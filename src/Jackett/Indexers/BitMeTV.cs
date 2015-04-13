@@ -58,8 +58,11 @@ namespace Jackett
             client = new HttpClient(handler);
         }
 
-        public bool IsConfigured { get; private set; }
+        public string DisplayName { get { return "BitMeTV.org"; } }
+        public string DisplayDescription { get { return "TV Episode specialty tracker"; } }
+        public Uri SitLink { get { return new Uri("https://bitmetv.org"); } }
 
+        public bool IsConfigured { get; private set; }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {

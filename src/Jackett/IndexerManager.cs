@@ -13,58 +13,40 @@ namespace Jackett
         static string AppConfigDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         static string IndexerConfigDirectory = Path.Combine(AppConfigDirectory, "Indexers");
 
-
-        enum IndexerName
-        {
-            BitMeTV,
-            Freshon,
-            IPTorrents,
-            BaconBits,
-        }
-
         Dictionary<string, IndexerInterface> loadedIndexers;
+
+        Dictionary<string, Type> implementedIndexerTypes;
 
         public IndexerManager()
         {
             loadedIndexers = new Dictionary<string, IndexerInterface>();
+
+            implementedIndexerTypes = (AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IndexerInterface).IsAssignableFrom(p)))
+                .ToDictionary(t => t.Name.ToLower());
+
+
+            // TODO: initialize all indexers at start, read all saved config json files then fill their indexers
         }
 
         IndexerInterface LoadIndexer(string name)
         {
-            IndexerInterface newIndexer;
+            name = name.Trim().ToLower();
 
-            IndexerName indexerName;
+            Type indexerType;
+            if (!implementedIndexerTypes.TryGetValue(name, out indexerType))
+                throw new Exception(string.Format("No indexer of type '{0}'", name));
 
-            try
-            {
-                indexerName = (IndexerName)Enum.Parse(typeof(IndexerName), name, true);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException(string.Format("Unsupported indexer '{0}'", name));
-            }
+            IndexerInterface newIndexer = (IndexerInterface)Activator.CreateInstance(indexerType);
 
-            switch (indexerName)
-            {
-                case IndexerName.BitMeTV:
-                    newIndexer = new BitMeTV();
-                    break;
-                case IndexerName.Freshon:
-                    newIndexer = new Freshon();
-                    break;
-                default:
-                    throw new ArgumentException(string.Format("Unsupported indexer '{0}'", name));
-            }
-
-
-            var configFilePath = Path.Combine(IndexerConfigDirectory, indexerName.ToString().ToLower());
+            var configFilePath = Path.Combine(IndexerConfigDirectory, name.ToString().ToLower());
             if (File.Exists(configFilePath))
             {
                 string jsonString = File.ReadAllText(configFilePath);
                 newIndexer.LoadFromSavedConfiguration(jsonString);
             }
 
-            //newIndexer.VerifyConnection();
             loadedIndexers.Add(name, newIndexer);
             return newIndexer;
         }

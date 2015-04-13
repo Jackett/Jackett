@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace Jackett
 {
     public class Freshon : IndexerInterface
     {
+
+        public string DisplayName { get; private set; }
+
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
@@ -35,6 +39,17 @@ namespace Jackett
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             throw new NotImplementedException();
+        }
+
+
+        public string DisplayDescription
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public Uri SitLink
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

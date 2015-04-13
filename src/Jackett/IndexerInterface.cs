@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace Jackett
 {
     public interface IndexerInterface
     {
+        string DisplayName { get; }
+        string DisplayDescription { get; }
+        Uri SitLink { get; }
+
+
         // Retrieved for starting setup for the indexer via web API
         Task<ConfigurationData> GetConfigurationForSetup();
 

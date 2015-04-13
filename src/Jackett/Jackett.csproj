@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ConfigurationData.cs" />
+    <Compile Include="DataUrl.cs" />
     <Compile Include="ExceptionWithConfigData.cs" />
     <Compile Include="IndexerInterface.cs" />
     <Compile Include="IndexerManager.cs" />
@@ -99,16 +100,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="HtmlContent\common.js">
+    <Content Include="WebContent\common.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="HtmlContent\index.html">
+    <Content Include="WebContent\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="HtmlContent\jquery-2.1.3.min.js">
+    <Content Include="WebContent\jquery-2.1.3.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="HtmlContent\setup_indexer.html">
+    <Content Include="WebContent\setup_indexer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\IndexerImages\bitmetv.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\validator_reply.xml" />

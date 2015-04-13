@@ -15,7 +15,7 @@ namespace Jackett
         HttpListener listener;
         IndexerManager indexerManager;
 
-        static string[] StaticFiles = Directory.EnumerateFiles("HtmlContent", "*", SearchOption.AllDirectories).Select(Path.GetFileName).ToArray();
+        static string[] StaticFiles = Directory.EnumerateFiles("WebContent", "*", SearchOption.AllDirectories).Select(Path.GetFileName).ToArray();
 
         enum WebApiMethod
         {
@@ -59,7 +59,7 @@ namespace Jackett
 
         async void ServeStaticFile(HttpListenerContext context, string file)
         {
-            var contentFile = File.ReadAllBytes(Path.Combine("HtmlContent", file));
+            var contentFile = File.ReadAllBytes(Path.Combine("WebContent", file));
 
             string contentType;
             MimeMapping.TryGetValue(Path.GetExtension(file), out contentType);
