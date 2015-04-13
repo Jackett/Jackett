@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <item>
+      <link>https://example.com</link>
+      <pubDate>Sat, 14 Mar 2015 17:10:42 -0400</pubDate>
+      <enclosure url="https://example.com" length="1" type="application/x-bittorrent" />
+    </item>
+  </channel>
+</rss>

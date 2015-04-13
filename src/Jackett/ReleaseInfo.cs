@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Jackett
+{
+
+    public class ReleaseInfo
+    {
+        public string Title { get; set; }
+        public Uri Guid { get; set; }
+        public Uri Link { get; set; }
+        public Uri Comments { get; set; }
+        public DateTime PublishDate { get; set; }
+        public string Category { get; set; }
+        public long? Size { get; set; }
+        public string Description { get; set; }
+        public long? RageID { get; set; }
+        public long? Imdb { get; set; }
+        public int? Seeders { get; set; }
+        public int? Peers { get; set; }
+        public Uri ConverUrl { get; set; }
+        public Uri BannerUrl { get; set; }
+        public string InfoHash { get; set; }
+        public double? MinimumRatio { get; set; }
+        public long? MinimumSeedTime { get; set; }
+
+
+    }
+}
