@@ -3,9 +3,42 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <script src="jquery-2.1.3.min.js"></script>
+    <script src="handlebars-v3.0.1.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
+    <title>Jackett</title>
+    <style>
+        #templates {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    home
+    <div class="container-fluid">
+        <div id="indexers"></div>
+    </div>
+
+    <div id="templates">
+        <div class="indexer">
+            <div class="indexer-name">{{name}}</div>
+            <div class="indexer-description">{{description}}</div>
+            <div class="indexer-link"><a href="{{link}}">{{link}}</a></div>
+            <div class="indexer-configured">
+                {{#if configured}}
+                <span>Configred</span>
+                {{else}}
+                <span>Not configured</span>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            var indexerTemplate = Handlebars.compile($("#templates > .indexer").html());
+            $('#indexers').append(indexerTemplate({ name: "n", description: "desc", link: "http://google.com", configured: true }));
+        });
+    </script>
 </body>
 </html>

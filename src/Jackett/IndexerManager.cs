@@ -13,30 +13,26 @@ namespace Jackett
         static string AppConfigDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         static string IndexerConfigDirectory = Path.Combine(AppConfigDirectory, "Indexers");
 
-        Dictionary<string, IndexerInterface> loadedIndexers;
-
-        Dictionary<string, Type> implementedIndexerTypes;
+        public Dictionary<string, IndexerInterface> Indexers { get; private set; }
 
         public IndexerManager()
         {
-            loadedIndexers = new Dictionary<string, IndexerInterface>();
+            Indexers = new Dictionary<string, IndexerInterface>();
 
-            implementedIndexerTypes = (AppDomain.CurrentDomain.GetAssemblies()
+            var implementedIndexerTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IndexerInterface).IsAssignableFrom(p)))
-                .ToDictionary(t => t.Name.ToLower());
+                .Where(p => typeof(IndexerInterface).IsAssignableFrom(p) && !p.IsInterface)
+                .ToArray();
 
-
-            // TODO: initialize all indexers at start, read all saved config json files then fill their indexers
+            foreach (var t in implementedIndexerTypes)
+            {
+                LoadIndexer(t);
+            }
         }
 
-        IndexerInterface LoadIndexer(string name)
+        IndexerInterface LoadIndexer(Type indexerType)
         {
-            name = name.Trim().ToLower();
-
-            Type indexerType;
-            if (!implementedIndexerTypes.TryGetValue(name, out indexerType))
-                throw new Exception(string.Format("No indexer of type '{0}'", name));
+            var name = indexerType.Name.Trim().ToLower();
 
             IndexerInterface newIndexer = (IndexerInterface)Activator.CreateInstance(indexerType);
 
@@ -47,15 +43,15 @@ namespace Jackett
                 newIndexer.LoadFromSavedConfiguration(jsonString);
             }
 
-            loadedIndexers.Add(name, newIndexer);
+            Indexers.Add(name, newIndexer);
             return newIndexer;
         }
 
         public IndexerInterface GetIndexer(string name)
         {
             IndexerInterface indexer;
-            if (!loadedIndexers.TryGetValue(name, out indexer))
-                indexer = LoadIndexer(name);
+            if (!Indexers.TryGetValue(name, out indexer))
+                throw new Exception(string.Format("No indexer with ID '{0}'", name));
             return indexer;
         }
 

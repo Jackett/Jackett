@@ -12,8 +12,7 @@ namespace Jackett
     {
         string DisplayName { get; }
         string DisplayDescription { get; }
-        Uri SitLink { get; }
-
+        Uri SiteLink { get; }
 
         // Retrieved for starting setup for the indexer via web API
         Task<ConfigurationData> GetConfigurationForSetup();

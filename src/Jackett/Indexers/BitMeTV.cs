@@ -60,7 +60,7 @@ namespace Jackett
 
         public string DisplayName { get { return "BitMeTV.org"; } }
         public string DisplayDescription { get { return "TV Episode specialty tracker"; } }
-        public Uri SitLink { get { return new Uri("https://bitmetv.org"); } }
+        public Uri SiteLink { get { return new Uri("https://bitmetv.org"); } }
 
         public bool IsConfigured { get; private set; }
 
@@ -81,7 +81,7 @@ namespace Jackett
             return Task.Run(async () =>
             {
                 var config = new BmtvConfig();
-                config.LoadValuesFromJson(configJson["config"]);
+                config.LoadValuesFromJson(configJson);
 
                 var pairs = new Dictionary<string, string>
                 {

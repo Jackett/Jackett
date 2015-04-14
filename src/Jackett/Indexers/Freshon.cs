@@ -11,8 +11,20 @@ namespace Jackett
     public class Freshon : IndexerInterface
     {
 
-        public string DisplayName { get; private set; }
+        public string DisplayName
+        {
+            get { return "FreshOnTV"; }
+        }
 
+        public string DisplayDescription
+        {
+            get { return "Our goal is to provide the latest stuff in the TV show domain"; }
+        }
+
+        public Uri SiteLink
+        {
+            get { return new Uri("https://freshon.tv/"); }
+        }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
@@ -33,23 +45,12 @@ namespace Jackett
 
         public bool IsConfigured
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             throw new NotImplementedException();
-        }
-
-
-        public string DisplayDescription
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Uri SitLink
-        {
-            get { throw new NotImplementedException(); }
         }
     }
 }

@@ -20,7 +20,7 @@
             var urlParams = getUrlParams();
 
             var jqxhr = $.post("get_config_form", JSON.stringify({ indexer: urlParams.indexer }), function (data) {
-                populateForm(data);
+                populateForm(data.config);
             })
             .fail(function () {
                 alert("error");
