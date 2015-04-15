@@ -10,7 +10,8 @@ namespace Jackett
 {
     public class IndexerManager
     {
-        static string AppConfigDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+        static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
         static string IndexerConfigDirectory = Path.Combine(AppConfigDirectory, "Indexers");
 
         public Dictionary<string, IndexerInterface> Indexers { get; private set; }
@@ -35,16 +36,31 @@ namespace Jackett
             var name = indexerType.Name.Trim().ToLower();
 
             IndexerInterface newIndexer = (IndexerInterface)Activator.CreateInstance(indexerType);
+            newIndexer.OnSaveConfigurationRequested += newIndexer_OnSaveConfigurationRequested;
 
-            var configFilePath = Path.Combine(IndexerConfigDirectory, name.ToString().ToLower());
+            var configFilePath = GetIndexerConfigFilePath(newIndexer);
             if (File.Exists(configFilePath))
             {
-                string jsonString = File.ReadAllText(configFilePath);
+                var jsonString = JObject.Parse(File.ReadAllText(configFilePath));
                 newIndexer.LoadFromSavedConfiguration(jsonString);
             }
 
             Indexers.Add(name, newIndexer);
             return newIndexer;
+        }
+
+        string GetIndexerConfigFilePath(IndexerInterface indexer)
+        {
+            return Path.Combine(IndexerConfigDirectory, indexer.GetType().Name.ToLower() + ".json");
+        }
+
+        void newIndexer_OnSaveConfigurationRequested(IndexerInterface indexer, JToken obj)
+        {
+            var name = indexer.GetType().Name.Trim().ToLower();
+            var configFilePath = GetIndexerConfigFilePath(indexer);
+            if (!Directory.Exists(IndexerConfigDirectory))
+                Directory.CreateDirectory(IndexerConfigDirectory);
+            File.WriteAllText(configFilePath, obj.ToString());
         }
 
         public IndexerInterface GetIndexer(string name)

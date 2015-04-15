@@ -24,7 +24,7 @@ namespace Jackett
         Task VerifyConnection();
 
         // Invoked when the indexer configuration has been applied and verified so the cookie needs to be saved
-        event Action<JToken> OnSaveConfigurationRequested;
+        event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
         // Whether this indexer has been configured, verified and saved in the past and has the settings required for functioning
         bool IsConfigured { get; }

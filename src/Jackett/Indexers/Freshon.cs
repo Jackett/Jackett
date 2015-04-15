@@ -41,7 +41,7 @@ namespace Jackett
             throw new NotImplementedException();
         }
 
-        public event Action<JToken> OnSaveConfigurationRequested;
+        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
         public bool IsConfigured
         {

@@ -43,7 +43,7 @@ namespace Jackett
         HttpClientHandler handler;
         HttpClient client;
 
-        public event Action<JToken> OnSaveConfigurationRequested;
+        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
         public BitMeTV()
         {
@@ -114,7 +114,7 @@ namespace Jackett
                     ).ToArray());
 
                     if (OnSaveConfigurationRequested != null)
-                        OnSaveConfigurationRequested(configSaveData);
+                        OnSaveConfigurationRequested(this, configSaveData);
 
                     IsConfigured = true;
                 }
@@ -133,7 +133,13 @@ namespace Jackett
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            // todo: set cookie data...
+
+            foreach (var cookie in jsonConfig["cookies"])
+            {
+                var w = ((string)cookie).Split(':');
+                cookies.Add(new Uri(BaseUrl), new Cookie(w[0], w[1]));
+            }
+
             IsConfigured = true;
         }
     }
