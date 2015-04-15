@@ -133,13 +133,7 @@ namespace Jackett
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-
-            foreach (var cookie in jsonConfig["cookies"])
-            {
-                var w = ((string)cookie).Split(':');
-                cookies.Add(new Uri(BaseUrl), new Cookie(w[0], w[1]));
-            }
-
+            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
             IsConfigured = true;
         }
     }

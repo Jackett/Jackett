@@ -70,6 +70,7 @@
     <Compile Include="ApiKey.cs" />
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ConfigurationData.cs" />
+    <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="DataUrl.cs" />
     <Compile Include="ExceptionWithConfigData.cs" />
     <Compile Include="IndexerInterface.cs" />
