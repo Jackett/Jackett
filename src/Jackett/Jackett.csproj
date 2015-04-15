@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiKey.cs" />
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ConfigurationData.cs" />
     <Compile Include="DataUrl.cs" />
@@ -91,7 +92,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="WebContent\bootstrap\glyphicons-halflings-regular.woff">
+    <None Include="WebContent\fonts\glyphicons-halflings-regular.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -105,13 +106,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WebContent\congruent_outline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebContent\handlebars-v3.0.1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\bitmetv.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebContent\logos\freshon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\bootstrap\bootstrap.min.css">
@@ -127,6 +128,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\jquery-2.1.3.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\freshon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\setup_indexer.html">

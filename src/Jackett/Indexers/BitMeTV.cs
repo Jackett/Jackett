@@ -58,7 +58,7 @@ namespace Jackett
             client = new HttpClient(handler);
         }
 
-        public string DisplayName { get { return "BitMeTV.org"; } }
+        public string DisplayName { get { return "BitMeTV"; } }
         public string DisplayDescription { get { return "TV Episode specialty tracker"; } }
         public Uri SiteLink { get { return new Uri("https://bitmetv.org"); } }
 
@@ -102,6 +102,7 @@ namespace Jackett
                     var errorMessage = messageEl.Text();
                     var captchaImage = await client.GetByteArrayAsync(CaptchaUrl);
                     config.CaptchaImage.Value = captchaImage;
+                    config.CaptchaText.Value = "";
                     throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
                 }
                 else
@@ -114,6 +115,8 @@ namespace Jackett
 
                     if (OnSaveConfigurationRequested != null)
                         OnSaveConfigurationRequested(configSaveData);
+
+                    IsConfigured = true;
                 }
             });
         }
@@ -123,6 +126,8 @@ namespace Jackett
             return Task.Run(async () =>
             {
                 var result = await client.GetStringAsync(new Uri(SearchUrl));
+                if (result.Contains("<h1>Not logged in!</h1>"))
+                    throw new Exception("Detected as not logged in");
             });
         }
 

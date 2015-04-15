@@ -9,36 +9,353 @@
     <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
     <title>Jackett</title>
     <style>
+        body {
+            background-image: url("congruent_outline.png");
+            background-repeat: repeat;
+        }
+
+        #page {
+            border-radius: 6px;
+            background-color: white;
+            max-width: 800px;
+            margin: 0 auto;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .container-fluid {
+        }
+
         #templates {
             display: none;
+        }
+
+        #api-key-input {
+            width: 300px;
+            display: inline-block;
+            font-family: monospace;
+        }
+
+        #api-key-header {
+            font-size: 20px;
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            box-shadow: 1px 1px 5px 2px #cdcdcd;
+            padding: 10px;
+            width: 225px;
+            display: inline-block;
+            margin-right: 30px;
+            vertical-align: top;
+        }
+
+        .unconfigured-indexer {
+            height: 170px;
+        }
+
+        .indexer {
+            height: 220px;
+        }
+
+        #add-indexer {
+            margin-right: 0px;
+        }
+
+        .indexer-logo {
+            text-align: center;
+        }
+
+            .indexer-logo > img {
+                border: 1px solid #828282;
+            }
+
+        .indexer-name > h3 {
+            margin-top: 13px;
+            text-align: center;
+        }
+
+        .indexer-buttons {
+            text-align: center;
+        }
+
+        .indexer-add-content {
+            color: gray;
+            text-align: center;
+        }
+
+            .indexer-add-content > .glyphicon {
+                font-size: 50px;
+                margin-top: 35%;
+                vertical-align: bottom;
+            }
+
+            .indexer-add-content > .light-text {
+                margin-top: 11px;
+                font-size: 18px;
+                margin-left: -5px;
+            }
+
+        .indexer-host {
+            margin-top: 10px;
+        }
+
+            .indexer-host > input {
+                font-size: 12px;
+                padding: 2px;
+            }
+
+        .setup-item-inputstring {
+            max-width: 260px;
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div id="indexers"></div>
+    <div id="page">
+
+        <div id="api-key">
+            <span id="api-key-header">API Key: </span>
+            <input id="api-key-input" class="form-control" type="text" value="" placeholder="API Key" readonly="">
+            <span>(Same key works for all indexers)</span>
+        </div>
+        <br />
+
+        <hr />
+
+        <h3>Configured Indexers</h3>
+        <div id="indexers">
+
+            <a class="indexer card" id="add-indexer" href="#" data-toggle="modal" data-target="#select-indexer-modal">
+                <div class="indexer-add-content">
+                    <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    <div class="light-text">Add</div>
+                </div>
+            </a>
+
+        </div>
+
     </div>
 
-    <div id="templates">
-        <div class="indexer">
-            <div class="indexer-name">{{name}}</div>
-            <div class="indexer-description">{{description}}</div>
-            <div class="indexer-link"><a href="{{link}}">{{link}}</a></div>
-            <div class="indexer-configured">
-                {{#if configured}}
-                <span>Configred</span>
-                {{else}}
-                <span>Not configured</span>
-                {{/if}}
+    <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Select an indexer to setup</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="unconfigured-indexers">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <div id="setup-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Setup indexer</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="indexer-setup-form"></form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="setup-indexer-go">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="templates">
+
+        <div class="indexer card">
+            <div class="indexer-logo"><img src="logos/{{id}}.png" /></div>
+            <div class="indexer-name"><h3>{{name}}</h3></div>
+            <div class="indexer-buttons">
+                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
+                <a class="btn btn-danger btn-sm" href="#">Delete <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                <a class="btn btn-primary btn-sm indexer-button-test" href="#" data-id="{{id}}">Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></a>
+            </div>
+            <div class="indexer-host">
+                <b>Torznab Host:</b>
+                <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
+            </div>
+        </div>
+
+        <div class="unconfigured-indexer card">
+            <div class="indexer-logo"><img src="logos/{{id}}.png" /></div>
+            <div class="indexer-name"><h3>{{name}}</h3></div>
+            <div class="indexer-buttons">
+                <a class="btn btn-info" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
+                <button class="indexer-setup btn btn-success" data-id="{{id}}">Setup <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+            </div>
+        </div>
+
+
+        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
+            <div class="setup-item-label">{{name}}</div>
+            <div class="setup-item-value">{{{value_element}}}</div>
+        </div>
+
+        <h4 class="setup-item-header" data-type="indexer" data-name="{{name}}" data-indexer="{{indexer}}">{{name}}</h4>
+        <input class="setup-item-inputstring form-control" type="text" value="{{{value}}}"></input>
+        <div class="setup-item-checkbox">
+            {{#if value}}
+            <input type="checkbox" class="form-control" checked></input>
+            {{else}}
+            <input type="checkbox" class="form-control"></input>
+            {{/if}}
+        </div>
+        <img class="setup-item-displayimage" src="{{{value}}}" />
+        <span class="setup-item-displayinfo">{{{value}}}</span>
+
+    </div>
+
     <script>
-        $(function () {
-            var indexerTemplate = Handlebars.compile($("#templates > .indexer").html());
-            $('#indexers').append(indexerTemplate({ name: "n", description: "desc", link: "http://google.com", configured: true }));
+
+        function reloadIndexers() {
+            $('#indexers').hide();
+            $('#indexers > div.indexer').remove();
+            $('#unconfigured-indexers').empty();
+            var jqxhr = $.get("get_indexers", function (data) {
+                $("#api-key-input").val(data.api_key);
+                displayIndexers(data.items);
+            }).fail(function () {
+                alert("error");
+            });
+        }
+
+        function displayIndexers(items) {
+            var indexerTemplate = Handlebars.compile($("#templates > .indexer")[0].outerHTML);
+            var unconfiguredIndexerTemplate = Handlebars.compile($("#templates > .unconfigured-indexer")[0].outerHTML);
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                item.torznab_host = resolveUrl("/torznab/" + item.id);
+                if (item.configured)
+                    $('#indexers').prepend(indexerTemplate(item));
+                else
+                    $('#unconfigured-indexers').prepend($(unconfiguredIndexerTemplate(item)));
+            }
+            $('#indexers').fadeIn();
+            prepareSetupButtons();
+            prepareTestButtons();
+        }
+
+        function prepareSetupButtons() {
+            $('.indexer-setup').each(function (i, btn) {
+                var $btn = $(btn);
+                var id = $btn.data("id");
+                $btn.click(function () {
+                    displayIndexerSetup(id);
+                });
+            });
+        }
+
+        function prepareTestButtons() {
+            $(".indexer-button-test").each(function (i, btn) {
+                var $btn = $(btn);
+                var id = $btn.data("id");
+                $btn.click(function () {
+                    var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
+                        if (data.result == "error") {
+                            alert("Test failed for " + data.name + "\n" + data.error);
+                        }
+                        else {
+                            alert("Test successful for " + data.name);
+                        }
+                    }).fail(function () {
+                        alert("error");
+                    });
+                });
+            });
+        }
+
+        function displayIndexerSetup(id) {
+
+            var jqxhr = $.post("get_config_form", JSON.stringify({ indexer: id }), function (data) {
+                if (data.result == "error") {
+                    alert(data.error);
+                    return;
+                }
+                populateSetupForm(id, data.name, data.config);
+                $("#setup-indexer-modal").modal("show");
+            }).fail(function () {
+                alert("error");
+            });
+
+            $("#select-indexer-modal").modal("hide");
+        }
+
+        function populateSetupForm(indexerId, name, config) {
+            $("#indexer-setup-form").empty();
+            var setupItemHeader = Handlebars.compile($("#templates > .setup-item-header")[0].outerHTML);
+            $("#indexer-setup-form").append(setupItemHeader({ indexer: indexerId, name: name }));
+            var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
+            for (var i = 0; i < config.length; i++) {
+                var item = config[i];
+                var setupValueTemplate = Handlebars.compile($("#templates > .setup-item-" + item.type)[0].outerHTML);
+                item.value_element = setupValueTemplate(item);
+                $("#indexer-setup-form").append(setupItemTemplate(item));
+            }
+        }
+
+        function resolveUrl(url) {
+            var a = document.createElement('a');
+            a.href = url;
+            url = a.href;
+            return url;
+        }
+
+        $("#setup-indexer-go").click(function () {
+            var data = { config: {} };
+            $("#indexer-setup-form").children().each(function (i, el) {
+                $el = $(el);
+                var type = $el.data("type");
+                var id = $el.data("id");
+                switch (type) {
+                    case "indexer":
+                        data.indexer = $el.data("indexer");
+                        data.name = $el.data("name")
+                        return;
+                    case "inputstring":
+                        data.config[id] = $el.find(".setup-item-inputstring").val();
+                        break;
+                    case "inputbool":
+                        data.config[id] = $el.find(".setup-item-checkbox").val();
+                        break;
+                }
+            });
+            sendSetupData(data.indexer, data.name, data);
         });
+
+        function sendSetupData(indexerId, name, data) {
+            var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
+                if (data.result == "error") {
+                    if (data.config) {
+                        populateSetupForm(indexerId, name, data.config);
+                    }
+                    alert(data.error);
+                }
+                else {
+                    $("#setup-indexer-modal").modal("hide");
+                    reloadIndexers();
+                    alert("success");
+                }
+            }).fail(function () {
+                alert("error");
+            });
+        }
+
+        reloadIndexers();
+
     </script>
+
 </body>
 </html>

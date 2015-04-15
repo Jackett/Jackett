@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -19,13 +20,15 @@ namespace Jackett
         {
             GetConfigForm,
             ConfigureIndexer,
-            GetIndexers
+            GetIndexers,
+            TestIndexer
         }
         static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod>
         {
             { "get_config_form", WebApiMethod.GetConfigForm },
             { "configure_indexer", WebApiMethod.ConfigureIndexer },
-            { "get_indexers", WebApiMethod.GetIndexers }
+            { "get_indexers", WebApiMethod.GetIndexers },
+            { "test_indexer", WebApiMethod.TestIndexer}
         };
 
         IndexerManager indexerManager;
@@ -63,8 +66,12 @@ namespace Jackett
             var contentFile = File.ReadAllBytes(Path.Combine(WebContentFolder, file));
             context.Response.ContentType = MimeMapping.GetMimeMapping(file);
             context.Response.StatusCode = (int)HttpStatusCode.OK;
-            await context.Response.OutputStream.WriteAsync(contentFile, 0, contentFile.Length);
-            context.Response.OutputStream.Close();
+            try
+            {
+                await context.Response.OutputStream.WriteAsync(contentFile, 0, contentFile.Length);
+                context.Response.OutputStream.Close();
+            }
+            catch (HttpListenerException) { }
         }
 
         async Task<JToken> ReadPostDataJson(Stream stream)
@@ -92,6 +99,7 @@ namespace Jackett
                         var indexer = indexerManager.GetIndexer(indexerString);
                         var config = await indexer.GetConfigurationForSetup();
                         jsonReply["config"] = config.ToJson();
+                        jsonReply["name"] = indexer.DisplayName;
                         jsonReply["result"] = "success";
                     }
                     catch (Exception ex)
@@ -106,6 +114,7 @@ namespace Jackett
                         var postData = await ReadPostDataJson(context.Request.InputStream);
                         string indexerString = (string)postData["indexer"];
                         var indexer = indexerManager.GetIndexer(indexerString);
+                        jsonReply["name"] = indexer.DisplayName;
                         await indexer.ApplyConfiguration(postData["config"]);
                         await indexer.VerifyConnection();
                         jsonReply["result"] = "success";
@@ -124,19 +133,36 @@ namespace Jackett
                     try
                     {
                         jsonReply["result"] = "success";
+                        jsonReply["api_key"] = ApiKey.Generate();
                         JArray items = new JArray();
                         foreach (var i in indexerManager.Indexers)
                         {
                             var indexer = i.Value;
                             var item = new JObject();
                             item["id"] = i.Key;
-                            item["display_name"] = indexer.DisplayName;
-                            item["display_description"] = indexer.DisplayDescription;
-                            item["is_configured"] = indexer.IsConfigured;
+                            item["name"] = indexer.DisplayName;
+                            item["description"] = indexer.DisplayDescription;
+                            item["configured"] = indexer.IsConfigured;
                             item["site_link"] = indexer.SiteLink;
                             items.Add(item);
                         }
                         jsonReply["items"] = items;
+                    }
+                    catch (Exception ex)
+                    {
+                        jsonReply["result"] = "error";
+                        jsonReply["error"] = ex.Message;
+                    }
+                    break;
+                case WebApiMethod.TestIndexer:
+                    try
+                    {
+                        var postData = await ReadPostDataJson(context.Request.InputStream);
+                        string indexerString = (string)postData["indexer"];
+                        var indexer = indexerManager.GetIndexer(indexerString);
+                        jsonReply["name"] = indexer.DisplayName;
+                        await indexer.VerifyConnection();
+                        jsonReply["result"] = "success";
                     }
                     catch (Exception ex)
                     {
