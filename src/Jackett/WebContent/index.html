@@ -7,6 +7,9 @@
     <script src="handlebars-v3.0.1.js"></script>
     <script src="bootstrap/bootstrap.min.js"></script>
     <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap-notify.js"></script>
+    <link href="animate.css" rel="stylesheet">
+
     <title>Jackett</title>
     <style>
         body {
@@ -116,6 +119,47 @@
         .setup-item-inputstring {
             max-width: 260px;
         }
+
+        .spinner {
+            -webkit-animation: spin 2s infinite linear;
+            -moz-animation: spin 2s infinite linear;
+            -o-animation: spin 2s infinite linear;
+            animation: spin 2s infinite linear;
+        }
+
+        @-moz-keyframes spin {
+            from {
+                -moz-transform: rotate(0deg);
+            }
+
+            to {
+                -moz-transform: rotate(360deg);
+            }
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #setup-indexer-go {
+            width: 70px;
+        }
     </style>
 </head>
 <body>
@@ -224,6 +268,8 @@
         <img class="setup-item-displayimage" src="{{{value}}}" />
         <span class="setup-item-displayinfo">{{{value}}}</span>
 
+        <span class="spinner glyphicon glyphicon-refresh"></span>
+
     </div>
 
     <script>
@@ -236,7 +282,7 @@
                 $("#api-key-input").val(data.api_key);
                 displayIndexers(data.items);
             }).fail(function () {
-                alert("error");
+                doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
             });
         }
 
@@ -271,15 +317,16 @@
                 var $btn = $(btn);
                 var id = $btn.data("id");
                 $btn.click(function () {
+                    doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
                     var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
                         if (data.result == "error") {
-                            alert("Test failed for " + data.name + "\n" + data.error);
+                            doNotify("Test failed for " + data.name + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
                         }
                         else {
-                            alert("Test successful for " + data.name);
+                            doNotify("Test successful for " + data.name, "success", "glyphicon glyphicon-ok");
                         }
                     }).fail(function () {
-                        alert("error");
+                        doNotify("Error testing indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
                     });
                 });
             });
@@ -289,13 +336,13 @@
 
             var jqxhr = $.post("get_config_form", JSON.stringify({ indexer: id }), function (data) {
                 if (data.result == "error") {
-                    alert(data.error);
+                    doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                     return;
                 }
                 populateSetupForm(id, data.name, data.config);
                 $("#setup-indexer-modal").modal("show");
             }).fail(function () {
-                alert("error");
+                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
             });
 
             $("#select-indexer-modal").modal("hide");
@@ -344,24 +391,56 @@
         });
 
         function sendSetupData(indexerId, name, data) {
+            var originalBtnText = $('#setup-indexer-go').html();
+
+            $('#setup-indexer-go').prop('disabled', true);
+            $('#setup-indexer-go').html($('#templates > .spinner')[0].outerHTML);
+
             var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
                 if (data.result == "error") {
                     if (data.config) {
                         populateSetupForm(indexerId, name, data.config);
                     }
-                    alert(data.error);
+                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
                 }
                 else {
                     $("#setup-indexer-modal").modal("hide");
                     reloadIndexers();
-                    alert("success");
+                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
                 }
             }).fail(function () {
-                alert("error");
+                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            }).always(function () {
+                $('#setup-indexer-go').html(originalBtnText);
+                $('#setup-indexer-go').prop('disabled', false);
             });
         }
 
         reloadIndexers();
+
+        function doNotify(message, type, icon) {
+            $.notify({
+                message: message,
+                icon: icon
+            }, {
+                element: 'body',
+                type: type,
+                allow_dismiss: true,
+                z_index: 9000,
+                mouse_over: 'pause',
+                placement: {
+                    from: "bottom",
+                    align: "center"
+                }
+            });
+        }
+
+        function clearNotifications() {
+            $('[data-notify="container"]').remove();
+        }
+
+        $('#test').click(doNotify);
+
 
     </script>
 
