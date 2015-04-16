@@ -19,3 +19,7 @@ Jackett's framework allows me (and any other volunteering dev) to implement just
 
 ### Contact & Support
 I can be contact on IRC at [irc.freenode.net#sonarr](http://webchat.freenode.net/?channels=#sonarr)
+
+### Screenshots
+
+![screenshot](http://i.imgur.com/8e2QylW.png "screenshot")
