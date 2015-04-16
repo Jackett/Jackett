@@ -45,10 +45,11 @@
             border-radius: 6px;
             box-shadow: 1px 1px 5px 2px #cdcdcd;
             padding: 10px;
-            width: 225px;
+            width: 220px;
             display: inline-block;
             margin-right: 30px;
             vertical-align: top;
+            margin-bottom: 30px;
         }
 
         .unconfigured-indexer {
@@ -56,7 +57,7 @@
         }
 
         .indexer {
-            height: 220px;
+            height: 265px;
         }
 
         #add-indexer {
@@ -80,6 +81,15 @@
             text-align: center;
         }
 
+            .indexer-buttons > .btn {
+                width: 90px;
+                margin-bottom: 10px;
+            }
+
+                .indexer-buttons > .btn:nth-child(even) {
+                    margin-left: 5px;
+                }
+
         .indexer-add-content {
             color: gray;
             text-align: center;
@@ -87,7 +97,7 @@
 
             .indexer-add-content > .glyphicon {
                 font-size: 50px;
-                margin-top: 35%;
+                margin-top: 40%;
                 vertical-align: bottom;
             }
 
@@ -97,14 +107,11 @@
                 margin-left: -5px;
             }
 
-        .indexer-host {
-            margin-top: 10px;
-        }
 
-            .indexer-host > input {
-                font-size: 12px;
-                padding: 2px;
-            }
+        .indexer-host > input {
+            font-size: 12px;
+            padding: 2px;
+        }
 
         .setup-item-inputstring {
             max-width: 260px;
@@ -180,8 +187,9 @@
             <div class="indexer-name"><h3>{{name}}</h3></div>
             <div class="indexer-buttons">
                 <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
+                <a class="btn btn-warning btn-sm indexer-button-test" href="#" data-id="{{id}}">Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></a>
                 <a class="btn btn-danger btn-sm" href="#">Delete <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                <a class="btn btn-primary btn-sm indexer-button-test" href="#" data-id="{{id}}">Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></a>
+                <a class="btn btn-primary btn-sm" href="#">Configure <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>
             </div>
             <div class="indexer-host">
                 <b>Torznab Host:</b>

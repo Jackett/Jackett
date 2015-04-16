@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Jackett
+{
+    public class ConfigurationDataBasicLogin : ConfigurationData
+    {
+        public StringItem Username { get; private set; }
+        public StringItem Password { get; private set; }
+
+        public ConfigurationDataBasicLogin()
+        {
+            Username = new StringItem { Name = "Username", ItemType = ItemType.InputString };
+            Password = new StringItem { Name = "Password", ItemType = ItemType.InputString };
+        }
+
+        public override Item[] GetItems()
+        {
+            return new Item[] { Username, Password };
+        }
+    }
+}

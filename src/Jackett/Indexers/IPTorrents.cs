@@ -5,20 +5,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
-    public class Freshon : IndexerInterface
+    public class IPTorrents : IndexerInterface
     {
 
-        static string BaseUrl = "https://freshon.tv";
-        static string LoginUrl = BaseUrl + "/login.php";
-        static string LoginPostUrl = BaseUrl + "/login.php?action=makelogin";
-        static string SearchUrl = BaseUrl + "/browse.php";
+        public event Action<IndexerInterface, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
+
+        public string DisplayName { get { return "IPTorrents"; } }
+
+        public string DisplayDescription { get { return "Always a step ahead"; } }
+
+        public Uri SiteLink { get { return new Uri("https://iptorrents.com"); } }
+
+        public bool IsConfigured { get; private set; }
+
+        static string BaseUrl = "https://iptorrents.com";
 
         static string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
 
@@ -26,17 +31,7 @@ namespace Jackett
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured { get; private set; }
-
-        public string DisplayName { get { return "FreshOnTV"; } }
-
-        public string DisplayDescription { get { return "Our goal is to provide the latest stuff in the TV show domain"; } }
-
-        public Uri SiteLink { get { return new Uri("https://freshon.tv/"); } }
-
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-
-        public Freshon()
+        public IPTorrents()
         {
             IsConfigured = false;
             cookies = new CookieContainer();
@@ -51,14 +46,15 @@ namespace Jackett
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
+                await client.GetAsync(new Uri(BaseUrl));
                 var config = new ConfigurationDataBasicLogin();
                 return (ConfigurationData)config;
             });
         }
 
-        public Task ApplyConfiguration(JToken configJson)
+        public Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
         {
             return Task.Run(async () =>
             {
@@ -75,17 +71,17 @@ namespace Jackett
                 var message = new HttpRequestMessage();
                 message.Method = HttpMethod.Post;
                 message.Content = content;
-                message.RequestUri = new Uri(LoginPostUrl);
-                message.Headers.Referrer = new Uri(LoginUrl);
+                message.RequestUri = new Uri(BaseUrl);
+                message.Headers.Referrer = new Uri(BaseUrl);
                 message.Headers.UserAgent.ParseAdd(chromeUserAgent);
 
                 var response = await client.SendAsync(message);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (!responseContent.Contains("/logout.php"))
+                if (!responseContent.Contains("/my.php"))
                 {
                     CQ dom = responseContent;
-                    var messageEl = dom[".error_text"];
+                    var messageEl = dom["body > div"].First();
                     var errorMessage = messageEl.Text().Trim();
                     throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
                 }
@@ -111,17 +107,17 @@ namespace Jackett
             {
                 var message = new HttpRequestMessage();
                 message.Method = HttpMethod.Get;
-                message.RequestUri = new Uri(SearchUrl);
+                message.RequestUri = new Uri(BaseUrl);
                 message.Headers.UserAgent.ParseAdd(chromeUserAgent);
 
                 var response = await client.SendAsync(message);
                 var result = await response.Content.ReadAsStringAsync();
-                if (!result.Contains("/logout.php"))
+                if (!result.Contains("/my.php"))
                     throw new Exception("Detected as not logged in");
             });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
             cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
             IsConfigured = true;
