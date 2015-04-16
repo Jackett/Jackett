@@ -11,6 +11,7 @@ Software is still in development, check back in a few days.
 
 ### Supported Trackers
  * [BitMeTV](http://www.bitmetv.org/)
+ * [MoreThan.tv](https://morethan.tv/)
  * [Freshon](https://freshon.tv/)
  * [IPTorrents](https://iptorrents.com/)
  * [The Pirate Bay](https://thepiratebay.se/)
