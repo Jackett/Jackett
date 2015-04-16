@@ -13,6 +13,7 @@ Software is still in development, check back in a few days.
  * [BitMeTV](http://www.bitmetv.org/)
  * [Freshon](https://freshon.tv/)
  * [The Pirate Bay](https://thepiratebay.se/)
+ * [IPTorrents](https://iptorrents.com/)
 
 ### Additional Trackers
 Jackett's framework allows me (and any other volunteering dev) to implement just about any new tracker in 15-60 minutes. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact me on IRC (see below).
