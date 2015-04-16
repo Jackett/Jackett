@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -62,20 +63,67 @@ namespace Jackett
                 return;
             }
 
-            var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
+            if (context.Request.Url.AbsolutePath.StartsWith("/api/"))
+            {
+                ProcessTorznab(context);
+                return;
+            }
 
-            var inputStream = context.Request.InputStream;
-            var reader = new StreamReader(inputStream, context.Request.ContentEncoding);
-            var bytes = await reader.ReadToEndAsync();
-
-            var indexer = context.Request.Url.AbsolutePath.TrimStart('/').Replace("/api", "").ToLower();
-
-            var responseBytes = Encoding.UTF8.GetBytes(Properties.Resources.validator_reply);
-            context.Response.ContentEncoding = Encoding.UTF8;
-            context.Response.ContentLength64 = responseBytes.LongLength;
-            context.Response.ContentType = "application/rss+xml";
+            var responseBytes = Encoding.UTF8.GetBytes("Invalid request");
             await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
             context.Response.Close();
         }
+
+        async void ProcessTorznab(HttpListenerContext context)
+        {
+            Exception exception;
+            try
+            {
+                var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
+                var inputStream = context.Request.InputStream;
+                var reader = new StreamReader(inputStream, context.Request.ContentEncoding);
+                var bytes = await reader.ReadToEndAsync();
+
+                var indexerId = context.Request.Url.AbsolutePath.Replace("/api", "").TrimStart('/').ToLower();
+                var indexer = indexerManager.GetIndexer(indexerId);
+                var torznabQuery = TorznabQuery.FromHttpQuery(query);
+                var severUrl = string.Format("{0}://{1}:{2}/", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port);
+
+                var resultPage = new ResultPage(new ChannelInfo
+                {
+                    Title = indexer.DisplayName,
+                    Description = indexer.DisplayDescription,
+                    Link = indexer.SiteLink,
+                    ImageUrl = new Uri(severUrl + "logos/" + indexerId + ".png"),
+                    ImageTitle = indexer.DisplayName,
+                    ImageLink = indexer.SiteLink,
+                    ImageDescription = indexer.DisplayName
+                });
+
+                var releases = await indexer.PerformQuery(torznabQuery);
+                resultPage.Releases.AddRange(releases);
+
+                var xml = resultPage.ToXml(new Uri(severUrl));
+
+                var responseBytes = Encoding.UTF8.GetBytes(xml);
+                context.Response.ContentEncoding = Encoding.UTF8;
+                context.Response.ContentLength64 = responseBytes.LongLength;
+                context.Response.ContentType = "application/rss+xml";
+                await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+                context.Response.Close();
+                return;
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            var errorBytes = Encoding.UTF8.GetBytes(exception.Message);
+            await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
+            context.Response.Close();
+        }
+
+
+
     }
 }

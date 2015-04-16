@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Jackett
 
         public string ToXml(Uri selfAtom)
         {
-            var doc = new XDocument(
+            var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
                 new XElement("rss",
                     new XAttribute("version", "1.0"),
@@ -58,31 +59,38 @@ namespace Jackett
                             new XElement("title", ChannelInfo.ImageTitle),
                             new XElement("link", ChannelInfo.ImageLink.ToString()),
                             new XElement("description", ChannelInfo.ImageDescription)
-                        )
-                    ),
+                        ),
 
-                    from r in Releases
-                    select new XElement("item",
-                        new XElement("title", r.Title),
-                        new XElement("guid", r.Guid),
-                        new XElement("link", r.Link),
-                        new XElement("comments", r.Comments.ToString()),
-                        new XElement("pubDate", xmlDateFormat(r.PublishDate)),
-                        new XElement("category", r.Category),
-                        new XElement("size", r.Size),
-                        new XElement("description", r.Description),
-                        new XElement("enclosure", new XAttribute("url", r.Link), new XAttribute("length", r.Size), new XAttribute("type", "application/x-bittorrent")),
-                        getTorznabElement("rageid", r.RageID),
-                        getTorznabElement("seeders", r.Seeders),
-                        getTorznabElement("peers", r.Peers),
-                        getTorznabElement("infohash", r.InfoHash),
-                        getTorznabElement("minimumratio", r.MinimumRatio),
-                        getTorznabElement("minimumseedtime", r.MinimumSeedTime)
+
+                        from r in Releases
+                        select new XElement("item",
+                            new XElement("title", r.Title),
+                            new XElement("guid", r.Guid),
+                            new XElement("comments", r.Comments.ToString()),
+                            new XElement("pubDate", xmlDateFormat(r.PublishDate)),
+                            new XElement("size", r.Size),
+                            new XElement("description", r.Description),
+                            r.Link == null ? null : new XElement("link", r.Link),
+                            r.Category == null ? null : new XElement("category", r.Category),
+                            new XElement(
+                                "enclosure",
+                                new XAttribute("url", r.Link ?? r.MagnetUrl),
+                                new XAttribute("length", r.Size),
+                                new XAttribute("type", r.Link == null ? "application/x-bittorrent;x-scheme-handler/magnet" : "application/x-bittorrent")
+                            ),
+                            getTorznabElement("magneturl", r.MagnetUrl),
+                            getTorznabElement("rageid", r.RageID),
+                            getTorznabElement("seeders", r.Seeders),
+                            getTorznabElement("peers", r.Peers),
+                            getTorznabElement("infohash", r.InfoHash),
+                            getTorznabElement("minimumratio", r.MinimumRatio),
+                            getTorznabElement("minimumseedtime", r.MinimumSeedTime)
+                        )
                     )
                 )
             );
 
-            return doc.ToString();
+            return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
         }
     }
 }

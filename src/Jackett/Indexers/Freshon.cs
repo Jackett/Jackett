@@ -126,5 +126,14 @@ namespace Jackett
             cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
             IsConfigured = true;
         }
+
+        public Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        {
+            return Task<ReleaseInfo[]>.Run(async () =>
+            {
+                List<ReleaseInfo> releases = new List<ReleaseInfo>();
+                return releases.ToArray();
+            });
+        }
     }
 }

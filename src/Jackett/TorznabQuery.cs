@@ -21,6 +21,7 @@ namespace Jackett
 
         public static TorznabQuery FromHttpQuery(NameValueCollection query)
         {
+
             //{t=tvsearch&cat=5030%2c5040&extended=1&apikey=test&offset=0&limit=100&rid=24493&season=5&ep=1}
             var q = new TorznabQuery();
             q.QueryType = query["t"];
@@ -29,9 +30,15 @@ namespace Jackett
             q.ApiKey = query["apikey"];
             q.Limit = int.Parse(query["limit"]);
             q.Offset = int.Parse(query["offset"]);
-            q.RageID = int.Parse(query["rid"]);
-            q.Season = int.Parse(query["season"]);
-            q.Episode = int.Parse(query["ep"]);
+
+            int temp;
+            if (int.TryParse(query["rid"], out temp))
+                q.RageID = temp;
+            if (int.TryParse(query["season"], out temp))
+                q.Season = temp;
+            if (int.TryParse(query["ep"], out temp))
+                q.Episode = int.Parse(query["ep"]);
+
             return q;
         }
     }

@@ -24,9 +24,25 @@ namespace Jackett
         public Uri ConverUrl { get; set; }
         public Uri BannerUrl { get; set; }
         public string InfoHash { get; set; }
+        public Uri MagnetUrl { get; set; }
         public double? MinimumRatio { get; set; }
         public long? MinimumSeedTime { get; set; }
 
+
+        public static long BytesFromGB(float gb)
+        {
+            return BytesFromMB(gb * 1024f);
+        }
+
+        public static long BytesFromMB(float mb)
+        {
+            return BytesFromKB(mb * 1024f);
+        }
+
+        public static long BytesFromKB(float kb)
+        {
+            return (long)(kb * 1024f);
+        }
 
     }
 }

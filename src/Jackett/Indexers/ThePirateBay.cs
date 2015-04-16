@@ -1,16 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CsQuery;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Jackett.Indexers
 {
     public class ThePirateBay : IndexerInterface
     {
+
         class ThePirateBayConfig : ConfigurationData
         {
             public StringItem Url { get; private set; }
@@ -36,7 +40,7 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-        static string SearchUrl = "s/?q=test";
+        static string SearchUrl = "s/?q=\"{0}\"&category=205&page=0&orderby=99";
         static string BrowserUrl = "browse";
 
         string BaseUrl;
@@ -112,6 +116,57 @@ namespace Jackett.Indexers
         {
             BaseUrl = (string)jsonConfig["base_url"];
             IsConfigured = true;
+        }
+
+        public Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        {
+            return Task<ReleaseInfo[]>.Run(async () =>
+            {
+                List<ReleaseInfo> releases = new List<ReleaseInfo>();
+
+                var search = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode("game of thrones s03e09"));
+                var results = await client.GetStringAsync(search);
+                CQ dom = results;
+                var descRegex = new Regex("Uploaded (?<month>.*?)-(?<day>.*?) (?<year>.*?), Size (?<size>.*?) (?<unit>.*?), ULed by");
+                var rows = dom["#searchResult > tbody > tr"];
+                foreach (var row in rows)
+                {
+                    var release = new ReleaseInfo();
+                    CQ qRow = row.Cq();
+                    CQ qLink = qRow[".detLink"].First();
+                    CQ qPeerCols = qRow["td[align=\"right\"]"];
+
+                    //Uploaded 08-02 2007, Size 47.15 MiB, ULed
+                    var description = qRow[".detDesc"][0].ChildNodes[0].NodeValue.Trim();
+                    var descGroups = descRegex.Match(description).Groups;
+                    release.PublishDate = new DateTime(
+                        int.Parse(descGroups["year"].Value),
+                        int.Parse(descGroups["month"].Value),
+                        int.Parse(descGroups["day"].Value)
+                    );
+                    var size = float.Parse(descGroups["size"].Value);
+                    switch (descGroups["unit"].Value)
+                    {
+                        case "GiB": release.Size = ReleaseInfo.BytesFromGB(size); break;
+                        case "MiB": release.Size = ReleaseInfo.BytesFromMB(size); break;
+                        case "KiB": release.Size = ReleaseInfo.BytesFromKB(size); break;
+                    }
+
+                    release.Comments = new Uri(BaseUrl + qLink.Attr("href").TrimStart('/'));
+                    release.Guid = release.Comments;
+                    release.Title = qLink.Text().Trim();
+                    release.Description = release.Title;
+                    release.MagnetUrl = new Uri(qRow["td > a"].First().Attr("href"));
+                    release.InfoHash = release.MagnetUrl.ToString().Split(':')[3].Split('&')[0];
+                    release.Seeders = int.Parse(qPeerCols.ElementAt(0).InnerText);
+                    release.Peers = int.Parse(qPeerCols.ElementAt(1).InnerText) + release.Seeders;
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    releases.Add(release);
+                }
+
+                return releases.ToArray();
+            });
         }
     }
 }

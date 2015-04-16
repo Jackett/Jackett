@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +17,18 @@ namespace Jackett
 
         static void Main(string[] args)
         {
+            //var descRegex = new Regex("Uploaded (?<month>.*?)-(?<day>.*?) (?<year>.*?), Size (?<size>.*?) (?<unit>.*?), ULed");
+            var descRegex = new Regex("Uploaded (?<month>.*?)-(?<day>.*?) (?<year>.*?), Size (?<size>.*?) (?<unit>.*?), ULed by");
+            var m = descRegex.Match(("Uploaded 06-03 2013, Size 329.84 MiB, ULed by"));
+            List<string> matches = new List<string>();
+            var date = m.Groups["month"].Value;
+            for (var i = 0; i < m.Groups.Count; i++)
+            {
+                var group = m.Groups[i];
+                matches.Add(group.Value); ;
+            }
+            //Uploaded 08-02&nbsp;2007, Size 47.15&nbsp;MiB, ULed
+            //Uploaded (<date>.*?)&nbsp;2007, Size 47.15&nbsp;MiB, ULed
 
             var resultPage = new ResultPage(new ChannelInfo
             {
