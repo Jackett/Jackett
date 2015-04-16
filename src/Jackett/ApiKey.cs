@@ -9,6 +9,9 @@ namespace Jackett
 {
     public class ApiKey
     {
+
+        public static string CurrentKey;
+
         const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
 
         public static string Generate()

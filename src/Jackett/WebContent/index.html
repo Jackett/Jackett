@@ -13,7 +13,7 @@
     <title>Jackett</title>
     <style>
         body {
-            background-image: url("congruent_outline.png");
+            background-image: url("crissXcross.png");
             background-repeat: repeat;
         }
 
@@ -100,7 +100,6 @@
 
             .indexer-add-content > .glyphicon {
                 font-size: 50px;
-                margin-top: 40%;
                 vertical-align: bottom;
             }
 
@@ -177,12 +176,12 @@
         <h3>Configured Indexers</h3>
         <div id="indexers">
 
-            <a class="indexer card" id="add-indexer" href="#" data-toggle="modal" data-target="#select-indexer-modal">
+            <button class="indexer card" id="add-indexer" data-toggle="modal" data-target="#select-indexer-modal">
                 <div class="indexer-add-content">
                     <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
                     <div class="light-text">Add</div>
                 </div>
-            </a>
+            </button>
 
         </div>
 
@@ -230,10 +229,18 @@
             <div class="indexer-logo"><img src="logos/{{id}}.png" /></div>
             <div class="indexer-name"><h3>{{name}}</h3></div>
             <div class="indexer-buttons">
-                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
-                <a class="btn btn-warning btn-sm indexer-button-test" href="#" data-id="{{id}}">Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></a>
-                <a class="btn btn-danger btn-sm" href="#">Delete <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                <a class="btn btn-primary btn-sm" href="#">Configure <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>
+                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
+                    Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+                </a>
+                <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
+                    Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
+                    Delete <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-primary btn-sm" data-id="{{id}}">
+                    Configure <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                </button>
             </div>
             <div class="indexer-host">
                 <b>Torznab Host:</b>
@@ -300,6 +307,28 @@
             $('#indexers').fadeIn();
             prepareSetupButtons();
             prepareTestButtons();
+            prepareDeleteButtons();
+        }
+
+        function prepareDeleteButtons() {
+            $(".indexer-button-delete").each(function (i, btn) {
+                var $btn = $(btn);
+                var id = $btn.data("id");
+                $btn.click(function () {
+                    var jqxhr = $.post("delete_indexer", JSON.stringify({ indexer: id }), function (data) {
+                        if (data.result == "error") {
+                            doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
+                        }
+                        else {
+                            doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
+                        }
+                    }).fail(function () {
+                        doNotify("Error deleting indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
+                    }).always(function () {
+                        reloadIndexers();
+                    });
+                });
+            });
         }
 
         function prepareSetupButtons() {

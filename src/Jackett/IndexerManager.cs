@@ -11,15 +11,18 @@ namespace Jackett
     public class IndexerManager
     {
 
-        static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
-        static string IndexerConfigDirectory = Path.Combine(AppConfigDirectory, "Indexers");
+        static string IndexerConfigDirectory = Path.Combine(Program.AppConfigDirectory, "Indexers");
 
         public Dictionary<string, IndexerInterface> Indexers { get; private set; }
 
         public IndexerManager()
         {
             Indexers = new Dictionary<string, IndexerInterface>();
+            LoadMissingIndexers();
+        }
 
+        void LoadMissingIndexers()
+        {
             var implementedIndexerTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => typeof(IndexerInterface).IsAssignableFrom(p) && !p.IsInterface)
@@ -31,9 +34,12 @@ namespace Jackett
             }
         }
 
-        IndexerInterface LoadIndexer(Type indexerType)
+        void LoadIndexer(Type indexerType)
         {
             var name = indexerType.Name.Trim().ToLower();
+
+            if (Indexers.ContainsKey(name))
+                return;
 
             IndexerInterface newIndexer = (IndexerInterface)Activator.CreateInstance(indexerType);
             newIndexer.OnSaveConfigurationRequested += newIndexer_OnSaveConfigurationRequested;
@@ -46,7 +52,6 @@ namespace Jackett
             }
 
             Indexers.Add(name, newIndexer);
-            return newIndexer;
         }
 
         string GetIndexerConfigFilePath(IndexerInterface indexer)
@@ -69,6 +74,15 @@ namespace Jackett
             if (!Indexers.TryGetValue(name, out indexer))
                 throw new Exception(string.Format("No indexer with ID '{0}'", name));
             return indexer;
+        }
+
+        public void DeleteIndexer(string name)
+        {
+            var indexer = GetIndexer(name);
+            var configPath = GetIndexerConfigFilePath(indexer);
+            File.Delete(configPath);
+            Indexers.Remove(name);
+            LoadMissingIndexers();
         }
 
     }

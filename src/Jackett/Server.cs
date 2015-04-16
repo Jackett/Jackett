@@ -18,11 +18,25 @@ namespace Jackett
 
         public Server()
         {
+            LoadApiKey();
+
             indexerManager = new IndexerManager();
             webApi = new WebApi(indexerManager);
 
             listener = new HttpListener();
             listener.Prefixes.Add("http://*:9117/");
+        }
+
+        void LoadApiKey()
+        {
+            var apiKeyFile = Path.Combine(Program.AppConfigDirectory, "api_key.txt");
+            if (File.Exists(apiKeyFile))
+                ApiKey.CurrentKey = File.ReadAllText(apiKeyFile).Trim();
+            else
+            {
+                ApiKey.CurrentKey = ApiKey.Generate();
+                File.WriteAllText(apiKeyFile, ApiKey.CurrentKey);
+            }
         }
 
         public async void Start()

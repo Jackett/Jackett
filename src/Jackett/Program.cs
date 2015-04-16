@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,13 +10,12 @@ namespace Jackett
 {
     class Program
     {
-        public static ManualResetEvent ExitEvent = new ManualResetEvent(false);
+        public static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
 
-        static IndexerManager indexerManager;
+        public static ManualResetEvent ExitEvent = new ManualResetEvent(false);
 
         static void Main(string[] args)
         {
-            indexerManager = new IndexerManager();
 
             var resultPage = new ResultPage(new ChannelInfo
             {

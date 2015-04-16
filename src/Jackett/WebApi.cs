@@ -21,14 +21,16 @@ namespace Jackett
             GetConfigForm,
             ConfigureIndexer,
             GetIndexers,
-            TestIndexer
+            TestIndexer,
+            DeleteIndexer
         }
         static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod>
         {
             { "get_config_form", WebApiMethod.GetConfigForm },
             { "configure_indexer", WebApiMethod.ConfigureIndexer },
             { "get_indexers", WebApiMethod.GetIndexers },
-            { "test_indexer", WebApiMethod.TestIndexer}
+            { "test_indexer", WebApiMethod.TestIndexer },
+            { "delete_indexer", WebApiMethod.DeleteIndexer }
         };
 
         IndexerManager indexerManager;
@@ -80,102 +82,39 @@ namespace Jackett
             return JObject.Parse(postData);
         }
 
+        delegate Task<JToken> HandlerTask(HttpListenerContext context);
+
         async void ProcessWebApiRequest(HttpListenerContext context, WebApiMethod method)
         {
             var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
 
-            JToken jsonReply = new JObject();
-
             context.Response.ContentType = "text/json";
             context.Response.StatusCode = (int)HttpStatusCode.OK;
+
+            HandlerTask handlerTask;
 
             switch (method)
             {
                 case WebApiMethod.GetConfigForm:
-                    try
-                    {
-                        var postData = await ReadPostDataJson(context.Request.InputStream);
-                        string indexerString = (string)postData["indexer"];
-                        var indexer = indexerManager.GetIndexer(indexerString);
-                        var config = await indexer.GetConfigurationForSetup();
-                        jsonReply["config"] = config.ToJson();
-                        jsonReply["name"] = indexer.DisplayName;
-                        jsonReply["result"] = "success";
-                    }
-                    catch (Exception ex)
-                    {
-                        jsonReply["result"] = "error";
-                        jsonReply["error"] = ex.Message;
-                    }
+                    handlerTask = HandleConfigForm;
                     break;
                 case WebApiMethod.ConfigureIndexer:
-                    try
-                    {
-                        var postData = await ReadPostDataJson(context.Request.InputStream);
-                        string indexerString = (string)postData["indexer"];
-                        var indexer = indexerManager.GetIndexer(indexerString);
-                        jsonReply["name"] = indexer.DisplayName;
-                        await indexer.ApplyConfiguration(postData["config"]);
-                        await indexer.VerifyConnection();
-                        jsonReply["result"] = "success";
-                    }
-                    catch (Exception ex)
-                    {
-                        jsonReply["result"] = "error";
-                        jsonReply["error"] = ex.Message;
-                        if (ex is ExceptionWithConfigData)
-                        {
-                            jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
-                        }
-                    }
+                    handlerTask = HandleConfigureIndexer;
                     break;
                 case WebApiMethod.GetIndexers:
-                    try
-                    {
-                        jsonReply["result"] = "success";
-                        jsonReply["api_key"] = ApiKey.Generate();
-                        JArray items = new JArray();
-                        foreach (var i in indexerManager.Indexers)
-                        {
-                            var indexer = i.Value;
-                            var item = new JObject();
-                            item["id"] = i.Key;
-                            item["name"] = indexer.DisplayName;
-                            item["description"] = indexer.DisplayDescription;
-                            item["configured"] = indexer.IsConfigured;
-                            item["site_link"] = indexer.SiteLink;
-                            items.Add(item);
-                        }
-                        jsonReply["items"] = items;
-                    }
-                    catch (Exception ex)
-                    {
-                        jsonReply["result"] = "error";
-                        jsonReply["error"] = ex.Message;
-                    }
+                    handlerTask = HandleGetIndexers;
                     break;
                 case WebApiMethod.TestIndexer:
-                    try
-                    {
-                        var postData = await ReadPostDataJson(context.Request.InputStream);
-                        string indexerString = (string)postData["indexer"];
-                        var indexer = indexerManager.GetIndexer(indexerString);
-                        jsonReply["name"] = indexer.DisplayName;
-                        await indexer.VerifyConnection();
-                        jsonReply["result"] = "success";
-                    }
-                    catch (Exception ex)
-                    {
-                        jsonReply["result"] = "error";
-                        jsonReply["error"] = ex.Message;
-                    }
+                    handlerTask = HandleTestIndexer;
+                    break;
+                case WebApiMethod.DeleteIndexer:
+                    handlerTask = HandleDeleteIndexer;
                     break;
                 default:
-                    jsonReply["result"] = "error";
-                    jsonReply["error"] = "Invalid API method";
+                    handlerTask = HandleInvalidApiMethod;
                     break;
             }
-
+            JToken jsonReply = await handlerTask(context);
             ReplyWithJson(context, jsonReply);
         }
 
@@ -184,6 +123,132 @@ namespace Jackett
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json.ToString());
             await context.Response.OutputStream.WriteAsync(jsonBytes, 0, jsonBytes.Length);
             context.Response.OutputStream.Close();
+        }
+
+        Task<JToken> HandleInvalidApiMethod(HttpListenerContext context)
+        {
+            return Task<JToken>.Run(() =>
+            {
+                JToken jsonReply = new JObject();
+                jsonReply["result"] = "error";
+                jsonReply["error"] = "Invalid API method";
+                return jsonReply;
+            });
+        }
+
+        async Task<JToken> HandleConfigForm(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                string indexerString = (string)postData["indexer"];
+                var indexer = indexerManager.GetIndexer(indexerString);
+                var config = await indexer.GetConfigurationForSetup();
+                jsonReply["config"] = config.ToJson();
+                jsonReply["name"] = indexer.DisplayName;
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        async Task<JToken> HandleConfigureIndexer(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                string indexerString = (string)postData["indexer"];
+                var indexer = indexerManager.GetIndexer(indexerString);
+                jsonReply["name"] = indexer.DisplayName;
+                await indexer.ApplyConfiguration(postData["config"]);
+                await indexer.VerifyConnection();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+                if (ex is ExceptionWithConfigData)
+                {
+                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
+                }
+            }
+            return jsonReply;
+        }
+
+        Task<JToken> HandleGetIndexers(HttpListenerContext context)
+        {
+            return Task<JToken>.Run(() =>
+            {
+                JToken jsonReply = new JObject();
+                try
+                {
+                    jsonReply["result"] = "success";
+                    jsonReply["api_key"] = ApiKey.CurrentKey;
+                    JArray items = new JArray();
+                    foreach (var i in indexerManager.Indexers)
+                    {
+                        var indexer = i.Value;
+                        var item = new JObject();
+                        item["id"] = i.Key;
+                        item["name"] = indexer.DisplayName;
+                        item["description"] = indexer.DisplayDescription;
+                        item["configured"] = indexer.IsConfigured;
+                        item["site_link"] = indexer.SiteLink;
+                        items.Add(item);
+                    }
+                    jsonReply["items"] = items;
+                }
+                catch (Exception ex)
+                {
+                    jsonReply["result"] = "error";
+                    jsonReply["error"] = ex.Message;
+                }
+                return jsonReply;
+            });
+        }
+
+        async Task<JToken> HandleTestIndexer(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                string indexerString = (string)postData["indexer"];
+                var indexer = indexerManager.GetIndexer(indexerString);
+                jsonReply["name"] = indexer.DisplayName;
+                await indexer.VerifyConnection();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        async Task<JToken> HandleDeleteIndexer(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                string indexerString = (string)postData["indexer"];
+                indexerManager.DeleteIndexer(indexerString);
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
         }
 
     }
