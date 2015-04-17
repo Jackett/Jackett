@@ -204,5 +204,11 @@ namespace Jackett.Indexers
                 return releases.ToArray();
             });
         }
+
+
+        public Task<byte[]> Download(Uri link)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

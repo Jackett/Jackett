@@ -195,5 +195,10 @@ namespace Jackett
                 return releases.ToArray();
             });
         }
+
+        public Task<byte[]> Download(Uri link)
+        {
+            return client.GetByteArrayAsync(link);
+        }
     }
 }

@@ -33,5 +33,7 @@ namespace Jackett
         void LoadFromSavedConfiguration(JToken jsonConfig);
 
         Task<ReleaseInfo[]> PerformQuery(TorznabQuery query);
+
+        Task<byte[]> Download(Uri link);
     }
 }

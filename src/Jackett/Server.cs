@@ -84,8 +84,18 @@ namespace Jackett
                 var reader = new StreamReader(inputStream, context.Request.ContentEncoding);
                 var bytes = await reader.ReadToEndAsync();
 
-                var indexerId = context.Request.Url.AbsolutePath.Replace("/api", "").TrimStart('/').ToLower();
+                var indexerId = context.Request.Url.Segments[2].TrimEnd('/').ToLower();
                 var indexer = indexerManager.GetIndexer(indexerId);
+
+                if (context.Request.Url.Segments.Length > 4 && context.Request.Url.Segments[3] == "download/")
+                {
+                    var downloadLink = Encoding.UTF8.GetString(Convert.FromBase64String((context.Request.Url.Segments[4].TrimEnd('/'))));
+                    var downloadBytes = await indexer.Download(new Uri(downloadLink));
+                    await context.Response.OutputStream.WriteAsync(downloadBytes, 0, downloadBytes.Length);
+                    context.Response.Close();
+                    return;
+                }
+
                 var torznabQuery = TorznabQuery.FromHttpQuery(query);
                 var severUrl = string.Format("{0}://{1}:{2}/", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port);
 
@@ -101,6 +111,16 @@ namespace Jackett
                 });
 
                 var releases = await indexer.PerformQuery(torznabQuery);
+
+                // add Jackett proxy to download links...
+                foreach (var release in releases)
+                {
+                    var originalLink = release.Link;
+                    var encodedLink = Convert.ToBase64String(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
+                    var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexerId, encodedLink);
+                    release.Link = new Uri(proxyLink);
+                }
+
                 resultPage.Releases.AddRange(releases);
 
                 var xml = resultPage.ToXml(new Uri(severUrl));
@@ -118,9 +138,13 @@ namespace Jackett
                 exception = ex;
             }
 
-            var errorBytes = Encoding.UTF8.GetBytes(exception.Message);
-            await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
-            context.Response.Close();
+            try
+            {
+                var errorBytes = Encoding.UTF8.GetBytes(exception.Message);
+                await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
+                context.Response.Close();
+            }
+            catch (Exception ex) { }
         }
 
 
