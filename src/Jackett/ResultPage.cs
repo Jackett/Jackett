@@ -32,7 +32,7 @@ namespace Jackett
 
         XElement getTorznabElement(string name, object value)
         {
-            return value == null ? null : new XElement(torznabNs + "attr", new XAttribute(name, "rageid"), new XAttribute("value", value));
+            return value == null ? null : new XElement(torznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
         }
 
         public string ToXml(Uri selfAtom)
@@ -70,7 +70,7 @@ namespace Jackett
                             new XElement("pubDate", xmlDateFormat(r.PublishDate)),
                             new XElement("size", r.Size),
                             new XElement("description", r.Description),
-                            r.Link == null ? null : new XElement("link", r.Link),
+                            new XElement("link", r.Link ?? r.MagnetUrl),
                             r.Category == null ? null : new XElement("category", r.Category),
                             new XElement(
                                 "enclosure",

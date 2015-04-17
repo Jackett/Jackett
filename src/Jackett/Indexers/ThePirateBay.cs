@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -41,7 +42,8 @@ namespace Jackett.Indexers
         public bool IsConfigured { get; private set; }
 
         static string SearchUrl = "s/?q=\"{0}\"&category=205&page=0&orderby=99";
-        static string BrowserUrl = "browse";
+        static string BrowserUrl = "browse/200";
+        static string SwitchSingleViewUrl = "switchview.php?view=s";
 
         string BaseUrl;
 
@@ -80,6 +82,15 @@ namespace Jackett.Indexers
                 config.LoadValuesFromJson(configJson);
                 await TestBrowse(config.Url.Value);
                 BaseUrl = new Uri(config.Url.Value).ToString();
+
+                var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
+                };
+                message.Headers.Referrer = new Uri(BaseUrl + BrowserUrl);
+                var response = await client.SendAsync(message);
+
                 var configSaveData = new JObject();
                 configSaveData["base_url"] = BaseUrl;
 
@@ -105,7 +116,7 @@ namespace Jackett.Indexers
             return Task.Run(async () =>
             {
                 var result = await client.GetStringAsync(new Uri(url) + BrowserUrl);
-                if (!result.Contains("<span>Browse Torrents</span>"))
+                if (!result.Contains("<table id=\"searchResult\">"))
                 {
                     throw new Exception("Could not detect The Pirate Bay content");
                 }
@@ -124,44 +135,69 @@ namespace Jackett.Indexers
             {
                 List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-                var search = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode("game of thrones s03e09"));
-                var results = await client.GetStringAsync(search);
+                var searchUrl = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode("game of thrones s05e01"));
+
+                var message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
+                };
+                message.Headers.Referrer = new Uri(searchUrl);
+
+                var response = await client.SendAsync(message);
+                var results = await response.Content.ReadAsStringAsync();
+
                 CQ dom = results;
-                var descRegex = new Regex("Uploaded (?<month>.*?)-(?<day>.*?) (?<year>.*?), Size (?<size>.*?) (?<unit>.*?), ULed by");
+
                 var rows = dom["#searchResult > tbody > tr"];
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     CQ qRow = row.Cq();
-                    CQ qLink = qRow[".detLink"].First();
-                    CQ qPeerCols = qRow["td[align=\"right\"]"];
+                    CQ qLink = row.ChildElements.ElementAt(1).Cq().Children("a").First();
 
-                    //Uploaded 08-02 2007, Size 47.15 MiB, ULed
-                    var description = qRow[".detDesc"][0].ChildNodes[0].NodeValue.Trim();
-                    var descGroups = descRegex.Match(description).Groups;
-                    release.PublishDate = new DateTime(
-                        int.Parse(descGroups["year"].Value),
-                        int.Parse(descGroups["month"].Value),
-                        int.Parse(descGroups["day"].Value)
-                    );
-                    var size = float.Parse(descGroups["size"].Value);
-                    switch (descGroups["unit"].Value)
-                    {
-                        case "GiB": release.Size = ReleaseInfo.BytesFromGB(size); break;
-                        case "MiB": release.Size = ReleaseInfo.BytesFromMB(size); break;
-                        case "KiB": release.Size = ReleaseInfo.BytesFromKB(size); break;
-                    }
-
-                    release.Comments = new Uri(BaseUrl + qLink.Attr("href").TrimStart('/'));
-                    release.Guid = release.Comments;
-                    release.Title = qLink.Text().Trim();
-                    release.Description = release.Title;
-                    release.MagnetUrl = new Uri(qRow["td > a"].First().Attr("href"));
-                    release.InfoHash = release.MagnetUrl.ToString().Split(':')[3].Split('&')[0];
-                    release.Seeders = int.Parse(qPeerCols.ElementAt(0).InnerText);
-                    release.Peers = int.Parse(qPeerCols.ElementAt(1).InnerText) + release.Seeders;
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+                    release.Title = qLink.Text().Trim();
+                    release.Description = release.Title;
+                    release.Comments = new Uri(BaseUrl + qLink.Attr("href").TrimStart('/'));
+                    release.Guid = release.Comments;
+
+                    var timeString = row.ChildElements.ElementAt(2).Cq().Text();
+                    if (timeString.Contains("mins ago"))
+                        release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(int.Parse(timeString.Split(' ')[0])));
+                    else if (timeString.Contains("Today"))
+                        release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(2) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                    else if (timeString.Contains("Y-day"))
+                        release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(26) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                    else if (timeString.Contains(':'))
+                    {
+                        var utc = DateTime.ParseExact(timeString, "MM-dd HH:mm", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
+                        release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
+                    }
+                    else
+                    {
+                        var utc = DateTime.ParseExact(timeString, "MM-dd yyyy", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
+                        release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
+                    }
+
+                    var downloadCol = row.ChildElements.ElementAt(3).Cq().Find("a");
+                    release.MagnetUrl = new Uri(downloadCol.Attr("href"));
+                    release.InfoHash = release.MagnetUrl.ToString().Split(':')[3].Split('&')[0];
+
+                    var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
+                    var sizeVal = float.Parse(sizeString[0]);
+                    var sizeUnit = sizeString[1];
+                    switch (sizeUnit)
+                    {
+                        case "GiB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
+                        case "MiB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
+                        case "KiB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
+                    }
+
+                    release.Seeders = int.Parse(row.ChildElements.ElementAt(5).Cq().Text());
+                    release.Peers = int.Parse(row.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
+
                     releases.Add(release);
                 }
 
