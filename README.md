@@ -11,9 +11,12 @@ Software is still in development, check back in a few days.
 
 ### Supported Trackers
  * [BitMeTV](http://www.bitmetv.org/)
+ * [MoreThan.tv](https://morethan.tv/)
  * [Freshon](https://freshon.tv/)
- * [The Pirate Bay](https://thepiratebay.se/)
  * [IPTorrents](https://iptorrents.com/)
+ * [The Pirate Bay](https://thepiratebay.se/)
+ * [RARBG](https://rarbg.com)
+
 
 ### Additional Trackers
 Jackett's framework allows me (and any other volunteering dev) to implement just about any new tracker in 15-60 minutes. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact me on IRC (see below).
