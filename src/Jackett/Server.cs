@@ -99,6 +99,11 @@ namespace Jackett
                 }
 
                 var torznabQuery = TorznabQuery.FromHttpQuery(query);
+
+                torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
+
+                var releases = await indexer.PerformQuery(torznabQuery);
+
                 var severUrl = string.Format("{0}://{1}:{2}/", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port);
 
                 var resultPage = new ResultPage(new ChannelInfo
@@ -111,8 +116,6 @@ namespace Jackett
                     ImageLink = indexer.SiteLink,
                     ImageDescription = indexer.DisplayName
                 });
-
-                var releases = await indexer.PerformQuery(torznabQuery);
 
                 // add Jackett proxy to download links...
                 foreach (var release in releases)

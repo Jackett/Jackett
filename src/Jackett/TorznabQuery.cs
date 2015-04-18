@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,23 @@ namespace Jackett
         public int Offset { get; private set; }
         public int RageID { get; private set; }
         public int Season { get; private set; }
-        public int Episode { get; private set; }
+        public string Episode { get; private set; }
+        public string[] ShowTitles { get; set; }
+
+        public string GetEpisodeSearchString()
+        {
+            if (Season == 0)
+                return string.Empty;
+
+            string episodeString;
+            DateTime showDate;
+            if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out showDate))
+                episodeString = showDate.ToString("yyyy.MM.dd");
+            else
+                episodeString = string.Format("S{0:00}E{1:00}", Season, int.Parse(Episode));
+
+            return episodeString;
+        }
 
         public static TorznabQuery FromHttpQuery(NameValueCollection query)
         {
@@ -36,8 +53,8 @@ namespace Jackett
                 q.RageID = temp;
             if (int.TryParse(query["season"], out temp))
                 q.Season = temp;
-            if (int.TryParse(query["ep"], out temp))
-                q.Episode = int.Parse(query["ep"]);
+
+            q.Episode = query["ep"];
 
             return q;
         }

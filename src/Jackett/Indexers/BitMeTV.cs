@@ -133,53 +133,57 @@ namespace Jackett
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode("game of thrones s03e09"));
-            var results = await client.GetStringAsync(searchUrl);
-            CQ dom = results;
-
-            var table = dom["tbody > tr > .latest"].Parent().Parent();
-
-            foreach (var row in table.Children().Skip(1))
+            foreach (var title in query.ShowTitles)
             {
-                var release = new ReleaseInfo();
 
-                CQ qRow = row.Cq();
-                CQ qDetailsCol = row.ChildElements.ElementAt(1).Cq();
-                CQ qLink = qDetailsCol.Children("a").First();
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var searchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
+                var results = await client.GetStringAsync(searchUrl);
+                CQ dom = results;
 
-                release.MinimumRatio = 1;
-                release.MinimumSeedTime = 172800;
-                release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
-                release.Guid = release.Comments;
-                release.Title = qLink.Attr("title");
-                release.Description = release.Title;
+                var table = dom["tbody > tr > .latest"].Parent().Parent();
 
-                //"Tuesday, June 11th 2013 at 03:52:53 AM" to...
-                //"Tuesday June 11 2013 03 52 53 AM"
-                var timestamp = qDetailsCol.Children("font").Text().Trim() + " ";
-                var groups = new Regex(@"(.*?), (.*?) (.*?)th (.*?) at (.*?):(.*?):(.*?) (.*?) ").Match(timestamp).Groups;
-                var str = string.Join(" ", groups.Cast<Group>().Skip(1).Select(g => g.Value));
-                release.PublishDate = DateTime.ParseExact(str, "dddd MMMM d yyyy hh mm ss tt", CultureInfo.InvariantCulture);
-
-                release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
-
-                var sizeCol = row.ChildElements.ElementAt(6);
-                var sizeVal = float.Parse(sizeCol.ChildNodes[0].NodeValue);
-                var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-
-                switch (sizeUnit)
+                foreach (var row in table.Children().Skip(1))
                 {
-                    case "GB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
-                    case "MB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
-                    case "KB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
-                }
+                    var release = new ReleaseInfo();
 
-                release.Seeders = int.Parse(row.ChildElements.ElementAt(8).Cq().Text());
-                release.Peers = int.Parse(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
-                releases.Add(release);
+                    CQ qRow = row.Cq();
+                    CQ qDetailsCol = row.ChildElements.ElementAt(1).Cq();
+                    CQ qLink = qDetailsCol.Children("a").First();
+
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                    release.Guid = release.Comments;
+                    release.Title = qLink.Attr("title");
+                    release.Description = release.Title;
+
+                    //"Tuesday, June 11th 2013 at 03:52:53 AM" to...
+                    //"Tuesday June 11 2013 03 52 53 AM"
+                    var timestamp = qDetailsCol.Children("font").Text().Trim() + " ";
+                    var groups = new Regex(@"(.*?), (.*?) (.*?)th (.*?) at (.*?):(.*?):(.*?) (.*?) ").Match(timestamp).Groups;
+                    var str = string.Join(" ", groups.Cast<Group>().Skip(1).Select(g => g.Value));
+                    release.PublishDate = DateTime.ParseExact(str, "dddd MMMM d yyyy hh mm ss tt", CultureInfo.InvariantCulture);
+
+                    release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
+
+                    var sizeCol = row.ChildElements.ElementAt(6);
+                    var sizeVal = float.Parse(sizeCol.ChildNodes[0].NodeValue);
+                    var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
+
+                    switch (sizeUnit)
+                    {
+                        case "GB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
+                        case "MB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
+                        case "KB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
+                    }
+
+                    release.Seeders = int.Parse(row.ChildElements.ElementAt(8).Cq().Text());
+                    release.Peers = int.Parse(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
+                    releases.Add(release);
+                }
             }
 
             return releases.ToArray();

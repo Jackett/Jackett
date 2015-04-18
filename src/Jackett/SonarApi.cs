@@ -45,6 +45,8 @@ namespace Jackett
         HttpClientHandler handler;
         HttpClient client;
 
+        Dictionary<int, string[]> IdNameMappings;
+
         public SonarrApi()
         {
             LoadSettings();
@@ -57,6 +59,28 @@ namespace Jackett
                 UseCookies = true,
             };
             client = new HttpClient(handler);
+
+            IdNameMappings = new Dictionary<int, string[]>();
+        }
+
+        async Task ReloadNameMappings(string host, int port, string apiKey)
+        {
+            Uri hostUri = new Uri(host);
+            var queryUrl = string.Format("http://{0}:{1}/api/series?apikey={2}", hostUri.Host, port, apiKey);
+            var response = await client.GetStringAsync(queryUrl);
+            var json = JArray.Parse(response);
+
+            IdNameMappings.Clear();
+            foreach (var item in json)
+            {
+                var titles = new List<string>();
+                titles.Add((string)item["title"]);
+                foreach (var t in item["alternateTitles"])
+                {
+                    titles.Add((string)t["title"]);
+                }
+                IdNameMappings.Add((int)item["tvRageId"], titles.ToArray());
+            }
         }
 
         void LoadSettings()
@@ -99,7 +123,7 @@ namespace Jackett
         {
             var config = new ConfigurationSonarr();
             config.LoadValuesFromJson(configJson);
-            await TestConnection(config.Host.Value, int.Parse(config.Port.Value), config.ApiKey.Value);
+            await ReloadNameMappings(config.Host.Value, int.Parse(config.Port.Value), config.ApiKey.Value);
             Host = "http://" + new Uri(config.Host.Value).Host;
             Port = int.Parse(config.Port.Value);
             ApiKey = config.ApiKey.Value;
@@ -108,15 +132,24 @@ namespace Jackett
 
         public async Task TestConnection()
         {
-            await TestConnection(Host, Port, ApiKey);
+            await ReloadNameMappings(Host, Port, ApiKey);
         }
 
-        async Task TestConnection(string host, int port, string apiKey)
+        public async Task<string[]> GetShowTitle(int rid)
         {
-            Uri hostUri = new Uri(host);
-            var queryUrl = string.Format("http://{0}:{1}/api/series?apikey={2}", hostUri.Host, port, apiKey);
-            var response = await client.GetStringAsync(queryUrl);
-            var json = JArray.Parse(response);
+            if (rid == 0)
+                return null;
+
+            int tries = 0;
+            while (tries < 2)
+            {
+                string[] titles;
+                if (IdNameMappings.TryGetValue(rid, out titles))
+                    return titles;
+                await ReloadNameMappings(Host, Port, ApiKey);
+                tries++;
+            }
+            return null;
         }
     }
 }
