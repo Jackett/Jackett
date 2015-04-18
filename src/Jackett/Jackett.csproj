@@ -91,6 +91,7 @@
     <Compile Include="ResultPage.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="TorznabQuery.cs" />
+    <Compile Include="TVRage.cs" />
     <Compile Include="WebApi.cs" />
   </ItemGroup>
   <ItemGroup>

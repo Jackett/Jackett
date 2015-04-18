@@ -51,74 +51,65 @@ namespace Jackett
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            return Task.Run(() =>
-            {
-                var config = new ConfigurationDataBasicLogin();
-                return (ConfigurationData)config;
-            });
+            var config = new ConfigurationDataBasicLogin();
+            return Task.FromResult<ConfigurationData>(config);
         }
 
-        public Task ApplyConfiguration(JToken configJson)
+        public async Task ApplyConfiguration(JToken configJson)
         {
-            return Task.Run(async () =>
-            {
-                var config = new ConfigurationDataBasicLogin();
-                config.LoadValuesFromJson(configJson);
+            var config = new ConfigurationDataBasicLogin();
+            config.LoadValuesFromJson(configJson);
 
-                var pairs = new Dictionary<string, string>
+            var pairs = new Dictionary<string, string>
                 {
                     { "username", config.Username.Value},
                     { "password", config.Password.Value}
                 };
 
-                var content = new FormUrlEncodedContent(pairs);
-                var message = new HttpRequestMessage();
-                message.Method = HttpMethod.Post;
-                message.Content = content;
-                message.RequestUri = new Uri(LoginPostUrl);
-                message.Headers.Referrer = new Uri(LoginUrl);
-                message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            var content = new FormUrlEncodedContent(pairs);
+            var message = new HttpRequestMessage();
+            message.Method = HttpMethod.Post;
+            message.Content = content;
+            message.RequestUri = new Uri(LoginPostUrl);
+            message.Headers.Referrer = new Uri(LoginUrl);
+            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
 
-                var response = await client.SendAsync(message);
-                var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await client.SendAsync(message);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
-                if (!responseContent.Contains("/logout.php"))
-                {
-                    CQ dom = responseContent;
-                    var messageEl = dom[".error_text"];
-                    var errorMessage = messageEl.Text().Trim();
-                    throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-                }
-                else
-                {
-                    var configSaveData = new JObject();
-                    configSaveData["cookies"] = new JArray((
-                        from cookie in cookies.GetCookies(new Uri(BaseUrl)).Cast<Cookie>()
-                        select cookie.Name + ":" + cookie.Value
-                    ).ToArray());
+            if (!responseContent.Contains("/logout.php"))
+            {
+                CQ dom = responseContent;
+                var messageEl = dom[".error_text"];
+                var errorMessage = messageEl.Text().Trim();
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+            }
+            else
+            {
+                var configSaveData = new JObject();
+                configSaveData["cookies"] = new JArray((
+                    from cookie in cookies.GetCookies(new Uri(BaseUrl)).Cast<Cookie>()
+                    select cookie.Name + ":" + cookie.Value
+                ).ToArray());
 
-                    if (OnSaveConfigurationRequested != null)
-                        OnSaveConfigurationRequested(this, configSaveData);
+                if (OnSaveConfigurationRequested != null)
+                    OnSaveConfigurationRequested(this, configSaveData);
 
-                    IsConfigured = true;
-                }
-            });
+                IsConfigured = true;
+            }
         }
 
-        public Task VerifyConnection()
+        public async Task VerifyConnection()
         {
-            return Task.Run(async () =>
-            {
-                var message = new HttpRequestMessage();
-                message.Method = HttpMethod.Get;
-                message.RequestUri = new Uri(SearchUrl);
-                message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            var message = new HttpRequestMessage();
+            message.Method = HttpMethod.Get;
+            message.RequestUri = new Uri(SearchUrl);
+            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
 
-                var response = await client.SendAsync(message);
-                var result = await response.Content.ReadAsStringAsync();
-                if (!result.Contains("/logout.php"))
-                    throw new Exception("Detected as not logged in");
-            });
+            var response = await client.SendAsync(message);
+            var result = await response.Content.ReadAsStringAsync();
+            if (!result.Contains("/logout.php"))
+                throw new Exception("Detected as not logged in");
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -129,11 +120,8 @@ namespace Jackett
 
         public Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-            return Task<ReleaseInfo[]>.Run(async () =>
-            {
-                List<ReleaseInfo> releases = new List<ReleaseInfo>();
-                return releases.ToArray();
-            });
+            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            return Task.FromResult<ReleaseInfo[]>(releases.ToArray());
         }
 
         public Task<byte[]> Download(Uri link)

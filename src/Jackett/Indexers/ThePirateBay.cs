@@ -67,60 +67,47 @@ namespace Jackett.Indexers
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            return Task.Run(() =>
-            {
-                var config = new ThePirateBayConfig();
-                return (ConfigurationData)config;
-            });
+            var config = new ThePirateBayConfig();
+            return Task.FromResult<ConfigurationData>(config);
         }
 
-        public Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
+        public async Task ApplyConfiguration(JToken configJson)
         {
-            return Task.Run(async () =>
+            var config = new ThePirateBayConfig();
+            config.LoadValuesFromJson(configJson);
+            await TestBrowse(config.Url.Value);
+            BaseUrl = new Uri(config.Url.Value).ToString();
+
+            var message = new HttpRequestMessage
             {
-                var config = new ThePirateBayConfig();
-                config.LoadValuesFromJson(configJson);
-                await TestBrowse(config.Url.Value);
-                BaseUrl = new Uri(config.Url.Value).ToString();
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
+            };
+            message.Headers.Referrer = new Uri(BaseUrl + BrowserUrl);
+            var response = await client.SendAsync(message);
 
-                var message = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
-                };
-                message.Headers.Referrer = new Uri(BaseUrl + BrowserUrl);
-                var response = await client.SendAsync(message);
+            var configSaveData = new JObject();
+            configSaveData["base_url"] = BaseUrl;
 
-                var configSaveData = new JObject();
-                configSaveData["base_url"] = BaseUrl;
+            if (OnSaveConfigurationRequested != null)
+                OnSaveConfigurationRequested(this, configSaveData);
 
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
-                IsConfigured = true;
-
-            });
+            IsConfigured = true;
         }
 
-        public Task VerifyConnection()
+        public async Task VerifyConnection()
         {
-            return Task.Run(async () =>
-            {
-                await TestBrowse(BaseUrl);
-            });
+            await TestBrowse(BaseUrl);
         }
 
 
-        Task TestBrowse(string url)
+        async Task TestBrowse(string url)
         {
-            return Task.Run(async () =>
+            var result = await client.GetStringAsync(new Uri(url) + BrowserUrl);
+            if (!result.Contains("<table id=\"searchResult\">"))
             {
-                var result = await client.GetStringAsync(new Uri(url) + BrowserUrl);
-                if (!result.Contains("<table id=\"searchResult\">"))
-                {
-                    throw new Exception("Could not detect The Pirate Bay content");
-                }
-            });
+                throw new Exception("Could not detect The Pirate Bay content");
+            }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -129,80 +116,78 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-            return Task<ReleaseInfo[]>.Run(async () =>
+            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+
+            var searchUrl = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode("game of thrones s05e01"));
+
+            var message = new HttpRequestMessage
             {
-                List<ReleaseInfo> releases = new List<ReleaseInfo>();
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
+            };
+            message.Headers.Referrer = new Uri(searchUrl);
 
-                var searchUrl = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode("game of thrones s05e01"));
+            var response = await client.SendAsync(message);
+            var results = await response.Content.ReadAsStringAsync();
 
-                var message = new HttpRequestMessage
+            CQ dom = results;
+
+            var rows = dom["#searchResult > tbody > tr"];
+            foreach (var row in rows)
+            {
+                var release = new ReleaseInfo();
+                CQ qRow = row.Cq();
+                CQ qLink = row.ChildElements.ElementAt(1).Cq().Children("a").First();
+
+                release.MinimumRatio = 1;
+                release.MinimumSeedTime = 172800;
+                release.Title = qLink.Text().Trim();
+                release.Description = release.Title;
+                release.Comments = new Uri(BaseUrl + qLink.Attr("href").TrimStart('/'));
+                release.Guid = release.Comments;
+
+                var timeString = row.ChildElements.ElementAt(2).Cq().Text();
+                if (timeString.Contains("mins ago"))
+                    release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(int.Parse(timeString.Split(' ')[0])));
+                else if (timeString.Contains("Today"))
+                    release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(2) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                else if (timeString.Contains("Y-day"))
+                    release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(26) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                else if (timeString.Contains(':'))
                 {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
-                };
-                message.Headers.Referrer = new Uri(searchUrl);
-
-                var response = await client.SendAsync(message);
-                var results = await response.Content.ReadAsStringAsync();
-
-                CQ dom = results;
-
-                var rows = dom["#searchResult > tbody > tr"];
-                foreach (var row in rows)
+                    var utc = DateTime.ParseExact(timeString, "MM-dd HH:mm", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
+                    release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
+                }
+                else
                 {
-                    var release = new ReleaseInfo();
-                    CQ qRow = row.Cq();
-                    CQ qLink = row.ChildElements.ElementAt(1).Cq().Children("a").First();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Title = qLink.Text().Trim();
-                    release.Description = release.Title;
-                    release.Comments = new Uri(BaseUrl + qLink.Attr("href").TrimStart('/'));
-                    release.Guid = release.Comments;
-
-                    var timeString = row.ChildElements.ElementAt(2).Cq().Text();
-                    if (timeString.Contains("mins ago"))
-                        release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(int.Parse(timeString.Split(' ')[0])));
-                    else if (timeString.Contains("Today"))
-                        release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(2) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
-                    else if (timeString.Contains("Y-day"))
-                        release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(26) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
-                    else if (timeString.Contains(':'))
-                    {
-                        var utc = DateTime.ParseExact(timeString, "MM-dd HH:mm", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
-                        release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
-                    }
-                    else
-                    {
-                        var utc = DateTime.ParseExact(timeString, "MM-dd yyyy", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
-                        release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
-                    }
-
-                    var downloadCol = row.ChildElements.ElementAt(3).Cq().Find("a");
-                    release.MagnetUrl = new Uri(downloadCol.Attr("href"));
-                    release.InfoHash = release.MagnetUrl.ToString().Split(':')[3].Split('&')[0];
-
-                    var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
-                    var sizeVal = float.Parse(sizeString[0]);
-                    var sizeUnit = sizeString[1];
-                    switch (sizeUnit)
-                    {
-                        case "GiB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
-                        case "MiB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
-                        case "KiB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
-                    }
-
-                    release.Seeders = int.Parse(row.ChildElements.ElementAt(5).Cq().Text());
-                    release.Peers = int.Parse(row.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
-
-                    releases.Add(release);
+                    var utc = DateTime.ParseExact(timeString, "MM-dd yyyy", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
+                    release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
                 }
 
-                return releases.ToArray();
-            });
+                var downloadCol = row.ChildElements.ElementAt(3).Cq().Find("a");
+                release.MagnetUrl = new Uri(downloadCol.Attr("href"));
+                release.InfoHash = release.MagnetUrl.ToString().Split(':')[3].Split('&')[0];
+
+                var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
+                var sizeVal = float.Parse(sizeString[0]);
+                var sizeUnit = sizeString[1];
+                switch (sizeUnit)
+                {
+                    case "GiB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
+                    case "MiB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
+                    case "KiB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
+                }
+
+                release.Seeders = int.Parse(row.ChildElements.ElementAt(5).Cq().Text());
+                release.Peers = int.Parse(row.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
+
+                releases.Add(release);
+            }
+
+            return releases.ToArray();
+
         }
 
 

@@ -184,34 +184,31 @@ namespace Jackett
 
         Task<JToken> HandleGetIndexers(HttpListenerContext context)
         {
-            return Task<JToken>.Run(() =>
+            JToken jsonReply = new JObject();
+            try
             {
-                JToken jsonReply = new JObject();
-                try
+                jsonReply["result"] = "success";
+                jsonReply["api_key"] = ApiKey.CurrentKey;
+                JArray items = new JArray();
+                foreach (var i in indexerManager.Indexers)
                 {
-                    jsonReply["result"] = "success";
-                    jsonReply["api_key"] = ApiKey.CurrentKey;
-                    JArray items = new JArray();
-                    foreach (var i in indexerManager.Indexers)
-                    {
-                        var indexer = i.Value;
-                        var item = new JObject();
-                        item["id"] = i.Key;
-                        item["name"] = indexer.DisplayName;
-                        item["description"] = indexer.DisplayDescription;
-                        item["configured"] = indexer.IsConfigured;
-                        item["site_link"] = indexer.SiteLink;
-                        items.Add(item);
-                    }
-                    jsonReply["items"] = items;
+                    var indexer = i.Value;
+                    var item = new JObject();
+                    item["id"] = i.Key;
+                    item["name"] = indexer.DisplayName;
+                    item["description"] = indexer.DisplayDescription;
+                    item["configured"] = indexer.IsConfigured;
+                    item["site_link"] = indexer.SiteLink;
+                    items.Add(item);
                 }
-                catch (Exception ex)
-                {
-                    jsonReply["result"] = "error";
-                    jsonReply["error"] = ex.Message;
-                }
-                return jsonReply;
-            });
+                jsonReply["items"] = items;
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return Task.FromResult<JToken>(jsonReply);
         }
 
         async Task<JToken> HandleTestIndexer(HttpListenerContext context)
