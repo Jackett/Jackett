@@ -48,7 +48,7 @@ namespace Jackett
             this.sonarrApi = sonarrApi;
         }
 
-        public bool HandleRequest(HttpListenerContext context)
+        public async Task<bool> HandleRequest(HttpListenerContext context)
         {
             string path = context.Request.Url.AbsolutePath.TrimStart('/');
             if (path == "")
@@ -57,21 +57,21 @@ namespace Jackett
             var sysPath = Path.Combine(WebContentFolder, path.Replace("/", Path.DirectorySeparatorChar.ToString()));
             if (Array.IndexOf(StaticFiles, sysPath) > -1)
             {
-                ServeStaticFile(context, path);
+                await ServeStaticFile(context, path);
                 return true;
             }
 
             WebApi.WebApiMethod apiMethod;
             if (WebApi.WebApiMethods.TryGetValue(path, out apiMethod))
             {
-                ProcessWebApiRequest(context, apiMethod);
+                await ProcessWebApiRequest(context, apiMethod);
                 return true;
             }
 
             return false;
         }
 
-        async void ServeStaticFile(HttpListenerContext context, string file)
+        async Task ServeStaticFile(HttpListenerContext context, string file)
         {
             var contentFile = File.ReadAllBytes(Path.Combine(WebContentFolder, file));
             context.Response.ContentType = MimeMapping.GetMimeMapping(file);
@@ -79,7 +79,6 @@ namespace Jackett
             try
             {
                 await context.Response.OutputStream.WriteAsync(contentFile, 0, contentFile.Length);
-                context.Response.OutputStream.Close();
             }
             catch (HttpListenerException) { }
         }
@@ -92,7 +91,7 @@ namespace Jackett
 
         delegate Task<JToken> HandlerTask(HttpListenerContext context);
 
-        async void ProcessWebApiRequest(HttpListenerContext context, WebApiMethod method)
+        async Task ProcessWebApiRequest(HttpListenerContext context, WebApiMethod method)
         {
             var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
 
@@ -139,7 +138,6 @@ namespace Jackett
         {
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json.ToString());
             await context.Response.OutputStream.WriteAsync(jsonBytes, 0, jsonBytes.Length);
-            context.Response.OutputStream.Close();
         }
 
         async Task<JToken> HandleTestSonarr(HttpListenerContext context)

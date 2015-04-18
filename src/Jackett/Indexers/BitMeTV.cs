@@ -63,7 +63,7 @@ namespace Jackett
 
         public string DisplayName { get { return "BitMeTV"; } }
         public string DisplayDescription { get { return "TV Episode specialty tracker"; } }
-        public Uri SiteLink { get { return new Uri("https://bitmetv.org"); } }
+        public Uri SiteLink { get { return new Uri(BaseUrl); } }
 
         public bool IsConfigured { get; private set; }
 

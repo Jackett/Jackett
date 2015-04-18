@@ -60,96 +60,99 @@ namespace Jackett
 
         async void ProcessHttpRequest(HttpListenerContext context)
         {
-            if (webApi.HandleRequest(context))
-            {
-                return;
-            }
-
-            if (context.Request.Url.AbsolutePath.StartsWith("/api/"))
-            {
-                ProcessTorznab(context);
-                return;
-            }
-
-            var responseBytes = Encoding.UTF8.GetBytes("Invalid request");
-            await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
-            context.Response.Close();
-        }
-
-        async void ProcessTorznab(HttpListenerContext context)
-        {
-            Exception exception;
+            Exception exception = null;
             try
             {
-                var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
-                var inputStream = context.Request.InputStream;
-                var reader = new StreamReader(inputStream, context.Request.ContentEncoding);
-                var bytes = await reader.ReadToEndAsync();
-
-                var indexerId = context.Request.Url.Segments[2].TrimEnd('/').ToLower();
-                var indexer = indexerManager.GetIndexer(indexerId);
-
-                if (context.Request.Url.Segments.Length > 4 && context.Request.Url.Segments[3] == "download/")
+                if (await webApi.HandleRequest(context))
                 {
-                    var downloadLink = Encoding.UTF8.GetString(Convert.FromBase64String((context.Request.Url.Segments[4].TrimEnd('/'))));
-                    var downloadBytes = await indexer.Download(new Uri(downloadLink));
-                    await context.Response.OutputStream.WriteAsync(downloadBytes, 0, downloadBytes.Length);
-                    context.Response.Close();
-                    return;
+
                 }
-
-                var torznabQuery = TorznabQuery.FromHttpQuery(query);
-
-                torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
-
-                var releases = await indexer.PerformQuery(torznabQuery);
-
-                var severUrl = string.Format("{0}://{1}:{2}/", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port);
-
-                var resultPage = new ResultPage(new ChannelInfo
+                else if (context.Request.Url.AbsolutePath.StartsWith("/api/"))
                 {
-                    Title = indexer.DisplayName,
-                    Description = indexer.DisplayDescription,
-                    Link = indexer.SiteLink,
-                    ImageUrl = new Uri(severUrl + "logos/" + indexerId + ".png"),
-                    ImageTitle = indexer.DisplayName,
-                    ImageLink = indexer.SiteLink,
-                    ImageDescription = indexer.DisplayName
-                });
-
-                // add Jackett proxy to download links...
-                foreach (var release in releases)
-                {
-                    var originalLink = release.Link;
-                    var encodedLink = Convert.ToBase64String(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
-                    var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexerId, encodedLink);
-                    release.Link = new Uri(proxyLink);
+                    await ProcessTorznab(context);
                 }
-
-                resultPage.Releases.AddRange(releases);
-
-                var xml = resultPage.ToXml(new Uri(severUrl));
-
-                var responseBytes = Encoding.UTF8.GetBytes(xml);
-                context.Response.ContentEncoding = Encoding.UTF8;
-                context.Response.ContentLength64 = responseBytes.LongLength;
-                context.Response.ContentType = "application/rss+xml";
-                await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
-                context.Response.Close();
-                return;
+                else
+                {
+                    var responseBytes = Encoding.UTF8.GetBytes("Invalid request");
+                    await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+                }
             }
             catch (Exception ex)
             {
                 exception = ex;
             }
 
-            try
+            if (exception != null)
             {
-                var errorBytes = Encoding.UTF8.GetBytes(exception.Message);
-                await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
-                context.Response.Close();
+                try
+                {
+                    var errorBytes = Encoding.UTF8.GetBytes(exception.Message);
+                    await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
+                }
+                catch (Exception) { }
             }
-            catch (Exception ex) { }
+
+            context.Response.Close();
+
+        }
+
+        async Task ProcessTorznab(HttpListenerContext context)
+        {
+
+            var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
+            var inputStream = context.Request.InputStream;
+            var reader = new StreamReader(inputStream, context.Request.ContentEncoding);
+            var bytes = await reader.ReadToEndAsync();
+
+            var indexerId = context.Request.Url.Segments[2].TrimEnd('/').ToLower();
+            var indexer = indexerManager.GetIndexer(indexerId);
+
+            if (context.Request.Url.Segments.Length > 4 && context.Request.Url.Segments[3] == "download/")
+            {
+                var downloadLink = Encoding.UTF8.GetString(Convert.FromBase64String((context.Request.Url.Segments[4].TrimEnd('/'))));
+                var downloadBytes = await indexer.Download(new Uri(downloadLink));
+                await context.Response.OutputStream.WriteAsync(downloadBytes, 0, downloadBytes.Length);
+                return;
+            }
+
+            var torznabQuery = TorznabQuery.FromHttpQuery(query);
+
+            torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
+
+            var releases = await indexer.PerformQuery(torznabQuery);
+
+            var severUrl = string.Format("{0}://{1}:{2}/", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port);
+
+            var resultPage = new ResultPage(new ChannelInfo
+            {
+                Title = indexer.DisplayName,
+                Description = indexer.DisplayDescription,
+                Link = indexer.SiteLink,
+                ImageUrl = new Uri(severUrl + "logos/" + indexerId + ".png"),
+                ImageTitle = indexer.DisplayName,
+                ImageLink = indexer.SiteLink,
+                ImageDescription = indexer.DisplayName
+            });
+
+            // add Jackett proxy to download links...
+            foreach (var release in releases)
+            {
+                var originalLink = release.Link;
+                var encodedLink = Convert.ToBase64String(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
+                var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexerId, encodedLink);
+                release.Link = new Uri(proxyLink);
+            }
+
+            resultPage.Releases.AddRange(releases);
+
+            var xml = resultPage.ToXml(new Uri(severUrl));
+
+            var responseBytes = Encoding.UTF8.GetBytes(xml);
+            context.Response.ContentEncoding = Encoding.UTF8;
+            context.Response.ContentLength64 = responseBytes.LongLength;
+            context.Response.ContentType = "application/rss+xml";
+            await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+
         }
 
 

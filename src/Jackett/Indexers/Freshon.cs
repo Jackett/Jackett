@@ -34,7 +34,7 @@ namespace Jackett
 
         public string DisplayDescription { get { return "Our goal is to provide the latest stuff in the TV show domain"; } }
 
-        public Uri SiteLink { get { return new Uri("https://freshon.tv/"); } }
+        public Uri SiteLink { get { return new Uri(BaseUrl); } }
 
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
@@ -169,7 +169,7 @@ namespace Jackett
                     else if (dateString.StartsWith("Yesterday "))
                         pubDate = (DateTime.UtcNow + TimeSpan.Parse(dateString.Split(' ')[1]) - TimeSpan.FromDays(1)).ToLocalTime();
                     else
-                        pubDate = DateTime.ParseExact(dateString, "dd-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                        pubDate = DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                     release.PublishDate = pubDate;
 
                     release.Seeders = int.Parse(qRow.Find("td.table_seeders").Text().Trim());
@@ -187,9 +187,12 @@ namespace Jackett
             return releases.ToArray();
         }
 
-        public Task<byte[]> Download(Uri link)
+        public async Task<byte[]> Download(Uri link)
         {
-            throw new NotImplementedException();
+            var request = CreateHttpRequest(link);
+            var response = await client.SendAsync(request);
+            var bytes = await response.Content.ReadAsByteArrayAsync();
+            return bytes;
         }
     }
 }
