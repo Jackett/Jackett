@@ -73,19 +73,40 @@ namespace Jackett
             public string ID { get { return Name.Replace(" ", "").ToLower(); } }
         }
 
+        public class DisplayItem : StringItem
+        {
+            public DisplayItem(string value)
+            {
+                Value = value;
+                ItemType = ItemType.DisplayInfo;
+            }
+        }
+
         public class StringItem : Item
         {
             public string Value { get; set; }
+            public StringItem()
+            {
+                ItemType = ConfigurationData.ItemType.InputString;
+            }
         }
 
         public class BoolItem : Item
         {
             public bool Value { get; set; }
+            public BoolItem()
+            {
+                ItemType = ConfigurationData.ItemType.InputBool;
+            }
         }
 
         public class ImageItem : Item
         {
             public byte[] Value { get; set; }
+            public ImageItem()
+            {
+                ItemType = ConfigurationData.ItemType.DisplayImage;
+            }
         }
 
         public abstract Item[] GetItems();

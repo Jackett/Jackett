@@ -22,7 +22,10 @@ namespace Jackett
             ConfigureIndexer,
             GetIndexers,
             TestIndexer,
-            DeleteIndexer
+            DeleteIndexer,
+            GetSonarrConfig,
+            ApplySonarrConfig,
+            TestSonarr
         }
         static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod>
         {
@@ -30,14 +33,19 @@ namespace Jackett
             { "configure_indexer", WebApiMethod.ConfigureIndexer },
             { "get_indexers", WebApiMethod.GetIndexers },
             { "test_indexer", WebApiMethod.TestIndexer },
-            { "delete_indexer", WebApiMethod.DeleteIndexer }
+            { "delete_indexer", WebApiMethod.DeleteIndexer },
+            { "get_sonarr_config", WebApiMethod.GetSonarrConfig },
+            { "apply_sonarr_config", WebApiMethod.ApplySonarrConfig },
+            { "test_sonarr", WebApiMethod.TestSonarr }
         };
 
         IndexerManager indexerManager;
+        SonarrApi sonarrApi;
 
-        public WebApi(IndexerManager indexerManager)
+        public WebApi(IndexerManager indexerManager, SonarrApi sonarrApi)
         {
             this.indexerManager = indexerManager;
+            this.sonarrApi = sonarrApi;
         }
 
         public bool HandleRequest(HttpListenerContext context)
@@ -110,6 +118,15 @@ namespace Jackett
                 case WebApiMethod.DeleteIndexer:
                     handlerTask = HandleDeleteIndexer;
                     break;
+                case WebApiMethod.GetSonarrConfig:
+                    handlerTask = HandleGetSonarrConfig;
+                    break;
+                case WebApiMethod.ApplySonarrConfig:
+                    handlerTask = HandleApplySonarrConfig;
+                    break;
+                case WebApiMethod.TestSonarr:
+                    handlerTask = HandleTestSonarr;
+                    break;
                 default:
                     handlerTask = HandleInvalidApiMethod;
                     break;
@@ -125,15 +142,61 @@ namespace Jackett
             context.Response.OutputStream.Close();
         }
 
+        async Task<JToken> HandleTestSonarr(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                await sonarrApi.TestConnection();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        async Task<JToken> HandleApplySonarrConfig(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                await sonarrApi.ApplyConfiguration(postData);
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        Task<JToken> HandleGetSonarrConfig(HttpListenerContext context)
+        {
+            JObject jsonReply = new JObject();
+            try
+            {
+                jsonReply["config"] = sonarrApi.GetConfiguration().ToJson();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return Task.FromResult<JToken>(jsonReply);
+        }
+
         Task<JToken> HandleInvalidApiMethod(HttpListenerContext context)
         {
-            return Task<JToken>.Run(() =>
-            {
-                JToken jsonReply = new JObject();
-                jsonReply["result"] = "error";
-                jsonReply["error"] = "Invalid API method";
-                return jsonReply;
-            });
+            JToken jsonReply = new JObject();
+            jsonReply["result"] = "error";
+            jsonReply["error"] = "Invalid API method";
+            return Task.FromResult<JToken>(jsonReply);
         }
 
         async Task<JToken> HandleConfigForm(HttpListenerContext context)

@@ -16,13 +16,15 @@ namespace Jackett
         HttpListener listener;
         IndexerManager indexerManager;
         WebApi webApi;
+        SonarrApi sonarrApi;
 
         public Server()
         {
             LoadApiKey();
 
             indexerManager = new IndexerManager();
-            webApi = new WebApi(indexerManager);
+            sonarrApi = new SonarrApi();
+            webApi = new WebApi(indexerManager, sonarrApi);
 
             listener = new HttpListener();
             listener.Prefixes.Add("http://*:9117/");

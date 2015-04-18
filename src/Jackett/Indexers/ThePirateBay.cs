@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 
             public ThePirateBayConfig()
             {
-                Url = new StringItem { Name = "Url", ItemType = ItemType.InputString, Value = "https://thepiratebay.se/" };
+                Url = new StringItem { Name = "Url", Value = "https://thepiratebay.se/" };
             }
 
             public override Item[] GetItems()

@@ -13,8 +13,8 @@ namespace Jackett
 
         public ConfigurationDataBasicLogin()
         {
-            Username = new StringItem { Name = "Username", ItemType = ItemType.InputString };
-            Password = new StringItem { Name = "Password", ItemType = ItemType.InputString };
+            Username = new StringItem { Name = "Username" };
+            Password = new StringItem { Name = "Password" };
         }
 
         public override Item[] GetItems()

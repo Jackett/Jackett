@@ -22,7 +22,7 @@
         #page {
             border-radius: 6px;
             background-color: white;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             margin-top: 30px;
             padding: 20px;
@@ -35,26 +35,15 @@
             display: none;
         }
 
-        #api-key-input {
-            width: 300px;
-            display: inline-block;
-            font-family: monospace;
-        }
-
-        #api-key-header {
-            font-size: 20px;
-        }
-
         .card {
             background-color: #f9f9f9;
             border-radius: 6px;
             box-shadow: 1px 1px 5px 2px #cdcdcd;
             padding: 10px;
-            width: 220px;
+            width: 260px;
             display: inline-block;
-            margin-right: 30px;
             vertical-align: top;
-            margin-bottom: 30px;
+            margin: 10px;
         }
 
         .unconfigured-indexer {
@@ -62,11 +51,12 @@
         }
 
         .indexer {
-            height: 265px;
+            height: 230px;
         }
 
         #add-indexer {
             margin-right: 0px;
+            border: 0;
         }
 
         .indexer-logo {
@@ -87,13 +77,13 @@
         }
 
             .indexer-buttons > .btn {
-                width: 90px;
                 margin-bottom: 10px;
             }
 
-                .indexer-buttons > .btn:nth-child(even) {
-                    margin-left: 5px;
-                }
+
+        .indexer-button-test {
+            width: 60px;
+        }
 
         .indexer-add-content {
             color: gray;
@@ -161,18 +151,67 @@
         #setup-indexer-go {
             width: 70px;
         }
+
+        hr {
+            border-top-color: #cdcdcd;
+        }
+
+        .input-area {
+        }
+
+            .input-area > * {
+                vertical-align: middle;
+            }
+
+            .input-area > p {
+                margin-top: 10px;
+            }
+
+        .input-header {
+            font-size: 18px;
+            width: 140px;
+            display: inline-block;
+        }
+
+        .input-right {
+            width: 300px;
+            display: inline-block;
+            font-family: monospace;
+        }
+
+        #sonarr-warning {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div id="page">
+        <h3><span>need a logo..</span></h3>
 
-        <div id="api-key">
-            <span>need a logo..</span>
-            <span id="api-key-header">API Key: </span>
-            <input id="api-key-input" class="form-control" type="text" value="" placeholder="API Key" readonly="">
-            <span>(Same key works for all indexers)</span>
+        <hr />
+
+        <div class="input-area">
+            <span class="input-header">Sonarr API Host: </span>
+            <input id="sonarr-host" class="form-control input-right" type="text" readonly />
+            <button id="sonarr-settings" class="btn btn-primary btn-sm">
+                Settings <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+            </button>
+            <button id="sonarr-test" class="btn btn-warning btn-sm">
+                Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+            </button>
+            <p id="sonarr-warning" class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                Sonarr API must be configured
+            </p>
         </div>
-        <br />
+
+        <hr />
+
+        <div class="input-area">
+            <span class="input-header">Jackett API Key: </span>
+            <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
+            <p>Use this key when adding indexers to Sonarr. This key works for all indexers.</p>
+        </div>
 
         <hr />
 
@@ -208,41 +247,43 @@
         </div>
     </div>
 
-    <div id="setup-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Setup indexer</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="indexer-setup-form"></form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="setup-indexer-go">Okay</button>
+    <div id="modals"></div>
+
+    <div id="templates">
+
+        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{title}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="config-setup-form"></form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div id="templates">
 
         <div class="indexer card">
             <div class="indexer-logo"><img src="logos/{{id}}.png" /></div>
             <div class="indexer-name"><h3>{{name}}</h3></div>
             <div class="indexer-buttons">
+                <button class="btn btn-primary btn-sm" data-id="{{id}}">
+                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
                 <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
-                    Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
                 </a>
                 <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
                     Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
-                    Delete <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-primary btn-sm" data-id="{{id}}">
-                    Configure <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                 </button>
             </div>
             <div class="indexer-host">
@@ -266,7 +307,6 @@
             <div class="setup-item-value">{{{value_element}}}</div>
         </div>
 
-        <h4 class="setup-item-header" data-type="indexer" data-name="{{name}}" data-indexer="{{indexer}}">{{name}}</h4>
         <input class="setup-item-inputstring form-control" type="text" value="{{{value}}}"></input>
         <div class="setup-item-checkbox">
             {{#if value}}
@@ -276,13 +316,97 @@
             {{/if}}
         </div>
         <img class="setup-item-displayimage" src="{{{value}}}" />
-        <span class="setup-item-displayinfo">{{{value}}}</span>
+        <div class="setup-item-displayinfo alert alert-info" role="alert">{{{value}}}</div>
 
         <span class="spinner glyphicon glyphicon-refresh"></span>
 
     </div>
 
     <script>
+
+
+        reloadIndexers();
+        loadSonarrInfo();
+
+        function loadSonarrInfo() {
+            getSonarrConfig(function (data) {
+                $("#sonarr-host").val("");
+                var host, port, apiKey;
+                for (var i = 0; i < data.config.length; i++) {
+                    if (data.config[i].id == "host")
+                        host = data.config[i].value;
+                    if (data.config[i].id == "port")
+                        port = data.config[i].value;
+                    if (data.config[i].id == "apikey")
+                        apiKey = data.config[i].value;
+                }
+                if (!apiKey)
+                    $("#sonarr-warning").show();
+                else {
+                    $("#sonarr-warning").hide();
+                    $("#sonarr-host").val(host + ":" + port);
+                }
+            });
+        }
+
+        function getSonarrConfig(callback) {
+            var jqxhr = $.get("get_sonarr_config", function (data) {
+                callback(data);
+            }).fail(function () {
+                doNotify("Error loading Sonarr API configuration, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            });
+        }
+
+        $("#sonarr-test").click(function () {
+            var jqxhr = $.get("get_indexers", function (data) {
+                if (data.result == "error")
+                    doNotify("Test failed for Sonarr API\n" + data.error, "danger", "glyphicon glyphicon-alert");
+                else
+                    doNotify("Test successful for Sonarr API", "success", "glyphicon glyphicon-ok");
+            }).fail(function () {
+                doNotify("Error testing Sonarr, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            });
+        });
+
+        $("#sonarr-settings").click(function () {
+            getSonarrConfig(function (data) {
+                var config = data.config;
+
+                var configForm = newConfigModal("Sonarr API", config);
+
+                var $goButton = configForm.find(".setup-indexer-go");
+                $goButton.click(function () {
+                    var data = getConfigModalJson(configForm);
+
+                    var originalBtnText = $goButton.html();
+                    $goButton.prop('disabled', true);
+                    $goButton.html($('#templates > .spinner')[0].outerHTML);
+
+                    var jqxhr = $.post("apply_sonarr_config", JSON.stringify(data), function (data) {
+                        if (data.result == "error") {
+                            if (data.config) {
+                                populateSetupForm(data.indexer, data.name, data.config);
+                            }
+                            doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+                        }
+                        else {
+                            configForm.modal("hide");
+                            loadSonarrInfo();
+                            doNotify("Successfully configured Sonarr API", "success", "glyphicon glyphicon-ok");
+                        }
+                    }).fail(function () {
+                        doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+                    }).always(function () {
+                        $goButton.html(originalBtnText);
+                        $goButton.prop('disabled', false);
+                    });
+                });
+
+                configForm.modal("show");
+
+            });
+        });
+
 
         function reloadIndexers() {
             $('#indexers').hide();
@@ -372,7 +496,7 @@
                     return;
                 }
                 populateSetupForm(id, data.name, data.config);
-                $("#setup-indexer-modal").modal("show");
+
             }).fail(function () {
                 doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
             });
@@ -380,17 +504,80 @@
             $("#select-indexer-modal").modal("hide");
         }
 
-        function populateSetupForm(indexerId, name, config) {
-            $("#indexer-setup-form").empty();
-            var setupItemHeader = Handlebars.compile($("#templates > .setup-item-header")[0].outerHTML);
-            $("#indexer-setup-form").append(setupItemHeader({ indexer: indexerId, name: name }));
+
+        function newConfigModal(title, config) {
+            //config-setup-modal
+            var configTemplate = Handlebars.compile($("#templates > .config-setup-modal")[0].outerHTML);
+            var configForm = $(configTemplate({ title: title }));
+
+            $("#modals").append(configForm);
+
+            var $formItemContainer = configForm.find(".config-setup-form");
             var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
             for (var i = 0; i < config.length; i++) {
                 var item = config[i];
                 var setupValueTemplate = Handlebars.compile($("#templates > .setup-item-" + item.type)[0].outerHTML);
                 item.value_element = setupValueTemplate(item);
-                $("#indexer-setup-form").append(setupItemTemplate(item));
+                $formItemContainer.append(setupItemTemplate(item));
             }
+
+
+            return configForm;
+            //modal.remove();
+        }
+
+        function getConfigModalJson(configForm) {
+            var configJson = {};
+            configForm.find(".config-setup-form").children().each(function (i, el) {
+                $el = $(el);
+                var type = $el.data("type");
+                var id = $el.data("id");
+                switch (type) {
+                    case "inputstring":
+                        configJson[id] = $el.find(".setup-item-inputstring").val();
+                        break;
+                    case "inputbool":
+                        configJson[id] = $el.find(".setup-item-checkbox").val();
+                        break;
+                }
+            });
+            return configJson;
+        }
+
+        function populateSetupForm(indexerId, name, config) {
+
+            var configForm = newConfigModal(name, config);
+
+            var $goButton = configForm.find(".setup-indexer-go");
+            $goButton.click(function () {
+                var data = { indexer: indexerId, name: name };
+                data.config = getConfigModalJson(configForm);
+
+                var originalBtnText = $goButton.html();
+                $goButton.prop('disabled', true);
+                $goButton.html($('#templates > .spinner')[0].outerHTML);
+
+                var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
+                    if (data.result == "error") {
+                        if (data.config) {
+                            populateSetupForm(data.indexer, data.name, data.config);
+                        }
+                        doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+                    }
+                    else {
+                        configForm.modal("hide");
+                        reloadIndexers();
+                        doNotify("Successfully configured " + data.name, "success", "glyphicon glyphicon-ok");
+                    }
+                }).fail(function () {
+                    doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+                }).always(function () {
+                    $goButton.html(originalBtnText);
+                    $goButton.prop('disabled', false);
+                });
+            });
+
+            configForm.modal("show");
         }
 
         function resolveUrl(url) {
@@ -400,55 +587,7 @@
             return url;
         }
 
-        $("#setup-indexer-go").click(function () {
-            var data = { config: {} };
-            $("#indexer-setup-form").children().each(function (i, el) {
-                $el = $(el);
-                var type = $el.data("type");
-                var id = $el.data("id");
-                switch (type) {
-                    case "indexer":
-                        data.indexer = $el.data("indexer");
-                        data.name = $el.data("name")
-                        return;
-                    case "inputstring":
-                        data.config[id] = $el.find(".setup-item-inputstring").val();
-                        break;
-                    case "inputbool":
-                        data.config[id] = $el.find(".setup-item-checkbox").val();
-                        break;
-                }
-            });
-            sendSetupData(data.indexer, data.name, data);
-        });
 
-        function sendSetupData(indexerId, name, data) {
-            var originalBtnText = $('#setup-indexer-go').html();
-
-            $('#setup-indexer-go').prop('disabled', true);
-            $('#setup-indexer-go').html($('#templates > .spinner')[0].outerHTML);
-
-            var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
-                if (data.result == "error") {
-                    if (data.config) {
-                        populateSetupForm(indexerId, name, data.config);
-                    }
-                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
-                }
-                else {
-                    $("#setup-indexer-modal").modal("hide");
-                    reloadIndexers();
-                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
-                }
-            }).fail(function () {
-                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
-            }).always(function () {
-                $('#setup-indexer-go').html(originalBtnText);
-                $('#setup-indexer-go').prop('disabled', false);
-            });
-        }
-
-        reloadIndexers();
 
         function doNotify(message, type, icon) {
             $.notify({

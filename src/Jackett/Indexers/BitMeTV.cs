@@ -24,10 +24,10 @@ namespace Jackett
 
             public BmtvConfig()
             {
-                Username = new StringItem { Name = "Username", ItemType = ItemType.InputString };
-                Password = new StringItem { Name = "Password", ItemType = ItemType.InputString };
-                CaptchaImage = new ImageItem { Name = "Captcha Image", ItemType = ItemType.DisplayImage };
-                CaptchaText = new StringItem { Name = "Captcha Text", ItemType = ItemType.InputString };
+                Username = new StringItem { Name = "Username" };
+                Password = new StringItem { Name = "Password" };
+                CaptchaImage = new ImageItem { Name = "Captcha Image" };
+                CaptchaText = new StringItem { Name = "Captcha Text" };
             }
 
             public override Item[] GetItems()
