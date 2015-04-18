@@ -120,17 +120,17 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            foreach (var title in query.ShowTitles)
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
                 var searchString = title + " " + query.GetEpisodeSearchString();
-                var searchUrl = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+                var episodeSearchUrl = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
                 var message = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
                     RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
                 };
-                message.Headers.Referrer = new Uri(searchUrl);
+                message.Headers.Referrer = new Uri(episodeSearchUrl);
 
                 var response = await client.SendAsync(message);
                 var results = await response.Content.ReadAsStringAsync();
@@ -176,12 +176,7 @@ namespace Jackett.Indexers
                     var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
                     var sizeVal = float.Parse(sizeString[0]);
                     var sizeUnit = sizeString[1];
-                    switch (sizeUnit)
-                    {
-                        case "GiB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
-                        case "MiB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
-                        case "KiB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
-                    }
+                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
                     release.Seeders = int.Parse(row.ChildElements.ElementAt(5).Cq().Text());
                     release.Peers = int.Parse(row.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;

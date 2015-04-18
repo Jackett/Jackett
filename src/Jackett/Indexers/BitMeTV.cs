@@ -135,12 +135,13 @@ namespace Jackett
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            foreach (var title in query.ShowTitles)
+
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
 
                 var searchString = title + " " + query.GetEpisodeSearchString();
-                var searchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
-                var results = await client.GetStringAsync(searchUrl);
+                var episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
+                var results = await client.GetStringAsync(episodeSearchUrl);
                 CQ dom = results;
 
                 var table = dom["tbody > tr > .latest"].Parent().Parent();
@@ -172,13 +173,7 @@ namespace Jackett
                     var sizeCol = row.ChildElements.ElementAt(6);
                     var sizeVal = float.Parse(sizeCol.ChildNodes[0].NodeValue);
                     var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-
-                    switch (sizeUnit)
-                    {
-                        case "GB": release.Size = ReleaseInfo.BytesFromGB(sizeVal); break;
-                        case "MB": release.Size = ReleaseInfo.BytesFromMB(sizeVal); break;
-                        case "KB": release.Size = ReleaseInfo.BytesFromKB(sizeVal); break;
-                    }
+                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
                     release.Seeders = int.Parse(row.ChildElements.ElementAt(8).Cq().Text());
                     release.Peers = int.Parse(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;

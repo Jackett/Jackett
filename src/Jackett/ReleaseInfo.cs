@@ -29,6 +29,24 @@ namespace Jackett
         public long? MinimumSeedTime { get; set; }
 
 
+        public static long GetBytes(string unit, float value)
+        {
+            switch (unit.ToLower())
+            {
+                case "kb":
+                case "kib":
+                    return BytesFromKB(value);
+                case "mb":
+                case "mib":
+                    return BytesFromMB(value);
+                case "gb":
+                case "gib":
+                    return BytesFromGB(value);
+                default:
+                    return 0;
+            }
+        }
+
         public static long BytesFromGB(float gb)
         {
             return BytesFromMB(gb * 1024f);
