@@ -7,7 +7,7 @@ This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implemen
 Currently [Sonarr](https://sonarr.tv/) is the only software that uses Torznab. [Couchpotato](https://couchpota.to/) will hopefully get Torznab support in the future.
 
 ### Download
-Software is still in development, check back in a few days.
+Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
 ### Supported Trackers
  * [BitMeTV](http://www.bitmetv.org/)
@@ -26,4 +26,4 @@ I can be contact on IRC at [irc.freenode.net#sonarr](http://webchat.freenode.net
 
 ### Screenshots
 
-![screenshot](http://i.imgur.com/8e2QylW.png "screenshot")
+![screenshot](http://i.imgur.com/ca3lKif.png "screenshot")
