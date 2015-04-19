@@ -95,12 +95,6 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public async Task VerifyConnection()
-        {
-            await TestBrowse(BaseUrl);
-        }
-
-
         async Task TestBrowse(string url)
         {
             var result = await client.GetStringAsync(new Uri(url) + BrowserUrl);

@@ -111,19 +111,6 @@ namespace Jackett.Indexers
             return message;
         }
 
-        public Task VerifyConnection()
-        {
-            return Task.Run(async () =>
-            {
-                var message = CreateHttpRequest(new Uri(BaseUrl));
-
-                var response = await client.SendAsync(message);
-                var result = await response.Content.ReadAsStringAsync();
-                if (!result.Contains("/my.php"))
-                    throw new Exception("Detected as not logged in");
-            });
-        }
-
         public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
             cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);

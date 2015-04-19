@@ -107,13 +107,6 @@ namespace Jackett.Indexers
             }
         }
 
-        public async Task VerifyConnection()
-        {
-            var response = await client.GetStringAsync(BaseUrl);
-            if (!response.Contains("logout.php?"))
-                throw new Exception("Detected as not logged in");
-        }
-
         public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
             cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);

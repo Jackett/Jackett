@@ -20,9 +20,6 @@ namespace Jackett
         // Called when web API wants to apply setup configuration via web API, usually this is where login and storing cookie happens
         Task ApplyConfiguration(JToken configJson);
 
-        // Called to check if configuration (cookie) is correct and indexer connection works
-        Task VerifyConnection();
-
         // Invoked when the indexer configuration has been applied and verified so the cookie needs to be saved
         event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 

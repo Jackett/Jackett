@@ -102,16 +102,6 @@ namespace Jackett
             }
         }
 
-        public async Task VerifyConnection()
-        {
-            var message = CreateHttpRequest(new Uri(SearchUrl));
-
-            var response = await client.SendAsync(message);
-            var result = await response.Content.ReadAsStringAsync();
-            if (!result.Contains("/logout.php"))
-                throw new Exception("Detected as not logged in");
-        }
-
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);

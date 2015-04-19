@@ -228,7 +228,7 @@ namespace Jackett
                 var indexer = indexerManager.GetIndexer(indexerString);
                 jsonReply["name"] = indexer.DisplayName;
                 await indexer.ApplyConfiguration(postData["config"]);
-                await indexer.VerifyConnection();
+                await indexerManager.TestIndexer(indexer);
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)
@@ -281,7 +281,7 @@ namespace Jackett
                 string indexerString = (string)postData["indexer"];
                 var indexer = indexerManager.GetIndexer(indexerString);
                 jsonReply["name"] = indexer.DisplayName;
-                await indexer.VerifyConnection();
+                await indexerManager.TestIndexer(indexer);
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)

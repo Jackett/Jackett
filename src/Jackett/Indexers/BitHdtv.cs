@@ -97,14 +97,6 @@ namespace Jackett.Indexers
             }
         }
 
-        public async Task VerifyConnection()
-        {
-            var browseQuery = new TorznabQuery();
-            var results = await PerformQuery(browseQuery);
-            if (results.Length == 0)
-                throw new Exception("Found no results while trying to browse this tracker");
-        }
-
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
         public bool IsConfigured { get; private set; }

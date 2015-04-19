@@ -118,13 +118,6 @@ namespace Jackett
             }
         }
 
-        public async Task VerifyConnection()
-        {
-            var result = await client.GetStringAsync(new Uri(SearchUrl));
-            if (result.Contains("<h1>Not logged in!</h1>"))
-                throw new Exception("Detected as not logged in");
-        }
-
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
