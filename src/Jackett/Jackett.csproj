@@ -87,6 +87,7 @@
     <Compile Include="ExceptionWithConfigData.cs" />
     <Compile Include="IndexerInterface.cs" />
     <Compile Include="IndexerManager.cs" />
+    <Compile Include="Indexers\BitHdtv.cs" />
     <Compile Include="Indexers\BitMeTV.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
