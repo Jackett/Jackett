@@ -76,7 +76,7 @@ namespace Jackett
                                 "enclosure",
                                 new XAttribute("url", r.Link ?? r.MagnetUrl),
                                 new XAttribute("length", r.Size),
-                                new XAttribute("type", r.Link == null ? "application/x-bittorrent;x-scheme-handler/magnet" : "application/x-bittorrent")
+                                new XAttribute("type", "application/x-bittorrent")
                             ),
                             getTorznabElement("magneturl", r.MagnetUrl),
                             getTorznabElement("rageid", r.RageID),
