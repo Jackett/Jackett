@@ -3,6 +3,7 @@ using NLog.Config;
 using NLog.Targets;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -70,6 +71,13 @@ namespace Jackett
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Main());
 
+        }
+
+        static public void RestartAsAdmin()
+        {
+            var startInfo = new ProcessStartInfo(Application.ExecutablePath.ToString()) { Verb = "runas" };
+            Process.Start(startInfo);
+            Environment.Exit(0);
         }
     }
 }

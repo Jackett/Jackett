@@ -57,9 +57,21 @@ namespace Jackett
             }
             catch (HttpListenerException ex)
             {
-                Program.LoggerInstance.FatalException("App must be ran as Admin for permission to use port " + Port, ex);
-                Application.Exit();
-                return;
+                var dialogResult = MessageBox.Show(
+                    "App must be ran as Admin for permission to use port " + Port + Environment.NewLine + "Restart app with admin privileges?",
+                    "Failed to open port",
+                    MessageBoxButtons.YesNo
+                );
+                if (dialogResult == DialogResult.No)
+                {
+                    Program.LoggerInstance.FatalException("App must be ran as Admin for permission to use port " + Port, ex);
+                    Application.Exit();
+                    return;
+                }
+                else
+                {
+                    Program.RestartAsAdmin();
+                }
             }
             catch (Exception ex)
             {
