@@ -44,7 +44,23 @@ namespace Jackett
 
         public async void Start()
         {
-            listener.Start();
+            Console.WriteLine("Starting HTTP server...");
+            try
+            {
+                listener.Start();
+            }
+            catch (HttpListenerException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("App must be ran as Admin for permission to use port");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error " + ex.ToString());
+                return;
+            }
+            Console.WriteLine("Server started on port 9117");
             while (true)
             {
                 var context = await listener.GetContextAsync();
@@ -60,6 +76,7 @@ namespace Jackett
 
         async void ProcessHttpRequest(HttpListenerContext context)
         {
+            Console.WriteLine("Received request: " + context.Request.Url.ToString());
             Exception exception = null;
             try
             {
