@@ -109,7 +109,8 @@ namespace Jackett
 
             if (context.Request.Url.Segments.Length > 4 && context.Request.Url.Segments[3] == "download/")
             {
-                var downloadLink = Encoding.UTF8.GetString(Convert.FromBase64String((context.Request.Url.Segments[4].TrimEnd('/'))));
+                var downloadSegment = HttpServerUtility.UrlTokenDecode(context.Request.Url.Segments[4].TrimEnd('/'));
+                var downloadLink = Encoding.UTF8.GetString(downloadSegment);
                 var downloadBytes = await indexer.Download(new Uri(downloadLink));
                 await context.Response.OutputStream.WriteAsync(downloadBytes, 0, downloadBytes.Length);
                 return;
@@ -138,7 +139,7 @@ namespace Jackett
             foreach (var release in releases)
             {
                 var originalLink = release.Link;
-                var encodedLink = Convert.ToBase64String(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
+                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
                 var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexerId, encodedLink);
                 release.Link = new Uri(proxyLink);
             }

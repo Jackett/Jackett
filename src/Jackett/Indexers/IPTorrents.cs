@@ -56,7 +56,7 @@ namespace Jackett.Indexers
             return (ConfigurationData)config;
         }
 
-        public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
+        public async Task ApplyConfiguration(JToken configJson)
         {
 
             var config = new ConfigurationDataBasicLogin();

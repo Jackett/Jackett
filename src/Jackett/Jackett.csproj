@@ -79,6 +79,7 @@
     <Compile Include="Indexers\BitMeTV.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
+    <Compile Include="Indexers\MoreThanTV.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
