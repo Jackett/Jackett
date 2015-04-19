@@ -181,11 +181,22 @@
         #sonarr-warning {
             display: none;
         }
+
+        #logo {
+            max-width: 50px;
+        }
+
+        #header-title {
+            font-size: 34px;
+            vertical-align: middle;
+            padding-left: 15px;
+        }
     </style>
 </head>
 <body>
     <div id="page">
-        <h3><span>need a logo..</span></h3>
+
+        <img id="logo" src="jacket_medium.png" /><span id="header-title">Jackett</span>
 
         <hr />
 
@@ -233,6 +244,10 @@
                 <div class="modal-body">
                     <div id="unconfigured-indexers">
                     </div>
+                    <hr />
+                    <p>
+                        To add a Jackett indexer in Sonarr go to <b>Settings > Indexers > Add > Torznab > Custom</b>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -509,6 +524,17 @@
             $("#select-indexer-modal").modal("hide");
         }
 
+        function populateConfigItems(configForm, config) {
+            var $formItemContainer = configForm.find(".config-setup-form");
+            $formItemContainer.empty();
+            var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
+            for (var i = 0; i < config.length; i++) {
+                var item = config[i];
+                var setupValueTemplate = Handlebars.compile($("#templates > .setup-item-" + item.type)[0].outerHTML);
+                item.value_element = setupValueTemplate(item);
+                $formItemContainer.append(setupItemTemplate(item));
+            }
+        }
 
         function newConfigModal(title, config) {
             //config-setup-modal
@@ -517,15 +543,7 @@
 
             $("#modals").append(configForm);
 
-            var $formItemContainer = configForm.find(".config-setup-form");
-            var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
-            for (var i = 0; i < config.length; i++) {
-                var item = config[i];
-                var setupValueTemplate = Handlebars.compile($("#templates > .setup-item-" + item.type)[0].outerHTML);
-                item.value_element = setupValueTemplate(item);
-                $formItemContainer.append(setupItemTemplate(item));
-            }
-
+            populateConfigItems(configForm, config);
 
             return configForm;
             //modal.remove();
@@ -565,7 +583,7 @@
                 var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
                     if (data.result == "error") {
                         if (data.config) {
-                            populateSetupForm(data.indexer, data.name, data.config);
+                            populateConfigItems(configForm, data.config);
                         }
                         doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
                     }

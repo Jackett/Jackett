@@ -2,17 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
 
 namespace Jackett
 {
     public class Server
     {
+        int Port = 9117;
+
         HttpListener listener;
         IndexerManager indexerManager;
         WebApi webApi;
@@ -44,23 +48,25 @@ namespace Jackett
 
         public async void Start()
         {
-            Console.WriteLine("Starting HTTP server...");
+            Program.LoggerInstance.Info("Starting HTTP server...");
+
             try
             {
                 listener.Start();
+                Process.Start("http://127.0.0.1:" + Port);
             }
             catch (HttpListenerException ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("App must be ran as Admin for permission to use port");
+                Program.LoggerInstance.FatalException("App must be ran as Admin for permission to use port " + Port, ex);
+                Application.Exit();
                 return;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error " + ex.ToString());
+                Program.LoggerInstance.ErrorException("Error: " + ex.Message, ex);
                 return;
             }
-            Console.WriteLine("Server started on port 9117");
+            Program.LoggerInstance.Info("Server started on port " + Port);
             while (true)
             {
                 var context = await listener.GetContextAsync();
@@ -76,7 +82,7 @@ namespace Jackett
 
         async void ProcessHttpRequest(HttpListenerContext context)
         {
-            Console.WriteLine("Received request: " + context.Request.Url.ToString());
+            Program.LoggerInstance.Trace("Received request: " + context.Request.Url.ToString());
             Exception exception = null;
             try
             {
@@ -155,6 +161,8 @@ namespace Jackett
             // add Jackett proxy to download links...
             foreach (var release in releases)
             {
+                if (release.Link == null || release.Link.Scheme == "magnet")
+                    continue;
                 var originalLink = release.Link;
                 var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
                 var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexerId, encodedLink);

@@ -51,10 +51,13 @@ namespace Jackett
             client = new HttpClient(handler);
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
+        public async Task<ConfigurationData> GetConfigurationForSetup()
         {
+            var request = CreateHttpRequest(new Uri(LoginUrl));
+            var response = await client.SendAsync(request);
+            await response.Content.ReadAsStreamAsync();
             var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
+            return config;
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -72,6 +75,7 @@ namespace Jackett
             var message = CreateHttpRequest(new Uri(LoginPostUrl));
             message.Method = HttpMethod.Post;
             message.Content = content;
+            message.Headers.Referrer = new Uri(LoginUrl);
 
             var response = await client.SendAsync(message);
             var responseContent = await response.Content.ReadAsStringAsync();
