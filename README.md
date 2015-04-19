@@ -12,6 +12,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 ### Supported Trackers
  * [BitMeTV](http://www.bitmetv.org/)
  * [MoreThan.tv](https://morethan.tv/)
+ * [BIT-HDTV](https://www.bit-hdtv.com)
  * [Freshon](https://freshon.tv/)
  * [IPTorrents](https://iptorrents.com/)
  * [The Pirate Bay](https://thepiratebay.se/)
