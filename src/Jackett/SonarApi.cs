@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Jackett
         HttpClientHandler handler;
         HttpClient client;
 
-        Dictionary<int, string[]> IdNameMappings;
+        ConcurrentDictionary<int, string[]> IdNameMappings;
 
         public SonarrApi()
         {
@@ -60,7 +61,7 @@ namespace Jackett
             };
             client = new HttpClient(handler);
 
-            IdNameMappings = new Dictionary<int, string[]>();
+            IdNameMappings = new ConcurrentDictionary<int, string[]>();
         }
 
         async Task ReloadNameMappings(string host, int port, string apiKey)
@@ -74,13 +75,18 @@ namespace Jackett
             foreach (var item in json)
             {
                 var titles = new List<string>();
-                titles.Add((string)item["title"]);
+                titles.Add(SanitizeTitle((string)item["title"]));
                 foreach (var t in item["alternateTitles"])
                 {
-                    titles.Add((string)t["title"]);
+                    titles.Add(SanitizeTitle((string)t["title"]));
                 }
-                IdNameMappings.Add((int)item["tvRageId"], titles.ToArray());
+                IdNameMappings.TryAdd((int)item["tvRageId"], titles.ToArray());
             }
+        }
+
+        string SanitizeTitle(string title)
+        {
+            return title.Replace("(", "").Replace(")", "");
         }
 
         void LoadSettings()
