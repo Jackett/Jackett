@@ -23,10 +23,16 @@ namespace Jackett
             toolStripMenuItemAutoStart.Checked = AutoStart;
             toolStripMenuItemAutoStart.CheckedChanged += toolStripMenuItemAutoStart_CheckedChanged;
 
+            toolStripMenuItemWebUI.Click += toolStripMenuItemWebUI_Click;
             toolStripMenuItemShutdown.Click += toolStripMenuItemShutdown_Click;
 
             if (Program.IsFirstRun)
                 AutoStart = true;
+        }
+
+        void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://127.0.0.1:" + Server.Port);
         }
 
         void toolStripMenuItemShutdown_Click(object sender, EventArgs e)

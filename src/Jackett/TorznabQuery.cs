@@ -30,6 +30,8 @@ namespace Jackett
             DateTime showDate;
             if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out showDate))
                 episodeString = showDate.ToString("yyyy.MM.dd");
+            else if (string.IsNullOrEmpty(Episode))
+                episodeString = string.Format("S{0:00}", Season);
             else
                 episodeString = string.Format("S{0:00}E{1:00}", Season, int.Parse(Episode));
 

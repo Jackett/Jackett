@@ -131,13 +131,20 @@ namespace Jackett
                     break;
             }
             JToken jsonReply = await handlerTask(context);
-            ReplyWithJson(context, jsonReply);
+            await ReplyWithJson(context, jsonReply, method.ToString());
         }
 
-        async void ReplyWithJson(HttpListenerContext context, JToken json)
+        async Task ReplyWithJson(HttpListenerContext context, JToken json, string apiCall)
         {
-            byte[] jsonBytes = Encoding.UTF8.GetBytes(json.ToString());
-            await context.Response.OutputStream.WriteAsync(jsonBytes, 0, jsonBytes.Length);
+            try
+            {
+                byte[] jsonBytes = Encoding.UTF8.GetBytes(json.ToString());
+                await context.Response.OutputStream.WriteAsync(jsonBytes, 0, jsonBytes.Length);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error writing json to stream for API call " + apiCall + Environment.NewLine + ex.ToString());
+            }
         }
 
         async Task<JToken> HandleTestSonarr(HttpListenerContext context)

@@ -15,7 +15,7 @@ namespace Jackett
 {
     public class Server
     {
-        int Port = 9117;
+        public const int Port = 9117;
 
         HttpListener listener;
         IndexerManager indexerManager;
@@ -46,17 +46,17 @@ namespace Jackett
             }
         }
 
-        public async void Start()
+        public async Task Start()
         {
             Program.LoggerInstance.Info("Starting HTTP server...");
 
             try
             {
                 listener.Start();
-                Process.Start("http://127.0.0.1:" + Port);
             }
             catch (HttpListenerException ex)
             {
+                Console.WriteLine("Server start exception: " + ex.ToString());
                 var dialogResult = MessageBox.Show(
                     "App must be ran as Admin for permission to use port " + Port + Environment.NewLine + "Restart app with admin privileges?",
                     "Failed to open port",
@@ -75,10 +75,18 @@ namespace Jackett
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Server start exception: " + ex.ToString());
                 Program.LoggerInstance.ErrorException("Error: " + ex.Message, ex);
                 return;
             }
             Program.LoggerInstance.Info("Server started on port " + Port);
+
+            try
+            {
+                Process.Start("http://127.0.0.1:" + Port);
+            }
+            catch (Exception) { }
+
             while (true)
             {
                 var context = await listener.GetContextAsync();
@@ -115,6 +123,7 @@ namespace Jackett
             catch (Exception ex)
             {
                 exception = ex;
+                Program.LoggerInstance.ErrorException(ex.Message + ex.ToString(), ex);
             }
 
             if (exception != null)
@@ -127,7 +136,11 @@ namespace Jackett
                 catch (Exception) { }
             }
 
-            context.Response.Close();
+            try
+            {
+                context.Response.Close();
+            }
+            catch (Exception) { }
 
         }
 
@@ -156,6 +169,8 @@ namespace Jackett
             torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
 
             var releases = await indexer.PerformQuery(torznabQuery);
+
+            Program.LoggerInstance.Debug(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
 
             var severUrl = string.Format("{0}://{1}:{2}/", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port);
 

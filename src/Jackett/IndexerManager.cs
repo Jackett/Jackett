@@ -89,8 +89,10 @@ namespace Jackett
         {
             var browseQuery = new TorznabQuery();
             var results = await indexer.PerformQuery(browseQuery);
+            Program.LoggerInstance.Debug(string.Format("Found {0} releases from {1}", results.Length, indexer.DisplayName));
             if (results.Length == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
+
         }
 
     }
