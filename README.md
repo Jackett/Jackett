@@ -9,6 +9,9 @@ Currently [Sonarr](https://sonarr.tv/) is the only software that uses Torznab. [
 ### Download
 Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
+### Supported Systems
+Windows. Tested and working on Linux using Mono. Should also work on OSX. 
+
 ### Supported Trackers
  * [BitMeTV](http://www.bitmetv.org/)
  * [MoreThan.tv](https://morethan.tv/)
@@ -16,7 +19,6 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [Freshon](https://freshon.tv/)
  * [IPTorrents](https://iptorrents.com/)
  * [The Pirate Bay](https://thepiratebay.se/)
- * [RARBG](https://rarbg.com)
 
 
 ### Additional Trackers
