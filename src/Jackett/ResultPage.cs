@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,6 +27,7 @@ namespace Jackett
 
         string xmlDateFormat(DateTime dt)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             //Sat, 14 Mar 2015 17:10:42 -0400
             var f = string.Format(@"{0:ddd, dd MMM yyyy HH:mm:ss }{1}", dt, string.Format("{0:zzz}", dt).Replace(":", ""));
             return f;
