@@ -37,6 +37,7 @@ namespace Jackett
                     IsFirstRun = true;
                     Directory.CreateDirectory(AppConfigDirectory);
                 }
+                Console.WriteLine("App config/log directory: " + AppConfigDirectory);
             }
             catch (Exception ex)
             {

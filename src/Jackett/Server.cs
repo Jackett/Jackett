@@ -22,6 +22,7 @@ namespace Jackett
         WebApi webApi;
         SonarrApi sonarrApi;
 
+
         public Server()
         {
             LoadApiKey();
@@ -83,7 +84,9 @@ namespace Jackett
 
             try
             {
+#if !DEBUG
                 Process.Start("http://127.0.0.1:" + Port);
+#endif
             }
             catch (Exception) { }
 

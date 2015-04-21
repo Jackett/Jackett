@@ -155,11 +155,12 @@ namespace Jackett
                     release.Description = release.Title;
 
                     //"Tuesday, June 11th 2013 at 03:52:53 AM" to...
-                    //"Tuesday June 11 2013 03 52 53 AM"
+                    //"Tuesday June 11 2013 03:52:53 AM"
                     var timestamp = qDetailsCol.Children("font").Text().Trim() + " ";
-                    var groups = new Regex(@"(.*?), (.*?) (.*?)th (.*?) at (.*?):(.*?):(.*?) (.*?) ").Match(timestamp).Groups;
-                    var str = string.Join(" ", groups.Cast<Group>().Skip(1).Select(g => g.Value));
-                    release.PublishDate = DateTime.ParseExact(str, "dddd MMMM d yyyy hh mm ss tt", CultureInfo.InvariantCulture);
+                    var timeParts = new List<string>(timestamp.Replace(" at", "").Replace(",", "").Split(' '));
+                    timeParts[2] = Regex.Replace(timeParts[2], "[^0-9.]", "");
+                    var formattedTimeString = string.Join(" ", timeParts.ToArray()).Trim();
+                    release.PublishDate = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
 
                     release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
