@@ -25,6 +25,9 @@ namespace Jackett
 
         public Server()
         {
+            // Allow all SSL.. sucks I know but mono on linux is having problems without it..
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+
             LoadApiKey();
 
             indexerManager = new IndexerManager();

@@ -33,7 +33,7 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-        static string BaseUrl = "http://www.morethan.tv";
+        static string BaseUrl = "https://www.morethan.tv";
 
         static string LoginUrl = BaseUrl + "/login.php";
 
@@ -66,7 +66,7 @@ namespace Jackett.Indexers
             return Task.FromResult<ConfigurationData>(config);
         }
 
-        public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
+        public async Task ApplyConfiguration(JToken configJson)
         {
 
             var config = new ConfigurationDataBasicLogin();
