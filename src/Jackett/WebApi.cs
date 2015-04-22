@@ -13,7 +13,7 @@ namespace Jackett
 {
     public class WebApi
     {
-        static string WebContentFolder = "WebContent";
+        static string WebContentFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WebContent");
         static string[] StaticFiles = Directory.EnumerateFiles(WebContentFolder, "*", SearchOption.AllDirectories).ToArray();
 
         public enum WebApiMethod
