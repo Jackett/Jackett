@@ -53,21 +53,24 @@ namespace Jackett
             logFile.FileName = Path.Combine(AppConfigDirectory, "log.txt");
             logFile.Layout = "${longdate} ${level} ${message} \n ${exception:format=ToString}\n";
             var logFileRule = new LoggingRule("*", LogLevel.Debug, logFile);
+            logConfig.LoggingRules.Add(logFileRule);
 
-            var logAlert = new MessageBoxTarget();
-            logConfig.AddTarget("alert", logAlert);
-            logAlert.Layout = "${message}";
-            logAlert.Caption = "Alert";
-            var logAlertRule = new LoggingRule("*", LogLevel.Fatal, logAlert);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                var logAlert = new MessageBoxTarget();
+                logConfig.AddTarget("alert", logAlert);
+                logAlert.Layout = "${message}";
+                logAlert.Caption = "Alert";
+                var logAlertRule = new LoggingRule("*", LogLevel.Fatal, logAlert);
+                logConfig.LoggingRules.Add(logAlertRule);
+            }
 
             var logConsole = new ConsoleTarget();
             logConfig.AddTarget("console", logConsole);
             logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
             var logConsoleRule = new LoggingRule("*", LogLevel.Debug, logConsole);
-
-            logConfig.LoggingRules.Add(logFileRule);
-            logConfig.LoggingRules.Add(logAlertRule);
             logConfig.LoggingRules.Add(logConsoleRule);
+
             LogManager.Configuration = logConfig;
             LoggerInstance = LogManager.GetCurrentClassLogger();
 
@@ -79,14 +82,15 @@ namespace Jackett
 
             try
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Main());
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    Application.Run(new Main());
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Running in headless mode.");
+
             }
+
+            Console.WriteLine("Running in headless mode.");
 
             Task.WaitAll(serverTask);
             Console.WriteLine("Server thread exit");
