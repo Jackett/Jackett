@@ -60,29 +60,33 @@ namespace Jackett
             }
             catch (HttpListenerException ex)
             {
-                Console.WriteLine("Server start exception: " + ex.ToString());
-                var dialogResult = MessageBox.Show(
-                    "App must be ran as Admin for permission to use port " + Port + Environment.NewLine + "Restart app with admin privileges?",
-                    "Failed to open port",
-                    MessageBoxButtons.YesNo
-                );
-                if (dialogResult == DialogResult.No)
+                var errorStr = "App must be ran as Admin for permission to use port "
+                    + Port + Environment.NewLine
+                    + "Restart app with admin privileges?";
+
+                Program.LoggerInstance.FatalException("Failed to start HTTP server", ex);
+
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
-                    Program.LoggerInstance.FatalException("App must be ran as Admin for permission to use port " + Port, ex);
-                    Application.Exit();
-                    return;
-                }
-                else
-                {
-                    Program.RestartAsAdmin();
+                    var dialogResult = MessageBox.Show(errorStr, "Error", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        Program.LoggerInstance.FatalException("App must be ran as Admin for permission to use port " + Port, ex);
+                        Application.Exit();
+                        return;
+                    }
+                    else
+                    {
+                        Program.RestartAsAdmin();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Server start exception: " + ex.ToString());
-                Program.LoggerInstance.ErrorException("Error: " + ex.Message, ex);
+                Program.LoggerInstance.ErrorException("Error starting HTTP server: " + ex.Message, ex);
                 return;
             }
+
             Program.LoggerInstance.Info("Server started on port " + Port);
 
             try
@@ -95,9 +99,18 @@ namespace Jackett
 
             while (true)
             {
-                var context = await listener.GetContextAsync();
-                ProcessHttpRequest(context);
+                try
+                {
+                    var context = await listener.GetContextAsync();
+                    ProcessHttpRequest(context);
+                }
+                catch (Exception ex)
+                {
+                    Program.LoggerInstance.ErrorException("Error processing HTTP request", ex);
+                }
             }
+
+            Program.LoggerInstance.Debug("HTTP request servicer thread died");
         }
 
         public void Stop()
