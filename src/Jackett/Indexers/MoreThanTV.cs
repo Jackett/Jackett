@@ -47,6 +47,8 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
+        string cookieHeader;
+
         public MoreThanTV()
         {
             IsConfigured = false;
@@ -68,22 +70,36 @@ namespace Jackett.Indexers
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
 
-            var pairs = new Dictionary<string, string>
-                {
-                    { "username", config.Username.Value},
-                    { "password", config.Password.Value},
-                    { "login", "Log in" },
-                    { "keeplogged", "1" }
-                };
+            var pairs = new Dictionary<string, string> {
+				{ "username", config.Username.Value },
+				{ "password", config.Password.Value },
+				{ "login", "Log in" },
+				{ "keeplogged", "1" }
+			};
 
             var content = new FormUrlEncodedContent(pairs);
 
-            var response = await client.PostAsync(LoginUrl, content);
-            var responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent;
+            JArray cookieJArray;
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                // If Windows use .net http
+                var response = await client.PostAsync(LoginUrl, content);
+                responseContent = await response.Content.ReadAsStringAsync();
+                cookieJArray = cookies.ToJson(SiteLink);
+            }
+            else
+            {
+                // If UNIX system use curl
+                var response = await CurlHelper.Shared.PostAsync(LoginUrl, pairs);
+                responseContent = Encoding.UTF8.GetString(response.Content);
+                cookieHeader = response.CookieHeader;
+                cookieJArray = new JArray(response.CookiesFlat);
+            }
 
             if (!responseContent.Contains("logout.php?"))
             {
@@ -91,15 +107,13 @@ namespace Jackett.Indexers
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+
             }
             else
             {
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = new JArray((
-                    from cookie in cookies.GetCookies(new Uri(BaseUrl)).Cast<Cookie>()
-                    select cookie.Name + ":" + cookie.Value
-                ).ToArray());
 
+                var configSaveData = new JObject();
+                configSaveData["cookies"] = cookieJArray;
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
 
@@ -107,9 +121,10 @@ namespace Jackett.Indexers
             }
         }
 
-        public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
+        public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(SiteLink, (JArray)jsonConfig["cookies"]);
+            cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
 
@@ -133,7 +148,18 @@ namespace Jackett.Indexers
 
                 var searchString = title + " " + query.GetEpisodeSearchString();
                 var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-                var results = await client.GetStringAsync(episodeSearchUrl);
+
+                string results;
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    results = await client.GetStringAsync(episodeSearchUrl);
+                }
+                else
+                {
+                    var response = await CurlHelper.Shared.GetAsync(episodeSearchUrl, cookieHeader);
+                    results = Encoding.UTF8.GetString(response.Content);
+                }
+
                 var json = JObject.Parse(results);
                 foreach (JObject r in json["response"]["results"])
                 {
@@ -176,9 +202,18 @@ namespace Jackett.Indexers
             return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
 
-        public Task<byte[]> Download(Uri link)
+        public async Task<byte[]> Download(Uri link)
         {
-            return client.GetByteArrayAsync(link);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                return await client.GetByteArrayAsync(link);
+            }
+            else
+            {
+                var response = await CurlHelper.Shared.GetAsync(link.ToString(), cookieHeader);
+                return response.Content;
+            }
+
         }
     }
 }

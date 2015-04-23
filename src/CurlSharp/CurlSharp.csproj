@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{74420A79-CC16-442C-8B1E-7C1B913844F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CurlSharp</RootNamespace>
+    <AssemblyName>CurlSharp</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;LINUX</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Curl.cs" />
+    <Compile Include="CurlEasy.cs" />
+    <Compile Include="CurlHttpMultiPartForm.cs" />
+    <Compile Include="CurlMulti.cs" />
+    <Compile Include="CurlMultiInfo.cs" />
+    <Compile Include="CurlShare.cs" />
+    <Compile Include="CurlSlist.cs" />
+    <Compile Include="CurlSslContext.cs" />
+    <Compile Include="CurlVersionInfoData.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Enums\CurlClosePolicy.cs" />
+    <Compile Include="Enums\CurlCode.cs" />
+    <Compile Include="Enums\CurlFormCode.cs" />
+    <Compile Include="Enums\CurlFormOption.cs" />
+    <Compile Include="Enums\CurlFtpAuth.cs" />
+    <Compile Include="Enums\CurlFtpSsl.cs" />
+    <Compile Include="Enums\CurlHttpAuth.cs" />
+    <Compile Include="Enums\CurlHttpVersion.cs" />
+    <Compile Include="Enums\CurlInfo.cs" />
+    <Compile Include="Enums\CurlInfoType.cs" />
+    <Compile Include="Enums\CurlInitFlag.cs" />
+    <Compile Include="Enums\CurlIoCommand.cs" />
+    <Compile Include="Enums\CurlIoError.cs" />
+    <Compile Include="Enums\CurlIpResolve.cs" />
+    <Compile Include="Enums\CurlLockAccess.cs" />
+    <Compile Include="Enums\CurlLockData.cs" />
+    <Compile Include="Enums\CurlMessage.cs" />
+    <Compile Include="Enums\CurlMultiCode.cs" />
+    <Compile Include="Enums\CurlNetrcOption.cs" />
+    <Compile Include="Enums\CurlOption.cs" />
+    <Compile Include="Enums\CurlProxyType.cs" />
+    <Compile Include="Enums\CurlShareCode.cs" />
+    <Compile Include="Enums\CurlShareOption.cs" />
+    <Compile Include="Enums\CurlSslVersion.cs" />
+    <Compile Include="Enums\CurlTimeCond.cs" />
+    <Compile Include="Enums\CurlVersion.cs" />
+    <Compile Include="Enums\CurlVersionFeatureBitmask.cs" />
+    <Compile Include="Callbacks\CurlEasyCallbacks.cs" />
+    <Compile Include="Callbacks\CurlShareCallbacks.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup />
+</Project>

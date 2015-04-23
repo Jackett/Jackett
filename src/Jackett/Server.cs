@@ -60,26 +60,26 @@ namespace Jackett
             }
             catch (HttpListenerException ex)
             {
-                var errorStr = "App must be ran as Admin for permission to use port "
-                    + Port + Environment.NewLine
-                    + "Restart app with admin privileges?";
-
-                Program.LoggerInstance.FatalException("Failed to start HTTP server", ex);
-
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                if (ex.ErrorCode == 5)
                 {
-                    var dialogResult = MessageBox.Show(errorStr, "Error", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.No)
+                    var errorStr = "App must be ran as admin for permission to use port "
+                                   + Port + Environment.NewLine + "Restart app with admin privileges?";
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                     {
-                        Program.LoggerInstance.FatalException("App must be ran as Admin for permission to use port " + Port, ex);
-                        Application.Exit();
-                        return;
-                    }
-                    else
-                    {
-                        Program.RestartAsAdmin();
+                        var dialogResult = MessageBox.Show(errorStr, "Error", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            Application.Exit();
+                            return;
+                        }
+                        else
+                        {
+                            Program.RestartAsAdmin();
+                        }
                     }
                 }
+                else
+                    Program.LoggerInstance.FatalException("Failed to start HTTP server. " + ex.Message, ex);
             }
             catch (Exception ex)
             {
@@ -95,7 +95,9 @@ namespace Jackett
                 Process.Start("http://127.0.0.1:" + Port);
 #endif
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
 
             while (true)
             {
@@ -152,14 +154,18 @@ namespace Jackett
                     var errorBytes = Encoding.UTF8.GetBytes(exception.Message);
                     await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
             }
 
             try
             {
                 context.Response.Close();
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
 
         }
 

@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett", "Jackett\Jackett.csproj", "{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurlSharp", "CurlSharp\CurlSharp.csproj", "{74420A79-CC16-442C-8B1E-7C1B913844F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74420A79-CC16-442C-8B1E-7C1B913844F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74420A79-CC16-442C-8B1E-7C1B913844F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74420A79-CC16-442C-8B1E-7C1B913844F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74420A79-CC16-442C-8B1E-7C1B913844F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
