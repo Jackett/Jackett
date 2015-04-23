@@ -10,7 +10,14 @@ Currently [Sonarr](https://sonarr.tv/) is the only software that uses Torznab. [
 Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
 ### Supported Systems
-Windows. Tested and working on Linux using Mono. Should also work on OSX. 
+* Works on Windows by default
+* Works on Linux and OS X using Mono. See instructions below...
+
+### Instructions for Mono
+ * Install Mono: http://www.mono-project.com/download/
+ * Install libcurl-dev for your system: http://curl.haxx.se/dlwiz/?type=devel
+   * For apt-get systems its simply: `apt-get install libcurl4-openssl-dev`
+
 
 ### Supported Trackers
  * [BitMeTV](http://www.bitmetv.org/)
