@@ -64,7 +64,7 @@ namespace Jackett
                 {
                     var errorStr = "App must be ran as admin for permission to use port "
                                    + Port + Environment.NewLine + "Restart app with admin privileges?";
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    if (Program.IsWindows)
                     {
                         var dialogResult = MessageBox.Show(errorStr, "Error", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.No)
@@ -111,8 +111,6 @@ namespace Jackett
                     Program.LoggerInstance.ErrorException("Error processing HTTP request", ex);
                 }
             }
-
-            Program.LoggerInstance.Debug("HTTP request servicer thread died");
         }
 
         public void Stop()
@@ -174,8 +172,6 @@ namespace Jackett
 
             var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
             var inputStream = context.Request.InputStream;
-            var reader = new StreamReader(inputStream, context.Request.ContentEncoding);
-            var bytes = await reader.ReadToEndAsync();
 
             var indexerId = context.Request.Url.Segments[2].TrimEnd('/').ToLower();
             var indexer = indexerManager.GetIndexer(indexerId);

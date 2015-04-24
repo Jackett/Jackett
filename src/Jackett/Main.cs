@@ -37,7 +37,7 @@ namespace Jackett
 
         void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Process.GetCurrentProcess().Kill();
         }
 
         void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e)

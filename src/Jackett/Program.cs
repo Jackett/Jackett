@@ -14,84 +14,95 @@ using System.Windows.Forms;
 
 namespace Jackett
 {
-	class Program
-	{
-		public static string AppConfigDirectory = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData), "Jackett");
+    class Program
+    {
+        public static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
 
-		public static Server ServerInstance { get; private set; }
+        public static Server ServerInstance { get; private set; }
 
-		public static bool IsFirstRun { get; private set; }
+        public static bool IsFirstRun { get; private set; }
 
-		public static Logger LoggerInstance { get; private set; }
+        public static Logger LoggerInstance { get; private set; }
 
-		public static ManualResetEvent ExitEvent { get; private set; }
+        public static ManualResetEvent ExitEvent { get; private set; }
 
-		static void Main (string[] args)
-		{
-			ExitEvent = new ManualResetEvent (false);
+        public static bool IsWindows { get { return Environment.OSVersion.Platform == PlatformID.Win32NT; } }
 
-			try {
-				if (!Directory.Exists (AppConfigDirectory)) {
-					IsFirstRun = true;
-					Directory.CreateDirectory (AppConfigDirectory);
-				}
-				Console.WriteLine ("App config/log directory: " + AppConfigDirectory);
-			} catch (Exception ex) {
-				MessageBox.Show ("Could not create settings directory.");
-				Application.Exit ();
-				return;
-			}
+        static void Main(string[] args)
+        {
+            ExitEvent = new ManualResetEvent(false);
 
-			var logConfig = new LoggingConfiguration ();
+            try
+            {
+                if (!Directory.Exists(AppConfigDirectory))
+                {
+                    IsFirstRun = true;
+                    Directory.CreateDirectory(AppConfigDirectory);
+                }
+                Console.WriteLine("App config/log directory: " + AppConfigDirectory);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not create settings directory. " + ex.Message);
+                Application.Exit();
+                return;
+            }
 
-			var logFile = new FileTarget ();
-			logConfig.AddTarget ("file", logFile);
-			logFile.FileName = Path.Combine (AppConfigDirectory, "log.txt");
-			logFile.Layout = "${longdate} ${level} ${message} \n ${exception:format=ToString}\n";
-			var logFileRule = new LoggingRule ("*", LogLevel.Debug, logFile);
-			logConfig.LoggingRules.Add (logFileRule);
+            var logConfig = new LoggingConfiguration();
 
-			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				var logAlert = new MessageBoxTarget ();
-				logConfig.AddTarget ("alert", logAlert);
-				logAlert.Layout = "${message}";
-				logAlert.Caption = "Alert";
-				var logAlertRule = new LoggingRule ("*", LogLevel.Fatal, logAlert);
-				logConfig.LoggingRules.Add (logAlertRule);
-			}
+            var logFile = new FileTarget();
+            logConfig.AddTarget("file", logFile);
+            logFile.FileName = Path.Combine(AppConfigDirectory, "log.txt");
+            logFile.Layout = "${longdate} ${level} ${message} \n ${exception:format=ToString}\n";
+            var logFileRule = new LoggingRule("*", LogLevel.Debug, logFile);
+            logConfig.LoggingRules.Add(logFileRule);
 
-			var logConsole = new ConsoleTarget ();
-			logConfig.AddTarget ("console", logConsole);
-			logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-			var logConsoleRule = new LoggingRule ("*", LogLevel.Debug, logConsole);
-			logConfig.LoggingRules.Add (logConsoleRule);
+            if (Program.IsWindows)
+            {
+                var logAlert = new MessageBoxTarget();
+                logConfig.AddTarget("alert", logAlert);
+                logAlert.Layout = "${message}";
+                logAlert.Caption = "Alert";
+                var logAlertRule = new LoggingRule("*", LogLevel.Fatal, logAlert);
+                logConfig.LoggingRules.Add(logAlertRule);
+            }
 
-			LogManager.Configuration = logConfig;
-			LoggerInstance = LogManager.GetCurrentClassLogger ();
+            var logConsole = new ConsoleTarget();
+            logConfig.AddTarget("console", logConsole);
+            logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
+            var logConsoleRule = new LoggingRule("*", LogLevel.Debug, logConsole);
+            logConfig.LoggingRules.Add(logConsoleRule);
 
-			var serverTask = Task.Run (async () => {
-				ServerInstance = new Server ();
-				await ServerInstance.Start ();
-			});
+            LogManager.Configuration = logConfig;
+            LoggerInstance = LogManager.GetCurrentClassLogger();
 
-			try {
-				if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-					Application.Run (new Main ());
-			} catch (Exception ex) {
+            var serverTask = Task.Run(async () =>
+            {
+                ServerInstance = new Server();
+                await ServerInstance.Start();
+            });
 
-			}
+            try
+            {
+                if (Program.IsWindows)
+                    Application.Run(new Main());
+            }
+            catch (Exception)
+            {
 
-			Console.WriteLine ("Running in headless mode.");
+            }
 
-			Task.WaitAll (serverTask);
-			Console.WriteLine ("Server thread exit");
-		}
+            Console.WriteLine("Running in headless mode.");
 
-		static public void RestartAsAdmin ()
-		{
-			var startInfo = new ProcessStartInfo (Application.ExecutablePath.ToString ()) { Verb = "runas" };
-			Process.Start (startInfo);
-			Environment.Exit (0);
-		}
-	}
+            Task.WaitAll(serverTask);
+            Console.WriteLine("Server thread exit");
+        }
+
+        static public void RestartAsAdmin()
+        {
+            var startInfo = new ProcessStartInfo(Application.ExecutablePath.ToString()) { Verb = "runas" };
+            Process.Start(startInfo);
+            Environment.Exit(0);
+        }
+    }
 }

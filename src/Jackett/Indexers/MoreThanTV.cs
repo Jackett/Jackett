@@ -85,7 +85,7 @@ namespace Jackett.Indexers
             string responseContent;
             JArray cookieJArray;
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (Program.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -95,7 +95,7 @@ namespace Jackett.Indexers
             else
             {
                 // If UNIX system use curl
-                var response = await CurlHelper.Shared.PostAsync(LoginUrl, pairs);
+                var response = await CurlHelper.PostAsync(LoginUrl, pairs);
                 responseContent = Encoding.UTF8.GetString(response.Content);
                 cookieHeader = response.CookieHeader;
                 cookieJArray = new JArray(response.CookiesFlat);
@@ -150,13 +150,13 @@ namespace Jackett.Indexers
                 var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
                 string results;
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                if (Program.IsWindows)
                 {
                     results = await client.GetStringAsync(episodeSearchUrl);
                 }
                 else
                 {
-                    var response = await CurlHelper.Shared.GetAsync(episodeSearchUrl, cookieHeader);
+                    var response = await CurlHelper.GetAsync(episodeSearchUrl, cookieHeader);
                     results = Encoding.UTF8.GetString(response.Content);
                 }
 
@@ -204,13 +204,13 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (Program.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }
             else
             {
-                var response = await CurlHelper.Shared.GetAsync(link.ToString(), cookieHeader);
+                var response = await CurlHelper.GetAsync(link.ToString(), cookieHeader);
                 return response.Content;
             }
 

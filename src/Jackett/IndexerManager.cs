@@ -61,7 +61,6 @@ namespace Jackett
 
         void newIndexer_OnSaveConfigurationRequested(IndexerInterface indexer, JToken obj)
         {
-            var name = indexer.GetType().Name.Trim().ToLower();
             var configFilePath = GetIndexerConfigFilePath(indexer);
             if (!Directory.Exists(IndexerConfigDirectory))
                 Directory.CreateDirectory(IndexerConfigDirectory);

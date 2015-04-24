@@ -33,15 +33,24 @@ namespace CurlSharp
         private const string CURL_LIB = "libcurl64.dll";
 
 
+
+
+
 #if USE_LIBCURLSHIM
         private const string CURLSHIM_LIB = "libcurlshim64.dll";
 #endif
 		
+
+
+
 #else
 		#if LINUX
 		private const string CURL_LIB = "libcurl";
 		#else
         private const string CURL_LIB = "libcurl.dll";
+
+
+
 
 
 #if USE_LIBCURLSHIM

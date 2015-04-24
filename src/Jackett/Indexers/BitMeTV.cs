@@ -73,7 +73,7 @@ namespace Jackett
 
 		public async Task<ConfigurationData> GetConfigurationForSetup ()
 		{
-			var loginPage = await client.GetAsync (LoginUrl);
+			await client.GetAsync (LoginUrl);
 			var captchaImage = await client.GetByteArrayAsync (CaptchaUrl);
 			var config = new BmtvConfig ();
 			config.CaptchaImage.Value = captchaImage;
@@ -138,7 +138,6 @@ namespace Jackett
 				foreach (var row in table.Children().Skip(1)) {
 					var release = new ReleaseInfo ();
 
-					CQ qRow = row.Cq ();
 					CQ qDetailsCol = row.ChildElements.ElementAt (1).Cq ();
 					CQ qLink = qDetailsCol.Children ("a").First ();
 

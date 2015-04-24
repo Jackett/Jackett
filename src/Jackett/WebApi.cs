@@ -27,17 +27,17 @@ namespace Jackett
             ApplySonarrConfig,
             TestSonarr
         }
-        static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod>
-        {
-            { "get_config_form", WebApiMethod.GetConfigForm },
-            { "configure_indexer", WebApiMethod.ConfigureIndexer },
-            { "get_indexers", WebApiMethod.GetIndexers },
-            { "test_indexer", WebApiMethod.TestIndexer },
-            { "delete_indexer", WebApiMethod.DeleteIndexer },
-            { "get_sonarr_config", WebApiMethod.GetSonarrConfig },
-            { "apply_sonarr_config", WebApiMethod.ApplySonarrConfig },
-            { "test_sonarr", WebApiMethod.TestSonarr }
-        };
+
+        static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod> {
+			{ "get_config_form", WebApiMethod.GetConfigForm },
+			{ "configure_indexer", WebApiMethod.ConfigureIndexer },
+			{ "get_indexers", WebApiMethod.GetIndexers },
+			{ "test_indexer", WebApiMethod.TestIndexer },
+			{ "delete_indexer", WebApiMethod.DeleteIndexer },
+			{ "get_sonarr_config", WebApiMethod.GetSonarrConfig },
+			{ "apply_sonarr_config", WebApiMethod.ApplySonarrConfig },
+			{ "test_sonarr", WebApiMethod.TestSonarr }
+		};
 
         IndexerManager indexerManager;
         SonarrApi sonarrApi;
@@ -80,7 +80,9 @@ namespace Jackett
             {
                 await context.Response.OutputStream.WriteAsync(contentFile, 0, contentFile.Length);
             }
-            catch (HttpListenerException) { }
+            catch (HttpListenerException)
+            {
+            }
         }
 
         async Task<JToken> ReadPostDataJson(Stream stream)
@@ -93,8 +95,6 @@ namespace Jackett
 
         async Task ProcessWebApiRequest(HttpListenerContext context, WebApiMethod method)
         {
-            var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
-
             context.Response.ContentType = "text/json";
             context.Response.StatusCode = (int)HttpStatusCode.OK;
 

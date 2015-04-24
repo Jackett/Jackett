@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 
             public ThePirateBayConfig()
             {
-                Url = new StringItem { Name = "Url", Value = "https://thepiratebay.se/" };
+                Url = new StringItem { Name = "Url", Value = "https://thepiratebay.se" };
             }
 
             public override Item[] GetItems()
@@ -37,13 +37,12 @@ namespace Jackett.Indexers
 
         public string DisplayDescription { get { return "The worlds largest bittorrent indexer"; } }
 
-        public Uri SiteLink { get { return new Uri("https://thepiratebay.se/"); } }
+        public Uri SiteLink { get { return new Uri("https://thepiratebay.se"); } }
 
         public bool IsConfigured { get; private set; }
 
-        static string SearchUrl = "s/?q=\"{0}\"&category=205&page=0&orderby=99";
-        static string BrowserUrl = "browse/200";
-        static string SwitchSingleViewUrl = "switchview.php?view=s";
+        static string SearchUrl = "/s/?q=\"{0}\"&category=205&page=0&orderby=99";
+        static string SwitchSingleViewUrl = "/switchview.php?view=s";
 
         string BaseUrl;
 
@@ -75,16 +74,14 @@ namespace Jackett.Indexers
         {
             var config = new ThePirateBayConfig();
             config.LoadValuesFromJson(configJson);
-            await TestBrowse(config.Url.Value);
-            BaseUrl = new Uri(config.Url.Value).ToString();
 
-            var message = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
-            };
-            message.Headers.Referrer = new Uri(BaseUrl + BrowserUrl);
-            var response = await client.SendAsync(message);
+            var uri = new Uri(config.Url.Value);
+            var formattedUrl = string.Format("{0}://{1}", uri.Scheme, uri.Host);
+            var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
+            if (releases.Length == 0)
+                throw new Exception("Could not find releases from this URL");
+
+            BaseUrl = formattedUrl;
 
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
@@ -93,15 +90,7 @@ namespace Jackett.Indexers
                 OnSaveConfigurationRequested(this, configSaveData);
 
             IsConfigured = true;
-        }
 
-        async Task TestBrowse(string url)
-        {
-            var result = await client.GetStringAsync(new Uri(url) + BrowserUrl);
-            if (!result.Contains("<table id=\"searchResult\">"))
-            {
-                throw new Exception("Could not detect The Pirate Bay content");
-            }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -112,22 +101,38 @@ namespace Jackett.Indexers
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
+            return await PerformQuery(query, BaseUrl);
+        }
+
+        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
                 var searchString = title + " " + query.GetEpisodeSearchString();
-                var episodeSearchUrl = BaseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+                var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
                 var message = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(BaseUrl + SwitchSingleViewUrl)
+                    RequestUri = new Uri(baseUrl + SwitchSingleViewUrl)
                 };
                 message.Headers.Referrer = new Uri(episodeSearchUrl);
 
-                var response = await client.SendAsync(message);
-                var results = await response.Content.ReadAsStringAsync();
+                string results;
+
+                if (Program.IsWindows)
+                {
+                    var response = await client.SendAsync(message);
+                    results = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var response = await CurlHelper.GetAsync(baseUrl + SwitchSingleViewUrl, null, episodeSearchUrl);
+                    //var response = await CurlHelper.GetAsync (episodeSearchUrl, setLayoutResponse.CookieHeader);
+                    results = Encoding.UTF8.GetString(response.Content);
+                }
 
                 CQ dom = results;
 
@@ -135,14 +140,14 @@ namespace Jackett.Indexers
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
-                    CQ qRow = row.Cq();
+
                     CQ qLink = row.ChildElements.ElementAt(1).Cq().Children("a").First();
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Text().Trim();
                     release.Description = release.Title;
-                    release.Comments = new Uri(BaseUrl + qLink.Attr("href").TrimStart('/'));
+                    release.Comments = new Uri(baseUrl + qLink.Attr("href").TrimStart('/'));
                     release.Guid = release.Comments;
 
                     var timeString = row.ChildElements.ElementAt(2).Cq().Text();
