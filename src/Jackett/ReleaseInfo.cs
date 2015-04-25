@@ -24,7 +24,7 @@ namespace Jackett
         public Uri ConverUrl { get; set; }
         public Uri BannerUrl { get; set; }
         public string InfoHash { get; set; }
-        public Uri MagnetUrl { get; set; }
+        public Uri MagnetUri { get; set; }
         public double? MinimumRatio { get; set; }
         public long? MinimumSeedTime { get; set; }
 

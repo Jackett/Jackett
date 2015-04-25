@@ -94,6 +94,7 @@
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
+    <Compile Include="Indexers\Strike.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -193,6 +194,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\rarbg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\strike.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\thepiratebay.png">

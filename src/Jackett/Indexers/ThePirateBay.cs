@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 
             public ThePirateBayConfig()
             {
-                Url = new StringItem { Name = "Url", Value = "https://thepiratebay.se" };
+                Url = new StringItem { Name = "Url", Value = DefaultUrl };
             }
 
             public override Item[] GetItems()
@@ -37,12 +37,13 @@ namespace Jackett.Indexers
 
         public string DisplayDescription { get { return "The worlds largest bittorrent indexer"; } }
 
-        public Uri SiteLink { get { return new Uri("https://thepiratebay.se"); } }
+        public Uri SiteLink { get { return new Uri(DefaultUrl); } }
 
         public bool IsConfigured { get; private set; }
 
-        static string SearchUrl = "/s/?q=\"{0}\"&category=205&page=0&orderby=99";
-        static string SwitchSingleViewUrl = "/switchview.php?view=s";
+        const string DefaultUrl = "https://thepiratebay.se";
+        const string SearchUrl = "/s/?q=\"{0}\"&category=205&page=0&orderby=99";
+        const string SwitchSingleViewUrl = "/switchview.php?view=s";
 
         string BaseUrl;
 
@@ -169,8 +170,8 @@ namespace Jackett.Indexers
                     }
 
                     var downloadCol = row.ChildElements.ElementAt(3).Cq().Find("a");
-                    release.MagnetUrl = new Uri(downloadCol.Attr("href"));
-                    release.InfoHash = release.MagnetUrl.ToString().Split(':')[3].Split('&')[0];
+                    release.MagnetUri = new Uri(downloadCol.Attr("href"));
+                    release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
 
                     var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
                     var sizeVal = float.Parse(sizeString[0]);

@@ -73,15 +73,15 @@ namespace Jackett
                             new XElement("pubDate", xmlDateFormat(r.PublishDate)),
                             new XElement("size", r.Size),
                             new XElement("description", r.Description),
-                            new XElement("link", r.Link ?? r.MagnetUrl),
+                            new XElement("link", r.Link ?? r.MagnetUri),
                             r.Category == null ? null : new XElement("category", r.Category),
                             new XElement(
                                 "enclosure",
-                                new XAttribute("url", r.Link ?? r.MagnetUrl),
+                                new XAttribute("url", r.Link ?? r.MagnetUri),
                                 new XAttribute("length", r.Size),
                                 new XAttribute("type", "application/x-bittorrent")
                             ),
-                            getTorznabElement("magneturl", r.MagnetUrl),
+                            getTorznabElement("magneturl", r.MagnetUri),
                             getTorznabElement("rageid", r.RageID),
                             getTorznabElement("seeders", r.Seeders),
                             getTorznabElement("peers", r.Peers),
