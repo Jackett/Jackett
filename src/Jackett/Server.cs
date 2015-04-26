@@ -198,7 +198,10 @@ namespace Jackett
 
             var torznabQuery = TorznabQuery.FromHttpQuery(query);
 
-            torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
+            if (torznabQuery.RageID != 0)
+                torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
+            else
+                torznabQuery.ShowTitles = new string[] { torznabQuery.SearchTerm };
 
             var releases = await indexer.PerformQuery(torznabQuery);
 

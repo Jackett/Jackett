@@ -20,6 +20,7 @@ namespace Jackett
         public int Season { get; private set; }
         public string Episode { get; private set; }
         public string[] ShowTitles { get; set; }
+        public string SearchTerm { get; set; }
 
         public string GetEpisodeSearchString()
         {
@@ -44,6 +45,7 @@ namespace Jackett
             //{t=tvsearch&cat=5030%2c5040&extended=1&apikey=test&offset=0&limit=100&rid=24493&season=5&ep=1}
             var q = new TorznabQuery();
             q.QueryType = query["t"];
+            q.SearchTerm = query["q"];
             q.Categories = query["cat"].Split(',');
             q.Extended = int.Parse(query["extended"]);
             q.ApiKey = query["apikey"];
