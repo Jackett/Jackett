@@ -15,7 +15,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
 ### Instructions for Mono
  * Install Mono: http://www.mono-project.com/download/
- * (For MoreThanTV & ThePirateBay) Install libcurl-dev for your system: http://curl.haxx.se/dlwiz/?type=devel
+ * *For MoreThanTV & ThePirateBay* install libcurl-dev for your system, [tutorial](http://curl.haxx.se/dlwiz/?type=devel)
    * For apt-get systems its simply: `apt-get install libcurl4-openssl-dev`
 
 
