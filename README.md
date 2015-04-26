@@ -15,7 +15,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
 ### Instructions for Mono
  * Install Mono: http://www.mono-project.com/download/
- * Install libcurl-dev for your system: http://curl.haxx.se/dlwiz/?type=devel
+ * (For MoreThanTV & ThePirateBay) Install libcurl-dev for your system: http://curl.haxx.se/dlwiz/?type=devel
    * For apt-get systems its simply: `apt-get install libcurl4-openssl-dev`
 
 
@@ -25,6 +25,8 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [Freshon](https://freshon.tv/)
  * [IPTorrents](https://iptorrents.com/)
+ * [TorrentLeech](http://www.torrentleech.org/)
+ * [Strike](https://getstrike.net/)
  * [The Pirate Bay](https://thepiratebay.se/)
 
 
@@ -36,4 +38,4 @@ I can be contact on IRC at [irc.freenode.net#sonarr](http://webchat.freenode.net
 
 ### Screenshots
 
-![screenshot](http://i.imgur.com/ca3lKif.png "screenshot")
+![screenshot](http://i.imgur.com/OX9MKrL.png "screenshot")
