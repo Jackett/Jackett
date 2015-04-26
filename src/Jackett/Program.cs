@@ -52,8 +52,13 @@ namespace Jackett
 
             var logFile = new FileTarget();
             logConfig.AddTarget("file", logFile);
-            logFile.FileName = Path.Combine(AppConfigDirectory, "log.txt");
             logFile.Layout = "${longdate} ${level} ${message} \n ${exception:format=ToString}\n";
+            logFile.FileName = Path.Combine(AppConfigDirectory, "log.txt");
+            logFile.ArchiveFileName = "log.{#####}.txt";
+            logFile.ArchiveAboveSize = 500000;
+            logFile.MaxArchiveFiles = 1;
+            logFile.KeepFileOpen = false;
+            logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
             var logFileRule = new LoggingRule("*", LogLevel.Debug, logFile);
             logConfig.LoggingRules.Add(logFileRule);
 

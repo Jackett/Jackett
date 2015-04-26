@@ -131,7 +131,6 @@ namespace Jackett.Indexers
                 else
                 {
                     var response = await CurlHelper.GetAsync(baseUrl + SwitchSingleViewUrl, null, episodeSearchUrl);
-                    //var response = await CurlHelper.GetAsync (episodeSearchUrl, setLayoutResponse.CookieHeader);
                     results = Encoding.UTF8.GetString(response.Content);
                 }
 

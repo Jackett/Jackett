@@ -34,8 +34,6 @@ namespace Jackett
             sonarrApi = new SonarrApi();
             webApi = new WebApi(indexerManager, sonarrApi);
 
-            listener = new HttpListener();
-            listener.Prefixes.Add("http://*:9117/");
         }
 
         void LoadApiKey()
@@ -56,6 +54,8 @@ namespace Jackett
 
             try
             {
+                listener = new HttpListener();
+                listener.Prefixes.Add("http://*:9117/");
                 listener.Start();
             }
             catch (HttpListenerException ex)
@@ -101,15 +101,26 @@ namespace Jackett
 
             while (true)
             {
+                Exception error = null;
                 try
                 {
+                    error = null;
                     var context = await listener.GetContextAsync();
                     ProcessHttpRequest(context);
                 }
+                catch (ObjectDisposedException ex)
+                {
+                    Program.LoggerInstance.ErrorException("Critical error, HTTP listener was destroyed", ex);
+                    Process.GetCurrentProcess().Kill();
+                }
                 catch (Exception ex)
                 {
+                    error = ex;
                     Program.LoggerInstance.ErrorException("Error processing HTTP request", ex);
                 }
+
+                if (error != null)
+                    await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
 
