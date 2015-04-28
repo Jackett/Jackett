@@ -63,7 +63,7 @@ namespace Jackett
                 if (ex.ErrorCode == 5)
                 {
                     var errorStr = "App must be ran as admin for permission to use port "
-                                   + Port + Environment.NewLine + "Restart app with admin privileges?";
+                                                  + Port + Environment.NewLine + "Restart app with admin privileges?";
                     if (Program.IsWindows)
                     {
                         var dialogResult = MessageBox.Show(errorStr, "Error", MessageBoxButtons.YesNo);
@@ -88,16 +88,6 @@ namespace Jackett
             }
 
             Program.LoggerInstance.Info("Server started on port " + Port);
-
-            try
-            {
-#if !DEBUG
-                Process.Start("http://127.0.0.1:" + Port);
-#endif
-            }
-            catch (Exception)
-            {
-            }
 
             while (true)
             {
