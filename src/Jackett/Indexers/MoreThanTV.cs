@@ -30,6 +30,7 @@ namespace Jackett.Indexers
 
 
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
 
         public bool IsConfigured { get; private set; }
 
@@ -159,36 +160,44 @@ namespace Jackett.Indexers
                     var response = await CurlHelper.GetAsync(episodeSearchUrl, cookieHeader);
                     results = Encoding.UTF8.GetString(response.Content);
                 }
-
-                var json = JObject.Parse(results);
-                foreach (JObject r in json["response"]["results"])
+                try
                 {
 
-                    var pubDate = UnixTimestampToDateTime(double.Parse((string)r["groupTime"]));
-                    var groupName = (string)r["groupName"];
-
-                    if (r["torrents"] is JArray)
+                    var json = JObject.Parse(results);
+                    foreach (JObject r in json["response"]["results"])
                     {
-                        foreach (JObject t in r["torrents"])
+
+                        var pubDate = UnixTimestampToDateTime(double.Parse((string)r["groupTime"]));
+                        var groupName = (string)r["groupName"];
+
+                        if (r["torrents"] is JArray)
+                        {
+                            foreach (JObject t in r["torrents"])
+                            {
+                                var release = new ReleaseInfo();
+                                release.PublishDate = pubDate;
+                                release.Title = groupName;
+                                release.Description = groupName;
+                                FillReleaseInfoFromJson(release, t);
+                                releases.Add(release);
+                            }
+                        }
+                        else
                         {
                             var release = new ReleaseInfo();
                             release.PublishDate = pubDate;
                             release.Title = groupName;
                             release.Description = groupName;
-                            FillReleaseInfoFromJson(release, t);
+                            FillReleaseInfoFromJson(release, r);
                             releases.Add(release);
                         }
-                    }
-                    else
-                    {
-                        var release = new ReleaseInfo();
-                        release.PublishDate = pubDate;
-                        release.Title = groupName;
-                        release.Description = groupName;
-                        FillReleaseInfoFromJson(release, r);
-                        releases.Add(release);
-                    }
 
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
                 }
             }
 
@@ -215,5 +224,6 @@ namespace Jackett.Indexers
             }
 
         }
+
     }
 }

@@ -14,6 +14,7 @@ namespace Jackett.Indexers
 {
     public class TorrentLeech : IndexerInterface
     {
+        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
 
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
@@ -114,44 +115,54 @@ namespace Jackett.Indexers
                 var searchString = title + " " + query.GetEpisodeSearchString();
                 var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
                 var results = await client.GetStringAsync(episodeSearchUrl);
-                CQ dom = results;
-
-                CQ qRows = dom["#torrenttable > tbody > tr"];
-
-                foreach (var row in qRows)
+                try
                 {
-                    var release = new ReleaseInfo();
+                    CQ dom = results;
 
-                    var qRow = row.Cq();
+                    CQ qRows = dom["#torrenttable > tbody > tr"];
 
-                    var debug = qRow.Html();
+                    foreach (var row in qRows)
+                    {
+                        var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                        var qRow = row.Cq();
 
-                    CQ qLink = qRow.Find(".title > a").First();
-                    release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
-                    release.Comments = release.Guid;
-                    release.Title = qLink.Text();
-                    release.Description = release.Title;
+                        var debug = qRow.Html();
 
-                    release.Link = new Uri(BaseUrl + qRow.Find(".quickdownload > a").Attr("href"));
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
 
-                    var dateString = qRow.Find(".name").First()[0].ChildNodes[4].NodeValue.Replace(" on", "").Trim();
-                    //"2015-04-25 23:38:12"
-                    //"yyyy-MMM-dd hh:mm:ss"
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        CQ qLink = qRow.Find(".title > a").First();
+                        release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
+                        release.Comments = release.Guid;
+                        release.Title = qLink.Text();
+                        release.Description = release.Title;
 
-                    var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], float.Parse(sizeStringParts[0]));
+                        release.Link = new Uri(BaseUrl + qRow.Find(".quickdownload > a").Attr("href"));
 
-                    release.Seeders = int.Parse(qRow.Find(".seeders").Text());
-                    release.Peers = int.Parse(qRow.Find(".leechers").Text());
+                        var dateString = qRow.Find(".name").First()[0].ChildNodes[4].NodeValue.Replace(" on", "").Trim();
+                        //"2015-04-25 23:38:12"
+                        //"yyyy-MMM-dd hh:mm:ss"
+                        release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-                    releases.Add(release);
+                        var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
+                        release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], float.Parse(sizeStringParts[0]));
+
+                        release.Seeders = int.Parse(qRow.Find(".seeders").Text());
+                        release.Peers = int.Parse(qRow.Find(".leechers").Text());
+
+                        releases.Add(release);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
                 }
 
             }
+
 
             return releases.ToArray();
         }
@@ -160,5 +171,8 @@ namespace Jackett.Indexers
         {
             return client.GetByteArrayAsync(link);
         }
+
+
+
     }
 }

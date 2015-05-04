@@ -31,6 +31,7 @@ namespace Jackett.Indexers
 
 
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {
@@ -116,32 +117,40 @@ namespace Jackett.Indexers
                 var searchString = title + " " + query.GetEpisodeSearchString();
                 var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
                 var results = await client.GetStringAsync(episodeSearchUrl);
-                var jResults = JObject.Parse(results);
-                foreach (JObject result in (JArray)jResults["torrents"])
+                try
                 {
-                    var release = new ReleaseInfo();
+                    var jResults = JObject.Parse(results);
+                    foreach (JObject result in (JArray)jResults["torrents"])
+                    {
+                        var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
 
-                    release.Title = (string)result["torrent_title"];
-                    release.Description = release.Title;
-                    release.Seeders = (int)result["seeds"];
-                    release.Peers = (int)result["leeches"] + release.Seeders;
-                    release.Size = (long)result["size"];
+                        release.Title = (string)result["torrent_title"];
+                        release.Description = release.Title;
+                        release.Seeders = (int)result["seeds"];
+                        release.Peers = (int)result["leeches"] + release.Seeders;
+                        release.Size = (long)result["size"];
 
-                    // "Apr  2, 2015", "Apr 12, 2015" (note the spacing)
-                    var dateString = string.Join(" ", ((string)result["upload_date"]).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
-                    release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
+                        // "Apr  2, 2015", "Apr 12, 2015" (note the spacing)
+                        var dateString = string.Join(" ", ((string)result["upload_date"]).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                        release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
 
-                    release.Guid = new Uri((string)result["page"]);
-                    release.Comments = release.Guid;
+                        release.Guid = new Uri((string)result["page"]);
+                        release.Comments = release.Guid;
 
-                    release.InfoHash = (string)result["torrent_hash"];
-                    release.MagnetUri = new Uri((string)result["magnet_uri"]);
-                    release.Link = new Uri(string.Format("{0}{1}{2}", baseUrl, DownloadUrl, release.InfoHash));
+                        release.InfoHash = (string)result["torrent_hash"];
+                        release.MagnetUri = new Uri((string)result["magnet_uri"]);
+                        release.Link = new Uri(string.Format("{0}{1}{2}", baseUrl, DownloadUrl, release.InfoHash));
 
-                    releases.Add(release);
+                        releases.Add(release);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
                 }
             }
 
@@ -157,5 +166,7 @@ namespace Jackett.Indexers
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

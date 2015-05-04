@@ -43,6 +43,7 @@ namespace Jackett
 
             IndexerInterface newIndexer = (IndexerInterface)Activator.CreateInstance(indexerType);
             newIndexer.OnSaveConfigurationRequested += newIndexer_OnSaveConfigurationRequested;
+            newIndexer.OnResultParsingError += newIndexer_OnResultParsingError;
 
             var configFilePath = GetIndexerConfigFilePath(newIndexer);
             if (File.Exists(configFilePath))
@@ -52,6 +53,14 @@ namespace Jackett
             }
 
             Indexers.Add(name, newIndexer);
+        }
+
+        void newIndexer_OnResultParsingError(IndexerInterface indexer, string results, Exception ex)
+        {
+            var fileName = string.Format("Error on {0} for {1}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"), indexer.DisplayName);
+            var spacing = string.Join("", Enumerable.Repeat(Environment.NewLine, 5));
+            var fileContents = string.Format("{0}{1}{2}", ex, spacing, results);
+            File.WriteAllText(Path.Combine(Program.AppConfigDirectory, fileName), fileContents);
         }
 
         string GetIndexerConfigFilePath(IndexerInterface indexer)
