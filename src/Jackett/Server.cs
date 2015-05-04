@@ -190,7 +190,7 @@ namespace Jackett
 
             if (torznabQuery.RageID != 0)
                 torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
-            else
+            else if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
                 torznabQuery.ShowTitles = new string[] { torznabQuery.SearchTerm };
 
             var releases = await indexer.PerformQuery(torznabQuery);
