@@ -33,7 +33,7 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-        const string DefaultUrl = "https://torrentapi.org";
+        const string DefaultUrl = "http://torrentapi.org";
 
         const string TokenUrl = "/pubapi.php?get_token=get_token&format=json";
         const string SearchTVRageUrl = "/pubapi.php?mode=search&search_tvrage={0}&token={1}&format=json&min_seeders=1";
