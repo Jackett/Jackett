@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,7 +27,6 @@ namespace Jackett.Indexers
         public bool IsConfigured { get; private set; }
 
         static string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
-
 
         static string BaseUrl = "https://iptorrents.com";
 
@@ -177,8 +177,8 @@ namespace Jackett.Indexers
                         var sizeUnit = sizeStr.Split(' ')[1];
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
-                        release.Seeders = int.Parse(qRow.Find(".t_seeders").Text().Trim());
-                        release.Peers = int.Parse(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;
+                        release.Seeders = int.Parse(qRow.Find(".t_seeders").Text().Trim(), NumberStyles.AllowThousands);
+                        release.Peers = int.Parse(qRow.Find(".t_leechers").Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
 
                         releases.Add(release);
                     }

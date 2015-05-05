@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -125,6 +126,7 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
                         release.Title = qRow.Find(".torrentName").Text();
+                        release.Description = release.Title;
                         release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrentName").Attr("href"));
                         release.Comments = release.Guid;
                         release.Link = new Uri(BaseUrl + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
@@ -153,8 +155,8 @@ namespace Jackett.Indexers
                             ts = TimeSpan.FromDays(dateValue * 365);
                         release.PublishDate = DateTime.Now - ts;
 
-                        release.Seeders = int.Parse(qRow.Find(".seedersInfo").Text());
-                        release.Peers = int.Parse(qRow.Find(".leechersInfo").Text()) + release.Seeders;
+                        release.Seeders = int.Parse(qRow.Find(".seedersInfo").Text(), NumberStyles.AllowThousands);
+                        release.Peers = int.Parse(qRow.Find(".leechersInfo").Text(), NumberStyles.AllowThousands) + release.Seeders;
 
                         releases.Add(release);
                     }

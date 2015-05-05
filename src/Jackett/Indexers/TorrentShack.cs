@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -127,6 +128,7 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
                         release.Title = qRow.Find(".torrent_name_link").Text();
+                        release.Description = release.Title;
                         release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrent_name_link").Parent().Attr("href"));
                         release.Comments = release.Guid;
                         release.Link = new Uri(BaseUrl + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
@@ -154,8 +156,8 @@ namespace Jackett.Indexers
                         var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
                         var sizeParts = sizeStr.Split(' ');
                         release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0]));
-                        release.Seeders = int.Parse(qRow.Children().ElementAt(6).InnerText.Trim());
-                        release.Peers = int.Parse(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
+                        release.Seeders = int.Parse(qRow.Children().ElementAt(6).InnerText.Trim(), NumberStyles.AllowThousands);
+                        release.Peers = int.Parse(qRow.Children().ElementAt(7).InnerText.Trim(), NumberStyles.AllowThousands) + release.Seeders;
 
                         releases.Add(release);
                     }

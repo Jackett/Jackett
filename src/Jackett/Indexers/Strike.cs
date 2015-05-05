@@ -14,22 +14,6 @@ namespace Jackett.Indexers
     public class Strike : IndexerInterface
     {
 
-        class StrikeConfig : ConfigurationData
-        {
-            public StringItem Url { get; private set; }
-
-            public StrikeConfig()
-            {
-                Url = new StringItem { Name = "Url", Value = DefaultUrl };
-            }
-
-            public override Item[] GetItems()
-            {
-                return new Item[] { Url };
-            }
-        }
-
-
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
         public event Action<IndexerInterface, string, Exception> OnResultParsingError;
 
@@ -75,17 +59,16 @@ namespace Jackett.Indexers
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new StrikeConfig();
+            var config = new ConfigurationDataUrl(DefaultUrl);
             return Task.FromResult<ConfigurationData>(config);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new StrikeConfig();
+            var config = new ConfigurationDataUrl(DefaultUrl);
             config.LoadValuesFromJson(configJson);
 
-            var uri = new Uri(config.Url.Value);
-            var formattedUrl = string.Format("{0}://{1}", uri.Scheme, uri.Host);
+            var formattedUrl = config.GetFormattedHostUrl();
             var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
             if (releases.Length == 0)
                 throw new Exception("Could not find releases from this URL");

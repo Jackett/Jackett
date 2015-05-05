@@ -164,8 +164,8 @@ namespace Jackett
                             pubDate = DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         release.PublishDate = pubDate;
 
-                        release.Seeders = int.Parse(qRow.Find("td.table_seeders").Text().Trim());
-                        release.Peers = int.Parse(qRow.Find("td.table_leechers").Text().Trim()) + release.Seeders;
+                        release.Seeders = int.Parse(qRow.Find("td.table_seeders").Text().Trim(), NumberStyles.AllowThousands);
+                        release.Peers = int.Parse(qRow.Find("td.table_leechers").Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
 
                         var sizeCol = qRow.Find("td.table_size")[0];
                         var sizeVal = float.Parse(sizeCol.ChildNodes[0].NodeValue.Trim());

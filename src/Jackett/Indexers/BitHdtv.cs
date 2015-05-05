@@ -109,7 +109,6 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-
             foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
                 var searchString = title + " " + query.GetEpisodeSearchString();
@@ -145,8 +144,8 @@ namespace Jackett.Indexers
                         var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, float.Parse(sizeVal));
 
-                        release.Seeders = int.Parse(qRow.Children().ElementAt(8).Cq().Text().Trim());
-                        release.Peers = int.Parse(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
+                        release.Seeders = int.Parse(qRow.Children().ElementAt(8).Cq().Text().Trim(), NumberStyles.AllowThousands);
+                        release.Peers = int.Parse(qRow.Children().ElementAt(9).Cq().Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
 
                         releases.Add(release);
                     }

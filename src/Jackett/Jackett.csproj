@@ -84,6 +84,7 @@
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ConfigurationData.cs" />
     <Compile Include="ConfigurationDataBasicLogin.cs" />
+    <Compile Include="ConfigurationDataUrl.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="DataUrl.cs" />
     <Compile Include="ExceptionWithConfigData.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
+    <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\Strike.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />

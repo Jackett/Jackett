@@ -172,8 +172,8 @@ namespace Jackett
                         var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
-                        release.Seeders = int.Parse(row.ChildElements.ElementAt(8).Cq().Text());
-                        release.Peers = int.Parse(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
+                        release.Seeders = int.Parse(row.ChildElements.ElementAt(8).Cq().Text(), NumberStyles.AllowThousands);
+                        release.Peers = int.Parse(row.ChildElements.ElementAt(9).Cq().Text(), NumberStyles.AllowThousands) + release.Seeders;
 
                         if (!release.Title.ToLower().Contains(title.ToLower()))
                             continue;
