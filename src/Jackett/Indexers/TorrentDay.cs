@@ -11,7 +11,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class TorrentShack : IndexerInterface
+    public class TorrentDay : IndexerInterface
     {
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
 
@@ -19,7 +19,7 @@ namespace Jackett.Indexers
 
         public string DisplayName
         {
-            get { return "TorrentShack"; }
+            get { return "TorrentDay"; }
         }
 
         public string DisplayDescription
@@ -32,18 +32,17 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
-        const string BaseUrl = "http://torrentshack.me";
-        const string LoginUrl = BaseUrl + "/login.php";
-        const string SearchUrl = BaseUrl + "/torrents.php?searchstr={0}&release_type=both&searchtags=&tags_type=0&order_by=s3&order_way=desc&torrent_preset=all&filter_cat%5B600%5D=1&filter_cat%5B620%5D=1&filter_cat%5B700%5D=1&filter_cat%5B981%5D=1&filter_cat%5B980%5D=1";
+        public bool IsConfigured { get; private set; }
 
+        const string BaseUrl = "https://torrentday.eu";
+        const string LoginUrl = BaseUrl + "/takelogin.php";
+        const string SearchUrl = BaseUrl + "/browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured { get; private set; }
-
-        public TorrentShack()
+        public TorrentDay()
         {
             IsConfigured = false;
             cookies = new CookieContainer();
@@ -82,8 +81,8 @@ namespace Jackett.Indexers
             if (!responseContent.Contains("logout.php"))
             {
                 CQ dom = responseContent;
-                var messageEl = dom["#loginform"];
-                messageEl.Children("table").Remove();
+                var messageEl = dom["#login"];
+                messageEl.Children("form").Remove();
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
             }
@@ -97,7 +96,6 @@ namespace Jackett.Indexers
 
                 IsConfigured = true;
             }
-
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -118,7 +116,7 @@ namespace Jackett.Indexers
                 try
                 {
                     CQ dom = results;
-                    var rows = dom["#torrent_table > tbody > tr.torrent"];
+                    var rows = dom["#torrentTable > tbody > tr.browse"];
                     foreach (var row in rows)
                     {
                         CQ qRow = row.Cq();
@@ -126,14 +124,18 @@ namespace Jackett.Indexers
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
-                        release.Title = qRow.Find(".torrent_name_link").Text();
-                        release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrent_name_link").Parent().Attr("href"));
+                        release.Title = qRow.Find(".torrentName").Text();
+                        release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrentName").Attr("href"));
                         release.Comments = release.Guid;
-                        release.Link = new Uri(BaseUrl + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
+                        release.Link = new Uri(BaseUrl + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
-                        var dateStr = qRow.Find(".time").Text().Trim();
+                        var sizeStr = qRow.Find(".sizeInfo").Text().Trim();
+                        var sizeParts = sizeStr.Split(' ');
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0]));
+
+                        var dateStr = qRow.Find(".ulInfo").Text().Trim();
                         var dateParts = dateStr.Split(' ');
-                        var dateValue = int.Parse(dateParts[0]);
+                        var dateValue = int.Parse(dateParts[1]);
                         TimeSpan ts = TimeSpan.Zero;
                         if (dateStr.Contains("sec"))
                             ts = TimeSpan.FromSeconds(dateValue);
@@ -151,11 +153,8 @@ namespace Jackett.Indexers
                             ts = TimeSpan.FromDays(dateValue * 365);
                         release.PublishDate = DateTime.Now - ts;
 
-                        var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
-                        var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0]));
-                        release.Seeders = int.Parse(qRow.Children().ElementAt(6).InnerText.Trim());
-                        release.Peers = int.Parse(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
+                        release.Seeders = int.Parse(qRow.Find(".seedersInfo").Text());
+                        release.Peers = int.Parse(qRow.Find(".leechersInfo").Text()) + release.Seeders;
 
                         releases.Add(release);
                     }
