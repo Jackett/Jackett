@@ -28,6 +28,9 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [Strike](https://getstrike.net/)
  * [The Pirate Bay](https://thepiratebay.se/)
+ * [RARBG](https://rarbg.com)
+ * [TorrentDay](https://torrentday.eu/)
+ * [TorrentShack](http://torrentshack.me/)
 
 
 ### Additional Trackers
