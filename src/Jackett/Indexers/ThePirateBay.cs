@@ -45,6 +45,7 @@ namespace Jackett.Indexers
 
         const string DefaultUrl = "https://thepiratebay.se";
         const string SearchUrl = "/s/?q=\"{0}\"&category=205&page=0&orderby=99";
+        const string SearchUrl2 = "/s/?q=\"{0}\"&category=208&page=0&orderby=99";
         const string SwitchSingleViewUrl = "/switchview.php?view=s";
 
         string BaseUrl;
@@ -111,11 +112,20 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
+            List<string> searchUrls = new List<string>();
+
             foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
                 var searchString = title + " " + query.GetEpisodeSearchString();
-                var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+                var queryStr = HttpUtility.UrlEncode(searchString);
+                var episodeSearchUrl = baseUrl + string.Format(SearchUrl, queryStr);
+                var episodeSearchUrl2 = baseUrl + string.Format(SearchUrl2, queryStr);
+                searchUrls.Add(episodeSearchUrl);
+                searchUrls.Add(episodeSearchUrl2);
+            }
 
+            foreach (var episodeSearchUrl in searchUrls)
+            {
                 var message = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
