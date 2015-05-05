@@ -97,6 +97,7 @@
     <Compile Include="Indexers\Strike.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Indexers\TorrentLeech.cs" />
+    <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
