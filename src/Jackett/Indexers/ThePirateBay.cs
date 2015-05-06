@@ -142,7 +142,7 @@ namespace Jackett.Indexers
                         release.MinimumSeedTime = 172800;
                         release.Title = qLink.Text().Trim();
                         release.Description = release.Title;
-                        release.Comments = new Uri(baseUrl + qLink.Attr("href").TrimStart('/'));
+                        release.Comments = new Uri(baseUrl + "/" + qLink.Attr("href").TrimStart('/'));
                         release.Guid = release.Comments;
 
                         var timeString = row.ChildElements.ElementAt(2).Cq().Text();
