@@ -166,8 +166,11 @@ namespace Jackett.Indexers
                     var json = JObject.Parse(results);
                     foreach (JObject r in json["response"]["results"])
                     {
+                        DateTime pubDate = DateTime.MinValue;
+                        double dateNum;
+                        if (double.TryParse((string)r["groupTime"], out dateNum))
+                            pubDate = UnixTimestampToDateTime(dateNum);
 
-                        var pubDate = UnixTimestampToDateTime(double.Parse((string)r["groupTime"]));
                         var groupName = (string)r["groupName"];
 
                         if (r["torrents"] is JArray)
