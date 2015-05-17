@@ -36,8 +36,11 @@ namespace Jackett.Indexers
         public bool IsConfigured { get; private set; }
 
         const string BaseUrl = "https://torrentday.eu";
-        const string LoginUrl = BaseUrl + "/takelogin.php";
+        const string StartPageUrl = BaseUrl + "/login.php";
+        const string LoginUrl = BaseUrl + "/tak3login.php";
         const string SearchUrl = BaseUrl + "/browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
+
+        const string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
 
         CookieContainer cookies;
         HttpClientHandler handler;
@@ -62,21 +65,35 @@ namespace Jackett.Indexers
             return Task.FromResult<ConfigurationData>(config);
         }
 
+        HttpRequestMessage CreateHttpRequest(string uri)
+        {
+            var message = new HttpRequestMessage();
+            message.Method = HttpMethod.Get;
+            message.RequestUri = new Uri(uri);
+            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            return message;
+        }
+
         public async Task ApplyConfiguration(JToken configJson)
         {
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
 
+            var startMessage = CreateHttpRequest(StartPageUrl);
+            var results = await (await client.SendAsync(startMessage)).Content.ReadAsStringAsync();
+
+
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
-                { "keeplogged", "1" },
-                { "login", "Login" }
+				{ "password", config.Password.Value }
 			};
-
             var content = new FormUrlEncodedContent(pairs);
+            var loginRequest = CreateHttpRequest(LoginUrl);
+            loginRequest.Method = HttpMethod.Post;
+            loginRequest.Content = content;
+            loginRequest.Headers.Referrer = new Uri(StartPageUrl);
 
-            var response = await client.PostAsync(LoginUrl, content);
+            var response = await client.SendAsync(loginRequest);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (!responseContent.Contains("logout.php"))
