@@ -28,7 +28,7 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-        const string DefaultUrl = "https://thepiratebay.se";
+        const string DefaultUrl = "https://thepiratebay.gd";
         const string SearchUrl = "/s/?q=\"{0}\"&category=205&page=0&orderby=99";
         const string SearchUrl2 = "/s/?q=\"{0}\"&category=208&page=0&orderby=99";
         const string SwitchSingleViewUrl = "/switchview.php?view=s";
