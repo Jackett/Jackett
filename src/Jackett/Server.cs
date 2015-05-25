@@ -15,7 +15,9 @@ namespace Jackett
 {
     public class Server
     {
-        public const int Port = 9117;
+        public const int DefaultPort = 9117;
+        public static int Port = DefaultPort;
+        public static bool ListenPublic = true;
 
         HttpListener listener;
         IndexerManager indexerManager;
@@ -55,7 +57,13 @@ namespace Jackett
             try
             {
                 listener = new HttpListener();
-                listener.Prefixes.Add("http://*:9117/");
+                listener.Prefixes.Add(string.Format("http://127.0.0.1:{0}/", Port));
+                listener.Prefixes.Add(string.Format("http://localhost:{0}/", Port));
+                if (ListenPublic)
+                {
+                    listener.Prefixes.Add(string.Format("http://*:{0}/", Port));
+                }
+
                 listener.Start();
             }
             catch (HttpListenerException ex)
@@ -88,6 +96,7 @@ namespace Jackett
             }
 
             Program.LoggerInstance.Info("Server started on port " + Port);
+            Program.LoggerInstance.Info("Accepting only requests from local system: " + (!ListenPublic));
 
             while (true)
             {

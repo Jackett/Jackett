@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using Jackett.Indexers;
+using Newtonsoft.Json.Linq;
+using NLog;
 using NLog.Config;
 using NLog.Targets;
 using System;
@@ -27,6 +29,8 @@ namespace Jackett
         public static ManualResetEvent ExitEvent { get; private set; }
 
         public static bool IsWindows { get { return Environment.OSVersion.Platform == PlatformID.Win32NT; } }
+
+
 
         static void Main(string[] args)
         {
@@ -81,6 +85,8 @@ namespace Jackett
             LogManager.Configuration = logConfig;
             LoggerInstance = LogManager.GetCurrentClassLogger();
 
+            ReadSettingsFile();
+
             var serverTask = Task.Run(async () =>
             {
                 ServerInstance = new Server();
@@ -99,8 +105,30 @@ namespace Jackett
 
             Console.WriteLine("Running in headless mode.");
 
+
+
             Task.WaitAll(serverTask);
             Console.WriteLine("Server thread exit");
+        }
+
+        static void ReadSettingsFile()
+        {
+            var path = Path.Combine(AppConfigDirectory, "config.json");
+            if (!File.Exists(path))
+            {
+                JObject f = new JObject();
+                f.Add("port", Server.DefaultPort);
+                f.Add("public", true);
+                File.WriteAllText(path, f.ToString());
+            }
+
+            var configJson = JObject.Parse(File.ReadAllText(path));
+            int port = (int)configJson.GetValue("port");
+            Server.Port = port;
+
+            Server.ListenPublic = (bool)configJson.GetValue("public");
+
+            Console.WriteLine("Config file path: " + path);
         }
 
         static public void RestartAsAdmin()

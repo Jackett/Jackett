@@ -88,6 +88,7 @@
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="DataUrl.cs" />
     <Compile Include="ExceptionWithConfigData.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="IndexerInterface.cs" />
     <Compile Include="IndexerManager.cs" />
     <Compile Include="Indexers\BitHdtv.cs" />
