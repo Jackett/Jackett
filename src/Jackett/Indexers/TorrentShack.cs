@@ -160,7 +160,7 @@ namespace Jackett.Indexers
 
                         var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
                         var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0]));
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0], NumberStyles.AllowThousands));
                         release.Seeders = int.Parse(qRow.Children().ElementAt(6).InnerText.Trim(), NumberStyles.AllowThousands);
                         release.Peers = int.Parse(qRow.Children().ElementAt(7).InnerText.Trim(), NumberStyles.AllowThousands) + release.Seeders;
 
