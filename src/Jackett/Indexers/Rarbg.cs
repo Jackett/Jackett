@@ -119,6 +119,7 @@ namespace Jackett.Indexers
 
         async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
         {
+
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             string token = await GetToken(baseUrl);
@@ -131,23 +132,28 @@ namespace Jackett.Indexers
             var request = CreateHttpRequest(searchUrl);
             var response = await client.SendAsync(request);
             var results = await response.Content.ReadAsStringAsync();
-
-            var jItems = JArray.Parse(results);
-            foreach (JObject item in jItems)
+            try
             {
-                var release = new ReleaseInfo();
-                release.Title = (string)item["f"];
-                release.MagnetUri = new Uri((string)item["d"]);
-                release.Guid = release.MagnetUri;
-                release.PublishDate = new DateTime(1970, 1, 1);
-                release.Size = 0;
-                release.Seeders = 1;
-                release.Peers = 1;
-                release.MinimumRatio = 1;
-                release.MinimumSeedTime = 172800;
-                releases.Add(release);
+                var jItems = JArray.Parse(results);
+                foreach (JObject item in jItems)
+                {
+                    var release = new ReleaseInfo();
+                    release.Title = (string)item["f"];
+                    release.MagnetUri = new Uri((string)item["d"]);
+                    release.Guid = release.MagnetUri;
+                    release.PublishDate = new DateTime(1970, 1, 1);
+                    release.Size = 0;
+                    release.Seeders = 1;
+                    release.Peers = 1;
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    releases.Add(release);
+                }
             }
-
+            catch (Exception ex)
+            {
+                OnResultParsingError(this, results, ex);
+            }
             return releases.ToArray();
 
         }
