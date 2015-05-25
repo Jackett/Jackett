@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -49,6 +50,7 @@ namespace Jackett.Indexers
         HttpClient client;
 
         string cookieHeader;
+        int retries = 3;
 
         public MoreThanTV()
         {
@@ -129,7 +131,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
+        static void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
         {
             var id = r["torrentId"];
             release.Size = (long)r["size"];
@@ -153,7 +155,7 @@ namespace Jackett.Indexers
                 string results;
                 if (Program.IsWindows)
                 {
-                    results = await client.GetStringAsync(episodeSearchUrl);
+                    results = await client.GetStringAsync(episodeSearchUrl, retries);
                 }
                 else
                 {
@@ -227,6 +229,5 @@ namespace Jackett.Indexers
             }
 
         }
-
     }
 }
