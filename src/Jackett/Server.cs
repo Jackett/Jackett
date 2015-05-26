@@ -52,16 +52,19 @@ namespace Jackett
 
         public async Task Start()
         {
-            Program.LoggerInstance.Info("Starting HTTP server...");
+            Program.LoggerInstance.Info("Starting HTTP server on port " + Port + " listening " + (ListenPublic ? "publicly" : "privately"));
 
             try
             {
                 listener = new HttpListener();
-                listener.Prefixes.Add(string.Format("http://127.0.0.1:{0}/", Port));
-                listener.Prefixes.Add(string.Format("http://localhost:{0}/", Port));
+
                 if (ListenPublic)
                 {
                     listener.Prefixes.Add(string.Format("http://*:{0}/", Port));
+                }
+                else
+                {
+                    listener.Prefixes.Add(string.Format("http://127.0.0.1:{0}/", Port));
                 }
 
                 listener.Start();
