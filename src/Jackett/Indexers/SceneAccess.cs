@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -39,7 +38,8 @@ namespace Jackett.Indexers
 
         public bool IsConfigured
         {
-            get; private set;
+            get;
+            private set;
         }
 
         CookieContainer cookies;
@@ -130,10 +130,10 @@ namespace Jackett.Indexers
 
             foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                var searchString = title + " " + query.GetEpisodeSearchString(); 
+                var searchString = title + " " + query.GetEpisodeSearchString();
                 var searchSection = string.IsNullOrEmpty(query.Episode) ? "archive" : "browse";
                 var searchCategory = string.IsNullOrEmpty(query.Episode) ? "26" : "27";
-                
+
                 var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
 
                 string results;
