@@ -72,10 +72,10 @@ namespace Jackett.Indexers
             config.LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
+                { "username", config.Username.Value },
+                { "password", config.Password.Value },
                 { "submit", "come on in" }
-			};
+            };
 
             var content = new FormUrlEncodedContent(pairs);
 
