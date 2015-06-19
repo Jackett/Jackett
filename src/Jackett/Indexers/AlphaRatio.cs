@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Net.Http.Headers;
 
 namespace Jackett.Indexers
 {
@@ -15,7 +16,7 @@ namespace Jackett.Indexers
     {
         public string DisplayName
         {
-			get { return "AlphaRatio"; }
+            get { return "AlphaRatio"; }
         }
 
         public string DisplayDescription
@@ -34,7 +35,7 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-		static string BaseUrl = "https://alpharatio.cc";
+        static string BaseUrl = "https://alpharatio.cc";
 
         static string LoginUrl = BaseUrl + "/login.php";
 
@@ -44,13 +45,15 @@ namespace Jackett.Indexers
 
         static string GuidUrl = BaseUrl + "/torrents.php?torrentid=";
 
+        static string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
+
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
         string cookieHeader;
 
-		public AlphaRatio()
+        public AlphaRatio()
         {
             IsConfigured = false;
             cookies = new CookieContainer();
@@ -59,6 +62,7 @@ namespace Jackett.Indexers
                 CookieContainer = cookies,
                 AllowAutoRedirect = true,
                 UseCookies = true,
+
             };
             client = new HttpClient(handler);
         }
@@ -71,31 +75,41 @@ namespace Jackett.Indexers
 
         public async Task ApplyConfiguration(JToken configJson)
         {
+            cookies = new CookieContainer();
+            client = new HttpClient(handler);
+
+            var configSaveData = new JObject();
+            if (OnSaveConfigurationRequested != null)
+                OnSaveConfigurationRequested(this, configSaveData);
+
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
-
+            
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
-				{ "login", "Log in" },
-				{ "keeplogged", "1" }
+				{ "password", @config.Password.Value },
+				{ "login", "Login" },
+			    { "keeplogged", "1" }
 			};
 
             var content = new FormUrlEncodedContent(pairs);
-
+            var message = CreateHttpRequest(new Uri(LoginUrl));
+            message.Content = content;
+            
+           //message.Headers.Referrer = new Uri(LoginUrl);
             string responseContent;
             JArray cookieJArray;
 
             if (Program.IsWindows)
             {
                 // If Windows use .net http
-                var response = await client.PostAsync(LoginUrl, content);
+                var response = await client.SendAsync(message);
                 responseContent = await response.Content.ReadAsStringAsync();
                 cookieJArray = cookies.ToJson(SiteLink);
             }
             else
             {
-                // If UNIX system use curl
+                // If UNIX system use curl, probably broken due to missing chromeUseragent record for CURL...cannot test
                 var response = await CurlHelper.PostAsync(LoginUrl, pairs);
                 responseContent = Encoding.UTF8.GetString(response.Content);
                 cookieHeader = response.CookieHeader;
@@ -112,14 +126,22 @@ namespace Jackett.Indexers
             }
             else
             {
-
-                var configSaveData = new JObject();
+                configSaveData = new JObject();
                 configSaveData["cookies"] = cookieJArray;
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
 
                 IsConfigured = true;
             }
+        }
+
+        HttpRequestMessage CreateHttpRequest(Uri uri)
+        {
+            var message = new HttpRequestMessage();
+            message.Method = HttpMethod.Post;
+            message.RequestUri = uri;
+            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            return message;
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -153,7 +175,10 @@ namespace Jackett.Indexers
                 string results;
                 if (Program.IsWindows)
                 {
-                    results = await client.GetStringAsync(episodeSearchUrl);
+                    var request = CreateHttpRequest(new Uri(episodeSearchUrl));
+                    request.Method = HttpMethod.Get;
+                    var response = await client.SendAsync(request);
+                    results = await response.Content.ReadAsStringAsync();
                 }
                 else
                 {
