@@ -75,10 +75,16 @@ namespace Jackett.Indexers
 
         public async Task ApplyConfiguration(JToken configJson)
         {
+            cookies = new CookieContainer();
+            client = new HttpClient(handler);
+
+            var configSaveData = new JObject();
+            if (OnSaveConfigurationRequested != null)
+                OnSaveConfigurationRequested(this, configSaveData);
 
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
-
+            
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
 				{ "password", @config.Password.Value },
@@ -88,7 +94,8 @@ namespace Jackett.Indexers
 
             var content = new FormUrlEncodedContent(pairs);
             var message = CreateHttpRequest(new Uri(LoginUrl));
-            //message.Content = content;
+            message.Content = content;
+            
            //message.Headers.Referrer = new Uri(LoginUrl);
             string responseContent;
             JArray cookieJArray;
@@ -119,8 +126,7 @@ namespace Jackett.Indexers
             }
             else
             {
-
-                var configSaveData = new JObject();
+                configSaveData = new JObject();
                 configSaveData["cookies"] = cookieJArray;
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
