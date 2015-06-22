@@ -103,6 +103,7 @@
     <Compile Include="Indexers\TorrentDay.cs" />
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
+    <Compile Include="Indexers\Torrentz.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,6 +223,7 @@
     <Content Include="WebContent\logos\torrentleech.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebContent\logos\torrentz.png" />
     <Content Include="WebContent\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
