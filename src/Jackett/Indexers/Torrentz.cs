@@ -122,7 +122,8 @@ namespace Jackett.Indexers
                     }
 
                     ReleaseInfo release;
-                    TorrentzDescription td;
+                    TorrentzHelper td;
+                    string serie_title;
 
                     foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                     {
@@ -130,20 +131,21 @@ namespace Jackett.Indexers
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
-                        release.Title = node.SelectSingleNode("title").InnerText;
+                        serie_title = node.SelectSingleNode("title").InnerText;
+                        release.Title = serie_title;
 
                         release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
                         release.Category = node.SelectSingleNode("category").InnerText;
                         release.Guid = new Uri(node.SelectSingleNode("guid").InnerText);
                         release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
 
-                        td = new TorrentzDescription(node.SelectSingleNode("description").InnerText);
+                        td = new TorrentzHelper(node.SelectSingleNode("description").InnerText);
                         release.Description = td.Description;
                         release.InfoHash = td.hash;
                         release.Size = td.Size;
                         release.Seeders = td.Seeders;
                         release.Peers = td.Peers;
-                        release.MagnetUri = new Uri("https://torrage.com/torrent/" + td.hash.ToUpper() + ".torrent");
+                        release.MagnetUri = TorrentzHelper.createMagnetLink(td.hash, serie_title);
                         releases.Add(release);
                     }
                 }
@@ -176,9 +178,9 @@ namespace Jackett.Indexers
 
     }
 
-    public class TorrentzDescription
+    public class TorrentzHelper
     {
-        public TorrentzDescription(string description)
+        public TorrentzHelper(string description)
         {
             this.Description = description;
             if (null == description)
@@ -191,6 +193,15 @@ namespace Jackett.Indexers
             }
             else
                 FillProperties();
+        }
+
+        public static Uri createMagnetLink(string hash, string title)
+        {
+            string MagnetLink = "magnet:?xt=urn:btih:{0}&dn={1}&tr={2}";
+            string Trackers = WebUtility.UrlEncode("udp://tracker.publicbt.com:80&tr=udp://tracker.openbittorrent.com:80&tr=udp://tracker.ccc.de:80&tr=udp://tracker.istole.it:80");
+            title = WebUtility.UrlEncode(title);
+
+            return new Uri(string.Format(MagnetLink, hash, title, Trackers));
         }
 
         private void FillProperties()
