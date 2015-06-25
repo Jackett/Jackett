@@ -98,6 +98,7 @@
     <Compile Include="Indexers\MoreThanTV.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\SceneAccess.cs" />
+    <Compile Include="Indexers\ShowRSS.cs" />
     <Compile Include="Indexers\Strike.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
@@ -147,9 +148,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WebContent\custom.css" />
+    <Content Include="WebContent\custom.js" />
     <Content Include="WebContent\logos\sceneaccess.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebContent\logos\showrss.png" />
     <Content Include="WebContent\logos\torrentday.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
