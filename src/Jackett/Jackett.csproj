@@ -148,6 +148,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WebContent\custom.css" />
+    <Content Include="WebContent\custom.js" />
     <Content Include="WebContent\logos\sceneaccess.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
