@@ -219,7 +219,7 @@ function getConfigModalJson(configForm) {
                 configJson[id] = $el.find(".setup-item-inputstring").val();
                 break;
             case "inputbool":
-                configJson[id] = $el.find(".setup-item-checkbox").val();
+                configJson[id] = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
         }
     });

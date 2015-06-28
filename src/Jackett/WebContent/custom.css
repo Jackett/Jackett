@@ -95,6 +95,11 @@
             max-width: 260px;
         }
 
+        .setup-item-inputbool input {
+            max-width: 100px;
+            height: 20px;
+        }
+
         .spinner {
             -webkit-animation: spin 2s infinite linear;
             -moz-animation: spin 2s infinite linear;
