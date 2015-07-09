@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Jackett
 {
 
-    public class ReleaseInfo
+    public class ReleaseInfo: ICloneable
     {
         public string Title { get; set; }
         public Uri Guid { get; set; }
@@ -28,6 +28,30 @@ namespace Jackett
         public double? MinimumRatio { get; set; }
         public long? MinimumSeedTime { get; set; }
 
+        public object Clone()
+        {
+            return new ReleaseInfo()
+            {
+                Title = Title,
+                Guid = Guid,
+                Link = Link,
+                Comments = Comments,
+                PublishDate = PublishDate,
+                Category = Category,
+                Size = Size,
+                Description = Description,
+                RageID = RageID,
+                Imdb = Imdb,
+                Seeders = Seeders,
+                Peers = Peers,
+                ConverUrl = ConverUrl,
+                BannerUrl = BannerUrl,
+                InfoHash = InfoHash,
+                MagnetUri = MagnetUri,
+                MinimumRatio = MinimumRatio,
+                MinimumSeedTime = MinimumSeedTime
+            };
+        }
 
         public static long GetBytes(string unit, float value)
         {
