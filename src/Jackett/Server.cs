@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
@@ -19,6 +20,11 @@ namespace Jackett
         public static int Port = DefaultPort;
         public static bool ListenPublic = true;
 
+        private static bool isAuthenticated = false;
+        private static bool isAuthEnabled = false;
+        private static string Username = "";
+        private static string Password = "";
+
         HttpListener listener;
         IndexerManager indexerManager;
         WebApi webApi;
@@ -30,6 +36,7 @@ namespace Jackett
             // Allow all SSL.. sucks I know but mono on linux is having problems without it..
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
+            ReadServerSettingsFile();
             LoadApiKey();
 
             indexerManager = new IndexerManager();
@@ -67,7 +74,12 @@ namespace Jackett
                     listener.Prefixes.Add(string.Format("http://127.0.0.1:{0}/", Port));
                 }
 
+                if (isAuthEnabled && HttpListener.IsSupported)
+                    listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
+
                 listener.Start();
+
+                webApi.server = this;
             }
             catch (HttpListenerException ex)
             {
@@ -109,6 +121,13 @@ namespace Jackett
                     error = null;
                     var context = await listener.GetContextAsync();
                     ProcessHttpRequest(context);
+
+                    if (isAuthEnabled && !isAuthenticated && HttpListener.IsSupported)
+                    {
+                        IAsyncResult result = listener.BeginGetContext(new AsyncCallback(ListenerCallback), listener);
+                        result.AsyncWaitHandle.WaitOne();
+                    }
+
                 }
                 catch (ObjectDisposedException ex)
                 {
@@ -123,6 +142,43 @@ namespace Jackett
 
                 if (error != null)
                     await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+        }
+
+
+        private static void ListenerCallback(IAsyncResult ar)
+        {
+            try
+            {
+                HttpListener listener = (HttpListener)ar.AsyncState;
+                HttpListenerContext context = listener.EndGetContext(ar);
+                HttpListenerBasicIdentity identity = (HttpListenerBasicIdentity)context.User.Identity;
+
+
+                if (Security.Base64Encode(identity.Name) != Username || Security.Base64Encode(identity.Password) != Password)
+                    context.Response.StatusCode = 401;
+
+
+                if (context.Response.StatusCode != 401)
+                {
+                    context.Response.StatusCode = 200;
+                    context.Response.StatusDescription = "OK";
+                    context.Response.Headers["StatusDescription"] = "OK";
+                    isAuthenticated = true;
+                }
+
+                try
+                {
+                    context.Response.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -205,6 +261,15 @@ namespace Jackett
             else if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
                 torznabQuery.ShowTitles = new string[] { torznabQuery.SearchTerm };
 
+            //Replacing non-alphanumeric characters with an empty string
+            if (torznabQuery.ShowTitles != null)
+                for (int i = 0; i < torznabQuery.ShowTitles.Length; i++)
+                {
+                    char[] arr = torznabQuery.ShowTitles[i].ToCharArray();
+                    arr = Array.FindAll<char>(arr, (c => (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c) || c == '-' || c == '@')));
+                    torznabQuery.ShowTitles[i] = new string(arr);
+                }
+
             var releases = await indexer.PerformQuery(torznabQuery);
 
             Program.LoggerInstance.Debug(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
@@ -245,6 +310,172 @@ namespace Jackett
 
         }
 
+        private static string ServerConfigFile = Path.Combine(Program.AppConfigDirectory, "config.json");
+
+        public JObject ReadServerSettingsFile()
+        {
+            var path = ServerConfigFile;
+            JObject jsonReply = new JObject();
+            if (File.Exists(path))
+            {
+                jsonReply = JObject.Parse(File.ReadAllText(path));
+                Port = (int)jsonReply["port"];
+                ListenPublic = (bool)jsonReply["public"];
+                Username = (string)jsonReply["Username"];
+                Password = (string)jsonReply["Password"];
+                isAuthEnabled = (!String.IsNullOrEmpty(Username) && !String.IsNullOrEmpty(Password));
+            }
+            else
+            {
+                jsonReply["port"] = Port;
+                jsonReply["public"] = ListenPublic;
+                jsonReply["Username"] = Username;
+                jsonReply["Password"] = Password;
+            }
+            return jsonReply;
+        }
+
+        public Task<int> ApplyPortConfiguration(JToken json)
+        {
+            JObject jsonObject = (JObject)json;
+            JToken jJackettPort = jsonObject.GetValue("port");
+            int jackettPort;
+            if (!IsPort(jJackettPort.ToString()))
+                throw new CustomException("The value entered is not a valid port");
+            else
+                jackettPort = int.Parse(jJackettPort.ToString());
+
+            if (jackettPort == Port)
+                throw new CustomException("The current port is the same as the one being used now.");
+            else if (ChromeUnsafePorts.RestrictedPorts.Contains(jackettPort))
+                throw new CustomException("This port is not allowed due to it not being safe.");
+            SaveSettings(jackettPort);
+
+            return Task.FromResult(jackettPort);
+        }
+
+
+        public async Task ApplyAuthConfiguration(JToken json)
+        {
+            JObject jsonObject = (JObject)json;
+            JToken jUsername = jsonObject.GetValue("username");
+            JToken jPassword = jsonObject.GetValue("password");
+
+            if (String.IsNullOrWhiteSpace(jUsername.ToString()))
+                throw new CustomException("Your username can not be empty.");
+            else if (String.IsNullOrWhiteSpace(jPassword.ToString()))
+                throw new CustomException("Your password can not be empty.");
+            else
+            {
+                Username = Security.Base64Encode(jUsername.ToString());
+                Password = Security.Base64Encode(jPassword.ToString());
+
+                isAuthEnabled = true;
+                isAuthenticated = false;
+                SaveAuthSettings();
+                listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
+            }
+
+        }
+
+        async Task<JToken> ReadPostDataJson(Stream stream)
+        {
+            string postData = await new StreamReader(stream).ReadToEndAsync();
+            return JObject.Parse(postData);
+        }
+
+        private void SaveAuthSettings()
+        {
+            JObject json = new JObject();
+            json["port"] = Port;
+            json["public"] = ListenPublic;
+            json["Password"] = Password;
+            json["Username"] = Username;
+            File.WriteAllText(ServerConfigFile, json.ToString());
+        }
+
+        private void SaveSettings(int jacketPort)
+        {
+            JObject json = new JObject();
+            json["port"] = jacketPort;
+            json["public"] = ListenPublic;
+            json["Password"] = Password;
+            json["Username"] = Username;
+            File.WriteAllText(ServerConfigFile, json.ToString());
+        }
+
+        public static bool IsPort(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+
+            Regex numeric = new Regex(@"^[0-9]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            if (numeric.IsMatch(value))
+            {
+                try
+                {
+                    if (Convert.ToInt32(value) < 65536)
+                        return true;
+                }
+                catch (OverflowException)
+                {
+                }
+            }
+
+            return false;
+        }
+
+
+        public ConfigurationAuthentication GetConfiguration()
+        {
+            var config = new ConfigurationAuthentication();
+            config.Username.Value = Security.Base64Decode(Username);
+            config.Password.Value = Security.Base64Decode(Password);
+
+            return config;
+        }
+
+        public async Task ApplyConfiguration(JToken configJson)
+        {
+            var config = new ConfigurationAuthentication();
+            config.LoadValuesFromJson(configJson);
+            Username = config.Username.Value;
+            Password = config.Password.Value;
+            isAuthEnabled = true;
+            SaveAuthSettings();
+
+        }
+
+        public async Task RemoveAuthConfig()
+        {
+            Username = "";
+            Password = "";
+            isAuthEnabled = false;
+            isAuthenticated = false;
+            SaveAuthSettings();
+        }
+
+
+        public class ConfigurationAuthentication : ConfigurationData
+        {
+            public StringItem Username { get; private set; }
+            public StringItem Password { get; private set; }
+
+            DisplayItem ApiInfo;
+
+            public ConfigurationAuthentication()
+            {
+                Username = new StringItem { Name = "Username", Value = Server.Username };
+                Password = new StringItem { Name = "Password", Value = Server.Password };
+            }
+
+            public override Item[] GetItems()
+            {
+                return new Item[] { Username, Password };
+            }
+
+        }
 
 
     }

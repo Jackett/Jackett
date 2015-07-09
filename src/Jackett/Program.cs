@@ -93,6 +93,8 @@ namespace Jackett
                 await ServerInstance.Start();
             });
 
+
+
             try
             {
                 if (Program.IsWindows)
@@ -109,6 +111,19 @@ namespace Jackett
 
             Task.WaitAll(serverTask);
             Console.WriteLine("Server thread exit");
+        }
+
+        public static void RestartServer()
+        {
+
+            ServerInstance.Stop();
+            ServerInstance = null;
+            var serverTask = Task.Run(async () =>
+            {
+                ServerInstance = new Server();
+                await ServerInstance.Start();
+            });
+            Task.WaitAll(serverTask);
         }
 
         static void ReadSettingsFile()

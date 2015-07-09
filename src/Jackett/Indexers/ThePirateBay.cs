@@ -168,7 +168,7 @@ namespace Jackett.Indexers
                         release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
 
                         var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
-                        var sizeVal = float.Parse(sizeString[0]);
+                        var sizeVal = float.Parse(sizeString[0], CultureInfo.InvariantCulture);
                         var sizeUnit = sizeString[1];
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 

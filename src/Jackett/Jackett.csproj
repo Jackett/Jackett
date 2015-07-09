@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="ApiKey.cs" />
     <Compile Include="ChannelInfo.cs" />
+    <Compile Include="ChromeUnsafePorts.cs" />
     <Compile Include="ConfigurationData.cs" />
     <Compile Include="ConfigurationDataBasicLogin.cs" />
     <Compile Include="ConfigurationDataUrl.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Indexers\MoreThanTV.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\SceneAccess.cs" />
+    <Compile Include="Indexers\ShowRSS.cs" />
     <Compile Include="Indexers\Strike.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
@@ -119,6 +121,7 @@
     </Compile>
     <Compile Include="ReleaseInfo.cs" />
     <Compile Include="ResultPage.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="SonarApi.cs" />
     <Compile Include="TorznabQuery.cs" />
@@ -147,14 +150,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WebContent\logos\sceneaccess.png">
+    <Content Include="WebContent\custom.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\custom.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\sceneaccess.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\showrss.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\torrentday.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\torrentshack.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="jacket_large.ico" />
     <Content Include="WebContent\animate.css">
@@ -182,10 +194,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\bithdtv.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\bitmetv.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\bootstrap\bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -203,33 +215,35 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\freshon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\iptorrents.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\morethantv.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\rarbg.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\strike.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\thepiratebay.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\torrentleech.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\torrentz.png" />
+    <Content Include="WebContent\logos\torrentz.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebContent\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\validator_reply.xml" />
     <Content Include="WebContent\logos\alpharatio.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
