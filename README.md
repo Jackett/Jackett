@@ -31,6 +31,11 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [RARBG](https://rarbg.com)
  * [TorrentDay](https://torrentday.eu/)
  * [TorrentShack](http://torrentshack.me/)
+ * AlphaRatio
+ * AnimeBytes
+ * SceneAccess
+ * ShowRSS
+ * Torrentz
 
 
 ### Additional Trackers
