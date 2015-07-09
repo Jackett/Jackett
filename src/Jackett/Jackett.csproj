@@ -81,9 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey.cs" />
+    <Compile Include="CachedResult.cs" />
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ChromeUnsafePorts.cs" />
     <Compile Include="ConfigurationData.cs" />
+    <Compile Include="ConfigurationDataBasicLoginAnimeBytes.cs" />
     <Compile Include="ConfigurationDataBasicLogin.cs" />
     <Compile Include="ConfigurationDataUrl.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Indexers\Strike.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
+    <Compile Include="Indexers\AnimeBytes.cs" />
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
@@ -154,6 +157,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\custom.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\custom.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\animebytes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\sceneaccess.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebContent\logos\showrss.png" />
+    <Content Include="WebContent\logos\torrentday.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\sceneaccess.png">

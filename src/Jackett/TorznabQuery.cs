@@ -46,11 +46,24 @@ namespace Jackett
             var q = new TorznabQuery();
             q.QueryType = query["t"];
             q.SearchTerm = query["q"];
-            q.Categories = query["cat"].Split(',');
-            q.Extended = int.Parse(query["extended"]);
+            if (query["cat"] != null)
+            {
+                q.Categories = query["cat"].Split(',');
+            }
+
+            if (query["extended"] != null)
+            {
+                q.Extended = int.Parse(query["extended"]);
+            }
             q.ApiKey = query["apikey"];
-            q.Limit = int.Parse(query["limit"]);
-            q.Offset = int.Parse(query["offset"]);
+            if (query["limit"] != null)
+            {
+                q.Limit = int.Parse(query["limit"]);
+            }
+            if (query["offset"] != null)
+            {
+                q.Offset = int.Parse(query["offset"]);
+            }
 
             int temp;
             if (int.TryParse(query["rid"], out temp))

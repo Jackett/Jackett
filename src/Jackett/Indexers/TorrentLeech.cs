@@ -149,7 +149,7 @@ namespace Jackett.Indexers
                         release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], float.Parse(sizeStringParts[0]));
 
                         release.Seeders = int.Parse(qRow.Find(".seeders").Text());
-                        release.Peers = int.Parse(qRow.Find(".leechers").Text());
+                        release.Peers = release.Seeders + int.Parse(qRow.Find(".leechers").Text());
 
                         releases.Add(release);
                     }

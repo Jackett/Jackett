@@ -180,11 +180,11 @@
         </div>
 
         <input class="setup-item-inputstring form-control" type="text" value="{{{value}}}" />
-        <div class="setup-item-checkbox">
+        <div class="setup-item-inputbool">
             {{#if value}}
-            <input type="checkbox" class="form-control" checked />
+            <input type="checkbox" data-id="{{id}}"  class="form-control" checked />
             {{else}}
-            <input type="checkbox" class="form-control" />
+            <input type="checkbox" data-id="{{id}}"  class="form-control" />
             {{/if}}
         </div>
         <img class="setup-item-displayimage" src="{{{value}}}" />
