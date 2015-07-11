@@ -141,7 +141,9 @@ namespace Jackett.Indexers
                             var dateParts = dateStr.Split(' ');
                             var dateValue = ParseUtil.CoerceInt(dateParts[0]);
                             TimeSpan ts = TimeSpan.Zero;
-                            if (dateStr.Contains("sec"))
+                            if (dateStr.Contains("Just now"))
+                                ts = TimeSpan.Zero;
+                            else if (dateStr.Contains("sec"))
                                 ts = TimeSpan.FromSeconds(dateValue);
                             else if (dateStr.Contains("min"))
                                 ts = TimeSpan.FromMinutes(dateValue);
