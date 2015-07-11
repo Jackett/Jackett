@@ -89,6 +89,7 @@ function reloadIndexers() {
     $('#unconfigured-indexers').empty();
     var jqxhr = $.get("get_indexers", function (data) {
         $("#api-key-input").val(data.api_key);
+        $("#app-version").html(data.app_version);
         displayIndexers(data.items);
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");

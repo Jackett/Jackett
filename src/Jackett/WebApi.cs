@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -257,6 +258,7 @@ namespace Jackett
             {
                 jsonReply["result"] = "success";
                 jsonReply["api_key"] = ApiKey.CurrentKey;
+                jsonReply["app_version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 JArray items = new JArray();
                 foreach (var i in indexerManager.Indexers)
                 {
