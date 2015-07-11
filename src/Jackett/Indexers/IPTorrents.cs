@@ -89,7 +89,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -110,7 +110,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
         }
 

@@ -111,7 +111,7 @@ namespace Jackett
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -122,7 +122,7 @@ namespace Jackett
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
         }
 

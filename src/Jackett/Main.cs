@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿#if !__MonoCS__
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -92,3 +93,4 @@ namespace Jackett
         }
     }
 }
+#endif

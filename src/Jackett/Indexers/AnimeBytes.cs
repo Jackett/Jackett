@@ -131,7 +131,7 @@ namespace Jackett.Indexers
             {
                 AllowRaws = config.IncludeRaw.Value;
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieContainer.ToJson(SiteLink);
+                cookieContainer.DumpToJson(SiteLink, configSaveData);
                 configSaveData["raws"] = AllowRaws;
 
                 if (OnSaveConfigurationRequested != null)
@@ -143,7 +143,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieContainer.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
             AllowRaws = jsonConfig["raws"].Value<bool>();
         }

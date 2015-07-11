@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using NLog.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -70,12 +71,14 @@ namespace Jackett
 
             if (Program.IsWindows)
             {
+#if !__MonoCS__
                 var logAlert = new MessageBoxTarget();
                 logConfig.AddTarget("alert", logAlert);
                 logAlert.Layout = "${message}";
                 logAlert.Caption = "Alert";
                 var logAlertRule = new LoggingRule("*", LogLevel.Fatal, logAlert);
                 logConfig.LoggingRules.Add(logAlertRule);
+#endif
             }
 
             var logConsole = new ConsoleTarget();
@@ -98,7 +101,11 @@ namespace Jackett
             try
             {
                 if (Program.IsWindows)
+                {
+#if !__MonoCS__
                     Application.Run(new Main());
+#endif
+                }
             }
             catch (Exception)
             {
