@@ -151,7 +151,7 @@ namespace Jackett.Indexers
                         var descString = qRow.Find(".t_ctime").Text();
                         var dateString = descString.Split('|').Last().Trim();
                         dateString = dateString.Split(new string[] { " by " }, StringSplitOptions.None)[0];
-                        var dateValue = float.Parse(dateString.Split(' ')[0]);
+                        var dateValue = ParseUtil.CoerceFloat(dateString.Split(' ')[0]);
                         var dateUnit = dateString.Split(' ')[1];
                         if (dateUnit.Contains("minute"))
                             pubDate = DateTime.Now - TimeSpan.FromMinutes(dateValue);
@@ -173,12 +173,12 @@ namespace Jackett.Indexers
                         release.Link = new Uri(BaseUrl + qLink.Attr("href"));
 
                         var sizeStr = row.ChildElements.ElementAt(5).Cq().Text().Trim();
-                        var sizeVal = float.Parse(sizeStr.Split(' ')[0]);
+                        var sizeVal = ParseUtil.CoerceFloat(sizeStr.Split(' ')[0]);
                         var sizeUnit = sizeStr.Split(' ')[1];
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
-                        release.Seeders = int.Parse(qRow.Find(".t_seeders").Text().Trim(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Find(".t_leechers").Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".t_seeders").Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;
 
                         releases.Add(release);
                     }

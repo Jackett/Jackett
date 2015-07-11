@@ -129,9 +129,9 @@ namespace Jackett
         {
             var config = new ConfigurationSonarr();
             config.LoadValuesFromJson(configJson);
-            await ReloadNameMappings(config.Host.Value, int.Parse(config.Port.Value), config.ApiKey.Value);
+            await ReloadNameMappings(config.Host.Value, ParseUtil.CoerceInt(config.Port.Value), config.ApiKey.Value);
             Host = "http://" + new Uri(config.Host.Value).Host;
-            Port = int.Parse(config.Port.Value);
+            Port = ParseUtil.CoerceInt(config.Port.Value);
             ApiKey = config.ApiKey.Value;
             SaveSettings();
         }

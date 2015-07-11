@@ -168,12 +168,12 @@ namespace Jackett
                         release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
                         var sizeCol = row.ChildElements.ElementAt(6);
-                        var sizeVal = float.Parse(sizeCol.ChildNodes[0].NodeValue);
+                        var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue);
                         var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
-                        release.Seeders = int.Parse(row.ChildElements.ElementAt(8).Cq().Text(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(row.ChildElements.ElementAt(9).Cq().Text(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
+                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
 
                         //if (!release.Title.ToLower().Contains(title.ToLower()))
                         //    continue;
