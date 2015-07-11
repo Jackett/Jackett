@@ -1,4 +1,6 @@
-﻿namespace Jackett
+﻿#if !__MonoCS__
+
+namespace Jackett
 {
     partial class Main
     {
@@ -98,3 +100,4 @@
 
     }
 }
+#endif

@@ -75,16 +75,13 @@ namespace Jackett.Indexers
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            cookies = new CookieContainer();
-            client = new HttpClient(handler);
-
             var configSaveData = new JObject();
             if (OnSaveConfigurationRequested != null)
                 OnSaveConfigurationRequested(this, configSaveData);
 
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
-            
+
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
 				{ "password", @config.Password.Value },
@@ -95,17 +92,18 @@ namespace Jackett.Indexers
             var content = new FormUrlEncodedContent(pairs);
             var message = CreateHttpRequest(new Uri(LoginUrl));
             message.Content = content;
-            
-           //message.Headers.Referrer = new Uri(LoginUrl);
+
+            //message.Headers.Referrer = new Uri(LoginUrl);
             string responseContent;
-            JArray cookieJArray;
+
+            configSaveData = new JObject();
 
             if (Program.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.SendAsync(message);
                 responseContent = await response.Content.ReadAsStringAsync();
-                cookieJArray = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
             }
             else
             {
@@ -113,7 +111,7 @@ namespace Jackett.Indexers
                 var response = await CurlHelper.PostAsync(LoginUrl, pairs);
                 responseContent = Encoding.UTF8.GetString(response.Content);
                 cookieHeader = response.CookieHeader;
-                cookieJArray = new JArray(response.CookiesFlat);
+                configSaveData["cookie_header"] = cookieHeader;
             }
 
             if (!responseContent.Contains("logout.php?"))
@@ -126,8 +124,6 @@ namespace Jackett.Indexers
             }
             else
             {
-                configSaveData = new JObject();
-                configSaveData["cookies"] = cookieJArray;
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
 
@@ -146,7 +142,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(SiteLink, jsonConfig);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
