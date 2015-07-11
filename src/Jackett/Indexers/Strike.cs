@@ -36,7 +36,10 @@ namespace Jackett.Indexers
 
         const string DefaultUrl = "https://getstrike.net";
 
-        const string DownloadUrl = "/api/v2/torrents/download/?hash={0}";
+
+        //const string DownloadUrl = "/api/v2/torrents/download/?hash={0}";
+        const string DownloadUrl = "/torrents/api/download/{0}.torrent";
+
         const string SearchUrl = "/api/v2/torrents/search/?category=TV&phrase={0}";
         string BaseUrl;
 
@@ -125,7 +128,7 @@ namespace Jackett.Indexers
 
                         release.InfoHash = (string)result["torrent_hash"];
                         release.MagnetUri = new Uri((string)result["magnet_uri"]);
-                        release.Link = new Uri(string.Format("{0}{1}{2}", baseUrl, DownloadUrl, release.InfoHash));
+                        release.Link = new Uri(string.Format("{0}{1}", baseUrl, string.Format(DownloadUrl, release.InfoHash)));
 
                         releases.Add(release);
                     }
