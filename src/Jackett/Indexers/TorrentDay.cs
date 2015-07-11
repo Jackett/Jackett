@@ -150,11 +150,11 @@ namespace Jackett.Indexers
 
                         var sizeStr = qRow.Find(".sizeInfo").Text().Trim();
                         var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0]));
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
 
-                        var dateStr = qRow.Find(".ulInfo").Text().Trim();
+                        var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
                         var dateParts = dateStr.Split(' ');
-                        var dateValue = int.Parse(dateParts[1]);
+                        var dateValue = ParseUtil.CoerceInt(dateParts[0]);
                         TimeSpan ts = TimeSpan.Zero;
                         if (dateStr.Contains("sec"))
                             ts = TimeSpan.FromSeconds(dateValue);
@@ -172,8 +172,8 @@ namespace Jackett.Indexers
                             ts = TimeSpan.FromDays(dateValue * 365);
                         release.PublishDate = DateTime.Now - ts;
 
-                        release.Seeders = int.Parse(qRow.Find(".seedersInfo").Text(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Find(".leechersInfo").Text(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
 
                         releases.Add(release);
                     }

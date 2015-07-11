@@ -146,10 +146,10 @@ namespace Jackett.Indexers
                         release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
                         var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], float.Parse(sizeStringParts[0]));
+                        release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], ParseUtil.CoerceFloat(sizeStringParts[0]));
 
-                        release.Seeders = int.Parse(qRow.Find(".seeders").Text());
-                        release.Peers = release.Seeders + int.Parse(qRow.Find(".leechers").Text());
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
+                        release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
 
                         releases.Add(release);
                     }

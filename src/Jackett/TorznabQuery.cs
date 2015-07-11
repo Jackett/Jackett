@@ -34,7 +34,7 @@ namespace Jackett
             else if (string.IsNullOrEmpty(Episode))
                 episodeString = string.Format("S{0:00}", Season);
             else
-                episodeString = string.Format("S{0:00}E{1:00}", Season, int.Parse(Episode));
+                episodeString = string.Format("S{0:00}E{1:00}", Season, ParseUtil.CoerceInt(Episode));
 
             return episodeString;
         }
@@ -53,16 +53,16 @@ namespace Jackett
 
             if (query["extended"] != null)
             {
-                q.Extended = int.Parse(query["extended"]);
+                q.Extended = ParseUtil.CoerceInt(query["extended"]);
             }
             q.ApiKey = query["apikey"];
             if (query["limit"] != null)
             {
-                q.Limit = int.Parse(query["limit"]);
+                q.Limit = ParseUtil.CoerceInt(query["limit"]);
             }
             if (query["offset"] != null)
             {
-                q.Offset = int.Parse(query["offset"]);
+                q.Offset = ParseUtil.CoerceInt(query["offset"]);
             }
 
             int temp;

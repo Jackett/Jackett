@@ -142,10 +142,10 @@ namespace Jackett.Indexers
                         var sizeCol = qRow.Children().ElementAt(6);
                         var sizeVal = sizeCol.ChildNodes[0].NodeValue;
                         var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-                        release.Size = ReleaseInfo.GetBytes(sizeUnit, float.Parse(sizeVal));
+                        release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
 
-                        release.Seeders = int.Parse(qRow.Children().ElementAt(8).Cq().Text().Trim(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Children().ElementAt(9).Cq().Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
 
                         releases.Add(release);
                     }

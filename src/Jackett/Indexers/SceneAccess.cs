@@ -166,7 +166,7 @@ namespace Jackett.Indexers
 
                         var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
                         var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0], NumberStyles.Float | NumberStyles.AllowThousands));
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
 
                         var timeStr = qRow.Find(".ttr_added").Text();
                         DateTime time;
@@ -175,8 +175,8 @@ namespace Jackett.Indexers
                             release.PublishDate = time;
                         }
 
-                        release.Seeders = int.Parse(qRow.Find(".ttr_seeders").Text(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Find(".ttr_leechers").Text(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".ttr_seeders").Text());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".ttr_leechers").Text()) + release.Seeders;
 
                         releases.Add(release);
                     }
