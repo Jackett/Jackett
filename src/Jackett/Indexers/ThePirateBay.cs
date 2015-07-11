@@ -40,6 +40,7 @@ namespace Jackett.Indexers
 
         public ThePirateBay()
         {
+            BaseUrl = DefaultUrl;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -53,7 +54,7 @@ namespace Jackett.Indexers
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(BaseUrl);
             return Task.FromResult<ConfigurationData>(config);
         }
 
