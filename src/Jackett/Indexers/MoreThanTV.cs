@@ -170,7 +170,10 @@ namespace Jackett.Indexers
                         DateTime pubDate = DateTime.MinValue;
                         double dateNum;
                         if (double.TryParse((string)r["groupTime"], out dateNum))
+                        {
                             pubDate = UnixTimestampToDateTime(dateNum);
+                            pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
+                        }
 
                         var groupName = (string)r["groupName"];
 

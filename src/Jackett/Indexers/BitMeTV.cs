@@ -163,7 +163,8 @@ namespace Jackett
                         var timeParts = new List<string>(timestamp.Replace(" at", "").Replace(",", "").Split(' '));
                         timeParts[2] = Regex.Replace(timeParts[2], "[^0-9.]", "");
                         var formattedTimeString = string.Join(" ", timeParts.ToArray()).Trim();
-                        release.PublishDate = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                        var date = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                        release.PublishDate = DateTime.SpecifyKind(date, DateTimeKind.Utc).ToLocalTime();
 
                         release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 

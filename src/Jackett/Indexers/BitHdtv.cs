@@ -137,7 +137,7 @@ namespace Jackett.Indexers
 
                         var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        release.PublishDate = pubDate;
+                        release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
 
                         var sizeCol = qRow.Children().ElementAt(6);
                         var sizeVal = sizeCol.ChildNodes[0].NodeValue;
