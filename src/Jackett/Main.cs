@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -57,20 +58,37 @@ namespace Jackett
         {
             get
             {
-                RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                if (rkApp.GetValue(ProgramTitle) == null)
-                    return false;
-                else
-                    return true;
+                return File.Exists(ShortcutPath);
             }
             set
             {
-                RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 if (value && !AutoStart)
-                    rkApp.SetValue(ProgramTitle, Application.ExecutablePath.ToString());
+                {
+                    CreateShortcut();
+                }
                 else if (!value && AutoStart)
-                    rkApp.DeleteValue(ProgramTitle, false);
+                {
+                    File.Delete(ShortcutPath);
+                }
             }
+        }
+
+        public string ShortcutPath
+        {
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), "Jackett.lnk");
+            }
+        }
+
+        private void CreateShortcut()
+        {
+            var appPath = Assembly.GetExecutingAssembly().Location;
+            var shell = new IWshRuntimeLibrary.WshShell();
+            var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(ShortcutPath);
+            shortcut.Description = Assembly.GetExecutingAssembly().GetName().Name;
+            shortcut.TargetPath = appPath;
+            shortcut.Save();
         }
     }
 }
