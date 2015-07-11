@@ -18,7 +18,7 @@ namespace Jackett
 {
     class Program
     {
-        public static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+        public static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
 
         public static Server ServerInstance { get; private set; }
 
@@ -35,6 +35,8 @@ namespace Jackett
         static void Main(string[] args)
         {
             ExitEvent = new ManualResetEvent(false);
+
+            MigrateSettingsDirectory();
 
             try
             {
@@ -109,6 +111,22 @@ namespace Jackett
 
             Task.WaitAll(serverTask);
             Console.WriteLine("Server thread exit");
+        }
+
+        static void MigrateSettingsDirectory()
+        {
+            try
+            {
+                string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+                if (Directory.Exists(oldDir) && !Directory.Exists(AppConfigDirectory))
+                {
+                    Directory.Move(oldDir, AppConfigDirectory);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR could not migrate settings directory " + ex);
+            }
         }
 
         static void ReadSettingsFile()
