@@ -86,7 +86,15 @@ namespace Jackett
 
         string SanitizeTitle(string title)
         {
-            return title.Replace("(", "").Replace(")", "");
+            char[] arr = title.ToCharArray();
+
+            arr = Array.FindAll<char>(arr, c => (char.IsLetterOrDigit(c)
+                                              || char.IsWhiteSpace(c)
+                                              || c == '-'
+                                              || c == '.'
+                                              ));
+            title = new string(arr);
+            return title;
         }
 
         void LoadSettings()
