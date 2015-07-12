@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKey.cs" />
+    <Compile Include="BrowserUtil.cs" />
     <Compile Include="CachedResult.cs" />
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ConfigurationData.cs" />
