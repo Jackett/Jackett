@@ -164,15 +164,29 @@ namespace Jackett.Indexers
                         release.Description = release.Title;
 
                         if (0 != qRow.Find("td.mainblockcontent u").Length)
-                            release.Imdb = ParseUtil.TryCoerceLong(qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", ""));
+                        {
+                            var imdbStr = qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", "");
+                            long imdb;
+                            if (ParseUtil.TryCoerceLong(imdbStr, out imdb))
+                            {
+                                release.Imdb = imdb;
+                            }
+                        }
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
 
                         release.MagnetUri = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
 
-                        release.Seeders = ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText);
-                        release.Peers = ParseUtil.TryCoerceInt(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText);
+                        int seeders, peers;
+                        if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
+                        {
+                            release.Seeders = seeders;
+                            if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText, out peers))
+                            {
+                                release.Peers = peers + release.Seeders;
+                            }
+                        }
 
                         string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                         string[] sizeSplit = fullSize.Split(' ');
