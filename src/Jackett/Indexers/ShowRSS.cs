@@ -135,7 +135,6 @@ namespace Jackett.Indexers
                     }
 
                     ReleaseInfo release;
-                    TorrentzHelper td;
                     string serie_title;
 
                     foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))

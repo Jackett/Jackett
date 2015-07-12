@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,6 @@ namespace Jackett
     {
         static string WebContentFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WebContent");
         static string[] StaticFiles = Directory.EnumerateFiles(WebContentFolder, "*", SearchOption.AllDirectories).ToArray();
-        public Server server;
-
 
         public enum WebApiMethod
         {
@@ -27,13 +26,7 @@ namespace Jackett
             DeleteIndexer,
             GetSonarrConfig,
             ApplySonarrConfig,
-            TestSonarr,
-            GetJackettConfig,
-            ApplyJackettConfig,
-            JackettRestart,
-            ApplyAuthenticationConfig,
-            GetAuthenticationConfig,
-            RemoveAuthenticationConfig,
+            TestSonarr
         }
 
         static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod> {
@@ -43,14 +36,8 @@ namespace Jackett
 			{ "test_indexer", WebApiMethod.TestIndexer },
 			{ "delete_indexer", WebApiMethod.DeleteIndexer },
 			{ "get_sonarr_config", WebApiMethod.GetSonarrConfig },
-            { "get_jackett_config",WebApiMethod.GetJackettConfig},
-            { "apply_jackett_config",WebApiMethod.ApplyJackettConfig},
 			{ "apply_sonarr_config", WebApiMethod.ApplySonarrConfig },
-            { "jackett_restart", WebApiMethod.JackettRestart },
-			{ "test_sonarr", WebApiMethod.TestSonarr },
-            { "apply_authentication_config", WebApiMethod.ApplyAuthenticationConfig},
-            { "get_authentication_config", WebApiMethod.GetAuthenticationConfig},
-            {"remove_authentication_config", WebApiMethod.RemoveAuthenticationConfig},
+			{ "test_sonarr", WebApiMethod.TestSonarr }
 		};
 
         IndexerManager indexerManager;
@@ -137,26 +124,8 @@ namespace Jackett
                 case WebApiMethod.ApplySonarrConfig:
                     handlerTask = HandleApplySonarrConfig;
                     break;
-                case WebApiMethod.ApplyJackettConfig:
-                    handlerTask = HandleApplyJackettConfig;
-                    break;
                 case WebApiMethod.TestSonarr:
                     handlerTask = HandleTestSonarr;
-                    break;
-                case WebApiMethod.GetJackettConfig:
-                    handlerTask = HandleJackettConfig;
-                    break;
-                case WebApiMethod.JackettRestart:
-                    handlerTask = HandleJackettRestart;
-                    break;
-                case WebApiMethod.ApplyAuthenticationConfig:
-                    handlerTask = HandleApplyAuthenticationConfig;
-                    break;
-                case WebApiMethod.GetAuthenticationConfig:
-                    handlerTask = HandleGetAuthenticationConfig;
-                    break;
-                case WebApiMethod.RemoveAuthenticationConfig:
-                    handlerTask = HandlerRemoveAuthenticationConfig;
                     break;
                 default:
                     handlerTask = HandleInvalidApiMethod;
@@ -165,23 +134,6 @@ namespace Jackett
             JToken jsonReply = await handlerTask(context);
             await ReplyWithJson(context, jsonReply, method.ToString());
         }
-
-        async Task<JToken> HandlerRemoveAuthenticationConfig(HttpListenerContext context)
-        {
-            JToken jsonReply = new JObject();
-            try
-            {
-                await server.RemoveAuthConfig();
-                jsonReply["result"] = "success";
-            }
-            catch (Exception ex)
-            {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            return jsonReply;
-        }
-
 
         async Task ReplyWithJson(HttpListenerContext context, JToken json, string apiCall)
         {
@@ -212,45 +164,6 @@ namespace Jackett
             return jsonReply;
         }
 
-        async Task<JToken> HandleJackettRestart(HttpListenerContext context)
-        {
-            Program.RestartServer();
-            return null;
-        }
-
-        async Task<JToken> HandleApplyAuthenticationConfig(HttpListenerContext context)
-        {
-            JToken jsonReply = new JObject();
-            try
-            {
-                var postData = await ReadPostDataJson(context.Request.InputStream);
-                await server.ApplyAuthConfiguration(postData);
-                jsonReply["result"] = "success";
-            }
-            catch (Exception ex)
-            {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            return jsonReply;
-        }
-
-        Task<JToken> HandleGetAuthenticationConfig(HttpListenerContext context)
-        {
-            JObject jsonReply = new JObject();
-            try
-            {
-                jsonReply["config"] = server.GetConfiguration().ToJson();
-                jsonReply["result"] = "success";
-            }
-            catch (Exception ex)
-            {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            return Task.FromResult<JToken>(jsonReply);
-        }
-
         async Task<JToken> HandleApplySonarrConfig(HttpListenerContext context)
         {
             JToken jsonReply = new JObject();
@@ -267,47 +180,6 @@ namespace Jackett
             }
             return jsonReply;
         }
-
-        async Task<JToken> HandleApplyJackettConfig(HttpListenerContext context)
-        {
-            JToken jsonReply = new JObject();
-
-            try
-            {
-                var postData = await ReadPostDataJson(context.Request.InputStream);
-                int port = await server.ApplyPortConfiguration(postData);
-                jsonReply["result"] = "success";
-                jsonReply["port"] = port;
-            }
-            catch (Exception ex)
-            {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            return jsonReply;
-        }
-
-        Task<JToken> HandleJackettConfig(HttpListenerContext context)
-        {
-            JObject jsonReply = new JObject();
-            try
-            {
-                jsonReply["config"] = server.ReadServerSettingsFile();
-                jsonReply["result"] = "success";
-            }
-            catch (CustomException ex)
-            {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            catch (Exception ex)
-            {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            return Task.FromResult<JToken>(jsonReply);
-        }
-
 
         Task<JToken> HandleGetSonarrConfig(HttpListenerContext context)
         {
@@ -386,7 +258,7 @@ namespace Jackett
             {
                 jsonReply["result"] = "success";
                 jsonReply["api_key"] = ApiKey.CurrentKey;
-                jsonReply["jackett_port"] = Server.Port;
+                jsonReply["app_version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 JArray items = new JArray();
                 foreach (var i in indexerManager.Indexers)
                 {

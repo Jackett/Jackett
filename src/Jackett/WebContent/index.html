@@ -28,7 +28,7 @@
             <span class="input-header">Sonarr API Host: </span>
             <input id="sonarr-host" class="form-control input-right" type="text" readonly />
             <button id="sonarr-settings" class="btn btn-primary btn-sm">
-                change <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                Settings <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
             </button>
             <button id="sonarr-test" class="btn btn-warning btn-sm">
                 Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
@@ -42,22 +42,9 @@
         <hr />
 
         <div class="input-area">
-            <!--icon-question-sign-->
             <span class="input-header">Jackett API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
             <p>Use this key when adding indexers to Sonarr. This key works for all indexers.</p>
-            <span class="input-header">Jackett port: </span>
-            <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
-            <button id="change-jackett-port" class="btn btn-primary btn-sm">
-                Configure <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-            <span title="Jackett will restart after changing the port" class="glyphicon glyphicon-info-sign"></span>
-            <p> </p>
-            <span class="input-header floatleft">Authentication: </span>
-                <div id="authentication-status"></div>
-                <button id="Authenticate-jackett" class="btn btn-primary btn-sm" disabled>
-                    Configure <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-                </button>
         </div>
 
         <hr />
@@ -68,6 +55,13 @@
 
 
         </div>
+
+        <hr />
+
+        <div id="footer">
+            Jackett Version <span id="app-version"></span>
+        </div>
+
 
     </div>
 
@@ -115,25 +109,6 @@
             </div>
         </div>
 
-        <div class="config-authentication-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{title}}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="config-setup-form"></form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default remove-auth" data-dismiss="modal">Remove</button>
-                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <button class="indexer card add-indexer" data-toggle="modal" data-target="#select-indexer-modal">
             <div class="indexer-add-content">
                 <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -145,7 +120,7 @@
             <div class="indexer-logo"><img src="logos/{{id}}.png" /></div>
             <div class="indexer-name"><h3>{{name}}</h3></div>
             <div class="indexer-buttons">
-              <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}">
+                <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}">
                     <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                 </button>
                 <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
@@ -182,9 +157,9 @@
         <input class="setup-item-inputstring form-control" type="text" value="{{{value}}}" />
         <div class="setup-item-inputbool">
             {{#if value}}
-            <input type="checkbox" data-id="{{id}}"  class="form-control" checked />
+            <input type="checkbox" data-id="{{id}}" class="form-control" checked />
             {{else}}
-            <input type="checkbox" data-id="{{id}}"  class="form-control" />
+            <input type="checkbox" data-id="{{id}}" class="form-control" />
             {{/if}}
         </div>
         <img class="setup-item-displayimage" src="{{{value}}}" />
@@ -192,7 +167,9 @@
 
         <span class="spinner glyphicon glyphicon-refresh"></span>
 
+
     </div>
+
 
     <script src="custom.js"></script>
 

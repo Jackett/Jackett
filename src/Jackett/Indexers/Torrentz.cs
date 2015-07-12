@@ -232,13 +232,13 @@ namespace Jackett.Indexers
                 switch (counter)
                 {
                     case 0:
-                        this.Size = ReleaseInfo.BytesFromMB(long.Parse(val.Substring(0, val.IndexOf(" ") - 1)));
+                        this.Size = ReleaseInfo.BytesFromMB(ParseUtil.CoerceLong(val.Substring(0, val.IndexOf(" ") - 1)));
                         break;
                     case 1:
-                        this.Seeders = int.Parse(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);
+                        this.Seeders = ParseUtil.CoerceInt(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);
                         break;
                     case 2:
-                        this.Peers = int.Parse(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);
+                        this.Peers = ParseUtil.CoerceInt(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);
                         break;
                     case 3:
                         this.hash = val;

@@ -75,11 +75,11 @@ namespace Jackett.Indexers
         {
             var config = new ConfigurationDataBasicLoginAnimeBytes();
             config.LoadValuesFromJson(configJson);
-            
-            
+
+
             // Get the login form as we need the CSRF Token
             var loginPage = await client.GetAsync(LoginUrl);
-            CQ loginPageDom =  await loginPage.Content.ReadAsStringAsync();
+            CQ loginPageDom = await loginPage.Content.ReadAsStringAsync();
             var csrfToken = loginPageDom["input[name=\"csrf_token\"]"].Last();
 
             // Build login form
@@ -131,9 +131,9 @@ namespace Jackett.Indexers
             {
                 AllowRaws = config.IncludeRaw.Value;
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieContainer.ToJson(SiteLink);
+                cookieContainer.DumpToJson(SiteLink, configSaveData);
                 configSaveData["raws"] = AllowRaws;
-              
+
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
 
@@ -143,7 +143,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieContainer.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
             AllowRaws = jsonConfig["raws"].Value<bool>();
         }
@@ -198,9 +198,10 @@ namespace Jackett.Indexers
                     return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
             }
 
-            var queryUrl  = SearchUrl;
+            var queryUrl = SearchUrl;
             // Only include the query bit if its required as hopefully the site caches the non query page
-            if(!string.IsNullOrWhiteSpace(query.SearchTerm)){
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
 
                 queryUrl += "&action=advanced&search_type=title&sort=time_added&way=desc&anime%5Btv_series%5D=1&searchstr=" + WebUtility.UrlEncode(query.SearchTerm);
             }
@@ -229,8 +230,8 @@ namespace Jackett.Indexers
                     var yearStr = seriesCq.Find(".group_title strong").First().Text().Trim().Replace("]", "").Trim();
                     int yearIndex = yearStr.LastIndexOf("[");
                     if (yearIndex > -1)
-                        yearStr = yearStr.Substring(yearIndex+1);
-                   
+                        yearStr = yearStr.Substring(yearIndex + 1);
+
                     int year = 0;
                     if (!int.TryParse(yearStr, out year))
                         year = DateTime.Now.Year;
@@ -301,7 +302,7 @@ namespace Jackett.Indexers
                                 var downloadLink = links.Get(0);
                                 release.Guid = new Uri(BaseUrl + "/" + downloadLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
                                 release.Link = release.Guid;// We dont know this so try to fake based on the release year
-                                release.PublishDate = new DateTime(year,1,1);
+                                release.PublishDate = new DateTime(year, 1, 1);
                                 release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
 
                                 var infoLink = links.Get(1);
@@ -347,15 +348,15 @@ namespace Jackett.Indexers
                                 if (size.Count() > 0)
                                 {
                                     var sizeParts = size.First().Text().Split(' ');
-                                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0]));
+                                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
                                 }
 
                                 //  Additional 5 hours per GB 
                                 release.MinimumSeedTime += (release.Size / 1000000000) * 18000;
 
                                 // Peer info
-                                release.Seeders = int.Parse(rowCq.Find(".torrent_seeders").Text());
-                                release.Peers = release.Seeders + int.Parse(rowCq.Find(".torrent_leechers").Text());
+                                release.Seeders = ParseUtil.CoerceInt(rowCq.Find(".torrent_seeders").Text());
+                                release.Peers = release.Seeders + ParseUtil.CoerceInt(rowCq.Find(".torrent_leechers").Text());
 
                                 releases.Add(release);
                             }
@@ -369,7 +370,7 @@ namespace Jackett.Indexers
                 throw ex;
             }
 
-            
+
             // Add to the cache
             lock (cache)
             {

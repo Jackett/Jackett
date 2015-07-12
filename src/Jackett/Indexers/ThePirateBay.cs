@@ -28,10 +28,9 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-        const string DefaultUrl = "https://thepiratebay.gd";
-        const string SearchUrl = "/s/?q=\"{0}\"&category=205&page=0&orderby=99";
-        const string SearchUrl2 = "/s/?q=\"{0}\"&category=208&page=0&orderby=99";
-        const string SwitchSingleViewUrl = "/switchview.php?view=s";
+        const string DefaultUrl = "https://thepiratebay.mn";
+        const string SearchUrl = "/search/{0}/0/99/208";
+        const string SearchUrl2 = "/search/{0}/0/99/205";
 
         string BaseUrl;
 
@@ -41,6 +40,7 @@ namespace Jackett.Indexers
 
         public ThePirateBay()
         {
+            BaseUrl = DefaultUrl;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -54,7 +54,7 @@ namespace Jackett.Indexers
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(BaseUrl);
             return Task.FromResult<ConfigurationData>(config);
         }
 
@@ -108,25 +108,19 @@ namespace Jackett.Indexers
 
             foreach (var episodeSearchUrl in searchUrls)
             {
-                var message = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(baseUrl + SwitchSingleViewUrl)
-                };
-                message.Headers.Referrer = new Uri(episodeSearchUrl);
 
                 string results;
 
                 if (Program.IsWindows)
                 {
-                    var response = await client.SendAsync(message);
-                    results = await response.Content.ReadAsStringAsync();
+                    results = await client.GetStringAsync(episodeSearchUrl);
                 }
                 else
                 {
-                    var response = await CurlHelper.GetAsync(baseUrl + SwitchSingleViewUrl, null, episodeSearchUrl);
+                    var response = await CurlHelper.GetAsync(episodeSearchUrl, null, episodeSearchUrl);
                     results = Encoding.UTF8.GetString(response.Content);
                 }
+
                 try
                 {
                     CQ dom = results;
@@ -136,7 +130,8 @@ namespace Jackett.Indexers
                     {
                         var release = new ReleaseInfo();
 
-                        CQ qLink = row.ChildElements.ElementAt(1).Cq().Children("a").First();
+                        CQ qRow = row.Cq();
+                        CQ qLink = qRow.Find(".detName > .detLink").First();
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
@@ -145,13 +140,27 @@ namespace Jackett.Indexers
                         release.Comments = new Uri(baseUrl + "/" + qLink.Attr("href").TrimStart('/'));
                         release.Guid = release.Comments;
 
-                        var timeString = row.ChildElements.ElementAt(2).Cq().Text();
+                        var downloadCol = row.ChildElements.ElementAt(1).Cq().Children("a");
+                        release.MagnetUri = new Uri(downloadCol.Attr("href"));
+                        release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
+
+                        var descString = qRow.Find(".detDesc").Text().Trim();
+                        var descParts = descString.Split(',');
+
+                        var timeString = descParts[0].Split(' ')[1];
+
                         if (timeString.Contains("mins ago"))
-                            release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(int.Parse(timeString.Split(' ')[0])));
+                        {
+                            release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(ParseUtil.CoerceInt(timeString.Split(' ')[0])));
+                        }
                         else if (timeString.Contains("Today"))
+                        {
                             release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(2) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                        }
                         else if (timeString.Contains("Y-day"))
+                        {
                             release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(26) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                        }
                         else if (timeString.Contains(':'))
                         {
                             var utc = DateTime.ParseExact(timeString, "MM-dd HH:mm", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
@@ -163,17 +172,13 @@ namespace Jackett.Indexers
                             release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
                         }
 
-                        var downloadCol = row.ChildElements.ElementAt(3).Cq().Find("a");
-                        release.MagnetUri = new Uri(downloadCol.Attr("href"));
-                        release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-
-                        var sizeString = row.ChildElements.ElementAt(4).Cq().Text().Split(' ');
-                        var sizeVal = float.Parse(sizeString[0], CultureInfo.InvariantCulture);
-                        var sizeUnit = sizeString[1];
+                        var sizeParts = descParts[1].Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        var sizeVal = ParseUtil.CoerceFloat(sizeParts[1]);
+                        var sizeUnit = sizeParts[2];
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
-                        release.Seeders = int.Parse(row.ChildElements.ElementAt(5).Cq().Text());
-                        release.Peers = int.Parse(row.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text());
+                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(3).Cq().Text()) + release.Seeders;
 
                         releases.Add(release);
                     }

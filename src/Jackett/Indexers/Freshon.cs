@@ -90,7 +90,7 @@ namespace Jackett
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -101,7 +101,7 @@ namespace Jackett
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
         }
 
@@ -164,11 +164,11 @@ namespace Jackett
                             pubDate = DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         release.PublishDate = pubDate;
 
-                        release.Seeders = int.Parse(qRow.Find("td.table_seeders").Text().Trim(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Find("td.table_leechers").Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Find("td.table_leechers").Text().Trim()) + release.Seeders;
 
                         var sizeCol = qRow.Find("td.table_size")[0];
-                        var sizeVal = float.Parse(sizeCol.ChildNodes[0].NodeValue.Trim());
+                        var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue.Trim());
                         var sizeUnit = sizeCol.ChildNodes[2].NodeValue.Trim();
                         release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
