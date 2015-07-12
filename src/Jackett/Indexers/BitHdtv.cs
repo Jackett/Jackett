@@ -86,7 +86,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -101,7 +101,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
         }
 
@@ -137,15 +137,15 @@ namespace Jackett.Indexers
 
                         var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        release.PublishDate = pubDate;
+                        release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
 
                         var sizeCol = qRow.Children().ElementAt(6);
                         var sizeVal = sizeCol.ChildNodes[0].NodeValue;
                         var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-                        release.Size = ReleaseInfo.GetBytes(sizeUnit, float.Parse(sizeVal));
+                        release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
 
-                        release.Seeders = int.Parse(qRow.Children().ElementAt(8).Cq().Text().Trim(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Children().ElementAt(9).Cq().Text().Trim(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
 
                         releases.Add(release);
                     }

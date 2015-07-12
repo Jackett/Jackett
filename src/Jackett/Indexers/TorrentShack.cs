@@ -91,7 +91,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -103,7 +103,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
         }
 
@@ -139,9 +139,11 @@ namespace Jackett.Indexers
                         else
                         {
                             var dateParts = dateStr.Split(' ');
-                            var dateValue = int.Parse(dateParts[0]);
+                            var dateValue = ParseUtil.CoerceInt(dateParts[0]);
                             TimeSpan ts = TimeSpan.Zero;
-                            if (dateStr.Contains("sec"))
+                            if (dateStr.Contains("Just now"))
+                                ts = TimeSpan.Zero;
+                            else if (dateStr.Contains("sec"))
                                 ts = TimeSpan.FromSeconds(dateValue);
                             else if (dateStr.Contains("min"))
                                 ts = TimeSpan.FromMinutes(dateValue);
@@ -160,9 +162,9 @@ namespace Jackett.Indexers
 
                         var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
                         var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0], NumberStyles.AllowThousands));
-                        release.Seeders = int.Parse(qRow.Children().ElementAt(6).InnerText.Trim(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Children().ElementAt(7).InnerText.Trim(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(6).InnerText.Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
 
                         releases.Add(release);
                     }

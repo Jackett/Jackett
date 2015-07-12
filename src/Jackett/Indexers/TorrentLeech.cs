@@ -90,7 +90,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -101,7 +101,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             IsConfigured = true;
         }
 
@@ -146,10 +146,10 @@ namespace Jackett.Indexers
                         release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
                         var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], float.Parse(sizeStringParts[0]));
+                        release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], ParseUtil.CoerceFloat(sizeStringParts[0]));
 
-                        release.Seeders = int.Parse(qRow.Find(".seeders").Text());
-                        release.Peers = release.Seeders + int.Parse(qRow.Find(".leechers").Text());
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
+                        release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
 
                         releases.Add(release);
                     }

@@ -92,7 +92,9 @@ namespace Jackett.Indexers
 				{ "uid", config.Username.Value },
 				{ "pwd", config.Password.Value }
 			};
+
             var content = new FormUrlEncodedContent(pairs);
+
             var loginRequest = CreateHttpRequest(LoginUrl);
             loginRequest.Method = HttpMethod.Post;
             loginRequest.Content = content;
@@ -103,14 +105,13 @@ namespace Jackett.Indexers
 
             if (!responseContent.Contains("If your browser doesn't have javascript enabled"))
             {
-                CQ dom = responseContent;
                 var errorMessage = "Couldn't login";
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
             }
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
 
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
@@ -121,7 +122,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(DefaultUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(SiteLink, jsonConfig);
             IsConfigured = true;
         }
 

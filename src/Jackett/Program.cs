@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using NLog.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +19,7 @@ namespace Jackett
 {
     class Program
     {
-        public static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+        public static string AppConfigDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
 
         public static Server ServerInstance { get; private set; }
 
@@ -35,6 +36,8 @@ namespace Jackett
         static void Main(string[] args)
         {
             ExitEvent = new ManualResetEvent(false);
+
+            MigrateSettingsDirectory();
 
             try
             {
@@ -68,12 +71,14 @@ namespace Jackett
 
             if (Program.IsWindows)
             {
+#if !__MonoCS__
                 var logAlert = new MessageBoxTarget();
                 logConfig.AddTarget("alert", logAlert);
                 logAlert.Layout = "${message}";
                 logAlert.Caption = "Alert";
                 var logAlertRule = new LoggingRule("*", LogLevel.Fatal, logAlert);
                 logConfig.LoggingRules.Add(logAlertRule);
+#endif
             }
 
             var logConsole = new ConsoleTarget();
@@ -93,12 +98,14 @@ namespace Jackett
                 await ServerInstance.Start();
             });
 
-
-
             try
             {
                 if (Program.IsWindows)
+                {
+#if !__MonoCS__
                     Application.Run(new Main());
+#endif
+                }
             }
             catch (Exception)
             {
@@ -113,17 +120,20 @@ namespace Jackett
             Console.WriteLine("Server thread exit");
         }
 
-        public static void RestartServer()
+        static void MigrateSettingsDirectory()
         {
-
-            ServerInstance.Stop();
-            ServerInstance = null;
-            var serverTask = Task.Run(async () =>
+            try
             {
-                ServerInstance = new Server();
-                await ServerInstance.Start();
-            });
-            Task.WaitAll(serverTask);
+                string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+                if (Directory.Exists(oldDir) && !Directory.Exists(AppConfigDirectory))
+                {
+                    Directory.Move(oldDir, AppConfigDirectory);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR could not migrate settings directory " + ex);
+            }
         }
 
         static void ReadSettingsFile()

@@ -80,14 +80,14 @@ namespace Jackett.Indexers
             var content = new FormUrlEncodedContent(pairs);
 
             string responseContent;
-            JArray cookieJArray;
+            var configSaveData = new JObject();
 
             if (Program.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
                 responseContent = await response.Content.ReadAsStringAsync();
-                cookieJArray = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
             }
             else
             {
@@ -95,7 +95,7 @@ namespace Jackett.Indexers
                 var response = await CurlHelper.PostAsync(LoginUrl, pairs);
                 responseContent = Encoding.UTF8.GetString(response.Content);
                 cookieHeader = response.CookieHeader;
-                cookieJArray = new JArray(response.CookiesFlat);
+                configSaveData["cookie_header"] = cookieHeader;
             }
 
             if (!responseContent.Contains("nav_profile"))
@@ -107,9 +107,6 @@ namespace Jackett.Indexers
             }
             else
             {
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieJArray;
-
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
 
@@ -119,7 +116,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -166,7 +163,7 @@ namespace Jackett.Indexers
 
                         var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
                         var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], float.Parse(sizeParts[0], NumberStyles.Float | NumberStyles.AllowThousands));
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
 
                         var timeStr = qRow.Find(".ttr_added").Text();
                         DateTime time;
@@ -175,8 +172,8 @@ namespace Jackett.Indexers
                             release.PublishDate = time;
                         }
 
-                        release.Seeders = int.Parse(qRow.Find(".ttr_seeders").Text(), NumberStyles.AllowThousands);
-                        release.Peers = int.Parse(qRow.Find(".ttr_leechers").Text(), NumberStyles.AllowThousands) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".ttr_seeders").Text());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".ttr_leechers").Text()) + release.Seeders;
 
                         releases.Add(release);
                     }

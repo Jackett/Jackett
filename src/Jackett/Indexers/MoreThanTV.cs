@@ -86,14 +86,16 @@ namespace Jackett.Indexers
             var content = new FormUrlEncodedContent(pairs);
 
             string responseContent;
-            JArray cookieJArray;
+
+            var configSaveData = new JObject();
 
             if (Program.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
                 responseContent = await response.Content.ReadAsStringAsync();
-                cookieJArray = cookies.ToJson(SiteLink);
+                cookies.DumpToJson(SiteLink, configSaveData);
+
             }
             else
             {
@@ -101,7 +103,7 @@ namespace Jackett.Indexers
                 var response = await CurlHelper.PostAsync(LoginUrl, pairs);
                 responseContent = Encoding.UTF8.GetString(response.Content);
                 cookieHeader = response.CookieHeader;
-                cookieJArray = new JArray(response.CookiesFlat);
+                configSaveData["cookie_header"] = cookieHeader;
             }
 
             if (!responseContent.Contains("logout.php?"))
@@ -114,9 +116,6 @@ namespace Jackett.Indexers
             }
             else
             {
-
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieJArray;
                 if (OnSaveConfigurationRequested != null)
                     OnSaveConfigurationRequested(this, configSaveData);
 
@@ -126,7 +125,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, (JArray)jsonConfig["cookies"]);
+            cookies.FillFromJson(SiteLink, jsonConfig);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -171,7 +170,10 @@ namespace Jackett.Indexers
                         DateTime pubDate = DateTime.MinValue;
                         double dateNum;
                         if (double.TryParse((string)r["groupTime"], out dateNum))
+                        {
                             pubDate = UnixTimestampToDateTime(dateNum);
+                            pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
+                        }
 
                         var groupName = (string)r["groupName"];
 

@@ -86,7 +86,15 @@ namespace Jackett
 
         string SanitizeTitle(string title)
         {
-            return title.Replace("(", "").Replace(")", "");
+            char[] arr = title.ToCharArray();
+
+            arr = Array.FindAll<char>(arr, c => (char.IsLetterOrDigit(c)
+                                              || char.IsWhiteSpace(c)
+                                              || c == '-'
+                                              || c == '.'
+                                              ));
+            title = new string(arr);
+            return title;
         }
 
         void LoadSettings()
@@ -129,9 +137,9 @@ namespace Jackett
         {
             var config = new ConfigurationSonarr();
             config.LoadValuesFromJson(configJson);
-            await ReloadNameMappings(config.Host.Value, int.Parse(config.Port.Value), config.ApiKey.Value);
+            await ReloadNameMappings(config.Host.Value, ParseUtil.CoerceInt(config.Port.Value), config.ApiKey.Value);
             Host = "http://" + new Uri(config.Host.Value).Host;
-            Port = int.Parse(config.Port.Value);
+            Port = ParseUtil.CoerceInt(config.Port.Value);
             ApiKey = config.ApiKey.Value;
             SaveSettings();
         }
