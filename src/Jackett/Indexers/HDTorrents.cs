@@ -19,8 +19,8 @@ namespace Jackett.Indexers
         public event Action<IndexerInterface, string, Exception> OnResultParsingError;
 
         const string DefaultUrl = "https://hd-torrents.org";
-        string BaseUrl;
-        static string ChromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
+        string BaseUrl = DefaultUrl;
+        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
         private string SearchUrl = "https://hd-torrents.org/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
         private static string LoginUrl = DefaultUrl + "/login.php";
         private static string LoginPostUrl = DefaultUrl + "/login.php?returnto=index.php";
@@ -75,7 +75,7 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = new Uri(url);
-            message.Headers.UserAgent.ParseAdd(ChromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
             return message;
         }
 
@@ -160,7 +160,6 @@ namespace Jackett.Indexers
                         release = new ReleaseInfo();
                         long imdbid;
                         long? size;
-                        int seeders, peers;
 
                         release.Title = qRow.Find("td.mainblockcontent b a").Text();
                         release.Description = release.Title;
@@ -173,23 +172,21 @@ namespace Jackett.Indexers
 
                         release.MagnetUri = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
 
-                        if (int.TryParse(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
-                            release.Seeders = seeders;
-                        if (int.TryParse(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText, out peers))
-                            release.Peers = peers;
+                        release.Seeders = ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText);
+                        release.Peers = ParseUtil.TryCoerceInt(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText);
 
                         string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                         string[] sizeSplit = fullSize.Split(' ');
                         switch (sizeSplit[1].ToLower())
                         {
                             case "kb":
-                                size = ReleaseInfo.BytesFromKB(float.Parse(sizeSplit[0], CultureInfo.InvariantCulture));
+                                size = ReleaseInfo.BytesFromKB(ParseUtil.CoerceFloat(sizeSplit[0]));
                                 break;
                             case "mb":
-                                size = ReleaseInfo.BytesFromMB(float.Parse(sizeSplit[0], CultureInfo.InvariantCulture));
+                                size = ReleaseInfo.BytesFromMB(ParseUtil.CoerceFloat(sizeSplit[0]));
                                 break;
                             case "gb":
-                                size = ReleaseInfo.BytesFromGB(float.Parse(sizeSplit[0], CultureInfo.InvariantCulture));
+                                size = ReleaseInfo.BytesFromGB(ParseUtil.CoerceFloat(sizeSplit[0]));
                                 break;
                             default:
                                 size = null;

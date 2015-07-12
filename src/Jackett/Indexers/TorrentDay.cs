@@ -40,7 +40,7 @@ namespace Jackett.Indexers
         const string LoginUrl = BaseUrl + "/tak3login.php";
         const string SearchUrl = BaseUrl + "/browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
 
-        const string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
+        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
         CookieContainer cookies;
         HttpClientHandler handler;
