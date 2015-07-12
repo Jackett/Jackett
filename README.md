@@ -1,5 +1,7 @@
 # Jackett
 
+Use just about any tracker with Sonarr
+
 ### API Access to your favorite trackers
 
 This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) API server on your machine that any Torznab enabled software can consume. Jackett works as a proxy server: it translates Torznab queries into tracker-site-specific http queries, parses the html response into Torznab results, then sends results back to the requesting software. 
@@ -37,6 +39,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [ShowRSS](https://showrss.info/)
  * [Torrentz](https://torrentz.eu/)
  * [HD-Torrents.org](https://hd-torrents.org/)
+ * [SceneTime](https://www.scenetime.com/)
 
 
 ### Additional Trackers
