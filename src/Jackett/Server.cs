@@ -90,7 +90,9 @@ namespace Jackett
                     }
                 }
                 else
+                {
                     Program.LoggerInstance.FatalException("Failed to start HTTP server. " + ex.Message, ex);
+                }
             }
             catch (Exception ex)
             {

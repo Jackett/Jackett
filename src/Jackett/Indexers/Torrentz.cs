@@ -144,7 +144,7 @@ namespace Jackett.Indexers
                         release.InfoHash = td.hash;
                         release.Size = td.Size;
                         release.Seeders = td.Seeders;
-                        release.Peers = td.Peers;
+                        release.Peers = td.Peers + release.Seeders;
                         release.MagnetUri = TorrentzHelper.createMagnetLink(td.hash, serie_title);
                         releases.Add(release);
                     }

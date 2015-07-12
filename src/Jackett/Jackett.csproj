@@ -164,7 +164,9 @@
     <Content Include="WebContent\logos\animebytes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\hdtorrents.png" />
+    <Content Include="WebContent\logos\hdtorrents.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebContent\logos\sceneaccess.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

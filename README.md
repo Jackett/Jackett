@@ -36,6 +36,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [ShowRSS](https://showrss.info/)
  * [Torrentz](https://torrentz.eu/)
+ * [HD-Torrents.org](https://hd-torrents.org/)
 
 
 ### Additional Trackers

@@ -25,25 +25,19 @@ namespace Jackett
         }
 
 
-        public static float TryCoerceFloat(string str)
+        public static bool TryCoerceFloat(string str, out float result)
         {
-            float val;
-            float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out val);
-            return val;
+            return float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
-        public static int TryCoerceInt(string str)
+        public static bool TryCoerceInt(string str, out int result)
         {
-            int val;
-            int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out val);
-            return val;
+            return int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
-        public static long TryCoerceLong(string str)
+        public static bool TryCoerceLong(string str, out long result)
         {
-            long val;
-            long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out val);
-            return val;
+            return long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
     }
