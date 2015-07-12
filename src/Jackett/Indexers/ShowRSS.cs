@@ -36,7 +36,7 @@ namespace Jackett.Indexers
         const string DefaultUrl = "http://showrss.info";
         const string searchAllUrl = DefaultUrl + "/feeds/all.rss";
         string BaseUrl;
-        static string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
+        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
         CookieContainer cookies;
         HttpClientHandler handler;
