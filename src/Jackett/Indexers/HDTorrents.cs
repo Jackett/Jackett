@@ -2,11 +2,13 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Jackett.Indexers
 {
@@ -19,9 +21,11 @@ namespace Jackett.Indexers
         const string DefaultUrl = "https://hd-torrents.org";
         string BaseUrl;
         static string ChromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
-        private string Search_url = "https://hd-torrents.org/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={0}";
+        private string SearchUrl = "https://hd-torrents.org/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
         private static string LoginUrl = DefaultUrl + "/login.php";
-        private static string LoginPostUrl = DefaultUrl + "/index.php";
+        private static string LoginPostUrl = DefaultUrl + "/login.php?returnto=index.php";
+        private const int MAXPAGES = 3;
+
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
@@ -60,21 +64,17 @@ namespace Jackett.Indexers
             private set;
         }
 
-        public async Task<ConfigurationData> GetConfigurationForSetup()
+        public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var request = CreateHttpRequest(new Uri(LoginUrl));
-
-            var response = await client.SendAsync(request);
-            await response.Content.ReadAsStreamAsync();
             var config = new ConfigurationDataBasicLogin();
-            return config;
+            return Task.FromResult<ConfigurationData>(config);
         }
 
-        HttpRequestMessage CreateHttpRequest(Uri uri)
+        HttpRequestMessage CreateHttpRequest(string url)
         {
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
-            message.RequestUri = uri;
+            message.RequestUri = new Uri(url);
             message.Headers.UserAgent.ParseAdd(ChromeUserAgent);
             return message;
         }
@@ -84,25 +84,27 @@ namespace Jackett.Indexers
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
 
+            var startMessage = CreateHttpRequest(LoginUrl);
+            var results = await (await client.SendAsync(startMessage)).Content.ReadAsStringAsync();
+
+
             var pairs = new Dictionary<string, string> {
 				{ "uid", config.Username.Value },
 				{ "pwd", config.Password.Value }
 			};
-
             var content = new FormUrlEncodedContent(pairs);
-            var message = CreateHttpRequest(new Uri(LoginPostUrl));
-            message.Method = HttpMethod.Post;
-            message.Content = content;
-            message.Headers.Referrer = new Uri(LoginPostUrl);
+            var loginRequest = CreateHttpRequest(LoginUrl);
+            loginRequest.Method = HttpMethod.Post;
+            loginRequest.Content = content;
+            loginRequest.Headers.Referrer = new Uri("https://hd-torrents.org/torrents.php");
 
-            var response = await client.SendAsync(message);
+            var response = await client.SendAsync(loginRequest);
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            if (!responseContent.Contains("/logout.php"))
+            if (!responseContent.Contains("If your browser doesn't have javascript enabled"))
             {
                 CQ dom = responseContent;
-                var messageEl = dom[".error_text"];
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = "Couldn't login";
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
             }
             else
@@ -119,13 +121,99 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            BaseUrl = (string)jsonConfig["base_url"];
+            cookies.FillFromJson(new Uri(DefaultUrl), (JArray)jsonConfig["cookies"]);
             IsConfigured = true;
         }
 
         async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            List<string> searchurls = new List<string>();
+
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
+            {
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                for (int page = 0; page < MAXPAGES; page++)
+                    searchurls.Add(string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()), page));
+            }
+
+            foreach (string SearchUrl in searchurls)
+            {
+                var results = await client.GetStringAsync(SearchUrl);
+                try
+                {
+                    CQ dom = results;
+                    ReleaseInfo release;
+
+                    int rowCount = 0;
+                    var rows = dom[".mainblockcontenttt > tbody > tr"];
+                    foreach (var row in rows)
+                    {
+                        CQ qRow = row.Cq();
+                        if (rowCount < 2 || qRow.Children().Count() != 12) //skip 2 rows because there's an empty row & a title/sort row
+                        {
+                            rowCount++;
+                            continue;
+                        }
+
+                        release = new ReleaseInfo();
+                        long imdbid;
+                        long? size;
+                        int seeders, peers;
+
+                        release.Title = qRow.Find("td.mainblockcontent b a").Text();
+                        release.Description = release.Title;
+
+                        if (0 != qRow.Find("td.mainblockcontent u").Length && long.TryParse(qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", ""), out imdbid))
+                            release.Imdb = imdbid;
+
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+
+                        release.MagnetUri = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
+
+                        if (int.TryParse(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
+                            release.Seeders = seeders;
+                        if (int.TryParse(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText, out peers))
+                            release.Peers = peers;
+
+                        string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
+                        string[] sizeSplit = fullSize.Split(' ');
+                        switch (sizeSplit[1].ToLower())
+                        {
+                            case "kb":
+                                size = ReleaseInfo.BytesFromKB(float.Parse(sizeSplit[0], CultureInfo.InvariantCulture));
+                                break;
+                            case "mb":
+                                size = ReleaseInfo.BytesFromMB(float.Parse(sizeSplit[0], CultureInfo.InvariantCulture));
+                                break;
+                            case "gb":
+                                size = ReleaseInfo.BytesFromGB(float.Parse(sizeSplit[0], CultureInfo.InvariantCulture));
+                                break;
+                            default:
+                                size = null;
+                                break;
+                        }
+                        release.Size = size;
+
+                        release.Link = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
+                        release.Guid = release.Link;
+
+                        string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
+                        string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
+                        release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
+
+                        release.Comments = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(2).FirstChild.GetAttribute("href"));
+
+                        releases.Add(release);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
+                }
+            }
 
 
             return releases.ToArray();
