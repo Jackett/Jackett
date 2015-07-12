@@ -158,14 +158,13 @@ namespace Jackett.Indexers
                         }
 
                         release = new ReleaseInfo();
-                        long imdbid;
                         long? size;
 
                         release.Title = qRow.Find("td.mainblockcontent b a").Text();
                         release.Description = release.Title;
 
-                        if (0 != qRow.Find("td.mainblockcontent u").Length && long.TryParse(qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", ""), out imdbid))
-                            release.Imdb = imdbid;
+                        if (0 != qRow.Find("td.mainblockcontent u").Length)
+                            release.Imdb = ParseUtil.TryCoerceLong(qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", ""));
 
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
