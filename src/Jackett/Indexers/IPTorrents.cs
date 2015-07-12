@@ -26,7 +26,7 @@ namespace Jackett.Indexers
 
         public bool IsConfigured { get; private set; }
 
-        static string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
+        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
         static string BaseUrl = "https://iptorrents.com";
 

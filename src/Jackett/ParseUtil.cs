@@ -24,5 +24,27 @@ namespace Jackett
             return long.Parse(str, NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
+
+        public static float TryCoerceFloat(string str)
+        {
+            float val;
+            float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out val);
+            return val;
+        }
+
+        public static int TryCoerceInt(string str)
+        {
+            int val;
+            int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out val);
+            return val;
+        }
+
+        public static long TryCoerceLong(string str)
+        {
+            long val;
+            long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out val);
+            return val;
+        }
+
     }
 }

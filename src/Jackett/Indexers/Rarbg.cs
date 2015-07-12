@@ -39,7 +39,7 @@ namespace Jackett.Indexers
         const string SearchTVRageUrl = "/pubapi.php?mode=search&search_tvrage={0}&token={1}&format=json&min_seeders=1";
         const string SearchQueryUrl = "/pubapi.php?mode=search&search_string={0}&token={1}&format=json&min_seeders=1";
 
-        static string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36";
+        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
         string BaseUrl;
 
