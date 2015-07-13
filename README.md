@@ -40,6 +40,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [Torrentz](https://torrentz.eu/)
  * [HD-Torrents.org](https://hd-torrents.org/)
  * [SceneTime](https://www.scenetime.com/)
+ * [BeyondHD](https://beyondhd.me/)
 
 
 ### Additional Trackers
