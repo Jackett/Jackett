@@ -86,7 +86,6 @@
     <Compile Include="CachedResult.cs" />
     <Compile Include="ChannelInfo.cs" />
     <Compile Include="ConfigurationData.cs" />
-    <Compile Include="ConfigurationDataBasicLoginAnimeBytes.cs" />
     <Compile Include="ConfigurationDataBasicLogin.cs" />
     <Compile Include="ConfigurationDataUrl.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
