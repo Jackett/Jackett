@@ -29,8 +29,7 @@ namespace Jackett.Indexers
         public bool IsConfigured { get; private set; }
 
         const string DefaultUrl = "https://thepiratebay.mn";
-        const string SearchUrl = "/search/{0}/0/99/208";
-        const string SearchUrl2 = "/search/{0}/0/99/205";
+        const string SearchUrl = "/search/{0}/0/99/208,205";
 
         string BaseUrl;
 
@@ -101,9 +100,7 @@ namespace Jackett.Indexers
                 var searchString = title + " " + query.GetEpisodeSearchString();
                 var queryStr = HttpUtility.UrlEncode(searchString);
                 var episodeSearchUrl = baseUrl + string.Format(SearchUrl, queryStr);
-                var episodeSearchUrl2 = baseUrl + string.Format(SearchUrl2, queryStr);
                 searchUrls.Add(episodeSearchUrl);
-                searchUrls.Add(episodeSearchUrl2);
             }
 
             foreach (var episodeSearchUrl in searchUrls)
