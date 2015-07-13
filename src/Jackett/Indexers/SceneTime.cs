@@ -33,6 +33,7 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
+        public bool IsConfigured { get; private set; }
 
         const string BaseUrl = "https://www.scenetime.com";
         const string LoginUrl = BaseUrl + "/takelogin.php";
@@ -43,7 +44,6 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured { get; private set; }
 
         public SceneTime()
         {
