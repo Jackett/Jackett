@@ -144,7 +144,7 @@ namespace Jackett.Indexers
                 var message = new HttpRequestMessage();
                 message.Method = HttpMethod.Get;
                 message.RequestUri = new Uri(episodeSearchUrl);
-                message.Headers.TryAddWithoutValidation("Authorization", token);
+                message.Headers.TryAddWithoutValidation("Authorization", await GetAuthToken());
 
                 var response = await client.SendAsync(message);
                 var results = await response.Content.ReadAsStringAsync();
@@ -191,7 +191,7 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = link;
-            message.Headers.TryAddWithoutValidation("Authorization", token);
+            message.Headers.TryAddWithoutValidation("Authorization", await GetAuthToken());
 
             var response = await client.SendAsync(message);
             return await response.Content.ReadAsByteArrayAsync();
