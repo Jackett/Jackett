@@ -1,7 +1,48 @@
 ﻿
 
 reloadIndexers();
+loadJackettSettings();
 loadSonarrInfo();
+
+function loadJackettSettings() {
+    getJackettConfig(function (data) {
+        $("#jackett-port").val(data.config.port);
+    });
+}
+
+$("#change-jackett-port").click(function () {
+    var jackett_port = $("#jackett-port").val();
+    var jsonObject = JSON.parse('{"port":"' + jackett_port + '"}');
+
+    var jqxhr = $.post("apply_jackett_config", JSON.stringify(jsonObject), function (data) {
+
+        if (data.result == "error") {
+            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+            return;
+        } else {
+            doNotify("The port has been changed. Jackett will now restart...", "success", "glyphicon glyphicon-ok");
+            var jqxhr0 = $.post("jackett_restart", null, function (data_restart) { });
+
+            window.setTimeout(function () {
+                url = window.location.href;
+                window.location.href = url.substr(0, url.lastIndexOf(":") + 1) + data.port;
+
+            }, 3000);
+
+        }
+    }).fail(function () {
+        doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+});
+
+function getJackettConfig(callback) {
+    var jqxhr = $.get("get_jackett_config", function (data) {
+
+        callback(data);
+    }).fail(function () {
+        doNotify("Error loading Jackett settings, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+}
 
 function loadSonarrInfo() {
     getSonarrConfig(function (data) {
