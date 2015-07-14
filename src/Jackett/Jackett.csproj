@@ -131,6 +131,7 @@
     <Compile Include="ReleaseInfo.cs" />
     <Compile Include="ResultPage.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="ServerUtil.cs" />
     <Compile Include="SonarApi.cs" />
     <Compile Include="TorznabQuery.cs" />
     <Compile Include="TVRage.cs" />
