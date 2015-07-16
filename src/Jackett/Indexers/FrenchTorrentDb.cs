@@ -166,7 +166,7 @@ namespace Jackett.Indexers
 
         public Task<byte[]> Download(Uri link)
         {
-            throw new NotImplementedException();
+            return client.GetByteArrayAsync(link);
         }       
     }
 }
