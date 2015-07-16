@@ -42,6 +42,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [SceneTime](https://www.scenetime.com/)
  * [BeyondHD](https://beyondhd.me/)
  * [T411](http://www.t411.io/)
+ * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
 
 
 ### Additional Trackers
