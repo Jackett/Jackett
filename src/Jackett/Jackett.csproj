@@ -98,6 +98,7 @@
     <Compile Include="Indexers\BeyondHD.cs" />
     <Compile Include="Indexers\BitHdtv.cs" />
     <Compile Include="Indexers\BitMeTV.cs" />
+    <Compile Include="Indexers\FrenchTorrentDb.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
@@ -171,6 +172,9 @@
     <Content Include="WebContent\logos\beyondhd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebContent\logos\frenchtorrentdb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="WebContent\logos\hdtorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -238,6 +242,7 @@
     <Content Include="WebContent\jquery-2.1.3.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+
     <Content Include="WebContent\logos\freshon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
