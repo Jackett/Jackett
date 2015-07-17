@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
@@ -30,7 +31,9 @@ namespace Jackett
             // Allow all SSL.. sucks I know but mono on linux is having problems without it..
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
+            ReadServerSettingsFile();
             LoadApiKey();
+
 
             indexerManager = new IndexerManager();
             sonarrApi = new SonarrApi();
@@ -68,6 +71,7 @@ namespace Jackett
                 }
 
                 listener.Start();
+                webApi.server = this;
             }
             catch (HttpListenerException ex)
             {
@@ -248,6 +252,54 @@ namespace Jackett
         }
 
 
+
+
+        public JObject ReadServerSettingsFile()
+        {
+            var path = ServerConfigFile;
+            JObject jsonReply = new JObject();
+            if (File.Exists(path))
+            {
+                jsonReply = JObject.Parse(File.ReadAllText(path));
+                Port = (int)jsonReply["port"];
+                ListenPublic = (bool)jsonReply["public"];
+            }
+            else
+            {
+                jsonReply["port"] = Port;
+                jsonReply["public"] = ListenPublic;
+            }
+            return jsonReply;
+        }
+
+        public Task<int> ApplyPortConfiguration(JToken json)
+        {
+            JObject jsonObject = (JObject)json;
+            JToken jJackettPort = jsonObject.GetValue("port");
+            int jackettPort;
+            if (!ServerUtil.IsPort(jJackettPort.ToString()))
+                throw new CustomException("The value entered is not a valid port");
+            else
+                jackettPort = int.Parse(jJackettPort.ToString());
+
+            if (jackettPort == Port)
+                throw new CustomException("The current port is the same as the one being used now.");
+            else if (ServerUtil.RestrictedPorts.Contains(jackettPort))
+                throw new CustomException("This port is not allowed due to it not being safe.");
+            SaveSettings(jackettPort);
+
+            return Task.FromResult(jackettPort);
+        }
+
+        private static string ServerConfigFile = Path.Combine(Program.AppConfigDirectory, "config.json");
+
+        private void SaveSettings(int jacketPort)
+        {
+            JObject json = new JObject();
+            json["port"] = jacketPort;
+            json["public"] = ListenPublic;
+            File.WriteAllText(ServerConfigFile, json.ToString());
+        }
 
     }
 }

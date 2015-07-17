@@ -16,6 +16,7 @@ namespace Jackett
     {
         static string WebContentFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WebContent");
         static string[] StaticFiles = Directory.EnumerateFiles(WebContentFolder, "*", SearchOption.AllDirectories).ToArray();
+        public Server server;
 
         public enum WebApiMethod
         {
@@ -26,7 +27,10 @@ namespace Jackett
             DeleteIndexer,
             GetSonarrConfig,
             ApplySonarrConfig,
-            TestSonarr
+            TestSonarr,
+            GetJackettConfig,
+            ApplyJackettConfig,
+            JackettRestart,
         }
 
         static Dictionary<string, WebApiMethod> WebApiMethods = new Dictionary<string, WebApiMethod> {
@@ -37,7 +41,10 @@ namespace Jackett
 			{ "delete_indexer", WebApiMethod.DeleteIndexer },
 			{ "get_sonarr_config", WebApiMethod.GetSonarrConfig },
 			{ "apply_sonarr_config", WebApiMethod.ApplySonarrConfig },
-			{ "test_sonarr", WebApiMethod.TestSonarr }
+			{ "test_sonarr", WebApiMethod.TestSonarr },
+            { "get_jackett_config",WebApiMethod.GetJackettConfig},
+            { "apply_jackett_config",WebApiMethod.ApplyJackettConfig},
+            { "jackett_restart", WebApiMethod.JackettRestart },
 		};
 
         IndexerManager indexerManager;
@@ -126,6 +133,15 @@ namespace Jackett
                     break;
                 case WebApiMethod.TestSonarr:
                     handlerTask = HandleTestSonarr;
+                    break;
+                case WebApiMethod.ApplyJackettConfig:
+                    handlerTask = HandleApplyJackettConfig;
+                    break;
+                case WebApiMethod.GetJackettConfig:
+                    handlerTask = HandleJackettConfig;
+                    break;
+                case WebApiMethod.JackettRestart:
+                    handlerTask = HandleJackettRestart;
                     break;
                 default:
                     handlerTask = HandleInvalidApiMethod;
@@ -317,6 +333,55 @@ namespace Jackett
             }
             return jsonReply;
         }
+
+
+        //Jacket port functions
+        Task<JToken> HandleJackettConfig(HttpListenerContext context)
+        {
+            JObject jsonReply = new JObject();
+            try
+            {
+                jsonReply["config"] = server.ReadServerSettingsFile();
+                jsonReply["result"] = "success";
+            }
+            catch (CustomException ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return Task.FromResult<JToken>(jsonReply);
+        }
+
+        async Task<JToken> HandleApplyJackettConfig(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                int port = await server.ApplyPortConfiguration(postData);
+                jsonReply["result"] = "success";
+                jsonReply["port"] = port;
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        async Task<JToken> HandleJackettRestart(HttpListenerContext context)
+        {
+            Program.RestartServer();
+            return null;
+        }
+
 
     }
 }
