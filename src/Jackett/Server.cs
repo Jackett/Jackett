@@ -23,7 +23,6 @@ namespace Jackett
         HttpListener listener;
         IndexerManager indexerManager;
         WebApi webApi;
-        SonarrApi sonarrApi;
 
 
         public Server()
@@ -34,11 +33,8 @@ namespace Jackett
             ReadServerSettingsFile();
             LoadApiKey();
 
-
             indexerManager = new IndexerManager();
-            sonarrApi = new SonarrApi();
-            webApi = new WebApi(indexerManager, sonarrApi);
-
+            webApi = new WebApi(indexerManager);
         }
 
         void LoadApiKey()
@@ -206,10 +202,10 @@ namespace Jackett
 
             var torznabQuery = TorznabQuery.FromHttpQuery(query);
 
-            if (torznabQuery.RageID != 0)
-                torznabQuery.ShowTitles = await sonarrApi.GetShowTitle(torznabQuery.RageID);
-            else if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
-                torznabQuery.ShowTitles = new string[] { torznabQuery.SearchTerm };
+            if (torznabQuery.RageIDLookupEnabled && indexer.RequiresRageIDLookupDisabled)
+            {
+                throw new ArgumentException("This indexer requires RageID lookup disabled");
+            }
 
             var releases = await indexer.PerformQuery(torznabQuery);
 

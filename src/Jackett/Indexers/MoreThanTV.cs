@@ -29,6 +29,7 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return true; } }
 
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
         public event Action<IndexerInterface, string, Exception> OnResultParsingError;
@@ -145,67 +146,63 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
+            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
+
+            string results;
+            if (Program.IsWindows)
+            {
+                results = await client.GetStringAsync(episodeSearchUrl, retries);
+            }
+            else
+            {
+                var response = await CurlHelper.GetAsync(episodeSearchUrl, cookieHeader);
+                results = Encoding.UTF8.GetString(response.Content);
+            }
+            try
             {
 
-                var searchString = title + " " + query.GetEpisodeSearchString();
-                var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-
-                string results;
-                if (Program.IsWindows)
+                var json = JObject.Parse(results);
+                foreach (JObject r in json["response"]["results"])
                 {
-                    results = await client.GetStringAsync(episodeSearchUrl, retries);
-                }
-                else
-                {
-                    var response = await CurlHelper.GetAsync(episodeSearchUrl, cookieHeader);
-                    results = Encoding.UTF8.GetString(response.Content);
-                }
-                try
-                {
-
-                    var json = JObject.Parse(results);
-                    foreach (JObject r in json["response"]["results"])
+                    DateTime pubDate = DateTime.MinValue;
+                    double dateNum;
+                    if (double.TryParse((string)r["groupTime"], out dateNum))
                     {
-                        DateTime pubDate = DateTime.MinValue;
-                        double dateNum;
-                        if (double.TryParse((string)r["groupTime"], out dateNum))
-                        {
-                            pubDate = UnixTimestampToDateTime(dateNum);
-                            pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
-                        }
+                        pubDate = UnixTimestampToDateTime(dateNum);
+                        pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
+                    }
 
-                        var groupName = (string)r["groupName"];
+                    var groupName = (string)r["groupName"];
 
-                        if (r["torrents"] is JArray)
-                        {
-                            foreach (JObject t in r["torrents"])
-                            {
-                                var release = new ReleaseInfo();
-                                release.PublishDate = pubDate;
-                                release.Title = groupName;
-                                release.Description = groupName;
-                                FillReleaseInfoFromJson(release, t);
-                                releases.Add(release);
-                            }
-                        }
-                        else
+                    if (r["torrents"] is JArray)
+                    {
+                        foreach (JObject t in r["torrents"])
                         {
                             var release = new ReleaseInfo();
                             release.PublishDate = pubDate;
                             release.Title = groupName;
                             release.Description = groupName;
-                            FillReleaseInfoFromJson(release, r);
+                            FillReleaseInfoFromJson(release, t);
                             releases.Add(release);
                         }
-
                     }
+                    else
+                    {
+                        var release = new ReleaseInfo();
+                        release.PublishDate = pubDate;
+                        release.Title = groupName;
+                        release.Description = groupName;
+                        FillReleaseInfoFromJson(release, r);
+                        releases.Add(release);
+                    }
+
                 }
-                catch (Exception ex)
-                {
-                    OnResultParsingError(this, results, ex);
-                    throw ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                OnResultParsingError(this, results, ex);
+                throw ex;
             }
 
             return releases.ToArray();

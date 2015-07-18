@@ -32,6 +32,8 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return true; } }
+
         public bool IsConfigured { get; private set; }
 
         const string BaseUrl = "https://beyondhd.me";
@@ -100,75 +102,73 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
+            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+            var results = await client.GetStringAsync(episodeSearchUrl);
+
+            try
             {
-                var searchString = title + " " + query.GetEpisodeSearchString();
-                var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-                var results = await client.GetStringAsync(episodeSearchUrl);
-
-                try
+                CQ dom = results;
+                var rows = dom["table.torrenttable > tbody > tr.browse_color"];
+                foreach (var row in rows)
                 {
-                    CQ dom = results;
-                    var rows = dom["table.torrenttable > tbody > tr.browse_color"];
-                    foreach (var row in rows)
+                    var release = new ReleaseInfo();
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+
+                    var qRow = row.Cq();
+
+                    var qLink = row.ChildElements.ElementAt(2).FirstChild.Cq();
+                    release.Link = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                    var torrentID = qLink.Attr("href").Split('=').Last();
+
+                    var descCol = row.ChildElements.ElementAt(3);
+                    var qCommentLink = descCol.FirstChild.Cq();
+                    release.Title = qCommentLink.Text();
+                    release.Description = release.Title;
+                    release.Comments = new Uri(BaseUrl + "/" + qCommentLink.Attr("href"));
+                    release.Guid = release.Comments;
+
+                    var dateStr = descCol.ChildElements.Last().Cq().Text().Split('|').Last().ToLowerInvariant().Replace("ago.", "").Trim();
+                    var dateParts = dateStr.Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var timeSpan = TimeSpan.Zero;
+                    for (var i = 0; i < dateParts.Length / 2; i++)
                     {
-                        var release = new ReleaseInfo();
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
-
-                        var qRow = row.Cq();
-
-                        var qLink = row.ChildElements.ElementAt(2).FirstChild.Cq();
-                        release.Link = new Uri(BaseUrl + "/" + qLink.Attr("href"));
-                        var torrentID = qLink.Attr("href").Split('=').Last();
-
-                        var descCol = row.ChildElements.ElementAt(3);
-                        var qCommentLink = descCol.FirstChild.Cq();
-                        release.Title = qCommentLink.Text();
-                        release.Description = release.Title;
-                        release.Comments = new Uri(BaseUrl + "/" + qCommentLink.Attr("href"));
-                        release.Guid = release.Comments;
-
-                        var dateStr = descCol.ChildElements.Last().Cq().Text().Split('|').Last().ToLowerInvariant().Replace("ago.", "").Trim();
-                        var dateParts = dateStr.Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        var timeSpan = TimeSpan.Zero;
-                        for (var i = 0; i < dateParts.Length / 2; i++)
-                        {
-                            var timeVal = ParseUtil.CoerceInt(dateParts[i * 2]);
-                            var timeUnit = dateParts[i * 2 + 1];
-                            if (timeUnit.Contains("year"))
-                                timeSpan += TimeSpan.FromDays(365 * timeVal);
-                            else if (timeUnit.Contains("month"))
-                                timeSpan += TimeSpan.FromDays(30 * timeVal);
-                            else if (timeUnit.Contains("day"))
-                                timeSpan += TimeSpan.FromDays(timeVal);
-                            else if (timeUnit.Contains("hour"))
-                                timeSpan += TimeSpan.FromHours(timeVal);
-                            else if (timeUnit.Contains("min"))
-                                timeSpan += TimeSpan.FromMinutes(timeVal);
-                        }
-                        release.PublishDate = DateTime.SpecifyKind(DateTime.Now - timeSpan, DateTimeKind.Local);
-
-                        var sizeEl = row.ChildElements.ElementAt(7);
-                        var sizeVal = ParseUtil.CoerceFloat(sizeEl.ChildNodes.First().NodeValue);
-                        var sizeUnit = sizeEl.ChildNodes.Last().NodeValue;
-
-                        release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
-
-                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text());
-                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).Cq().Text()) + release.Seeders;
-
-                        releases.Add(release);
-
+                        var timeVal = ParseUtil.CoerceInt(dateParts[i * 2]);
+                        var timeUnit = dateParts[i * 2 + 1];
+                        if (timeUnit.Contains("year"))
+                            timeSpan += TimeSpan.FromDays(365 * timeVal);
+                        else if (timeUnit.Contains("month"))
+                            timeSpan += TimeSpan.FromDays(30 * timeVal);
+                        else if (timeUnit.Contains("day"))
+                            timeSpan += TimeSpan.FromDays(timeVal);
+                        else if (timeUnit.Contains("hour"))
+                            timeSpan += TimeSpan.FromHours(timeVal);
+                        else if (timeUnit.Contains("min"))
+                            timeSpan += TimeSpan.FromMinutes(timeVal);
                     }
-                }
+                    release.PublishDate = DateTime.SpecifyKind(DateTime.Now - timeSpan, DateTimeKind.Local);
 
-                catch (Exception ex)
-                {
-                    OnResultParsingError(this, results, ex);
-                    throw ex;
+                    var sizeEl = row.ChildElements.ElementAt(7);
+                    var sizeVal = ParseUtil.CoerceFloat(sizeEl.ChildNodes.First().NodeValue);
+                    var sizeUnit = sizeEl.ChildNodes.Last().NodeValue;
+
+                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+
+                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text());
+                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).Cq().Text()) + release.Seeders;
+
+                    releases.Add(release);
+
                 }
             }
+
+            catch (Exception ex)
+            {
+                OnResultParsingError(this, results, ex);
+                throw ex;
+            }
+
             return releases.ToArray();
         }
 
