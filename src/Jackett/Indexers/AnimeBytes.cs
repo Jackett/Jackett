@@ -1,6 +1,7 @@
 ﻿using CsQuery;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -19,20 +20,18 @@ namespace Jackett.Indexers
         class ConfigurationDataBasicLoginAnimeBytes : ConfigurationDataBasicLogin
         {
             public BoolItem IncludeRaw { get; private set; }
-            public DisplayItem RageIdWarning { get; private set; }
             public DisplayItem DateWarning { get; private set; }
 
             public ConfigurationDataBasicLoginAnimeBytes()
                 : base()
             {
                 IncludeRaw = new BoolItem() { Name = "IncludeRaw", Value = false };
-                RageIdWarning = new DisplayItem("Ensure rageid lookup is disabled in Sonarr for this tracker.") { Name = "RageWarning" };
                 DateWarning = new DisplayItem("This tracker does not supply upload dates so they are based off year of release.") { Name = "DateWarning" };
             }
 
             public override Item[] GetItems()
             {
-                return new Item[] { Username, Password, IncludeRaw, RageIdWarning, DateWarning };
+                return new Item[] { Username, Password, IncludeRaw, DateWarning };
             }
         }
 
@@ -196,12 +195,28 @@ namespace Jackett.Indexers
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-            // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            // The result list
+            var releases = new ConcurrentBag<ReleaseInfo>();
+            var titles = query.ShowTitles ?? new string[] { query.SearchTerm??string.Empty };
+
+            var tasks = titles.Select(async item =>
             {
-                var splitindex = query.SearchTerm.LastIndexOf(' ');
+                foreach (var result in await GetResults(item))
+                    releases.Add(result);
+            });
+            await Task.WhenAll(tasks);
+
+            return releases.ToArray();
+        }
+
+        public async Task<ReleaseInfo[]> GetResults(string searchTerm)
+        {
+            // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var splitindex = searchTerm.LastIndexOf(' ');
                 if (splitindex > -1)
-                    query.SearchTerm = query.SearchTerm.Substring(0, splitindex);
+                    searchTerm = searchTerm.Substring(0, splitindex);
             }
 
             // The result list
@@ -213,17 +228,16 @@ namespace Jackett.Indexers
                 // Remove old cache items
                 CleanCache();
 
-                var cachedResult = cache.Where(i => i.Query == query.SearchTerm).FirstOrDefault();
+                var cachedResult = cache.Where(i => i.Query == searchTerm).FirstOrDefault();
                 if (cachedResult != null)
                     return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
             }
 
             var queryUrl = SearchUrl;
             // Only include the query bit if its required as hopefully the site caches the non query page
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-
-                queryUrl += "&action=advanced&search_type=title&sort=time_added&way=desc&anime%5Btv_series%5D=1&searchstr=" + WebUtility.UrlEncode(query.SearchTerm);
+                queryUrl += "&action=advanced&search_type=title&sort=time_added&way=desc&anime%5Btv_series%5D=1&searchstr=" + WebUtility.UrlEncode(searchTerm);
             }
 
             // Get the content from the tracker
@@ -320,13 +334,15 @@ namespace Jackett.Indexers
                                 release.MinimumRatio = 1;
                                 release.MinimumSeedTime = 259200;
                                 var downloadLink = links.Get(0);
-                                release.Guid = new Uri(BaseUrl + "/" + downloadLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = release.Guid;// We dont know this so try to fake based on the release year
+             
+                                // We dont know this so try to fake based on the release year
                                 release.PublishDate = new DateTime(year, 1, 1);
                                 release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
 
                                 var infoLink = links.Get(1);
                                 release.Comments = new Uri(BaseUrl + "/" + infoLink.Attributes.GetAttribute("href"));
+                                release.Guid = new Uri(BaseUrl + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
+                                release.Link = new Uri(BaseUrl + "/" + downloadLink.Attributes.GetAttribute("href")); 
 
                                 // We dont actually have a release name >.> so try to create one
                                 var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -390,11 +406,10 @@ namespace Jackett.Indexers
                 throw ex;
             }
 
-
             // Add to the cache
             lock (cache)
             {
-                cache.Add(new CachedResult(query.SearchTerm, releases));
+                cache.Add(new CachedResult(searchTerm, releases));
             }
 
             return releases.Select(s => (ReleaseInfo)s.Clone()).ToArray();

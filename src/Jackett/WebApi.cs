@@ -276,7 +276,7 @@ namespace Jackett
                 jsonReply["api_key"] = ApiKey.CurrentKey;
                 jsonReply["app_version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 JArray items = new JArray();
-                foreach (var i in indexerManager.Indexers)
+                foreach (var i in indexerManager.Indexers.OrderBy(_=>_.Key))
                 {
                     var indexer = i.Value;
                     var item = new JObject();
