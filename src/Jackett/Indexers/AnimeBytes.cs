@@ -58,6 +58,8 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return true; } }
+
         const string BaseUrl = "https://animebytes.tv";
         const string LoginUrl = BaseUrl + "/user/login";
         const string SearchUrl = BaseUrl + "/torrents.php?filter_cat[1]=1";
@@ -196,15 +198,12 @@ namespace Jackett.Indexers
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
             // The result list
-            var releases = new ConcurrentBag<ReleaseInfo>();
-            var titles = query.ShowTitles ?? new string[] { query.SearchTerm??string.Empty };
+            var releases = new List<ReleaseInfo>();
 
-            var tasks = titles.Select(async item =>
+            foreach (var result in await GetResults(query.SanitizedSearchTerm))
             {
-                foreach (var result in await GetResults(item))
-                    releases.Add(result);
-            });
-            await Task.WhenAll(tasks);
+                releases.Add(result);
+            }
 
             return releases.ToArray();
         }
@@ -334,7 +333,7 @@ namespace Jackett.Indexers
                                 release.MinimumRatio = 1;
                                 release.MinimumSeedTime = 259200;
                                 var downloadLink = links.Get(0);
-             
+
                                 // We dont know this so try to fake based on the release year
                                 release.PublishDate = new DateTime(year, 1, 1);
                                 release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
@@ -342,7 +341,7 @@ namespace Jackett.Indexers
                                 var infoLink = links.Get(1);
                                 release.Comments = new Uri(BaseUrl + "/" + infoLink.Attributes.GetAttribute("href"));
                                 release.Guid = new Uri(BaseUrl + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = new Uri(BaseUrl + "/" + downloadLink.Attributes.GetAttribute("href")); 
+                                release.Link = new Uri(BaseUrl + "/" + downloadLink.Attributes.GetAttribute("href"));
 
                                 // We dont actually have a release name >.> so try to create one
                                 var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();

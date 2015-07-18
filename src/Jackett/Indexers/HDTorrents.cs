@@ -58,6 +58,8 @@ namespace Jackett.Indexers
             get { return new Uri(DefaultUrl); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return true; } }
+
         public bool IsConfigured
         {
             get;
@@ -131,11 +133,10 @@ namespace Jackett.Indexers
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
             List<string> searchurls = new List<string>();
 
-            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
+            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            for (int page = 0; page < MAXPAGES; page++)
             {
-                var searchString = title + " " + query.GetEpisodeSearchString();
-                for (int page = 0; page < MAXPAGES; page++)
-                    searchurls.Add(string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()), page));
+                searchurls.Add(string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()), page));
             }
 
             foreach (string SearchUrl in searchurls)
@@ -176,7 +177,7 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
 
-                       
+
 
                         int seeders, peers;
                         if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
@@ -214,7 +215,7 @@ namespace Jackett.Indexers
                         string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
                         string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
                         release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
-                       
+
                         releases.Add(release);
                     }
                 }

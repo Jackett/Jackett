@@ -25,29 +25,18 @@
         <hr />
 
         <div class="input-area">
-            <span class="input-header">Sonarr API Host: </span>
-            <input id="sonarr-host" class="form-control input-right" type="text" readonly />
-            <button id="sonarr-settings" class="btn btn-primary btn-sm">
-                Settings <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-            </button>
-            <button id="sonarr-test" class="btn btn-warning btn-sm">
-                Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-            </button>
-            <p id="sonarr-warning" class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                Sonarr API must be configured
-            </p>
-        </div>
-
-        <hr />
-
-        <div class="input-area">
-            <p>
-                To add a Jackett indexer in Sonarr go to <b>Settings > Indexers > Add > Torznab > Custom</b>.
-            </p>
+            <h4>Adding a Jackett indexer in Sonarr</h4>
+            <ol>
+                <li>In Sonarr go to <b>Settings > Indexers > Add > Torznab > Custom</b></li>
+                <li>For <b>URL</b> enter the <b>Torznab Host</b> of one of the indexers below</li>
+                <li>For <b>API key</b> using the key below</li>
+                <li>Turn off <b>Enable RageID Lookup</b></li>
+            </ol>
             <span class="input-header">Jackett API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
-            <p>Use this key when adding indexers to Sonarr. This key works for all indexers.</p>
+        </div>
+        <hr />
+        <div class="input-area">
             <span class="input-header">Jackett port: </span>
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
             <button id="change-jackett-port" class="btn btn-primary btn-sm">
