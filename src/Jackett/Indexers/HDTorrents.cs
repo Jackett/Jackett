@@ -18,7 +18,7 @@ namespace Jackett.Indexers
 
         public event Action<IndexerInterface, string, Exception> OnResultParsingError;
 
-        const string DefaultUrl = "http://hd-torrents.org";
+        const string DefaultUrl = "http://hdts.ru"; // Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
         string BaseUrl = DefaultUrl;
         static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
         private string SearchUrl = DefaultUrl + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
@@ -176,7 +176,7 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800;
 
-                        release.MagnetUri = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
+                       
 
                         int seeders, peers;
                         if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
@@ -207,15 +207,14 @@ namespace Jackett.Indexers
                         }
                         release.Size = size;
 
-                        release.Link = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
-                        release.Guid = release.Link;
+                        release.Guid = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
+                        release.Link = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
+                        release.Comments = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
 
                         string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
                         string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
                         release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
-
-                        release.Comments = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(2).FirstChild.GetAttribute("href"));
-
+                       
                         releases.Add(release);
                     }
                 }
@@ -237,7 +236,7 @@ namespace Jackett.Indexers
 
         public Task<byte[]> Download(Uri link)
         {
-            throw new NotImplementedException();
+            return client.GetByteArrayAsync(link);
         }
     }
 }
