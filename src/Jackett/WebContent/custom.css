@@ -25,18 +25,31 @@
     border-radius: 6px;
     box-shadow: 1px 1px 5px 2px #cdcdcd;
     padding: 10px;
-    width: 260px;
+    width: 270px;
     display: inline-block;
     vertical-align: top;
-    margin: 10px;
+    margin: 5px;
 }
 
+#indexers {
+   text-align: center;
+}
+
+
+#unconfigured-indexers{
+   text-align: center;
+}
+
+    #unconfigured-indexers .card {
+     width: 200px;
+    }
+
 .unconfigured-indexer {
-    height: 170px;
+    height: 120px;
 }
 
 .indexer {
-    height: 230px;
+    height: 180px;
 }
 
 .add-indexer {
@@ -45,6 +58,7 @@
 
 .indexer-logo {
     text-align: center;
+    padding-bottom: 5px;
 }
 
     .indexer-logo > img {
