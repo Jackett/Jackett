@@ -1,6 +1,8 @@
 ﻿using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,35 +16,9 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class T411 : IIndexer
+    public class T411 : BaseIndexer, IIndexer
     {
-
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "T411"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "French Torrent Tracker"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        const string BaseUrl = "http://www.t411.io";
-        const string CommentsUrl = BaseUrl + "/torrents/{0}";
-
+        private readonly string CommentsUrl = "";
         const string ApiUrl = "http://api.t411.io";
         const string AuthUrl = ApiUrl + "/auth";
         const string SearchUrl = ApiUrl + "/torrents/search/{0}";
@@ -56,8 +32,15 @@ namespace Jackett.Indexers
         string token = string.Empty;
         DateTime lastTokenFetch = DateTime.MinValue;
 
-        public T411()
+          public T411(IIndexerManagerService i, Logger l) :
+            base(name: "T411",
+          description: "French Torrent Tracker",
+          link: new Uri("http://www.t411.io"),
+          rageid: true,
+          manager: i,
+          logger: l)
         {
+            CommentsUrl = SiteLink + "/torrents/{0}";
             IsConfigured = false;
             handler = new HttpClientHandler
             {
@@ -120,10 +103,7 @@ namespace Jackett.Indexers
             configSaveData["password"] = password;
             configSaveData["token"] = token;
             configSaveData["last_token_fetch"] = lastTokenFetch;
-
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
-
+            SaveConfig(configSaveData);
             IsConfigured = true;
         }
 
@@ -182,8 +162,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
             return releases.ToArray();
         }

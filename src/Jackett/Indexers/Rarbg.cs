@@ -1,7 +1,9 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,48 +14,27 @@ using System.Threading.Tasks;
 
 namespace Jackett.Indexers
 {
-    public class Rarbg : IIndexer
+    public class Rarbg : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "RARBG"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return DisplayName; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri("https://rarbg.com"); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return false; } }
-
-        public bool IsConfigured { get; private set; }
-
         const string DefaultUrl = "http://torrentapi.org";
-
         const string TokenUrl = "/pubapi.php?get_token=get_token&format=json";
         const string SearchTVRageUrl = "/pubapi.php?mode=search&search_tvrage={0}&token={1}&format=json&min_seeders=1";
         const string SearchQueryUrl = "/pubapi.php?mode=search&search_string={0}&token={1}&format=json&min_seeders=1";
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
-
-        string BaseUrl;
+        private string BaseUrl;
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public Rarbg()
+
+          public Rarbg(IIndexerManagerService i, Logger l) :
+            base(name: "RARBG",
+      description: "RARBG",
+      link: new Uri("https://rarbg.com"),
+      rageid: true,
+      manager: i,
+      logger: l)
         {
-            IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -85,10 +66,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
-
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
-
+            SaveConfig(configSaveData);
             IsConfigured = true;
         }
 
@@ -103,7 +81,7 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = new Uri(uri);
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
@@ -156,10 +134,9 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
+                OnParseError(results, ex);
             }
             return releases.ToArray();
-
         }
 
         public Task<byte[]> Download(Uri link)

@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,28 +16,27 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class HDTorrents : IIndexer
+    public class HDTorrents : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        const string DefaultUrl = "http://hdts.ru"; // Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
-        string BaseUrl = DefaultUrl;
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
-        private string SearchUrl = DefaultUrl + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
-        private static string LoginUrl = DefaultUrl + "/login.php";
+        private readonly string SearchUrl = "";
+        private static string LoginUrl = "";
         private const int MAXPAGES = 3;
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger logger;
 
-        public HDTorrents(Logger l)
+        public HDTorrents(IIndexerManagerService i, Logger l) :
+            base(name: "HD-Torrents",
+        description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
+        link: new Uri("http://hdts.ru"),// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+        rageid: true,
+        manager: i,
+        logger: l)
         {
-            logger = l;
-            IsConfigured = false;
+            SearchUrl = SiteLink + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
+            LoginUrl = SiteLink + "/login.php";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -45,29 +45,6 @@ namespace Jackett.Indexers
                 UseCookies = true,
             };
             client = new HttpClient(handler);
-        }
-
-        public string DisplayName
-        {
-            get { return "HD-Torrents"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "HD-Torrents is a private torrent website with HD torrents and strict rules on their content."; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(DefaultUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured
-        {
-            get;
-            private set;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -81,7 +58,7 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = new Uri(url);
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
@@ -118,10 +95,7 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
@@ -132,7 +106,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, Uri baseUrl)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
             List<string> searchurls = new List<string>();
@@ -212,9 +186,9 @@ namespace Jackett.Indexers
                         }
                         release.Size = size;
 
-                        release.Guid = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
-                        release.Link = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
-                        release.Comments = new Uri(DefaultUrl + "/" + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
+                        release.Guid = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
+                        release.Link = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
+                        release.Comments = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
 
                         string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
                         string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
@@ -225,8 +199,7 @@ namespace Jackett.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnResultParsingError(this, results, ex);
-                    throw ex;
+                    OnParseError( results, ex);
                 }
             }
 
@@ -236,7 +209,7 @@ namespace Jackett.Indexers
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-            return await PerformQuery(query, BaseUrl);
+            return await PerformQuery(query, SiteLink);
         }
 
         public Task<byte[]> Download(Uri link)

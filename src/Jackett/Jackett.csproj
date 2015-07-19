@@ -139,6 +139,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
+    <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\SerializeService.cs" />
@@ -153,7 +154,7 @@
     <Compile Include="Models\ConfigurationDataUrl.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
-    <Compile Include="DataUrl.cs" />
+    <Compile Include="Utils\DataUrl.cs" />
     <Compile Include="ExceptionWithConfigData.cs" />
     <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
@@ -164,7 +165,6 @@
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
-    <Compile Include="Indexers\Master.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\SceneAccess.cs" />
@@ -179,6 +179,7 @@
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
     <Compile Include="JackettModule.cs" />
+    <Compile Include="Utils\DateTimeUtil.cs" />
     <Compile Include="Utils\ParseUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -239,6 +240,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\showrss.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\speedcd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\t411.png">

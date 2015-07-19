@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,7 @@ namespace Jackett.Models
                         jObject["value"] = ((BoolItem)item).Value;
                         break;
                     case ItemType.DisplayImage:
-                        string dataUri = DataUrl.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
+                        string dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
                         jObject["value"] = dataUri;
                         break;
                 }

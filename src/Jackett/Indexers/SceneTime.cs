@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,46 +16,28 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class SceneTime : IIndexer
+    public class SceneTime : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "SceneTime"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Always on time"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        const string BaseUrl = "https://www.scenetime.com";
-        const string LoginUrl = BaseUrl + "/takelogin.php";
-        const string SearchUrl = BaseUrl + "/browse_API.php";
-        const string DownloadUrl = BaseUrl + "/download.php/{0}/download.torrent";
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger logger;
 
-
-        public SceneTime(Logger l)
+         public SceneTime(IIndexerManagerService i, Logger l) :
+            base(name: "SceneTime",
+      description: "Always on time",
+      link: new Uri("https://www.scenetime.com"),
+      rageid: true,
+      manager: i,
+      logger: l)
         {
-            logger = l;
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/takelogin.php";
+            SearchUrl = SiteLink + "/browse_API.php";
+            DownloadUrl = SiteLink + "/download.php/{0}/download.torrent";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -96,17 +79,14 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -146,7 +126,7 @@ namespace Jackett.Indexers
                     var qLink = qDescCol.Find("a");
                     release.Title = qLink.Text();
                     release.Description = release.Title;
-                    release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     release.Guid = release.Comments;
                     var torrentId = qLink.Attr("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
@@ -169,8 +149,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
             return releases.ToArray();
         }

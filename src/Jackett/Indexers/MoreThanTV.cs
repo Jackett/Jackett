@@ -1,5 +1,7 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -14,52 +16,33 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class MoreThanTV : IIndexer
+    public class MoreThanTV : BaseIndexer, IIndexer
     {
-        public string DisplayName
-        {
-            get { return "MoreThanTV"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public bool IsConfigured { get; private set; }
-
-        static string BaseUrl = "https://www.morethan.tv";
-
-        static string LoginUrl = BaseUrl + "/login.php";
-
-        static string SearchUrl = BaseUrl + "/ajax.php?action=browse&searchstr=";
-
-        static string DownloadUrl = BaseUrl + "/torrents.php?action=download&id=";
-
-        static string GuidUrl = BaseUrl + "/torrents.php?torrentid=";
+        private readonly string LoginUrl ="";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
+        private readonly string GuidUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        private Logger logger;
 
         string cookieHeader;
         int retries = 3;
 
-        public MoreThanTV(Logger l)
+        public MoreThanTV(IIndexerManagerService i, Logger l) :
+            base(name: "MoreThanTV",
+      description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
+      link: new Uri("https://www.morethan.tv"),
+      rageid: true,
+      manager: i,
+      logger: l)
         {
-            logger = l;
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login.php";
+            SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";
+            DownloadUrl = SiteLink + "/torrents.php?action=download&id=";
+            GuidUrl = SiteLink + "/torrents.php?torrentid=";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -121,9 +104,7 @@ namespace Jackett.Indexers
             }
             else
             {
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
@@ -135,7 +116,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        static void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
+        private void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
         {
             var id = r["torrentId"];
             release.Size = (long)r["size"];
@@ -173,7 +154,7 @@ namespace Jackett.Indexers
                     double dateNum;
                     if (double.TryParse((string)r["groupTime"], out dateNum))
                     {
-                        pubDate = UnixTimestampToDateTime(dateNum);
+                        pubDate = DateTimeUtil.UnixTimestampToDateTime(dateNum);
                         pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
                     }
 
@@ -205,18 +186,10 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
-        }
-
-        static DateTime UnixTimestampToDateTime(double unixTime)
-        {
-            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
-            return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
 
         public async Task<byte[]> Download(Uri link)
@@ -230,7 +203,6 @@ namespace Jackett.Indexers
                 var response = await CurlHelper.GetAsync(link.ToString(), cookieHeader);
                 return response.Content;
             }
-
         }
     }
 }

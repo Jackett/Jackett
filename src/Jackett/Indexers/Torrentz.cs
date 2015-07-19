@@ -1,6 +1,8 @@
 ﻿using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,47 +15,25 @@ using System.Xml;
 
 namespace Jackett.Indexers
 {
-    public class Torrentz : IIndexer
+    public class Torrentz : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "Torrentz"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines."; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(DefaultUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string DefaultUrl = "https://torrentz.eu";
-        const string SearchUrl = DefaultUrl + "/feed_verifiedP?f={0}";
+        private readonly string SearchUrl = "";
         string BaseUrl;
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured
+          public Torrentz(IIndexerManagerService i, Logger l) :
+            base(name: "Torrentz",
+        description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
+        link: new Uri("https://torrentz.eu"),
+        rageid: true,
+        manager: i,
+        logger: l)
         {
-            get;
-            private set;
-        }
 
-        public Torrentz()
-        {
-            IsConfigured = false;
+            SearchUrl = SiteLink + "/feed_verifiedP?f={0}";
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -64,18 +44,16 @@ namespace Jackett.Indexers
             client = new HttpClient(handler);
         }
 
-
-
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             return Task.FromResult<ConfigurationData>(config);
 
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             config.LoadValuesFromJson(configJson);
 
             var formattedUrl = config.GetFormattedHostUrl();
@@ -87,10 +65,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
-
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
-
+            SaveConfig(configSaveData);
             IsConfigured = true;
 
         }
@@ -99,7 +74,7 @@ namespace Jackett.Indexers
         {
             WebClient wc = new WebClient();
             WebHeaderCollection headers = new WebHeaderCollection();
-            headers.Add("User-Agent", chromeUserAgent);
+            headers.Add("User-Agent", BrowserUtil.ChromeUserAgent);
             wc.Headers = headers;
             return wc;
         }
@@ -119,7 +94,7 @@ namespace Jackett.Indexers
             {
                 using (wc)
                 {
-                    xml = wc.DownloadString(episodeSearchUrl);
+                    xml = await wc.DownloadStringTaskAsync(new Uri(episodeSearchUrl));
                     xmlDoc.LoadXml(xml);
                 }
 
@@ -153,8 +128,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, xml, ex);
-                throw ex;
+                OnParseError(xml, ex);
             }
 
             return releases.ToArray();
@@ -176,7 +150,6 @@ namespace Jackett.Indexers
         {
             throw new NotImplementedException();
         }
-
     }
 
     public class TorrentzHelper
