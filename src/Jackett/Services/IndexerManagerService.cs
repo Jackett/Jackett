@@ -15,7 +15,7 @@ namespace Jackett.Services
 {
     public interface IIndexerManagerService
     {
-        void TestIndexer(string name);
+        Task TestIndexer(string name);
         void DeleteIndexer(string name);
         IIndexer GetIndexer(string name);
         IEnumerable<IIndexer> GetAllIndexers();
@@ -70,7 +70,7 @@ namespace Jackett.Services
             return indexers.Values;
         }
 
-        public async void TestIndexer(string name)
+        public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
