@@ -100,7 +100,7 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchTerm = query.SanitizedSearchTerm ?? "2015";
+            var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "2015" : query.SanitizedSearchTerm;
 
             var searchString = searchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
