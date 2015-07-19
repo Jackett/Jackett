@@ -138,8 +138,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-               // OnResultParsingError(this, results, ex);
-                throw ex;
+               OnParseError(results, ex);
             }
             return releases.ToArray();
         }

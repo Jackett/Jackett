@@ -203,7 +203,6 @@ namespace Jackett.Indexers
                 }
             }
 
-
             return releases.ToArray();
         }
 
