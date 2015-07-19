@@ -10,6 +10,7 @@ using NLog.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -95,6 +96,8 @@ namespace Jackett.Services
 
         public void Start()
         {
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+
             // Allow all SSL.. sucks I know but mono on linux is having problems without it..
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
