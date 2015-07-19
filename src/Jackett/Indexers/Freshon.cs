@@ -1,4 +1,5 @@
 ﻿using CsQuery;
+using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
@@ -15,11 +16,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
-    public class Freshon : IndexerInterface
+    public class Freshon : IIndexer
     {
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         static string BaseUrl = "https://freshon.tv";
         static string LoginUrl = BaseUrl + "/login.php";
@@ -40,7 +41,7 @@ namespace Jackett
 
         public Uri SiteLink { get { return new Uri(BaseUrl); } }
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
         Logger logger;
 
         public Freshon(Logger l)

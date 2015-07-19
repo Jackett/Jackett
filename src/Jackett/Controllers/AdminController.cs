@@ -19,12 +19,14 @@ namespace Jackett.Controllers
         private IConfigurationService config;
         private ISonarrApi sonarrApi;
         private IIndexerManagerService indexerService;
+        private IServerService serverService;
 
-        public AdminController(IConfigurationService config, ISonarrApi s, IIndexerManagerService i)
+        public AdminController(IConfigurationService config, ISonarrApi s, IIndexerManagerService i, IServerService ss)
         {
             this.config = config;
             sonarrApi = s;
             indexerService = i;
+            serverService = ss;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -92,7 +94,7 @@ namespace Jackett.Controllers
             try
             {
                 jsonReply["result"] = "success";
-                jsonReply["api_key"] = ApiKey.CurrentKey;
+                jsonReply["api_key"] = serverService.Config.APIKey;
                 jsonReply["app_version"] = config.GetVersion();
                 JArray items = new JArray();
 

@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
-    public interface IndexerInterface
+    public interface IIndexer
     {
         string DisplayName { get; }
         string DisplayDescription { get; }

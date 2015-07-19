@@ -15,18 +15,17 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class HDTorrents : IndexerInterface
+    public class HDTorrents : IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         const string DefaultUrl = "http://hdts.ru"; // Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
         string BaseUrl = DefaultUrl;
         static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
         private string SearchUrl = DefaultUrl + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
         private static string LoginUrl = DefaultUrl + "/login.php";
-        private static string LoginPostUrl = DefaultUrl + "/login.php?returnto=index.php";
         private const int MAXPAGES = 3;
 
         CookieContainer cookies;

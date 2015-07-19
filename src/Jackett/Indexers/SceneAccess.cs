@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Jackett.Indexers
 {
-    class SceneAccess : IndexerInterface
+    class SceneAccess : IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {
@@ -87,7 +87,7 @@ namespace Jackett.Indexers
             string responseContent;
             var configSaveData = new JObject();
 
-            if (WebServer.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -139,7 +139,7 @@ namespace Jackett.Indexers
                 var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
 
                 string results;
-                if (WebServer.IsWindows)
+                if (Engine.IsWindows)
                 {
                     results = await client.GetStringAsync(searchUrl);
                 }
@@ -195,7 +195,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (WebServer.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

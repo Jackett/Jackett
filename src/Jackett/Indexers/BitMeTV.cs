@@ -14,9 +14,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
-    public class BitMeTV : IndexerInterface
+    public class BitMeTV : IIndexer
     {
         class BmtvConfig : ConfigurationData
         {
@@ -53,8 +53,8 @@ namespace Jackett
         HttpClient client;
         Logger logger;
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public BitMeTV(Logger l)
         {

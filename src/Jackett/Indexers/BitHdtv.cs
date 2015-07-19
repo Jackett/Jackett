@@ -15,9 +15,9 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class BitHdtv : IndexerInterface
+    public class BitHdtv : IIndexer
     {
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {
@@ -100,7 +100,7 @@ namespace Jackett.Indexers
             }
         }
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
         public bool IsConfigured { get; private set; }
 

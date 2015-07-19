@@ -12,7 +12,6 @@ namespace Jackett
 {
     public static class CookieContainerExtensions
     {
-
         public static void FillFromJson(this CookieContainer cookies, Uri uri, JToken json, Logger logger)
         {
             if (json["cookies"] != null)

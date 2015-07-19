@@ -12,11 +12,11 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Strike : IndexerInterface
+    public class Strike : IIndexer
     {
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {

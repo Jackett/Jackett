@@ -18,7 +18,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class AnimeBytes : IndexerInterface
+    public class AnimeBytes : IIndexer
     {
         class ConfigurationDataBasicLoginAnimeBytes : ConfigurationDataBasicLogin
         {
@@ -41,8 +41,8 @@ namespace Jackett.Indexers
         private static List<CachedResult> cache = new List<CachedResult>();
         private static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
         static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 

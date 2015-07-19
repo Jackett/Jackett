@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Jackett.Indexers;
 using Jackett.Models;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,9 +16,10 @@ namespace Jackett.Services
     {
         void TestIndexer(string name);
         void DeleteIndexer(string name);
-        IndexerInterface GetIndexer(string name);
-        IEnumerable<IndexerInterface> GetAllIndexers();
-        void SaveConfig(IndexerInterface indexer, JToken obj);
+        IIndexer GetIndexer(string name);
+        IEnumerable<IIndexer> GetAllIndexers();
+        void SaveConfig(IIndexer indexer, JToken obj);
+        void InitIndexers();
     }
 
     public class IndexerManagerService : IIndexerManagerService
@@ -33,14 +35,35 @@ namespace Jackett.Services
             logger = l;
         }
 
-        public IndexerInterface GetIndexer(string name)
+        public void InitIndexers()
         {
-            return container.ResolveNamed<IndexerInterface>(name.ToLowerInvariant()); 
+            // Load the existing config for each indexer
+            foreach (var indexer in GetAllIndexers())
+            {
+                var configFilePath = GetIndexerConfigFilePath(indexer);
+                if (File.Exists(configFilePath))
+                {
+                    var jsonString = JObject.Parse(File.ReadAllText(configFilePath));
+                    indexer.LoadFromSavedConfiguration(jsonString);
+                }
+            }
         }
 
-        public IEnumerable<IndexerInterface> GetAllIndexers()
+        public IIndexer GetIndexer(string name)
         {
-            return container.Resolve<IEnumerable<IndexerInterface>>().OrderBy(_ => _.DisplayName);
+            var indexer = GetAllIndexers().Where(i => string.Equals(i.DisplayName, name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            if (indexer == null)
+            {
+                logger.Error("Request for unknown indexer: " + name);
+                throw new Exception("Unknown indexer: " + name);
+            }
+            return indexer;
+        }
+
+        public IEnumerable<IIndexer> GetAllIndexers()
+        {
+          
+            return container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName);
         }
 
         public async void TestIndexer(string name)
@@ -62,12 +85,12 @@ namespace Jackett.Services
             //LoadMissingIndexers();
         }
 
-        private string GetIndexerConfigFilePath(IndexerInterface indexer)
+        private string GetIndexerConfigFilePath(IIndexer indexer)
         {
             return Path.Combine(configService.GetIndexerConfigDir(), indexer.GetType().Name.ToLower() + ".json");
         }
 
-        public void SaveConfig(IndexerInterface indexer, JToken obj)
+        public void SaveConfig(IIndexer indexer, JToken obj)
         {
             var configFilePath = GetIndexerConfigFilePath(indexer);
             if (!Directory.Exists(configService.GetIndexerConfigDir()))
