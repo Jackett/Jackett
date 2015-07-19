@@ -50,7 +50,8 @@ namespace Jackett
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not create settings directory. " + ex.Message);
+                Console.WriteLine("Missing settings directory: " + AppConfigDirectory);
+                Console.WriteLine("Could not create settings directory. " + ex.Message);
                 Application.Exit();
                 return;
             }
@@ -122,7 +123,6 @@ namespace Jackett
 
         public static void RestartServer()
         {
-
             ServerInstance.Stop();
             ServerInstance = null;
             var serverTask = Task.Run(async () =>
