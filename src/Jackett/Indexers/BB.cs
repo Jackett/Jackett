@@ -68,7 +68,6 @@ namespace Jackett.Indexers
 			};
 
             var content = new FormUrlEncodedContent(pairs);
-
             var response = await client.PostAsync(LoginUrl, content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -87,8 +86,9 @@ namespace Jackett.Indexers
             }
             else
             {
+
                 var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
+                cookies.DumpToJson(BaseUrl, configSaveData);
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -97,7 +97,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
         }
 
