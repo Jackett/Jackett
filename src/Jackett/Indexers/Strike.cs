@@ -1,5 +1,6 @@
 ﻿using Jackett.Models;
 using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -14,7 +15,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Strike :  BaseIndexer, IIndexer
+    public class Strike : BaseIndexer, IIndexer
     {
         private readonly string DownloadUrl = "/torrents/api/download/{0}.torrent";
         private readonly string SearchUrl = "/api/v2/torrents/search/?category=TV&phrase={0}";
@@ -24,13 +25,13 @@ namespace Jackett.Indexers
         private HttpClientHandler handler;
         private HttpClient client;
 
-         public Strike(IIndexerManagerService i, Logger l) :
+        public Strike(IIndexerManagerService i, Logger l) :
             base(name: "Strike",
-          description: "Torrent search engine",
-          link: new Uri("https://getstrike.net"),
-          rageid: true,
-          manager: i,
-          logger: l)
+         description: "Torrent search engine",
+         link: new Uri("https://getstrike.net"),
+         rageid: true,
+         manager: i,
+         logger: l)
         {
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -98,8 +99,13 @@ namespace Jackett.Indexers
                     release.Size = (long)result["size"];
 
                     // "Apr  2, 2015", "Apr 12, 2015" (note the spacing)
+                    // some are unix timestamps, some are not.. :/
                     var dateString = string.Join(" ", ((string)result["upload_date"]).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
-                    release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
+                    float dateVal;
+                    if (ParseUtil.TryCoerceFloat(dateString, out dateVal))
+                        release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(dateVal);
+                    else
+                        release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
 
                     release.Guid = new Uri((string)result["page"]);
                     release.Comments = release.Guid;
