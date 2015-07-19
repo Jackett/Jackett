@@ -13,6 +13,8 @@ namespace Jackett.Indexers
     {
         string DisplayName { get; }
         string DisplayDescription { get; }
+        string ID { get; }
+
         Uri SiteLink { get; }
 
         bool RequiresRageIDLookupDisabled { get; }
