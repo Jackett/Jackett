@@ -81,20 +81,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Indexers\SpeedCD.cs" />
-    <Compile Include="Utils\ApiKeyUtil.cs" />
-    <Compile Include="Utils\BrowserUtil.cs" />
-    <Compile Include="Torznab\CachedResult.cs" />
-    <Compile Include="Torznab\ChannelInfo.cs" />
-    <Compile Include="Configurations\ConfigurationData.cs" />
-    <Compile Include="Configurations\ConfigurationDataBasicLogin.cs" />
-    <Compile Include="Configurations\ConfigurationDataCookie.cs" />
-    <Compile Include="Configurations\ConfigurationDataUrl.cs" />
-    <Compile Include="Http\CookieContainerExtensions.cs" />
-    <Compile Include="Utils\DataUrl.cs" />
-    <Compile Include="Utils\DateTimeUtil.cs" />
-    <Compile Include="Configurations\ExceptionWithConfigData.cs" />
-    <Compile Include="Http\HttpClientExtensions.cs" />
+    <Compile Include="ApiKey.cs" />
+    <Compile Include="BrowserUtil.cs" />
+    <Compile Include="CachedResult.cs" />
+    <Compile Include="ChannelInfo.cs" />
+    <Compile Include="ConfigurationData.cs" />
+    <Compile Include="ConfigurationDataBasicLogin.cs" />
+    <Compile Include="ConfigurationDataCookie.cs" />
+    <Compile Include="ConfigurationDataUrl.cs" />
+    <Compile Include="CookieContainerExtensions.cs" />
+    <Compile Include="DataUrl.cs" />
+    <Compile Include="ExceptionWithConfigData.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="IndexerInterface.cs" />
     <Compile Include="IndexerManager.cs" />
     <Compile Include="Indexers\BeyondHD.cs" />
@@ -117,13 +115,13 @@
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
-    <Compile Include="Windows\Main.cs">
+    <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Main.Designer.cs">
+    <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\ParseUtil.cs" />
+    <Compile Include="ParseUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -131,13 +129,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Torznab\ReleaseInfo.cs" />
-    <Compile Include="Torznab\ResultPage.cs" />
+    <Compile Include="ReleaseInfo.cs" />
+    <Compile Include="ResultPage.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="Utils\ServerUtil.cs" />
-    <Compile Include="Torznab\TorznabQuery.cs" />
+    <Compile Include="ServerUtil.cs" />
+    <Compile Include="TorznabQuery.cs" />
     <Compile Include="WebApi.cs" />
-    <Compile Include="Http\CurlHelper.cs" />
+    <Compile Include="CurlHelper.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -151,7 +149,7 @@
     <None Include="Resources\test.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Windows\Main.resx">
+    <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -185,9 +183,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\showrss.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="WebContent\logos\speedcd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WebContent\logos\t411.png">
