@@ -99,7 +99,7 @@ namespace Jackett.Controllers
                 foreach (var indexer in indexerService.GetAllIndexers())
                 {
                     var item = new JObject();
-                    item["id"] = indexer.GetType().Name;
+                    item["id"] = indexer.ID;
                     item["name"] = indexer.DisplayName;
                     item["description"] = indexer.DisplayDescription;
                     item["configured"] = indexer.IsConfigured;

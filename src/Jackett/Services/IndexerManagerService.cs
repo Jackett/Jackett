@@ -41,7 +41,7 @@ namespace Jackett.Services
         {
             foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
             {
-                indexers.Add(idx.DisplayName, idx);
+                indexers.Add(idx.ID, idx);
                 var configFilePath = GetIndexerConfigFilePath(idx);
                 if (File.Exists(configFilePath))
                 {
@@ -90,7 +90,7 @@ namespace Jackett.Services
 
         private string GetIndexerConfigFilePath(IIndexer indexer)
         {
-            return Path.Combine(configService.GetIndexerConfigDir(), indexer.GetType().Name.ToLower() + ".json");
+            return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
         }
 
         public void SaveConfig(IIndexer indexer, JToken obj)

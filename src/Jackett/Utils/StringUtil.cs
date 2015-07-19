@@ -16,5 +16,10 @@ namespace Jackett.Utils
             return str;
         }
 
+        public static string FromBase64(string str)
+        {
+            return Encoding.UTF8.GetString(Convert.FromBase64String(str));
+        }
+
     }
 }
