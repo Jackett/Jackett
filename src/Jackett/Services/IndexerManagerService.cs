@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Jackett.Indexers;
 using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -52,7 +53,7 @@ namespace Jackett.Services
 
         public IIndexer GetIndexer(string name)
         {
-            var indexer = indexers.Values.Where(i => string.Equals(i.DisplayName, name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            var indexer = indexers.Values.Where(i => string.Equals(StringUtil.StripNonAlphaNumeric(i.DisplayName), name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
             if (indexer != null)
             {
                 return indexer;

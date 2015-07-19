@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
     public class Freshon : BaseIndexer, IIndexer
     {
