@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Jackett
 {
-    public static class ApiKeyUtil
+    public class ApiKey
     {
+
         public static string CurrentKey;
 
         const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";

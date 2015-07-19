@@ -188,7 +188,7 @@ namespace Jackett.Indexers
                     DateTime pubDate = DateTime.MinValue;
                     double dateNum;
                     if (double.TryParse((string)r["groupTime"], out dateNum))
-                        pubDate = DateTimeUtil.UnixTimestampToDateTime(dateNum);
+                        pubDate = UnixTimestampToDateTime(dateNum);
 
                     var groupName = (string)r["groupName"];
 
@@ -223,6 +223,13 @@ namespace Jackett.Indexers
             }
 
             return releases.ToArray();
+        }
+
+        static DateTime UnixTimestampToDateTime(double unixTime)
+        {
+            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
+            return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
 
         public async Task<byte[]> Download(Uri link)

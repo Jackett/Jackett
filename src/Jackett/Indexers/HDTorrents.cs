@@ -23,6 +23,7 @@ namespace Jackett.Indexers
         static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
         private string SearchUrl = DefaultUrl + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
         private static string LoginUrl = DefaultUrl + "/login.php";
+        private static string LoginPostUrl = DefaultUrl + "/login.php?returnto=index.php";
         private const int MAXPAGES = 3;
 
         CookieContainer cookies;
