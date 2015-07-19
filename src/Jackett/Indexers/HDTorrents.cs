@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,11 +15,11 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class HDTorrents : IndexerInterface
+    public class HDTorrents : IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         const string DefaultUrl = "http://hdts.ru"; // Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
         string BaseUrl = DefaultUrl;
@@ -28,9 +31,11 @@ namespace Jackett.Indexers
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
+        Logger logger;
 
-        public HDTorrents()
+        public HDTorrents(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -123,7 +128,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 

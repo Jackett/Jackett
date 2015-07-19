@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett
+namespace Jackett.Utils
 {
     public static class BrowserUtil
     {

@@ -1,4 +1,6 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,12 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class ThePirateBay : IndexerInterface
+    public class ThePirateBay : IIndexer
     {
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName { get { return "The Pirate Bay"; } }
 
@@ -101,7 +103,7 @@ namespace Jackett.Indexers
 
             string results;
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 results = await client.GetStringAsync(episodeSearchUrl);
             }
@@ -175,7 +177,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
+              //  OnResultParsingError(this, results, ex);
                 throw ex;
             }
             return releases.ToArray();

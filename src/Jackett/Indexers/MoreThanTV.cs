@@ -1,5 +1,7 @@
 ﻿using CsQuery;
+using Jackett.Models;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +14,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class MoreThanTV : IndexerInterface
+    public class MoreThanTV : IIndexer
     {
         public string DisplayName
         {
@@ -31,8 +33,8 @@ namespace Jackett.Indexers
 
         public bool RequiresRageIDLookupDisabled { get { return true; } }
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public bool IsConfigured { get; private set; }
 
@@ -49,12 +51,14 @@ namespace Jackett.Indexers
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
+        private Logger logger;
 
         string cookieHeader;
         int retries = 3;
 
-        public MoreThanTV()
+        public MoreThanTV(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -90,7 +94,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -126,7 +130,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -150,7 +154,7 @@ namespace Jackett.Indexers
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
             string results;
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 results = await client.GetStringAsync(episodeSearchUrl, retries);
             }
@@ -169,7 +173,7 @@ namespace Jackett.Indexers
                     double dateNum;
                     if (double.TryParse((string)r["groupTime"], out dateNum))
                     {
-                        pubDate = DateTimeUtil.UnixTimestampToDateTime(dateNum);
+                        pubDate = UnixTimestampToDateTime(dateNum);
                         pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
                     }
 
@@ -208,9 +212,16 @@ namespace Jackett.Indexers
             return releases.ToArray();
         }
 
+        static DateTime UnixTimestampToDateTime(double unixTime)
+        {
+            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
+            return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
+        }
+
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }
