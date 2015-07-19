@@ -130,7 +130,7 @@ namespace Jackett.Indexers
             {
                 using (wc)
                 {
-                    xml = wc.DownloadString(episodeSearchUrl);
+                    xml = await wc.DownloadStringTaskAsync(new Uri(episodeSearchUrl));
                     xmlDoc.LoadXml(xml);
                 }
 
