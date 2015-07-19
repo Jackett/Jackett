@@ -25,7 +25,7 @@ namespace Jackett.Services
         string ApplicationFolder();
     }
 
-    public class ConfigurationService: IConfigurationService
+    public class ConfigurationService : IConfigurationService
     {
         private ISerializeService serializeService;
         private Logger logger;
@@ -61,13 +61,17 @@ namespace Jackett.Services
                     foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
                     {
                         var path = file.Replace(oldDir, "");
-                        var destFolder = GetAppDataFolder()+ path;
+                        var destFolder = GetAppDataFolder() + path;
                         if (!Directory.Exists(Path.GetDirectoryName(destFolder)))
                         {
                             Directory.CreateDirectory(Path.GetDirectoryName(destFolder));
                         }
-                        File.Move(file, destFolder);
+                        if (!File.Exists(destFolder))
+                        {
+                            File.Move(file, destFolder);
+                        }
                     }
+                    Directory.Delete(oldDir, true);
                 }
             }
             catch (Exception ex)
@@ -90,7 +94,7 @@ namespace Jackett.Services
 
                 return serializeService.DeSerialise<T>(File.ReadAllText(fullPath));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Error(e, "Error reading config file " + fullPath);
                 return default(T);
@@ -147,12 +151,12 @@ namespace Jackett.Services
         /// <returns></returns>
         public static string GetAppDataFolderStatic()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett"); 
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
         }
 
         public string GetIndexerConfigDir()
         {
-            return   Path.Combine(GetAppDataFolder(), "Indexers");
+            return Path.Combine(GetAppDataFolder(), "Indexers");
         }
 
         public string GetConfigFile()
@@ -173,13 +177,13 @@ namespace Jackett.Services
             if (File.Exists(path))
             {
                 jsonReply = JObject.Parse(File.ReadAllText(path));
-               // Port = (int)jsonReply["port"];
-              //  ListenPublic = (bool)jsonReply["public"];
+                // Port = (int)jsonReply["port"];
+                //  ListenPublic = (bool)jsonReply["public"];
             }
             else
             {
-               // jsonReply["port"] = Port;
-               // jsonReply["public"] = ListenPublic;
+                // jsonReply["port"] = Port;
+                // jsonReply["public"] = ListenPublic;
             }
             return jsonReply;
         }

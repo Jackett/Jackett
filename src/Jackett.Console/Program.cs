@@ -22,14 +22,17 @@ namespace JackettConsole
                 {
                     switch (args[0].ToLowerInvariant())
                     {
-                        case "/i":
+                        case "/i": // install
                             Engine.ServiceConfig.Install();
                             return;
-                        case "/r":
-                            Engine.Server.ReserveUrls();
+                        case "/r": // reserve port/url & install
+                            Engine.Server.ReserveUrls(doInstall: true);
                             return;
-                        case "/u":
-                            Engine.Server.ReserveUrls(false);
+                        case "/c": // change port
+                            Engine.Server.ReserveUrls(doInstall: false);
+                            return;
+                        case "/u": // uninstall
+                            Engine.Server.ReserveUrls(doInstall: false);
                             Engine.ServiceConfig.Uninstall();
                             return;
                     }
@@ -40,9 +43,9 @@ namespace JackettConsole
                 Engine.RunTime.Spin();
                 Engine.Logger.Info("Server thread exit");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                 Engine.Logger.Error(e, "Top level exception");
+                Engine.Logger.Error(e, "Top level exception");
             }
         }
     }

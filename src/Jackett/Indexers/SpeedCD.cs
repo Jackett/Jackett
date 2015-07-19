@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             SearchUrl = SiteLink + "/V3/API/API.php";
             CommentsUrl = SiteLink + "/t/{0}";
             DownloadUrl = SiteLink + "/download.php?torrent={0}";
-            
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
