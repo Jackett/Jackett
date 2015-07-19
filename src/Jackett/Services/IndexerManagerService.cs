@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Jackett.Indexers;
 using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -14,7 +15,7 @@ namespace Jackett.Services
 {
     public interface IIndexerManagerService
     {
-        void TestIndexer(string name);
+        Task TestIndexer(string name);
         void DeleteIndexer(string name);
         IIndexer GetIndexer(string name);
         IEnumerable<IIndexer> GetAllIndexers();
@@ -40,7 +41,7 @@ namespace Jackett.Services
         {
             foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
             {
-                indexers.Add(idx.DisplayName, idx);
+                indexers.Add(idx.ID, idx);
                 var configFilePath = GetIndexerConfigFilePath(idx);
                 if (File.Exists(configFilePath))
                 {
@@ -52,7 +53,7 @@ namespace Jackett.Services
 
         public IIndexer GetIndexer(string name)
         {
-            var indexer = indexers.Values.Where(i => string.Equals(i.DisplayName, name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            var indexer = indexers.Values.Where(i => string.Equals(StringUtil.StripNonAlphaNumeric(i.DisplayName), name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
             if (indexer != null)
             {
                 return indexer;
@@ -69,7 +70,7 @@ namespace Jackett.Services
             return indexers.Values;
         }
 
-        public async void TestIndexer(string name)
+        public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
@@ -84,12 +85,12 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             var configPath = GetIndexerConfigFilePath(indexer);
             File.Delete(configPath);
-            indexers[name] = container.ResolveNamed<IIndexer>(name);
+            indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
         }
 
         private string GetIndexerConfigFilePath(IIndexer indexer)
         {
-            return Path.Combine(configService.GetIndexerConfigDir(), indexer.GetType().Name.ToLower() + ".json");
+            return Path.Combine(configService.GetIndexerConfigDir(), indexer.ID + ".json");
         }
 
         public void SaveConfig(IIndexer indexer, JToken obj)

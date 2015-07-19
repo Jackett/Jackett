@@ -197,6 +197,7 @@
     <Compile Include="Models\TorznabQuery.cs" />
     <Compile Include="CurlHelper.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
+    <Compile Include="Utils\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
