@@ -14,14 +14,14 @@ $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
     var jsonObject = JSON.parse('{"port":"' + jackett_port + '"}');
 
-    var jqxhr = $.post("apply_jackett_config", JSON.stringify(jsonObject), function (data) {
+    var jqxhr = $.post("admin/apply_jackett_config", JSON.stringify(jsonObject), function (data) {
 
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         } else {
             doNotify("The port has been changed. Jackett will now restart...", "success", "glyphicon glyphicon-ok");
-            var jqxhr0 = $.post("jackett_restart", null, function (data_restart) { });
+            var jqxhr0 = $.post("admin/jackett_restart", null, function (data_restart) { });
 
             window.setTimeout(function () {
                 url = window.location.href;
@@ -36,7 +36,7 @@ $("#change-jackett-port").click(function () {
 });
 
 function getJackettConfig(callback) {
-    var jqxhr = $.get("get_jackett_config", function (data) {
+    var jqxhr = $.get("admin/get_jackett_config", function (data) {
 
         callback(data);
     }).fail(function () {
@@ -66,7 +66,7 @@ function loadSonarrInfo() {
 }
 
 function getSonarrConfig(callback) {
-    var jqxhr = $.get("get_sonarr_config", function (data) {
+    var jqxhr = $.get("admin/get_sonarr_config", function (data) {
         callback(data);
     }).fail(function () {
         doNotify("Error loading Sonarr API configuration, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -74,7 +74,7 @@ function getSonarrConfig(callback) {
 }
 
 $("#sonarr-test").click(function () {
-    var jqxhr = $.get("get_indexers", function (data) {
+    var jqxhr = $.get("admin/get_indexers", function (data) {
         if (data.result == "error")
             doNotify("Test failed for Sonarr API\n" + data.error, "danger", "glyphicon glyphicon-alert");
         else
@@ -98,7 +98,7 @@ $("#sonarr-settings").click(function () {
             $goButton.prop('disabled', true);
             $goButton.html($('#templates > .spinner')[0].outerHTML);
 
-            var jqxhr = $.post("apply_sonarr_config", JSON.stringify(data), function (data) {
+            var jqxhr = $.post("admin/apply_sonarr_config", JSON.stringify(data), function (data) {
                 if (data.result == "error") {
                     if (data.config) {
                         populateSetupForm(data.indexer, data.name, data.config);
@@ -128,7 +128,7 @@ function reloadIndexers() {
     $('#indexers').hide();
     $('#indexers > .indexer').remove();
     $('#unconfigured-indexers').empty();
-    var jqxhr = $.get("get_indexers", function (data) {
+    var jqxhr = $.get("admin/get_indexers", function (data) {
         $("#api-key-input").val(data.api_key);
         $("#app-version").html(data.app_version);
         displayIndexers(data.items);
@@ -163,7 +163,7 @@ function prepareDeleteButtons() {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            var jqxhr = $.post("delete_indexer", JSON.stringify({ indexer: id }), function (data) {
+            var jqxhr = $.post("admin/delete_indexer", JSON.stringify({ indexer: id }), function (data) {
                 if (data.result == "error") {
                     doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
                 }
@@ -195,7 +195,7 @@ function prepareTestButtons() {
         var id = $btn.data("id");
         $btn.click(function () {
             doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-            var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
+            var jqxhr = $.post("admin/test_indexer", JSON.stringify({ indexer: id }), function (data) {
                 if (data.result == "error") {
                     doNotify("Test failed for " + data.name + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
                 }
@@ -211,7 +211,7 @@ function prepareTestButtons() {
 
 function displayIndexerSetup(id) {
 
-    var jqxhr = $.post("get_config_form", JSON.stringify({ indexer: id }), function (data) {
+    var jqxhr = $.post("admin/get_config_form", JSON.stringify({ indexer: id }), function (data) {
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
@@ -281,7 +281,7 @@ function populateSetupForm(indexerId, name, config) {
         $goButton.prop('disabled', true);
         $goButton.html($('#templates > .spinner')[0].outerHTML);
 
-        var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
+        var jqxhr = $.post("admin/configure_indexer", JSON.stringify(data), function (data) {
             if (data.result == "error") {
                 if (data.config) {
                     populateConfigItems(configForm, data.config);

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett
+namespace Jackett.Models
 {
     public abstract class ConfigurationData
     {

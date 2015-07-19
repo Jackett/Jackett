@@ -1,6 +1,4 @@
-﻿#if !__MonoCS__
-
-namespace Jackett
+﻿namespace JackettTray
 {
     partial class Main
     {
@@ -100,4 +98,3 @@ namespace Jackett
 
     }
 }
-#endif

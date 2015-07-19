@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Jackett
 {
-    public class IndexerManager
+    /*public class IndexerManager
     {
 
-        static string IndexerConfigDirectory = Path.Combine(Program.AppConfigDirectory, "Indexers");
+        static string IndexerConfigDirectory = Path.Combine(WebServer.AppConfigDirectory, "Indexers");
 
         public Dictionary<string, IndexerInterface> Indexers { get; private set; }
 
@@ -60,7 +60,7 @@ namespace Jackett
             var fileName = string.Format("Error on {0} for {1}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"), indexer.DisplayName);
             var spacing = string.Join("", Enumerable.Repeat(Environment.NewLine, 5));
             var fileContents = string.Format("{0}{1}{2}", ex, spacing, results);
-            File.WriteAllText(Path.Combine(Program.AppConfigDirectory, fileName), fileContents);
+            File.WriteAllText(Path.Combine(WebServer.AppConfigDirectory, fileName), fileContents);
         }
 
         string GetIndexerConfigFilePath(IndexerInterface indexer)
@@ -97,11 +97,11 @@ namespace Jackett
         {
             var browseQuery = new TorznabQuery();
             var results = await indexer.PerformQuery(browseQuery);
-            Program.LoggerInstance.Debug(string.Format("Found {0} releases from {1}", results.Length, indexer.DisplayName));
+            WebServer.LoggerInstance.Debug(string.Format("Found {0} releases from {1}", results.Length, indexer.DisplayName));
             if (results.Length == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
 
         }
 
-    }
+    }*/
 }

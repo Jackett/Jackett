@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Jackett
+namespace JackettTray
 {
     public partial class Main : Form
     {
@@ -28,13 +28,13 @@ namespace Jackett
             toolStripMenuItemWebUI.Click += toolStripMenuItemWebUI_Click;
             toolStripMenuItemShutdown.Click += toolStripMenuItemShutdown_Click;
 
-            if (Program.IsFirstRun)
-                AutoStart = true;
+            //if (Server.IsFirstRun)
+            //    AutoStart = true;
         }
 
         void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            Process.Start("http://127.0.0.1:" + Server.Port);
+          //  Process.Start("http://127.0.0.1:" + Server.Port);
         }
 
         void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
@@ -84,12 +84,12 @@ namespace Jackett
 
         private void CreateShortcut()
         {
-            var appPath = Assembly.GetExecutingAssembly().Location;
+          /*  var appPath = Assembly.GetExecutingAssembly().Location;
             var shell = new IWshRuntimeLibrary.WshShell();
             var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(ShortcutPath);
             shortcut.Description = Assembly.GetExecutingAssembly().GetName().Name;
             shortcut.TargetPath = appPath;
-            shortcut.Save();
+            shortcut.Save();*/
         }
     }
 }

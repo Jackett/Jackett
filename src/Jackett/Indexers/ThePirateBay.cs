@@ -1,4 +1,6 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -108,7 +110,7 @@ namespace Jackett.Indexers
 
                 string results;
 
-                if (Program.IsWindows)
+                if (WebServer.IsWindows)
                 {
                     results = await client.GetStringAsync(episodeSearchUrl);
                 }

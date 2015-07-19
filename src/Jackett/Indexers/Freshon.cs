@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,9 +41,11 @@ namespace Jackett
         public Uri SiteLink { get { return new Uri(BaseUrl); } }
 
         public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        Logger logger;
 
-        public Freshon()
+        public Freshon(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -101,7 +106,7 @@ namespace Jackett
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
         }
 

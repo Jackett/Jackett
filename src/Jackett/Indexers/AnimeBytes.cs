@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -69,9 +72,11 @@ namespace Jackett.Indexers
         CookieContainer cookieContainer;
         HttpClientHandler handler;
         HttpClient client;
+        Logger logger;
 
-        public AnimeBytes()
+        public AnimeBytes(Logger l)
         {
+            logger = l; 
             IsConfigured = false;
             cookieContainer = new CookieContainer();
             handler = new HttpClientHandler
@@ -162,7 +167,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
             AllowRaws = jsonConfig["raws"].Value<bool>();
         }

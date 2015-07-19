@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Models;
+using Jackett.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
