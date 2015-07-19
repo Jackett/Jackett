@@ -20,8 +20,6 @@ namespace Jackett
         string DisplayDescription { get; }
         Uri SiteLink { get; }
 
-        bool RequiresRageIDLookupDisabled { get; }
-
         // Whether this indexer has been configured, verified and saved in the past and has the settings required for functioning
         bool IsConfigured { get; }
 

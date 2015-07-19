@@ -33,8 +33,6 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         public bool IsConfigured { get; private set; }
 
         const string BaseUrl = "https://torrentday.eu";
@@ -128,60 +126,63 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
-            try
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                CQ dom = results;
-                var rows = dom["#torrentTable > tbody > tr.browse"];
-                foreach (var row in rows)
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+                var results = await client.GetStringAsync(episodeSearchUrl);
+                try
                 {
-                    CQ qRow = row.Cq();
-                    var release = new ReleaseInfo();
+                    CQ dom = results;
+                    var rows = dom["#torrentTable > tbody > tr.browse"];
+                    foreach (var row in rows)
+                    {
+                        CQ qRow = row.Cq();
+                        var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Title = qRow.Find(".torrentName").Text();
-                    release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrentName").Attr("href"));
-                    release.Comments = release.Guid;
-                    release.Link = new Uri(BaseUrl + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+                        release.Title = qRow.Find(".torrentName").Text();
+                        release.Description = release.Title;
+                        release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrentName").Attr("href"));
+                        release.Comments = release.Guid;
+                        release.Link = new Uri(BaseUrl + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
-                    var sizeStr = qRow.Find(".sizeInfo").Text().Trim();
-                    var sizeParts = sizeStr.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                        var sizeStr = qRow.Find(".sizeInfo").Text().Trim();
+                        var sizeParts = sizeStr.Split(' ');
+                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
 
-                    var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
-                    var dateParts = dateStr.Split(' ');
-                    var dateValue = ParseUtil.CoerceInt(dateParts[0]);
-                    TimeSpan ts = TimeSpan.Zero;
-                    if (dateStr.Contains("sec"))
-                        ts = TimeSpan.FromSeconds(dateValue);
-                    else if (dateStr.Contains("min"))
-                        ts = TimeSpan.FromMinutes(dateValue);
-                    else if (dateStr.Contains("hour"))
-                        ts = TimeSpan.FromHours(dateValue);
-                    else if (dateStr.Contains("day"))
-                        ts = TimeSpan.FromDays(dateValue);
-                    else if (dateStr.Contains("week"))
-                        ts = TimeSpan.FromDays(dateValue * 7);
-                    else if (dateStr.Contains("month"))
-                        ts = TimeSpan.FromDays(dateValue * 30);
-                    else if (dateStr.Contains("year"))
-                        ts = TimeSpan.FromDays(dateValue * 365);
-                    release.PublishDate = DateTime.Now - ts;
+                        var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
+                        var dateParts = dateStr.Split(' ');
+                        var dateValue = ParseUtil.CoerceInt(dateParts[0]);
+                        TimeSpan ts = TimeSpan.Zero;
+                        if (dateStr.Contains("sec"))
+                            ts = TimeSpan.FromSeconds(dateValue);
+                        else if (dateStr.Contains("min"))
+                            ts = TimeSpan.FromMinutes(dateValue);
+                        else if (dateStr.Contains("hour"))
+                            ts = TimeSpan.FromHours(dateValue);
+                        else if (dateStr.Contains("day"))
+                            ts = TimeSpan.FromDays(dateValue);
+                        else if (dateStr.Contains("week"))
+                            ts = TimeSpan.FromDays(dateValue * 7);
+                        else if (dateStr.Contains("month"))
+                            ts = TimeSpan.FromDays(dateValue * 30);
+                        else if (dateStr.Contains("year"))
+                            ts = TimeSpan.FromDays(dateValue * 365);
+                        release.PublishDate = DateTime.Now - ts;
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
 
-                    releases.Add(release);
+                        releases.Add(release);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
+                }
             }
             return releases.ToArray();
         }

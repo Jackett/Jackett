@@ -26,8 +26,6 @@ namespace Jackett.Indexers
 
         public Uri SiteLink { get { return new Uri(DefaultUrl); } }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         public bool IsConfigured { get; private set; }
 
         const string DefaultUrl = "https://thepiratebay.mn";
@@ -95,90 +93,101 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var queryStr = HttpUtility.UrlEncode(searchString);
-            var episodeSearchUrl = baseUrl + string.Format(SearchUrl, queryStr);
+            List<string> searchUrls = new List<string>();
 
-            string results;
-
-            if (Program.IsWindows)
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                results = await client.GetStringAsync(episodeSearchUrl);
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(episodeSearchUrl, null, episodeSearchUrl);
-                results = Encoding.UTF8.GetString(response.Content);
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var queryStr = HttpUtility.UrlEncode(searchString);
+                var episodeSearchUrl = baseUrl + string.Format(SearchUrl, queryStr);
+                searchUrls.Add(episodeSearchUrl);
             }
 
-            try
+            foreach (var episodeSearchUrl in searchUrls)
             {
-                CQ dom = results;
 
-                var rows = dom["#searchResult > tbody > tr"];
-                foreach (var row in rows)
+                string results;
+
+                if (Program.IsWindows)
                 {
-                    var release = new ReleaseInfo();
+                    results = await client.GetStringAsync(episodeSearchUrl);
+                }
+                else
+                {
+                    var response = await CurlHelper.GetAsync(episodeSearchUrl, null, episodeSearchUrl);
+                    results = Encoding.UTF8.GetString(response.Content);
+                }
 
-                    CQ qRow = row.Cq();
-                    CQ qLink = qRow.Find(".detName > .detLink").First();
+                try
+                {
+                    CQ dom = results;
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Title = qLink.Text().Trim();
-                    release.Description = release.Title;
-                    release.Comments = new Uri(baseUrl + "/" + qLink.Attr("href").TrimStart('/'));
-                    release.Guid = release.Comments;
-
-                    var downloadCol = row.ChildElements.ElementAt(1).Cq().Children("a");
-                    release.MagnetUri = new Uri(downloadCol.Attr("href"));
-                    release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-
-                    var descString = qRow.Find(".detDesc").Text().Trim();
-                    var descParts = descString.Split(',');
-
-                    var timeString = descParts[0].Split(' ')[1];
-
-                    if (timeString.Contains("mins ago"))
+                    var rows = dom["#searchResult > tbody > tr"];
+                    foreach (var row in rows)
                     {
-                        release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(ParseUtil.CoerceInt(timeString.Split(' ')[0])));
-                    }
-                    else if (timeString.Contains("Today"))
-                    {
-                        release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(2) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
-                    }
-                    else if (timeString.Contains("Y-day"))
-                    {
-                        release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(26) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
-                    }
-                    else if (timeString.Contains(':'))
-                    {
-                        var utc = DateTime.ParseExact(timeString, "MM-dd HH:mm", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
-                        release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
-                    }
-                    else
-                    {
-                        var utc = DateTime.ParseExact(timeString, "MM-dd yyyy", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
-                        release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
-                    }
+                        var release = new ReleaseInfo();
 
-                    var sizeParts = descParts[1].Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    var sizeVal = ParseUtil.CoerceFloat(sizeParts[1]);
-                    var sizeUnit = sizeParts[2];
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                        CQ qRow = row.Cq();
+                        CQ qLink = qRow.Find(".detName > .detLink").First();
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(3).Cq().Text()) + release.Seeders;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+                        release.Title = qLink.Text().Trim();
+                        release.Description = release.Title;
+                        release.Comments = new Uri(baseUrl + "/" + qLink.Attr("href").TrimStart('/'));
+                        release.Guid = release.Comments;
 
-                    releases.Add(release);
+                        var downloadCol = row.ChildElements.ElementAt(1).Cq().Children("a");
+                        release.MagnetUri = new Uri(downloadCol.Attr("href"));
+                        release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
+
+                        var descString = qRow.Find(".detDesc").Text().Trim();
+                        var descParts = descString.Split(',');
+
+                        var timeString = descParts[0].Split(' ')[1];
+
+                        if (timeString.Contains("mins ago"))
+                        {
+                            release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(ParseUtil.CoerceInt(timeString.Split(' ')[0])));
+                        }
+                        else if (timeString.Contains("Today"))
+                        {
+                            release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(2) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                        }
+                        else if (timeString.Contains("Y-day"))
+                        {
+                            release.PublishDate = (DateTime.UtcNow - TimeSpan.FromHours(26) - TimeSpan.Parse(timeString.Split(' ')[1])).ToLocalTime();
+                        }
+                        else if (timeString.Contains(':'))
+                        {
+                            var utc = DateTime.ParseExact(timeString, "MM-dd HH:mm", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
+                            release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
+                        }
+                        else
+                        {
+                            var utc = DateTime.ParseExact(timeString, "MM-dd yyyy", CultureInfo.InvariantCulture) - TimeSpan.FromHours(2);
+                            release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
+                        }
+
+                        var sizeParts = descParts[1].Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        var sizeVal = ParseUtil.CoerceFloat(sizeParts[1]);
+                        var sizeUnit = sizeParts[2];
+                        release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+
+                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text());
+                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(3).Cq().Text()) + release.Seeders;
+
+                        releases.Add(release);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
                 }
             }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
-            }
             return releases.ToArray();
+
         }
 
 

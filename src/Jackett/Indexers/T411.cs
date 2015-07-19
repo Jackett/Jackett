@@ -34,8 +34,6 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         public bool IsConfigured { get; private set; }
 
         const string BaseUrl = "http://www.t411.io";
@@ -138,50 +136,52 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "%20" : query.SanitizedSearchTerm;
-            var searchString = searchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = new Uri(episodeSearchUrl);
-            message.Headers.TryAddWithoutValidation("Authorization", await GetAuthToken());
-
-            var response = await client.SendAsync(message);
-            var results = await response.Content.ReadAsStringAsync();
-
-            var jsonResult = JObject.Parse(results);
-            try
+            foreach (var title in query.ShowTitles ?? new string[] { "%20" })
             {
-                var items = (JArray)jsonResult["torrents"];
-                foreach (var item in items)
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+
+                var message = new HttpRequestMessage();
+                message.Method = HttpMethod.Get;
+                message.RequestUri = new Uri(episodeSearchUrl);
+                message.Headers.TryAddWithoutValidation("Authorization", await GetAuthToken());
+
+                var response = await client.SendAsync(message);
+                var results = await response.Content.ReadAsStringAsync();
+
+                var jsonResult = JObject.Parse(results);
+                try
                 {
-                    var release = new ReleaseInfo();
+                    var items = (JArray)jsonResult["torrents"];
+                    foreach (var item in items)
+                    {
+                        var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    var torrentId = (string)item["id"];
-                    release.Link = new Uri(string.Format(DownloadUrl, torrentId));
-                    release.Title = (string)item["name"];
-                    release.Description = release.Title;
-                    release.Comments = new Uri(string.Format(CommentsUrl, (string)item["rewritename"]));
-                    release.Guid = release.Comments;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+                        var torrentId = (string)item["id"];
+                        release.Link = new Uri(string.Format(DownloadUrl, torrentId));
+                        release.Title = (string)item["name"];
+                        release.Description = release.Title;
+                        release.Comments = new Uri(string.Format(CommentsUrl, (string)item["rewritename"]));
+                        release.Guid = release.Comments;
 
-                    var dateUtc = DateTime.ParseExact((string)item["added"], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    release.PublishDate = DateTime.SpecifyKind(dateUtc, DateTimeKind.Utc).ToLocalTime();
+                        var dateUtc = DateTime.ParseExact((string)item["added"], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        release.PublishDate = DateTime.SpecifyKind(dateUtc, DateTimeKind.Utc).ToLocalTime();
 
-                    release.Seeders = ParseUtil.CoerceInt((string)item["seeders"]);
-                    release.Peers = ParseUtil.CoerceInt((string)item["leechers"]) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt((string)item["seeders"]);
+                        release.Peers = ParseUtil.CoerceInt((string)item["leechers"]) + release.Seeders;
 
-                    release.Size = ParseUtil.CoerceLong((string)item["size"]);
+                        release.Size = ParseUtil.CoerceLong((string)item["size"]);
 
-                    releases.Add(release);
+                        releases.Add(release);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
+                }
             }
             return releases.ToArray();
         }

@@ -27,6 +27,7 @@ namespace Jackett
             DeleteIndexer,
             GetSonarrConfig,
             ApplySonarrConfig,
+            TestSonarr,
             GetJackettConfig,
             ApplyJackettConfig,
             JackettRestart,
@@ -40,16 +41,19 @@ namespace Jackett
 			{ "delete_indexer", WebApiMethod.DeleteIndexer },
 			{ "get_sonarr_config", WebApiMethod.GetSonarrConfig },
 			{ "apply_sonarr_config", WebApiMethod.ApplySonarrConfig },
+			{ "test_sonarr", WebApiMethod.TestSonarr },
             { "get_jackett_config",WebApiMethod.GetJackettConfig},
             { "apply_jackett_config",WebApiMethod.ApplyJackettConfig},
             { "jackett_restart", WebApiMethod.JackettRestart },
 		};
 
         IndexerManager indexerManager;
+        SonarrApi sonarrApi;
 
-        public WebApi(IndexerManager indexerManager)
+        public WebApi(IndexerManager indexerManager, SonarrApi sonarrApi)
         {
             this.indexerManager = indexerManager;
+            this.sonarrApi = sonarrApi;
         }
 
         public async Task<bool> HandleRequest(HttpListenerContext context)
@@ -121,6 +125,15 @@ namespace Jackett
                 case WebApiMethod.DeleteIndexer:
                     handlerTask = HandleDeleteIndexer;
                     break;
+                case WebApiMethod.GetSonarrConfig:
+                    handlerTask = HandleGetSonarrConfig;
+                    break;
+                case WebApiMethod.ApplySonarrConfig:
+                    handlerTask = HandleApplySonarrConfig;
+                    break;
+                case WebApiMethod.TestSonarr:
+                    handlerTask = HandleTestSonarr;
+                    break;
                 case WebApiMethod.ApplyJackettConfig:
                     handlerTask = HandleApplyJackettConfig;
                     break;
@@ -149,6 +162,55 @@ namespace Jackett
             {
                 Console.WriteLine("Error writing json to stream for API call " + apiCall + Environment.NewLine + ex.ToString());
             }
+        }
+
+        async Task<JToken> HandleTestSonarr(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                await sonarrApi.TestConnection();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        async Task<JToken> HandleApplySonarrConfig(HttpListenerContext context)
+        {
+            JToken jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson(context.Request.InputStream);
+                await sonarrApi.ApplyConfiguration(postData);
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return jsonReply;
+        }
+
+        Task<JToken> HandleGetSonarrConfig(HttpListenerContext context)
+        {
+            JObject jsonReply = new JObject();
+            try
+            {
+                jsonReply["config"] = sonarrApi.GetConfiguration().ToJson();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return Task.FromResult<JToken>(jsonReply);
         }
 
         Task<JToken> HandleInvalidApiMethod(HttpListenerContext context)
@@ -214,7 +276,7 @@ namespace Jackett
                 jsonReply["api_key"] = ApiKey.CurrentKey;
                 jsonReply["app_version"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 JArray items = new JArray();
-                foreach (var i in indexerManager.Indexers.OrderBy(_ => _.Key))
+                foreach (var i in indexerManager.Indexers.OrderBy(_=>_.Key))
                 {
                     var indexer = i.Value;
                     var item = new JObject();
