@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Jackett
+namespace Jackett.Utils
 {
-    public class DataUrl
+    public class DataUrlUtils
     {
         public static string ReadFileToDataUrl(string file)
         {

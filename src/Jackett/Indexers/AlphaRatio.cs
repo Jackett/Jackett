@@ -12,57 +12,36 @@ using System.Net.Http.Headers;
 using Jackett.Models;
 using Jackett.Utils;
 using NLog;
+using Jackett.Services;
 
 namespace Jackett.Indexers
 {
-    public class AlphaRatio : IIndexer
+    public class AlphaRatio : BaseIndexer,IIndexer
     {
-        public string DisplayName
-        {
-            get { return "AlphaRatio"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Legendary"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public bool IsConfigured { get; private set; }
-
-        static string BaseUrl = "https://alpharatio.cc";
-
-        static string LoginUrl = BaseUrl + "/login.php";
-
-        static string SearchUrl = BaseUrl + "/ajax.php?action=browse&searchstr=";
-
-        static string DownloadUrl = BaseUrl + "/torrents.php?action=download&id=";
-
-        static string GuidUrl = BaseUrl + "/torrents.php?torrentid=";
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
+        private readonly string GuidUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
         string cookieHeader;
-        private Logger logger;
 
-        public AlphaRatio(Logger l)
+        public AlphaRatio(IIndexerManagerService i, Logger l):
+            base(name: "AlphaRatio",
+            description: "Legendary",
+            link: new Uri("https://alpharatio.cc"),
+            rageid: true,
+            manager:i,
+            logger:l)
         {
-            logger = l;
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login.php";
+            SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";
+            DownloadUrl = SiteLink + "/torrents.php?action=download&id=";
+            GuidUrl = SiteLink + "/torrents.php?torrentid=";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -83,8 +62,7 @@ namespace Jackett.Indexers
         public async Task ApplyConfiguration(JToken configJson)
         {
             var configSaveData = new JObject();
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
+            SaveConfig(configSaveData);
 
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
@@ -131,9 +109,7 @@ namespace Jackett.Indexers
             }
             else
             {
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
@@ -143,7 +119,7 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Post;
             message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
@@ -223,8 +199,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();

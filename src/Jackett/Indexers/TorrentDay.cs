@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,47 +16,28 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class TorrentDay : IIndexer
+    public class TorrentDay: BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "TorrentDay"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return DisplayName; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        const string BaseUrl = "https://torrentday.eu";
-        const string StartPageUrl = BaseUrl + "/login.php";
-        const string LoginUrl = BaseUrl + "/tak3login.php";
-        const string SearchUrl = BaseUrl + "/browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
+        private readonly string StartPageUrl = "";
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger logger;
 
-        public TorrentDay(Logger l)
+         public TorrentDay(IIndexerManagerService i, Logger l) :
+            base(name: "TorrentDay",
+        description: "TorrentDay",
+        link: new Uri("https://torrentday.eu"),
+        rageid: true,
+        manager: i,
+        logger: l)
         {
-            logger = l;
-            IsConfigured = false;
+            StartPageUrl = SiteLink + "/login.php";
+            LoginUrl = SiteLink + "/tak3login.php";
+            SearchUrl = SiteLink + "/browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -77,7 +59,7 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = new Uri(uri);
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
@@ -115,17 +97,14 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -149,9 +128,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qRow.Find(".torrentName").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrentName").Attr("href"));
+                    release.Guid = new Uri(SiteLink + "/" + qRow.Find(".torrentName").Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(BaseUrl + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".sizeInfo").Text().Trim();
                     var sizeParts = sizeStr.Split(' ');
@@ -185,8 +164,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
             return releases.ToArray();
         }

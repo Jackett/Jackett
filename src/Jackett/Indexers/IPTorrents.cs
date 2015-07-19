@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,38 +16,22 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class IPTorrents : IIndexer
+    public class IPTorrents : BaseIndexer, IIndexer
     {
-
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName { get { return "IPTorrents"; } }
-
-        public string DisplayDescription { get { return "Always a step ahead"; } }
-
-        public Uri SiteLink { get { return new Uri(BaseUrl); } }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
-
-        static string BaseUrl = "https://iptorrents.com";
-
-        string SearchUrl = BaseUrl + "/t?q=";
-
-
+        private readonly string SearchUrl = "";
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger logger;
 
-        public IPTorrents(Logger l)
+         public IPTorrents(IIndexerManagerService i, Logger l) :
+            base(name: "IPTorrents",
+        description: "Always a step ahead.",
+        link: new Uri("https://iptorrents.com"),
+        rageid: true,
+        manager: i,
+        logger: l)
         {
-            logger = l;
-            IsConfigured = false;
+            SearchUrl = SiteLink + "t?q=";
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -59,7 +44,7 @@ namespace Jackett.Indexers
 
         public async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            await client.GetAsync(new Uri(BaseUrl));
+            await client.GetAsync(SiteLink);
             var config = new ConfigurationDataBasicLogin();
             return (ConfigurationData)config;
         }
@@ -79,9 +64,9 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Post;
             message.Content = content;
-            message.RequestUri = new Uri(BaseUrl);
-            message.Headers.Referrer = new Uri(BaseUrl);
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.RequestUri = SiteLink;
+            message.Headers.Referrer = SiteLink;
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
 
             var response = await client.SendAsync(message);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -97,13 +82,9 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
-
         }
 
         HttpRequestMessage CreateHttpRequest(Uri uri)
@@ -111,22 +92,19 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
         public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
@@ -148,7 +126,7 @@ namespace Jackett.Indexers
                     var qTitleLink = qRow.Find("a.t_title").First();
                     release.Title = qTitleLink.Text().Trim();
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + qTitleLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
                     DateTime pubDate;
@@ -174,7 +152,7 @@ namespace Jackett.Indexers
                     release.PublishDate = pubDate;
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(BaseUrl + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text().Trim();
                     var sizeVal = ParseUtil.CoerceFloat(sizeStr.Split(' ')[0]);
@@ -189,12 +167,10 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
-
         }
 
         public async Task<byte[]> Download(Uri link)
@@ -204,8 +180,5 @@ namespace Jackett.Indexers
             var bytes = await response.Content.ReadAsByteArrayAsync();
             return bytes;
         }
-
-
-
     }
 }

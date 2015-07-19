@@ -121,6 +121,10 @@
     <Content Include="jackett.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
+      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
+      <Name>CurlSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jackett\Jackett.csproj">
       <Project>{e636d5f8-68b4-4903-b4ed-ccfd9c9e899f}</Project>
       <Name>Jackett</Name>

@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,45 +16,25 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class TorrentShack : IIndexer
+    public class TorrentShack : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "TorrentShack"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return DisplayName; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string BaseUrl = "http://torrentshack.me";
-        const string LoginUrl = BaseUrl + "/login.php";
-        const string SearchUrl = BaseUrl + "/torrents.php?searchstr={0}&release_type=both&searchtags=&tags_type=0&order_by=s3&order_way=desc&torrent_preset=all&filter_cat%5B600%5D=1&filter_cat%5B620%5D=1&filter_cat%5B700%5D=1&filter_cat%5B981%5D=1&filter_cat%5B980%5D=1";
-
+        private readonly string LoginUrl ="";
+        private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger logger;
 
-        public bool IsConfigured { get; private set; }
-
-        public TorrentShack(Logger l)
+          public TorrentShack(IIndexerManagerService i, Logger l) :
+            base(name: "TorrentShack",
+        description: "TorrentShack",
+        link: new Uri("http://torrentshack.me"),
+        rageid: true,
+        manager: i,
+        logger: l)
         {
-            logger = l;
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login.php";
+            SearchUrl = SiteLink + "/torrents.php?searchstr={0}&release_type=both&searchtags=&tags_type=0&order_by=s3&order_way=desc&torrent_preset=all&filter_cat%5B600%5D=1&filter_cat%5B620%5D=1&filter_cat%5B700%5D=1&filter_cat%5B981%5D=1&filter_cat%5B980%5D=1";
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -99,10 +80,7 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
 
@@ -110,7 +88,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -135,9 +113,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qRow.Find(".torrent_name_link").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrent_name_link").Parent().Attr("href"));
+                    release.Guid = new Uri(SiteLink + "/" + qRow.Find(".torrent_name_link").Parent().Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(BaseUrl + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
+                    release.Link = new Uri(SiteLink + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
 
                     var dateStr = qRow.Find(".time").Text().Trim();
                     if (dateStr.ToLower().Contains("just now"))
@@ -177,8 +155,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
             return releases.ToArray();
         }

@@ -27,6 +27,7 @@ namespace Jackett.Services
         private IContainer container;
         private IConfigurationService configService;
         private Logger logger;
+        private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
 
         public IndexerManagerService(IContainer c, IConfigurationService config, Logger l)
         {
@@ -37,33 +38,35 @@ namespace Jackett.Services
 
         public void InitIndexers()
         {
-            // Load the existing config for each indexer
-            foreach (var indexer in GetAllIndexers())
+            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
             {
-                var configFilePath = GetIndexerConfigFilePath(indexer);
+                indexers.Add(idx.DisplayName, idx);
+                var configFilePath = GetIndexerConfigFilePath(idx);
                 if (File.Exists(configFilePath))
                 {
                     var jsonString = JObject.Parse(File.ReadAllText(configFilePath));
-                    indexer.LoadFromSavedConfiguration(jsonString);
+                    idx.LoadFromSavedConfiguration(jsonString);
                 }
             }
         }
 
         public IIndexer GetIndexer(string name)
         {
-            var indexer = GetAllIndexers().Where(i => string.Equals(i.DisplayName, name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
-            if (indexer == null)
+            var indexer = indexers.Values.Where(i => string.Equals(i.DisplayName, name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            if (indexer != null)
+            {
+                return indexer;
+            }
+            else
             {
                 logger.Error("Request for unknown indexer: " + name);
                 throw new Exception("Unknown indexer: " + name);
             }
-            return indexer;
         }
 
         public IEnumerable<IIndexer> GetAllIndexers()
         {
-          
-            return container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName);
+            return indexers.Values;
         }
 
         public async void TestIndexer(string name)
@@ -79,10 +82,9 @@ namespace Jackett.Services
         public void DeleteIndexer(string name)
         {
             var indexer = GetIndexer(name);
-            var configPath = configService.GetIndexerConfigDir();
+            var configPath = GetIndexerConfigFilePath(indexer);
             File.Delete(configPath);
-            //Indexers.Remove(name);
-            //LoadMissingIndexers();
+            indexers[name] = container.ResolveNamed<IIndexer>(name);
         }
 
         private string GetIndexerConfigFilePath(IIndexer indexer)

@@ -1,7 +1,9 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,35 +17,24 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class ThePirateBay : IIndexer
+    public class ThePirateBay : BaseIndexer, IIndexer
     {
-
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName { get { return "The Pirate Bay"; } }
-
-        public string DisplayDescription { get { return "The worlds largest bittorrent indexer"; } }
-
-        public Uri SiteLink { get { return new Uri(DefaultUrl); } }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        const string DefaultUrl = "https://thepiratebay.mn";
         const string SearchUrl = "/search/{0}/0/99/208,205";
-
         string BaseUrl;
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public ThePirateBay()
+        public ThePirateBay(IIndexerManagerService i, Logger l) :
+            base(name: "The Pirate Bay",
+        description: "The worlds largest bittorrent indexer",
+        link: new Uri("https://thepiratebay.mn"),
+        rageid: true,
+        manager: i,
+        logger: l)
         {
-            BaseUrl = DefaultUrl;
+            BaseUrl = SiteLink.ToString();
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -63,7 +54,7 @@ namespace Jackett.Indexers
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             config.LoadValuesFromJson(configJson);
 
             var formattedUrl = config.GetFormattedHostUrl();
@@ -75,10 +66,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
-
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
-
+            SaveConfig(configSaveData);
             IsConfigured = true;
         }
 

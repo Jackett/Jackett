@@ -1,7 +1,9 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,7 +14,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    class FrenchTorrentDb : IIndexer
+    class FrenchTorrentDb : BaseIndexer, IIndexer
     {
         public event Action<IIndexer, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
 
@@ -33,28 +35,9 @@ namespace Jackett.Indexers
             }
         }
 
-        public string DisplayName
-        {
-            get { return "FrenchTorrentDb"; }
-        }
 
-        public string DisplayDescription
-        {
-            get { return "One the biggest French Torrent Tracker"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-        const string BaseUrl = "http://www.frenchtorrentdb.com/";
-        const string MainUrl = BaseUrl + "?section=INDEX";
-        const string SearchUrl = BaseUrl + "?section=TORRENTS&exact=1&name={0}&submit=GO";
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
+        private readonly string MainUrl = "";
+        private readonly string SearchUrl = "";
 
         string cookie = string.Empty;
 
@@ -62,9 +45,17 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public FrenchTorrentDb()
+           public FrenchTorrentDb(IIndexerManagerService i, Logger l) :
+            base(name: "FrenchTorrentDb",
+            description: "One the biggest French Torrent Tracker",
+            link: new Uri("http://www.frenchtorrentdb.com/"),
+            rageid: true,
+            manager: i,
+            logger: l)
         {
-            IsConfigured = false;
+            MainUrl = SiteLink + "?section=INDEX";
+            SearchUrl = SiteLink + "?section=TORRENTS&exact=1&name={0}&submit=GO";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -73,12 +64,12 @@ namespace Jackett.Indexers
                 UseCookies = true,
             };
             client = new HttpClient(handler);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(chromeUserAgent);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(BaseUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             return Task.FromResult<ConfigurationData>(config);
         }
 
@@ -86,7 +77,7 @@ namespace Jackett.Indexers
         {
             var config = new ConfigurationDataBasicLoginFrenchTorrentDb();
             config.LoadValuesFromJson(configJson);
-            cookies.SetCookies(new Uri(BaseUrl), "WebsiteID=" + config.Cookie.Value);
+            cookies.SetCookies(SiteLink, "WebsiteID=" + config.Cookie.Value);
             var mainPage = await client.GetAsync(MainUrl);
             string responseContent = await mainPage.Content.ReadAsStringAsync();
 
@@ -109,7 +100,7 @@ namespace Jackett.Indexers
         public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
             cookie = (string)jsonConfig["cookie"];
-            cookies.SetCookies(new Uri(BaseUrl), "WebsiteID=" + cookie);
+            cookies.SetCookies(SiteLink, "WebsiteID=" + cookie);
             IsConfigured = true;
         }
 
@@ -142,9 +133,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Text().Trim();
                     release.Description = release.Title;
-                    release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href").TrimStart('/'));
+                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href").TrimStart('/'));
                     release.Guid = release.Comments;
-                    release.Link = new Uri(BaseUrl + "/" + qDlLink.Attr("href").TrimStart('/'));
+                    release.Link = new Uri(SiteLink + "/" + qDlLink.Attr("href").TrimStart('/'));
                     release.PublishDate = DateTime.Now;
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("li.torrents_seeders").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find("li.torrents_leechers").Text()) + release.Seeders;

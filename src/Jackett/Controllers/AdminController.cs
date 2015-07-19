@@ -34,7 +34,7 @@ namespace Jackett.Controllers
         }
 
         [Route("get_config_form")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IHttpActionResult> GetConfigForm()
         {
             var jsonReply = new JObject();
@@ -99,7 +99,7 @@ namespace Jackett.Controllers
                 foreach (var indexer in indexerService.GetAllIndexers())
                 {
                     var item = new JObject();
-                    item["id"] = indexer.GetType().Name.ToLowerInvariant();
+                    item["id"] = indexer.GetType().Name;
                     item["name"] = indexer.DisplayName;
                     item["description"] = indexer.DisplayDescription;
                     item["configured"] = indexer.IsConfigured;
@@ -126,6 +126,7 @@ namespace Jackett.Controllers
                 var postData = await ReadPostDataJson();
                 string indexerString = (string)postData["indexer"];
                 indexerService.TestIndexer(indexerString);
+                jsonReply["name"] = indexerService.GetIndexer(indexerString).DisplayName;
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)

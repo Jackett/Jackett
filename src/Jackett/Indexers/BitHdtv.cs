@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -15,41 +16,28 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class BitHdtv : IIndexer
+    public class BitHdtv : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "BIT-HDTV"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Home of high definition invites"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        static string BaseUrl = "https://www.bit-hdtv.com";
-        static string LoginUrl = BaseUrl + "/takelogin.php";
-        static string SearchUrl = BaseUrl + "/torrents.php?cat=0&search=";
-        static string DownloadUrl = BaseUrl + "/download.php?/{0}/dl.torrent";
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger loggger;
 
-        public BitHdtv(Logger l)
+        public BitHdtv(IIndexerManagerService i, Logger l) :
+            base(name: "BIT-HDTV",
+            description: "Home of high definition invites",
+            link: new Uri("https://www.bit-hdtv.com"),
+            rageid: true,
+            manager: i,
+            logger: l)
         {
-            loggger = l;
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/takelogin.php";
+            SearchUrl = SiteLink + "/torrents.php?cat=0&search=";
+            DownloadUrl = SiteLink + "/download.php?/{0}/dl.torrent";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -94,21 +82,14 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public bool IsConfigured { get; private set; }
-
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, loggger);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -136,7 +117,7 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
                     release.Comments = release.Guid;
                     release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
 
@@ -157,8 +138,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
@@ -168,7 +148,5 @@ namespace Jackett.Indexers
         {
             return client.GetByteArrayAsync(link);
         }
-
-
     }
 }

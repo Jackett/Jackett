@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Services;
 using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -14,44 +15,26 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class BeyondHD : IIndexer
+    public class BeyondHD : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "BeyondHD"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Without BeyondHD, your HDTV is just a TV"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        const string BaseUrl = "https://beyondhd.me";
-        const string SearchUrl = BaseUrl + "/browse.php?c40=1&c44=1&c48=1&c89=1&c46=1&c45=1&searchin=title&incldead=0&search={0}";
-        const string DownloadUrl = BaseUrl + "/download.php?torrent={0}";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
-        Logger logger;
 
-        public BeyondHD(Logger l)
+        public BeyondHD(IIndexerManagerService i, Logger l) :
+            base(name: "BeyondHD",
+            description: "Without BeyondHD, your HDTV is just a TV",
+            link: new Uri("https://beyondhd.me"),
+            rageid: true,
+            manager:i,
+            logger:l)
         {
-            logger = l;
-            IsConfigured = false;
+            SearchUrl = SiteLink + "/browse.php?c40=1&c44=1&c48=1&c89=1&c46=1&c45=1&searchin=title&incldead=0&search={0}";
+            DownloadUrl = SiteLink + "/download.php?torrent={0}";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -75,9 +58,9 @@ namespace Jackett.Indexers
 
             var jsonCookie = new JObject();
             jsonCookie["cookie_header"] = config.CookieHeader;
-            cookies.FillFromJson(new Uri(BaseUrl), jsonCookie, logger);
+            cookies.FillFromJson(SiteLink, jsonCookie, logger);
 
-            var responseContent = await client.GetStringAsync(BaseUrl);
+            var responseContent = await client.GetStringAsync(SiteLink);
 
             if (!responseContent.Contains("logout.php"))
             {
@@ -88,18 +71,14 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
-
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -124,14 +103,14 @@ namespace Jackett.Indexers
                     var qRow = row.Cq();
 
                     var qLink = row.ChildElements.ElementAt(2).FirstChild.Cq();
-                    release.Link = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     var torrentID = qLink.Attr("href").Split('=').Last();
 
                     var descCol = row.ChildElements.ElementAt(3);
                     var qCommentLink = descCol.FirstChild.Cq();
                     release.Title = qCommentLink.Text();
                     release.Description = release.Title;
-                    release.Comments = new Uri(BaseUrl + "/" + qCommentLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href"));
                     release.Guid = release.Comments;
 
                     var dateStr = descCol.ChildElements.Last().Cq().Text().Split('|').Last().ToLowerInvariant().Replace("ago.", "").Trim();
@@ -167,11 +146,9 @@ namespace Jackett.Indexers
 
                 }
             }
-
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
