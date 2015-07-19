@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Jackett.Indexers
 {
-    class SceneAccess : IndexerInterface
+    class SceneAccess : IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {
@@ -48,9 +51,11 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
         string cookieHeader;
+        private Logger logger;
 
-        public SceneAccess()
+        public SceneAccess(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -84,7 +89,7 @@ namespace Jackett.Indexers
             string responseContent;
             var configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -118,7 +123,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -134,7 +139,7 @@ namespace Jackett.Indexers
             var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
 
             string results;
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 results = await client.GetStringAsync(searchUrl);
             }
@@ -189,7 +194,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

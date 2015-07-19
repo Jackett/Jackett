@@ -9,10 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Net.Http.Headers;
+using Jackett.Models;
+using Jackett.Utils;
+using NLog;
 
 namespace Jackett.Indexers
 {
-    public class AlphaRatio : IndexerInterface
+    public class AlphaRatio : IIndexer
     {
         public string DisplayName
         {
@@ -32,8 +35,8 @@ namespace Jackett.Indexers
         public bool RequiresRageIDLookupDisabled { get { return true; } }
 
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public bool IsConfigured { get; private set; }
 
@@ -54,9 +57,11 @@ namespace Jackett.Indexers
         HttpClient client;
 
         string cookieHeader;
+        private Logger logger;
 
-        public AlphaRatio()
+        public AlphaRatio(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -100,7 +105,7 @@ namespace Jackett.Indexers
 
             configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.SendAsync(message);
@@ -144,7 +149,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -167,7 +172,7 @@ namespace Jackett.Indexers
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
             string results;
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 var request = CreateHttpRequest(new Uri(episodeSearchUrl));
                 request.Method = HttpMethod.Get;
@@ -234,7 +239,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

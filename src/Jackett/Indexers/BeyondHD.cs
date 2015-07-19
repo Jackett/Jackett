@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +14,11 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class BeyondHD : IndexerInterface
+    public class BeyondHD : IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {
@@ -43,9 +46,11 @@ namespace Jackett.Indexers
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
+        Logger logger;
 
-        public BeyondHD()
+        public BeyondHD(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -70,7 +75,7 @@ namespace Jackett.Indexers
 
             var jsonCookie = new JObject();
             jsonCookie["cookie_header"] = config.CookieHeader;
-            cookies.FillFromJson(new Uri(BaseUrl), jsonCookie);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonCookie, logger);
 
             var responseContent = await client.GetStringAsync(BaseUrl);
 
@@ -94,7 +99,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
         }
 

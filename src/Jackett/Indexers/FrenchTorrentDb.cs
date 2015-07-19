@@ -1,4 +1,6 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,11 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    class FrenchTorrentDb : IndexerInterface
+    class FrenchTorrentDb : IIndexer
     {
-        public event Action<IndexerInterface, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         class ConfigurationDataBasicLoginFrenchTorrentDb : ConfigurationData
         {
