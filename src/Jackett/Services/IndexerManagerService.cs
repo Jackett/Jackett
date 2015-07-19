@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Jackett.Models;
+using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Jackett.Services
         void DeleteIndexer(string name);
         IndexerInterface GetIndexer(string name);
         IEnumerable<IndexerInterface> GetAllIndexers();
+        void SaveConfig(IndexerInterface indexer, JToken obj);
     }
 
     public class IndexerManagerService : IIndexerManagerService
@@ -63,6 +65,14 @@ namespace Jackett.Services
         private string GetIndexerConfigFilePath(IndexerInterface indexer)
         {
             return Path.Combine(configService.GetIndexerConfigDir(), indexer.GetType().Name.ToLower() + ".json");
+        }
+
+        public void SaveConfig(IndexerInterface indexer, JToken obj)
+        {
+            var configFilePath = GetIndexerConfigFilePath(indexer);
+            if (!Directory.Exists(configService.GetIndexerConfigDir()))
+                Directory.CreateDirectory(configService.GetIndexerConfigDir());
+            File.WriteAllText(configFilePath, obj.ToString());
         }
     }
 }
