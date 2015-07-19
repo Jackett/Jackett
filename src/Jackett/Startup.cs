@@ -33,10 +33,16 @@ namespace Jackett
             );
 
             config.Routes.MapHttpRoute(
-                name: "api",
+                name: "apiDefault",
                 routeTemplate: "api/{indexerName}",
                 defaults: new { controller = "API", action = "Call" }
             );
+
+            config.Routes.MapHttpRoute(
+               name: "api",
+               routeTemplate: "api/{indexerName}/api",
+               defaults: new { controller = "API", action = "Call" }
+           );
 
             config.Routes.MapHttpRoute(
                 name: "download",
