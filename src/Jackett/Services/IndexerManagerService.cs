@@ -85,7 +85,7 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             var configPath = GetIndexerConfigFilePath(indexer);
             File.Delete(configPath);
-            indexers[name] = container.ResolveNamed<IIndexer>(name);
+            indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
         }
 
         private string GetIndexerConfigFilePath(IIndexer indexer)
