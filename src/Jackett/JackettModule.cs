@@ -9,7 +9,7 @@ using Jackett.Indexers;
 
 namespace Jackett
 {
-    public class JackettModule: Module
+    public class JackettModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -19,11 +19,11 @@ namespace Jackett
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
 
             // Register indexers
-           foreach(var indexer in thisAssembly.GetTypes()
-                .Where(p => typeof(IIndexer).IsAssignableFrom(p) && !p.IsInterface)
-                .ToArray())
+            foreach (var indexer in thisAssembly.GetTypes()
+                 .Where(p => typeof(IIndexer).IsAssignableFrom(p) && !p.IsInterface)
+                 .ToArray())
             {
-                builder.RegisterType(indexer).Named<IIndexer>(indexer.Name);
+                builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }
         }
     }
