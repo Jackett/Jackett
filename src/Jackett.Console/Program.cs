@@ -39,7 +39,7 @@ namespace JackettConsole
                 }
 
                 Engine.Server.Start();
-                Engine.Logger.Info("Running in headless mode.");
+                Engine.Logger.Info("Running in console mode.");
                 Engine.RunTime.Spin();
                 Engine.Logger.Info("Server thread exit");
             }

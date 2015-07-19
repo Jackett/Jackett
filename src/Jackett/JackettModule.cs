@@ -23,6 +23,7 @@ namespace Jackett
                 .Where(p => typeof(IIndexer).IsAssignableFrom(p) && !p.IsInterface)
                 .ToArray())
             {
+
                 builder.RegisterType(indexer).Named<IIndexer>(indexer.Name);
             }
         }
