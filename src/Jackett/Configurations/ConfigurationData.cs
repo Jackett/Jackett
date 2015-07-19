@@ -57,7 +57,7 @@ namespace Jackett
                         jObject["value"] = ((BoolItem)item).Value;
                         break;
                     case ItemType.DisplayImage:
-                        string dataUri = DataUrl.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
+                        string dataUri = DataUrlUtil.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
                         jObject["value"] = dataUri;
                         break;
                 }

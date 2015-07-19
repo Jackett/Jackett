@@ -41,11 +41,11 @@ namespace Jackett
         {
             var apiKeyFile = Path.Combine(Program.AppConfigDirectory, "api_key.txt");
             if (File.Exists(apiKeyFile))
-                ApiKey.CurrentKey = File.ReadAllText(apiKeyFile).Trim();
+                ApiKeyUtil.CurrentKey = File.ReadAllText(apiKeyFile).Trim();
             else
             {
-                ApiKey.CurrentKey = ApiKey.Generate();
-                File.WriteAllText(apiKeyFile, ApiKey.CurrentKey);
+                ApiKeyUtil.CurrentKey = ApiKeyUtil.Generate();
+                File.WriteAllText(apiKeyFile, ApiKeyUtil.CurrentKey);
             }
         }
 
@@ -91,12 +91,12 @@ namespace Jackett
                 }
                 else
                 {
-                    Program.LoggerInstance.FatalException("Failed to start HTTP server. " + ex.Message, ex);
+                    Program.LoggerInstance.Fatal(ex, "Failed to start HTTP server. " + ex.Message);
                 }
             }
             catch (Exception ex)
             {
-                Program.LoggerInstance.ErrorException("Error starting HTTP server: " + ex.Message, ex);
+                Program.LoggerInstance.Error(ex, "Error starting HTTP server: " + ex.Message);
                 return;
             }
 
@@ -114,13 +114,13 @@ namespace Jackett
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    Program.LoggerInstance.ErrorException("Critical error, HTTP listener was destroyed", ex);
+                    Program.LoggerInstance.Error(ex, "Critical error, HTTP listener was destroyed");
                     Process.GetCurrentProcess().Kill();
                 }
                 catch (Exception ex)
                 {
                     error = ex;
-                    Program.LoggerInstance.ErrorException("Error processing HTTP request", ex);
+                    Program.LoggerInstance.Error(ex, "Error processing HTTP request");
                 }
 
                 if (error != null)
@@ -157,7 +157,7 @@ namespace Jackett
             catch (Exception ex)
             {
                 exception = ex;
-                Program.LoggerInstance.ErrorException(ex.Message + ex.ToString(), ex);
+                Program.LoggerInstance.Error(ex, ex.Message + ex.ToString());
             }
 
             if (exception != null)
@@ -202,10 +202,10 @@ namespace Jackett
 
             var torznabQuery = TorznabQuery.FromHttpQuery(query);
 
-            if (torznabQuery.RageIDLookupEnabled && indexer.RequiresRageIDLookupDisabled)
+            /*if (torznabQuery.RageIDLookupEnabled && indexer.RequiresRageIDLookupDisabled)
             {
                 throw new ArgumentException("This indexer requires RageID lookup disabled");
-            }
+            }*/
 
             var releases = await indexer.PerformQuery(torznabQuery);
 

@@ -8,9 +8,8 @@ using System.Web;
 
 namespace Jackett
 {
-    public class DataUrl
+    public static class DataUrlUtil
     {
-
         public static string ReadFileToDataUrl(string file)
         {
             string mime = MimeMapping.GetMimeMapping(file);
