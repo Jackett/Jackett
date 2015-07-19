@@ -11,12 +11,6 @@ namespace Jackett
 {
     public interface IndexerInterface
     {
-
-        // Invoked when the indexer configuration has been applied and verified so the cookie needs to be saved
-        event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-
-        event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
         string DisplayName { get; }
         string DisplayDescription { get; }
         Uri SiteLink { get; }

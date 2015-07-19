@@ -133,6 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Models\ApiKey.cs" />
     <Compile Include="Utils\BrowserUtil.cs" />
     <Compile Include="Models\CachedResult.cs" />
