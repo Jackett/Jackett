@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Indexers;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,9 +18,9 @@ using System.Web.UI.WebControls;
 
 namespace Jackett
 {
-    public class Freshon : IndexerInterface
+    public class Freshon : IIndexer
     {
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         static string BaseUrl = "https://freshon.tv";
         static string LoginUrl = BaseUrl + "/login.php";
@@ -39,10 +43,12 @@ namespace Jackett
 
         public bool RequiresRageIDLookupDisabled { get { return true; } }
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
+        private Logger logger;
 
-        public Freshon()
+        public Freshon(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -94,8 +100,8 @@ namespace Jackett
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
 
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
+               // if (OnSaveConfigurationRequested != null)
+               //     OnSaveConfigurationRequested(this, configSaveData);
 
                 IsConfigured = true;
             }
@@ -103,7 +109,7 @@ namespace Jackett
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
         }
 
