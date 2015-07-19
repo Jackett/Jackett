@@ -20,7 +20,7 @@ namespace Jackett.Controllers
         private IIndexerManagerService indexerService;
         private IServerService serverService;
 
-        public AdminController(IConfigurationService config,  IIndexerManagerService i, IServerService ss)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss)
         {
             this.config = config;
             indexerService = i;
@@ -67,7 +67,7 @@ namespace Jackett.Controllers
                 var indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 jsonReply["name"] = indexer.DisplayName;
                 await indexer.ApplyConfiguration(postData["config"]);
-                indexerService.TestIndexer((string)postData["indexer"]);
+                await indexerService.TestIndexer((string)postData["indexer"]);
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)
@@ -99,7 +99,7 @@ namespace Jackett.Controllers
                 foreach (var indexer in indexerService.GetAllIndexers())
                 {
                     var item = new JObject();
-                    item["id"] = indexer.GetType().Name;
+                    item["id"] = indexer.ID;
                     item["name"] = indexer.DisplayName;
                     item["description"] = indexer.DisplayDescription;
                     item["configured"] = indexer.IsConfigured;
@@ -125,7 +125,7 @@ namespace Jackett.Controllers
             {
                 var postData = await ReadPostDataJson();
                 string indexerString = (string)postData["indexer"];
-                indexerService.TestIndexer(indexerString);
+                await indexerService.TestIndexer(indexerString);
                 jsonReply["name"] = indexerService.GetIndexer(indexerString).DisplayName;
                 jsonReply["result"] = "success";
             }
@@ -187,9 +187,9 @@ namespace Jackett.Controllers
             try
             {
                 var postData = await ReadPostDataJson();
-              //  int port = await WebServer.ApplyPortConfiguration(postData);
+                //  int port = await WebServer.ApplyPortConfiguration(postData);
                 jsonReply["result"] = "success";
-               // jsonReply["port"] = port;
+                // jsonReply["port"] = port;
             }
             catch (Exception ex)
             {

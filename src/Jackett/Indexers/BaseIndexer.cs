@@ -7,6 +7,7 @@ using Jackett.Models;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Jackett.Services;
+using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
@@ -14,6 +15,7 @@ namespace Jackett.Indexers
     {
         public string DisplayDescription { get; private set; }
         public string DisplayName { get; private set; }
+        public string ID { get { return GetIndexerID(GetType()); } }
         public bool IsConfigured { get; protected set; }
         public Uri SiteLink { get; private set; }
         public bool RequiresRageIDLookupDisabled { get; private set; }
@@ -24,6 +26,10 @@ namespace Jackett.Indexers
         protected static List<CachedResult> cache = new List<CachedResult>();
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
 
+        public static string GetIndexerID(Type type)
+        {
+            return StringUtil.StripNonAlphaNumeric(type.Name.ToLowerInvariant());
+        }
 
         public BaseIndexer(string name, string description, bool rageid, Uri link, IIndexerManagerService manager, Logger logger)
         {
