@@ -13,6 +13,8 @@ using Microsoft.Owin.StaticFiles;
 using Microsoft.Owin.FileSystems;
 using Autofac;
 using Jackett.Services;
+using System.Web.Http.Tracing;
+using Jackett.Utils;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -23,6 +25,17 @@ namespace Jackett
         {
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
+            // Setup tracing if enabled
+            if (Engine.TracingEnabled)
+            {
+                config.EnableSystemDiagnosticsTracing();
+                config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer());
+            }
+            // Add request logging if enabled
+            if (Engine.LogRequests)
+            {
+                config.MessageHandlers.Add(new WebAPIRequestLogger());
+            }
             config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
             config.MapHttpAttributeRoutes();
 

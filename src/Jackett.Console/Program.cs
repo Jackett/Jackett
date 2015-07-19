@@ -18,23 +18,29 @@ namespace JackettConsole
         {
             try
             {
-                if (args.Length > 0)
+                foreach (var arg in args)
                 {
-                    switch (args[0].ToLowerInvariant())
+                    switch (arg.ToLowerInvariant())
                     {
-                        case "/i": // install
+                        case "/i": // Install
                             Engine.ServiceConfig.Install();
                             return;
-                        case "/r": // reserve port/url & install
+                        case "/r": // Reserve port/url & install
                             Engine.Server.ReserveUrls(doInstall: true);
                             return;
-                        case "/c": // change port
+                        case "/c": // Change port
                             Engine.Server.ReserveUrls(doInstall: false);
                             return;
-                        case "/u": // uninstall
+                        case "/u": // Uninstall
                             Engine.Server.ReserveUrls(doInstall: false);
                             Engine.ServiceConfig.Uninstall();
                             return;
+                        case "/l":  // Logging
+                            Engine.LogRequests = true;
+                            break;
+                        case "/t":  // Tracing
+                            Engine.TracingEnabled = true;
+                            break;
                     }
                 }
 

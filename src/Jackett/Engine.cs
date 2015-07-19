@@ -31,6 +31,18 @@ namespace Jackett
            Logger.Info("Starting Jackett " + ConfigService.GetVersion());
        }
 
+       public static bool TracingEnabled
+       {
+           get;
+           set;
+       }
+
+       public static bool LogRequests
+       {
+           get;
+           set;
+       }
+
        public static IContainer GetContainer()
        {
            return container;
