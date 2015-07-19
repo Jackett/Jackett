@@ -31,7 +31,7 @@ namespace Jackett.Indexers
             base(name: "RARBG",
       description: "RARBG",
       link: new Uri("https://rarbg.com"),
-      rageid: true,
+      rageid: false,
       manager: i,
       logger: l)
         {
