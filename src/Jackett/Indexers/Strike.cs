@@ -128,7 +128,5 @@ namespace Jackett.Indexers
         {
             throw new NotImplementedException();
         }
-
-
     }
 }
