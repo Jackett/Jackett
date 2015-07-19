@@ -121,6 +121,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Http.Tracing">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Tracing.5.2.3\lib\net45\System.Web.Http.Tracing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -199,6 +202,8 @@
     <Compile Include="CurlHelper.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Utils\StringUtil.cs" />
+    <Compile Include="Utils\WebAPIRequestLogger.cs" />
+    <Compile Include="Utils\WebAPIToNLogTracer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
