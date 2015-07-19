@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett
+namespace Jackett.Models
 {
     public class ApiKey
     {

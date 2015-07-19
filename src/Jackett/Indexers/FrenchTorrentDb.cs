@@ -1,4 +1,6 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

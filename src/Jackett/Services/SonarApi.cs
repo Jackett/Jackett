@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,7 +14,14 @@ using System.Threading.Tasks;
 
 namespace Jackett
 {
-    public class SonarrApi
+    public interface ISonarrApi
+    {
+        Task TestConnection();
+        SonarrApi.ConfigurationSonarr GetConfiguration();
+        Task ApplyConfiguration(JToken configJson);
+    }
+
+    public class SonarrApi: ISonarrApi
     {
         public class ConfigurationSonarr : ConfigurationData
         {
@@ -36,7 +46,7 @@ namespace Jackett
 
         }
 
-        static string SonarrConfigFile = Path.Combine(Program.AppConfigDirectory, "sonarr_api.json");
+      
 
         string Host;
         int Port;
@@ -48,7 +58,9 @@ namespace Jackett
 
         ConcurrentDictionary<int, string[]> IdNameMappings;
 
-        public SonarrApi()
+        private IConfigurationService configService;
+
+        public SonarrApi(IConfigurationService c)
         {
             LoadSettings();
 
@@ -62,6 +74,8 @@ namespace Jackett
             client = new HttpClient(handler);
 
             IdNameMappings = new ConcurrentDictionary<int, string[]>();
+
+            configService = c;
         }
 
         async Task ReloadNameMappings(string host, int port, string apiKey)
@@ -101,9 +115,9 @@ namespace Jackett
         {
             try
             {
-                if (File.Exists(SonarrConfigFile))
+                if (File.Exists(configService.GetSonarrConfigFile()))
                 {
-                    var json = JObject.Parse(File.ReadAllText(SonarrConfigFile));
+                    var json = JObject.Parse(File.ReadAllText(configService.GetSonarrConfigFile()));
                     Host = (string)json["host"];
                     Port = (int)json["port"];
                     ApiKey = (string)json["api_key"];
@@ -118,7 +132,7 @@ namespace Jackett
             json["host"] = Host;
             json["port"] = Port;
             json["api_key"] = ApiKey;
-            File.WriteAllText(SonarrConfigFile, json.ToString());
+            File.WriteAllText(configService.GetSonarrConfigFile(), json.ToString());
         }
 
         public ConfigurationSonarr GetConfiguration()

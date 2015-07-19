@@ -1,5 +1,7 @@
 ﻿using CsQuery;
+using Jackett.Models;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,12 +50,14 @@ namespace Jackett.Indexers
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
+        Logger logger;
 
         string cookieHeader;
         int retries = 3;
 
-        public MoreThanTV()
+        public MoreThanTV(Logger l)
         {
+            logger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -89,7 +93,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (WebServer.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -125,7 +129,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -152,7 +156,7 @@ namespace Jackett.Indexers
                 var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
                 string results;
-                if (Program.IsWindows)
+                if (WebServer.IsWindows)
                 {
                     results = await client.GetStringAsync(episodeSearchUrl, retries);
                 }
@@ -220,7 +224,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (WebServer.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

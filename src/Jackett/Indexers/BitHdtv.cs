@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -39,9 +42,11 @@ namespace Jackett.Indexers
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
+        Logger loggger;
 
-        public BitHdtv()
+        public BitHdtv(Logger l)
         {
+            loggger = l;
             IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -101,7 +106,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, loggger);
             IsConfigured = true;
         }
 

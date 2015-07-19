@@ -12,11 +12,11 @@ using System.Web;
 
 namespace Jackett
 {
-    public class WebApi
+    /*public class WebApi
     {
         static string WebContentFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WebContent");
         static string[] StaticFiles = Directory.EnumerateFiles(WebContentFolder, "*", SearchOption.AllDirectories).ToArray();
-        public Server server;
+        public WebServer server;
 
         public enum WebApiMethod
         {
@@ -140,8 +140,8 @@ namespace Jackett
                 case WebApiMethod.GetJackettConfig:
                     handlerTask = HandleJackettConfig;
                     break;
-                case WebApiMethod.JackettRestart:
-                    handlerTask = HandleJackettRestart;
+              //  case WebApiMethod.JackettRestart:
+               //     handlerTask = HandleJackettRestart;
                     break;
                 default:
                     handlerTask = HandleInvalidApiMethod;
@@ -341,7 +341,7 @@ namespace Jackett
             JObject jsonReply = new JObject();
             try
             {
-                jsonReply["config"] = server.ReadServerSettingsFile();
+                jsonReply["config"] = WebServer.ReadServerSettingsFile();
                 jsonReply["result"] = "success";
             }
             catch (CustomException ex)
@@ -364,7 +364,7 @@ namespace Jackett
             try
             {
                 var postData = await ReadPostDataJson(context.Request.InputStream);
-                int port = await server.ApplyPortConfiguration(postData);
+                int port = await WebServer.ApplyPortConfiguration(postData);
                 jsonReply["result"] = "success";
                 jsonReply["port"] = port;
             }
@@ -378,10 +378,8 @@ namespace Jackett
 
         async Task<JToken> HandleJackettRestart(HttpListenerContext context)
         {
-            Program.RestartServer();
-            return null;
+          //  WebServer.RestartServer();
+            * null;
         }
-
-
-    }
+    }*/
 }
