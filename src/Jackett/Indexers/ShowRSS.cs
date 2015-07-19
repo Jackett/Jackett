@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Models;
+using Jackett.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,11 +14,11 @@ using System.Xml;
 
 namespace Jackett.Indexers
 {
-    public class ShowRSS : IndexerInterface
+    public class ShowRSS : IIndexer
     {
-        public event Action<IndexerInterface, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {

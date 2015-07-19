@@ -1,5 +1,8 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,7 +18,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class AnimeBytes : IndexerInterface
+    public class AnimeBytes : IIndexer
     {
         class ConfigurationDataBasicLoginAnimeBytes : ConfigurationDataBasicLogin
         {
@@ -38,8 +41,8 @@ namespace Jackett.Indexers
         private static List<CachedResult> cache = new List<CachedResult>();
         private static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
         static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
@@ -71,9 +74,11 @@ namespace Jackett.Indexers
         CookieContainer cookieContainer;
         HttpClientHandler handler;
         HttpClient client;
+        Logger logger;
 
-        public AnimeBytes()
+        public AnimeBytes(Logger l)
         {
+            logger = l; 
             IsConfigured = false;
             cookieContainer = new CookieContainer();
             handler = new HttpClientHandler
@@ -164,7 +169,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
             AllowRaws = jsonConfig["raws"].Value<bool>();
         }
