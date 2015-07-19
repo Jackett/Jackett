@@ -2,6 +2,7 @@
 
 reloadIndexers();
 loadJackettSettings();
+loadSonarrInfo();
 
 function loadJackettSettings() {
     getJackettConfig(function (data) {
@@ -42,6 +43,86 @@ function getJackettConfig(callback) {
         doNotify("Error loading Jackett settings, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
 }
+
+function loadSonarrInfo() {
+    getSonarrConfig(function (data) {
+        $("#sonarr-host").val("");
+        var host, port, apiKey;
+        for (var i = 0; i < data.config.length; i++) {
+            if (data.config[i].id == "host")
+                host = data.config[i].value;
+            if (data.config[i].id == "port")
+                port = data.config[i].value;
+            if (data.config[i].id == "apikey")
+                apiKey = data.config[i].value;
+        }
+        if (!apiKey)
+            $("#sonarr-warning").show();
+        else {
+            $("#sonarr-warning").hide();
+            $("#sonarr-host").val(host + ":" + port);
+        }
+    });
+}
+
+function getSonarrConfig(callback) {
+    var jqxhr = $.get("get_sonarr_config", function (data) {
+        callback(data);
+    }).fail(function () {
+        doNotify("Error loading Sonarr API configuration, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+}
+
+$("#sonarr-test").click(function () {
+    var jqxhr = $.get("get_indexers", function (data) {
+        if (data.result == "error")
+            doNotify("Test failed for Sonarr API\n" + data.error, "danger", "glyphicon glyphicon-alert");
+        else
+            doNotify("Test successful for Sonarr API", "success", "glyphicon glyphicon-ok");
+    }).fail(function () {
+        doNotify("Error testing Sonarr, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+});
+
+$("#sonarr-settings").click(function () {
+    getSonarrConfig(function (data) {
+        var config = data.config;
+
+        var configForm = newConfigModal("Sonarr API", config);
+
+        var $goButton = configForm.find(".setup-indexer-go");
+        $goButton.click(function () {
+            var data = getConfigModalJson(configForm);
+
+            var originalBtnText = $goButton.html();
+            $goButton.prop('disabled', true);
+            $goButton.html($('#templates > .spinner')[0].outerHTML);
+
+            var jqxhr = $.post("apply_sonarr_config", JSON.stringify(data), function (data) {
+                if (data.result == "error") {
+                    if (data.config) {
+                        populateSetupForm(data.indexer, data.name, data.config);
+                    }
+                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+                }
+                else {
+                    configForm.modal("hide");
+                    loadSonarrInfo();
+                    doNotify("Successfully configured Sonarr API", "success", "glyphicon glyphicon-ok");
+                }
+            }).fail(function () {
+                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            }).always(function () {
+                $goButton.html(originalBtnText);
+                $goButton.prop('disabled', false);
+            });
+        });
+
+        configForm.modal("show");
+
+    });
+});
+
 
 function reloadIndexers() {
     $('#indexers').hide();

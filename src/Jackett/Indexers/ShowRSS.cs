@@ -33,8 +33,6 @@ namespace Jackett.Indexers
             get { return new Uri(DefaultUrl); }
         }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         const string DefaultUrl = "http://showrss.info";
         const string searchAllUrl = DefaultUrl + "/feeds/all.rss";
         string BaseUrl;
@@ -119,53 +117,56 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(searchAllUrl);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            string xml = string.Empty;
-            WebClient wc = getWebClient();
-
-            try
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                using (wc)
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var episodeSearchUrl = string.Format(searchAllUrl);
+
+                XmlDocument xmlDoc = new XmlDocument();
+                string xml = string.Empty;
+                WebClient wc = getWebClient();
+
+                try
                 {
-                    xml = wc.DownloadString(episodeSearchUrl);
-                    xmlDoc.LoadXml(xml);
+                    using (wc)
+                    {
+                        xml = wc.DownloadString(episodeSearchUrl);
+                        xmlDoc.LoadXml(xml);
+                    }
+
+                    ReleaseInfo release;
+                    string serie_title;
+
+                    foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
+                    {
+                        release = new ReleaseInfo();
+
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+
+                        serie_title = node.SelectSingleNode("title").InnerText;
+                        release.Title = serie_title;
+
+                        release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
+                        release.Category = node.SelectSingleNode("title").InnerText;
+                        var test = node.SelectSingleNode("enclosure");
+                        release.Guid = new Uri(test.Attributes["url"].Value);
+                        release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
+
+                        release.Description = node.SelectSingleNode("description").InnerText;
+                        release.InfoHash = node.SelectSingleNode("description").InnerText;
+                        release.Size = 0;
+                        release.Seeders = 1;
+                        release.Peers = 1;
+                        release.MagnetUri = new Uri(node.SelectSingleNode("link").InnerText);
+                        releases.Add(release);
+                    }
                 }
-
-                ReleaseInfo release;
-                string serie_title;
-
-                foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
+                catch (Exception ex)
                 {
-                    release = new ReleaseInfo();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-
-                    serie_title = node.SelectSingleNode("title").InnerText;
-                    release.Title = serie_title;
-
-                    release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-                    release.Category = node.SelectSingleNode("title").InnerText;
-                    var test = node.SelectSingleNode("enclosure");
-                    release.Guid = new Uri(test.Attributes["url"].Value);
-                    release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
-
-                    release.Description = node.SelectSingleNode("description").InnerText;
-                    release.InfoHash = node.SelectSingleNode("description").InnerText;
-                    release.Size = 0;
-                    release.Seeders = 1;
-                    release.Peers = 1;
-                    release.MagnetUri = new Uri(node.SelectSingleNode("link").InnerText);
-                    releases.Add(release);
+                    OnResultParsingError(this, xml, ex);
+                    throw ex;
                 }
-            }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, xml, ex);
-                throw ex;
             }
 
             return releases.ToArray();

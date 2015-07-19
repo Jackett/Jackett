@@ -71,8 +71,6 @@ namespace Jackett
 
         public Uri SiteLink { get { return new Uri(BaseUrl); } }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         public bool IsConfigured { get; private set; }
 
         public async Task<ConfigurationData> GetConfigurationForSetup()
@@ -132,58 +130,63 @@ namespace Jackett
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
-            try
+
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                CQ dom = results;
 
-                var table = dom["tbody > tr > .latest"].Parent().Parent();
-
-                foreach (var row in table.Children().Skip(1))
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
+                var results = await client.GetStringAsync(episodeSearchUrl);
+                try
                 {
-                    var release = new ReleaseInfo();
+                    CQ dom = results;
 
-                    CQ qDetailsCol = row.ChildElements.ElementAt(1).Cq();
-                    CQ qLink = qDetailsCol.Children("a").First();
+                    var table = dom["tbody > tr > .latest"].Parent().Parent();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
-                    release.Guid = release.Comments;
-                    release.Title = qLink.Attr("title");
-                    release.Description = release.Title;
+                    foreach (var row in table.Children().Skip(1))
+                    {
+                        var release = new ReleaseInfo();
 
-                    //"Tuesday, June 11th 2013 at 03:52:53 AM" to...
-                    //"Tuesday June 11 2013 03:52:53 AM"
-                    var timestamp = qDetailsCol.Children("font").Text().Trim() + " ";
-                    var timeParts = new List<string>(timestamp.Replace(" at", "").Replace(",", "").Split(' '));
-                    timeParts[2] = Regex.Replace(timeParts[2], "[^0-9.]", "");
-                    var formattedTimeString = string.Join(" ", timeParts.ToArray()).Trim();
-                    var date = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-                    release.PublishDate = DateTime.SpecifyKind(date, DateTimeKind.Utc).ToLocalTime();
+                        CQ qDetailsCol = row.ChildElements.ElementAt(1).Cq();
+                        CQ qLink = qDetailsCol.Children("a").First();
 
-                    release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+                        release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                        release.Guid = release.Comments;
+                        release.Title = qLink.Attr("title");
+                        release.Description = release.Title;
 
-                    var sizeCol = row.ChildElements.ElementAt(6);
-                    var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue);
-                    var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                        //"Tuesday, June 11th 2013 at 03:52:53 AM" to...
+                        //"Tuesday June 11 2013 03:52:53 AM"
+                        var timestamp = qDetailsCol.Children("font").Text().Trim() + " ";
+                        var timeParts = new List<string>(timestamp.Replace(" at", "").Replace(",", "").Split(' '));
+                        timeParts[2] = Regex.Replace(timeParts[2], "[^0-9.]", "");
+                        var formattedTimeString = string.Join(" ", timeParts.ToArray()).Trim();
+                        var date = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                        release.PublishDate = DateTime.SpecifyKind(date, DateTimeKind.Utc).ToLocalTime();
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
+                        release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
-                    //if (!release.Title.ToLower().Contains(title.ToLower()))
-                    //    continue;
+                        var sizeCol = row.ChildElements.ElementAt(6);
+                        var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue);
+                        var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
+                        release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
 
-                    releases.Add(release);
+                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
+                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
+
+                        //if (!release.Title.ToLower().Contains(title.ToLower()))
+                        //    continue;
+
+                        releases.Add(release);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
+                }
             }
 
             return releases.ToArray();

@@ -33,8 +33,6 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         const string BaseUrl = "http://www.torrentleech.org";
         const string LoginUrl = BaseUrl + "/user/account/login/";
         const string SearchUrl = BaseUrl + "/torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
@@ -111,54 +109,60 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
-            try
+
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                CQ dom = results;
-
-                CQ qRows = dom["#torrenttable > tbody > tr"];
-
-                foreach (var row in qRows)
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+                var results = await client.GetStringAsync(episodeSearchUrl);
+                try
                 {
-                    var release = new ReleaseInfo();
+                    CQ dom = results;
 
-                    var qRow = row.Cq();
+                    CQ qRows = dom["#torrenttable > tbody > tr"];
 
-                    var debug = qRow.Html();
+                    foreach (var row in qRows)
+                    {
+                        var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                        var qRow = row.Cq();
 
-                    CQ qLink = qRow.Find(".title > a").First();
-                    release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
-                    release.Comments = release.Guid;
-                    release.Title = qLink.Text();
-                    release.Description = release.Title;
+                        var debug = qRow.Html();
 
-                    release.Link = new Uri(BaseUrl + qRow.Find(".quickdownload > a").Attr("href"));
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
 
-                    var dateString = qRow.Find(".name").First()[0].ChildNodes[4].NodeValue.Replace(" on", "").Trim();
-                    //"2015-04-25 23:38:12"
-                    //"yyyy-MMM-dd hh:mm:ss"
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        CQ qLink = qRow.Find(".title > a").First();
+                        release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
+                        release.Comments = release.Guid;
+                        release.Title = qLink.Text();
+                        release.Description = release.Title;
 
-                    var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], ParseUtil.CoerceFloat(sizeStringParts[0]));
+                        release.Link = new Uri(BaseUrl + qRow.Find(".quickdownload > a").Attr("href"));
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
+                        var dateString = qRow.Find(".name").First()[0].ChildNodes[4].NodeValue.Replace(" on", "").Trim();
+                        //"2015-04-25 23:38:12"
+                        //"yyyy-MMM-dd hh:mm:ss"
+                        release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-                    releases.Add(release);
+                        var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
+                        release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], ParseUtil.CoerceFloat(sizeStringParts[0]));
+
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
+                        release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
+
+                        releases.Add(release);
+                    }
                 }
+
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
+                }
+
             }
 
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
-            }
 
             return releases.ToArray();
         }

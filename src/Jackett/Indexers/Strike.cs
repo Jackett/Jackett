@@ -32,8 +32,6 @@ namespace Jackett.Indexers
             get { return new Uri(DefaultUrl); }
         }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         public bool IsConfigured { get; private set; }
 
         const string DefaultUrl = "https://getstrike.net";
@@ -100,47 +98,47 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchTerm = query.SanitizedSearchTerm ?? "2015";
-
-            var searchString = searchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
-            var results = await client.GetStringAsync(episodeSearchUrl);
-            try
+            foreach (var title in query.ShowTitles ?? new string[] { "2015" })
             {
-                var jResults = JObject.Parse(results);
-                foreach (JObject result in (JArray)jResults["torrents"])
+                var searchString = title + " " + query.GetEpisodeSearchString();
+                var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+                var results = await client.GetStringAsync(episodeSearchUrl);
+                try
                 {
-                    var release = new ReleaseInfo();
+                    var jResults = JObject.Parse(results);
+                    foreach (JObject result in (JArray)jResults["torrents"])
+                    {
+                        var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
 
-                    release.Title = (string)result["torrent_title"];
-                    release.Description = release.Title;
-                    release.Seeders = (int)result["seeds"];
-                    release.Peers = (int)result["leeches"] + release.Seeders;
-                    release.Size = (long)result["size"];
+                        release.Title = (string)result["torrent_title"];
+                        release.Description = release.Title;
+                        release.Seeders = (int)result["seeds"];
+                        release.Peers = (int)result["leeches"] + release.Seeders;
+                        release.Size = (long)result["size"];
 
-                    // "Apr  2, 2015", "Apr 12, 2015" (note the spacing)
-                    var dateString = string.Join(" ", ((string)result["upload_date"]).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
-                    release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
+                        // "Apr  2, 2015", "Apr 12, 2015" (note the spacing)
+                        var dateString = string.Join(" ", ((string)result["upload_date"]).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                        release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
 
-                    release.Guid = new Uri((string)result["page"]);
-                    release.Comments = release.Guid;
+                        release.Guid = new Uri((string)result["page"]);
+                        release.Comments = release.Guid;
 
-                    release.InfoHash = (string)result["torrent_hash"];
-                    release.MagnetUri = new Uri((string)result["magnet_uri"]);
-                    release.Link = new Uri(string.Format("{0}{1}", baseUrl, string.Format(DownloadUrl, release.InfoHash)));
+                        release.InfoHash = (string)result["torrent_hash"];
+                        release.MagnetUri = new Uri((string)result["magnet_uri"]);
+                        release.Link = new Uri(string.Format("{0}{1}", baseUrl, string.Format(DownloadUrl, release.InfoHash)));
 
-                    releases.Add(release);
+                        releases.Add(release);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
                 }
             }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
-            }
-
 
             return releases.ToArray();
         }

@@ -17,12 +17,10 @@ namespace Jackett
         public int Limit { get; private set; }
         public int Offset { get; private set; }
         public int RageID { get; private set; }
-        public bool RageIDLookupEnabled { get; private set; }
-
         public int Season { get; private set; }
         public string Episode { get; private set; }
-        public string SearchTerm { get; private set; }
-        public string SanitizedSearchTerm { get; private set; }
+        public string[] ShowTitles { get; set; }
+        public string SearchTerm { get; set; }
 
         public string GetEpisodeSearchString()
         {
@@ -41,39 +39,13 @@ namespace Jackett
             return episodeString;
         }
 
-        static string SanitizeSearchTerm(string title)
-        {
-            char[] arr = title.ToCharArray();
-
-            arr = Array.FindAll<char>(arr, c => (char.IsLetterOrDigit(c)
-                                              || char.IsWhiteSpace(c)
-                                              || c == '-'
-                                              || c == '.'
-                                              ));
-            title = new string(arr);
-            return title;
-        }
-
         public static TorznabQuery FromHttpQuery(NameValueCollection query)
         {
 
             //{t=tvsearch&cat=5030%2c5040&extended=1&apikey=test&offset=0&limit=100&rid=24493&season=5&ep=1}
             var q = new TorznabQuery();
             q.QueryType = query["t"];
-
-            if (query["q"] == null)
-            {
-                q.SearchTerm = string.Empty;
-                q.SanitizedSearchTerm = string.Empty;
-            }
-            else
-            {
-                q.SearchTerm = query["q"];
-                q.SanitizedSearchTerm = SanitizeSearchTerm(q.SearchTerm);
-            }
-
-            q.RageIDLookupEnabled = query["rid_enabled"] != "0";
-
+            q.SearchTerm = query["q"];
             if (query["cat"] != null)
             {
                 q.Categories = query["cat"].Split(',');
@@ -93,17 +65,11 @@ namespace Jackett
                 q.Offset = ParseUtil.CoerceInt(query["offset"]);
             }
 
-            int rageId;
-            if (int.TryParse(query["rid"], out rageId))
-            {
-                q.RageID = rageId;
-            }
-
-            int season;
-            if (int.TryParse(query["season"], out season))
-            {
-                q.Season = season;
-            }
+            int temp;
+            if (int.TryParse(query["rid"], out temp))
+                q.RageID = temp;
+            if (int.TryParse(query["season"], out temp))
+                q.Season = temp;
 
             q.Episode = query["ep"];
 

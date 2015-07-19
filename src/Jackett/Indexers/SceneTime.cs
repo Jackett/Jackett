@@ -33,8 +33,6 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
         public bool IsConfigured { get; private set; }
 
         const string BaseUrl = "https://www.scenetime.com";
@@ -120,52 +118,55 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-
-            var searchContent = GetSearchFormData(searchString);
-            var response = await client.PostAsync(SearchUrl, searchContent);
-            var results = await response.Content.ReadAsStringAsync();
-
-            try
+            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
             {
-                CQ dom = results;
-                var rows = dom["tr.browse"];
-                foreach (var row in rows)
+                var searchString = title + " " + query.GetEpisodeSearchString();
+
+                var searchContent = GetSearchFormData(searchString);
+                var response = await client.PostAsync(SearchUrl, searchContent);
+                var results = await response.Content.ReadAsStringAsync();
+
+                try
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    CQ dom = results;
+                    var rows = dom["tr.browse"];
+                    foreach (var row in rows)
+                    {
+                        var release = new ReleaseInfo();
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
 
-                    var descCol = row.ChildElements.ElementAt(1);
-                    var qDescCol = descCol.Cq();
-                    var qLink = qDescCol.Find("a");
-                    release.Title = qLink.Text();
-                    release.Description = release.Title;
-                    release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
-                    release.Guid = release.Comments;
-                    var torrentId = qLink.Attr("href").Split('=')[1];
-                    release.Link = new Uri(string.Format(DownloadUrl, torrentId));
+                        var descCol = row.ChildElements.ElementAt(1);
+                        var qDescCol = descCol.Cq();
+                        var qLink = qDescCol.Find("a");
+                        release.Title = qLink.Text();
+                        release.Description = release.Title;
+                        release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                        release.Guid = release.Comments;
+                        var torrentId = qLink.Attr("href").Split('=')[1];
+                        release.Link = new Uri(string.Format(DownloadUrl, torrentId));
 
-                    var dateStr = descCol.ChildNodes.Last().NodeValue.Trim();
-                    var euDate = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToLocalTime();
-                    release.PublishDate = localDate;
+                        var dateStr = descCol.ChildNodes.Last().NodeValue.Trim();
+                        var euDate = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToLocalTime();
+                        release.PublishDate = localDate;
 
-                    var sizeNodes = row.ChildElements.ElementAt(3).ChildNodes;
-                    var sizeVal = sizeNodes.First().NodeValue;
-                    var sizeUnit = sizeNodes.Last().NodeValue;
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
+                        var sizeNodes = row.ChildElements.ElementAt(3).ChildNodes;
+                        var sizeVal = sizeNodes.First().NodeValue;
+                        var sizeUnit = sizeNodes.Last().NodeValue;
+                        release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(4).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(5).Cq().Text().Trim()) + release.Seeders;
+                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(4).Cq().Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(5).Cq().Text().Trim()) + release.Seeders;
 
-                    releases.Add(release);
+                        releases.Add(release);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                catch (Exception ex)
+                {
+                    OnResultParsingError(this, results, ex);
+                    throw ex;
+                }
             }
             return releases.ToArray();
         }
