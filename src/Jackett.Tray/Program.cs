@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Jackett.Tray
+namespace JackettTray
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace Jackett.Tray
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-           // Application.Run(new Form1());
+            Application.Run(new Main());
         }
     }
 }
