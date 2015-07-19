@@ -25,13 +25,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-          public ShowRSS(IIndexerManagerService i, Logger l) :
-            base(name: "ShowRSS",
-          description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-          link: new Uri("http://showrss.info"),
-          rageid: true,
-          manager: i,
-          logger: l)
+        public ShowRSS(IIndexerManagerService i, Logger l)
+            : base(name: "ShowRSS",
+                description: "showRSS is a service that allows you to keep track of your favorite TV shows",
+                link: new Uri("http://showrss.info"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             searchAllUrl = SiteLink + "/feeds/all.rss";
 

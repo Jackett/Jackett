@@ -29,13 +29,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public Freshon(IIndexerManagerService i, Logger l) :
-            base(name: "FreshOnTV",
-        description: "Our goal is to provide the latest stuff in the TV show domain",
-        link: new Uri("https://www.bit-hdtv.com"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public Freshon(IIndexerManagerService i, Logger l)
+            : base(name: "FreshOnTV",
+                description: "Our goal is to provide the latest stuff in the TV show domain",
+                link: new Uri("https://www.bit-hdtv.com"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
 
             LoginUrl = SiteLink + "/login.php";

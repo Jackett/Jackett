@@ -16,7 +16,7 @@ using Jackett.Services;
 
 namespace Jackett.Indexers
 {
-    public class AlphaRatio : BaseIndexer,IIndexer
+    public class AlphaRatio : BaseIndexer, IIndexer
     {
         private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
@@ -29,13 +29,13 @@ namespace Jackett.Indexers
 
         string cookieHeader;
 
-        public AlphaRatio(IIndexerManagerService i, Logger l):
-            base(name: "AlphaRatio",
-            description: "Legendary",
-            link: new Uri("https://alpharatio.cc"),
-            rageid: true,
-            manager:i,
-            logger:l)
+        public AlphaRatio(IIndexerManagerService i, Logger l)
+            : base(name: "AlphaRatio",
+                description: "Legendary",
+                link: new Uri("https://alpharatio.cc"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/login.php";
             SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";

@@ -27,13 +27,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public BB(IIndexerManagerService i, Logger l) :
-            base(name: "bB",
-              description: "bB",
-              link: new Uri("http://www.reddit.com/r/baconbits"),
-              rageid: true,
-              manager: i,
-              logger: l)
+        public BB(IIndexerManagerService i, Logger l)
+            : base(name: "bB",
+                description: "bB",
+                link: new Uri("http://www.reddit.com/r/baconbits"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
 
             BaseUrl = StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3Jn");

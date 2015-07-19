@@ -18,7 +18,7 @@ namespace Jackett.Indexers
 {
     public class MoreThanTV : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl ="";
+        private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
         private readonly string DownloadUrl = "";
         private readonly string GuidUrl = "";
@@ -30,13 +30,13 @@ namespace Jackett.Indexers
         string cookieHeader;
         int retries = 3;
 
-        public MoreThanTV(IIndexerManagerService i, Logger l) :
-            base(name: "MoreThanTV",
-      description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
-      link: new Uri("https://www.morethan.tv"),
-      rageid: true,
-      manager: i,
-      logger: l)
+        public MoreThanTV(IIndexerManagerService i, Logger l)
+            : base(name: "MoreThanTV",
+                description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
+                link: new Uri("https://www.morethan.tv"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/login.php";
             SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";

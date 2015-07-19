@@ -18,20 +18,20 @@ namespace Jackett.Indexers
 {
     public class TorrentLeech : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl ="";
+        private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-          public TorrentLeech(IIndexerManagerService i, Logger l) :
-            base(name: "TorrentLeech",
-        description: "This is what happens when you seed",
-        link: new Uri("http://www.torrentleech.org"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public TorrentLeech(IIndexerManagerService i, Logger l)
+            : base(name: "TorrentLeech",
+                description: "This is what happens when you seed",
+                link: new Uri("http://www.torrentleech.org"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/user/account/login/";
             SearchUrl = SiteLink + "/torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
