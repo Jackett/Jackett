@@ -25,13 +25,13 @@ namespace Jackett.Indexers
         private HttpClientHandler handler;
         private HttpClient client;
 
-        public Strike(IIndexerManagerService i, Logger l) :
-            base(name: "Strike",
-         description: "Torrent search engine",
-         link: new Uri("https://getstrike.net"),
-         rageid: true,
-         manager: i,
-         logger: l)
+        public Strike(IIndexerManagerService i, Logger l)
+            : base(name: "Strike",
+                description: "Torrent search engine",
+                link: new Uri("https://getstrike.net"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             cookies = new CookieContainer();
             handler = new HttpClientHandler

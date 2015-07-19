@@ -26,13 +26,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-         public SceneTime(IIndexerManagerService i, Logger l) :
-            base(name: "SceneTime",
-      description: "Always on time",
-      link: new Uri("https://www.scenetime.com"),
-      rageid: true,
-      manager: i,
-      logger: l)
+        public SceneTime(IIndexerManagerService i, Logger l)
+            : base(name: "SceneTime",
+                description: "Always on time",
+                link: new Uri("https://www.scenetime.com"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/takelogin.php";
             SearchUrl = SiteLink + "/browse_API.php";

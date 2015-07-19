@@ -45,13 +45,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-           public FrenchTorrentDb(IIndexerManagerService i, Logger l) :
-            base(name: "FrenchTorrentDb",
-            description: "One the biggest French Torrent Tracker",
-            link: new Uri("http://www.frenchtorrentdb.com/"),
-            rageid: true,
-            manager: i,
-            logger: l)
+        public FrenchTorrentDb(IIndexerManagerService i, Logger l)
+            : base(name: "FrenchTorrentDb",
+                description: "One the biggest French Torrent Tracker",
+                link: new Uri("http://www.frenchtorrentdb.com/"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             MainUrl = SiteLink + "?section=INDEX";
             SearchUrl = SiteLink + "?section=TORRENTS&exact=1&name={0}&submit=GO";

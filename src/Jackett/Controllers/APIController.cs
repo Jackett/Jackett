@@ -17,7 +17,7 @@ namespace Jackett.Controllers
         private IIndexerManagerService indexerService;
         private Logger logger;
 
-        public APIController(IIndexerManagerService i,  Logger l)
+        public APIController(IIndexerManagerService i, Logger l)
         {
             indexerService = i;
             logger = l;
@@ -29,9 +29,12 @@ namespace Jackett.Controllers
             var indexer = indexerService.GetIndexer(indexerName);
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
 
-            if (torznabQuery.RageIDLookupEnabled && indexer.RequiresRageIDLookupDisabled)
+            if (torznabQuery.QueryType == "caps")
             {
-                throw new ArgumentException("This indexer requires RageID lookup disabled");
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/rss+xml")
+                };
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);

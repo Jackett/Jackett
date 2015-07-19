@@ -26,13 +26,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public BitHdtv(IIndexerManagerService i, Logger l) :
-            base(name: "BIT-HDTV",
-            description: "Home of high definition invites",
-            link: new Uri("https://www.bit-hdtv.com"),
-            rageid: true,
-            manager: i,
-            logger: l)
+        public BitHdtv(IIndexerManagerService i, Logger l)
+            : base(name: "BIT-HDTV",
+                description: "Home of high definition invites",
+                link: new Uri("https://www.bit-hdtv.com"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/takelogin.php";
             SearchUrl = SiteLink + "/torrents.php?cat=0&search=";

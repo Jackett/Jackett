@@ -18,7 +18,6 @@ namespace Jackett.Models
         public int Limit { get; private set; }
         public int Offset { get; private set; }
         public int RageID { get; private set; }
-        public bool RageIDLookupEnabled { get; private set; }
 
         public int Season { get; private set; }
         public string Episode { get; private set; }
@@ -72,8 +71,6 @@ namespace Jackett.Models
                 q.SearchTerm = query["q"];
                 q.SanitizedSearchTerm = SanitizeSearchTerm(q.SearchTerm);
             }
-
-            q.RageIDLookupEnabled = query["rid_enabled"] != "0";
 
             if (query["cat"] != null)
             {

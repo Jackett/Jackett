@@ -22,20 +22,20 @@ namespace Jackett.Indexers
         private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
         private readonly string SearchFormData = "c53=1&c49=1&c2=1&c52=1&c41=1&c50=1&c30=1&jxt=4&jxw=b";
-        private readonly string CommentsUrl ="";
+        private readonly string CommentsUrl = "";
         private readonly string DownloadUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-         public SpeedCD(IIndexerManagerService i, Logger l) :
-            base(name: "Speed.cd",
-          description: "Your home now!",
-          link: new Uri("http://speed.cd"),
-          rageid: true,
-          manager: i,
-          logger: l)
+        public SpeedCD(IIndexerManagerService i, Logger l)
+            : base(name: "Speed.cd",
+                description: "Your home now!",
+                link: new Uri("http://speed.cd"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/take_login.php";
             SearchUrl = SiteLink + "/V3/API/API.php";
@@ -138,7 +138,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-               OnParseError(results, ex);
+                OnParseError(results, ex);
             }
             return releases.ToArray();
         }

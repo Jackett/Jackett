@@ -12,112 +12,119 @@ using System.Threading.Tasks;
 
 namespace Jackett
 {
-   public class Engine
+    public class Engine
     {
-       private static IContainer container = null;
+        private static IContainer container = null;
 
-       static Engine()
-       {
-           var builder = new ContainerBuilder();
-           builder.RegisterModule<JackettModule>();
-           container = builder.Build();
+        static Engine()
+        {
 
-           // Register the container in itself to allow for late resolves
-           var secondaryBuilder = new ContainerBuilder();
-           secondaryBuilder.RegisterInstance<IContainer>(container).SingleInstance();
-           SetupLogging(secondaryBuilder);
-           secondaryBuilder.Update(container);
+#if DEBUG
+            TracingEnabled = true;
+#endif
 
-           Logger.Info("Starting Jackett " + ConfigService.GetVersion());
-       }
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<JackettModule>();
+            container = builder.Build();
 
-       public static bool TracingEnabled
-       {
-           get;
-           set;
-       }
+            // Register the container in itself to allow for late resolves
+            var secondaryBuilder = new ContainerBuilder();
+            secondaryBuilder.RegisterInstance<IContainer>(container).SingleInstance();
+            SetupLogging(secondaryBuilder);
+            secondaryBuilder.Update(container);
 
-       public static bool LogRequests
-       {
-           get;
-           set;
-       }
+            Logger.Info("Starting Jackett " + ConfigService.GetVersion());
+        }
 
-       public static IContainer GetContainer()
-       {
-           return container;
-       }
+        public static bool TracingEnabled
+        {
+            get;
+            set;
+        }
 
-       public static bool IsWindows {
-           get {
-               return Environment.OSVersion.Platform == PlatformID.Win32NT;
-           } 
-       }
+        public static bool LogRequests
+        {
+            get;
+            set;
+        }
 
-       public static IConfigurationService ConfigService
-       {
-           get
-           {
-               return container.Resolve<IConfigurationService>();
-           }
-       }
+        public static IContainer GetContainer()
+        {
+            return container;
+        }
 
-       public static IServiceConfigService ServiceConfig
-       {
-           get
-           {
-               return container.Resolve<IServiceConfigService>();
-           }
-       }
+        public static bool IsWindows
+        {
+            get
+            {
+                return Environment.OSVersion.Platform == PlatformID.Win32NT;
+            }
+        }
 
-       public static IServerService Server
-       {
-           get
-           {
-               return container.Resolve<IServerService>();
-           }
-       }
+        public static IConfigurationService ConfigService
+        {
+            get
+            {
+                return container.Resolve<IConfigurationService>();
+            }
+        }
 
-       public static IRunTimeService RunTime
-       {
-           get
-           {
-               return container.Resolve<IRunTimeService>();
-           }
-       }
+        public static IServiceConfigService ServiceConfig
+        {
+            get
+            {
+                return container.Resolve<IServiceConfigService>();
+            }
+        }
 
-       public static Logger Logger
-       {
-           get
-           {
-               return container.Resolve<Logger>();
-           }
-       }
+        public static IServerService Server
+        {
+            get
+            {
+                return container.Resolve<IServerService>();
+            }
+        }
 
-       private static void SetupLogging(ContainerBuilder builder)
-       {
-           var logConfig = new LoggingConfiguration();
+        public static IRunTimeService RunTime
+        {
+            get
+            {
+                return container.Resolve<IRunTimeService>();
+            }
+        }
 
-           var logFile = new FileTarget();
-           logConfig.AddTarget("file", logFile);
-           logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-           logFile.FileName = Path.Combine(ConfigurationService.GetAppDataFolderStatic(), "log.txt");
-           logFile.ArchiveFileName = "log.{#####}.txt";
-           logFile.ArchiveAboveSize = 500000;
-           logFile.MaxArchiveFiles = 1;
-           logFile.KeepFileOpen = false;
-           logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
-           var logFileRule = new LoggingRule("*", LogLevel.Debug, logFile);
-           logConfig.LoggingRules.Add(logFileRule);
+        public static Logger Logger
+        {
+            get
+            {
+                return container.Resolve<Logger>();
+            }
+        }
 
-           var logConsole = new ConsoleTarget();
-           logConfig.AddTarget("console", logConsole);
-           logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-           var logConsoleRule = new LoggingRule("*", LogLevel.Debug, logConsole);
-           logConfig.LoggingRules.Add(logConsoleRule);
+        private static void SetupLogging(ContainerBuilder builder)
+        {
+            var logConfig = new LoggingConfiguration();
 
-           LogManager.Configuration = logConfig;
-           builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
-       }
+            var logFile = new FileTarget();
+            logConfig.AddTarget("file", logFile);
+            logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
+            logFile.FileName = Path.Combine(ConfigurationService.GetAppDataFolderStatic(), "log.txt");
+            logFile.ArchiveFileName = "log.{#####}.txt";
+            logFile.ArchiveAboveSize = 500000;
+            logFile.MaxArchiveFiles = 1;
+            logFile.KeepFileOpen = false;
+            logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
+            var logFileRule = new LoggingRule("*", LogLevel.Debug, logFile);
+            logConfig.LoggingRules.Add(logFileRule);
+
+            var logConsole = new ConsoleTarget();
+            logConfig.AddTarget("console", logConsole);
+            logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
+            var logConsoleRule = new LoggingRule("*", LogLevel.Debug, logConsole);
+            logConfig.LoggingRules.Add(logConsoleRule);
+
+            LogManager.Configuration = logConfig;
+            builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
+        }
     }
 }

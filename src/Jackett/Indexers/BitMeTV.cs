@@ -52,13 +52,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public BitMeTV(IIndexerManagerService i, Logger l) :
-            base(name: "BitMeTV",
-            description: "TV Episode specialty tracker",
-            link: new Uri("http://www.bitmetv.org"),
-            rageid: true,
-            manager: i,
-            logger: l)
+        public BitMeTV(IIndexerManagerService i, Logger l)
+            : base(name: "BitMeTV",
+                description: "TV Episode specialty tracker",
+                link: new Uri("http://www.bitmetv.org"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/login.php";
             LoginPost = SiteLink + "/takelogin.php";

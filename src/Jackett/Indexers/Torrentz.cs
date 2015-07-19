@@ -24,13 +24,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-          public Torrentz(IIndexerManagerService i, Logger l) :
-            base(name: "Torrentz",
-        description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
-        link: new Uri("https://torrentz.eu"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public Torrentz(IIndexerManagerService i, Logger l)
+            : base(name: "Torrentz",
+                description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
+                link: new Uri("https://torrentz.eu"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
 
             SearchUrl = SiteLink + "/feed_verifiedP?f={0}";

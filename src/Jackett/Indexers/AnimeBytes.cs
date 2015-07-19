@@ -39,7 +39,7 @@ namespace Jackett.Indexers
             }
         }
 
-       
+
         private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
 
@@ -48,13 +48,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public AnimeBytes(IIndexerManagerService i, Logger l) :
-            base(name: "AnimeBytes",
-             description: "The web's best Chinese cartoons",
-             link: new Uri("https://animebytes.tv"),
-             rageid: true,
-             manager: i,
-             logger: l)
+        public AnimeBytes(IIndexerManagerService i, Logger l)
+            : base(name: "AnimeBytes",
+                description: "The web's best Chinese cartoons",
+                link: new Uri("https://animebytes.tv"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
 
             LoginUrl = SiteLink + "/user/login";
@@ -169,7 +169,7 @@ namespace Jackett.Indexers
             return sb.ToString();
         }
 
-      
+
 
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
