@@ -139,6 +139,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
+    <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\SerializeService.cs" />
@@ -239,6 +240,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\showrss.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\speedcd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\t411.png">
