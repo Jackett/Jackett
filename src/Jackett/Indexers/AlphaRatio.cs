@@ -86,7 +86,7 @@ namespace Jackett.Indexers
 
             configSaveData = new JObject();
 
-            if (WebServer.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.SendAsync(message);
@@ -155,7 +155,7 @@ namespace Jackett.Indexers
                 var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
                 string results;
-                if (WebServer.IsWindows)
+                if (Engine.IsWindows)
                 {
                     var request = CreateHttpRequest(new Uri(episodeSearchUrl));
                     request.Method = HttpMethod.Get;
@@ -223,7 +223,7 @@ namespace Jackett.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            if (WebServer.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

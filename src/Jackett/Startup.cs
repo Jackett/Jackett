@@ -23,30 +23,35 @@ namespace Jackett
         {
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
-
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(Server.GetContainer());
-
-           
-
-            //  Enable attribute based routing
-            //  http://www.asp.net/web-api/overview/web-api-routing-and-actions/attribute-routing-in-web-api-2
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-              name: "Content",
-              routeTemplate: "{controller}/{action}",
-              defaults: new { controller =  "Admin"}
+                name: "Admin",
+                routeTemplate: "admin/{action}",
+                defaults: new { controller = "Admin" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "api",
+                routeTemplate: "api/{indexerName}",
+                defaults: new { controller = "API", action = "Call" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "download",
+                routeTemplate: "api/{indexerName}/download/{path}/download.torrent",
+                defaults: new { controller = "Download", action = "Download" }
             );
 
             appBuilder.UseFileServer(new FileServerOptions
             {
                 RequestPath = new PathString(string.Empty),
-                FileSystem = new PhysicalFileSystem(Server.GetContainer().Resolve<IConfigurationService>().GetContentFolder()),
+                FileSystem = new PhysicalFileSystem(Engine.ConfigService.GetContentFolder()),
                 EnableDirectoryBrowsing = true,
             });
 
             appBuilder.UseWebApi(config);
-
         }
     }
 }

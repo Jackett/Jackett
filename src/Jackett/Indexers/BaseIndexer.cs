@@ -9,12 +9,12 @@ using NLog;
 
 namespace Jackett.Indexers
 {
-    public abstract class BaseIndexer: IndexerInterface
+    public abstract class BaseIndexer: IIndexer
     {
-        public string DisplayDescription { get; }
-        public string DisplayName { get; }
+        public string DisplayDescription { get; private set; }
+        public string DisplayName { get; private set; }
         public bool IsConfigured { get; protected set; }
-        public Uri SiteLink { get; }
+        public Uri SiteLink { get; private set; }
 
         public abstract Task ApplyConfiguration(JToken configJson);
         public abstract Task<byte[]> Download(Uri link);

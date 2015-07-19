@@ -10,7 +10,6 @@ namespace Jackett
 {
     public class DataUrl
     {
-
         public static string ReadFileToDataUrl(string file)
         {
             string mime = MimeMapping.GetMimeMapping(file);

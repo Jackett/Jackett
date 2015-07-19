@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Jackett.Indexers
 {
-    public class Rarbg : IndexerInterface
+    public class Rarbg : IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public string DisplayName
         {

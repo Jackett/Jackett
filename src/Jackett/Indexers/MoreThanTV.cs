@@ -14,7 +14,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class MoreThanTV : IndexerInterface
+    public class MoreThanTV : IIndexer
     {
         public string DisplayName
         {
@@ -32,8 +32,8 @@ namespace Jackett.Indexers
         }
 
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        public event Action<IIndexer, JToken> OnSaveConfigurationRequested;
+        public event Action<IIndexer, string, Exception> OnResultParsingError;
 
         public bool IsConfigured { get; private set; }
 
@@ -93,7 +93,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
 
-            if (WebServer.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -156,7 +156,7 @@ namespace Jackett.Indexers
                 var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
                 string results;
-                if (WebServer.IsWindows)
+                if (Engine.IsWindows)
                 {
                     results = await client.GetStringAsync(episodeSearchUrl, retries);
                 }
@@ -224,7 +224,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (WebServer.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

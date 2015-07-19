@@ -16,62 +16,34 @@ namespace JackettConsole
     {
         static void Main(string[] args)
         {
-
-
-            Server.Start();
-            Console.ReadKey();
-
-
-          /*  var serverTask = Task.Run(async () =>
-            {
-                ServerInstance = new Server();
-                await ServerInstance.Start();
-            });
-
             try
             {
-                if (Program.IsWindows)
+                if (args.Length > 0)
                 {
-#if !__MonoCS__
-                    Application.Run(new Main());
-#endif
+                    switch (args[0].ToLowerInvariant())
+                    {
+                        case "/i":
+                            Engine.ServiceConfig.Install();
+                            return;
+                        case "/r":
+                            Engine.Server.ReserveUrls();
+                            return;
+                        case "/u":
+                            Engine.Server.ReserveUrls(false);
+                            Engine.ServiceConfig.Uninstall();
+                            return;
+                    }
                 }
+
+                Engine.Server.Start();
+                Engine.Logger.Info("Running in headless mode.");
+                Engine.RunTime.Spin();
+                Engine.Logger.Info("Server thread exit");
             }
-            catch (Exception)
+            catch(Exception e)
             {
-
-            }*/
-
-            Console.WriteLine("Running in headless mode.");
-
-
-
-          //  Task.WaitAll(serverTask);
-            Console.WriteLine("Server thread exit");
-        }
-
-       /* public static void RestartServer()
-        {
-
-            ServerInstance.Stop();
-            ServerInstance = null;
-            var serverTask = Task.Run(async () =>
-            {
-                ServerInstance = new Server();
-                await ServerInstance.Start();
-            });
-            Task.WaitAll(serverTask);
-        }*/
-
-        
-
-       
-
-        static public void RestartAsAdmin()
-        {
-           // var startInfo = new ProcessStartInfo(Application.ExecutablePath.ToString()) { Verb = "runas" };
-           // Process.Start(startInfo);
-            Environment.Exit(0);
+                 Engine.Logger.Error(e, "Top level exception");
+            }
         }
     }
 }

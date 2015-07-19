@@ -19,6 +19,7 @@ namespace Jackett
         Task TestConnection();
         SonarrApi.ConfigurationSonarr GetConfiguration();
         Task ApplyConfiguration(JToken configJson);
+        Task<string[]> GetShowTitle(int rid);
     }
 
     public class SonarrApi: ISonarrApi
@@ -62,6 +63,8 @@ namespace Jackett
 
         public SonarrApi(IConfigurationService c)
         {
+            configService = c;
+
             LoadSettings();
 
             cookies = new CookieContainer();
@@ -74,8 +77,6 @@ namespace Jackett
             client = new HttpClient(handler);
 
             IdNameMappings = new ConcurrentDictionary<int, string[]>();
-
-            configService = c;
         }
 
         async Task ReloadNameMappings(string host, int port, string apiKey)
