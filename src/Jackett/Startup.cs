@@ -15,6 +15,8 @@ using Autofac;
 using Jackett.Services;
 using System.Web.Http.Tracing;
 using Jackett.Utils;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.AspNet.Identity;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -25,6 +27,9 @@ namespace Jackett
         {
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
+
+            appBuilder.Use<WebApiRootRedirectMiddleware>();   
+
             // Setup tracing if enabled
             if (Engine.TracingEnabled)
             {
@@ -63,11 +68,18 @@ namespace Jackett
                 defaults: new { controller = "Download", action = "Download" }
             );
 
+            appBuilder.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                LoginPath = new PathString("/Admin/Login")
+            });
+
             appBuilder.UseFileServer(new FileServerOptions
             {
                 RequestPath = new PathString(string.Empty),
                 FileSystem = new PhysicalFileSystem(Engine.ConfigService.GetContentFolder()),
-                EnableDirectoryBrowsing = true,
+                EnableDirectoryBrowsing = false,
+                
             });
 
             appBuilder.UseWebApi(config);

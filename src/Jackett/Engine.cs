@@ -94,6 +94,15 @@ namespace Jackett
            }
        }
 
+        public static ISecuityService SecurityService
+        {
+            get
+            {
+                return container.Resolve<ISecuityService>();
+            }
+        }
+        
+
        private static void SetupLogging(ContainerBuilder builder)
        {
            var logConfig = new LoggingConfiguration();

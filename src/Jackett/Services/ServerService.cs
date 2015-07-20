@@ -26,6 +26,7 @@ namespace Jackett.Services
         void Stop();
         void ReserveUrls(bool doInstall = true);
         ServerConfig Config { get; }
+        void SaveConfig();
     }
 
     public class ServerService : IServerService
@@ -92,6 +93,11 @@ namespace Jackett.Services
 
                 configService.SaveConfig<ServerConfig>(config);
             }
+        }
+
+        public void SaveConfig()
+        {
+            configService.SaveConfig<ServerConfig>(config);
         }
 
         public void Start()
