@@ -24,13 +24,13 @@ namespace Jackett.Indexers
         HttpClient client;
         string cookieHeader;
 
-         public SceneAccess(IIndexerManagerService i, Logger l) :
-            base(name: "SceneAccess",
-      description: "Your gateway to the scene",
-      link: new Uri("https://sceneaccess.eu"),
-      rageid: true,
-      manager: i,
-      logger: l)
+        public SceneAccess(IIndexerManagerService i, Logger l)
+            : base(name: "SceneAccess",
+                description: "Your gateway to the scene",
+                link: new Uri("https://sceneaccess.eu"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/login";
             SearchUrl = SiteLink + "/{0}?method=1&c{1}=1&search={2}";

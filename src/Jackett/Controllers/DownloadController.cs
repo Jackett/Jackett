@@ -13,6 +13,7 @@ using System.Web.Http;
 
 namespace Jackett.Controllers
 {
+    [AllowAnonymous]
     public class DownloadController : ApiController
     {
         private Logger logger;

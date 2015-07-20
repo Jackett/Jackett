@@ -26,13 +26,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public ThePirateBay(IIndexerManagerService i, Logger l) :
-            base(name: "The Pirate Bay",
-        description: "The worlds largest bittorrent indexer",
-        link: new Uri("https://thepiratebay.mn"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public ThePirateBay(IIndexerManagerService i, Logger l)
+            : base(name: "The Pirate Bay",
+                description: "The worlds largest bittorrent indexer",
+                link: new Uri("https://thepiratebay.mn"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             BaseUrl = SiteLink.ToString();
             IsConfigured = false;
@@ -165,7 +165,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-              //  OnResultParsingError(this, results, ex);
+                //  OnResultParsingError(this, results, ex);
                 throw ex;
             }
             return releases.ToArray();

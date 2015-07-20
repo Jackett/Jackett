@@ -18,20 +18,20 @@ namespace Jackett.Indexers
 {
     public class TorrentShack : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl ="";
+        private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-          public TorrentShack(IIndexerManagerService i, Logger l) :
-            base(name: "TorrentShack",
-        description: "TorrentShack",
-        link: new Uri("http://torrentshack.me"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public TorrentShack(IIndexerManagerService i, Logger l)
+            : base(name: "TorrentShack",
+                description: "TorrentShack",
+                link: new Uri("http://torrentshack.me"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             LoginUrl = SiteLink + "/login.php";
             SearchUrl = SiteLink + "/torrents.php?searchstr={0}&release_type=both&searchtags=&tags_type=0&order_by=s3&order_way=desc&torrent_preset=all&filter_cat%5B600%5D=1&filter_cat%5B620%5D=1&filter_cat%5B700%5D=1&filter_cat%5B981%5D=1&filter_cat%5B980%5D=1";

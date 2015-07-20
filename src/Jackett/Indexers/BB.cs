@@ -27,13 +27,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public BB(IIndexerManagerService i, Logger l) :
-            base(name: "bB",
-              description: "bB",
-              link: new Uri("http://www.reddit.com/r/baconbits"),
-              rageid: true,
-              manager: i,
-              logger: l)
+        public BB(IIndexerManagerService i, Logger l)
+            : base(name: "bB",
+                description: "bB",
+                link: new Uri("http://www.reddit.com/r/baconbits"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
 
             BaseUrl = StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3Jn");
@@ -68,7 +68,6 @@ namespace Jackett.Indexers
 			};
 
             var content = new FormUrlEncodedContent(pairs);
-
             var response = await client.PostAsync(LoginUrl, content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -87,8 +86,9 @@ namespace Jackett.Indexers
             }
             else
             {
+
                 var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
+                cookies.DumpToJson(BaseUrl, configSaveData);
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -97,7 +97,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
+            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig, logger);
             IsConfigured = true;
         }
 

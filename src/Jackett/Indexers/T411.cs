@@ -32,13 +32,13 @@ namespace Jackett.Indexers
         string token = string.Empty;
         DateTime lastTokenFetch = DateTime.MinValue;
 
-          public T411(IIndexerManagerService i, Logger l) :
-            base(name: "T411",
-          description: "French Torrent Tracker",
-          link: new Uri("http://www.t411.io"),
-          rageid: true,
-          manager: i,
-          logger: l)
+        public T411(IIndexerManagerService i, Logger l)
+            : base(name: "T411",
+                description: "French Torrent Tracker",
+                link: new Uri("http://www.t411.io"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             CommentsUrl = SiteLink + "/torrents/{0}";
             IsConfigured = false;
