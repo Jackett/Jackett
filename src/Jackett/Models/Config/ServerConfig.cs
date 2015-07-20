@@ -25,7 +25,7 @@ namespace Jackett.Models.Config
             {
                 external = AllowExternal;
             }
-            return "http://" + (external.Value ? "*" : "localhost") + ":" + Port + "/";
+            return "http://" + (external.Value ? "*" : "127.0.0.1") + ":" + Port + "/";
         }
 
         public string GenerateApi()
