@@ -16,9 +16,11 @@ namespace Jackett.Indexers
         public string DisplayDescription { get; private set; }
         public string DisplayName { get; private set; }
         public string ID { get { return GetIndexerID(GetType()); } }
+
         public bool IsConfigured { get; protected set; }
         public Uri SiteLink { get; private set; }
-        public bool RequiresRageIDLookupDisabled { get; private set; }
+
+        public TorznabCapabilities TorznabCaps { get; private set; }
 
         protected Logger logger;
         protected IIndexerManagerService indexerService;
@@ -31,14 +33,14 @@ namespace Jackett.Indexers
             return StringUtil.StripNonAlphaNumeric(type.Name.ToLowerInvariant());
         }
 
-        public BaseIndexer(string name, string description, bool rageid, Uri link, IIndexerManagerService manager, Logger logger)
+        public BaseIndexer(string name, string description, Uri link, TorznabCapabilities caps, IIndexerManagerService manager, Logger logger)
         {
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
+            TorznabCaps = caps;
             this.logger = logger;
             indexerService = manager;
-            RequiresRageIDLookupDisabled = rageid;
         }
 
         protected void SaveConfig(JToken config)

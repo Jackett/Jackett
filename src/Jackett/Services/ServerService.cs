@@ -109,22 +109,24 @@ namespace Jackett.Services
 
             // Load indexers
             indexerService.InitIndexers();
-                       
+
             // Start the server
-            logger.Debug("Starting web server at " + config.GetListenAddress());
-            _server = WebApp.Start<Startup>(url: config.GetListenAddress());
+            logger.Debug("Starting web server at " + config.GetListenAddresses()[0]);
+            var startOptions = new StartOptions();
+            config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
+            _server = WebApp.Start<Startup>(startOptions);
             logger.Debug("Web server started");
         }
 
         public void ReserveUrls(bool doInstall = true)
         {
             logger.Debug("Unreserving Urls");
-            RunNetSh(string.Format("http delete urlacl {0}", config.GetListenAddress(false)));
-            RunNetSh(string.Format("http delete urlacl {0}", config.GetListenAddress(true)));
+            config.GetListenAddresses(false).ToList().ForEach(u => RunNetSh(string.Format("http delete urlacl {0}", u)));
+            config.GetListenAddresses(true).ToList().ForEach(u => RunNetSh(string.Format("http delete urlacl {0}", u)));
             if (doInstall)
             {
                 logger.Debug("Reserving Urls");
-                RunNetSh(string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", config.GetListenAddress()));
+                config.GetListenAddresses(true).ToList().ForEach(u => RunNetSh(string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", u)));
                 logger.Debug("Urls reserved");
             }
         }

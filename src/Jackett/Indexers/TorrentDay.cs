@@ -16,7 +16,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class TorrentDay: BaseIndexer, IIndexer
+    public class TorrentDay : BaseIndexer, IIndexer
     {
         private readonly string StartPageUrl = "";
         private readonly string LoginUrl = "";
@@ -26,13 +26,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-         public TorrentDay(IIndexerManagerService i, Logger l) :
-            base(name: "TorrentDay",
-        description: "TorrentDay",
-        link: new Uri("https://torrentday.eu"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public TorrentDay(IIndexerManagerService i, Logger l)
+            : base(name: "TorrentDay",
+                description: "TorrentDay",
+                link: new Uri("https://torrentday.eu"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             StartPageUrl = SiteLink + "/login.php";
             LoginUrl = SiteLink + "/tak3login.php";

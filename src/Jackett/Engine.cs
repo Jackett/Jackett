@@ -18,6 +18,11 @@ namespace Jackett
 
        static Engine()
        {
+
+#if DEBUG
+            TracingEnabled = true;
+#endif
+
            var builder = new ContainerBuilder();
            builder.RegisterModule<JackettModule>();
            container = builder.Build();
@@ -48,8 +53,10 @@ namespace Jackett
            return container;
        }
 
-       public static bool IsWindows {
-           get {
+        public static bool IsWindows
+        {
+            get
+            {
                return Environment.OSVersion.Platform == PlatformID.Win32NT;
            } 
        }

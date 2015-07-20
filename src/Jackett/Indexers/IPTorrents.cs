@@ -23,13 +23,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-         public IPTorrents(IIndexerManagerService i, Logger l) :
-            base(name: "IPTorrents",
-        description: "Always a step ahead.",
-        link: new Uri("https://iptorrents.com"),
-        rageid: true,
-        manager: i,
-        logger: l)
+        public IPTorrents(IIndexerManagerService i, Logger l)
+            : base(name: "IPTorrents",
+                description: "Always a step ahead.",
+                link: new Uri("https://iptorrents.com"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             SearchUrl = SiteLink + "t?q=";
             cookies = new CookieContainer();

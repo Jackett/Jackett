@@ -27,13 +27,13 @@ namespace Jackett.Indexers
         HttpClient client;
 
 
-          public Rarbg(IIndexerManagerService i, Logger l) :
-            base(name: "RARBG",
-      description: "RARBG",
-      link: new Uri("https://rarbg.com"),
-      rageid: false,
-      manager: i,
-      logger: l)
+        public Rarbg(IIndexerManagerService i, Logger l)
+            : base(name: "RARBG",
+                description: "RARBG",
+                link: new Uri("https://rarbg.com"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             cookies = new CookieContainer();
             handler = new HttpClientHandler

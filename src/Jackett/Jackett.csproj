@@ -156,7 +156,9 @@
     <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Indexers\BB.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
+    <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
+    <Compile Include="Models\TorznabCategory.cs" />
     <Compile Include="Services\ProcessService.cs" />
     <Compile Include="Services\SecuityService.cs" />
     <Compile Include="Services\SerializeService.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="CurlHelper.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Utils\StringUtil.cs" />
+    <Compile Include="Utils\TorznabCapsUtil.cs" />
     <Compile Include="Utils\WebApiRootRedirectMiddleware.cs" />
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />

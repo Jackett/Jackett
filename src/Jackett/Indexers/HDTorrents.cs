@@ -26,13 +26,13 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        public HDTorrents(IIndexerManagerService i, Logger l) :
-            base(name: "HD-Torrents",
-        description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-        link: new Uri("http://hdts.ru"),// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
-        rageid: true,
-        manager: i,
-        logger: l)
+        public HDTorrents(IIndexerManagerService i, Logger l)
+            : base(name: "HD-Torrents",
+                description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
+                link: new Uri("http://hdts.ru"),// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
             SearchUrl = SiteLink + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
             LoginUrl = SiteLink + "/login.php";
@@ -199,7 +199,7 @@ namespace Jackett.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError( results, ex);
+                    OnParseError(results, ex);
                 }
             }
 
