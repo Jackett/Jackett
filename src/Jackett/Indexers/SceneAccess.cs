@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,48 +14,27 @@ using System.Threading.Tasks;
 
 namespace Jackett.Indexers
 {
-    class SceneAccess : IndexerInterface
+    class SceneAccess : BaseIndexer, IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "SceneAccess"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Your gateway to the scene"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string BaseUrl = "https://sceneaccess.eu";
-        const string LoginUrl = BaseUrl + "/login";
-        const string SearchUrl = BaseUrl + "/{0}?method=1&c{1}=1&search={2}";
-
-
-        public bool IsConfigured
-        {
-            get;
-            private set;
-        }
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
         string cookieHeader;
 
-        public SceneAccess()
+        public SceneAccess(IIndexerManagerService i, Logger l)
+            : base(name: "SceneAccess",
+                description: "Your gateway to the scene",
+                link: new Uri("https://sceneaccess.eu"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login";
+            SearchUrl = SiteLink + "/{0}?method=1&c{1}=1&search={2}";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -84,7 +67,7 @@ namespace Jackett.Indexers
             string responseContent;
             var configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -109,16 +92,14 @@ namespace Jackett.Indexers
             }
             else
             {
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -134,7 +115,7 @@ namespace Jackett.Indexers
             var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
 
             string results;
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 results = await client.GetStringAsync(searchUrl);
             }
@@ -157,9 +138,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 129600;
                     release.Title = qRow.Find(".ttr_name > a").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".ttr_name > a").Attr("href"));
+                    release.Guid = new Uri(SiteLink + "/" + qRow.Find(".ttr_name > a").Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(BaseUrl + "/" + qRow.Find(".td_dl > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + "/" + qRow.Find(".td_dl > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
                     var sizeParts = sizeStr.Split(' ');
@@ -180,8 +161,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
@@ -189,7 +169,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

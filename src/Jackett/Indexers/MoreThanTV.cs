@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,39 +16,12 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class MoreThanTV : IndexerInterface
+    public class MoreThanTV : BaseIndexer, IIndexer
     {
-        public string DisplayName
-        {
-            get { return "MoreThanTV"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public bool IsConfigured { get; private set; }
-
-        static string BaseUrl = "https://www.morethan.tv";
-
-        static string LoginUrl = BaseUrl + "/login.php";
-
-        static string SearchUrl = BaseUrl + "/ajax.php?action=browse&searchstr=";
-
-        static string DownloadUrl = BaseUrl + "/torrents.php?action=download&id=";
-
-        static string GuidUrl = BaseUrl + "/torrents.php?torrentid=";
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
+        private readonly string GuidUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
@@ -53,9 +30,19 @@ namespace Jackett.Indexers
         string cookieHeader;
         int retries = 3;
 
-        public MoreThanTV()
+        public MoreThanTV(IIndexerManagerService i, Logger l)
+            : base(name: "MoreThanTV",
+                description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
+                link: new Uri("https://www.morethan.tv"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login.php";
+            SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";
+            DownloadUrl = SiteLink + "/torrents.php?action=download&id=";
+            GuidUrl = SiteLink + "/torrents.php?torrentid=";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -90,7 +77,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.PostAsync(LoginUrl, content);
@@ -117,21 +104,19 @@ namespace Jackett.Indexers
             }
             else
             {
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
 
-        static void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
+        private void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
         {
             var id = r["torrentId"];
             release.Size = (long)r["size"];
@@ -150,7 +135,7 @@ namespace Jackett.Indexers
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
             string results;
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 results = await client.GetStringAsync(episodeSearchUrl, retries);
             }
@@ -201,8 +186,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
@@ -210,7 +194,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }
@@ -219,7 +203,6 @@ namespace Jackett.Indexers
                 var response = await CurlHelper.GetAsync(link.ToString(), cookieHeader);
                 return response.Content;
             }
-
         }
     }
 }

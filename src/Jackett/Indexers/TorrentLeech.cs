@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,43 +16,26 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class TorrentLeech : IndexerInterface
+    public class TorrentLeech : BaseIndexer, IIndexer
     {
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-
-        public string DisplayName
-        {
-            get { return "TorrentLeech"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "This is what happens when you seed"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string BaseUrl = "http://www.torrentleech.org";
-        const string LoginUrl = BaseUrl + "/user/account/login/";
-        const string SearchUrl = BaseUrl + "/torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
-
-        public bool IsConfigured { get; private set; }
-
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public TorrentLeech()
+        public TorrentLeech(IIndexerManagerService i, Logger l)
+            : base(name: "TorrentLeech",
+                description: "This is what happens when you seed",
+                link: new Uri("http://www.torrentleech.org"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/user/account/login/";
+            SearchUrl = SiteLink + "/torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -93,17 +80,14 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -132,12 +116,12 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
 
                     CQ qLink = qRow.Find(".title > a").First();
-                    release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
                     release.Comments = release.Guid;
                     release.Title = qLink.Text();
                     release.Description = release.Title;
 
-                    release.Link = new Uri(BaseUrl + qRow.Find(".quickdownload > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href"));
 
                     var dateString = qRow.Find(".name").First()[0].ChildNodes[4].NodeValue.Replace(" on", "").Trim();
                     //"2015-04-25 23:38:12"
@@ -156,8 +140,7 @@ namespace Jackett.Indexers
 
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
