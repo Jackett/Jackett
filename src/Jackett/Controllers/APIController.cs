@@ -4,6 +4,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,15 +13,19 @@ using System.Web.Http;
 
 namespace Jackett.Controllers
 {
+    [AllowAnonymous]
     public class APIController : ApiController
     {
         private IIndexerManagerService indexerService;
         private Logger logger;
+        private IServerService serverService;
 
-        public APIController(IIndexerManagerService i,  Logger l)
+
+        public APIController(IIndexerManagerService i, Logger l, IServerService s)
         {
             indexerService = i;
             logger = l;
+            serverService = s;
         }
 
         [HttpGet]
@@ -29,9 +34,17 @@ namespace Jackett.Controllers
             var indexer = indexerService.GetIndexer(indexerName);
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
 
-            if (torznabQuery.RageIDLookupEnabled && indexer.RequiresRageIDLookupDisabled)
+            if (!string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new ArgumentException("This indexer requires RageID lookup disabled");
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
+            }
+
+            if (torznabQuery.QueryType == "caps")
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/rss+xml")
+                };
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);
