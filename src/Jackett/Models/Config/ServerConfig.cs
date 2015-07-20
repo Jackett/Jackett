@@ -18,14 +18,23 @@ namespace Jackett.Models.Config
         public bool AllowExternal { get; set; }
         public string APIKey { get; set; }
 
-        public string GetListenAddress(bool? external = null)
+        public string[] GetListenAddresses(bool? external = null)
         {
-
             if (external == null)
             {
                 external = AllowExternal;
             }
-            return "http://" + (external.Value ? "*" : "127.0.0.1") + ":" + Port + "/";
+            if (external.Value)
+            {
+                return new string[] { "http://*:" + Port + "/" };
+            }
+            else
+            {
+                return new string[] { 
+                    "http://127.0.0.1:" + Port + "/",
+                    "http://localhost:" + Port + "/",
+                };
+            }
         }
 
         public string GenerateApi()
