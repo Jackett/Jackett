@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,47 +16,25 @@ using System.Xml;
 
 namespace Jackett.Indexers
 {
-    public class ShowRSS : IndexerInterface
+    public class ShowRSS : BaseIndexer, IIndexer
     {
-        public event Action<IndexerInterface, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
-
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public string DisplayName
-        {
-            get { return "ShowRSS"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "showRSS is a service that allows you to keep track of your favorite TV shows"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(DefaultUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string DefaultUrl = "http://showrss.info";
-        const string searchAllUrl = DefaultUrl + "/feeds/all.rss";
+        private readonly string searchAllUrl = "";
         string BaseUrl;
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured
+        public ShowRSS(IIndexerManagerService i, Logger l)
+            : base(name: "ShowRSS",
+                description: "showRSS is a service that allows you to keep track of your favorite TV shows",
+                link: new Uri("http://showrss.info"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            get;
-            private set;
-        }
+            searchAllUrl = SiteLink + "/feeds/all.rss";
 
-        public ShowRSS()
-        {
-            IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -65,13 +47,13 @@ namespace Jackett.Indexers
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             return Task.FromResult<ConfigurationData>(config);
         }
 
         public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             config.LoadValuesFromJson(configJson);
 
             var formattedUrl = config.GetFormattedHostUrl();
@@ -83,10 +65,7 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
-
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
-
+            SaveConfig(configSaveData);
             IsConfigured = true;
         }
 
@@ -110,7 +89,7 @@ namespace Jackett.Indexers
         {
             WebClient wc = new WebClient();
             WebHeaderCollection headers = new WebHeaderCollection();
-            headers.Add("User-Agent", chromeUserAgent);
+            headers.Add("User-Agent", BrowserUtil.ChromeUserAgent);
             wc.Headers = headers;
             return wc;
         }
@@ -164,8 +143,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, xml, ex);
-                throw ex;
+                OnParseError(xml, ex);
             }
 
             return releases.ToArray();

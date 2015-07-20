@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jackett</RootNamespace>
     <AssemblyName>Jackett</AssemblyName>
@@ -48,25 +48,94 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>jacket_large.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Jackett.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.Owin">
+      <HintPath>..\packages\Autofac.Owin.3.1.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi.Owin">
+      <HintPath>..\packages\Autofac.WebApi2.Owin.3.2.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="CsQuery">
       <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.FileSystems, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.FileSystems.3.0.1\lib\net45\Microsoft.Owin.FileSystems.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.0.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Hosting.2.0.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.StaticFiles, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.StaticFiles.3.0.1\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NLog.Windows.Forms, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.Windows.Forms.2.0.0.0\lib\net35\NLog.Windows.Forms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Tracing">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Tracing.5.2.3\lib\net45\System.Web.Http.Tracing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -81,22 +150,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\BaseIndexer.cs" />
+    <Compile Include="Indexers\BB.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
-    <Compile Include="Utils\ApiKeyUtil.cs" />
+    <Compile Include="Models\TorznabCapabilities.cs" />
+    <Compile Include="Models\Config\ServerConfig.cs" />
+    <Compile Include="Models\TorznabCategory.cs" />
+    <Compile Include="Services\ProcessService.cs" />
+    <Compile Include="Services\SecuityService.cs" />
+    <Compile Include="Services\SerializeService.cs" />
+    <Compile Include="Services\ServiceConfigService.cs" />
+    <Compile Include="Services\SpinService.cs" />
     <Compile Include="Utils\BrowserUtil.cs" />
-    <Compile Include="Torznab\CachedResult.cs" />
-    <Compile Include="Torznab\ChannelInfo.cs" />
-    <Compile Include="Configurations\ConfigurationData.cs" />
-    <Compile Include="Configurations\ConfigurationDataBasicLogin.cs" />
-    <Compile Include="Configurations\ConfigurationDataCookie.cs" />
-    <Compile Include="Configurations\ConfigurationDataUrl.cs" />
-    <Compile Include="Http\CookieContainerExtensions.cs" />
+    <Compile Include="Models\CachedResult.cs" />
+    <Compile Include="Models\ChannelInfo.cs" />
+    <Compile Include="Models\ConfigurationData.cs" />
+    <Compile Include="Models\ConfigurationDataBasicLogin.cs" />
+    <Compile Include="Models\ConfigurationDataCookie.cs" />
+    <Compile Include="Models\ConfigurationDataUrl.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="Utils\DataUrl.cs" />
-    <Compile Include="Utils\DateTimeUtil.cs" />
-    <Compile Include="Configurations\ExceptionWithConfigData.cs" />
-    <Compile Include="Http\HttpClientExtensions.cs" />
-    <Compile Include="IndexerInterface.cs" />
-    <Compile Include="IndexerManager.cs" />
+    <Compile Include="ExceptionWithConfigData.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
+    <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\BeyondHD.cs" />
     <Compile Include="Indexers\BitHdtv.cs" />
     <Compile Include="Indexers\BitMeTV.cs" />
@@ -117,33 +197,45 @@
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
-    <Compile Include="Windows\Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
+    <Compile Include="JackettModule.cs" />
+    <Compile Include="Utils\DateTimeUtil.cs" />
+    <Compile Include="Utils\JackettAuthorizedAttribute.cs" />
     <Compile Include="Utils\ParseUtil.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Torznab\ReleaseInfo.cs" />
-    <Compile Include="Torznab\ResultPage.cs" />
-    <Compile Include="Server.cs" />
+    <Compile Include="Models\ReleaseInfo.cs" />
+    <Compile Include="Models\ResultPage.cs" />
+    <Compile Include="Services\ServerService.cs" />
     <Compile Include="Utils\ServerUtil.cs" />
-    <Compile Include="Torznab\TorznabQuery.cs" />
-    <Compile Include="WebApi.cs" />
-    <Compile Include="Http\CurlHelper.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
+    <Compile Include="Services\IndexerManagerService.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Models\TorznabQuery.cs" />
+    <Compile Include="CurlHelper.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
+    <Compile Include="Utils\StringUtil.cs" />
+    <Compile Include="Utils\TorznabCapsUtil.cs" />
+    <Compile Include="Utils\WebApiRootRedirectMiddleware.cs" />
+    <Compile Include="Utils\WebAPIRequestLogger.cs" />
+    <Compile Include="Utils\WebAPIToNLogTracer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Content\fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\fonts\glyphicons-halflings-regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="WebContent\fonts\glyphicons-halflings-regular.woff">
+    <None Include="Content\fonts\glyphicons-halflings-regular.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -151,129 +243,134 @@
     <None Include="Resources\test.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Windows\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WebContent\custom.css">
+    <Content Include="Content\custom.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\custom.js">
+    <Content Include="Content\custom.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\animebytes.png">
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\beyondhd.png">
+    <Content Include="Content\login.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\frenchtorrentdb.png">
+    <Content Include="Content\logos\animebytes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\hdtorrents.png">
+    <Content Include="Content\logos\bb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\sceneaccess.png">
+    <Content Include="Content\logos\beyondhd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\scenetime.png">
+    <Content Include="Content\logos\frenchtorrentdb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\showrss.png">
+    <Content Include="Content\logos\hdtorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\speedcd.png">
+    <Content Include="Content\logos\sceneaccess.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\t411.png">
+    <Content Include="Content\logos\scenetime.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\torrentday.png">
+    <Content Include="Content\logos\showrss.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\torrentshack.png">
+    <Content Include="Content\logos\speedcd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="jacket_large.ico" />
-    <Content Include="WebContent\animate.css">
+    <Content Include="Content\logos\t411.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\binding_dark.png">
+    <Content Include="Content\logos\torrentday.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\bootstrap-notify.js">
+    <Content Include="Content\logos\torrentshack.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\congruent_outline.png">
+    <Content Include="Content\animate.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\crissXcross.png">
+    <Content Include="Content\binding_dark.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\favicon.ico">
+    <Content Include="Content\bootstrap-notify.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\handlebars-v3.0.1.js">
+    <Content Include="Content\congruent_outline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\jacket_medium.png">
+    <Content Include="Content\crissXcross.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\bithdtv.png">
+    <Content Include="Content\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\bitmetv.png">
+    <Content Include="Content\handlebars-v3.0.1.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\bootstrap\bootstrap.min.css">
+    <Content Include="Content\jacket_medium.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\bootstrap\bootstrap.min.js">
+    <Content Include="Content\logos\bithdtv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\common.js">
+    <Content Include="Content\logos\bitmetv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\index.html">
+    <Content Include="Content\bootstrap\bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\jquery-2.1.3.min.js">
+    <Content Include="Content\bootstrap\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\freshon.png">
+    <Content Include="Content\common.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\iptorrents.png">
+    <Content Include="Content\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\morethantv.png">
+    <Content Include="Content\jquery-2.1.3.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\rarbg.png">
+    <Content Include="Content\logos\freshon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\strike.png">
+    <Content Include="Content\logos\iptorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\thepiratebay.png">
+    <Content Include="Content\logos\morethantv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\torrentleech.png">
+    <Content Include="Content\logos\rarbg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\logos\torrentz.png">
+    <Content Include="Content\logos\strike.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebContent\setup_indexer.html">
+    <Content Include="Content\logos\thepiratebay.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\torrentleech.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\torrentz.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\validator_reply.xml" />
-    <Content Include="WebContent\logos\alpharatio.png">
+    <Content Include="Content\logos\alpharatio.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

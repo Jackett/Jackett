@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,36 +17,31 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class SpeedCD : IndexerInterface
+    public class SpeedCD : BaseIndexer, IIndexer
     {
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public string DisplayName { get { return "Speed.cd"; } }
-
-        public string DisplayDescription { get { return "Your home now!"; } }
-
-        public Uri SiteLink { get { return new Uri(BaseUrl); } }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string BaseUrl = "http://speed.cd";
-        const string LoginUrl = BaseUrl + "/take_login.php";
-        const string SearchUrl = BaseUrl + "/V3/API/API.php";
-        const string SearchFormData = "c53=1&c49=1&c2=1&c52=1&c41=1&c50=1&c30=1&jxt=4&jxw=b";
-        const string CommentsUrl = BaseUrl + "/t/{0}";
-        const string DownloadUrl = BaseUrl + "/download.php?torrent={0}";
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
+        private readonly string SearchFormData = "c53=1&c49=1&c2=1&c52=1&c41=1&c50=1&c30=1&jxt=4&jxw=b";
+        private readonly string CommentsUrl = "";
+        private readonly string DownloadUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured { get; private set; }
-
-        public SpeedCD()
+        public SpeedCD(IIndexerManagerService i, Logger l)
+            : base(name: "Speed.cd",
+                description: "Your home now!",
+                link: new Uri("http://speed.cd"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/take_login.php";
+            SearchUrl = SiteLink + "/V3/API/API.php";
+            CommentsUrl = SiteLink + "/t/{0}";
+            DownloadUrl = SiteLink + "/download.php?torrent={0}";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -84,17 +83,14 @@ namespace Jackett.Indexers
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -142,8 +138,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
             return releases.ToArray();
         }

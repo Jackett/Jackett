@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,47 +15,24 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Strike : IndexerInterface
+    public class Strike : BaseIndexer, IIndexer
     {
+        private readonly string DownloadUrl = "/torrents/api/download/{0}.torrent";
+        private readonly string SearchUrl = "/api/v2/torrents/search/?category=TV&phrase={0}";
+        private string BaseUrl;
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        private CookieContainer cookies;
+        private HttpClientHandler handler;
+        private HttpClient client;
 
-        public string DisplayName
+        public Strike(IIndexerManagerService i, Logger l)
+            : base(name: "Strike",
+                description: "Torrent search engine",
+                link: new Uri("https://getstrike.net"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            get { return "Strike"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Torrent search engine"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(DefaultUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        const string DefaultUrl = "https://getstrike.net";
-
-
-        //const string DownloadUrl = "/api/v2/torrents/download/?hash={0}";
-        const string DownloadUrl = "/torrents/api/download/{0}.torrent";
-
-        const string SearchUrl = "/api/v2/torrents/search/?category=TV&phrase={0}";
-        string BaseUrl;
-
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public Strike()
-        {
-            IsConfigured = false;
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -64,13 +45,13 @@ namespace Jackett.Indexers
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             return Task.FromResult<ConfigurationData>(config);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
+            var config = new ConfigurationDataUrl(SiteLink);
             config.LoadValuesFromJson(configJson);
 
             var formattedUrl = config.GetFormattedHostUrl();
@@ -82,12 +63,8 @@ namespace Jackett.Indexers
 
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
-
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
-
+            SaveConfig(configSaveData);
             IsConfigured = true;
-
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -122,8 +99,13 @@ namespace Jackett.Indexers
                     release.Size = (long)result["size"];
 
                     // "Apr  2, 2015", "Apr 12, 2015" (note the spacing)
+                    // some are unix timestamps, some are not.. :/
                     var dateString = string.Join(" ", ((string)result["upload_date"]).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
-                    release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
+                    float dateVal;
+                    if (ParseUtil.TryCoerceFloat(dateString, out dateVal))
+                        release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(dateVal);
+                    else
+                        release.PublishDate = DateTime.ParseExact(dateString, "MMM d, yyyy", CultureInfo.InvariantCulture);
 
                     release.Guid = new Uri((string)result["page"]);
                     release.Comments = release.Guid;
@@ -137,10 +119,8 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
-
 
             return releases.ToArray();
         }
@@ -154,7 +134,5 @@ namespace Jackett.Indexers
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

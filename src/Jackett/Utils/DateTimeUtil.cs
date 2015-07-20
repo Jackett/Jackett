@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett
+namespace Jackett.Utils
 {
     public static class DateTimeUtil
     {
@@ -14,6 +14,5 @@ namespace Jackett
             long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
             return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
-
     }
 }
