@@ -24,11 +24,13 @@ namespace Jackett.Utils
             return await base.SendAsync(request, cancellationToken)
                 .ContinueWith(task =>
                 {
-                    //once response is ready, log it
-                    var responseBody = task.Result.Content.ReadAsStringAsync().Result;
-                    Trace.WriteLine(responseBody);
-                    Engine.Logger.Debug("Response: " + responseBody);
-
+                    if (null != task.Result.Content)
+                    {
+                        //once response is ready, log it
+                        var responseBody = task.Result.Content.ReadAsStringAsync().Result;
+                        Trace.WriteLine(responseBody);
+                        Engine.Logger.Debug("Response: " + responseBody);
+                    }
                     return task.Result;
                 });
         }

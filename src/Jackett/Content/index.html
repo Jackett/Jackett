@@ -6,21 +6,21 @@
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
 
-    <script src="jquery-2.1.3.min.js"></script>
-    <script src="handlebars-v3.0.1.js"></script>
-    <script src="bootstrap/bootstrap.min.js"></script>
-    <script src="bootstrap-notify.js"></script>
+    <script src="/jquery-2.1.3.min.js"></script>
+    <script src="/handlebars-v3.0.1.js"></script>
+    <script src="/bootstrap/bootstrap.min.js"></script>
+    <script src="/bootstrap-notify.js"></script>
 
-    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="animate.css" rel="stylesheet">
-    <link href="custom.css" rel="stylesheet">
+    <link href="/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/animate.css" rel="stylesheet">
+    <link href="/custom.css" rel="stylesheet">
 
     <title>Jackett</title>
 </head>
 <body>
     <div id="page">
 
-        <img id="logo" src="jacket_medium.png" /><span id="header-title">Jackett</span>
+        <img id="logo" src="/jacket_medium.png" /><span id="header-title">Jackett</span>
 
         <hr />
 
@@ -34,6 +34,16 @@
             </ol>
             <span class="input-header">Jackett API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
+        </div>
+        <div class="input-area">
+            <span class="input-header">Admin Password: </span>
+            <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable">
+            <button id="change-jackett-password" class="btn btn-primary btn-sm">
+                Set <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+            <a href="Dashboard?logout=true" id="logoutBtn" style="display:none" class="btn btn-danger btn-sm">
+               Logout
+            </a>
         </div>
         <hr />
         <div class="input-area">
@@ -101,7 +111,7 @@
         </button>
 
         <div class="configured-indexer indexer card">
-            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="logos/{{id}}.png" /></div>
+            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
             <div class="indexer-buttons">
                 <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}">
                     <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
@@ -123,7 +133,7 @@
         </div>
 
         <div class="unconfigured-indexer card">
-            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="logos/{{id}}.png" /></div>
+            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
             <div class="indexer-buttons">
                 <a class="btn btn-info" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
                 <button class="indexer-setup btn btn-success" data-id="{{id}}">Setup <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
@@ -153,7 +163,7 @@
     </div>
 
 
-    <script src="custom.js"></script>
+    <script src="/custom.js"></script>
 
 </body>
 </html>

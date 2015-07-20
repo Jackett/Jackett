@@ -17,6 +17,7 @@ namespace Jackett.Models.Config
         public int Port { get; set; }
         public bool AllowExternal { get; set; }
         public string APIKey { get; set; }
+        public string AdminPassword { get; set; }
 
         public string GetListenAddress(bool? external = null)
         {

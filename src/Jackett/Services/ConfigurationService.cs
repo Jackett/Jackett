@@ -18,7 +18,6 @@ namespace Jackett.Services
         string GetVersion();
         string GetIndexerConfigDir();
         string GetAppDataFolder();
-        JObject ReadServerSettingsFile();
         string GetSonarrConfigFile();
         T GetConfig<T>();
         void SaveConfig<T>(T config);
@@ -167,25 +166,6 @@ namespace Jackett.Services
         public string GetSonarrConfigFile()
         {
             return Path.Combine(GetAppDataFolder(), "sonarr_api.json");
-        }
-
-
-        public JObject ReadServerSettingsFile()
-        {
-            var path = GetConfigFile();
-            JObject jsonReply = new JObject();
-            if (File.Exists(path))
-            {
-                jsonReply = JObject.Parse(File.ReadAllText(path));
-                // Port = (int)jsonReply["port"];
-                //  ListenPublic = (bool)jsonReply["public"];
-            }
-            else
-            {
-                // jsonReply["port"] = Port;
-                // jsonReply["public"] = ListenPublic;
-            }
-            return jsonReply;
         }
     }
 }

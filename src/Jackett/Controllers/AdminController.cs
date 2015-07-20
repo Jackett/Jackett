@@ -1,36 +1,131 @@
 ﻿using Autofac;
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.Results;
+using System.Web.Security;
 
 namespace Jackett.Controllers
 {
     [RoutePrefix("admin")]
+    [JackettAuthorized]
     public class AdminController : ApiController
     {
         private IConfigurationService config;
         private IIndexerManagerService indexerService;
         private IServerService serverService;
+        private ISecuityService securityService;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s)
         {
             this.config = config;
             indexerService = i;
             serverService = ss;
+            securityService = s;
         }
 
         private async Task<JToken> ReadPostDataJson()
         {
             var content = await Request.Content.ReadAsStringAsync();
             return JObject.Parse(content);
+        }
+
+
+        private HttpResponseMessage GetFile(string path)
+        {
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            var mappedPath = Path.Combine(config.GetContentFolder(), path);
+            var stream = new FileStream(mappedPath, FileMode.Open);
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(mappedPath));
+            
+            return result;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public RedirectResult Logout()
+        {
+            var ctx = Request.GetOwinContext();
+            var authManager = ctx.Authentication;
+            authManager.SignOut("ApplicationCookie");
+            return Redirect("/Admin/Dashboard");
+        }
+
+        [HttpGet]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<HttpResponseMessage> Dashboard()
+        {
+            if(Request.RequestUri.Query!=null && Request.RequestUri.Query.Contains("logout"))
+            {
+                var file = GetFile("login.html");
+                securityService.Logout(file);
+                return file;
+            }
+
+
+            if (securityService.CheckAuthorised(Request))
+            {
+                return GetFile("index.html");
+
+            } else
+            {
+                var formData = await Request.Content.ReadAsFormDataAsync();
+                
+                if (formData!=null && securityService.HashPassword(formData["password"]) == serverService.Config.AdminPassword)
+                {
+                    var file = GetFile("index.html");
+                    securityService.Login(file);
+                    return file;
+                } else
+                {
+                    return GetFile("login.html");
+                }
+            }
+        }
+
+        [Route("set_admin_password")]
+        [HttpPost]
+        public async Task<IHttpActionResult> SetAdminPassword()
+        {
+            var jsonReply = new JObject();
+            try
+            {
+                var postData = await ReadPostDataJson();
+                var password = (string)postData["password"];
+                if (string.IsNullOrEmpty(password))
+                {
+                    serverService.Config.AdminPassword = string.Empty;
+                }
+                else
+                {
+                    serverService.Config.AdminPassword = securityService.HashPassword(password);
+                }
+
+                serverService.SaveConfig();
+                jsonReply["result"] = "success";
+            }
+            catch (Exception ex)
+            {
+                jsonReply["result"] = "error";
+                jsonReply["error"] = ex.Message;
+            }
+            return Json(jsonReply);
         }
 
         [Route("get_config_form")]
@@ -92,8 +187,6 @@ namespace Jackett.Controllers
             try
             {
                 jsonReply["result"] = "success";
-                jsonReply["api_key"] = serverService.Config.APIKey;
-                jsonReply["app_version"] = config.GetVersion();
                 JArray items = new JArray();
 
                 foreach (var indexer in indexerService.GetAllIndexers())
@@ -163,7 +256,13 @@ namespace Jackett.Controllers
             var jsonReply = new JObject();
             try
             {
-                jsonReply["config"] = config.ReadServerSettingsFile();
+                var cfg = new JObject();
+                cfg["port"] = serverService.Config.Port;
+                cfg["api_key"] = serverService.Config.APIKey;
+                cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword )? string.Empty:serverService.Config.AdminPassword.Substring(0,10);
+
+                jsonReply["config"] = cfg;
+                jsonReply["app_version"] = config.GetVersion();
                 jsonReply["result"] = "success";
             }
             catch (CustomException ex)
