@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,7 +19,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class AnimeBytes : IndexerInterface
+    public class AnimeBytes : BaseIndexer, IIndexer
     {
         class ConfigurationDataBasicLoginAnimeBytes : ConfigurationDataBasicLogin
         {
@@ -35,46 +39,28 @@ namespace Jackett.Indexers
             }
         }
 
-        private static List<CachedResult> cache = new List<CachedResult>();
-        private static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
 
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
 
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
-
-        public string DisplayName
-        {
-            get { return "AnimeBytes"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "The web's best Chinese cartoons"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        const string BaseUrl = "https://animebytes.tv";
-        const string LoginUrl = BaseUrl + "/user/login";
-        const string SearchUrl = BaseUrl + "/torrents.php?filter_cat[1]=1";
-
-        public bool IsConfigured { get; private set; }
         public bool AllowRaws { get; private set; }
-
-
         CookieContainer cookieContainer;
         HttpClientHandler handler;
         HttpClient client;
 
-        public AnimeBytes()
+        public AnimeBytes(IIndexerManagerService i, Logger l)
+            : base(name: "AnimeBytes",
+                description: "The web's best Chinese cartoons",
+                link: new Uri("https://animebytes.tv"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            TorznabCaps.Categories.Clear();
+            TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
+            LoginUrl = SiteLink + "/user/login";
+            SearchUrl = SiteLink + "/torrents.php?filter_cat[1]=1";
+
             cookieContainer = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -83,7 +69,7 @@ namespace Jackett.Indexers
                 UseCookies = true,
             };
             client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("User-Agent", chromeUserAgent);
+            client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -127,11 +113,11 @@ namespace Jackett.Indexers
             {
                 foreach (var c in cookies)
                 {
-                    cookieContainer.SetCookies(new Uri(BaseUrl), c.Substring(0, c.LastIndexOf(';')));
+                    cookieContainer.SetCookies(SiteLink, c.Substring(0, c.LastIndexOf(';')));
                 }
             }
 
-            foreach (Cookie cookie in cookieContainer.GetCookies(new Uri(BaseUrl)))
+            foreach (Cookie cookie in cookieContainer.GetCookies(SiteLink))
             {
                 if (cookie.Name == "session")
                 {
@@ -141,7 +127,7 @@ namespace Jackett.Indexers
             }
 
             // Get the home page now we are logged in as AllowAutoRedirect is false as we needed to get the cookie manually.
-            response = await client.GetAsync(BaseUrl);
+            response = await client.GetAsync(SiteLink);
             responseContent = await response.Content.ReadAsStringAsync();
 
             if (!responseContent.Contains("/user/logout"))
@@ -155,16 +141,14 @@ namespace Jackett.Indexers
                 cookieContainer.DumpToJson(SiteLink, configSaveData);
                 configSaveData["raws"] = AllowRaws;
 
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieContainer.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookieContainer.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
             AllowRaws = jsonConfig["raws"].Value<bool>();
         }
@@ -186,13 +170,7 @@ namespace Jackett.Indexers
             return sb.ToString();
         }
 
-        private void CleanCache()
-        {
-            foreach (var expired in cache.Where(i => i.Created - DateTime.Now > cacheTime).ToList())
-            {
-                cache.Remove(expired);
-            }
-        }
+
 
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -339,9 +317,9 @@ namespace Jackett.Indexers
                                 release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
 
                                 var infoLink = links.Get(1);
-                                release.Comments = new Uri(BaseUrl + "/" + infoLink.Attributes.GetAttribute("href"));
-                                release.Guid = new Uri(BaseUrl + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = new Uri(BaseUrl + "/" + downloadLink.Attributes.GetAttribute("href"));
+                                release.Comments = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href"));
+                                release.Guid = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
+                                release.Link = new Uri(SiteLink + "/" + downloadLink.Attributes.GetAttribute("href"));
 
                                 // We dont actually have a release name >.> so try to create one
                                 var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -401,8 +379,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, responseContent, ex);
-                throw ex;
+                OnParseError(responseContent, ex);
             }
 
             // Add to the cache

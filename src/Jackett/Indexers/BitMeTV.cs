@@ -1,5 +1,9 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,9 +15,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
-    public class BitMeTV : IndexerInterface
+    public class BitMeTV : BaseIndexer, IIndexer
     {
         class BmtvConfig : ConfigurationData
         {
@@ -39,22 +43,28 @@ namespace Jackett
             }
         }
 
-        static string BaseUrl = "http://www.bitmetv.org";
-        static string LoginUrl = BaseUrl + "/login.php";
-        static string LoginPost = BaseUrl + "/takelogin.php";
-        static string CaptchaUrl = BaseUrl + "/visual.php";
-        static string SearchUrl = BaseUrl + "/browse.php";
+        private readonly string LoginUrl = "";
+        private readonly string LoginPost = "";
+        private readonly string CaptchaUrl = "";
+        private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public BitMeTV()
+        public BitMeTV(IIndexerManagerService i, Logger l)
+            : base(name: "BitMeTV",
+                description: "TV Episode specialty tracker",
+                link: new Uri("http://www.bitmetv.org"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login.php";
+            LoginPost = SiteLink + "/takelogin.php";
+            CaptchaUrl = SiteLink + "/visual.php";
+            SearchUrl = SiteLink + "/browse.php";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -64,16 +74,6 @@ namespace Jackett
             };
             client = new HttpClient(handler);
         }
-
-        public string DisplayName { get { return "BitMeTV"; } }
-
-        public string DisplayDescription { get { return "TV Episode specialty tracker"; } }
-
-        public Uri SiteLink { get { return new Uri(BaseUrl); } }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
 
         public async Task<ConfigurationData> GetConfigurationForSetup()
         {
@@ -114,17 +114,14 @@ namespace Jackett
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -150,7 +147,7 @@ namespace Jackett
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
-                    release.Comments = new Uri(BaseUrl + "/" + qLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     release.Guid = release.Comments;
                     release.Title = qLink.Attr("title");
                     release.Description = release.Title;
@@ -164,7 +161,7 @@ namespace Jackett
                     var date = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
                     release.PublishDate = DateTime.SpecifyKind(date, DateTimeKind.Utc).ToLocalTime();
 
-                    release.Link = new Uri(BaseUrl + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
+                    release.Link = new Uri(SiteLink + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
                     var sizeCol = row.ChildElements.ElementAt(6);
                     var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue);
@@ -182,8 +179,7 @@ namespace Jackett
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();

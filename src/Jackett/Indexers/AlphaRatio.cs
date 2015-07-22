@@ -9,45 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Net.Http.Headers;
+using Jackett.Models;
+using Jackett.Utils;
+using NLog;
+using Jackett.Services;
 
 namespace Jackett.Indexers
 {
-    public class AlphaRatio : IndexerInterface
+    public class AlphaRatio : BaseIndexer, IIndexer
     {
-        public string DisplayName
-        {
-            get { return "AlphaRatio"; }
-        }
-
-        public string DisplayDescription
-        {
-            get { return "Legendary"; }
-        }
-
-        public Uri SiteLink
-        {
-            get { return new Uri(BaseUrl); }
-        }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        public bool IsConfigured { get; private set; }
-
-        static string BaseUrl = "https://alpharatio.cc";
-
-        static string LoginUrl = BaseUrl + "/login.php";
-
-        static string SearchUrl = BaseUrl + "/ajax.php?action=browse&searchstr=";
-
-        static string DownloadUrl = BaseUrl + "/torrents.php?action=download&id=";
-
-        static string GuidUrl = BaseUrl + "/torrents.php?torrentid=";
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
+        private readonly string LoginUrl = "";
+        private readonly string SearchUrl = "";
+        private readonly string DownloadUrl = "";
+        private readonly string GuidUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
@@ -55,9 +29,19 @@ namespace Jackett.Indexers
 
         string cookieHeader;
 
-        public AlphaRatio()
+        public AlphaRatio(IIndexerManagerService i, Logger l)
+            : base(name: "AlphaRatio",
+                description: "Legendary",
+                link: new Uri("https://alpharatio.cc"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+            LoginUrl = SiteLink + "/login.php";
+            SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";
+            DownloadUrl = SiteLink + "/torrents.php?action=download&id=";
+            GuidUrl = SiteLink + "/torrents.php?torrentid=";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -78,8 +62,7 @@ namespace Jackett.Indexers
         public async Task ApplyConfiguration(JToken configJson)
         {
             var configSaveData = new JObject();
-            if (OnSaveConfigurationRequested != null)
-                OnSaveConfigurationRequested(this, configSaveData);
+            SaveConfig(configSaveData);
 
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
@@ -100,7 +83,7 @@ namespace Jackett.Indexers
 
             configSaveData = new JObject();
 
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 // If Windows use .net http
                 var response = await client.SendAsync(message);
@@ -126,9 +109,7 @@ namespace Jackett.Indexers
             }
             else
             {
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
@@ -138,13 +119,13 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Post;
             message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             cookieHeader = cookies.GetCookieHeader(SiteLink);
             IsConfigured = true;
         }
@@ -167,7 +148,7 @@ namespace Jackett.Indexers
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
             string results;
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 var request = CreateHttpRequest(new Uri(episodeSearchUrl));
                 request.Method = HttpMethod.Get;
@@ -218,8 +199,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
@@ -234,7 +214,7 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Program.IsWindows)
+            if (Engine.IsWindows)
             {
                 return await client.GetByteArrayAsync(link);
             }

@@ -1,5 +1,10 @@
 ﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,51 +17,29 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class IPTorrents : IndexerInterface
+    public class IPTorrents : BaseIndexer, IIndexer
     {
+        private readonly string SearchUrl = "";
+        private string cookieHeader = "";
 
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
+        private IWebClient webclient;
 
-        public string DisplayName { get { return "IPTorrents"; } }
-
-        public string DisplayDescription { get { return "Always a step ahead"; } }
-
-        public Uri SiteLink { get { return new Uri(BaseUrl); } }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public bool IsConfigured { get; private set; }
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
-
-        static string BaseUrl = "https://iptorrents.com";
-
-        string SearchUrl = BaseUrl + "/t?q=";
-
-
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public IPTorrents()
+        public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l)
+            : base(name: "IPTorrents",
+                description: "Always a step ahead.",
+                link: new Uri("https://iptorrents.com/"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
+            SearchUrl = SiteLink + "t?q=";
+            webclient =wc;
         }
 
-        public async Task<ConfigurationData> GetConfigurationForSetup()
+        public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            await client.GetAsync(new Uri(BaseUrl));
             var config = new ConfigurationDataBasicLogin();
-            return (ConfigurationData)config;
+            return Task.FromResult<ConfigurationData>((ConfigurationData)config);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -70,16 +53,27 @@ namespace Jackett.Indexers
 				{ "password", config.Password.Value }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Post;
-            message.Content = content;
-            message.RequestUri = new Uri(BaseUrl);
-            message.Headers.Referrer = new Uri(BaseUrl);
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Url = SiteLink.ToString(),
+                PostData = pairs,
+                Referer = SiteLink.ToString(),
+                Type = RequestType.POST
+            });
 
-            var response = await client.SendAsync(message);
-            var responseContent = await response.Content.ReadAsStringAsync();
+            cookieHeader = response.Cookies;
+            if (response.Status == HttpStatusCode.Found)
+            {
+                response = await webclient.GetString(new Utils.Clients.WebRequest()
+                {
+                    Url = SearchUrl,
+                    PostData = pairs,
+                    Referer = SiteLink.ToString(),
+                    Cookies = response.Cookies
+                });
+            }
+
+            var responseContent = response.Content;
 
             if (!responseContent.Contains("/my.php"))
             {
@@ -91,14 +85,10 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                configSaveData["cookies"] = cookieHeader;
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
-
         }
 
         HttpRequestMessage CreateHttpRequest(Uri uri)
@@ -106,29 +96,30 @@ namespace Jackett.Indexers
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
         public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookieHeader = (string)jsonConfig["cookies"];
             IsConfigured = true;
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
-            var request = CreateHttpRequest(new Uri(episodeSearchUrl));
-            var response = await client.SendAsync(request);
-            var results = await response.Content.ReadAsStringAsync();
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Url = episodeSearchUrl,
+                Referer = SiteLink.ToString(),
+                Cookies = cookieHeader
+            });
 
+            var results = response.Content;
             try
             {
                 CQ dom = results;
@@ -143,7 +134,7 @@ namespace Jackett.Indexers
                     var qTitleLink = qRow.Find("a.t_title").First();
                     release.Title = qTitleLink.Text().Trim();
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + qTitleLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
                     DateTime pubDate;
@@ -169,7 +160,7 @@ namespace Jackett.Indexers
                     release.PublishDate = pubDate;
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(BaseUrl + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text().Trim();
                     var sizeVal = ParseUtil.CoerceFloat(sizeStr.Split(' ')[0]);
@@ -184,23 +175,21 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
-
         }
 
         public async Task<byte[]> Download(Uri link)
         {
-            var request = CreateHttpRequest(link);
-            var response = await client.SendAsync(request);
-            var bytes = await response.Content.ReadAsByteArrayAsync();
-            return bytes;
+            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
+            {
+                Url = link.ToString(),
+                Cookies = cookieHeader
+            });
+
+            return response.Content;
         }
-
-
-
     }
 }

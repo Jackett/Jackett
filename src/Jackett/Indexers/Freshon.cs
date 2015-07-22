@@ -1,5 +1,10 @@
 ﻿using CsQuery;
+using Jackett.Indexers;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,38 +17,31 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 
-namespace Jackett
+namespace Jackett.Indexers
 {
-    public class Freshon : IndexerInterface
+    public class Freshon : BaseIndexer, IIndexer
     {
-        public event Action<IndexerInterface, string, Exception> OnResultParsingError;
-
-        static string BaseUrl = "https://freshon.tv";
-        static string LoginUrl = BaseUrl + "/login.php";
-        static string LoginPostUrl = BaseUrl + "/login.php?action=makelogin";
-        static string SearchUrl = BaseUrl + "/browse.php";
-
-        static string chromeUserAgent = BrowserUtil.ChromeUserAgent;
+        private readonly string LoginUrl = "";
+        private readonly string LoginPostUrl = "";
+        private readonly string SearchUrl = "";
 
         CookieContainer cookies;
         HttpClientHandler handler;
         HttpClient client;
 
-        public bool IsConfigured { get; private set; }
-
-        public string DisplayName { get { return "FreshOnTV"; } }
-
-        public string DisplayDescription { get { return "Our goal is to provide the latest stuff in the TV show domain"; } }
-
-        public Uri SiteLink { get { return new Uri(BaseUrl); } }
-
-        public bool RequiresRageIDLookupDisabled { get { return true; } }
-
-        public event Action<IndexerInterface, JToken> OnSaveConfigurationRequested;
-
-        public Freshon()
+        public Freshon(IIndexerManagerService i, Logger l)
+            : base(name: "FreshOnTV",
+                description: "Our goal is to provide the latest stuff in the TV show domain",
+                link: new Uri("https://www.bit-hdtv.com"),
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                logger: l)
         {
-            IsConfigured = false;
+
+            LoginUrl = SiteLink + "/login.php";
+            LoginPostUrl = SiteLink + "/login.php?action=makelogin";
+            SearchUrl = SiteLink + "/browse.php";
+
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {
@@ -93,17 +91,14 @@ namespace Jackett
             {
                 var configSaveData = new JObject();
                 cookies.DumpToJson(SiteLink, configSaveData);
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
+                SaveConfig(configSaveData);
                 IsConfigured = true;
             }
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(new Uri(BaseUrl), jsonConfig);
+            cookies.FillFromJson(SiteLink, jsonConfig, logger);
             IsConfigured = true;
         }
 
@@ -112,7 +107,7 @@ namespace Jackett
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;
             message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(chromeUserAgent);
+            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             return message;
         }
 
@@ -150,9 +145,9 @@ namespace Jackett
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
                     release.Description = release.Title;
-                    release.Guid = new Uri(BaseUrl + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(BaseUrl + qRow.Find("td.table_links > a").First().Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href"));
 
                     DateTime pubDate;
                     var dateString = qRow.Find("td.table_added").Text().Trim();
@@ -177,8 +172,7 @@ namespace Jackett
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(results, ex);
             }
 
             return releases.ToArray();
