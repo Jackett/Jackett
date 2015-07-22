@@ -7,13 +7,13 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
+using Jackett.Utils;
+using System.Net;
 
 namespace Jackett
 {
     public static class CurlHelper
     {
-        private const string ChromeUserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36";
-
         public class CurlRequest
         {
 
@@ -44,18 +44,21 @@ namespace Jackett
 
             public byte[] Content { get; private set; }
 
+            public HttpStatusCode Status { get; private set;}
+
             public Dictionary<string, string> Cookies { get; private set; }
 
             public List<string> CookiesFlat { get { return Cookies.Select(c => c.Key + "=" + c.Value).ToList(); } }
 
             public string CookieHeader { get { return string.Join("; ", CookiesFlat); } }
 
-            public CurlResponse(List<string[]> headers, byte[] content)
+            public CurlResponse(List<string[]> headers, byte[] content, HttpStatusCode s)
             {
                 Headers = new Dictionary<string, string>();
                 Cookies = new Dictionary<string, string>();
                 HeaderList = headers;
                 Content = content;
+                Status = s;
                 foreach (var h in headers)
                 {
                     Headers[h[0]] = h[1];
@@ -145,7 +148,7 @@ namespace Jackett
             {
                 easy.Url = curlRequest.Url;
                 easy.BufferSize = 64 * 1024;
-                easy.UserAgent = ChromeUserAgent;
+                easy.UserAgent = BrowserUtil.ChromeUserAgent;
                 easy.WriteFunction = (byte[] buf, int size, int nmemb, object data) =>
                 {
                     contentBuffers.Add(buf);
@@ -173,23 +176,35 @@ namespace Jackett
 
                 easy.Perform();
             }
-
+            
             var headerBytes = Combine(headerBuffers.ToArray());
             var headerString = Encoding.UTF8.GetString(headerBytes);
             var headerParts = headerString.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             var headers = new List<string[]>();
-            foreach (var headerPart in headerParts.Skip(1))
+            var headerCount = 0;
+            HttpStatusCode status = HttpStatusCode.InternalServerError;
+            foreach (var headerPart in headerParts)
             {
-                var keyVal = headerPart.Split(new char[] { ':' }, 2);
-                if (keyVal.Length > 1)
+                if (headerCount == 0)
                 {
-                    headers.Add(new[] { keyVal[0].ToLower().Trim(), keyVal[1].Trim() });
+                    var responseCode = int.Parse(headerPart.Split(' ')[1]);
+                    status = (HttpStatusCode)responseCode;
                 }
+                else
+                {
+                    var keyVal = headerPart.Split(new char[] { ':' }, 2);
+                    if (keyVal.Length > 1)
+                    {
+                        headers.Add(new[] { keyVal[0].ToLower().Trim(), keyVal[1].Trim() });
+                    }
+                }
+
+                headerCount++;
             }
 
             var contentBytes = Combine(contentBuffers.ToArray());
-            var curlResponse = new CurlResponse(headers, contentBytes);
 
+            var curlResponse = new CurlResponse(headers, contentBytes, status);
             if (!string.IsNullOrEmpty(curlRequest.Cookies))
                 curlResponse.AddCookiesFromHeaderValue(curlRequest.Cookies);
             curlResponse.AddCookiesFromHeaders(headers);
