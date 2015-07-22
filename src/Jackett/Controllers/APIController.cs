@@ -34,17 +34,17 @@ namespace Jackett.Controllers
             var indexer = indexerService.GetIndexer(indexerName);
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
 
-            if (!string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
-            }
-
             if (string.Equals(torznabQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/rss+xml")
                 };
+            }
+
+            if (!string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);

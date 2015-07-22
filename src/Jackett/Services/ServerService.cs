@@ -115,7 +115,7 @@ namespace Jackett.Services
         public void Start()
         {
             // Start the server
-            logger.Debug("Starting web server at " + config.GetListenAddresses()[0]);
+            logger.Info("Starting web server at " + config.GetListenAddresses()[0]);
             var startOptions = new StartOptions();
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
             _server = WebApp.Start<Startup>(startOptions);
