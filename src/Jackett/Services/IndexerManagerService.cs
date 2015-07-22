@@ -53,10 +53,9 @@ namespace Jackett.Services
 
         public IIndexer GetIndexer(string name)
         {
-            var indexer = indexers.Values.Where(i => string.Equals(StringUtil.StripNonAlphaNumeric(i.DisplayName), name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
-            if (indexer != null)
+            if (indexers.ContainsKey(name))
             {
-                return indexer;
+                return indexers[name];
             }
             else
             {
