@@ -12,11 +12,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using System.Web.Security;
+using System.Windows.Forms;
 
 namespace Jackett.Controllers
 {
@@ -28,13 +30,15 @@ namespace Jackett.Controllers
         private IIndexerManagerService indexerService;
         private IServerService serverService;
         private ISecuityService securityService;
+        private IProcessService processService;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p)
         {
             this.config = config;
             indexerService = i;
             serverService = ss;
             securityService = s;
+            processService = p;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -168,7 +172,7 @@ namespace Jackett.Controllers
             catch (Exception ex)
             {
                 jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
+                //jsonReply["error"] = Newtonsoft.Json.JsonConvert.SerializeObject(ex); 
                 if (ex is ExceptionWithConfigData)
                 {
                     jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
@@ -278,17 +282,58 @@ namespace Jackett.Controllers
             return Json(jsonReply);
         }
 
-        [Route("apply_jackett_config")]
+        [Route("set_port")]
         [HttpPost]
         public async Task<IHttpActionResult> SetConfig()
         {
+            var originalPort = Engine.Server.Config.Port;
             var jsonReply = new JObject();
             try
             {
                 var postData = await ReadPostDataJson();
-                //  int port = await WebServer.ApplyPortConfiguration(postData);
+                int port = (int)postData["port"];
+
+                if (port != Engine.Server.Config.Port)
+                {
+                    if (ServerUtil.RestrictedPorts.Contains(port))
+                    {
+                        jsonReply["result"] = "error";
+                        jsonReply["error"] = "The port you have selected is restricted, try a different one.";
+                        return Json(jsonReply);
+                    }
+
+                    Engine.Server.Config.Port = port;
+                    Engine.Server.SaveConfig();
+
+                    if (!ServerUtil.IsUserAdministrator())
+                    {
+                        try {
+                            processService.StartProcessAndLog(Application.ExecutablePath, "/r", true);
+                        }
+                        catch
+                        {
+                            Engine.Server.Config.Port = originalPort;
+                            Engine.Server.SaveConfig();
+                            jsonReply["result"] = "error";
+                            jsonReply["error"] = "Failed to acquire admin permissions to reserve the new port.";
+                            return Json(jsonReply);
+                        }
+                    } else
+                    {
+                        serverService.ReserveUrls(true);
+                    }
+
+                    // This is giving a warning - is there a better way of doing this?
+                    Task.Run(() =>
+                    {
+                        Thread.Sleep(500);
+                        serverService.Start();
+                    });
+                   
+                }
+
                 jsonReply["result"] = "success";
-                // jsonReply["port"] = port;
+                jsonReply["port"] = port;
             }
             catch (Exception ex)
             {

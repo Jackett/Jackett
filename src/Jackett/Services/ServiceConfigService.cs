@@ -16,6 +16,10 @@ namespace Jackett.Services
     {
         void Install();
         void Uninstall();
+        bool ServiceExists();
+        bool ServiceRunning();
+        void Start();
+        void Stop();
     }
 
     class ServiceConfigService : IServiceConfigService
@@ -33,9 +37,30 @@ namespace Jackett.Services
             logger = l;
         }
 
-        public bool Exists()
+        public bool ServiceExists()
         {
             return GetService(NAME) != null;
+        }
+
+        public bool ServiceRunning()
+        {
+            var service = GetService(NAME);
+            if (service == null)
+                return false;
+            return service.Status == ServiceControllerStatus.Running;
+        }
+
+        public void Start()
+        {
+
+            var service = GetService(NAME);
+            service.Start();
+        }
+
+        public void Stop()
+        {
+            var service = GetService(NAME);
+            service.Stop();
         }
 
         public ServiceController GetService(string serviceName)
@@ -45,15 +70,15 @@ namespace Jackett.Services
 
         public void Install()
         {
-            if (Exists())
+            if (ServiceExists())
             {
-
+                logger.Warn("The service is already installed!");
             }
             else
             {
                 var installer = new ServiceProcessInstaller
                 {
-                    Account = ServiceAccount.NetworkService
+                    Account = ServiceAccount.LocalSystem
                 };
 
                 var serviceInstaller = new ServiceInstaller();
@@ -80,20 +105,18 @@ namespace Jackett.Services
 
         public void Uninstall()
         {
-            Stop();
+            RemoveService();
 
             var serviceInstaller = new ServiceInstaller();
-
             var context = new InstallContext("jackettservice_uninstall.log", null);
             serviceInstaller.Context = context;
             serviceInstaller.ServiceName = NAME;
             serviceInstaller.Uninstall(null);
 
             logger.Info("The service was uninstalled.");
-
         }
 
-        public void Stop()
+        public void RemoveService()
         {
             var service = GetService(NAME);
             if (service.Status != ServiceControllerStatus.Stopped)

@@ -20,13 +20,13 @@ function loadJackettSettings() {
 $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
     var jsonObject = { port: jackett_port};
-    var jqxhr = $.post("/admin/apply_jackett_config", JSON.stringify(jsonObject), function (data) {
+    var jqxhr = $.post("/admin/set_port", JSON.stringify(jsonObject), function (data) {
 
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         } else {
-            doNotify("The port has been changed. Jackett will now restart...", "success", "glyphicon glyphicon-ok");
+            doNotify("The port has been changed. Redirecting you to the new port.", "success", "glyphicon glyphicon-ok");
             var jqxhr0 = $.post("admin/jackett_restart", null, function (data_restart) { });
 
             window.setTimeout(function () {

@@ -41,11 +41,27 @@ namespace JackettConsole
                         case "/t":  // Tracing
                             Engine.TracingEnabled = true;
                             break;
+                        case "/curlsafe":  // Curl safe mode
+                            Engine.CurlSafe = true;
+                            break;
+                        case "/start":  // Start Service
+                            if (!Engine.ServiceConfig.ServiceRunning())
+                            {
+                                Engine.ServiceConfig.Start();
+                            }
+                            return;
+                        case "/stop":  // Stop Service
+                            if (Engine.ServiceConfig.ServiceRunning())
+                            {
+                                Engine.ServiceConfig.Stop();
+                            }
+                            return;
                     }
                 }
 
+                Engine.Server.Initalize();
                 Engine.Server.Start();
-                Engine.Logger.Info("Running in console mode.");
+                Engine.Logger.Info("Running in console mode!");
                 Engine.RunTime.Spin();
                 Engine.Logger.Info("Server thread exit");
             }

@@ -22,6 +22,7 @@ namespace Jackett.Services
 {
     public interface IServerService
     {
+        void Initalize();
         void Start();
         void Stop();
         void ReserveUrls(bool doInstall = true);
@@ -100,7 +101,7 @@ namespace Jackett.Services
             configService.SaveConfig<ServerConfig>(config);
         }
 
-        public void Start()
+        public void Initalize()
         {
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
@@ -109,7 +110,10 @@ namespace Jackett.Services
 
             // Load indexers
             indexerService.InitIndexers();
+        }
 
+        public void Start()
+        {
             // Start the server
             logger.Debug("Starting web server at " + config.GetListenAddresses()[0]);
             var startOptions = new StartOptions();

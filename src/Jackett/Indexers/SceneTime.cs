@@ -29,7 +29,7 @@ namespace Jackett.Indexers
         public SceneTime(IIndexerManagerService i, Logger l)
             : base(name: "SceneTime",
                 description: "Always on time",
-                link: new Uri("https://www.scenetime.com"),
+                link: new Uri("https://www.scenetime.com/"),
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 logger: l)

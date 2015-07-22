@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac.Integration.WebApi;
 using Jackett.Indexers;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
 
 namespace Jackett
 {
@@ -17,6 +19,20 @@ namespace Jackett
             var thisAssembly = typeof(JackettModule).Assembly;
             builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
+
+            // Register the best web client for the platform or exec curl as a safe option
+            if (Engine.CurlSafe)
+            {
+                builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
+            }
+            else if(System.Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+            }
+            else
+            {
+                builder.RegisterType<WindowsWebClient>().As<IWebClient>();
+            }
 
             // Register indexers
             foreach (var indexer in thisAssembly.GetTypes()

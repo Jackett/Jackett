@@ -23,7 +23,8 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=setup
-SetupIconFile=O:\Documents\JackettKayo\src\Jackett.Console\jackett.ico
+SetupIconFile=src\Jackett.Console\jackett.ico
+UninstallDisplayIcon={app}\JackettConsole.exe
 Compression=lzma
 SolidCompression=yes
 
@@ -35,8 +36,8 @@ Name: "windowsService"; Description: "Install as a Windows Service"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "O:\Documents\JackettKayo\Build\JackettTray.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "O:\Documents\JackettKayo\Build\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Build\JackettTray.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Build\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -51,6 +52,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 Filename: "{app}\JackettConsole.exe"; Parameters: "/u"; Flags: waituntilterminated;
 Filename: "{app}\JackettConsole.exe"; Parameters: "/r"; Flags: waituntilterminated;
 Filename: "{app}\JackettConsole.exe"; Parameters: "/i"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{app}\JackettConsole.exe"; Parameters: "/start"; Flags: waituntilterminated; Tasks: windowsService
 
 [UninstallRun]
 Filename: "{app}\JackettConsole.exe"; Parameters: "/u"; Flags: waituntilterminated skipifdoesntexist

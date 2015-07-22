@@ -24,6 +24,7 @@ namespace Jackett.Indexers
 
         protected Logger logger;
         protected IIndexerManagerService indexerService;
+       // protected IWebClient webClient;
 
         protected static List<CachedResult> cache = new List<CachedResult>();
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
@@ -33,7 +34,7 @@ namespace Jackett.Indexers
             return StringUtil.StripNonAlphaNumeric(type.Name.ToLowerInvariant());
         }
 
-        public BaseIndexer(string name, string description, Uri link, TorznabCapabilities caps, IIndexerManagerService manager, Logger logger)
+        public BaseIndexer(string name, string description, Uri link, TorznabCapabilities caps, IIndexerManagerService manager,Logger logger)
         {
             DisplayName = name;
             DisplayDescription = description;
@@ -41,6 +42,7 @@ namespace Jackett.Indexers
             TorznabCaps = caps;
             this.logger = logger;
             indexerService = manager;
+          //  webClient = wc;
         }
 
         protected void SaveConfig(JToken config)
