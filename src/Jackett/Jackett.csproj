@@ -133,9 +133,7 @@
     <Compile Include="ResultPage.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerUtil.cs" />
-    <Compile Include="SonarApi.cs" />
     <Compile Include="TorznabQuery.cs" />
-    <Compile Include="TVRage.cs" />
     <Compile Include="WebApi.cs" />
     <Compile Include="CurlHelper.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
@@ -242,7 +240,6 @@
     <Content Include="WebContent\jquery-2.1.3.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-
     <Content Include="WebContent\logos\freshon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

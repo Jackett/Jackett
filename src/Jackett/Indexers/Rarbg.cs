@@ -31,6 +31,8 @@ namespace Jackett.Indexers
             get { return new Uri("https://rarbg.com"); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return false; } }
+
         public bool IsConfigured { get; private set; }
 
         const string DefaultUrl = "http://torrentapi.org";
@@ -127,7 +129,7 @@ namespace Jackett.Indexers
             if (query.RageID != 0)
                 searchUrl = string.Format(baseUrl + SearchTVRageUrl, query.RageID, token);
             else
-                searchUrl = string.Format(baseUrl + SearchQueryUrl, query.SearchTerm, token);
+                searchUrl = string.Format(baseUrl + SearchQueryUrl, query.SanitizedSearchTerm, token);
 
             var request = CreateHttpRequest(searchUrl);
             var response = await client.SendAsync(request);
