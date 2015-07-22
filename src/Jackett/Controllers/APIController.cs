@@ -39,7 +39,7 @@ namespace Jackett.Controllers
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
             }
 
-            if (torznabQuery.QueryType == "caps")
+            if (string.Equals(torznabQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return new HttpResponseMessage()
                 {
@@ -49,7 +49,7 @@ namespace Jackett.Controllers
 
             var releases = await indexer.PerformQuery(torznabQuery);
 
-            logger.Debug(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
+            logger.Info(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
 
             var resultPage = new ResultPage(new ChannelInfo

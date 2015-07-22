@@ -150,7 +150,14 @@ namespace Jackett.Services
         /// <returns></returns>
         public static string GetAppDataFolderStatic()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+            if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+            }
+            else
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+            }
         }
 
         public string GetIndexerConfigDir()

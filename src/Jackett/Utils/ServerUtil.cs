@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Utils
 {
-    public static class ServerUtil
+    public class ServerUtil
     {
         public static int[] RestrictedPorts = new int[] {
                                                              1,    // tcpmux
@@ -75,26 +76,27 @@ namespace Jackett.Utils
                                                               6668, // Alternate IRC [Apple addition]
                                                               6669, // Alternate IRC [Apple addition]};
                                                                 };
-        public static bool IsPort(string value)
+
+        public static bool IsUserAdministrator()
         {
-            if (string.IsNullOrEmpty(value))
-                return false;
-
-            Regex numeric = new Regex(@"^[0-9]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-            if (numeric.IsMatch(value))
+            //bool value to hold our return value
+            bool isAdmin;
+            try
             {
-                try
-                {
-                    if (Convert.ToInt32(value) < 65536)
-                        return true;
-                }
-                catch (OverflowException)
-                {
-                }
+                //get the currently logged in user
+                var user = WindowsIdentity.GetCurrent();
+                var principal = new WindowsPrincipal(user);
+                isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
-
-            return false;
+            catch (UnauthorizedAccessException)
+            {
+                isAdmin = false;
+            }
+            catch
+            {
+                isAdmin = false;
+            }
+            return isAdmin;
         }
     }
 }

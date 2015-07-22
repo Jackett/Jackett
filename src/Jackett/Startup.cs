@@ -15,7 +15,6 @@ using Autofac;
 using Jackett.Services;
 using System.Web.Http.Tracing;
 using Jackett.Utils;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -67,12 +66,6 @@ namespace Jackett
                 routeTemplate: "api/{indexerName}/download/{path}/download.torrent",
                 defaults: new { controller = "Download", action = "Download" }
             );
-
-            appBuilder.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Admin/Login")
-            });
 
             appBuilder.UseFileServer(new FileServerOptions
             {

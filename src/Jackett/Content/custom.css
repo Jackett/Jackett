@@ -160,6 +160,7 @@ hr {
 }
 
 .input-area {
+    margin: 4px 0px;
 }
 
     .input-area > * {
@@ -172,7 +173,7 @@ hr {
 
 .input-header {
     font-size: 18px;
-    width: 140px;
+    width: 160px;
     display: inline-block;
 }
 

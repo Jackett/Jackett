@@ -10,7 +10,8 @@ namespace Jackett.Services
 {
     public interface IProcessService
     {
-        void StartProcessAndLog(string exe, string args);
+        void StartProcessAndLog(string exe, string args, bool asAdmin = false);
+        string StartProcessAndGetOutput(string exe, string args, bool keepnewlines = false, bool asAdmin = false);
     }
 
     public class ProcessService : IProcessService
@@ -22,7 +23,7 @@ namespace Jackett.Services
             logger = l;
         }
 
-        public void StartProcessAndLog(string exe, string args)
+        private void Run(string exe, string args, bool asAdmin, DataReceivedEventHandler d, DataReceivedEventHandler r)
         {
             var startInfo = new ProcessStartInfo()
             {
@@ -35,30 +36,71 @@ namespace Jackett.Services
                 RedirectStandardInput = true
             };
 
+            if (asAdmin)
+            {
+                startInfo.Verb = "runas";
+                startInfo.UseShellExecute = true;
+                startInfo.RedirectStandardError = false;
+                startInfo.RedirectStandardOutput = false;
+                startInfo.RedirectStandardInput = false;
+            }
+
             var proc = Process.Start(startInfo);
-            proc.OutputDataReceived += proc_OutputDataReceived;
-            proc.ErrorDataReceived += proc_ErrorDataReceived;
-            proc.BeginErrorReadLine();
-            proc.BeginOutputReadLine();
+
+            if (!asAdmin)
+            {
+                proc.OutputDataReceived += d;
+                proc.ErrorDataReceived += r;
+                proc.BeginErrorReadLine();
+                proc.BeginOutputReadLine();
+            }
             proc.WaitForExit();
-            proc.OutputDataReceived -= proc_OutputDataReceived;
-            proc.ErrorDataReceived -= proc_ErrorDataReceived;
-        }
-
-        void proc_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(e.Data))
+            if (!asAdmin)
             {
-                logger.Error(e.Data);
+                proc.OutputDataReceived -= d;
+                proc.ErrorDataReceived -= r;
             }
         }
 
-        void proc_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        public string StartProcessAndGetOutput(string exe, string args, bool keepnewlines = false, bool asAdmin = false)
         {
-            if (!string.IsNullOrWhiteSpace(e.Data))
+            var sb = new StringBuilder();
+            DataReceivedEventHandler rxData = (a, e) => {
+                if (keepnewlines || !string.IsNullOrWhiteSpace(e.Data))
+                {
+                    sb.AppendLine(e.Data);
+                }
+            };
+            DataReceivedEventHandler rxError = (s, e) => {
+                if (keepnewlines || !string.IsNullOrWhiteSpace(e.Data))
+                {
+                    sb.AppendLine(e.Data);
+                }
+            };
+
+            Run(exe, args, asAdmin, rxData, rxError);
+            return sb.ToString();
+        }
+
+        public void StartProcessAndLog(string exe, string args, bool asAdmin = false)
+        {
+            var sb = new StringBuilder();
+            DataReceivedEventHandler rxData = (a, e) =>
             {
-                logger.Debug(e.Data);
-            }
+                if (!string.IsNullOrWhiteSpace(e.Data))
+                {
+                    logger.Debug(e.Data);
+                }
+            };
+            DataReceivedEventHandler rxError = (s, e) =>
+            {
+                if (!string.IsNullOrWhiteSpace(e.Data))
+                {
+                    logger.Error(e.Data);
+                }
+            };
+
+            Run(exe, args, asAdmin, rxData, rxError);
         }
     }
 }
