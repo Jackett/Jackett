@@ -31,6 +31,8 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return true; } }
+
         const string BaseUrl = "https://sceneaccess.eu";
         const string LoginUrl = BaseUrl + "/login";
         const string SearchUrl = BaseUrl + "/{0}?method=1&c{1}=1&search={2}";
@@ -125,64 +127,61 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
+            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchSection = string.IsNullOrEmpty(query.Episode) ? "archive" : "browse";
+            var searchCategory = string.IsNullOrEmpty(query.Episode) ? "26" : "27";
+
+            var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
+
+            string results;
+            if (Program.IsWindows)
             {
-                var searchString = title + " " + query.GetEpisodeSearchString();
-                var searchSection = string.IsNullOrEmpty(query.Episode) ? "archive" : "browse";
-                var searchCategory = string.IsNullOrEmpty(query.Episode) ? "26" : "27";
+                results = await client.GetStringAsync(searchUrl);
+            }
+            else
+            {
+                var response = await CurlHelper.GetAsync(searchUrl, cookieHeader);
+                results = Encoding.UTF8.GetString(response.Content);
+            }
 
-                var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
+            try
+            {
+                CQ dom = results;
+                var rows = dom["#torrents-table > tbody > tr.tt_row"];
+                foreach (var row in rows)
+                {
+                    CQ qRow = row.Cq();
+                    var release = new ReleaseInfo();
 
-                string results;
-                if (Program.IsWindows)
-                {
-                    results = await client.GetStringAsync(searchUrl);
-                }
-                else
-                {
-                    var response = await CurlHelper.GetAsync(searchUrl, cookieHeader);
-                    results = Encoding.UTF8.GetString(response.Content);
-                }
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 129600;
+                    release.Title = qRow.Find(".ttr_name > a").Text();
+                    release.Description = release.Title;
+                    release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".ttr_name > a").Attr("href"));
+                    release.Comments = release.Guid;
+                    release.Link = new Uri(BaseUrl + "/" + qRow.Find(".td_dl > a").Attr("href"));
 
-                try
-                {
-                    CQ dom = results;
-                    var rows = dom["#torrents-table > tbody > tr.tt_row"];
-                    foreach (var row in rows)
+                    var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
+                    var sizeParts = sizeStr.Split(' ');
+                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+
+                    var timeStr = qRow.Find(".ttr_added").Text();
+                    DateTime time;
+                    if (DateTime.TryParseExact(timeStr, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out time))
                     {
-                        CQ qRow = row.Cq();
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 129600;
-                        release.Title = qRow.Find(".ttr_name > a").Text();
-                        release.Description = release.Title;
-                        release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".ttr_name > a").Attr("href"));
-                        release.Comments = release.Guid;
-                        release.Link = new Uri(BaseUrl + "/" + qRow.Find(".td_dl > a").Attr("href"));
-
-                        var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
-                        var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
-
-                        var timeStr = qRow.Find(".ttr_added").Text();
-                        DateTime time;
-                        if (DateTime.TryParseExact(timeStr, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out time))
-                        {
-                            release.PublishDate = time;
-                        }
-
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Find(".ttr_seeders").Text());
-                        release.Peers = ParseUtil.CoerceInt(qRow.Find(".ttr_leechers").Text()) + release.Seeders;
-
-                        releases.Add(release);
+                        release.PublishDate = time;
                     }
+
+                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".ttr_seeders").Text());
+                    release.Peers = ParseUtil.CoerceInt(qRow.Find(".ttr_leechers").Text()) + release.Seeders;
+
+                    releases.Add(release);
                 }
-                catch (Exception ex)
-                {
-                    OnResultParsingError(this, results, ex);
-                    throw ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                OnResultParsingError(this, results, ex);
+                throw ex;
             }
 
             return releases.ToArray();

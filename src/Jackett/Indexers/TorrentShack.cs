@@ -33,6 +33,8 @@ namespace Jackett.Indexers
             get { return new Uri(BaseUrl); }
         }
 
+        public bool RequiresRageIDLookupDisabled { get { return true; } }
+
         const string BaseUrl = "http://torrentshack.me";
         const string LoginUrl = BaseUrl + "/login.php";
         const string SearchUrl = BaseUrl + "/torrents.php?searchstr={0}&release_type=both&searchtags=&tags_type=0&order_by=s3&order_way=desc&torrent_preset=all&filter_cat%5B600%5D=1&filter_cat%5B620%5D=1&filter_cat%5B700%5D=1&filter_cat%5B981%5D=1&filter_cat%5B980%5D=1";
@@ -111,69 +113,67 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            foreach (var title in query.ShowTitles ?? new string[] { string.Empty })
+
+            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+            var results = await client.GetStringAsync(episodeSearchUrl);
+            try
             {
-                var searchString = title + " " + query.GetEpisodeSearchString();
-                var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-                var results = await client.GetStringAsync(episodeSearchUrl);
-                try
+                CQ dom = results;
+                var rows = dom["#torrent_table > tbody > tr.torrent"];
+                foreach (var row in rows)
                 {
-                    CQ dom = results;
-                    var rows = dom["#torrent_table > tbody > tr.torrent"];
-                    foreach (var row in rows)
+                    CQ qRow = row.Cq();
+                    var release = new ReleaseInfo();
+
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    release.Title = qRow.Find(".torrent_name_link").Text();
+                    release.Description = release.Title;
+                    release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrent_name_link").Parent().Attr("href"));
+                    release.Comments = release.Guid;
+                    release.Link = new Uri(BaseUrl + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
+
+                    var dateStr = qRow.Find(".time").Text().Trim();
+                    if (dateStr.ToLower().Contains("just now"))
+                        release.PublishDate = DateTime.Now;
+                    else
                     {
-                        CQ qRow = row.Cq();
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
-                        release.Title = qRow.Find(".torrent_name_link").Text();
-                        release.Description = release.Title;
-                        release.Guid = new Uri(BaseUrl + "/" + qRow.Find(".torrent_name_link").Parent().Attr("href"));
-                        release.Comments = release.Guid;
-                        release.Link = new Uri(BaseUrl + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
-
-                        var dateStr = qRow.Find(".time").Text().Trim();
-                        if (dateStr.ToLower().Contains("just now"))
-                            release.PublishDate = DateTime.Now;
-                        else
-                        {
-                            var dateParts = dateStr.Split(' ');
-                            var dateValue = ParseUtil.CoerceInt(dateParts[0]);
-                            TimeSpan ts = TimeSpan.Zero;
-                            if (dateStr.Contains("Just now"))
-                                ts = TimeSpan.Zero;
-                            else if (dateStr.Contains("sec"))
-                                ts = TimeSpan.FromSeconds(dateValue);
-                            else if (dateStr.Contains("min"))
-                                ts = TimeSpan.FromMinutes(dateValue);
-                            else if (dateStr.Contains("hour"))
-                                ts = TimeSpan.FromHours(dateValue);
-                            else if (dateStr.Contains("day"))
-                                ts = TimeSpan.FromDays(dateValue);
-                            else if (dateStr.Contains("week"))
-                                ts = TimeSpan.FromDays(dateValue * 7);
-                            else if (dateStr.Contains("month"))
-                                ts = TimeSpan.FromDays(dateValue * 30);
-                            else if (dateStr.Contains("year"))
-                                ts = TimeSpan.FromDays(dateValue * 365);
-                            release.PublishDate = DateTime.Now - ts;
-                        }
-
-                        var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
-                        var sizeParts = sizeStr.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(6).InnerText.Trim());
-                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
-
-                        releases.Add(release);
+                        var dateParts = dateStr.Split(' ');
+                        var dateValue = ParseUtil.CoerceInt(dateParts[0]);
+                        TimeSpan ts = TimeSpan.Zero;
+                        if (dateStr.Contains("Just now"))
+                            ts = TimeSpan.Zero;
+                        else if (dateStr.Contains("sec"))
+                            ts = TimeSpan.FromSeconds(dateValue);
+                        else if (dateStr.Contains("min"))
+                            ts = TimeSpan.FromMinutes(dateValue);
+                        else if (dateStr.Contains("hour"))
+                            ts = TimeSpan.FromHours(dateValue);
+                        else if (dateStr.Contains("day"))
+                            ts = TimeSpan.FromDays(dateValue);
+                        else if (dateStr.Contains("week"))
+                            ts = TimeSpan.FromDays(dateValue * 7);
+                        else if (dateStr.Contains("month"))
+                            ts = TimeSpan.FromDays(dateValue * 30);
+                        else if (dateStr.Contains("year"))
+                            ts = TimeSpan.FromDays(dateValue * 365);
+                        release.PublishDate = DateTime.Now - ts;
                     }
+
+                    var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
+                    var sizeParts = sizeStr.Split(' ');
+                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                    release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(6).InnerText.Trim());
+                    release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
+
+                    releases.Add(release);
                 }
-                catch (Exception ex)
-                {
-                    OnResultParsingError(this, results, ex);
-                    throw ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                OnResultParsingError(this, results, ex);
+                throw ex;
             }
             return releases.ToArray();
         }
