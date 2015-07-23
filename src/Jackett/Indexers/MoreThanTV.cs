@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -23,14 +24,10 @@ namespace Jackett.Indexers
         private readonly string DownloadUrl = "";
         private readonly string GuidUrl = "";
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
+        private IWebClient client;
+        private string cookieHeader = "";
 
-        string cookieHeader;
-        int retries = 3;
-
-        public MoreThanTV(IIndexerManagerService i, Logger l)
+        public MoreThanTV(IIndexerManagerService i, IWebClient c, Logger l)
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                 link: new Uri("https://www.morethan.tv"),
@@ -42,15 +39,7 @@ namespace Jackett.Indexers
             SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";
             DownloadUrl = SiteLink + "/torrents.php?action=download&id=";
             GuidUrl = SiteLink + "/torrents.php?torrentid=";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
+            client = c;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -71,32 +60,26 @@ namespace Jackett.Indexers
 				{ "keeplogged", "1" }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-
-            string responseContent;
-
-            var configSaveData = new JObject();
-
-            if (Engine.IsWindows)
+            var loginResponse = await client.GetString(new Utils.Clients.WebRequest()
             {
-                // If Windows use .net http
-                var response = await client.PostAsync(LoginUrl, content);
-                responseContent = await response.Content.ReadAsStringAsync();
-                cookies.DumpToJson(SiteLink, configSaveData);
+                PostData = pairs,
+                Url = LoginUrl,
+                Type = RequestType.POST
+            });
 
-            }
-            else
+            if (loginResponse.Status == HttpStatusCode.Found)
             {
-                // If UNIX system use curl
-                var response = await CurlHelper.PostAsync(LoginUrl, pairs);
-                responseContent = Encoding.UTF8.GetString(response.Content);
-                cookieHeader = response.CookieHeader;
-                configSaveData["cookie_header"] = cookieHeader;
+                cookieHeader = loginResponse.Cookies;
+                loginResponse = await client.GetString(new Utils.Clients.WebRequest()
+                {
+                    Url = SiteLink.ToString(),
+                    Cookies = cookieHeader
+                });
             }
 
-            if (!responseContent.Contains("logout.php?"))
+            if (!loginResponse.Content.Contains("logout.php?"))
             {
-                CQ dom = responseContent;
+                CQ dom = loginResponse.Content;
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
@@ -104,6 +87,8 @@ namespace Jackett.Indexers
             }
             else
             {
+                var configSaveData = new JObject();
+                configSaveData["cookies"] = cookieHeader;
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -111,9 +96,12 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            cookieHeader = cookies.GetCookieHeader(SiteLink);
-            IsConfigured = true;
+            // The old config used an array - just fail to load it
+            if (!(jsonConfig["cookies"] is JArray))
+            {
+                cookieHeader = (string)jsonConfig["cookies"];
+                IsConfigured = true;
+            }
         }
 
         private void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
@@ -133,21 +121,30 @@ namespace Jackett.Indexers
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
+            WebClientStringResult response = null; 
 
-            string results;
-            if (Engine.IsWindows)
+            // Their web server is fairly flakey - try up to three times.
+            for(int i = 0; i < 3; i++)
             {
-                results = await client.GetStringAsync(episodeSearchUrl, retries);
+                try
+                {
+                    response = await client.GetString(new Utils.Clients.WebRequest()
+                    {
+                        Url = episodeSearchUrl,
+                        Type = RequestType.GET,
+                        Cookies = cookieHeader
+                    });
+
+                    break;
+                }
+                catch (Exception e){
+                    logger.Error(e, "Error checking for results from MoreThanTv.");
+                }
             }
-            else
-            {
-                var response = await CurlHelper.GetAsync(episodeSearchUrl, cookieHeader);
-                results = Encoding.UTF8.GetString(response.Content);
-            }
+            
             try
             {
-
-                var json = JObject.Parse(results);
+                var json = JObject.Parse(response.Content);
                 foreach (JObject r in json["response"]["results"])
                 {
                     DateTime pubDate = DateTime.MinValue;
@@ -186,7 +183,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases.ToArray();
@@ -194,15 +191,14 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Engine.IsWindows)
+            var result = await client.GetBytes(new Utils.Clients.WebRequest()
             {
-                return await client.GetByteArrayAsync(link);
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(link.ToString(), cookieHeader);
-                return response.Content;
-            }
+                Cookies = cookieHeader,
+                Url = link.ToString(),
+               Type = RequestType.GET
+            });
+
+            return result.Content;
         }
     }
 }

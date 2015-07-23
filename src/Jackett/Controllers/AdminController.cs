@@ -172,16 +172,14 @@ namespace Jackett.Controllers
             catch (Exception ex)
             {
                 jsonReply["result"] = "error";
-                //jsonReply["error"] = Newtonsoft.Json.JsonConvert.SerializeObject(ex); 
+                jsonReply["error"] = ex.Message;
                 if (ex is ExceptionWithConfigData)
                 {
                     jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
-                }
+                } 
             }
             return Json(jsonReply);
         }
-
-
 
         [Route("get_indexers")]
         [HttpGet]
@@ -323,13 +321,10 @@ namespace Jackett.Controllers
                         serverService.ReserveUrls(true);
                     }
 
-                    // This is giving a warning - is there a better way of doing this?
-                    Task.Run(() =>
-                    {
+                    (new Thread(() => {
                         Thread.Sleep(500);
                         serverService.Start();
-                    });
-                   
+                    })).Start();
                 }
 
                 jsonReply["result"] = "success";
@@ -341,14 +336,6 @@ namespace Jackett.Controllers
                 jsonReply["error"] = ex.Message;
             }
             return Json(jsonReply);
-        }
-
-
-        [Route("jackett_restart")]
-        [HttpPost]
-        public IHttpActionResult Restart()
-        {
-            return null;
         }
     }
 }
