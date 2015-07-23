@@ -123,10 +123,10 @@ namespace Jackett.Indexers
 
                     release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href"));
 
-                    var dateString = qRow.Find(".name").First()[0].ChildNodes[4].NodeValue.Replace(" on", "").Trim();
+                    var dateString = qRow.Find(".name")[0].InnerText.Trim().Replace(" ", string.Empty).Replace("Addedinon", string.Empty);
                     //"2015-04-25 23:38:12"
                     //"yyyy-MMM-dd hh:mm:ss"
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
                     release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], ParseUtil.CoerceFloat(sizeStringParts[0]));
