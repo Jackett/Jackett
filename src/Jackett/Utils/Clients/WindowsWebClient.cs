@@ -13,16 +13,18 @@ namespace Jackett.Utils.Clients
     class WindowsWebClient : IWebClient
     {
         private Logger logger;
+        CookieContainer cookies;
 
         public WindowsWebClient(Logger l)
         {
             logger = l;
+            cookies = new CookieContainer();
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("WindowsWebClient:GetBytes(Url:{0})", request.Url));
-            var cookies = new CookieContainer();
+
 
             if (!string.IsNullOrEmpty(request.Cookies))
             {
@@ -45,7 +47,6 @@ namespace Jackett.Utils.Clients
                 CookieContainer = cookies,
                 AllowAutoRedirect = false,
                 UseCookies = true,
-
             });
 
             client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
@@ -92,9 +93,8 @@ namespace Jackett.Utils.Clients
             var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookies,
-                AllowAutoRedirect = false,
+                AllowAutoRedirect = request.AutoRedirect,
                 UseCookies = true,
-                
             });
 
             client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);

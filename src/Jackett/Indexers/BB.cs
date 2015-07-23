@@ -130,28 +130,7 @@ namespace Jackett.Indexers
                     release.Link = new Uri(BaseUrl + "/" + qDownload.Attr("href"));
 
                     var dateStr = row.ChildElements.ElementAt(3).Cq().Text().Trim().Replace(" and", "");
-                    var dateParts = dateStr.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    TimeSpan timeAgo = TimeSpan.Zero;
-                    for (var i = 0; i < dateParts.Length / 2; i++)
-                    {
-                        var val = ParseUtil.CoerceInt(dateParts[i * 2]);
-                        var unit = dateParts[i * 2 + 1];
-                        if (unit.Contains("sec"))
-                            timeAgo += TimeSpan.FromSeconds(val);
-                        else if (unit.Contains("min"))
-                            timeAgo += TimeSpan.FromMinutes(val);
-                        else if (unit.Contains("hour"))
-                            timeAgo += TimeSpan.FromHours(val);
-                        else if (unit.Contains("day"))
-                            timeAgo += TimeSpan.FromDays(val);
-                        else if (unit.Contains("week"))
-                            timeAgo += TimeSpan.FromDays(val * 7);
-                        else if (unit.Contains("month"))
-                            timeAgo += TimeSpan.FromDays(val * 30);
-                        else if (unit.Contains("year"))
-                            timeAgo += TimeSpan.FromDays(val * 365);
-                    }
-                    release.PublishDate = DateTime.SpecifyKind(DateTime.Now - timeAgo, DateTimeKind.Local);
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     var sizeStr = row.ChildElements.ElementAt(4).Cq().Text().Trim();
                     var sizeParts = sizeStr.Split(' ');

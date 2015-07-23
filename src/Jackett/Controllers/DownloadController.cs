@@ -26,11 +26,11 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Download(string indexerName, string path)
+        public async Task<HttpResponseMessage> Download(string indexerID, string path)
         {
             try
             {
-                var indexer = indexerService.GetIndexer(indexerName);
+                var indexer = indexerService.GetIndexer(indexerID);
                 var remoteFile = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
                 var downloadBytes = await indexer.Download(new Uri(remoteFile));
 
@@ -41,7 +41,7 @@ namespace Jackett.Controllers
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error downloading " + indexerName + " " + path);
+                logger.Error(e, "Error downloading " + indexerID + " " + path);
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
         }

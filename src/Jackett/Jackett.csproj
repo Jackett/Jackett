@@ -155,6 +155,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Indexers\BB.cs" />
+    <Compile Include="Indexers\PrivateHD.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
@@ -281,6 +282,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\hdtorrents.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\privatehd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\sceneaccess.png">

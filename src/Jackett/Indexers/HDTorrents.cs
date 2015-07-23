@@ -169,22 +169,7 @@ namespace Jackett.Indexers
 
                         string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                         string[] sizeSplit = fullSize.Split(' ');
-                        switch (sizeSplit[1].ToLower())
-                        {
-                            case "kb":
-                                size = ReleaseInfo.BytesFromKB(ParseUtil.CoerceFloat(sizeSplit[0]));
-                                break;
-                            case "mb":
-                                size = ReleaseInfo.BytesFromMB(ParseUtil.CoerceFloat(sizeSplit[0]));
-                                break;
-                            case "gb":
-                                size = ReleaseInfo.BytesFromGB(ParseUtil.CoerceFloat(sizeSplit[0]));
-                                break;
-                            default:
-                                size = null;
-                                break;
-                        }
-                        release.Size = size;
+                        release.Size = ReleaseInfo.GetBytes(sizeSplit[1], ParseUtil.CoerceFloat(sizeSplit[0]));
 
                         release.Guid = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
                         release.Link = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
