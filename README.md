@@ -50,7 +50,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 Jackett's framework allows me (and any other volunteering dev) to implement just about any new tracker in 15-60 minutes. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact me on IRC (see below).
 
 ### Contact & Support
-I can be contact on IRC at [irc.freenode.net#sonarr](http://webchat.freenode.net/?channels=#sonarr)
+I can be contact on IRC at [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett) & [irc.freenode.net#sonarr](http://webchat.freenode.net/?channels=#sonarr)
 
 ### Screenshots
 
