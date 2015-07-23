@@ -46,8 +46,7 @@ namespace Jackett.Indexers
             var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = LoginUrl,
-                Type = RequestType.GET,
-                AutoRedirect = true,
+                Type = RequestType.GET
             });
 
             var token = new Regex("Avz.CSRF_TOKEN = '(.*?)';").Match(loginPage.Content).Groups[1].ToString();
@@ -58,26 +57,34 @@ namespace Jackett.Indexers
                 { "remember", "on" }
             };
 
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            // Send Post
+            var loginPost = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = LoginUrl,
                 PostData = pairs,
                 Referer = LoginUrl,
                 Type = RequestType.POST,
-                AutoRedirect = true,
                 Cookies = loginPage.Cookies
             });
 
-            if (!response.Content.Contains("auth/logout"))
+            // Get result from redirect
+            var loginResult = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                CQ dom = response.Content;
+                Url = loginPost.RedirectingTo,
+                Type = RequestType.GET,
+                Cookies = loginPost.Cookies
+            });
+
+            if (!loginResult.Content.Contains("auth/logout"))
+            {
+                CQ dom = loginResult.Content;
                 var messageEl = dom[".form-error"];
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
             }
             else
             {
-                cookieHeader = response.Cookies;
+                cookieHeader = loginPost.Cookies;
                 var configSaveData = new JObject();
                 configSaveData["cookies"] = cookieHeader;
                 SaveConfig(configSaveData);
