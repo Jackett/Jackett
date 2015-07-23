@@ -13,19 +13,19 @@ namespace Jackett.Utils.Clients
     class WindowsWebClient : IWebClient
     {
         private Logger logger;
-        CookieContainer cookies;
+      
 
         public WindowsWebClient(Logger l)
         {
             logger = l;
-            cookies = new CookieContainer();
+          
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("WindowsWebClient:GetBytes(Url:{0})", request.Url));
 
-
+            var cookies = new CookieContainer();
             if (!string.IsNullOrEmpty(request.Cookies))
             {
                 var uri = new Uri(request.Url);
@@ -45,7 +45,7 @@ namespace Jackett.Utils.Clients
             var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookies,
-                AllowAutoRedirect = false,
+                AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
             });
 
@@ -64,8 +64,24 @@ namespace Jackett.Utils.Clients
 
             var result = new WebClientByteResult();
             result.Content = await response.Content.ReadAsByteArrayAsync();
-            result.Cookies = cookies.GetCookieHeader(new Uri(request.Url));
+           
             result.Status = response.StatusCode;
+
+            // Compatiblity issue between the cookie format and httpclient
+            // Pull it out manually ignoring the expiry date then set it manually
+            // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
+            IEnumerable<string> cookieHeaders;
+            if (response.Headers.TryGetValues("set-cookie", out cookieHeaders))
+            {
+                var cookieBuilder = new StringBuilder();
+                foreach (var c in cookieHeaders)
+                {
+                    cookieBuilder.AppendFormat("{0} ", c.Substring(0, c.LastIndexOf(';')));
+                }
+
+                result.Cookies = cookieBuilder.ToString().TrimEnd();
+            }
+
             return result;
         }
 
@@ -93,7 +109,7 @@ namespace Jackett.Utils.Clients
             var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookies,
-                AllowAutoRedirect = request.AutoRedirect,
+                AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
             });
 
@@ -111,8 +127,32 @@ namespace Jackett.Utils.Clients
 
             var result = new WebClientStringResult();
             result.Content = await response.Content.ReadAsStringAsync();
-            result.Cookies = cookies.GetCookieHeader(new Uri(request.Url));
+
+            // Compatiblity issue between the cookie format and httpclient
+            // Pull it out manually ignoring the expiry date then set it manually
+            // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
+            IEnumerable<string> cookieHeaders;
+            if (response.Headers.TryGetValues("set-cookie", out cookieHeaders))
+            {
+                var cookieBuilder = new StringBuilder();
+                foreach (var c in cookieHeaders)
+                {
+                    if (cookieBuilder.Length > 0)
+                    {
+                        cookieBuilder.Append("; ");
+                    }
+
+                    cookieBuilder.Append( c.Substring(0, c.IndexOf(';')));
+                }
+
+                result.Cookies = cookieBuilder.ToString();
+            }
+
             result.Status = response.StatusCode;
+            if (null != response.Headers.Location)
+            {
+                result.RedirectingTo = response.Headers.Location.ToString();
+            }
             return result;
         }
     }

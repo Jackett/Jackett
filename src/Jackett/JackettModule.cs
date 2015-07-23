@@ -21,7 +21,7 @@ namespace Jackett
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
 
             // Register the best web client for the platform or exec curl as a safe option
-            if (Engine.CurlSafe)
+            if (Startup.CurlSafe)
             {
                 builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
             }

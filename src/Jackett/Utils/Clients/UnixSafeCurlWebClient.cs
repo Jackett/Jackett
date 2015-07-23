@@ -37,7 +37,8 @@ namespace Jackett.Utils.Clients
             {
                 Cookies = byteResult.Cookies,
                 Status = byteResult.Status,
-                Content = Encoding.UTF8.GetString(byteResult.Content)
+                Content = Encoding.UTF8.GetString(byteResult.Content),
+                RedirectingTo = byteResult.RedirectingTo
             };
         }
 
@@ -71,7 +72,7 @@ namespace Jackett.Utils.Clients
             string stdout = null;
             await Task.Run(() =>
             {
-                stdout = processService.StartProcessAndGetOutput("curl", args.ToString(), true);
+                stdout = processService.StartProcessAndGetOutput(@"C:\Apps\curl.exe", args.ToString(), true);
             });
 
             var outputData = File.ReadAllBytes(tempFile);
@@ -97,15 +98,20 @@ namespace Jackett.Utils.Clients
                     var headerSplitIndex = header.IndexOf(':');
                     if (headerSplitIndex > 0)
                     {
-                        var name = header.Substring(0, headerSplitIndex);
+                        var name = header.Substring(0, headerSplitIndex).ToLowerInvariant();
                         var value = header.Substring(headerSplitIndex + 1);
-                        if (string.Equals(name, "set-cookie", StringComparison.InvariantCultureIgnoreCase))
+                        switch (name)
                         {
-                            var cookieDataSplit = value.IndexOf(';');
-                            if (cookieDataSplit > 0)
-                            {
-                                result.Cookies += value.Substring(0, cookieDataSplit + 1) + " ";
-                            }
+                            case "set-cookie":
+                                var cookieDataSplit = value.IndexOf(';');
+                                if (cookieDataSplit > 0)
+                                {
+                                    result.Cookies += value.Substring(0, cookieDataSplit + 1) + " ";
+                                }//Location
+                                break;
+                            case "location":
+                                result.RedirectingTo = value.Trim();
+                                break;
                         }
                     }
                 }

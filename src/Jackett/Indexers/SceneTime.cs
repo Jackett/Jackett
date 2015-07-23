@@ -58,7 +58,7 @@ namespace Jackett.Indexers
         {
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
-
+           
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
 				{ "password", config.Password.Value }

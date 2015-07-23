@@ -137,7 +137,6 @@ namespace Jackett.Indexers
                         }
 
                         release = new ReleaseInfo();
-                        long? size;
 
                         release.Title = qRow.Find("td.mainblockcontent b a").Text();
                         release.Description = release.Title;
