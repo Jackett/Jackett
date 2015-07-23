@@ -103,6 +103,7 @@ namespace Jackett.Services
 
         public void Initalize()
         {
+            logger.Info("Starting Jackett " + configService.GetVersion());
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
             // Allow all SSL.. sucks I know but mono on linux is having problems without it..
