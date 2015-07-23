@@ -33,7 +33,7 @@ namespace Jackett.Indexers
                 logger: l)
         {
             SearchUrl = SiteLink + "t?q=";
-            webclient =wc;
+            webclient = wc;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -58,7 +58,8 @@ namespace Jackett.Indexers
                 Url = SiteLink.ToString(),
                 PostData = pairs,
                 Referer = SiteLink.ToString(),
-                Type = RequestType.POST
+                Type = RequestType.POST,
+                AutoRedirect = true
             });
 
             cookieHeader = response.Cookies;
@@ -91,16 +92,7 @@ namespace Jackett.Indexers
             }
         }
 
-        HttpRequestMessage CreateHttpRequest(Uri uri)
-        {
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            return message;
-        }
-
-        public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
+        public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             cookieHeader = (string)jsonConfig["cookies"];
             IsConfigured = true;
@@ -137,27 +129,10 @@ namespace Jackett.Indexers
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
-                    DateTime pubDate;
                     var descString = qRow.Find(".t_ctime").Text();
                     var dateString = descString.Split('|').Last().Trim();
                     dateString = dateString.Split(new string[] { " by " }, StringSplitOptions.None)[0];
-                    var dateValue = ParseUtil.CoerceFloat(dateString.Split(' ')[0]);
-                    var dateUnit = dateString.Split(' ')[1];
-                    if (dateUnit.Contains("minute"))
-                        pubDate = DateTime.Now - TimeSpan.FromMinutes(dateValue);
-                    else if (dateUnit.Contains("hour"))
-                        pubDate = DateTime.Now - TimeSpan.FromHours(dateValue);
-                    else if (dateUnit.Contains("day"))
-                        pubDate = DateTime.Now - TimeSpan.FromDays(dateValue);
-                    else if (dateUnit.Contains("week"))
-                        pubDate = DateTime.Now - TimeSpan.FromDays(7 * dateValue);
-                    else if (dateUnit.Contains("month"))
-                        pubDate = DateTime.Now - TimeSpan.FromDays(30 * dateValue);
-                    else if (dateUnit.Contains("year"))
-                        pubDate = DateTime.Now - TimeSpan.FromDays(365 * dateValue);
-                    else
-                        pubDate = DateTime.MinValue;
-                    release.PublishDate = pubDate;
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
