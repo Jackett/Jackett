@@ -143,8 +143,15 @@
             <div class="setup-item-label">{{name}}</div>
             <div class="setup-item-value">{{{value_element}}}</div>
         </div>
-
-        <input class="setup-item-inputstring form-control" type="text" value="{{{value}}}" />
+        <div class="setup-item-inputstring">
+            {{#if ispassword}}
+            <input class="form-control" type="password" value="{{{value}}}" />
+            {{else}}
+            <input class="form-control" type="text" value="{{{value}}}" />
+            {{/if}}
+            
+        </div>
+       
         <div class="setup-item-inputbool">
             {{#if value}}
             <input type="checkbox" data-id="{{id}}" class="form-control" checked />

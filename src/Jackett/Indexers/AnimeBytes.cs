@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -39,16 +40,14 @@ namespace Jackett.Indexers
             }
         }
 
-
         private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
-
         public bool AllowRaws { get; private set; }
-        CookieContainer cookieContainer;
-        HttpClientHandler handler;
-        HttpClient client;
 
-        public AnimeBytes(IIndexerManagerService i, Logger l)
+        private IWebClient webclient;
+        private string cookieHeader = "";
+
+        public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l)
             : base(name: "AnimeBytes",
                 description: "The web's best Chinese cartoons",
                 link: new Uri("https://animebytes.tv"),
@@ -60,16 +59,7 @@ namespace Jackett.Indexers
             TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
             LoginUrl = SiteLink + "/user/login";
             SearchUrl = SiteLink + "/torrents.php?filter_cat[1]=1";
-
-            cookieContainer = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookieContainer,
-                AllowAutoRedirect = false,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
+            webclient = client;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -85,8 +75,12 @@ namespace Jackett.Indexers
 
 
             // Get the login form as we need the CSRF Token
-            var loginPage = await client.GetAsync(LoginUrl);
-            CQ loginPageDom = await loginPage.Content.ReadAsStringAsync();
+            var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Url = LoginUrl
+            });
+
+            CQ loginPageDom =loginPage.Content;
             var csrfToken = loginPageDom["input[name=\"csrf_token\"]"].Last();
 
             // Build login form
@@ -102,45 +96,39 @@ namespace Jackett.Indexers
             var content = new FormUrlEncodedContent(pairs);
 
             // Do the login
-            var response = await client.PostAsync(LoginUrl, content);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            // Compatiblity issue between the cookie format and httpclient
-            // Pull it out manually ignoring the expiry date then set it manually
-            // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
-            IEnumerable<string> cookies;
-            if (response.Headers.TryGetValues("set-cookie", out cookies))
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                foreach (var c in cookies)
+                Cookies = loginPage.Cookies,
+                 PostData = pairs,
+                 Referer = LoginUrl,
+                 Type = RequestType.POST,
+                 Url = LoginUrl
+            });
+
+            // Follow the redirect
+            if (response.Status == HttpStatusCode.RedirectMethod)
+            {
+                cookieHeader = response.Cookies;
+                response = await webclient.GetString(new Utils.Clients.WebRequest()
                 {
-                    cookieContainer.SetCookies(SiteLink, c.Substring(0, c.LastIndexOf(';')));
-                }
+                    Url = SearchUrl,
+                    PostData = pairs,
+                    Referer = SiteLink.ToString(),
+                    Cookies = cookieHeader
+                });
             }
 
-            foreach (Cookie cookie in cookieContainer.GetCookies(SiteLink))
+            if (!response.Content.Contains("/user/logout"))
             {
-                if (cookie.Name == "session")
-                {
-                    cookie.Expires = DateTime.Now.AddDays(360);
-                    break;
-                }
-            }
-
-            // Get the home page now we are logged in as AllowAutoRedirect is false as we needed to get the cookie manually.
-            response = await client.GetAsync(SiteLink);
-            responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("/user/logout"))
-            {
+                // Their login page appears to be broken and just gives a 500 error.
                 throw new ExceptionWithConfigData("Failed to login, 6 failed attempts will get you banned for 6 hours.", (ConfigurationData)config);
             }
             else
             {
                 AllowRaws = config.IncludeRaw.Value;
                 var configSaveData = new JObject();
-                cookieContainer.DumpToJson(SiteLink, configSaveData);
+                configSaveData["cookies"] = cookieHeader;
                 configSaveData["raws"] = AllowRaws;
-
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -148,9 +136,13 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieContainer.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-            AllowRaws = jsonConfig["raws"].Value<bool>();
+            // The old config used an array - just fail to load it
+            if (!(jsonConfig["cookies"] is JArray))
+            {
+                cookieHeader = (string)jsonConfig["cookies"];
+                AllowRaws = jsonConfig["raws"].Value<bool>();
+                IsConfigured = true;
+            }
         }
 
 
@@ -169,9 +161,6 @@ namespace Jackett.Indexers
             }
             return sb.ToString();
         }
-
-
-
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
@@ -218,9 +207,13 @@ namespace Jackett.Indexers
             }
 
             // Get the content from the tracker
-            var response = await client.GetAsync(queryUrl);
-            var responseContent = await response.Content.ReadAsStringAsync();
-            CQ dom = responseContent;
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Cookies = cookieHeader,
+                Url = queryUrl,
+                Type = RequestType.GET
+            });
+            CQ dom = response.Content;
 
             // Parse
             try
@@ -379,7 +372,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(responseContent, ex);
+                OnParseError(response.Content, ex);
             }
 
             // Add to the cache
@@ -391,9 +384,15 @@ namespace Jackett.Indexers
             return releases.Select(s => (ReleaseInfo)s.Clone()).ToArray();
         }
 
-        public Task<byte[]> Download(Uri link)
+        public async Task<byte[]> Download(Uri link)
         {
-            return client.GetByteArrayAsync(link);
+            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
+            {
+                Url = link.ToString(),
+                Cookies = cookieHeader
+            });
+
+            return response.Content;
         }
     }
 }

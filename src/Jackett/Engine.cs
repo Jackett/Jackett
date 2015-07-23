@@ -22,24 +22,6 @@ namespace Jackett
             Logger.Info("Starting Jackett " + ConfigService.GetVersion());
         }
 
-        public static bool TracingEnabled
-        {
-            get;
-            set;
-        }
-
-        public static bool LogRequests
-        {
-            get;
-            set;
-        }
-
-        public static bool CurlSafe
-        {
-            get;
-            set;
-        }
-
         public static void BuildContainer()
         {
             var builder = new ContainerBuilder();
@@ -136,13 +118,13 @@ namespace Jackett
             logFile.MaxArchiveFiles = 1;
             logFile.KeepFileOpen = false;
             logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
-            var logFileRule = new LoggingRule("*", TracingEnabled?LogLevel.Debug: LogLevel.Info, logFile);
+            var logFileRule = new LoggingRule("*", LogLevel.Info, logFile);
             logConfig.LoggingRules.Add(logFileRule);
 
             var logConsole = new ConsoleTarget();
             logConfig.AddTarget("console", logConsole);
             logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-            var logConsoleRule = new LoggingRule("*", TracingEnabled ? LogLevel.Debug : LogLevel.Info, logConsole);
+            var logConsoleRule = new LoggingRule("*", Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
 
             LogManager.Configuration = logConfig;

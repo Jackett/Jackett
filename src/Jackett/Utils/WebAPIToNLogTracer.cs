@@ -13,7 +13,7 @@ namespace Jackett.Utils
         public void Trace(HttpRequestMessage request, string category, TraceLevel level,
             Action<TraceRecord> traceAction)
         {
-            if (Engine.TracingEnabled)
+            if (Startup.TracingEnabled)
             {
                 TraceRecord rec = new TraceRecord(request, category, level);
                 traceAction(rec);

@@ -37,12 +37,25 @@ namespace Jackett.Utils.Clients
                 response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer);
             }
 
-            return new WebClientByteResult()
+            var result = new WebClientByteResult()
             {
                 Content = response.Content,
                 Cookies = response.CookieHeader,
                 Status = response.Status
             };
+
+            if (response.Headers != null)
+            {
+                foreach(var header in response.Headers)
+                {
+                    if(string.Equals(header.Key, "location", StringComparison.InvariantCultureIgnoreCase) && header.Value !=null)
+                    {
+                        result.RedirectingTo = header.Value;
+                    }
+                }
+            }
+
+            return result;
         }
 
         public async Task<WebClientStringResult> GetString(WebRequest request)

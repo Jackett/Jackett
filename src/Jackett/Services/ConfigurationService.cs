@@ -125,12 +125,16 @@ namespace Jackett.Services
         public string GetContentFolder()
         {
             // If we are debugging we can use the non copied content.
-            var dir = Path.Combine(ApplicationFolder(), "Content");
-            if (!Directory.Exists(dir))
-            {
-                dir = Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Content");
-            }
+            string dir = Path.Combine(ApplicationFolder(), "Content"); ;
 
+#if DEBUG
+            // When we are running in debug use the source files
+            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Content"));
+            if (Directory.Exists(sourcePath))
+            {
+                dir = sourcePath;
+            }
+#endif
             return dir;
         }
 
