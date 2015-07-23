@@ -29,9 +29,9 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Call(string indexerName)
+        public async Task<HttpResponseMessage> Call(string indexerID)
         {
-            var indexer = indexerService.GetIndexer(indexerName);
+            var indexer = indexerService.GetIndexer(indexerID);
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
 
             if (string.Equals(torznabQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
@@ -70,7 +70,7 @@ namespace Jackett.Controllers
                     continue;
                 var originalLink = release.Link;
                 var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
-                var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.DisplayName, encodedLink);
+                var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.ID, encodedLink);
                 release.Link = new Uri(proxyLink);
             }
 
