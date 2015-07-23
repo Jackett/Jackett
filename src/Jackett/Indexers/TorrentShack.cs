@@ -118,31 +118,7 @@ namespace Jackett.Indexers
                     release.Link = new Uri(SiteLink + "/" + qRow.Find(".torrent_handle_links > a").First().Attr("href"));
 
                     var dateStr = qRow.Find(".time").Text().Trim();
-                    if (dateStr.ToLower().Contains("just now"))
-                        release.PublishDate = DateTime.Now;
-                    else
-                    {
-                        var dateParts = dateStr.Split(' ');
-                        var dateValue = ParseUtil.CoerceInt(dateParts[0]);
-                        TimeSpan ts = TimeSpan.Zero;
-                        if (dateStr.Contains("Just now"))
-                            ts = TimeSpan.Zero;
-                        else if (dateStr.Contains("sec"))
-                            ts = TimeSpan.FromSeconds(dateValue);
-                        else if (dateStr.Contains("min"))
-                            ts = TimeSpan.FromMinutes(dateValue);
-                        else if (dateStr.Contains("hour"))
-                            ts = TimeSpan.FromHours(dateValue);
-                        else if (dateStr.Contains("day"))
-                            ts = TimeSpan.FromDays(dateValue);
-                        else if (dateStr.Contains("week"))
-                            ts = TimeSpan.FromDays(dateValue * 7);
-                        else if (dateStr.Contains("month"))
-                            ts = TimeSpan.FromDays(dateValue * 30);
-                        else if (dateStr.Contains("year"))
-                            ts = TimeSpan.FromDays(dateValue * 365);
-                        release.PublishDate = DateTime.Now - ts;
-                    }
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
                     var sizeParts = sizeStr.Split(' ');

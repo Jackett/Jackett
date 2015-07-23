@@ -114,24 +114,7 @@ namespace Jackett.Indexers
                     release.Guid = release.Comments;
 
                     var dateStr = descCol.ChildElements.Last().Cq().Text().Split('|').Last().ToLowerInvariant().Replace("ago.", "").Trim();
-                    var dateParts = dateStr.Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    var timeSpan = TimeSpan.Zero;
-                    for (var i = 0; i < dateParts.Length / 2; i++)
-                    {
-                        var timeVal = ParseUtil.CoerceInt(dateParts[i * 2]);
-                        var timeUnit = dateParts[i * 2 + 1];
-                        if (timeUnit.Contains("year"))
-                            timeSpan += TimeSpan.FromDays(365 * timeVal);
-                        else if (timeUnit.Contains("month"))
-                            timeSpan += TimeSpan.FromDays(30 * timeVal);
-                        else if (timeUnit.Contains("day"))
-                            timeSpan += TimeSpan.FromDays(timeVal);
-                        else if (timeUnit.Contains("hour"))
-                            timeSpan += TimeSpan.FromHours(timeVal);
-                        else if (timeUnit.Contains("min"))
-                            timeSpan += TimeSpan.FromMinutes(timeVal);
-                    }
-                    release.PublishDate = DateTime.SpecifyKind(DateTime.Now - timeSpan, DateTimeKind.Local);
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     var sizeEl = row.ChildElements.ElementAt(7);
                     var sizeVal = ParseUtil.CoerceFloat(sizeEl.ChildNodes.First().NodeValue);

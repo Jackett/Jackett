@@ -137,24 +137,7 @@ namespace Jackett.Indexers
                     release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
 
                     var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
-                    var dateParts = dateStr.Split(' ');
-                    var dateValue = ParseUtil.CoerceInt(dateParts[0]);
-                    TimeSpan ts = TimeSpan.Zero;
-                    if (dateStr.Contains("sec"))
-                        ts = TimeSpan.FromSeconds(dateValue);
-                    else if (dateStr.Contains("min"))
-                        ts = TimeSpan.FromMinutes(dateValue);
-                    else if (dateStr.Contains("hour"))
-                        ts = TimeSpan.FromHours(dateValue);
-                    else if (dateStr.Contains("day"))
-                        ts = TimeSpan.FromDays(dateValue);
-                    else if (dateStr.Contains("week"))
-                        ts = TimeSpan.FromDays(dateValue * 7);
-                    else if (dateStr.Contains("month"))
-                        ts = TimeSpan.FromDays(dateValue * 30);
-                    else if (dateStr.Contains("year"))
-                        ts = TimeSpan.FromDays(dateValue * 365);
-                    release.PublishDate = DateTime.Now - ts;
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
