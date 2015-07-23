@@ -306,7 +306,7 @@ namespace Jackett.Controllers
                     if (!ServerUtil.IsUserAdministrator())
                     {
                         try {
-                            processService.StartProcessAndLog(Application.ExecutablePath, "/r", true);
+                            processService.StartProcessAndLog(Application.ExecutablePath, "--ReserveUrls", true);
                         }
                         catch
                         {

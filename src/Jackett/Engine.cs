@@ -19,7 +19,7 @@ namespace Jackett
         static Engine()
         {
             BuildContainer();
-            Logger.Info("Starting Jackett " + ConfigService.GetVersion());
+           
         }
 
         public static void BuildContainer()
@@ -121,8 +121,9 @@ namespace Jackett
             var logFileRule = new LoggingRule("*", LogLevel.Info, logFile);
             logConfig.LoggingRules.Add(logFileRule);
 
-            var logConsole = new ConsoleTarget();
+            var logConsole = new ColoredConsoleTarget();
             logConfig.AddTarget("console", logConsole);
+            
             logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
             var logConsoleRule = new LoggingRule("*", Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
