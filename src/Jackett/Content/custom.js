@@ -1,6 +1,4 @@
-﻿
-
-reloadIndexers();
+﻿reloadIndexers();
 loadJackettSettings();
 
 function loadJackettSettings() {
@@ -162,6 +160,7 @@ function displayIndexerSetup(id) {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         }
+       
         populateSetupForm(id, data.name, data.config);
 
     }).fail(function () {
@@ -172,6 +171,10 @@ function displayIndexerSetup(id) {
 }
 
 function populateConfigItems(configForm, config) {
+    // Set flag so we show fields named password as a password input
+    for (var i = 0; i < config.length; i++) {
+        config[i].ispassword = config[i].id.toLowerCase() === 'password';
+    }
     var $formItemContainer = configForm.find(".config-setup-form");
     $formItemContainer.empty();
     var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
@@ -204,7 +207,7 @@ function getConfigModalJson(configForm) {
         var id = $el.data("id");
         switch (type) {
             case "inputstring":
-                configJson[id] = $el.find(".setup-item-inputstring").val();
+                configJson[id] = $el.find(".setup-item-inputstring input").val();
                 break;
             case "inputbool":
                 configJson[id] = $el.find(".setup-item-inputbool input").is(":checked");
@@ -215,9 +218,7 @@ function getConfigModalJson(configForm) {
 }
 
 function populateSetupForm(indexerId, name, config) {
-
     var configForm = newConfigModal(name, config);
-
     var $goButton = configForm.find(".setup-indexer-go");
     $goButton.click(function () {
         var data = { indexer: indexerId, name: name };

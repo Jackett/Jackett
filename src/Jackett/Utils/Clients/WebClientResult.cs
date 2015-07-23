@@ -12,5 +12,6 @@ namespace Jackett.Utils.Clients
         public HttpStatusCode Status { get; set; }
         public string Cookies { get; set; }
         public string Content { get; set; }
+        public string RedirectingTo { get; set; }
     }
 }

@@ -22,6 +22,24 @@ namespace Jackett
 {
     public class Startup
     {
+        public static bool TracingEnabled
+        {
+            get;
+            set;
+        }
+
+        public static bool LogRequests
+        {
+            get;
+            set;
+        }
+
+        public static bool CurlSafe
+        {
+            get;
+            set;
+        }
+
         public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
@@ -30,13 +48,13 @@ namespace Jackett
             appBuilder.Use<WebApiRootRedirectMiddleware>();   
 
             // Setup tracing if enabled
-            if (Engine.TracingEnabled)
+            if (TracingEnabled)
             {
                 config.EnableSystemDiagnosticsTracing();
                 config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer());
             }
             // Add request logging if enabled
-            if (Engine.LogRequests)
+            if (LogRequests)
             {
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
             }
