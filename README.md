@@ -44,6 +44,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [T411](http://www.t411.io/)
  * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
  * [bB](http://reddit.com/r/baconbits)
+ * [PrivateHD](https://privatehd.to/)
 
 
 ### Additional Trackers
