@@ -141,7 +141,7 @@ namespace JackettTray
                 {
                     try
                     {
-                        Engine.ProcessService.StartProcessAndLog(consolePath, "/stop", true);
+                        Engine.ProcessService.StartProcessAndLog(consolePath, "--Stop", true);
                     }
                     catch
                     {
@@ -159,7 +159,7 @@ namespace JackettTray
                 {
                     try
                     {
-                        Engine.ProcessService.StartProcessAndLog(consolePath, "/start", true);
+                        Engine.ProcessService.StartProcessAndLog(consolePath, "--Start", true);
                     }
                     catch
                     {
