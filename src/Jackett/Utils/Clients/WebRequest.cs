@@ -19,6 +19,7 @@ namespace Jackett.Utils.Clients
         public string Cookies { get; set; }
         public string Referer { get; set; }
         public RequestType Type { get; set; }
+        public bool AutoRedirect { get; set; }
     }
 
     public enum RequestType
