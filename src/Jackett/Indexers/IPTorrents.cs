@@ -58,8 +58,7 @@ namespace Jackett.Indexers
                 Url = SiteLink.ToString(),
                 PostData = pairs,
                 Referer = SiteLink.ToString(),
-                Type = RequestType.POST,
-                AutoRedirect = true
+                Type = RequestType.POST
             });
 
             cookieHeader = response.Cookies;

@@ -36,13 +36,13 @@ namespace JackettConsole
                             Engine.ServiceConfig.Uninstall();
                             return;
                         case "/l":  // Logging
-                            Engine.LogRequests = true;
+                            Startup.LogRequests = true;
                             break;
                         case "/t":  // Tracing
-                            Engine.TracingEnabled = true;
+                            Startup.TracingEnabled = true;
                             break;
                         case "/curlsafe":  // Curl safe mode
-                            Engine.CurlSafe = true;
+                            Startup.CurlSafe = true;
                             break;
                         case "/start":  // Start Service
                             if (!Engine.ServiceConfig.ServiceRunning())
