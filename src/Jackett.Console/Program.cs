@@ -54,6 +54,7 @@ namespace JackettConsole
                     // Reserve urls
                     if (options.ReserveUrls)
                     {
+                        Engine.ConfigService.CreateOrMigrateSettings();
                         Engine.Server.ReserveUrls(doInstall: true);
                         return;
                     }
@@ -74,6 +75,16 @@ namespace JackettConsole
                         if (Engine.ServiceConfig.ServiceRunning())
                         {
                             Engine.ServiceConfig.Stop();
+                        }
+                        return;
+                    }
+
+                    // Migrate settings
+                    if (options.MigrateSettings)
+                    {
+                        if (Engine.ServiceConfig.ServiceRunning())
+                        {
+                            Engine.ConfigService.PerformMigration();
                         }
                         return;
                     }
@@ -125,6 +136,8 @@ namespace JackettConsole
                                     return;
                                 }
                             }
+
+                            Engine.Server.SaveConfig();
                         }
                     }
 
@@ -147,6 +160,8 @@ namespace JackettConsole
                                     return;
                                 }
                             }
+
+                            Engine.Server.SaveConfig();
                         }
                     }
                 }

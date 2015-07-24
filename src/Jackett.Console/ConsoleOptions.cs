@@ -9,8 +9,6 @@ namespace Jackett.Console
 {
     public class ConsoleOptions
     {
-        private bool listenPublic = false;
-
         [Option('i', "Install", HelpText = "Install Jackett windows service (Must be admin)")]
         public bool Install { get; set; }
 
@@ -47,5 +45,7 @@ namespace Jackett.Console
         [Option('p', "Port", HelpText = "Web server port")]
         public int Port { get; set; }
 
+        [Option('m', "MigrateSettings", HelpText = "Migrate settings manually (Must be admin on Windows)")]
+        public bool MigrateSettings { get; set; }
     }
 }

@@ -35,26 +35,33 @@
             <span class="input-header">API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
         </div>
+       
+        <hr />
+        <h3>Configured Indexers</h3>
+        <div id="indexers"> </div>
+        <hr />
+        <h3>Jackett Configuration</h3>
         <div class="input-area">
             <span class="input-header">Admin Password: </span>
-            <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable">
+            <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
             <button id="change-jackett-password" class="btn btn-primary btn-sm">
                 Set Password <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
             </button>
             <a href="Dashboard?logout=true" id="logoutBtn" style="display:none" class="btn btn-danger btn-sm">
-               Logout
+                Logout
             </a>
         </div>
         <div class="input-area">
             <span class="input-header">Server port: </span>
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
             <button id="change-jackett-port" class="btn btn-primary btn-sm">
-                Change Port <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
             </button>
         </div>
-        <hr />
-        <h3>Configured Indexers</h3>
-        <div id="indexers"> </div>
+        <div class="input-area">
+            <span class="input-header">External access: </span>
+            <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
+        </div>
         <hr />
         <div id="footer">
             Jackett Version <span id="app-version"></span>

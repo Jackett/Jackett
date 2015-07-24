@@ -138,7 +138,7 @@ namespace Jackett.Indexers
                     break;
                 }
                 catch (Exception e){
-                    logger.Error(e, "Error checking for results from MoreThanTv.");
+                    logger.Error("On attempt " + (i+1) + " checking for results from MoreThanTv: " + e.Message );
                 }
             }
             
