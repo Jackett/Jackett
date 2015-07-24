@@ -34,6 +34,31 @@ namespace JackettConsole
                 }
                 else
                 {
+                    /*  ======     Options    =====  */
+
+                    // Use curl
+                    if (options.UseCurlExec)
+                        Startup.CurlSafe = true;
+
+                    // Logging
+                    if (options.Logging)
+                        Startup.LogRequests = true;
+
+                    // Tracing
+                    if (options.Tracing)
+                        Startup.TracingEnabled = true;
+
+                    // Log after the fact as using the logger will cause the options above to be used
+
+                    if (options.UseCurlExec)
+                        Engine.Logger.Info("Safe curl enabled.");
+
+                    if (options.Logging)
+                        Engine.Logger.Info("Logging enabled.");
+
+                    if (options.Tracing)
+                        Engine.Logger.Info("Tracing enabled.");
+
                     /*  ======     Actions    =====  */
 
                     // Install service
@@ -54,7 +79,6 @@ namespace JackettConsole
                     // Reserve urls
                     if (options.ReserveUrls)
                     {
-                        Engine.ConfigService.CreateOrMigrateSettings();
                         Engine.Server.ReserveUrls(doInstall: true);
                         return;
                     }
@@ -82,10 +106,7 @@ namespace JackettConsole
                     // Migrate settings
                     if (options.MigrateSettings)
                     {
-                        if (Engine.ServiceConfig.ServiceRunning())
-                        {
-                            Engine.ConfigService.PerformMigration();
-                        }
+                        Engine.ConfigService.PerformMigration();
                         return;
                     }
 
@@ -97,31 +118,14 @@ namespace JackettConsole
                         return;
                     }
 
-                    /*  ======     Options    =====  */
-
-                    // Logging
-                    if (options.Logging)
-                    {
-                        Startup.LogRequests = true;
-                    }
-
-                    // Tracing
-                    if (options.Tracing)
-                    {
-                        Startup.TracingEnabled = true;
-                    }
-
-                    // Use curl
-                    if (options.UseCurlExec)
-                    {
-                        Startup.CurlSafe = true;
-                    }
+                    /*  ======     Overrides    =====  */
 
                     // Override listen public
                     if(options.ListenPublic.HasValue)
                     {
-                        if(Engine.Server.Config.AllowExternal != options.ListenPublic)
+                        if (Engine.Server.Config.AllowExternal != options.ListenPublic)
                         {
+                            Engine.Logger.Info("Overriding external access to " + options.ListenPublic);
                             Engine.Server.Config.AllowExternal = options.ListenPublic.Value;
                             if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                             {
@@ -146,6 +150,7 @@ namespace JackettConsole
                     {
                         if (Engine.Server.Config.Port != options.Port)
                         {
+                            Engine.Logger.Info("Overriding port to " + options.Port);
                             Engine.Server.Config.Port = options.Port;
                             if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                             {

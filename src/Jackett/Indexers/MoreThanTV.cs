@@ -52,21 +52,20 @@ namespace Jackett.Indexers
         {
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
 				{ "password", config.Password.Value },
 				{ "login", "Log in" },
 				{ "keeplogged", "1" }
 			};
-
+            
             var loginResponse = await client.GetString(new Utils.Clients.WebRequest()
             {
                 PostData = pairs,
                 Url = LoginUrl,
                 Type = RequestType.POST
             });
-
+            
             if (loginResponse.Status == HttpStatusCode.Found)
             {
                 cookieHeader = loginResponse.Cookies;
@@ -88,7 +87,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
+                configSaveData["cookie_header"] = cookieHeader;
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -96,12 +95,8 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            // The old config used an array - just fail to load it
-            if (!(jsonConfig["cookies"] is JArray))
-            {
-                cookieHeader = (string)jsonConfig["cookies"];
-                IsConfigured = true;
-            }
+            cookieHeader = (string)jsonConfig["cookie_header"];
+            IsConfigured = true;
         }
 
         private void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)

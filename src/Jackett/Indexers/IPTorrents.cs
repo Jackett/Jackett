@@ -85,7 +85,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
+                configSaveData["cookie_header"] = cookieHeader;
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -93,7 +93,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieHeader = (string)jsonConfig["cookies"];
+            cookieHeader = (string)jsonConfig["cookie_header"];
             IsConfigured = true;
         }
 
