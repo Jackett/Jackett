@@ -72,7 +72,7 @@ namespace Jackett.Utils.Clients
             string stdout = null;
             await Task.Run(() =>
             {
-                stdout = processService.StartProcessAndGetOutput(@"C:\Apps\curl.exe", args.ToString(), true);
+                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix?"curl":"curl.exe", args.ToString(), true);
             });
 
             var outputData = File.ReadAllBytes(tempFile);
@@ -126,6 +126,7 @@ namespace Jackett.Utils.Clients
                 dest++;
             }
 
+            logger.Debug("WebClientByteResult returned " + result.Status);
             return result;
         }
     }

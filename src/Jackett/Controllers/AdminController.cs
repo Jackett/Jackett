@@ -308,23 +308,29 @@ namespace Jackett.Controllers
                     Engine.Server.Config.Port = port;
                     Engine.Server.SaveConfig();
 
-                    if (!ServerUtil.IsUserAdministrator())
+                    // On Windows change the url reservations
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        try {
-                            processService.StartProcessAndLog(Application.ExecutablePath, "--ReserveUrls", true);
-                        }
-                        catch
+                        if (!ServerUtil.IsUserAdministrator())
                         {
-                            Engine.Server.Config.Port = originalPort;
-                            Engine.Server.Config.AllowExternal = originalAllowExternal;
-                            Engine.Server.SaveConfig();
-                            jsonReply["result"] = "error";
-                            jsonReply["error"] = "Failed to acquire admin permissions to reserve the new port.";
-                            return Json(jsonReply);
+                            try
+                            {
+                                processService.StartProcessAndLog(Application.ExecutablePath, "--ReserveUrls", true);
+                            }
+                            catch
+                            {
+                                Engine.Server.Config.Port = originalPort;
+                                Engine.Server.Config.AllowExternal = originalAllowExternal;
+                                Engine.Server.SaveConfig();
+                                jsonReply["result"] = "error";
+                                jsonReply["error"] = "Failed to acquire admin permissions to reserve the new port.";
+                                return Json(jsonReply);
+                            }
                         }
-                    } else
-                    {
-                        serverService.ReserveUrls(true);
+                        else
+                        {
+                            serverService.ReserveUrls(true);
+                        }
                     }
 
                     (new Thread(() => {

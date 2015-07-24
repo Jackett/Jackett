@@ -44,7 +44,7 @@ namespace Jackett.Services
                 startInfo.RedirectStandardOutput = false;
                 startInfo.RedirectStandardInput = false;
             }
-
+            logger.Debug("Running " + startInfo.FileName + " " + startInfo.Arguments);
             var proc = Process.Start(startInfo);
 
             if (!asAdmin)

@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -47,7 +49,13 @@ namespace Jackett.Services
             {
                 if (!Directory.Exists(GetAppDataFolder()))
                 {
-                    Directory.CreateDirectory(GetAppDataFolder());
+                    var dir = Directory.CreateDirectory(GetAppDataFolder());
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                    {
+                        var access = dir.GetAccessControl();
+                        access.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
+                        Directory.SetAccessControl(GetAppDataFolder(), access);
+                    }
                 }
 
                 logger.Debug("App config/log directory: " + GetAppDataFolder());
@@ -57,13 +65,14 @@ namespace Jackett.Services
                 throw new Exception("Could not create settings directory. " + ex.Message);
             }
 
-            try
+            if (System.Environment.OSVersion.Platform != PlatformID.Unix)
             {
-                string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-                if (Directory.Exists(oldDir))
+                try
                 {
-                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                    string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+                    if (Directory.Exists(oldDir))
                     {
+
                         // On Windows we need admin permissions to migrate as they were made with admin permissions.
                         if (ServerUtil.IsUserAdministrator())
                         {
@@ -82,35 +91,51 @@ namespace Jackett.Services
                                 return;
                             }
                         }
-                    } else
+                    }
+                    else
                     {
                         PerformMigration();
                     }
+
                 }
-            }
-            catch (Exception ex)
-            {
-                logger.Error("ERROR could not migrate settings directory " + ex);
+                catch (Exception ex)
+                {
+                    logger.Error("ERROR could not migrate settings directory " + ex);
+                }
             }
         }
 
         public void PerformMigration()
         {
             var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-            foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
+            if (Directory.Exists(oldDir))
             {
-                var path = file.Replace(oldDir, "");
-                var destFolder = GetAppDataFolder() + path;
-                if (!Directory.Exists(Path.GetDirectoryName(destFolder)))
+                foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(destFolder));
+                    var path = file.Replace(oldDir, "");
+                    var destPath = GetAppDataFolder() + path;
+                    var destFolder = Path.GetDirectoryName(destPath);
+                    if (!Directory.Exists(destFolder))
+                    {
+                        var dir = Directory.CreateDirectory(destFolder);
+                        var access = dir.GetAccessControl();
+                        access.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
+                        Directory.SetAccessControl(destFolder, access);
+                    }
+                    if (!File.Exists(destPath))
+                    {
+                        File.Copy(file, destPath);
+                        // The old files were created when running as admin so make sure they are editable by normal users / services.
+                        if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                        {
+                            var access = File.GetAccessControl(destPath);
+                            access.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
+                            File.SetAccessControl(destPath, access);
+                        }
+                    }
                 }
-                if (!File.Exists(destFolder))
-                {
-                    File.Copy(file, destFolder);
-                }
+                Directory.Delete(oldDir, true);
             }
-            Directory.Delete(oldDir, true);
         }
 
         public T GetConfig<T>()

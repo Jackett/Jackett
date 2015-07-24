@@ -55,6 +55,7 @@ namespace Jackett.Utils.Clients
                 }
             }
 
+            logger.Debug("WebClientByteResult returned " + result.Status);
             return result;
         }
 
