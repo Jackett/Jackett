@@ -85,7 +85,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
+                configSaveData["cookie_header"] = cookieHeader;
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -93,7 +93,7 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookieHeader = (string)jsonConfig["cookies"];
+            cookieHeader = (string)jsonConfig["cookie_header"];
             IsConfigured = true;
         }
 
@@ -103,12 +103,27 @@ namespace Jackett.Indexers
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            WebClientStringResult response = null;
+
+            // Their web server is fairly flakey - try up to three times.
+            for (int i = 0; i < 3; i++)
             {
-                Url = episodeSearchUrl,
-                Referer = SiteLink.ToString(),
-                Cookies = cookieHeader
-            });
+                try
+                {
+                    response = await webclient.GetString(new Utils.Clients.WebRequest()
+                    {
+                        Url = episodeSearchUrl,
+                        Referer = SiteLink.ToString(),
+                        Cookies = cookieHeader
+                    });
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    logger.Error("On attempt " + (i + 1) + " checking for results from IPTorrents: " + e.Message);
+                }
+            }
 
             var results = response.Content;
             try
