@@ -51,6 +51,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 [Run]
 Filename: "{app}\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated;
 Filename: "{app}\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated;
+Filename: "{app}\JackettConsole.exe"; Parameters: "--MigrateSettings"; Flags: waituntilterminated;
 Filename: "{app}\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated; Tasks: windowsService
 Filename: "{app}\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated; Tasks: windowsService
 

@@ -9,8 +9,6 @@ namespace Jackett.Console
 {
     public class ConsoleOptions
     {
-        private bool listenPublic = false;
-
         [Option('i', "Install", HelpText = "Install Jackett windows service (Must be admin)")]
         public bool Install { get; set; }
 
@@ -20,13 +18,13 @@ namespace Jackett.Console
         [Option('u', "Uninstall", HelpText = "Uninstall Jackett windows service (Must be admin).")]
         public bool Uninstall { get; set; }
 
-        [Option('l', "Logging", DefaultValue = false, HelpText = "Log all requests/responses to Jackett")]
+        [Option('l', "Logging",  HelpText = "Log all requests/responses to Jackett")]
         public bool Logging { get; set; }
 
-        [Option('t', "Tracing", DefaultValue = false, HelpText = "Enable tracing")]
+        [Option('t', "Tracing", HelpText = "Enable tracing")]
         public bool Tracing { get; set; }
 
-        [Option('c', "UseCurlExec", DefaultValue = false, HelpText = "Execute curl rather than libcurl for all outgoing requests.")]
+        [Option('c', "UseCurlExec",  HelpText = "Execute curl rather than libcurl for all outgoing requests.")]
         public bool UseCurlExec { get; set; }
 
         [Option('s', "Start",  HelpText = "Start the Jacket Windows service (Must be admin)")]
@@ -47,5 +45,7 @@ namespace Jackett.Console
         [Option('p', "Port", HelpText = "Web server port")]
         public int Port { get; set; }
 
+        [Option('m', "MigrateSettings", HelpText = "Migrate settings manually (Must be admin on Windows)")]
+        public bool MigrateSettings { get; set; }
     }
 }
