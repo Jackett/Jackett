@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Utils;
+using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -22,21 +23,25 @@ namespace Jackett.Services
         T GetConfig<T>();
         void SaveConfig<T>(T config);
         string ApplicationFolder();
+        void CreateOrMigrateSettings();
+        void PerformMigration();
     }
 
     public class ConfigurationService : IConfigurationService
     {
         private ISerializeService serializeService;
         private Logger logger;
+        private IProcessService processService;
 
-        public ConfigurationService(ISerializeService s, Logger l)
+        public ConfigurationService(ISerializeService s, IProcessService p, Logger l)
         {
             serializeService = s;
             logger = l;
+            processService = p;
             CreateOrMigrateSettings();
         }
 
-        private void CreateOrMigrateSettings()
+        public void CreateOrMigrateSettings()
         {
             try
             {
@@ -57,26 +62,55 @@ namespace Jackett.Services
                 string oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
                 if (Directory.Exists(oldDir))
                 {
-                    foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        var path = file.Replace(oldDir, "");
-                        var destFolder = GetAppDataFolder() + path;
-                        if (!Directory.Exists(Path.GetDirectoryName(destFolder)))
+                        // On Windows we need admin permissions to migrate as they were made with admin permissions.
+                        if (ServerUtil.IsUserAdministrator())
                         {
-                            Directory.CreateDirectory(Path.GetDirectoryName(destFolder));
+                            PerformMigration();
                         }
-                        if (!File.Exists(destFolder))
+                        else
                         {
-                            File.Move(file, destFolder);
+                            try
+                            {
+                                processService.StartProcessAndLog(Application.ExecutablePath, "--MigrateSettings", true);
+                            }
+                            catch
+                            {
+                                Engine.Logger.Error("Unable to migrate settings when not running as administrator.");
+                                Environment.ExitCode = 1;
+                                return;
+                            }
                         }
+                    } else
+                    {
+                        PerformMigration();
                     }
-                    Directory.Delete(oldDir, true);
                 }
             }
             catch (Exception ex)
             {
                 logger.Error("ERROR could not migrate settings directory " + ex);
             }
+        }
+
+        public void PerformMigration()
+        {
+            var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+            foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
+            {
+                var path = file.Replace(oldDir, "");
+                var destFolder = GetAppDataFolder() + path;
+                if (!Directory.Exists(Path.GetDirectoryName(destFolder)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(destFolder));
+                }
+                if (!File.Exists(destFolder))
+                {
+                    File.Copy(file, destFolder);
+                }
+            }
+            Directory.Delete(oldDir, true);
         }
 
         public T GetConfig<T>()

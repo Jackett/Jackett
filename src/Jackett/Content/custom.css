@@ -203,3 +203,7 @@ hr {
     margin-top: 10px;
     text-align: center;
 }
+
+#jackett-allowext {
+    width: 25px;
+}
