@@ -34,9 +34,9 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/takelogin.php";
-            SearchUrl = SiteLink + "/browse_API.php";
-            DownloadUrl = SiteLink + "/download.php/{0}/download.torrent";
+            LoginUrl = SiteLink + "takelogin.php";
+            SearchUrl = SiteLink + "browse_API.php";
+            DownloadUrl = SiteLink + "download.php/{0}/download.torrent";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler
@@ -133,16 +133,17 @@ namespace Jackett.Indexers
 
                     var dateStr = descCol.ChildNodes.Last().NodeValue.Trim();
                     var euDate = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToLocalTime();
+                    var timezoneString = Environment.OSVersion.Platform == PlatformID.Unix ? "Europe/Berlin" : "Central European Standard Time";
+                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById(timezoneString)).ToLocalTime();
                     release.PublishDate = localDate;
 
-                    var sizeNodes = row.ChildElements.ElementAt(3).ChildNodes;
+                    var sizeNodes = row.ChildElements.ElementAt(5).ChildNodes;
                     var sizeVal = sizeNodes.First().NodeValue;
                     var sizeUnit = sizeNodes.Last().NodeValue;
                     release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(4).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(5).Cq().Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim()) + release.Seeders;
 
                     releases.Add(release);
                 }

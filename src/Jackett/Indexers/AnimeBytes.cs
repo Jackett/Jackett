@@ -57,8 +57,8 @@ namespace Jackett.Indexers
         {
             TorznabCaps.Categories.Clear();
             TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
-            LoginUrl = SiteLink + "/user/login";
-            SearchUrl = SiteLink + "/torrents.php?filter_cat[1]=1";
+            LoginUrl = SiteLink + "user/login";
+            SearchUrl = SiteLink + "torrents.php?filter_cat[1]=1";
             webclient = client;
         }
 
