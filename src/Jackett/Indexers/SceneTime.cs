@@ -133,7 +133,8 @@ namespace Jackett.Indexers
 
                     var dateStr = descCol.ChildNodes.Last().NodeValue.Trim();
                     var euDate = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToLocalTime();
+                    var timezoneString = Environment.OSVersion.Platform == PlatformID.Unix ? "Europe/Berlin" : "Central European Standard Time";
+                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById(timezoneString)).ToLocalTime();
                     release.PublishDate = localDate;
 
                     var sizeNodes = row.ChildElements.ElementAt(5).ChildNodes;
