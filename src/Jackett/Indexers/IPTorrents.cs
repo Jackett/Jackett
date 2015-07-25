@@ -67,7 +67,6 @@ namespace Jackett.Indexers
                 response = await webclient.GetString(new Utils.Clients.WebRequest()
                 {
                     Url = SearchUrl,
-                    PostData = pairs,
                     Referer = SiteLink.ToString(),
                     Cookies = response.Cookies
                 });
