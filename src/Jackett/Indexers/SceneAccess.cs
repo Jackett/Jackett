@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -19,12 +20,10 @@ namespace Jackett.Indexers
         private readonly string LoginUrl = "";
         private readonly string SearchUrl = "";
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-        string cookieHeader;
+        private IWebClient webclient;
+        private string cookieHeader = "";
 
-        public SceneAccess(IIndexerManagerService i, Logger l)
+        public SceneAccess(IIndexerManagerService i, IWebClient c, Logger l)
             : base(name: "SceneAccess",
                 description: "Your gateway to the scene",
                 link: new Uri("https://sceneaccess.eu"),
@@ -34,15 +33,7 @@ namespace Jackett.Indexers
         {
             LoginUrl = SiteLink + "/login";
             SearchUrl = SiteLink + "/{0}?method=1&c{1}=1&search={2}";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
+            webclient = c;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -64,34 +55,37 @@ namespace Jackett.Indexers
 
             var content = new FormUrlEncodedContent(pairs);
 
-            string responseContent;
-            var configSaveData = new JObject();
+            // Do the login
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                PostData = pairs,
+                Referer = LoginUrl,
+                Type = RequestType.POST,
+                Url = LoginUrl
+            });
 
-            if (Engine.IsWindows)
+            cookieHeader = response.Cookies;
+
+            if (response.Status == HttpStatusCode.Found)
             {
-                // If Windows use .net http
-                var response = await client.PostAsync(LoginUrl, content);
-                responseContent = await response.Content.ReadAsStringAsync();
-                cookies.DumpToJson(SiteLink, configSaveData);
-            }
-            else
-            {
-                // If UNIX system use curl
-                var response = await CurlHelper.PostAsync(LoginUrl, pairs);
-                responseContent = Encoding.UTF8.GetString(response.Content);
-                cookieHeader = response.CookieHeader;
-                configSaveData["cookie_header"] = cookieHeader;
+                response = await webclient.GetString(new Utils.Clients.WebRequest()
+                {
+                    Url = SiteLink.ToString(),
+                    Referer = LoginUrl.ToString(),
+                    Cookies = cookieHeader
+                });
             }
 
-            if (!responseContent.Contains("nav_profile"))
+            if (!response.Content.Contains("nav_profile"))
             {
-                CQ dom = responseContent;
+                CQ dom = response.Content;
                 var messageEl = dom["#login_box_desc"];
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
             }
             else
             {
+                var configSaveData = new JObject();
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -99,9 +93,11 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            cookieHeader = cookies.GetCookieHeader(SiteLink);
-            IsConfigured = true;
+            cookieHeader = (string)jsonConfig["cookie_header"];
+            if (!string.IsNullOrEmpty(cookieHeader))
+            {
+                IsConfigured = true;
+            }
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -114,20 +110,18 @@ namespace Jackett.Indexers
 
             var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
 
-            string results;
-            if (Engine.IsWindows)
+
+            var results = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                results = await client.GetStringAsync(searchUrl);
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(searchUrl, cookieHeader);
-                results = Encoding.UTF8.GetString(response.Content);
-            }
+                Referer = LoginUrl,
+                Cookies = cookieHeader,
+                Type = RequestType.GET,
+                Url = searchUrl
+            });
 
             try
             {
-                CQ dom = results;
+                CQ dom = results.Content;
                 var rows = dom["#torrents-table > tbody > tr.tt_row"];
                 foreach (var row in rows)
                 {
@@ -161,7 +155,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases.ToArray();
@@ -169,15 +163,13 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Engine.IsWindows)
+            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
             {
-                return await client.GetByteArrayAsync(link);
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(link.ToString(), cookieHeader);
-                return response.Content;
-            }
+                Url = link.ToString(),
+                Cookies = cookieHeader
+            });
+
+            return response.Content;
         }
     }
 }
