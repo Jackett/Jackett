@@ -13,6 +13,7 @@ using Jackett.Models;
 using Jackett.Utils;
 using NLog;
 using Jackett.Services;
+using Jackett.Utils.Clients;
 
 namespace Jackett.Indexers
 {
@@ -23,13 +24,10 @@ namespace Jackett.Indexers
         private readonly string DownloadUrl = "";
         private readonly string GuidUrl = "";
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
+        private IWebClient webclient;
+        private string cookieHeader = "";
 
-        string cookieHeader;
-
-        public AlphaRatio(IIndexerManagerService i, Logger l)
+        public AlphaRatio(IIndexerManagerService i, IWebClient w, Logger l)
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: new Uri("https://alpharatio.cc"),
@@ -41,16 +39,7 @@ namespace Jackett.Indexers
             SearchUrl = SiteLink + "ajax.php?action=browse&searchstr=";
             DownloadUrl = SiteLink + "torrents.php?action=download&id=";
             GuidUrl = SiteLink + "torrents.php?torrentid=";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-
-            };
-            client = new HttpClient(handler);
+            webclient = w;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -61,53 +50,48 @@ namespace Jackett.Indexers
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var configSaveData = new JObject();
-            SaveConfig(configSaveData);
-
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", @config.Password.Value },
+				{ "username", incomingConfig.Username.Value },
+				{ "password", incomingConfig.Password.Value },
 				{ "login", "Login" },
 			    { "keeplogged", "1" }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-            var message = CreateHttpRequest(new Uri(LoginUrl));
-            message.Content = content;
-
-            //message.Headers.Referrer = new Uri(LoginUrl);
-            string responseContent;
-
-            configSaveData = new JObject();
-
-            if (Engine.IsWindows)
+            // Do the login
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                // If Windows use .net http
-                var response = await client.SendAsync(message);
-                responseContent = await response.Content.ReadAsStringAsync();
-                cookies.DumpToJson(SiteLink, configSaveData);
-            }
-            else
+                PostData = pairs,
+                Referer = LoginUrl,
+                Type = RequestType.POST,
+                Url = LoginUrl
+            });
+
+            cookieHeader = response.Cookies;
+
+            if (response.Status == HttpStatusCode.Found || response.Status == HttpStatusCode.Redirect || response.Status == HttpStatusCode.RedirectMethod)
             {
-                // If UNIX system use curl, probably broken due to missing chromeUseragent record for CURL...cannot test
-                var response = await CurlHelper.PostAsync(LoginUrl, pairs);
-                responseContent = Encoding.UTF8.GetString(response.Content);
-                cookieHeader = response.CookieHeader;
-                configSaveData["cookie_header"] = cookieHeader;
+                response = await webclient.GetString(new Utils.Clients.WebRequest()
+                {
+                    Url = SiteLink.ToString(),
+                    Referer = LoginUrl.ToString(),
+                    Cookies = cookieHeader
+                });
             }
 
-            if (!responseContent.Contains("logout.php?"))
+            if (!response.Content.Contains("logout.php?"))
             {
-                CQ dom = responseContent;
+                CQ dom = response.Content;
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
             }
             else
             {
+                var configSaveData = new JObject();
+                configSaveData["cookie_header"] = cookieHeader;
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -124,9 +108,11 @@ namespace Jackett.Indexers
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            cookieHeader = cookies.GetCookieHeader(SiteLink);
-            IsConfigured = true;
+            cookieHeader = (string)jsonConfig["cookie_header"];
+            if (!string.IsNullOrEmpty(cookieHeader))
+            {
+                IsConfigured = true;
+            }
         }
 
         void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
@@ -146,23 +132,18 @@ namespace Jackett.Indexers
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
 
-            string results;
-            if (Engine.IsWindows)
+            var results = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                var request = CreateHttpRequest(new Uri(episodeSearchUrl));
-                request.Method = HttpMethod.Get;
-                var response = await client.SendAsync(request);
-                results = await response.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(episodeSearchUrl, cookieHeader);
-                results = Encoding.UTF8.GetString(response.Content);
-            }
+                Cookies = cookieHeader,
+                Type = RequestType.GET,
+                Url = episodeSearchUrl
+            });
+
+
             try
             {
 
-                var json = JObject.Parse(results);
+                var json = JObject.Parse(results.Content);
                 foreach (JObject r in json["response"]["results"])
                 {
                     DateTime pubDate = DateTime.MinValue;
@@ -198,7 +179,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases.ToArray();
@@ -213,16 +194,13 @@ namespace Jackett.Indexers
 
         public async Task<byte[]> Download(Uri link)
         {
-            if (Engine.IsWindows)
+            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
             {
-                return await client.GetByteArrayAsync(link);
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(link.ToString(), cookieHeader);
-                return response.Content;
-            }
+                Url = link.ToString(),
+                Cookies = cookieHeader
+            });
 
+            return response.Content;
         }
 
     }

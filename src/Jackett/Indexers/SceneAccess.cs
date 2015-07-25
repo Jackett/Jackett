@@ -86,6 +86,7 @@ namespace Jackett.Indexers
             else
             {
                 var configSaveData = new JObject();
+                configSaveData["cookie_header"] = cookieHeader;
                 SaveConfig(configSaveData);
                 IsConfigured = true;
             }
@@ -96,8 +97,8 @@ namespace Jackett.Indexers
             cookieHeader = (string)jsonConfig["cookie_header"];
             if (!string.IsNullOrEmpty(cookieHeader))
             {
-            IsConfigured = true;
-        }
+                IsConfigured = true;
+            }
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
