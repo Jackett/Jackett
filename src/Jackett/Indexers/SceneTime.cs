@@ -136,13 +136,13 @@ namespace Jackett.Indexers
                     var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToLocalTime();
                     release.PublishDate = localDate;
 
-                    var sizeNodes = row.ChildElements.ElementAt(3).ChildNodes;
+                    var sizeNodes = row.ChildElements.ElementAt(5).ChildNodes;
                     var sizeVal = sizeNodes.First().NodeValue;
                     var sizeUnit = sizeNodes.Last().NodeValue;
                     release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(4).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(5).Cq().Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim()) + release.Seeders;
 
                     releases.Add(release);
                 }
