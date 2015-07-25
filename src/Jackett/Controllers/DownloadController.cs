@@ -31,6 +31,13 @@ namespace Jackett.Controllers
             try
             {
                 var indexer = indexerService.GetIndexer(indexerID);
+
+                if (!indexer.IsConfigured)
+                {
+                    logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
+                }
+
                 var remoteFile = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
                 var downloadBytes = await indexer.Download(new Uri(remoteFile));
 

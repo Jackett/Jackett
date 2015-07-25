@@ -24,17 +24,14 @@ namespace Jackett
             if (Startup.CurlSafe)
             {
                 builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
-                Console.WriteLine("Using UnixSafeCurlWebClient");
             }
             else if(System.Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
-                Console.WriteLine("Using UnixLibCurlWebClient");
             }
             else
             {
                 builder.RegisterType<WindowsWebClient>().As<IWebClient>();
-                Console.WriteLine("Using WindowsWebClient");
             }
 
             // Register indexers

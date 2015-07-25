@@ -48,6 +48,12 @@ namespace Jackett.Controllers
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
             }
 
+            if (!indexer.IsConfigured)
+            {
+                logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
+            }
+
             var releases = await indexer.PerformQuery(torznabQuery);
 
             if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
