@@ -32,15 +32,15 @@ namespace Jackett.Indexers
         public Freshon(IIndexerManagerService i, Logger l)
             : base(name: "FreshOnTV",
                 description: "Our goal is to provide the latest stuff in the TV show domain",
-                link: new Uri("https://www.bit-hdtv.com"),
+                link: new Uri("https://freshon.tv"),
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 logger: l)
         {
 
-            LoginUrl = SiteLink + "/login.php";
-            LoginPostUrl = SiteLink + "/login.php?action=makelogin";
-            SearchUrl = SiteLink + "/browse.php";
+            LoginUrl = SiteLink + "login.php";
+            LoginPostUrl = SiteLink + "login.php?action=makelogin";
+            SearchUrl = SiteLink + "browse.php";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler

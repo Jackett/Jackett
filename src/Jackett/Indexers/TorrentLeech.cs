@@ -33,8 +33,8 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/user/account/login/";
-            SearchUrl = SiteLink + "/torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
+            LoginUrl = SiteLink + "user/account/login/";
+            SearchUrl = SiteLink + "torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler

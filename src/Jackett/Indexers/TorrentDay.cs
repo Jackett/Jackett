@@ -34,9 +34,9 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            StartPageUrl = SiteLink + "/login.php";
-            LoginUrl = SiteLink + "/tak3login.php";
-            SearchUrl = SiteLink + "/browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
+            StartPageUrl = SiteLink + "login.php";
+            LoginUrl = SiteLink + "tak3login.php";
+            SearchUrl = SiteLink + "browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler

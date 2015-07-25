@@ -26,13 +26,13 @@ namespace Jackett.Indexers
         public SceneAccess(IIndexerManagerService i, IWebClient c, Logger l)
             : base(name: "SceneAccess",
                 description: "Your gateway to the scene",
-                link: new Uri("https://sceneaccess.eu"),
+                link: new Uri("https://sceneaccess.eu/"),
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/login";
-            SearchUrl = SiteLink + "/{0}?method=1&c{1}=1&search={2}";
+            LoginUrl = SiteLink + "login";
+            SearchUrl = SiteLink + "{0}?method=1&c{1}=1&search={2}";
             webclient = c;
         }
 
@@ -69,7 +69,7 @@ namespace Jackett.Indexers
             if (response.Status == HttpStatusCode.Found)
             {
                 response = await webclient.GetString(new Utils.Clients.WebRequest()
-                {
+            {
                     Url = SiteLink.ToString(),
                     Referer = LoginUrl.ToString(),
                     Cookies = cookieHeader
@@ -96,8 +96,8 @@ namespace Jackett.Indexers
             cookieHeader = (string)jsonConfig["cookie_header"];
             if (!string.IsNullOrEmpty(cookieHeader))
             {
-                IsConfigured = true;
-            }
+            IsConfigured = true;
+        }
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -169,7 +169,7 @@ namespace Jackett.Indexers
                 Cookies = cookieHeader
             });
 
-            return response.Content;
+                return response.Content;
+            }
         }
     }
-}

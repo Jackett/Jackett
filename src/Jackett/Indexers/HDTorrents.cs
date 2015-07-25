@@ -34,8 +34,8 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            SearchUrl = SiteLink + "/torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
-            LoginUrl = SiteLink + "/login.php";
+            SearchUrl = SiteLink + "torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
+            LoginUrl = SiteLink + "login.php";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler

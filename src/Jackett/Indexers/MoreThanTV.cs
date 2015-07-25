@@ -35,10 +35,10 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/login.php";
-            SearchUrl = SiteLink + "/ajax.php?action=browse&searchstr=";
-            DownloadUrl = SiteLink + "/torrents.php?action=download&id=";
-            GuidUrl = SiteLink + "/torrents.php?torrentid=";
+            LoginUrl = SiteLink + "login.php";
+            SearchUrl = SiteLink + "ajax.php?action=browse&searchstr=";
+            DownloadUrl = SiteLink + "torrents.php?action=download&id=";
+            GuidUrl = SiteLink + "torrents.php?torrentid=";
             client = c;
         }
 

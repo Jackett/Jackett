@@ -33,7 +33,7 @@ namespace Jackett.Indexers
                 logger: l)
         {
 
-            SearchUrl = SiteLink + "/feed_verifiedP?f={0}";
+            SearchUrl = SiteLink + "feed_verifiedP?f={0}";
             cookies = new CookieContainer();
             handler = new HttpClientHandler
             {

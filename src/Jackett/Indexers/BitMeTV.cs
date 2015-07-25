@@ -60,10 +60,10 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/login.php";
-            LoginPost = SiteLink + "/takelogin.php";
-            CaptchaUrl = SiteLink + "/visual.php";
-            SearchUrl = SiteLink + "/browse.php";
+            LoginUrl = SiteLink + "login.php";
+            LoginPost = SiteLink + "takelogin.php";
+            CaptchaUrl = SiteLink + "visual.php";
+            SearchUrl = SiteLink + "browse.php";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler
