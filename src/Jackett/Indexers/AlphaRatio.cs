@@ -105,7 +105,6 @@ namespace Jackett.Indexers
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-
             }
             else
             {
