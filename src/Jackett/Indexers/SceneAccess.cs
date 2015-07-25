@@ -32,8 +32,8 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/login";
-            SearchUrl = SiteLink + "/{0}?method=1&c{1}=1&search={2}";
+            LoginUrl = SiteLink + "login";
+            SearchUrl = SiteLink + "{0}?method=1&c{1}=1&search={2}";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler
