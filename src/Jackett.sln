@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett", "Jackett\Jackett.csproj", "{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Service", "Jackett.Service\Jackett.Service.csproj", "{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Tray", "Jackett.Tray\Jackett.Tray.csproj", "{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Test", "Jackett.Test\Jackett.Test.csproj", "{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,18 +11,18 @@ namespace Jackett.Models
 {
     public class TorznabQuery
     {
-        public string QueryType { get; private set; }
-        public string[] Categories { get; private set; }
-        public int Extended { get; private set; }
-        public string ApiKey { get; private set; }
-        public int Limit { get; private set; }
-        public int Offset { get; private set; }
-        public int RageID { get; private set; }
+        public string QueryType { get; set; }
+        public string[] Categories { get; set; }
+        public int Extended { get; set; }
+        public string ApiKey { get; set; }
+        public int Limit { get; set; }
+        public int Offset { get; set; }
+        public int RageID { get; set; }
 
-        public int Season { get; private set; }
-        public string Episode { get; private set; }
-        public string SearchTerm { get; private set; }
-        public string SanitizedSearchTerm { get; private set; }
+        public int Season { get; set; }
+        public string Episode { get; set; }
+        public string SearchTerm { get; set; }
+        public string SanitizedSearchTerm { get; set; }
 
         public string GetEpisodeSearchString()
         {
