@@ -44,12 +44,21 @@ namespace Jackett.Controllers
 
             if (!string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
             {
+                logger.Warn(string.Format("A request from {0} was made with an incorrect API key.", Request.GetOwinContext().Request.RemoteIpAddress));
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);
 
-            logger.Info(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
+            if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
+            {
+                logger.Info(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
+            }
+            else
+            {
+                logger.Info(string.Format("Found {0} releases from {1} for: {2}", releases.Length, indexer.DisplayName, torznabQuery.SanitizedSearchTerm));
+            }
+
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
 
             var resultPage = new ResultPage(new ChannelInfo

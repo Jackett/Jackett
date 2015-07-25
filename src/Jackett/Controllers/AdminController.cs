@@ -260,6 +260,7 @@ namespace Jackett.Controllers
             {
                 var cfg = new JObject();
                 cfg["port"] = serverService.Config.Port;
+                cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword )? string.Empty:serverService.Config.AdminPassword.Substring(0,10);
 
@@ -285,13 +286,15 @@ namespace Jackett.Controllers
         public async Task<IHttpActionResult> SetConfig()
         {
             var originalPort = Engine.Server.Config.Port;
+            var originalAllowExternal = Engine.Server.Config.AllowExternal;
             var jsonReply = new JObject();
             try
             {
                 var postData = await ReadPostDataJson();
                 int port = (int)postData["port"];
+                bool external = (bool)postData["external"];
 
-                if (port != Engine.Server.Config.Port)
+                if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
                 {
                     if (ServerUtil.RestrictedPorts.Contains(port))
                     {
@@ -300,35 +303,48 @@ namespace Jackett.Controllers
                         return Json(jsonReply);
                     }
 
+                    // Save port to the config so it can be picked up by the if needed when running as admin below.
+                    Engine.Server.Config.AllowExternal = external;
                     Engine.Server.Config.Port = port;
                     Engine.Server.SaveConfig();
 
-                    if (!ServerUtil.IsUserAdministrator())
+                    // On Windows change the url reservations
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        try {
-                            processService.StartProcessAndLog(Application.ExecutablePath, "/r", true);
-                        }
-                        catch
+                        if (!ServerUtil.IsUserAdministrator())
                         {
-                            Engine.Server.Config.Port = originalPort;
-                            Engine.Server.SaveConfig();
-                            jsonReply["result"] = "error";
-                            jsonReply["error"] = "Failed to acquire admin permissions to reserve the new port.";
-                            return Json(jsonReply);
+                            try
+                            {
+                                processService.StartProcessAndLog(Application.ExecutablePath, "--ReserveUrls", true);
+                            }
+                            catch
+                            {
+                                Engine.Server.Config.Port = originalPort;
+                                Engine.Server.Config.AllowExternal = originalAllowExternal;
+                                Engine.Server.SaveConfig();
+                                jsonReply["result"] = "error";
+                                jsonReply["error"] = "Failed to acquire admin permissions to reserve the new port.";
+                                return Json(jsonReply);
+                            }
                         }
-                    } else
-                    {
-                        serverService.ReserveUrls(true);
+                        else
+                        {
+                            serverService.ReserveUrls(true);
+                        }
                     }
 
                     (new Thread(() => {
                         Thread.Sleep(500);
-                        serverService.Start();
+                        serverService.Stop();
+                        Engine.BuildContainer();
+                        Engine.Server.Initalize();
+                        Engine.Server.Start();
                     })).Start();
                 }
 
                 jsonReply["result"] = "success";
                 jsonReply["port"] = port;
+                jsonReply["external"] = external;
             }
             catch (Exception ex)
             {
