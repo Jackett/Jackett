@@ -2,6 +2,7 @@
 using Jackett.Services;
 using NLog;
 using NLog.Config;
+using NLog.LayoutRenderers;
 using NLog.Targets;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Jackett
         static Engine()
         {
             BuildContainer();
-            Logger.Info("Starting Jackett " + ConfigService.GetVersion());
+           
         }
 
         public static void BuildContainer()
@@ -107,8 +108,10 @@ namespace Jackett
 
         private static void SetupLogging(ContainerBuilder builder)
         {
-            var logConfig = new LoggingConfiguration();
+            // Add custom date time format renderer as the default is too long
+            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 
+            var logConfig = new LoggingConfiguration();
             var logFile = new FileTarget();
             logConfig.AddTarget("file", logFile);
             logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
@@ -121,14 +124,24 @@ namespace Jackett
             var logFileRule = new LoggingRule("*", LogLevel.Info, logFile);
             logConfig.LoggingRules.Add(logFileRule);
 
-            var logConsole = new ConsoleTarget();
+            var logConsole = new ColoredConsoleTarget();
             logConfig.AddTarget("console", logConsole);
-            logConsole.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
+            
+            logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
             var logConsoleRule = new LoggingRule("*", Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
 
             LogManager.Configuration = logConfig;
             builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
+        }
+    }
+
+    [LayoutRenderer("simpledatetime")]
+    public class SimpleDateTimeRenderer : LayoutRenderer
+    {
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        {
+            builder.Append(DateTime.Now.ToString("MM-dd HH:mm:ss"));
         }
     }
 }

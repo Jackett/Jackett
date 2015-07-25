@@ -49,12 +49,13 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Run]
-Filename: "{app}\JackettConsole.exe"; Parameters: "/u"; Flags: waituntilterminated;
-Filename: "{app}\JackettConsole.exe"; Parameters: "/r"; Flags: waituntilterminated;
-Filename: "{app}\JackettConsole.exe"; Parameters: "/i"; Flags: waituntilterminated; Tasks: windowsService
-Filename: "{app}\JackettConsole.exe"; Parameters: "/start"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{app}\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated;
+Filename: "{app}\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated;
+Filename: "{app}\JackettConsole.exe"; Parameters: "--MigrateSettings"; Flags: waituntilterminated;
+Filename: "{app}\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{app}\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated; Tasks: windowsService
 
 [UninstallRun]
-Filename: "{app}\JackettConsole.exe"; Parameters: "/u"; Flags: waituntilterminated skipifdoesntexist
+Filename: "{app}\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated skipifdoesntexist
 
 

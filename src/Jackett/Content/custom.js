@@ -7,6 +7,7 @@ function loadJackettSettings() {
         $("#api-key-input").val(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
+        $("#jackett-allowext").attr('checked', data.config.external);
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
         if (password != null && password != '') {
@@ -17,20 +18,21 @@ function loadJackettSettings() {
 
 $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
-    var jsonObject = { port: jackett_port};
+    var jackett_external = $("#jackett-allowext").is(':checked');
+    var jsonObject = { port: jackett_port, external: jackett_external};
     var jqxhr = $.post("/admin/set_port", JSON.stringify(jsonObject), function (data) {
-
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         } else {
             doNotify("The port has been changed. Redirecting you to the new port.", "success", "glyphicon glyphicon-ok");
-            var jqxhr0 = $.post("admin/jackett_restart", null, function (data_restart) { });
-
             window.setTimeout(function () {
                 url = window.location.href;
-                window.location.href = url.substr(0, url.lastIndexOf(":") + 1) + data.port;
-
+                if (data.external) {
+                    window.location.href = url.substr(0, url.lastIndexOf(":") + 1) + data.port;
+                } else {
+                    window.location.href = 'http://127.0.0.1:' + data.port;
+                }
             }, 3000);
 
         }
