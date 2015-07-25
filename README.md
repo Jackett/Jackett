@@ -55,4 +55,4 @@ I can be contact on IRC at [irc.freenode.net#jackett](http://webchat.freenode.ne
 
 ### Screenshots
 
-![screenshot](http://i.imgur.com/OX9MKrL.png "screenshot")
+![screenshot](http://i.imgur.com/t1sVva6.png "screenshot")
