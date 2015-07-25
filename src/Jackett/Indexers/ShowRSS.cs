@@ -33,7 +33,7 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            searchAllUrl = SiteLink + "/feeds/all.rss";
+            searchAllUrl = SiteLink + "feeds/all.rss";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler

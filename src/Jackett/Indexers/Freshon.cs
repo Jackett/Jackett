@@ -38,9 +38,9 @@ namespace Jackett.Indexers
                 logger: l)
         {
 
-            LoginUrl = SiteLink + "/login.php";
-            LoginPostUrl = SiteLink + "/login.php?action=makelogin";
-            SearchUrl = SiteLink + "/browse.php";
+            LoginUrl = SiteLink + "login.php";
+            LoginPostUrl = SiteLink + "login.php?action=makelogin";
+            SearchUrl = SiteLink + "browse.php";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler

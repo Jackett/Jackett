@@ -34,9 +34,9 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "/takelogin.php";
-            SearchUrl = SiteLink + "/browse_API.php";
-            DownloadUrl = SiteLink + "/download.php/{0}/download.torrent";
+            LoginUrl = SiteLink + "takelogin.php";
+            SearchUrl = SiteLink + "browse_API.php";
+            DownloadUrl = SiteLink + "download.php/{0}/download.torrent";
 
             cookies = new CookieContainer();
             handler = new HttpClientHandler
