@@ -24,7 +24,6 @@ namespace Jackett.Indexers
 
         protected Logger logger;
         protected IIndexerManagerService indexerService;
-       // protected IWebClient webClient;
 
         protected static List<CachedResult> cache = new List<CachedResult>();
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
@@ -42,7 +41,6 @@ namespace Jackett.Indexers
             TorznabCaps = caps;
             this.logger = logger;
             indexerService = manager;
-          //  webClient = wc;
         }
 
         protected void SaveConfig(JToken config)

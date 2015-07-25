@@ -55,6 +55,7 @@ namespace Jackett.Utils.Clients
                 }
             }
 
+            logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
             return result;
         }
 
@@ -63,12 +64,14 @@ namespace Jackett.Utils.Clients
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
             var result = await GetBytes(request);
 
-            return new WebClientStringResult()
+            var sresult = new WebClientStringResult()
             {
                 Content = Encoding.UTF8.GetString(result.Content),
                 Cookies = result.Cookies,
                 Status = result.Status
             };
+
+            return sresult;
         }
     }
 }

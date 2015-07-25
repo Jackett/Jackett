@@ -12,8 +12,16 @@ using System.Net;
 
 namespace Jackett
 {
-    public static class CurlHelper
+    public class CurlHelper
     {
+        private static readonly object instance = new object();
+
+        static CurlHelper()
+        {
+            Engine.Logger.Debug("LibCurl init" + Curl.GlobalInit(CurlInitFlag.All).ToString());
+            Engine.Logger.Debug("LibCurl version " + Curl.Version);
+        }
+
         public class CurlRequest
         {
 
@@ -39,17 +47,11 @@ namespace Jackett
         public class CurlResponse
         {
             public Dictionary<string, string> Headers { get; private set; }
-
             public List<string[]> HeaderList { get; private set; }
-
             public byte[] Content { get; private set; }
-
             public HttpStatusCode Status { get; private set;}
-
             public Dictionary<string, string> Cookies { get; private set; }
-
             public List<string> CookiesFlat { get { return Cookies.Select(c => c.Key + "=" + c.Value).ToList(); } }
-
             public string CookieHeader { get { return string.Join("; ", CookiesFlat); } }
 
             public CurlResponse(List<string[]> headers, byte[] content, HttpStatusCode s)
@@ -94,17 +96,15 @@ namespace Jackett
         {
             var curlRequest = new CurlRequest(HttpMethod.Get, url, cookies, referer);
             var result = await PerformCurlAsync(curlRequest);
-            var checkedResult = await FollowRedirect(url, result);
-            return checkedResult;
-        }
+            return result;
+        }    
 
         public static async Task<CurlResponse> PostAsync(string url, Dictionary<string, string> formData, string cookies = null, string referer = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer);
             curlRequest.PostData = formData;
             var result = await PerformCurlAsync(curlRequest);
-            var checkedResult = await FollowRedirect(url, result);
-            return checkedResult;
+            return result;
         }
 
         private static async Task<CurlResponse> FollowRedirect(string url, CurlResponse response)
@@ -139,78 +139,80 @@ namespace Jackett
 
         public static CurlResponse PerformCurl(CurlRequest curlRequest)
         {
-            Curl.GlobalInit(CurlInitFlag.All);
-
-            var headerBuffers = new List<byte[]>();
-            var contentBuffers = new List<byte[]>();
-
-            using (var easy = new CurlEasy())
+            lock (instance)
             {
-                easy.Url = curlRequest.Url;
-                easy.BufferSize = 64 * 1024;
-                easy.UserAgent = BrowserUtil.ChromeUserAgent;
-                easy.WriteFunction = (byte[] buf, int size, int nmemb, object data) =>
-                {
-                    contentBuffers.Add(buf);
-                    return size * nmemb;
-                };
-                easy.HeaderFunction = (byte[] buf, int size, int nmemb, object extraData) =>
-                {
-                    headerBuffers.Add(buf);
-                    return size * nmemb;
-                };
+                var headerBuffers = new List<byte[]>();
+                var contentBuffers = new List<byte[]>();
 
-                if (!string.IsNullOrEmpty(curlRequest.Cookies))
-                    easy.Cookie = curlRequest.Cookies;
-
-                if (!string.IsNullOrEmpty(curlRequest.Referer))
-                    easy.Referer = curlRequest.Referer;
-
-                if (curlRequest.Method == HttpMethod.Post)
+                using (var easy = new CurlEasy())
                 {
-                    easy.Post = true;
-                    var postString = new FormUrlEncodedContent(curlRequest.PostData).ReadAsStringAsync().Result;
-                    easy.PostFields = postString;
-                    easy.PostFieldSize = Encoding.UTF8.GetByteCount(postString);
-                }
-
-                easy.Perform();
-            }
-            
-            var headerBytes = Combine(headerBuffers.ToArray());
-            var headerString = Encoding.UTF8.GetString(headerBytes);
-            var headerParts = headerString.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            var headers = new List<string[]>();
-            var headerCount = 0;
-            HttpStatusCode status = HttpStatusCode.InternalServerError;
-            foreach (var headerPart in headerParts)
-            {
-                if (headerCount == 0)
-                {
-                    var responseCode = int.Parse(headerPart.Split(' ')[1]);
-                    status = (HttpStatusCode)responseCode;
-                }
-                else
-                {
-                    var keyVal = headerPart.Split(new char[] { ':' }, 2);
-                    if (keyVal.Length > 1)
+                    easy.Url = curlRequest.Url;
+                    easy.BufferSize = 64 * 1024;
+                    easy.UserAgent = BrowserUtil.ChromeUserAgent;
+                    easy.FollowLocation = false;
+                    easy.ConnectTimeout  = 20;
+                    easy.WriteFunction = (byte[] buf, int size, int nmemb, object data) =>
                     {
-                        headers.Add(new[] { keyVal[0].ToLower().Trim(), keyVal[1].Trim() });
+                        contentBuffers.Add(buf);
+                        return size * nmemb;
+                    };
+                    easy.HeaderFunction = (byte[] buf, int size, int nmemb, object extraData) =>
+                    {
+                        headerBuffers.Add(buf);
+                        return size * nmemb;
+                    };
+
+                    if (!string.IsNullOrEmpty(curlRequest.Cookies))
+                        easy.Cookie = curlRequest.Cookies;
+
+                    if (!string.IsNullOrEmpty(curlRequest.Referer))
+                        easy.Referer = curlRequest.Referer;
+
+                    if (curlRequest.Method == HttpMethod.Post)
+                    {
+                        easy.Post = true;
+                        var postString = new FormUrlEncodedContent(curlRequest.PostData).ReadAsStringAsync().Result;
+                        easy.PostFields = postString;
+                        easy.PostFieldSize = Encoding.UTF8.GetByteCount(postString);
                     }
+
+                    easy.Perform();
                 }
 
-                headerCount++;
+                var headerBytes = Combine(headerBuffers.ToArray());
+                var headerString = Encoding.UTF8.GetString(headerBytes);
+                var headerParts = headerString.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                var headers = new List<string[]>();
+                var headerCount = 0;
+                HttpStatusCode status = HttpStatusCode.InternalServerError;
+                foreach (var headerPart in headerParts)
+                {
+                    if (headerCount == 0)
+                    {
+                        var responseCode = int.Parse(headerPart.Split(' ')[1]);
+                        status = (HttpStatusCode)responseCode;
+                    }
+                    else
+                    {
+                        var keyVal = headerPart.Split(new char[] { ':' }, 2);
+                        if (keyVal.Length > 1)
+                        {
+                            headers.Add(new[] { keyVal[0].ToLower().Trim(), keyVal[1].Trim() });
+                        }
+                    }
+
+                    headerCount++;
+                }
+
+                var contentBytes = Combine(contentBuffers.ToArray());
+
+                var curlResponse = new CurlResponse(headers, contentBytes, status);
+                if (!string.IsNullOrEmpty(curlRequest.Cookies))
+                    curlResponse.AddCookiesFromHeaderValue(curlRequest.Cookies);
+                curlResponse.AddCookiesFromHeaders(headers);
+
+                return curlResponse;
             }
-
-            var contentBytes = Combine(contentBuffers.ToArray());
-
-            var curlResponse = new CurlResponse(headers, contentBytes, status);
-            if (!string.IsNullOrEmpty(curlRequest.Cookies))
-                curlResponse.AddCookiesFromHeaderValue(curlRequest.Cookies);
-            curlResponse.AddCookiesFromHeaders(headers);
-
-            return curlResponse;
-
         }
 
         public static byte[] Combine(params byte[][] arrays)
