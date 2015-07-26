@@ -167,8 +167,7 @@ namespace Jackett.Indexers
                         }
 
                         string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
-                        string[] sizeSplit = fullSize.Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(sizeSplit[1], ParseUtil.CoerceFloat(sizeSplit[0]));
+                        release.Size = ReleaseInfo.GetBytes(fullSize);
 
                         release.Guid = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
                         release.Link = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));

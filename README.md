@@ -24,6 +24,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 ### Supported Trackers
  * [AlphaRatio](https://alpharatio.cc/)
  * [AnimeBytes](https://animebytes.tv/)
+ * [BakaBT](http://bakabt.me/)
  * [bB](http://reddit.com/r/baconbits)
  * [BeyondHD](https://beyondhd.me/)
  * [BIT-HDTV](https://www.bit-hdtv.com)
@@ -47,7 +48,6 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [TorrentShack](http://torrentshack.me/)
  * [Torrentz](https://torrentz.eu/)
- * [BakaBT](http://bakabt.me/)
 
 
 ### Additional Trackers

@@ -30,7 +30,6 @@ namespace Jackett.Indexers
             {
                 return new Item[] { Pin, Username, Password };
             }
-
         }
 
         private readonly string LoginUrl = "";

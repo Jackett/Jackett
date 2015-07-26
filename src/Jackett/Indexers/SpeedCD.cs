@@ -121,8 +121,8 @@ namespace Jackett.Indexers
 
                     release.Title = Regex.Replace((string)jobj["name"], "<.*?>", String.Empty);
 
-                    var sizeParts = ((string)jobj["size"]).Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                    var SizeStr = ((string)jobj["size"]);
+                    release.Size = ReleaseInfo.GetBytes(SizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt((string)jobj["seed"]);
                     release.Peers = ParseUtil.CoerceInt((string)jobj["leech"]) + release.Seeders;

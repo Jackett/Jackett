@@ -138,8 +138,7 @@ namespace Jackett.Indexers
                     release.Link = new Uri(SiteLink + "/" + qRow.Find(".td_dl > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
-                    var sizeParts = sizeStr.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     var timeStr = qRow.Find(".ttr_added").Text();
                     DateTime time;

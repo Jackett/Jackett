@@ -132,9 +132,8 @@ namespace Jackett.Indexers
                     var dateStr = row.ChildElements.ElementAt(3).Cq().Text().Trim().Replace(" and", "");
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var sizeStr = row.ChildElements.ElementAt(4).Cq().Text().Trim();
-                    var sizeParts = sizeStr.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                    var sizeStr = row.ChildElements.ElementAt(4).Cq().Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text().Trim()) + release.Seeders;

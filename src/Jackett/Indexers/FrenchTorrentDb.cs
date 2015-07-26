@@ -139,10 +139,8 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTime.Now;
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("li.torrents_seeders").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find("li.torrents_leechers").Text()) + release.Seeders;
-                    var sizeParts = qRow.Find("li.torrents_size").Text().Split(' ');
-                    var sizeVal = ParseUtil.CoerceFloat(sizeParts[0]);
-                    var sizeUnit = sizeParts[1];
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                    var sizeParts = qRow.Find("li.torrents_size").Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeParts);
 
                     releases.Add(release);
                 }

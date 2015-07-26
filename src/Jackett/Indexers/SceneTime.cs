@@ -137,10 +137,8 @@ namespace Jackett.Indexers
                     var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById(timezoneString)).ToLocalTime();
                     release.PublishDate = localDate;
 
-                    var sizeNodes = row.ChildElements.ElementAt(5).ChildNodes;
-                    var sizeVal = sizeNodes.First().NodeValue;
-                    var sizeUnit = sizeNodes.Last().NodeValue;
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
+                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim()) + release.Seeders;

@@ -128,8 +128,8 @@ namespace Jackett.Indexers
                     //"yyyy-MMM-dd hh:mm:ss"
                     release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
-                    var sizeStringParts = qRow.Children().ElementAt(4).InnerText.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeStringParts[1], ParseUtil.CoerceFloat(sizeStringParts[0]));
+                    var sizeStr = qRow.Children().ElementAt(4).InnerText;
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
