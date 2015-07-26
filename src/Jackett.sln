@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Tray", "Jackett.Tra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Test", "Jackett.Test\Jackett.Test.csproj", "{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Distribution", "Jackett.Distribution\Jackett.Distribution.csproj", "{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
