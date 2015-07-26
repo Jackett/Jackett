@@ -133,11 +133,16 @@ namespace Jackett.Indexers
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
-
                     var qRow = row.Cq();
-
                     var qTitleLink = qRow.Find("a.t_title").First();
                     release.Title = qTitleLink.Text().Trim();
+
+                    // If we get a no results found page we still get a table but without any data
+                    if (string.IsNullOrWhiteSpace(release.Title))
+                    {
+                        break;
+                    }
+
                     release.Description = release.Title;
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
