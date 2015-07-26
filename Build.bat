@@ -10,7 +10,6 @@ copy /Y src\Jackett.Service\bin\Release\JackettService.exe build\JackettService.
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe.config build\JackettService.exe.config
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build\JackettTray.exe
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe.config build\JackettTray.exe.config
-copy /Y src\Jackett.Distribution\bin\Release\JackettDistribution.exe distributor.exe
 copy /Y LICENSE build\LICENSE
 copy /Y README.md build\README.md
 cd build
