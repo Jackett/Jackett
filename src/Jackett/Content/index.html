@@ -7,13 +7,66 @@
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
 
     <script src="/jquery-2.1.3.min.js"></script>
-    <script src="/handlebars-v3.0.1.js"></script>
+    <script src="/jquery.dataTables.js"></script>
+    <script src="/handlebars.js"></script>
+    <script src="/handlebars-intl.min.js"></script>
     <script src="/bootstrap/bootstrap.min.js"></script>
     <script src="/bootstrap-notify.js"></script>
 
     <link href="/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/animate.css" rel="stylesheet">
     <link href="/custom.css" rel="stylesheet">
+    <link href="/css/jquery.dataTables.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="jackett-releases" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Releases</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This screen shows releases which have been recently returned from Jackett. Only the last 100 releases in the last 2 days are kept in memory for each tracker.</p>
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th>Published</th>
+                                    <th>First Seen</th>
+                                    <th>Published</th>
+                                    <th>First Seen</th>
+                                    <th>Tracker</th>
+                                    <th>Name</th>
+                                    <th>Seeds</th>
+                                    <th>Leechers</th>
+                                    <th>Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each releases}}
+                                <tr>
+                                    <td>{{PublishDate}}</td>
+                                    <td>{{FirstSeen}}</td>
+                                    <td>{{formatRelative  PublishDate}}</td>
+                                    <td>{{formatRelative  FirstSeen}}</td>
+                                    <td>{{Tracker}}</td>
+                                    <td><a href="{{Comments}}">{{Title}}</a></td>
+                                    <td>{{Seeders}}</td>
+                                    <td>{{Peers}}</td>
+                                    <td><a href="{{Link}}"><i class="fa fa-download"></i></a></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 
     <title>Jackett</title>
 </head>
@@ -35,8 +88,13 @@
             <span class="input-header">API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
         </div>
-       
+
         <hr />
+        <div class="pull-right">
+            <button id="jackett-show-releases" class="btn btn-primary btn-sm">
+                View cached releases <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+        </div>
         <h3>Configured Indexers</h3>
         <div id="indexers"> </div>
         <hr />
@@ -89,7 +147,6 @@
     <div id="modals"></div>
 
     <div id="templates">
-
         <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -156,9 +213,9 @@
             {{else}}
             <input class="form-control" type="text" value="{{{value}}}" />
             {{/if}}
-            
+
         </div>
-       
+
         <div class="setup-item-inputbool">
             {{#if value}}
             <input type="checkbox" data-id="{{id}}" class="form-control" checked />

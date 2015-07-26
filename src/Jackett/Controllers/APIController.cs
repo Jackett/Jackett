@@ -14,21 +14,24 @@ using System.Web.Http;
 
 namespace Jackett.Controllers
 {
+    [RoutePrefix("API")]
     [AllowAnonymous]
     public class APIController : ApiController
     {
         private IIndexerManagerService indexerService;
         private Logger logger;
         private IServerService serverService;
+        private ICacheService cacheService;
 
-
-        public APIController(IIndexerManagerService i, Logger l, IServerService s)
+        public APIController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c)
         {
             indexerService = i;
             logger = l;
             serverService = s;
+            cacheService = c;
         }
 
+        [Route("Call")]
         [HttpGet]
         public async Task<HttpResponseMessage> Call(string indexerID)
         {
@@ -62,6 +65,13 @@ namespace Jackett.Controllers
 
             var releases = await indexer.PerformQuery(torznabQuery);
 
+            // Cache non query results
+            if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
+            {
+                cacheService.CacheRssResults(indexer.DisplayName, releases);
+            }
+
+            // Log info
             if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
                 logger.Info(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
@@ -102,6 +112,13 @@ namespace Jackett.Controllers
             {
                 Content = new StringContent(xml, Encoding.UTF8, "application/rss+xml")
             };
+        }
+
+        [Route("GetCache")]
+        [HttpGet]
+        public List<TrackerCacheResult> GetCache()
+        {
+            return cacheService.GetCachedResults();
         }
     }
 }

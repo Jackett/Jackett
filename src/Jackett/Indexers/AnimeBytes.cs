@@ -377,7 +377,7 @@ namespace Jackett.Indexers
             // Add to the cache
             lock (cache)
             {
-                cache.Add(new CachedResult(searchTerm, releases));
+                cache.Add(new CachedQueryResult(searchTerm, releases));
             }
 
             return releases.Select(s => (ReleaseInfo)s.Clone()).ToArray();
