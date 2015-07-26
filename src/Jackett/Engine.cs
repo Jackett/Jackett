@@ -108,6 +108,7 @@ namespace Jackett
 
         private static void SetupLogging(ContainerBuilder builder)
         {
+            var logLevel = Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
             ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 
@@ -121,14 +122,14 @@ namespace Jackett
             logFile.MaxArchiveFiles = 1;
             logFile.KeepFileOpen = false;
             logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
-            var logFileRule = new LoggingRule("*", LogLevel.Info, logFile);
+            var logFileRule = new LoggingRule("*", logLevel, logFile);
             logConfig.LoggingRules.Add(logFileRule);
 
             var logConsole = new ColoredConsoleTarget();
             logConfig.AddTarget("console", logConsole);
             
             logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
-            var logConsoleRule = new LoggingRule("*", Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info, logConsole);
+            var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
 
             LogManager.Configuration = logConfig;

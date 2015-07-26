@@ -1,9 +1,13 @@
-﻿reloadIndexers();
-loadJackettSettings();
+﻿$(document).ready(function () {
+    $.ajaxSetup({ cache: false });
+    HandlebarsIntl.registerWith(Handlebars);
+    reloadIndexers();
+    loadJackettSettings();
+});
 
 function loadJackettSettings() {
     getJackettConfig(function (data) {
-        
+
         $("#api-key-input").val(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
@@ -16,10 +20,54 @@ function loadJackettSettings() {
     });
 }
 
+$("#jackett-show-releases").click(function () {
+    var jqxhr = $.get("/api/GetCache", function (data) {
+        var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
+        var item = { releases: data, Title: 'Releases' };
+        var releaseDialog = $(releaseTemplate(item));
+        releaseDialog.find('table').DataTable(
+            {
+                "pageLength": 20,
+                "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                "order": [[2, "desc"]],
+                "columnDefs": [
+                   {
+                       "targets": 0,
+                       "visible": false,
+                       "searchable": false
+                   },
+                   {
+                       "targets": 1,
+                       "visible": false,
+                       "searchable": false
+                   },
+                   {
+                       "targets": 2,
+                       "visible": true,
+                       "searchable": false,
+                       "iDataSort": 0
+                   },
+                   {
+                       "targets": 3,
+                       "visible": true,
+                       "searchable": false,
+                       "iDataSort": 1
+                   }
+                ]
+            });
+        $("#modals").append(releaseDialog);
+        releaseDialog.modal("show");
+
+    }).fail(function () {
+        doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+});
+
+
 $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
     var jackett_external = $("#jackett-allowext").is(':checked');
-    var jsonObject = { port: jackett_port, external: jackett_external};
+    var jsonObject = { port: jackett_port, external: jackett_external };
     var jqxhr = $.post("/admin/set_port", JSON.stringify(jsonObject), function (data) {
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
@@ -162,7 +210,7 @@ function displayIndexerSetup(id) {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         }
-       
+
         populateSetupForm(id, data.name, data.config);
 
     }).fail(function () {
