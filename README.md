@@ -22,9 +22,9 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
 ### Running Jackett
 
-On Windows the recommened way of running Jackett is to install it as a windows service.  When installed as a service the tray icon acts as a way to open/start/stop Jackett.  If you opted to not install it as a service then Jacett will run it's web server from the tray tool.
+On Windows the recommended way of running Jackett is to install it as a windows service. When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
 
-Jackett can also be run from the command line (See --help for switches) using JackettConsole.exe if you would like to see log messages.  On Linux / OSX you would need to run the console using "mono JackettConsole.exe".
+Jackett can also be run from the command line (See --help for switches) using JackettConsole.exe if you would like to see log messages where the service and tray isn't running. On Linux / OSX you would need to run the console using "mono JackettConsole.exe".
 
 
 ### Supported Trackers
