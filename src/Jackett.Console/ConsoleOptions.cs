@@ -33,7 +33,7 @@ namespace Jackett.Console
         [Option('k', "Stop", HelpText = "Stop the Jacket Windows service (Must be admin)")]
         public bool StopService { get; set; }
 
-        [Option('p', "ListenPublic", HelpText = "Listen publicly")]
+        [Option('x', "ListenPublic", HelpText = "Listen publicly")]
         public bool? ListenPublic { get; set; }
 
         [Option('h', "Help",  HelpText = "Show Help")]
