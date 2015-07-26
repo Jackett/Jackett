@@ -9,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using static Jackett.CurlHelper;
 
 namespace Jackett.Utils.Clients
 {
@@ -24,7 +23,7 @@ namespace Jackett.Utils.Clients
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
-            CurlResponse response;
+            Jackett.CurlHelper.CurlResponse response;
 
             logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
 
