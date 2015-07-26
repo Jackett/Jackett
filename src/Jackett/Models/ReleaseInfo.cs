@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Jackett.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Models
@@ -53,22 +55,25 @@ namespace Jackett.Models
             };
         }
 
+        // ex: " 3.5  gb   "
+        public static long GetBytes(string str)
+        {
+            var valStr = new string(str.Where(c => char.IsDigit(c) || c == '.').ToArray());
+            var unit = new string(str.Where(char.IsLetter).ToArray());
+            var val = ParseUtil.CoerceFloat(valStr);
+            return GetBytes(unit, val);
+        }
+
         public static long GetBytes(string unit, float value)
         {
-            switch (unit.ToLower())
-            {
-                case "kb":
-                case "kib":
-                    return BytesFromKB(value);
-                case "mb":
-                case "mib":
-                    return BytesFromMB(value);
-                case "gb":
-                case "gib":
-                    return BytesFromGB(value);
-                default:
-                    return 0;
-            }
+            unit = unit.Replace("i", "").ToLowerInvariant();
+            if (unit.Contains("kb"))
+                return BytesFromKB(value);
+            if (unit.Contains("mb"))
+                return BytesFromMB(value);
+            if (unit.Contains("gb"))
+                return BytesFromGB(value);
+            return 0;
         }
 
         public static long BytesFromGB(float gb)

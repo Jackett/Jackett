@@ -158,6 +158,7 @@
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Indexers\BB.cs" />
+    <Compile Include="Indexers\Pretome.cs" />
     <Compile Include="Indexers\PrivateHD.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Models\TorznabCapabilities.cs" />
@@ -290,6 +291,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\hdtorrents.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\pretome.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\privatehd.png">
