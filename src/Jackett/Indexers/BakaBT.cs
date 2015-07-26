@@ -183,6 +183,8 @@ namespace Jackett.Indexers
                         release.Seeders = int.Parse(qRow.Find(".peers a").Get(0).InnerText);
                         release.Peers = release.Seeders + int.Parse(qRow.Find(".peers a").Get(1).InnerText);
 
+                        release.MinimumRatio = 1;
+
                         var size = qRow.Find(".size").First().Text().Split(' ');
                         release.Size = ReleaseInfo.GetBytes(size[1], ParseUtil.CoerceFloat(size[0]));
 
