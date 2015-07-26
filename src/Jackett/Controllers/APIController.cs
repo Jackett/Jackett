@@ -3,6 +3,7 @@ using Jackett.Services;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -42,7 +43,12 @@ namespace Jackett.Controllers
                 };
             }
 
-            if (!string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
+            var allowBadApiDueToDebug = false;
+#if DEBUG
+            allowBadApiDueToDebug = Debugger.IsAttached;
+#endif
+
+            if (!allowBadApiDueToDebug && !string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
             {
                 logger.Warn(string.Format("A request from {0} was made with an incorrect API key.", Request.GetOwinContext().Request.RemoteIpAddress));
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
