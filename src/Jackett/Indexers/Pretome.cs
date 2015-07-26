@@ -40,9 +40,9 @@ namespace Jackett.Indexers
         private IWebClient webclient;
 
         public Pretome(IIndexerManagerService i, IWebClient wc, Logger l)
-            : base(name: "PrivateHD",
+            : base(name: "PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: new Uri("https://pretome.info"),
+                link: new Uri("https://pretome.info/"),
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 logger: l)
@@ -167,7 +167,7 @@ namespace Jackett.Indexers
                     var qDownload = row.ChildElements.ElementAt(2).Cq().Find("a").First();
                     release.Link = new Uri(SiteLink + qDownload.Attr("href"));
 
-                    var dateStr = row.ChildElements.ElementAt(5).Cq().Text();
+                    var dateStr = row.ChildElements.ElementAt(5).InnerHTML.Replace("<br>", " ");
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     var sizeStr = row.ChildElements.ElementAt(7).Cq().Text();

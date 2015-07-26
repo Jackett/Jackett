@@ -25,7 +25,7 @@ namespace Jackett.Indexers
         protected Logger logger;
         protected IIndexerManagerService indexerService;
 
-        protected static List<CachedResult> cache = new List<CachedResult>();
+        protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
 
         public static string GetIndexerID(Type type)

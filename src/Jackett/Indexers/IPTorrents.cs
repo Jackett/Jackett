@@ -32,7 +32,7 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            SearchUrl = SiteLink + "t?q=";
+            SearchUrl = SiteLink + "t?73=q=";  //73 is tv
             webclient = wc;
         }
 
@@ -133,13 +133,18 @@ namespace Jackett.Indexers
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
-
                     var qRow = row.Cq();
-
                     var qTitleLink = qRow.Find("a.t_title").First();
                     release.Title = qTitleLink.Text().Trim();
+
+                    // If we search an get no results, we still get a table just with no info.
+                    if (string.IsNullOrWhiteSpace(release.Title))
+                    {
+                        break;
+                    }
+
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
                     var descString = qRow.Find(".t_ctime").Text();
