@@ -21,7 +21,7 @@ function loadJackettSettings() {
 }
 
 $("#jackett-show-releases").click(function () {
-    var jqxhr = $.get("/api/GetCache", function (data) {
+    var jqxhr = $.get("/admin/GetCache", function (data) {
         var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
         var item = { releases: data, Title: 'Releases' };
         var releaseDialog = $(releaseTemplate(item));

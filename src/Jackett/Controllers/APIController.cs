@@ -14,7 +14,6 @@ using System.Web.Http;
 
 namespace Jackett.Controllers
 {
-    [RoutePrefix("API")]
     [AllowAnonymous]
     public class APIController : ApiController
     {
@@ -31,7 +30,6 @@ namespace Jackett.Controllers
             cacheService = c;
         }
 
-        [Route("Call")]
         [HttpGet]
         public async Task<HttpResponseMessage> Call(string indexerID)
         {
@@ -114,11 +112,6 @@ namespace Jackett.Controllers
             };
         }
 
-        [Route("GetCache")]
-        [HttpGet]
-        public List<TrackerCacheResult> GetCache()
-        {
-            return cacheService.GetCachedResults();
-        }
+
     }
 }

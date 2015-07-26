@@ -31,14 +31,16 @@ namespace Jackett.Controllers
         private IServerService serverService;
         private ISecuityService securityService;
         private IProcessService processService;
+        private ICacheService cacheService;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c)
         {
             this.config = config;
             indexerService = i;
             serverService = ss;
             securityService = s;
             processService = p;
+            cacheService = c;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -352,6 +354,13 @@ namespace Jackett.Controllers
                 jsonReply["error"] = ex.Message;
             }
             return Json(jsonReply);
+        }
+
+        [Route("GetCache")]
+        [HttpGet]
+        public List<TrackerCacheResult> GetCache()
+        {
+            return cacheService.GetCachedResults();
         }
     }
 }
