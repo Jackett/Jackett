@@ -167,6 +167,7 @@ namespace JackettTest.Indexers
             results[0].Link.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
             results[0].Peers.Should().Be(161);
             results[0].Seeders.Should().Be(151);
+            results[0].MinimumRatio.Should().Be(1);
 
             results[1].Title.Should().Be("Yowamushi Pedal Season 1 (BD 720p) [Commie]");
             results[4].Title.Should().Be("Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth Season 1 (480p) [HorribleSubs]");
