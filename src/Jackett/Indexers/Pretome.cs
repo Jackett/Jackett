@@ -161,6 +161,11 @@ namespace Jackett.Indexers
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Find("a").First();
                     release.Title = qLink.Text().Trim();
+                    if (qLink.Find("span").Count() == 1 && release.Title.StartsWith("NEW! |"))
+                    {
+                        release.Title = release.Title.Substring(6).Trim();
+                    }
+
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                     release.Guid = release.Comments;
                     
