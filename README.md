@@ -45,6 +45,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [TorrentShack](http://torrentshack.me/)
  * [Torrentz](https://torrentz.eu/)
+ * [BakaBT](http://bakabt.me/)
 
 
 ### Additional Trackers
