@@ -47,7 +47,6 @@ namespace Jackett.Distribution
 
         static Version GetJackettVersion()
         {
-            return new Version(5, 0, 1);
             var assemblyVersion = AssemblyName.GetAssemblyName(Path.Combine("Build", "Jackett.dll")).Version;
             return new Version(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
