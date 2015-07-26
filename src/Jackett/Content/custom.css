@@ -207,3 +207,7 @@ hr {
 #jackett-allowext {
     width: 25px;
 }
+
+.modal-fillwidth {
+    width: 1200px;
+}

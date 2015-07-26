@@ -32,7 +32,7 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
-            SearchUrl = SiteLink + "t?q=";
+            SearchUrl = SiteLink + "t?73=q=";  //73 is tv
             webclient = wc;
         }
 
@@ -144,7 +144,7 @@ namespace Jackett.Indexers
                     }
 
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
                     var descString = qRow.Find(".t_ctime").Text();
