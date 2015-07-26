@@ -125,10 +125,8 @@ namespace Jackett.Indexers
                     var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
 
-                    var sizeCol = qRow.Children().ElementAt(6);
-                    var sizeVal = sizeCol.ChildNodes[0].NodeValue;
-                    var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, ParseUtil.CoerceFloat(sizeVal));
+                    var sizeStr = qRow.Children().ElementAt(6).Cq().Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;

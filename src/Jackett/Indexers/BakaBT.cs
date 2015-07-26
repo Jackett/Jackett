@@ -185,8 +185,8 @@ namespace Jackett.Indexers
 
                         release.MinimumRatio = 1;
 
-                        var size = qRow.Find(".size").First().Text().Split(' ');
-                        release.Size = ReleaseInfo.GetBytes(size[1], ParseUtil.CoerceFloat(size[0]));
+                        var size = qRow.Find(".size").First().Text();
+                        release.Size = ReleaseInfo.GetBytes(size);
 
                         //22 Jul 15
                         var dateStr = qRow.Find(".added . datetime").First().Text().Replace("'", string.Empty);
