@@ -150,10 +150,8 @@ namespace Jackett.Indexers
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
-                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text().Trim();
-                    var sizeVal = ParseUtil.CoerceFloat(sizeStr.Split(' ')[0]);
-                    var sizeUnit = sizeStr.Split(' ')[1];
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".t_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;

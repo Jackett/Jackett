@@ -132,9 +132,8 @@ namespace Jackett.Indexers
                     release.Comments = release.Guid;
                     release.Link = new Uri(SiteLink + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
-                    var sizeStr = qRow.Find(".sizeInfo").Text().Trim();
-                    var sizeParts = sizeStr.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                    var sizeStr = qRow.Find(".sizeInfo").Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);

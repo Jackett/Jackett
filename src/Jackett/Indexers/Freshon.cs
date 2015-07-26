@@ -162,10 +162,8 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find("td.table_leechers").Text().Trim()) + release.Seeders;
 
-                    var sizeCol = qRow.Find("td.table_size")[0];
-                    var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue.Trim());
-                    var sizeUnit = sizeCol.ChildNodes[2].NodeValue.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                    var sizeStr = qRow.Find("td.table_size")[0].Cq().Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     releases.Add(release);
                 }

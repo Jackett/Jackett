@@ -353,8 +353,7 @@ namespace Jackett.Indexers
                                 var size = rowCq.Find(".torrent_size");
                                 if (size.Count() > 0)
                                 {
-                                    var sizeParts = size.First().Text().Split(' ');
-                                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                                    release.Size = ReleaseInfo.GetBytes(size.First().Text());
                                 }
 
                                 //  Additional 5 hours per GB 

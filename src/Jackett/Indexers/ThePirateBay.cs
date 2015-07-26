@@ -152,10 +152,7 @@ namespace Jackett.Indexers
                         release.PublishDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc).ToLocalTime();
                     }
 
-                    var sizeParts = descParts[1].Split(new char[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    var sizeVal = ParseUtil.CoerceFloat(sizeParts[1]);
-                    var sizeUnit = sizeParts[2];
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                    release.Size = ReleaseInfo.GetBytes(descParts[1]);
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(3).Cq().Text()) + release.Seeders;
