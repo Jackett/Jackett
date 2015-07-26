@@ -107,6 +107,15 @@ namespace Jackett.Indexers
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
+
+            // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
+            if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
+            {
+                var splitindex = query.SanitizedSearchTerm.LastIndexOf(' ');
+                if (splitindex > -1)
+                    query.SanitizedSearchTerm = query.SanitizedSearchTerm.Substring(0, splitindex);
+            }
+
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
