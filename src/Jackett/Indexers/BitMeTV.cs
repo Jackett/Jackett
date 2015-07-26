@@ -163,10 +163,8 @@ namespace Jackett.Indexers
 
                     release.Link = new Uri(SiteLink + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
-                    var sizeCol = row.ChildElements.ElementAt(6);
-                    var sizeVal = ParseUtil.CoerceFloat(sizeCol.ChildNodes[0].NodeValue);
-                    var sizeUnit = sizeCol.ChildNodes[2].NodeValue;
-                    release.Size = ReleaseInfo.GetBytes(sizeUnit, sizeVal);
+                    var sizeStr = row.ChildElements.ElementAt(6).Cq().Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;

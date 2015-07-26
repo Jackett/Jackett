@@ -20,19 +20,28 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * *For MoreThanTV & ThePirateBay* install libcurl-dev for your system, [tutorial](http://curl.haxx.se/dlwiz/?type=devel)
    * For apt-get systems its simply: `apt-get install libcurl4-openssl-dev`
 
+### Running Jackett
+
+On Windows the recommened way of running Jackett is to install it as a windows service.  When installed as a service the tray icon acts as a way to open/start/stop Jackett.  If you opted to not install it as a service then Jacett will run it's web server from the tray tool.
+
+Jackett can also be run from the command line (See --help for switches) using JackettConsole.exe if you would like to see log messages.  On Linux / OSX you would need to run the console using "mono JackettConsole.exe".
+
 
 ### Supported Trackers
  * [AlphaRatio](https://alpharatio.cc/)
  * [AnimeBytes](https://animebytes.tv/)
+ * [BakaBT](http://bakabt.me/)
  * [bB](http://reddit.com/r/baconbits)
  * [BeyondHD](https://beyondhd.me/)
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [BitMeTV](http://www.bitmetv.org/)
  * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
  * [Freshon](https://freshon.tv/)
+ * [HD-Space](https://hd-space.org/)
  * [HD-Torrents.org](https://hd-torrents.org/)
  * [IPTorrents](https://iptorrents.com/)
  * [MoreThan.tv](https://morethan.tv/)
+ * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
  * [RARBG](https://rarbg.com)
  * [SceneAccess](https://sceneaccess.eu/login)
@@ -45,7 +54,6 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [TorrentShack](http://torrentshack.me/)
  * [Torrentz](https://torrentz.eu/)
- * [BakaBT](http://bakabt.me/)
 
 
 ### Additional Trackers

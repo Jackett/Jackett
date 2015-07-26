@@ -120,9 +120,8 @@ namespace Jackett.Indexers
                     var dateStr = qRow.Find(".time").Text().Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue.Trim();
-                    var sizeParts = sizeStr.Split(' ');
-                    release.Size = ReleaseInfo.GetBytes(sizeParts[1], ParseUtil.CoerceFloat(sizeParts[0]));
+                    var sizeStr = qRow.Find(".size")[0].ChildNodes[0].NodeValue;
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(6).InnerText.Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
 
