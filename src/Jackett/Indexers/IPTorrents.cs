@@ -32,6 +32,7 @@ namespace Jackett.Indexers
                 manager: i,
                 logger: l)
         {
+            TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
             SearchUrl = SiteLink + "t?26=&55=&78=&23=&24=&25=&66=&82=&65=&83=&79=&22=&5=&4=&60=&q="; 
             webclient = wc;
         }
