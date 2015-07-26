@@ -40,9 +40,9 @@ namespace Jackett.Indexers
         private IWebClient webclient;
 
         public Pretome(IIndexerManagerService i, IWebClient wc, Logger l)
-            : base(name: "PrivateHD",
+            : base(name: "PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: new Uri("https://pretome.info"),
+                link: new Uri("https://pretome.info/"),
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 logger: l)
