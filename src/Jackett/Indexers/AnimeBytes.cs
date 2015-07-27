@@ -1,5 +1,6 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -22,57 +23,30 @@ namespace Jackett.Indexers
 {
     public class AnimeBytes : BaseIndexer, IIndexer
     {
-        class ConfigurationDataBasicLoginAnimeBytes : ConfigurationDataBasicLogin
-        {
-            public BoolItem IncludeRaw { get; private set; }
-            public DisplayItem DateWarning { get; private set; }
-
-            public ConfigurationDataBasicLoginAnimeBytes()
-                : base()
-            {
-                IncludeRaw = new BoolItem() { Name = "IncludeRaw", Value = false };
-                DateWarning = new DisplayItem("This tracker does not supply upload dates so they are based off year of release.") { Name = "DateWarning" };
-            }
-
-            public override Item[] GetItems()
-            {
-                return new Item[] { Username, Password, IncludeRaw, DateWarning };
-            }
-        }
-
-        private readonly string LoginUrl = "";
-        private readonly string SearchUrl = "";
+        private string LoginUrl { get { return SiteLink + "user/login"; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php?filter_cat[1]=1"; } }
         public bool AllowRaws { get; private set; }
-
-        private IWebClient webclient;
-        private string cookieHeader = "";
 
         public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l)
             : base(name: "AnimeBytes",
+                link: "https://animebytes.tv/",
                 description: "The web's best Chinese cartoons",
-                link: new Uri("https://animebytes.tv"),
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: client,
+                caps: new TorznabCapabilities(TorznabCategory.Anime),
                 logger: l)
         {
-            TorznabCaps.Categories.Clear();
-            TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
-            LoginUrl = SiteLink + "user/login";
-            SearchUrl = SiteLink + "torrents.php?filter_cat[1]=1";
-            webclient = client;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLoginAnimeBytes();
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLoginAnimeBytes());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
             var config = new ConfigurationDataBasicLoginAnimeBytes();
             config.LoadValuesFromJson(configJson);
-
 
             // Get the login form as we need the CSRF Token
             var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
@@ -85,46 +59,36 @@ namespace Jackett.Indexers
 
             // Build login form
             var pairs = new Dictionary<string, string> {
-                  { "csrf_token", csrfToken.Attr("value") },
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
-                { "keeplogged_sent", "true" },
-                { "keeplogged", "on" },
-                { "login", "Log In!" }
+                    { "csrf_token", csrfToken.Attr("value") },
+				    { "username", config.Username.Value },
+				    { "password", config.Password.Value },
+                    { "keeplogged_sent", "true" },
+                    { "keeplogged", "on" },
+                    { "login", "Log In!" }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-
             // Do the login
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            var request = new Utils.Clients.WebRequest()
             {
                 Cookies = loginPage.Cookies,
-                 PostData = pairs,
-                 Referer = LoginUrl,
-                 Type = RequestType.POST,
-                 Url = LoginUrl
-            });
+                PostData = pairs,
+                Referer = LoginUrl,
+                Type = RequestType.POST,
+                Url = LoginUrl
+            };
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
 
             // Follow the redirect
-            if (response.Status == HttpStatusCode.RedirectMethod)
-            {
-                cookieHeader = response.Cookies;
-                response = await webclient.GetString(new Utils.Clients.WebRequest()
-                {
-                    Url = SearchUrl,
-                    PostData = pairs,
-                    Referer = SiteLink.ToString(),
-                    Cookies = cookieHeader
-                });
-            }
+            await FollowIfRedirect(request, response, SearchUrl);
 
-            if (!response.Content.Contains("/user/logout"))
+            if (!(response.Content != null && response.Content.Contains("/user/logout")))
             {
                 // Their login page appears to be broken and just gives a 500 error.
                 throw new ExceptionWithConfigData("Failed to login, 6 failed attempts will get you banned for 6 hours.", (ConfigurationData)config);
             }
             else
             {
+                cookieHeader = response.Cookies;
                 AllowRaws = config.IncludeRaw.Value;
                 var configSaveData = new JObject();
                 configSaveData["cookies"] = cookieHeader;
@@ -134,7 +98,7 @@ namespace Jackett.Indexers
             }
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             // The old config used an array - just fail to load it
             if (!(jsonConfig["cookies"] is JArray))
@@ -143,23 +107,6 @@ namespace Jackett.Indexers
                 AllowRaws = jsonConfig["raws"].Value<bool>();
                 IsConfigured = true;
             }
-        }
-
-
-        private string Hash(string input)
-        {
-            // Use input string to calculate MD5 hash
-            MD5 md5 = System.Security.Cryptography.MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-            // Convert the byte array to hexadecimal string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hashBytes.Length; i++)
-            {
-                sb.Append(hashBytes[i].ToString("X2"));
-            }
-            return sb.ToString();
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -207,12 +154,7 @@ namespace Jackett.Indexers
             }
 
             // Get the content from the tracker
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Cookies = cookieHeader,
-                Url = queryUrl,
-                Type = RequestType.GET
-            });
+            var response = await RequestStringWithCookies(queryUrl);
             CQ dom = response.Content;
 
             // Parse
@@ -311,7 +253,7 @@ namespace Jackett.Indexers
 
                                 var infoLink = links.Get(1);
                                 release.Comments = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href"));
-                                release.Guid = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
+                                release.Guid = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
                                 release.Link = new Uri(SiteLink + "/" + downloadLink.Attributes.GetAttribute("href"));
 
                                 // We dont actually have a release name >.> so try to create one
@@ -381,17 +323,6 @@ namespace Jackett.Indexers
             }
 
             return releases.Select(s => (ReleaseInfo)s.Clone()).ToArray();
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
-            });
-
-            return response.Content;
         }
     }
 }

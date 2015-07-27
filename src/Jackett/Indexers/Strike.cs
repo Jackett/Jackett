@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -17,74 +18,56 @@ namespace Jackett.Indexers
 {
     public class Strike : BaseIndexer, IIndexer
     {
-        private readonly string DownloadUrl = "/torrents/api/download/{0}.torrent";
-        private readonly string SearchUrl = "/api/v2/torrents/search/?category=TV&phrase={0}";
-        private string BaseUrl;
+        private string DownloadUrl { get { return baseUrl + "torrents/api/download/{0}.torrent"; } }
+        private string SearchUrl { get { return baseUrl + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
+        private string baseUrl = null;
 
-        private CookieContainer cookies;
-        private HttpClientHandler handler;
-        private HttpClient client;
-
-        public Strike(IIndexerManagerService i, Logger l)
+        public Strike(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "Strike",
                 description: "Torrent search engine",
-                link: new Uri("https://getstrike.net"),
+                link: "https://getstrike.net/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public Task ApplyConfiguration(JToken configJson)
         {
             var config = new ConfigurationDataUrl(SiteLink);
             config.LoadValuesFromJson(configJson);
-
-            var formattedUrl = config.GetFormattedHostUrl();
-            var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Length == 0)
-                throw new Exception("Could not find releases from this URL");
-
-            BaseUrl = formattedUrl;
-
+            baseUrl = config.GetFormattedHostUrl();
             var configSaveData = new JObject();
-            configSaveData["base_url"] = BaseUrl;
+            configSaveData["base_url"] = baseUrl;
             SaveConfig(configSaveData);
             IsConfigured = true;
+            return Task.FromResult(0);
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            BaseUrl = (string)jsonConfig["base_url"];
-            IsConfigured = true;
+            baseUrl = (string)jsonConfig["base_url"];
+            IsConfigured = !string.IsNullOrEmpty(baseUrl);
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "2015" : query.SanitizedSearchTerm;
 
             var searchString = searchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = baseUrl + string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
-            var results = await client.GetStringAsync(episodeSearchUrl);
+            var episodeSearchUrl =string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+            var results = await RequestStringWithCookies(episodeSearchUrl, string.Empty);
             try
             {
-                var jResults = JObject.Parse(results);
+                var jResults = JObject.Parse(results.Content);
                 foreach (JObject result in (JArray)jResults["torrents"])
                 {
                     var release = new ReleaseInfo();
@@ -112,25 +95,20 @@ namespace Jackett.Indexers
 
                     release.InfoHash = (string)result["torrent_hash"];
                     release.MagnetUri = new Uri((string)result["magnet_uri"]);
-                    release.Link = new Uri(string.Format("{0}{1}", baseUrl, string.Format(DownloadUrl, release.InfoHash)));
+                    release.Link = new Uri(string.Format(DownloadUrl, release.InfoHash));
 
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases.ToArray();
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, BaseUrl);
-        }
-
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             throw new NotImplementedException();
         }

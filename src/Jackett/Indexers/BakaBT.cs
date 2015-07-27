@@ -18,31 +18,23 @@ namespace Jackett.Indexers
 {
     public class BakaBT : BaseIndexer, IIndexer
     {
-        public readonly string SearchUrl = "";
-        public readonly string LoginUrl = "";
-        private string cookieHeader = "";
-        private IWebClient webclient;
+        public string SearchUrl { get { return SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&c1=1&reorder=1&q="; } }
+        public string LoginUrl { get { return SiteLink + "login.php"; } }
 
         public BakaBT(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "BakaBT",
                 description: "Anime Community",
-                link: new Uri("http://bakabt.me/"),
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                link: "http://bakabt.me/",
+                caps: new TorznabCapabilities(TorznabCategory.Anime),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            TorznabCaps.Categories.Clear();
-            TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
-
-            SearchUrl = SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&c1=1&reorder=1&q=";
-            LoginUrl = SiteLink + "login.php";
-            webclient = wc;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>((ConfigurationData)config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -62,47 +54,15 @@ namespace Jackett.Indexers
                 { "returnto", "/index.php" }
             };
 
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                PostData = pairs,
-                Referer = SiteLink.ToString(),
-                Type = RequestType.POST,
-                Cookies = loginForm.Cookies
-            });
-
-            cookieHeader = response.Cookies;
-            if (response.Status == HttpStatusCode.Found)
-            {
-                response = await webclient.GetString(new Utils.Clients.WebRequest()
-                {
-                    Url = SearchUrl,
-                    Cookies = cookieHeader
-                });
-            }
-
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
             var responseContent = response.Content;
-
-            if (!responseContent.Contains("<a href=\"logout.php\">Logout</a>"))
-            {
-                CQ dom = responseContent;
-                var messageEl = dom[".error"].First();
-                var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookies"];
-            IsConfigured = true;
+            ConfigureIfOK(response.Cookies, responseContent.Contains("<a href=\"logout.php\">Logout</a>"), () =>
+             {
+                 CQ dom = responseContent;
+                 var messageEl = dom[".error"].First();
+                 var errorMessage = messageEl.Text().Trim();
+                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+             });
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -119,12 +79,7 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm;
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = episodeSearchUrl,
-                Cookies = cookieHeader
-            });
+            var response = await RequestStringWithCookies(episodeSearchUrl);
 
             try
             {
@@ -218,14 +173,9 @@ namespace Jackett.Indexers
             return releases.ToArray();
         }
 
-        public async Task<byte[]> Download(Uri link)
+        public override async Task<byte[]> Download(Uri link)
         {
-            var downloadPage = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
-            });
-
+            var downloadPage = await RequestStringWithCookies(link.ToString());
             CQ dom = downloadPage.Content;
             var downloadLink = dom.Find(".download_link").First().Attr("href");
 
@@ -234,14 +184,7 @@ namespace Jackett.Indexers
                 throw new Exception("Unable to find download link.");
             }
 
-            downloadLink = SiteLink + downloadLink;
-
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = downloadLink,
-                Cookies = cookieHeader
-            });
-
+            var response = await RequestBytesWithCookies(SiteLink + downloadLink);
             return response.Content;
         }
     }

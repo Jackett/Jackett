@@ -19,82 +19,54 @@ namespace Jackett.Indexers
 {
     public class IPTorrents : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        private string cookieHeader = "";
-
-        private IWebClient webclient;
+        private string SearchUrl { get { return SiteLink + "t?26=&55=&78=&23=&24=&25=&66=&82=&65=&83=&79=&22=&5=&4=&60=&q="; } }
 
         public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
-                link: new Uri("https://iptorrents.com/"),
+                link: "https://iptorrents.com/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
             TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
-            SearchUrl = SiteLink + "t?26=&55=&78=&23=&24=&25=&66=&82=&65=&83=&79=&22=&5=&4=&60=&q="; 
-            webclient = wc;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>((ConfigurationData)config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
-
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value }
-			};
-
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+                { "username", incomingConfig.Username.Value },
+                { "password", incomingConfig.Password.Value }
+            };
+            var request = new Utils.Clients.WebRequest()
             {
-                Url = SiteLink.ToString(),
-                PostData = pairs,
-                Referer = SiteLink.ToString(),
-                Type = RequestType.POST
-            });
+                Url = SiteLink,
+                Type = RequestType.POST,
+                Referer = SiteLink,
+                PostData = pairs
+            };
+            var response = await webclient.GetString(request);
+            var firstCallCookies = response.Cookies;
+            // Redirect to ?
+            await FollowIfRedirect(request, response,null, firstCallCookies);
+            // Redirect to /t
+            await FollowIfRedirect(request, response, null, firstCallCookies);
 
-            cookieHeader = response.Cookies;
-            if (response.Status == HttpStatusCode.Found)
+            ConfigureIfOK(firstCallCookies, response.Content.Contains("/my.php"), () =>
             {
-                response = await webclient.GetString(new Utils.Clients.WebRequest()
-                {
-                    Url = SearchUrl,
-                    Referer = SiteLink.ToString(),
-                    Cookies = response.Cookies
-                });
-            }
-
-            var responseContent = response.Content;
-
-            if (!responseContent.Contains("/my.php"))
-            {
-                CQ dom = responseContent;
+                CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                configSaveData["cookie_header"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookie_header"];
-            IsConfigured = true;
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+            });
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -110,13 +82,7 @@ namespace Jackett.Indexers
             {
                 try
                 {
-                    response = await webclient.GetString(new Utils.Clients.WebRequest()
-                    {
-                        Url = episodeSearchUrl,
-                        Referer = SiteLink.ToString(),
-                        Cookies = cookieHeader
-                    });
-
+                    response = await RequestStringWithCookies(episodeSearchUrl, null, SearchUrl);
                     break;
                 }
                 catch (Exception e)
@@ -171,17 +137,6 @@ namespace Jackett.Indexers
             }
 
             return releases.ToArray();
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
-            });
-
-            return response.Content;
         }
     }
 }

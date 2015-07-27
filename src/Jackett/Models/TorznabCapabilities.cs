@@ -23,6 +23,12 @@ namespace Jackett.Models
             Categories = new List<TorznabCategory>();
         }
 
+        public TorznabCapabilities(params TorznabCategory[] cats)
+        {
+            Categories = new List<TorznabCategory>();
+            Categories.AddRange(cats);
+        }
+
         string SupportedTVSearchParams
         {
             get

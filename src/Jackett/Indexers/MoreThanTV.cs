@@ -19,33 +19,25 @@ namespace Jackett.Indexers
 {
     public class MoreThanTV : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl = "";
-        private readonly string SearchUrl = "";
-        private readonly string DownloadUrl = "";
-        private readonly string GuidUrl = "";
-
-        private IWebClient client;
-        private string cookieHeader = "";
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&searchstr="; } }
+        private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
+        private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
         public MoreThanTV(IIndexerManagerService i, IWebClient c, Logger l)
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
-                link: new Uri("https://www.morethan.tv"),
+                link: "https://www.morethan.tv/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: c,
                 logger: l)
         {
-            LoginUrl = SiteLink + "login.php";
-            SearchUrl = SiteLink + "ajax.php?action=browse&searchstr=";
-            DownloadUrl = SiteLink + "torrents.php?action=download&id=";
-            GuidUrl = SiteLink + "torrents.php?torrentid=";
-            client = c;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -58,45 +50,15 @@ namespace Jackett.Indexers
 				{ "login", "Log in" },
 				{ "keeplogged", "1" }
 			};
-            
-            var loginResponse = await client.GetString(new Utils.Clients.WebRequest()
-            {
-                PostData = pairs,
-                Url = LoginUrl,
-                Type = RequestType.POST
-            });
-            
-            if (loginResponse.Status == HttpStatusCode.Found)
-            {
-                cookieHeader = loginResponse.Cookies;
-                loginResponse = await client.GetString(new Utils.Clients.WebRequest()
-                {
-                    Url = SiteLink.ToString(),
-                    Cookies = cookieHeader
-                });
-            }
 
-            if (!loginResponse.Content.Contains("logout.php?"))
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, SiteLink);
+            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php?"), () =>
             {
-                CQ dom = loginResponse.Content;
+                CQ dom = result.Content;
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                configSaveData["cookie_header"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookie_header"];
-            IsConfigured = true;
+            });
         }
 
         private void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)
@@ -123,13 +85,7 @@ namespace Jackett.Indexers
             {
                 try
                 {
-                    response = await client.GetString(new Utils.Clients.WebRequest()
-                    {
-                        Url = episodeSearchUrl,
-                        Type = RequestType.GET,
-                        Cookies = cookieHeader
-                    });
-
+                    response = await RequestStringWithCookies(episodeSearchUrl);
                     break;
                 }
                 catch (Exception e){
@@ -173,7 +129,6 @@ namespace Jackett.Indexers
                         FillReleaseInfoFromJson(release, r);
                         releases.Add(release);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -182,18 +137,6 @@ namespace Jackett.Indexers
             }
 
             return releases.ToArray();
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var result = await client.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Cookies = cookieHeader,
-                Url = link.ToString(),
-               Type = RequestType.GET
-            });
-
-            return result.Content;
         }
     }
 }

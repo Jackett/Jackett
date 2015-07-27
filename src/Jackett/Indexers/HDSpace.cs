@@ -18,30 +18,23 @@ namespace Jackett.Indexers
 {
     public class HDSpace : BaseIndexer, IIndexer
     {
-
-        private readonly string LoginUrl = "";
-        private readonly string SearchUrl = "";
-        private string cookieHeader = "";
-
-        private IWebClient webclient;
+        private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
+        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&active=0&options=0&category=21%3B22&search={0}"; } }
 
         public HDSpace(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "HD-Space",
                 description: "Sharing The Universe",
-                link: new Uri("https://hd-space.org"),
+                link: "https://hd-space.org/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            LoginUrl = SiteLink + "index.php?page=login";
-            SearchUrl = SiteLink + "index.php?page=torrents&active=0&options=0&category=21%3B22&search={0}";
-            webclient = wc;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -49,11 +42,7 @@ namespace Jackett.Indexers
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
 
-            var loginPage = await webclient.GetString(new WebRequest()
-            {
-                Url = LoginUrl,
-                Type = RequestType.GET
-            });
+            var loginPage = await RequestStringWithCookies(LoginUrl, null);
 
             var pairs = new Dictionary<string, string> {
                 { "uid", config.Username.Value },
@@ -61,14 +50,7 @@ namespace Jackett.Indexers
             };
 
             // Send Post
-            var loginPost = await webclient.GetString(new WebRequest()
-            {
-                Url = LoginUrl,
-                PostData = pairs,
-                Referer = LoginUrl,
-                Type = RequestType.POST,
-                Cookies = loginPage.Cookies
-            });
+            var loginPost = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
             if (loginPost.Status == System.Net.HttpStatusCode.OK)
             {
@@ -80,42 +62,12 @@ namespace Jackett.Indexers
             }
 
             // Get result from redirect
-            var loginResult = await webclient.GetString(new WebRequest()
-            {
-                Url = SiteLink + loginPost.RedirectingTo,
-                Type = RequestType.GET,
-                Cookies = loginPost.Cookies
-            });
+            var loginResult = await RequestStringWithCookies(SiteLink + loginPost.RedirectingTo, loginPost.Cookies);
 
-            if (!loginResult.Content.Contains("logout.php"))
+            ConfigureIfOK(loginPost.Cookies, loginResult.Content.Contains("logout.php"), () =>
             {
                 throw new ExceptionWithConfigData("Login failed", (ConfigurationData)config);
-            }
-            else
-            {
-                cookieHeader = loginPost.Cookies;
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookies"];
-            IsConfigured = true;
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var response = await webclient.GetBytes(new WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
             });
-            return response.Content;
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -124,13 +76,7 @@ namespace Jackett.Indexers
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-
-            var response = await webclient.GetString(new WebRequest()
-            {
-                Url = episodeSearchUrl,
-                Referer = SiteLink.ToString(),
-                Cookies = cookieHeader
-            });
+            var response = await RequestStringWithCookies(episodeSearchUrl);
             var results = response.Content;
 
             try

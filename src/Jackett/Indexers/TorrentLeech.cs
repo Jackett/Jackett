@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -18,45 +19,29 @@ namespace Jackett.Indexers
 {
     public class TorrentLeech : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl = "";
-        private readonly string SearchUrl = "";
+        private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
+        private string SearchUrl { get { return SiteLink + "torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?"; } }
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public TorrentLeech(IIndexerManagerService i, Logger l)
+        public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "TorrentLeech",
                 description: "This is what happens when you seed",
-                link: new Uri("http://www.torrentleech.org"),
+                link: "http://www.torrentleech.org/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            LoginUrl = SiteLink + "user/account/login/";
-            SearchUrl = SiteLink + "torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
 				{ "password", config.Password.Value },
@@ -64,31 +49,14 @@ namespace Jackett.Indexers
                 { "login", "submit" }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-
-            var response = await client.PostAsync(LoginUrl, content);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("/user/account/logout"))
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true,null, LoginUrl);
+            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
-                CQ dom = responseContent;
+                CQ dom = result.Content;
                 var messageEl = dom[".ui-state-error"].Last();
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
+            });
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -97,10 +65,10 @@ namespace Jackett.Indexers
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
+            var results = await RequestStringWithCookies(episodeSearchUrl);
             try
             {
-                CQ dom = results;
+                CQ dom = results.Content;
 
                 CQ qRows = dom["#torrenttable > tbody > tr"];
 
@@ -140,18 +108,10 @@ namespace Jackett.Indexers
 
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
             return releases.ToArray();
         }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
-        }
-
-
-
     }
 }

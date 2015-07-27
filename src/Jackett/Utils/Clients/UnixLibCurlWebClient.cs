@@ -1,4 +1,5 @@
-﻿using Jackett.Models;
+﻿using AutoMapper;
+using Jackett.Models;
 using Jackett.Services;
 using NLog;
 using System;
@@ -23,10 +24,23 @@ namespace Jackett.Utils.Clients
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
-            Jackett.CurlHelper.CurlResponse response;
-
             logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
+            var result = await Run(request);
+            logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
+            return result;
+        }
 
+        public async Task<WebClientStringResult> GetString(WebRequest request)
+        {
+            logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
+            var result = await Run(request);
+            logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
+            return Mapper.Map<WebClientStringResult>(result);
+        }
+
+        private async Task<WebClientByteResult> Run(WebRequest request)
+        {
+            Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
             {
                 response = await CurlHelper.GetAsync(request.Url, request.Cookies, request.Referer);
@@ -45,32 +59,17 @@ namespace Jackett.Utils.Clients
 
             if (response.Headers != null)
             {
-                foreach(var header in response.Headers)
+                foreach (var header in response.Headers)
                 {
-                    if(string.Equals(header.Key, "location", StringComparison.InvariantCultureIgnoreCase) && header.Value !=null)
+                    if (string.Equals(header.Key, "location", StringComparison.InvariantCultureIgnoreCase) && header.Value != null)
                     {
                         result.RedirectingTo = header.Value;
                     }
                 }
             }
 
-            logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
+            ServerUtil.ResureRedirectIsFullyQualified(request, result);
             return result;
-        }
-
-        public async Task<WebClientStringResult> GetString(WebRequest request)
-        {
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
-            var result = await GetBytes(request);
-
-            var sresult = new WebClientStringResult()
-            {
-                Content = Encoding.UTF8.GetString(result.Content),
-                Cookies = result.Cookies,
-                Status = result.Status
-            };
-
-            return sresult;
         }
     }
 }

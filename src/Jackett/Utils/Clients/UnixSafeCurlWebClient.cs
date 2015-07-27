@@ -1,4 +1,5 @@
-﻿using Jackett.Models;
+﻿using AutoMapper;
+using Jackett.Models;
 using Jackett.Services;
 using NLog;
 using System;
@@ -23,30 +24,26 @@ namespace Jackett.Utils.Clients
             logger = l;
         }
 
-        public Task<WebClientByteResult> GetBytes(WebRequest request)
+        public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("UnixSafeCurlWebClient:GetBytes(Url:{0})", request.Url));
-            return Run(request);
+            var result = await Run(request);
+            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning", result.Status));
+            return result;
         }
 
         public async Task<WebClientStringResult> GetString(WebRequest request)
         {
             logger.Debug(string.Format("UnixSafeCurlWebClient:GetString(Url:{0})", request.Url));
-            var byteResult = await Run(request);
-            return new WebClientStringResult()
-            {
-                Cookies = byteResult.Cookies,
-                Status = byteResult.Status,
-                Content = Encoding.UTF8.GetString(byteResult.Content),
-                RedirectingTo = byteResult.RedirectingTo
-            };
+            var result = await Run(request);
+            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning", result.Status));
+            return Mapper.Map<WebClientStringResult>(result);
         }
 
         private async Task<WebClientByteResult> Run(WebRequest request)
         {
             var args = new StringBuilder();
             args.AppendFormat("--url \"{0}\" ", request.Url);
-
             args.AppendFormat("-i  -sS --user-agent \"{0}\" ", BrowserUtil.ChromeUserAgent);
 
             if (!string.IsNullOrWhiteSpace(request.Cookies))
@@ -66,7 +63,6 @@ namespace Jackett.Utils.Clients
             }
 
             var tempFile = Path.GetTempFileName();
-
             args.AppendFormat("--output \"{0}\" ", tempFile);
 
             string stdout = null;
@@ -77,9 +73,7 @@ namespace Jackett.Utils.Clients
 
             var outputData = File.ReadAllBytes(tempFile);
             File.Delete(tempFile);
-
             stdout = Encoding.UTF8.GetString(outputData);
-
             var result = new WebClientByteResult();
             var headSplit = stdout.IndexOf("\r\n\r\n");
             if (headSplit < 0)
@@ -127,6 +121,7 @@ namespace Jackett.Utils.Clients
             }
 
             logger.Debug("WebClientByteResult returned " + result.Status);
+            ServerUtil.ResureRedirectIsFullyQualified(request, result);
             return result;
         }
     }
