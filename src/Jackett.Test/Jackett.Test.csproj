@@ -158,6 +158,7 @@
     <Compile Include="TestIIndexerManagerServiceHelper.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TestWebClient.cs" />
+    <Compile Include="Util\ServerUtilTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -11,52 +11,30 @@ using NLog;
 using Jackett.Utils;
 using CsQuery;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class Pretome : BaseIndexer, IIndexer
     {
-
-        class PretomeConfiguration : ConfigurationDataBasicLogin
-        {
-            public StringItem Pin { get; private set; }
-
-            public PretomeConfiguration() : base()
-            {
-                Pin = new StringItem { Name = "Login Pin Number" };
-            }
-
-            public override Item[] GetItems()
-            {
-                return new Item[] { Pin, Username, Password };
-            }
-        }
-
-        private readonly string LoginUrl = "";
-        private readonly string LoginReferer = "";
-        private readonly string SearchUrl = "";
-        private string cookieHeader = "";
-
-        private IWebClient webclient;
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string LoginReferer { get { return SiteLink + "index.php?cat=1"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?tags=&st=1&tf=all&cat%5B%5D=7&search={0}"; } }
 
         public Pretome(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: new Uri("https://pretome.info/"),
+                link: "https://pretome.info/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                client: wc,
                 manager: i,
                 logger: l)
         {
-            LoginUrl = SiteLink + "takelogin.php";
-            LoginReferer = SiteLink + "index.php?cat=1";
-            SearchUrl = SiteLink + "browse.php?tags=&st=1&tf=all&cat%5B%5D=7&search={0}";
-            webclient = wc;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new PretomeConfiguration();
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new PretomeConfiguration());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -78,58 +56,20 @@ namespace Jackett.Indexers
                 { "login", "Login" }
             };
 
-
             // Send Post
-            var loginPost = await webclient.GetString(new WebRequest()
-            {
-                Url = LoginUrl,
-                PostData = pairs,
-                Referer = LoginReferer,
-                Type = RequestType.POST,
-                Cookies = loginPage.Cookies
-            });
-
+            var loginPost = await PostDataWithCookies(LoginUrl, pairs, loginPage.Cookies);
             if (loginPost.RedirectingTo == null)
             {
                 throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", (ConfigurationData)config);
             }
 
             // Get result from redirect
-            var loginResult = await webclient.GetString(new WebRequest()
-            {
-                Url = loginPost.RedirectingTo,
-                Type = RequestType.GET,
-                Cookies = loginPost.Cookies
-            });
+            var loginResult = await RequestStringWithCookies(loginPost.RedirectingTo);
 
-            if (!loginResult.Content.Contains("logout.php"))
+            ConfigureIfOK(loginPost.Cookies, loginResult.Content != null && loginResult.Content.Contains("logout.php"), () =>
             {
                 throw new ExceptionWithConfigData("Failed", (ConfigurationData)config);
-            }
-            else
-            {
-                cookieHeader = loginPost.Cookies;
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookies"];
-            IsConfigured = true;
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var response = await webclient.GetBytes(new WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
             });
-            return response.Content;
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -139,17 +79,11 @@ namespace Jackett.Indexers
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
-            var response = await webclient.GetString(new WebRequest()
-            {
-                Url = episodeSearchUrl,
-                Referer = SiteLink.ToString(),
-                Cookies = cookieHeader
-            });
-            var results = response.Content;
+            var response = await RequestStringWithCookies(episodeSearchUrl);
 
             try
             {
-                CQ dom = results;
+                CQ dom = response.Content;
                 var rows = dom["table > tbody > tr.browse"];
                 foreach (var row in rows)
                 {
@@ -186,7 +120,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.Content, ex);
             }
             return releases.ToArray();
         }

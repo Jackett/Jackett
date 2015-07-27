@@ -11,11 +11,11 @@ namespace Jackett.Indexers
 {
     public interface IIndexer
     {
+        string SiteLink { get; }
+
         string DisplayName { get; }
         string DisplayDescription { get; }
         string ID { get; }
-
-        Uri SiteLink { get; }
 
         TorznabCapabilities TorznabCaps { get; }
 

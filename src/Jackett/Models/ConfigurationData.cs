@@ -19,6 +19,16 @@ namespace Jackett.Models
             HiddenData
         }
 
+        public ConfigurationData()
+        {
+
+        }
+
+        public ConfigurationData(JToken json)
+        {
+            LoadValuesFromJson(json);
+        }
+
         public void LoadValuesFromJson(JToken json)
         {
             // todo: match up ids with items and fill values

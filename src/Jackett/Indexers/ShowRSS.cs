@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -18,37 +19,23 @@ namespace Jackett.Indexers
 {
     public class ShowRSS : BaseIndexer, IIndexer
     {
-        private readonly string searchAllUrl = "";
-        string BaseUrl;
+        private string searchAllUrl { get { return SiteLink + "feeds/all.rss"; } }
+        private string BaseUrl;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public ShowRSS(IIndexerManagerService i, Logger l)
+        public ShowRSS(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-                link: new Uri("http://showrss.info"),
+                link: "http://showrss.info/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            searchAllUrl = SiteLink + "feeds/all.rss";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
         }
 
         public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
@@ -69,7 +56,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
         {
             BaseUrl = (string)jsonConfig["base_url"];
             IsConfigured = true;
@@ -80,39 +67,22 @@ namespace Jackett.Indexers
             return await PerformQuery(query, BaseUrl);
         }
 
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             throw new NotImplementedException();
         }
 
-        private WebClient getWebClient()
-        {
-            WebClient wc = new WebClient();
-            WebHeaderCollection headers = new WebHeaderCollection();
-            headers.Add("User-Agent", BrowserUtil.ChromeUserAgent);
-            wc.Headers = headers;
-            return wc;
-        }
-
         async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(searchAllUrl);
-
-            XmlDocument xmlDoc = new XmlDocument();
-            string xml = string.Empty;
-            WebClient wc = getWebClient();
+            var result = await RequestStringWithCookies(episodeSearchUrl, string.Empty);
+            var xmlDoc = new XmlDocument();
 
             try
             {
-                using (wc)
-                {
-                    xml = await wc.DownloadStringTaskAsync(new Uri(episodeSearchUrl));
-                    xmlDoc.LoadXml(xml);
-                }
-
+                xmlDoc.LoadXml(result.Content);
                 ReleaseInfo release;
                 string serie_title;
 
@@ -143,7 +113,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(xml, ex);
+                OnParseError(result.Content, ex);
             }
 
             return releases.ToArray();

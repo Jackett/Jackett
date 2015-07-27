@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -16,39 +17,26 @@ namespace Jackett.Indexers
 {
     public class Rarbg : BaseIndexer, IIndexer
     {
-        const string DefaultUrl = "http://torrentapi.org";
-        const string TokenUrl = "/pubapi.php?get_token=get_token&format=json";
-        const string SearchTVRageUrl = "/pubapi.php?mode=search&search_tvrage={0}&token={1}&format=json&min_seeders=1";
-        const string SearchQueryUrl = "/pubapi.php?mode=search&search_string={0}&token={1}&format=json&min_seeders=1";
+        private const string DefaultUrl = "http://torrentapi.org/";
+        private const string TokenUrl = "pubapi.php?get_token=get_token&format=json";
+        private const string SearchTVRageUrl = "pubapi.php?mode=search&search_tvrage={0}&token={1}&format=json&min_seeders=1";
+        private const string SearchQueryUrl = "pubapi.php?mode=search&search_string={0}&token={1}&format=json&min_seeders=1";
         private string BaseUrl;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-
-        public Rarbg(IIndexerManagerService i, Logger l)
+        public Rarbg(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "RARBG",
                 description: "RARBG",
-                link: new Uri("https://rarbg.com"),
+                link: "https://rarbg.com/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(DefaultUrl);
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(DefaultUrl));
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -70,27 +58,16 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             BaseUrl = (string)jsonConfig["base_url"];
-            IsConfigured = true;
-        }
-
-        HttpRequestMessage CreateHttpRequest(string uri)
-        {
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = new Uri(uri);
-            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            return message;
+            IsConfigured = !string.IsNullOrEmpty(BaseUrl);
         }
 
         async Task<string> GetToken(string url)
         {
-            var request = CreateHttpRequest(url + TokenUrl);
-            var response = await client.SendAsync(request);
-            var result = await response.Content.ReadAsStringAsync();
-            JObject obj = JObject.Parse(result);
+            var response = await RequestStringWithCookies(url + TokenUrl);
+            JObject obj = JObject.Parse(response.Content);
             return (string)obj["token"];
         }
 
@@ -101,9 +78,7 @@ namespace Jackett.Indexers
 
         async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
         {
-
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             string token = await GetToken(baseUrl);
             string searchUrl;
             if (query.RageID != 0)
@@ -111,12 +86,10 @@ namespace Jackett.Indexers
             else
                 searchUrl = string.Format(baseUrl + SearchQueryUrl, query.SanitizedSearchTerm, token);
 
-            var request = CreateHttpRequest(searchUrl);
-            var response = await client.SendAsync(request);
-            var results = await response.Content.ReadAsStringAsync();
+            var results = await RequestStringWithCookies(searchUrl);
             try
             {
-                var jItems = JArray.Parse(results);
+                var jItems = JArray.Parse(results.Content);
                 foreach (JObject item in jItems)
                 {
                     var release = new ReleaseInfo();
@@ -134,12 +107,12 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
             return releases.ToArray();
         }
 
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             throw new NotImplementedException();
         }

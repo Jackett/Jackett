@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -32,12 +33,13 @@ namespace Jackett.Indexers
         string token = string.Empty;
         DateTime lastTokenFetch = DateTime.MinValue;
 
-        public T411(IIndexerManagerService i, Logger l)
+        public T411(IIndexerManagerService i, Logger l,IWebClient wc)
             : base(name: "T411",
                 description: "French Torrent Tracker",
-                link: new Uri("http://www.t411.io"),
+                link: "http://www.t411.io/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
             CommentsUrl = SiteLink + "/torrents/{0}";
@@ -107,7 +109,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             username = (string)jsonConfig["username"];
             password = (string)jsonConfig["password"];
@@ -167,7 +169,7 @@ namespace Jackett.Indexers
             return releases.ToArray();
         }
 
-        public async Task<byte[]> Download(Uri link)
+        public override async Task<byte[]> Download(Uri link)
         {
             var message = new HttpRequestMessage();
             message.Method = HttpMethod.Get;

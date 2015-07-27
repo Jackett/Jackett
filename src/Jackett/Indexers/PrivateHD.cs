@@ -19,101 +19,46 @@ namespace Jackett.Indexers
 {
     public class PrivateHD : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl = "";
-        private readonly string SearchUrl = "";
-        private string cookieHeader = "";
-
-        private IWebClient webclient;
+        private string LoginUrl { get { return SiteLink + "auth/login"; } }
+        private string SearchUrl { get { return SiteLink + "torrents?in=1&type=2&search={0}"; } }
 
         public PrivateHD(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "PrivateHD",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: new Uri("https://privatehd.to"),
+                link: "https://privatehd.to/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            LoginUrl = SiteLink + "auth/login";
-            SearchUrl = SiteLink + "torrents?in=1&type=2&search={0}";
-            webclient = wc;
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
-
-            var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                Type = RequestType.GET
-            });
-
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
+            var loginPage = await RequestStringWithCookies(LoginUrl);
             var token = new Regex("Avz.CSRF_TOKEN = '(.*?)';").Match(loginPage.Content).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
-                { "username_email", config.Username.Value },
-                { "password", config.Password.Value },
+                { "username_email", incomingConfig.Username.Value },
+                { "password", incomingConfig.Password.Value },
                 { "remember", "on" }
             };
 
-            // Send Post
-            var loginPost = await webclient.GetString(new Utils.Clients.WebRequest()
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
             {
-                Url = LoginUrl,
-                PostData = pairs,
-                Referer = LoginUrl,
-                Type = RequestType.POST,
-                Cookies = loginPage.Cookies
-            });
-
-            // Get result from redirect
-            var loginResult = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = loginPost.RedirectingTo,
-                Type = RequestType.GET,
-                Cookies = loginPost.Cookies
-            });
-
-            if (!loginResult.Content.Contains("auth/logout"))
-            {
-                CQ dom = loginResult.Content;
+                CQ dom = result.Content;
                 var messageEl = dom[".form-error"];
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                cookieHeader = loginPost.Cookies;
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
-
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
             });
-
-            return response.Content;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
-        }
-
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookies"];
-            IsConfigured = true;
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
@@ -123,17 +68,11 @@ namespace Jackett.Indexers
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = episodeSearchUrl,
-                Referer = SiteLink.ToString(),
-                Cookies = cookieHeader
-            });
-            var results = response.Content;
+            var response = await RequestStringWithCookies(episodeSearchUrl);
 
             try
             {
-                CQ dom = results;
+                CQ dom = response.Content;
                 var rows = dom["table > tbody > tr"];
                 foreach (var row in rows)
                 {
@@ -165,7 +104,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.Content, ex);
             }
             return releases.ToArray();
         }

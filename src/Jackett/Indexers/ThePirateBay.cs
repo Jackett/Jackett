@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -19,37 +20,25 @@ namespace Jackett.Indexers
 {
     public class ThePirateBay : BaseIndexer, IIndexer
     {
-        const string SearchUrl = "/search/{0}/0/99/208,205";
-        string BaseUrl;
+        private const string SearchUrl = "/search/{0}/0/99/208,205";
+        private string BaseUrl;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public ThePirateBay(IIndexerManagerService i, Logger l)
+        public ThePirateBay(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "The Pirate Bay",
                 description: "The worlds largest bittorrent indexer",
-                link: new Uri("https://thepiratebay.mn"),
+                link: "https://thepiratebay.mn/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
             BaseUrl = SiteLink.ToString();
             IsConfigured = false;
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(BaseUrl);
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(BaseUrl));
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -70,7 +59,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             BaseUrl = (string)jsonConfig["base_url"];
             IsConfigured = true;
@@ -83,27 +72,15 @@ namespace Jackett.Indexers
 
         async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var queryStr = HttpUtility.UrlEncode(searchString);
             var episodeSearchUrl = baseUrl + string.Format(SearchUrl, queryStr);
-
-            string results;
-
-            if (Engine.IsWindows)
-            {
-                results = await client.GetStringAsync(episodeSearchUrl);
-            }
-            else
-            {
-                var response = await CurlHelper.GetAsync(episodeSearchUrl, null, episodeSearchUrl);
-                results = Encoding.UTF8.GetString(response.Content);
-            }
+            var response = await RequestStringWithCookies(episodeSearchUrl, string.Empty);
 
             try
             {
-                CQ dom = results;
+                CQ dom = response.Content;
 
                 var rows = dom["#searchResult > tbody > tr"];
                 foreach (var row in rows)
@@ -162,18 +139,14 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                //  OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(response.Content, ex);
             }
             return releases.ToArray();
         }
 
-
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

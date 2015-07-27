@@ -85,10 +85,10 @@ namespace Jackett.Controllers
             {
                 Title = indexer.DisplayName,
                 Description = indexer.DisplayDescription,
-                Link = indexer.SiteLink,
+                Link = new Uri(indexer.SiteLink),
                 ImageUrl = new Uri(severUrl + "logos/" + indexer.ID + ".png"),
                 ImageTitle = indexer.DisplayName,
-                ImageLink = indexer.SiteLink,
+                ImageLink = new Uri(indexer.SiteLink),
                 ImageDescription = indexer.DisplayName
             });
 

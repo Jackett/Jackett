@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Jackett.Utils.Clients
 {
-    public class WebClientStringResult:  BaseWebResult
+    public abstract class BaseWebResult
     {
-        public string Content { get; set; }
+        public HttpStatusCode Status { get; set; }
+        public string Cookies { get; set; }
+        public string RedirectingTo { get; set; }
     }
 }

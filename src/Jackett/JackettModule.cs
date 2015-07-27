@@ -8,6 +8,7 @@ using Autofac.Integration.WebApi;
 using Jackett.Indexers;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using AutoMapper;
 
 namespace Jackett
 {
@@ -41,6 +42,14 @@ namespace Jackett
             {
                 builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }
+
+            Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().AfterMap((be, str) =>
+            {
+                str.Content = Encoding.UTF8.GetString(be.Content);
+            });
+
+            Mapper.CreateMap<WebClientStringResult, WebClientStringResult>();
+            Mapper.CreateMap<WebClientByteResult, WebClientByteResult>();
         }
     }
 }

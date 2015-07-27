@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -17,38 +18,23 @@ namespace Jackett.Indexers
 {
     public class Torrentz : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        string BaseUrl;
+        private string SearchUrl { get { return SiteLink + "feed_verifiedP?f={0}"; } }
+        private string BaseUrl;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public Torrentz(IIndexerManagerService i, Logger l)
+        public Torrentz(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "Torrentz",
                 description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
-                link: new Uri("https://torrentz.eu"),
+                link: "https://torrentz.eu/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-
-            SearchUrl = SiteLink + "feed_verifiedP?f={0}";
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            return Task.FromResult<ConfigurationData>(config);
-
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -62,7 +48,6 @@ namespace Jackett.Indexers
                 throw new Exception("Could not find releases from this URL");
 
             BaseUrl = formattedUrl;
-
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
             SaveConfig(configSaveData);
@@ -70,33 +55,18 @@ namespace Jackett.Indexers
 
         }
 
-        private WebClient getWebClient()
-        {
-            WebClient wc = new WebClient();
-            WebHeaderCollection headers = new WebHeaderCollection();
-            headers.Add("User-Agent", BrowserUtil.ChromeUserAgent);
-            wc.Headers = headers;
-            return wc;
-        }
-
         async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
-
-            XmlDocument xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument();
             string xml = string.Empty;
-            WebClient wc = getWebClient();
+            var result = await RequestStringWithCookies(episodeSearchUrl);
 
             try
             {
-                using (wc)
-                {
-                    xml = await wc.DownloadStringTaskAsync(new Uri(episodeSearchUrl));
-                    xmlDoc.LoadXml(xml);
-                }
+                xmlDoc.LoadXml(result.Content);
 
                 ReleaseInfo release;
                 TorrentzHelper td;
@@ -135,7 +105,7 @@ namespace Jackett.Indexers
         }
 
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             BaseUrl = (string)jsonConfig["base_url"];
             IsConfigured = true;
@@ -146,7 +116,7 @@ namespace Jackett.Indexers
             return await PerformQuery(query, BaseUrl);
         }
 
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             throw new NotImplementedException();
         }

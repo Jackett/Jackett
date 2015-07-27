@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -18,98 +19,50 @@ namespace Jackett.Indexers
 {
     public class HDTorrents : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        private static string LoginUrl = "";
+        private string SearchUrl { get { return SiteLink + "torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public HDTorrents(IIndexerManagerService i, Logger l)
+        public HDTorrents(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-                link: new Uri("http://hdts.ru"),// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+                link: "http://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: w,
                 logger: l)
         {
-            SearchUrl = SiteLink + "torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
-            LoginUrl = SiteLink + "login.php";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
-        }
-
-        HttpRequestMessage CreateHttpRequest(string url)
-        {
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = new Uri(url);
-            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            return message;
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
-
-            var startMessage = CreateHttpRequest(LoginUrl);
-            var results = await (await client.SendAsync(startMessage)).Content.ReadAsStringAsync();
-
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
+            var loginPage = await RequestStringWithCookies(LoginUrl, null);
 
             var pairs = new Dictionary<string, string> {
-				{ "uid", config.Username.Value },
-				{ "pwd", config.Password.Value }
-			};
+                { "uid", incomingConfig.Username.Value },
+                { "pwd", incomingConfig.Password.Value }
+            };
 
-            var content = new FormUrlEncodedContent(pairs);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
-            var loginRequest = CreateHttpRequest(LoginUrl);
-            loginRequest.Method = HttpMethod.Post;
-            loginRequest.Content = content;
-            loginRequest.Headers.Referrer = new Uri("https://hd-torrents.org/torrents.php");
-
-            var response = await client.SendAsync(loginRequest);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("If your browser doesn't have javascript enabled"))
+            ConfigureIfOK(result.Content, result.Content != null && result.Content.Contains("If your browser doesn't have javascript enabled"), () =>
             {
                 var errorMessage = "Couldn't login";
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-        }
-
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, Uri baseUrl)
-        {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-            List<string> searchurls = new List<string>();
+            var releases = new List<ReleaseInfo>();
+            var searchurls = new List<string>();
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             for (int page = 0; page < MAXPAGES; page++)
@@ -117,12 +70,12 @@ namespace Jackett.Indexers
                 searchurls.Add(string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()), page));
             }
 
-            foreach (string SearchUrl in searchurls)
+            foreach (string searchUrl in searchurls)
             {
-                var results = await client.GetStringAsync(SearchUrl);
+                var results = await RequestStringWithCookies(searchUrl);
                 try
                 {
-                    CQ dom = results;
+                    CQ dom = results.Content;
                     ReleaseInfo release;
 
                     int rowCount = 0;
@@ -182,21 +135,11 @@ namespace Jackett.Indexers
                 }
                 catch (Exception ex)
                 {
-                    OnParseError(results, ex);
+                    OnParseError(results.Content, ex);
                 }
             }
 
             return releases.ToArray();
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, SiteLink);
-        }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
         }
     }
 }

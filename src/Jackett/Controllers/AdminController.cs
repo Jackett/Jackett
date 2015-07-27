@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
@@ -160,12 +161,13 @@ namespace Jackett.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Configure()
         {
-            JToken jsonReply = new JObject();
+            var jsonReply = new JObject();
+            IIndexer indexer = null;
             try
             {
                 var postData = await ReadPostDataJson();
                 string indexerString = (string)postData["indexer"];
-                var indexer = indexerService.GetIndexer((string)postData["indexer"]);
+                indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 jsonReply["name"] = indexer.DisplayName;
                 await indexer.ApplyConfiguration(postData["config"]);
                 await indexerService.TestIndexer((string)postData["indexer"]);
@@ -175,6 +177,9 @@ namespace Jackett.Controllers
             {
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
+                var baseIndexer = indexer as BaseIndexer;
+                if (null != baseIndexer)
+                    baseIndexer.ResetBaseConfig();
                 if (ex is ExceptionWithConfigData)
                 {
                     jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
