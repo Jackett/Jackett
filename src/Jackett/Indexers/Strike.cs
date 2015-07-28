@@ -56,7 +56,7 @@ namespace Jackett.Indexers
             IsConfigured = !string.IsNullOrEmpty(baseUrl);
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
@@ -105,7 +105,7 @@ namespace Jackett.Indexers
                 OnParseError(results.Content, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
 
         public override Task<byte[]> Download(Uri link)

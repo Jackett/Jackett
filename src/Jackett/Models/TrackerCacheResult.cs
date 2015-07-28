@@ -10,5 +10,6 @@ namespace Jackett.Models
     {
         public DateTime FirstSeen { get; set; }
         public string Tracker { get; set; }
+        public string CategoryDesc { get; set; }
     }
 }

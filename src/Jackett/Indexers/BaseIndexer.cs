@@ -29,6 +29,8 @@ namespace Jackett.Indexers
         protected IWebClient webclient;
         protected string cookieHeader = "";
 
+        private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
+
         public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, TorznabCapabilities caps = null)
         {
             if (!link.EndsWith("/"))
@@ -44,6 +46,19 @@ namespace Jackett.Indexers
             if (caps == null)
                 caps = TorznabCapsUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
+        }
+
+        protected int MapTrackerCatToNewznab(string input)
+        {
+            if (null != input) {
+                input = input.ToLowerInvariant();
+                var mapping = categoryMapping.Where(m => m.TrackerCategory == input).FirstOrDefault();
+                if(mapping!= null)
+                {
+                    return mapping.NewzNabCategory;
+                }
+            }
+            return 0;
         }
 
         public static string GetIndexerID(Type type)
@@ -238,6 +253,41 @@ namespace Jackett.Indexers
             {
                 onError();
             }
+        }
+
+        public virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
+        {
+            foreach(var result in results)
+            {
+               if(query.Categories.Length == 0 || query.Categories.Contains(result.Category) || result.Category == 0 || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category))
+                {
+                    yield return result;
+                }
+            }
+        }
+
+        protected void AddCategoryMapping(string trackerCategory, int newznabCategory)
+        {
+            categoryMapping.Add(new CategoryMapping(trackerCategory, newznabCategory));
+        }
+
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory)
+        {
+            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
+            if (!TorznabCaps.Categories.Contains(newznabCategory))
+                TorznabCaps.Categories.Add(newznabCategory);
+        }
+
+        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
+        {
+            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
+            if (!TorznabCaps.Categories.Contains(newznabCategory))
+                TorznabCaps.Categories.Add(newznabCategory);
+        }
+
+        protected void AddCategoryMapping(int trackerCategory, int newznabCategory)
+        {
+            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory));
         }
     }
 }

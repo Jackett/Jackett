@@ -45,7 +45,7 @@ namespace Jackett.Indexers
 
             var formattedUrl = config.GetFormattedHostUrl();
             var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Length == 0)
+            if (releases.Count() == 0)
                 throw new Exception("Could not find releases from this URL");
 
             BaseUrl = formattedUrl;
@@ -62,7 +62,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return await PerformQuery(query, BaseUrl);
         }
@@ -72,7 +72,7 @@ namespace Jackett.Indexers
             throw new NotImplementedException();
         }
 
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
@@ -97,7 +97,9 @@ namespace Jackett.Indexers
                     release.Title = serie_title;
 
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-                    release.Category = node.SelectSingleNode("title").InnerText;
+                    int category = 0;
+                    int.TryParse(node.SelectSingleNode("title").InnerText, out category);
+                    release.Category = category;
                     var test = node.SelectSingleNode("enclosure");
                     release.Guid = new Uri(test.Attributes["url"].Value);
                     release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
@@ -116,7 +118,7 @@ namespace Jackett.Indexers
                 OnParseError(result.Content, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
     }
 }

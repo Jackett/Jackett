@@ -158,20 +158,20 @@ namespace JackettTest.Indexers
             indexer.LoadFromSavedConfiguration(JObject.Parse("{\"cookies\":\"bbtid=c\"}"));
             var results = await indexer.PerformQuery(new Jackett.Models.TorznabQuery() { SanitizedSearchTerm = "Series S1", Season = 1 });
 
-            results.Length.Should().Be(44);
-            results[0].Title.Should().Be("Golden Time Season 1 (BD 720p) [FFF]");
-            results[0].Guid.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
-            results[0].Comments.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
-            results[0].Size.Should().Be(10307921920);
-            results[0].Description.Should().Be("Golden Time Season 1 (BD 720p) [FFF]");
-            results[0].Link.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
-            results[0].Peers.Should().Be(161);
-            results[0].Seeders.Should().Be(151);
-            results[0].MinimumRatio.Should().Be(1);
+            results.Count().Should().Be(44);
+            results.First().Title.Should().Be("Golden Time Season 1 (BD 720p) [FFF]");
+            results.First().Guid.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
+            results.First().Comments.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
+            results.First().Size.Should().Be(10307921920);
+            results.First().Description.Should().Be("Golden Time Season 1 (BD 720p) [FFF]");
+            results.First().Link.Should().Be("http://bakabt.me/torrent/180302/golden-time-bd-720p-fff");
+            results.First().Peers.Should().Be(161);
+            results.First().Seeders.Should().Be(151);
+            results.First().MinimumRatio.Should().Be(1);
 
-            results[1].Title.Should().Be("Yowamushi Pedal Season 1 (BD 720p) [Commie]");
-            results[4].Title.Should().Be("Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth Season 1 (480p) [HorribleSubs]");
-            results[5].Title.Should().Be("Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 1 (480p) [HorribleSubs]");
+            results.ElementAt(1).Title.Should().Be("Yowamushi Pedal Season 1 (BD 720p) [Commie]");
+            results.ElementAt(4).Title.Should().Be("Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth Season 1 (480p) [HorribleSubs]");
+            results.ElementAt(5).Title.Should().Be("Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 1 (480p) [HorribleSubs]");
         }
     }
 }

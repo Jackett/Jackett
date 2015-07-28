@@ -30,7 +30,7 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l)
         {
-            TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
+            TorznabCaps.Categories.Add(TorznabCatType.Anime);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -67,7 +67,7 @@ namespace Jackett.Indexers
             });
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
@@ -134,7 +134,7 @@ namespace Jackett.Indexers
                 OnParseError(results, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Jackett.Models
     public class TorznabQuery
     {
         public string QueryType { get; set; }
-        public string[] Categories { get; set; }
+        public int[] Categories { get; set; }
         public int Extended { get; set; }
         public string ApiKey { get; set; }
         public int Limit { get; set; }
@@ -74,7 +74,10 @@ namespace Jackett.Models
 
             if (query["cat"] != null)
             {
-                q.Categories = query["cat"].Split(',');
+                q.Categories = query["cat"].Split(',').Select(s => int.Parse(s)).ToArray();
+            }else
+            {
+                q.Categories = new int[0];
             }
 
             if (query["extended"] != null)

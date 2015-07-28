@@ -9,6 +9,7 @@ using Jackett.Indexers;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using AutoMapper;
+using Jackett.Models;
 
 namespace Jackett
 {
@@ -58,6 +59,11 @@ namespace Jackett
 
             Mapper.CreateMap<WebClientStringResult, WebClientStringResult>();
             Mapper.CreateMap<WebClientByteResult, WebClientByteResult>();
+
+            Mapper.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
+            {
+                t.CategoryDesc = TorznabCatType.GetCatDesc(r.Category);
+            });
         }
     }
 }

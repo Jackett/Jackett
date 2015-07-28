@@ -175,6 +175,7 @@
     <Compile Include="Indexers\HDSpace.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
+    <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
     <Compile Include="Indexers\Pretome.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
     <Compile Include="Models\CachedResult.cs" />
+    <Compile Include="Models\CategoryMapping.cs" />
     <Compile Include="Models\IndexerConfig\BmtvConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginAnimeBytes.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginFrenchTorrentDb.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Models\TorznabCategory.cs" />
+    <Compile Include="Models\TorznabCatType.cs" />
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="Services\CacheService.cs" />
