@@ -53,7 +53,7 @@ namespace Jackett.Indexers
 
             // Get inital cookies
             cookieHeader = string.Empty;
-            var loginPage = await RequestStringWithCookies(LoginUrl);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
             ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>

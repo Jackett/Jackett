@@ -79,41 +79,42 @@ namespace Jackett.Indexers
             }
         }
 
-        protected async Task FollowIfRedirect(WebRequest request, WebClientStringResult incomingResponse, string overrideRedirectUrl = null, string overrideCookies = null)
+        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null)
         {
-            if (incomingResponse.Status == System.Net.HttpStatusCode.Redirect ||
-               incomingResponse.Status == System.Net.HttpStatusCode.RedirectKeepVerb ||
-               incomingResponse.Status == System.Net.HttpStatusCode.RedirectMethod ||
-               incomingResponse.Status == System.Net.HttpStatusCode.Found)
+            var byteResult = new WebClientByteResult();
+            // Map to byte
+            Mapper.Map(response, byteResult);
+            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies);
+            // Map to string
+            Mapper.Map(byteResult, response);
+        }
+
+        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null)
+        {
+            // Follow up  to 5 redirects
+            for (int i = 0; i < 5; i++)
+            {
+                if (!response.IsRedirect)
+                    break;
+                await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies);
+            }
+        }
+
+        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null)
+        {
+            if (incomingResponse.IsRedirect)
             {
                 // Do redirect
-                var redirectedResponse = await webclient.GetString(new WebRequest()
+                var redirectedResponse = await webclient.GetBytes(new WebRequest()
                 {
-                    Url = overrideRedirectUrl??incomingResponse.RedirectingTo,
-                    Referer = request.Url,
-                    Cookies = overrideCookies??cookieHeader
+                    Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
+                    Referer = referrer,
+                    Cookies = overrideCookies ?? cookieHeader
                 });
                 Mapper.Map(redirectedResponse, incomingResponse);
             }
         }
 
-        protected async void FollowIfRedirect(WebRequest request, WebClientByteResult incomingResponse, string overrideRedirectUrl)
-        {
-            if (incomingResponse.Status == System.Net.HttpStatusCode.Redirect ||
-               incomingResponse.Status == System.Net.HttpStatusCode.RedirectKeepVerb ||
-               incomingResponse.Status == System.Net.HttpStatusCode.RedirectMethod ||
-               incomingResponse.Status == System.Net.HttpStatusCode.Found)
-            {
-                // Do redirect
-                var redirectedResponse = await webclient.GetBytes(new WebRequest()
-                {
-                    Url = overrideRedirectUrl??incomingResponse.RedirectingTo,
-                    Referer = request.Url,
-                    Cookies = cookieHeader
-                });
-                Mapper.Map(redirectedResponse, incomingResponse);
-            }
-        }
 
         protected void LoadCookieHeaderAndConfigure(JToken jsonConfig)
         {
@@ -210,7 +211,14 @@ namespace Jackett.Indexers
             };
             var response = await webclient.GetString(request);
             var firstCallCookies = response.Cookies;
-            await FollowIfRedirect(request, response, SiteLink, response.Cookies);
+
+            // Follow up  to 5 redirects
+            for(int i = 0; i < 5; i++)
+            {
+                if (!response.IsRedirect)
+                    break;
+                await FollowIfRedirect(response, request.Url, null, response.Cookies);
+            }
 
             if (returnCookiesFromFirstCall)
             {

@@ -81,7 +81,7 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "download",
-                routeTemplate: "api/{indexerID}/download/{path}/download.torrent",
+                routeTemplate: "api/{indexerID}/download/{path}/t.torrent",
                 defaults: new { controller = "Download", action = "Download" }
             );
 

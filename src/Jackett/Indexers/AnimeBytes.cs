@@ -30,7 +30,7 @@ namespace Jackett.Indexers
         public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l)
             : base(name: "AnimeBytes",
                 link: "https://animebytes.tv/",
-                description: "The web's best Chinese cartoons",
+                description: "Powered by Tentacles",
                 manager: i,
                 client: client,
                 caps: new TorznabCapabilities(TorznabCategory.Anime),
@@ -47,6 +47,11 @@ namespace Jackett.Indexers
         {
             var config = new ConfigurationDataBasicLoginAnimeBytes();
             config.LoadValuesFromJson(configJson);
+
+            lock (cache)
+            {
+                cache.Clear();
+            }
 
             // Get the login form as we need the CSRF Token
             var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
@@ -79,7 +84,7 @@ namespace Jackett.Indexers
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
 
             // Follow the redirect
-            await FollowIfRedirect(request, response, SearchUrl);
+            await FollowIfRedirect(response, request.Url, SearchUrl);
 
             if (!(response.Content != null && response.Content.Contains("/user/logout")))
             {
@@ -252,9 +257,9 @@ namespace Jackett.Indexers
                                 release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
 
                                 var infoLink = links.Get(1);
-                                release.Comments = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href"));
-                                release.Guid = new Uri(SiteLink + "/" + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = new Uri(SiteLink + "/" + downloadLink.Attributes.GetAttribute("href"));
+                                release.Comments = new Uri(SiteLink  + infoLink.Attributes.GetAttribute("href"));
+                                release.Guid = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
+                                release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"), UriKind.Relative);
 
                                 // We dont actually have a release name >.> so try to create one
                                 var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -323,6 +328,19 @@ namespace Jackett.Indexers
             }
 
             return releases.Select(s => (ReleaseInfo)s.Clone()).ToArray();
+        }
+
+
+        public async override Task<byte[]> Download(Uri link)
+        {
+            // The urls for this tracker are quite long so append the domain after the incoming request.
+            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
+            {
+                Url = SiteLink + link.ToString(),
+                Cookies = cookieHeader
+            });
+
+            return response.Content;
         }
     }
 }

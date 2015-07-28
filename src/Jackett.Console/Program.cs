@@ -173,7 +173,6 @@ namespace JackettConsole
 
                 Engine.Server.Initalize();
                 Engine.Server.Start();
-                Engine.Logger.Info("Running in console mode!");
                 Engine.RunTime.Spin();
                 Engine.Logger.Info("Server thread exit");
             }

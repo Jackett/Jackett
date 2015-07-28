@@ -37,7 +37,7 @@ namespace Jackett.Indexers
         {
             var incomingConfig = new ConfigurationDataBasicLogin();
             incomingConfig.LoadValuesFromJson(configJson);
-            var loginPage = await RequestStringWithCookies(LoginUrl);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var token = new Regex("Avz.CSRF_TOKEN = '(.*?)';").Match(loginPage.Content).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
@@ -46,7 +46,7 @@ namespace Jackett.Indexers
                 { "remember", "on" }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
             ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
             {
                 CQ dom = result.Content;

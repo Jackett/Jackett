@@ -95,10 +95,10 @@ namespace Jackett.Controllers
             // add Jackett proxy to download links...
             foreach (var release in releases)
             {
-                if (release.Link == null || release.Link.Scheme == "magnet")
+                if (release.Link == null || (release.Link.IsAbsoluteUri && release.Link.Scheme == "magnet"))
                     continue;
                 var originalLink = release.Link;
-                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
+                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
                 var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.ID, encodedLink);
                 release.Link = new Uri(proxyLink);
             }

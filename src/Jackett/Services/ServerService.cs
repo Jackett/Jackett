@@ -111,6 +111,7 @@ namespace Jackett.Services
 
             // Load indexers
             indexerService.InitIndexers();
+            
         }
 
         public void Start()

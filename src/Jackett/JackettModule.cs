@@ -43,9 +43,17 @@ namespace Jackett
                 builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }
 
-            Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().AfterMap((be, str) =>
+            Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
             {
                 str.Content = Encoding.UTF8.GetString(be.Content);
+            });
+
+            Mapper.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
+            {
+                if (!string.IsNullOrEmpty(str.Content))
+                {
+                    be.Content = Encoding.UTF8.GetBytes(str.Content);
+                }
             });
 
             Mapper.CreateMap<WebClientStringResult, WebClientStringResult>();
