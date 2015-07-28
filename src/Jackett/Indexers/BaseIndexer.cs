@@ -141,7 +141,20 @@ namespace Jackett.Indexers
             else
             {
                 // Legacy cookie key
-                cookieHeader = (string)jsonConfig["cookies"];
+                var jcookes = jsonConfig["cookies"];
+                if (jcookes is JArray) {
+                    var array = (JArray)jsonConfig["cookies"];
+                    cookieHeader = string.Empty;
+                    for (int i = 0; i < array.Count; i++)
+                    {
+                        if (i != 0)
+                            cookieHeader += "; ";
+                        cookieHeader += array[i];
+                    }
+                }
+                else
+                    cookieHeader = (string)jsonConfig["cookies"];
+               
                 if (!string.IsNullOrEmpty(cookieHeader))
                 {
                     IsConfigured = true;

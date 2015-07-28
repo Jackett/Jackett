@@ -30,12 +30,14 @@ namespace Jackett.Services
         private IConfigurationService configService;
         private Logger logger;
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
+        private ICacheService cacheService;
 
-        public IndexerManagerService(IContainer c, IConfigurationService config, Logger l)
+        public IndexerManagerService(IContainer c, IConfigurationService config, Logger l, ICacheService cache)
         {
             container = c;
             configService = config;
             logger = l;
+            cacheService = cache;
         }
 
         public void InitIndexers()
@@ -80,6 +82,7 @@ namespace Jackett.Services
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
             if (results.Count() == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
+            cacheService.CacheRssResults(indexer.DisplayName, results);
         }
 
         public void DeleteIndexer(string name)
