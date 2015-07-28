@@ -31,7 +31,9 @@ namespace Jackett.Indexers
         // Called on startup when initializing indexers from saved configuration
         void LoadFromSavedConfiguration(JToken jsonConfig);
 
-        Task<ReleaseInfo[]> PerformQuery(TorznabQuery query);
+        Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+
+        IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input);
 
         Task<byte[]> Download(Uri link);
     }

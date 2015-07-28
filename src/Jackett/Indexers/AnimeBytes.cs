@@ -33,7 +33,7 @@ namespace Jackett.Indexers
                 description: "Powered by Tentacles",
                 manager: i,
                 client: client,
-                caps: new TorznabCapabilities(TorznabCategory.Anime),
+                caps: new TorznabCapabilities(TorznabCatType.Anime),
                 logger: l)
         {
         }
@@ -114,7 +114,7 @@ namespace Jackett.Indexers
             }
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             // The result list
             var releases = new List<ReleaseInfo>();
@@ -127,7 +127,7 @@ namespace Jackett.Indexers
             return releases.ToArray();
         }
 
-        public async Task<ReleaseInfo[]> GetResults(string searchTerm)
+        public async Task<IEnumerable<ReleaseInfo>> GetResults(string searchTerm)
         {
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -327,7 +327,7 @@ namespace Jackett.Indexers
                 cache.Add(new CachedQueryResult(searchTerm, releases));
             }
 
-            return releases.Select(s => (ReleaseInfo)s.Clone()).ToArray();
+            return releases.Select(s => (ReleaseInfo)s.Clone());
         }
 
 

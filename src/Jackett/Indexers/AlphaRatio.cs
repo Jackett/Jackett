@@ -74,7 +74,7 @@ namespace Jackett.Indexers
             release.Link = new Uri(DownloadUrl + id);
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
@@ -122,7 +122,7 @@ namespace Jackett.Indexers
                 OnParseError(response.Content, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
 
         static DateTime UnixTimestampToDateTime(double unixTime)

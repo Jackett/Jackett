@@ -69,14 +69,16 @@ namespace Jackett.Controllers
                 cacheService.CacheRssResults(indexer.DisplayName, releases);
             }
 
+            releases = indexer.FilterResults(torznabQuery, releases);
+
             // Log info
             if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
-                logger.Info(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
+                logger.Info(string.Format("Found {0} releases from {1}", releases.Count(), indexer.DisplayName));
             }
             else
             {
-                logger.Info(string.Format("Found {0} releases from {1} for: {2}", releases.Length, indexer.DisplayName, torznabQuery.SanitizedSearchTerm));
+                logger.Info(string.Format("Found {0} releases from {1} for: {2}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm));
             }
 
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);

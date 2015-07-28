@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
+using System.Linq;
 
 namespace Jackett.Indexers
 {
@@ -43,8 +44,8 @@ namespace Jackett.Indexers
             config.LoadValuesFromJson(configJson);
 
             var formattedUrl = config.GetFormattedHostUrl();
-            var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Length == 0)
+            IEnumerable<ReleaseInfo> releases = await PerformQuery(new TorznabQuery(), formattedUrl);
+            if (releases.Count() == 0)
                 throw new Exception("Could not find releases from this URL");
 
             BaseUrl = formattedUrl;
@@ -52,10 +53,9 @@ namespace Jackett.Indexers
             configSaveData["base_url"] = BaseUrl;
             SaveConfig(configSaveData);
             IsConfigured = true;
-
         }
 
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
@@ -82,7 +82,9 @@ namespace Jackett.Indexers
                     release.Title = serie_title;
 
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-                    release.Category = node.SelectSingleNode("category").InnerText;
+                    int category = 0;
+                    int.TryParse(node.SelectSingleNode("category").InnerText, out category);
+                    release.Category = category;
                     release.Guid = new Uri(node.SelectSingleNode("guid").InnerText);
                     release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
 
@@ -101,7 +103,7 @@ namespace Jackett.Indexers
                 OnParseError(xml, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
 
 
@@ -111,7 +113,7 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return await PerformQuery(query, BaseUrl);
         }

@@ -77,8 +77,8 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
             var results = await indexer.PerformQuery(browseQuery);
-            logger.Info(string.Format("Found {0} releases from {1}", results.Length, indexer.DisplayName));
-            if (results.Length == 0)
+            logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
+            if (results.Count() == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
         }
 

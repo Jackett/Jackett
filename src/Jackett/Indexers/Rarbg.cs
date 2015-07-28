@@ -71,12 +71,12 @@ namespace Jackett.Indexers
             return (string)obj["token"];
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return await PerformQuery(query, BaseUrl);
         }
 
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
         {
             var releases = new List<ReleaseInfo>();
             string token = await GetToken(baseUrl);
@@ -109,7 +109,7 @@ namespace Jackett.Indexers
             {
                 OnParseError(results.Content, ex);
             }
-            return releases.ToArray();
+            return releases;
         }
 
         public override Task<byte[]> Download(Uri link)

@@ -118,10 +118,9 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "%20" : query.SanitizedSearchTerm;
             var searchString = searchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
@@ -166,7 +165,7 @@ namespace Jackett.Indexers
             {
                 OnParseError(results, ex);
             }
-            return releases.ToArray();
+            return releases;
         }
 
         public override async Task<byte[]> Download(Uri link)

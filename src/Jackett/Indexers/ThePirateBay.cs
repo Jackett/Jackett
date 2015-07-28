@@ -48,7 +48,7 @@ namespace Jackett.Indexers
 
             var formattedUrl = config.GetFormattedHostUrl();
             var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Length == 0)
+            if (releases.Count() == 0)
                 throw new Exception("Could not find releases from this URL");
 
             BaseUrl = formattedUrl;
@@ -65,12 +65,12 @@ namespace Jackett.Indexers
             IsConfigured = true;
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return await PerformQuery(query, BaseUrl);
         }
 
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
+        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();

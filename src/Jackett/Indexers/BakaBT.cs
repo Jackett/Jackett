@@ -25,7 +25,7 @@ namespace Jackett.Indexers
             : base(name: "BakaBT",
                 description: "Anime Community",
                 link: "http://bakabt.me/",
-                caps: new TorznabCapabilities(TorznabCategory.Anime),
+                caps: new TorznabCapabilities(TorznabCatType.Anime),
                 manager: i,
                 client: wc,
                 logger: l)
@@ -65,7 +65,7 @@ namespace Jackett.Indexers
              });
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
 
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
@@ -170,7 +170,7 @@ namespace Jackett.Indexers
                 OnParseError(response.Content, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
 
         public override async Task<byte[]> Download(Uri link)

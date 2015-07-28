@@ -61,10 +61,9 @@ namespace Jackett.Indexers
             });
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
             var results = await RequestStringWithCookies(episodeSearchUrl);
@@ -107,7 +106,7 @@ namespace Jackett.Indexers
                 OnParseError(results.Content, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
     }
 }

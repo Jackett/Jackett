@@ -16,9 +16,9 @@ namespace Jackett.Utils
             caps.TVSearchAvailable = true;
             caps.SupportsTVRageSearch = false;
             caps.Categories.AddRange(new[] {
-                TorznabCategory.TV,
-                TorznabCategory.TVSD,
-                TorznabCategory.TVHD
+                TorznabCatType.TV,
+                TorznabCatType.TVSD,
+                TorznabCatType.TVHD
             });
             return caps;
         }
