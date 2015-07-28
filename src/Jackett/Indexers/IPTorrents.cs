@@ -55,10 +55,8 @@ namespace Jackett.Indexers
             };
             var response = await webclient.GetString(request);
             var firstCallCookies = response.Cookies;
-            // Redirect to ?
-            await FollowIfRedirect(request, response,null, firstCallCookies);
-            // Redirect to /t
-            await FollowIfRedirect(request, response, null, firstCallCookies);
+            // Redirect to ? then to /t
+            await FollowIfRedirect(response, request.Url, null, firstCallCookies);
 
             ConfigureIfOK(firstCallCookies, response.Content.Contains("/my.php"), () =>
             {

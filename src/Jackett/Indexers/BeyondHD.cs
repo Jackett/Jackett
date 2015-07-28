@@ -49,7 +49,7 @@ namespace Jackett.Indexers
                 Cookies = cookieHeader
             });
 
-            ConfigureIfOK(response.Cookies, response.Content.Contains("logout.php"), () =>
+            ConfigureIfOK(cookieHeader, response.Content.Contains("logout.php"), () =>
             {
                 CQ dom = response.Content;
                 throw new ExceptionWithConfigData("Invalid cookie header", (ConfigurationData)config);
@@ -63,6 +63,7 @@ namespace Jackett.Indexers
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
             var results = await RequestStringWithCookies(episodeSearchUrl);
+            await FollowIfRedirect(results);
             try
             {
                 CQ dom = results.Content;

@@ -42,7 +42,7 @@ namespace Jackett.Indexers
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, null);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "uid", config.Username.Value },
@@ -50,23 +50,15 @@ namespace Jackett.Indexers
             };
 
             // Send Post
-            var loginPost = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
-            if (loginPost.Status == System.Net.HttpStatusCode.OK)
+            ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var errorStr = "You have {0} remaining login attempts";
                 var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)")).Match(loginPage.Content).Groups[1].ToString();
                 var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", String.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-
-            // Get result from redirect
-            var loginResult = await RequestStringWithCookies(SiteLink + loginPost.RedirectingTo, loginPost.Cookies);
-
-            ConfigureIfOK(loginPost.Cookies, loginResult.Content.Contains("logout.php"), () =>
-            {
-                throw new ExceptionWithConfigData("Login failed", (ConfigurationData)config);
             });
         }
 

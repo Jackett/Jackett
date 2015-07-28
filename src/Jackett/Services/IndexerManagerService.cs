@@ -2,6 +2,7 @@
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -39,6 +40,8 @@ namespace Jackett.Services
 
         public void InitIndexers()
         {
+            logger.Info("Using HTTP Client: " + container.Resolve<IWebClient>().GetType().Name);
+
             foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
             {
                 indexers.Add(idx.ID, idx);

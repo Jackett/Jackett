@@ -176,7 +176,7 @@ namespace Jackett.Indexers
                 switch (counter)
                 {
                     case 0:
-                        this.Size = ReleaseInfo.BytesFromMB(ParseUtil.CoerceLong(val.Substring(0, val.IndexOf(" ") - 1)));
+                        this.Size = ReleaseInfo.GetBytes(val); 
                         break;
                     case 1:
                         this.Seeders = ParseUtil.CoerceInt(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);

@@ -42,11 +42,7 @@ namespace Jackett.Indexers
             var config = new PretomeConfiguration();
             config.LoadValuesFromJson(configJson);
 
-            var loginPage = await webclient.GetString(new WebRequest()
-            {
-                Url = LoginUrl,
-                Type = RequestType.GET
-            });
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
                 { "returnto", "%2F" },
@@ -57,17 +53,18 @@ namespace Jackett.Indexers
             };
 
             // Send Post
-            var loginPost = await PostDataWithCookies(LoginUrl, pairs, loginPage.Cookies);
-            if (loginPost.RedirectingTo == null)
+            var result = await PostDataWithCookies(LoginUrl, pairs, loginPage.Cookies);
+            if (result.RedirectingTo == null)
             {
                 throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", (ConfigurationData)config);
             }
-
+            var loginCookies = result.Cookies;
             // Get result from redirect
-            var loginResult = await RequestStringWithCookies(loginPost.RedirectingTo);
+            await FollowIfRedirect(result,LoginUrl,null, loginCookies);
 
-            ConfigureIfOK(loginPost.Cookies, loginResult.Content != null && loginResult.Content.Contains("logout.php"), () =>
+            ConfigureIfOK(loginCookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
+                cookieHeader = string.Empty;
                 throw new ExceptionWithConfigData("Failed", (ConfigurationData)config);
             });
         }
