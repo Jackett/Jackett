@@ -12,6 +12,7 @@ namespace Jackett.Models.Config
         public ServerConfig()
         {
             Port = 9117;
+            AllowExternal = System.Environment.OSVersion.Platform == PlatformID.Unix;
         }
 
         public int Port { get; set; }
