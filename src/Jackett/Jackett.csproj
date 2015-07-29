@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jackett</RootNamespace>
     <AssemblyName>Jackett</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
@@ -255,9 +255,12 @@
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\WindowsWebClient.cs" />
+    <Compile Include="WebAPIExceptionLogger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Content\fonts\fontawesome-webfont.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

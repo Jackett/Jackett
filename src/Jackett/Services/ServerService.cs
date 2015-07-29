@@ -105,13 +105,9 @@ namespace Jackett.Services
         {
             logger.Info("Starting Jackett " + configService.GetVersion());
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-
-            // Allow all SSL.. sucks I know but mono on linux is having problems without it..
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             // Load indexers
             indexerService.InitIndexers();
-            
         }
 
         public void Start()

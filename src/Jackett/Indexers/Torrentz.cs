@@ -62,7 +62,7 @@ namespace Jackett.Indexers
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
             var xmlDoc = new XmlDocument();
             string xml = string.Empty;
-            var result = await RequestStringWithCookies(episodeSearchUrl);
+            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
             try
             {

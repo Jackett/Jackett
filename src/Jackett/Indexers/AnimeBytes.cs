@@ -159,7 +159,7 @@ namespace Jackett.Indexers
             }
 
             // Get the content from the tracker
-            var response = await RequestStringWithCookies(queryUrl);
+            var response = await RequestStringWithCookiesAndRetry(queryUrl);
             CQ dom = response.Content;
 
             // Parse

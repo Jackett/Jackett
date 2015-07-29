@@ -12,9 +12,6 @@ namespace Jackett.Utils
         public static TorznabCapabilities CreateDefaultTorznabTVCaps()
         {
             var caps = new TorznabCapabilities();
-            caps.SearchAvailable = true;
-            caps.TVSearchAvailable = true;
-            caps.SupportsTVRageSearch = false;
             caps.Categories.AddRange(new[] {
                 TorznabCatType.TV,
                 TorznabCatType.TVSD,
@@ -22,6 +19,5 @@ namespace Jackett.Utils
             });
             return caps;
         }
-
     }
 }

@@ -66,7 +66,7 @@ namespace Jackett.Indexers
 
         async Task<string> GetToken(string url)
         {
-            var response = await RequestStringWithCookies(url + TokenUrl);
+            var response = await RequestStringWithCookiesAndRetry(url + TokenUrl);
             JObject obj = JObject.Parse(response.Content);
             return (string)obj["token"];
         }
@@ -86,7 +86,7 @@ namespace Jackett.Indexers
             else
                 searchUrl = string.Format(baseUrl + SearchQueryUrl, query.SanitizedSearchTerm, token);
 
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
                 var jItems = JArray.Parse(results.Content);

@@ -10,6 +10,7 @@ using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using AutoMapper;
+using System.Threading;
 
 namespace Jackett.Indexers
 {
@@ -201,6 +202,26 @@ namespace Jackett.Indexers
             return await webclient.GetString(request);
         }
 
+        protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null)
+        {
+            Exception lastException = null;
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    return await RequestStringWithCookies(url, cookieOverride, referer);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
+                    lastException= e;
+                    await Task.Delay(500);
+                }
+            }
+
+            throw lastException;
+        }
+
         protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null)
         {
             var request = new Utils.Clients.WebRequest()
@@ -225,6 +246,26 @@ namespace Jackett.Indexers
                 PostData = data
             };
             return await webclient.GetString(request);
+        }
+
+        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, Dictionary<string, string> data, string cookieOverride = null)
+        {
+            Exception lastException = null;
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    return await PostDataWithCookies(url,data,cookieOverride);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
+                    lastException = e;
+                    await Task.Delay(500);
+                }
+            }
+
+            throw lastException;
         }
 
         protected async Task<WebClientStringResult> RequestLoginAndFollowRedirect(string url, Dictionary<string, string> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer =null)
