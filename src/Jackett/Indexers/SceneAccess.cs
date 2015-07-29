@@ -64,7 +64,7 @@ namespace Jackett.Indexers
             var searchSection = string.IsNullOrEmpty(query.Episode) ? "archive" : "browse";
             var searchCategory = string.IsNullOrEmpty(query.Episode) ? "26" : "27";
             var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {

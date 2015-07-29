@@ -66,7 +66,7 @@ namespace Jackett.Indexers
             var formData = HttpUtility.ParseQueryString(SearchFormData);
             var formDict = formData.AllKeys.ToDictionary(t => t, t => formData[t]);
             formDict.Add("search", query.SanitizedSearchTerm);
-            var response = await PostDataWithCookies(SearchUrl, formDict);
+            var response = await PostDataWithCookiesAndRetry(SearchUrl, formDict);
             try
             {
                 var jsonResult = JObject.Parse(response.Content);

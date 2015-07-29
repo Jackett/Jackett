@@ -77,7 +77,7 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(searchAllUrl);
-            var result = await RequestStringWithCookies(episodeSearchUrl, string.Empty);
+            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             var xmlDoc = new XmlDocument();
 
             try

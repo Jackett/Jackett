@@ -103,7 +103,7 @@ namespace Jackett.Indexers
                 searchUrl += string.Format(QueryString, HttpUtility.UrlEncode(searchString));
             }
 
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {

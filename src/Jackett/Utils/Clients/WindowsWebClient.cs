@@ -18,7 +18,6 @@ namespace Jackett.Utils.Clients
         public WindowsWebClient(Logger l)
         {
             logger = l;
-          
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
@@ -65,7 +64,7 @@ namespace Jackett.Utils.Clients
 
             client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
             HttpResponseMessage response = null;
-
+           
             if (request.Type == RequestType.POST)
             {
                 var content = new FormUrlEncodedContent(request.PostData);

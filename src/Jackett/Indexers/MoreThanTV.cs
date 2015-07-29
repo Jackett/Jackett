@@ -77,21 +77,10 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-            WebClientStringResult response = null; 
+            WebClientStringResult response = null;
 
-            // Their web server is fairly flakey - try up to three times.
-            for(int i = 0; i < 3; i++)
-            {
-                try
-                {
-                    response = await RequestStringWithCookies(episodeSearchUrl);
-                    break;
-                }
-                catch (Exception e){
-                    logger.Error("On attempt " + (i+1) + " checking for results from MoreThanTv: " + e.Message );
-                }
-            }
-            
+            response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+
             try
             {
                 var json = JObject.Parse(response.Content);

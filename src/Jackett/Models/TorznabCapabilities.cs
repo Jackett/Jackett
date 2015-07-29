@@ -21,10 +21,16 @@ namespace Jackett.Models
         public TorznabCapabilities()
         {
             Categories = new List<TorznabCategory>();
+            SearchAvailable = true;
+            TVSearchAvailable = true;
+            SupportsTVRageSearch = false;
         }
 
         public TorznabCapabilities(params TorznabCategory[] cats)
         {
+            SearchAvailable = true;
+            TVSearchAvailable = true;
+            SupportsTVRageSearch = false;
             Categories = new List<TorznabCategory>();
             Categories.AddRange(cats);
         }
