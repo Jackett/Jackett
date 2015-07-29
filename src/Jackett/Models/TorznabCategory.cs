@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,14 @@ namespace Jackett.Models
         public TorznabCategory()
         {
             SubCategories = new List<TorznabCategory>();
+        }
+
+        public JToken ToJson()
+        {
+            var t = new JObject();
+            t["ID"] = ID;
+            t["Name"] = Name;
+            return t;
         }
     }
 }

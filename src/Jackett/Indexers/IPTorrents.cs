@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -19,7 +20,7 @@ namespace Jackett.Indexers
 {
     public class IPTorrents : BaseIndexer, IIndexer
     {
-        private string SearchUrl { get { return SiteLink + "t?26=&55=&78=&23=&24=&25=&66=&82=&65=&83=&79=&22=&5=&4=&60=&q="; } }
+        private string BrowseUrl { get { return SiteLink + "t"; } }
 
         public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "IPTorrents",
@@ -30,7 +31,47 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l)
         {
-            TorznabCaps.Categories.Add(TorznabCatType.Anime);
+            AddCategoryMapping(72, TorznabCatType.Movies);
+            AddCategoryMapping(77, TorznabCatType.MoviesSD);
+            AddCategoryMapping(89, TorznabCatType.MoviesSD);
+            AddCategoryMapping(90, TorznabCatType.MoviesSD);
+            AddCategoryMapping(96, TorznabCatType.MoviesSD);
+            AddCategoryMapping(6, TorznabCatType.MoviesSD);
+            AddCategoryMapping(48, TorznabCatType.MoviesHD);
+            AddCategoryMapping(54, TorznabCatType.Movies);
+            AddCategoryMapping(62, TorznabCatType.MoviesSD);
+            AddCategoryMapping(38, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(68, TorznabCatType.Movies);
+            AddCategoryMapping(20, TorznabCatType.MoviesHD);
+            AddCategoryMapping(7, TorznabCatType.MoviesSD);
+
+            AddCategoryMapping(73, TorznabCatType.TV);
+            AddCategoryMapping(26, TorznabCatType.TVSD);
+            AddCategoryMapping(55, TorznabCatType.TVSD);
+            AddCategoryMapping(78, TorznabCatType.TVSD);
+            AddCategoryMapping(23, TorznabCatType.TVHD);
+            AddCategoryMapping(24, TorznabCatType.TVSD);
+            AddCategoryMapping(25, TorznabCatType.TVSD);
+            AddCategoryMapping(66, TorznabCatType.TVSD);
+            AddCategoryMapping(82, TorznabCatType.TVSD);
+            AddCategoryMapping(65, TorznabCatType.TV);
+            AddCategoryMapping(83, TorznabCatType.TV);
+            AddCategoryMapping(79, TorznabCatType.TVSD);
+            AddCategoryMapping(22, TorznabCatType.TVHD);
+            AddCategoryMapping(79, TorznabCatType.TVSD);
+            AddCategoryMapping(4, TorznabCatType.TVSD);
+            AddCategoryMapping(5, TorznabCatType.TVHD);
+
+            AddCategoryMapping(75, TorznabCatType.Audio);
+            AddCategoryMapping(73, TorznabCatType.Audio);
+            AddCategoryMapping(80, TorznabCatType.AudioLossless);
+            AddCategoryMapping(93, TorznabCatType.Audio);
+
+            AddCategoryMapping(60, TorznabCatType.Anime);
+            AddCategoryMapping(1, TorznabCatType.Apps);
+            AddCategoryMapping(64, TorznabCatType.AudioBooks);
+            AddCategoryMapping(35, TorznabCatType.Books);
+            AddCategoryMapping(94, TorznabCatType.Comic);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
@@ -71,8 +112,26 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, null, SearchUrl);
+            var searchUrl = BrowseUrl;
+            var trackerCats = MapTorznabCapsToTrackers(query);
+            var queryCollection = new NameValueCollection();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("q", searchString);
+            }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add(cat, string.Empty);
+            }
+
+            if (queryCollection.Count > 0)
+            {
+                searchUrl += "?" + string.Join("&", queryCollection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(queryCollection[a])));
+            }
+                       
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
 
             var results = response.Content;
             try
@@ -110,6 +169,9 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".t_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;
+
+                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(1);
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }
