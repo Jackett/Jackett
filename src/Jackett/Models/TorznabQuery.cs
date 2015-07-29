@@ -24,6 +24,11 @@ namespace Jackett.Models
         public string SearchTerm { get; set; }
         public string SanitizedSearchTerm { get; set; }
 
+        public TorznabQuery()
+        {
+            Categories = new int[0];
+        }
+
         public string GetEpisodeSearchString()
         {
             if (Season == 0)
