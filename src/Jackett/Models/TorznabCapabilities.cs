@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +45,16 @@ namespace Jackett.Models
                     parameters.Add("rid");
                 return string.Join(",", parameters);
             }
+        }
+
+        public JArray CapsToJson()
+        {
+            var jArray = new JArray();
+            foreach (var cat in Categories.GroupBy(p => p.ID).Select(g => g.First()).OrderBy(c=>c.ID))
+            {
+                jArray.Add(cat.ToJson());
+            }
+            return jArray;
         }
 
         public string ToXml()

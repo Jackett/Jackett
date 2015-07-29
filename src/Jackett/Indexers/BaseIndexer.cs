@@ -343,5 +343,19 @@ namespace Jackett.Indexers
         {
             categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory));
         }
+
+        protected List<string> MapTorznabCapsToTrackers(TorznabQuery query)
+        {
+            var result = new List<string>();
+            foreach (var cat in query.Categories)
+            {
+                foreach (var mapping in categoryMapping.Where(c => c.NewzNabCategory == cat))
+                {
+                    result.Add(mapping.TrackerCategory);
+                }
+            }
+
+            return result;
+        }
     }
 }

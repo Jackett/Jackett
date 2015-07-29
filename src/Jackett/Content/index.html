@@ -70,6 +70,45 @@
         </div>
     </script>
 
+    <script id="jackett-config-setup-modal" type="text/x-handlebars-template">
+        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{title}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="config-setup-form"></form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
+                    </div>
+                    <div class="indexer-caps">
+                        <h4>Capabilities</h4>
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each caps}}
+                                <tr>
+                                    <td>{{ID}}</td>
+                                    <td>{{Name}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <title>Jackett</title>
 </head>
 <body>
@@ -149,24 +188,6 @@
     <div id="modals"></div>
 
     <div id="templates">
-        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{title}}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="config-setup-form"></form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <button class="indexer card add-indexer" data-toggle="modal" data-target="#select-indexer-modal">
             <div class="indexer-add-content">
                 <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>

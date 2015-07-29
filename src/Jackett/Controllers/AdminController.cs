@@ -3,6 +3,7 @@ using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -146,6 +147,7 @@ namespace Jackett.Controllers
                 var indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 var config = await indexer.GetConfigurationForSetup();
                 jsonReply["config"] = config.ToJson();
+                jsonReply["caps"] = indexer.TorznabCaps.CapsToJson();
                 jsonReply["name"] = indexer.DisplayName;
                 jsonReply["result"] = "success";
             }

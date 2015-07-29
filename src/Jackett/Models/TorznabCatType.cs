@@ -20,6 +20,7 @@ namespace Jackett.Models
             cats.Add(8020, "Books/Comics");
             cats.Add(4000, "PC");
             cats.Add(3030, "Audio/Audiobook");
+            cats.Add(2000, "Movies");
             cats.Add(2040, "Movies/HD");
             cats.Add(2030, "Movies/SD");
             cats.Add(2010, "Movies/Foreign");
@@ -107,6 +108,11 @@ namespace Jackett.Models
             get { return GetCat(3030); }
         }
 
+        public static TorznabCategory Movies
+        {
+            get { return GetCat(2000); }
+        }
+
         public static TorznabCategory MoviesHD
         {
             get { return GetCat(2040); }
@@ -114,7 +120,7 @@ namespace Jackett.Models
 
         public static TorznabCategory MoviesSD
         {
-            get { return GetCat(2040); }
+            get { return GetCat(2030); }
         }
 
         public static TorznabCategory MoviesForeign

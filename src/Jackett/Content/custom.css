@@ -211,3 +211,12 @@ hr {
 .modal-fillwidth {
     width: 1200px;
 }
+
+.indexer-caps {
+   padding: 0px 15px 15px 15px;
+   border-top: 1px solid #e5e5e5;
+}
+
+.indexer-caps table {
+    border-bottom:   1px solid #ddd;
+}
