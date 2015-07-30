@@ -27,6 +27,10 @@ namespace Jackett.Models
             cats.Add(3000, "Audio");
             cats.Add(3040, "Audio/Lossless");
             cats.Add(3010, "Audio/MP3");
+            cats.Add(6000, "XXX");
+            cats.Add(6040, "XXX/x264");
+            cats.Add(6010, "XXX/DVD");
+            cats.Add(6060, "XXX/Imageset");
         }
 
         public static bool QueryContainsParentCategory(int[] queryCats, int releaseCat)
@@ -141,6 +145,26 @@ namespace Jackett.Models
         public static TorznabCategory AudioLossy
         {
             get { return GetCat(3010); }
+        }
+
+        public static TorznabCategory XXX
+        {
+            get { return GetCat(6000); }
+        }
+
+        public static TorznabCategory XXXHD
+        {
+            get { return GetCat(6040); }
+        }
+
+        public static TorznabCategory XXXSD
+        {
+            get { return GetCat(6010); }
+        }
+
+        public static TorznabCategory XXXImg
+        {
+            get { return GetCat(6060); }
         }
     }
 }

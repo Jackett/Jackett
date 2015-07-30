@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Jackett.Utils
 {
@@ -56,5 +58,9 @@ namespace Jackett.Utils
             return String.Join("\n", fields);
         }
 
+        public static string GetQueryString(this NameValueCollection collection)
+        {
+            return string.Join("&", collection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(collection[a])));
+        }
     }
 }
