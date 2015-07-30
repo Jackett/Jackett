@@ -78,7 +78,7 @@ namespace Jackett.Controllers
             }
             else
             {
-                logger.Info(string.Format("Found {0} releases from {1} for: {2}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm));
+                logger.Info(string.Format("Found {0} releases from {1} for: {2} {3}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString()));
             }
 
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);

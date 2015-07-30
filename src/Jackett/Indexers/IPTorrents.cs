@@ -128,7 +128,7 @@ namespace Jackett.Indexers
 
             if (queryCollection.Count > 0)
             {
-                searchUrl += "?" + string.Join("&", queryCollection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(queryCollection[a])));
+                searchUrl += "?" + queryCollection.GetQueryString();
             }
                        
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
