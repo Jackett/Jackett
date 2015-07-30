@@ -24,8 +24,8 @@ namespace Jackett.Console
         [Option('t', "Tracing", HelpText = "Enable tracing")]
         public bool Tracing { get; set; }
 
-        [Option('c', "UseCurlExec",  HelpText = "Execute curl rather than libcurl for all outgoing requests.")]
-        public bool UseCurlExec { get; set; }
+        [Option('c', "UseClient",  HelpText = "Override web client selection. Automatic(Default)/libcurl/safecurl/httpclient ")]
+        public string Client { get; set; }
 
         [Option('s', "Start",  HelpText = "Start the Jacket Windows service (Must be admin)")]
         public bool StartService { get; set; }

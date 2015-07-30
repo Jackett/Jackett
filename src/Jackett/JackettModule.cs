@@ -22,18 +22,29 @@ namespace Jackett
             builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
 
-            // Register the best web client for the platform or exec curl as a safe option
-            if (Startup.CurlSafe)
+            // Register the best web client for the platform or the override
+            switch (Startup.ClientOverride)
             {
-                builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
-            }
-            else if(System.Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
-            }
-            else
-            {
-                builder.RegisterType<WindowsWebClient>().As<IWebClient>();
+                case "httpclient":
+                    builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                    break;
+                case "safecurl":
+                    builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
+                    break;
+                case "libcurl":
+                    builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                    break;
+                case "automatic":
+                    default:
+                    if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+                    {
+                        builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                    }
+                    else
+                    {
+                        builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                    }
+                    break;
             }
 
             // Register indexers

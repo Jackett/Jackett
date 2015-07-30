@@ -264,7 +264,7 @@
     <Compile Include="Utils\WebApiRootRedirectMiddleware.cs" />
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
-    <Compile Include="Utils\Clients\WindowsWebClient.cs" />
+    <Compile Include="Utils\Clients\HttpWebClient.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
   </ItemGroup>
   <ItemGroup>

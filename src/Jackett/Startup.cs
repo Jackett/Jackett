@@ -34,7 +34,7 @@ namespace Jackett
             set;
         }
 
-        public static bool CurlSafe
+        public static string ClientOverride
         {
             get;
             set;

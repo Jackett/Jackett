@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Jackett.Models.Config;
 using Jackett.Services;
+using Jackett.Utils.Clients;
 using Microsoft.Owin.Hosting;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -41,14 +42,16 @@ namespace Jackett.Services
         private ISerializeService serializeService;
         private IConfigurationService configService;
         private Logger logger;
+        private IWebClient client;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w)
         {
             indexerService = i;
             processService = p;
             serializeService = s;
             configService = c;
             logger = l;
+            client = w;
 
             LoadConfig();
         }
@@ -105,9 +108,9 @@ namespace Jackett.Services
         {
             logger.Info("Starting Jackett " + configService.GetVersion());
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             // Load indexers
             indexerService.InitIndexers();
+            client.Init();
         }
 
         public void Start()

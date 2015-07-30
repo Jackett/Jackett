@@ -24,6 +24,10 @@ namespace Jackett.Utils.Clients
             logger = l;
         }
 
+        public void Init()
+        {
+        }
+
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("UnixSafeCurlWebClient:GetBytes(Url:{0})", request.Url));
