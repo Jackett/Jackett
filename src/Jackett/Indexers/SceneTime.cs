@@ -70,7 +70,7 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var results = await PostDataWithCookies(SearchUrl, GetSearchFormData(searchString));
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(searchString));
 
             try
             {

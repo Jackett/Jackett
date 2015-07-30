@@ -16,12 +16,6 @@ namespace Jackett
     {
         private static readonly object instance = new object();
 
-        static CurlHelper()
-        {
-            Engine.Logger.Debug("LibCurl init" + Curl.GlobalInit(CurlInitFlag.All).ToString());
-            Engine.Logger.Debug("LibCurl version " + Curl.Version);
-        }
-
         public class CurlRequest
         {
 

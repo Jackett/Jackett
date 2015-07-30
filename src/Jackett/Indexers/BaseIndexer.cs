@@ -178,13 +178,28 @@ namespace Jackett.Indexers
 
         public async virtual Task<byte[]> Download(Uri link)
         {
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
-            });
-
+            var response = await RequestBytesWithCookiesAndRetry(link.ToString());
             return response.Content;
+        }
+
+        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null)
+        {
+            Exception lastException = null;
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    return await RequestBytesWithCookies(url, cookieOverride);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
+                    lastException = e;
+                    await Task.Delay(500);
+                }
+            }
+
+            throw lastException;
         }
 
         protected async Task<WebClientStringResult> RequestStringWithCookies(string url, string cookieOverride = null, string referer = null)

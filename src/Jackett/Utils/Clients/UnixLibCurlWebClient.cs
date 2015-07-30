@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CurlSharp;
 using Jackett.Models;
 using Jackett.Services;
 using NLog;
@@ -36,6 +37,12 @@ namespace Jackett.Utils.Clients
             var result = await Run(request);
             logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
             return Mapper.Map<WebClientStringResult>(result);
+        }
+
+        public void Init()
+        {
+            Engine.Logger.Info("LibCurl init " + Curl.GlobalInit(CurlInitFlag.All).ToString());
+            Engine.Logger.Info("LibCurl version " + Curl.Version);
         }
 
         private async Task<WebClientByteResult> Run(WebRequest request)

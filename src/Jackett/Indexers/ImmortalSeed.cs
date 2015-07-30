@@ -115,6 +115,8 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
                     release.Title = qRow.Find(".tooltip-content div").First().Text();
+                    if (string.IsNullOrWhiteSpace(release.Title))
+                        continue;
                     release.Description = qRow.Find(".tooltip-content div").Get(1).InnerText.Trim();
 
                     var qLink = row.Cq().Find("td:eq(2) a:eq(1)");

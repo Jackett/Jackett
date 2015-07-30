@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -34,11 +35,14 @@ namespace JackettConsole
                 }
                 else
                 {
+                 
+
+
                     /*  ======     Options    =====  */
 
                     // Use curl
-                    if (options.UseCurlExec)
-                        Startup.CurlSafe = true;
+                    if (options.Client!=null)
+                        Startup.ClientOverride = options.Client.ToLowerInvariant();
 
                     // Logging
                     if (options.Logging)
@@ -49,9 +53,6 @@ namespace JackettConsole
                         Startup.TracingEnabled = true;
 
                     // Log after the fact as using the logger will cause the options above to be used
-
-                    if (options.UseCurlExec)
-                        Engine.Logger.Info("Safe curl enabled.");
 
                     if (options.Logging)
                         Engine.Logger.Info("Logging enabled.");

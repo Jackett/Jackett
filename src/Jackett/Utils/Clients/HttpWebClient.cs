@@ -11,13 +11,18 @@ using System.Threading.Tasks;
 
 namespace Jackett.Utils.Clients
 {
-    class WindowsWebClient : IWebClient
+    class HttpWebClient : IWebClient
     {
         private Logger logger;
 
-        public WindowsWebClient(Logger l)
+        public HttpWebClient(Logger l)
         {
             logger = l;
+        }
+
+
+        public void Init()
+        {
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)

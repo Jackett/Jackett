@@ -36,8 +36,8 @@ Name: "windowsService"; Description: "Install as a Windows Service"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "Build\JackettTray.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Build\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Build.windows\JackettTray.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Build.windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
