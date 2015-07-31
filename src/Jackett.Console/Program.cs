@@ -35,10 +35,10 @@ namespace JackettConsole
                 }
                 else
                 {
-                 
-
-
                     /*  ======     Options    =====  */
+
+                    // SSL Fix
+                    Startup.DoSSLFix = options.SSLFix;
 
                     // Use curl
                     if (options.Client!=null)
@@ -60,6 +60,10 @@ namespace JackettConsole
                     if (options.Tracing)
                         Engine.Logger.Info("Tracing enabled.");
 
+                    if (options.SSLFix == true)
+                        Engine.Logger.Info("SSL ECC workaround enabled.");
+                    else if (options.SSLFix == false)
+                        Engine.Logger.Info("SSL ECC workaround has been disabled.");
                     /*  ======     Actions    =====  */
 
                     // Install service

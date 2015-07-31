@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CurlSharp;
 using Jackett.Models;
 using Jackett.Services;
 using NLog;
@@ -32,7 +33,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("UnixSafeCurlWebClient:GetBytes(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning", result.Status));
+            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
 
@@ -40,7 +41,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("UnixSafeCurlWebClient:GetString(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning", result.Status));
+            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
             return Mapper.Map<WebClientStringResult>(result);
         }
 
@@ -68,6 +69,13 @@ namespace Jackett.Utils.Clients
 
             var tempFile = Path.GetTempFileName();
             args.AppendFormat("--output \"{0}\" ", tempFile);
+
+            if (Startup.DoSSLFix == true)
+            {
+                // http://stackoverflow.com/questions/31107851/how-to-fix-curl-35-cannot-communicate-securely-with-peer-no-common-encryptio
+                // https://git.fedorahosted.org/cgit/mod_nss.git/plain/docs/mod_nss.html
+                args.Append("--cipher " + SSLFix.CipherList);
+            }
 
             string stdout = null;
             await Task.Run(() =>
