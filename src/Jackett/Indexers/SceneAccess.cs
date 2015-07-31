@@ -47,8 +47,10 @@ namespace Jackett.Indexers
                 { "submit", "come on in" }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SiteLink, LoginUrl);
-            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("nav_profile"), () =>
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, LoginUrl);
+            ConfigureIfOK(result.Cookies + " " + loginPage.Cookies, result.Content != null && result.Content.Contains("nav_profile"), () =>
             {
                 CQ dom = result.Content;
                 var messageEl = dom["#login_box_desc"];

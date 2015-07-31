@@ -29,7 +29,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("WindowsWebClient:GetBytes(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("WindowsWebClient: Returning", result.Status));
+            logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
 
@@ -37,7 +37,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("WindowsWebClient:GetString(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("WindowsWebClient: Returning", result.Status));
+            logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
             return Mapper.Map<WebClientStringResult>(result);
         }
 

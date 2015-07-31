@@ -27,7 +27,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
+            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes Returning {0} => {1} bytes", result.Status, (result.Content==null?"<NULL>":result.Content.Length.ToString())));
             return result;
         }
 
@@ -35,14 +35,35 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient: Returning", result.Status));
+            logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content== null?"<NULL>": Encoding.UTF8.GetString(result.Content))));
             return Mapper.Map<WebClientStringResult>(result);
         }
 
         public void Init()
         {
-            Engine.Logger.Info("LibCurl init " + Curl.GlobalInit(CurlInitFlag.All).ToString());
-            Engine.Logger.Info("LibCurl version " + Curl.Version);
+            try {
+                Engine.Logger.Info("LibCurl init " + Curl.GlobalInit(CurlInitFlag.All).ToString());
+                CurlHelper.OnErrorMessage += (msg) =>
+                 {
+                     Engine.Logger.Error(msg);
+                 };
+            }
+            catch(Exception e)
+            {
+                Engine.Logger.Warn("Libcurl failed to initalize. Did you install it?");
+                Engine.Logger.Warn("Debian: apt-get install libcurl4-openssl-dev");
+                Engine.Logger.Warn("Redhat: yum install libcurl-devel");
+                throw e;
+            }
+
+            var version = Curl.Version;
+            Engine.Logger.Info("LibCurl version " + version);
+
+            if (!Startup.DoSSLFix.HasValue && version.IndexOf("NSS")>-1)
+            {
+                Engine.Logger.Info("NSS Detected SSL ECC workaround enabled.");
+                Startup.DoSSLFix = true;
+            }
         }
 
         private async Task<WebClientByteResult> Run(WebRequest request)
@@ -54,23 +75,30 @@ namespace Jackett.Utils.Clients
             }
             else
             {
+                if (request.PostData != null && request.PostData.Count > 0)
+                {
+                    logger.Debug("UnixLibCurlWebClient: Posting " + new FormUrlEncodedContent(request.PostData).ReadAsStringAsync().Result);
+                }
+
                 response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer);
             }
 
             var result = new WebClientByteResult()
             {
                 Content = response.Content,
-                Cookies = response.CookieHeader,
+                Cookies = response.Cookies,
                 Status = response.Status
             };
 
-            if (response.Headers != null)
+            if (response.HeaderList != null)
             {
-                foreach (var header in response.Headers)
+                foreach (var header in response.HeaderList)
                 {
-                    if (string.Equals(header.Key, "location", StringComparison.InvariantCultureIgnoreCase) && header.Value != null)
+                    switch (header[0].ToLowerInvariant())
                     {
-                        result.RedirectingTo = header.Value;
+                        case "location":
+                            result.RedirectingTo = header[1];
+                            break;
                     }
                 }
             }

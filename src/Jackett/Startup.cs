@@ -40,6 +40,12 @@ namespace Jackett
             set;
         }
 
+        public static bool? DoSSLFix
+        {
+            get;
+            set;
+        }
+
         public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 

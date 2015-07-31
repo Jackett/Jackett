@@ -120,15 +120,12 @@ namespace Jackett.Indexers
             // 15 results per page - really don't want to call the server twice but only 15 results per page is a bit crap!
             await ProcessPage(releases, searchUrl);  
             await ProcessPage(releases, searchUrl + "&page=1");
-
             return releases;
         }
 
         private async Task ProcessPage(List<ReleaseInfo> releases, string searchUrl)
         {
-
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
-
             var results = response.Content;
             try
             {
