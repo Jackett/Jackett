@@ -23,8 +23,7 @@ namespace Jackett.Indexers
         private string SearchUrl = "https://ncore.cc/torrents.php";
         private static string LoginUrl = "https://ncore.cc/login.php";
         private readonly string LoggedInUrl = "https://ncore.cc/index.php";
-        //private string cookieHeader = "";
-        private JToken configData = null;
+        //private JToken configData = null;
 
         private readonly string enSearch = "torrents.php?oldal=1&tipus=kivalasztottak_kozott&kivalasztott_tipus=xvidser,dvdser,hdser&mire={0}&miben=name";
         private readonly string hunSearch = "torrents.php?oldal=1&tipus=kivalasztottak_kozott&kivalasztott_tipus=xvidser_hun,dvdser_hun,hdser_hun,mire={0}&miben=name";
@@ -45,54 +44,46 @@ namespace Jackett.Indexers
                 logger: l)
         {
             SearchUrl = SearchUrlEnHun;
-            //webclient = wc;
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = configData == null ? new ConfigurationDatanCore() : new ConfigurationDatanCore(configData);
-            return Task.FromResult<ConfigurationData>(new ConfigurationDatanCore(configData));
+            //var config = configData == null ? new ConfigurationDatanCore() : new ConfigurationDatanCore(configData);
+            //return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDatanCore());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDatanCore();
-            config.LoadValuesFromJson(configJson);
+            var incomingConfig = new ConfigurationDatanCore();
+            incomingConfig.LoadValuesFromJson(configJson);
 
-            if (config.Hungarian.Value == false && config.English.Value == false)
-                throw new ExceptionWithConfigData("Please select atleast one language.", (ConfigurationData)config);
+            if (incomingConfig.Hungarian.Value == false && incomingConfig.English.Value == false)
+                throw new ExceptionWithConfigData("Please select atleast one language.", (ConfigurationData)incomingConfig);
 
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string> {
-				{ "nev", config.Username.Value },
-				{ "pass", config.Password.Value },
-                {"ne_leptessen_ki", "on"}
+				{ "nev", incomingConfig.Username.Value },
+				{ "pass", incomingConfig.Password.Value },
+                { "ne_leptessen_ki", "on"}
 			};
+             
+               var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, LoggedInUrl, LoggedInUrl);
+               ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Felhasználó"), () =>
+               {
+                   CQ dom = result.Content;
+                   var messageEl = dom["#hibauzenet table tbody tr"];
+                   var msgContainer = messageEl.Get(0).ChildElements.ElementAt(1);
+                   var errorMessage = msgContainer != null ? msgContainer.InnerText : "Error while trying to login.";
+                   throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+               });
 
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                PostData = pairs,
-                Referer = SiteLink.ToString(),
-                Type = RequestType.POST,
-            });
-
-            if (!response.RedirectingTo.Equals("index.php"))
-            {
-                var errorMessage = "Couldn't login";
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookieHeader = response.Cookies;
-
-                cookieHeader = cookieHeader.Substring(0, cookieHeader.IndexOf(' ') - 1) + ";stilus=brutecore; nyelv=hu";
-                configSaveData["cookies"] = cookieHeader;
-                configSaveData["config"] = configData = config.ToJson();
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+               //var configSaveData = new JObject();
+               //configSaveData["config"] = incomingConfig.ToJson();
+               //SaveConfig(configSaveData);
         }
+
+
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
@@ -101,18 +92,10 @@ namespace Jackett.Indexers
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
-            //var response = await webclient.GetString(new Utils.Clients.WebRequest()
-            //{
-            //    Url = episodeSearchUrl,
-            //    Cookies = cookieHeader,
-            //    Referer = SiteLink.ToString(),
-            //});
-
-           // var results = response.Content;
-            var results= "";
+            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
-                CQ dom = results;
+                CQ dom = response.Content;
 
                 ReleaseInfo release;
                 var rows = dom[".box_torrent_all"].Find(".box_torrent");
@@ -146,37 +129,36 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                //OnParseError(response.Content, ex);
+                OnParseError(response.Content, ex);
             }
 
 
             return releases.ToArray();
         }
 
-        //public void LoadFromSavedConfiguration(JToken jsonConfig)
-        //{
-        //    if (jsonConfig["config"] != null)
-        //    {
-        //        string hun, eng;
-        //        Dictionary<string, string>[] configDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>[]>(jsonConfig["config"].ToString());
-        //        configDictionary[2].TryGetValue("value", out hun);
-        //        configDictionary[3].TryGetValue("value", out eng);
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
+        {
+            base.LoadFromSavedConfiguration(jsonConfig);
+            //if (jsonConfig["config"] != null)
+            //{
+            //    string hun, eng;
+            //    Dictionary<string, string>[] configDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>[]>(jsonConfig["config"].ToString());
+            //    configDictionary[2].TryGetValue("value", out hun);
+            //    configDictionary[3].TryGetValue("value", out eng);
 
-        //        bool isHun = Boolean.Parse(hun);
-        //        bool isEng = Boolean.Parse(eng);
+            //    bool isHun = Boolean.Parse(hun);
+            //    bool isEng = Boolean.Parse(eng);
 
-        //        if (isHun && isEng)
-        //            SearchUrl = SearchUrlEnHun;
-        //        else if (isHun && !isEng)
-        //            SearchUrl = SearchUrlHun;
-        //        else if (!isHun && isEng)
-        //            SearchUrl = SearchUrlEn;
+            //    if (isHun && isEng)
+            //        SearchUrl = SearchUrlEnHun;
+            //    else if (isHun && !isEng)
+            //        SearchUrl = SearchUrlHun;
+            //    else if (!isHun && isEng)
+            //        SearchUrl = SearchUrlEn;
 
-        //        configData = jsonConfig["config"];
-        //    }
-        //    cookieHeader = (string)jsonConfig["cookies"];
-        //    IsConfigured = true;
-        //}
+            //    configData = jsonConfig["config"];
+            //}
+        }
 
     }
 }

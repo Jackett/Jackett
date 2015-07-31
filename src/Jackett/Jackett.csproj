@@ -186,6 +186,7 @@
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\ImmortalSeed.cs" />
+    <Compile Include="Indexers\nCore.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Indexers\Torrentz.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
+    <Compile Include="Models\ConfigurationDatanCore.cs" />
     <Compile Include="Models\IndexerConfig\BmtvConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginAnimeBytes.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginFrenchTorrentDb.cs" />
