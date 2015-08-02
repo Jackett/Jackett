@@ -51,7 +51,7 @@ namespace Jackett.Indexers
 				{ "password", incomingConfig.Password.Value },
 			};
 
-            var result = await RequestLoginAndFollowRedirect(SiteLink, pairs, null, true, null, SiteLink);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
