@@ -170,7 +170,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\APIController.cs" />
+    <Compile Include="Controllers\PotatoController.cs" />
+    <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
@@ -209,6 +210,9 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginAnimeBytes.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginFrenchTorrentDb.cs" />
     <Compile Include="Models\IndexerConfig\PretomeConfiguration.cs" />
+    <Compile Include="Models\TorrentPotatoRequest.cs" />
+    <Compile Include="Models\TorrentPotatoResponse.cs" />
+    <Compile Include="Models\TorrentPotatoResponseItem.cs" />
     <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Models\TorznabCategory.cs" />
@@ -243,6 +247,7 @@
     <Compile Include="Utils\DateTimeUtil.cs" />
     <Compile Include="Utils\Clients\IWebClient.cs" />
     <Compile Include="Utils\JackettAuthorizedAttribute.cs" />
+    <Compile Include="Utils\JsonContent.cs" />
     <Compile Include="Utils\ParseUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

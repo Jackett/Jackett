@@ -69,11 +69,11 @@ namespace Jackett.Indexers
         {
 
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                var splitindex = query.SanitizedSearchTerm.LastIndexOf(' ');
+                var splitindex = query.SearchTerm.LastIndexOf(' ');
                 if (splitindex > -1)
-                    query.SanitizedSearchTerm = query.SanitizedSearchTerm.Substring(0, splitindex);
+                    query.SearchTerm = query.SearchTerm.Substring(0, splitindex);
             }
 
             var releases = new List<ReleaseInfo>();
