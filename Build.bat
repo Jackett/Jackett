@@ -6,7 +6,7 @@ cd src
 Msbuild Jackett.sln /t:Clean,Build /p:Configuration=Release /verbosity:minimal
 cd ..
 
-xcopy src\Jackett.Console\bin\Release Build.windows\  /e /y
+xcopy src\Jackett.Console\bin\Release build.windows\  /e /y
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe build.windows\JackettService.exe
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe.config build.windows\JackettService.exe.config
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build.windows\JackettTray.exe
@@ -20,7 +20,7 @@ Msbuild Jackett.sln /t:Clean
 call "C:\Program Files (x86)\Mono\bin\xbuild.bat"  Jackett.sln /t:Build /p:Configuration=Release /verbosity:minimal
 cd ..
 
-xcopy src\Jackett.Console\bin\Release Build.mono\  /e /y
+xcopy src\Jackett.Console\bin\Release build.mono\  /e /y
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe build.mono\JackettService.exe
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe.config build.mono\JackettService.exe.config
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build.mono\JackettTray.exe
