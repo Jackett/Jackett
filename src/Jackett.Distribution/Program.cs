@@ -15,6 +15,7 @@ namespace Jackett.Distribution
     {
         static readonly string repoOwner = "zone117x";
         static readonly string repoName = "Jackett";
+        static readonly string jackettLibPath = Path.Combine("build.windows", "Jackett.dll");
         static readonly string buildZipFileWindows = "JackettBuildWindows.zip";
         static readonly string buildZipFileMono = "JackettBuildMono.zip";
         static readonly string installFile = Path.Combine("Output", "setup.exe");
@@ -51,7 +52,7 @@ namespace Jackett.Distribution
 
         static Version GetJackettVersion()
         {
-            var assemblyVersion = AssemblyName.GetAssemblyName(Path.Combine("Build", "Jackett.dll")).Version;
+            var assemblyVersion = AssemblyName.GetAssemblyName(jackettLibPath).Version;
             return new Version(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
