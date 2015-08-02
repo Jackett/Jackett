@@ -296,11 +296,8 @@ namespace Jackett.Indexers
             var response = await webclient.GetString(request);
             var firstCallCookies = response.Cookies;
 
-            // Follow up  to 5 redirects
-            for(int i = 0; i < 5; i++)
+            if (response.IsRedirect)
             {
-                if (!response.IsRedirect)
-                    break;
                 await FollowIfRedirect(response, request.Url, null, response.Cookies);
             }
 

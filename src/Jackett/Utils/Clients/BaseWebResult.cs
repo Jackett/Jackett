@@ -20,7 +20,8 @@ namespace Jackett.Utils.Clients
              return  Status == System.Net.HttpStatusCode.Redirect ||
                      Status == System.Net.HttpStatusCode.RedirectKeepVerb ||
                      Status == System.Net.HttpStatusCode.RedirectMethod ||
-                     Status == System.Net.HttpStatusCode.Found;
+                     Status == System.Net.HttpStatusCode.Found ||
+                     Status == System.Net.HttpStatusCode.MovedPermanently;
             }
         }
     }
