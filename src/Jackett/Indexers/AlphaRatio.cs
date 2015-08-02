@@ -54,7 +54,7 @@ namespace Jackett.Indexers
 
             // Do the login
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);
-            ConfigureIfOK(response.Cookies, response.Content!=null && response.Content.Contains("logout.php?"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content!=null && response.Content.Contains("logout.php?"), () =>
              {
                  CQ dom = response.Content;
                  dom["#loginform > table"].Remove();

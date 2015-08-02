@@ -52,7 +52,7 @@ namespace Jackett.Indexers
 			};
 
             var result = await RequestLoginAndFollowRedirect(SiteLink, pairs, null, true, null, SiteLink);
-            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
                 var errorMessage = dom["h5"].First().Text().Trim();

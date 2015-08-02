@@ -50,7 +50,7 @@ namespace Jackett.Indexers
 			};
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true,null, LoginUrl);
-            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
                 CQ dom = result.Content;
                 var messageEl = dom[".ui-state-error"].Last();

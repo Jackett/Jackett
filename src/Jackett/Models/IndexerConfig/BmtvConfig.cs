@@ -16,17 +16,20 @@ namespace Jackett.Models.IndexerConfig
 
         public StringItem CaptchaText { get; private set; }
 
+        public HiddenItem CaptchaCookie { get; private set; }
+
         public BmtvConfig()
         {
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
             CaptchaImage = new ImageItem { Name = "Captcha Image" };
             CaptchaText = new StringItem { Name = "Captcha Text" };
+            CaptchaCookie = new HiddenItem("") { Name = "Captcha Cookie" };
         }
 
         public override Item[] GetItems()
         {
-            return new Item[] { Username, Password, CaptchaImage, CaptchaText };
+            return new Item[] { Username, Password, CaptchaImage, CaptchaText, CaptchaCookie };
         }
     }
 }

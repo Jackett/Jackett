@@ -47,6 +47,7 @@ namespace Jackett.Indexers
             var captchaImage = await RequestBytesWithCookies(CaptchaUrl);
             var config = new BmtvConfig();
             config.CaptchaImage.Value = captchaImage.Content;
+            config.CaptchaCookie.Value = captchaImage.Cookies;
             return (ConfigurationData)config;
         }
 
@@ -61,8 +62,8 @@ namespace Jackett.Indexers
 				{ "secimage", config.CaptchaText.Value }
 			};
 
-            var response = await RequestLoginAndFollowRedirect(LoginPost, pairs, cookieHeader, true);
-            await ConfigureIfOK(cookieHeader, response.Content.Contains("/logout.php"), async () =>
+            var response = await RequestLoginAndFollowRedirect(LoginPost, pairs, config.CaptchaCookie.Value, true);
+            await ConfigureIfOK(response.Cookies, response.Content.Contains("/logout.php"), async () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["table tr > td.embedded > h2"].Last();
@@ -70,6 +71,7 @@ namespace Jackett.Indexers
                 var captchaImage = await RequestBytesWithCookies(CaptchaUrl);
                 config.CaptchaImage.Value = captchaImage.Content;
                 config.CaptchaText.Value = "";
+                config.CaptchaCookie.Value = captchaImage.Cookies;
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
             });
         }

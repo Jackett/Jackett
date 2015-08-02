@@ -52,7 +52,7 @@ namespace Jackett.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
-            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("If your browser doesn't have javascript enabled"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("If your browser doesn't have javascript enabled"), () =>
             {
                 var errorMessage = "Couldn't login";
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);

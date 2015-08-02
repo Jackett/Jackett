@@ -56,7 +56,7 @@ namespace Jackett.Indexers
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
-            ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom[".error_text"];

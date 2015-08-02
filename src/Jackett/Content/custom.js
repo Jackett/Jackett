@@ -251,6 +251,9 @@ function getConfigModalJson(configForm) {
         var type = $el.data("type");
         var id = $el.data("id");
         switch (type) {
+            case "hiddendata":
+                configJson[id] = $el.find(".setup-item-hiddendata input").val();
+                break;
             case "inputstring":
                 configJson[id] = $el.find(".setup-item-inputstring input").val();
                 break;

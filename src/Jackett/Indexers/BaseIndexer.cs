@@ -312,18 +312,6 @@ namespace Jackett.Indexers
             return response;
         }
 
-        protected void ConfigureIfOK(string cookies, bool isLoggedin, Action onError)
-        {
-            if (isLoggedin)
-            {
-                cookieHeader = cookies;
-                SaveCookieHeaderAndConfigure();
-            } else
-            {
-                onError();
-            }
-        }
-
         protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
         {
             if (isLoggedin)
