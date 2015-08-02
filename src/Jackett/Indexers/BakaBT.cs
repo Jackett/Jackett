@@ -56,7 +56,7 @@ namespace Jackett.Indexers
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
             var responseContent = response.Content;
-            ConfigureIfOK(response.Cookies, responseContent.Contains("<a href=\"logout.php\">Logout</a>"), () =>
+            await ConfigureIfOK(response.Cookies, responseContent.Contains("<a href=\"logout.php\">Logout</a>"), () =>
              {
                  CQ dom = responseContent;
                  var messageEl = dom[".error"].First();

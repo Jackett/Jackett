@@ -47,7 +47,7 @@ namespace Jackett.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("auth/logout"), () =>
             {
                 CQ dom = result.Content;
                 var messageEl = dom[".form-error"];

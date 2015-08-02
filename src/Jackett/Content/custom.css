@@ -114,6 +114,10 @@
     height: 20px;
 }
 
+[data-type=hiddendata]{
+    display: none;
+}
+
 .spinner {
     -webkit-animation: spin 2s infinite linear;
     -moz-animation: spin 2s infinite linear;

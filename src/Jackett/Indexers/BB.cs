@@ -52,7 +52,7 @@ namespace Jackett.Indexers
             };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-            ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["#loginform"];

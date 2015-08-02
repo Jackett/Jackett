@@ -62,7 +62,7 @@ namespace Jackett.Indexers
             // Get result from redirect
             await FollowIfRedirect(result,LoginUrl,null, loginCookies);
 
-            ConfigureIfOK(loginCookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(loginCookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 cookieHeader = string.Empty;
                 throw new ExceptionWithConfigData("Failed", (ConfigurationData)config);

@@ -84,7 +84,7 @@ namespace Jackett.Indexers
             var resultPage = await RequestStringWithCookies(link.Attr("href"), response.Cookies);
             CQ resultDom = resultPage.Content;
 
-            ConfigureIfOK(response.Cookies, resultPage.Content.Contains("/logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, resultPage.Content.Contains("/logout.php"), () =>
             {
                 var tries = resultDom["#main tr:eq(1) td font"].First().Text();
                 var errorMessage = "Incorrect username or password! " + tries + " tries remaining.";

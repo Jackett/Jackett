@@ -49,7 +49,7 @@ namespace Jackett.Indexers
                 Cookies = cookies
             });
 
-            ConfigureIfOK(cookies, response.Content.Contains("/?section=LOGOUT"), () =>
+            await ConfigureIfOK(cookies, response.Content.Contains("/?section=LOGOUT"), () =>
             {
                 throw new ExceptionWithConfigData("Failed to login", (ConfigurationData)config);
             });
