@@ -119,7 +119,7 @@ namespace Jackett
             logFile.FileName = Path.Combine(ConfigurationService.GetAppDataFolderStatic(), "log.txt");
             logFile.ArchiveFileName = "log.{#####}.txt";
             logFile.ArchiveAboveSize = 500000;
-            logFile.MaxArchiveFiles = 1;
+            logFile.MaxArchiveFiles = 5;
             logFile.KeepFileOpen = false;
             logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
             var logFileRule = new LoggingRule("*", logLevel, logFile);

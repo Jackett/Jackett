@@ -3,6 +3,7 @@ using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -21,100 +22,51 @@ namespace Jackett.Indexers
 {
     public class Freshon : BaseIndexer, IIndexer
     {
-        private readonly string LoginUrl = "";
-        private readonly string LoginPostUrl = "";
-        private readonly string SearchUrl = "";
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string LoginPostUrl { get { return SiteLink + "login.php?action=makelogin"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public Freshon(IIndexerManagerService i, Logger l)
+        public Freshon(IIndexerManagerService i, Logger l, IWebClient c)
             : base(name: "FreshOnTV",
                 description: "Our goal is to provide the latest stuff in the TV show domain",
-                link: new Uri("https://freshon.tv"),
+                link: "https://freshon.tv/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: c,
                 logger: l)
         {
-
-            LoginUrl = SiteLink + "login.php";
-            LoginPostUrl = SiteLink + "login.php?action=makelogin";
-            SearchUrl = SiteLink + "browse.php";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var request = CreateHttpRequest(new Uri(LoginUrl));
-            var response = await client.SendAsync(request);
-            await response.Content.ReadAsStreamAsync();
-            var config = new ConfigurationDataBasicLogin();
-            return config;
+            return await Task.FromResult< ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
-
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value }
+				{ "username", incomingConfig.Username.Value },
+				{ "password", incomingConfig.Password.Value }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-            var message = CreateHttpRequest(new Uri(LoginPostUrl));
-            message.Method = HttpMethod.Post;
-            message.Content = content;
-            message.Headers.Referrer = new Uri(LoginUrl);
+            // Get inital cookies
+            cookieHeader = string.Empty;
+            var response = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, cookieHeader, true, null, LoginUrl);
 
-            var response = await client.SendAsync(message);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("/logout.php"))
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>
             {
-                CQ dom = responseContent;
+                CQ dom = response.Content;
                 var messageEl = dom[".error_text"];
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-        }
-
-        HttpRequestMessage CreateHttpRequest(Uri uri)
-        {
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = uri;
-            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            return message;
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
-        {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             string episodeSearchUrl;
 
             if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
@@ -125,12 +77,10 @@ namespace Jackett.Indexers
                 episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
             }
 
-            var request = CreateHttpRequest(new Uri(episodeSearchUrl));
-            var response = await client.SendAsync(request);
-            var results = await response.Content.ReadAsStringAsync();
+            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
-                CQ dom = results;
+                CQ dom = results.Content;
 
                 var rows = dom["#highlight > tbody > tr"];
 
@@ -170,18 +120,10 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
-            return releases.ToArray();
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var request = CreateHttpRequest(link);
-            var response = await client.SendAsync(request);
-            var bytes = await response.Content.ReadAsByteArrayAsync();
-            return bytes;
+            return releases;
         }
     }
 }

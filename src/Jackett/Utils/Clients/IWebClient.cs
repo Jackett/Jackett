@@ -11,5 +11,6 @@ namespace Jackett.Utils.Clients
     {
         Task<WebClientStringResult> GetString(WebRequest request);
         Task<WebClientByteResult> GetBytes(WebRequest request);
+        void Init();
     }
 }

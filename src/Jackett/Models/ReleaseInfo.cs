@@ -16,7 +16,7 @@ namespace Jackett.Models
         public Uri Link { get; set; }
         public Uri Comments { get; set; }
         public DateTime PublishDate { get; set; }
-        public string Category { get; set; }
+        public int Category { get; set; }
         public long? Size { get; set; }
         public string Description { get; set; }
         public long? RageID { get; set; }

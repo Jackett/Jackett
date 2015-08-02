@@ -1,7 +1,9 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -16,111 +18,53 @@ namespace Jackett.Indexers
 {
     class FrenchTorrentDb : BaseIndexer, IIndexer
     {
-        public event Action<IIndexer, Newtonsoft.Json.Linq.JToken> OnSaveConfigurationRequested;
+        private string MainUrl { get { return SiteLink + "?section=INDEX"; } }
+        private string SearchUrl { get { return SiteLink + "?section=TORRENTS&exact=1&name={0}&submit=GO"; } }
 
-        public event Action<IIndexer, string, Exception> OnResultParsingError;
-
-        class ConfigurationDataBasicLoginFrenchTorrentDb : ConfigurationData
-        {
-            public StringItem Cookie { get; private set; }
-
-            public ConfigurationDataBasicLoginFrenchTorrentDb()
-            {
-                Cookie = new StringItem { Name = "Cookie" };
-            }
-
-            public override Item[] GetItems()
-            {
-                return new Item[] { Cookie };
-            }
-        }
-
-
-        private readonly string MainUrl = "";
-        private readonly string SearchUrl = "";
-
-        string cookie = string.Empty;
-
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public FrenchTorrentDb(IIndexerManagerService i, Logger l)
+        public FrenchTorrentDb(IIndexerManagerService i, Logger l, IWebClient c)
             : base(name: "FrenchTorrentDb",
                 description: "One the biggest French Torrent Tracker",
-                link: new Uri("http://www.frenchtorrentdb.com/"),
+                link: "http://www.frenchtorrentdb.com/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: c,
                 logger: l)
         {
-            MainUrl = SiteLink + "?section=INDEX";
-            SearchUrl = SiteLink + "?section=TORRENTS&exact=1&name={0}&submit=GO";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
         }
 
         public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
         {
             var config = new ConfigurationDataBasicLoginFrenchTorrentDb();
             config.LoadValuesFromJson(configJson);
-            cookies.SetCookies(SiteLink, "WebsiteID=" + config.Cookie.Value);
-            var mainPage = await client.GetAsync(MainUrl);
-            string responseContent = await mainPage.Content.ReadAsStringAsync();
+            var cookies = "WebsiteID=" + config.Cookie.Value;
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Url = MainUrl,
+                Type = RequestType.GET,
+                Cookies = cookies
+            });
 
-            if (!responseContent.Contains("/?section=LOGOUT"))
+            await ConfigureIfOK(cookies, response.Content.Contains("/?section=LOGOUT"), () =>
             {
                 throw new ExceptionWithConfigData("Failed to login", (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                configSaveData["cookie"] = config.Cookie.Value;
-
-                if (OnSaveConfigurationRequested != null)
-                    OnSaveConfigurationRequested(this, configSaveData);
-
-                IsConfigured = true;
-            }
+            });
         }
 
-        public void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
-        {
-            cookie = (string)jsonConfig["cookie"];
-            cookies.SetCookies(SiteLink, "WebsiteID=" + cookie);
-            IsConfigured = true;
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = new Uri(episodeSearchUrl);
-
-            var response = await client.SendAsync(message);
-            var results = await response.Content.ReadAsStringAsync();
+            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
-
-                CQ dom = results;
+                CQ dom = response.Cookies;
                 var rows = dom[".results_index ul"];
                 foreach (var row in rows)
                 {
@@ -147,16 +91,10 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnResultParsingError(this, results, ex);
-                throw ex;
+                OnParseError(response.Content, ex);
             }
 
-            return releases.ToArray();
-        }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
+            return releases;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Jackett.Controllers
                 }
 
                 var remoteFile = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
-                var downloadBytes = await indexer.Download(new Uri(remoteFile));
+                var downloadBytes = await indexer.Download(new Uri(remoteFile, UriKind.RelativeOrAbsolute));
 
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);

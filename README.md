@@ -1,33 +1,21 @@
-# Jackett
+## Jackett
 
-Use just about any tracker with Sonarr
+This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/master/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) API server on your machine.  Torznab enables software such as [Sonarr](https://sonarr.tv) to access data from your favorite indexers in a similar fashion to rss but with added features such as searching.  TorrentPotato is an interface accessible to [CouchPotato](https://couchpota.to/).
 
-### API Access to your favorite trackers
 
-This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) API server on your machine that any Torznab enabled software can consume. Jackett works as a proxy server: it translates Torznab queries into tracker-site-specific http queries, parses the html response into Torznab results, then sends results back to the requesting software. 
+Jackett works as a proxy server: it translates Torznab queries into tracker-site-specific http queries, parses the html response into Torznab results, then sends results back to the requesting software which allows for getting recent uploads and performing searches.
 
-Currently [Sonarr](https://sonarr.tv/) is the only software that uses Torznab. [Couchpotato](https://couchpota.to/) will hopefully get Torznab support in the future.
+We were previously focused on TV but are working on extending searches to allow for searching other items such as movies and comics.
 
-### Download
+#### Download
 Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
-### Supported Systems
-* Works on Windows by default
-* Works on Linux and OS X using Mono. See instructions below...
-
-### Instructions for Mono
- * Install Mono: http://www.mono-project.com/download/
- * *For MoreThanTV & ThePirateBay* install libcurl-dev for your system, [tutorial](http://curl.haxx.se/dlwiz/?type=devel)
-   * For apt-get systems its simply: `apt-get install libcurl4-openssl-dev`
-
-### Running Jackett
-
-On Windows the recommended way of running Jackett is to install it as a windows service. When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
-
-Jackett can also be run from the command line (See --help for switches) using JackettConsole.exe if you would like to see log messages where the service and tray isn't running. On Linux / OSX you would need to run the console using "mono JackettConsole.exe".
+#### Supported Systems
+* Windows using .NET 4.5
+* Linux and OSX using Mono 4
 
 
-### Supported Trackers
+#### Supported Trackers
  * [AlphaRatio](https://alpharatio.cc/)
  * [AnimeBytes](https://animebytes.tv/)
  * [BakaBT](http://bakabt.me/)
@@ -39,28 +27,65 @@ Jackett can also be run from the command line (See --help for switches) using Ja
  * [Freshon](https://freshon.tv/)
  * [HD-Space](https://hd-space.org/)
  * [HD-Torrents.org](https://hd-torrents.org/)
+ * [Immortalseed.me](http://immortalseed.me)
  * [IPTorrents](https://iptorrents.com/)
  * [MoreThan.tv](https://morethan.tv/)
  * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
- * [RARBG](https://rarbg.com)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [SceneTime](https://www.scenetime.com/)
  * [ShowRSS](https://showrss.info/)
  * [Strike](https://getstrike.net/)
  * [T411](http://www.t411.io/)
  * [The Pirate Bay](https://thepiratebay.se/)
+ * [TorrentBytes](https://www.torrentbytes.net/)
  * [TorrentDay](https://torrentday.eu/)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [TorrentShack](http://torrentshack.me/)
  * [Torrentz](https://torrentz.eu/)
 
 
+#### Installation on Linux/OSX
+ 1. Install [Mono 4](http://www.mono-project.com/download/) or better
+ 2. Install  libcurl:
+       * Debian/Ubunutu: apt-get install libcurl-dev
+       * Redhat/Fedora: yum install libcurl-devel
+       * Or see the [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
+
+
+
+#### Installation on Windows
+
+We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
+
+Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
+
+#### Installation on Linux/OSX
+
+Run Jackett using mono with the command "mono JackettConsole.exe".
+
+
+
+#### Troubleshooting
+
+* Command line switches
+
+You can pass various options when running via the command line, see --help for details.
+
+* Unable to  connect to certain trackers on Linux
+
+Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcurl.  If the tracker is currently configured try removing it and adding it again. Alternatively try running with a different client via --UseClient (Warning: safecurl just executes curl and your details may be seen from the process list).
+
+*  Enable logging
+
+You can get additional logging with the switches "-t -l".  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
+
+
 ### Additional Trackers
-Jackett's framework allows me (and any other volunteering dev) to implement just about any new tracker in 15-60 minutes. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact me on IRC (see below).
+Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact us on IRC (see below).
 
 ### Contact & Support
-I can be contact on IRC at [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett) & [irc.freenode.net#sonarr](http://webchat.freenode.net/?channels=#sonarr)
+Use the github issues pages or talk to us directly at: [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett).
 
 ### Screenshots
 

@@ -1,7 +1,9 @@
 ﻿using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -19,68 +21,33 @@ namespace Jackett.Indexers
 {
     public class BitMeTV : BaseIndexer, IIndexer
     {
-        class BmtvConfig : ConfigurationData
-        {
-            public StringItem Username { get; private set; }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string LoginPost { get { return SiteLink + "takelogin.php"; } }
+        private string CaptchaUrl { get { return SiteLink + "visual.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-            public StringItem Password { get; private set; }
-
-            public ImageItem CaptchaImage { get; private set; }
-
-            public StringItem CaptchaText { get; private set; }
-
-            public BmtvConfig()
-            {
-                Username = new StringItem { Name = "Username" };
-                Password = new StringItem { Name = "Password" };
-                CaptchaImage = new ImageItem { Name = "Captcha Image" };
-                CaptchaText = new StringItem { Name = "Captcha Text" };
-            }
-
-            public override Item[] GetItems()
-            {
-                return new Item[] { Username, Password, CaptchaImage, CaptchaText };
-            }
-        }
-
-        private readonly string LoginUrl = "";
-        private readonly string LoginPost = "";
-        private readonly string CaptchaUrl = "";
-        private readonly string SearchUrl = "";
-
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public BitMeTV(IIndexerManagerService i, Logger l)
+        public BitMeTV(IIndexerManagerService i, Logger l, IWebClient c)
             : base(name: "BitMeTV",
                 description: "TV Episode specialty tracker",
-                link: new Uri("http://www.bitmetv.org"),
+                link: "http://www.bitmetv.org/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: c,
                 logger: l)
         {
-            LoginUrl = SiteLink + "login.php";
-            LoginPost = SiteLink + "takelogin.php";
-            CaptchaUrl = SiteLink + "visual.php";
-            SearchUrl = SiteLink + "browse.php";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            await client.GetAsync(LoginUrl);
-            var captchaImage = await client.GetByteArrayAsync(CaptchaUrl);
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Url = LoginUrl
+            });
+            cookieHeader = response.Cookies;
+            var captchaImage = await RequestBytesWithCookies(CaptchaUrl);
             var config = new BmtvConfig();
-            config.CaptchaImage.Value = captchaImage;
+            config.CaptchaImage.Value = captchaImage.Content;
+            config.CaptchaCookie.Value = captchaImage.Cookies;
             return (ConfigurationData)config;
         }
 
@@ -95,46 +62,29 @@ namespace Jackett.Indexers
 				{ "secimage", config.CaptchaText.Value }
 			};
 
-            var content = new FormUrlEncodedContent(pairs);
-
-            var response = await client.PostAsync(LoginPost, content);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("/logout.php"))
+            var response = await RequestLoginAndFollowRedirect(LoginPost, pairs, config.CaptchaCookie.Value, true);
+            await ConfigureIfOK(response.Cookies, response.Content.Contains("/logout.php"), async () =>
             {
-                CQ dom = responseContent;
+                CQ dom = response.Content;
                 var messageEl = dom["table tr > td.embedded > h2"].Last();
                 var errorMessage = messageEl.Text();
-                var captchaImage = await client.GetByteArrayAsync(CaptchaUrl);
-                config.CaptchaImage.Value = captchaImage;
+                var captchaImage = await RequestBytesWithCookies(CaptchaUrl);
+                config.CaptchaImage.Value = captchaImage.Content;
                 config.CaptchaText.Value = "";
+                config.CaptchaCookie.Value = captchaImage.Cookies;
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
-        {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
+            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
-                CQ dom = results;
+                CQ dom = results.Content;
 
                 var table = dom["tbody > tr > .latest"].Parent().Parent();
 
@@ -177,17 +127,10 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
-            return releases.ToArray();
-
+            return releases;
         }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
-        }
-
     }
 }

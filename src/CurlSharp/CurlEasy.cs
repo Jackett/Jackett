@@ -118,7 +118,6 @@ namespace CurlSharp
         private NativeMethods._CurlDebugCallback _pcbDebug;
         private NativeMethods._CurlIoctlCallback _pcbIoctl;
         private NativeMethods._CurlProgressCallback _pcbProgress;
-        private NativeMethods._CurlSslCtxCallback _pcbSslCtx;
 #endif
         private CurlDebugCallback _pfCurlDebug;
         private CurlHeaderCallback _pfCurlHeader;
@@ -293,18 +292,6 @@ namespace CurlSharp
             return setCurlOpt(_curlDebugData, CurlOption.DebugData);
         }
 
-        private IntPtr _curlSslCtxData = IntPtr.Zero;
-
-        /// <summary>
-        ///     Object to pass to OnSslCtxCallback.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private CurlCode setSslCtxData(object data)
-        {
-            _curlSslCtxData = getHandle(data);
-            return setCurlOpt(_curlSslCtxData, CurlOption.SslCtxData);
-        }
 
         private IntPtr _curlIoctlData = IntPtr.Zero;
 
@@ -368,17 +355,6 @@ namespace CurlSharp
             }
         }
 
-        public object SslCtxData
-        {
-            get { return _sslContextData; }
-            set
-            {
-                _sslContextData = value;
-#if !USE_LIBCURLSHIM
-                setSslCtxData(value);
-#endif
-            }
-        }
 
         public object IoctlData
         {
@@ -538,11 +514,6 @@ namespace CurlSharp
             set { setFunctionOptions(CurlOption.IoctlFunction, value); }
         }
 
-        public CurlSslContextCallback SslContextFunction
-        {
-            get { return _pfCurlSslContext; }
-            set { setFunctionOptions(CurlOption.SslCtxFunction, value); }
-        }
 
         public string LastErrorDescription
         {
@@ -1262,7 +1233,6 @@ namespace CurlSharp
                     freeHandle(ref _curlProgressData);
                     freeHandle(ref _curlHeaderData);
                     freeHandle(ref _curlIoctlData);
-                    freeHandle(ref _curlSslCtxData);
 #endif
                     NativeMethods.curl_easy_cleanup(_pCurl);
 
@@ -1439,9 +1409,6 @@ namespace CurlSharp
                 case CurlOption.HeaderData:
                     _headerData = parameter;
                     break;
-                case CurlOption.SslCtxData:
-                    _sslContextData = parameter;
-                    break;
                 case CurlOption.IoctlData:
                     _ioctlData = parameter;
                     break;
@@ -1593,14 +1560,6 @@ namespace CurlSharp
                     break;
                 }
 
-                case CurlOption.SslCtxFunction:
-                {
-                    var sf = pfn as CurlSslContextCallback;
-                    if (sf == null)
-                        return CurlCode.BadFunctionArgument;
-                    _pfCurlSslContext = sf;
-                    break;
-                }
 
                 case CurlOption.IoctlFunction:
                 {
@@ -1949,7 +1908,6 @@ namespace CurlSharp
             _pcbProgress = _curlProgressCallback;
             _pcbDebug = _curlDebugCallback;
             _pcbHeader = _curlHeaderCallback;
-            _pcbSslCtx = _curlSslCtxCallback;
             _pcbIoctl = _curlIoctlCallback;
 
             setLastError(NativeMethods.curl_easy_setopt_cb(_pCurl, CurlOption.WriteFunction, _pcbWrite),
@@ -1962,8 +1920,6 @@ namespace CurlSharp
                          CurlOption.HeaderFunction);
             setLastError(NativeMethods.curl_easy_setopt_cb(_pCurl, CurlOption.DebugFunction, _pcbDebug),
                          CurlOption.DebugFunction);
-            setLastError(NativeMethods.curl_easy_setopt_cb(_pCurl, CurlOption.SslCtxFunction, _pcbSslCtx),
-                         CurlOption.SslCtxFunction);
             setLastError(NativeMethods.curl_easy_setopt_cb(_pCurl, CurlOption.IoctlFunction, _pcbIoctl),
                          CurlOption.IoctlFunction);
             setLastError(NativeMethods.curl_easy_setopt(_pCurl, CurlOption.NoProgress, (IntPtr) 0),
@@ -1974,7 +1930,6 @@ namespace CurlSharp
             setHeaderData(null);
             setProgressData(null);
             setDebugData(null);
-            setSslCtxData(null);
             setIoctlData(null);
 #endif
         }

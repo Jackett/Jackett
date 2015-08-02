@@ -1,8 +1,11 @@
 ﻿using Autofac;
+using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,8 +35,9 @@ namespace Jackett.Controllers
         private ISecuityService securityService;
         private IProcessService processService;
         private ICacheService cacheService;
+        private Logger logger;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l)
         {
             this.config = config;
             indexerService = i;
@@ -41,6 +45,7 @@ namespace Jackett.Controllers
             securityService = s;
             processService = p;
             cacheService = c;
+            logger = l;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -128,6 +133,7 @@ namespace Jackett.Controllers
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "Exception in SetAdminPassword");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }
@@ -145,11 +151,13 @@ namespace Jackett.Controllers
                 var indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 var config = await indexer.GetConfigurationForSetup();
                 jsonReply["config"] = config.ToJson();
+                jsonReply["caps"] = indexer.TorznabCaps.CapsToJson();
                 jsonReply["name"] = indexer.DisplayName;
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "Exception in GetConfigForm");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }
@@ -160,12 +168,13 @@ namespace Jackett.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Configure()
         {
-            JToken jsonReply = new JObject();
+            var jsonReply = new JObject();
+            IIndexer indexer = null;
             try
             {
                 var postData = await ReadPostDataJson();
                 string indexerString = (string)postData["indexer"];
-                var indexer = indexerService.GetIndexer((string)postData["indexer"]);
+                indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 jsonReply["name"] = indexer.DisplayName;
                 await indexer.ApplyConfiguration(postData["config"]);
                 await indexerService.TestIndexer((string)postData["indexer"]);
@@ -175,9 +184,15 @@ namespace Jackett.Controllers
             {
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
+                var baseIndexer = indexer as BaseIndexer;
+                if (null != baseIndexer)
+                    baseIndexer.ResetBaseConfig();
                 if (ex is ExceptionWithConfigData)
                 {
                     jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
+                } else
+                {
+                    logger.Error(ex, "Exception in Configure");
                 } 
             }
             return Json(jsonReply);
@@ -201,12 +216,14 @@ namespace Jackett.Controllers
                     item["description"] = indexer.DisplayDescription;
                     item["configured"] = indexer.IsConfigured;
                     item["site_link"] = indexer.SiteLink;
+                    item["potatoenabled"] = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => PotatoController.MOVIE_CATS.Contains(i));
                     items.Add(item);
                 }
                 jsonReply["items"] = items;
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "Exception in get_indexers");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }
@@ -228,6 +245,7 @@ namespace Jackett.Controllers
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "Exception in test_indexer");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }
@@ -247,6 +265,7 @@ namespace Jackett.Controllers
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "Exception in delete_indexer");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }
@@ -269,14 +288,9 @@ namespace Jackett.Controllers
                 jsonReply["config"] = cfg;
                 jsonReply["app_version"] = config.GetVersion();
                 jsonReply["result"] = "success";
-            }
-            catch (CustomException ex)
+            }catch (Exception ex)
             {
-                jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
-            }
-            catch (Exception ex)
-            {
+                logger.Error(ex, "Exception in get_jackett_config");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }
@@ -350,6 +364,7 @@ namespace Jackett.Controllers
             }
             catch (Exception ex)
             {
+                logger.Error(ex, "Exception in set_port");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
             }

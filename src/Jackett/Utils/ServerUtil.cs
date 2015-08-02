@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jackett.Utils.Clients;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -97,6 +98,20 @@ namespace Jackett.Utils
                 isAdmin = false;
             }
             return isAdmin;
+        }
+
+        public static void ResureRedirectIsFullyQualified(WebRequest req, BaseWebResult result)
+        {
+            if (!string.IsNullOrEmpty(result.RedirectingTo))
+            {
+                var destLower = result.RedirectingTo.ToLowerInvariant();
+                if (!destLower.StartsWith("http"))
+                {
+                    var hostUri = new Uri(req.Url);
+                    var fullUri = new Uri(hostUri, result.RedirectingTo);
+                    result.RedirectingTo = fullUri.ToString();
+                }
+            }
         }
     }
 }

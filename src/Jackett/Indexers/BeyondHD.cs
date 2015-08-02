@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -17,82 +18,55 @@ namespace Jackett.Indexers
 {
     public class BeyondHD : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        private readonly string DownloadUrl = "";
+        private string SearchUrl { get { return SiteLink + "browse.php?c40=1&c44=1&c48=1&c89=1&c46=1&c45=1&searchin=title&incldead=0&search={0}"; } }
+        private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public BeyondHD(IIndexerManagerService i, Logger l)
+        public BeyondHD(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
-                link: new Uri("https://beyondhd.me"),
+                link: "https://beyondhd.me/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: w,
                 logger: l)
         {
-            SearchUrl = SiteLink + "browse.php?c40=1&c44=1&c48=1&c89=1&c46=1&c45=1&searchin=title&incldead=0&search={0}";
-            DownloadUrl = SiteLink + "download.php?torrent={0}";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataCookie();
-            return Task.FromResult<ConfigurationData>(config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataCookie());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
             var config = new ConfigurationDataCookie();
             config.LoadValuesFromJson(configJson);
+            cookieHeader = config.CookieHeader;
 
-            var jsonCookie = new JObject();
-            jsonCookie["cookie_header"] = config.CookieHeader;
-            cookies.FillFromJson(SiteLink, jsonCookie, logger);
-
-            var responseContent = await client.GetStringAsync(SiteLink);
-
-            if (!responseContent.Contains("logout.php"))
+            var response = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                CQ dom = responseContent;
+                Url = SiteLink,
+                Cookies = cookieHeader
+            });
+
+            await ConfigureIfOK(cookieHeader, response.Content.Contains("logout.php"), () =>
+            {
+                CQ dom = response.Content;
                 throw new ExceptionWithConfigData("Invalid cookie header", (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
-
+            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            await FollowIfRedirect(results);
             try
             {
-                CQ dom = results;
+                CQ dom = results.Content;
                 var rows = dom["table.torrenttable > tbody > tr.browse_color"];
                 foreach (var row in rows)
                 {
@@ -128,15 +102,10 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
 
-            return releases.ToArray();
-        }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
+            return releases;
         }
     }
 }

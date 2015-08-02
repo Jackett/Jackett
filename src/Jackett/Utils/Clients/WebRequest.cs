@@ -14,6 +14,13 @@ namespace Jackett.Utils.Clients
             Type = RequestType.GET;
         }
 
+        public WebRequest(string url)
+        {
+            PostData = new Dictionary<string, string>();
+            Type = RequestType.GET;
+            Url = url;
+        }
+
         public string Url { get; set; }
         public Dictionary<string, string> PostData { get; set; }
         public string Cookies { get; set; }

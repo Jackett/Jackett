@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -18,185 +19,119 @@ namespace Jackett.Indexers
 {
     public class HDTorrents : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        private static string LoginUrl = "";
+        private string SearchUrl { get { return SiteLink + "torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page=0"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public HDTorrents(IIndexerManagerService i, Logger l)
+        public HDTorrents(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-                link: new Uri("http://hdts.ru"),// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+                link: "http://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: w,
                 logger: l)
         {
-            SearchUrl = SiteLink + "torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page={1}";
-            LoginUrl = SiteLink + "login.php";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
-        }
-
-        HttpRequestMessage CreateHttpRequest(string url)
-        {
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = new Uri(url);
-            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            return message;
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
-
-            var startMessage = CreateHttpRequest(LoginUrl);
-            var results = await (await client.SendAsync(startMessage)).Content.ReadAsStringAsync();
-
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
-				{ "uid", config.Username.Value },
-				{ "pwd", config.Password.Value }
-			};
+                { "uid", incomingConfig.Username.Value },
+                { "pwd", incomingConfig.Password.Value }
+            };
 
-            var content = new FormUrlEncodedContent(pairs);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
-            var loginRequest = CreateHttpRequest(LoginUrl);
-            loginRequest.Method = HttpMethod.Post;
-            loginRequest.Content = content;
-            loginRequest.Headers.Referrer = new Uri("https://hd-torrents.org/torrents.php");
-
-            var response = await client.SendAsync(loginRequest);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("If your browser doesn't have javascript enabled"))
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("If your browser doesn't have javascript enabled"), () =>
             {
                 var errorMessage = "Couldn't login";
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-        }
-
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, Uri baseUrl)
-        {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-            List<string> searchurls = new List<string>();
-
+            var releases = new List<ReleaseInfo>();
+            var searchurls = new List<string>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            for (int page = 0; page < MAXPAGES; page++)
+            var searchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            try
             {
-                searchurls.Add(string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()), page));
-            }
+                CQ dom = results.Content;
+                ReleaseInfo release;
 
-            foreach (string SearchUrl in searchurls)
-            {
-                var results = await client.GetStringAsync(SearchUrl);
-                try
+                int rowCount = 0;
+                var rows = dom[".mainblockcontenttt > tbody > tr"];
+                foreach (var row in rows)
                 {
-                    CQ dom = results;
-                    ReleaseInfo release;
-
-                    int rowCount = 0;
-                    var rows = dom[".mainblockcontenttt > tbody > tr"];
-                    foreach (var row in rows)
+                    CQ qRow = row.Cq();
+                    if (rowCount < 2 || qRow.Children().Count() != 12) //skip 2 rows because there's an empty row & a title/sort row
                     {
-                        CQ qRow = row.Cq();
-                        if (rowCount < 2 || qRow.Children().Count() != 12) //skip 2 rows because there's an empty row & a title/sort row
-                        {
-                            rowCount++;
-                            continue;
-                        }
-
-                        release = new ReleaseInfo();
-
-                        release.Title = qRow.Find("td.mainblockcontent b a").Text();
-                        release.Description = release.Title;
-
-                        if (0 != qRow.Find("td.mainblockcontent u").Length)
-                        {
-                            var imdbStr = qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", "");
-                            long imdb;
-                            if (ParseUtil.TryCoerceLong(imdbStr, out imdb))
-                            {
-                                release.Imdb = imdb;
-                            }
-                        }
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
-
-
-
-                        int seeders, peers;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
-                        {
-                            release.Seeders = seeders;
-                            if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText, out peers))
-                            {
-                                release.Peers = peers + release.Seeders;
-                            }
-                        }
-
-                        string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
-                        release.Size = ReleaseInfo.GetBytes(fullSize);
-
-                        release.Guid = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
-                        release.Link = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
-
-                        string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
-                        string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
-                        release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
-
-                        releases.Add(release);
+                        rowCount++;
+                        continue;
                     }
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(results, ex);
+
+                    release = new ReleaseInfo();
+
+                    release.Title = qRow.Find("td.mainblockcontent b a").Text();
+                    release.Description = release.Title;
+
+                    if (0 != qRow.Find("td.mainblockcontent u").Length)
+                    {
+                        var imdbStr = qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", "");
+                        long imdb;
+                        if (ParseUtil.TryCoerceLong(imdbStr, out imdb))
+                        {
+                            release.Imdb = imdb;
+                        }
+                    }
+
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+
+
+
+                    int seeders, peers;
+                    if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
+                    {
+                        release.Seeders = seeders;
+                        if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText, out peers))
+                        {
+                            release.Peers = peers + release.Seeders;
+                        }
+                    }
+
+                    string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
+                    release.Size = ReleaseInfo.GetBytes(fullSize);
+
+                    release.Guid = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
+                    release.Link = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
+
+                    string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
+                    string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
+                    release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
+
+                    releases.Add(release);
                 }
             }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
+            }
 
-            return releases.ToArray();
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, SiteLink);
-        }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
+            return releases;
         }
     }
 }

@@ -31,5 +31,10 @@ namespace JackettTest
         {
             return Task.FromResult<WebClientStringResult>(stringCallbacks.Where(r => r.Key.Equals(request)).First().Value.Invoke(request));
         }
+
+        public void Init()
+        {
+          
+        }
     }
 }
