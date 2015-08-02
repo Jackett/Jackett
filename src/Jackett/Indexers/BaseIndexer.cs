@@ -195,8 +195,8 @@ namespace Jackett.Indexers
                 {
                     logger.Error(string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
                     lastException = e;
-                    await Task.Delay(500);
                 }
+                await Task.Delay(500);
             }
 
             throw lastException;
@@ -230,8 +230,8 @@ namespace Jackett.Indexers
                 {
                     logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
                     lastException= e;
-                    await Task.Delay(500);
                 }
+                await Task.Delay(500);
             }
 
             throw lastException;
@@ -276,8 +276,8 @@ namespace Jackett.Indexers
                 {
                     logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
                     lastException = e;
-                    await Task.Delay(500);
                 }
+                await Task.Delay(500);
             }
 
             throw lastException;
