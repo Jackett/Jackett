@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -12,43 +13,29 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using System.Xml;
+using System.Linq;
 
 namespace Jackett.Indexers
 {
     public class Torrentz : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        string BaseUrl;
+        private string SearchUrl { get { return SiteLink + "feed_verifiedP?f={0}"; } }
+        private string BaseUrl;
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public Torrentz(IIndexerManagerService i, Logger l)
+        public Torrentz(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "Torrentz",
                 description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
-                link: new Uri("https://torrentz.eu"),
+                link: "https://torrentz.eu/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-
-            SearchUrl = SiteLink + "feed_verifiedP?f={0}";
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            return Task.FromResult<ConfigurationData>(config);
-
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -57,46 +44,29 @@ namespace Jackett.Indexers
             config.LoadValuesFromJson(configJson);
 
             var formattedUrl = config.GetFormattedHostUrl();
-            var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Length == 0)
+            IEnumerable<ReleaseInfo> releases = await PerformQuery(new TorznabQuery(), formattedUrl);
+            if (releases.Count() == 0)
                 throw new Exception("Could not find releases from this URL");
 
             BaseUrl = formattedUrl;
-
             var configSaveData = new JObject();
             configSaveData["base_url"] = BaseUrl;
             SaveConfig(configSaveData);
             IsConfigured = true;
-
         }
 
-        private WebClient getWebClient()
+        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
         {
-            WebClient wc = new WebClient();
-            WebHeaderCollection headers = new WebHeaderCollection();
-            headers.Add("User-Agent", BrowserUtil.ChromeUserAgent);
-            wc.Headers = headers;
-            return wc;
-        }
-
-        async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query, string baseUrl)
-        {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
-
-            XmlDocument xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument();
             string xml = string.Empty;
-            WebClient wc = getWebClient();
+            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
             try
             {
-                using (wc)
-                {
-                    xml = await wc.DownloadStringTaskAsync(new Uri(episodeSearchUrl));
-                    xmlDoc.LoadXml(xml);
-                }
+                xmlDoc.LoadXml(result.Content);
 
                 ReleaseInfo release;
                 TorrentzHelper td;
@@ -112,7 +82,9 @@ namespace Jackett.Indexers
                     release.Title = serie_title;
 
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-                    release.Category = node.SelectSingleNode("category").InnerText;
+                    int category = 0;
+                    int.TryParse(node.SelectSingleNode("category").InnerText, out category);
+                    release.Category = category;
                     release.Guid = new Uri(node.SelectSingleNode("guid").InnerText);
                     release.PublishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
 
@@ -131,22 +103,22 @@ namespace Jackett.Indexers
                 OnParseError(xml, ex);
             }
 
-            return releases.ToArray();
+            return releases;
         }
 
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             BaseUrl = (string)jsonConfig["base_url"];
             IsConfigured = true;
         }
 
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return await PerformQuery(query, BaseUrl);
         }
 
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             throw new NotImplementedException();
         }
@@ -206,7 +178,7 @@ namespace Jackett.Indexers
                 switch (counter)
                 {
                     case 0:
-                        this.Size = ReleaseInfo.BytesFromMB(ParseUtil.CoerceLong(val.Substring(0, val.IndexOf(" ") - 1)));
+                        this.Size = ReleaseInfo.GetBytes(val); 
                         break;
                     case 1:
                         this.Seeders = ParseUtil.CoerceInt(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);

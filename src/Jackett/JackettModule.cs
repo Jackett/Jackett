@@ -8,6 +8,8 @@ using Autofac.Integration.WebApi;
 using Jackett.Indexers;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using AutoMapper;
+using Jackett.Models;
 
 namespace Jackett
 {
@@ -20,18 +22,29 @@ namespace Jackett
             builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
 
-            // Register the best web client for the platform or exec curl as a safe option
-            if (Startup.CurlSafe)
+            // Register the best web client for the platform or the override
+            switch (Startup.ClientOverride)
             {
-                builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
-            }
-            else if(System.Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
-            }
-            else
-            {
-                builder.RegisterType<WindowsWebClient>().As<IWebClient>();
+                case "httpclient":
+                    builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                    break;
+                case "safecurl":
+                    builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
+                    break;
+                case "libcurl":
+                    builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                    break;
+                case "automatic":
+                    default:
+                    if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+                    {
+                        builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                    }
+                    else
+                    {
+                        builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                    }
+                    break;
             }
 
             // Register indexers
@@ -41,6 +54,27 @@ namespace Jackett
             {
                 builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }
+
+            Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
+            {
+                str.Content = Encoding.UTF8.GetString(be.Content);
+            });
+
+            Mapper.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
+            {
+                if (!string.IsNullOrEmpty(str.Content))
+                {
+                    be.Content = Encoding.UTF8.GetBytes(str.Content);
+                }
+            });
+
+            Mapper.CreateMap<WebClientStringResult, WebClientStringResult>();
+            Mapper.CreateMap<WebClientByteResult, WebClientByteResult>();
+
+            Mapper.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
+            {
+                t.CategoryDesc = TorznabCatType.GetCatDesc(r.Category);
+            });
         }
     }
 }

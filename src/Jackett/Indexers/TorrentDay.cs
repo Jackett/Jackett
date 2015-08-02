@@ -2,6 +2,7 @@
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -18,49 +19,24 @@ namespace Jackett.Indexers
 {
     public class TorrentDay : BaseIndexer, IIndexer
     {
-        private readonly string StartPageUrl = "";
-        private readonly string LoginUrl = "";
-        private readonly string SearchUrl = "";
+        private string StartPageUrl { get { return SiteLink + "login.php"; } }
+        private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1"; } }
 
-        CookieContainer cookies;
-        HttpClientHandler handler;
-        HttpClient client;
-
-        public TorrentDay(IIndexerManagerService i, Logger l)
+        public TorrentDay(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "TorrentDay",
                 description: "TorrentDay",
-                link: new Uri("https://torrentday.eu"),
+                link: "https://torrentday.eu/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            StartPageUrl = SiteLink + "login.php";
-            LoginUrl = SiteLink + "tak3login.php";
-            SearchUrl = SiteLink + "browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1";
-
-            cookies = new CookieContainer();
-            handler = new HttpClientHandler
-            {
-                CookieContainer = cookies,
-                AllowAutoRedirect = true,
-                UseCookies = true,
-            };
-            client = new HttpClient(handler);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
-        }
-
-        HttpRequestMessage CreateHttpRequest(string uri)
-        {
-            var message = new HttpRequestMessage();
-            message.Method = HttpMethod.Get;
-            message.RequestUri = new Uri(uri);
-            message.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            return message;
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -68,56 +44,35 @@ namespace Jackett.Indexers
             var config = new ConfigurationDataBasicLogin();
             config.LoadValuesFromJson(configJson);
 
-            var startMessage = CreateHttpRequest(StartPageUrl);
-            var results = await (await client.SendAsync(startMessage)).Content.ReadAsStringAsync();
+            var startMessage = await RequestStringWithCookies(StartPageUrl, string.Empty);
 
 
             var pairs = new Dictionary<string, string> {
 				{ "username", config.Username.Value },
 				{ "password", config.Password.Value }
 			};
-            var content = new FormUrlEncodedContent(pairs);
-            var loginRequest = CreateHttpRequest(LoginUrl);
-            loginRequest.Method = HttpMethod.Post;
-            loginRequest.Content = content;
-            loginRequest.Headers.Referrer = new Uri(StartPageUrl);
 
-            var response = await client.SendAsync(loginRequest);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            if (!responseContent.Contains("logout.php"))
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SiteLink, LoginUrl);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
-                CQ dom = responseContent;
+                CQ dom = result.Content;
                 var messageEl = dom["#login"];
                 messageEl.Children("form").Remove();
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                cookies.DumpToJson(SiteLink, configSaveData);
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            cookies.FillFromJson(SiteLink, jsonConfig, logger);
-            IsConfigured = true;
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
-        {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
+            var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await client.GetStringAsync(episodeSearchUrl);
+            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+
             try
             {
-                CQ dom = results;
+                CQ dom = results.Content;
                 var rows = dom["#torrentTable > tbody > tr.browse"];
                 foreach (var row in rows)
                 {
@@ -146,14 +101,9 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(results.Content, ex);
             }
-            return releases.ToArray();
-        }
-
-        public Task<byte[]> Download(Uri link)
-        {
-            return client.GetByteArrayAsync(link);
+            return releases;
         }
     }
 }

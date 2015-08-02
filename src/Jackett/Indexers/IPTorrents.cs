@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -19,111 +20,118 @@ namespace Jackett.Indexers
 {
     public class IPTorrents : BaseIndexer, IIndexer
     {
-        private readonly string SearchUrl = "";
-        private string cookieHeader = "";
-
-        private IWebClient webclient;
+        private string BrowseUrl { get { return SiteLink + "t"; } }
 
         public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
-                link: new Uri("https://iptorrents.com/"),
+                link: "https://iptorrents.com/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
+                client: wc,
                 logger: l)
         {
-            TorznabCaps.Categories.Add(new TorznabCategory { ID = "5070", Name = "TV/Anime" });
-            SearchUrl = SiteLink + "t?26=&55=&78=&23=&24=&25=&66=&82=&65=&83=&79=&22=&5=&4=&60=&q="; 
-            webclient = wc;
+            AddCategoryMapping(72, TorznabCatType.Movies);
+            AddCategoryMapping(77, TorznabCatType.MoviesSD);
+            AddCategoryMapping(89, TorznabCatType.MoviesSD);
+            AddCategoryMapping(90, TorznabCatType.MoviesSD);
+            AddCategoryMapping(96, TorznabCatType.MoviesSD);
+            AddCategoryMapping(6, TorznabCatType.MoviesSD);
+            AddCategoryMapping(48, TorznabCatType.MoviesHD);
+            AddCategoryMapping(54, TorznabCatType.Movies);
+            AddCategoryMapping(62, TorznabCatType.MoviesSD);
+            AddCategoryMapping(38, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(68, TorznabCatType.Movies);
+            AddCategoryMapping(20, TorznabCatType.MoviesHD);
+            AddCategoryMapping(7, TorznabCatType.MoviesSD);
+
+            AddCategoryMapping(73, TorznabCatType.TV);
+            AddCategoryMapping(26, TorznabCatType.TVSD);
+            AddCategoryMapping(55, TorznabCatType.TVSD);
+            AddCategoryMapping(78, TorznabCatType.TVSD);
+            AddCategoryMapping(23, TorznabCatType.TVHD);
+            AddCategoryMapping(24, TorznabCatType.TVSD);
+            AddCategoryMapping(25, TorznabCatType.TVSD);
+            AddCategoryMapping(66, TorznabCatType.TVSD);
+            AddCategoryMapping(82, TorznabCatType.TVSD);
+            AddCategoryMapping(65, TorznabCatType.TV);
+            AddCategoryMapping(83, TorznabCatType.TV);
+            AddCategoryMapping(79, TorznabCatType.TVSD);
+            AddCategoryMapping(22, TorznabCatType.TVHD);
+            AddCategoryMapping(79, TorznabCatType.TVSD);
+            AddCategoryMapping(4, TorznabCatType.TVSD);
+            AddCategoryMapping(5, TorznabCatType.TVHD);
+
+            AddCategoryMapping(75, TorznabCatType.Audio);
+            AddCategoryMapping(73, TorznabCatType.Audio);
+            AddCategoryMapping(80, TorznabCatType.AudioLossless);
+            AddCategoryMapping(93, TorznabCatType.Audio);
+
+            AddCategoryMapping(60, TorznabCatType.Anime);
+            AddCategoryMapping(1, TorznabCatType.Apps);
+            AddCategoryMapping(64, TorznabCatType.AudioBooks);
+            AddCategoryMapping(35, TorznabCatType.Books);
+            AddCategoryMapping(94, TorznabCatType.Comic);
         }
 
         public Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>((ConfigurationData)config);
+            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
-
+            var incomingConfig = new ConfigurationDataBasicLogin();
+            incomingConfig.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value }
-			};
-
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+                { "username", incomingConfig.Username.Value },
+                { "password", incomingConfig.Password.Value }
+            };
+            var request = new Utils.Clients.WebRequest()
             {
-                Url = SiteLink.ToString(),
-                PostData = pairs,
-                Referer = SiteLink.ToString(),
-                Type = RequestType.POST
-            });
+                Url = SiteLink,
+                Type = RequestType.POST,
+                Referer = SiteLink,
+                PostData = pairs
+            };
+            var response = await webclient.GetString(request);
+            var firstCallCookies = response.Cookies;
+            // Redirect to ? then to /t
+            await FollowIfRedirect(response, request.Url, null, firstCallCookies);
 
-            cookieHeader = response.Cookies;
-            if (response.Status == HttpStatusCode.Found)
+            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/my.php"), () =>
             {
-                response = await webclient.GetString(new Utils.Clients.WebRequest()
-                {
-                    Url = SearchUrl,
-                    Referer = SiteLink.ToString(),
-                    Cookies = response.Cookies
-                });
-            }
-
-            var responseContent = response.Content;
-
-            if (!responseContent.Contains("/my.php"))
-            {
-                CQ dom = responseContent;
+                CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
-            }
-            else
-            {
-                var configSaveData = new JObject();
-                configSaveData["cookie_header"] = cookieHeader;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+            });
         }
 
-        public void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            cookieHeader = (string)jsonConfig["cookie_header"];
-            IsConfigured = true;
-        }
-
-        public async Task<ReleaseInfo[]> PerformQuery(TorznabQuery query)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
+            var searchUrl = BrowseUrl;
+            var trackerCats = MapTorznabCapsToTrackers(query);
+            var queryCollection = new NameValueCollection();
 
-            WebClientStringResult response = null;
-
-            // Their web server is fairly flakey - try up to three times.
-            for (int i = 0; i < 3; i++)
+            if (!string.IsNullOrWhiteSpace(searchString))
             {
-                try
-                {
-                    response = await webclient.GetString(new Utils.Clients.WebRequest()
-                    {
-                        Url = episodeSearchUrl,
-                        Referer = SiteLink.ToString(),
-                        Cookies = cookieHeader
-                    });
-
-                    break;
-                }
-                catch (Exception e)
-                {
-                    logger.Error("On attempt " + (i + 1) + " checking for results from IPTorrents: " + e.Message);
-                }
+                queryCollection.Add("q", searchString);
             }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add(cat, string.Empty);
+            }
+
+            if (queryCollection.Count > 0)
+            {
+                searchUrl += "?" + queryCollection.GetQueryString();
+            }
+                       
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
 
             var results = response.Content;
             try
@@ -162,6 +170,9 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".t_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;
 
+                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(1);
+                    release.Category = MapTrackerCatToNewznab(cat);
+
                     releases.Add(release);
                 }
             }
@@ -170,18 +181,7 @@ namespace Jackett.Indexers
                 OnParseError(results, ex);
             }
 
-            return releases.ToArray();
-        }
-
-        public async Task<byte[]> Download(Uri link)
-        {
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = link.ToString(),
-                Cookies = cookieHeader
-            });
-
-            return response.Content;
+            return releases;
         }
     }
 }

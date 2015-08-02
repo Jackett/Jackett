@@ -15,14 +15,14 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
-    public class APIController : ApiController
+    public class TorznabController : ApiController
     {
         private IIndexerManagerService indexerService;
         private Logger logger;
         private IServerService serverService;
         private ICacheService cacheService;
 
-        public APIController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c)
+        public TorznabController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c)
         {
             indexerService = i;
             logger = l;
@@ -69,14 +69,16 @@ namespace Jackett.Controllers
                 cacheService.CacheRssResults(indexer.DisplayName, releases);
             }
 
+            releases = indexer.FilterResults(torznabQuery, releases);
+
             // Log info
             if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
-                logger.Info(string.Format("Found {0} releases from {1}", releases.Length, indexer.DisplayName));
+                logger.Info(string.Format("Found {0} releases from {1}", releases.Count(), indexer.DisplayName));
             }
             else
             {
-                logger.Info(string.Format("Found {0} releases from {1} for: {2}", releases.Length, indexer.DisplayName, torznabQuery.SanitizedSearchTerm));
+                logger.Info(string.Format("Found {0} releases from {1} for: {2} {3}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString()));
             }
 
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
@@ -85,20 +87,20 @@ namespace Jackett.Controllers
             {
                 Title = indexer.DisplayName,
                 Description = indexer.DisplayDescription,
-                Link = indexer.SiteLink,
+                Link = new Uri(indexer.SiteLink),
                 ImageUrl = new Uri(severUrl + "logos/" + indexer.ID + ".png"),
                 ImageTitle = indexer.DisplayName,
-                ImageLink = indexer.SiteLink,
+                ImageLink = new Uri(indexer.SiteLink),
                 ImageDescription = indexer.DisplayName
             });
 
             // add Jackett proxy to download links...
             foreach (var release in releases)
             {
-                if (release.Link == null || release.Link.Scheme == "magnet")
+                if (release.Link == null || (release.Link.IsAbsoluteUri && release.Link.Scheme == "magnet"))
                     continue;
                 var originalLink = release.Link;
-                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/download.torrent";
+                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
                 var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.ID, encodedLink);
                 release.Link = new Uri(proxyLink);
             }

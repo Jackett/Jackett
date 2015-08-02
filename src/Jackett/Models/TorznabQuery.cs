@@ -12,7 +12,7 @@ namespace Jackett.Models
     public class TorznabQuery
     {
         public string QueryType { get; set; }
-        public string[] Categories { get; set; }
+        public int[] Categories { get; set; }
         public int Extended { get; set; }
         public string ApiKey { get; set; }
         public int Limit { get; set; }
@@ -22,7 +22,30 @@ namespace Jackett.Models
         public int Season { get; set; }
         public string Episode { get; set; }
         public string SearchTerm { get; set; }
-        public string SanitizedSearchTerm { get; set; }
+
+        public string SanitizedSearchTerm
+        {
+            get
+            {
+                if (SearchTerm == null)
+                    return string.Empty;
+
+                char[] arr = SearchTerm.ToCharArray();
+
+                arr = Array.FindAll<char>(arr, c => (char.IsLetterOrDigit(c)
+                                                  || char.IsWhiteSpace(c)
+                                                  || c == '-'
+                                                  || c == '.'
+                                                  ));
+                var safetitle = new string(arr);
+                return safetitle;
+            }
+        }
+
+        public TorznabQuery()
+        {
+            Categories = new int[0];
+        }
 
         public string GetEpisodeSearchString()
         {
@@ -41,19 +64,6 @@ namespace Jackett.Models
             return episodeString;
         }
 
-        static string SanitizeSearchTerm(string title)
-        {
-            char[] arr = title.ToCharArray();
-
-            arr = Array.FindAll<char>(arr, c => (char.IsLetterOrDigit(c)
-                                              || char.IsWhiteSpace(c)
-                                              || c == '-'
-                                              || c == '.'
-                                              ));
-            title = new string(arr);
-            return title;
-        }
-
         public static TorznabQuery FromHttpQuery(NameValueCollection query)
         {
 
@@ -64,17 +74,18 @@ namespace Jackett.Models
             if (query["q"] == null)
             {
                 q.SearchTerm = string.Empty;
-                q.SanitizedSearchTerm = string.Empty;
             }
             else
             {
                 q.SearchTerm = query["q"];
-                q.SanitizedSearchTerm = SanitizeSearchTerm(q.SearchTerm);
             }
 
             if (query["cat"] != null)
             {
-                q.Categories = query["cat"].Split(',');
+                q.Categories = query["cat"].Split(',').Select(s => int.Parse(s)).ToArray();
+            }else
+            {
+                q.Categories = new int[0];
             }
 
             if (query["extended"] != null)

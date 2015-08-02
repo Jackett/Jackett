@@ -194,3 +194,5 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+/Build.mono
+/Build.windows

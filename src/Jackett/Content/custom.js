@@ -136,7 +136,8 @@ function displayIndexers(items) {
     var unconfiguredIndexerTemplate = Handlebars.compile($("#templates > .unconfigured-indexer")[0].outerHTML);
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        item.torznab_host = resolveUrl("/api/" + item.id);
+        item.torznab_host = resolveUrl("/torznab/" + item.id);
+        item.potato_host = resolveUrl("/potato/" + item.id);  
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
@@ -211,7 +212,7 @@ function displayIndexerSetup(id) {
             return;
         }
 
-        populateSetupForm(id, data.name, data.config);
+        populateSetupForm(id, data.name, data.config, data.caps);
 
     }).fail(function () {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -236,17 +237,12 @@ function populateConfigItems(configForm, config) {
     }
 }
 
-function newConfigModal(title, config) {
-    //config-setup-modal
-    var configTemplate = Handlebars.compile($("#templates > .config-setup-modal")[0].outerHTML);
-    var configForm = $(configTemplate({ title: title }));
-
+function newConfigModal(title, config, caps) {
+    var configTemplate = Handlebars.compile($("#jackett-config-setup-modal").html());
+    var configForm = $(configTemplate({ title: title, caps: caps }));
     $("#modals").append(configForm);
-
     populateConfigItems(configForm, config);
-
     return configForm;
-    //modal.remove();
 }
 
 function getConfigModalJson(configForm) {
@@ -256,6 +252,9 @@ function getConfigModalJson(configForm) {
         var type = $el.data("type");
         var id = $el.data("id");
         switch (type) {
+            case "hiddendata":
+                configJson[id] = $el.find(".setup-item-hiddendata input").val();
+                break;
             case "inputstring":
                 configJson[id] = $el.find(".setup-item-inputstring input").val();
                 break;
@@ -267,8 +266,8 @@ function getConfigModalJson(configForm) {
     return configJson;
 }
 
-function populateSetupForm(indexerId, name, config) {
-    var configForm = newConfigModal(name, config);
+function populateSetupForm(indexerId, name, config, caps) {
+    var configForm = newConfigModal(name, config, caps);
     var $goButton = configForm.find(".setup-indexer-go");
     $goButton.click(function () {
         var data = { indexer: indexerId, name: name };

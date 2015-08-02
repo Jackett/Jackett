@@ -49,7 +49,7 @@
 }
 
 .indexer {
-    height: 180px;
+    height: 235px;
 }
 
 .add-indexer {
@@ -112,6 +112,10 @@
 .setup-item-inputbool input {
     max-width: 100px;
     height: 20px;
+}
+
+[data-type=hiddendata]{
+    display: none;
 }
 
 .spinner {
@@ -210,4 +214,13 @@ hr {
 
 .modal-fillwidth {
     width: 1200px;
+}
+
+.indexer-caps {
+   padding: 0px 15px 15px 15px;
+   border-top: 1px solid #e5e5e5;
+}
+
+.indexer-caps table {
+    border-bottom:   1px solid #ddd;
 }

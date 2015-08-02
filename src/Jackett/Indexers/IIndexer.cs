@@ -11,11 +11,11 @@ namespace Jackett.Indexers
 {
     public interface IIndexer
     {
+        string SiteLink { get; }
+
         string DisplayName { get; }
         string DisplayDescription { get; }
         string ID { get; }
-
-        Uri SiteLink { get; }
 
         TorznabCapabilities TorznabCaps { get; }
 
@@ -31,7 +31,9 @@ namespace Jackett.Indexers
         // Called on startup when initializing indexers from saved configuration
         void LoadFromSavedConfiguration(JToken jsonConfig);
 
-        Task<ReleaseInfo[]> PerformQuery(TorznabQuery query);
+        Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+
+        IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input);
 
         Task<byte[]> Download(Uri link);
     }

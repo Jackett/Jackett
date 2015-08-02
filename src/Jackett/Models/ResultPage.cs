@@ -63,8 +63,6 @@ namespace Jackett.Models
                             new XElement("link", ChannelInfo.ImageLink.ToString()),
                             new XElement("description", ChannelInfo.ImageDescription)
                         ),
-
-
                         from r in Releases
                         select new XElement("item",
                             new XElement("title", r.Title),
@@ -74,7 +72,7 @@ namespace Jackett.Models
                             r.Size == null ? null : new XElement("size", r.Size),
                             new XElement("description", r.Description),
                             new XElement("link", r.Link ?? r.MagnetUri),
-                            r.Category == null ? null : new XElement("category", r.Category),
+                            r.Category == 0 ? null : new XElement("category", r.Category),
                             new XElement(
                                 "enclosure",
                                 new XAttribute("url", r.Link ?? r.MagnetUri),

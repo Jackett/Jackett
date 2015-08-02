@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -36,9 +37,12 @@ namespace JackettConsole
                 {
                     /*  ======     Options    =====  */
 
+                    // SSL Fix
+                    Startup.DoSSLFix = options.SSLFix;
+
                     // Use curl
-                    if (options.UseCurlExec)
-                        Startup.CurlSafe = true;
+                    if (options.Client!=null)
+                        Startup.ClientOverride = options.Client.ToLowerInvariant();
 
                     // Logging
                     if (options.Logging)
@@ -50,15 +54,16 @@ namespace JackettConsole
 
                     // Log after the fact as using the logger will cause the options above to be used
 
-                    if (options.UseCurlExec)
-                        Engine.Logger.Info("Safe curl enabled.");
-
                     if (options.Logging)
                         Engine.Logger.Info("Logging enabled.");
 
                     if (options.Tracing)
                         Engine.Logger.Info("Tracing enabled.");
 
+                    if (options.SSLFix == true)
+                        Engine.Logger.Info("SSL ECC workaround enabled.");
+                    else if (options.SSLFix == false)
+                        Engine.Logger.Info("SSL ECC workaround has been disabled.");
                     /*  ======     Actions    =====  */
 
                     // Install service
@@ -173,7 +178,6 @@ namespace JackettConsole
 
                 Engine.Server.Initalize();
                 Engine.Server.Start();
-                Engine.Logger.Info("Running in console mode!");
                 Engine.RunTime.Spin();
                 Engine.Logger.Info("Server thread exit");
             }

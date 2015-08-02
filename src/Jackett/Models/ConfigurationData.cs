@@ -19,6 +19,16 @@ namespace Jackett.Models
             HiddenData
         }
 
+        public ConfigurationData()
+        {
+
+        }
+
+        public ConfigurationData(JToken json)
+        {
+            LoadValuesFromJson(json);
+        }
+
         public void LoadValuesFromJson(JToken json)
         {
             // todo: match up ids with items and fill values
@@ -32,6 +42,9 @@ namespace Jackett.Models
                         break;
                     case ItemType.InputBool:
                         ((BoolItem)item).Value = (bool)dictionary[item.ID];
+                        break;
+                    case ItemType.HiddenData:
+                        ((HiddenItem)item).Value = (string)dictionary[item.ID];
                         break;
                 }
             }
@@ -72,6 +85,15 @@ namespace Jackett.Models
             public ItemType ItemType { get; set; }
             public string Name { get; set; }
             public string ID { get { return Name.Replace(" ", "").ToLower(); } }
+        }
+
+        public class HiddenItem : StringItem
+        {
+            public HiddenItem(string value)
+            {
+                Value = value;
+                ItemType = ItemType.HiddenData;
+            }
         }
 
         public class DisplayItem : StringItem
