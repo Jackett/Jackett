@@ -18,9 +18,10 @@ namespace Jackett.Indexers
 {
     public class Strike : BaseIndexer, IIndexer
     {
-        private string DownloadUrl { get { return baseUrl + "torrents/api/download/{0}.torrent"; } }
-        private string SearchUrl { get { return baseUrl + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
+        private string DownloadUrl { get { return baseUri + "torrents/api/download/{0}.torrent"; } }
+        private string SearchUrl { get { return baseUri + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
         private string baseUrl = null;
+        private Uri baseUri { get { return new Uri(baseUrl); } }
 
         public Strike(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "Strike",
@@ -63,7 +64,7 @@ namespace Jackett.Indexers
             var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "2015" : query.SanitizedSearchTerm;
 
             var searchString = searchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl =string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             try
             {
