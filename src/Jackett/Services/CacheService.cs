@@ -17,7 +17,7 @@ namespace Jackett.Services
     public class CacheService : ICacheService
     {
         private readonly List<TrackerCache> cache = new List<TrackerCache>();
-        private readonly int MAX_RESULTS_PER_TRACKER = 100;
+        private readonly int MAX_RESULTS_PER_TRACKER = 250;
         private readonly TimeSpan AGE_LIMIT = new TimeSpan(2, 0, 0, 0);
 
         public void CacheRssResults(string trackerId, IEnumerable<ReleaseInfo> releases)

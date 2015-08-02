@@ -156,7 +156,7 @@ namespace JackettTest.Indexers
             var indexer = TestUtil.Container.ResolveNamed<IIndexer>(BakaBT.GetIndexerID(typeof(BakaBT))) as BakaBT;
 
             indexer.LoadFromSavedConfiguration(JObject.Parse("{\"cookies\":\"bbtid=c\"}"));
-            var results = await indexer.PerformQuery(new Jackett.Models.TorznabQuery() { SanitizedSearchTerm = "Series S1", Season = 1 });
+            var results = await indexer.PerformQuery(new Jackett.Models.TorznabQuery() { SearchTerm = "Series S1", Season = 1 });
 
             results.Count().Should().Be(44);
             results.First().Title.Should().Be("Golden Time Season 1 (BD 720p) [FFF]");
