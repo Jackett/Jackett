@@ -1,6 +1,6 @@
 ## Jackett
 
-This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) API server on your machine that any Torznab enabled software such as [Sonarr](https://sonarr.tv) can consume.  
+This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/master/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) API server on your machine.  Torznab enables software such as [Sonarr](https://sonarr.tv) to access data from your favorite indexers in a similar fashion to rss but with added features such as searching.  TorrentPotato is an interface accessible to [CouchPotato](https://couchpota.to/).
 
 
 Jackett works as a proxy server: it translates Torznab queries into tracker-site-specific http queries, parses the html response into Torznab results, then sends results back to the requesting software which allows for getting recent uploads and performing searches.
@@ -27,6 +27,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [Freshon](https://freshon.tv/)
  * [HD-Space](https://hd-space.org/)
  * [HD-Torrents.org](https://hd-torrents.org/)
+ * [Immortalseed.me](http://immortalseed.me)
  * [IPTorrents](https://iptorrents.com/)
  * [MoreThan.tv](https://morethan.tv/)
  * [pretome](https://pretome.info)

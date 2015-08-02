@@ -136,7 +136,8 @@ function displayIndexers(items) {
     var unconfiguredIndexerTemplate = Handlebars.compile($("#templates > .unconfigured-indexer")[0].outerHTML);
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        item.torznab_host = resolveUrl("/api/" + item.id);
+        item.torznab_host = resolveUrl("/torznab/" + item.id);
+        item.potato_host = resolveUrl("/potato/" + item.id);  
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
