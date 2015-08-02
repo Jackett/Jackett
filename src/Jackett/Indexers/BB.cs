@@ -21,8 +21,9 @@ namespace Jackett.Indexers
     public class BB : BaseIndexer, IIndexer
     {
         private string BaseUrl {  get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?searchstr={0}&searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&filter_cat%5B10%5D=1"; } }
+        private Uri BaseUri { get { return new Uri(BaseUrl); } }
+        private string LoginUrl { get { return BaseUri + "login.php"; } }
+        private string SearchUrl { get { return BaseUri + "torrents.php?searchstr={0}&searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&filter_cat%5B10%5D=1"; } }
 
         public BB(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "bB",
