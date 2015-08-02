@@ -214,6 +214,13 @@
             <div class="indexer-host">
                 <b>Torznab Host:</b>
                 <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
+                <b>CouchPotato Host:</b>
+                {{#if potatoenabled}}
+               
+                <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
+                {{else}}
+                <input class="form-control" type="text" value="Not availible" placeholder="Torznab Host" readonly="">
+                {{/if}}
             </div>
         </div>
 

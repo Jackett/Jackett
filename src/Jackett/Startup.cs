@@ -76,13 +76,37 @@ namespace Jackett
             config.Routes.MapHttpRoute(
                 name: "apiDefault",
                 routeTemplate: "api/{indexerID}",
-                defaults: new { controller = "API", action = "Call" }
+                defaults: new { controller = "Torznab", action = "Call" }
             );
 
             config.Routes.MapHttpRoute(
                name: "api",
                routeTemplate: "api/{indexerID}/api",
-               defaults: new { controller = "API", action = "Call" }
+               defaults: new { controller = "Torznab", action = "Call" }
+           );
+
+            config.Routes.MapHttpRoute(
+               name: "torznabDefault",
+               routeTemplate: "torznab/{indexerID}",
+               defaults: new { controller = "Torznab", action = "Call" }
+           );
+
+            config.Routes.MapHttpRoute(
+               name: "torznab",
+               routeTemplate: "torznab/{indexerID}/api",
+               defaults: new { controller = "Torznab", action = "Call" }
+           );
+
+            config.Routes.MapHttpRoute(
+              name: "potatoDefault",
+              routeTemplate: "potato/{indexerID}",
+              defaults: new { controller = "Potato", action = "Call" }
+          );
+
+            config.Routes.MapHttpRoute(
+               name: "potato",
+               routeTemplate: "potato/{indexerID}/api",
+               defaults: new { controller = "Potato", action = "Call" }
            );
 
             config.Routes.MapHttpRoute(

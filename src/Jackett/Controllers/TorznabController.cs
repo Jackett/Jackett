@@ -15,14 +15,14 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
-    public class APIController : ApiController
+    public class TorznabController : ApiController
     {
         private IIndexerManagerService indexerService;
         private Logger logger;
         private IServerService serverService;
         private ICacheService cacheService;
 
-        public APIController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c)
+        public TorznabController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c)
         {
             indexerService = i;
             logger = l;
