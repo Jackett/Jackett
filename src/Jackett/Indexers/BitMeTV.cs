@@ -62,7 +62,7 @@ namespace Jackett.Indexers
 			};
 
             var response = await RequestLoginAndFollowRedirect(LoginPost, pairs, cookieHeader, true);
-            ConfigureIfOK(cookieHeader, response.Content.Contains("/logout.php"), async () =>
+            await ConfigureIfOK(cookieHeader, response.Content.Contains("/logout.php"), async () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["table tr > td.embedded > h2"].Last();

@@ -324,6 +324,19 @@ namespace Jackett.Indexers
             }
         }
 
+        protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
+        {
+            if (isLoggedin)
+            {
+                cookieHeader = cookies;
+                SaveCookieHeaderAndConfigure();
+            }
+            else
+            {
+                await onError();
+            }
+        }
+
         public virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
         {
             foreach(var result in results)
