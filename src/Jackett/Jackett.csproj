@@ -307,6 +307,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="CurlSharp.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\test.xml" />
   </ItemGroup>
