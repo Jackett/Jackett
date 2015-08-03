@@ -27,7 +27,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes Returning {0} => {1} bytes", result.Status, (result.Content==null?"<NULL>":result.Content.Length.ToString())));
+            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
 
@@ -35,20 +35,21 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content== null?"<NULL>": Encoding.UTF8.GetString(result.Content))));
+            logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
             return Mapper.Map<WebClientStringResult>(result);
         }
 
         public void Init()
         {
-            try {
+            try
+            {
                 Engine.Logger.Info("LibCurl init " + Curl.GlobalInit(CurlInitFlag.All).ToString());
                 CurlHelper.OnErrorMessage += (msg) =>
                  {
                      Engine.Logger.Error(msg);
                  };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Engine.Logger.Warn("Libcurl failed to initalize. Did you install it?");
                 Engine.Logger.Warn("Debian: apt-get install libcurl4-openssl-dev");
@@ -59,7 +60,7 @@ namespace Jackett.Utils.Clients
             var version = Curl.Version;
             Engine.Logger.Info("LibCurl version " + version);
 
-            if (!Startup.DoSSLFix.HasValue && version.IndexOf("NSS")>-1)
+            if (!Startup.DoSSLFix.HasValue && version.IndexOf("NSS") > -1)
             {
                 Engine.Logger.Info("NSS Detected SSL ECC workaround enabled.");
                 Startup.DoSSLFix = true;
@@ -75,9 +76,9 @@ namespace Jackett.Utils.Clients
             }
             else
             {
-                if (request.PostData != null && request.PostData.Count > 0)
+                if (request.PostData != null && request.PostData.Count() > 0)
                 {
-                    logger.Debug("UnixLibCurlWebClient: Posting " + new FormUrlEncodedContent(request.PostData).ReadAsStringAsync().Result);
+                    logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
                 response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer);

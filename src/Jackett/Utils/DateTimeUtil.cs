@@ -15,6 +15,14 @@ namespace Jackett.Utils
             return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
         }
 
+        public static double DateTimeToUnixTimestamp(DateTime dt)
+        {
+            var date = dt.ToUniversalTime();
+            var ticks = date.Ticks - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).Ticks;
+            var ts = ticks / TimeSpan.TicksPerSecond;
+            return ts;
+        }
+
         // ex: "2 hours 1 day"
         public static DateTime FromTimeAgo(string str)
         {

@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -23,6 +24,12 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public HDTorrents(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
@@ -30,24 +37,19 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
-                { "uid", incomingConfig.Username.Value },
-                { "pwd", incomingConfig.Password.Value }
+                { "uid", configData.Username.Value },
+                { "pwd", configData.Password.Value }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
@@ -55,7 +57,7 @@ namespace Jackett.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("If your browser doesn't have javascript enabled"), () =>
             {
                 var errorMessage = "Couldn't login";
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -22,6 +23,12 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?searchstr={0}&release_type=both&searchtags=&tags_type=0&order_by=s3&order_way=desc&torrent_preset=all&filter_cat%5B600%5D=1&filter_cat%5B620%5D=1&filter_cat%5B700%5D=1&filter_cat%5B981%5D=1&filter_cat%5B980%5D=1"; } }
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public TorrentShack(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "TorrentShack",
                 description: "TorrentShack",
@@ -29,26 +36,21 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 client: wc,
                 manager: i,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "keeplogged", "1" },
                 { "login", "Login" }
-			};
+            };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
@@ -57,7 +59,7 @@ namespace Jackett.Indexers
                 var messageEl = dom["#loginform"];
                 messageEl.Children("table").Remove();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

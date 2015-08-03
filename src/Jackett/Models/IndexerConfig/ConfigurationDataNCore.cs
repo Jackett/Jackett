@@ -7,16 +7,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Models
+namespace Jackett.Models.IndexerConfig
 {
-    public class ConfigurationDatanCore : ConfigurationData
+    public class ConfigurationDataNCore : ConfigurationData
     {
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }
         public BoolItem Hungarian { get; set; }
         public BoolItem English { get; set; }
 
-        public ConfigurationDatanCore()
+        public ConfigurationDataNCore()
         {
             Username = new StringItem { Name = "Username", Value = "" };
             Password = new StringItem { Name = "Password", Value = "" };
@@ -24,9 +24,9 @@ namespace Jackett.Models
             English = new BoolItem { Name = "English", Value = true };
         }
 
-        public ConfigurationDatanCore(JToken json)
+        public ConfigurationDataNCore(JToken json)
         {
-            ConfigurationDatanCore configData = new ConfigurationDatanCore();
+            ConfigurationDataNCore configData = new ConfigurationDataNCore();
 
             dynamic configArray = JsonConvert.DeserializeObject(json.ToString());
             foreach (var config in configArray)
@@ -50,11 +50,6 @@ namespace Jackett.Models
                         break;
                 }
             }
-        }
-
-        public override Item[] GetItems()
-        {
-            return new Item[] { Username, Password, Hungarian, English };
         }
 
         static string UppercaseFirst(string s)

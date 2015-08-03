@@ -13,48 +13,65 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class Strike : BaseIndexer, IIndexer
     {
-        private string DownloadUrl { get { return baseUri + "torrents/api/download/{0}.torrent"; } }
-        private string SearchUrl { get { return baseUri + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
-        private string baseUrl = null;
-        private Uri baseUri { get { return new Uri(baseUrl); } }
+        readonly static string defaultSiteLink = "https://getstrike.net/";
+
+        private Uri BaseUri
+        {
+            get { return new Uri(configData.Url.Value); }
+            set { configData.Url.Value = value.ToString(); }
+        }
+
+        private string SearchUrl { get { return BaseUri + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
+        private string DownloadUrl { get { return BaseUri + "torrents/api/download/{0}.torrent"; } }
+
+        new ConfigurationDataUrl configData
+        {
+            get { return (ConfigurationDataUrl)base.configData; }
+            set { base.configData = value; }
+        }
+
 
         public Strike(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "Strike",
                 description: "Torrent search engine",
-                link: "https://getstrike.net/",
+                link: defaultSiteLink,
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataUrl(defaultSiteLink))
         {
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
+        public async Task ApplyConfiguration(JToken configJson)
         {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
+            configData.LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
+
+            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
+            {
+                throw new Exception("Could not find releases from this URL");
+            });
         }
 
-        public Task ApplyConfiguration(JToken configJson)
-        {
-            var config = new ConfigurationDataUrl(SiteLink);
-            config.LoadValuesFromJson(configJson);
-            baseUrl = config.GetFormattedHostUrl();
-            var configSaveData = new JObject();
-            configSaveData["base_url"] = baseUrl;
-            SaveConfig(configSaveData);
-            IsConfigured = true;
-            return Task.FromResult(0);
-        }
-
+        // Override to load legacy config format
         public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            baseUrl = (string)jsonConfig["base_url"];
-            IsConfigured = !string.IsNullOrEmpty(baseUrl);
+            if (jsonConfig is JObject)
+            {
+                BaseUri = new Uri(jsonConfig.Value<string>("base_url"));
+                SaveConfig();
+                IsConfigured = true;
+                return;
+            }
+
+            base.LoadFromSavedConfiguration(jsonConfig);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

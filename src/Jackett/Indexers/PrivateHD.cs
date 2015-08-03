@@ -14,6 +14,7 @@ using System.Web;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using System.Text.RegularExpressions;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -22,6 +23,12 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "auth/login"; } }
         private string SearchUrl { get { return SiteLink + "torrents?in=1&type=2&search={0}"; } }
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public PrivateHD(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "PrivateHD",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
@@ -29,20 +36,20 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var token = new Regex("Avz.CSRF_TOKEN = '(.*?)';").Match(loginPage.Content).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
-                { "username_email", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value },
+                { "username_email", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "remember", "on" }
             };
 
@@ -52,13 +59,8 @@ namespace Jackett.Indexers
                 CQ dom = result.Content;
                 var messageEl = dom[".form-error"];
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

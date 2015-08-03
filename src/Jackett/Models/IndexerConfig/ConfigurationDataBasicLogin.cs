@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Models
+namespace Jackett.Models.IndexerConfig
 {
     public class ConfigurationDataBasicLogin : ConfigurationData
     {
@@ -18,9 +18,6 @@ namespace Jackett.Models
             Password = new StringItem { Name = "Password" };
         }
 
-        public override Item[] GetItems()
-        {
-            return new Item[] { Username, Password };
-        }
+
     }
 }

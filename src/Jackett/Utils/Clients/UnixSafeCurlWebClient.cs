@@ -61,9 +61,9 @@ namespace Jackett.Utils.Clients
                 args.AppendFormat("--referer \"{0}\" ", request.Referer);
             }
 
-            if (request.PostData != null && request.PostData.Count > 0)
+            if (request.PostData != null && request.PostData.Count() > 0)
             {
-                var postString = new FormUrlEncodedContent(request.PostData).ReadAsStringAsync().Result;
+                var postString = StringUtil.PostDataFromDict(request.PostData);
                 args.AppendFormat("--data \"{0}\" ", postString);
             }
 
@@ -80,7 +80,7 @@ namespace Jackett.Utils.Clients
             string stdout = null;
             await Task.Run(() =>
             {
-                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix?"curl":"curl.exe", args.ToString(), true);
+                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix ? "curl" : "curl.exe", args.ToString(), true);
             });
 
             var outputData = File.ReadAllBytes(tempFile);
@@ -126,7 +126,7 @@ namespace Jackett.Utils.Clients
 
             result.Content = new byte[outputData.Length - (headSplit + 3)];
             var dest = 0;
-            for (int i= headSplit+4;i< outputData.Length; i++)
+            for (int i = headSplit + 4; i < outputData.Length; i++)
             {
                 result.Content[dest] = outputData[i];
                 dest++;

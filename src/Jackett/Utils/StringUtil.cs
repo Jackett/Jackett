@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,6 +23,11 @@ namespace Jackett.Utils
         public static string FromBase64(string str)
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(str));
+        }
+
+        public static string PostDataFromDict(IEnumerable<KeyValuePair<string, string>> dict)
+        {
+            return new FormUrlEncodedContent(dict).ReadAsStringAsync().Result;
         }
 
         public static string Hash(string input)
@@ -46,7 +52,8 @@ namespace Jackett.Utils
             var properties = exception.GetType()
                                     .GetProperties();
             var fields = properties
-                             .Select(property => new {
+                             .Select(property => new
+                             {
                                  Name = property.Name,
                                  Value = property.GetValue(exception, null)
                              })

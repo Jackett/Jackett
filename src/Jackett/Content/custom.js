@@ -137,7 +137,7 @@ function displayIndexers(items) {
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
         item.torznab_host = resolveUrl("/torznab/" + item.id);
-        item.potato_host = resolveUrl("/potato/" + item.id);  
+        item.potato_host = resolveUrl("/potato/" + item.id);
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
@@ -246,22 +246,24 @@ function newConfigModal(title, config, caps) {
 }
 
 function getConfigModalJson(configForm) {
-    var configJson = {};
+    var configJson = [];
     configForm.find(".config-setup-form").children().each(function (i, el) {
         $el = $(el);
         var type = $el.data("type");
         var id = $el.data("id");
+        var itemEntry = { id: id };
         switch (type) {
             case "hiddendata":
-                configJson[id] = $el.find(".setup-item-hiddendata input").val();
+                itemEntry.value = $el.find(".setup-item-hiddendata input").val();
                 break;
             case "inputstring":
-                configJson[id] = $el.find(".setup-item-inputstring input").val();
+                itemEntry.value = $el.find(".setup-item-inputstring input").val();
                 break;
             case "inputbool":
-                configJson[id] = $el.find(".setup-item-inputbool input").is(":checked");
+                itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
         }
+        configJson.push(itemEntry)
     });
     return configJson;
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,26 +11,27 @@ namespace Jackett.Utils.Clients
     {
         public WebRequest()
         {
-            PostData = new Dictionary<string, string>();
+            PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
         }
 
         public WebRequest(string url)
         {
-            PostData = new Dictionary<string, string>();
+            PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
             Url = url;
         }
 
         public string Url { get; set; }
-        public Dictionary<string, string> PostData { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> PostData { get; set; }
         public string Cookies { get; set; }
         public string Referer { get; set; }
         public RequestType Type { get; set; }
 
+
         public override bool Equals(System.Object obj)
         {
-            if(obj is WebRequest)
+            if (obj is WebRequest)
             {
                 var other = obj as WebRequest;
                 var postDataSame = PostData == null && other.PostData == null;
@@ -37,16 +39,16 @@ namespace Jackett.Utils.Clients
                 {
                     if (!(PostData == null || other.PostData == null))
                     {
-                        var ok = PostData.Count == other.PostData.Count;
-                        foreach(var i in PostData)
+                        var ok = PostData.Count() == other.PostData.Count();
+                        foreach (var i in PostData)
                         {
-                            if (!other.PostData.ContainsKey(i.Key))
+                            if (!other.PostData.Any(item => item.Key == i.Key))
                             {
                                 ok = false;
                                 break;
                             }
 
-                            if(PostData[i.Key] != other.PostData[i.Key])
+                            if (PostData.FirstOrDefault(item => item.Key == i.Key).Value != other.PostData.FirstOrDefault(item => item.Key == i.Key).Value)
                             {
                                 ok = false;
                                 break;
@@ -66,7 +68,8 @@ namespace Jackett.Utils.Clients
                        other.Type == Type &&
                        postDataSame;
 
-            } else
+            }
+            else
             {
                 return false;
             }

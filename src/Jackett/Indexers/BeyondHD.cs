@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -21,6 +22,12 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php?c40=1&c44=1&c48=1&c89=1&c46=1&c45=1&searchin=title&incldead=0&search={0}"; } }
         private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
 
+        new ConfigurationDataCookie configData
+        {
+            get { return (ConfigurationDataCookie)base.configData; }
+            set { base.configData = value; }
+        }
+
         public BeyondHD(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
@@ -28,31 +35,25 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataCookie())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataCookie());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataCookie();
-            config.LoadValuesFromJson(configJson);
-            cookieHeader = config.CookieHeader;
+            configData.LoadValuesFromJson(configJson);
 
             var response = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = SiteLink,
-                Cookies = cookieHeader
+                Cookies = configData.Cookie.Value
             });
 
-            await ConfigureIfOK(cookieHeader, response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(CookieHeader, response.Content.Contains("logout.php"), () =>
             {
                 CQ dom = response.Content;
-                throw new ExceptionWithConfigData("Invalid cookie header", (ConfigurationData)config);
+                throw new ExceptionWithConfigData("Invalid cookie header", configData);
             });
         }
 

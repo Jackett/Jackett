@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -28,19 +29,21 @@ namespace Jackett.Indexers
         HttpClientHandler handler;
         HttpClient client;
 
-        string username = string.Empty;
-        string password = string.Empty;
-        string token = string.Empty;
-        DateTime lastTokenFetch = DateTime.MinValue;
+        new ConfigurationDataLoginTokin configData
+        {
+            get { return (ConfigurationDataLoginTokin)base.configData; }
+            set { base.configData = value; }
+        }
 
-        public T411(IIndexerManagerService i, Logger l,IWebClient wc)
+        public T411(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "T411",
                 description: "French Torrent Tracker",
                 link: "http://www.t411.io/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataLoginTokin())
         {
             CommentsUrl = SiteLink + "/torrents/{0}";
             IsConfigured = false;
@@ -51,23 +54,17 @@ namespace Jackett.Indexers
             client = new HttpClient(handler);
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var config = new ConfigurationDataBasicLogin();
-            return Task.FromResult<ConfigurationData>(config);
-        }
-
         async Task<string> GetAuthToken(bool forceFetch = false)
         {
-            if (!forceFetch && lastTokenFetch > DateTime.Now - TimeSpan.FromHours(48))
+            if (!forceFetch && configData.LastTokenFetchDateTime > DateTime.Now - TimeSpan.FromHours(48))
             {
-                return token;
+                return configData.ApiToken.Value;
             }
 
             var pairs = new Dictionary<string, string> {
-				{ "username", username },
-				{ "password", password }
-			};
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
+            };
 
             var content = new FormUrlEncodedContent(pairs);
 
@@ -78,44 +75,45 @@ namespace Jackett.Indexers
             {
                 throw new ApplicationException((string)jsonResponse["error"]);
             }
-            token = (string)jsonResponse["token"];
-            lastTokenFetch = DateTime.Now;
-            return token;
+            configData.ApiToken.Value = (string)jsonResponse["token"];
+            configData.LastTokenFetchDateTime = DateTime.Now;
+            return configData.ApiToken.Value;
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
-            username = config.Username.Value;
-            password = config.Password.Value;
-
+            Exception tokenFetchEx = null;
             try
             {
                 await GetAuthToken(true);
             }
             catch (Exception ex)
             {
-                throw new ExceptionWithConfigData(ex.Message, (ConfigurationData)config);
+                tokenFetchEx = new ExceptionWithConfigData(ex.Message, configData);
             }
 
-            var configSaveData = new JObject();
-            configSaveData["username"] = username;
-            configSaveData["password"] = password;
-            configSaveData["token"] = token;
-            configSaveData["last_token_fetch"] = lastTokenFetch;
-            SaveConfig(configSaveData);
-            IsConfigured = true;
+            await ConfigureIfOK(string.Empty, tokenFetchEx == null, () =>
+            {
+                throw tokenFetchEx;
+            });
         }
 
+        // Override to load legacy config format
         public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            username = (string)jsonConfig["username"];
-            password = (string)jsonConfig["password"];
-            token = (string)jsonConfig["token"];
-            lastTokenFetch = (DateTime)jsonConfig["last_token_fetch"];
-            IsConfigured = true;
+            if (jsonConfig is JObject)
+            {
+                configData.ApiToken.Value = jsonConfig.Value<string>("token"); ;
+                configData.Username.Value = jsonConfig.Value<string>("username");
+                configData.Password.Value = jsonConfig.Value<string>("password");
+                SaveConfig();
+                IsConfigured = true;
+                return;
+            }
+
+            base.LoadFromSavedConfiguration(jsonConfig);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

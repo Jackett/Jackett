@@ -13,6 +13,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -21,6 +22,12 @@ namespace Jackett.Indexers
         public string SearchUrl { get { return SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&c1=1&reorder=1&q="; } }
         public string LoginUrl { get { return SiteLink + "login.php"; } }
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public BakaBT(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "BakaBT",
                 description: "Anime Community",
@@ -28,19 +35,14 @@ namespace Jackett.Indexers
                 caps: new TorznabCapabilities(TorznabCatType.Anime),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             var loginForm = await webclient.GetString(new Utils.Clients.WebRequest()
             {
@@ -49,8 +51,8 @@ namespace Jackett.Indexers
             });
 
             var pairs = new Dictionary<string, string> {
-                { "username", config.Username.Value },
-                { "password", config.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "returnto", "/index.php" }
             };
 
@@ -61,7 +63,7 @@ namespace Jackett.Indexers
                  CQ dom = responseContent;
                  var messageEl = dom[".error"].First();
                  var errorMessage = messageEl.Text().Trim();
-                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                 throw new ExceptionWithConfigData(errorMessage, configData);
              });
         }
 
@@ -88,7 +90,7 @@ namespace Jackett.Indexers
 
                 foreach (var row in rows)
                 {
-                   
+
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find("a.title").First();
                     var title = qTitleLink.Text().Trim();

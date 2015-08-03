@@ -9,6 +9,11 @@ namespace Jackett.Utils
 {
     public static class ParseUtil
     {
+        public static double CoerceDouble(string str)
+        {
+            return double.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
+        }
+
         public static float CoerceFloat(string str)
         {
             return float.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
@@ -24,6 +29,11 @@ namespace Jackett.Utils
             return long.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
+
+        public static bool TryCoerceDouble(string str, out double result)
+        {
+            return double.TryParse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+        }
 
         public static bool TryCoerceFloat(string str, out float result)
         {
