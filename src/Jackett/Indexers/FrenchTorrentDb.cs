@@ -8,9 +8,6 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -21,6 +18,12 @@ namespace Jackett.Indexers
         private string MainUrl { get { return SiteLink + "?section=INDEX"; } }
         private string SearchUrl { get { return SiteLink + "?section=TORRENTS&exact=1&name={0}&submit=GO"; } }
 
+        new ConfigurationDataCookie configData
+        {
+            get { return (ConfigurationDataCookie)base.configData; }
+            set { base.configData = value; }
+        }
+
         public FrenchTorrentDb(IIndexerManagerService i, Logger l, IWebClient c)
             : base(name: "FrenchTorrentDb",
                 description: "One the biggest French Torrent Tracker",
@@ -28,30 +31,24 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataCookie())
         {
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
+        public async Task ApplyConfiguration(JToken configJson)
         {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
-        }
-
-        public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
-        {
-            var config = new ConfigurationDataBasicLoginFrenchTorrentDb();
-            config.LoadValuesFromJson(configJson);
-            var cookies = "WebsiteID=" + config.Cookie.Value;
+            configData.LoadValuesFromJson(configJson);
             var response = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = MainUrl,
                 Type = RequestType.GET,
-                Cookies = cookies
+                Cookies = configData.Cookie.Value
             });
 
-            await ConfigureIfOK(cookies, response.Content.Contains("/?section=LOGOUT"), () =>
+            await ConfigureIfOK(configData.Cookie.Value, response.Content.Contains("/?section=LOGOUT"), () =>
             {
-                throw new ExceptionWithConfigData("Failed to login", (ConfigurationData)config);
+                throw new ExceptionWithConfigData("Failed to login", configData);
             });
         }
 

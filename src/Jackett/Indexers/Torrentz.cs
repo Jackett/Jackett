@@ -14,48 +14,67 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml;
 using System.Linq;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class Torrentz : BaseIndexer, IIndexer
     {
-        private string SearchUrl { get { return SiteLink + "feed_verifiedP?f={0}"; } }
-        private string BaseUrl;
+        readonly static string defaultSiteLink = "https://torrentz.eu/";
+
+        private Uri BaseUri
+        {
+            get { return new Uri(configData.Url.Value); }
+            set { configData.Url.Value = value.ToString(); }
+        }
+
+        private string SearchUrl { get { return BaseUri + "feed_verifiedP?f={0}"; } }
+
+        new ConfigurationDataUrl configData
+        {
+            get { return (ConfigurationDataUrl)base.configData; }
+            set { base.configData = value; }
+        }
+
 
         public Torrentz(IIndexerManagerService i, Logger l, IWebClient wc)
             : base(name: "Torrentz",
                 description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
-                link: "https://torrentz.eu/",
+                link: defaultSiteLink,
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataUrl(defaultSiteLink))
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
 
-            var formattedUrl = config.GetFormattedHostUrl();
-            IEnumerable<ReleaseInfo> releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Count() == 0)
+            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
+            {
                 throw new Exception("Could not find releases from this URL");
-
-            BaseUrl = formattedUrl;
-            var configSaveData = new JObject();
-            configSaveData["base_url"] = BaseUrl;
-            SaveConfig(configSaveData);
-            IsConfigured = true;
+            });
         }
 
-        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
+        // Override to load legacy config format
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
+        {
+            if (jsonConfig is JObject)
+            {
+                BaseUri = new Uri(jsonConfig.Value<string>("base_url"));
+                SaveConfig();
+                IsConfigured = true;
+                return;
+            }
+
+            base.LoadFromSavedConfiguration(jsonConfig);
+        }
+
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
@@ -104,18 +123,6 @@ namespace Jackett.Indexers
             }
 
             return releases;
-        }
-
-
-        public override void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            BaseUrl = (string)jsonConfig["base_url"];
-            IsConfigured = true;
-        }
-
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, BaseUrl);
         }
 
         public override Task<byte[]> Download(Uri link)
@@ -178,7 +185,7 @@ namespace Jackett.Indexers
                 switch (counter)
                 {
                     case 0:
-                        this.Size = ReleaseInfo.GetBytes(val); 
+                        this.Size = ReleaseInfo.GetBytes(val);
                         break;
                     case 1:
                         this.Seeders = ParseUtil.CoerceInt(val.Contains(",") ? val.Remove(val.IndexOf(","), 1) : val);

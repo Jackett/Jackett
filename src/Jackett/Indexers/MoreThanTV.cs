@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -24,6 +25,12 @@ namespace Jackett.Indexers
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public MoreThanTV(IIndexerManagerService i, IWebClient c, Logger l)
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
@@ -31,25 +38,20 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
-				{ "login", "Log in" },
-				{ "keeplogged", "1" }
-			};
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "login", "Log in" },
+                { "keeplogged", "1" }
+            };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php?"), () =>
@@ -57,7 +59,7 @@ namespace Jackett.Indexers
                 CQ dom = result.Content;
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Models
+namespace Jackett.Models.IndexerConfig
 {
 
     public class ConfigurationDataCookie : ConfigurationData
@@ -17,7 +17,7 @@ namespace Jackett.Models
         {
             Cookie = new StringItem { Name = "Cookie" };
             CookieHint = new DisplayItem(
-            "<ol><li>Login to BeyondHD in your browser <li>Open the developer console, go the network tab <li>Find 'cookie' in the request headers <li>Copy & paste it to here</ol>")
+            "<ol><li>Login to this tracker in your browser <li>Open the developer console, go the network tab <li>Find 'cookie' in the request headers <li>Copy & paste it to here</ol>")
             {
                 Name = "CookieHint"
             };
@@ -26,19 +26,6 @@ namespace Jackett.Models
             {
                 Name = "CookieExample"
             };
-        }
-
-        public override Item[] GetItems()
-        {
-            return new Item[] { Cookie, CookieHint, CookieExample };
-        }
-
-        public string CookieHeader
-        {
-            get
-            {
-                return Cookie.Value.Trim().TrimStart(new char[] { '"' }).TrimEnd(new char[] { '"' });
-            }
         }
     }
 

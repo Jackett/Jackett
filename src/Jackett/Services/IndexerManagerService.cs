@@ -50,8 +50,16 @@ namespace Jackett.Services
                 var configFilePath = GetIndexerConfigFilePath(idx);
                 if (File.Exists(configFilePath))
                 {
-                    var jsonString = JObject.Parse(File.ReadAllText(configFilePath));
-                    idx.LoadFromSavedConfiguration(jsonString);
+                    var fileStr = File.ReadAllText(configFilePath);
+                    var jsonString = JToken.Parse(fileStr);
+                    try
+                    {
+                        idx.LoadFromSavedConfiguration(jsonString);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex, "Failed loading configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                    }
                 }
             }
         }

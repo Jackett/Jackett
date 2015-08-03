@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -20,10 +21,16 @@ namespace Jackett.Indexers
 
     public class BB : BaseIndexer, IIndexer
     {
-        private string BaseUrl {  get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
+        private string BaseUrl { get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
         private Uri BaseUri { get { return new Uri(BaseUrl); } }
         private string LoginUrl { get { return BaseUri + "login.php"; } }
         private string SearchUrl { get { return BaseUri + "torrents.php?searchstr={0}&searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&filter_cat%5B10%5D=1"; } }
+
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
 
         public BB(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "bB",
@@ -32,22 +39,17 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-                { "username", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "keeplogged", "1" },
                 { "login", "Log In!" }
             };
@@ -64,7 +66,7 @@ namespace Jackett.Indexers
                     messages.Add(child.Cq().Text().Trim());
                 }
                 var message = string.Join(" ", messages);
-                throw new ExceptionWithConfigData(message, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(message, configData);
 
             });
         }

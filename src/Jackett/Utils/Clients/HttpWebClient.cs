@@ -69,7 +69,7 @@ namespace Jackett.Utils.Clients
 
             client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
             HttpResponseMessage response = null;
-           
+
             if (request.Type == RequestType.POST)
             {
                 var content = new FormUrlEncodedContent(request.PostData);
@@ -97,7 +97,7 @@ namespace Jackett.Utils.Clients
                 var cookieBuilder = new StringBuilder();
                 foreach (var c in cookieHeaders)
                 {
-                    cookieBuilder.AppendFormat("{0} ", c.Substring(0, c.IndexOf(';')+1));
+                    cookieBuilder.AppendFormat("{0} ", c.Substring(0, c.IndexOf(';') + 1));
                 }
 
                 result.Cookies = cookieBuilder.ToString().TrimEnd();

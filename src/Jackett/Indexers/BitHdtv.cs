@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -23,6 +24,12 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrents.php?cat=0&search="; } }
         private string DownloadUrl { get { return SiteLink + "download.php?/{0}/dl.torrent"; } }
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public BitHdtv(IIndexerManagerService i, Logger l, IWebClient w)
             : base(name: "BIT-HDTV",
                 description: "Home of high definition invites",
@@ -30,24 +37,19 @@ namespace Jackett.Indexers
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
-                logger: l)
+                logger: l,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
-				{ "username", incomingConfig.Username.Value },
-				{ "password", incomingConfig.Password.Value }
-			};
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
+            };
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
@@ -57,7 +59,7 @@ namespace Jackett.Indexers
                 messageEl.Children("a").Remove();
                 messageEl.Children("style").Remove();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

@@ -15,87 +15,114 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class nCore : BaseIndexer, IIndexer
+    public class NCore : BaseIndexer, IIndexer
     {
-        private string SearchUrl = "https://ncore.cc/torrents.php";
-        private static string LoginUrl = "https://ncore.cc/login.php";
-        private readonly string LoggedInUrl = "https://ncore.cc/index.php";
-        //private JToken configData = null;
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php"; } }
 
-        private readonly string enSearch = "torrents.php?oldal=1&tipus=kivalasztottak_kozott&kivalasztott_tipus=xvidser,dvdser,hdser&mire={0}&miben=name";
-        private readonly string hunSearch = "torrents.php?oldal=1&tipus=kivalasztottak_kozott&kivalasztott_tipus=xvidser_hun,dvdser_hun,hdser_hun,mire={0}&miben=name";
-        private readonly string enHunSearch = "torrents.php?oldal=1&tipus=kivalasztottak_kozott&kivalasztott_tipus=xvidser_hun,xvidser,dvdser_hun,dvdser,hdser_hun,hdser&mire={0}&miben=name";
+        new ConfigurationDataNCore configData
+        {
+            get { return (ConfigurationDataNCore)base.configData; }
+            set { base.configData = value; }
+        }
 
-        private string SearchUrlEn { get { return SiteLink.ToString() + enSearch; } }
-        private string SearchUrlHun { get { return SiteLink.ToString() + hunSearch; } }
-        private string SearchUrlEnHun { get { return SiteLink.ToString() + enHunSearch; } }
-
-
-        public nCore(IIndexerManagerService i, IWebClient wc, Logger l)
+        public NCore(IIndexerManagerService i, IWebClient wc, Logger l)
             : base(name: "nCore",
                 description: "A Hungarian private torrent site.",
                 link: "https://ncore.cc/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
-                client:wc,
-                logger: l)
+                client: wc,
+                logger: l,
+                configData: new ConfigurationDataNCore())
         {
-            SearchUrl = SearchUrlEnHun;
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            //var config = configData == null ? new ConfigurationDatanCore() : new ConfigurationDatanCore(configData);
-            //return Task.FromResult<ConfigurationData>(config);
-            return Task.FromResult<ConfigurationData>(new ConfigurationDatanCore());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDatanCore();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
-            if (incomingConfig.Hungarian.Value == false && incomingConfig.English.Value == false)
-                throw new ExceptionWithConfigData("Please select atleast one language.", (ConfigurationData)incomingConfig);
+            if (configData.Hungarian.Value == false && configData.English.Value == false)
+                throw new ExceptionWithConfigData("Please select atleast one language.", configData);
 
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string> {
-				{ "nev", incomingConfig.Username.Value },
-				{ "pass", incomingConfig.Password.Value },
-                { "ne_leptessen_ki", "on"}
-			};
-             
-               var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, LoggedInUrl, LoggedInUrl);
-               ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Felhasználó"), () =>
-               {
-                   CQ dom = result.Content;
-                   var messageEl = dom["#hibauzenet table tbody tr"];
-                   var msgContainer = messageEl.Get(0).ChildElements.ElementAt(1);
-                   var errorMessage = msgContainer != null ? msgContainer.InnerText : "Error while trying to login.";
-                   throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
-               });
+                { "nev", configData.Username.Value },
+                { "pass", configData.Password.Value },
+                { "ne_leptessen_ki", "1"},
+                { "set_lang", "en" },
+                { "submitted", "1" },
+                { "submit", "Access!" }
+            };
 
-               //var configSaveData = new JObject();
-               //configSaveData["config"] = incomingConfig.ToJson();
-               //SaveConfig(configSaveData);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("profile.php"), () =>
+            {
+                CQ dom = result.Content;
+                var messageEl = dom["#hibauzenet table tbody tr"];
+                var msgContainer = messageEl.Get(0).ChildElements.ElementAt(1);
+                var errorMessage = msgContainer != null ? msgContainer.InnerText : "Error while trying to login.";
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
         }
 
+        List<KeyValuePair<string, string>> CreateKeyValueList(params string[][] keyValues)
+        {
+            var list = new List<KeyValuePair<string, string>>();
+            foreach (var d in keyValues)
+            {
+                list.Add(new KeyValuePair<string, string>(d[0], d[1]));
+            }
+            return list;
+        }
 
+        private IEnumerable<KeyValuePair<string, string>> GetSearchFormData(string searchString)
+        {
+            const string searchTypeKey = "kivalasztott_tipus[]";
+            var baseList = CreateKeyValueList(
+                new[] { "nyit_sorozat_resz", "true" },
+                new[] { "miben", "name" },
+                new[] { "tipus", "kivalasztottak_kozott" },
+                new[] { "submit.x", "1" },
+                new[] { "submit.y", "1" },
+                new[] { "submit", "Ok" },
+                new[] { "mire", searchString }
+            );
+
+            if (configData.English.Value)
+            {
+                baseList.AddRange(CreateKeyValueList(
+                    new[] { searchTypeKey, "xvidser" },
+                    new[] { searchTypeKey, "dvdser" },
+                    new[] { searchTypeKey, "hdser" }
+                ));
+            }
+
+            if (configData.Hungarian.Value)
+            {
+                baseList.AddRange(CreateKeyValueList(
+                    new[] { searchTypeKey, "xvidser_hun" },
+                    new[] { searchTypeKey, "dvdser_hun" },
+                    new[] { searchTypeKey, "hdser_hun" }
+                ));
+            }
+            return baseList;
+        }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(searchString));
 
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
-                CQ dom = response.Content;
+                CQ dom = results.Content;
 
                 ReleaseInfo release;
                 var rows = dom[".box_torrent_all"].Find(".box_torrent");
@@ -129,35 +156,11 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(results.Content, ex);
             }
 
 
             return releases.ToArray();
-        }
-
-        public override void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            base.LoadFromSavedConfiguration(jsonConfig);
-            //if (jsonConfig["config"] != null)
-            //{
-            //    string hun, eng;
-            //    Dictionary<string, string>[] configDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>[]>(jsonConfig["config"].ToString());
-            //    configDictionary[2].TryGetValue("value", out hun);
-            //    configDictionary[3].TryGetValue("value", out eng);
-
-            //    bool isHun = Boolean.Parse(hun);
-            //    bool isEng = Boolean.Parse(eng);
-
-            //    if (isHun && isEng)
-            //        SearchUrl = SearchUrlEnHun;
-            //    else if (isHun && !isEng)
-            //        SearchUrl = SearchUrlHun;
-            //    else if (!isHun && isEng)
-            //        SearchUrl = SearchUrlEn;
-
-            //    configData = jsonConfig["config"];
-            //}
         }
 
     }

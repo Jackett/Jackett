@@ -1,4 +1,5 @@
 ﻿using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

@@ -3,10 +3,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Models
+namespace Jackett.Models.IndexerConfig
 {
     public abstract class ConfigurationData
     {
@@ -18,6 +19,8 @@ namespace Jackett.Models
             DisplayInfo,
             HiddenData
         }
+
+        public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
 
         public ConfigurationData()
         {
@@ -31,28 +34,31 @@ namespace Jackett.Models
 
         public void LoadValuesFromJson(JToken json)
         {
-            // todo: match up ids with items and fill values
-            IDictionary<string, JToken> dictionary = (JObject)json;
-            foreach (var item in GetItems())
+            var arr = (JArray)json;
+            foreach (var item in GetItems(forDisplay: false))
             {
+                var arrItem = arr.FirstOrDefault(f => f.Value<string>("id") == item.ID);
+                if (arrItem == null)
+                    continue;
+
                 switch (item.ItemType)
                 {
                     case ItemType.InputString:
-                        ((StringItem)item).Value = (string)dictionary[item.ID];
-                        break;
-                    case ItemType.InputBool:
-                        ((BoolItem)item).Value = (bool)dictionary[item.ID];
+                        ((StringItem)item).Value = arrItem.Value<string>("value");
                         break;
                     case ItemType.HiddenData:
-                        ((HiddenItem)item).Value = (string)dictionary[item.ID];
+                        ((HiddenItem)item).Value = arrItem.Value<string>("value");
+                        break;
+                    case ItemType.InputBool:
+                        ((BoolItem)item).Value = arrItem.Value<bool>("value");
                         break;
                 }
             }
         }
 
-        public JToken ToJson()
+        public JToken ToJson(bool forDisplay = true)
         {
-            var items = GetItems();
+            var items = GetItems(forDisplay);
             var jArray = new JArray();
             foreach (var item in items)
             {
@@ -80,6 +86,24 @@ namespace Jackett.Models
             return jArray;
         }
 
+        Item[] GetItems(bool forDisplay)
+        {
+            var properties = GetType()
+                .GetProperties()
+                .Where(p => p.CanRead)
+                .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
+                .Select(p => (Item)p.GetValue(this));
+
+            if (!forDisplay)
+            {
+                properties = properties
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString)
+                    .ToArray();
+            }
+
+            return properties.ToArray();
+        }
+
         public class Item
         {
             public ItemType ItemType { get; set; }
@@ -89,7 +113,7 @@ namespace Jackett.Models
 
         public class HiddenItem : StringItem
         {
-            public HiddenItem(string value)
+            public HiddenItem(string value = "")
             {
                 Value = value;
                 ItemType = ItemType.HiddenData;
@@ -132,7 +156,6 @@ namespace Jackett.Models
             }
         }
 
-        public abstract Item[] GetItems();
-
+        //public abstract Item[] GetItems();
     }
 }

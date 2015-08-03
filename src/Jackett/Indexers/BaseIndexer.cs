@@ -11,6 +11,7 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using AutoMapper;
 using System.Threading;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -28,11 +29,17 @@ namespace Jackett.Indexers
         protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
         protected IWebClient webclient;
-        protected string cookieHeader = "";
+        protected string CookieHeader
+        {
+            get { return configData.CookieHeader.Value; }
+            set { configData.CookieHeader.Value = value; }
+        }
+
+        protected ConfigurationData configData;
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
 
-        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, TorznabCapabilities caps = null)
+        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, TorznabCapabilities caps = null)
         {
             if (!link.EndsWith("/"))
                 throw new Exception("Site link must end with a slash.");
@@ -44,17 +51,21 @@ namespace Jackett.Indexers
             indexerService = manager;
             webclient = client;
 
+            this.configData = configData;
+
             if (caps == null)
                 caps = TorznabCapsUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
+
         }
 
         protected int MapTrackerCatToNewznab(string input)
         {
-            if (null != input) {
+            if (null != input)
+            {
                 input = input.ToLowerInvariant();
                 var mapping = categoryMapping.Where(m => m.TrackerCategory == input).FirstOrDefault();
-                if(mapping!= null)
+                if (mapping != null)
                 {
                     return mapping.NewzNabCategory;
                 }
@@ -67,15 +78,20 @@ namespace Jackett.Indexers
             return StringUtil.StripNonAlphaNumeric(type.Name.ToLowerInvariant());
         }
 
-        public void ResetBaseConfig()
+        public virtual Task<ConfigurationData> GetConfigurationForSetup()
         {
-            cookieHeader = string.Empty;
+            return Task.FromResult<ConfigurationData>(configData);
+        }
+
+        public virtual void ResetBaseConfig()
+        {
+            CookieHeader = string.Empty;
             IsConfigured = false;
         }
 
-        protected void SaveConfig(JToken config)
+        protected void SaveConfig()
         {
-            indexerService.SaveConfig(this as IIndexer, config);
+            indexerService.SaveConfig(this as IIndexer, configData.ToJson(forDisplay: false));
         }
 
         protected void OnParseError(string results, Exception ex)
@@ -125,55 +141,57 @@ namespace Jackett.Indexers
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,
-                    Cookies = overrideCookies ?? cookieHeader
+                    Cookies = overrideCookies ?? CookieHeader
                 });
                 Mapper.Map(redirectedResponse, incomingResponse);
             }
         }
 
 
-        protected void LoadCookieHeaderAndConfigure(JToken jsonConfig)
+        protected void LoadLegacyCookieConfig(JToken jsonConfig)
         {
-            cookieHeader = (string)jsonConfig["cookie_header"];
-            if (!string.IsNullOrEmpty(cookieHeader))
+            string legacyCookieHeader = (string)jsonConfig["cookie_header"];
+            if (!string.IsNullOrEmpty(legacyCookieHeader))
             {
-                IsConfigured = true;
+                CookieHeader = legacyCookieHeader;
             }
             else
             {
                 // Legacy cookie key
-                var jcookes = jsonConfig["cookies"];
-                if (jcookes is JArray) {
-                    var array = (JArray)jsonConfig["cookies"];
-                    cookieHeader = string.Empty;
+                var jcookies = jsonConfig["cookies"];
+                if (jcookies is JArray)
+                {
+                    var array = (JArray)jcookies;
+                    legacyCookieHeader = string.Empty;
                     for (int i = 0; i < array.Count; i++)
                     {
                         if (i != 0)
-                            cookieHeader += "; ";
-                        cookieHeader += array[i];
+                            legacyCookieHeader += "; ";
+                        legacyCookieHeader += array[i];
                     }
+                    CookieHeader = legacyCookieHeader;
                 }
-                else
-                    cookieHeader = (string)jsonConfig["cookies"];
-               
-                if (!string.IsNullOrEmpty(cookieHeader))
+                else if (jcookies != null)
                 {
-                    IsConfigured = true;
+                    CookieHeader = (string)jcookies;
                 }
             }
         }
 
-        protected void SaveCookieHeaderAndConfigure()
-        {
-            var configSaveData = new JObject();
-            configSaveData["cookie_header"] = cookieHeader;
-            SaveConfig(configSaveData);
-            IsConfigured = !string.IsNullOrEmpty(cookieHeader);
-        }
-
         public virtual void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            LoadCookieHeaderAndConfigure(jsonConfig);
+            if (jsonConfig is JArray)
+            {
+                configData.LoadValuesFromJson(jsonConfig);
+                IsConfigured = true;
+            }
+            // read and upgrade old settings file format
+            else if (jsonConfig is Object)
+            {
+                LoadLegacyCookieConfig(jsonConfig);
+                SaveConfig();
+                IsConfigured = true;
+            }
         }
 
         public async virtual Task<byte[]> Download(Uri link)
@@ -208,7 +226,7 @@ namespace Jackett.Indexers
             {
                 Url = url,
                 Type = RequestType.GET,
-                Cookies = cookieHeader,
+                Cookies = CookieHeader,
                 Referer = referer
             };
 
@@ -229,7 +247,7 @@ namespace Jackett.Indexers
                 catch (Exception e)
                 {
                     logger.Error(string.Format("On attempt {0} checking for results from {1}: {2}", (i + 1), DisplayName, e.Message));
-                    lastException= e;
+                    lastException = e;
                 }
                 await Task.Delay(500);
             }
@@ -243,7 +261,7 @@ namespace Jackett.Indexers
             {
                 Url = url,
                 Type = RequestType.GET,
-                Cookies = cookieOverride ?? cookieHeader
+                Cookies = cookieOverride ?? CookieHeader
             };
 
             if (cookieOverride != null)
@@ -251,26 +269,26 @@ namespace Jackett.Indexers
             return await webclient.GetBytes(request);
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookies(string url, Dictionary<string, string> data, string cookieOverride = null)
+        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
                 Url = url,
                 Type = RequestType.POST,
-                Cookies = cookieOverride ?? cookieHeader,
+                Cookies = cookieOverride ?? CookieHeader,
                 PostData = data
             };
             return await webclient.GetString(request);
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, Dictionary<string, string> data, string cookieOverride = null)
+        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await PostDataWithCookies(url,data,cookieOverride);
+                    return await PostDataWithCookies(url, data, cookieOverride);
                 }
                 catch (Exception e)
                 {
@@ -283,7 +301,7 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientStringResult> RequestLoginAndFollowRedirect(string url, Dictionary<string, string> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer =null)
+        protected async Task<WebClientStringResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -313,8 +331,9 @@ namespace Jackett.Indexers
         {
             if (isLoggedin)
             {
-                cookieHeader = cookies;
-                SaveCookieHeaderAndConfigure();
+                CookieHeader = cookies;
+                SaveConfig();
+                IsConfigured = true;
             }
             else
             {
@@ -324,9 +343,9 @@ namespace Jackett.Indexers
 
         public virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
         {
-            foreach(var result in results)
+            foreach (var result in results)
             {
-               if(query.Categories.Length == 0 || query.Categories.Contains(result.Category) || result.Category == 0 || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category))
+                if (query.Categories.Length == 0 || query.Categories.Contains(result.Category) || result.Category == 0 || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category))
                 {
                     yield return result;
                 }
