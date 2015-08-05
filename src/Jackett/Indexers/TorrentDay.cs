@@ -85,14 +85,19 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qRow.Find(".torrentName").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + "/" + qRow.Find(".torrentName").Attr("href"));
+                    release.Guid = new Uri(SiteLink  + qRow.Find(".torrentName").Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + "/" + qRow.Find(".dlLinksInfo > a").Attr("href"));
+                    release.Link = new Uri(SiteLink  + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".sizeInfo").Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
+                    var agoIdx = dateStr.IndexOf("ago");
+                    if (agoIdx > -1)
+                    {
+                        dateStr = dateStr.Substring(0, agoIdx);
+                    }
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
