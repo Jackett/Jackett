@@ -181,6 +181,7 @@
     <Compile Include="Indexers\BeyondHD.cs" />
     <Compile Include="Indexers\BitHdtv.cs" />
     <Compile Include="Indexers\BitMeTV.cs" />
+    <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDSpace.cs" />
@@ -382,6 +383,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\beyondhd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\demonoid.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\frenchtorrentdb.png">
