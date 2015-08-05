@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
     $.ajaxSetup({ cache: false });
-    HandlebarsIntl.registerWith(Handlebars);
     reloadIndexers();
     loadJackettSettings();
 });

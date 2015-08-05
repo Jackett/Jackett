@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Jackett.Indexers;
 using Jackett.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace Jackett.Services
 {
     public interface ICacheService
     {
-        void CacheRssResults(string trackerId, IEnumerable<ReleaseInfo> releases);
-        List<TrackerCacheResult> GetCachedResults();
+        void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
+        List<TrackerCacheResult> GetCachedResults(string serverUrl);
     }
 
     public class CacheService : ICacheService
@@ -20,15 +21,16 @@ namespace Jackett.Services
         private readonly int MAX_RESULTS_PER_TRACKER = 250;
         private readonly TimeSpan AGE_LIMIT = new TimeSpan(2, 0, 0, 0);
 
-        public void CacheRssResults(string trackerId, IEnumerable<ReleaseInfo> releases)
+        public void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
             lock (cache)
             {
-                var trackerCache = cache.Where(c => c.TrackerId == trackerId).FirstOrDefault();
+                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
                 if (trackerCache == null)
                 {
                     trackerCache = new TrackerCache();
-                    trackerCache.TrackerId = trackerId;
+                    trackerCache.TrackerId = indexer.ID;
+                    trackerCache.TrackerName = indexer.DisplayName;
                     cache.Add(trackerCache);
                 }
 
@@ -59,7 +61,7 @@ namespace Jackett.Services
             }
         }
 
-        public List<TrackerCacheResult> GetCachedResults()
+        public List<TrackerCacheResult> GetCachedResults(string serverUrl)
         {
             lock (cache)
             {
@@ -71,8 +73,9 @@ namespace Jackett.Services
                     {
                         var item = Mapper.Map<TrackerCacheResult>(release.Result);
                         item.FirstSeen = release.Created;
-                        item.Tracker = tracker.TrackerId;
+                        item.Tracker = tracker.TrackerName;
                         item.Peers = item.Peers - item.Seeders; // Use peers as leechers
+                        item.ConvertToProxyLink(serverUrl, tracker.TrackerId);
                         results.Add(item);
                     }
                 }

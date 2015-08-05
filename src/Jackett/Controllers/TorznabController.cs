@@ -1,4 +1,5 @@
-﻿using Jackett.Models;
+﻿using AutoMapper;
+using Jackett.Models;
 using Jackett.Services;
 using NLog;
 using System;
@@ -66,7 +67,7 @@ namespace Jackett.Controllers
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
             {
-                cacheService.CacheRssResults(indexer.DisplayName, releases);
+                cacheService.CacheRssResults(indexer, releases);
             }
 
             releases = indexer.FilterResults(torznabQuery, releases);
@@ -82,7 +83,6 @@ namespace Jackett.Controllers
             }
 
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
-
             var resultPage = new ResultPage(new ChannelInfo
             {
                 Title = indexer.DisplayName,
@@ -94,18 +94,7 @@ namespace Jackett.Controllers
                 ImageDescription = indexer.DisplayName
             });
 
-            // add Jackett proxy to download links...
-            foreach (var release in releases)
-            {
-                if (release.Link == null || (release.Link.IsAbsoluteUri && release.Link.Scheme == "magnet"))
-                    continue;
-                var originalLink = release.Link;
-                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
-                var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.ID, encodedLink);
-                release.Link = new Uri(proxyLink);
-            }
-
-            resultPage.Releases.AddRange(releases);
+            resultPage.Releases.AddRange(releases.Select(s=>Mapper.Map<ReleaseInfo>(s).ConvertToProxyLink(severUrl, indexerID)));
             var xml = resultPage.ToXml(new Uri(severUrl));
             // Force the return as XML
             return new HttpResponseMessage()
