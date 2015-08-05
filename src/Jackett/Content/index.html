@@ -6,12 +6,13 @@
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
 
-    <script src="/jquery-2.1.3.min.js"></script>
-    <script src="/jquery.dataTables.js"></script>
-    <script src="/handlebars.js"></script>
-    <script src="/handlebars-intl.min.js"></script>
+    <script src="/libs/jquery.min.js"></script>
+    <script src="/libs/jquery.dataTables.min.js"></script>
+    <script src="/libs/handlebars.min.js"></script>
+    <script src="/libs/moment.min.js"></script>
+    <script src="/libs/handlebarsmoment.js"></script>
     <script src="/bootstrap/bootstrap.min.js"></script>
-    <script src="/bootstrap-notify.js"></script>
+    <script src="/libs/bootstrap-notify.js"></script>
 
     <link href="/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/animate.css" rel="stylesheet">
@@ -49,8 +50,8 @@
                                 <tr>
                                     <td>{{PublishDate}}</td>
                                     <td>{{FirstSeen}}</td>
-                                    <td>{{formatRelative  PublishDate}}</td>
-                                    <td>{{formatRelative  FirstSeen}}</td>
+                                    <td>{{dateFormatRel PublishDate}}</td>
+                                    <td>{{dateFormatRel FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
                                     <td><a href="{{Comments}}">{{Title}}</a></td>
                                     <td>{{CategoryDesc}}</td>

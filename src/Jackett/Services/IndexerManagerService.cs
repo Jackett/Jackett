@@ -90,7 +90,7 @@ namespace Jackett.Services
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
             if (results.Count() == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
-            cacheService.CacheRssResults(indexer.DisplayName, results);
+            cacheService.CacheRssResults(indexer, results);
         }
 
         public void DeleteIndexer(string name)

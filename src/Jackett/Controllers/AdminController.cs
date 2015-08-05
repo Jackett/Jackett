@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using AutoMapper;
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
@@ -375,7 +376,8 @@ namespace Jackett.Controllers
         [HttpGet]
         public List<TrackerCacheResult> GetCache()
         {
-            return cacheService.GetCachedResults();
+            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            return cacheService.GetCachedResults(severUrl);
         }
     }
 }
