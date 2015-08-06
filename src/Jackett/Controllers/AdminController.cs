@@ -37,8 +37,9 @@ namespace Jackett.Controllers
         private IProcessService processService;
         private ICacheService cacheService;
         private Logger logger;
+        private ILogCacheService logCache;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l, ILogCacheService lc)
         {
             this.config = config;
             indexerService = i;
@@ -47,6 +48,7 @@ namespace Jackett.Controllers
             processService = p;
             cacheService = c;
             logger = l;
+            logCache = lc;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -378,6 +380,13 @@ namespace Jackett.Controllers
         {
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             return cacheService.GetCachedResults(severUrl);
+        }
+
+        [Route("GetLogs")]
+        [HttpGet]
+        public List<CachedLog> GetLogs()
+        {
+            return logCache.Logs;
         }
     }
 }

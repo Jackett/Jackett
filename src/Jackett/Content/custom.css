@@ -224,3 +224,11 @@ hr {
 .indexer-caps table {
     border-bottom:   1px solid #ddd;
 }
+
+.jackettlogWarn {
+    background-color: #FFFF8E !important;
+}
+
+.jackettlogError {
+    background-color: #FF6060 !important;
+}

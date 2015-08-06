@@ -63,6 +63,20 @@ $("#jackett-show-releases").click(function () {
 });
 
 
+$("#view-jackett-logs").click(function () {
+    var jqxhr = $.get("/admin/GetLogs", function (data) {
+        var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
+        var item = { logs: data };
+        var releaseDialog = $(releaseTemplate(item));
+        $("#modals").append(releaseDialog);
+        releaseDialog.modal("show");
+
+    }).fail(function () {
+        doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+});
+
+
 $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
     var jackett_external = $("#jackett-allowext").is(':checked');

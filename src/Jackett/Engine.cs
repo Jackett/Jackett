@@ -34,6 +34,7 @@ namespace Jackett
             secondaryBuilder.RegisterInstance<IContainer>(container).SingleInstance();
             SetupLogging(secondaryBuilder);
             secondaryBuilder.Update(container);
+
         }
 
         public static IContainer GetContainer()
@@ -131,6 +132,11 @@ namespace Jackett
             logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
             var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
+
+            var logService = new LogCacheService();
+            logConfig.AddTarget("service", logService);
+            var serviceRule = new LoggingRule("*", logLevel,logService);
+            logConfig.LoggingRules.Add(serviceRule);
 
             LogManager.Configuration = logConfig;
             builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
