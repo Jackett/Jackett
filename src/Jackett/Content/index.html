@@ -71,6 +71,42 @@
         </div>
     </script>
 
+    <script id="jackett-logs" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Server Logs</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px">When</th>
+                                    <th style="width: 80px">Level</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each logs}}
+                                <tr class="jackettlog{{Level}}">
+                                    <td>{{dateFormat When}}</td>
+                                    <td>{{Level}}</td>
+                                    <td>{{Message}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script id="jackett-config-setup-modal" type="text/x-handlebars-template">
         <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -155,6 +191,9 @@
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
             <button id="change-jackett-port" class="btn btn-primary btn-sm">
                 Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+            <button id="view-jackett-logs" class="btn btn-danger btn-sm">
+                View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
             </button>
         </div>
         <div class="input-area">

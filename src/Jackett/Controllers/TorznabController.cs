@@ -64,23 +64,35 @@ namespace Jackett.Controllers
 
             var releases = await indexer.PerformQuery(torznabQuery);
 
+            int? newItemCount = null;
+
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
             {
-                cacheService.CacheRssResults(indexer, releases);
+                newItemCount = cacheService.CacheRssResults(indexer, releases);
             }
 
+            var releaseCount = releases.Count();
             releases = indexer.FilterResults(torznabQuery, releases);
 
+            var removedInFilterCount = releaseCount - releases.Count();
+            if (newItemCount.HasValue)
+                newItemCount -= removedInFilterCount;
+
             // Log info
-            if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
-            {
-                logger.Info(string.Format("Found {0} releases from {1}", releases.Count(), indexer.DisplayName));
+            var logBuilder = new StringBuilder();
+            if (newItemCount != null)  {
+                logBuilder.AppendFormat(string.Format("Found {0} ({1} new) releases from {2}", releases.Count(), newItemCount, indexer.DisplayName));
             }
-            else
-            {
-                logger.Info(string.Format("Found {0} releases from {1} for: {2} {3}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString()));
+            else {
+                logBuilder.AppendFormat(string.Format("Found {0} releases from {1}", releases.Count(), indexer.DisplayName));
             }
+
+            if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm)) { 
+                logBuilder.AppendFormat(" for: {2} {3}", torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString());
+            }
+
+            logger.Info(logBuilder.ToString());
 
             var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var resultPage = new ResultPage(new ChannelInfo

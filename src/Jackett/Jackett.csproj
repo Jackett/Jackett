@@ -170,6 +170,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationException.cs" />
     <Compile Include="Controllers\PotatoController.cs" />
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
+    <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginTokin.cs" />
@@ -223,6 +225,7 @@
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\LogCacheService.cs" />
     <Compile Include="Utils\Clients\BaseWebResult.cs" />
     <Compile Include="Utils\Clients\UnixLibCurlWebClient.cs" />
     <Compile Include="Utils\Clients\WebByteResult.cs" />

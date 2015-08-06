@@ -11,7 +11,7 @@ namespace Jackett.Services
 {
     public interface ICacheService
     {
-        void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
+        int CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
         List<TrackerCacheResult> GetCachedResults(string serverUrl);
     }
 
@@ -19,12 +19,13 @@ namespace Jackett.Services
     {
         private readonly List<TrackerCache> cache = new List<TrackerCache>();
         private readonly int MAX_RESULTS_PER_TRACKER = 250;
-        private readonly TimeSpan AGE_LIMIT = new TimeSpan(2, 0, 0, 0);
+        private readonly TimeSpan AGE_LIMIT = new TimeSpan(7, 0, 0, 0);
 
-        public void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
+        public int CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
             lock (cache)
             {
+                int newItemCount = 0;
                 var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
                 if (trackerCache == null)
                 {
@@ -48,6 +49,7 @@ namespace Jackett.Services
                         existingItem = new CachedResult();
                         existingItem.Created = DateTime.Now;
                         trackerCache.Results.Add(existingItem);
+                        newItemCount++;
                     }
 
                     existingItem.Result = release;
@@ -58,6 +60,8 @@ namespace Jackett.Services
                 {
                     tracker.Results = tracker.Results.OrderByDescending(i => i.Created).Take(MAX_RESULTS_PER_TRACKER).ToList();
                 }
+
+                return newItemCount;
             }
         }
 

@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -22,7 +23,7 @@ namespace Jackett.Indexers
     {
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php?search={0}&cata=yes&c2=1&c7=1&c14=1&c24=1&c26=1&c31=1&c32=1&c33=1"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -40,6 +41,46 @@ namespace Jackett.Indexers
                 logger: l,
                 configData: new ConfigurationDataBasicLogin())
         {
+
+            AddCategoryMapping(29, TorznabCatType.Anime);
+            AddCategoryMapping(28, TorznabCatType.Apps);
+            AddCategoryMapping(28, TorznabCatType.AudioBooks);
+            AddCategoryMapping(20, TorznabCatType.Books);
+            AddCategoryMapping(30, TorznabCatType.TVDocs);
+            //Freelech
+            //Mac
+
+            AddCategoryMapping(25, TorznabCatType.MoviesSD);
+            AddCategoryMapping(11, TorznabCatType.MoviesHD);
+            AddCategoryMapping(5, TorznabCatType.MoviesHD);
+            AddCategoryMapping(3, TorznabCatType.MoviesSD);
+            AddCategoryMapping(21, TorznabCatType.MoviesSD);
+            AddCategoryMapping(22, TorznabCatType.MoviesForeign);
+            // Movie packs
+            AddCategoryMapping(44, TorznabCatType.MoviesSD);
+            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+
+            // Music foreign
+            // Music packs
+            // Music videos
+
+            AddCategoryMapping(4, TorznabCatType.PCGames);
+            // ps3
+            // psp
+            // wii
+            // 360
+
+            AddCategoryMapping(24, TorznabCatType.TVSD);
+            AddCategoryMapping(32, TorznabCatType.TVHD);
+            AddCategoryMapping(31, TorznabCatType.TVSD);
+            AddCategoryMapping(33, TorznabCatType.TVSD);
+            AddCategoryMapping(14, TorznabCatType.TVHD);
+            AddCategoryMapping(26, TorznabCatType.TVSD);
+            AddCategoryMapping(7, TorznabCatType.TVHD);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+
+            AddCategoryMapping(6, TorznabCatType.XXX);
+            AddCategoryMapping(15, TorznabCatType.XXX);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -69,8 +110,23 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var queryUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+                queryCollection.Add("search", searchString);
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                queryCollection.Add("c"+cat,"1");
+
+            if (queryCollection.Count > 0)
+                queryUrl += "?" + queryCollection.GetQueryString();
+
+            var results = await RequestStringWithCookiesAndRetry(queryUrl);
+
+            // Check for being logged out
+            if (results.IsRedirect)
+                throw new AuthenticationException();
 
             try
             {
@@ -102,6 +158,9 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
+
+                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Substring(15);//browse.php?cat=24
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }
