@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     public class PrivateHD : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "auth/login"; } }
-        private string SearchUrl { get { return SiteLink + "torrents?in=1&type=2&search={0}"; } }
+        private string SearchUrl { get { return SiteLink + "torrents?in=1&type={0}&search={1}"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -39,6 +39,12 @@ namespace Jackett.Indexers
                 logger: l,
                 configData: new ConfigurationDataBasicLogin())
         {
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(3, TorznabCatType.Audio);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -67,7 +73,16 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+
+            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct();
+            string category = "0"; // Aka all
+            if (categoryMapping.Count() == 1)
+            {
+                category = categoryMapping.First();
+            }
+
+
+            var episodeSearchUrl = string.Format(SearchUrl, category, HttpUtility.UrlEncode(searchString));
 
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
@@ -100,6 +115,11 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
 
+                    var cat = row.Cq().Find("td:eq(0) i").First().Attr("class")
+                                            .Replace("gi gi-film", "1")
+                                            .Replace("gi gi-tv", "2")
+                                            .Replace("gi gi-music", "3");
+                    release.Category = MapTrackerCatToNewznab(cat);
                     releases.Add(release);
                 }
             }

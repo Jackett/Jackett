@@ -199,12 +199,9 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.Cq().Find(".green").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.Cq().Find(".red").Text().Trim()) + release.Seeders;
-
                 
                     release.Guid = new Uri(configData.Url.Value + row.Cq().Find("td:eq(1) a:eq("+ titleIndex+")").Attr("href").Substring(1));
                     release.Comments = release.Guid;
-
-                  
 
                     if (hasTorrent)
                     {
