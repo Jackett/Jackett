@@ -170,8 +170,12 @@ namespace Jackett.Indexers
 
                     release.PublishDate = DateTime.ParseExact(date, "ddMMyy", CultureInfo.InvariantCulture);
 
-                    release.Title = row.Cq().Find("td:eq(1)").Text().Trim();
+                    var hasTorrent = row.Cq().Find("td:eq(1) a").Length == 3;
+                    var titleIndex = 1;
+                    if (hasTorrent)
+                        titleIndex++;
 
+                    release.Title = row.Cq().Find("td:eq("+ titleIndex+")").Text().Trim();
                     if (configData.StripRussian.Value)
                     {
                         var split = release.Title.IndexOf('/');
@@ -195,11 +199,12 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.Cq().Find(".green").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.Cq().Find(".red").Text().Trim()) + release.Seeders;
-                   
-                    release.Guid = new Uri(configData.Url.Value + row.Cq().Find("td:eq(1) a:eq(1)").Attr("href").Substring(1));
+
+                
+                    release.Guid = new Uri(configData.Url.Value + row.Cq().Find("td:eq(1) a:eq("+ titleIndex+")").Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
-                    var hasTorrent = row.Cq().Find("td:eq(1) a").Length == 3;
+                  
 
                     if (hasTorrent)
                     {
