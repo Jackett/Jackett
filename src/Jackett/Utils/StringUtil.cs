@@ -13,10 +13,15 @@ namespace Jackett.Utils
 {
     public static class StringUtil
     {
-        public static string StripNonAlphaNumeric(string str)
+        public static string StripNonAlphaNumeric(string str, string replacement = "")
         {
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            str = rgx.Replace(str, "");
+            return StripRegex(str, "[^a-zA-Z0-9 -]", replacement);
+        }
+
+        public static string StripRegex(string str, string regex, string replacement = "")
+        {
+            Regex rgx = new Regex(regex);
+            str = rgx.Replace(str, replacement);
             return str;
         }
 

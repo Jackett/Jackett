@@ -89,7 +89,7 @@ namespace Jackett.Indexers
             IsConfigured = false;
         }
 
-        protected void SaveConfig()
+        protected virtual void SaveConfig()
         {
             indexerService.SaveConfig(this as IIndexer, configData.ToJson(forDisplay: false));
         }

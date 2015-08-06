@@ -89,7 +89,7 @@ namespace Jackett.Controllers
             }
 
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm)) { 
-                logBuilder.AppendFormat(" for: {2} {3}", torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString());
+                logBuilder.AppendFormat(" for: {0} {1}", torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString());
             }
 
             logger.Info(logBuilder.ToString());
