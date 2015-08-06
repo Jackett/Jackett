@@ -190,6 +190,7 @@
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\NCore.cs" />
+    <Compile Include="Indexers\RuTor.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAnimeBytes.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
     <Compile Include="Models\TorrentPotatoRequest.cs" />
@@ -241,7 +243,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationData.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCookie.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataRuTor.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="Utils\Clients\WebRequest.cs" />
@@ -416,6 +418,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\privatehd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\rutor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\sceneaccess.png">
