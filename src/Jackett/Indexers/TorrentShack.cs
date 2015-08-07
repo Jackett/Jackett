@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentShack(IIndexerManagerService i, Logger l, IWebClient wc)
+        public TorrentShack(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentShack",
                 description: "TorrentShack",
                 link: "http://torrentshack.me/",
@@ -37,6 +37,7 @@ namespace Jackett.Indexers
                 client: wc,
                 manager: i,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

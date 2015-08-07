@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SceneTime(IIndexerManagerService i, Logger l, IWebClient w)
+        public SceneTime(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "SceneTime",
                 description: "Always on time",
                 link: "https://www.scenetime.com/",
@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: w,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

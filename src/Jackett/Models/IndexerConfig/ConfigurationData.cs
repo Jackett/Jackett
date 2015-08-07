@@ -1,4 +1,5 @@
-﻿using Jackett.Utils;
+﻿using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace Jackett.Models.IndexerConfig
 {
     public abstract class ConfigurationData
     {
+        const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
+
         public enum ItemType
         {
             InputString,
@@ -27,12 +30,12 @@ namespace Jackett.Models.IndexerConfig
 
         }
 
-        public ConfigurationData(JToken json)
+        public ConfigurationData(JToken json, IProtectionService ps)
         {
-            LoadValuesFromJson(json);
+            LoadValuesFromJson(json, ps);
         }
 
-        public void LoadValuesFromJson(JToken json)
+        public void LoadValuesFromJson(JToken json, IProtectionService ps= null)
         {
             var arr = (JArray)json;
             foreach (var item in GetItems(forDisplay: false))
@@ -44,7 +47,21 @@ namespace Jackett.Models.IndexerConfig
                 switch (item.ItemType)
                 {
                     case ItemType.InputString:
-                        ((StringItem)item).Value = arrItem.Value<string>("value");
+                        var sItem = (StringItem)item;
+                        var newValue = arrItem.Value<string>("value");
+
+                        if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            if (newValue != PASSWORD_REPLACEMENT)
+                            {
+                                sItem.Value = newValue;
+                                if (ps != null)
+                                    sItem.Value = ps.UnProtect(newValue);
+                            }
+                        } else
+                        {
+                            sItem.Value = newValue;
+                        }
                         break;
                     case ItemType.HiddenData:
                         ((HiddenItem)item).Value = arrItem.Value<string>("value");
@@ -56,7 +73,7 @@ namespace Jackett.Models.IndexerConfig
             }
         }
 
-        public JToken ToJson(bool forDisplay = true)
+        public JToken ToJson(IProtectionService ps, bool forDisplay = true)
         {
             var items = GetItems(forDisplay);
             var jArray = new JArray();
@@ -71,7 +88,18 @@ namespace Jackett.Models.IndexerConfig
                     case ItemType.InputString:
                     case ItemType.HiddenData:
                     case ItemType.DisplayInfo:
-                        jObject["value"] = ((StringItem)item).Value;
+                        var value = ((StringItem)item).Value;
+                        if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            if (string.IsNullOrEmpty(value))
+                                value = string.Empty;
+                            else if (forDisplay)
+                                value = PASSWORD_REPLACEMENT;
+                            else if (ps != null)
+                                value = ps.Protect(value);
+                        }
+
+                        jObject["value"] = value;
                         break;
                     case ItemType.InputBool:
                         jObject["value"] = ((BoolItem)item).Value;

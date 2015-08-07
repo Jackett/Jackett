@@ -36,7 +36,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ShowRSS(IIndexerManagerService i, Logger l, IWebClient wc)
+        public ShowRSS(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                 link: defaultSiteLink,
@@ -44,6 +44,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataUrl(defaultSiteLink))
         {
         }

@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc)
+        public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentLeech",
                 description: "This is what happens when you seed",
                 link: "http://www.torrentleech.org/",
@@ -37,6 +37,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

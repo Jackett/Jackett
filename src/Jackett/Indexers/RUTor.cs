@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public RuTor(IIndexerManagerService i, Logger l, IWebClient wc)
+        public RuTor(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "RUTor",
                 description: "Свободный торрент трекер",
                 link: "http://rutor.org/",
@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataRuTor(defaultSiteLink))
         {
             TorznabCaps.Categories.Add(TorznabCatType.Anime);

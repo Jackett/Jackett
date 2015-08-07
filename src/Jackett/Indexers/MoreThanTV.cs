@@ -31,7 +31,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public MoreThanTV(IIndexerManagerService i, IWebClient c, Logger l)
+        public MoreThanTV(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                 link: "https://www.morethan.tv/",
@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: c,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

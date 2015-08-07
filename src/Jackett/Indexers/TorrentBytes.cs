@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentBytes(IIndexerManagerService i, IWebClient wc, Logger l)
+        public TorrentBytes(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentBytes",
                 description: "A decade of torrentbytes",
                 link: "https://www.torrentbytes.net/",
@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
 

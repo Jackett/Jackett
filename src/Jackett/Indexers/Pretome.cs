@@ -27,7 +27,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Pretome(IIndexerManagerService i, IWebClient wc, Logger l)
+        public Pretome(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://pretome.info/",
@@ -35,6 +35,7 @@ namespace Jackett.Indexers
                 client: wc,
                 manager: i,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataPinNumber())
         {
         }

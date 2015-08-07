@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Freshon(IIndexerManagerService i, Logger l, IWebClient c)
+        public Freshon(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "FreshOnTV",
                 description: "Our goal is to provide the latest stuff in the TV show domain",
                 link: "https://freshon.tv/",
@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: c,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

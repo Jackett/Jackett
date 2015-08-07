@@ -37,7 +37,7 @@ namespace Jackett.Indexers
         }
 
 
-        public Strike(IIndexerManagerService i, Logger l, IWebClient wc)
+        public Strike(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Strike",
                 description: "Torrent search engine",
                 link: defaultSiteLink,
@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataUrl(defaultSiteLink))
         {
         }

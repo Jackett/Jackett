@@ -29,6 +29,8 @@ namespace Jackett.Indexers
         protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
         protected IWebClient webclient;
+        protected IProtectionService protectionService;
+
         protected string CookieHeader
         {
             get { return configData.CookieHeader.Value; }
@@ -39,7 +41,7 @@ namespace Jackett.Indexers
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
 
-        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, TorznabCapabilities caps = null)
+        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null)
         {
             if (!link.EndsWith("/"))
                 throw new Exception("Site link must end with a slash.");
@@ -50,6 +52,7 @@ namespace Jackett.Indexers
             this.logger = logger;
             indexerService = manager;
             webclient = client;
+            protectionService = p;
 
             this.configData = configData;
 
@@ -91,7 +94,7 @@ namespace Jackett.Indexers
 
         protected virtual void SaveConfig()
         {
-            indexerService.SaveConfig(this as IIndexer, configData.ToJson(forDisplay: false));
+            indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService,forDisplay: false));
         }
 
         protected void OnParseError(string results, Exception ex)
@@ -182,7 +185,7 @@ namespace Jackett.Indexers
         {
             if (jsonConfig is JArray)
             {
-                configData.LoadValuesFromJson(jsonConfig);
+                configData.LoadValuesFromJson(jsonConfig, protectionService);
                 IsConfigured = true;
             }
             // read and upgrade old settings file format

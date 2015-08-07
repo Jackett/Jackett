@@ -35,7 +35,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public T411(IIndexerManagerService i, Logger l, IWebClient wc)
+        public T411(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "T411",
                 description: "French Torrent Tracker",
                 link: "http://www.t411.io/",
@@ -43,6 +43,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataLoginTokin())
         {
             CommentsUrl = SiteLink + "/torrents/{0}";

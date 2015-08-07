@@ -148,6 +148,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -207,6 +208,7 @@
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="Indexers\Torrentz.cs" />
+    <Compile Include="JackettProtectedAttribute.cs" />
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
@@ -228,6 +230,7 @@
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="Services\CacheService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
+    <Compile Include="Services\ProtectionService.cs" />
     <Compile Include="Utils\Clients\BaseWebResult.cs" />
     <Compile Include="Utils\Clients\UnixLibCurlWebClient.cs" />
     <Compile Include="Utils\Clients\WebByteResult.cs" />

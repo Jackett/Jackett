@@ -28,7 +28,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public HDSpace(IIndexerManagerService i, IWebClient wc, Logger l)
+        public HDSpace(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "HD-Space",
                 description: "Sharing The Universe",
                 link: "https://hd-space.org/",
@@ -36,6 +36,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

@@ -27,7 +27,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SceneAccess(IIndexerManagerService i, IWebClient c, Logger l)
+        public SceneAccess(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "SceneAccess",
                 description: "Your gateway to the scene",
                 link: "https://sceneaccess.eu/",
@@ -35,6 +35,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: c,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

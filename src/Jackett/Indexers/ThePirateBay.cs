@@ -37,7 +37,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ThePirateBay(IIndexerManagerService i, Logger l, IWebClient wc)
+        public ThePirateBay(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "The Pirate Bay",
                 description: "The worlds largest bittorrent indexer",
                 link: defaultSiteLink,
@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataUrl(defaultSiteLink))
         {
         }
