@@ -25,9 +25,9 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -40,7 +40,7 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataRecaptchaLogin())
         {
 
             AddCategoryMapping(29, TorznabCatType.Anime);
@@ -84,19 +84,26 @@ namespace Jackett.Indexers
             AddCategoryMapping(15, TorznabCatType.XXX);
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            CQ cq = loginPage.Content;
+            var result = new ConfigurationDataRecaptchaLogin();
+            result.CookieHeader.Value = loginPage.Cookies;
+            result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            return result;
+        }
+
         public async Task ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
-
-            var startMessage = await RequestStringWithCookies(StartPageUrl, string.Empty);
-
-
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
-                { "password", configData.Password.Value }
+                { "password", configData.Password.Value },
+                { "g-recaptcha-response", configData.Captcha.Value }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SiteLink, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;

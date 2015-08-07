@@ -13,6 +13,7 @@
     <script src="/libs/handlebarsmoment.js"></script>
     <script src="/bootstrap/bootstrap.min.js"></script>
     <script src="/libs/bootstrap-notify.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 
     <link href="/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/animate.css" rel="stylesheet">
@@ -20,6 +21,85 @@
     <link href="/css/jquery.dataTables.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
 
+    <script id="setup-item" type="text/x-handlebars-template">
+        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
+            <div class="setup-item-label">{{name}}</div>
+            <div class="setup-item-value">{{{value_element}}}</div>
+        </div>
+    </script>
+    <script id="setup-item-inputstring" type="text/x-handlebars-template">
+        <div class="setup-item-inputstring">
+            {{#if ispassword}}
+            <input class="form-control" type="password" value="{{{value}}}" />
+            {{else}}
+            <input class="form-control" type="text" value="{{{value}}}" />
+            {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputbool" type="text/x-handlebars-template">
+        <div class="setup-item-inputbool">
+            {{#if value}}
+            <input type="checkbox" data-id="{{id}}" class="form-control" checked />
+            {{else}}
+            <input type="checkbox" data-id="{{id}}" class="form-control" />
+            {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-recaptcha" type="text/x-handlebars-template">
+        <div class="jackettrecaptcha">
+        </div>
+    </script>
+    <script id="setup-item-displayimage" type="text/x-handlebars-template">
+        <img class="setup-item-displayimage" src="{{{value}}}" />
+    </script>
+    <script id="setup-item-displayinfo" type="text/x-handlebars-template">
+        <div class="setup-item-displayinfo alert alert-info" role="alert">{{{value}}}</div>
+    </script>
+    <script id="setup-item-hiddendata" type="text/x-handlebars-template">
+        <div class="setup-item-hiddendata">
+            <input class="form-control" type="text" value="{{{value}}}" />
+        </div>
+    </script>
+
+    <script id="configured-indexer" type="text/x-handlebars-template">
+        <div class="configured-indexer indexer card">
+            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
+            <div class="indexer-buttons">
+                <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}">
+                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
+                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+                </a>
+                <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
+                    Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="indexer-host">
+                <b>Torznab Host:</b>
+                <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
+                <b>CouchPotato Host:</b>
+                {{#if potatoenabled}}
+
+                <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
+                {{else}}
+                <input class="form-control" type="text" value="Not availible" placeholder="Torznab Host" readonly="">
+                {{/if}}
+            </div>
+        </div>
+    </script>
+    <script id="unconfigured-indexer" type="text/x-handlebars-template">
+        <div class="unconfigured-indexer card">
+            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
+            <div class="indexer-buttons">
+                <a class="btn btn-info" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
+                <button class="indexer-setup btn btn-success" data-id="{{id}}">Setup <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+            </div>
+        </div>
+    </script>
     <script id="jackett-releases" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-fillwidth">
@@ -164,6 +244,17 @@
             </div>
         </div>
     </script>
+    <script id="add-indexer" type="text/x-handlebars-template">
+        <button class="indexer card add-indexer" data-toggle="modal" data-target="#select-indexer-modal">
+            <div class="indexer-add-content">
+                <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <div class="light-text">Add</div>
+            </div>
+        </button>
+    </script>
+    <script id="spinner" type="text/x-handlebars-template">
+        <span class="spinner glyphicon glyphicon-refresh"></span>
+    </script>
 
     <title>Jackett</title>
 </head>
@@ -248,85 +339,6 @@
     </div>
 
     <div id="modals"></div>
-
-    <div id="templates">
-        <button class="indexer card add-indexer" data-toggle="modal" data-target="#select-indexer-modal">
-            <div class="indexer-add-content">
-                <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <div class="light-text">Add</div>
-            </div>
-        </button>
-
-        <div class="configured-indexer indexer card">
-            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
-            <div class="indexer-buttons">
-                <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}">
-                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
-                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
-                </a>
-                <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
-                    Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="indexer-host">
-                <b>Torznab Host:</b>
-                <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
-                <b>CouchPotato Host:</b>
-                {{#if potatoenabled}}
-               
-                <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
-                {{else}}
-                <input class="form-control" type="text" value="Not availible" placeholder="Torznab Host" readonly="">
-                {{/if}}
-            </div>
-        </div>
-
-        <div class="unconfigured-indexer card">
-            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
-            <div class="indexer-buttons">
-                <a class="btn btn-info" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
-                <button class="indexer-setup btn btn-success" data-id="{{id}}">Setup <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
-            </div>
-        </div>
-
-
-        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
-            <div class="setup-item-label">{{name}}</div>
-            <div class="setup-item-value">{{{value_element}}}</div>
-        </div>
-        <div class="setup-item-inputstring">
-            {{#if ispassword}}
-            <input class="form-control" type="password" value="{{{value}}}" />
-            {{else}}
-            <input class="form-control" type="text" value="{{{value}}}" />
-            {{/if}}
-        </div>
-
-        <div class="setup-item-inputbool">
-            {{#if value}}
-            <input type="checkbox" data-id="{{id}}" class="form-control" checked />
-            {{else}}
-            <input type="checkbox" data-id="{{id}}" class="form-control" />
-            {{/if}}
-        </div>
-        <img class="setup-item-displayimage" src="{{{value}}}" />
-        <div class="setup-item-displayinfo alert alert-info" role="alert">{{{value}}}</div>
-        <div class="setup-item-hiddendata">
-            <input class="form-control" type="text" value="{{{value}}}" />
-        </div>
-
-        <span class="spinner glyphicon glyphicon-refresh"></span>
-
-
-    </div>
-
-
     <script src="/custom.js"></script>
-
 </body>
 </html>

@@ -197,8 +197,8 @@ function reloadIndexers() {
 }
 
 function displayIndexers(items) {
-    var indexerTemplate = Handlebars.compile($("#templates > .configured-indexer")[0].outerHTML);
-    var unconfiguredIndexerTemplate = Handlebars.compile($("#templates > .unconfigured-indexer")[0].outerHTML);
+    var indexerTemplate = Handlebars.compile($("#configured-indexer").html());
+    var unconfiguredIndexerTemplate = Handlebars.compile($("#unconfigured-indexer").html());
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
         item.torznab_host = resolveUrl("/torznab/" + item.id);
@@ -209,7 +209,7 @@ function displayIndexers(items) {
             $('#unconfigured-indexers').append($(unconfiguredIndexerTemplate(item)));
     }
 
-    var addIndexerButton = $("#templates > .add-indexer")[0].outerHTML;
+    var addIndexerButton = $('#add-indexer').html();
     $('#indexers').append(addIndexerButton);
 
     $('#indexers').fadeIn();
@@ -293,12 +293,22 @@ function populateConfigItems(configForm, config) {
     }
     var $formItemContainer = configForm.find(".config-setup-form");
     $formItemContainer.empty();
-    var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
+    var setupItemTemplate = Handlebars.compile($("#setup-item").html());
     for (var i = 0; i < config.length; i++) {
         var item = config[i];
-        var setupValueTemplate = Handlebars.compile($("#templates > .setup-item-" + item.type)[0].outerHTML);
+        var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
+       
+
         item.value_element = setupValueTemplate(item);
-        $formItemContainer.append(setupItemTemplate(item));
+        var template = setupItemTemplate(item);
+
+        $formItemContainer.append(template);
+
+        if (item.type === 'recaptcha') {
+            grecaptcha.render($('.jackettrecaptcha')[0], {
+                'sitekey': item.sitekey
+          });
+        }
     }
 }
 
@@ -327,6 +337,9 @@ function getConfigModalJson(configForm) {
             case "inputbool":
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
+            case "recaptcha":
+                itemEntry.value = $('.g-recaptcha-response').val();
+                break;
         }
         configJson.push(itemEntry)
     });
@@ -342,7 +355,7 @@ function populateSetupForm(indexerId, name, config, caps) {
 
         var originalBtnText = $goButton.html();
         $goButton.prop('disabled', true);
-        $goButton.html($('#templates > .spinner')[0].outerHTML);
+        $goButton.html($('#spinner').html());
 
         var jqxhr = $.post("/admin/configure_indexer", JSON.stringify(data), function (data) {
             if (data.result == "error") {

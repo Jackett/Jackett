@@ -31,4 +31,3 @@ Handlebars.registerHelper('jacketTimespan', function (context, block) {
     var years = timeSpan.asYears();
     return Math.round(years) + 'y ago';
 });
-
