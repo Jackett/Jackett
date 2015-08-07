@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ImmortalSeed(IIndexerManagerService i, IWebClient wc, Logger l)
+        public ImmortalSeed(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "ImmortalSeed",
                 description: "ImmortalSeed",
                 link: "http://immortalseed.me/",
@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
             AddCategoryMapping(32, TorznabCatType.Anime);

@@ -28,7 +28,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BakaBT(IIndexerManagerService i, IWebClient wc, Logger l)
+        public BakaBT(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BakaBT",
                 description: "Anime Community",
                 link: "http://bakabt.me/",
@@ -36,6 +36,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

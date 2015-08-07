@@ -51,7 +51,6 @@ namespace Jackett.Utils
             return sb.ToString();
         }
 
-
         public static string GetExceptionDetails(this Exception exception)
         {
             var properties = exception.GetType()
@@ -73,6 +72,22 @@ namespace Jackett.Utils
         public static string GetQueryString(this NameValueCollection collection)
         {
             return string.Join("&", collection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(collection[a])));
+        }
+
+        public static string GenerateRandom(int length)
+        {
+            var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            var randBytes = new byte[length];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetBytes(randBytes);
+                var key = "";
+                foreach (var b in randBytes)
+                {
+                    key += chars[b % chars.Length];
+                }
+                return key;
+            }
         }
     }
 }

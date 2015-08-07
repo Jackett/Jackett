@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public PrivateHD(IIndexerManagerService i, IWebClient wc, Logger l)
+        public PrivateHD(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "PrivateHD",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://privatehd.to/",
@@ -37,6 +37,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
             AddCategoryMapping(1, TorznabCatType.Movies);

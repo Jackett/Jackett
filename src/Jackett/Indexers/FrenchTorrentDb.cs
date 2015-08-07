@@ -24,7 +24,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public FrenchTorrentDb(IIndexerManagerService i, Logger l, IWebClient c)
+        public FrenchTorrentDb(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "FrenchTorrentDb",
                 description: "One the biggest French Torrent Tracker",
                 link: "http://www.frenchtorrentdb.com/",
@@ -32,6 +32,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: c,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataCookie())
         {
         }

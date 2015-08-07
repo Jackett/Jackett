@@ -25,7 +25,7 @@ namespace Jackett.Indexers
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
-        public AlphaRatio(IIndexerManagerService i, IWebClient w, Logger l)
+        public AlphaRatio(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: "https://alpharatio.cc/",
@@ -33,6 +33,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: w,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
             webclient = w;

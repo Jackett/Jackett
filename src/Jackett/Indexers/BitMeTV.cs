@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BitMeTV(IIndexerManagerService i, Logger l, IWebClient c)
+        public BitMeTV(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "BitMeTV",
                 description: "TV Episode specialty tracker",
                 link: "http://www.bitmetv.org/",
@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: c,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataCaptchaLogin())
         {
         }

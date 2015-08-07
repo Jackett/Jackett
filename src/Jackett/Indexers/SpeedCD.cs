@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc)
+        public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Speed.cd",
                 description: "Your home now!",
                 link: "http://speed.cd/",
@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

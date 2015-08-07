@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l)
+        public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
@@ -37,6 +37,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
             AddCategoryMapping(72, TorznabCatType.Movies);

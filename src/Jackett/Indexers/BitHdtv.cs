@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BitHdtv(IIndexerManagerService i, Logger l, IWebClient w)
+        public BitHdtv(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "BIT-HDTV",
                 description: "Home of high definition invites",
                 link: "https://www.bit-hdtv.com/",
@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: w,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

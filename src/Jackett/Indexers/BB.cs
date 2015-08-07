@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BB(IIndexerManagerService i, Logger l, IWebClient w)
+        public BB(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "bB",
                 description: "bB",
                 link: "http://www.reddit.com/r/baconbits/",
@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: w,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
         }

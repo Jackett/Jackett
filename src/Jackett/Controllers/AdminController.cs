@@ -153,7 +153,7 @@ namespace Jackett.Controllers
                 var postData = await ReadPostDataJson();
                 var indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 var config = await indexer.GetConfigurationForSetup();
-                jsonReply["config"] = config.ToJson();
+                jsonReply["config"] = config.ToJson(null);
                 jsonReply["caps"] = indexer.TorznabCaps.CapsToJson();
                 jsonReply["name"] = indexer.DisplayName;
                 jsonReply["result"] = "success";
@@ -192,7 +192,7 @@ namespace Jackett.Controllers
                     baseIndexer.ResetBaseConfig();
                 if (ex is ExceptionWithConfigData)
                 {
-                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
+                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null);
                 } else
                 {
                     logger.Error(ex, "Exception in Configure");

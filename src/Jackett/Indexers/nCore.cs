@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public NCore(IIndexerManagerService i, IWebClient wc, Logger l)
+        public NCore(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "nCore",
                 description: "A Hungarian private torrent site.",
                 link: "https://ncore.cc/",
@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataNCore())
         {
         }

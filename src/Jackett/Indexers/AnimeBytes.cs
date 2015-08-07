@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l)
+        public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l, IProtectionService ps)
             : base(name: "AnimeBytes",
                 link: "https://animebytes.tv/",
                 description: "Powered by Tentacles",
@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 client: client,
                 caps: new TorznabCapabilities(TorznabCatType.Anime),
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataAnimeBytes())
         {
         }

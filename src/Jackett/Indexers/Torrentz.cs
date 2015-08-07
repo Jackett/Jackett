@@ -37,7 +37,7 @@ namespace Jackett.Indexers
         }
 
 
-        public Torrentz(IIndexerManagerService i, Logger l, IWebClient wc)
+        public Torrentz(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Torrentz",
                 description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
                 link: defaultSiteLink,
@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 manager: i,
                 client: wc,
                 logger: l,
+                p: ps,
                 configData: new ConfigurationDataUrl(defaultSiteLink))
         {
         }
