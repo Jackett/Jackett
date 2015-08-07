@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationException.cs" />
+    <Compile Include="Controllers\BlackholeController.cs" />
     <Compile Include="Controllers\PotatoController.cs" />
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />

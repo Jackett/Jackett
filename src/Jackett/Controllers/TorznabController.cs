@@ -64,20 +64,24 @@ namespace Jackett.Controllers
 
             var releases = await indexer.PerformQuery(torznabQuery);
 
+            // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
+            foreach(var release in releases)
+            {
+                if (release.PublishDate > DateTime.Now)
+                    release.PublishDate = DateTime.Now;
+            }
+
+            // Some trackers do not support multiple category filtering so filter the releases that match manually.
+            var filteredReleases = releases = indexer.FilterResults(torznabQuery, releases); 
             int? newItemCount = null;
+
 
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
             {
-                newItemCount = cacheService.CacheRssResults(indexer, releases);
+                newItemCount = cacheService.GetNewItemCount(indexer, filteredReleases);
+                cacheService.CacheRssResults(indexer, releases);
             }
-
-            var releaseCount = releases.Count();
-            releases = indexer.FilterResults(torznabQuery, releases);
-
-            var removedInFilterCount = releaseCount - releases.Count();
-            if (newItemCount.HasValue)
-                newItemCount -= removedInFilterCount;
 
             // Log info
             var logBuilder = new StringBuilder();
@@ -94,20 +98,27 @@ namespace Jackett.Controllers
 
             logger.Info(logBuilder.ToString());
 
-            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var resultPage = new ResultPage(new ChannelInfo
             {
                 Title = indexer.DisplayName,
                 Description = indexer.DisplayDescription,
                 Link = new Uri(indexer.SiteLink),
-                ImageUrl = new Uri(severUrl + "logos/" + indexer.ID + ".png"),
+                ImageUrl = new Uri(serverUrl + "logos/" + indexer.ID + ".png"),
                 ImageTitle = indexer.DisplayName,
                 ImageLink = new Uri(indexer.SiteLink),
                 ImageDescription = indexer.DisplayName
             });
 
-            resultPage.Releases.AddRange(releases.Select(s=>Mapper.Map<ReleaseInfo>(s).ConvertToProxyLink(severUrl, indexerID)));
-            var xml = resultPage.ToXml(new Uri(severUrl));
+
+            foreach(var result in releases)
+            {
+                var clone = Mapper.Map<ReleaseInfo>(result);
+                clone.Link = clone.ConvertToProxyLink(serverUrl, indexerID);
+                resultPage.Releases.Add(result);
+            }
+
+            var xml = resultPage.ToXml(new Uri(serverUrl));
             // Force the return as XML
             return new HttpResponseMessage()
             {

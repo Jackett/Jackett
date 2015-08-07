@@ -100,15 +100,14 @@ namespace Jackett.Controllers
             }
 
             releases = indexer.FilterResults(torznabQuery, releases);
-
-            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
-          
-            var proxiedReleases = releases.Select(s => Mapper.Map<ReleaseInfo>(s).ConvertToProxyLink(severUrl, indexerID));
-
+            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var potatoResponse = new TorrentPotatoResponse();
 
-            foreach(var release in proxiedReleases)
+            foreach(var r in releases)
             {
+                var release = Mapper.Map<ReleaseInfo>(r);
+                release.Link = release.ConvertToProxyLink(serverUrl, indexerID);
+
                 potatoResponse.results.Add(new TorrentPotatoResponseItem()
                 {
                     release_name = release.Title + "[" + indexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>

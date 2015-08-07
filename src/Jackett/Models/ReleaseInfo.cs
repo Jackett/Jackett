@@ -92,15 +92,14 @@ namespace Jackett.Models
             return (long)(kb * 1024f);
         }
 
-        public ReleaseInfo ConvertToProxyLink(string serverUrl, string indexerId)
+        public Uri ConvertToProxyLink(string serverUrl, string indexerId, string action = "download")
         {
             if (Link == null || (Link.IsAbsoluteUri && Link.Scheme == "magnet"))
-                return this;
+                return Link;
             var originalLink = Link;
             var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
-            var proxyLink = string.Format("{0}api/{1}/download/{2}", serverUrl, indexerId, encodedLink);
-            Link = new Uri(proxyLink);
-            return this;
+            var proxyLink = string.Format("{0}api/{1}/{2}/{3}", serverUrl, indexerId, action, encodedLink);
+            return new Uri(proxyLink);
         }
     }
 }

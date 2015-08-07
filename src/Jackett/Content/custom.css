@@ -232,3 +232,15 @@ hr {
 .jackettlogError {
     background-color: #FF6060 !important;
 }
+
+.jackettdownloaded {
+    color: blueviolet;
+}
+
+.jacketdownloadlocal {
+    padding-left: 10px;
+}
+
+.downloadcolumn {
+    text-align:center;
+}
