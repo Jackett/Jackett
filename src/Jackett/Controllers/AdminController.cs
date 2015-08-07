@@ -286,6 +286,7 @@ namespace Jackett.Controllers
                 cfg["port"] = serverService.Config.Port;
                 cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;
+                cfg["blackholedir"] = serverService.Config.BlackholeDir;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword )? string.Empty:serverService.Config.AdminPassword.Substring(0,10);
 
                 jsonReply["config"] = cfg;
@@ -300,7 +301,7 @@ namespace Jackett.Controllers
             return Json(jsonReply);
         }
 
-        [Route("set_port")]
+        [Route("set_config")]
         [HttpPost]
         public async Task<IHttpActionResult> SetConfig()
         {
@@ -312,6 +313,7 @@ namespace Jackett.Controllers
                 var postData = await ReadPostDataJson();
                 int port = (int)postData["port"];
                 bool external = (bool)postData["external"];
+                string saveDir = (string)postData["blackholedir"];
 
                 if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
                 {
@@ -359,6 +361,21 @@ namespace Jackett.Controllers
                         Engine.Server.Initalize();
                         Engine.Server.Start();
                     })).Start();
+                }
+
+
+                if(saveDir != Engine.Server.Config.BlackholeDir)
+                {
+                    if (!string.IsNullOrEmpty(saveDir))
+                    {
+                        if (!Directory.Exists(saveDir))
+                        {
+                            throw new Exception("Blackhole directory does not exist");
+                        }
+                    }
+
+                    Engine.Server.Config.BlackholeDir = saveDir;
+                    Engine.Server.SaveConfig();
                 }
 
                 jsonReply["result"] = "success";

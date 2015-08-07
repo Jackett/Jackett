@@ -30,7 +30,7 @@ namespace Jackett.Services
                     Message = l.Message,
                     When = l.TimeStamp 
                 });
-                logs = logs.Take(100).ToList();
+                logs = logs.Take(50).ToList();
             }
 
         }

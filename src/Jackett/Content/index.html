@@ -50,17 +50,36 @@
                                 <tr>
                                     <td>{{PublishDate}}</td>
                                     <td>{{FirstSeen}}</td>
-                                    <td>{{dateFormatRel PublishDate}}</td>
-                                    <td>{{dateFormatRel FirstSeen}}</td>
+                                    <td>{{jacketTimespan PublishDate}}</td>
+                                    <td>{{jacketTimespan FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
                                     <td><a href="{{Comments}}">{{Title}}</a></td>
                                     <td>{{CategoryDesc}}</td>
                                     <td>{{Seeders}}</td>
                                     <td>{{Peers}}</td>
-                                    <td><a href="{{Link}}"><i class="fa fa-download"></i></a></td>
+                                    <td class="downloadcolumn">
+                                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                                        {{#if BlackholeLink}}
+                                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
+                                        {{/if}}
+                                    </td>
                                 </tr>
                                 {{/each}}
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <div class="modal-footer">
@@ -93,7 +112,7 @@
                                 <tr class="jackettlog{{Level}}">
                                     <td>{{dateFormat When}}</td>
                                     <td>{{Level}}</td>
-                                    <td>{{Message}}</td>
+                                    <td><pre>{{Message}}</pre></td>
                                 </tr>
                                 {{/each}}
                             </tbody>
@@ -195,6 +214,10 @@
             <button id="view-jackett-logs" class="btn btn-danger btn-sm">
                 View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
             </button>
+        </div>
+        <div class="input-area">
+            <span class="input-header">Manual download blackhole directory: </span>
+            <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
         </div>
         <div class="input-area">
             <span class="input-header">External access: </span>

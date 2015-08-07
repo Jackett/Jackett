@@ -20,6 +20,7 @@ namespace Jackett.Models.Config
         public string APIKey { get; set; }
         public string AdminPassword { get; set; }
         public string InstanceId { get; set; }
+        public string BlackholeDir { get; set; }
 
         public string[] GetListenAddresses(bool? external = null)
         {

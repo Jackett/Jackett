@@ -2,14 +2,36 @@
     $.ajaxSetup({ cache: false });
     reloadIndexers();
     loadJackettSettings();
+
+    $('body').on('click', '.downloadlink', function (e, b) {
+        $(e.target).addClass('jackettdownloaded');
+    });
+
+
+    $('body').on('click', '.jacketdownloadserver', function (event) {
+        var href = $(event.target).parent().attr('href');
+        var jqxhr = $.get(href, function (data) {
+            if (data.result == "error") {
+                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                return;
+            } else {
+                doNotify("Downloaded sent to the blackhole successfully.", "success", "glyphicon glyphicon-ok");
+            }
+        }).fail(function () {
+            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+        });
+        event.preventDefault();
+        return false;
+    });
+
 });
 
 function loadJackettSettings() {
     getJackettConfig(function (data) {
-
         $("#api-key-input").val(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
+        $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
@@ -33,12 +55,14 @@ $("#jackett-show-releases").click(function () {
                    {
                        "targets": 0,
                        "visible": false,
-                       "searchable": false
+                       "searchable": false,
+                       "type": 'date'
                    },
                    {
                        "targets": 1,
                        "visible": false,
-                       "searchable": false
+                       "searchable": false,
+                       "type": 'date'
                    },
                    {
                        "targets": 2,
@@ -52,7 +76,31 @@ $("#jackett-show-releases").click(function () {
                        "searchable": false,
                        "iDataSort": 1
                    }
-                ]
+                ],
+                initComplete: function () {
+                    var count = 0;
+                    this.api().columns().every(function () {
+                        count++;
+                        if (count === 5 || count ===7) {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>')
+                            });
+                        }
+                    });
+                }
             });
         $("#modals").append(releaseDialog);
         releaseDialog.modal("show");
@@ -80,13 +128,17 @@ $("#view-jackett-logs").click(function () {
 $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
     var jackett_external = $("#jackett-allowext").is(':checked');
-    var jsonObject = { port: jackett_port, external: jackett_external };
-    var jqxhr = $.post("/admin/set_port", JSON.stringify(jsonObject), function (data) {
+    var jsonObject = {
+        port: jackett_port,
+        external: jackett_external,
+        blackholedir:  $("#jackett-savedir").val()
+    };
+    var jqxhr = $.post("/admin/set_config", JSON.stringify(jsonObject), function (data) {
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         } else {
-            doNotify("The port has been changed. Redirecting you to the new port.", "success", "glyphicon glyphicon-ok");
+            doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
             window.setTimeout(function () {
                 url = window.location.href;
                 if (data.external) {
