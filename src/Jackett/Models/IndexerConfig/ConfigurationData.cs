@@ -20,7 +20,8 @@ namespace Jackett.Models.IndexerConfig
             InputBool,
             DisplayImage,
             DisplayInfo,
-            HiddenData
+            HiddenData,
+            Recaptcha
         }
 
         public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
@@ -69,6 +70,9 @@ namespace Jackett.Models.IndexerConfig
                     case ItemType.InputBool:
                         ((BoolItem)item).Value = arrItem.Value<bool>("value");
                         break;
+                    case ItemType.Recaptcha:
+                        ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
+                        break;
                 }
             }
         }
@@ -85,6 +89,9 @@ namespace Jackett.Models.IndexerConfig
                 jObject["name"] = item.Name;
                 switch (item.ItemType)
                 {
+                    case ItemType.Recaptcha:
+                        jObject["sitekey"] = ((RecaptchaItem)item).SiteKey;
+                        break;
                     case ItemType.InputString:
                     case ItemType.HiddenData:
                     case ItemType.DisplayInfo:
@@ -98,7 +105,6 @@ namespace Jackett.Models.IndexerConfig
                             else if (ps != null)
                                 value = ps.Protect(value);
                         }
-
                         jObject["value"] = value;
                         break;
                     case ItemType.InputBool:
@@ -125,7 +131,7 @@ namespace Jackett.Models.IndexerConfig
             if (!forDisplay)
             {
                 properties = properties
-                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString)
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.Recaptcha)
                     .ToArray();
             }
 
@@ -159,10 +165,19 @@ namespace Jackett.Models.IndexerConfig
 
         public class StringItem : Item
         {
+            public string SiteKey { get; set; }
             public string Value { get; set; }
             public StringItem()
             {
                 ItemType = ConfigurationData.ItemType.InputString;
+            }
+        }
+
+        public class RecaptchaItem : StringItem
+        {
+            public RecaptchaItem()
+            {
+                ItemType = ConfigurationData.ItemType.Recaptcha;
             }
         }
 

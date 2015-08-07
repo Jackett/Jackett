@@ -213,6 +213,7 @@
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginTokin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
