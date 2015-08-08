@@ -3,6 +3,9 @@
     reloadIndexers();
     loadJackettSettings();
 
+    window.jackettIsLocal = window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1';
+
     $('body').on('click', '.downloadlink', function (e, b) {
         $(e.target).addClass('jackettdownloaded');
     });
@@ -81,7 +84,7 @@ $("#jackett-show-releases").click(function () {
                     var count = 0;
                     this.api().columns().every(function () {
                         count++;
-                        if (count === 5 || count ===7) {
+                        if (count === 5 || count === 7) {
                             var column = this;
                             var select = $('<select><option value=""></option></select>')
                                 .appendTo($(column.footer()).empty())
@@ -131,7 +134,7 @@ $("#change-jackett-port").click(function () {
     var jsonObject = {
         port: jackett_port,
         external: jackett_external,
-        blackholedir:  $("#jackett-savedir").val()
+        blackholedir: $("#jackett-savedir").val()
     };
     var jqxhr = $.post("/admin/set_config", JSON.stringify(jsonObject), function (data) {
         if (data.result == "error") {
@@ -293,21 +296,37 @@ function populateConfigItems(configForm, config) {
     }
     var $formItemContainer = configForm.find(".config-setup-form");
     $formItemContainer.empty();
-    var setupItemTemplate = Handlebars.compile($("#setup-item").html());
+
+    $('.jackettrecaptcha').remove();
+
+    var hasReacaptcha = false;
+    var captchaItem = null;
     for (var i = 0; i < config.length; i++) {
-        var item = config[i];
-        var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
-       
+        if (config[i].type === 'recaptcha') {
+            hasReacaptcha = true;
+            captchaItem = config[i];
+        }
+    }
 
-        item.value_element = setupValueTemplate(item);
-        var template = setupItemTemplate(item);
-
+    var setupItemTemplate = Handlebars.compile($("#setup-item").html());
+    if (hasReacaptcha && !window.jackettIsLocal) {
+        var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
+        captchaItem.value_element = setupValueTemplate(captchaItem);
+        var template = setupItemTemplate(captchaItem);
         $formItemContainer.append(template);
+    } else {
 
-        if (item.type === 'recaptcha') {
-            grecaptcha.render($('.jackettrecaptcha')[0], {
-                'sitekey': item.sitekey
-          });
+        for (var i = 0; i < config.length; i++) {
+            var item = config[i];
+            var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
+            item.value_element = setupValueTemplate(item);
+            var template = setupItemTemplate(item);
+            $formItemContainer.append(template);
+            if (item.type === 'recaptcha') {
+                grecaptcha.render($('.jackettrecaptcha')[0], {
+                    'sitekey': item.sitekey
+                });
+            }
         }
     }
 }
@@ -338,7 +357,11 @@ function getConfigModalJson(configForm) {
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
             case "recaptcha":
-                itemEntry.value = $('.g-recaptcha-response').val();
+                if (window.jackettIsLocal) {
+                    itemEntry.value = $('.g-recaptcha-response').val();
+                } else {
+                    itemEntry.cookie = $el.find(".setup-item-recaptcha input").val();
+                }
                 break;
         }
         configJson.push(itemEntry)

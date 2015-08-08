@@ -103,6 +103,28 @@ namespace Jackett.Indexers
                 { "g-recaptcha-response", configData.Captcha.Value }
             };
 
+            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            {
+                // Cookie was manually supplied
+                CookieHeader = configData.Captcha.Cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (results.Count() == 0)
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
+
+                    SaveConfig();
+                    IsConfigured = true;
+                }
+                catch(Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
+
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
@@ -110,6 +132,12 @@ namespace Jackett.Indexers
                 var messageEl = dom["#login"];
                 messageEl.Children("form").Remove();
                 var errorMessage = messageEl.Text().Trim();
+
+                if (string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    errorMessage = dom.Text();
+                }
+
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }

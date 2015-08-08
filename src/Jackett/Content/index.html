@@ -13,7 +13,7 @@
     <script src="/libs/handlebarsmoment.js"></script>
     <script src="/bootstrap/bootstrap.min.js"></script>
     <script src="/libs/bootstrap-notify.js"></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
     <link href="/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/animate.css" rel="stylesheet">
@@ -21,6 +21,14 @@
     <link href="/css/jquery.dataTables.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
 
+
+    <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
+        <div class="setup-item-recaptcha">
+            <p>This site requires you to enter a ReCaptcha however this only works when accessing Jackett via localhost or 127.0.0.1. If you cannot access Jackett using that hostname then alternatively you can enter the cookie for the site manually.  <a href="https://github.com/zone117x/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
+            <div class="setup-item-label">Full cookie header</div>
+            <input class="form-control" type="text" value="" />
+        </div>
+    </script>
     <script id="setup-item" type="text/x-handlebars-template">
         <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
             <div class="setup-item-label">{{name}}</div>
