@@ -244,3 +244,17 @@ hr {
 .downloadcolumn {
     text-align:center;
 }
+
+pre {
+    display: block;
+    padding: 3px;
+    margin: 0 0 0px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: transparent;
+    border: 0px;
+    border-radius: 0px;
+}

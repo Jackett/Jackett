@@ -72,6 +72,7 @@ namespace Jackett.Models.IndexerConfig
                         break;
                     case ItemType.Recaptcha:
                         ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
+                        ((RecaptchaItem)item).Cookie = arrItem.Value<string>("cookie");
                         break;
                 }
             }
@@ -167,6 +168,7 @@ namespace Jackett.Models.IndexerConfig
         {
             public string SiteKey { get; set; }
             public string Value { get; set; }
+            public string Cookie { get; set; }
             public StringItem()
             {
                 ItemType = ConfigurationData.ItemType.InputString;
