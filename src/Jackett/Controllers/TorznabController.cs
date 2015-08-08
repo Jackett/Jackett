@@ -115,7 +115,7 @@ namespace Jackett.Controllers
             {
                 var clone = Mapper.Map<ReleaseInfo>(result);
                 clone.Link = clone.ConvertToProxyLink(serverUrl, indexerID);
-                resultPage.Releases.Add(result);
+                resultPage.Releases.Add(clone);
             }
 
             var xml = resultPage.ToXml(new Uri(serverUrl));
