@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Jackett.Indexers;
 using Jackett.Models;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,27 @@ namespace Jackett.Services
 {
     public interface ICacheService
     {
-        void CacheRssResults(string trackerId, IEnumerable<ReleaseInfo> releases);
-        List<TrackerCacheResult> GetCachedResults();
+        void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
+        List<TrackerCacheResult> GetCachedResults(string serverUrl);
+        int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
     }
 
     public class CacheService : ICacheService
     {
         private readonly List<TrackerCache> cache = new List<TrackerCache>();
-        private readonly int MAX_RESULTS_PER_TRACKER = 250;
-        private readonly TimeSpan AGE_LIMIT = new TimeSpan(2, 0, 0, 0);
+        private readonly int MAX_RESULTS_PER_TRACKER = 1000;
+        private readonly TimeSpan AGE_LIMIT = new TimeSpan(7, 0, 0, 0);
 
-        public void CacheRssResults(string trackerId, IEnumerable<ReleaseInfo> releases)
+        public void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
             lock (cache)
             {
-                var trackerCache = cache.Where(c => c.TrackerId == trackerId).FirstOrDefault();
+                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
                 if (trackerCache == null)
                 {
                     trackerCache = new TrackerCache();
-                    trackerCache.TrackerId = trackerId;
+                    trackerCache.TrackerId = indexer.ID;
+                    trackerCache.TrackerName = indexer.DisplayName;
                     cache.Add(trackerCache);
                 }
 
@@ -59,7 +62,31 @@ namespace Jackett.Services
             }
         }
 
-        public List<TrackerCacheResult> GetCachedResults()
+        public int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
+        {
+            lock (cache)
+            {
+                int newItemCount = 0;
+                var trackerCache = cache.Where(c => c.TrackerId == indexer.ID).FirstOrDefault();
+                if (trackerCache != null)
+                {
+                    foreach (var release in releases)
+                    {
+                        if (trackerCache.Results.Where(i => i.Result.Guid == release.Guid).Count() == 0)
+                        {
+                            newItemCount++;
+                        }
+                    }
+                }
+                else {
+                    newItemCount++;
+                }
+
+                return newItemCount;
+            }
+        }
+
+        public List<TrackerCacheResult> GetCachedResults(string serverUrl)
         {
             lock (cache)
             {
@@ -71,13 +98,17 @@ namespace Jackett.Services
                     {
                         var item = Mapper.Map<TrackerCacheResult>(release.Result);
                         item.FirstSeen = release.Created;
-                        item.Tracker = tracker.TrackerId;
+                        item.Tracker = tracker.TrackerName;
                         item.Peers = item.Peers - item.Seeders; // Use peers as leechers
+                        item.Link = item.ConvertToProxyLink(serverUrl, tracker.TrackerId);
+                        if(item.Link!=null && item.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
+                            item.BlackholeLink = item.ConvertToProxyLink(serverUrl, tracker.TrackerId, "blackhole");
+
                         results.Add(item);
                     }
                 }
 
-                return results.OrderByDescending(i=>i.PublishDate).ToList();
+                return results.Take(3000).OrderByDescending(i=>i.PublishDate).ToList();
             }
         }
     }

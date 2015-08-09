@@ -33,8 +33,11 @@ namespace Jackett.Console
         [Option('k', "Stop", HelpText = "Stop the Jacket Windows service (Must be admin)")]
         public bool StopService { get; set; }
 
-        [Option('x', "ListenPublic", HelpText = "Listen publicly [true/false]")]
-        public bool? ListenPublic { get; set; }
+        [Option('x',  "ListenPublic",  HelpText = "Listen publicly")]
+        public bool ListenPublic { get; set; }
+
+        [Option('z', "ListenPrivate", HelpText = "Only allow local access")]
+        public bool ListenPrivate { get; set; }
 
         [Option('h', "Help",  HelpText = "Show Help")]
         public bool ShowHelp { get; set; }
@@ -48,7 +51,10 @@ namespace Jackett.Console
         [Option('m', "MigrateSettings", HelpText = "Migrate settings manually (Must be admin on Windows)")]
         public bool MigrateSettings { get; set; }
 
-        [Option('f', "SSLFix", HelpText = "Linux Libcurl NSS Missing ECC Ciphers workaround (Use if you can't access some trackers) [true/false].")]
+        [Option('f', "SSLFix", HelpText = "[true/false] Linux Libcurl NSS Missing ECC Ciphers workaround (Use if you can't access some trackers) .")]
         public bool? SSLFix { get; set; }
+
+        [ParserState]
+        public IParserState LastParserState { get; set; }
     }
 }

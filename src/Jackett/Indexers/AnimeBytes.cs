@@ -25,28 +25,30 @@ namespace Jackett.Indexers
     {
         private string LoginUrl { get { return SiteLink + "user/login"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?filter_cat[1]=1"; } }
-        public bool AllowRaws { get; private set; }
+        public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
 
-        public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l)
+        new ConfigurationDataAnimeBytes configData
+        {
+            get { return (ConfigurationDataAnimeBytes)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l, IProtectionService ps)
             : base(name: "AnimeBytes",
                 link: "https://animebytes.tv/",
                 description: "Powered by Tentacles",
                 manager: i,
                 client: client,
                 caps: new TorznabCapabilities(TorznabCatType.Anime),
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataAnimeBytes())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLoginAnimeBytes());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLoginAnimeBytes();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             lock (cache)
             {
@@ -59,18 +61,18 @@ namespace Jackett.Indexers
                 Url = LoginUrl
             });
 
-            CQ loginPageDom =loginPage.Content;
+            CQ loginPageDom = loginPage.Content;
             var csrfToken = loginPageDom["input[name=\"csrf_token\"]"].Last();
 
             // Build login form
             var pairs = new Dictionary<string, string> {
                     { "csrf_token", csrfToken.Attr("value") },
-				    { "username", config.Username.Value },
-				    { "password", config.Password.Value },
+                    { "username", configData.Username.Value },
+                    { "password", configData.Password.Value },
                     { "keeplogged_sent", "true" },
                     { "keeplogged", "on" },
                     { "login", "Log In!" }
-			};
+            };
 
             // Do the login
             var request = new Utils.Clients.WebRequest()
@@ -86,32 +88,26 @@ namespace Jackett.Indexers
             // Follow the redirect
             await FollowIfRedirect(response, request.Url, SearchUrl);
 
-            if (!(response.Content != null && response.Content.Contains("/user/logout")))
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/user/logout"), () =>
             {
                 // Their login page appears to be broken and just gives a 500 error.
-                throw new ExceptionWithConfigData("Failed to login, 6 failed attempts will get you banned for 6 hours.", (ConfigurationData)config);
-            }
-            else
-            {
-                cookieHeader = response.Cookies;
-                AllowRaws = config.IncludeRaw.Value;
-                var configSaveData = new JObject();
-                configSaveData["cookies"] = cookieHeader;
-                configSaveData["raws"] = AllowRaws;
-                SaveConfig(configSaveData);
-                IsConfigured = true;
-            }
+                throw new ExceptionWithConfigData("Failed to login, 6 failed attempts will get you banned for 6 hours.", configData);
+            });
         }
 
+        // Override to load legacy config format
         public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            // The old config used an array - just fail to load it
-            if (!(jsonConfig["cookies"] is JArray))
+            if (jsonConfig is JObject)
             {
-                cookieHeader = (string)jsonConfig["cookies"];
-                AllowRaws = jsonConfig["raws"].Value<bool>();
+                configData.CookieHeader.Value = jsonConfig.Value<string>("cookies");
+                configData.IncludeRaw.Value = jsonConfig.Value<bool>("raws");
+                SaveConfig();
                 IsConfigured = true;
+                return;
             }
+
+            base.LoadFromSavedConfiguration(jsonConfig);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -257,7 +253,7 @@ namespace Jackett.Indexers
                                 release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
 
                                 var infoLink = links.Get(1);
-                                release.Comments = new Uri(SiteLink  + infoLink.Attributes.GetAttribute("href"));
+                                release.Comments = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href"));
                                 release.Guid = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
                                 release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"), UriKind.Relative);
 
@@ -337,7 +333,7 @@ namespace Jackett.Indexers
             var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
             {
                 Url = SiteLink + link.ToString(),
-                Cookies = cookieHeader
+                Cookies = CookieHeader
             });
 
             return response.Content;

@@ -70,6 +70,7 @@ namespace Jackett
 
             Mapper.CreateMap<WebClientStringResult, WebClientStringResult>();
             Mapper.CreateMap<WebClientByteResult, WebClientByteResult>();
+            Mapper.CreateMap<ReleaseInfo, ReleaseInfo>();
 
             Mapper.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
             {

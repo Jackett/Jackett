@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -20,30 +21,32 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string SearchUrl { get { return SiteLink + "{0}?method=1&c{1}=1&search={2}"; } }
 
-        public SceneAccess(IIndexerManagerService i, IWebClient c, Logger l)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public SceneAccess(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "SceneAccess",
                 description: "Your gateway to the scene",
                 link: "https://sceneaccess.eu/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
-                { "username", config.Username.Value },
-                { "password", config.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "submit", "come on in" }
             };
 
@@ -55,7 +58,7 @@ namespace Jackett.Indexers
                 CQ dom = result.Content;
                 var messageEl = dom["#login_box_desc"];
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

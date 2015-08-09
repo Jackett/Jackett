@@ -15,7 +15,9 @@ namespace Jackett.Distribution
     {
         static readonly string repoOwner = "zone117x";
         static readonly string repoName = "Jackett";
-        static readonly string buildZipFile = "JackettBuild.zip";
+        static readonly string jackettLibPath = Path.Combine("build.windows", "Jackett.dll");
+        static readonly string buildZipFileWindows = "JackettBuildWindows.zip";
+        static readonly string buildZipFileMono = "JackettBuildMono.zip";
         static readonly string installFile = Path.Combine("Output", "setup.exe");
 
         static GitHubClient github;
@@ -32,22 +34,25 @@ namespace Jackett.Distribution
             github.Credentials = new Credentials(token);
 
             localVersion = GetJackettVersion();
-            var latestReleaseVersion = LatestGithubRelease().Result;
+            /*var latestReleaseVersion = LatestGithubRelease().Result;
             if (localVersion <= latestReleaseVersion)
             {
                 Console.WriteLine("Latest Github release is {0}, will not upload local version {1}", latestReleaseVersion, localVersion);
                 return;
-            }
+            }*/
 
-            Console.WriteLine("Zipping release build " + localVersion);
-            ZippingReleaseBuild();
+            Console.WriteLine("Zipping release build for Windows " + localVersion);
+            ZippingReleaseBuildWindows();
+
+            Console.WriteLine("Zipping release build for Mono " + localVersion);
+            ZippingReleaseBuildMono();
 
             UploadRelease().Wait();
         }
 
         static Version GetJackettVersion()
         {
-            var assemblyVersion = AssemblyName.GetAssemblyName(Path.Combine("Build", "Jackett.dll")).Version;
+            var assemblyVersion = AssemblyName.GetAssemblyName(jackettLibPath).Version;
             return new Version(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
@@ -59,11 +64,18 @@ namespace Jackett.Distribution
             return version;
         }
 
-        static void ZippingReleaseBuild()
+        static void ZippingReleaseBuildWindows()
         {
-            if (File.Exists(buildZipFile))
-                File.Delete(buildZipFile);
-            ZipFile.CreateFromDirectory("Build", buildZipFile);
+            if (File.Exists(buildZipFileWindows))
+                File.Delete(buildZipFileWindows);
+            ZipFile.CreateFromDirectory("build.windows", buildZipFileWindows);
+        }
+
+        static void ZippingReleaseBuildMono()
+        {
+            if (File.Exists(buildZipFileMono))
+                File.Delete(buildZipFileMono);
+            ZipFile.CreateFromDirectory("build.mono", buildZipFileMono);
         }
 
         static async Task UploadRelease()
@@ -93,23 +105,23 @@ namespace Jackett.Distribution
 
             var releaseResult = await github.Release.Create(repoOwner, repoName, newRelease);
 
+            Console.WriteLine("Uploading Windows build");
+            await UploadFileToGithub(releaseResult, buildZipFileWindows, string.Format("Jackett.Windows.v{0}.zip", localVersion), "application/zip");
+            Console.WriteLine("Uploading Mono build");
+            await UploadFileToGithub(releaseResult, buildZipFileMono, string.Format("Jackett.Mono.v{0}.zip", localVersion), "application/zip");
+            Console.WriteLine("Uploading Windows installer");
+            await UploadFileToGithub(releaseResult, installFile, string.Format("Jackett.v{0}.Windows.Installer.exe", localVersion), "application/octet-stream");
+        }
 
-            var buildZipAsset = new ReleaseAssetUpload()
+        static Task UploadFileToGithub(Release githubRelease, string filePath, string filePublishName, string contentType)
+        {
+            var buildZipAssetWindows = new ReleaseAssetUpload()
             {
-                FileName = string.Format("Jackett.v{0}.zip", localVersion),
-                ContentType = "application/zip",
-                RawData = File.OpenRead(buildZipFile)
+                FileName = filePublishName,
+                ContentType = contentType,
+                RawData = File.OpenRead(filePath)
             };
-            var buildZipAssetResult = await github.Release.UploadAsset(releaseResult, buildZipAsset);
-
-            var installFileAsset = new ReleaseAssetUpload()
-            {
-                FileName = string.Format("Jackett.v{0}.Windows.Installer.exe", localVersion),
-                ContentType = "application/octet-stream",
-                RawData = File.OpenRead(installFile)
-            };
-            var installFileAssetResult = await github.Release.UploadAsset(releaseResult, installFileAsset);
-
+            return github.Release.UploadAsset(githubRelease, buildZipAssetWindows);
         }
     }
 }

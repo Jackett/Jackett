@@ -5,22 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Models
+namespace Jackett.Models.IndexerConfig
 {
-    public class ConfigurationDataBasicLogin : ConfigurationData
+    public class ConfigurationDataRecaptchaLogin : ConfigurationData
     {
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }
+        public RecaptchaItem Captcha { get; private set; }
 
-        public ConfigurationDataBasicLogin()
+        public ConfigurationDataRecaptchaLogin()
         {
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
+            Captcha = new RecaptchaItem() { Name = "Recaptcha" };
         }
 
-        public override Item[] GetItems()
-        {
-            return new Item[] { Username, Password };
-        }
+
     }
 }

@@ -14,57 +14,64 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class ShowRSS : BaseIndexer, IIndexer
     {
-        private string searchAllUrl { get { return SiteLink + "feeds/all.rss"; } }
-        private string BaseUrl;
+        readonly static string defaultSiteLink = "http://showrss.info/";
 
-        public ShowRSS(IIndexerManagerService i, Logger l, IWebClient wc)
+        private Uri BaseUri
+        {
+            get { return new Uri(configData.Url.Value); }
+            set { configData.Url.Value = value.ToString(); }
+        }
+
+        private string SearchAllUrl { get { return BaseUri + "feeds/all.rss"; } }
+
+        new ConfigurationDataUrl configData
+        {
+            get { return (ConfigurationDataUrl)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public ShowRSS(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-                link: "http://showrss.info/",
+                link: defaultSiteLink,
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataUrl(defaultSiteLink))
         {
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
+        public async Task ApplyConfiguration(JToken configJson)
         {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(SiteLink));
-        }
+            configData.LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
 
-        public async Task ApplyConfiguration(Newtonsoft.Json.Linq.JToken configJson)
-        {
-            var config = new ConfigurationDataUrl(SiteLink);
-            config.LoadValuesFromJson(configJson);
-
-            var formattedUrl = config.GetFormattedHostUrl();
-            var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Count() == 0)
+            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
+            {
                 throw new Exception("Could not find releases from this URL");
-
-            BaseUrl = formattedUrl;
-
-            var configSaveData = new JObject();
-            configSaveData["base_url"] = BaseUrl;
-            SaveConfig(configSaveData);
-            IsConfigured = true;
+            });
         }
 
-        public override void LoadFromSavedConfiguration(Newtonsoft.Json.Linq.JToken jsonConfig)
+        // Override to load legacy config format
+        public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            BaseUrl = (string)jsonConfig["base_url"];
-            IsConfigured = true;
-        }
+            if (jsonConfig is JObject)
+            {
+                BaseUri = new Uri(jsonConfig.Value<string>("base_url"));
+                SaveConfig();
+                IsConfigured = true;
+                return;
+            }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            return await PerformQuery(query, BaseUrl);
+            base.LoadFromSavedConfiguration(jsonConfig);
         }
 
         public override Task<byte[]> Download(Uri link)
@@ -72,11 +79,11 @@ namespace Jackett.Indexers
             throw new NotImplementedException();
         }
 
-        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(searchAllUrl);
+            var episodeSearchUrl = string.Format(SearchAllUrl);
             var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             var xmlDoc = new XmlDocument();
 

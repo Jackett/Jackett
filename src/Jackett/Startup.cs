@@ -115,6 +115,12 @@ namespace Jackett
                 defaults: new { controller = "Download", action = "Download" }
             );
 
+            config.Routes.MapHttpRoute(
+              name: "blackhole",
+              routeTemplate: "api/{indexerID}/blackhole/{path}/t.torrent",
+              defaults: new { controller = "Blackhole", action = "Blackhole" }
+          );
+
             appBuilder.UseFileServer(new FileServerOptions
             {
                 RequestPath = new PathString(string.Empty),

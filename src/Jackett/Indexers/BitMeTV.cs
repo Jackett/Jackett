@@ -26,53 +26,59 @@ namespace Jackett.Indexers
         private string CaptchaUrl { get { return SiteLink + "visual.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        public BitMeTV(IIndexerManagerService i, Logger l, IWebClient c)
+        new ConfigurationDataCaptchaLogin configData
+        {
+            get { return (ConfigurationDataCaptchaLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public BitMeTV(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "BitMeTV",
                 description: "TV Episode specialty tracker",
                 link: "http://www.bitmetv.org/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataCaptchaLogin())
         {
         }
 
-        public async Task<ConfigurationData> GetConfigurationForSetup()
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var response = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = LoginUrl
             });
-            cookieHeader = response.Cookies;
+            CookieHeader = response.Cookies;
             var captchaImage = await RequestBytesWithCookies(CaptchaUrl);
-            var config = new BmtvConfig();
-            config.CaptchaImage.Value = captchaImage.Content;
-            config.CaptchaCookie.Value = captchaImage.Cookies;
-            return (ConfigurationData)config;
+            configData.CaptchaImage.Value = captchaImage.Content;
+            configData.CaptchaCookie.Value = captchaImage.Cookies;
+            return configData;
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new BmtvConfig();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
-				{ "secimage", config.CaptchaText.Value }
-			};
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "secimage", configData.CaptchaText.Value }
+            };
 
-            var response = await RequestLoginAndFollowRedirect(LoginPost, pairs, config.CaptchaCookie.Value, true);
+            var response = await RequestLoginAndFollowRedirect(LoginPost, pairs, configData.CaptchaCookie.Value, true);
             await ConfigureIfOK(response.Cookies, response.Content.Contains("/logout.php"), async () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["table tr > td.embedded > h2"].Last();
                 var errorMessage = messageEl.Text();
                 var captchaImage = await RequestBytesWithCookies(CaptchaUrl);
-                config.CaptchaImage.Value = captchaImage.Content;
-                config.CaptchaText.Value = "";
-                config.CaptchaCookie.Value = captchaImage.Cookies;
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                configData.CaptchaImage.Value = captchaImage.Content;
+                configData.CaptchaText.Value = "";
+                configData.CaptchaCookie.Value = captchaImage.Cookies;
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

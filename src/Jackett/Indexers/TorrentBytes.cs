@@ -15,6 +15,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -23,16 +24,24 @@ namespace Jackett.Indexers
         private string BrowseUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
 
-        public TorrentBytes(IIndexerManagerService i, IWebClient wc, Logger l)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public TorrentBytes(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentBytes",
                 description: "A decade of torrentbytes",
                 link: "https://www.torrentbytes.net/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
-           
+
             AddCategoryMapping(41, TorznabCatType.TV);
             AddCategoryMapping(33, TorznabCatType.TVSD);
             AddCategoryMapping(38, TorznabCatType.TVHD);
@@ -62,18 +71,12 @@ namespace Jackett.Indexers
             AddCategoryMapping(24, TorznabCatType.XXXImg);
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
-        }
-
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-                { "username", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "returnto", "/" },
                 { "login", "Log in!" }
             };
@@ -86,7 +89,7 @@ namespace Jackett.Indexers
                 CQ dom = result.Content;
                 var messageEl = dom["body > div"].First();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 
@@ -118,7 +121,7 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             // 15 results per page - really don't want to call the server twice but only 15 results per page is a bit crap!
-            await ProcessPage(releases, searchUrl);  
+            await ProcessPage(releases, searchUrl);
             await ProcessPage(releases, searchUrl + "&page=1");
             return releases;
         }

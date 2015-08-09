@@ -15,67 +15,72 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class ThePirateBay : BaseIndexer, IIndexer
     {
-        private const string SearchUrl = "/search/{0}/0/99/208,205";
-        private string BaseUrl;
+        readonly static string defaultSiteLink = "https://thepiratebay.mn/";
 
-        public ThePirateBay(IIndexerManagerService i, Logger l, IWebClient wc)
+        private Uri BaseUri
+        {
+            get { return new Uri(configData.Url.Value); }
+            set { configData.Url.Value = value.ToString(); }
+        }
+
+        private string SearchUrl { get { return BaseUri + "search/{0}/0/99/208,205"; } }
+
+        new ConfigurationDataUrl configData
+        {
+            get { return (ConfigurationDataUrl)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public ThePirateBay(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "The Pirate Bay",
                 description: "The worlds largest bittorrent indexer",
-                link: "https://thepiratebay.mn/",
+                link: defaultSiteLink,
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataUrl(defaultSiteLink))
         {
-            BaseUrl = SiteLink.ToString();
-            IsConfigured = false;
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataUrl(BaseUrl));
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataUrl(SiteLink);
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
 
-            var formattedUrl = config.GetFormattedHostUrl();
-            var releases = await PerformQuery(new TorznabQuery(), formattedUrl);
-            if (releases.Count() == 0)
+            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
+            {
                 throw new Exception("Could not find releases from this URL");
-
-            BaseUrl = formattedUrl;
-
-            var configSaveData = new JObject();
-            configSaveData["base_url"] = BaseUrl;
-            SaveConfig(configSaveData);
-            IsConfigured = true;
+            });
         }
 
+        // Override to load legacy config format
         public override void LoadFromSavedConfiguration(JToken jsonConfig)
         {
-            BaseUrl = (string)jsonConfig["base_url"];
-            IsConfigured = true;
+            if (jsonConfig is JObject)
+            {
+                BaseUri = new Uri(jsonConfig.Value<string>("base_url"));
+                SaveConfig();
+                IsConfigured = true;
+                return;
+            }
+
+            base.LoadFromSavedConfiguration(jsonConfig);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            return await PerformQuery(query, BaseUrl);
-        }
-
-        async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, string baseUrl)
-        {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var queryStr = HttpUtility.UrlEncode(searchString);
-            var episodeSearchUrl = baseUrl + string.Format(SearchUrl, queryStr);
+            var episodeSearchUrl = string.Format(SearchUrl, queryStr);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
 
             try
@@ -94,7 +99,7 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Text().Trim();
                     release.Description = release.Title;
-                    release.Comments = new Uri(baseUrl + "/" + qLink.Attr("href").TrimStart('/'));
+                    release.Comments = new Uri(BaseUri + qLink.Attr("href").TrimStart('/'));
                     release.Guid = release.Comments;
 
                     var downloadCol = row.ChildElements.ElementAt(1).Cq().Children("a");

@@ -1,16 +1,40 @@
 ﻿$(document).ready(function () {
     $.ajaxSetup({ cache: false });
-    HandlebarsIntl.registerWith(Handlebars);
     reloadIndexers();
     loadJackettSettings();
+
+    window.jackettIsLocal = window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1';
+
+    $('body').on('click', '.downloadlink', function (e, b) {
+        $(e.target).addClass('jackettdownloaded');
+    });
+
+
+    $('body').on('click', '.jacketdownloadserver', function (event) {
+        var href = $(event.target).parent().attr('href');
+        var jqxhr = $.get(href, function (data) {
+            if (data.result == "error") {
+                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                return;
+            } else {
+                doNotify("Downloaded sent to the blackhole successfully.", "success", "glyphicon glyphicon-ok");
+            }
+        }).fail(function () {
+            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+        });
+        event.preventDefault();
+        return false;
+    });
+
 });
 
 function loadJackettSettings() {
     getJackettConfig(function (data) {
-
         $("#api-key-input").val(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
+        $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
@@ -34,12 +58,14 @@ $("#jackett-show-releases").click(function () {
                    {
                        "targets": 0,
                        "visible": false,
-                       "searchable": false
+                       "searchable": false,
+                       "type": 'date'
                    },
                    {
                        "targets": 1,
                        "visible": false,
-                       "searchable": false
+                       "searchable": false,
+                       "type": 'date'
                    },
                    {
                        "targets": 2,
@@ -53,8 +79,46 @@ $("#jackett-show-releases").click(function () {
                        "searchable": false,
                        "iDataSort": 1
                    }
-                ]
+                ],
+                initComplete: function () {
+                    var count = 0;
+                    this.api().columns().every(function () {
+                        count++;
+                        if (count === 5 || count === 7) {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>')
+                            });
+                        }
+                    });
+                }
             });
+        $("#modals").append(releaseDialog);
+        releaseDialog.modal("show");
+
+    }).fail(function () {
+        doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+});
+
+
+$("#view-jackett-logs").click(function () {
+    var jqxhr = $.get("/admin/GetLogs", function (data) {
+        var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
+        var item = { logs: data };
+        var releaseDialog = $(releaseTemplate(item));
         $("#modals").append(releaseDialog);
         releaseDialog.modal("show");
 
@@ -67,13 +131,17 @@ $("#jackett-show-releases").click(function () {
 $("#change-jackett-port").click(function () {
     var jackett_port = $("#jackett-port").val();
     var jackett_external = $("#jackett-allowext").is(':checked');
-    var jsonObject = { port: jackett_port, external: jackett_external };
-    var jqxhr = $.post("/admin/set_port", JSON.stringify(jsonObject), function (data) {
+    var jsonObject = {
+        port: jackett_port,
+        external: jackett_external,
+        blackholedir: $("#jackett-savedir").val()
+    };
+    var jqxhr = $.post("/admin/set_config", JSON.stringify(jsonObject), function (data) {
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         } else {
-            doNotify("The port has been changed. Redirecting you to the new port.", "success", "glyphicon glyphicon-ok");
+            doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
             window.setTimeout(function () {
                 url = window.location.href;
                 if (data.external) {
@@ -132,19 +200,19 @@ function reloadIndexers() {
 }
 
 function displayIndexers(items) {
-    var indexerTemplate = Handlebars.compile($("#templates > .configured-indexer")[0].outerHTML);
-    var unconfiguredIndexerTemplate = Handlebars.compile($("#templates > .unconfigured-indexer")[0].outerHTML);
+    var indexerTemplate = Handlebars.compile($("#configured-indexer").html());
+    var unconfiguredIndexerTemplate = Handlebars.compile($("#unconfigured-indexer").html());
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
         item.torznab_host = resolveUrl("/torznab/" + item.id);
-        item.potato_host = resolveUrl("/potato/" + item.id);  
+        item.potato_host = resolveUrl("/potato/" + item.id);
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
             $('#unconfigured-indexers').append($(unconfiguredIndexerTemplate(item)));
     }
 
-    var addIndexerButton = $("#templates > .add-indexer")[0].outerHTML;
+    var addIndexerButton = $('#add-indexer').html();
     $('#indexers').append(addIndexerButton);
 
     $('#indexers').fadeIn();
@@ -228,12 +296,38 @@ function populateConfigItems(configForm, config) {
     }
     var $formItemContainer = configForm.find(".config-setup-form");
     $formItemContainer.empty();
-    var setupItemTemplate = Handlebars.compile($("#templates > .setup-item")[0].outerHTML);
+
+    $('.jackettrecaptcha').remove();
+
+    var hasReacaptcha = false;
+    var captchaItem = null;
     for (var i = 0; i < config.length; i++) {
-        var item = config[i];
-        var setupValueTemplate = Handlebars.compile($("#templates > .setup-item-" + item.type)[0].outerHTML);
-        item.value_element = setupValueTemplate(item);
-        $formItemContainer.append(setupItemTemplate(item));
+        if (config[i].type === 'recaptcha') {
+            hasReacaptcha = true;
+            captchaItem = config[i];
+        }
+    }
+
+    var setupItemTemplate = Handlebars.compile($("#setup-item").html());
+    if (hasReacaptcha && !window.jackettIsLocal) {
+        var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
+        captchaItem.value_element = setupValueTemplate(captchaItem);
+        var template = setupItemTemplate(captchaItem);
+        $formItemContainer.append(template);
+    } else {
+
+        for (var i = 0; i < config.length; i++) {
+            var item = config[i];
+            var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
+            item.value_element = setupValueTemplate(item);
+            var template = setupItemTemplate(item);
+            $formItemContainer.append(template);
+            if (item.type === 'recaptcha') {
+                grecaptcha.render($('.jackettrecaptcha')[0], {
+                    'sitekey': item.sitekey
+                });
+            }
+        }
     }
 }
 
@@ -246,22 +340,31 @@ function newConfigModal(title, config, caps) {
 }
 
 function getConfigModalJson(configForm) {
-    var configJson = {};
+    var configJson = [];
     configForm.find(".config-setup-form").children().each(function (i, el) {
         $el = $(el);
         var type = $el.data("type");
         var id = $el.data("id");
+        var itemEntry = { id: id };
         switch (type) {
             case "hiddendata":
-                configJson[id] = $el.find(".setup-item-hiddendata input").val();
+                itemEntry.value = $el.find(".setup-item-hiddendata input").val();
                 break;
             case "inputstring":
-                configJson[id] = $el.find(".setup-item-inputstring input").val();
+                itemEntry.value = $el.find(".setup-item-inputstring input").val();
                 break;
             case "inputbool":
-                configJson[id] = $el.find(".setup-item-inputbool input").is(":checked");
+                itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
+                break;
+            case "recaptcha":
+                if (window.jackettIsLocal) {
+                    itemEntry.value = $('.g-recaptcha-response').val();
+                } else {
+                    itemEntry.cookie = $el.find(".setup-item-recaptcha input").val();
+                }
                 break;
         }
+        configJson.push(itemEntry)
     });
     return configJson;
 }
@@ -275,7 +378,7 @@ function populateSetupForm(indexerId, name, config, caps) {
 
         var originalBtnText = $goButton.html();
         $goButton.prop('disabled', true);
-        $goButton.html($('#templates > .spinner')[0].outerHTML);
+        $goButton.html($('#spinner').html());
 
         var jqxhr = $.post("/admin/configure_indexer", JSON.stringify(data), function (data) {
             if (data.result == "error") {

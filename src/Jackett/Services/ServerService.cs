@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Jackett.Models.Config;
 using Jackett.Services;
+using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Microsoft.Owin.Hosting;
 using Newtonsoft.Json.Linq;
@@ -16,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -91,10 +93,14 @@ namespace Jackett.Services
                 }
 
                 if (string.IsNullOrWhiteSpace(config.APIKey))
-                {
-                    config.APIKey = config.GenerateApi();
-                }
+                    config.APIKey = StringUtil.GenerateRandom(32);
 
+                configService.SaveConfig<ServerConfig>(config);
+            }
+
+            if (string.IsNullOrWhiteSpace(config.InstanceId))
+            {
+                config.InstanceId = StringUtil.GenerateRandom(64);
                 configService.SaveConfig<ServerConfig>(config);
             }
         }

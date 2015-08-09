@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -23,14 +24,22 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string QueryString { get { return "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no"; } }
 
-        public ImmortalSeed(IIndexerManagerService i, IWebClient wc, Logger l)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public ImmortalSeed(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "ImmortalSeed",
                 description: "ImmortalSeed",
                 link: "http://immortalseed.me/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
             AddCategoryMapping(32, TorznabCatType.Anime);
             AddCategoryMapping(47, TorznabCatType.TVSD);
@@ -58,18 +67,12 @@ namespace Jackett.Indexers
 
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
-        }
-
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-                { "username", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value }
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
             };
             var request = new Utils.Clients.WebRequest()
             {
@@ -88,7 +91,7 @@ namespace Jackett.Indexers
             {
                 var tries = resultDom["#main tr:eq(1) td font"].First().Text();
                 var errorMessage = "Incorrect username or password! " + tries + " tries remaining.";
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 
@@ -153,6 +156,6 @@ namespace Jackett.Indexers
             return releases;
         }
 
-     
+
     }
 }
