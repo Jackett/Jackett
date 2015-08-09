@@ -15,6 +15,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -22,14 +23,22 @@ namespace Jackett.Indexers
     {
         private string BrowseUrl { get { return SiteLink + "t"; } }
 
-        public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
             AddCategoryMapping(72, TorznabCatType.Movies);
             AddCategoryMapping(77, TorznabCatType.MoviesSD);
@@ -74,18 +83,12 @@ namespace Jackett.Indexers
             AddCategoryMapping(94, TorznabCatType.Comic);
         }
 
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
-        }
-
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-                { "username", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value }
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
             };
             var request = new Utils.Clients.WebRequest()
             {
@@ -104,7 +107,7 @@ namespace Jackett.Indexers
                 CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 
@@ -130,7 +133,7 @@ namespace Jackett.Indexers
             {
                 searchUrl += "?" + queryCollection.GetQueryString();
             }
-                       
+
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
 
             var results = response.Content;

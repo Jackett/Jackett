@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -22,40 +23,42 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
         private string SearchUrl { get { return SiteLink + "torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?"; } }
 
-        public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentLeech",
                 description: "This is what happens when you seed",
                 link: "http://www.torrentleech.org/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", config.Username.Value },
-				{ "password", config.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "remember_me", "on" },
                 { "login", "submit" }
-			};
+            };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true,null, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
                 CQ dom = result.Content;
                 var messageEl = dom[".ui-state-error"].Last();
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

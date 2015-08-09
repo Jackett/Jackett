@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Jackett.Models
 {
@@ -91,5 +92,14 @@ namespace Jackett.Models
             return (long)(kb * 1024f);
         }
 
+        public Uri ConvertToProxyLink(string serverUrl, string indexerId, string action = "download")
+        {
+            if (Link == null || (Link.IsAbsoluteUri && Link.Scheme == "magnet"))
+                return Link;
+            var originalLink = Link;
+            var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
+            var proxyLink = string.Format("{0}api/{1}/{2}/{3}", serverUrl, indexerId, action, encodedLink);
+            return new Uri(proxyLink);
+        }
     }
 }

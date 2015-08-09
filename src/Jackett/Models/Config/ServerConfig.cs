@@ -19,6 +19,8 @@ namespace Jackett.Models.Config
         public bool AllowExternal { get; set; }
         public string APIKey { get; set; }
         public string AdminPassword { get; set; }
+        public string InstanceId { get; set; }
+        public string BlackholeDir { get; set; }
 
         public string[] GetListenAddresses(bool? external = null)
         {
@@ -37,20 +39,6 @@ namespace Jackett.Models.Config
                     "http://localhost:" + Port + "/",
                 };
             }
-        }
-
-        public string GenerateApi()
-        {
-            var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            var randBytes = new byte[32];
-            var rngCsp = new RNGCryptoServiceProvider();
-            rngCsp.GetBytes(randBytes);
-            var key = "";
-            foreach (var b in randBytes)
-            {
-                key += chars[b % chars.Length];
-            }
-            return key;
         }
     }
 }

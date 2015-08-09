@@ -13,6 +13,7 @@ using CsQuery;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -21,32 +22,34 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
         private string SearchUrl { get { return SiteLink + "index.php?page=torrents&active=0&options=0&category=21%3B22&search={0}"; } }
 
-        public HDSpace(IIndexerManagerService i, IWebClient wc, Logger l)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public HDSpace(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "HD-Space",
                 description: "Sharing The Universe",
                 link: "https://hd-space.org/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var config = new ConfigurationDataBasicLogin();
-            config.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
 
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
-                { "uid", config.Username.Value },
-                { "pwd", config.Password.Value }
+                { "uid", configData.Username.Value },
+                { "pwd", configData.Password.Value }
             };
 
             // Send Post
@@ -58,7 +61,7 @@ namespace Jackett.Indexers
                 var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)")).Match(loginPage.Content).Groups[1].ToString();
                 var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", String.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)config);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

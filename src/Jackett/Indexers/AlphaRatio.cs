@@ -14,6 +14,7 @@ using Jackett.Utils;
 using NLog;
 using Jackett.Services;
 using Jackett.Utils.Clients;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -24,21 +25,18 @@ namespace Jackett.Indexers
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
-        public AlphaRatio(IIndexerManagerService i, IWebClient w, Logger l)
+        public AlphaRatio(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: "https://alpharatio.cc/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
             webclient = w;
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -54,13 +52,13 @@ namespace Jackett.Indexers
 
             // Do the login
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content!=null && response.Content.Contains("logout.php?"), () =>
-             {
-                 CQ dom = response.Content;
-                 dom["#loginform > table"].Remove();
-                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
-                 throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
-             });
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php?"), () =>
+               {
+                   CQ dom = response.Content;
+                   dom["#loginform > table"].Remove();
+                   var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
+                   throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+               });
         }
 
         void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)

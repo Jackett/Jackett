@@ -23,7 +23,7 @@ namespace Jackett
             public string Cookies { get; private set; }
             public string Referer { get; private set; }
             public HttpMethod Method { get; private set; }
-            public Dictionary<string, string> PostData { get; set; }
+            public IEnumerable<KeyValuePair<string, string>> PostData { get; set; }
 
             public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null)
             {
@@ -38,7 +38,7 @@ namespace Jackett
         {
             public List<string[]> HeaderList { get; private set; }
             public byte[] Content { get; private set; }
-            public HttpStatusCode Status { get; private set;}
+            public HttpStatusCode Status { get; private set; }
             public string Cookies { set; get; }
 
             public CurlResponse(List<string[]> headers, byte[] content, HttpStatusCode s, string cookies)
@@ -55,9 +55,9 @@ namespace Jackett
             var curlRequest = new CurlRequest(HttpMethod.Get, url, cookies, referer);
             var result = await PerformCurlAsync(curlRequest);
             return result;
-        }    
+        }
 
-        public static async Task<CurlResponse> PostAsync(string url, Dictionary<string, string> formData, string cookies = null, string referer = null)
+        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer);
             curlRequest.PostData = formData;
@@ -86,7 +86,7 @@ namespace Jackett
                     easy.BufferSize = 64 * 1024;
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
                     easy.FollowLocation = false;
-                    easy.ConnectTimeout  = 20;
+                    easy.ConnectTimeout = 20;
 
                     easy.WriteFunction = (byte[] buf, int size, int nmemb, object data) =>
                     {
@@ -109,7 +109,7 @@ namespace Jackett
                     if (curlRequest.Method == HttpMethod.Post)
                     {
                         easy.Post = true;
-                        var postString = new FormUrlEncodedContent(curlRequest.PostData).ReadAsStringAsync().Result;
+                        var postString = StringUtil.PostDataFromDict(curlRequest.PostData);
                         easy.PostFields = postString;
                         easy.PostFieldSize = Encoding.UTF8.GetByteCount(postString);
                     }
@@ -125,7 +125,7 @@ namespace Jackett
 
                     easy.Perform();
 
-                    if(easy.LastErrorCode != CurlCode.Ok)
+                    if (easy.LastErrorCode != CurlCode.Ok)
                     {
                         var message = "Error " + easy.LastErrorCode.ToString() + " " + easy.LastErrorDescription;
                         if (null != OnErrorMessage)

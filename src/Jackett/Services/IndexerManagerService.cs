@@ -50,8 +50,16 @@ namespace Jackett.Services
                 var configFilePath = GetIndexerConfigFilePath(idx);
                 if (File.Exists(configFilePath))
                 {
-                    var jsonString = JObject.Parse(File.ReadAllText(configFilePath));
-                    idx.LoadFromSavedConfiguration(jsonString);
+                    var fileStr = File.ReadAllText(configFilePath);
+                    var jsonString = JToken.Parse(fileStr);
+                    try
+                    {
+                        idx.LoadFromSavedConfiguration(jsonString);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex, "Failed loading configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                    }
                 }
             }
         }
@@ -82,7 +90,7 @@ namespace Jackett.Services
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
             if (results.Count() == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
-            cacheService.CacheRssResults(indexer.DisplayName, results);
+            cacheService.CacheRssResults(indexer, results);
         }
 
         public void DeleteIndexer(string name)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.IndexerConfig
 {
-    class BmtvConfig : ConfigurationData
+    class ConfigurationDataCaptchaLogin : ConfigurationData
     {
         public StringItem Username { get; private set; }
 
@@ -18,18 +18,13 @@ namespace Jackett.Models.IndexerConfig
 
         public HiddenItem CaptchaCookie { get; private set; }
 
-        public BmtvConfig()
+        public ConfigurationDataCaptchaLogin()
         {
             Username = new StringItem { Name = "Username" };
             Password = new StringItem { Name = "Password" };
             CaptchaImage = new ImageItem { Name = "Captcha Image" };
             CaptchaText = new StringItem { Name = "Captcha Text" };
             CaptchaCookie = new HiddenItem("") { Name = "Captcha Cookie" };
-        }
-
-        public override Item[] GetItems()
-        {
-            return new Item[] { Username, Password, CaptchaImage, CaptchaText, CaptchaCookie };
         }
     }
 }

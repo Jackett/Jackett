@@ -15,6 +15,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -25,38 +26,40 @@ namespace Jackett.Indexers
         private string SearchFormData { get { return "c53=1&c49=1&c2=1&c52=1&c41=1&c50=1&c30=1&jxt=4&jxw=b"; } }
         private string CommentsUrl { get { return SiteLink + "t/{0}"; } }
         private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
-       
-        public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc)
+
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Speed.cd",
                 description: "Your home now!",
                 link: "http://speed.cd/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", incomingConfig.Username.Value },
-				{ "password", incomingConfig.Password.Value },
-			};
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+            };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
                 var errorMessage = dom["h5"].First().Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 

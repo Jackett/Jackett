@@ -26,22 +26,43 @@ namespace JackettConsole
                 var options = new ConsoleOptions();
                 if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
                 {
-                    var text = HelpText.AutoBuild(options, (HelpText current) => HelpText.DefaultParsingErrorsHandler(options, current));
-                    text.Copyright = " ";
-                    text.Heading = "Jackett v" + Engine.ConfigService.GetVersion() + " options:";
-                    Console.WriteLine(text);
-                    Environment.ExitCode = 1;
-                    return;
+                    if (options.LastParserState != null && options.LastParserState.Errors.Count > 0)
+                    {
+                        var help = new HelpText();
+                        var errors = help.RenderParsingErrorsText(options, 2); // indent with two spaces
+                        Console.WriteLine("Jackett v" + Engine.ConfigService.GetVersion());
+                        Console.WriteLine("Switch error: " + errors);
+                        Console.WriteLine("See --help for further details on switches.");
+                        Environment.ExitCode = 1;
+                        return;
+                    }
+                    else
+                    {
+
+                        var text = HelpText.AutoBuild(options, (HelpText current) => HelpText.DefaultParsingErrorsHandler(options, current));
+                        text.Copyright = " ";
+                        text.Heading = "Jackett v" + Engine.ConfigService.GetVersion() + " options:";
+                        Console.WriteLine(text);
+                        Environment.ExitCode = 1;
+                        return;
+                    }
                 }
                 else
                 {
+
+                    if (options.ListenPublic && options.ListenPrivate)
+                    {
+                        Console.WriteLine("You can only use listen private OR listen publicly.");
+                        Environment.ExitCode = 1;
+                        return;
+                    }
                     /*  ======     Options    =====  */
 
                     // SSL Fix
                     Startup.DoSSLFix = options.SSLFix;
 
                     // Use curl
-                    if (options.Client!=null)
+                    if (options.Client != null)
                         Startup.ClientOverride = options.Client.ToLowerInvariant();
 
                     // Logging
@@ -126,12 +147,12 @@ namespace JackettConsole
                     /*  ======     Overrides    =====  */
 
                     // Override listen public
-                    if(options.ListenPublic.HasValue)
+                    if (options.ListenPublic || options.ListenPrivate)
                     {
                         if (Engine.Server.Config.AllowExternal != options.ListenPublic)
                         {
                             Engine.Logger.Info("Overriding external access to " + options.ListenPublic);
-                            Engine.Server.Config.AllowExternal = options.ListenPublic.Value;
+                            Engine.Server.Config.AllowExternal = options.ListenPublic;
                             if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                             {
                                 if (ServerUtil.IsUserAdministrator())
@@ -151,7 +172,7 @@ namespace JackettConsole
                     }
 
                     // Override port
-                    if(options.Port != 0)
+                    if (options.Port != 0)
                     {
                         if (Engine.Server.Config.Port != options.Port)
                         {

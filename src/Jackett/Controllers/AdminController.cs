@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using AutoMapper;
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
@@ -36,8 +37,9 @@ namespace Jackett.Controllers
         private IProcessService processService;
         private ICacheService cacheService;
         private Logger logger;
+        private ILogCacheService logCache;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l, ILogCacheService lc)
         {
             this.config = config;
             indexerService = i;
@@ -46,6 +48,7 @@ namespace Jackett.Controllers
             processService = p;
             cacheService = c;
             logger = l;
+            logCache = lc;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -150,7 +153,7 @@ namespace Jackett.Controllers
                 var postData = await ReadPostDataJson();
                 var indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 var config = await indexer.GetConfigurationForSetup();
-                jsonReply["config"] = config.ToJson();
+                jsonReply["config"] = config.ToJson(null);
                 jsonReply["caps"] = indexer.TorznabCaps.CapsToJson();
                 jsonReply["name"] = indexer.DisplayName;
                 jsonReply["result"] = "success";
@@ -189,7 +192,7 @@ namespace Jackett.Controllers
                     baseIndexer.ResetBaseConfig();
                 if (ex is ExceptionWithConfigData)
                 {
-                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson();
+                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null);
                 } else
                 {
                     logger.Error(ex, "Exception in Configure");
@@ -283,6 +286,7 @@ namespace Jackett.Controllers
                 cfg["port"] = serverService.Config.Port;
                 cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;
+                cfg["blackholedir"] = serverService.Config.BlackholeDir;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword )? string.Empty:serverService.Config.AdminPassword.Substring(0,10);
 
                 jsonReply["config"] = cfg;
@@ -297,7 +301,7 @@ namespace Jackett.Controllers
             return Json(jsonReply);
         }
 
-        [Route("set_port")]
+        [Route("set_config")]
         [HttpPost]
         public async Task<IHttpActionResult> SetConfig()
         {
@@ -309,6 +313,7 @@ namespace Jackett.Controllers
                 var postData = await ReadPostDataJson();
                 int port = (int)postData["port"];
                 bool external = (bool)postData["external"];
+                string saveDir = (string)postData["blackholedir"];
 
                 if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
                 {
@@ -358,6 +363,21 @@ namespace Jackett.Controllers
                     })).Start();
                 }
 
+
+                if(saveDir != Engine.Server.Config.BlackholeDir)
+                {
+                    if (!string.IsNullOrEmpty(saveDir))
+                    {
+                        if (!Directory.Exists(saveDir))
+                        {
+                            throw new Exception("Blackhole directory does not exist");
+                        }
+                    }
+
+                    Engine.Server.Config.BlackholeDir = saveDir;
+                    Engine.Server.SaveConfig();
+                }
+
                 jsonReply["result"] = "success";
                 jsonReply["port"] = port;
                 jsonReply["external"] = external;
@@ -375,7 +395,15 @@ namespace Jackett.Controllers
         [HttpGet]
         public List<TrackerCacheResult> GetCache()
         {
-            return cacheService.GetCachedResults();
+            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            return cacheService.GetCachedResults(severUrl);
+        }
+
+        [Route("GetLogs")]
+        [HttpGet]
+        public List<CachedLog> GetLogs()
+        {
+            return logCache.Logs;
         }
     }
 }

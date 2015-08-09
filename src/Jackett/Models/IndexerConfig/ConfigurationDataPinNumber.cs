@@ -6,18 +6,13 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.IndexerConfig
 {
-    class PretomeConfiguration : ConfigurationDataBasicLogin
+    class ConfigurationDataPinNumber : ConfigurationDataBasicLogin
     {
         public StringItem Pin { get; private set; }
 
-        public PretomeConfiguration() : base()
+        public ConfigurationDataPinNumber() : base()
         {
             Pin = new StringItem { Name = "Login Pin Number" };
-        }
-
-        public override Item[] GetItems()
-        {
-            return new Item[] { Pin, Username, Password };
         }
     }
 }

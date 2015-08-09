@@ -1,4 +1,5 @@
-﻿using Jackett.Models;
+﻿using AutoMapper;
+using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -95,27 +96,18 @@ namespace Jackett.Controllers
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
             {
-                cacheService.CacheRssResults(indexer.DisplayName, releases);
+                cacheService.CacheRssResults(indexer, releases);
             }
 
             releases = indexer.FilterResults(torznabQuery, releases);
-
-            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
-            // add Jackett proxy to download links...
-            foreach (var release in releases)
-            {
-                if (release.Link == null || (release.Link.IsAbsoluteUri && release.Link.Scheme == "magnet"))
-                    continue;
-                var originalLink = release.Link;
-                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
-                var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.ID, encodedLink);
-                release.Link = new Uri(proxyLink);
-            }
-
+            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var potatoResponse = new TorrentPotatoResponse();
 
-            foreach(var release in releases)
+            foreach(var r in releases)
             {
+                var release = Mapper.Map<ReleaseInfo>(r);
+                release.Link = release.ConvertToProxyLink(serverUrl, indexerID);
+
                 potatoResponse.results.Add(new TorrentPotatoResponseItem()
                 {
                     release_name = release.Title + "[" + indexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>

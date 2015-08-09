@@ -1,4 +1,5 @@
-﻿using Jackett.Models;
+﻿using AutoMapper;
+using Jackett.Models;
 using Jackett.Services;
 using NLog;
 using System;
@@ -63,50 +64,61 @@ namespace Jackett.Controllers
 
             var releases = await indexer.PerformQuery(torznabQuery);
 
+            // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
+            foreach(var release in releases)
+            {
+                if (release.PublishDate > DateTime.Now)
+                    release.PublishDate = DateTime.Now;
+            }
+
+            // Some trackers do not support multiple category filtering so filter the releases that match manually.
+            var filteredReleases = releases = indexer.FilterResults(torznabQuery, releases); 
+            int? newItemCount = null;
+
+
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
             {
-                cacheService.CacheRssResults(indexer.DisplayName, releases);
+                newItemCount = cacheService.GetNewItemCount(indexer, filteredReleases);
+                cacheService.CacheRssResults(indexer, releases);
             }
-
-            releases = indexer.FilterResults(torznabQuery, releases);
 
             // Log info
-            if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
-            {
-                logger.Info(string.Format("Found {0} releases from {1}", releases.Count(), indexer.DisplayName));
+            var logBuilder = new StringBuilder();
+            if (newItemCount != null)  {
+                logBuilder.AppendFormat(string.Format("Found {0} ({1} new) releases from {2}", releases.Count(), newItemCount, indexer.DisplayName));
             }
-            else
-            {
-                logger.Info(string.Format("Found {0} releases from {1} for: {2} {3}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString()));
+            else {
+                logBuilder.AppendFormat(string.Format("Found {0} releases from {1}", releases.Count(), indexer.DisplayName));
             }
 
-            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm)) { 
+                logBuilder.AppendFormat(" for: {0} {1}", torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString());
+            }
 
+            logger.Info(logBuilder.ToString());
+
+            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var resultPage = new ResultPage(new ChannelInfo
             {
                 Title = indexer.DisplayName,
                 Description = indexer.DisplayDescription,
                 Link = new Uri(indexer.SiteLink),
-                ImageUrl = new Uri(severUrl + "logos/" + indexer.ID + ".png"),
+                ImageUrl = new Uri(serverUrl + "logos/" + indexer.ID + ".png"),
                 ImageTitle = indexer.DisplayName,
                 ImageLink = new Uri(indexer.SiteLink),
                 ImageDescription = indexer.DisplayName
             });
 
-            // add Jackett proxy to download links...
-            foreach (var release in releases)
+
+            foreach(var result in releases)
             {
-                if (release.Link == null || (release.Link.IsAbsoluteUri && release.Link.Scheme == "magnet"))
-                    continue;
-                var originalLink = release.Link;
-                var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(originalLink.ToString())) + "/t.torrent";
-                var proxyLink = string.Format("{0}api/{1}/download/{2}", severUrl, indexer.ID, encodedLink);
-                release.Link = new Uri(proxyLink);
+                var clone = Mapper.Map<ReleaseInfo>(result);
+                clone.Link = clone.ConvertToProxyLink(serverUrl, indexerID);
+                resultPage.Releases.Add(clone);
             }
 
-            resultPage.Releases.AddRange(releases);
-            var xml = resultPage.ToXml(new Uri(severUrl));
+            var xml = resultPage.ToXml(new Uri(serverUrl));
             // Force the return as XML
             return new HttpResponseMessage()
             {

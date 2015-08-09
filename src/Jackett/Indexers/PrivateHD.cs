@@ -14,35 +14,49 @@ using System.Web;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using System.Text.RegularExpressions;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class PrivateHD : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "auth/login"; } }
-        private string SearchUrl { get { return SiteLink + "torrents?in=1&type=2&search={0}"; } }
+        private string SearchUrl { get { return SiteLink + "torrents?in=1&type={0}&search={1}"; } }
 
-        public PrivateHD(IIndexerManagerService i, IWebClient wc, Logger l)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public PrivateHD(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "PrivateHD",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://privatehd.to/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            AddCategoryMapping(2, TorznabCatType.TV);
+            AddCategoryMapping(3, TorznabCatType.Audio);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var token = new Regex("Avz.CSRF_TOKEN = '(.*?)';").Match(loginPage.Content).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
-                { "username_email", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value },
+                { "username_email", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "remember", "on" }
             };
 
@@ -52,20 +66,24 @@ namespace Jackett.Indexers
                 CQ dom = result.Content;
                 var messageEl = dom[".form-error"];
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
-        }
-
-        public Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return Task.FromResult<ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+
+            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct();
+            string category = "0"; // Aka all
+            if (categoryMapping.Count() == 1)
+            {
+                category = categoryMapping.First();
+            }
+
+
+            var episodeSearchUrl = string.Format(SearchUrl, category, HttpUtility.UrlEncode(searchString));
 
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
@@ -98,6 +116,11 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
 
+                    var cat = row.Cq().Find("td:eq(0) i").First().Attr("class")
+                                            .Replace("gi gi-film", "1")
+                                            .Replace("gi gi-tv", "2")
+                                            .Replace("gi gi-music", "3");
+                    release.Category = MapTrackerCatToNewznab(cat);
                     releases.Add(release);
                 }
             }

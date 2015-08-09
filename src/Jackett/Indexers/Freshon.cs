@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -26,41 +27,43 @@ namespace Jackett.Indexers
         private string LoginPostUrl { get { return SiteLink + "login.php?action=makelogin"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        public Freshon(IIndexerManagerService i, Logger l, IWebClient c)
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public Freshon(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "FreshOnTV",
                 description: "Our goal is to provide the latest stuff in the TV show domain",
                 link: "https://freshon.tv/",
                 caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
-                logger: l)
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
         {
-        }
-
-        public async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            return await Task.FromResult< ConfigurationData>(new ConfigurationDataBasicLogin());
         }
 
         public async Task ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-				{ "username", incomingConfig.Username.Value },
-				{ "password", incomingConfig.Password.Value }
-			};
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
+            };
 
             // Get inital cookies
-            cookieHeader = string.Empty;
-            var response = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, cookieHeader, true, null, LoginUrl);
+            CookieHeader = string.Empty;
+            var response = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, CookieHeader, true, null, LoginUrl);
 
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom[".error_text"];
                 var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
 
