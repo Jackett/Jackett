@@ -95,11 +95,7 @@ namespace Jackett.Indexers
                     var torrentId = qLink.Attr("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
 
-                    var dateStr = descCol.ChildNodes.Last().NodeValue.Trim();
-                    var euDate = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var timezoneString = Environment.OSVersion.Platform == PlatformID.Unix ? "Europe/Berlin" : "Central European Standard Time";
-                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById(timezoneString)).ToLocalTime();
-                    release.PublishDate = localDate;
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(descCol.ChildNodes.Last().InnerText);
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
