@@ -191,6 +191,7 @@
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\ImmortalSeed.cs" />
+    <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
     <Compile Include="Indexers\RuTor.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginTokin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
@@ -510,6 +512,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\torrentz.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\tvchaosuk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\setup_indexer.html">

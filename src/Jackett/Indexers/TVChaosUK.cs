@@ -1,0 +1,244 @@
+﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using Jackett.Models.IndexerConfig;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+
+namespace Jackett.Indexers
+{
+    public class TVChaosUK : BaseIndexer, IIndexer
+    {
+        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
+        string SearchUrl { get { return SiteLink + "browse.php"; } }
+        string RSSUrl { get { return SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all"; } }
+        string CommentUrl { get { return SiteLink + "details.php?id={0}"; } }
+        string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
+
+        new ConfigurationDataBasicLoginWithRSS configData
+        {
+            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public TVChaosUK(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+            : base(name: "TV Chaos",
+                description: "Total Chaos",
+                link: "https://tvchaosuk.com/",
+                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                manager: i,
+                client: wc,
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLoginWithRSS())
+        {
+            AddCategoryMapping(72, TorznabCatType.Apps);
+            AddCategoryMapping(86, TorznabCatType.Audio);
+            AddCategoryMapping(87, TorznabCatType.AudioBooks);
+            AddCategoryMapping(88, TorznabCatType.Audio);
+
+            AddCategoryMapping(83, TorznabCatType.Movies);
+            AddCategoryMapping(171, TorznabCatType.Movies);
+            AddCategoryMapping(178, TorznabCatType.MoviesHD);
+            AddCategoryMapping(181, TorznabCatType.Movies);
+            AddCategoryMapping(182, TorznabCatType.Movies);
+
+            AddCategoryMapping(75, TorznabCatType.TVDocs);
+            AddCategoryMapping(189, TorznabCatType.TVDocs);
+            AddCategoryMapping(224, TorznabCatType.TVDocs);
+            AddCategoryMapping(174, TorznabCatType.TVDocs);
+            AddCategoryMapping(113, TorznabCatType.TVDocs);
+            AddCategoryMapping(100, TorznabCatType.TVDocs);
+            AddCategoryMapping(98, TorznabCatType.TVDocs);
+
+            AddCategoryMapping(176, TorznabCatType.TVHD);
+            AddCategoryMapping(175, TorznabCatType.TVHD);
+            AddCategoryMapping(177, TorznabCatType.TVHD);
+            AddCategoryMapping(223, TorznabCatType.TVHD);
+            AddCategoryMapping(222, TorznabCatType.TVHD);
+            AddCategoryMapping(172, TorznabCatType.TVHD);
+            AddCategoryMapping(221, TorznabCatType.TVHD);
+
+            // RSS Textual categories
+            AddCategoryMapping("Appz", TorznabCatType.Apps);
+            AddCategoryMapping("Radio/Audio", TorznabCatType.Audio);
+            AddCategoryMapping("Audio Books", TorznabCatType.AudioBooks);
+            AddCategoryMapping("Radio Comedy", TorznabCatType.AudioBooks);
+
+            AddCategoryMapping("TV Aired Movies", TorznabCatType.Movies);
+            AddCategoryMapping("Classic Movies", TorznabCatType.Movies);
+            AddCategoryMapping("HD TV Aired Movies", TorznabCatType.MoviesHD);
+            AddCategoryMapping("Made for TV", TorznabCatType.Movies);
+            AddCategoryMapping("TV Aired Movies", TorznabCatType.Movies);
+
+            AddCategoryMapping("Documentary & News", TorznabCatType.TVDocs);
+            AddCategoryMapping("Docudrama", TorznabCatType.TVDocs);
+            AddCategoryMapping("Documentary", TorznabCatType.TVDocs);
+            AddCategoryMapping("HD Documentary", TorznabCatType.TVDocs);
+            AddCategoryMapping("Historical", TorznabCatType.TVDocs);
+            AddCategoryMapping("True Crime", TorznabCatType.TVDocs);
+            AddCategoryMapping("Wildlife/Nature", TorznabCatType.TVDocs);
+
+            AddCategoryMapping("HD Sci-Fi", TorznabCatType.TVHD);
+            AddCategoryMapping("HD Drama", TorznabCatType.TVHD);
+            AddCategoryMapping("HD Soaps", TorznabCatType.TVHD);
+            AddCategoryMapping("HD Entertainment", TorznabCatType.TVHD);
+            AddCategoryMapping("HD Sport", TorznabCatType.TVHD);
+            AddCategoryMapping("HD Comedy", TorznabCatType.TVHD);
+            AddCategoryMapping("HD Factual/Reality", TorznabCatType.TVHD);
+        }
+
+        public async Task ApplyConfiguration(JToken configJson)
+        {
+            configData.LoadValuesFromJson(configJson);
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
+            };
+
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, SiteLink);
+
+            // Get RSS key
+            var rssParams = new Dictionary<string, string> {
+                { "feedtype", "download" },
+                { "timezone", "0" },
+                { "showrows", "50" }
+            };
+
+            var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
+            var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
+            configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
+            if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
+                throw new Exception("Failed to get RSS Key");
+
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            {
+                CQ dom = result.Content;
+                var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
+        }
+
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = new List<ReleaseInfo>();
+            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+
+            // If we have no query use the RSS Page as their server is slow enough at times!
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
+                var rssDoc = XDocument.Parse(rssPage.Content);
+
+                foreach (var item in rssDoc.Descendants("item"))
+                {
+                    var title = item.Descendants("title").First().Value;
+                    var description = item.Descendants("description").First().Value;
+                    var link = item.Descendants("link").First().Value;
+                    var category = item.Descendants("category").First().Value;
+                    var date = item.Descendants("pubDate").First().Value;
+
+                    var torrentIdMatch = Regex.Match(link, "(?<=id=)(\\d)*");
+                    var torrentId = torrentIdMatch.Success ? torrentIdMatch.Value : string.Empty;
+                    if (string.IsNullOrWhiteSpace(torrentId))
+                        throw new Exception("Missing torrent id");
+
+                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>\d*)\W\/\WLeechers:\W(?<leechers>\d*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
+                    if (!infoMatch.Success)
+                        throw new Exception("Unable to find info");
+
+                    var release = new ReleaseInfo()
+                    {
+                        Title = title,
+                        Description = title,
+                        Guid = new Uri(string.Format(DownloadUrl, torrentId)),
+                        Comments = new Uri(string.Format(CommentUrl, torrentId)),
+                        PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
+                        Link = new Uri(string.Format(DownloadUrl, torrentId)),
+                        Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
+                        Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
+                        Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
+                        Category = MapTrackerCatToNewznab(infoMatch.Groups["cat"].Value)
+                    };
+
+                    // If its not apps or audio we can only mark as general TV
+                    if (release.Category == 0)
+                        release.Category = 5030;
+
+                    release.Peers += release.Seeders;
+                    releases.Add(release);
+                }
+            }
+            else
+            {
+                var searchParams = new Dictionary<string, string> {
+                    { "do", "search" },
+                    { "keywords",  searchString },
+                    { "search_type", "t_name" },
+                    { "category", "0" },
+                    { "include_dead_torrents", "no" }
+                };
+
+                var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                try
+                {
+                    CQ dom = searchPage.Content;
+                    var rows = dom["#listtorrents tbody tr"];
+                    foreach (var row in rows.Skip(1))
+                    {
+                        var release = new ReleaseInfo();
+                        var qRow = row.Cq();
+
+                        release.Title = qRow.Find("td:eq(1) .tooltip-content div:eq(0)").Text();
+
+                        if (string.IsNullOrWhiteSpace(release.Title))
+                            continue;
+
+                        release.Description = release.Title;
+                        release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
+                        release.Link = release.Guid;
+                        release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
+                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51 
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
+                        release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
+                        release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
+
+
+                        var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                        var catSplit = cat.LastIndexOf('=');
+                        if (catSplit > -1)
+                            cat = cat.Substring(catSplit + 1);
+                        release.Category = MapTrackerCatToNewznab(cat);
+
+                        // If its not apps or audio we can only mark as general TV
+                        if (release.Category == 0)
+                            release.Category = 5030;
+
+                        releases.Add(release);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnParseError(searchPage.Content, ex);
+                }
+            }
+
+            return releases;
+        }
+    }
+}
