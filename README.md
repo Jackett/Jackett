@@ -45,7 +45,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [TorrentShack](http://torrentshack.me/)
  * [Torrentz](https://torrentz.eu/)
-
+ * [TV Chaos UK](https://tvchaosuk.com/)
 
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
