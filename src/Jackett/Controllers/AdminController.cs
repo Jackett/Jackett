@@ -28,6 +28,7 @@ namespace Jackett.Controllers
 {
     [RoutePrefix("admin")]
     [JackettAuthorized]
+    [JackettAPINoCache]
     public class AdminController : ApiController
     {
         private IConfigurationService config;

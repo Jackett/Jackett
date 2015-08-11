@@ -19,6 +19,7 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
+    [JackettAPINoCache]
     public class PotatoController : ApiController
     {
         private IIndexerManagerService indexerService;

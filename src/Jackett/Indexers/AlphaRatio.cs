@@ -44,9 +44,9 @@ namespace Jackett.Indexers
             AddCategoryMapping(10, TorznabCatType.XXX);
             AddCategoryMapping(20, TorznabCatType.XXX);
             AddCategoryMapping(12, TorznabCatType.PCGames);
-            AddCategoryMapping(13, TorznabCatType.GameXbox);
-            AddCategoryMapping(14, TorznabCatType.GamePS3);
-            AddCategoryMapping(15, TorznabCatType.GameWii);
+            AddCategoryMapping(13, TorznabCatType.ConsoleXbox);
+            AddCategoryMapping(14, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(15, TorznabCatType.ConsoleWii);
             AddCategoryMapping(16, TorznabCatType.PC);
             AddCategoryMapping(17, TorznabCatType.PCMac);
             AddCategoryMapping(19, TorznabCatType.PCMobileOther);

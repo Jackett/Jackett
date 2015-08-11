@@ -14,6 +14,7 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
+    [JackettAPINoCache]
     public class DownloadController : ApiController
     {
         private Logger logger;
