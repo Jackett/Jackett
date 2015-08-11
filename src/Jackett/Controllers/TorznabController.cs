@@ -16,6 +16,7 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
+    [JackettAPINoCache]
     public class TorznabController : ApiController
     {
         private IIndexerManagerService indexerService;

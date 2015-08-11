@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http.Filters;
+
+namespace Jackett
+{
+    public class JackettAPINoCacheAttribute : System.Web.Http.Filters.ActionFilterAttribute
+    {
+        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        {
+            actionExecutedContext.Response.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue()
+            {
+                NoStore = true,
+                Private = true
+            };
+
+            base.OnActionExecuted(actionExecutedContext);
+        }
+    }
+}
