@@ -37,13 +37,13 @@ namespace Jackett.Models
 
         public static bool QueryContainsParentCategory(int[] queryCats, int releaseCat)
         {
-            if (cats.ContainsKey(releaseCat) && queryCats!=null)
+            if (cats.ContainsKey(releaseCat) && queryCats != null)
             {
                 var ncab = cats[releaseCat];
                 var split = ncab.IndexOf("/");
                 if (split > -1)
                 {
-                    string parentCatName = ncab.Substring(0,split);
+                    string parentCatName = ncab.Substring(0, split);
                     if (cats.ContainsValue(parentCatName))
                     {
                         var parentCat = cats.Where(c => c.Value == parentCatName).First().Key;
@@ -70,7 +70,7 @@ namespace Jackett.Models
             return new TorznabCategory()
             {
                 ID = id,
-                Name = cats[id]
+                Name = cats.ContainsKey(id) ? cats[id] : string.Empty
             };
         }
 
@@ -99,9 +99,24 @@ namespace Jackett.Models
             get { return GetCat(5040); }
         }
 
+        public static TorznabCategory TVSport
+        {
+            get { return GetCat(5060); }
+        }
+
+        public static TorznabCategory TVForeign
+        {
+            get { return GetCat(5020); }
+        }
+
         public static TorznabCategory Books
         {
             get { return GetCat(8000); }
+        }
+
+        public static TorznabCategory EBook
+        {
+            get { return GetCat(7020); }
         }
 
         public static TorznabCategory Comic
@@ -114,19 +129,19 @@ namespace Jackett.Models
             get { return GetCat(4000); }
         }
 
-        public static TorznabCategory PCGames
-        {
-            get { return GetCat(4050); }
-        }
-
-        public static TorznabCategory AudioBooks
-        {
-            get { return GetCat(3030); }
-        }
-
         public static TorznabCategory Movies
         {
             get { return GetCat(2000); }
+        }
+
+        public static TorznabCategory MoviesForeign
+        {
+            get { return GetCat(2010); }
+        }
+
+        public static TorznabCategory MoviesOther
+        {
+            get { return GetCat(2020); }
         }
 
         public static TorznabCategory MoviesHD
@@ -139,14 +154,24 @@ namespace Jackett.Models
             get { return GetCat(2030); }
         }
 
-        public static TorznabCategory MoviesForeign
+        public static TorznabCategory MoviesBlueRay
         {
-            get { return GetCat(2040); }
+            get { return GetCat(2050); }
+        }
+
+        public static TorznabCategory Movies3D
+        {
+            get { return GetCat(2060); }
         }
 
         public static TorznabCategory Audio
         {
             get { return GetCat(3000); }
+        }
+
+        public static TorznabCategory AudioBooks
+        {
+            get { return GetCat(3030); }
         }
 
         public static TorznabCategory AudioLossless
@@ -177,6 +202,76 @@ namespace Jackett.Models
         public static TorznabCategory XXXImg
         {
             get { return GetCat(6060); }
+        }
+
+        public static TorznabCategory PC
+        {
+            get { return GetCat(4000); }
+        }
+
+        public static TorznabCategory PC0Day
+        {
+            get { return GetCat(4010); }
+        }
+
+        public static TorznabCategory PCIso
+        {
+            get { return GetCat(4020); }
+        }
+
+        public static TorznabCategory PCMac
+        {
+            get { return GetCat(4030); }
+        }
+
+        public static TorznabCategory PCGames
+        {
+            get { return GetCat(4050); }
+        }
+
+        public static TorznabCategory PCMobileOther
+        {
+            get { return GetCat(4040); }
+        }
+
+        public static TorznabCategory PCMobileIos
+        {
+            get { return GetCat(4060); }
+        }
+
+        public static TorznabCategory PCMobileAndroid
+        {
+            get { return GetCat(4070); }
+        }
+
+        public static TorznabCategory GameDNS
+        {
+            get { return GetCat(1010); }
+        }
+
+        public static TorznabCategory GamePSP
+        {
+            get { return GetCat(1020); }
+        }
+
+        public static TorznabCategory GameXbox
+        {
+            get { return GetCat(1040); }
+        }
+
+        public static TorznabCategory GameXbox360
+        {
+            get { return GetCat(1050); }
+        }
+
+        public static TorznabCategory GameWii
+        {
+            get { return GetCat(1030); }
+        }
+
+        public static TorznabCategory GamePS3
+        {
+            get { return GetCat(1080); }
         }
     }
 }
