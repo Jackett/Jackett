@@ -103,7 +103,6 @@ namespace Jackett.Indexers
             }
 
             searchUrl += queryCollection.GetQueryString();
-            Console.WriteLine(searchUrl);
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 

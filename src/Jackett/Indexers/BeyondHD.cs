@@ -14,12 +14,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class BeyondHD : BaseIndexer, IIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php?c40=1&c44=1&c48=1&c89=1&c46=1&c45=1&searchin=title&incldead=0&search={0}"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
         private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
 
         new ConfigurationDataCookie configData
@@ -39,6 +40,26 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataCookie())
         {
+            AddCategoryMapping("40,44,48,89,46,45", TorznabCatType.TV);
+            AddCategoryMapping("40", TorznabCatType.TVHD);
+            AddCategoryMapping("44", TorznabCatType.TVHD);
+            AddCategoryMapping("48", TorznabCatType.TVHD);
+            AddCategoryMapping("46", TorznabCatType.TVHD);
+            AddCategoryMapping("45", TorznabCatType.TVHD);
+            AddCategoryMapping("44", TorznabCatType.TVSD);
+            AddCategoryMapping("46", TorznabCatType.TVSD);
+            AddCategoryMapping("45", TorznabCatType.TVSD);
+
+            AddCategoryMapping("41,77,71,94,78,37,54,17", TorznabCatType.Movies);
+            AddCategoryMapping("77", TorznabCatType.MoviesHD);
+            AddCategoryMapping("71", TorznabCatType.Movies3D);
+            AddCategoryMapping("78", TorznabCatType.MoviesHD);
+            AddCategoryMapping("37", TorznabCatType.MoviesBlueRay);
+            AddCategoryMapping("54", TorznabCatType.MoviesHD);
+
+            AddCategoryMapping("55,56,42,36,69", TorznabCatType.Audio);
+            AddCategoryMapping("36", TorznabCatType.AudioLossless);
+            AddCategoryMapping("69", TorznabCatType.AudioLossy);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -63,8 +84,27 @@ namespace Jackett.Indexers
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
+
+            var cats = new List<string>();
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                cats.AddRange(cat.Split(','));
+            }
+            foreach (var cat in cats)
+            {
+                queryCollection.Add("c" + cat, "1");
+            }
+
+            searchUrl += queryCollection.GetQueryString();
+
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
             await FollowIfRedirect(results);
             try
             {
@@ -77,6 +117,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
 
                     var qRow = row.Cq();
+
+
+                    release.Category = MapTrackerCatToNewznab(row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split('?')[1]);
 
                     var qLink = row.ChildElements.ElementAt(2).FirstChild.Cq();
                     release.Link = new Uri(SiteLink + "/" + qLink.Attr("href"));
