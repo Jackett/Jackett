@@ -31,7 +31,7 @@ namespace Jackett.Indexers
             : base(name: "PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://pretome.info/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 client: wc,
                 manager: i,
                 logger: l,

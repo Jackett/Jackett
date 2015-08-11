@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             : base(name: "Torrentz",
                 description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

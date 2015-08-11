@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

@@ -35,7 +35,7 @@ namespace Jackett.Indexers
             : base(name: "TorrentDay",
                 description: "TorrentDay",
                 link: "https://torrentday.eu/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

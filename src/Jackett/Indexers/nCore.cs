@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "nCore",
                 description: "A Hungarian private torrent site.",
                 link: "https://ncore.cc/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

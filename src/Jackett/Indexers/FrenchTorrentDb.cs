@@ -28,7 +28,7 @@ namespace Jackett.Indexers
             : base(name: "FrenchTorrentDb",
                 description: "One the biggest French Torrent Tracker",
                 link: "http://www.frenchtorrentdb.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,

@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "TorrentLeech",
                 description: "This is what happens when you seed",
                 link: "http://www.torrentleech.org/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

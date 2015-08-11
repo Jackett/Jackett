@@ -31,7 +31,7 @@ namespace Jackett.Indexers
             : base(name: "SceneAccess",
                 description: "Your gateway to the scene",
                 link: "https://sceneaccess.eu/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,

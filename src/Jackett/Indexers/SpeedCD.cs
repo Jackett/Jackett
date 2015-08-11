@@ -37,7 +37,7 @@ namespace Jackett.Indexers
             : base(name: "Speed.cd",
                 description: "Your home now!",
                 link: "http://speed.cd/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

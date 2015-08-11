@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: "https://alpharatio.cc/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,

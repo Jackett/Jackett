@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             : base(name: "HD-Space",
                 description: "Sharing The Universe",
                 link: "https://hd-space.org/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

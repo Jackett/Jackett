@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             : base(name: "Strike",
                 description: "Torrent search engine",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

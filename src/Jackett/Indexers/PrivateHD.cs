@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "PrivateHD",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://privatehd.to/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

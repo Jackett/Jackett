@@ -65,6 +65,8 @@ namespace Jackett.Controllers
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer does not support movies.");
             }
 
+            var year = 0;
+
             if (string.IsNullOrWhiteSpace(request.search))
             {
                 // We are searching by IMDB id so look up the name
@@ -75,6 +77,7 @@ namespace Jackett.Controllers
                     if (result["Title"] != null)
                     {
                         request.search = result["Title"].ToString();
+                        year = ParseUtil.CoerceInt(result["Year"].ToString());
                     }
                 }
             }
@@ -103,7 +106,9 @@ namespace Jackett.Controllers
             var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var potatoResponse = new TorrentPotatoResponse();
 
-            foreach(var r in releases)
+            releases = TorznabUtil.FilterResultsToTitle(releases, torznabQuery.SanitizedSearchTerm, year);
+
+            foreach (var r in releases)
             {
                 var release = Mapper.Map<ReleaseInfo>(r);
                 release.Link = release.ConvertToProxyLink(serverUrl, indexerID);

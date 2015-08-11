@@ -36,7 +36,7 @@ namespace Jackett.Indexers
             : base(name: "BitMeTV",
                 description: "TV Episode specialty tracker",
                 link: "http://www.bitmetv.org/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,

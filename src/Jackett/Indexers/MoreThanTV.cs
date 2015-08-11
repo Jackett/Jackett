@@ -35,7 +35,7 @@ namespace Jackett.Indexers
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                 link: "https://www.morethan.tv/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,
