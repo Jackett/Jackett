@@ -22,7 +22,7 @@ namespace Jackett.Indexers
     public class AlphaRatio : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&"; } }
+        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&order_by=time&order_way=desc&"; } }
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
@@ -50,7 +50,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(16, TorznabCatType.PC);
             AddCategoryMapping(17, TorznabCatType.PCMac);
             AddCategoryMapping(19, TorznabCatType.PCMobileOther);
-            AddCategoryMapping(21, TorznabCatType.EBook);
+            AddCategoryMapping(21, TorznabCatType.EBooks);
             AddCategoryMapping(22, TorznabCatType.AudioBooks);
             AddCategoryMapping(23, TorznabCatType.Audio);
         }
@@ -95,8 +95,6 @@ namespace Jackett.Indexers
 
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
-            queryCollection.Add("order_by", "time");
-            queryCollection.Add("order_way", "desc");
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {

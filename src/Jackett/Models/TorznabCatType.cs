@@ -114,7 +114,7 @@ namespace Jackett.Models
             get { return GetCat(8000); }
         }
 
-        public static TorznabCategory EBook
+        public static TorznabCategory EBooks
         {
             get { return GetCat(7020); }
         }
