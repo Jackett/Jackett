@@ -116,7 +116,6 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var searchUrl = BrowseUrl;
-            var trackerCats = MapTorznabCapsToTrackers(query);
             var queryCollection = new NameValueCollection();
 
             if (!string.IsNullOrWhiteSpace(searchString))

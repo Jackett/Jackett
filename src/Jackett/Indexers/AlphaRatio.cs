@@ -15,13 +15,14 @@ using NLog;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class AlphaRatio : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&searchstr="; } }
+        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&"; } }
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
@@ -36,7 +37,22 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-            webclient = w;
+            AddCategoryMapping(1, TorznabCatType.TVSD);
+            AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(6, TorznabCatType.MoviesSD);
+            AddCategoryMapping(7, TorznabCatType.MoviesHD);
+            AddCategoryMapping(10, TorznabCatType.XXX);
+            AddCategoryMapping(20, TorznabCatType.XXX);
+            AddCategoryMapping(12, TorznabCatType.PCGames);
+            AddCategoryMapping(13, TorznabCatType.GameXbox);
+            AddCategoryMapping(14, TorznabCatType.GamePS3);
+            AddCategoryMapping(15, TorznabCatType.GameWii);
+            AddCategoryMapping(16, TorznabCatType.PC);
+            AddCategoryMapping(17, TorznabCatType.PCMac);
+            AddCategoryMapping(19, TorznabCatType.PCMobileOther);
+            AddCategoryMapping(21, TorznabCatType.EBook);
+            AddCategoryMapping(22, TorznabCatType.AudioBooks);
+            AddCategoryMapping(23, TorznabCatType.Audio);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -76,8 +92,24 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+            queryCollection.Add("order_by", "time");
+            queryCollection.Add("order_way", "desc");
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("searchstr", searchString);
+            }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
+
+            searchUrl += queryCollection.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {
