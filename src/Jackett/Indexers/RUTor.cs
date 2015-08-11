@@ -36,7 +36,7 @@ namespace Jackett.Indexers
             : base(name: "RUTor",
                 description: "Свободный торрент трекер",
                 link: "http://rutor.org/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

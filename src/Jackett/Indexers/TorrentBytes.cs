@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "TorrentBytes",
                 description: "A decade of torrentbytes",
                 link: "https://www.torrentbytes.net/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

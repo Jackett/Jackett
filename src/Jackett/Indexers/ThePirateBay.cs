@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             : base(name: "The Pirate Bay",
                 description: "The worlds largest bittorrent indexer",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

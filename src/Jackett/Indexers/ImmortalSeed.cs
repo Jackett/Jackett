@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "ImmortalSeed",
                 description: "ImmortalSeed",
                 link: "http://immortalseed.me/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

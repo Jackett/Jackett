@@ -31,7 +31,7 @@ namespace Jackett.Indexers
             : base(name: "Demonoid",
                 description: "Demonoid",
                 link: "http://www.demonoid.pw/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

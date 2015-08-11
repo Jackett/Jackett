@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "SceneTime",
                 description: "Always on time",
                 link: "https://www.scenetime.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,

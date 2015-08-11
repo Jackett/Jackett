@@ -37,7 +37,7 @@ namespace Jackett.Indexers
             : base(name: "FreshOnTV",
                 description: "Our goal is to provide the latest stuff in the TV show domain",
                 link: "https://freshon.tv/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,

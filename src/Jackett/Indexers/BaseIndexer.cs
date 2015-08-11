@@ -57,7 +57,7 @@ namespace Jackett.Indexers
             this.configData = configData;
 
             if (caps == null)
-                caps = TorznabCapsUtil.CreateDefaultTorznabTVCaps();
+                caps = TorznabUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
 
         }

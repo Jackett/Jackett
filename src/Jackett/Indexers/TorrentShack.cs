@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "TorrentShack",
                 description: "TorrentShack",
                 link: "http://torrentshack.me/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 client: wc,
                 manager: i,
                 logger: l,

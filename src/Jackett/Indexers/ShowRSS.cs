@@ -40,7 +40,7 @@ namespace Jackett.Indexers
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
