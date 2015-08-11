@@ -49,9 +49,9 @@ namespace Jackett.Indexers
             AddCategoryMapping(25, TorznabCatType.Movies3D);
             AddCategoryMapping(20, TorznabCatType.MoviesBlueRay);
             AddCategoryMapping(2, TorznabCatType.MoviesSD);
-            AddCategoryMapping(3, TorznabCatType.MoviesSD); //RO
+            AddCategoryMapping(3, TorznabCatType.MoviesForeign); //RO
             AddCategoryMapping(4, TorznabCatType.MoviesHD);
-            AddCategoryMapping(19, TorznabCatType.MoviesHD); // RO
+            AddCategoryMapping(19, TorznabCatType.MoviesForeign); // RO
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(10, TorznabCatType.Consoles);
             AddCategoryMapping(9, TorznabCatType.PCGames);
@@ -128,7 +128,7 @@ namespace Jackett.Indexers
                     if (release.Category != 0)
                     {
                         // Skip Romanian releases
-                        if ((cat == "3" || cat == "19") && !configData.IncludeRomanianReleases.Value)
+                        if (release.Category == TorznabCatType.MoviesForeign.ID && !configData.IncludeRomanianReleases.Value)
                             continue;
 
                         releases.Add(release);
