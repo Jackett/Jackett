@@ -51,9 +51,9 @@ namespace Jackett.Indexers
             AddCategoryMapping(6, TorznabCatType.Comic);
             AddCategoryMapping(8, TorznabCatType.Anime);
             AddCategoryMapping(9, TorznabCatType.Movies);
-            AddCategoryMapping(10, TorznabCatType.TV);
             AddCategoryMapping(10, TorznabCatType.TVHD);
             AddCategoryMapping(10, TorznabCatType.TVSD);
+            AddCategoryMapping(10, TorznabCatType.TV);
             AddCategoryMapping(11, TorznabCatType.PCGames);
         }
 
@@ -117,6 +117,9 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+
+                    var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
                     var linkStr = qLink.Attr("href");
