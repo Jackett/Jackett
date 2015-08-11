@@ -94,7 +94,7 @@ namespace Jackett.Indexers
 
         protected virtual void SaveConfig()
         {
-            indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService,forDisplay: false));
+            indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
         }
 
         protected void OnParseError(string results, Exception ex)
@@ -390,7 +390,7 @@ namespace Jackett.Indexers
                 }
             }
 
-            return result;
+            return result.Distinct().ToList();
         }
     }
 }
