@@ -19,6 +19,13 @@ namespace Jackett.Models
             SubCategories = new List<TorznabCategory>();
         }
 
+        public TorznabCategory(int id, string name)
+        {
+            ID = id;
+            Name = name;
+            SubCategories = new List<TorznabCategory>();
+        }
+
         public JToken ToJson()
         {
             var t = new JObject();
