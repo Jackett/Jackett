@@ -43,11 +43,11 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin())
         {
 
-            AddCategoryMapping(29, TorznabCatType.Anime);
-            AddCategoryMapping(28, TorznabCatType.Apps);
-            AddCategoryMapping(28, TorznabCatType.AudioBooks);
+            AddCategoryMapping(29, TorznabCatType.TVAnime);
+            AddCategoryMapping(28, TorznabCatType.PC);
+            AddCategoryMapping(28, TorznabCatType.AudioAudiobook);
             AddCategoryMapping(20, TorznabCatType.Books);
-            AddCategoryMapping(30, TorznabCatType.TVDocs);
+            AddCategoryMapping(30, TorznabCatType.TVDocumentary);
             //Freelech
             //Mac
 
@@ -118,7 +118,7 @@ namespace Jackett.Indexers
                     SaveConfig();
                     IsConfigured = true;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     IsConfigured = false;
                     throw new Exception("Your cookie did not work: " + e.Message);
@@ -153,7 +153,7 @@ namespace Jackett.Indexers
                 queryCollection.Add("search", searchString);
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
-                queryCollection.Add("c"+cat,"1");
+                queryCollection.Add("c" + cat, "1");
 
             if (queryCollection.Count > 0)
                 queryUrl += "?" + queryCollection.GetQueryString();
@@ -177,9 +177,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qRow.Find(".torrentName").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink  + qRow.Find(".torrentName").Attr("href"));
+                    release.Guid = new Uri(SiteLink + qRow.Find(".torrentName").Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink  + qRow.Find(".dlLinksInfo > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".sizeInfo").Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

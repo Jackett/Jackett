@@ -46,10 +46,10 @@ namespace Jackett.Indexers
         {
             AddCategoryMapping(1, TorznabCatType.Audio);
             AddCategoryMapping(2, TorznabCatType.PC);
-            AddCategoryMapping(3, TorznabCatType.EBooks);
-            AddCategoryMapping(4, TorznabCatType.AudioBooks);
-            AddCategoryMapping(6, TorznabCatType.Comic);
-            AddCategoryMapping(8, TorznabCatType.Anime);
+            AddCategoryMapping(3, TorznabCatType.BooksEbook);
+            AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(6, TorznabCatType.BooksComics);
+            AddCategoryMapping(8, TorznabCatType.TVAnime);
             AddCategoryMapping(9, TorznabCatType.Movies);
             AddCategoryMapping(10, TorznabCatType.TVHD);
             AddCategoryMapping(10, TorznabCatType.TVSD);

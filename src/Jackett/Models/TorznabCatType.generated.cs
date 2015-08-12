@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using Jackett.Models;
 
-public static class TorznabCats
+namespace Jackett.Models
 {
+
+	public static partial class TorznabCatType
+	{
 
 		public static readonly TorznabCategory Console = new TorznabCategory(1000, "Console");
 				
@@ -137,7 +139,9 @@ public static class TorznabCats
 		public static readonly TorznabCategory BooksForeign = new TorznabCategory(8060, "Books/Foreign");
 				 
 
-		static TorznabCats()
+		public static readonly TorznabCategory[] AllCats = new TorznabCategory[] { Console, ConsoleNDS, ConsolePSP, ConsoleWii, ConsoleXbox, ConsoleXbox360, ConsoleWiiwareVC, ConsoleXBOX360DLC, ConsolePS3, ConsoleOther, Console3DS, ConsolePSVita, ConsoleWiiU, ConsoleXboxOne, ConsolePS4, Movies, MoviesForeign, MoviesOther, MoviesSD, MoviesHD, Movies3D, MoviesBluRay, MoviesDVD, MoviesWEBDL, Audio, AudioMP3, AudioVideo, AudioAudiobook, AudioLossless, AudioOther, AudioForeign, PC, PC0day, PCISO, PCMac, PCPhoneOther, PCGames, PCPhoneIOS, PCPhoneAndroid, TV, TVWEBDL, TVFOREIGN, TVSD, TVHD, TVOTHER, TVSport, TVAnime, TVDocumentary, XXX, XXXDVD, XXXWMV, XXXXviD, XXXx264, XXXOther, XXXImageset, XXXPacks, Other, OtherMisc, OtherHashed, Books, BooksEbook, BooksComics, BooksMagazines, BooksTechnical, BooksOther, BooksForeign };
+
+		static TorznabCatType()
 		{
 				 
 			Console.SubCategories.AddRange(new List<TorznabCategory> { ConsoleNDS, ConsolePSP, ConsoleWii, ConsoleXbox, ConsoleXbox360, ConsoleWiiwareVC, ConsoleXBOX360DLC, ConsolePS3, ConsoleOther, Console3DS, ConsolePSVita, ConsoleWiiU, ConsoleXboxOne, ConsolePS4 });
@@ -157,6 +161,6 @@ public static class TorznabCats
 			Books.SubCategories.AddRange(new List<TorznabCategory> { BooksEbook, BooksComics, BooksMagazines, BooksTechnical, BooksOther, BooksForeign });
 				 
 		}
-
+	}
 }
 

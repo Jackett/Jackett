@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 description: "Powered by Tentacles",
                 manager: i,
                 client: client,
-                caps: new TorznabCapabilities(TorznabCatType.Anime),
+                caps: new TorznabCapabilities(TorznabCatType.TVAnime),
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataAnimeBytes())

@@ -3,7 +3,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".cs" #>
+<#@ output extension=".generated.cs" #>
 <# string data = @"
 
 1000: Console
@@ -75,10 +75,12 @@
 
 "; #>
 using System.Collections.Generic;
-using Jackett.Models;
 
-public static class TorznabCats
+namespace Jackett.Models
 {
+
+	public static partial class TorznabCatType
+	{
 <#
             var items = data.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             var cats = new List<CatStub>();
@@ -97,7 +99,9 @@ public static class TorznabCats
 				<#
 			} #> 
 
-		static TorznabCats()
+		public static readonly TorznabCategory[] AllCats = new TorznabCategory[] { <#= string.Join(", ", cats.Select(c => c.MemberName)) #> };
+
+		static TorznabCatType()
 		{
 				<#
 				foreach (var cat in cats)
@@ -117,7 +121,7 @@ public static class TorznabCats
 
 				#> 
 		}
-
+	}
 }
 
 <#+         

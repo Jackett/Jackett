@@ -47,9 +47,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSS())
         {
-            AddCategoryMapping(72, TorznabCatType.Apps);
+            AddCategoryMapping(72, TorznabCatType.PC);
             AddCategoryMapping(86, TorznabCatType.Audio);
-            AddCategoryMapping(87, TorznabCatType.AudioBooks);
+            AddCategoryMapping(87, TorznabCatType.AudioAudiobook);
             AddCategoryMapping(88, TorznabCatType.Audio);
 
             AddCategoryMapping(83, TorznabCatType.Movies);
@@ -58,13 +58,13 @@ namespace Jackett.Indexers
             AddCategoryMapping(181, TorznabCatType.Movies);
             AddCategoryMapping(182, TorznabCatType.Movies);
 
-            AddCategoryMapping(75, TorznabCatType.TVDocs);
-            AddCategoryMapping(189, TorznabCatType.TVDocs);
-            AddCategoryMapping(224, TorznabCatType.TVDocs);
-            AddCategoryMapping(174, TorznabCatType.TVDocs);
-            AddCategoryMapping(113, TorznabCatType.TVDocs);
-            AddCategoryMapping(100, TorznabCatType.TVDocs);
-            AddCategoryMapping(98, TorznabCatType.TVDocs);
+            AddCategoryMapping(75, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(189, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(224, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(174, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(113, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(100, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(98, TorznabCatType.TVDocumentary);
 
             AddCategoryMapping(176, TorznabCatType.TVHD);
             AddCategoryMapping(175, TorznabCatType.TVHD);
@@ -75,10 +75,10 @@ namespace Jackett.Indexers
             AddCategoryMapping(221, TorznabCatType.TVHD);
 
             // RSS Textual categories
-            AddCategoryMapping("Appz", TorznabCatType.Apps);
+            AddCategoryMapping("Appz", TorznabCatType.PC);
             AddCategoryMapping("Radio/Audio", TorznabCatType.Audio);
-            AddCategoryMapping("Audio Books", TorznabCatType.AudioBooks);
-            AddCategoryMapping("Radio Comedy", TorznabCatType.AudioBooks);
+            AddCategoryMapping("Audio Books", TorznabCatType.AudioAudiobook);
+            AddCategoryMapping("Radio Comedy", TorznabCatType.AudioAudiobook);
 
             AddCategoryMapping("TV Aired Movies", TorznabCatType.Movies);
             AddCategoryMapping("Classic Movies", TorznabCatType.Movies);
@@ -86,13 +86,13 @@ namespace Jackett.Indexers
             AddCategoryMapping("Made for TV", TorznabCatType.Movies);
             AddCategoryMapping("TV Aired Movies", TorznabCatType.Movies);
 
-            AddCategoryMapping("Documentary & News", TorznabCatType.TVDocs);
-            AddCategoryMapping("Docudrama", TorznabCatType.TVDocs);
-            AddCategoryMapping("Documentary", TorznabCatType.TVDocs);
-            AddCategoryMapping("HD Documentary", TorznabCatType.TVDocs);
-            AddCategoryMapping("Historical", TorznabCatType.TVDocs);
-            AddCategoryMapping("True Crime", TorznabCatType.TVDocs);
-            AddCategoryMapping("Wildlife/Nature", TorznabCatType.TVDocs);
+            AddCategoryMapping("Documentary & News", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("Docudrama", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("Documentary", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("HD Documentary", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("Historical", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("True Crime", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("Wildlife/Nature", TorznabCatType.TVDocumentary);
 
             AddCategoryMapping("HD Sci-Fi", TorznabCatType.TVHD);
             AddCategoryMapping("HD Drama", TorznabCatType.TVHD);
