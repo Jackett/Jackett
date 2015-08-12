@@ -41,28 +41,28 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataFileList())
         {
-            AddCategoryMapping(24, TorznabCatType.Anime);
+            AddCategoryMapping(24, TorznabCatType.TVAnime);
             AddCategoryMapping(11, TorznabCatType.Audio);
             AddCategoryMapping(15, TorznabCatType.TV);
             //AddCategoryMapping(18, TorznabCatType.); Other
-            AddCategoryMapping(16, TorznabCatType.TVDocs);
+            AddCategoryMapping(16, TorznabCatType.TVDocumentary);
             AddCategoryMapping(25, TorznabCatType.Movies3D);
-            AddCategoryMapping(20, TorznabCatType.MoviesBlueRay);
+            AddCategoryMapping(20, TorznabCatType.MoviesBluRay);
             AddCategoryMapping(2, TorznabCatType.MoviesSD);
             AddCategoryMapping(3, TorznabCatType.MoviesForeign); //RO
             AddCategoryMapping(4, TorznabCatType.MoviesHD);
             AddCategoryMapping(19, TorznabCatType.MoviesForeign); // RO
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(10, TorznabCatType.Consoles);
+            AddCategoryMapping(10, TorznabCatType.Console);
             AddCategoryMapping(9, TorznabCatType.PCGames);
             //AddCategoryMapping(17, TorznabCatType); Linux No cat
-            AddCategoryMapping(22, TorznabCatType.AppsMobile); //Apps/mobile
-            AddCategoryMapping(8, TorznabCatType.Apps);
+            AddCategoryMapping(22, TorznabCatType.PCPhoneOther); //Apps/mobile
+            AddCategoryMapping(8, TorznabCatType.PC);
             AddCategoryMapping(21, TorznabCatType.TVHD);
             AddCategoryMapping(23, TorznabCatType.TVSD);
             AddCategoryMapping(13, TorznabCatType.TVSport);
             AddCategoryMapping(14, TorznabCatType.TV);
-            AddCategoryMapping(12, TorznabCatType.AudioMusicVideos);
+            AddCategoryMapping(12, TorznabCatType.AudioVideo);
             AddCategoryMapping(7, TorznabCatType.XXX);
         }
 

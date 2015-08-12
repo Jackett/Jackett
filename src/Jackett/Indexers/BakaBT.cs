@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             : base(name: "BakaBT",
                 description: "Anime Community",
                 link: "http://bakabt.me/",
-                caps: new TorznabCapabilities(TorznabCatType.Anime),
+                caps: new TorznabCapabilities(TorznabCatType.TVAnime),
                 manager: i,
                 client: wc,
                 logger: l,

@@ -54,12 +54,12 @@ namespace Jackett.Indexers
             AddCategoryMapping("77", TorznabCatType.MoviesHD);
             AddCategoryMapping("71", TorznabCatType.Movies3D);
             AddCategoryMapping("78", TorznabCatType.MoviesHD);
-            AddCategoryMapping("37", TorznabCatType.MoviesBlueRay);
+            AddCategoryMapping("37", TorznabCatType.MoviesBluRay);
             AddCategoryMapping("54", TorznabCatType.MoviesHD);
 
             AddCategoryMapping("55,56,42,36,69", TorznabCatType.Audio);
             AddCategoryMapping("36", TorznabCatType.AudioLossless);
-            AddCategoryMapping("69", TorznabCatType.AudioLossy);
+            AddCategoryMapping("69", TorznabCatType.AudioMP3);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -97,7 +97,7 @@ namespace Jackett.Indexers
             {
                 cats.AddRange(cat.Split(','));
             }
-            foreach (var cat in cats)
+            foreach (var cat in cats.Distinct())
             {
                 queryCollection.Add("c" + cat, "1");
             }

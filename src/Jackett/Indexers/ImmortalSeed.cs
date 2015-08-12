@@ -41,7 +41,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-            AddCategoryMapping(32, TorznabCatType.Anime);
+            AddCategoryMapping(32, TorznabCatType.TVAnime);
             AddCategoryMapping(47, TorznabCatType.TVSD);
             AddCategoryMapping(8, TorznabCatType.TVHD);
             AddCategoryMapping(48, TorznabCatType.TVHD);
@@ -50,8 +50,8 @@ namespace Jackett.Indexers
             AddCategoryMapping(6, TorznabCatType.TVSD);
 
             AddCategoryMapping(22, TorznabCatType.Books);
-            AddCategoryMapping(41, TorznabCatType.Comic);
-            AddCategoryMapping(23, TorznabCatType.Apps);
+            AddCategoryMapping(41, TorznabCatType.BooksComics);
+            AddCategoryMapping(23, TorznabCatType.PC);
 
             AddCategoryMapping(16, TorznabCatType.MoviesHD);
             AddCategoryMapping(17, TorznabCatType.MoviesSD);
@@ -62,8 +62,8 @@ namespace Jackett.Indexers
 
             AddCategoryMapping(34, TorznabCatType.Audio);
             AddCategoryMapping(37, TorznabCatType.AudioLossless);
-            AddCategoryMapping(35, TorznabCatType.AudioBooks);
-            AddCategoryMapping(36, TorznabCatType.AudioLossy);
+            AddCategoryMapping(35, TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(36, TorznabCatType.AudioMP3);
 
         }
 

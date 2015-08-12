@@ -232,12 +232,12 @@
     <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Models\TorznabCategory.cs" />
-    <Compile Include="Models\TorznabCats.cs">
+    <Compile Include="Models\TorznabCatType.cs" />
+    <Compile Include="Models\TorznabCatType.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TorznabCats.tt</DependentUpon>
+      <DependentUpon>TorznabCatType.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TorznabCatType.cs" />
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="Services\CacheService.cs" />
@@ -531,9 +531,9 @@
     <Content Include="Content\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Models\TorznabCats.tt">
+    <Content Include="Models\TorznabCatType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TorznabCats.cs</LastGenOutput>
+      <LastGenOutput>TorznabCatType.generated.cs</LastGenOutput>
     </Content>
     <Content Include="Resources\validator_reply.xml" />
     <Content Include="Content\logos\alpharatio.png">

@@ -49,9 +49,9 @@ namespace Jackett.Indexers
             AddCategoryMapping(15, TorznabCatType.ConsoleWii);
             AddCategoryMapping(16, TorznabCatType.PC);
             AddCategoryMapping(17, TorznabCatType.PCMac);
-            AddCategoryMapping(19, TorznabCatType.PCMobileOther);
-            AddCategoryMapping(21, TorznabCatType.EBooks);
-            AddCategoryMapping(22, TorznabCatType.AudioBooks);
+            AddCategoryMapping(19, TorznabCatType.PCPhoneOther);
+            AddCategoryMapping(21, TorznabCatType.BooksEbook);
+            AddCategoryMapping(22, TorznabCatType.AudioAudiobook);
             AddCategoryMapping(23, TorznabCatType.Audio);
         }
 
