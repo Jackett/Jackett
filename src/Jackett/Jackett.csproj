@@ -232,6 +232,11 @@
     <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Models\TorznabCategory.cs" />
+    <Compile Include="Models\TorznabCats.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TorznabCats.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TorznabCatType.cs" />
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
@@ -526,6 +531,10 @@
     <Content Include="Content\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Models\TorznabCats.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TorznabCats.cs</LastGenOutput>
+    </Content>
     <Content Include="Resources\validator_reply.xml" />
     <Content Include="Content\logos\alpharatio.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -553,6 +562,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
