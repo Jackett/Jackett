@@ -258,3 +258,7 @@ pre {
     border: 0px;
     border-radius: 0px;
 }
+
+.modal-open .modal {
+    overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
+}
