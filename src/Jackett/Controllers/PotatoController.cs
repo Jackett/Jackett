@@ -95,6 +95,7 @@ namespace Jackett.Controllers
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
                 releases = await indexer.PerformQuery(torznabQuery);
+                releases = indexer.CleanLinks(releases);
             }
 
             // Cache non query results
@@ -112,7 +113,7 @@ namespace Jackett.Controllers
             foreach (var r in releases)
             {
                 var release = Mapper.Map<ReleaseInfo>(r);
-                release.Link = release.ConvertToProxyLink(serverUrl, indexerID);
+                release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, indexerID);
 
                 potatoResponse.results.Add(new TorrentPotatoResponseItem()
                 {

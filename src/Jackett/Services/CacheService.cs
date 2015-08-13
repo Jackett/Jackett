@@ -12,7 +12,7 @@ namespace Jackett.Services
     public interface ICacheService
     {
         void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
-        List<TrackerCacheResult> GetCachedResults(string serverUrl);
+        List<TrackerCacheResult> GetCachedResults();
         int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
     }
 
@@ -37,12 +37,6 @@ namespace Jackett.Services
 
                 foreach(var release in releases.OrderByDescending(i=>i.PublishDate))
                 {
-                    // Skip old releases
-                    if(release.PublishDate-DateTime.Now> AGE_LIMIT)
-                    {
-                        continue;
-                    }
-
                     var existingItem = trackerCache.Results.Where(i => i.Result.Guid == release.Guid).FirstOrDefault();
                     if (existingItem == null)
                     {
@@ -86,7 +80,7 @@ namespace Jackett.Services
             }
         }
 
-        public List<TrackerCacheResult> GetCachedResults(string serverUrl)
+        public List<TrackerCacheResult> GetCachedResults()
         {
             lock (cache)
             {
@@ -94,16 +88,13 @@ namespace Jackett.Services
 
                 foreach(var tracker in cache)
                 {
-                    foreach(var release in tracker.Results)
+                    foreach(var release in tracker.Results.OrderByDescending(i => i.Result.PublishDate).Take(300))
                     {
                         var item = Mapper.Map<TrackerCacheResult>(release.Result);
                         item.FirstSeen = release.Created;
                         item.Tracker = tracker.TrackerName;
+                        item.TrackerId = tracker.TrackerId;
                         item.Peers = item.Peers - item.Seeders; // Use peers as leechers
-                        item.Link = item.ConvertToProxyLink(serverUrl, tracker.TrackerId);
-                        if(item.Link!=null && item.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
-                            item.BlackholeLink = item.ConvertToProxyLink(serverUrl, tracker.TrackerId, "blackhole");
-
                         results.Add(item);
                     }
                 }

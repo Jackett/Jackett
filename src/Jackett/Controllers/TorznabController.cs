@@ -64,9 +64,10 @@ namespace Jackett.Controllers
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);
+            releases = indexer.CleanLinks(releases);
 
             // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
-            foreach(var release in releases)
+            foreach (var release in releases)
             {
                 if (release.PublishDate > DateTime.Now)
                     release.PublishDate = DateTime.Now;
@@ -115,7 +116,7 @@ namespace Jackett.Controllers
             foreach(var result in releases)
             {
                 var clone = Mapper.Map<ReleaseInfo>(result);
-                clone.Link = clone.ConvertToProxyLink(serverUrl, indexerID);
+                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, indexerID);
                 resultPage.Releases.Add(clone);
             }
 
