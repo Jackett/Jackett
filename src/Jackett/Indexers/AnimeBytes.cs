@@ -24,7 +24,7 @@ namespace Jackett.Indexers
     public class AnimeBytes : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "user/login"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?filter_cat[1]=1"; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
 
         new ConfigurationDataAnimeBytes configData
@@ -39,11 +39,17 @@ namespace Jackett.Indexers
                 description: "Powered by Tentacles",
                 manager: i,
                 client: client,
-                caps: new TorznabCapabilities(TorznabCatType.TVAnime),
+                caps: new TorznabCapabilities(TorznabCatType.TVAnime,
+                                              TorznabCatType.Movies,
+                                              TorznabCatType.BooksComics,
+                                              TorznabCatType.ConsolePSP,
+                                              TorznabCatType.ConsoleOther,
+                                              TorznabCatType.PCGames),
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataAnimeBytes())
         {
+           
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -125,6 +131,8 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> GetResults(string searchTerm)
         {
+            var cleanSearchTerm = HttpUtility.UrlEncode(searchTerm);
+
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -151,7 +159,7 @@ namespace Jackett.Indexers
             // Only include the query bit if its required as hopefully the site caches the non query page
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                queryUrl += "&action=advanced&search_type=title&sort=time_added&way=desc&anime%5Btv_series%5D=1&searchstr=" + WebUtility.UrlEncode(searchTerm);
+                queryUrl += string.Format("searchstr={0}&action=advanced&search_type=title&year=&year2=&tags=&tags_type=0&sort=time_added&way=desc&hentai=2&releasegroup=&epcount=&epcount2=&artbooktitle=", cleanSearchTerm);
             }
 
             // Get the content from the tracker
@@ -162,7 +170,7 @@ namespace Jackett.Indexers
             try
             {
                 var releaseInfo = "S01";
-                var root = dom.Find(".anime");
+                var root = dom.Find(".group_cont");
                 // We may have got redirected to the series page if we have none of these
                 if (root.Count() == 0)
                     root = dom.Find(".torrent_table");
@@ -215,7 +223,7 @@ namespace Jackett.Indexers
                         var releaseRows = seriesCq.Find(".torrent_group tr");
 
                         // Skip the first two info rows
-                        for (int r = 2; r < releaseRows.Count(); r++)
+                        for (int r = 1; r < releaseRows.Count(); r++)
                         {
                             var row = releaseRows.Get(r);
                             var rowCq = row.Cq();
@@ -257,6 +265,37 @@ namespace Jackett.Indexers
                                 release.Guid = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
                                 release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"), UriKind.Relative);
 
+                                var category = seriesCq.Find("a[title=\"View Torrent\"]").Text().Trim();
+                                if (category == "TV Series")
+                                    release.Category = TorznabCatType.TVAnime.ID;
+
+                                // Ignore these categories as they'll cause hell with the matcher
+                                // TV Special, OVA, ONA, DVD Special, BD Special
+
+                                if (category == "Movie")
+                                    release.Category = TorznabCatType.Movies.ID;
+
+                                if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
+                                    release.Category = TorznabCatType.BooksComics.ID;
+
+                                if (category == "Novel" || category == "Artbook")
+                                    release.Category = TorznabCatType.BooksComics.ID;
+
+                                if (category == "Game" || category == "Visual Novel")
+                                {
+                                    var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
+                                    if (description.Contains(" PSP "))
+                                        release.Category = TorznabCatType.ConsolePSP.ID;
+                                    if (description.Contains("PSX"))
+                                        release.Category = TorznabCatType.ConsoleOther.ID;
+                                    if (description.Contains(" NES "))
+                                        release.Category = TorznabCatType.ConsoleOther.ID;
+                                    if (description.Contains(" PC "))
+                                        release.Category = TorznabCatType.PCGames.ID;
+                                }
+
+
+
                                 // We dont actually have a release name >.> so try to create one
                                 var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
                                 for (int i = releaseTags.Count - 1; i >= 0; i--)
@@ -287,10 +326,19 @@ namespace Jackett.Indexers
 
                                 for (int i = 0; i + 1 < releaseTags.Count(); i++)
                                 {
+                                    if (releaseTags[i] == "Raw" && !AllowRaws)
+                                        continue;
                                     infoString += "[" + releaseTags[i] + "]";
                                 }
 
-                                release.Title = string.Format("{0}{1} {2} {3}", group, title, releaseInfo, infoString);
+                                if (category == "Movie")
+                                {
+                                    release.Title = string.Format("{0} {1} {2}{3}", title, year, group, infoString);
+                                }
+                                else
+                                {
+                                    release.Title = string.Format("{0}{1} {2} {3}", group, title, releaseInfo, infoString);
+                                }
                                 release.Description = title;
 
                                 var size = rowCq.Find(".torrent_size");
@@ -306,7 +354,8 @@ namespace Jackett.Indexers
                                 release.Seeders = ParseUtil.CoerceInt(rowCq.Find(".torrent_seeders").Text());
                                 release.Peers = release.Seeders + ParseUtil.CoerceInt(rowCq.Find(".torrent_leechers").Text());
 
-                                releases.Add(release);
+                                if (release.Category != 0)
+                                    releases.Add(release);
                             }
                         }
                     }

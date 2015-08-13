@@ -20,6 +20,7 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Jackett.Services
 {
@@ -31,6 +32,7 @@ namespace Jackett.Services
         void ReserveUrls(bool doInstall = true);
         ServerConfig Config { get; }
         void SaveConfig();
+        Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "/t.torrent");
     }
 
     public class ServerService : IServerService
@@ -61,6 +63,16 @@ namespace Jackett.Services
         public ServerConfig Config
         {
             get { return config; }
+        }
+
+        public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "/t.torrent")
+        {
+            if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
+                return link;
+         
+            var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString())) + file;
+            var proxyLink = string.Format("{0}{1}/{2}/{3}/{4}", serverUrl, action, indexerId, config.APIKey, encodedLink);
+            return new Uri(proxyLink);
         }
 
         private void LoadConfig()

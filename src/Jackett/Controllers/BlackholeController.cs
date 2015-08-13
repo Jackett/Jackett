@@ -21,15 +21,17 @@ namespace Jackett.Controllers
     {
         private Logger logger;
         private IIndexerManagerService indexerService;
+        IServerService serverService;
 
-        public BlackholeController(IIndexerManagerService i, Logger l)
+        public BlackholeController(IIndexerManagerService i, Logger l, IServerService s)
         {
             logger = l;
             indexerService = i;
+            serverService = s;
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Blackhole(string indexerID, string path)
+        public async Task<IHttpActionResult> Blackhole(string indexerID, string path, string apikey)
         {
 
             var jsonReply = new JObject();
@@ -42,8 +44,13 @@ namespace Jackett.Controllers
                     throw new Exception("This indexer is not configured.");
                 }
 
-                var remoteFile = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
-                var downloadBytes = await indexer.Download(new Uri(remoteFile, UriKind.RelativeOrAbsolute));
+                if (serverService.Config.APIKey != apikey)
+                    throw new Exception("Incorrect API key");
+
+                var remoteFile = new Uri(Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path)), UriKind.RelativeOrAbsolute);
+                remoteFile = indexer.UncleanLink(remoteFile);
+
+                var downloadBytes = await indexer.Download(remoteFile);
 
                 if (string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
                 {

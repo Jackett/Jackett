@@ -147,7 +147,7 @@ namespace Jackett.Indexers
                         release.Size = ReleaseInfo.GetBytes(size);
 
                         //22 Jul 15
-                        var dateStr = qRow.Find(".added . datetime").First().Text().Replace("'", string.Empty);
+                        var dateStr = qRow.Find(".added").First().Text().Replace("'", string.Empty);
                         if (dateStr.Split(' ')[0].Length == 1)
                             dateStr = "0" + dateStr;
 

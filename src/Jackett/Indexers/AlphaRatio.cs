@@ -35,6 +35,7 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
+                downloadBase: "https://alpharatio.cc/torrents.php?action=download&id=",
                 configData: new ConfigurationDataBasicLogin())
         {
             AddCategoryMapping(1, TorznabCatType.TVSD);

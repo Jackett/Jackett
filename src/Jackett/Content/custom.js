@@ -53,7 +53,7 @@ $("#jackett-show-releases").click(function () {
             {
                 "pageLength": 20,
                 "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
-                "order": [[2, "desc"]],
+                "order": [[0, "desc"]],
                 "columnDefs": [
                    {
                        "targets": 0,

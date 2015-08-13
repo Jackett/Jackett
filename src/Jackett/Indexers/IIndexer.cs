@@ -37,5 +37,8 @@ namespace Jackett.Indexers
         IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input);
 
         Task<byte[]> Download(Uri link);
+
+        IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases);
+        Uri UncleanLink(Uri link);
     }
 }

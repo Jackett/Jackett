@@ -396,8 +396,19 @@ namespace Jackett.Controllers
         [HttpGet]
         public List<TrackerCacheResult> GetCache()
         {
-            var severUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
-            return cacheService.GetCachedResults(severUrl);
+            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            var results = cacheService.GetCachedResults();
+
+            foreach (var result in results)
+            {
+                var link = result.Link;
+                result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId);
+                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
+                    result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", string.Empty);
+
+            }
+
+            return results;
         }
 
         [Route("GetLogs")]

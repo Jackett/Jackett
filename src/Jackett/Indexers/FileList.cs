@@ -110,7 +110,7 @@ namespace Jackett.Indexers
 
                     //22:05:3716/02/2013
                     var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim();
-                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy", CultureInfo.InvariantCulture);
+                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy", CultureInfo.InvariantCulture).AddHours(-2);
 
                     var qLink = qRow.Find(".torrenttable:eq(2) a").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));

@@ -17,17 +17,19 @@ namespace Jackett.Controllers
     [JackettAPINoCache]
     public class DownloadController : ApiController
     {
-        private Logger logger;
-        private IIndexerManagerService indexerService;
+        Logger logger;
+        IIndexerManagerService indexerService;
+        IServerService serverService;
 
-        public DownloadController(IIndexerManagerService i, Logger l)
+        public DownloadController(IIndexerManagerService i, Logger l, IServerService s)
         {
             logger = l;
             indexerService = i;
+            serverService = s;
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Download(string indexerID, string path)
+        public async Task<HttpResponseMessage> Download(string indexerID, string path, string apikey)
         {
             try
             {
@@ -39,8 +41,15 @@ namespace Jackett.Controllers
                     return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
                 }
 
-                var remoteFile = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
-                var downloadBytes = await indexer.Download(new Uri(remoteFile, UriKind.RelativeOrAbsolute));
+                path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
+
+                if (serverService.Config.APIKey != apikey)
+                    return new HttpResponseMessage(HttpStatusCode.Unauthorized);
+
+                var target = new Uri(path, UriKind.RelativeOrAbsolute);
+                target = indexer.UncleanLink(target);
+
+                var downloadBytes = await indexer.Download(target);
 
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);

@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     public class TorrentLeech : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
-        private string SearchUrl { get { return SiteLink + "torrents/browse/index/query/{0}/categories/2%2C26%2C27%2C32/orderby/added?"; } }
+        private string SearchUrl { get { return SiteLink + "torrents/browse/index/"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -38,8 +38,45 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
+                downloadBase: "http://www.torrentleech.org/download/",
                 configData: new ConfigurationDataBasicLogin())
         {
+
+            AddCategoryMapping(8, TorznabCatType.MoviesSD); // cam
+            AddCategoryMapping(9, TorznabCatType.MoviesSD); //ts
+            AddCategoryMapping(10, TorznabCatType.MoviesSD); // Sceener
+            AddCategoryMapping(11, TorznabCatType.MoviesSD);
+            AddCategoryMapping(12, TorznabCatType.MoviesSD);
+            AddCategoryMapping(13, TorznabCatType.MoviesHD);
+            AddCategoryMapping(14, TorznabCatType.MoviesHD);
+            AddCategoryMapping(15, TorznabCatType.Movies); // Boxsets
+            AddCategoryMapping(29, TorznabCatType.TVDocumentary);
+
+            AddCategoryMapping(26, TorznabCatType.TVSD);
+            AddCategoryMapping(27, TorznabCatType.TV); // Boxsets
+            AddCategoryMapping(32, TorznabCatType.TVHD);
+
+            AddCategoryMapping(17, TorznabCatType.PCGames);
+            AddCategoryMapping(18, TorznabCatType.ConsoleXbox);
+            AddCategoryMapping(19, TorznabCatType.ConsoleXbox360);
+            // 20 PS2
+            AddCategoryMapping(21, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(22, TorznabCatType.ConsolePSP);
+            AddCategoryMapping(28, TorznabCatType.ConsoleWii);
+            AddCategoryMapping(30, TorznabCatType.ConsoleNDS);
+
+            AddCategoryMapping(16, TorznabCatType.AudioVideo);
+            AddCategoryMapping(31, TorznabCatType.Audio);
+
+            AddCategoryMapping(34, TorznabCatType.TVAnime);
+            AddCategoryMapping(35, TorznabCatType.TV); // Cartoons
+
+            AddCategoryMapping(5, TorznabCatType.Books);
+
+            AddCategoryMapping(23, TorznabCatType.PCISO);
+            AddCategoryMapping(24, TorznabCatType.PCMac);
+            AddCategoryMapping(25, TorznabCatType.PCPhoneOther);
+            AddCategoryMapping(33, TorznabCatType.PC0day);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -66,8 +103,27 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var searchUrl = SearchUrl;
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchUrl += "query/" + HttpUtility.UrlEncode(searchString)  + "/";
+            }
+            string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+
+            var cats = MapTorznabCapsToTrackers(query);
+            if (cats.Count > 0)
+            {
+                searchUrl += "categories/";
+                foreach (var cat in cats)
+                {
+                    if (!searchUrl.EndsWith("/"))
+                        searchUrl += ",";
+                    searchUrl += cat;
+                }
+            }
+
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
                 CQ dom = results.Content;
@@ -86,12 +142,12 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
 
                     CQ qLink = qRow.Find(".title > a").First();
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
                     release.Title = qLink.Text();
                     release.Description = release.Title;
 
-                    release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href").Substring(1));
 
                     var dateString = qRow.Find(".name")[0].InnerText.Trim().Replace(" ", string.Empty).Replace("Addedinon", string.Empty);
                     //"2015-04-25 23:38:12"
@@ -103,6 +159,9 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
+
+                    var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/",string.Empty);
+                    release.Category = MapTrackerCatToNewznab(category);
 
                     releases.Add(release);
                 }
