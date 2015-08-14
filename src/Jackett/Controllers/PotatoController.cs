@@ -28,7 +28,19 @@ namespace Jackett.Controllers
         private ICacheService cacheService;
         private IWebClient webClient;
 
-        public static readonly int[] MOVIE_CATS = new int[] {2000, 2040, 2030, 2010};
+        public static int[] MOVIE_CATS
+        {
+            get
+            {
+                var torznabQuery = new TorznabQuery()
+                {
+                    Categories = new int[1] { TorznabCatType.Movies.ID },
+                };
+
+                torznabQuery.ExpandCatsToSubCats();
+                    return torznabQuery.Categories;
+            }
+        }
 
         public PotatoController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c, IWebClient w)
         {
@@ -137,7 +149,7 @@ namespace Jackett.Controllers
             }
             else
             {
-                logger.Info(string.Format("Found {0} torrentpotato releases from {1} for: {2} {3}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString()));
+                logger.Info(string.Format("Found {0} torrentpotato releases from {1} for: {2}", releases.Count(), indexer.DisplayName, torznabQuery.GetQueryString()));
             }
 
             // Force the return as Json

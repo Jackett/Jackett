@@ -221,6 +221,11 @@ namespace Jackett.Controllers
                     item["configured"] = indexer.IsConfigured;
                     item["site_link"] = indexer.SiteLink;
                     item["potatoenabled"] = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => PotatoController.MOVIE_CATS.Contains(i));
+
+                    var caps = new JObject();
+                    foreach (var cap in indexer.TorznabCaps.Categories)
+                        caps[cap.ID.ToString()] = cap.Name;
+                    item["caps"] = caps;
                     items.Add(item);
                 }
                 jsonReply["items"] = items;
@@ -396,9 +401,15 @@ namespace Jackett.Controllers
         [HttpGet]
         public List<TrackerCacheResult> GetCache()
         {
-            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var results = cacheService.GetCachedResults();
+            ConfigureCacheResults(results);
+            return results;
+        }
 
+
+        private void ConfigureCacheResults(List<TrackerCacheResult> results)
+        {
+            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             foreach (var result in results)
             {
                 var link = result.Link;
@@ -407,8 +418,6 @@ namespace Jackett.Controllers
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", string.Empty);
 
             }
-
-            return results;
         }
 
         [Route("GetLogs")]
@@ -416,6 +425,73 @@ namespace Jackett.Controllers
         public List<CachedLog> GetLogs()
         {
             return logCache.Logs;
+        }
+
+        [Route("Search")]
+        [HttpPost]
+        public ManualSearchResult Search([FromBody]AdminSearch value)
+        {
+            var results = new List<TrackerCacheResult>();
+            var query = new TorznabQuery()
+            {
+                SearchTerm = value.Query,
+                Categories = value.Category ==0?new int[0]: new int[1] {  value.Category }
+            };
+
+            query.ExpandCatsToSubCats();
+
+            var trackers = indexerService.GetAllIndexers().Where(t=>t.IsConfigured).ToList();
+            if (!string.IsNullOrWhiteSpace(value.Tracker))
+            {
+                trackers = trackers.Where(t => t.ID == value.Tracker).ToList();
+            }
+
+            if (value.Category != 0)
+            {
+                trackers = trackers.Where(t => t.TorznabCaps.Categories.Select(c => c.ID).Contains(value.Category)).ToList();
+            }
+
+            Parallel.ForEach(trackers.ToList(), indexer =>
+            {
+                var searchResults =  indexer.PerformQuery(query).Result;
+                cacheService.CacheRssResults(indexer, searchResults);
+                searchResults = indexer.FilterResults(query, searchResults);
+
+                lock (results)
+                {
+                    if (searchResults.Count() == 0)
+                        trackers.Remove(indexer);
+
+                    foreach (var result in searchResults)
+                    {
+                        var item = Mapper.Map<TrackerCacheResult>(result);
+                        item.Tracker = indexer.DisplayName;
+                        item.TrackerId = indexer.ID;
+                        item.Peers = item.Peers - item.Seeders; // Use peers as leechers
+                        results.Add(item);
+                    }
+                }
+            });
+
+            ConfigureCacheResults(results);
+
+            if (trackers.Count > 1)
+            {
+                results = results.OrderByDescending(d => d.PublishDate).ToList();
+            }
+
+            var manualResult =  new ManualSearchResult()
+            {
+                Results = results,
+                Indexers = trackers.Select(t=>t.DisplayName).ToList()
+            };
+
+
+            if (manualResult.Indexers.Count == 0)
+                manualResult.Indexers = new List<string>() { "None" };
+
+            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", query.GetQueryString(), string.Join(", ", manualResult.Indexers), manualResult.Results.Count));
+            return manualResult;
         }
     }
 }

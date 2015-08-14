@@ -86,11 +86,20 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var searchUrl = BrowseUrl;
+            var searchString = query.GetQueryString();
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-                searchUrl += string.Format("?search={0}&cat=0&searchin=0&sort=0", HttpUtility.UrlEncode(searchString));
+            var cats = MapTorznabCapsToTrackers(query);
+            string cat = "0";
+            if (cats.Count == 1)
+            {
+                cat = cats[0];
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchString) || cat != "0")
+                searchUrl += string.Format("?search={0}&cat={1}&searchin=0&sort=0", HttpUtility.UrlEncode(searchString), cat);
+
+          
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             var results = response.Content;
@@ -121,8 +130,8 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".torrenttable:eq(8)").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".torrenttable:eq(9)").Text().Trim()) + release.Seeders;
 
-                    var cat = qRow.Find(".torrenttable:eq(0) a").First().Attr("href").Substring(15);
-                    release.Category = MapTrackerCatToNewznab(cat);
+                    var catId = qRow.Find(".torrenttable:eq(0) a").First().Attr("href").Substring(15);
+                    release.Category = MapTrackerCatToNewznab(catId);
 
                     // Skip other
                     if (release.Category != 0)

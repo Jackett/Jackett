@@ -116,10 +116,8 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(searchString));
+            var releases = new List<ReleaseInfo>();
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(query.GetQueryString()));
 
             try
             {

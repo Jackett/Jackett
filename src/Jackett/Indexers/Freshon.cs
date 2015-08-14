@@ -72,12 +72,11 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             string episodeSearchUrl;
 
-            if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
+            if (string.IsNullOrEmpty(query.GetQueryString()))
                 episodeSearchUrl = SearchUrl;
             else
             {
-                var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-                episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(searchString));
+                episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             }
 
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
