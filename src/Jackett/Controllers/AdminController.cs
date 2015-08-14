@@ -459,9 +459,6 @@ namespace Jackett.Controllers
 
                 lock (results)
                 {
-                    if (searchResults.Count() == 0)
-                        trackers.Remove(indexer);
-
                     foreach (var result in searchResults)
                     {
                         var item = Mapper.Map<TrackerCacheResult>(result);
