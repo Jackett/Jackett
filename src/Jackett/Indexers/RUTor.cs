@@ -96,7 +96,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var searchCategory = CAT_ANY;
 
             if (query.Categories.Contains(TorznabCatType.TV.ID) ||

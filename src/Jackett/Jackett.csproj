@@ -189,6 +189,7 @@
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\FileList.cs" />
+    <Compile Include="Indexers\ManualSearchResult.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
     <Compile Include="Indexers\RuTor.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
+    <Compile Include="Models\AdminSearch.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataFileList.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />

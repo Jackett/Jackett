@@ -82,7 +82,6 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var episodeSearchUrl = string.Format(SearchAllUrl);
             var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             var xmlDoc = new XmlDocument();

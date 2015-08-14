@@ -66,8 +66,7 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchurls = new List<string>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var searchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+            var searchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {

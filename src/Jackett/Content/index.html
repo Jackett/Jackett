@@ -108,6 +108,7 @@
             </div>
         </div>
     </script>
+
     <script id="jackett-releases" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-fillwidth">
@@ -117,7 +118,7 @@
                         <h4 class="modal-title">Releases</h4>
                     </div>
                     <div class="modal-body">
-                        <p>This screen shows releases which have been recently returned from Jackett. Only the last 100 releases in the last 2 days are kept in memory for each tracker.</p>
+                        <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
                         <table class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
@@ -176,6 +177,89 @@
                 </div>
             </div>
         </div>
+    </script>
+
+    <script id="jackett-search" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Metasearch</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You can search all configured indexers from this screen.</p>
+                        <label>Query</label>
+                        <input type="text" name="query" id="searchquery" style="width:400px" />
+                        <label>Category</label>
+                        <select name="category" id="searchCategory"></select>
+                        <label>Tracker</label>
+                        <select name="tracker" id="searchTracker">
+                            {{#each indexers}}
+                            <option value="{{id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <button id="jackett-search-perform" class="btn btn-success btn-sm">
+                            Search trackers<span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                        </button>
+                        <div id="searchResults"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="jackett-search-results" type="text/x-handlebars-template">
+        <hr/>
+        <p>Your search contains results from: {{#each Indexers}}{{this}}, {{/each}}</p>
+        <table class="dataTable compact cell-border hover stripe">
+            <thead>
+                <tr>
+                    <th>Published</th>
+                    <th>Published</th>
+                    <th>Tracker</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Seeds</th>
+                    <th>Leechers</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each Results}}
+                <tr>
+                    <td>{{PublishDate}}</td>
+                    <td>{{jacketTimespan PublishDate}}</td>
+                    <td>{{Tracker}}</td>
+                    <td><a href="{{Comments}}">{{Title}}</a></td>
+                    <td>{{CategoryDesc}}</td>
+                    <td>{{Seeders}}</td>
+                    <td>{{Peers}}</td>
+                    <td class="downloadcolumn">
+                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                        {{#if BlackholeLink}}
+                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
     </script>
 
     <script id="jackett-logs" type="text/x-handlebars-template">
@@ -286,6 +370,9 @@
 
         <hr />
         <div class="pull-right">
+            <button id="jackett-show-search" class="btn btn-success btn-sm">
+                Metasearch <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
             <button id="jackett-show-releases" class="btn btn-primary btn-sm">
                 View cached releases <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
             </button>

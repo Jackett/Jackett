@@ -88,7 +88,7 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 

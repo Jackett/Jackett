@@ -50,66 +50,192 @@ $("#jackett-show-releases").click(function () {
         var item = { releases: data, Title: 'Releases' };
         var releaseDialog = $(releaseTemplate(item));
         releaseDialog.find('table').DataTable(
-            {
-                "pageLength": 20,
-                "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
-                "order": [[0, "desc"]],
-                "columnDefs": [
-                   {
-                       "targets": 0,
-                       "visible": false,
-                       "searchable": false,
-                       "type": 'date'
-                   },
-                   {
-                       "targets": 1,
-                       "visible": false,
-                       "searchable": false,
-                       "type": 'date'
-                   },
-                   {
-                       "targets": 2,
-                       "visible": true,
-                       "searchable": false,
-                       "iDataSort": 0
-                   },
-                   {
-                       "targets": 3,
-                       "visible": true,
-                       "searchable": false,
-                       "iDataSort": 1
-                   }
-                ],
-                initComplete: function () {
-                    var count = 0;
-                    this.api().columns().every(function () {
-                        count++;
-                        if (count === 5 || count === 7) {
-                            var column = this;
-                            var select = $('<select><option value=""></option></select>')
-                                .appendTo($(column.footer()).empty())
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
+             {
+                 "pageLength": 20,
+                 "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                 "order": [[0, "desc"]],
+                 "columnDefs": [
+                    {
+                        "targets": 0,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'date'
+                    },
+                    {
+                        "targets": 1,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'date'
+                    },
+                    {
+                        "targets": 2,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 0
+                    },
+                    {
+                        "targets": 3,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 1
+                    }
+                 ],
+                 initComplete: function () {
+                     var count = 0;
+                     this.api().columns().every(function () {
+                         count++;
+                         if (count === 5 || count === 7) {
+                             var column = this;
+                             var select = $('<select><option value=""></option></select>')
+                                 .appendTo($(column.footer()).empty())
+                                 .on('change', function () {
+                                     var val = $.fn.dataTable.util.escapeRegex(
+                                         $(this).val()
+                                     );
 
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
+                                     column
+                                         .search(val ? '^' + val + '$' : '', true, false)
+                                         .draw();
+                                 });
 
-                            column.data().unique().sort().each(function (d, j) {
-                                select.append('<option value="' + d + '">' + d + '</option>')
-                            });
-                        }
-                    });
-                }
-            });
+                             column.data().unique().sort().each(function (d, j) {
+                                 select.append('<option value="' + d + '">' + d + '</option>')
+                             });
+                         }
+                     });
+                 }
+             });
         $("#modals").append(releaseDialog);
         releaseDialog.modal("show");
 
     }).fail(function () {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+});
+
+
+$("#jackett-show-search").click(function () {
+    $('#select-indexer-modal').remove();
+    var jqxhr = $.get("/admin/get_indexers", function (data) {
+        var scope = {
+            items: data.items
+        };
+    
+        var indexers = [];
+        indexers.push({ id: '', name: '-- All --' });
+        for (var i = 0; i < data.items.length; i++) {
+            if (data.items[i].configured === true) {
+                indexers.push(data.items[i]);
+            }
+        }
+
+      
+        var releaseTemplate = Handlebars.compile($("#jackett-search").html());
+        var releaseDialog = $(releaseTemplate({ indexers: indexers }));
+        $("#modals").append(releaseDialog);
+        releaseDialog.modal("show");
+
+        var setCategories = function (tracker, items) {
+            var cats = {};
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].configured === true && (items[i].id === tracker || tracker ==='')) {
+                    indexers["'" + items[i].id + "'"] = items[i].name;
+                    for (var prop in items[i].caps) {
+                        cats[prop] = items[i].caps[prop];
+                    }
+                }
+            }
+            var select = $('#searchCategory');
+            select.html("<option value=''>-- All --</option>");
+            $.each(cats, function (value, key) {
+                select.append($("<option></option>")
+                   .attr("value", value).text(key + ' (' + value + ')'));
+            });
+
+
+        };
+
+        setCategories('', data.items);
+        $('#searchTracker').change(jQuery.proxy(function () {
+            var trackerId = $('#searchTracker').val();
+            setCategories(trackerId, this.items);
+        }, scope));
+
+
+        $('#jackett-search-perform').click(function () {
+            if ($('#jackett-search-perform').text().trim() !== 'Search trackers') {
+                // We are searchin already
+                return;
+            }
+
+
+            var queryObj = {
+                Query: releaseDialog.find('#searchquery').val(),
+                Category: releaseDialog.find('#searchCategory').val(),
+                Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
+            };
+            $('#searchResults').empty();
+         
+            $('#jackett-search-perform').html($('#spinner').html());
+            var jqxhr = $.post("/admin/search", queryObj, function (data) {
+                $('#jackett-search-perform').html('Search trackers');
+                var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
+                var results = $('#searchResults');
+                results.html($(resultsTemplate(data)));
+
+                results.find('table').DataTable(
+                {
+                    "pageLength": 20,
+                    "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                    "order": [[0, "desc"]],
+                    "columnDefs": [
+                       {
+                           "targets": 0,
+                           "visible": false,
+                           "searchable": false,
+                           "type": 'date'
+                       },
+                       {
+                           "targets": 1,
+                           "visible": true,
+                           "searchable": false,
+                           "iDataSort": 0
+                       },
+                    ],
+                    initComplete: function () {
+                        var count = 0;
+                        this.api().columns().every(function () {
+                            count++;
+                            if (count === 3 || count === 5) {
+                                var column = this;
+                                var select = $('<select><option value=""></option></select>')
+                                    .appendTo($(column.footer()).empty())
+                                    .on('change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                        );
+
+                                        column
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                    });
+
+                                column.data().unique().sort().each(function (d, j) {
+                                    select.append('<option value="' + d + '">' + d + '</option>')
+                                });
+                            }
+                        });
+                    }
+                });
+
+            }).fail(function () {
+                $('#jackett-search-perform').html('Search trackers');
+                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            });
+        });
+
+    }).fail(function () {
+        doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
 });
 

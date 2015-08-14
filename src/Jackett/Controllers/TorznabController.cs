@@ -37,7 +37,7 @@ namespace Jackett.Controllers
         {
             var indexer = indexerService.GetIndexer(indexerID);
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
-
+           
             if (string.Equals(torznabQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return new HttpResponseMessage()
@@ -46,6 +46,7 @@ namespace Jackett.Controllers
                 };
             }
 
+            torznabQuery.ExpandCatsToSubCats();
             var allowBadApiDueToDebug = false;
 #if DEBUG
             allowBadApiDueToDebug = Debugger.IsAttached;
@@ -77,7 +78,6 @@ namespace Jackett.Controllers
             var filteredReleases = releases = indexer.FilterResults(torznabQuery, releases); 
             int? newItemCount = null;
 
-
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
             {
@@ -95,7 +95,7 @@ namespace Jackett.Controllers
             }
 
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm)) { 
-                logBuilder.AppendFormat(" for: {0} {1}", torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString());
+                logBuilder.AppendFormat(" for: {0}", torznabQuery.GetQueryString());
             }
 
             logger.Info(logBuilder.ToString());

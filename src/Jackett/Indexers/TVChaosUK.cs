@@ -137,7 +137,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
 
             // If we have no query use the RSS Page as their server is slow enough at times!
             if (string.IsNullOrWhiteSpace(searchString))
