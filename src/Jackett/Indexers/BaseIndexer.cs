@@ -38,7 +38,7 @@ namespace Jackett.Indexers
             set { configData.CookieHeader.Value = value; }
         }
 
-       
+
 
         protected ConfigurationData configData;
 
@@ -70,7 +70,7 @@ namespace Jackett.Indexers
         {
             if (string.IsNullOrEmpty(downloadUrlBase))
                 return releases;
-            foreach(var release in releases)
+            foreach (var release in releases)
             {
                 if (release.Link.ToString().StartsWith(downloadUrlBase))
                 {
@@ -403,12 +403,34 @@ namespace Jackett.Indexers
             categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory));
         }
 
+        protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
+        {
+            foreach (var trackerCat in trackerCategories)
+            {
+                categoryMapping.Add(new CategoryMapping(trackerCat.ToString(), newznabCategory.ID));
+            }
+        }
+
+        protected void AddMultiCategoryMapping(int trackerCategory, params TorznabCategory[] newznabCategories)
+        {
+            foreach (var newznabCat in newznabCategories)
+            {
+                categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCat.ID));
+            }
+        }
+
         protected List<string> MapTorznabCapsToTrackers(TorznabQuery query)
         {
             var result = new List<string>();
             foreach (var cat in query.Categories)
             {
-                foreach (var mapping in categoryMapping.Where(c => c.NewzNabCategory == cat))
+                var queryCats = new List<int> { cat };
+                var newznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.ID == cat);
+                if (newznabCat != null)
+                {
+                    queryCats.AddRange(newznabCat.SubCategories.Select(c => c.ID));
+                }
+                foreach (var mapping in categoryMapping.Where(c => queryCats.Contains(c.NewzNabCategory)))
                 {
                     result.Add(mapping.TrackerCategory);
                 }

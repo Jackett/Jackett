@@ -36,6 +36,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [MoreThan.tv](https://morethan.tv/)
  * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
+ * [RARGB](https://rarbg.to/)
  * [RuTor](http://rutor.org/)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [SceneTime](https://www.scenetime.com/)
