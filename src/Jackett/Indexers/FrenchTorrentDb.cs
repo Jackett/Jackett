@@ -28,7 +28,7 @@ namespace Jackett.Indexers
             : base(name: "FrenchTorrentDb",
                 description: "One the biggest French Torrent Tracker",
                 link: "http://www.frenchtorrentdb.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,
@@ -55,10 +55,8 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
+            var releases = new List<ReleaseInfo>();
+            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {

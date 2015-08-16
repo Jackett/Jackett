@@ -31,7 +31,7 @@ namespace Jackett.Indexers
             : base(name: "SceneAccess",
                 description: "Your gateway to the scene",
                 link: "https://sceneaccess.eu/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
                 logger: l,
@@ -65,10 +65,9 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             var searchSection = string.IsNullOrEmpty(query.Episode) ? "archive" : "browse";
             var searchCategory = string.IsNullOrEmpty(query.Episode) ? "26" : "27";
-            var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, searchString);
+            var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, query.GetQueryString());
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try

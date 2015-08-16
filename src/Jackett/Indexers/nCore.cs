@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "nCore",
                 description: "A Hungarian private torrent site.",
                 link: "https://ncore.cc/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -116,10 +116,8 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(searchString));
+            var releases = new List<ReleaseInfo>();
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(query.GetQueryString()));
 
             try
             {

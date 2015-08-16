@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             : base(name: "The Pirate Bay",
                 description: "The worlds largest bittorrent indexer",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -78,8 +78,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var queryStr = HttpUtility.UrlEncode(searchString);
+            var queryStr = HttpUtility.UrlEncode(query.GetQueryString());
             var episodeSearchUrl = string.Format(SearchUrl, queryStr);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
 

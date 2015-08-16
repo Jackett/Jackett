@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -76,11 +76,11 @@ namespace Jackett.Indexers
             AddCategoryMapping(80, TorznabCatType.AudioLossless);
             AddCategoryMapping(93, TorznabCatType.Audio);
 
-            AddCategoryMapping(60, TorznabCatType.Anime);
-            AddCategoryMapping(1, TorznabCatType.Apps);
-            AddCategoryMapping(64, TorznabCatType.AudioBooks);
+            AddCategoryMapping(60, TorznabCatType.TVAnime);
+            AddCategoryMapping(1, TorznabCatType.PC);
+            AddCategoryMapping(64, TorznabCatType.AudioAudiobook);
             AddCategoryMapping(35, TorznabCatType.Books);
-            AddCategoryMapping(94, TorznabCatType.Comic);
+            AddCategoryMapping(94, TorznabCatType.BooksComics);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -114,9 +114,8 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
-            var trackerCats = MapTorznabCapsToTrackers(query);
             var queryCollection = new NameValueCollection();
 
             if (!string.IsNullOrWhiteSpace(searchString))

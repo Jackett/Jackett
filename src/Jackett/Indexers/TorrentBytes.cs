@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "TorrentBytes",
                 description: "A decade of torrentbytes",
                 link: "https://www.torrentbytes.net/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -58,17 +58,17 @@ namespace Jackett.Indexers
 
             AddCategoryMapping(43, TorznabCatType.Audio);
             AddCategoryMapping(48, TorznabCatType.AudioLossless);
-            AddCategoryMapping(6, TorznabCatType.AudioLossy);
+            AddCategoryMapping(6, TorznabCatType.AudioMP3);
             AddCategoryMapping(46, TorznabCatType.Movies);
 
-            AddCategoryMapping(1, TorznabCatType.Apps);
-            AddCategoryMapping(2, TorznabCatType.Apps);
-            AddCategoryMapping(23, TorznabCatType.Anime);
+            AddCategoryMapping(1, TorznabCatType.PC);
+            AddCategoryMapping(2, TorznabCatType.PC);
+            AddCategoryMapping(23, TorznabCatType.TVAnime);
             AddCategoryMapping(21, TorznabCatType.XXX);
-            AddCategoryMapping(9, TorznabCatType.XXXSD);
-            AddCategoryMapping(39, TorznabCatType.XXXHD);
-            AddCategoryMapping(29, TorznabCatType.XXXSD);
-            AddCategoryMapping(24, TorznabCatType.XXXImg);
+            AddCategoryMapping(9, TorznabCatType.XXXXviD);
+            AddCategoryMapping(39, TorznabCatType.XXXx264);
+            AddCategoryMapping(29, TorznabCatType.XXXXviD);
+            AddCategoryMapping(24, TorznabCatType.XXXImageset);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -96,7 +96,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
             var trackerCats = MapTorznabCapsToTrackers(query);
             var queryCollection = new NameValueCollection();

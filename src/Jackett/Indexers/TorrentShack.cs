@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "TorrentShack",
                 description: "TorrentShack",
                 link: "http://torrentshack.me/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 client: wc,
                 manager: i,
                 logger: l,
@@ -67,7 +67,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try

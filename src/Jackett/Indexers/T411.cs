@@ -39,7 +39,7 @@ namespace Jackett.Indexers
             : base(name: "T411",
                 description: "French Torrent Tracker",
                 link: "http://www.t411.io/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,

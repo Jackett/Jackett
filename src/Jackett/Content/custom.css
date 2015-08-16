@@ -33,6 +33,7 @@
 
 #indexers {
    text-align: center;
+   margin-top: 30px;
 }
 
 
@@ -214,6 +215,7 @@ hr {
 
 .modal-fillwidth {
     width: 1200px;
+    min-width:80%;
 }
 
 .indexer-caps {
@@ -258,3 +260,19 @@ pre {
     border: 0px;
     border-radius: 0px;
 }
+
+.modal-open .modal {
+    overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
+}
+
+#unconfigured-indexers-template {
+    display: none;
+}
+.jackett-apikey{
+    margin-top: 10px;
+}
+
+.jackett-apikey .input-header{
+    width: 80px;
+}
+

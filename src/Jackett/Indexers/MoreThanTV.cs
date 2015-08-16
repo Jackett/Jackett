@@ -35,7 +35,8 @@ namespace Jackett.Indexers
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                 link: "https://www.morethan.tv/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(TorznabCatType.TV,
+                                              TorznabCatType.Movies),
                 manager: i,
                 client: c,
                 logger: l,
@@ -72,14 +73,23 @@ namespace Jackett.Indexers
             release.Peers = (int)r["leechers"] + release.Seeders;
             release.Guid = new Uri(GuidUrl + id);
             release.Comments = release.Guid;
+
+            if ((string)r["category"] == "TV")
+            {
+                release.Category = TorznabCatType.TV.ID;
+            }
+            else if ((string)r["category"] == "Movies")
+            {
+                release.Category = TorznabCatType.Movies.ID;
+            }
+
             release.Link = new Uri(DownloadUrl + id);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
+            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(query.GetQueryString());
             WebClientStringResult response = null;
 
             response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);

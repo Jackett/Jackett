@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -24,7 +25,7 @@ namespace Jackett.Indexers
         private string BaseUrl { get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
         private Uri BaseUri { get { return new Uri(BaseUrl); } }
         private string LoginUrl { get { return BaseUri + "login.php"; } }
-        private string SearchUrl { get { return BaseUri + "torrents.php?searchstr={0}&searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&filter_cat%5B10%5D=1"; } }
+        private string SearchUrl { get { return BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -36,13 +37,24 @@ namespace Jackett.Indexers
             : base(name: "bB",
                 description: "bB",
                 link: "http://www.reddit.com/r/baconbits/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            AddCategoryMapping(1, TorznabCatType.Audio);
+            AddCategoryMapping(2, TorznabCatType.PC);
+            AddCategoryMapping(3, TorznabCatType.BooksEbook);
+            AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(6, TorznabCatType.BooksComics);
+            AddCategoryMapping(8, TorznabCatType.TVAnime);
+            AddCategoryMapping(9, TorznabCatType.Movies);
+            AddCategoryMapping(10, TorznabCatType.TVHD);
+            AddCategoryMapping(10, TorznabCatType.TVSD);
+            AddCategoryMapping(10, TorznabCatType.TV);
+            AddCategoryMapping(11, TorznabCatType.PCGames);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -76,9 +88,23 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
-            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("searchstr", searchString);
+            }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
+
+            searchUrl += queryCollection.GetQueryString();
+
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {
@@ -91,6 +117,9 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+
+                    var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+                    release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
                     var linkStr = qLink.Attr("href");

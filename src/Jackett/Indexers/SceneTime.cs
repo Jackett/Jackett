@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "SceneTime",
                 description: "Always on time",
                 link: "https://www.scenetime.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,
@@ -72,8 +72,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(searchString));
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, GetSearchFormData(query.GetQueryString()));
 
             try
             {
@@ -95,11 +94,7 @@ namespace Jackett.Indexers
                     var torrentId = qLink.Attr("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
 
-                    var dateStr = descCol.ChildNodes.Last().NodeValue.Trim();
-                    var euDate = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var timezoneString = Environment.OSVersion.Platform == PlatformID.Unix ? "Europe/Berlin" : "Central European Standard Time";
-                    var localDate = TimeZoneInfo.ConvertTimeToUtc(euDate, TimeZoneInfo.FindSystemTimeZoneById(timezoneString)).ToLocalTime();
-                    release.PublishDate = localDate;
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(descCol.ChildNodes.Last().InnerText);
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

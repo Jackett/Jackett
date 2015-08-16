@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel='shortcut icon' type='image/x-icon' href='~/content/favicon.ico' />
+    <script src="~/content/libs/jquery.min.js"></script>
+    <script src="~/content/libs/jquery.dataTables.min.js"></script>
+    <script src="~/content/libs/handlebars.min.js"></script>
+    <script src="~/content/libs/moment.min.js"></script>
+    <script src="~/content/libs/handlebarsmoment.js"></script>
+    <script src="~/content/bootstrap/bootstrap.min.js"></script>
+    <script src="~/content/libs/bootstrap-notify.js"></script>
+    <link href="~/content/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="~/content/animate.css" rel="stylesheet">
+    <link href="~/content/custom.css" rel="stylesheet">
+    <link href="~/content/web/web.css" rel="stylesheet">
+    <link href="~/content/css/jquery.dataTables.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/content/css/font-awesome.min.css">
+    <title>Jackett</title>
+</head>
+<body>
+    <div id="page">
+        <a href="~/">
+            <img id="logo" src="~/content/jacket_medium.png" /><span id="header-title">Jackett</span>
+        </a>
+        <hr />
+
+        @RenderBody()
+        <hr />
+        <div id="footer">
+            Jackett @DateTime.Now.Year
+        </div>
+    </div>
+
+    <div id="modals"></div>
+    <!--@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)-->
+</body>
+</html>
