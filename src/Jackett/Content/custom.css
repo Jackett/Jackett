@@ -33,6 +33,7 @@
 
 #indexers {
    text-align: center;
+   margin-top: 30px;
 }
 
 
@@ -263,3 +264,15 @@ pre {
 .modal-open .modal {
     overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
 }
+
+#unconfigured-indexers-template {
+    display: none;
+}
+.jackett-apikey{
+    margin-top: 10px;
+}
+
+.jackett-apikey .input-header{
+    width: 80px;
+}
+

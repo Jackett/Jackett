@@ -3,9 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-
     <script src="/libs/jquery.min.js"></script>
     <script src="/libs/jquery.dataTables.min.js"></script>
     <script src="/libs/handlebars.min.js"></script>
@@ -20,7 +18,83 @@
     <link href="/custom.css" rel="stylesheet">
     <link href="/css/jquery.dataTables.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <title>Jackett</title>
+</head>
+<body>
+    <div id="page">
 
+        <img id="logo" src="/jacket_medium.png" /><span id="header-title">Jackett</span>
+
+        <div class="pull-right jackett-apikey">
+            <span class="input-header">API Key: </span>
+            <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
+        </div>
+        <hr />
+        <div class="pull-right">
+            <button id="jackett-show-search" class="btn btn-success btn-sm">
+                <i class="fa fa-search"></i> Manual Search <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+            <button id="jackett-show-releases" class="btn btn-primary btn-sm">
+                <i class="fa fa-database"></i>  View cached releases <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+        </div>
+        <h3>Configured Indexers</h3>
+        <div id="indexers"> </div>
+        <hr />
+
+        <div class="input-area">
+            <h4>Adding a Jackett indexer in Sonarr</h4>
+            <ol>
+                <li>Go to <b>Settings > Indexers > Add > Torznab > Custom</b>.</li>
+                <li>For <b>URL</b> enter the <b>Torznab Host</b> of one of the indexers.</li>
+                <li>For the <b>API key</b> using the key below.</li>
+            </ol>
+            <h4>Adding a Jackett indexer in Couchpoato</h4>
+            <ol>
+                <li>Go to <b>Settings > Searchers</b>.</li>
+                <li>Enable <b>TorrentPotato</b> and in the host field enter the <b>TorrentPotato host</b> of one of the indexers.</li>
+                <li>For the <b>Passkey</b> use the <b>API key</b>.  Leave username blank.</li>
+            </ol>
+
+        </div>
+        <hr />
+        <h3>Jackett Configuration</h3>
+        <div class="input-area">
+            <span class="input-header">Admin Password: </span>
+            <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
+            <button id="change-jackett-password" class="btn btn-primary btn-sm">
+                <i class="fa fa-user-secret"></i>  Set Password <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+            <a href="Dashboard?logout=true" id="logoutBtn" style="display:none" class="btn btn-danger btn-sm">
+                Logout
+            </a>
+        </div>
+        <div class="input-area">
+            <span class="input-header">Server port: </span>
+            <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
+            <button id="change-jackett-port" class="btn btn-primary btn-sm">
+                <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+            <button id="view-jackett-logs" class="btn btn-danger btn-sm">
+                <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="input-area">
+            <span class="input-header">Manual download blackhole directory: </span>
+            <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
+        </div>
+        <div class="input-area">
+            <span class="input-header">External access: </span>
+            <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
+        </div>
+        <hr />
+        <div id="footer">
+            Jackett Version <span id="app-version"></span>
+        </div>
+    </div>
+
+    <div id="modals"></div>
+    <div id="unconfigured-indexers-template"></div>
 
     <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
         <div class="setup-item-recaptcha">
@@ -115,7 +189,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Releases</h4>
+                        <h4 class="modal-title">Cached Releases</h4>
                     </div>
                     <div class="modal-body">
                         <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
@@ -185,7 +259,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Metasearch</h4>
+                        <h4 class="modal-title">Manual search</h4>
                     </div>
                     <div class="modal-body">
                         <p>You can search all configured indexers from this screen.</p>
@@ -200,7 +274,7 @@
                             {{/each}}
                         </select>
                         <button id="jackett-search-perform" class="btn btn-success btn-sm">
-                            Search trackers<span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                            <i class="fa fa-search"></i> Search trackers<span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
                         </button>
                         <div id="searchResults"></div>
                     </div>
@@ -213,7 +287,7 @@
     </script>
 
     <script id="jackett-search-results" type="text/x-handlebars-template">
-        <hr/>
+        <hr />
         <p>Your search was done using: {{#each Indexers}}{{this}}, {{/each}}</p>
         <table class="dataTable compact cell-border hover stripe">
             <thead>
@@ -260,6 +334,25 @@
                 </tr>
             </tfoot>
         </table>
+    </script>
+    <script id="select-indexer" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Select an indexer to setup</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="unconfigured-indexers">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 
     <script id="jackett-logs" type="text/x-handlebars-template">
@@ -337,7 +430,7 @@
         </div>
     </script>
     <script id="add-indexer" type="text/x-handlebars-template">
-        <button class="indexer card add-indexer" data-toggle="modal" data-target="#select-indexer-modal">
+        <button class="indexer card add-indexer" data-toggle="modal">
             <div class="indexer-add-content">
                 <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
                 <div class="light-text">Add</div>
@@ -348,92 +441,6 @@
         <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>
 
-    <title>Jackett</title>
-</head>
-<body>
-    <div id="page">
-
-        <img id="logo" src="/jacket_medium.png" /><span id="header-title">Jackett</span>
-
-        <hr />
-
-        <div class="input-area">
-            <h4>Adding a Jackett indexer in Sonarr</h4>
-            <ol>
-                <li>In Sonarr go to <b>Settings > Indexers > Add > Torznab > Custom</b></li>
-                <li>For <b>URL</b> enter the <b>Torznab Host</b> of one of the indexers below</li>
-                <li>For <b>API key</b> using the key below</li>
-            </ol>
-            <span class="input-header">API Key: </span>
-            <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
-        </div>
-
-        <hr />
-        <div class="pull-right">
-            <button id="jackett-show-search" class="btn btn-success btn-sm">
-                Metasearch <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-            <button id="jackett-show-releases" class="btn btn-primary btn-sm">
-                View cached releases <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-        </div>
-        <h3>Configured Indexers</h3>
-        <div id="indexers"> </div>
-        <hr />
-        <h3>Jackett Configuration</h3>
-        <div class="input-area">
-            <span class="input-header">Admin Password: </span>
-            <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
-            <button id="change-jackett-password" class="btn btn-primary btn-sm">
-                Set Password <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-            <a href="Dashboard?logout=true" id="logoutBtn" style="display:none" class="btn btn-danger btn-sm">
-                Logout
-            </a>
-        </div>
-        <div class="input-area">
-            <span class="input-header">Server port: </span>
-            <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
-            <button id="change-jackett-port" class="btn btn-primary btn-sm">
-                Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-            <button id="view-jackett-logs" class="btn btn-danger btn-sm">
-                View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-        </div>
-        <div class="input-area">
-            <span class="input-header">Manual download blackhole directory: </span>
-            <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
-        </div>
-        <div class="input-area">
-            <span class="input-header">External access: </span>
-            <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
-        </div>
-        <hr />
-        <div id="footer">
-            Jackett Version <span id="app-version"></span>
-        </div>
-    </div>
-
-    <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Select an indexer to setup</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="unconfigured-indexers">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modals"></div>
     <script src="/custom.js"></script>
 </body>
 </html>

@@ -453,20 +453,26 @@ namespace Jackett.Controllers
 
             Parallel.ForEach(trackers.ToList(), indexer =>
             {
-                var searchResults =  indexer.PerformQuery(query).Result;
-                cacheService.CacheRssResults(indexer, searchResults);
-                searchResults = indexer.FilterResults(query, searchResults);
+                try {
+                    var searchResults = indexer.PerformQuery(query).Result;
+                    cacheService.CacheRssResults(indexer, searchResults);
+                    searchResults = indexer.FilterResults(query, searchResults);
 
-                lock (results)
-                {
-                    foreach (var result in searchResults)
+                    lock (results)
                     {
-                        var item = Mapper.Map<TrackerCacheResult>(result);
-                        item.Tracker = indexer.DisplayName;
-                        item.TrackerId = indexer.ID;
-                        item.Peers = item.Peers - item.Seeders; // Use peers as leechers
-                        results.Add(item);
+                        foreach (var result in searchResults)
+                        {
+                            var item = Mapper.Map<TrackerCacheResult>(result);
+                            item.Tracker = indexer.DisplayName;
+                            item.TrackerId = indexer.ID;
+                            item.Peers = item.Peers - item.Seeders; // Use peers as leechers
+                            results.Add(item);
+                        }
                     }
+                }
+                catch(Exception e)
+                {
+                    logger.Error(e, "An error occured during manual search on " + indexer.DisplayName + ":  " + e.Message);
                 }
             });
 
