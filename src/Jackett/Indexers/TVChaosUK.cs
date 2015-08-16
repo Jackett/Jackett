@@ -112,26 +112,33 @@ namespace Jackett.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, SiteLink);
-
-            // Get RSS key
-            var rssParams = new Dictionary<string, string> {
-                { "feedtype", "download" },
-                { "timezone", "0" },
-                { "showrows", "50" }
-            };
-
-            var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
-            var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
-            configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
-            if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
-                throw new Exception("Failed to get RSS Key");
-
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
                 var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+
+            try
+            {
+                // Get RSS key
+                var rssParams = new Dictionary<string, string> {
+                { "feedtype", "download" },
+                { "timezone", "0" },
+                { "showrows", "50" }
+            };
+                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
+                var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
+                configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
+                if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
+                    throw new Exception("Failed to get RSS Key");
+                SaveConfig();
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw e;
+            }
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
