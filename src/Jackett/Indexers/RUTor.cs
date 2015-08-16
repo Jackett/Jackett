@@ -36,14 +36,14 @@ namespace Jackett.Indexers
             : base(name: "RUTor",
                 description: "Свободный торрент трекер",
                 link: "http://rutor.org/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataRuTor(defaultSiteLink))
         {
-            TorznabCaps.Categories.Add(TorznabCatType.Anime);
+            TorznabCaps.Categories.Add(TorznabCatType.TVAnime);
             TorznabCaps.Categories.Add(TorznabCatType.Movies);
             TorznabCaps.Categories.Add(TorznabCatType.Audio);
             TorznabCaps.Categories.Add(TorznabCatType.Books);
@@ -57,7 +57,7 @@ namespace Jackett.Indexers
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
             {
-                 configData = oldConfig;
+                configData = oldConfig;
                 throw new Exception("Could not find releases from this URL");
             });
         }
@@ -78,30 +78,31 @@ namespace Jackett.Indexers
 
         private readonly int CAT_ANY = 0;
         private readonly int CAT_FOREIGN_MOVIE = 1;
-       // private readonly int CAT_OUR_MOVIES = 5;
-       // private readonly int CAT_POP_SCIFI_MOVIES = 12;
+        // private readonly int CAT_OUR_MOVIES = 5;
+        // private readonly int CAT_POP_SCIFI_MOVIES = 12;
         private readonly int CAT_TV_SERIES = 4;
-       // private readonly int CAT_TV = 6;
-       // private readonly int CAT_ANIMATION = 7;
+        // private readonly int CAT_TV = 6;
+        // private readonly int CAT_ANIMATION = 7;
         private readonly int CAT_ANIME = 10;
         private readonly int CAT_MUSIC = 2;
-       // private readonly int CAT_GAMES = 8;
-       // private readonly int CAT_SOFTWARE = 9;
-       // private readonly int CAT_SPORTS_HEALTH = 13;
-       // private readonly int CAT_HUMOR = 15;
-       // private readonly int CAT_ECONOMY_LIFE = 14;
+        // private readonly int CAT_GAMES = 8;
+        // private readonly int CAT_SOFTWARE = 9;
+        // private readonly int CAT_SPORTS_HEALTH = 13;
+        // private readonly int CAT_HUMOR = 15;
+        // private readonly int CAT_ECONOMY_LIFE = 14;
         private readonly int CAT_BOOKS = 11;
-       // private readonly int CAT_OTHER = 3;
+        // private readonly int CAT_OTHER = 3;
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var searchCategory = CAT_ANY;
 
-            if(query.Categories.Contains(TorznabCatType.TV.ID) ||
-                query.Categories.Contains(TorznabCatType.TVHD.ID)||
-                query.Categories.Contains(TorznabCatType.TVSD.ID)){
+            if (query.Categories.Contains(TorznabCatType.TV.ID) ||
+                query.Categories.Contains(TorznabCatType.TVHD.ID) ||
+                query.Categories.Contains(TorznabCatType.TVSD.ID))
+            {
                 searchCategory = CAT_TV_SERIES;
             }
 
@@ -114,8 +115,8 @@ namespace Jackett.Indexers
                 searchCategory = CAT_FOREIGN_MOVIE;
             }
 
-            if ((searchCategory == CAT_ANY) && 
-               (query.Categories.Contains(TorznabCatType.Anime.ID)))
+            if ((searchCategory == CAT_ANY) &&
+               (query.Categories.Contains(TorznabCatType.TVAnime.ID)))
             {
                 searchCategory = CAT_ANIME;
             }
@@ -129,7 +130,7 @@ namespace Jackett.Indexers
             if ((searchCategory == CAT_ANY) &&
               (query.Categories.Contains(TorznabCatType.Audio.ID) ||
               query.Categories.Contains(TorznabCatType.AudioLossless.ID) ||
-              query.Categories.Contains(TorznabCatType.AudioLossy.ID)))
+              query.Categories.Contains(TorznabCatType.AudioMP3.ID)))
             {
                 searchCategory = CAT_MUSIC;
             }
@@ -138,7 +139,8 @@ namespace Jackett.Indexers
             if (string.IsNullOrWhiteSpace(searchString))
             {
                 queryUrl = string.Format(BrowseUrl, searchCategory);
-            } else
+            }
+            else
             {
                 queryUrl = string.Format(SearchUrl, searchCategory, HttpUtility.UrlEncode(searchString.Trim()));
             }
@@ -176,7 +178,7 @@ namespace Jackett.Indexers
                     if (hasTorrent)
                         titleIndex++;
 
-                    release.Title = row.Cq().Find("td:eq("+ titleIndex+")").Text().Trim();
+                    release.Title = row.Cq().Find("td:eq(" + titleIndex + ")").Text().Trim();
                     if (configData.StripRussian.Value)
                     {
                         var split = release.Title.IndexOf('/');
@@ -194,14 +196,14 @@ namespace Jackett.Indexers
                     if (hasComments)
                         sizeCol++;
 
-                    var sizeStr = StringUtil.StripRegex(row.Cq().Find("td:eq("+ sizeCol + ")").Text(), "[^a-zA-Z0-9\\. -]", " ").Trim();
+                    var sizeStr = StringUtil.StripRegex(row.Cq().Find("td:eq(" + sizeCol + ")").Text(), "[^a-zA-Z0-9\\. -]", " ").Trim();
                     string[] sizeSplit = sizeStr.Split(' ');
                     release.Size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
 
                     release.Seeders = ParseUtil.CoerceInt(row.Cq().Find(".green").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.Cq().Find(".red").Text().Trim()) + release.Seeders;
-                
-                    release.Guid = new Uri(configData.Url.Value + row.Cq().Find("td:eq(1) a:eq("+ titleIndex+")").Attr("href").Substring(1));
+
+                    release.Guid = new Uri(configData.Url.Value + row.Cq().Find("td:eq(1) a:eq(" + titleIndex + ")").Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
                     if (hasTorrent)
@@ -213,7 +215,7 @@ namespace Jackett.Indexers
                     {
                         release.MagnetUri = new Uri(row.Cq().Find("td:eq(1) a:eq(0)").Attr("href"));
                     }
-                   
+
                     releases.Add(release);
                 }
             }

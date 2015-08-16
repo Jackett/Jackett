@@ -30,6 +30,7 @@ namespace Jackett.Indexers
         protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
         protected IWebClient webclient;
         protected IProtectionService protectionService;
+        protected readonly string downloadUrlBase = "";
 
         protected string CookieHeader
         {
@@ -37,11 +38,13 @@ namespace Jackett.Indexers
             set { configData.CookieHeader.Value = value; }
         }
 
+       
+
         protected ConfigurationData configData;
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
 
-        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null)
+        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
         {
             if (!link.EndsWith("/"))
                 throw new Exception("Site link must end with a slash.");
@@ -53,13 +56,34 @@ namespace Jackett.Indexers
             indexerService = manager;
             webclient = client;
             protectionService = p;
+            this.downloadUrlBase = downloadBase;
 
             this.configData = configData;
 
             if (caps == null)
-                caps = TorznabCapsUtil.CreateDefaultTorznabTVCaps();
+                caps = TorznabUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
 
+        }
+
+        public IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases)
+        {
+            if (string.IsNullOrEmpty(downloadUrlBase))
+                return releases;
+            foreach(var release in releases)
+            {
+                if (release.Link.ToString().StartsWith(downloadUrlBase))
+                {
+                    release.Link = new Uri(release.Link.ToString().Substring(downloadUrlBase.Length), UriKind.Relative);
+                }
+            }
+
+            return releases;
+        }
+
+        public Uri UncleanLink(Uri link)
+        {
+            return new Uri(downloadUrlBase + link.ToString(), UriKind.RelativeOrAbsolute);
         }
 
         protected int MapTrackerCatToNewznab(string input)
@@ -94,7 +118,7 @@ namespace Jackett.Indexers
 
         protected virtual void SaveConfig()
         {
-            indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService,forDisplay: false));
+            indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
         }
 
         protected void OnParseError(string results, Exception ex)
@@ -390,7 +414,7 @@ namespace Jackett.Indexers
                 }
             }
 
-            return result;
+            return result.Distinct().ToList();
         }
     }
 }

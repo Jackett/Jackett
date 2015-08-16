@@ -1,14 +1,16 @@
 ## Jackett
 
+#### Download
+Downloads on the [Releases page](https://github.com/zone117x/Jackett/releases)
+
+
+#### Overview
 This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/master/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) API server on your machine.  Torznab enables software such as [Sonarr](https://sonarr.tv) to access data from your favorite indexers in a similar fashion to rss but with added features such as searching.  TorrentPotato is an interface accessible to [CouchPotato](https://couchpota.to/).
 
+Jackett works as a proxy server: it translates queries from apps (Sonarr, SickRage, CouchPotato, Mylar, etc) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps. 
 
-Jackett works as a proxy server: it translates Torznab queries into tracker-site-specific http queries, parses the html response into Torznab results, then sends results back to the requesting software which allows for getting recent uploads and performing searches.
+We were previously focused on TV but are working on extending searches to allow for searching other items such as movies, comics, and music.
 
-We were previously focused on TV but are working on extending searches to allow for searching other items such as movies and comics.
-
-#### Download
-Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
 
 #### Supported Systems
 * Windows using .NET 4.5
@@ -24,6 +26,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [BitMeTV](http://www.bitmetv.org/)
  * [Demonoid](http://www.demonoid.pw/)
+ * [FileList](http://filelist.ro/)
  * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
  * [Freshon](https://freshon.tv/)
  * [HD-Space](https://hd-space.org/)
@@ -45,7 +48,7 @@ Download in the [Releases page](https://github.com/zone117x/Jackett/releases)
  * [TorrentLeech](http://www.torrentleech.org/)
  * [TorrentShack](http://torrentshack.me/)
  * [Torrentz](https://torrentz.eu/)
-
+ * [TV Chaos UK](https://tvchaosuk.com/)
 
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better

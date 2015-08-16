@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             : base(name: "Strike",
                 description: "Torrent search engine",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -80,9 +80,7 @@ namespace Jackett.Indexers
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "2015" : query.SanitizedSearchTerm;
-
-            var searchString = searchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             try
             {

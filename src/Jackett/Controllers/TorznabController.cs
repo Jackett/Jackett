@@ -16,6 +16,7 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
+    [JackettAPINoCache]
     public class TorznabController : ApiController
     {
         private IIndexerManagerService indexerService;
@@ -36,7 +37,7 @@ namespace Jackett.Controllers
         {
             var indexer = indexerService.GetIndexer(indexerID);
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
-
+           
             if (string.Equals(torznabQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return new HttpResponseMessage()
@@ -45,6 +46,7 @@ namespace Jackett.Controllers
                 };
             }
 
+            torznabQuery.ExpandCatsToSubCats();
             var allowBadApiDueToDebug = false;
 #if DEBUG
             allowBadApiDueToDebug = Debugger.IsAttached;
@@ -63,9 +65,10 @@ namespace Jackett.Controllers
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);
+            releases = indexer.CleanLinks(releases);
 
             // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
-            foreach(var release in releases)
+            foreach (var release in releases)
             {
                 if (release.PublishDate > DateTime.Now)
                     release.PublishDate = DateTime.Now;
@@ -74,7 +77,6 @@ namespace Jackett.Controllers
             // Some trackers do not support multiple category filtering so filter the releases that match manually.
             var filteredReleases = releases = indexer.FilterResults(torznabQuery, releases); 
             int? newItemCount = null;
-
 
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
@@ -93,7 +95,7 @@ namespace Jackett.Controllers
             }
 
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm)) { 
-                logBuilder.AppendFormat(" for: {0} {1}", torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString());
+                logBuilder.AppendFormat(" for: {0}", torznabQuery.GetQueryString());
             }
 
             logger.Info(logBuilder.ToString());
@@ -114,7 +116,7 @@ namespace Jackett.Controllers
             foreach(var result in releases)
             {
                 var clone = Mapper.Map<ReleaseInfo>(result);
-                clone.Link = clone.ConvertToProxyLink(serverUrl, indexerID);
+                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, indexerID);
                 resultPage.Releases.Add(clone);
             }
 

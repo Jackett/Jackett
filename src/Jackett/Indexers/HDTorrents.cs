@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
                 link: "http://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,
@@ -66,8 +66,7 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchurls = new List<string>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var searchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
+            var searchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {

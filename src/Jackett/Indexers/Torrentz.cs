@@ -41,7 +41,7 @@ namespace Jackett.Indexers
             : base(name: "Torrentz",
                 description: "Torrentz is a meta-search engine and a Multisearch. This means we just search other search engines.",
                 link: defaultSiteLink,
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -78,7 +78,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
+            var searchString = query.GetQueryString();
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchString.Trim()));
             var xmlDoc = new XmlDocument();
             string xml = string.Empty;

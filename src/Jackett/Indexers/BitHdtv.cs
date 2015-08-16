@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             : base(name: "BIT-HDTV",
                 description: "Home of high definition invites",
                 link: "https://www.bit-hdtv.com/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,
@@ -67,8 +67,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
+            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(query.GetQueryString());
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {

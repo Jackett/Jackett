@@ -74,12 +74,8 @@
       <HintPath>..\packages\Autofac.WebApi2.Owin.3.2.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CsQuery, Version=1.3.3.249, Culture=neutral, processorArchitecture=MSIL">
@@ -172,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationException.cs" />
+    <Compile Include="CacheControlAttribute.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
     <Compile Include="Controllers\PotatoController.cs" />
     <Compile Include="Controllers\TorznabController.cs" />
@@ -191,6 +188,9 @@
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\ImmortalSeed.cs" />
+    <Compile Include="Indexers\FileList.cs" />
+    <Compile Include="Indexers\ManualSearchResult.cs" />
+    <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
     <Compile Include="Indexers\RuTor.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
@@ -213,6 +213,9 @@
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
+    <Compile Include="Models\AdminSearch.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataFileList.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginTokin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
@@ -228,6 +231,11 @@
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Models\TorznabCategory.cs" />
     <Compile Include="Models\TorznabCatType.cs" />
+    <Compile Include="Models\TorznabCatType.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TorznabCatType.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="Services\CacheService.cs" />
@@ -322,7 +330,9 @@
     <None Include="CurlSharp.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\test.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -402,6 +412,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\demonoid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\filelist.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\frenchtorrentdb.png">
@@ -512,8 +525,15 @@
     <Content Include="Content\logos\torrentz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\logos\tvchaosuk.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Models\TorznabCatType.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TorznabCatType.generated.cs</LastGenOutput>
     </Content>
     <Content Include="Resources\validator_reply.xml" />
     <Content Include="Content\logos\alpharatio.png">
@@ -543,6 +563,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -561,7 +584,6 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

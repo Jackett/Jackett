@@ -19,6 +19,7 @@ using System.Web.Http;
 namespace Jackett.Controllers
 {
     [AllowAnonymous]
+    [JackettAPINoCache]
     public class PotatoController : ApiController
     {
         private IIndexerManagerService indexerService;
@@ -27,7 +28,19 @@ namespace Jackett.Controllers
         private ICacheService cacheService;
         private IWebClient webClient;
 
-        public static readonly int[] MOVIE_CATS = new int[] {2000, 2040, 2030, 2010};
+        public static int[] MOVIE_CATS
+        {
+            get
+            {
+                var torznabQuery = new TorznabQuery()
+                {
+                    Categories = new int[1] { TorznabCatType.Movies.ID },
+                };
+
+                torznabQuery.ExpandCatsToSubCats();
+                    return torznabQuery.Categories;
+            }
+        }
 
         public PotatoController(IIndexerManagerService i, Logger l, IServerService s, ICacheService c, IWebClient w)
         {
@@ -65,6 +78,8 @@ namespace Jackett.Controllers
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer does not support movies.");
             }
 
+            var year = 0;
+
             if (string.IsNullOrWhiteSpace(request.search))
             {
                 // We are searching by IMDB id so look up the name
@@ -75,6 +90,7 @@ namespace Jackett.Controllers
                     if (result["Title"] != null)
                     {
                         request.search = result["Title"].ToString();
+                        year = ParseUtil.CoerceInt(result["Year"].ToString());
                     }
                 }
             }
@@ -91,6 +107,7 @@ namespace Jackett.Controllers
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
                 releases = await indexer.PerformQuery(torznabQuery);
+                releases = indexer.CleanLinks(releases);
             }
 
             // Cache non query results
@@ -103,10 +120,12 @@ namespace Jackett.Controllers
             var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
             var potatoResponse = new TorrentPotatoResponse();
 
-            foreach(var r in releases)
+            releases = TorznabUtil.FilterResultsToTitle(releases, torznabQuery.SanitizedSearchTerm, year);
+
+            foreach (var r in releases)
             {
                 var release = Mapper.Map<ReleaseInfo>(r);
-                release.Link = release.ConvertToProxyLink(serverUrl, indexerID);
+                release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, indexerID);
 
                 potatoResponse.results.Add(new TorrentPotatoResponseItem()
                 {
@@ -130,7 +149,7 @@ namespace Jackett.Controllers
             }
             else
             {
-                logger.Info(string.Format("Found {0} torrentpotato releases from {1} for: {2} {3}", releases.Count(), indexer.DisplayName, torznabQuery.SanitizedSearchTerm, torznabQuery.GetEpisodeSearchString()));
+                logger.Info(string.Format("Found {0} torrentpotato releases from {1} for: {2}", releases.Count(), indexer.DisplayName, torznabQuery.GetQueryString()));
             }
 
             // Force the return as Json

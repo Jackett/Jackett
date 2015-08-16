@@ -51,7 +51,7 @@ namespace Jackett
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
 
-            appBuilder.Use<WebApiRootRedirectMiddleware>();   
+            appBuilder.Use<WebApiRootRedirectMiddleware>();
 
             // Setup tracing if enabled
             if (TracingEnabled)
@@ -111,25 +111,27 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "download",
-                routeTemplate: "api/{indexerID}/download/{path}/t.torrent",
+                routeTemplate: "dl/{indexerID}/{apikey}/{path}/t.torrent",
                 defaults: new { controller = "Download", action = "Download" }
             );
 
             config.Routes.MapHttpRoute(
               name: "blackhole",
-              routeTemplate: "api/{indexerID}/blackhole/{path}/t.torrent",
+              routeTemplate: "bh/{indexerID}/{apikey}/{path}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
           );
+
+            appBuilder.UseWebApi(config);
+
 
             appBuilder.UseFileServer(new FileServerOptions
             {
                 RequestPath = new PathString(string.Empty),
                 FileSystem = new PhysicalFileSystem(Engine.ConfigService.GetContentFolder()),
                 EnableDirectoryBrowsing = false,
-                
+
             });
 
-            appBuilder.UseWebApi(config);
         }
     }
 }

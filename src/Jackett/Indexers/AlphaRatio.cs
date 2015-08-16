@@ -15,13 +15,14 @@ using NLog;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class AlphaRatio : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&searchstr="; } }
+        private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&order_by=time&order_way=desc&"; } }
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
@@ -29,14 +30,30 @@ namespace Jackett.Indexers
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: "https://alpharatio.cc/",
-                caps: TorznabCapsUtil.CreateDefaultTorznabTVCaps(),
+                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,
                 p: ps,
+                downloadBase: "https://alpharatio.cc/torrents.php?action=download&id=",
                 configData: new ConfigurationDataBasicLogin())
         {
-            webclient = w;
+            AddCategoryMapping(1, TorznabCatType.TVSD);
+            AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(6, TorznabCatType.MoviesSD);
+            AddCategoryMapping(7, TorznabCatType.MoviesHD);
+            AddCategoryMapping(10, TorznabCatType.XXX);
+            AddCategoryMapping(20, TorznabCatType.XXX);
+            AddCategoryMapping(12, TorznabCatType.PCGames);
+            AddCategoryMapping(13, TorznabCatType.ConsoleXbox);
+            AddCategoryMapping(14, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(15, TorznabCatType.ConsoleWii);
+            AddCategoryMapping(16, TorznabCatType.PC);
+            AddCategoryMapping(17, TorznabCatType.PCMac);
+            AddCategoryMapping(19, TorznabCatType.PCPhoneOther);
+            AddCategoryMapping(21, TorznabCatType.BooksEbook);
+            AddCategoryMapping(22, TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(23, TorznabCatType.Audio);
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -75,9 +92,23 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(searchString);
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var searchString = query.GetQueryString();
+
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("searchstr", searchString);
+            }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
+
+            searchUrl += queryCollection.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
 
             try
             {
