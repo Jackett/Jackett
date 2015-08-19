@@ -15,12 +15,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class HDTorrents : BaseIndexer, IIndexer
     {
-        private string SearchUrl { get { return SiteLink + "torrents.php?search={0}&active=1&options=0&category%5B%5D=59&category%5B%5D=60&category%5B%5D=30&category%5B%5D=38&page=0"; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
@@ -34,13 +35,34 @@ namespace Jackett.Indexers
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
                 link: "http://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: w,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            TorznabCaps.Categories.Clear();
+
+            AddCategoryMapping("1", TorznabCatType.MoviesHD);// Movie/Blu-Ray
+            AddCategoryMapping("2", TorznabCatType.MoviesHD);// Movie/Remux
+            AddCategoryMapping("5", TorznabCatType.MoviesHD);//Movie/1080p/i
+            AddCategoryMapping("3", TorznabCatType.MoviesHD);//Movie/720p
+            AddCategoryMapping("63", TorznabCatType.Audio);//Movie/Audio Track
+
+            AddCategoryMapping("59", TorznabCatType.TVHD);//TV Show/Blu-ray
+            AddCategoryMapping("60", TorznabCatType.TVHD);//TV Show/Remux
+            AddCategoryMapping("30", TorznabCatType.TVHD);//TV Show/1080p/i
+            AddCategoryMapping("38", TorznabCatType.TVHD);//TV Show/720p
+
+            AddCategoryMapping("44", TorznabCatType.Audio);//Music/Album
+            AddCategoryMapping("61", TorznabCatType.AudioVideo);//Music/Blu-Ray
+            AddCategoryMapping("62", TorznabCatType.AudioVideo);//Music/Remux
+            AddCategoryMapping("57", TorznabCatType.AudioVideo);//Music/1080p/i
+            AddCategoryMapping("45", TorznabCatType.AudioVideo);//Music/720p
+
+            AddCategoryMapping("58", TorznabCatType.XXX);//XXX/Blu-ray
+            AddCategoryMapping("48", TorznabCatType.XXX);//XXX/1080p/i
+            AddCategoryMapping("47", TorznabCatType.XXX);//XXX/720p
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -66,7 +88,30 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchurls = new List<string>();
-            var searchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            var searchUrl = SearchUrl;// string.Format(SearchUrl, HttpUtility.UrlEncode()));
+            var queryCollection = new NameValueCollection();
+            var searchString = query.GetQueryString();
+
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                searchUrl += "category%5B%5D=" + cat + "&";
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
+
+            
+
+            queryCollection.Add("active", "1");
+            queryCollection.Add("options", "0");
+
+            searchUrl += queryCollection.GetQueryString();
+
+
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
@@ -117,13 +162,16 @@ namespace Jackett.Indexers
                     string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
-                    release.Guid = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href"));
-                    release.Link = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + "/" + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
+                    release.Guid = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
+                    release.Comments = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
 
                     string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
                     string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
                     release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
+
+                    string category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
+                    release.Category = MapTrackerCatToNewznab(category);
 
                     releases.Add(release);
                 }
