@@ -118,8 +118,9 @@ namespace Jackett.Indexers
                     var cat = row.Cq().Find("td:eq(0) i").First().Attr("class")
                                             .Replace("gi gi-film", "1")
                                             .Replace("gi gi-tv", "2")
-                                            .Replace("gi gi-music", "3");
-                    release.Category = MapTrackerCatToNewznab(cat);
+                                            .Replace("gi gi-music", "3")
+                                            .Replace("text-pink",string.Empty);
+                    release.Category = MapTrackerCatToNewznab(cat.Trim());
                     releases.Add(release);
                 }
             }
