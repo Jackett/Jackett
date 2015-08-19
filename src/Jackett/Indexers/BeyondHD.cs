@@ -88,7 +88,7 @@ namespace Jackett.Indexers
                 Cookies = configData.Cookie.Value
             });
 
-            await ConfigureIfOK(CookieHeader, response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(configData.Cookie.Value, response.Content.Contains("logout.php"), () =>
             {
                 CQ dom = response.Content;
                 throw new ExceptionWithConfigData("Invalid cookie header", configData);
