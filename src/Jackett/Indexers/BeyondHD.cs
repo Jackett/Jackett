@@ -40,26 +40,42 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataCookie())
         {
-            AddCategoryMapping("40,44,48,89,46,45", TorznabCatType.TV);
-            AddCategoryMapping("40", TorznabCatType.TVHD);
-            AddCategoryMapping("44", TorznabCatType.TVHD);
-            AddCategoryMapping("48", TorznabCatType.TVHD);
-            AddCategoryMapping("46", TorznabCatType.TVHD);
-            AddCategoryMapping("45", TorznabCatType.TVHD);
-            AddCategoryMapping("44", TorznabCatType.TVSD);
-            AddCategoryMapping("46", TorznabCatType.TVSD);
-            AddCategoryMapping("45", TorznabCatType.TVSD);
+            AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
+            AddMultiCategoryMapping(TorznabCatType.Movies3D,
+                71,  // Movie / 3D
+                83 // FraMeSToR 3D
+            );
+            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
+                77, // Movie / 1080p/i
+                94, // Movie / 4K
+                78, // Movie / 720p
+                54, // Movie / MP4
+                17, // Movie / Remux
+                50, // Internal / FraMeSToR 1080p
+                75, // Internal / FraMeSToR 720p
+                49, // Internal / FraMeSToR REMUX
+                61, // Internal / HDX REMUX
+                86 // Internal / SC4R
+            );
 
-            AddCategoryMapping("41,77,71,94,78,37,54,17", TorznabCatType.Movies);
-            AddCategoryMapping("77", TorznabCatType.MoviesHD);
-            AddCategoryMapping("71", TorznabCatType.Movies3D);
-            AddCategoryMapping("78", TorznabCatType.MoviesHD);
-            AddCategoryMapping("37", TorznabCatType.MoviesBluRay);
-            AddCategoryMapping("54", TorznabCatType.MoviesHD);
+            AddMultiCategoryMapping(TorznabCatType.TVHD,
+                40, // TV Show / Blu-ray
+                44, // TV Show / Encodes
+                48, // TV Show / HDTV
+                89, // TV Show / Packs
+                46, // TV Show / Remux
+                45 // TV Show / WEB-DL
+            );
 
-            AddCategoryMapping("55,56,42,36,69", TorznabCatType.Audio);
-            AddCategoryMapping("36", TorznabCatType.AudioLossless);
-            AddCategoryMapping("69", TorznabCatType.AudioMP3);
+            AddCategoryMapping(36, TorznabCatType.AudioLossless); // Music / Lossless
+            AddCategoryMapping(69, TorznabCatType.AudioMP3); // Music / MP3
+            AddMultiCategoryMapping(TorznabCatType.AudioVideo,
+                55, // Music / 1080p/i
+                56, // Music / 720p
+                42 // Music / Blu-ray
+            );
+
+
         }
 
         public async Task ApplyConfiguration(JToken configJson)
@@ -83,7 +99,7 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            var searchString =  query.GetQueryString();
+            var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
@@ -92,12 +108,7 @@ namespace Jackett.Indexers
                 queryCollection.Add("search", searchString);
             }
 
-            var cats = new List<string>();
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                cats.AddRange(cat.Split(','));
-            }
-            foreach (var cat in cats.Distinct())
             {
                 queryCollection.Add("c" + cat, "1");
             }
