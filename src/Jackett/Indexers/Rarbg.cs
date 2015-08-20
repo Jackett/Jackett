@@ -124,9 +124,15 @@ namespace Jackett.Indexers
             {
                 var jsonContent = JObject.Parse(response.Content);
 
-                if (jsonContent.Value<int>("error_code") == 20) // no results found
+                int errorCode = jsonContent.Value<int>("error_code");
+                if (errorCode == 20) // no results found
                 {
                     return releases.ToArray();
+                }
+
+                if (errorCode > 0) // too many requests per second
+                {
+                    throw new Exception(jsonContent.Value<string>("error"));
                 }
 
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
@@ -135,7 +141,10 @@ namespace Jackett.Indexers
                     release.Title = item.Value<string>("title");
                     release.Description = release.Title;
                     release.Category = MapTrackerCatToNewznab(categoryLabels[item.Value<string>("category")].ToString());
-                    release.Link = new Uri(item.Value<string>("download"));
+
+                    release.MagnetUri = new Uri(item.Value<string>("download"));
+                    release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
+
                     release.Comments = new Uri(item.Value<string>("info_page"));
                     release.Guid = release.Comments;
 
