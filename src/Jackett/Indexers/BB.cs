@@ -57,7 +57,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(11, TorznabCatType.PCGames);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -80,8 +80,9 @@ namespace Jackett.Indexers
                 }
                 var message = string.Join(" ", messages);
                 throw new ExceptionWithConfigData(message, configData);
-
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

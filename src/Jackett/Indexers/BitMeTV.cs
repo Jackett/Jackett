@@ -58,7 +58,7 @@ namespace Jackett.Indexers
             return configData;
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -80,6 +80,7 @@ namespace Jackett.Indexers
                 configData.CaptchaCookie.Value = captchaImage.Cookies;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

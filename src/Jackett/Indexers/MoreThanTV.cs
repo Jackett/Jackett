@@ -45,7 +45,7 @@ namespace Jackett.Indexers
         {
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -63,6 +63,8 @@ namespace Jackett.Indexers
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         private void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)

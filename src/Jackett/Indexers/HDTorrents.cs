@@ -65,7 +65,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("47", TorznabCatType.XXX);//XXX/720p
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
@@ -82,6 +82,7 @@ namespace Jackett.Indexers
                 var errorMessage = "Couldn't login";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -104,7 +105,7 @@ namespace Jackett.Indexers
                 queryCollection.Add("search", searchString);
             }
 
-            
+
 
             queryCollection.Add("active", "1");
             queryCollection.Add("options", "0");

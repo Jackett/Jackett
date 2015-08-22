@@ -66,7 +66,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(7, TorznabCatType.XXX);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -81,6 +81,7 @@ namespace Jackett.Indexers
                 var errorMessage = dom[".main"].Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -99,7 +100,7 @@ namespace Jackett.Indexers
             if (!string.IsNullOrWhiteSpace(searchString) || cat != "0")
                 searchUrl += string.Format("?search={0}&cat={1}&searchin=0&sort=0", HttpUtility.UrlEncode(searchString), cat);
 
-          
+
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             var results = response.Content;

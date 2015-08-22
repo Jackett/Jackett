@@ -49,7 +49,7 @@ namespace Jackett.Indexers
             TorznabCaps.Categories.Add(TorznabCatType.Books);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var oldConfig = configData;
@@ -60,6 +60,8 @@ namespace Jackett.Indexers
                 configData = oldConfig;
                 throw new Exception("Could not find releases from this URL");
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
 

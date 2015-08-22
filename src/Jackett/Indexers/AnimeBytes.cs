@@ -49,10 +49,10 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataAnimeBytes())
         {
-           
+
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -99,6 +99,8 @@ namespace Jackett.Indexers
                 // Their login page appears to be broken and just gives a 500 error.
                 throw new ExceptionWithConfigData("Failed to login, 6 failed attempts will get you banned for 6 hours.", configData);
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         // Override to load legacy config format

@@ -215,6 +215,7 @@
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
     <Compile Include="Models\AdminSearch.cs" />
+    <Compile Include="Models\IndexerConfigurationStatus.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataFileList.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />

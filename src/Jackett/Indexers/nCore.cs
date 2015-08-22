@@ -43,7 +43,7 @@ namespace Jackett.Indexers
         {
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -69,6 +69,8 @@ namespace Jackett.Indexers
                 var errorMessage = msgContainer != null ? msgContainer.InnerText : "Error while trying to login.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         List<KeyValuePair<string, string>> CreateKeyValueList(params string[][] keyValues)

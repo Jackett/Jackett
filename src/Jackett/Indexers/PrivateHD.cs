@@ -48,7 +48,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(3, TorznabCatType.Audio);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
@@ -68,6 +68,8 @@ namespace Jackett.Indexers
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -119,7 +121,7 @@ namespace Jackett.Indexers
                                             .Replace("gi gi-film", "1")
                                             .Replace("gi gi-tv", "2")
                                             .Replace("gi gi-music", "3")
-                                            .Replace("text-pink",string.Empty);
+                                            .Replace("text-pink", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat.Trim());
                     releases.Add(release);
                 }
