@@ -15,13 +15,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class BitHdtv : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?cat=0&search="; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         private string DownloadUrl { get { return SiteLink + "download.php?/{0}/dl.torrent"; } }
 
         new ConfigurationDataBasicLogin configData
@@ -41,6 +42,16 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
+            AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
+            AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries
+            AddCategoryMapping(6, TorznabCatType.AudioLossless); // HQ Audio
+            AddCategoryMapping(7, TorznabCatType.Movies); // Movies
+            AddCategoryMapping(8, TorznabCatType.AudioVideo); // Music Videos
+            AddCategoryMapping(5, TorznabCatType.TVSport); // Sports
+            AddCategoryMapping(10, TorznabCatType.TV); // TV
+            AddCategoryMapping(12, TorznabCatType.TV); // TV/Seasonpack
+            AddCategoryMapping(11, TorznabCatType.XXX); // XXX
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -68,8 +79,19 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(query.GetQueryString());
-            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var searchString = query.GetQueryString();
+            var queryCollection = new NameValueCollection();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
+
+            var searchUrl = SearchUrl + queryCollection.GetQueryString();
+
+            var trackerCats = MapTorznabCapsToTrackers(query, mapChildrenCatsToParent: true);
+
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
                 CQ dom = results.Content;
@@ -87,9 +109,17 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
                     release.Comments = release.Guid;
                     release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
+
+                    var catUrl = qRow.Children().ElementAt(1).FirstElementChild.Cq().Attr("href");
+                    var catNum = catUrl.Split(new char[] { '=', '&' })[1];
+                    release.Category = MapTrackerCatToNewznab(catNum);
+
+                    // This tracker cannot search multiple cats at a time, so search all cats then filter out results from different cats
+                    if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
+                        continue;
 
                     var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
                     var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
