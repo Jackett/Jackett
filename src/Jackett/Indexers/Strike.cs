@@ -30,9 +30,9 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return BaseUri + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
         private string DownloadUrl { get { return BaseUri + "torrents/api/download/{0}.torrent"; } }
 
-        new ConfigurationDataUrl configData
+        new ConfigurationDataStrike configData
         {
-            get { return (ConfigurationDataUrl)base.configData; }
+            get { return (ConfigurationDataStrike)base.configData; }
             set { base.configData = value; }
         }
 
@@ -46,7 +46,7 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataUrl(defaultSiteLink))
+                configData: new ConfigurationDataStrike(defaultSiteLink))
         {
         }
 
@@ -80,9 +80,9 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-            var searchTerm = string.IsNullOrEmpty(query.SanitizedSearchTerm) ? "2015" : query.SanitizedSearchTerm;
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            var queryString = query.GetQueryString();
+            var searchTerm = string.IsNullOrEmpty(queryString) ? DateTime.Now.Year.ToString() : queryString;
+            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchTerm));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             try
             {
