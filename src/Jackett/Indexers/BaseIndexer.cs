@@ -418,7 +418,7 @@ namespace Jackett.Indexers
             }
         }
 
-        protected List<string> MapTorznabCapsToTrackers(TorznabQuery query)
+        protected List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false)
         {
             var result = new List<string>();
             foreach (var cat in query.Categories)
@@ -429,6 +429,16 @@ namespace Jackett.Indexers
                 {
                     queryCats.AddRange(newznabCat.SubCategories.Select(c => c.ID));
                 }
+
+                if (mapChildrenCatsToParent)
+                {
+                    var parentNewznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.SubCategories.Contains(newznabCat));
+                    if (parentNewznabCat != null)
+                    {
+                        queryCats.Add(parentNewznabCat.ID);
+                    }
+                }
+
                 foreach (var mapping in categoryMapping.Where(c => queryCats.Contains(c.NewzNabCategory)))
                 {
                     result.Add(mapping.TrackerCategory);
