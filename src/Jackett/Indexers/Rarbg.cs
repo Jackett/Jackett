@@ -107,7 +107,12 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            return PerformQuery(query, 0);
+        }
+
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts = 0)
         {
             await CheckToken();
             var releases = new List<ReleaseInfo>();
@@ -120,6 +125,7 @@ namespace Jackett.Indexers
             {
                 episodeSearchUrl += "&category=" + cats;
             }
+
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
 
             try
@@ -134,7 +140,15 @@ namespace Jackett.Indexers
 
                 if (errorCode > 0) // too many requests per second
                 {
-                    throw new Exception(jsonContent.Value<string>("error"));
+                    if (attempts < 3)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(2));
+                        return await PerformQuery(query, ++attempts);
+                    }
+                    else
+                    {
+                        throw new Exception(jsonContent.Value<string>("error"));
+                    }
                 }
 
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
