@@ -223,6 +223,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAnimeBytes.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataStrike.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
