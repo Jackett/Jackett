@@ -78,7 +78,7 @@ namespace Jackett.Indexers
 
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -93,6 +93,7 @@ namespace Jackett.Indexers
                 CQ dom = response.Content;
                 throw new ExceptionWithConfigData("Invalid cookie header", configData);
             });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

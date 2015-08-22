@@ -169,7 +169,7 @@ namespace Jackett.Indexers
                 TorznabCaps.Categories.Add(newznabCategory);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -198,6 +198,8 @@ namespace Jackett.Indexers
                 CookieHeader = string.Empty;
                 throw new ExceptionWithConfigData("Failed", configData);
             });
+
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -292,7 +294,7 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).InnerText);
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).InnerText) + release.Seeders;
 
-                    var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href").Replace("browse.php?",string.Empty);
+                    var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href").Replace("browse.php?", string.Empty);
                     release.Category = MapTrackerResultCatToNewznab(cat);
 
                     releases.Add(release);

@@ -79,7 +79,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(33, TorznabCatType.PC0day);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -97,6 +97,7 @@ namespace Jackett.Indexers
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -107,7 +108,7 @@ namespace Jackett.Indexers
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                searchUrl += "query/" + HttpUtility.UrlEncode(searchString)  + "/";
+                searchUrl += "query/" + HttpUtility.UrlEncode(searchString) + "/";
             }
             string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
@@ -160,7 +161,7 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
 
-                    var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/",string.Empty);
+                    var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/", string.Empty);
                     release.Category = MapTrackerCatToNewznab(category);
 
                     releases.Add(release);

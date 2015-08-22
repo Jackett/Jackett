@@ -94,7 +94,7 @@ namespace Jackett.Indexers
             }
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
@@ -103,6 +103,8 @@ namespace Jackett.Indexers
             {
                 throw new Exception("Could not find releases from this URL");
             });
+
+            return IndexerConfigurationStatus.Completed;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
