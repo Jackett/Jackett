@@ -27,6 +27,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [BitMeTV](http://www.bitmetv.org/)
  * [Demonoid](http://www.demonoid.pw/)
+ * [EuTorrents](https://eutorrents.to/)
  * [FileList](http://filelist.ro/)
  * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
  * [Freshon](https://freshon.tv/)
