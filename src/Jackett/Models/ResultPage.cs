@@ -81,6 +81,8 @@ namespace Jackett.Models
                             ),
                             getTorznabElement("magneturl", r.MagnetUri),
                             getTorznabElement("rageid", r.RageID),
+                            getTorznabElement("thetvdb", r.TheTvDbId),
+                            getTorznabElement("imdb", r.Imdb),
                             getTorznabElement("seeders", r.Seeders),
                             getTorznabElement("peers", r.Peers),
                             getTorznabElement("infohash", r.InfoHash),

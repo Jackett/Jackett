@@ -44,6 +44,16 @@ namespace Jackett.Utils
             return filteredResults;
         }
 
+        public static IEnumerable<ReleaseInfo> FilterResultsToImdb(IEnumerable<ReleaseInfo> results, string imdb)
+        {
+            if (string.IsNullOrWhiteSpace(imdb))
+                return results;
+            // Filter out releases that do have a valid imdb ID, that is not equal to the one we're searching for.
+            return
+                results.Where(
+                    result => !result.Imdb.HasValue || result.Imdb.Value == 0 || ("tt" + result.Imdb.Value).Equals(imdb));
+        } 
+
         private static string CleanTitle(string title)
         {
             title = title.Replace(':', ' ').Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Replace('+', ' ');

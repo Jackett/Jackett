@@ -12,7 +12,7 @@ namespace Jackett.Models
         public string torrent_id { get; set; }
         public string details_url { get; set; }
         public string download_url { get; set; }
-       // public string imdb_id { get; set; }
+        public string imdb_id { get; set; }
         public bool freeleech { get; set; }
         public string type { get; set; }
         public long size { get; set; }
