@@ -37,7 +37,7 @@ namespace Jackett.Indexers
             : base(name: "bB",
                 description: "bB",
                 link: "http://www.reddit.com/r/baconbits/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
                 logger: l,
