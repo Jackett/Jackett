@@ -18,12 +18,12 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class PrivateHD : AvistazTracker, IIndexer
+    public class Avistaz : AvistazTracker, IIndexer
     {
-        public PrivateHD(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "PrivateHD",
-                desc: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                link: "https://privatehd.to/",
+        public Avistaz(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+            : base(name: "Avistaz",
+                desc: "Aka AsiaTorrents",
+                link: "https://avistaz.to/",
                 indexerManager: indexerManager,
                 logger: logger,
                 protectionService: protectionService,
