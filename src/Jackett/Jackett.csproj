@@ -175,6 +175,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
+    <Compile Include="Indexers\EuTorrents.cs" />
     <Compile Include="Indexers\Avistaz.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
@@ -420,6 +421,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\demonoid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\eutorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\filelist.png">
