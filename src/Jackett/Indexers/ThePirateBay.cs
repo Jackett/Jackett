@@ -30,6 +30,7 @@ namespace Jackett.Indexers
         }
 
         private string SearchUrl { get { return BaseUri + "search/{0}/0/99/208,205"; } }
+        private string RecentUrl { get { return BaseUri + "recent"; } }
 
         new ConfigurationDataUrl configData
         {
@@ -50,7 +51,7 @@ namespace Jackett.Indexers
         {
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
@@ -59,6 +60,8 @@ namespace Jackett.Indexers
             {
                 throw new Exception("Could not find releases from this URL");
             });
+
+            return IndexerConfigurationStatus.Completed;
         }
 
         // Override to load legacy config format
@@ -79,7 +82,7 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var queryStr = HttpUtility.UrlEncode(query.GetQueryString());
-            var episodeSearchUrl = string.Format(SearchUrl, queryStr);
+            var episodeSearchUrl = string.IsNullOrWhiteSpace(queryStr) ? RecentUrl : string.Format(SearchUrl, queryStr);
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
 
             try
@@ -89,8 +92,10 @@ namespace Jackett.Indexers
                 var rows = dom["#searchResult > tbody > tr"];
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
+                    if (row.ChildElements.Count() < 2)
+                        continue;
 
+                    var release = new ReleaseInfo();
                     CQ qRow = row.Cq();
                     CQ qLink = qRow.Find(".detName > .detLink").First();
 
@@ -110,7 +115,7 @@ namespace Jackett.Indexers
 
                     var timeString = descParts[0].Split(' ')[1];
 
-                    if (timeString.Contains("mins ago"))
+                    if (timeString.Contains(" ago"))
                     {
                         release.PublishDate = (DateTime.Now - TimeSpan.FromMinutes(ParseUtil.CoerceInt(timeString.Split(' ')[0])));
                     }

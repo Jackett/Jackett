@@ -14,18 +14,20 @@ We were previously focused on TV but are working on extending searches to allow 
 
 #### Supported Systems
 * Windows using .NET 4.5
-* Linux and OSX using Mono 4
+* Linux and OSX using Mono 4 (v3 should work but you may experience crashes).
 
 
 #### Supported Trackers
  * [AlphaRatio](https://alpharatio.cc/)
  * [AnimeBytes](https://animebytes.tv/)
+ * [Avistaz](https://avistaz.to/)
  * [BakaBT](http://bakabt.me/)
  * [bB](http://reddit.com/r/baconbits)
  * [BeyondHD](https://beyondhd.me/)
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [BitMeTV](http://www.bitmetv.org/)
  * [Demonoid](http://www.demonoid.pw/)
+ * [EuTorrents](https://eutorrents.to/)
  * [FileList](http://filelist.ro/)
  * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
  * [Freshon](https://freshon.tv/)
@@ -36,6 +38,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [MoreThan.tv](https://morethan.tv/)
  * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
+ * [RARGB](https://rarbg.to/)
  * [RuTor](http://rutor.org/)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [SceneTime](https://www.scenetime.com/)
@@ -55,20 +58,18 @@ We were previously focused on TV but are working on extending searches to allow 
  2. Install  libcurl:
        * Debian/Ubunutu: apt-get install libcurl-dev
        * Redhat/Fedora: yum install libcurl-devel
-       * Or see the [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
+       * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
+3. Download and extract the latest ```.tar.bz2``` release from the [website](http://jackett.net/Download)  and run Jackett using mono with the command "mono JackettConsole.exe".
 
 
 
 #### Installation on Windows
 
+Grab the latest release from the [web site](http://jackett.net/Download).
+
 We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
 
 Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
-
-#### Installation on Linux/OSX
-
-Run Jackett using mono with the command "mono JackettConsole.exe".
-
 
 
 #### Troubleshooting
@@ -87,7 +88,7 @@ You can get additional logging with the switches "-t -l".  Please post logs if y
 
 
 ### Additional Trackers
-Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact us on IRC (see below).
+Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact us on IRC (see below).  Pull requests must be made to the develop branch.
 
 ### Contact & Support
 Use the github issues pages or talk to us directly at: [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett).

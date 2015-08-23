@@ -103,7 +103,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("HD Factual/Reality", TorznabCatType.TVHD);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -139,6 +139,7 @@ namespace Jackett.Indexers
                 IsConfigured = false;
                 throw e;
             }
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

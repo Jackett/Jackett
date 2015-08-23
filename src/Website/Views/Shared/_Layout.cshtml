@@ -8,6 +8,7 @@
     <script src="~/content/libs/handlebars.min.js"></script>
     <script src="~/content/libs/moment.min.js"></script>
     <script src="~/content/libs/handlebarsmoment.js"></script>
+    <script src="~/Content/libs/jquery.timeago.js"></script>
     <script src="~/content/bootstrap/bootstrap.min.js"></script>
     <script src="~/content/libs/bootstrap-notify.js"></script>
     <link href="~/content/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -36,5 +37,12 @@
     <!--@Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)-->
+
+    <script>
+        $(document).ready(function () {
+            $("abbr.timeago").timeago();
+        });
+    </script>
+
 </body>
 </html>

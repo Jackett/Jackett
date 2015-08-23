@@ -175,6 +175,8 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
+    <Compile Include="Indexers\EuTorrents.cs" />
+    <Compile Include="Indexers\Avistaz.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Indexers\BB.cs" />
@@ -189,7 +191,9 @@
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\FileList.cs" />
-    <Compile Include="Indexers\ManualSearchResult.cs" />
+    <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
+    <Compile Include="Models\ManualSearchResult.cs" />
+    <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
     <Compile Include="Indexers\RuTor.cs" />
@@ -214,6 +218,7 @@
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
     <Compile Include="Models\AdminSearch.cs" />
+    <Compile Include="Models\IndexerConfigurationStatus.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataFileList.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />
@@ -221,6 +226,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAnimeBytes.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataStrike.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
@@ -402,6 +408,9 @@
     <Content Include="Content\logos\animebytes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\logos\avistaz.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\logos\bakabt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -412,6 +421,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\demonoid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\eutorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\filelist.png">
@@ -436,6 +448,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\privatehd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\rarbg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\rutor.png">

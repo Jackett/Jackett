@@ -37,7 +37,7 @@ namespace Jackett.Indexers
         {
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var response = await webclient.GetString(new Utils.Clients.WebRequest()
@@ -51,6 +51,7 @@ namespace Jackett.Indexers
             {
                 throw new ExceptionWithConfigData("Failed to login", configData);
             });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
