@@ -25,7 +25,7 @@ namespace Jackett.Utils
         protected override async Task SerializeToStreamAsync(Stream stream,
             TransportContext context)
         {
-            var json = JsonConvert.SerializeObject(_value, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(_value, Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
             var writer = new StreamWriter(stream);
             writer.Write(json);
             await writer.FlushAsync();
