@@ -312,7 +312,7 @@ namespace Jackett.Indexers
             if (null != input)
             {
                 input = input.ToLowerInvariant();
-                var mapping = resultMapping.Where(m => m.TrackerCategory == input).FirstOrDefault();
+                var mapping = resultMapping.Where(m => m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
                 if (mapping != null)
                 {
                     return mapping.NewzNabCategory;

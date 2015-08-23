@@ -10,7 +10,7 @@ namespace Jackett.Models
     {
         public CategoryMapping(string trackerCat, int newzCat)
         {
-            TrackerCategory = trackerCat.ToLowerInvariant();
+            TrackerCategory = trackerCat;
             NewzNabCategory = newzCat;
         }
 

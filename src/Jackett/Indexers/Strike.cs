@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -27,7 +28,7 @@ namespace Jackett.Indexers
             set { configData.Url.Value = value.ToString(); }
         }
 
-        private string SearchUrl { get { return BaseUri + "api/v2/torrents/search/?category=TV&phrase={0}"; } }
+        private string SearchUrl { get { return BaseUri + "api/v2/torrents/search/?phrase={0}"; } }
         private string DownloadUrl { get { return BaseUri + "torrents/api/download/{0}.torrent"; } }
 
         new ConfigurationDataStrike configData
@@ -41,13 +42,34 @@ namespace Jackett.Indexers
             : base(name: "Strike",
                 description: "Torrent search engine",
                 link: defaultSiteLink,
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataStrike(defaultSiteLink))
         {
+            AddCategoryMapping("Anime", TorznabCatType.TVAnime);
+            AddCategoryMapping("Applications", TorznabCatType.PC);
+            AddCategoryMapping("Books", TorznabCatType.Books);
+            AddCategoryMapping("Games", TorznabCatType.PCGames);
+            AddCategoryMapping("Movies", TorznabCatType.Movies);
+            AddCategoryMapping("TV", TorznabCatType.TV);
+            AddCategoryMapping("XXX", TorznabCatType.XXX);
+            AddCategoryMapping("Music", TorznabCatType.Audio);
+
+            /*AddCategoryMapping("Movies:Highres Movies", TorznabCatType.MoviesHD);
+            AddCategoryMapping("Movies:3D Movies", TorznabCatType.Movies3D);
+            AddCategoryMapping("Books:Ebooks", TorznabCatType.BooksEbook);
+            AddCategoryMapping("Books:Comics", TorznabCatType.BooksComics);
+            AddCategoryMapping("Books:Audio Books", TorznabCatType.AudioAudiobook);
+            AddCategoryMapping("Games:XBOX360", TorznabCatType.ConsoleXbox360);
+            AddCategoryMapping("Games:Wii", TorznabCatType.ConsoleWii);
+            AddCategoryMapping("Games:PSP", TorznabCatType.ConsolePSP);
+            AddCategoryMapping("Games:PS3", TorznabCatType.ConsolePS3);
+            AddCategoryMapping("Games:PC", TorznabCatType.PCGames);
+            AddCategoryMapping("Games:Android", TorznabCatType.PCPhoneAndroid);
+            AddCategoryMapping("Music:Mp3", TorznabCatType.AudioMP3);*/
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -83,6 +105,15 @@ namespace Jackett.Indexers
             var queryString = query.GetQueryString();
             var searchTerm = string.IsNullOrEmpty(queryString) ? DateTime.Now.Year.ToString() : queryString;
             var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(searchTerm));
+
+            var trackerCategories = MapTorznabCapsToTrackers(query, mapChildrenCatsToParent: true);
+
+            // This tracker can only search one cat at a time, otherwise search all and filter results
+            if (trackerCategories.Count == 1)
+            {
+                episodeSearchUrl += "&category=" + trackerCategories[0];
+            }
+
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl, string.Empty);
             try
             {
@@ -93,6 +124,12 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+
+                    if (trackerCategories.Count > 0 && !trackerCategories.Contains((string)result["torrent_category"]))
+                    {
+                        continue;
+                    }
+                    release.Category = MapTrackerCatToNewznab((string)result["torrent_category"]);
 
                     release.Title = (string)result["torrent_title"];
                     release.Description = release.Title;

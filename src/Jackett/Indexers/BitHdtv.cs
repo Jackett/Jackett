@@ -35,7 +35,7 @@ namespace Jackett.Indexers
             : base(name: "BIT-HDTV",
                 description: "Home of high definition invites",
                 link: "https://www.bit-hdtv.com/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
                 logger: l,

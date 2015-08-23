@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
                 link: "https://beyondhd.me/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
                 logger: l,
