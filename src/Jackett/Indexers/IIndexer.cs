@@ -27,7 +27,7 @@ namespace Jackett.Indexers
         Task<ConfigurationData> GetConfigurationForSetup();
 
         // Called when web API wants to apply setup configuration via web API, usually this is where login and storing cookie happens
-        Task ApplyConfiguration(JToken configJson);
+        Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);
 
         // Called on startup when initializing indexers from saved configuration
         void LoadFromSavedConfiguration(JToken jsonConfig);

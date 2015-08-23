@@ -56,7 +56,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(23, TorznabCatType.Audio);
         }
 
-        public async Task ApplyConfiguration(JToken configJson)
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             var incomingConfig = new ConfigurationDataBasicLogin();
             incomingConfig.LoadValuesFromJson(configJson);
@@ -76,6 +76,7 @@ namespace Jackett.Indexers
                    var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
                    throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
                });
+            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         void FillReleaseInfoFromJson(ReleaseInfo release, JObject r)

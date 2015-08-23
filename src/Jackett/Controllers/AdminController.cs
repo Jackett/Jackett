@@ -67,7 +67,7 @@ namespace Jackett.Controllers
             result.Content = new StreamContent(stream);
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(mappedPath));
-            
+
             return result;
         }
 
@@ -86,7 +86,7 @@ namespace Jackett.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Dashboard()
         {
-            if(Request.RequestUri.Query!=null && Request.RequestUri.Query.Contains("logout"))
+            if (Request.RequestUri.Query != null && Request.RequestUri.Query.Contains("logout"))
             {
                 var file = GetFile("login.html");
                 securityService.Logout(file);
@@ -98,16 +98,18 @@ namespace Jackett.Controllers
             {
                 return GetFile("index.html");
 
-            } else
+            }
+            else
             {
                 var formData = await Request.Content.ReadAsFormDataAsync();
-                
-                if (formData!=null && securityService.HashPassword(formData["password"]) == serverService.Config.AdminPassword)
+
+                if (formData != null && securityService.HashPassword(formData["password"]) == serverService.Config.AdminPassword)
                 {
                     var file = GetFile("index.html");
                     securityService.Login(file);
                     return file;
-                } else
+                }
+                else
                 {
                     return GetFile("login.html");
                 }
@@ -180,8 +182,15 @@ namespace Jackett.Controllers
                 string indexerString = (string)postData["indexer"];
                 indexer = indexerService.GetIndexer((string)postData["indexer"]);
                 jsonReply["name"] = indexer.DisplayName;
-                await indexer.ApplyConfiguration(postData["config"]);
-                await indexerService.TestIndexer((string)postData["indexer"]);
+                var configurationResult = await indexer.ApplyConfiguration(postData["config"]);
+                if (configurationResult == IndexerConfigurationStatus.RequiresTesting)
+                {
+                    await indexerService.TestIndexer((string)postData["indexer"]);
+                }
+                else if (configurationResult == IndexerConfigurationStatus.Failed)
+                {
+                    throw new Exception("Configuration Failed");
+                }
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)
@@ -194,10 +203,11 @@ namespace Jackett.Controllers
                 if (ex is ExceptionWithConfigData)
                 {
                     jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null);
-                } else
+                }
+                else
                 {
                     logger.Error(ex, "Exception in Configure");
-                } 
+                }
             }
             return Json(jsonReply);
         }
@@ -293,12 +303,13 @@ namespace Jackett.Controllers
                 cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;
                 cfg["blackholedir"] = serverService.Config.BlackholeDir;
-                cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword )? string.Empty:serverService.Config.AdminPassword.Substring(0,10);
+                cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword) ? string.Empty : serverService.Config.AdminPassword.Substring(0, 10);
 
                 jsonReply["config"] = cfg;
                 jsonReply["app_version"] = config.GetVersion();
                 jsonReply["result"] = "success";
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.Error(ex, "Exception in get_jackett_config");
                 jsonReply["result"] = "error";
@@ -360,7 +371,8 @@ namespace Jackett.Controllers
                         }
                     }
 
-                    (new Thread(() => {
+                    (new Thread(() =>
+                    {
                         Thread.Sleep(500);
                         serverService.Stop();
                         Engine.BuildContainer();
@@ -370,7 +382,7 @@ namespace Jackett.Controllers
                 }
 
 
-                if(saveDir != Engine.Server.Config.BlackholeDir)
+                if (saveDir != Engine.Server.Config.BlackholeDir)
                 {
                     if (!string.IsNullOrEmpty(saveDir))
                     {
@@ -435,12 +447,12 @@ namespace Jackett.Controllers
             var query = new TorznabQuery()
             {
                 SearchTerm = value.Query,
-                Categories = value.Category ==0?new int[0]: new int[1] {  value.Category }
+                Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category }
             };
 
             query.ExpandCatsToSubCats();
 
-            var trackers = indexerService.GetAllIndexers().Where(t=>t.IsConfigured).ToList();
+            var trackers = indexerService.GetAllIndexers().Where(t => t.IsConfigured).ToList();
             if (!string.IsNullOrWhiteSpace(value.Tracker))
             {
                 trackers = trackers.Where(t => t.ID == value.Tracker).ToList();
@@ -453,7 +465,8 @@ namespace Jackett.Controllers
 
             Parallel.ForEach(trackers.ToList(), indexer =>
             {
-                try {
+                try
+                {
                     var searchResults = indexer.PerformQuery(query).Result;
                     cacheService.CacheRssResults(indexer, searchResults);
                     searchResults = indexer.FilterResults(query, searchResults);
@@ -470,7 +483,7 @@ namespace Jackett.Controllers
                         }
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     logger.Error(e, "An error occured during manual search on " + indexer.DisplayName + ":  " + e.Message);
                 }
@@ -483,10 +496,10 @@ namespace Jackett.Controllers
                 results = results.OrderByDescending(d => d.PublishDate).ToList();
             }
 
-            var manualResult =  new ManualSearchResult()
+            var manualResult = new ManualSearchResult()
             {
                 Results = results,
-                Indexers = trackers.Select(t=>t.DisplayName).ToList()
+                Indexers = trackers.Select(t => t.DisplayName).ToList()
             };
 
 

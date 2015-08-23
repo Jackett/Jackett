@@ -9,6 +9,7 @@
 {
     <hr />
     <h4><a href="@release.Url">@release.Title - @release.Version</a></h4>
+    <h5>Published <abbr class="timeago" title="@release.When.ToString("s")Z"></abbr></h5>
 
     var files = Website.Services.FileService.FindFilesForRelease(release.Version);
 
