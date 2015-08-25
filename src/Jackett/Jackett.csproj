@@ -192,6 +192,7 @@
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
+    <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
@@ -406,6 +407,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\animebytes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\animetorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\avistaz.png">

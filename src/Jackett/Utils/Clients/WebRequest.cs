@@ -13,6 +13,7 @@ namespace Jackett.Utils.Clients
         {
             PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
+            Headers = new Dictionary<string, string>();
         }
 
         public WebRequest(string url)
@@ -20,6 +21,7 @@ namespace Jackett.Utils.Clients
             PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
             Url = url;
+            Headers = new Dictionary<string, string>();
         }
 
         public string Url { get; set; }
@@ -28,6 +30,10 @@ namespace Jackett.Utils.Clients
         public string Referer { get; set; }
         public RequestType Type { get; set; }
 
+        /// <summary>
+        /// Warning this is only implemented on HTTPWebClient currently!
+        /// </summary>
+        public Dictionary<string, string> Headers { get; set; }
 
         public override bool Equals(System.Object obj)
         {

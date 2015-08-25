@@ -20,6 +20,7 @@ We were previously focused on TV but are working on extending searches to allow 
 #### Supported Trackers
  * [AlphaRatio](https://alpharatio.cc/)
  * [AnimeBytes](https://animebytes.tv/)
+ * [AnimeTorrents](http://animetorrents.me/)
  * [Avistaz](https://avistaz.to/)
  * [BakaBT](http://bakabt.me/)
  * [bB](http://reddit.com/r/baconbits)
