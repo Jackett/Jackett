@@ -128,19 +128,23 @@ namespace Jackett.Controllers
                 var release = Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, indexerID);
 
-                potatoResponse.results.Add(new TorrentPotatoResponseItem()
+                // Only accept torrent links, magnet is not supported
+                if (release.Link != null)
                 {
-                    release_name = release.Title + "[" + indexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
-                    torrent_id = release.Guid.ToString(),
-                    details_url = release.Comments.ToString(),
-                    download_url = release.Link.ToString(),
-                    imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
-                    freeleech = false,
-                    type = "movie",
-                    size = (long)release.Size/ (1024 * 1024), // This is in MB
-                    leechers = (int)release.Peers - (int)release.Seeders,
-                    seeders = (int)release.Seeders
-                });
+                    potatoResponse.results.Add(new TorrentPotatoResponseItem()
+                    {
+                        release_name = release.Title + "[" + indexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
+                        torrent_id = release.Guid.ToString(),
+                        details_url = release.Comments.ToString(),
+                        download_url = release.Link.ToString(),
+                        imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
+                        freeleech = false,
+                        type = "movie",
+                        size = (long)release.Size / (1024 * 1024), // This is in MB
+                        leechers = (int)release.Peers - (int)release.Seeders,
+                        seeders = (int)release.Seeders
+                    });
+                }
             }
 
             // Log info
