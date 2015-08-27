@@ -1,0 +1,26 @@
+{
+  "jspm": {
+    "directories": {},
+    "dependencies": {
+      "aurelia-animator-css": "github:aurelia/animator-css@^0.15.0",
+      "aurelia-bootstrapper": "github:aurelia/bootstrapper@^0.16.0",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.2",
+      "aurelia-framework": "github:aurelia/framework@^0.15.0",
+      "aurelia-http-client": "github:aurelia/http-client@^0.10.3",
+      "aurelia-router": "github:aurelia/router@^0.11.0",
+      "font-awesome": "npm:font-awesome@^4.4.0",
+      "jquery": "github:components/jquery@^2.1.4",
+      "polymer/mutationobservers": "github:polymer/mutationobservers@^0.4.2",
+      "semantic-ui": "github:Semantic-Org/Semantic-UI@^2.0.8"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.22",
+      "babel-runtime": "npm:babel-runtime@^5.8.20",
+      "core-js": "npm:core-js@^1.1.0"
+    }
+  },
+  "devDependencies": {
+    "aurelia-cli": "^0.3.1",
+    "jspm": "^0.16.2"
+  }
+}

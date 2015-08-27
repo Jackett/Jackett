@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Distribution", "Jac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{6B6AB1B0-5ABD-4696-A3D2-70E991174625}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Distribution", "Distribution", "{DEAF0BB2-3F29-4805-9759-2BDF9FBD340B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Web", "Jackett.Web\Jackett.Web.csproj", "{7A9699EE-AA9B-4843-A0B4-D1FEC47B0FFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,9 +69,17 @@ Global
 		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A9699EE-AA9B-4843-A0B4-D1FEC47B0FFC}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9699EE-AA9B-4843-A0B4-D1FEC47B0FFC}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{7A9699EE-AA9B-4843-A0B4-D1FEC47B0FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9699EE-AA9B-4843-A0B4-D1FEC47B0FFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0} = {DEAF0BB2-3F29-4805-9759-2BDF9FBD340B}
+		{6B6AB1B0-5ABD-4696-A3D2-70E991174625} = {DEAF0BB2-3F29-4805-9759-2BDF9FBD340B}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

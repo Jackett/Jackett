@@ -1,0 +1,33 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>Aurelia</title>
+    <link rel="stylesheet" href="jspm_packages/npm/font-awesome@4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body  aurelia-app>
+    <div class="splash">
+        <div class="message"><h1>Loading Jackett..</h1></div>
+        <i class="fa fa-spinner fa-spin fa-3x"></i>
+    </div>
+    <script src="jspm_packages/system.js"></script>
+    <script src="config.js"></script>
+    <script>
+        System.import('jquery')
+        .then(function () {
+            return System.import('semantic-ui');
+        })
+       /* .then(function () {
+            return System.import('core-js');
+        })
+        .then(function () {
+            return System.import('polymer/mutationobservers');
+        })*/
+        .then(function () {
+           return System.import('aurelia-bootstrapper');
+        });
+
+    </script>
+</body>
+</html>

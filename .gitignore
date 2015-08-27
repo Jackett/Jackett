@@ -196,3 +196,7 @@ FakesAssemblies/
 *.opt
 /Build.mono
 /Build.windows
+
+
+src/Jackett.Web/jspm_packages
+src/Jackett.Web/npm_packages

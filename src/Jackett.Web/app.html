@@ -1,0 +1,43 @@
+﻿<template>
+    <div class="ui fixed inverted menu">
+        <div class="ui container">
+            <div href="#" class="header item">
+                <img class="logo" src="content/jacket_medium.png">
+                Jackett
+            </div>
+            <li repeat.for="row of router.navigation" class="item ${row.isActive ? 'active' : ''}">
+                <a href.bind="row.href">${row.title}</a>
+            </li>
+           <!--<a href="#" class="ui simple dropdown item">
+                Dropdown <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item">Link Item</div>
+                    <div class="item">Link Item</div>
+                    <div class="divider"></div>
+                    <div class="header">Header Item</div>
+                    <div class="item">
+                        <i class="dropdown icon"></i>
+                        Sub Menu
+                        <div class="menu">
+                            <div class="item">Link Item</div>
+                            <div class="item">Link Item</div>
+                        </div>
+                    </div>
+                    <div class="item">Link Item</div>
+                </div>
+            </a>--> 
+        </div>
+    </div>
+
+    <div class="ui main text container">
+        <router-view></router-view>
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+        <div class="ui center aligned container">
+           
+            Jackett
+         
+        </div>
+    </div>
+</template>
