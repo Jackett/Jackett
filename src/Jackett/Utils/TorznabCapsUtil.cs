@@ -79,7 +79,7 @@ namespace Jackett.Utils
 
         private static string CleanTitle(string title)
         {
-            title = title.Replace(':', ' ').Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Replace('+', ' ');
+            title = title.Replace(':', ' ').Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Replace('+', ' ').Replace("'", "");
             return reduceSpacesRegex.Replace(title, " ").ToLowerInvariant();
         }
     }
