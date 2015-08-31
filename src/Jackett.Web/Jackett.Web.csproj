@@ -54,6 +54,7 @@
     <Content Include="content\jacket_medium.png" />
     <Content Include="packages.config" />
     <Content Include="styles\styles.css" />
+    <Content Include="package.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -74,6 +75,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="main.ts" />
+    <TypeScriptCompile Include="Scripts\typings\JackettSignalr.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
     <TypeScriptCompile Include="typings\aurelia-amd\aurelia-amd.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-animator-css.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-app-contacts.d.ts" />
@@ -103,7 +107,6 @@
     <TypeScriptCompile Include="typings\aurelia\aurelia-validation.d.ts" />
     <TypeScriptCompile Include="typings\core-js.d.ts" />
     <TypeScriptCompile Include="typings\es6.d.ts" />
-    <TypeScriptCompile Include="typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="typings\nprogress.d.ts" />
     <TypeScriptCompile Include="typings\reflect-metadata.d.ts" />
     <TypeScriptCompile Include="views\home.ts" />

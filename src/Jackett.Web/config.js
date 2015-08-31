@@ -1,5 +1,5 @@
 System.config({
-  baseURL: "/",
+  baseURL: "/dev",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -9,6 +9,7 @@ System.config({
     ]
   },
   paths: {
+    "jackett-hubs": "/signalr/hubs",
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
@@ -25,6 +26,7 @@ System.config({
     "core-js": "npm:core-js@1.1.1",
     "font-awesome": "npm:font-awesome@4.4.0",
     "jquery": "github:components/jquery@2.1.4",
+    "ms-signalr-client": "npm:ms-signalr-client@2.2.2",
     "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2",
     "semantic-ui": "github:Semantic-Org/Semantic-UI@2.0.8",
     "github:Semantic-Org/Semantic-UI@2.0.8": {
@@ -160,6 +162,12 @@ System.config({
     },
     "npm:font-awesome@4.4.0": {
       "css": "github:systemjs/plugin-css@0.1.15"
+    },
+    "npm:jquery@2.1.4": {
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:ms-signalr-client@2.2.2": {
+      "jquery": "npm:jquery@2.1.4"
     }
   }
 });

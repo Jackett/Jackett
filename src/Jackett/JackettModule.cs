@@ -10,6 +10,8 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using AutoMapper;
 using Jackett.Models;
+using Autofac.Integration.SignalR;
+using Jackett.Services;
 
 namespace Jackett
 {
@@ -55,6 +57,8 @@ namespace Jackett
             {
                 builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }
+
+            builder.RegisterHubs(thisAssembly);
 
             Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
             {

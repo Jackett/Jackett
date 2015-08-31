@@ -16,6 +16,9 @@ using Jackett.Services;
 using System.Web.Http.Tracing;
 using Jackett.Utils;
 using Microsoft.AspNet.Identity;
+using System.IO;
+using Microsoft.AspNet.SignalR;
+using Autofac.Integration.SignalR;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -51,6 +54,9 @@ namespace Jackett
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
 
+            // ES6 Imports always pull from a .js file however signalr doesn't support the call with an extensions so remap it.
+            appBuilder.Rewrite("/signalr/hubs.js", "/signalr/hubs");
+
             appBuilder.Use<WebApiRootRedirectMiddleware>();
 
             // Setup tracing if enabled
@@ -64,6 +70,7 @@ namespace Jackett
             {
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
             }
+            
             config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
             config.MapHttpAttributeRoutes();
 
@@ -123,15 +130,26 @@ namespace Jackett
 
             appBuilder.UseWebApi(config);
 
+            appBuilder.MapSignalR(new Microsoft.AspNet.SignalR.HubConfiguration()
+            {
+                EnableDetailedErrors = true,
+                EnableJSONP = true,
+                Resolver = new AutofacDependencyResolver(Engine.GetContainer())
+            });
+
+            appBuilder.UseFileServer(new FileServerOptions
+            {
+                RequestPath = new PathString("/dev"),
+                FileSystem = new PhysicalFileSystem(Path.GetFullPath(Path.Combine(Engine.ConfigService.GetContentFolder(), "../../Jackett.Web"))),
+                EnableDirectoryBrowsing = false,
+            });
 
             appBuilder.UseFileServer(new FileServerOptions
             {
                 RequestPath = new PathString(string.Empty),
                 FileSystem = new PhysicalFileSystem(Engine.ConfigService.GetContentFolder()),
                 EnableDirectoryBrowsing = false,
-
             });
-
         }
     }
 }
