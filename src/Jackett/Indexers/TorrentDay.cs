@@ -117,6 +117,7 @@ namespace Jackett.Indexers
 
                     SaveConfig();
                     IsConfigured = true;
+                    return IndexerConfigurationStatus.Completed;
                 }
                 catch (Exception e)
                 {
