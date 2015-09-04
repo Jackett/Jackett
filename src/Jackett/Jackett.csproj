@@ -254,10 +254,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
-    <Compile Include="Models\Sync\Change.cs" />
-    <Compile Include="Models\Sync\ObjectPointer.cs" />
-    <Compile Include="Models\Sync\StateRoot.cs" />
-    <Compile Include="Models\Sync\SyncObjectBase.cs" />
     <Compile Include="Models\TorrentPotatoRequest.cs" />
     <Compile Include="Models\TorrentPotatoResponse.cs" />
     <Compile Include="Models\TorrentPotatoResponseItem.cs" />
@@ -274,8 +270,8 @@
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="OWINRewriter.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\IRCService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
-    <Compile Include="Services\ObjectSyncService.cs" />
     <Compile Include="Services\ProtectionService.cs" />
     <Compile Include="Services\SignalR\JackettHub.cs" />
     <Compile Include="Utils\Clients\BaseWebResult.cs" />

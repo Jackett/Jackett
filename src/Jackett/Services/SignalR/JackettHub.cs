@@ -14,16 +14,14 @@ namespace Jackett.Services.SignalR
 
     public class JackettHub : Hub
     {
-        IObjectSyncService syncService;
 
-        public JackettHub(IObjectSyncService o)
+        public JackettHub()
         {
-            syncService = o;
         }
 
         public override Task OnConnected()
         {
-            Clients.Caller.transferState(syncService.Root.GetAllData(syncService));
+           // Clients.Caller.transferState(syncService.Root.GetAllData(syncService));
             return base.OnConnected();
         }
     }

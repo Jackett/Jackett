@@ -1,38 +1,100 @@
-﻿  body {
+﻿body {
     background-color: #FFFFFF;
-  }
-  .ui.menu .item img.logo {
+}
+
+.ui.menu .item img.logo {
     margin-right: 1.5em;
-  }
-  .main.container {
+}
+
+.main.container {
     margin-top: 7em;
-  }
-  .wireframe {
+}
+
+.wireframe {
     margin-top: 2em;
-  }
-  .ui.footer.segment {
+}
+
+.ui.footer.segment {
     margin: 5em 0em 0em;
     padding: 5em 0em;
-  }
+}
 
-  .main {
-      min-height: 20em;
-  }
+.main {
+    min-height: 20em;
+}
 
-  .splash{
+.splash {
     text-align: center;
     margin-top: 10em;
-  }
+}
 
-  .splash .message {
-      margin-bottom: 2em;
-  }
+    .splash .message {
+        margin-bottom: 2em;
+    }
 
 
-  .ui.inverted.menu {
-      background: #52708D !important;
-  }
+.ui.inverted.menu {
+    background: #52708D !important;
+}
 
-  .logo {
-      margin-right: 1em !important;
-  }
+.logo {
+    margin-right: 1em !important;
+}
+
+/* IRC */
+
+.jackett-irc {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    z-index: 2;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.jackett-irc-networks {
+    flex-grow: 1;
+    min-width: 200px;
+    border-right: 1px solid #52708D;
+    padding: 10px;
+}
+
+.jackett-irc-logs {
+    flex-grow: 20;
+    min-width: 200px;
+}
+
+.jackett-irc-log-time, .jackett-irc-log-user, .jackett-irc-log-msg {
+    display: inline-block;
+}
+
+.jackett-irc-log-user {
+    padding-right: 10px;
+    border-right: 1px grey solid;
+    margin-left: 10px;
+}
+
+.jackett-irc-log-msg {
+    margin-left: 10px;
+}
+
+.jackett-irc-users {
+    flex-grow: 1;
+    min-width: 200px;
+    border-left: 1px solid #52708D;
+    padding: 10px;
+}
+
+.jackett-irc-channel  {
+    margin-left: 10px;
+}
+
+.jackett-irc-network i {
+    padding-right: 5px;
+
+}
