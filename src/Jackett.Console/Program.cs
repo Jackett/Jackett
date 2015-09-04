@@ -3,6 +3,7 @@ using CommandLine.Text;
 using Jackett;
 using Jackett.Console;
 using Jackett.Indexers;
+using Jackett.Services;
 using Jackett.Utils;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace JackettConsole
         {
             try
             {
+                new IRCService().Start();
                 var options = new ConsoleOptions();
                 if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
                 {
