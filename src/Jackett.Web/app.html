@@ -1,31 +1,27 @@
 ﻿<template>
     <div class="ui fixed inverted menu">
         <div class="ui container">
-            <div href="#" class="header item">
-                <img class="logo" src="content/jacket_medium.png">
-                Jackett
-            </div>
-            <li repeat.for="row of router.navigation" class="item ${row.isActive ? 'active' : ''}">
-                <a href.bind="row.href">${row.title}</a>
-            </li>
-           <!--<a href="#" class="ui simple dropdown item">
-                Dropdown <i class="dropdown icon"></i>
+           
+                <a route-href="route: welcome" class="header item ${router.navigation[0].isActive  ? 'active' : ''}" >
+                    <img class="logo" src="content/jacket_medium.png">
+                    Jackett
+                </a>
+                <!-- <li repeat.for="row of router.navigation" class="item ${row.isActive ? 'active' : ''}">
+             <a href.bind="row.href">${row.title}</a>
+         </li>-->
+            <a class="jackett-inputs-header item ${router.navigation[1].isActive  ? 'active' : ''}" route-href="route: indexers">Indexers</a>
+            <a class="jackett-inputs-header item ${router.navigation[2].isActive  ? 'active' : ''}" route-href="route: irc">IRC</a>
+            <a class="jackett-outputs-header item ${router.navigation[3].isActive  ? 'active' : ''}" route-href="route: settings">Torznab</a>
+            <a class="jackett-outputs-header item ${router.navigation[3].isActive  ? 'active' : ''}" route-href="route: settings">Couchpotato</a>
+            <a class="jackett-outputs-header item ${router.navigation[3].isActive  ? 'active' : ''}" route-href="route: settings">Blackhole</a>
+            <div route-href="route: settings" class="ui simple dropdown item">
+                Settings <i class="dropdown icon"></i>
                 <div class="menu">
-                    <div class="item">Link Item</div>
-                    <div class="item">Link Item</div>
-                    <div class="divider"></div>
-                    <div class="header">Header Item</div>
-                    <div class="item">
-                        <i class="dropdown icon"></i>
-                        Sub Menu
-                        <div class="menu">
-                            <div class="item">Link Item</div>
-                            <div class="item">Link Item</div>
-                        </div>
-                    </div>
-                    <div class="item">Link Item</div>
+                    <a  route-href="route: settings" class="item">Server settings</a>
+                    <a  route-href="route: irc-settings" class="item">IRC Configuration</a>
+                    <a href="/docs/index" class="item">API Docs</a>
                 </div>
-            </a>--> 
+            </div>
         </div>
     </div>
 

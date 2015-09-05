@@ -6,11 +6,11 @@ export class App {
     constructor() {
         let hub = $.connection.hub.proxies.jacketthub;
         hub.client.transferState = function (item: any) {
-            debugger;
+           // debugger;
         };
 
         $.connection.hub.start().done(() => {
-            debugger;
+         //   debugger;
         });
     }
 }

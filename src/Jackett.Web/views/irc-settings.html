@@ -1,0 +1,14 @@
+﻿<template>
+    <h1 class="ui header">IRC Settings</h1>
+    <p>Profile count ${profiles.length}</p>
+
+    <h2>Known channels</h2>
+    <div repeat.for="network of autodlprofiles">
+        <h3>${network.Name}</h3>
+        <ul>
+            <li repeat.for="profile of network.Profiles">${profile}</li>
+        </ul>
+    </div>
+    
+       
+</template>

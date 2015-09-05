@@ -18,19 +18,20 @@ System.config({
     "aurelia-animator-css": "github:aurelia/animator-css@0.15.0",
     "aurelia-bootstrapper": "github:aurelia/bootstrapper@0.16.0",
     "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.9.2",
+    "aurelia-fetch-client": "github:aurelia/fetch-client@0.2.0",
     "aurelia-framework": "github:aurelia/framework@0.15.0",
     "aurelia-http-client": "github:aurelia/http-client@0.10.3",
     "aurelia-router": "github:aurelia/router@0.11.0",
-    "babel": "npm:babel-core@5.8.22",
+    "babel": "npm:babel-core@5.8.23",
     "babel-runtime": "npm:babel-runtime@5.8.20",
-    "core-js": "npm:core-js@1.1.1",
+    "core-js": "npm:core-js@1.1.4",
     "font-awesome": "npm:font-awesome@4.4.0",
     "jquery": "github:components/jquery@2.1.4",
     "ms-signalr-client": "npm:ms-signalr-client@2.2.2",
     "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2",
-    "semantic-ui": "github:Semantic-Org/Semantic-UI@2.0.8",
-    "github:Semantic-Org/Semantic-UI@2.0.8": {
-      "css": "github:systemjs/plugin-css@0.1.15",
+    "semantic-ui": "github:Semantic-Org/Semantic-UI@2.1.3",
+    "github:Semantic-Org/Semantic-UI@2.1.3": {
+      "css": "github:systemjs/plugin-css@0.1.16",
       "jquery": "github:components/jquery@2.1.4"
     },
     "github:aurelia/animator-css@0.15.0": {
@@ -64,6 +65,9 @@ System.config({
     },
     "github:aurelia/event-aggregator@0.7.0": {
       "aurelia-logging": "github:aurelia/logging@0.6.4"
+    },
+    "github:aurelia/fetch-client@0.2.0": {
+      "core-js": "npm:core-js@0.9.18"
     },
     "github:aurelia/framework@0.15.0": {
       "aurelia-binding": "github:aurelia/binding@0.8.6",
@@ -155,13 +159,13 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.1",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     },
-    "npm:core-js@1.1.1": {
+    "npm:core-js@1.1.4": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.1",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     },
     "npm:font-awesome@4.4.0": {
-      "css": "github:systemjs/plugin-css@0.1.15"
+      "css": "github:systemjs/plugin-css@0.1.16"
     },
     "npm:jquery@2.1.4": {
       "process": "github:jspm/nodelibs-process@0.1.1"

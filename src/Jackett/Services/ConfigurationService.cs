@@ -27,6 +27,7 @@ namespace Jackett.Services
         string ApplicationFolder();
         void CreateOrMigrateSettings();
         void PerformMigration();
+        string GetAutoDLFolder();
     }
 
     public class ConfigurationService : IConfigurationService
@@ -189,6 +190,22 @@ namespace Jackett.Services
 #if DEBUG
             // When we are running in debug use the source files
             var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Content"));
+            if (Directory.Exists(sourcePath))
+            {
+                dir = sourcePath;
+            }
+#endif
+            return dir;
+        }
+
+        public string GetAutoDLFolder()
+        {
+            // If we are debugging we can use the non copied content.
+            string dir = Path.Combine(ApplicationFolder(), "autodl-trackers"); ;
+
+#if DEBUG
+            // When we are running in debug use the source files
+            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\autodl-trackers"));
             if (Directory.Exists(sourcePath))
             {
                 dir = sourcePath;

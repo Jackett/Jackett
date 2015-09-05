@@ -24,7 +24,6 @@ namespace JackettConsole
         {
             try
             {
-                new IRCService().Start();
                 var options = new ConsoleOptions();
                 if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
                 {

@@ -1,1 +1,1 @@
-{"version":3,"file":"irc.js","sourceRoot":"","sources":["irc.ts"],"names":["Irc","Irc.constructor"],"mappings":"AACA;IACIA;IAEAC,CAACA;AACLD,CAACA;AAAA"}
+{"version":3,"file":"irc.js","sourceRoot":"","sources":["irc.ts"],"names":["Irc","Irc.constructor"],"mappings":"OAAO,EAAC,UAAU,EAAC,MAAM,sBAAsB;AAG/C;IACIA;QACIC,IAAIA,MAAMA,GAAGA,IAAIA,UAAUA,EAAEA,CAACA;QAC/BA,gBAAgBA;IACnBA,CAACA;AACLD,CAACA;AAAA"}

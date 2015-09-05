@@ -5,6 +5,7 @@
       "aurelia-animator-css": "github:aurelia/animator-css@^0.15.0",
       "aurelia-bootstrapper": "github:aurelia/bootstrapper@^0.16.0",
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.2",
+      "aurelia-fetch-client": "github:aurelia/fetch-client@^0.2.0",
       "aurelia-framework": "github:aurelia/framework@^0.15.0",
       "aurelia-http-client": "github:aurelia/http-client@^0.10.3",
       "aurelia-router": "github:aurelia/router@^0.11.0",

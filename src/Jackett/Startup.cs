@@ -19,6 +19,7 @@ using Microsoft.AspNet.Identity;
 using System.IO;
 using Microsoft.AspNet.SignalR;
 using Autofac.Integration.SignalR;
+using Swashbuckle.Application;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -70,9 +71,17 @@ namespace Jackett
             {
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
             }
-            
+
             config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
             config.MapHttpAttributeRoutes();
+            appBuilder.UseWebApi(config);
+
+            config.Routes.MapHttpRoute(
+              name: "webapi",
+              routeTemplate: "webapi/{controller}/{action}",
+              defaults: new { action = RouteParameter.Optional }
+             );
+
 
             config.Routes.MapHttpRoute(
                 name: "Admin",
@@ -128,8 +137,6 @@ namespace Jackett
               defaults: new { controller = "Blackhole", action = "Blackhole" }
           );
 
-            appBuilder.UseWebApi(config);
-
             appBuilder.MapSignalR(new Microsoft.AspNet.SignalR.HubConfiguration()
             {
                 EnableDetailedErrors = true,
@@ -150,6 +157,10 @@ namespace Jackett
                 FileSystem = new PhysicalFileSystem(Engine.ConfigService.GetContentFolder()),
                 EnableDirectoryBrowsing = false,
             });
+
+            config
+            .EnableSwagger(c => c.SingleApiVersion("v1", "Jackett API"))
+            .EnableSwaggerUi("docs/{*assetPath}");
         }
     }
 }

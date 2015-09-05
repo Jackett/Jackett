@@ -47,8 +47,9 @@ namespace Jackett.Services
         private IConfigurationService configService;
         private Logger logger;
         private IWebClient client;
+        private IAutoDLProfileService autoDlService;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileService a)
         {
             indexerService = i;
             processService = p;
@@ -56,7 +57,9 @@ namespace Jackett.Services
             configService = c;
             logger = l;
             client = w;
+            autoDlService = a;
 
+            autoDlService.Load();
             LoadConfig();
         }
 

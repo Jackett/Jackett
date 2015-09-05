@@ -86,6 +86,10 @@
       <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CuttingEdge.Conditions, Version=1.2.0.11174, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\CuttingEdge.Conditions.1.2.0.0\lib\NET35\CuttingEdge.Conditions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="IrcDotNet, Version=0.5.0.0, Culture=neutral, PublicKeyToken=44f6d157e750246b, processorArchitecture=MSIL">
       <HintPath>..\packages\IrcDotNet.0.5.0\lib\net45\IrcDotNet.dll</HintPath>
       <Private>True</Private>
@@ -134,8 +138,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=4.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog.Windows.Forms, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -144,6 +148,10 @@
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Swashbuckle.Core.Net45.5.2.1\lib\net45\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -167,8 +175,16 @@
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -190,6 +206,7 @@
     <Compile Include="AuthenticationException.cs" />
     <Compile Include="CacheControlAttribute.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
+    <Compile Include="Controllers\IRCProfileController.cs" />
     <Compile Include="Controllers\PotatoController.cs" />
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
@@ -214,10 +231,14 @@
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Models\AutoDL\NetworkSummary.cs" />
+    <Compile Include="Models\AutoDL\ServerInfo.cs" />
+    <Compile Include="Models\AutoDL\TrackerInfo.cs" />
     <Compile Include="Models\Irc\Channel.cs" />
     <Compile Include="Models\Irc\ChannelInfoResult.cs" />
     <Compile Include="Models\Irc\DTO\ChannelInfo.cs" />
     <Compile Include="Models\Irc\DTO\NetworkInfo.cs" />
+    <Compile Include="Models\Irc\IRCProfile.cs" />
     <Compile Include="Models\Irc\Message.cs" />
     <Compile Include="Models\Irc\MessageType.cs" />
     <Compile Include="Models\Irc\Network.cs" />
@@ -274,7 +295,9 @@
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="OWINRewriter.cs" />
+    <Compile Include="Services\AutoDLProfileService.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\IRCProfileService.cs" />
     <Compile Include="Services\IRCService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
     <Compile Include="Services\ProtectionService.cs" />
