@@ -20,6 +20,7 @@ We were previously focused on TV but are working on extending searches to allow 
 #### Supported Trackers
  * [AlphaRatio](https://alpharatio.cc/)
  * [AnimeBytes](https://animebytes.tv/)
+ * [AnimeTorrents](http://animetorrents.me/)
  * [Avistaz](https://avistaz.to/)
  * [BakaBT](http://bakabt.me/)
  * [bB](http://reddit.com/r/baconbits)
@@ -59,7 +60,7 @@ We were previously focused on TV but are working on extending searches to allow 
        * Debian/Ubunutu: apt-get install libcurl-dev
        * Redhat/Fedora: yum install libcurl-devel
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
- 3. Download and extract the latest ```.tar.bz2``` release from the [website](http://jackett.net/Download)  and run Jackett using mono with the command "mono JackettConsole.exe".
+3. Download and extract the latest ```.tar.bz2``` release from the [website](http://jackett.net/Download)  and run Jackett using mono with the command "mono JackettConsole.exe".
 
 
 #### Installation on Windows

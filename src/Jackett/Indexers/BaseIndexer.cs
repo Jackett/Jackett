@@ -246,14 +246,15 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientStringResult> RequestStringWithCookies(string url, string cookieOverride = null, string referer = null)
+        protected async Task<WebClientStringResult> RequestStringWithCookies(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
                 Url = url,
                 Type = RequestType.GET,
                 Cookies = CookieHeader,
-                Referer = referer
+                Referer = referer,
+                 Headers = headers
             };
 
             if (cookieOverride != null)
@@ -261,14 +262,14 @@ namespace Jackett.Indexers
             return await webclient.GetString(request);
         }
 
-        protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null)
+        protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string,string> headers = null)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await RequestStringWithCookies(url, cookieOverride, referer);
+                    return await RequestStringWithCookies(url, cookieOverride, referer, headers);
                 }
                 catch (Exception e)
                 {

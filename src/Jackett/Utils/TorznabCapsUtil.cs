@@ -12,6 +12,8 @@ namespace Jackett.Utils
     {
         static Regex reduceSpacesRegex = new Regex("\\s{2,}", RegexOptions.Compiled);
 
+        static Regex findYearRegex = new Regex(@"(?<=\[|\(|\s)(\d{4})(?=\]|\)|\s)", RegexOptions.Compiled);
+
         public static TorznabCapabilities CreateDefaultTorznabTVCaps()
         {
             var caps = new TorznabCapabilities();
@@ -23,7 +25,22 @@ namespace Jackett.Utils
             return caps;
         }
 
-        public static IEnumerable<ReleaseInfo> FilterResultsToTitle(IEnumerable<ReleaseInfo> results, string name, int year)
+        private static int GetYearFromTitle(string title)
+        {
+            var match = findYearRegex.Match(title);
+            if (match.Success)
+            {
+                var year = ParseUtil.CoerceInt(match.Value);
+                if(year>1850 && year < 2100)
+                {
+                    return year;
+                }
+            }
+
+            return 0;
+        }
+
+        public static IEnumerable<ReleaseInfo> FilterResultsToTitle(IEnumerable<ReleaseInfo> results, string name, int imdbYear)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return results;
@@ -34,19 +51,35 @@ namespace Jackett.Utils
             {
                 if (result.Title == null)
                     continue;
-                if (CleanTitle(result.Title).Contains(name) &&
-                    (year ==0 || result.Title.Contains(year.ToString())))
+
+                // Match on title
+                if (CleanTitle(result.Title).Contains(name))
                 {
-                    filteredResults.Add(result);
+                    // Match on year
+                    var titleYear = GetYearFromTitle(result.Title);
+                    if (imdbYear == 0 || titleYear == 0 || titleYear == imdbYear)
+                    {
+                        filteredResults.Add(result);
+                    }
                 }
             }
 
             return filteredResults;
         }
 
+        public static IEnumerable<ReleaseInfo> FilterResultsToImdb(IEnumerable<ReleaseInfo> results, string imdb)
+        {
+            if (string.IsNullOrWhiteSpace(imdb))
+                return results;
+            // Filter out releases that do have a valid imdb ID, that is not equal to the one we're searching for.
+            return
+                results.Where(
+                    result => !result.Imdb.HasValue || result.Imdb.Value == 0 || ("tt" + result.Imdb.Value).Equals(imdb));
+        } 
+
         private static string CleanTitle(string title)
         {
-            title = title.Replace(':', ' ').Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Replace('+', ' ');
+            title = title.Replace(':', ' ').Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Replace('+', ' ').Replace("'", "");
             return reduceSpacesRegex.Replace(title, " ").ToLowerInvariant();
         }
     }

@@ -21,6 +21,7 @@ namespace Jackett.Models
         public long? Size { get; set; }
         public string Description { get; set; }
         public long? RageID { get; set; }
+        public long? TheTvDbId { get; set; }
         public long? Imdb { get; set; }
         public int? Seeders { get; set; }
         public int? Peers { get; set; }

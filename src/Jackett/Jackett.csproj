@@ -185,6 +185,7 @@
     <Compile Include="Indexers\BitMeTV.cs" />
     <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
+    <Compile Include="Indexers\NxtGn.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDSpace.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
+    <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
@@ -408,6 +410,9 @@
     <Content Include="Content\logos\animebytes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\logos\animetorrents.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\logos\avistaz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -442,6 +447,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\ncore.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\nxtgn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\pretome.png">
