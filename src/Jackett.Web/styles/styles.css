@@ -98,3 +98,7 @@
     padding-right: 5px;
 
 }
+
+.jackett-body-fill {
+    overflow: hidden;
+}

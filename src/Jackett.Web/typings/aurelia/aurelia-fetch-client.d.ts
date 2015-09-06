@@ -134,6 +134,6 @@ declare module 'aurelia-fetch-client' {
       * @param - An options object containing settings to be applied to
       * the Request.
       */
-    fetch(input: Request | string, init?: RequestInit): Promise<Response>;
+    fetch(input: Request | string, init?: any): Promise<Response>;
   }
 }

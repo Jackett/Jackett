@@ -12,7 +12,8 @@ export class App {
             { route: ['irc'], name: 'irc', moduleId: './views/irc', nav: true, title: 'IRC' },
             { route: ['settings'], name: 'settings', moduleId: './views/settings', nav: true, title: 'Settings' },
             { route: ['settings'], name: 'settings', moduleId: './views/settings', nav: true, title: 'Server settings' },
-            { route: 'irc-settings', name: 'irc-settings', moduleId: './views/irc-settings', nav: true, title: 'IRC Settings' },
+            { route: 'irc-settings', name: 'irc-settings', moduleId: './views/irc-settings', nav: true, title: 'IRC Settings' },  
+            { route: 'irc-settings-edit', name: 'irc-settings-edit', moduleId: './views/irc-settings-edit', nav: true, title: 'Edit Profile' }
         ]);
        
         this.router = router;

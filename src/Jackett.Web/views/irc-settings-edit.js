@@ -21,21 +21,10 @@ export let IRCSettings = class {
         });
     }
     activate() {
-        return this.http.fetch('../webapi/IRCProfile/AutoDLProfiles', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => { return response.json(); })
-            .then(profiles => { this.autodlprofiles = profiles; });
-        /* return this.http.fetch('../webapi/IRCProfile')
-             .then(response => response.json())
-             .then(profiles => { this.profiles = profiles });*/
     }
 };
 IRCSettings = __decorate([
     autoinject, 
     __metadata('design:paramtypes', [HttpClient])
 ], IRCSettings);
-//# sourceMappingURL=irc-settings.js.map
+//# sourceMappingURL=irc-settings-edit.js.map

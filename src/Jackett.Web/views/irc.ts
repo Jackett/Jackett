@@ -1,9 +1,12 @@
 ﻿import {HttpClient} from 'aurelia-fetch-client'
-
+import  'jquery' 
 
 export class Irc {
-    constructor() {
-        var client = new HttpClient();
-       // client.fetch(
+    activate() {
+        $('body').addClass('jackett-body-fill');
+    }
+
+    deactivate() {
+        $('body').removeClass('jackett-body-fill');
     }
 }

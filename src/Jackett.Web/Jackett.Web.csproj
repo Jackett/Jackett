@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="Index.html" />
     <Content Include="typings\aurelia-amd\aurelia-amd.d.js" />
+    <Content Include="views\irc-settings-edit.html" />
     <Content Include="views\irc-settings.html" />
     <Content Include="views\settings.html" />
     <Content Include="views\home.html" />
@@ -122,6 +123,7 @@
     <TypeScriptCompile Include="typings\nprogress.d.ts" />
     <TypeScriptCompile Include="typings\reflect-metadata.d.ts" />
     <TypeScriptCompile Include="typings\whatwg-fetch.d.ts" />
+    <TypeScriptCompile Include="views\irc-settings-edit.ts" />
     <TypeScriptCompile Include="views\irc-settings.ts" />
     <TypeScriptCompile Include="views\settings.ts" />
     <TypeScriptCompile Include="views\home.ts" />

@@ -20,7 +20,7 @@ System.config({
     "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.9.2",
     "aurelia-fetch-client": "github:aurelia/fetch-client@0.2.0",
     "aurelia-framework": "github:aurelia/framework@0.15.0",
-    "aurelia-http-client": "github:aurelia/http-client@0.10.3",
+    "aurelia-http-client": "github:aurelia/http-client@0.11.0",
     "aurelia-router": "github:aurelia/router@0.11.0",
     "babel": "npm:babel-core@5.8.23",
     "babel-runtime": "npm:babel-runtime@5.8.20",
@@ -30,6 +30,7 @@ System.config({
     "ms-signalr-client": "npm:ms-signalr-client@2.2.2",
     "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2",
     "semantic-ui": "github:Semantic-Org/Semantic-UI@2.1.3",
+    "whatwg-fetch": "npm:whatwg-fetch@0.9.0",
     "github:Semantic-Org/Semantic-UI@2.1.3": {
       "css": "github:systemjs/plugin-css@0.1.16",
       "jquery": "github:components/jquery@2.1.4"
@@ -84,8 +85,8 @@ System.config({
       "aurelia-history": "github:aurelia/history@0.6.1",
       "core-js": "npm:core-js@0.9.18"
     },
-    "github:aurelia/http-client@0.10.3": {
-      "aurelia-path": "github:aurelia/path@0.8.1",
+    "github:aurelia/http-client@0.11.0": {
+      "aurelia-path": "github:aurelia/path@0.9.0",
       "core-js": "npm:core-js@0.9.18"
     },
     "github:aurelia/loader-default@0.9.5": {

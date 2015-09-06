@@ -1,6 +1,5 @@
 ﻿import {HttpClient} from 'aurelia-fetch-client'
 import {autoinject} from 'aurelia-framework';
-
  
 @autoinject 
 export class IRCSettings {
@@ -16,9 +15,14 @@ export class IRCSettings {
     }
 
     activate() {
-        return this.http.fetch('../webapi/IRCProfile/AutoDLProfiles')
-            .then(response => response.json())
-            .then(profiles => { debugger; this.autodlprofiles = profiles })
+        return this.http.fetch('../webapi/IRCProfile/AutoDLProfiles', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => { return response.json(); })
+            .then(profiles => { this.autodlprofiles = profiles })
 
        /* return this.http.fetch('../webapi/IRCProfile')
             .then(response => response.json())

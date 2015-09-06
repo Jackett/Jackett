@@ -1,7 +1,7 @@
 ﻿<template>
     <h1 class="ui header">IRC Settings</h1>
     <p>Profile count ${profiles.length}</p>
-
+    <a class="ui button"  route-href="route: irc-settings-edit" >Create new profile</a>
     <h2>Known channels</h2>
     <div repeat.for="network of autodlprofiles">
         <h3>${network.Name}</h3>
