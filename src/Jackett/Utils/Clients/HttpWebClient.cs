@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Jackett.Utils.Clients
 {
-    class HttpWebClient : IWebClient
+    public class HttpWebClient : IWebClient
     {
         private Logger logger;
 
@@ -69,6 +69,14 @@ namespace Jackett.Utils.Clients
 
             client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
             HttpResponseMessage response = null;
+
+            if (request.Headers != null)
+            {
+                foreach (var header in request.Headers)
+                {
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                }
+            }
 
             if (request.Type == RequestType.POST)
             {

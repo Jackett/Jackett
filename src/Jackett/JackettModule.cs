@@ -21,6 +21,7 @@ namespace Jackett
             var thisAssembly = typeof(JackettModule).Assembly;
             builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
+            builder.RegisterType<HttpWebClient>();
 
             // Register the best web client for the platform or the override
             switch (Startup.ClientOverride)
