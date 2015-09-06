@@ -37,6 +37,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [Immortalseed.me](http://immortalseed.me)
  * [IPTorrents](https://iptorrents.com/)
  * [MoreThan.tv](https://morethan.tv/)
+ * [NextGen](https://nxtgn.org/)
  * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
  * [RARGB](https://rarbg.to/)
