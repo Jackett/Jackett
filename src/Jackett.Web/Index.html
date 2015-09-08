@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="styles/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body  aurelia-app>
+<body  aurelia-app="main">
     <div class="splash">
         <div class="message"><h1>Loading Jackett..</h1></div>
         <i class="fa fa-spinner fa-spin fa-3x"></i>
@@ -23,10 +23,10 @@
         })
         .then(function () {
             return System.import('polymer/mutationobservers');
-        })*/
+        })
         .then(function () {
             return System.import('whatwg-fetch');
-        })
+        })*/
         .then(function () {
             return System.import('semantic-ui');
         })

@@ -11,5 +11,6 @@ namespace Jackett.Models.Irc
         public string Name { get; set; }
         public List<string> Servers { get; set; } = new List<string>();
         public string Username { get; set; }
+        public string Profile { get; set; }
     }
 }

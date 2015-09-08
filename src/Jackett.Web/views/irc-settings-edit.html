@@ -1,3 +1,24 @@
 ﻿<template>
     <h1 class="ui header">Edit profile</h1>
+    <div if.bind="error">
+        ${error}
+    </div>
+
+    <form role="form" class="ui form form-group" submit.delegate="submit()" validate.bind="validation">
+        <div class="field">
+            <label for="autodlnetwork">Network profile</label>
+            <select ref="profileSelect" id="autodlnetwork" value.bind="autodlnetwork">
+                <option repeat.for="network of networks" value="${network.Name}">${network.Name}</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="name">Profile Name</label>
+            <input id="name" type="text" value.bind="name" class="form-control" validate="name">
+        </div>
+        <div class="field">
+            <label for="nickname">Nickname</label>
+            <input id="nickname" type="text" value.bind="nickname" class="form-control">
+        </div>
+        <button type="submit" class="ui button">Submit</button>
+    </form>
 </template>

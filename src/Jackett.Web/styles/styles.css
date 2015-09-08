@@ -102,3 +102,12 @@
 .jackett-body-fill {
     overflow: hidden;
 }
+
+.ui.form .field > label, .aurelia-validation-message{
+    display:inline-block !important;
+}
+
+.aurelia-validation-message{
+   margin-left: 10px;
+   color:red;
+}

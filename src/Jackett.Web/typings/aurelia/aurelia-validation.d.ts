@@ -39,7 +39,9 @@ declare module 'aurelia-validation/validation/validate-custom-attribute-view-str
 	    prepareElement(validationProperty: any, element: any): void;
 	    updateElement(validationProperty: any, element: any): void;
 	}
-	export class ValidateCustomAttributeViewStrategy {
+    export class ValidateCustomAttributeViewStrategy {
+        static TWBootstrapAppendToInput: any;
+        static TWBootstrapAppendToMessage: any;
 	}
 
 }

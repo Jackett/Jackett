@@ -1,32 +1,31 @@
-﻿import {HttpClient} from 'aurelia-fetch-client'
+﻿import {IRCProfileService, IRCProfile, NetworkSummary} from '../Services/IRCProfileService';
 import {autoinject} from 'aurelia-framework';
  
 @autoinject 
 export class IRCSettings {
-    http: HttpClient;
-    profiles = [];
-    autodlprofiles = [];
+    ircService: IRCProfileService;
+    profiles: IRCProfile[];
+    autodlprofiles: NetworkSummary[];
 
-    constructor(httpClient: HttpClient) {
-        this.http = httpClient;
-        this.http.configure(config=> {
-            config.useStandardConfiguration();
-        });
+    constructor(httpClient: IRCProfileService) {
+        this.ircService = httpClient;
     }
 
     activate() {
-        return this.http.fetch('../webapi/IRCProfile/AutoDLProfiles', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => { return response.json(); })
-            .then(profiles => { this.autodlprofiles = profiles })
+        return Promise.all([
+            this.ircService.getAutoDLProfiles()
+                .then(profiles => {
+                    this.autodlprofiles = profiles
+                }),
 
-       /* return this.http.fetch('../webapi/IRCProfile')
-            .then(response => response.json())
-            .then(profiles => { this.profiles = profiles });*/
-     
+            this.ircService.getProfiles().then(profiles => {
+                this.profiles = profiles
+            })
+        ]);
+    }
+
+    async remove(item) {
+        await this.ircService.removeProfile(item);
+        this.profiles = await this.ircService.getProfiles();
     }
 } 

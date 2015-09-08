@@ -13,6 +13,7 @@ namespace Jackett.Services
         IRCProfile Get(string name);
         void Set(IRCProfile profile);
         List<IRCProfile> All { get; }
+        void Delete(string name);
     }
 
     public class IRCProfileService: IIRCProfileService
@@ -41,6 +42,15 @@ namespace Jackett.Services
             get
             {
                 return profiles;
+            }
+        }
+
+        public void Delete(string name)
+        {
+            var existing = Get(name);
+            if (existing != null)
+            {
+                profiles.Remove(existing);
             }
         }
     }

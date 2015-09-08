@@ -98,9 +98,13 @@
     <TypeScriptCompile Include="Scripts\typings\JackettSignalr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
+    <TypeScriptCompile Include="Services\IRCProfileService.ts" />
+    <TypeScriptCompile Include="Services\WebClient.ts" />
     <TypeScriptCompile Include="typings\aurelia-amd\aurelia-amd.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-animator-css.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-app-contacts.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-binding.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-bootstrapper.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-dependency-injection.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-event-aggregator.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-fetch-client.d.ts" />
@@ -108,6 +112,7 @@
     <TypeScriptCompile Include="typings\aurelia\aurelia-history-browser.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-history.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-http-client.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-loader-default.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-loader.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-logging-console.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-logging.d.ts" />
@@ -115,13 +120,19 @@
     <TypeScriptCompile Include="typings\aurelia\aurelia-path.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-route-recognizer.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-router.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-skeleton-navigation.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-skeleton-plugin.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-task-queue.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-templating-binding.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-templating-resources.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-templating-router.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-templating.d.ts" />
+    <TypeScriptCompile Include="typings\aurelia\aurelia-validation.d.ts" />
     <TypeScriptCompile Include="typings\core-js.d.ts" />
     <TypeScriptCompile Include="typings\es6.d.ts" />
     <TypeScriptCompile Include="typings\nprogress.d.ts" />
     <TypeScriptCompile Include="typings\reflect-metadata.d.ts" />
+    <TypeScriptCompile Include="typings\semantic-ui.d.ts" />
     <TypeScriptCompile Include="typings\whatwg-fetch.d.ts" />
     <TypeScriptCompile Include="views\irc-settings-edit.ts" />
     <TypeScriptCompile Include="views\irc-settings.ts" />
@@ -152,9 +163,10 @@
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
-    <TypeScriptAdditionalFlags> $(TypeScriptAdditionalFlags) --emitDecoratorMetadata --experimentalDecorators </TypeScriptAdditionalFlags>
+    <TypeScriptAdditionalFlags> $(TypeScriptAdditionalFlags) --emitDecoratorMetadata --experimentalDecorators --experimentalAsyncFunctions</TypeScriptAdditionalFlags>
     <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
     <TypeScriptEmitDecoratorMetadata>true</TypeScriptEmitDecoratorMetadata>
+    <TypeScriptExperimentalAsyncFunctions>true</TypeScriptExperimentalAsyncFunctions>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
@@ -169,9 +181,10 @@
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
-    <TypeScriptAdditionalFlags> $(TypeScriptAdditionalFlags) --emitDecoratorMetadata --experimentalDecorators </TypeScriptAdditionalFlags>
+    <TypeScriptAdditionalFlags> $(TypeScriptAdditionalFlags) --emitDecoratorMetadata --experimentalDecorators --experimentalAsyncFunctions</TypeScriptAdditionalFlags>
     <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
     <TypeScriptEmitDecoratorMetadata>true</TypeScriptEmitDecoratorMetadata>
+    <TypeScriptExperimentalAsyncFunctions>true</TypeScriptExperimentalAsyncFunctions>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>

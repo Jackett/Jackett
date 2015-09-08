@@ -18,12 +18,10 @@ namespace Jackett.Controllers
     public class IRCProfileController : ApiController
     {
         IIRCProfileService profileService;
-        IAutoDLProfileService autodlService;
 
-        public IRCProfileController(IIRCProfileService p, IAutoDLProfileService a)
+        public IRCProfileController(IIRCProfileService p)
         {
             profileService = p;
-            autodlService = a;
         }
 
         [HttpGet]
@@ -32,9 +30,10 @@ namespace Jackett.Controllers
             return profileService.All;
         }
 
-        public IHttpActionResult Get(string name)
+        [HttpGet]
+        public IHttpActionResult Get(string id)
         {
-            var item = profileService.Get(name);
+            var item = profileService.Get(id);
             if (item == null)
                 return NotFound();
             return Content(System.Net.HttpStatusCode.OK, item);
@@ -46,10 +45,11 @@ namespace Jackett.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public List<NetworkSummary> AutoDLProfiles()
+
+        public IHttpActionResult Delete(string id)
         {
-            return autodlService.GetNetworks();
+            profileService.Delete(id);
+            return Ok();
         }
     }
 }

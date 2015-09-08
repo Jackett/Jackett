@@ -9,33 +9,45 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { HttpClient } from 'aurelia-fetch-client';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
+    return new Promise(function (resolve, reject) {
+        generator = generator.call(thisArg, _arguments);
+        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
+        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
+        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
+        function step(verb, value) {
+            var result = generator[verb](value);
+            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
+        }
+        step("next", void 0);
+    });
+};
+import { IRCProfileService } from '../Services/IRCProfileService';
 import { autoinject } from 'aurelia-framework';
 export let IRCSettings = class {
     constructor(httpClient) {
-        this.profiles = [];
-        this.autodlprofiles = [];
-        this.http = httpClient;
-        this.http.configure(config => {
-            config.useStandardConfiguration();
-        });
+        this.ircService = httpClient;
     }
     activate() {
-        return this.http.fetch('../webapi/IRCProfile/AutoDLProfiles', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => { return response.json(); })
-            .then(profiles => { this.autodlprofiles = profiles; });
-        /* return this.http.fetch('../webapi/IRCProfile')
-             .then(response => response.json())
-             .then(profiles => { this.profiles = profiles });*/
+        return Promise.all([
+            this.ircService.getAutoDLProfiles()
+                .then(profiles => {
+                this.autodlprofiles = profiles;
+            }),
+            this.ircService.getProfiles().then(profiles => {
+                this.profiles = profiles;
+            })
+        ]);
+    }
+    remove(item) {
+        return __awaiter(this, void 0, Promise, function* () {
+            yield this.ircService.removeProfile(item);
+            this.profiles = yield this.ircService.getProfiles();
+        });
     }
 };
 IRCSettings = __decorate([
     autoinject, 
-    __metadata('design:paramtypes', [HttpClient])
+    __metadata('design:paramtypes', [IRCProfileService])
 ], IRCSettings);
 //# sourceMappingURL=irc-settings.js.map

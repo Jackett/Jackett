@@ -9,6 +9,7 @@
       "aurelia-framework": "github:aurelia/framework@^0.15.0",
       "aurelia-http-client": "github:aurelia/http-client@^0.11.0",
       "aurelia-router": "github:aurelia/router@^0.11.0",
+      "aurelia-validation": "github:aurelia/validation@^0.2.8",
       "font-awesome": "npm:font-awesome@^4.4.0",
       "jquery": "github:components/jquery@^2.1.4",
       "ms-signalr-client": "npm:ms-signalr-client@^2.2.2",

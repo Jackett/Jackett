@@ -18,7 +18,7 @@ declare class Request {
 	referrer: string;
 	mode: RequestMode;
 	credentials: RequestCredentials;
-	cache: RequestCache;
+    cache: RequestCache;
 }
 
 interface RequestInit {

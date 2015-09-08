@@ -78,8 +78,8 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
               name: "webapi",
-              routeTemplate: "webapi/{controller}/{action}",
-              defaults: new { action = RouteParameter.Optional }
+              routeTemplate: "webapi/{controller}/{id}",
+              defaults: new { id = RouteParameter.Optional }
              );
 
 

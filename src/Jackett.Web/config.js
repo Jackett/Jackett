@@ -22,6 +22,7 @@ System.config({
     "aurelia-framework": "github:aurelia/framework@0.15.0",
     "aurelia-http-client": "github:aurelia/http-client@0.11.0",
     "aurelia-router": "github:aurelia/router@0.11.0",
+    "aurelia-validation": "github:aurelia/validation@0.2.8",
     "babel": "npm:babel-core@5.8.23",
     "babel-runtime": "npm:babel-runtime@5.8.20",
     "core-js": "npm:core-js@1.1.4",
@@ -148,6 +149,12 @@ System.config({
       "aurelia-path": "github:aurelia/path@0.8.1",
       "aurelia-task-queue": "github:aurelia/task-queue@0.6.2",
       "core-js": "npm:core-js@0.9.18"
+    },
+    "github:aurelia/validation@0.2.8": {
+      "aurelia-binding": "github:aurelia/binding@0.8.6",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.9.2",
+      "aurelia-logging": "github:aurelia/logging@0.6.4",
+      "aurelia-templating": "github:aurelia/templating@0.14.4"
     },
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
