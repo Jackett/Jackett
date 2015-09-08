@@ -52,6 +52,7 @@ export let IRCSettings = class {
                 this.autodlnetwork = profile.Profile;
                 this.name = profile.Name;
                 this.nickname = profile.Username;
+                this.id = profile.Id;
             }));
         }
         return Promise.all(actions);
@@ -69,6 +70,7 @@ export let IRCSettings = class {
                 profile.Name = this.name;
                 profile.Username = this.nickname;
                 profile.Profile = this.autodlnetwork;
+                profile.Id = this.id;
                 yield this.ircService.setProfile(profile);
                 this.router.navigate('irc-settings');
             }

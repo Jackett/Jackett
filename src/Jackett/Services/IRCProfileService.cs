@@ -1,5 +1,7 @@
 ﻿using CuttingEdge.Conditions;
+using Jackett.Models.Commands.IRC;
 using Jackett.Models.Irc;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,23 +20,40 @@ namespace Jackett.Services
 
     public class IRCProfileService: IIRCProfileService
     {
-        private List<IRCProfile> profiles = new List<IRCProfile>();
+        List<IRCProfile> profiles = new List<IRCProfile>();
+        IMediator mediator;
+        IIDService idService;
 
-        public IRCProfile Get(string name)
+        public IRCProfileService(IMediator m, IIDService i)
         {
-            return profiles.Where(p => string.Equals(p.Name, name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            mediator = m;
+            idService = i;
+        }
+
+        public IRCProfile Get(string id)
+        {
+            return profiles.Where(p => string.Equals(p.Id, id, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
         }
 
         public void Set(IRCProfile profile)
         {
             Condition.Requires<string>(profile.Name, "Name").IsNotNullOrWhiteSpace();
-            var existing = Get(profile.Name);
-            if (existing != null)
+
+            if (profile.Id == null)
             {
-                profiles.Remove(existing);
+                profile.Id = idService.NewId();
+            }
+            else
+            {
+                var existing = Get(profile.Id);
+                if (existing != null)
+                {
+                    profiles.Remove(existing);
+                }
             }
 
             profiles.Add(profile);
+            mediator.Publish(new AddProfileCommand() { Profile = profile });
         }
 
         public List<IRCProfile> All

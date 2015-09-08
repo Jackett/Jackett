@@ -12,6 +12,8 @@ using AutoMapper;
 using Jackett.Models;
 using Autofac.Integration.SignalR;
 using Jackett.Services;
+using Autofac.Features.Variance;
+using MediatR;
 
 namespace Jackett
 {
@@ -80,6 +82,20 @@ namespace Jackett
             Mapper.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
             {
                 t.CategoryDesc = TorznabCatType.GetCatDesc(r.Category);
+            });
+
+            builder.RegisterSource(new ContravariantRegistrationSource());
+            builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
+
+            builder.Register<SingleInstanceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
+            });
+            builder.Register<MultiInstanceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
             });
         }
     }

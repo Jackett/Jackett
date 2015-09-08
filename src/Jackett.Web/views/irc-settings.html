@@ -16,7 +16,7 @@
                 <td>${profile.Username}</td>
                 <td>${profile.Profile}</td>
                 <td>
-                    <a href="javascript:void(0)" route-href="route: irc-profile-edit; params.bind: { name: profile.Name }">Edit</a>
+                    <a href="javascript:void(0)" route-href="route: irc-profile-edit; params.bind: { name: profile.Id }">Edit</a>
                     <a href="javascript:void(0)" click.trigger="$parent.remove(profile)">Delete</a>
                 </td>
             </tr>

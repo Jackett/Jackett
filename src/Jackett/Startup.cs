@@ -77,11 +77,28 @@ namespace Jackett
             appBuilder.UseWebApi(config);
 
             config.Routes.MapHttpRoute(
+            name: "ircmessages",
+            routeTemplate: "webapi/ircmessages/{network}/{room}",
+              defaults: new { controller = "IRCChannel", action = "Messages", room = RouteParameter.Optional }
+           );
+
+            config.Routes.MapHttpRoute(
+              name: "ircusers",
+              routeTemplate: "webapi/ircusers/{network}/{room}",
+                defaults: new { controller = "IRCChannel", action = "Users" }
+             );
+
+            config.Routes.MapHttpRoute(
+             name: "irc",
+             routeTemplate: "webapi/ircstate",
+                defaults: new { controller = "IRCState" }
+            );
+
+            config.Routes.MapHttpRoute(
               name: "webapi",
               routeTemplate: "webapi/{controller}/{id}",
               defaults: new { id = RouteParameter.Optional }
              );
-
 
             config.Routes.MapHttpRoute(
                 name: "Admin",

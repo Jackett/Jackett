@@ -1,20 +1,82 @@
 ﻿using IrcDotNet;
 using IrcDotNet.Ctcp;
+using Jackett.Models.Commands;
+using Jackett.Models.Commands.IRC;
+using Jackett.Models.DTO;
 using Jackett.Models.Irc;
 using Jackett.Models.Irc.DTO;
 using Jackett.Utils;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MoreLinq;
 
 namespace Jackett.Services
 {
-    public class IRCService
+    public interface IIRCService
     {
-        private List<Network> networks = new List<Network>();
+        List<NetworkDTO> GetSummary();
+        List<Message> GetMessages(string network, string channel);
+        List<User> GetUser(string network, string channel);
+    }
+
+    public class IRCService : IIRCService, INotificationHandler<AddProfileCommand>
+    { 
+        List<Network> networks = new List<Network>();
+        IIDService idService = null;
+
+        public IRCService(IIDService i)
+        {
+            idService = i;
+        }
+
+        public List<Message> GetMessages(string networkId, string channelId)
+        {
+            var network = networks.Where(n => n.Id == networkId).FirstOrDefault();
+            if (network == null)
+                return new List<Message>();
+            if (string.IsNullOrEmpty(channelId))
+            {
+                return network.Messages.TakeLast(100).ToList();
+            }
+
+            var channel = network.Channels.Where(c => c.Id == channelId).FirstOrDefault();
+            return channel.Messages.TakeLast(100).ToList();
+        }
+
+        public List<User> GetUser(string networkId, string channelId)
+        {
+            var network = networks.Where(n => n.Id == networkId).FirstOrDefault();
+            if (network == null)
+                return new List<User>();
+            var channel = network.Channels.Where(c => c.Id == channelId).FirstOrDefault();
+            return channel.Users.ToList();
+        }
+
+        public List<NetworkDTO> GetSummary()
+        {
+            var list = new List<NetworkDTO>();
+            foreach(var network in networks)
+            {
+                var d = new NetworkDTO();
+                d.Name = network.Name;
+                d.Id = network.Id;
+                foreach(var c in network.Channels)
+                {
+                    d.Channels.Add(new ChannelDTO()
+                    {
+                        Name = c.Name
+                    });
+                }
+                list.Add(d);
+            }
+
+            return list;
+        }
 
         public void Start()
         {
@@ -23,11 +85,11 @@ namespace Jackett.Services
                 Address  = "chat.freenode.net:6667"
             });
 
-           foreach(var network in networks)
+         /*  foreach(var network in networks)
             {
                 SetupNetwork(network);
                 Connect(network);
-            }
+            }*/
         }
 
         private void SetupNetwork(Network network)
@@ -61,6 +123,8 @@ namespace Jackett.Services
             ctcpClient.VersionResponseReceived += CtcpClient_VersionResponseReceived;
             ctcpClient.TimeResponseReceived += CtcpClient_TimeResponseReceived;
             ctcpClient.ActionReceived += CtcpClient_ActionReceived;
+
+            networks.Add(network);
         }
 
         private void Client_Registered(object sender, EventArgs e)
@@ -95,7 +159,12 @@ namespace Jackett.Services
 
         private Network NetworkFromIrcClient(StandardIrcClient client)
         {
-            return networks.Where(n => n.Client == client).First();
+            return networks.Where(n => n.Client.ToString() == client.ToString()).First();
+        }
+
+        private Network NetworkFromIrcClient(IrcLocalUser user)
+        {
+            return NetworkFromIrcClient((StandardIrcClient)user.Client);
         }
 
         private void BroadcastMessageToNetwork(Network network, Message message)
@@ -197,12 +266,15 @@ namespace Jackett.Services
         private void Client_ServerSupportedFeaturesReceived(object sender, EventArgs e)
         {
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
-            network.Messages.Add(new Message()
+            foreach (var config in network.Client.ServerSupportedFeatures)
             {
-                From = network.Address,
-                Text = $"Server features: {network.Client.ServerSupportedFeatures}",
-                Type = MessageType.System
-            });
+                network.Messages.Add(new Message()
+                {
+                    From = network.Address,
+                    Text = $"Server features: {config.Key} = {config.Value}",
+                    Type = MessageType.System
+                });
+            }
         }
 
         private void Client_ServerTimeReceived(object sender, IrcServerTimeEventArgs e)
@@ -366,7 +438,8 @@ namespace Jackett.Services
 
         private void LocalUser_ModesChanged(object sender, EventArgs e)
         {
-            var network = NetworkFromIrcClient(sender as StandardIrcClient);
+            var user = sender as IrcLocalUser;
+            var network = NetworkFromIrcClient((StandardIrcClient)user.Client);
             BroadcastMessageToNetwork(network, new Message()
             {
                 From = network.Address,
@@ -542,7 +615,7 @@ namespace Jackett.Services
         private void LocalUser_MessageReceived(object sender, IrcMessageEventArgs e)
         {
             // TODO PM Implementation
-            var network = NetworkFromIrcClient(sender as StandardIrcClient);
+            var network = NetworkFromIrcClient(sender as IrcLocalUser); // Confirmed
             BroadcastMessageToNetwork(network, new Message()
             {
                 From = e.Source.Name,
@@ -574,9 +647,9 @@ namespace Jackett.Services
 
             network.Client.Connect(addr, port, network.UseSSL, new IrcUserRegistrationInfo()
             {
-                NickName = "KayoJackett",
-                UserName = "KayoJackett",
-                RealName = "KayoJackett"
+                NickName = network.Username,
+                UserName = network.Username,
+                RealName = network.Username
             });
         }
 
@@ -604,6 +677,24 @@ namespace Jackett.Services
                     info.Add(netInfo);
                 }
                 return info;
+            }
+        }
+
+        void INotificationHandler<AddProfileCommand>.Handle(AddProfileCommand notification)
+        {
+            var network = networks.Where(n => n.Id == notification.Profile.Id).FirstOrDefault();
+            if (network == null)
+            {
+                network = new Network()
+                {
+                    Id = notification.Profile.Id,
+                    Name = notification.Profile.Name,
+                    Address = "adams.freenode.net",
+                    Username = notification.Profile.Username
+                };
+
+                SetupNetwork(network);
+                Connect(network);
             }
         }
     }

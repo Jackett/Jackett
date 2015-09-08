@@ -31,7 +31,7 @@ export let IRCProfileService = class {
         return this.webClient.put('IRCProfile', profile);
     }
     removeProfile(profile) {
-        return this.webClient.delete('IRCProfile/' + profile.Name);
+        return this.webClient.delete('IRCProfile/' + profile.Id);
     }
 };
 IRCProfileService = __decorate([

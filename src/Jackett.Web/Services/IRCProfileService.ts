@@ -29,7 +29,7 @@ export class IRCProfileService {
     }
 
     removeProfile(profile: IRCProfile): Promise<Response> {
-        return this.webClient.delete('IRCProfile/' + profile.Name);
+        return this.webClient.delete('IRCProfile/' + profile.Id);
     }
 }
 
@@ -41,6 +41,7 @@ export class NetworkSummary {
 }
 
 export class IRCProfile {
+    Id: string;
     Name: string;
     Servers: string[];
     Username: string;

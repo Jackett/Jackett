@@ -9,7 +9,9 @@ namespace Jackett.Models.Irc
 {
     public class Network 
     {
+        public string Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public List<Channel> Channels { get; } = new List<Channel>();
         public List<Message> Messages { get; } = new List<Message>();

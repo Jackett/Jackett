@@ -1,8 +1,10 @@
 ﻿using Autofac;
+using Jackett.Models.Commands.IRC;
 using Jackett.Models.Config;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using MediatR;
 using Microsoft.Owin.Hosting;
 using Newtonsoft.Json.Linq;
 using NLog;

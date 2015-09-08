@@ -62,6 +62,10 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Extras.CommonServiceLocator, Version=3.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Extras.CommonServiceLocator.3.2.0\lib\net40\Autofac.Extras.CommonServiceLocator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac.Integration.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.Owin.3.1.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +96,22 @@
     </Reference>
     <Reference Include="IrcDotNet, Version=0.5.0.0, Culture=neutral, PublicKeyToken=44f6d157e750246b, processorArchitecture=MSIL">
       <HintPath>..\packages\IrcDotNet.0.5.0\lib\net45\IrcDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magnum, Version=2.1.3.0, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Magnum.2.1.3\lib\NET40\Magnum.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MediatR, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.2.0.2\lib\net45\MediatR.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MediatR.Extensions, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.Extensions.0.6.0.0\lib\net45\MediatR.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MediatR.Extensions.Autofac, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.Extensions.Autofac.0.6.0.0\lib\net45\MediatR.Extensions.Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -132,6 +152,14 @@
     </Reference>
     <Reference Include="Microsoft.Owin.StaticFiles, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.StaticFiles.3.0.1\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MoreLinq.Portable, Version=1.1.17511.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MoreLinq.Portable.1.1.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\MoreLinq.Portable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -207,6 +235,8 @@
     <Compile Include="CacheControlAttribute.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
     <Compile Include="Controllers\AutoDLController.cs" />
+    <Compile Include="Controllers\IRCChannelController.cs" />
+    <Compile Include="Controllers\IRCCStateController.cs" />
     <Compile Include="Controllers\IRCProfileController.cs" />
     <Compile Include="Controllers\PotatoController.cs" />
     <Compile Include="Controllers\TorznabController.cs" />
@@ -235,6 +265,9 @@
     <Compile Include="Models\AutoDL\NetworkSummary.cs" />
     <Compile Include="Models\AutoDL\ServerInfo.cs" />
     <Compile Include="Models\AutoDL\TrackerInfo.cs" />
+    <Compile Include="Models\Commands\IRC\AddProfileCommand.cs" />
+    <Compile Include="Models\DTO\ChannelDTO.cs" />
+    <Compile Include="Models\DTO\NetworkDTO.cs" />
     <Compile Include="Models\Irc\Channel.cs" />
     <Compile Include="Models\Irc\ChannelInfoResult.cs" />
     <Compile Include="Models\Irc\DTO\ChannelInfo.cs" />
@@ -243,6 +276,7 @@
     <Compile Include="Models\Irc\Message.cs" />
     <Compile Include="Models\Irc\MessageType.cs" />
     <Compile Include="Models\Irc\Network.cs" />
+    <Compile Include="Models\Irc\User.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
@@ -298,6 +332,7 @@
     <Compile Include="OWINRewriter.cs" />
     <Compile Include="Services\AutoDLProfileService.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\IDService.cs" />
     <Compile Include="Services\IRCProfileService.cs" />
     <Compile Include="Services\IRCService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
@@ -643,6 +678,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

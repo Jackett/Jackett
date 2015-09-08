@@ -8,6 +8,7 @@ namespace Jackett.Models.Irc
 {
     public class IRCProfile
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public List<string> Servers { get; set; } = new List<string>();
         public string Username { get; set; }
