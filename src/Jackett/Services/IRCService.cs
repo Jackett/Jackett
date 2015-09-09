@@ -22,6 +22,7 @@ namespace Jackett.Services
         List<NetworkDTO> GetSummary();
         List<Message> GetMessages(string network, string channel);
         List<User> GetUser(string network, string channel);
+        void ProcessCommand(string networkId, string channelId, string command);
     }
 
     public class IRCService : IIRCService, INotificationHandler<AddProfileCommand>
@@ -53,8 +54,42 @@ namespace Jackett.Services
             var network = networks.Where(n => n.Id == networkId).FirstOrDefault();
             if (network == null)
                 return new List<User>();
+
             var channel = network.Channels.Where(c => c.Id == channelId).FirstOrDefault();
-            return channel.Users.ToList();
+            if(channel==null)
+                return new List<User>();
+            var channelObj = network.Client.Channels.Where(c => c.Name == channel.Name).FirstOrDefault();
+            if (channelObj == null)
+                return new List<User>();
+            return channelObj.Users.Select(u => new User() { Nickname = u.User.NickName }).ToList();
+        }
+
+        public void ProcessCommand(string networkId, string channelId, string command)
+        {
+            var network = networks.Where(n => n.Id == networkId).FirstOrDefault();
+            Channel channel = null;
+            if (null != network)
+            {
+                channel = network.Channels.Where(c => c.Id == channelId).FirstOrDefault();
+            }
+
+            if (string.IsNullOrWhiteSpace(command))
+                return;
+
+            if (command.StartsWith("/join"))
+            {
+                network.Client.Channels.Join(command.Split(" ".ToArray())[1]);
+            }
+            else
+            {
+                if (channel == null)
+                {
+                    network.Client.SendRawMessage(command);
+                } else
+                {
+                    network.Client.LocalUser.SendMessage(channel.Name, command);
+                }
+            }
         }
 
         public List<NetworkDTO> GetSummary()
@@ -69,7 +104,8 @@ namespace Jackett.Services
                 {
                     d.Channels.Add(new ChannelDTO()
                     {
-                        Name = c.Name
+                        Name = c.Name,
+                        Id = c.Id
                     });
                 }
                 list.Add(d);
@@ -144,8 +180,9 @@ namespace Jackett.Services
         private void LocalUser_JoinedChannel(object sender, IrcChannelEventArgs e)
         {
             var localUser = (IrcLocalUser)sender;
-            var channel = GetChannelFromEvent(e);
-            channel.Joined = true;
+            var details = GetChannelFromEvent(e);
+            details.Channel.Joined = true;
+
             e.Channel.UserJoined += Channel_UserJoined;
             e.Channel.MessageReceived += Channel_MessageReceived;
             e.Channel.ModesChanged += Channel_ModesChanged;
@@ -155,6 +192,8 @@ namespace Jackett.Services
             e.Channel.UserKicked += Channel_UserKicked;
             e.Channel.UserLeft += Channel_UserLeft;
             e.Channel.UsersListReceived += Channel_UsersListReceived;
+
+            details.Network.Channels.Add(details.Channel);
         }
 
         private Network NetworkFromIrcClient(StandardIrcClient client)
@@ -266,15 +305,15 @@ namespace Jackett.Services
         private void Client_ServerSupportedFeaturesReceived(object sender, EventArgs e)
         {
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
-            foreach (var config in network.Client.ServerSupportedFeatures)
+            var msg = string.Join(", ", network.Client.ServerSupportedFeatures.Select(f => f.Key + "=" + f.Value));
+
+
+            network.Messages.Add(new Message()
             {
-                network.Messages.Add(new Message()
-                {
-                    From = network.Address,
-                    Text = $"Server features: {config.Key} = {config.Value}",
-                    Type = MessageType.System
-                });
-            }
+                From = network.Address,
+                Text = "Server features: " + msg,
+                Type = MessageType.System
+            });
         }
 
         private void Client_ServerTimeReceived(object sender, IrcServerTimeEventArgs e)
@@ -296,7 +335,7 @@ namespace Jackett.Services
                 network.Messages.Add(new Message()
                 {
                     From = network.Address,
-                    Text = $"Server stats ({entry.Type}) : { string.Join(",", entry.Parameters)}",
+                    Text = $"Server stats ({entry.Type}) : { string.Join(", ", entry.Parameters)}",
                     Type = MessageType.System
                 });
             }
@@ -443,7 +482,7 @@ namespace Jackett.Services
             BroadcastMessageToNetwork(network, new Message()
             {
                 From = network.Address,
-                Text = $"Your modes were set to: {String.Join(",", network.Client.LocalUser.Modes)}",
+                Text = $"Your modes were set to: {String.Join("", network.Client.LocalUser.Modes)}",
                 Type = MessageType.System
             });
         }
@@ -470,7 +509,7 @@ namespace Jackett.Services
             });
         }
 
-        private Channel GetChannelFromEvent(IrcChannelEventArgs e)
+        private ChannelInfoResult GetChannelFromEvent(IrcChannelEventArgs e)
         {
             var network = networks.Where(n => n.Client == e.Channel.Client).First();
             var channel = network.Channels.Where(c => c.Name == e.Channel.Name).FirstOrDefault();
@@ -479,11 +518,16 @@ namespace Jackett.Services
                 channel = new Channel()
                 {
                     Joined = true,
-                    Name = e.Channel.Name
+                    Name = e.Channel.Name,
+                    Id = idService.NewId()
                 };
             }
 
-            return channel;
+            return new ChannelInfoResult()
+            {
+                Network = network,
+                Channel = channel
+            };
         }
 
         private ChannelInfoResult GetChannelInfoFromClientChannel(IrcChannel ircchannel)
@@ -516,8 +560,8 @@ namespace Jackett.Services
 
             var network = GetNetworkFromEvent(e);
             var channel = GetChannelFromEvent(e);
-            channel.Joined = false;
-            channel.Messages.Add(new Message()
+            channel.Channel.Joined = false;
+            channel.Channel.Messages.Add(new Message()
             {
                 From = network.Address,
                 Text = "You left this channel",
@@ -563,7 +607,7 @@ namespace Jackett.Services
             info.Channel.Messages.Add(new Message()
             {
                 From = info.Network.Address,
-                Text = $"{e.User.NickName} was invited.",
+                Text = $"Topic: {(sender as IrcChannel).Topic}",
                 Type = MessageType.System
             });
         }
@@ -582,12 +626,15 @@ namespace Jackett.Services
         private void Channel_ModesChanged(object sender, IrcUserEventArgs e)
         {
             var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
-            info.Channel.Messages.Add(new Message()
+            if (info.Channel != null)
             {
-                From = e.User.NickName,
-                Text = $"Channel modes changed to: {(sender as IrcChannel).Modes}",
-                Type = MessageType.System
-            });
+                info.Channel.Messages.Add(new Message()
+                {
+                    From = e.User==null?string.Empty:e.User.NickName,
+                    Text = $"Channel modes changed to: {(sender as IrcChannel).Modes}",
+                    Type = MessageType.System
+                });
+            }
         }
 
         private void Channel_MessageReceived(object sender, IrcMessageEventArgs e)

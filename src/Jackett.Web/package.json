@@ -12,6 +12,7 @@
       "aurelia-validation": "github:aurelia/validation@^0.2.8",
       "font-awesome": "npm:font-awesome@^4.4.0",
       "jquery": "github:components/jquery@^2.1.4",
+      "moment": "npm:moment@^2.10.6",
       "ms-signalr-client": "npm:ms-signalr-client@^2.2.2",
       "polymer/mutationobservers": "github:polymer/mutationobservers@^0.4.2",
       "semantic-ui": "github:Semantic-Org/Semantic-UI@^2.0.8",

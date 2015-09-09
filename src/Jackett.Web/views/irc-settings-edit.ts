@@ -41,6 +41,10 @@ export class IRCSettings {
             this.ircService.getAutoDLProfiles()
                 .then(profiles => {
                     this.networks = profiles;
+                    // Set default
+                    if (profiles.length > 0) {
+                        this.name = profiles[0].Name;
+                    }
                 })
         ];
         if (params.name) {

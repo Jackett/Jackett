@@ -70,6 +70,8 @@
     <Content Include="config.js" />
     <Content Include="content\jacket_medium.png" />
     <Content Include="packages.config" />
+    <TypeScriptCompile Include="Resources\DateToTimeConverter.ts" />
+    <Content Include="Resources\DateToTimeConverter.html" />
     <Content Include="styles\styles.css" />
     <Content Include="package.json" />
     <None Include="Web.Debug.config">
@@ -95,10 +97,14 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="main.ts" />
+    <TypeScriptCompile Include="Resources\index.ts" />
     <TypeScriptCompile Include="Scripts\typings\JackettSignalr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment-node.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
     <TypeScriptCompile Include="Services\IRCProfileService.ts" />
+    <TypeScriptCompile Include="Services\IRCService.ts" />
     <TypeScriptCompile Include="Services\WebClient.ts" />
     <TypeScriptCompile Include="typings\aurelia-amd\aurelia-amd.d.ts" />
     <TypeScriptCompile Include="typings\aurelia\aurelia-animator-css.d.ts" />

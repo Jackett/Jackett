@@ -267,6 +267,7 @@
     <Compile Include="Models\AutoDL\TrackerInfo.cs" />
     <Compile Include="Models\Commands\IRC\AddProfileCommand.cs" />
     <Compile Include="Models\DTO\ChannelDTO.cs" />
+    <Compile Include="Models\DTO\IRCommandDTO.cs" />
     <Compile Include="Models\DTO\NetworkDTO.cs" />
     <Compile Include="Models\Irc\Channel.cs" />
     <Compile Include="Models\Irc\ChannelInfoResult.cs" />

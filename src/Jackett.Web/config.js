@@ -28,6 +28,7 @@ System.config({
     "core-js": "npm:core-js@1.1.4",
     "font-awesome": "npm:font-awesome@4.4.0",
     "jquery": "github:components/jquery@2.1.4",
+    "moment": "npm:moment@2.10.6",
     "ms-signalr-client": "npm:ms-signalr-client@2.2.2",
     "polymer/mutationobservers": "github:polymer/mutationobservers@0.4.2",
     "semantic-ui": "github:Semantic-Org/Semantic-UI@2.1.3",
@@ -176,6 +177,9 @@ System.config({
       "css": "github:systemjs/plugin-css@0.1.16"
     },
     "npm:jquery@2.1.4": {
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:moment@2.10.6": {
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:ms-signalr-client@2.2.2": {

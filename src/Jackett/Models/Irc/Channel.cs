@@ -12,7 +12,6 @@ namespace Jackett.Models.Irc
         public string Id { get; set; }
         public string Name { get; set; }
         public List<Message> Messages { get; } = new List<Message>();
-        public List<User> Users { get; } = new List<User>();
         public bool Joined { get; set; }
     }
 }

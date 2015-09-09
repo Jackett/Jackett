@@ -9,6 +9,7 @@ LogManager.setLevel(LogManager.logLevel.debug);
 
 export function configure(aurelia: Aurelia) {
     aurelia.use.standardConfiguration()
+        .plugin('./resources/DateToTimeConverter', undefined)
     // .developmentLogging()
         .plugin('aurelia-validation', (config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage); });
    

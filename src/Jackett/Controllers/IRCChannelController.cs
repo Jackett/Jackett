@@ -39,5 +39,12 @@ namespace Jackett.Controllers
         {
             return irc.GetUser(network, room);
         }
+
+        [HttpPost]
+        public IHttpActionResult Command([FromBody]IRCommandDTO command)
+        {
+            irc.ProcessCommand(command.NetworkId, command.ChannelId, command.Text);
+            return Ok();
+        }
     }
 }

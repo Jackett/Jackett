@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.DTO
 {
-    public class ChannelDTO
+    public class IRCommandDTO
     {
-        public string Name { get; set; }
-        public string Id { get; set; }
+        public string Text { get; set; }
+        public string NetworkId { get; set; }
+        public string ChannelId { get; set; }
     }
 }

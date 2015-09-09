@@ -67,10 +67,13 @@
 .jackett-irc-logs {
     flex-grow: 20;
     min-width: 200px;
+    overflow-y: scroll;
+    position: relative;
 }
 
 .jackett-irc-log-time, .jackett-irc-log-user, .jackett-irc-log-msg {
     display: inline-block;
+    vertical-align:top;
 }
 
 .jackett-irc-log-user {
@@ -81,6 +84,14 @@
 
 .jackett-irc-log-msg {
     margin-left: 10px;
+    word-break: break-all;
+}
+
+.jackett-irc-log-msg pre {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+    white-space: pre-line;
 }
 
 .jackett-irc-users {
@@ -110,4 +121,16 @@
 .aurelia-validation-message{
    margin-left: 10px;
    color:red;
+}
+
+.jackett-irc-selected {
+    background-color: grey;
+}
+
+.jackett-irc-command{
+    bottom: 0;
+    width: 100%;
+    top: auto;
+    position: absolute;
+    background-color:#2F2D2D;
 }

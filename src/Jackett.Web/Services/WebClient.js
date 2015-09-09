@@ -28,6 +28,9 @@ export let WebClient = class {
     delete(url) {
         return this.http.delete('../webapi/' + url + '?_t=' + new Date().getTime());
     }
+    post(url, obj) {
+        return this.http.post('../webapi/' + url + '?_t=' + new Date().getTime(), JSON.stringify(obj));
+    }
 };
 WebClient = __decorate([
     autoinject, 
