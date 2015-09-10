@@ -265,7 +265,10 @@
     <Compile Include="Models\AutoDL\NetworkSummary.cs" />
     <Compile Include="Models\AutoDL\ServerInfo.cs" />
     <Compile Include="Models\AutoDL\TrackerInfo.cs" />
-    <Compile Include="Models\Commands\IRC\AddProfileCommand.cs" />
+    <Compile Include="Models\Commands\IRC\AddProfileEvent.cs" />
+    <Compile Include="Models\Commands\IRC\IRCMessageEvent.cs" />
+    <Compile Include="Models\Commands\IRC\IRCStateChangedEvent.cs" />
+    <Compile Include="Models\Commands\IRC\IRCUsersChangedEvent.cs" />
     <Compile Include="Models\DTO\ChannelDTO.cs" />
     <Compile Include="Models\DTO\IRCommandDTO.cs" />
     <Compile Include="Models\DTO\NetworkDTO.cs" />
@@ -338,6 +341,7 @@
     <Compile Include="Services\IRCService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
     <Compile Include="Services\ProtectionService.cs" />
+    <Compile Include="Services\SignalR\JackettHubProxy.cs" />
     <Compile Include="Services\SignalR\JackettHub.cs" />
     <Compile Include="Utils\Clients\BaseWebResult.cs" />
     <Compile Include="Utils\Clients\UnixLibCurlWebClient.cs" />
@@ -679,7 +683,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

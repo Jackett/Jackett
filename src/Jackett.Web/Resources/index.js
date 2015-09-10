@@ -1,4 +1,4 @@
 export function configure(aurelia) {
-    aurelia.globalizeResources('./DateToTimeConverter');
+    aurelia.globalizeResources('./MomentValueConverter');
 }
 //# sourceMappingURL=index.js.map

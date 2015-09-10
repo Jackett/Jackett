@@ -9,33 +9,55 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
-    return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
-        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
-        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
-        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
-        function step(verb, value) {
-            var result = generator[verb](value);
-            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
-        }
-        step("next", void 0);
-    });
-};
 import { autoinject } from 'aurelia-framework';
 import { IRCService } from '../Services/IRCService';
+import { activationStrategy } from 'aurelia-router';
+import { EventAggregator } from 'aurelia-event-aggregator';
 import 'jquery';
 export let Irc = class {
-    constructor(ircs) {
+    constructor(ircs, ea) {
         this.ircService = ircs;
+        this.eventAggregator = ea;
     }
-    activate() {
+    // Force aurelia to redraw the page
+    determineActivationStrategy() {
+        return activationStrategy.replace;
+    }
+    attached() {
+        var irc = this;
+        this.ircMessageSubscription = this.eventAggregator.subscribe('IRC-Message', msg => {
+            if (msg.Id === irc.selectedId) {
+                this.ircService.getMessages(irc.selectedNetworkId, irc.selectedChannelId).then(m => {
+                    this.messages = m;
+                });
+            }
+        });
+        this.ircUsersSubscription = this.eventAggregator.subscribe('IRC-Users', msg => {
+            if (msg.Id === irc.selectedId) {
+                this.ircService.getUsers(irc.selectedNetworkId, irc.selectedChannelId).then(users => {
+                    this.users = users;
+                });
+            }
+        });
+        this.ircStateSubscription = this.eventAggregator.subscribe('IRC-State', msg => {
+            irc.getState();
+        });
+    }
+    detached() {
+        this.ircMessageSubscription();
+        this.ircUsersSubscription();
+        this.ircStateSubscription();
+    }
+    getState() {
         return this.ircService.getState().then(state => {
             this.networkStates = state;
             if (this.networkStates.length > 0) {
                 this.onNetworkClick(this.networkStates[0]);
             }
         });
+    }
+    activate() {
+        this.getState();
         $('body').addClass('jackett-body-fill');
     }
     deactivate() {
@@ -43,6 +65,8 @@ export let Irc = class {
     }
     onNetworkClick(network) {
         this.selectById(network.Id);
+        this.selectedChannelId = null;
+        this.selectedNetworkId = network.Id;
         this.users = [];
         this.ircService.getMessages(network.Id, null).then(m => {
             this.messages = m;
@@ -51,6 +75,8 @@ export let Irc = class {
     }
     onChannelClick(channel, network) {
         this.selectById(channel.Id);
+        this.selectedChannelId = channel.Id;
+        this.selectedNetworkId = network.Id;
         this.ircService.getMessages(network.Id, channel.Id).then(m => {
             this.messages = m;
         });
@@ -88,6 +114,6 @@ export let Irc = class {
 };
 Irc = __decorate([
     autoinject, 
-    __metadata('design:paramtypes', [IRCService])
+    __metadata('design:paramtypes', [IRCService, EventAggregator])
 ], Irc);
 //# sourceMappingURL=irc.js.map

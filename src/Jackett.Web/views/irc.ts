@@ -1,29 +1,77 @@
 ﻿import {autoinject} from 'aurelia-framework';
 import {IRCService, NetworkState, ChannelState, IRCMessage, IRCUser} from '../Services/IRCService';
 import {HttpClient} from 'aurelia-fetch-client'
+import {activationStrategy} from 'aurelia-router'
+import {EventAggregator} from 'aurelia-event-aggregator';
 import 'jquery' 
 
 @autoinject 
 export class Irc {
     ircService: IRCService;
+    eventAggregator: EventAggregator;
+
     networkStates: NetworkState[];
     messages: IRCMessage[];
     users: IRCUser[];
 
     selectedId: string;
-    commandInput: any;
+    selectedChannelId: string;
+    selectedNetworkId: string;
 
-    constructor(ircs: IRCService) {
+    commandInput: any;
+    ircMessageSubscription: any;
+    ircUsersSubscription: any;
+    ircStateSubscription: any;
+
+    constructor(ircs: IRCService, ea: EventAggregator) {
         this.ircService = ircs;
+        this.eventAggregator = ea;
     }
 
-    activate() {
+    // Force aurelia to redraw the page
+    determineActivationStrategy() {
+        return activationStrategy.replace;
+    }
+
+    attached() {
+        var irc = this;
+        this.ircMessageSubscription = this.eventAggregator.subscribe('IRC-Message', msg => {
+            if (msg.Id === irc.selectedId) {
+                this.ircService.getMessages(irc.selectedNetworkId, irc.selectedChannelId).then(m=> {
+                    this.messages = m;
+                });
+            }
+        });
+        this.ircUsersSubscription = this.eventAggregator.subscribe('IRC-Users', msg => {
+            if (msg.Id === irc.selectedId) {
+                this.ircService.getUsers(irc.selectedNetworkId, irc.selectedChannelId).then(users=> {
+                    this.users = users;
+                });
+            }
+        });
+
+        this.ircStateSubscription = this.eventAggregator.subscribe('IRC-State', msg => {
+            irc.getState();
+        });
+    }
+
+    detached() {
+        this.ircMessageSubscription();
+        this.ircUsersSubscription();
+        this.ircStateSubscription();
+    }
+
+    getState() {
         return this.ircService.getState().then(state=> {
             this.networkStates = state;
             if (this.networkStates.length > 0) {
                 this.onNetworkClick(this.networkStates[0]);
             }
         });
+    }
+
+    activate() {
+        this.getState();
         $('body').addClass('jackett-body-fill');
     }
 
@@ -33,6 +81,8 @@ export class Irc {
 
     onNetworkClick(network: NetworkState) {
         this.selectById(network.Id);
+        this.selectedChannelId = null;
+        this.selectedNetworkId = network.Id;
         this.users = [];
         this.ircService.getMessages(network.Id, null).then(m=> {
                 this.messages = m;
@@ -42,6 +92,8 @@ export class Irc {
 
     onChannelClick(channel: ChannelState, network: NetworkState) {
         this.selectById(channel.Id);
+        this.selectedChannelId = channel.Id;
+        this.selectedNetworkId = network.Id;
         this.ircService.getMessages(network.Id, channel.Id).then(m=> {
                 this.messages = m;
         });

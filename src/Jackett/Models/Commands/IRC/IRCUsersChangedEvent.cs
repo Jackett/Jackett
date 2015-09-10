@@ -1,5 +1,4 @@
-﻿using Jackett.Models.Irc;
-using MediatR;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.Commands.IRC
 {
-    public class AddProfileCommand : INotification
+    public class IRCUsersChangedEvent : INotification
     {
-        public IRCProfile Profile { get; set; }
+        public string Id { get; set; }
     }
 }

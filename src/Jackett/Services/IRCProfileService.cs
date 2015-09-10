@@ -53,7 +53,7 @@ namespace Jackett.Services
             }
 
             profiles.Add(profile);
-            mediator.Publish(new AddProfileCommand() { Profile = profile });
+            mediator.Publish(new AddProfileEvent() { Profile = profile });
         }
 
         public List<IRCProfile> All

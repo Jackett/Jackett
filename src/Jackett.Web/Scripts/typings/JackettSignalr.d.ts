@@ -1,13 +1,17 @@
 ﻿/* This file contains the signalr services Jackett provides */
+    export interface SignalR {
+        sync: HubProxy;
+    }
 
-interface SignalR {
-    sync: HubProxy;
-}
+    export interface HubProxy {
+        client: ISyncClient;
+    }
 
-interface HubProxy {
-    client: ISyncClient;
-}
+    export interface ISyncClient {
+        onChange();
+        onIRCMessage(m: IRCMessageCommand);
+    }
 
-interface ISyncClient {
-    onChange();
-}
+    export class IRCMessageCommand {
+        Id: string;
+    }

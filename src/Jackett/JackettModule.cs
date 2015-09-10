@@ -14,6 +14,7 @@ using Autofac.Integration.SignalR;
 using Jackett.Services;
 using Autofac.Features.Variance;
 using MediatR;
+using Jackett.Services.SignalR;
 
 namespace Jackett
 {
@@ -26,6 +27,7 @@ namespace Jackett
             builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
             builder.RegisterType<HttpWebClient>();
+            builder.RegisterType<JackettHub>();
 
             // Register the best web client for the platform or the override
             switch (Startup.ClientOverride)
@@ -59,8 +61,6 @@ namespace Jackett
             {
                 builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }
-
-            builder.RegisterHubs(thisAssembly);
 
             Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
             {
@@ -97,6 +97,8 @@ namespace Jackett
                 var c = ctx.Resolve<IComponentContext>();
                 return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
             });
+
+            
         }
     }
 }

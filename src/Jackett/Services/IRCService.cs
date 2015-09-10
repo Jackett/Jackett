@@ -25,14 +25,16 @@ namespace Jackett.Services
         void ProcessCommand(string networkId, string channelId, string command);
     }
 
-    public class IRCService : IIRCService, INotificationHandler<AddProfileCommand>
+    public class IRCService : IIRCService, INotificationHandler<AddProfileEvent>
     { 
         List<Network> networks = new List<Network>();
         IIDService idService = null;
+        IMediator mediator;
 
-        public IRCService(IIDService i)
+        public IRCService(IIDService i, IMediator m)
         {
             idService = i;
+            mediator = m;
         }
 
         public List<Message> GetMessages(string networkId, string channelId)
@@ -80,6 +82,10 @@ namespace Jackett.Services
             {
                 network.Client.Channels.Join(command.Split(" ".ToArray())[1]);
             }
+            else if(command == "/leave" && channel != null)
+            {
+                network.Client.Channels.Leave(channel.Name);
+            }
             else
             {
                 if (channel == null)
@@ -88,8 +94,25 @@ namespace Jackett.Services
                 } else
                 {
                     network.Client.LocalUser.SendMessage(channel.Name, command);
+                    channel.Messages.Add(new Message()
+                    {
+                        From = network.Client.LocalUser.NickName,
+                        Text = command,
+                        Type = MessageType.Message
+                    });
+                    NotifyChannelChange(channel);
                 }
             }
+        }
+
+        private void NotifyChannelChange(Channel c)
+        {
+            mediator.Publish(new IRCMessageEvent() { Id = c.Id });
+        }
+
+        private void NotifyNetworkChange(Network n)
+        {
+            mediator.Publish(new IRCMessageEvent() { Id = n.Id });
         }
 
         public List<NetworkDTO> GetSummary()
@@ -175,6 +198,7 @@ namespace Jackett.Services
             client.LocalUser.IsAwayChanged += LocalUser_IsAwayChanged;
             client.LocalUser.ModesChanged += LocalUser_ModesChanged;
             client.LocalUser.NickNameChanged += LocalUser_NickNameChanged;
+            mediator.Publish(new IRCStateChangedEvent());
         }
 
         private void LocalUser_JoinedChannel(object sender, IrcChannelEventArgs e)
@@ -194,6 +218,7 @@ namespace Jackett.Services
             e.Channel.UsersListReceived += Channel_UsersListReceived;
 
             details.Network.Channels.Add(details.Channel);
+            mediator.Publish(new IRCStateChangedEvent());
         }
 
         private Network NetworkFromIrcClient(StandardIrcClient client)
@@ -209,8 +234,12 @@ namespace Jackett.Services
         private void BroadcastMessageToNetwork(Network network, Message message)
         {
             network.Messages.Add(message);
-            foreach(var channel in network.Channels)
+            NotifyNetworkChange(network);
+            foreach (var channel in network.Channels)
+            {
                 channel.Messages.Add(message);
+                NotifyChannelChange(channel);
+            }
         }
 
         private void CtcpClient_ActionReceived(object sender, CtcpMessageEventArgs e)
@@ -222,7 +251,7 @@ namespace Jackett.Services
                 Text = e.Text,
                 Type = MessageType.CTCP
             });
-
+            NotifyNetworkChange(network);
         }
 
         private void CtcpClient_TimeResponseReceived(object sender, CtcpTimeResponseReceivedEventArgs e)
@@ -234,6 +263,7 @@ namespace Jackett.Services
                 Text = $"Time received: {e.DateTime}",
                 Type = MessageType.CTCP
             });
+            NotifyNetworkChange(network);
         }
 
         private void CtcpClient_VersionResponseReceived(object sender, CtcpVersionResponseReceivedEventArgs e)
@@ -245,6 +275,7 @@ namespace Jackett.Services
                 Text = $"Version received: {e.VersionInfo}",
                 Type = MessageType.CTCP
             });
+            NotifyNetworkChange(network);
         }
 
         private void CtcpClient_PingResponseReceived(object sender, CtcpPingResponseReceivedEventArgs e)
@@ -256,6 +287,7 @@ namespace Jackett.Services
                 Text = $"Ping time: {e.PingTime}",
                 Type = MessageType.CTCP
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_WhoWasReplyReceived(object sender, IrcUserEventArgs e)
@@ -267,6 +299,7 @@ namespace Jackett.Services
                 Text = $"Who was: {e.User.NickName}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_WhoReplyReceived(object sender, IrcNameEventArgs e)
@@ -278,6 +311,7 @@ namespace Jackett.Services
                 Text = $"Who was: {e.Name}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_WhoIsReplyReceived(object sender, IrcUserEventArgs e)
@@ -289,6 +323,7 @@ namespace Jackett.Services
                 Text = $"Who is: {e.User.NickName}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_ServerVersionInfoReceived(object sender, IrcServerVersionInfoEventArgs e)
@@ -300,6 +335,7 @@ namespace Jackett.Services
                 Text = $"Server version: {e.Version}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_ServerSupportedFeaturesReceived(object sender, EventArgs e)
@@ -307,13 +343,13 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             var msg = string.Join(", ", network.Client.ServerSupportedFeatures.Select(f => f.Key + "=" + f.Value));
 
-
             network.Messages.Add(new Message()
             {
                 From = network.Address,
                 Text = "Server features: " + msg,
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_ServerTimeReceived(object sender, IrcServerTimeEventArgs e)
@@ -325,6 +361,7 @@ namespace Jackett.Services
                 Text = $"Server time: {e.DateTime}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_ServerStatsReceived(object sender, IrcServerStatsReceivedEventArgs e)
@@ -339,6 +376,7 @@ namespace Jackett.Services
                     Type = MessageType.System
                 });
             }
+            NotifyNetworkChange(network);
         }
 
         private void Client_ServerBounce(object sender, IrcServerInfoEventArgs e)
@@ -371,6 +409,7 @@ namespace Jackett.Services
                 Text = e.Comment,
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_ConnectFailed(object sender, IrcErrorEventArgs e)
@@ -412,6 +451,7 @@ namespace Jackett.Services
                 Text = $"Protocol error ({e.Code}): {e.Message} { string.Join(" ", e.Parameters)}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_MotdReceived(object sender, EventArgs e)
@@ -423,6 +463,7 @@ namespace Jackett.Services
                 Text = $"MOTD: {network.Client.MessageOfTheDay}",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void Client_ErrorMessageReceived(object sender, IrcErrorMessageEventArgs e)
@@ -458,7 +499,7 @@ namespace Jackett.Services
                 Type = MessageType.System
             });
 
-            foreach(var channel in network.Channels)
+            foreach (var channel in network.Channels)
             {
                 channel.Joined = false;
             }
@@ -496,6 +537,7 @@ namespace Jackett.Services
                 Text = network.Client.LocalUser.IsAway?"You were marked away": "You are no longer marked as away",
                 Type = MessageType.System
             });
+            NotifyNetworkChange(network);
         }
 
         private void LocalUser_InviteReceived(object sender, IrcChannelInvitationEventArgs e)
@@ -567,16 +609,19 @@ namespace Jackett.Services
                 Text = "You left this channel",
                 Type = MessageType.System
             });
+            mediator.Publish(new IRCStateChangedEvent());
         }
 
         private void Channel_UsersListReceived(object sender, EventArgs e)
         {
-           // event
+            var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
+            mediator.Publish(new IRCUsersChangedEvent() { Id = info.Channel.Id });
         }
 
         private void Channel_UserLeft(object sender, IrcChannelUserEventArgs e)
         {
-            // event
+            var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
+            mediator.Publish(new IRCUsersChangedEvent() {Id = info.Channel.Id });
         }
 
         private void Channel_UserKicked(object sender, IrcChannelUserEventArgs e)
@@ -588,6 +633,8 @@ namespace Jackett.Services
                 Text =$"{e.ChannelUser.User.NickName} was kicked.",
                 Type = MessageType.System
             });
+            NotifyChannelChange(info.Channel);
+            mediator.Publish(new IRCUsersChangedEvent() { Id = info.Channel.Id });
         }
 
         private void Channel_UserInvited(object sender, IrcUserEventArgs e)
@@ -599,6 +646,7 @@ namespace Jackett.Services
                 Text = $"{e.User.NickName} was invited.",
                 Type = MessageType.System
             });
+            NotifyChannelChange(info.Channel);
         }
 
         private void Channel_TopicChanged(object sender, IrcUserEventArgs e)
@@ -610,6 +658,7 @@ namespace Jackett.Services
                 Text = $"Topic: {(sender as IrcChannel).Topic}",
                 Type = MessageType.System
             });
+            NotifyChannelChange(info.Channel);
         }
 
         private void Channel_NoticeReceived(object sender, IrcMessageEventArgs e)
@@ -621,6 +670,7 @@ namespace Jackett.Services
                 Text = e.Text,
                 Type = MessageType.Notice
             });
+            NotifyChannelChange(info.Channel);
         }
 
         private void Channel_ModesChanged(object sender, IrcUserEventArgs e)
@@ -634,6 +684,7 @@ namespace Jackett.Services
                     Text = $"Channel modes changed to: {(sender as IrcChannel).Modes}",
                     Type = MessageType.System
                 });
+                NotifyChannelChange(info.Channel);
             }
         }
 
@@ -646,6 +697,7 @@ namespace Jackett.Services
                 Text = e.Text,
                 Type = MessageType.Message
             });
+            NotifyChannelChange(info.Channel);
         }
 
         private void Channel_UserJoined(object sender, IrcChannelUserEventArgs e)
@@ -657,6 +709,8 @@ namespace Jackett.Services
                 Text = $"User joined: {e.ChannelUser.User.NickName}",
                 Type = MessageType.System
             });
+            NotifyChannelChange(info.Channel);
+            mediator.Publish(new IRCUsersChangedEvent() { Id = info.Channel.Id });
         }
 
         private void LocalUser_MessageReceived(object sender, IrcMessageEventArgs e)
@@ -698,6 +752,13 @@ namespace Jackett.Services
                 UserName = network.Username,
                 RealName = network.Username
             });
+
+            BroadcastMessageToNetwork(network, new Message()
+            {
+                From = network.Address,
+                Text = $"Connecting to {network.Address} ..",
+                Type = MessageType.System
+            });
         }
 
         public List<NetworkInfo> NetworkInfo
@@ -727,7 +788,7 @@ namespace Jackett.Services
             }
         }
 
-        void INotificationHandler<AddProfileCommand>.Handle(AddProfileCommand notification)
+        void INotificationHandler<AddProfileEvent>.Handle(AddProfileEvent notification)
         {
             var network = networks.Where(n => n.Id == notification.Profile.Id).FirstOrDefault();
             if (network == null)

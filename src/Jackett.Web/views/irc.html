@@ -1,5 +1,5 @@
 ﻿<template>
-    <require from="../Resources/DateToTimeConverter"></require>
+    <require from="../resources/MomentValueConverter"></require>
     <div class="jackett-irc">
         <div class="jackett-irc-networks">
             <div class="jackett-irc-network" repeat.for="network of networkStates" click.delegate="$parent.onNetworkClick(network)">
@@ -11,7 +11,7 @@
             <table>
                 <tbody>
                     <tr repeat.for="message of messages">
-                        <td class="jackett-irc-log-time">[${message.When | DateToTimeConverter:'HH:ss'}]</td>
+                        <td class="jackett-irc-log-time">[${message.When | moment:'HH:ss'}]</td>
                         <td class="jackett-irc-log-user">${message.From}</td>
                         <td class="jackett-irc-log-msg"><pre>${message.Text}</pre></td>
                     </tr>

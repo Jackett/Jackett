@@ -1,7 +1,14 @@
 ﻿import {Router} from 'aurelia-router';
+import {SignalRService} from './Services/SignalRService'
+import {autoinject} from 'aurelia-framework';
 
+@autoinject 
 export class App {
     router: Router;
+
+    constructor(sr: SignalRService) {
+        sr.start();
+    }
 
     configureRouter(config, router: Router) {
         config.title = 'Jackett';

@@ -1,6 +1,6 @@
-﻿import 'moment'
+﻿import moment from 'moment';
 
-export class DateToTimeConverter {
+export class MomentValueConverter  {
     toView(value: Date, format: string) {
         return moment(value).format(format);
     }

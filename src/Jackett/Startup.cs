@@ -20,6 +20,8 @@ using System.IO;
 using Microsoft.AspNet.SignalR;
 using Autofac.Integration.SignalR;
 using Swashbuckle.Application;
+using Jackett.Services.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -161,12 +163,14 @@ namespace Jackett
               defaults: new { controller = "Blackhole", action = "Blackhole" }
           );
 
+            appBuilder.UseAutofacMiddleware(Engine.GetContainer());
+            var dr = new AutofacDependencyResolver(Engine.GetContainer());
             appBuilder.MapSignalR(new Microsoft.AspNet.SignalR.HubConfiguration()
             {
                 EnableDetailedErrors = true,
                 EnableJSONP = true,
-                Resolver = new AutofacDependencyResolver(Engine.GetContainer())
-            });
+                Resolver = dr
+});
 
             appBuilder.UseFileServer(new FileServerOptions
             {
@@ -185,6 +189,14 @@ namespace Jackett
             config
             .EnableSwagger(c => c.SingleApiVersion("v1", "Jackett API"))
             .EnableSwaggerUi("docs/{*assetPath}");
+
+            var conManager = dr.Resolve<IConnectionManager>();
+            var builder = new ContainerBuilder();
+            builder.RegisterInstance(conManager).As<IConnectionManager>();
+            builder.Update(Engine.GetContainer());
+
+           // IHubContext hubContext = dr.Resolve<IConnectionManager>().GetHubContext<JackettHub>(); 
+           //  var context = GlobalHost.ConnectionManager.GetHubContext<JackettHub>();
         }
     }
 }

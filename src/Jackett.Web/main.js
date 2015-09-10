@@ -6,7 +6,8 @@ LogManager.addAppender(new ConsoleAppender());
 LogManager.setLevel(LogManager.logLevel.debug);
 export function configure(aurelia) {
     aurelia.use.standardConfiguration()
-        .plugin('./resources/DateToTimeConverter', undefined)
+        .plugin('./resources/MomentValueConverter', undefined)
+        .developmentLogging()
         .plugin('aurelia-validation', (config) => { config.useViewStrategy(ValidateCustomAttributeViewStrategy.TWBootstrapAppendToMessage); });
     aurelia.start().then(a => a.setRoot('app', document.body));
 }
