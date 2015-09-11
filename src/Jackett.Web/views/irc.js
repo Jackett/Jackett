@@ -9,6 +9,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
+    return new Promise(function (resolve, reject) {
+        generator = generator.call(thisArg, _arguments);
+        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
+        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
+        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
+        function step(verb, value) {
+            var result = generator[verb](value);
+            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
+        }
+        step("next", void 0);
+    });
+};
 import { autoinject } from 'aurelia-framework';
 import { IRCService } from '../Services/IRCService';
 import { activationStrategy } from 'aurelia-router';
@@ -70,6 +83,9 @@ export let Irc = class {
         this.users = [];
         this.ircService.getMessages(network.Id, null).then(m => {
             this.messages = m;
+        });
+        this.ircService.getUsers(network.Id, 'server').then(users => {
+            this.users = users;
         });
         return false;
     }

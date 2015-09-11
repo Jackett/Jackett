@@ -134,3 +134,7 @@
     position: absolute;
     background-color:#2F2D2D;
 }
+
+.jackett-ircprofile-server i{
+       padding-top: 10px;
+}

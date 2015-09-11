@@ -1,36 +1,34 @@
 ﻿<template>
-    <h1 class="ui header">IRC Settings</h1>
-    <p if.bind="profiles.length===0">You have no profiles defined!</p>
-    <table class="ui celled table" if.bind="profiles.length>0">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Username</th>
-                <th>Profile</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr repeat.for="profile of profiles">
-                <td>${profile.Name}</td>
-                <td>${profile.Username}</td>
-                <td>${profile.Profile}</td>
-                <td>
-                    <a href="javascript:void(0)" route-href="route: irc-profile-edit; params.bind: { name: profile.Id }">Edit</a>
-                    <a href="javascript:void(0)" click.trigger="$parent.remove(profile)">Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+       <h1 class="ui header">IRC Settings</h1>
+       <p if.bind="profiles.length===0">You have no profiles defined!</p>
+       <table class="ui celled table" if.bind="profiles.length>0">
+           <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Username</th>
+                   <th>Profile</th>
+                   <th>Actions</th>
+               </tr>
+           </thead>
+           <tbody>
+               <tr repeat.for="profile of profiles">
+                   <td>${profile.Name}</td>
+                   <td>${profile.Username}</td>
+                   <td>${profile.Profile}</td>
+                   <td>
+                       <a href="javascript:void(0)" route-href="route: irc-profile-edit; params.bind: { name: profile.Id }">Edit</a>
+                       <a href="javascript:void(0)" click.trigger="$parent.remove(profile)">Delete</a>
+                   </td>
+               </tr>
+           </tbody>
+       </table>
 
-    <a class="ui button"  route-href="route: irc-profile-create" >Create new profile</a>
-    <h2>Known channels</h2>
-    <div repeat.for="network of autodlprofiles">
-        <h3>${network.Name}</h3>
-        <ul>
-            <li repeat.for="profile of network.Profiles">${profile}</li>
-        </ul>
-    </div>
-    
-       
+       <a class="ui button" route-href="route: irc-profile-create">Create new profile</a>
+       <h2>Known channels</h2>
+       <div repeat.for="network of autodlprofiles">
+           <h3>${network.Name}</h3>
+           <ul>
+               <li repeat.for="profile of network.Profiles">${profile}</li>
+           </ul>
+       </div>
 </template>

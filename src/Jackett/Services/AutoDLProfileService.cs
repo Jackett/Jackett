@@ -47,18 +47,6 @@ namespace Jackett.Services
         {
             trackers.Clear();
 
-            // Add Jackett Profile
-            var jackettProfile = new TrackerInfo();
-            jackettProfile.LongName = jackettProfile.ShortName = jackettProfile.SiteName = jackettProfile.Type = "Jackett";
-            jackettProfile.Servers.Add(new ServerInfo()
-            {
-                Network = "FreeNode",
-                Servers = new List<string>() { "chat.freenode.net" },
-                Channels = new List<string>() { "#jackett" }
-            });
-
-            trackers.Add(jackettProfile);
-
             foreach (var path in Directory.GetFiles(configSerivce.GetAutoDLFolder(), "*.tracker")) {
                 var xml = XDocument.Load(path);
                 var info = new TrackerInfo()
@@ -102,6 +90,22 @@ namespace Jackett.Services
         public List<NetworkSummary> GetNetworks()
         {
             var list = new List<NetworkSummary>();
+
+            // Default profile
+            list.Add(new NetworkSummary()
+            {
+                Name = "Other network"
+            });
+
+            // Freenode
+            list.Add(new NetworkSummary()
+            {
+                Name = "FreeNode",
+                Servers =new List<string>()
+                {
+                    "chat.freenode.net"
+                }
+            });
 
             foreach(var networkGroup in trackers.Where(t=>t.Servers.Count>0).GroupBy(t=>t.Servers.First().Network.ToLowerInvariant()))
             {

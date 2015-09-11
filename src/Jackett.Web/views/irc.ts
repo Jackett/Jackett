@@ -87,6 +87,9 @@ export class Irc {
         this.ircService.getMessages(network.Id, null).then(m=> {
                 this.messages = m;
         });
+        this.ircService.getUsers(network.Id, 'server').then(users=> {
+            this.users = users;
+        });
         return false;
     }
 

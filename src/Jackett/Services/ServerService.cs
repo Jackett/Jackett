@@ -50,8 +50,10 @@ namespace Jackett.Services
         private Logger logger;
         private IWebClient client;
         private IAutoDLProfileService autoDlService;
+        private IIRCProfileService ircProfileService;
+        private IIRCService ircService;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileService a)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileService a, IIRCProfileService ircp, IIRCService irc)
         {
             indexerService = i;
             processService = p;
@@ -62,6 +64,8 @@ namespace Jackett.Services
             autoDlService = a;
 
             autoDlService.Load();
+            ircProfileService = ircp;
+            ircService = irc;
             LoadConfig();
         }
 
@@ -120,6 +124,9 @@ namespace Jackett.Services
                 config.InstanceId = StringUtil.GenerateRandom(64);
                 configService.SaveConfig<ServerConfig>(config);
             }
+
+            ircProfileService.Load();
+           
         }
 
         public void SaveConfig()
@@ -144,6 +151,11 @@ namespace Jackett.Services
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
             _server = WebApp.Start<Startup>(startOptions);
             logger.Debug("Web server started");
+
+            foreach (var profile in ircProfileService.All)
+            {
+                ircService.CreateNetworkFromProfile(profile);
+            }
         }
 
         public void ReserveUrls(bool doInstall = true)

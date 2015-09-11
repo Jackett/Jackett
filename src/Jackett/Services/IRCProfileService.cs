@@ -16,6 +16,7 @@ namespace Jackett.Services
         void Set(IRCProfile profile);
         List<IRCProfile> All { get; }
         void Delete(string name);
+        void Load();
     }
 
     public class IRCProfileService: IIRCProfileService
@@ -23,11 +24,32 @@ namespace Jackett.Services
         List<IRCProfile> profiles = new List<IRCProfile>();
         IMediator mediator;
         IIDService idService;
+        IConfigurationService configService;
 
-        public IRCProfileService(IMediator m, IIDService i)
+        public IRCProfileService(IMediator m, IIDService i, IConfigurationService c)
         {
             mediator = m;
             idService = i;
+            configService = c;
+        }
+
+        public void Save()
+        {
+            var config = new IRCProfiles()
+            {
+                Profiles = this.profiles
+            };
+
+            configService.SaveConfig<IRCProfiles>(config);
+        }
+
+        public void Load()
+        {
+            var config = configService.GetConfig<IRCProfiles>();
+            if (config != null)
+            {
+                this.profiles = config.Profiles;
+            }
         }
 
         public IRCProfile Get(string id)
@@ -54,6 +76,7 @@ namespace Jackett.Services
 
             profiles.Add(profile);
             mediator.Publish(new AddProfileEvent() { Profile = profile });
+            Save();
         }
 
         public List<IRCProfile> All
@@ -71,6 +94,8 @@ namespace Jackett.Services
             {
                 profiles.Remove(existing);
             }
+
+            Save();
         }
     }
 }

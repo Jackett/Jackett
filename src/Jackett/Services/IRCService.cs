@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MoreLinq;
+using NLog;
 
 namespace Jackett.Services
 {
@@ -23,6 +24,7 @@ namespace Jackett.Services
         List<Message> GetMessages(string network, string channel);
         List<User> GetUser(string network, string channel);
         void ProcessCommand(string networkId, string channelId, string command);
+        void CreateNetworkFromProfile(IRCProfile profile);
     }
 
     public class IRCService : IIRCService, INotificationHandler<AddProfileEvent>
@@ -30,11 +32,13 @@ namespace Jackett.Services
         List<Network> networks = new List<Network>();
         IIDService idService = null;
         IMediator mediator;
+        Logger logger;
 
-        public IRCService(IIDService i, IMediator m)
+        public IRCService(IIDService i, IMediator m, Logger l)
         {
             idService = i;
             mediator = m;
+            logger = l;
         }
 
         public List<Message> GetMessages(string networkId, string channelId)
@@ -56,6 +60,18 @@ namespace Jackett.Services
             var network = networks.Where(n => n.Id == networkId).FirstOrDefault();
             if (network == null)
                 return new List<User>();
+            if (channelId == "server")
+            {
+                // Network room
+                return new List<User>()
+                {
+                    new User()
+                    {
+                        Nickname = network.Client.LocalUser.NickName
+                    }
+                };
+            }
+
 
             var channel = network.Channels.Where(c => c.Id == channelId).FirstOrDefault();
             if(channel==null)
@@ -139,10 +155,7 @@ namespace Jackett.Services
 
         public void Start()
         {
-            networks.Add(new Network()
-            {
-                Address  = "chat.freenode.net:6667"
-            });
+      
 
          /*  foreach(var network in networks)
             {
@@ -307,7 +320,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Who was: {e.Name}",
                 Type = MessageType.System
             });
@@ -319,7 +332,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Who is: {e.User.NickName}",
                 Type = MessageType.System
             });
@@ -345,7 +358,7 @@ namespace Jackett.Services
 
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = "Server features: " + msg,
                 Type = MessageType.System
             });
@@ -371,7 +384,7 @@ namespace Jackett.Services
             {
                 network.Messages.Add(new Message()
                 {
-                    From = network.Address,
+                    From = network.Client.ServerName,
                     Text = $"Server stats ({entry.Type}) : { string.Join(", ", entry.Parameters)}",
                     Type = MessageType.System
                 });
@@ -384,7 +397,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Server is requesting bounce to: {e.Address}:{e.Port}",
                 Type = MessageType.System
             });
@@ -405,7 +418,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = e.Comment,
                 Type = MessageType.System
             });
@@ -417,7 +430,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Name,
                 Text = $"Connect failed",
                 Type = MessageType.System
             });
@@ -430,7 +443,7 @@ namespace Jackett.Services
             {
                 BroadcastMessageToNetwork(network, new Message()
                 {
-                    From = network.Address,
+                    From = network.Client.ServerName,
                     Text = $"Channel: \"{channel.Name}\" Users: {channel.VisibleUsersCount} Topic: \"{channel.Topic}\"",
                     Type = MessageType.System
                 });
@@ -447,7 +460,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Name,
                 Text = $"Protocol error ({e.Code}): {e.Message} { string.Join(" ", e.Parameters)}",
                 Type = MessageType.System
             });
@@ -459,7 +472,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"MOTD: {network.Client.MessageOfTheDay}",
                 Type = MessageType.System
             });
@@ -471,7 +484,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Network Error: {e.Message}",
                 Type = MessageType.System
             });
@@ -483,7 +496,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Client Error: {e.Error.Message} {e.Error.StackTrace}",
                 Type = MessageType.System
             });
@@ -494,7 +507,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = "Disconnected",
                 Type = MessageType.System
             });
@@ -510,7 +523,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Nickname changed to {network.Client.LocalUser.NickName}",
                 Type = MessageType.System
             });
@@ -522,7 +535,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient((StandardIrcClient)user.Client);
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = $"Your modes were set to: {String.Join("", network.Client.LocalUser.Modes)}",
                 Type = MessageType.System
             });
@@ -533,7 +546,7 @@ namespace Jackett.Services
             var network = NetworkFromIrcClient(sender as StandardIrcClient);
             network.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = network.Client.LocalUser.IsAway?"You were marked away": "You are no longer marked as away",
                 Type = MessageType.System
             });
@@ -579,7 +592,7 @@ namespace Jackett.Services
             {
                 Network = network,
                Channel = network.Channels.Where(c => c.Name == ircchannel.Name).FirstOrDefault()
-        };
+             };
         }
 
 
@@ -605,7 +618,7 @@ namespace Jackett.Services
             channel.Channel.Joined = false;
             channel.Channel.Messages.Add(new Message()
             {
-                From = network.Address,
+                From = network.Client.ServerName,
                 Text = "You left this channel",
                 Type = MessageType.System
             });
@@ -629,7 +642,7 @@ namespace Jackett.Services
             var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
             info.Channel.Messages.Add(new Message()
             {
-                From = info.Network.Address,
+                From = info.Network.Client.ServerName,
                 Text =$"{e.ChannelUser.User.NickName} was kicked.",
                 Type = MessageType.System
             });
@@ -642,7 +655,7 @@ namespace Jackett.Services
             var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
             info.Channel.Messages.Add(new Message()
             {
-                From = info.Network.Address,
+                From = info.Network.Client.ServerName,
                 Text = $"{e.User.NickName} was invited.",
                 Type = MessageType.System
             });
@@ -654,7 +667,7 @@ namespace Jackett.Services
             var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
             info.Channel.Messages.Add(new Message()
             {
-                From = info.Network.Address,
+                From = info.Network.Client.ServerName,
                 Text = $"Topic: {(sender as IrcChannel).Topic}",
                 Type = MessageType.System
             });
@@ -705,7 +718,7 @@ namespace Jackett.Services
             var info = GetChannelInfoFromClientChannel(sender as IrcChannel);
             info.Channel.Messages.Add(new Message()
             {
-                From = info.Network.Address,
+                From = info.Network.Client.ServerName,
                 Text = $"User joined: {e.ChannelUser.User.NickName}",
                 Type = MessageType.System
             });
@@ -727,7 +740,7 @@ namespace Jackett.Services
 
         private void LocalUser_NoticeReceived(object sender, IrcMessageEventArgs e)
         {
-            var network = NetworkFromIrcClient(sender as StandardIrcClient);
+            var network = NetworkFromIrcClient(sender as IrcLocalUser);
             BroadcastMessageToNetwork(network, new Message()
             {
                 From = e.Source.Name,
@@ -738,9 +751,25 @@ namespace Jackett.Services
 
         private void Connect(Network network)
         {
+            if (network.Address.Count == 0)
+            {
+                logger.Error($"Unable to connect to {network.Name} as it has no servers defined!");
+                return;
+            }
+
+            if (network.AddressIndex + 1 > network.Address.Count)
+            {
+                network.AddressIndex = 0;
+            }
+
+            var address = network.Address[network.AddressIndex];
+
+            // Bump index so we try the next server should we fail to connect
+            network.AddressIndex++;
+
             var port = 6667;
             var addr = string.Empty;
-            var split = network.Address.Split(':');
+            var split = address.Split(':');
             if (split.Length > 0)
                 addr = split[0];
             if (split.Length > 1)
@@ -755,50 +784,28 @@ namespace Jackett.Services
 
             BroadcastMessageToNetwork(network, new Message()
             {
-                From = network.Address,
-                Text = $"Connecting to {network.Address} ..",
+                From = network.Name,
+                Text = $"Connecting to {address} ..",
                 Type = MessageType.System
             });
         }
 
-        public List<NetworkInfo> NetworkInfo
-        {
-            get
-            {
-                var info = new List<NetworkInfo>();
-                foreach(var network in networks)
-                {
-                    var netInfo = new NetworkInfo()
-                    {
-                        Address = network.Address,
-                        Name = network.Name
-                    };
-
-                    foreach (var channel in network.Channels) {
-                        netInfo.Channels.Add(new ChannelInfo()
-                        {
-                            Joined = channel.Joined,
-                            Name = channel.Name
-                        });
-                    }
-
-                    info.Add(netInfo);
-                }
-                return info;
-            }
-        }
-
         void INotificationHandler<AddProfileEvent>.Handle(AddProfileEvent notification)
         {
-            var network = networks.Where(n => n.Id == notification.Profile.Id).FirstOrDefault();
+            CreateNetworkFromProfile(notification.Profile);
+        }
+
+        public void CreateNetworkFromProfile(IRCProfile profile)
+        {
+            var network = networks.Where(n => n.Id == profile.Id).FirstOrDefault();
             if (network == null)
             {
                 network = new Network()
                 {
-                    Id = notification.Profile.Id,
-                    Name = notification.Profile.Name,
-                    Address = "adams.freenode.net",
-                    Username = notification.Profile.Username
+                    Id = profile.Id,
+                    Name = profile.Name,
+                    Address = profile.Servers,
+                    Username = profile.Username
                 };
 
                 SetupNetwork(network);

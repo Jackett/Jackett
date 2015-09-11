@@ -277,6 +277,7 @@
     <Compile Include="Models\Irc\DTO\ChannelInfo.cs" />
     <Compile Include="Models\Irc\DTO\NetworkInfo.cs" />
     <Compile Include="Models\Irc\IRCProfile.cs" />
+    <Compile Include="Models\Irc\IRCProfiles.cs" />
     <Compile Include="Models\Irc\Message.cs" />
     <Compile Include="Models\Irc\MessageType.cs" />
     <Compile Include="Models\Irc\Network.cs" />

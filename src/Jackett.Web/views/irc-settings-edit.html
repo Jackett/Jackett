@@ -19,6 +19,19 @@
             <label for="nickname">Nickname</label>
             <input id="nickname" type="text" value.bind="nickname" class="form-control">
         </div>
-        <button type="submit" class="ui button">Submit</button>
+        <div class="field">
+            <label for="nickname">Servers</label>
+            <div class="ui grid jackett-ircprofile-server"  repeat.for="server of servers">
+                <div class="fifteen wide column">
+                    <input type="text" value.bind="server" class="form-control">
+
+                </div>
+                <div class="one wide column">
+                    <i class="fa fa-minus-circle" click.trigger="$parent.removeServer($index)"></i>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="ui button"><i class="fa fa-tasks"></i> Save Profile</button>
+        <button type="button" class="ui button" click.trigger="addButton()"><i class="fa fa-plus"></i> Add server</button>
     </form>
 </template>

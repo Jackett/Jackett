@@ -16,6 +16,7 @@ export class IRCSettings {
     nickname: string;
     error: string;
     id: string;
+    servers: string[];
 
     profileSelect: any;
     validation: any;
@@ -41,10 +42,6 @@ export class IRCSettings {
             this.ircService.getAutoDLProfiles()
                 .then(profiles => {
                     this.networks = profiles;
-                    // Set default
-                    if (profiles.length > 0) {
-                        this.name = profiles[0].Name;
-                    }
                 })
         ];
         if (params.name) {
@@ -53,15 +50,35 @@ export class IRCSettings {
                 this.name = profile.Name;
                 this.nickname = profile.Username;
                 this.id = profile.Id;
+                this.servers = profile.Servers;
             }));
         }
         return Promise.all(actions);
     }
 
     attached() {
+        var vm = this;
         $(this.profileSelect).val(this.autodlnetwork).dropdown().on('change', e => {
             this.autodlnetwork = this.name = e.target.value;
+            vm.servers = [];
+            vm.networks.forEach(n=> {
+                if (n.Name === e.target.value) {
+                    vm.servers = n.Servers;
+                }
+            });
         });
+    }
+
+    removeServer(index: number) {
+        this.servers.splice(index, 1);
+    }
+
+    addButton() {
+        if (this.servers === undefined) {
+            this.servers = [];
+        }
+
+        this.servers.push('');
     }
 
     async submit() {
@@ -74,6 +91,7 @@ export class IRCSettings {
             profile.Username = this.nickname;
             profile.Profile = this.autodlnetwork;
             profile.Id = this.id;
+            profile.Servers = this.servers;
             await this.ircService.setProfile(profile);
 
             this.router.navigate('irc-settings');
