@@ -26,7 +26,8 @@ export let App = class {
             { route: ['settings'], name: 'settings', moduleId: './views/settings', title: 'Server settings' },
             { route: 'irc-settings', name: 'irc-settings', moduleId: './views/irc-settings', title: 'IRC Settings' },
             { route: 'irc-profile-edit/:name', name: 'irc-profile-edit', moduleId: './views/irc-settings-edit', title: 'Edit Profile' },
-            { route: 'irc-profile-create', name: 'irc-profile-create', moduleId: './views/irc-settings-edit', title: 'Create Profile' }
+            { route: 'irc-profile-create', name: 'irc-profile-create', moduleId: './views/irc-settings-edit', title: 'Create Profile' },
+            { route: 'autodlprofile-configure/:type', name: 'autodlprofile-configure', moduleId: './views/autodlprofile-configure', title: 'AutoDL Profile Config' }
         ]);
         this.router = router;
     }

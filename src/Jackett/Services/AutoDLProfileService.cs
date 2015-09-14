@@ -1,5 +1,6 @@
 ﻿using CuttingEdge.Conditions;
 using Jackett.Models.AutoDL;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,20 +28,66 @@ namespace Jackett.Services
         }
     }
 
-    public interface IAutoDLProfileService {
+    public interface IAutoDLProfileervice {
         void Load();
         List<NetworkSummary> GetNetworks();
+        List<AutoDLProfileSummary> GetProfiles();
+        void Set(AutoDLProfileSummary profile);
     }
 
-    class AutoDLProfileService : IAutoDLProfileService
+    class AutoDLProfileService : IAutoDLProfileervice
     {
         private IConfigurationService configSerivce;
         private List<TrackerInfo> trackers = new List<TrackerInfo>();
+        Logger logger;
 
-        public AutoDLProfileService(IConfigurationService c)
+
+        public AutoDLProfileService(IConfigurationService c, Logger l)
         {
             configSerivce = c;
+            logger = l;
             Load();
+        }
+
+        public List<AutoDLProfileSummary> GetProfiles()
+        {
+            return trackers.Select(t => new AutoDLProfileSummary()
+            {
+                LongName = t.LongName,
+                Options = t.Options,
+                ShortName = t.ShortName,
+                SiteName= t.SiteName,
+                Type = t.Type
+            }).ToList();
+        }
+
+        public void Set(AutoDLProfileSummary profile)
+        {
+            var tracker = trackers.Where(t => t.Type == profile.Type).FirstOrDefault();
+            if (tracker != null)
+            {
+                tracker.IsConfigured = true;
+                tracker.Options = profile.Options;
+            }
+
+            Save();
+        }
+
+        private void Save()
+        {
+            var config = new SavedAutoDLConfigurations()
+            {
+                Configurations = trackers.Where(t => t.IsConfigured).Select(t =>
+                  {
+                      return new SavedAutoDLConfig()
+                      {
+                          Type = t.Type,
+                          Options = t.Options.Where(o=>!string.IsNullOrWhiteSpace(o.Name)).ToDictionary(c => c.Name, c => c.Value)
+                      };
+                  }).ToList()
+            };
+
+            configSerivce.SaveConfig<SavedAutoDLConfigurations>(config);
         }
 
         public void Load()
@@ -64,10 +111,129 @@ namespace Jackett.Services
                // Condition.Requires<string>(info.SiteName, "SiteName").IsNotNullOrWhiteSpace();
                 Condition.Requires<string>(info.Type, "Type").IsNotNullOrWhiteSpace();
 
-
-                foreach(var setting in xml.Root.Element("settings").Descendants())
+                info.Options.Add(new ConfigOption()
                 {
+                    Name = "enabled",
+                    Label = "Enabled",
+                    DefaultValue = "true",
+                    Type = ConfigOptionType.Bool
+                });
 
+                info.Options.Add(new ConfigOption()
+                {
+                    Name = "upload-delay-secs",
+                    Label = "Delay",
+                    Tooltip = "Wait this many seconds before uploading/saving the torrent. Default is 0.",
+                    DefaultValue = "0",
+                    Type = ConfigOptionType.Integer
+                });
+
+                info.Options.Add(new ConfigOption()
+                {
+                    Name = "force-ssl",
+                    Label = "Force HTTPS (SSL) downloads",
+                    Tooltip = "If checked, all torrent file downloads from this tracker will be forced to use the HTTPS protocol. Not all trackers support this.",
+                    DefaultValue = "false",
+                    Type = ConfigOptionType.Bool
+                });
+
+                foreach (var setting in xml.Root.Element("settings").Descendants())
+                {
+                    var tag = setting.Name;
+                    var option = new ConfigOption()
+                    {
+                        Name = setting.AttributeString("name"),
+                        DefaultValue = setting.AttributeString("defaultValue")??string.Empty,
+                        Label = setting.AttributeString("text"),
+                        EmptyText = setting.AttributeString("emptytext"),
+                        Tooltip = setting.AttributeString("tooltiptext"),
+                        PasteGroup = setting.AttributeString("pasteGroup"),
+                        PasteRegex = setting.AttributeString("pasteRegex"),
+                        MinValue = setting.AttributeString("minValue"),
+                        MaxValue = setting.AttributeString("maxValue"),
+                        IsDownloadVar = setting.AttributeString("name")=="true"
+                    };
+
+                    if(!string.IsNullOrEmpty(setting.AttributeString("type")))
+                        option.Type = (ConfigOptionType)Enum.Parse(typeof(ConfigOptionType), setting.AttributeString("type"), true);
+
+                    if (tag == "gazelle_description" || tag == "description" || tag == "cookie_description")
+                    {
+                        option.Type = ConfigOptionType.Description;
+                        option.Label = "Paste (Ctrl+V) any torrent download link into any one of the two text boxes below to automatically extract authkey and torrent_pass.";
+                    }
+                    else if (tag == "gazelle_authkey" || tag == "authkey")
+                    {
+                        option.Type = ConfigOptionType.TextBox;
+                        option.Name = "authkey";
+                        option.Label = "authkey";
+                        option.Tooltip = "The authkey in any torrent download link.";
+                        option.PasteGroup = "authkey,torrent_pass";
+                        option.PasteRegex = "[\\?&]authkey=([\\da-zA-Z]{32})";
+                    }
+                    else if (tag == "gazelle_torrent_pass")
+                    {
+                        option.Type = ConfigOptionType.TextBox;
+                        option.Name = "torrent_pass";
+                        option.Label = "torrent_pass";
+                        option.Tooltip = "The torrent_pass in any torrent download link.";
+                        option.PasteGroup = "authkey,torrent_pass";
+                        option.PasteRegex = "[\\?&]torrent_pass=([\\da-zA-Z]{32})";
+                    }
+                    else if (tag == "description")
+                    {
+                        option.Type = ConfigOptionType.Description;
+                    }
+                    else if (tag == "authkey")
+                    {
+                        option.Type = ConfigOptionType.TextBox;
+                        option.Name = "authkey";
+                        option.Label = "authkey";
+                        option.Tooltip = "The authkey in any torrent download link.";
+                        option.PasteGroup = "authkey";
+                        option.PasteRegex = "[\\?&]authkey=([\\da-fA-F]{32})";
+                    }
+                    else if (tag == "passkey")
+                    {
+                        option.Type = ConfigOptionType.TextBox;
+                        option.Name = "passkey";
+                        option.Label = "passkey";
+                        option.Tooltip = "The passkey in any torrent download link.";
+                        option.PasteGroup = "passkey";
+                        option.PasteRegex = "[\\?&]passkey=([\\da-fA-F]{32})";
+                    }
+                    else if (tag == "cookie")
+                    {
+                        option.Type = ConfigOptionType.TextBox;
+                        option.Name = "cookie";
+                        option.Label = "Log in to your tracker's home page with your browser.<br><br><strong>Chrome:</strong> Options Menu -&gt; Privacy -&gt; Content Settings -&gt; All cookies and site data<br><strong>Firefox:</strong> Firefox Menu -&gt; Options -&gt; Privacy -&gt; Show cookies<br><strong>Safari:</strong> Action Menu -&gt; Preferences -&gt; Privacy -&gt; Details<br><br>Find your tracker site in the cookie or file list.The values needed may vary between trackers. Often these are _uid_ and _pass_.<br />Set the cookie like <strong>uid=XXX; pass=YYY</strong>, separating each key=value pair with a semicolon.";
+                        option.Tooltip = "The cookie.";
+                    }
+                    else if (tag == "integer")
+                    {
+                        option.Type = ConfigOptionType.Integer;
+                        option.MinValue = "-999999999";
+                    }
+                    else if (tag == "delta")
+                    {
+                        option.Type = ConfigOptionType.Integer;
+                        option.Name = "delta";
+                        option.Label = "Torrent ID delta";
+                        option.MinValue = "-999999999";
+
+                    }
+                    else if (tag == "textbox")
+                    {
+                        option.Type = ConfigOptionType.TextBox;
+                        option.Tooltip = $"{info.LongName} {setting.Name}";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(option.Label))
+                        option.Label = option.Name;
+                    if (!option.Type.HasValue)
+                        throw new Exception($"No option type specified for setting {tag} on tracker {info.LongName}");
+
+                    info.Options.Add(option);
                 }
 
                 foreach (var server in xml.Root.Element("servers").Descendants())
@@ -84,6 +250,29 @@ namespace Jackett.Services
                 }
 
                 trackers.Add(info);
+            }
+
+            logger.Trace($"Loaded {trackers.Count} irc profiles.");
+
+            var savedConfig = configSerivce.GetConfig<SavedAutoDLConfigurations>();
+            if (savedConfig != null)
+            {
+                foreach(var config in savedConfig.Configurations)
+                {
+                    var tracker = trackers.Where(t => t.Type == config.Type).FirstOrDefault();
+                    if (tracker != null)
+                    {
+                        tracker.IsConfigured = true;
+                        foreach(var savedOption in config.Options)
+                        {
+                            var trackerOption = tracker.Options.Where(o => o.Name == savedOption.Key).FirstOrDefault();
+                            if (trackerOption != null)
+                            {
+                                trackerOption.Value = savedOption.Value;
+                            }
+                        }
+                    }
+                }
             }
         }
 

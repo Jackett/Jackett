@@ -1,0 +1,19 @@
+﻿<template>
+    <h1 class="ui header">Configure ${profile.LongName}</h1>
+    <form ref="form" role="form" class="ui form form-group" submit.delegate="submit()" validate.bind="validation">
+        <div class="field" repeat.for="field of profile.Options">
+            <label for="field${$index}">${field.Label}</label>
+            <div if.bind="field.Type =='Bool'">
+                <input type="checkbox" checked.bind="field.Value" />
+            </div>
+            <div if.bind="field.Type =='Integer'">
+                <input type="number" step="1" value.bind="field.Value" />
+            </div>
+            <div if.bind="field.Type =='TextBox'">
+                <input type="text" data-fieldname="${field.Name}" value.bind="field.Value" />
+            </div>
+
+        </div>
+        <button type="submit" class="ui button"><i class="fa fa-tasks"></i> Apply</button>
+    </form>
+</template>

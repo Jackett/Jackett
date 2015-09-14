@@ -49,11 +49,11 @@ namespace Jackett.Services
         private IConfigurationService configService;
         private Logger logger;
         private IWebClient client;
-        private IAutoDLProfileService autoDlService;
+        private IAutoDLProfileervice autoDlService;
         private IIRCProfileService ircProfileService;
         private IIRCService ircService;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileService a, IIRCProfileService ircp, IIRCService irc)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileervice a, IIRCProfileService ircp, IIRCService irc)
         {
             indexerService = i;
             processService = p;

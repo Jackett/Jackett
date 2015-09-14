@@ -262,7 +262,12 @@
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Models\AutoDL\ConfigOption.cs" />
+    <Compile Include="Models\AutoDL\AutoDLProfileConfig.cs" />
+    <Compile Include="Models\AutoDL\AutoDLProfileSummary.cs" />
     <Compile Include="Models\AutoDL\NetworkSummary.cs" />
+    <Compile Include="Models\AutoDL\SavedAutoDLConfig.cs" />
+    <Compile Include="Models\AutoDL\SavedAutoDLConfigurations.cs" />
     <Compile Include="Models\AutoDL\ServerInfo.cs" />
     <Compile Include="Models\AutoDL\TrackerInfo.cs" />
     <Compile Include="Models\Commands\IRC\AddProfileEvent.cs" />

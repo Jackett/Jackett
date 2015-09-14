@@ -83,6 +83,9 @@
   <ItemGroup>
     <Content Include="Index.html" />
     <Content Include="typings\aurelia-amd\aurelia-amd.d.js" />
+    <Content Include="views\add-indexer.html" />
+    <Content Include="views\autodlprofile-configure.html" />
+    <Content Include="views\Indexers.html" />
     <Content Include="views\irc-settings-edit.html" />
     <Content Include="views\irc-settings.html" />
     <Content Include="views\settings.html" />
@@ -102,6 +105,7 @@
     <TypeScriptCompile Include="Scripts\typings\moment\moment-node.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
+    <TypeScriptCompile Include="Services\AutoDLService.ts" />
     <TypeScriptCompile Include="Services\IRCProfileService.ts" />
     <TypeScriptCompile Include="Services\IRCService.ts" />
     <TypeScriptCompile Include="Services\SignalRService.ts" />
@@ -140,6 +144,9 @@
     <TypeScriptCompile Include="typings\reflect-metadata.d.ts" />
     <TypeScriptCompile Include="typings\semantic-ui.d.ts" />
     <TypeScriptCompile Include="typings\whatwg-fetch.d.ts" />
+    <TypeScriptCompile Include="views\add-indexer.ts" />
+    <TypeScriptCompile Include="views\autodlprofile-configure.ts" />
+    <TypeScriptCompile Include="views\Indexers.ts" />
     <TypeScriptCompile Include="views\irc-settings-edit.ts" />
     <TypeScriptCompile Include="views\irc-settings.ts" />
     <TypeScriptCompile Include="views\settings.ts" />

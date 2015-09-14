@@ -57,6 +57,10 @@ namespace Jackett
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
 
+            // Use Json.NET as the serialization lib as it encodes enums as strings.
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+
+
             // ES6 Imports always pull from a .js file however signalr doesn't support the call with an extensions so remap it.
             appBuilder.Rewrite("/signalr/hubs.js", "/signalr/hubs");
 
@@ -79,11 +83,16 @@ namespace Jackett
             appBuilder.UseWebApi(config);
 
             config.Routes.MapHttpRoute(
+               name: "autodl",
+               routeTemplate: "webapi/autodl",
+                 defaults: new { controller = "AutoDL"}
+            );
+
+            config.Routes.MapHttpRoute(
              name: "irccommand",
              routeTemplate: "webapi/irccommand",
                defaults: new { controller = "IRCChannel", action = "Command" }
             );
-
 
             config.Routes.MapHttpRoute(
             name: "ircmessages",

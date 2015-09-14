@@ -1,4 +1,5 @@
-﻿using Jackett.Models.DTO;
+﻿using Jackett.Models.AutoDL;
+using Jackett.Models.DTO;
 using Jackett.Services;
 using Jackett.Utils;
 using System;
@@ -26,5 +27,6 @@ namespace Jackett.Controllers
         {
             return irc.GetSummary();
         }
+
     }
 }

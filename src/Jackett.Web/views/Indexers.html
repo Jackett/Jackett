@@ -1,0 +1,7 @@
+﻿<template>
+    <h1 class="ui header">Indexers</h1>
+    <div repeat.for="autodl of autodlProfiles">
+        <h4><a href="http://${autodl.SiteName}">${autodl.LongName}</a></h4>
+        <a href="javascript:void(0)" route-href="route: autodlprofile-configure; params.bind: { type: autodl.Type }">Edit</a>
+    </div>
+</template>

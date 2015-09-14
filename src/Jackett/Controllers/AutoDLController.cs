@@ -17,17 +17,31 @@ namespace Jackett.Controllers
     [JackettAPINoCache]
     public class AutoDLController : ApiController
     {
-        IAutoDLProfileService autodlService;
+        IAutoDLProfileervice autodlService;
 
-        public AutoDLController(IAutoDLProfileService a)
+        public AutoDLController(IAutoDLProfileervice a)
         {
             autodlService = a;
         }
 
         [HttpGet]
+        [Route("AutoDL/Summary")]
         public List<NetworkSummary> Summary()
         {
             return autodlService.GetNetworks();
+        }
+
+        [HttpGet]
+        public List<AutoDLProfileSummary> Index()
+        {
+            return autodlService.GetProfiles();
+        }
+
+        [HttpPut]
+        public IHttpActionResult Put([FromBody]AutoDLProfileSummary profile)
+        {
+            autodlService.Set(profile);
+            return Ok();
         }
     }
 }
