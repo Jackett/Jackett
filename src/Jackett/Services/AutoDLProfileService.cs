@@ -1,5 +1,6 @@
 ﻿using CuttingEdge.Conditions;
 using Jackett.Models.AutoDL;
+using Jackett.Models.AutoDL.Parser;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -11,23 +12,6 @@ using System.Xml.Linq;
 
 namespace Jackett.Services
 {
-    public static class ElementExtensions
-    {
-        public static string AttributeString(this XElement element, string name)
-        {
-            var attr = element.Attribute(name);
-            if (attr == null)
-                return string.Empty;
-            return attr.Value;
-        }
-
-        public static List<string> AttributeStringList(this XElement element, string name)
-        {
-            var value = element.AttributeString(name);
-            return value.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
-    }
-
     public interface IAutoDLProfileervice {
         void Load();
         List<NetworkSummary> GetNetworks();
@@ -94,21 +78,22 @@ namespace Jackett.Services
         {
             trackers.Clear();
 
-            foreach (var path in Directory.GetFiles(configSerivce.GetAutoDLFolder(), "*.tracker")) {
+            foreach (var path in Directory.GetFiles(configSerivce.GetAutoDLFolder(), "*.tracker"))
+            {
                 var xml = XDocument.Load(path);
                 var info = new TrackerInfo()
                 {
                     FileName = Path.GetFileName(path),
                     LongName = xml.Root.AttributeString("longName"),
                     ShortName = xml.Root.AttributeString("shortName"),
-                    SiteName =  xml.Root.AttributeString("siteName"),
-                    Type =  xml.Root.AttributeString("type")
+                    SiteName = xml.Root.AttributeString("siteName"),
+                    Type = xml.Root.AttributeString("type")
                 };
 
                 Condition.Requires<string>(info.FileName, "FileName").IsNotNullOrWhiteSpace();
                 Condition.Requires<string>(info.LongName, "LongName").IsNotNullOrWhiteSpace();
                 Condition.Requires<string>(info.ShortName, "ShortName").IsNotNullOrWhiteSpace();
-               // Condition.Requires<string>(info.SiteName, "SiteName").IsNotNullOrWhiteSpace();
+                // Condition.Requires<string>(info.SiteName, "SiteName").IsNotNullOrWhiteSpace();
                 Condition.Requires<string>(info.Type, "Type").IsNotNullOrWhiteSpace();
 
                 info.Options.Add(new ConfigOption()
@@ -137,13 +122,13 @@ namespace Jackett.Services
                     Type = ConfigOptionType.Bool
                 });
 
-                foreach (var setting in xml.Root.Element("settings").Descendants())
+                foreach (var setting in xml.Root.Element("settings").Elements())
                 {
                     var tag = setting.Name;
                     var option = new ConfigOption()
                     {
                         Name = setting.AttributeString("name"),
-                        DefaultValue = setting.AttributeString("defaultValue")??string.Empty,
+                        DefaultValue = setting.AttributeString("defaultValue") ?? string.Empty,
                         Label = setting.AttributeString("text"),
                         EmptyText = setting.AttributeString("emptytext"),
                         Tooltip = setting.AttributeString("tooltiptext"),
@@ -151,10 +136,10 @@ namespace Jackett.Services
                         PasteRegex = setting.AttributeString("pasteRegex"),
                         MinValue = setting.AttributeString("minValue"),
                         MaxValue = setting.AttributeString("maxValue"),
-                        IsDownloadVar = setting.AttributeString("name")=="true"
+                        IsDownloadVar = setting.AttributeString("name") == "true"
                     };
 
-                    if(!string.IsNullOrEmpty(setting.AttributeString("type")))
+                    if (!string.IsNullOrEmpty(setting.AttributeString("type")))
                         option.Type = (ConfigOptionType)Enum.Parse(typeof(ConfigOptionType), setting.AttributeString("type"), true);
 
                     if (tag == "gazelle_description" || tag == "description" || tag == "cookie_description")
@@ -236,17 +221,45 @@ namespace Jackett.Services
                     info.Options.Add(option);
                 }
 
-                foreach (var server in xml.Root.Element("servers").Descendants())
+                foreach (var server in xml.Root.Element("servers").Elements())
                 {
                     var serverInfo = new ServerInfo()
                     {
                         Announcers = server.AttributeStringList("announcerNames"),
                         Channels = server.AttributeStringList("channelNames"),
-                        Network =  server.AttributeString("network"),
+                        Network = server.AttributeString("network"),
                         Servers = server.AttributeStringList("serverNames"),
                     };
 
                     info.Servers.Add(serverInfo);
+                }
+
+                foreach (var node in xml.Root.Element("parseinfo").Elements())
+                {
+                    switch (node.Name.ToString())
+                    {
+                        case "multilinepatterns":
+                            // todo
+                            break;
+                        case "linepatterns":
+                            info.Parser.SingleLineMatches.Add(new Models.AutoDL.Parser.LinePatterns()
+                            {
+                                Children = ParseCommands(node)
+                            });
+                            break;
+                        case "linematched":
+                            info.Parser.MatchParsers.Add(new Models.AutoDL.Parser.LineMatched()
+                            {
+                                Children = ParseCommands(node)
+                            });
+                            break;
+                        case "ignore":
+                            info.Parser.IgnoreMatches.Add(new Models.AutoDL.Parser.Ignore()
+                            {
+                                Children = ParseCommands(node)
+                            });
+                            break;
+                    }
                 }
 
                 trackers.Add(info);
@@ -274,6 +287,65 @@ namespace Jackett.Services
                     }
                 }
             }
+        }
+
+        private List<IParserCommand> ParseCommands(XElement node)
+        {
+            var subCommands = new List<IParserCommand>();
+            foreach(var childNode in node.Elements())
+            {
+                IParserCommand parsedAction = null;
+                switch (childNode.Name.ToString().ToLowerInvariant())
+                {
+                    case "extract":
+                        parsedAction = new Extract();
+                        break;
+                    case "http":
+                        parsedAction = new Http(childNode);
+                        break;
+                    case "ignore":
+                        parsedAction = new Ignore();
+                        break;
+                    case "regex":
+                        parsedAction = new Regex(childNode);
+                        break;
+                    case "string":
+                        parsedAction = new Models.AutoDL.Parser.String(childNode);
+                        break;
+                    case "var":
+                        parsedAction = new Var(childNode);
+                        break;
+                    case "varenc":
+                        parsedAction = new VarEnc(childNode);
+                        break;
+                    case "varreplace":
+                        parsedAction = new VarReplace(childNode);
+                        break;
+                    case "vars":
+                        parsedAction = new Vars(childNode);
+                        break;
+                    case "setregex":
+                        parsedAction = new SetRegex(childNode);
+                        break;
+                }
+
+                if (parsedAction == null)
+                {
+                    var msg = "Failed to parse AutoDL action: " + childNode.Name;
+                    logger.Error(msg);
+                    //throw new Exception(msg);
+                }
+
+                var baseCommand = parsedAction as BaseParserCommand;
+                if (baseCommand != null)
+                {
+                    baseCommand.Children = ParseCommands(childNode);
+                }
+
+                subCommands.Add(parsedAction);
+            }
+
+            return subCommands;
         }
 
         public List<NetworkSummary> GetNetworks()

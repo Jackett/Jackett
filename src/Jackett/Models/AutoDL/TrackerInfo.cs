@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jackett.Models.AutoDL.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,5 +22,7 @@ namespace Jackett.Models.AutoDL
         public List<ServerInfo> Servers { get; set; } = new List<ServerInfo>();
 
         public List<ConfigOption> Options { get; set; } = new List<ConfigOption>();
+
+        public ParseInfo Parser { get; set; } = new ParseInfo();
     }
 }
