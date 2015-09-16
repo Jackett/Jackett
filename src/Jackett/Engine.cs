@@ -109,7 +109,7 @@ namespace Jackett
 
         private static void SetupLogging(ContainerBuilder builder)
         {
-            var logLevel = Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
+            var logLevel = Startup.TracingEnabled ? LogLevel.Trace : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
             ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 

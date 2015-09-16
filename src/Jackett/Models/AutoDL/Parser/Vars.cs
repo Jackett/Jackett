@@ -28,9 +28,8 @@ namespace Jackett.Models.AutoDL.Parser
                 else
                 {
                     var originalItem = state.CurrentItem;
-                    state.CurrentItem = state.TempVariables[i];
+                    state.CurrentValue = state.TempVariables[i];
                     base.Children[i].Execute(state);
-                    state.CurrentItem = originalItem;
                 }
             }
 

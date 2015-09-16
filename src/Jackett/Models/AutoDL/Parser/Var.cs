@@ -23,8 +23,10 @@ namespace Jackett.Models.AutoDL.Parser
         {
             if (state.TempVariables.Count == 0)
             {
-                state.Logger.Debug($"{state.Tracker} Var setting: {name} to {state.CurrentItem}");
-                state.Variables[name] = state.CurrentItem;
+                // Write variable
+                state.CurrentValue = state.Variables[name];
+                state.Logger.Debug($"{state.Tracker} Var returning {state.Variables[name]} from {name}.");
+               
                 return true;
             }
             else if (base.Children.Count > 0)
@@ -35,14 +37,16 @@ namespace Jackett.Models.AutoDL.Parser
                 for(var i=0;i<base.Children.Count;i++)
                 {
                     var action = base.Children[i];
-                    if (!action.Execute(state))
+                    var subState = state.Clone();
+                    subState.TempVariables.Clear();
+                    if (!action.Execute(subState))
                     {
                         state.Logger.Debug($"{state.Tracker} Var sub {i} action failed.");
                         return false;
                     }
                     else
                     {
-                        builder.Append(state.CurrentValue);
+                        builder.Append(subState.CurrentValue);
                     }
                 }
 
@@ -52,9 +56,8 @@ namespace Jackett.Models.AutoDL.Parser
                 return true;
             } else
             {
-                // Write variable
-                state.CurrentValue = state.Variables[name];
-                state.Logger.Debug($"{state.Tracker} Var returning {state.Variables[name]} from {name}.");
+                state.Logger.Debug($"{state.Tracker} Var setting: {name} to {state.CurrentValue}");
+                state.Variables[name] = state.CurrentValue;
                 return true;
             }
         }

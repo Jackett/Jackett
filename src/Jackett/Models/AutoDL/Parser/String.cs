@@ -23,7 +23,7 @@ namespace Jackett.Models.AutoDL.Parser
 
         public bool Execute(ParserState state)
         {
-            if (name == null)
+            if (string.IsNullOrEmpty(name))
             {
                 state.CurrentValue = value;
                 state.Logger.Debug($"{state.Tracker} String returning value {value}.");

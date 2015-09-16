@@ -17,9 +17,9 @@ namespace Jackett.Controllers
     [JackettAPINoCache]
     public class AutoDLController : ApiController
     {
-        IAutoDLProfileervice autodlService;
+        IAutoDLProfileService autodlService;
 
-        public AutoDLController(IAutoDLProfileervice a)
+        public AutoDLController(IAutoDLProfileService a)
         {
             autodlService = a;
         }

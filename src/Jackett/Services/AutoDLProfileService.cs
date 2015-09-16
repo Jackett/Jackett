@@ -12,14 +12,15 @@ using System.Xml.Linq;
 
 namespace Jackett.Services
 {
-    public interface IAutoDLProfileervice {
+    public interface IAutoDLProfileService {
         void Load();
         List<NetworkSummary> GetNetworks();
         List<AutoDLProfileSummary> GetProfiles();
         void Set(AutoDLProfileSummary profile);
+        TrackerInfo GetTracker(string id);
     }
 
-    class AutoDLProfileService : IAutoDLProfileervice
+    class AutoDLProfileService : IAutoDLProfileService
     {
         private IConfigurationService configSerivce;
         private List<TrackerInfo> trackers = new List<TrackerInfo>();
@@ -43,6 +44,11 @@ namespace Jackett.Services
                 SiteName= t.SiteName,
                 Type = t.Type
             }).ToList();
+        }
+
+        public TrackerInfo GetTracker(string id)
+        {
+            return trackers.Where(t => t.Type == "tl").First();
         }
 
         public void Set(AutoDLProfileSummary profile)
@@ -205,7 +211,6 @@ namespace Jackett.Services
                         option.Name = "delta";
                         option.Label = "Torrent ID delta";
                         option.MinValue = "-999999999";
-
                     }
                     else if (tag == "textbox")
                     {
@@ -262,6 +267,7 @@ namespace Jackett.Services
                     }
                 }
 
+                logger.Trace($"Loaded {info.FileName}");
                 trackers.Add(info);
             }
 
@@ -326,6 +332,18 @@ namespace Jackett.Services
                         break;
                     case "setregex":
                         parsedAction = new SetRegex(childNode);
+                        break;
+                    case "if":
+                        parsedAction = new If(childNode);
+                        break;
+                    case "extractone":
+                        parsedAction = new ExtractOne(childNode);
+                        break;
+                    case "extracttags":
+                        parsedAction = new ExtractTags(childNode);
+                        break;
+                    case "setvarif":
+                        parsedAction = new SetVarIf(childNode);
                         break;
                 }
 

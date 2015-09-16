@@ -9,6 +9,10 @@ namespace Jackett.Models.Commands.IRC
 {
     public class IRCMessageEvent : INotification
     {
-        public string Id { get; set;}
+        public string Network { get; set; }
+        public string Channel { get; set;}
+        public string Profile { get; set; }
+        public string Message { get; set; }
+        public string From { get; set; }
     }
 }

@@ -123,12 +123,12 @@ namespace Jackett.Services
 
         private void NotifyChannelChange(Channel c)
         {
-            mediator.Publish(new IRCMessageEvent() { Id = c.Id });
+            mediator.Publish(new IRCMessageEvent() { Channel = c.Id });
         }
 
         private void NotifyNetworkChange(Network n)
         {
-            mediator.Publish(new IRCMessageEvent() { Id = n.Id });
+            mediator.Publish(new IRCMessageEvent() { Channel = n.Id });
         }
 
         public List<NetworkDTO> GetSummary()
@@ -710,7 +710,15 @@ namespace Jackett.Services
                 Text = e.Text,
                 Type = MessageType.Message
             });
-            NotifyChannelChange(info.Channel);
+
+            mediator.Publish(new IRCMessageEvent() {
+                Channel = info.Channel.Id,
+                From = e.Source.Name,
+                Message = e.Text,
+                Network = info.Network.Id,
+                Profile = info.Network.Id
+            });
+            // NotifyChannelChange(info.Channel);
         }
 
         private void Channel_UserJoined(object sender, IrcChannelUserEventArgs e)

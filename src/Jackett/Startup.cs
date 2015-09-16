@@ -66,16 +66,13 @@ namespace Jackett
 
             appBuilder.Use<WebApiRootRedirectMiddleware>();
 
-            // Setup tracing if enabled
-            if (TracingEnabled)
-            {
-                config.EnableSystemDiagnosticsTracing();
-                config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer());
-            }
+        
             // Add request logging if enabled
             if (LogRequests)
             {
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
+                config.EnableSystemDiagnosticsTracing();
+                config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer());
             }
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());

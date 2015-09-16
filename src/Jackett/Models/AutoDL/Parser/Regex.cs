@@ -30,7 +30,16 @@ namespace Jackett.Models.AutoDL.Parser
                 return false;
             }
 
-            state.TempVariables = matches.Cast<Match>().Where(m => m.Success).Select(m => m.Value).ToList();
+            state.TempVariables = new List<string>();
+
+            foreach(var match in matches.Cast<Match>().Where(m => m.Success))
+            {
+                foreach(var group in match.Groups.Cast<Group>().Skip(1))
+                {
+                    state.TempVariables.Add(group.Value);
+                }
+            }
+
             return true;
         }
     }

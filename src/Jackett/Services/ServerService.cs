@@ -49,11 +49,12 @@ namespace Jackett.Services
         private IConfigurationService configService;
         private Logger logger;
         private IWebClient client;
-        private IAutoDLProfileervice autoDlService;
+        private IAutoDLProfileService autoDlService;
         private IIRCProfileService ircProfileService;
         private IIRCService ircService;
+        private IMediator mediator;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileervice a, IIRCProfileService ircp, IIRCService irc)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IAutoDLProfileService a, IIRCProfileService ircp, IIRCService irc, IMediator m)
         {
             indexerService = i;
             processService = p;
@@ -66,6 +67,7 @@ namespace Jackett.Services
             autoDlService.Load();
             ircProfileService = ircp;
             ircService = irc;
+            mediator = m;
             LoadConfig();
         }
 
@@ -156,6 +158,15 @@ namespace Jackett.Services
             {
                 ircService.CreateNetworkFromProfile(profile);
             }
+
+            mediator.Publish(new IRCMessageEvent()
+            {
+                Channel = "#tlannounces",
+                From = "_AnnounceBot_",
+                Message = "New Torrent Announcement: <Games :: Wii>  Name:'PokePark Pikachus Adventure REPACK USA WII-dumpTruck' uploaded by 'Anonymous' -  http://www.torrentleech.org/torrent/263302",
+                Network = "tl",
+                Profile = "tl"
+            });
         }
 
         public void ReserveUrls(bool doInstall = true)

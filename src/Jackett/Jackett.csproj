@@ -269,7 +269,9 @@
     <Compile Include="Models\AutoDL\NetworkSummary.cs" />
     <Compile Include="Models\AutoDL\Parser\BaseParserCommand.cs" />
     <Compile Include="Models\AutoDL\Parser\Extract.cs" />
+    <Compile Include="Models\AutoDL\Parser\ExtractTags.cs" />
     <Compile Include="Models\AutoDL\Parser\Http.cs" />
+    <Compile Include="Models\AutoDL\Parser\SetVarIf.cs" />
     <Compile Include="Models\AutoDL\Parser\Ignore.cs" />
     <Compile Include="Models\AutoDL\Parser\IParserCommand.cs" />
     <Compile Include="Models\AutoDL\Parser\LineMatched.cs" />
@@ -279,6 +281,8 @@
     <Compile Include="Models\AutoDL\Parser\SetRegex.cs" />
     <Compile Include="Models\AutoDL\Parser\Var.cs" />
     <Compile Include="Models\AutoDL\Parser\String.cs" />
+    <Compile Include="Models\AutoDL\Parser\If.cs" />
+    <Compile Include="Models\AutoDL\Parser\ExtractOne.cs" />
     <Compile Include="Models\AutoDL\Parser\VarEnc.cs" />
     <Compile Include="Models\AutoDL\Parser\Vars.cs" />
     <Compile Include="Models\AutoDL\Parser\Regex.cs" />
@@ -357,6 +361,7 @@
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="OWINRewriter.cs" />
+    <Compile Include="Services\AutoDLProcessorService.cs" />
     <Compile Include="Services\AutoDLProfileService.cs" />
     <Compile Include="Services\CacheService.cs" />
     <Compile Include="Services\IDService.cs" />
