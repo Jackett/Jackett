@@ -83,6 +83,11 @@ namespace Jackett.Indexers
 
         public Uri UncleanLink(Uri link)
         {
+            if (string.IsNullOrWhiteSpace(downloadUrlBase))
+            {
+                return link;
+            }
+
             if (link.ToString().StartsWith(downloadUrlBase))
             {
                 return link;
