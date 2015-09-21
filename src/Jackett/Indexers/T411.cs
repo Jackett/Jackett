@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     public class T411 : BaseIndexer, IIndexer
     {
         private readonly string CommentsUrl = "";
-        const string ApiUrl = "http://api.t411.io";
+        const string ApiUrl = "http://api.t411.in";
         const string AuthUrl = ApiUrl + "/auth";
         const string SearchUrl = ApiUrl + "/torrents/search/{0}";
         const string DownloadUrl = ApiUrl + "/torrents/download/{0}";
@@ -38,7 +38,7 @@ namespace Jackett.Indexers
         public T411(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "T411",
                 description: "French Torrent Tracker",
-                link: "http://www.t411.io/",
+                link: "http://www.t411.in/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
