@@ -27,6 +27,7 @@ copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build.mono\JackettTray.exe
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe.config build.mono\JackettTray.exe.config
 copy /Y LICENSE build.mono\LICENSE
 copy /Y README.md build.mono\README.md
+copy /Y Upstart.config build.mono\Upstart.config
 
 iscc Installer.iss
 
