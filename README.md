@@ -55,6 +55,14 @@ We were previously focused on TV but are working on extending searches to allow 
  * [Torrentz](https://torrentz.eu/)
  * [TV Chaos UK](https://tvchaosuk.com/)
 
+#### Installation on Windows
+
+Grab the latest release from the [website](http://jackett.net/Download).
+
+We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
+
+Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
+
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
  2. Install  libcurl:
@@ -63,15 +71,14 @@ We were previously focused on TV but are working on extending searches to allow 
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
  3. Download and extract the latest ```.tar.bz2``` release from the [website](http://jackett.net/Download)  and run Jackett using mono with the command "mono JackettConsole.exe".
 
-
-#### Installation on Windows
-
-Grab the latest release from the [web site](http://jackett.net/Download).
-
-We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
-
-Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
-
+#### Installation on Synology
+1. Install Sonarr & Mono 3.10 from synocommunity.
+2. Install Mono beta 3.12 from the main Synology repo (Or newer if available).
+3. Download jackett and place it in /opt/Jackett
+4. cd /opt
+5. chown -R {user who will run jackett} Jackett
+6. Copy Upstart.config to /etc/init/jackett.conf and replace the braces {} in the script with the username that you wish to run Jackett with.
+9. From anywhere on command line type "start jackett" . You should see output telling you that Jackett is running and you should be able to browse to {IP Address}:9117 . If not you should check /var/log/upstart/jackett.log and see what that says.
 
 #### Troubleshooting
 
