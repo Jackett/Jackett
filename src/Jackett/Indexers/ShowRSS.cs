@@ -101,7 +101,7 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
 
-                    serie_title = node.SelectSingleNode("title").InnerText;
+                    serie_title = node.SelectSingleNode(".//*[local-name()='rawtitle']").InnerText;
                     release.Title = serie_title;
 
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
