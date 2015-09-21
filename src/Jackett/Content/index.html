@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+    <script src="/libs/filesize.min.js"></script>
     <script src="/libs/jquery.min.js"></script>
     <script src="/libs/jquery.dataTables.min.js"></script>
     <script src="/libs/handlebars.min.js"></script>
@@ -202,6 +203,8 @@
                                     <th>First Seen</th>
                                     <th>Tracker</th>
                                     <th>Name</th>
+                                    <th>Size</th>
+                                    <th>Size</th>
                                     <th>Category</th>
                                     <th>Seeds</th>
                                     <th>Leechers</th>
@@ -217,6 +220,8 @@
                                     <td>{{jacketTimespan FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
                                     <td><a href="{{Comments}}">{{Title}}</a></td>
+                                    <td>{{Size}}</td>
+                                    <td>{{jacketSize Size}}</td>
                                     <td>{{CategoryDesc}}</td>
                                     <td>{{Seeders}}</td>
                                     <td>{{Peers}}</td>
@@ -296,6 +301,8 @@
                     <th>Published</th>
                     <th>Tracker</th>
                     <th>Name</th>
+                    <th>Size</th>
+                    <th>Size</th>
                     <th>Category</th>
                     <th>Seeds</th>
                     <th>Leechers</th>
@@ -309,6 +316,8 @@
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
                     <td><a href="{{Comments}}">{{Title}}</a></td>
+                    <td>{{Size}}</td>
+                    <td>{{jacketSize Size}}</td>
                     <td>{{CategoryDesc}}</td>
                     <td>{{Seeders}}</td>
                     <td>{{Peers}}</td>
