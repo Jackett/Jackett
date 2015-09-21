@@ -83,6 +83,11 @@ namespace Jackett.Indexers
 
         public Uri UncleanLink(Uri link)
         {
+            if (link.ToString().StartsWith(downloadUrlBase))
+            {
+                return link;
+            }
+
             return new Uri(downloadUrlBase + link.ToString(), UriKind.RelativeOrAbsolute);
         }
 
@@ -223,6 +228,11 @@ namespace Jackett.Indexers
         public async virtual Task<byte[]> Download(Uri link)
         {
             var response = await RequestBytesWithCookiesAndRetry(link.ToString());
+            if(response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
+            {
+                throw new Exception($"Remote server returned {response.Status.ToString()}");
+            }
+
             return response.Content;
         }
 

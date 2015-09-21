@@ -468,6 +468,7 @@ namespace Jackett.Controllers
                 try
                 {
                     var searchResults = indexer.PerformQuery(query).Result;
+                    searchResults = indexer.CleanLinks(searchResults);
                     cacheService.CacheRssResults(indexer, searchResults);
                     searchResults = indexer.FilterResults(query, searchResults);
 

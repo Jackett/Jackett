@@ -349,6 +349,18 @@ function bindUIButtons() {
                             "visible": true,
                             "searchable": false,
                             "iDataSort": 1
+                        },
+                        {
+                            "targets": 6,
+                            "visible": false,
+                            "searchable": false,
+                            "type": 'num'
+                        },
+                        {
+                            "targets": 7,
+                            "visible": true,
+                            "searchable": false,
+                            "iDataSort": 6
                         }
                      ],
                      initComplete: function () {
@@ -466,6 +478,18 @@ function bindUIButtons() {
                                "searchable": false,
                                "iDataSort": 0
                            },
+                           {
+                                "targets": 4,
+                                "visible": false,
+                                "searchable": false,
+                                "type": 'num'
+                           },
+                           {
+                                 "targets": 5,
+                                 "visible": true,
+                                 "searchable": false,
+                                 "iDataSort": 4
+                           }
                         ],
                         initComplete: function () {
                             var count = 0;
