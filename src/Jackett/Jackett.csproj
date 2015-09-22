@@ -185,6 +185,7 @@
     <Compile Include="Indexers\BitMeTV.cs" />
     <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
+    <Compile Include="Indexers\Shazbat.cs" />
     <Compile Include="Indexers\NxtGn.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDSpace.cs" />
@@ -471,6 +472,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\scenetime.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\shazbat.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\showrss.png">

@@ -44,6 +44,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [RuTor](http://rutor.org/)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [SceneTime](https://www.scenetime.com/)
+ * [Shazbat](www.shazbat.tv/login)
  * [ShowRSS](https://showrss.info/)
  * [Strike](https://getstrike.net/)
  * [T411](http://www.t411.io/)
