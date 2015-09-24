@@ -311,7 +311,7 @@ namespace Jackett.Indexers
             return await webclient.GetBytes(request);
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null)
+        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -319,19 +319,20 @@ namespace Jackett.Indexers
                 Type = RequestType.POST,
                 Cookies = cookieOverride ?? CookieHeader,
                 PostData = data,
-                Referer = referer
+                Referer = referer,
+                Headers = headers
             };
             return await webclient.GetString(request);
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null)
+        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await PostDataWithCookies(url, data, cookieOverride, referer);
+                    return await PostDataWithCookies(url, data, cookieOverride, referer, headers, rawbody);
                 }
                 catch (Exception e)
                 {

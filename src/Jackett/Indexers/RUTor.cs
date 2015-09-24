@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using Jackett.Models.IndexerConfig;
 using System.Globalization;
 using Newtonsoft.Json;
+using Jackett.Models.IndexerConfig.Bespoke;
 
 namespace Jackett.Indexers
 {

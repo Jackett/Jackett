@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using Jackett.Models.IndexerConfig.Bespoke;
 
 namespace Jackett.Indexers
 {

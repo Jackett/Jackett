@@ -40,7 +40,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [NextGen](https://nxtgn.org/)
  * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
- * [RARGB](https://rarbg.to/)
+ * [RARBG](https://rarbg.to/)
  * [RuTor](http://rutor.org/)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [SceneTime](https://www.scenetime.com/)
