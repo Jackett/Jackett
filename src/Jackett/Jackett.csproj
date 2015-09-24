@@ -185,6 +185,7 @@
     <Compile Include="Indexers\BitMeTV.cs" />
     <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
+    <Compile Include="Indexers\BroadcastTheNet.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
     <Compile Include="Indexers\NxtGn.cs" />
     <Compile Include="Indexers\Freshon.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
@@ -222,14 +224,14 @@
     <Compile Include="Models\CategoryMapping.cs" />
     <Compile Include="Models\AdminSearch.cs" />
     <Compile Include="Models\IndexerConfigurationStatus.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataFileList.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFileList.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginTokin.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataNCore.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNCore.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataAnimeBytes.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataStrike.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAnimeBytes.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataStrike.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
@@ -265,7 +267,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationData.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCookie.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataRuTor.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataRuTor.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="Utils\Clients\WebRequest.cs" />
@@ -427,6 +429,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\beyondhd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\broadcastthenet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\demonoid.png">

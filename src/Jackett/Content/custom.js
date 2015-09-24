@@ -367,7 +367,7 @@ function bindUIButtons() {
                          var count = 0;
                          this.api().columns().every(function () {
                              count++;
-                             if (count === 5 || count === 7) {
+                             if (count === 5 || count === 9) {
                                  var column = this;
                                  var select = $('<select><option value=""></option></select>')
                                      .appendTo($(column.footer()).empty())
@@ -495,7 +495,7 @@ function bindUIButtons() {
                             var count = 0;
                             this.api().columns().every(function () {
                                 count++;
-                                if (count === 3 || count === 5) {
+                                if (count === 3 || count === 7) {
                                     var column = this;
                                     var select = $('<select><option value=""></option></select>')
                                         .appendTo($(column.footer()).empty())
