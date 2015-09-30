@@ -16,13 +16,15 @@ namespace Jackett.Utils.Clients
 {
     public class UnixSafeCurlWebClient : IWebClient
     {
-        private IProcessService processService;
-        private Logger logger;
+        IProcessService processService;
+        Logger logger;
+        IConfigurationService configService;
 
-        public UnixSafeCurlWebClient(IProcessService p, Logger l)
+        public UnixSafeCurlWebClient(IProcessService p, Logger l, IConfigurationService c)
         {
             processService = p;
             logger = l;
+            configService = c;
         }
 
         public void Init()
@@ -49,7 +51,11 @@ namespace Jackett.Utils.Clients
         {
             var args = new StringBuilder();
             args.AppendFormat("--url \"{0}\" ", request.Url);
-            args.AppendFormat("-i  -sS --user-agent \"{0}\" ", BrowserUtil.ChromeUserAgent);
+           
+            if (request.EmulateBrowser)
+                args.AppendFormat("-i  -sS --user-agent \"{0}\" ", BrowserUtil.ChromeUserAgent);
+            else
+                args.AppendFormat("-i  -sS --user-agent \"{0}\" ", "Jackett/" + configService.GetVersion());
 
             if (!string.IsNullOrWhiteSpace(request.Cookies))
             {
@@ -61,7 +67,11 @@ namespace Jackett.Utils.Clients
                 args.AppendFormat("--referer \"{0}\" ", request.Referer);
             }
 
-            if (request.PostData != null && request.PostData.Count() > 0)
+            if (!string.IsNullOrEmpty(request.RawBody))
+            {
+                var postString = StringUtil.PostDataFromDict(request.PostData);
+                args.AppendFormat("--data \"{0}\" ", request.RawBody.Replace("\"", "\\\""));
+            } else if (request.PostData != null && request.PostData.Count() > 0)
             {
                 var postString = StringUtil.PostDataFromDict(request.PostData);
                 args.AppendFormat("--data \"{0}\" ", postString);
@@ -92,6 +102,9 @@ namespace Jackett.Utils.Clients
                 throw new Exception("Invalid response");
             var headers = stdout.Substring(0, headSplit);
             var headerCount = 0;
+            var cookieBuilder = new StringBuilder();
+            var cookies = new List<Tuple<string, string>>();
+
             foreach (var header in headers.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (headerCount == 0)
@@ -109,11 +122,11 @@ namespace Jackett.Utils.Clients
                         switch (name)
                         {
                             case "set-cookie":
-                                var cookieDataSplit = value.IndexOf(';');
-                                if (cookieDataSplit > 0)
+                                var nameSplit = value.IndexOf('=');
+                                if (nameSplit > -1)
                                 {
-                                    result.Cookies += value.Substring(0, cookieDataSplit + 1) + " ";
-                                }//Location
+                                    cookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') + 1)));
+                                }
                                 break;
                             case "location":
                                 result.RedirectingTo = value.Trim();
@@ -124,6 +137,12 @@ namespace Jackett.Utils.Clients
                 headerCount++;
             }
 
+            foreach (var cookieGroup in cookies.GroupBy(c => c.Item1))
+            {
+                cookieBuilder.AppendFormat("{0} ", cookieGroup.Last().Item2);
+            }
+
+            result.Cookies = cookieBuilder.ToString().Trim();
             result.Content = new byte[outputData.Length - (headSplit + 3)];
             var dest = 0;
             for (int i = headSplit + 4; i < outputData.Length; i++)

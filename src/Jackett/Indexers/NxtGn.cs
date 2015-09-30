@@ -193,7 +193,7 @@ namespace Jackett.Indexers
                         }
                         else if (imgUrl == "/pic/TV.png")
                         {
-                            release.TheTvDbId = long.Parse(url.Substring(url.LastIndexOf('=') + 1));
+                            release.TVDBId = long.Parse(url.Substring(url.LastIndexOf('=') + 1));
                         }
                     }
                     var nextPage = dom["#torrent-table-wrapper + p[align=center]"].Children().Last();

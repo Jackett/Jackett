@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
 using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace Jackett.Indexers
 {
@@ -64,9 +65,9 @@ namespace Jackett.Indexers
         }
 
 
-        private string JsonRPCRequest(string method, dynamic parameters)
+        private string JsonRPCRequest(string method, JArray parameters)
         {
-            dynamic request = new ExpandoObject();
+            dynamic request = new JObject();
             request["jsonrpc"] = "2.0";
             request["method"] = method;
             request["params"] = parameters;
@@ -76,76 +77,98 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var searchString = query.GetQueryString();
             var releases = new List<ReleaseInfo>();
 
-
+            var parameters = new JArray();
+            parameters.Add(new JValue(configData.Key.Value));
+            parameters.Add(new JValue(searchString.Trim()));
+            parameters.Add(new JValue(100));
+            parameters.Add(new JValue(0));
             var response = await PostDataWithCookiesAndRetry(APIBASE, null, null, null, new Dictionary<string, string>()
             {
                 { "Accept", "application/json-rpc, application/json"},
-                {"ContentType", "application/json-rpc"}
-            }, JsonRPCRequest("getTorrents", new Object[]
+                {"Content-Type", "application/json-rpc"}
+            }, JsonRPCRequest("getTorrents", parameters),false);
+
+            try
             {
-                configData.Key.Value
-            }));
+                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
 
-            /* 
-             var searchUrl = BrowsePage;
+                if (btnResponse != null && btnResponse.Result != null)
+                {
+                    foreach (var itemKey in btnResponse.Result.Torrents)
+                    {
+                        var btnResult = itemKey.Value;
+                        var item = new ReleaseInfo();
+                        if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
+                            item.BannerUrl = new Uri(btnResult.SeriesBanner);
+                        item.Category = TorznabCatType.TV.ID;
+                        item.Comments = new Uri($"https://broadcasthe.net/torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                        item.Description = btnResult.ReleaseName;
+                        item.Guid = new Uri(btnResult.DownloadURL);
+                        if (!string.IsNullOrWhiteSpace(btnResult.ImdbID))
+                            item.Imdb = ParseUtil.CoerceLong(btnResult.ImdbID);
+                        item.Link = new Uri(btnResult.DownloadURL);
+                        item.MinimumRatio = 1;
+                        item.PublishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
+                        item.RageID = btnResult.TvrageID;
+                        item.Seeders = btnResult.Seeders;
+                        item.Peers = btnResult.Seeders + btnResult.Leechers;
+                        item.Size = btnResult.Size;
+                        item.TVDBId = btnResult.TvdbID;
+                        item.Title = btnResult.ReleaseName;
+                        releases.Add(item);
+                    }
+                }
 
-             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-             {
-                 searchUrl += string.Format(QueryString, HttpUtility.UrlEncode(query.GetQueryString()));
-             }
-
-             var results = await RequestStringWithCookiesAndRetry(searchUrl);
-
-             try
-             {
-                 CQ dom = results.Content;
-
-                 var rows = dom["#sortabletable tr"];
-                 foreach (var row in rows.Skip(1))
-                 {
-                     var release = new ReleaseInfo();
-                     var qRow = row.Cq();
-                     release.Title = qRow.Find(".tooltip-content div").First().Text();
-                     if (string.IsNullOrWhiteSpace(release.Title))
-                         continue;
-                     release.Description = qRow.Find(".tooltip-content div").Get(1).InnerText.Trim();
-
-                     var qLink = row.Cq().Find("td:eq(2) a:eq(1)");
-                     release.Link = new Uri(qLink.Attr("href"));
-                     release.Guid = release.Link;
-                     release.Comments = new Uri(qRow.Find(".tooltip-target a").First().Attr("href"));
-
-                     // 07-22-2015 11:08 AM
-                     var dateString = qRow.Find("td:eq(1) div").Last().Children().Remove().End().Text().Trim();
-                     release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
-
-                     var sizeStr = qRow.Find("td:eq(4)").Text().Trim();
-                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text().Trim());
-                     release.Peers = ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim()) + release.Seeders;
-
-                     var catLink = row.Cq().Find("td:eq(0) a").First().Attr("href");
-                     var catSplit = catLink.IndexOf("category=");
-                     if (catSplit > -1)
-                     {
-                         catLink = catLink.Substring(catSplit + 9);
-                     }
-
-                     release.Category = MapTrackerCatToNewznab(catLink);
-                     releases.Add(release);
-                 }
-             }
-             catch (Exception ex)
-             {
-                 OnParseError(results.Content, ex);
-             }*/
-
+            }
+            catch (Exception ex)
+            {
+                OnParseError(response.Content, ex);
+            }
             return releases;
         }
 
 
+        public class BTNRPCResponse
+        {
+            public string Id { get; set; }
+            public BTNResultPage Result { get; set; }
+        }
+
+        public class BTNResultPage
+        {
+            public Dictionary<int, BTNResultItem> Torrents { get; set; }
+        }
+
+        public class BTNResultItem
+        {
+            public int TorrentID { get; set; }
+            public string DownloadURL { get; set; }
+            public string GroupName { get; set; }
+            public int GroupID { get; set; }
+            public int SeriesID { get; set; }
+            public string Series { get; set; }
+            public string SeriesBanner { get; set; }
+            public string SeriesPoster { get; set; }
+            public string YoutubeTrailer { get; set; }
+            public string Category { get; set; }
+            public int? Snatched { get; set; }
+            public int? Seeders { get; set; }
+            public int? Leechers { get; set; }
+            public string Source { get; set; }
+            public string Container { get; set; }
+            public string Codec { get; set; }
+            public string Resolution { get; set; }
+            public string Origin { get; set; }
+            public string ReleaseName { get; set; }
+            public long Size { get; set; }
+            public long Time { get; set; }
+            public int? TvdbID { get; set; }
+            public int? TvrageID { get; set; }
+            public string ImdbID { get; set; }
+            public string InfoHash { get; set; }
+        }
     }
 }
