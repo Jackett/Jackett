@@ -181,7 +181,7 @@ namespace Jackett.Indexers
                     if (hasTorrent)
                         titleIndex++;
 
-                    release.Title = row.Cq().Find("td:eq(" + titleIndex + ")").Text().Trim();
+                    release.Title = row.Cq().Find("td:eq(1) a:eq(" + titleIndex + ")").Text().Trim();
                     if (configData.StripRussian.Value)
                     {
                         var split = release.Title.IndexOf('/');
