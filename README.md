@@ -96,8 +96,8 @@ Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcu
 You can get additional logging with the switches "-t -l".  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
 
 
-### Additional Trackers
-Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact us on IRC (see below).  Pull requests must be made to the develop branch.
+### Contributing
+All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.
 
 ### Contact & Support
 Use the github issues pages or talk to us directly at: [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett).
