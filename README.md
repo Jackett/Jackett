@@ -27,7 +27,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [BeyondHD](https://beyondhd.me/)
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [BitMeTV](http://www.bitmetv.org/)
- * [BTN](http://www.bitmetv.org/)
+ * [BTN](http://broadcasthe.net)
  * [Demonoid](http://www.demonoid.pw/)
  * [EuTorrents](https://eutorrents.to/)
  * [FileList](http://filelist.ro/)
