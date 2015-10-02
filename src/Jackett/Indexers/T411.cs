@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     public class T411 : BaseIndexer, IIndexer
     {
         private readonly string CommentsUrl = "";
-        const string ApiUrl = "http://api.t411.io";
+        const string ApiUrl = "http://api.t411.in";
         const string AuthUrl = ApiUrl + "/auth";
         const string SearchUrl = ApiUrl + "/torrents/search/{0}";
         const string DownloadUrl = ApiUrl + "/torrents/download/{0}";
@@ -38,7 +38,7 @@ namespace Jackett.Indexers
         public T411(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "T411",
                 description: "French Torrent Tracker",
-                link: "http://www.t411.io/",
+                link: "http://www.t411.in/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
@@ -53,6 +53,72 @@ namespace Jackett.Indexers
                 AllowAutoRedirect = true
             };
             client = new HttpClient(handler);
+
+
+
+            AddCategoryMapping("Film\\/Vidéo", TorznabCatType.Movies);
+            AddCategoryMapping("Vidéo-clips", TorznabCatType.Other);
+            AddCategoryMapping("Série TV", TorznabCatType.TV);
+            AddCategoryMapping("Animation", TorznabCatType.TVAnime);
+            AddCategoryMapping("Film", TorznabCatType.Movies);
+            AddCategoryMapping("Concert", TorznabCatType.AudioVideo);
+            AddCategoryMapping("Documentaire", TorznabCatType.Audio);
+            AddCategoryMapping("Spectacle", TorznabCatType.TV);
+            AddCategoryMapping("Sport", TorznabCatType.TVSport);
+            AddCategoryMapping("Animation Série", TorznabCatType.TVAnime);
+            AddCategoryMapping("Emission TV", TorznabCatType.TV);
+
+
+            AddCategoryMapping("Application", TorznabCatType.PC0day);
+            AddCategoryMapping("Linux", TorznabCatType.PC);
+            AddCategoryMapping("MacOS", TorznabCatType.PCMac);
+            AddCategoryMapping("Windows", TorznabCatType.PC);
+            AddCategoryMapping("Smartphone", TorznabCatType.PCPhoneOther);
+            AddCategoryMapping("Tablette", TorznabCatType.PCPhoneOther);
+            AddCategoryMapping("Autre", TorznabCatType.PC);
+            AddCategoryMapping("Formation", TorznabCatType.PC);
+
+            AddCategoryMapping("Emulation", TorznabCatType.PC);
+            AddCategoryMapping("Emulateurs", TorznabCatType.PC);
+            AddCategoryMapping("Roms", TorznabCatType.PC);
+
+            AddCategoryMapping("GPS", TorznabCatType.Other);
+            AddCategoryMapping("Applications", TorznabCatType.Other);
+            AddCategoryMapping("Cartes", TorznabCatType.Other);
+            AddCategoryMapping("Divers", TorznabCatType.Other);
+
+            AddCategoryMapping("Audio", TorznabCatType.Audio);
+            AddCategoryMapping("Karaoke", TorznabCatType.Audio);
+            AddCategoryMapping("Samples", TorznabCatType.Audio);
+            AddCategoryMapping("Musique", TorznabCatType.Audio);
+            AddCategoryMapping("Podcast Radio", TorznabCatType.Audio);
+
+            AddCategoryMapping("eBook", TorznabCatType.BooksEbook);
+            AddCategoryMapping("Audio", TorznabCatType.AudioAudiobook);
+            AddCategoryMapping("Bds", TorznabCatType.AudioVideo);
+            AddCategoryMapping("Comics", TorznabCatType.BooksComics);
+            AddCategoryMapping("Livres", TorznabCatType.Books);
+            AddCategoryMapping("Mangas", TorznabCatType.BooksForeign);
+            AddCategoryMapping("Presse", TorznabCatType.BooksMagazines);
+
+            AddCategoryMapping("xXx", TorznabCatType.XXX);
+            AddCategoryMapping("eBooks", TorznabCatType.XXXImageset);
+            AddCategoryMapping("Jeux vidéo", TorznabCatType.XXX);
+            AddCategoryMapping("Video", TorznabCatType.XXXDVD);
+            //AddCategoryMapping("Animation", TorznabCatType.XXX); Used above :/
+
+            AddCategoryMapping("Jeu vidéo", TorznabCatType.PCGames);
+            AddCategoryMapping("Linux", TorznabCatType.PCGames);
+            AddCategoryMapping("MacOS", TorznabCatType.PCGames);
+            // AddCategoryMapping("Windows", TorznabCatType.PCGames); Used above :/
+            AddCategoryMapping("Nintendo", TorznabCatType.Console);
+            AddCategoryMapping("Sony", TorznabCatType.Console);
+            AddCategoryMapping("Microsoft", TorznabCatType.PCGames);
+            AddCategoryMapping("Smartphone", TorznabCatType.PCPhoneOther);
+            AddCategoryMapping("Tablette", TorznabCatType.PCPhoneOther);
+            AddCategoryMapping("Autre", TorznabCatType.Other);
+
+            AddCategoryMapping("Jeux vidéo", TorznabCatType.Other);
         }
 
         async Task<string> GetAuthToken(bool forceFetch = false)
@@ -156,8 +222,8 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt((string)item["seeders"]);
                     release.Peers = ParseUtil.CoerceInt((string)item["leechers"]) + release.Seeders;
-
                     release.Size = ParseUtil.CoerceLong((string)item["size"]);
+                    release.Category = MapTrackerCatToNewznab((string)item["categoryname"]);
 
                     releases.Add(release);
                 }

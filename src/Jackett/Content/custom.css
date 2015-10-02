@@ -24,11 +24,12 @@
     background-color: #f9f9f9;
     border-radius: 6px;
     box-shadow: 1px 1px 5px 2px #cdcdcd;
-    padding: 10px;
     width: 270px;
     display: inline-block;
     vertical-align: top;
     margin: 5px;
+    overflow: hidden;
+    position: relative;
 }
 
 #indexers {
@@ -50,7 +51,7 @@
 }
 
 .indexer {
-    height: 235px;
+    height: 252px;
 }
 
 .add-indexer {
@@ -58,12 +59,18 @@
 }
 
 .indexer-logo {
-    text-align: center;
     padding-bottom: 5px;
 }
 
+    .indexer-logo > .hidden-name {
+        position: absolute;
+        color: rgba(255, 255, 255, 0);
+        left: 0;
+    }
+
     .indexer-logo > img {
-        border: 1px solid #828282;
+        width: 100%;
+        border-bottom: 1px solid #FFF;
     }
 
 .indexer-name > h3 {
@@ -76,7 +83,7 @@
 }
 
     .indexer-buttons > .btn {
-        margin-bottom: 10px;
+        margin-bottom: 2px;
     }
 
 
@@ -100,6 +107,10 @@
         margin-left: -5px;
     }
 
+.indexer-host {
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
 .indexer-host > input {
     font-size: 12px;
@@ -107,7 +118,7 @@
 }
 
 .setup-item-inputstring {
-    max-width: 260px;
+    max-width: 255px;
 }
 
 .setup-item-inputbool input {

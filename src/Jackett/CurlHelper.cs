@@ -24,13 +24,15 @@ namespace Jackett
             public string Referer { get; private set; }
             public HttpMethod Method { get; private set; }
             public IEnumerable<KeyValuePair<string, string>> PostData { get; set; }
+            public string RawPOSTDdata { get; set;}
 
-            public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null)
+            public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null, string rawPOSTData = null)
             {
                 Method = method;
                 Url = url;
                 Cookies = cookies;
                 Referer = referer;
+                RawPOSTDdata = rawPOSTData;
             }
         }
 
@@ -57,10 +59,11 @@ namespace Jackett
             return result;
         }
 
-        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null)
+        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, string rawPostData =null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer);
             curlRequest.PostData = formData;
+            curlRequest.RawPOSTDdata = rawPostData;
             var result = await PerformCurlAsync(curlRequest);
             return result;
         }
@@ -108,10 +111,19 @@ namespace Jackett
 
                     if (curlRequest.Method == HttpMethod.Post)
                     {
-                        easy.Post = true;
-                        var postString = StringUtil.PostDataFromDict(curlRequest.PostData);
-                        easy.PostFields = postString;
-                        easy.PostFieldSize = Encoding.UTF8.GetByteCount(postString);
+                        if (!string.IsNullOrEmpty(curlRequest.RawPOSTDdata))
+                        {
+                            easy.Post = true;
+                            easy.PostFields = curlRequest.RawPOSTDdata;
+                            easy.PostFieldSize = Encoding.UTF8.GetByteCount(curlRequest.RawPOSTDdata);
+                        }
+                        else
+                        {
+                            easy.Post = true;
+                            var postString = StringUtil.PostDataFromDict(curlRequest.PostData);
+                            easy.PostFields = postString;
+                            easy.PostFieldSize = Encoding.UTF8.GetByteCount(postString);
+                        }
                     }
 
                     if (Startup.DoSSLFix == true)
@@ -142,6 +154,7 @@ namespace Jackett
                 var headerCount = 0;
                 HttpStatusCode status = HttpStatusCode.InternalServerError;
                 var cookieBuilder = new StringBuilder();
+                var cookies = new List<Tuple<string, string>>();
                 foreach (var headerPart in headerParts)
                 {
                     if (headerCount == 0)
@@ -162,7 +175,10 @@ namespace Jackett
 
                             if (key == "set-cookie")
                             {
-                                cookieBuilder.AppendFormat("{0} ", value.Substring(0, value.IndexOf(';') + 1));
+                                var nameSplit = value.IndexOf('=');
+                                if (nameSplit > -1) {
+                                    cookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') + 1)));
+                                }
                             }
                             else
                             {
@@ -174,8 +190,13 @@ namespace Jackett
                     headerCount++;
                 }
 
+                foreach (var cookieGroup in cookies.GroupBy(c => c.Item1))
+                {
+                    cookieBuilder.AppendFormat("{0} ", cookieGroup.Last().Item2);
+                }
+
                 var contentBytes = Combine(contentBuffers.ToArray());
-                var curlResponse = new CurlResponse(headers, contentBytes, status, cookieBuilder.ToString().TrimEnd());
+                var curlResponse = new CurlResponse(headers, contentBytes, status, cookieBuilder.ToString().Trim());
                 return curlResponse;
             }
         }

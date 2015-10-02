@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+    <script src="/libs/filesize.min.js"></script>
     <script src="/libs/jquery.min.js"></script>
     <script src="/libs/jquery.dataTables.min.js"></script>
     <script src="/libs/handlebars.min.js"></script>
@@ -49,7 +50,7 @@
                 <li>For <b>URL</b> enter the <b>Torznab Host</b> of one of the indexers.</li>
                 <li>For the <b>API key</b> using the key below.</li>
             </ol>
-            <h4>Adding a Jackett indexer in Couchpoato</h4>
+            <h4>Adding a Jackett indexer in CouchPotato</h4>
             <ol>
                 <li>Go to <b>Settings > Searchers</b>.</li>
                 <li>Enable <b>TorrentPotato</b> and in the host field enter the <b>TorrentPotato host</b> of one of the indexers.</li>
@@ -145,7 +146,11 @@
 
     <script id="configured-indexer" type="text/x-handlebars-template">
         <div class="configured-indexer indexer card">
-            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
+            <div class="indexer-logo">
+                <!-- Make section browser searchable -->
+                <span class="hidden-name">{{name}}</span>
+                <img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" />
+            </div>
             <div class="indexer-buttons">
                 <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}">
                     <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
@@ -168,14 +173,18 @@
 
                 <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
                 {{else}}
-                <input class="form-control" type="text" value="Not availible" placeholder="Torznab Host" readonly="">
+                <input class="form-control" type="text" value="Not available" placeholder="Torznab Host" readonly="">
                 {{/if}}
             </div>
         </div>
     </script>
     <script id="unconfigured-indexer" type="text/x-handlebars-template">
         <div class="unconfigured-indexer card">
-            <div class="indexer-logo"><img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" /></div>
+            <div class="indexer-logo">
+                <!-- Make section browser searchable -->
+                <span class="hidden-name">{{name}}</span>
+                <img alt="{{name}}" title="{{name}}" src="/logos/{{id}}.png" />
+            </div>
             <div class="indexer-buttons">
                 <a class="btn btn-info" target="_blank" href="{{site_link}}">Visit <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a>
                 <button class="indexer-setup btn btn-success" data-id="{{id}}">Setup <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
@@ -202,6 +211,8 @@
                                     <th>First Seen</th>
                                     <th>Tracker</th>
                                     <th>Name</th>
+                                    <th>Size</th>
+                                    <th>Size</th>
                                     <th>Category</th>
                                     <th>Seeds</th>
                                     <th>Leechers</th>
@@ -217,6 +228,8 @@
                                     <td>{{jacketTimespan FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
                                     <td><a href="{{Comments}}">{{Title}}</a></td>
+                                    <td>{{Size}}</td>
+                                    <td>{{jacketSize Size}}</td>
                                     <td>{{CategoryDesc}}</td>
                                     <td>{{Seeders}}</td>
                                     <td>{{Peers}}</td>
@@ -296,6 +309,8 @@
                     <th>Published</th>
                     <th>Tracker</th>
                     <th>Name</th>
+                    <th>Size</th>
+                    <th>Size</th>
                     <th>Category</th>
                     <th>Seeds</th>
                     <th>Leechers</th>
@@ -309,6 +324,8 @@
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
                     <td><a href="{{Comments}}">{{Title}}</a></td>
+                    <td>{{Size}}</td>
+                    <td>{{jacketSize Size}}</td>
                     <td>{{CategoryDesc}}</td>
                     <td>{{Seeders}}</td>
                     <td>{{Peers}}</td>

@@ -27,6 +27,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [BeyondHD](https://beyondhd.me/)
  * [BIT-HDTV](https://www.bit-hdtv.com)
  * [BitMeTV](http://www.bitmetv.org/)
+ * [BTN](http://broadcasthe.net)
  * [Demonoid](http://www.demonoid.pw/)
  * [EuTorrents](https://eutorrents.to/)
  * [FileList](http://filelist.ro/)
@@ -37,12 +38,14 @@ We were previously focused on TV but are working on extending searches to allow 
  * [Immortalseed.me](http://immortalseed.me)
  * [IPTorrents](https://iptorrents.com/)
  * [MoreThan.tv](https://morethan.tv/)
+ * [NextGen](https://nxtgn.org/)
  * [pretome](https://pretome.info)
  * [PrivateHD](https://privatehd.to/)
- * [RARGB](https://rarbg.to/)
+ * [RARBG](https://rarbg.to/)
  * [RuTor](http://rutor.org/)
  * [SceneAccess](https://sceneaccess.eu/login)
  * [SceneTime](https://www.scenetime.com/)
+ * [Shazbat](www.shazbat.tv/login)
  * [ShowRSS](https://showrss.info/)
  * [Strike](https://getstrike.net/)
  * [T411](http://www.t411.io/)
@@ -54,6 +57,14 @@ We were previously focused on TV but are working on extending searches to allow 
  * [Torrentz](https://torrentz.eu/)
  * [TV Chaos UK](https://tvchaosuk.com/)
 
+#### Installation on Windows
+
+Grab the latest release from the [website](http://jackett.net/Download).
+
+We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
+
+Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
+
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
  2. Install  libcurl:
@@ -62,15 +73,14 @@ We were previously focused on TV but are working on extending searches to allow 
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
  3. Download and extract the latest ```.tar.bz2``` release from the [website](http://jackett.net/Download)  and run Jackett using mono with the command "mono JackettConsole.exe".
 
-
-#### Installation on Windows
-
-Grab the latest release from the [web site](http://jackett.net/Download).
-
-We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
-
-Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
-
+#### Installation on Synology
+1. Install Sonarr & Mono 3.10 from synocommunity.
+2. Install Mono beta 3.12 from the main Synology repo (Or newer if available).
+3. Download jackett and place it in /opt/Jackett
+4. cd /opt
+5. chown -R {user who will run jackett} Jackett
+6. Copy Upstart.config to /etc/init/jackett.conf and replace the braces {} in the script with the username that you wish to run Jackett with.
+9. From anywhere on command line type "start jackett" . You should see output telling you that Jackett is running and you should be able to browse to {IP Address}:9117 . If not you should check /var/log/upstart/jackett.log and see what that says.
 
 #### Troubleshooting
 
@@ -87,8 +97,8 @@ Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcu
 You can get additional logging with the switches "-t -l".  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
 
 
-### Additional Trackers
-Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues) or contact us on IRC (see below).  Pull requests must be made to the develop branch.
+### Contributing
+All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.
 
 ### Contact & Support
 Use the github issues pages or talk to us directly at: [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett).

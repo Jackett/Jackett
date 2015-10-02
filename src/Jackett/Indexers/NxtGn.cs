@@ -36,7 +36,7 @@ namespace Jackett.Indexers
         public NxtGn(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "NextGen",
                 description: "A danish closed torrent tracker",
-                link: "https://nxtgn.org/",
+                link: "https://nxgn.org/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
@@ -51,13 +51,13 @@ namespace Jackett.Indexers
             AddCategoryMapping(5, TorznabCatType.MoviesSD);
             AddCategoryMapping(23, TorznabCatType.MoviesForeign);
             AddCategoryMapping(22, TorznabCatType.MoviesSD);
-            //AddCategoryMapping(4, TorznabCatType.TVFOREIGN);
-            //AddCategoryMapping(4, TorznabCatType.TVSD);
-            //AddCategoryMapping(4, TorznabCatType.TVDocumentary);
-            //AddCategoryMapping(4, TorznabCatType.TVSport);
-            //AddCategoryMapping(4, TorznabCatType.TV);
-            //AddCategoryMapping(31, TorznabCatType.TVHD);
-            //AddCategoryMapping(21, TorznabCatType.TVFOREIGN);
+            AddCategoryMapping(4, TorznabCatType.TVFOREIGN);
+            AddCategoryMapping(4, TorznabCatType.TVSD);
+            AddCategoryMapping(4, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(4, TorznabCatType.TVSport);
+            AddCategoryMapping(4, TorznabCatType.TV);
+            AddCategoryMapping(31, TorznabCatType.TVHD);
+            AddCategoryMapping(21, TorznabCatType.TVFOREIGN);
             AddCategoryMapping(46, TorznabCatType.TV);
             AddCategoryMapping(46, TorznabCatType.TVHD);
             //AddCategoryMapping(45, TorznabCatType.TV);
@@ -193,7 +193,7 @@ namespace Jackett.Indexers
                         }
                         else if (imgUrl == "/pic/TV.png")
                         {
-                            release.TheTvDbId = long.Parse(url.Substring(url.LastIndexOf('=') + 1));
+                            release.TVDBId = long.Parse(url.Substring(url.LastIndexOf('=') + 1));
                         }
                     }
                     var nextPage = dom["#torrent-table-wrapper + p[align=center]"].Children().Last();

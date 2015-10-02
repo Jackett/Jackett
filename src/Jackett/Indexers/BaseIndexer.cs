@@ -83,6 +83,16 @@ namespace Jackett.Indexers
 
         public Uri UncleanLink(Uri link)
         {
+            if (string.IsNullOrWhiteSpace(downloadUrlBase))
+            {
+                return link;
+            }
+
+            if (link.ToString().StartsWith(downloadUrlBase))
+            {
+                return link;
+            }
+
             return new Uri(downloadUrlBase + link.ToString(), UriKind.RelativeOrAbsolute);
         }
 
@@ -223,6 +233,11 @@ namespace Jackett.Indexers
         public async virtual Task<byte[]> Download(Uri link)
         {
             var response = await RequestBytesWithCookiesAndRetry(link.ToString());
+            if(response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
+            {
+                throw new Exception($"Remote server returned {response.Status.ToString()}");
+            }
+
             return response.Content;
         }
 
@@ -296,26 +311,32 @@ namespace Jackett.Indexers
             return await webclient.GetBytes(request);
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null)
+        protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
                 Url = url,
                 Type = RequestType.POST,
                 Cookies = cookieOverride ?? CookieHeader,
-                PostData = data
+                PostData = data,
+                Referer = referer,
+                Headers = headers,
+                RawBody = rawbody
             };
+
+            if (emulateBrowser.HasValue)
+                request.EmulateBrowser = emulateBrowser.Value;
             return await webclient.GetString(request);
         }
 
-        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null)
+        protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await PostDataWithCookies(url, data, cookieOverride);
+                    return await PostDataWithCookies(url, data, cookieOverride, referer, headers, rawbody, emulateBrowser);
                 }
                 catch (Exception e)
                 {

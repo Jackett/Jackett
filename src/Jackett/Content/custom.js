@@ -349,13 +349,25 @@ function bindUIButtons() {
                             "visible": true,
                             "searchable": false,
                             "iDataSort": 1
+                        },
+                        {
+                            "targets": 6,
+                            "visible": false,
+                            "searchable": false,
+                            "type": 'num'
+                        },
+                        {
+                            "targets": 7,
+                            "visible": true,
+                            "searchable": false,
+                            "iDataSort": 6
                         }
                      ],
                      initComplete: function () {
                          var count = 0;
                          this.api().columns().every(function () {
                              count++;
-                             if (count === 5 || count === 7) {
+                             if (count === 5 || count === 9) {
                                  var column = this;
                                  var select = $('<select><option value=""></option></select>')
                                      .appendTo($(column.footer()).empty())
@@ -466,12 +478,24 @@ function bindUIButtons() {
                                "searchable": false,
                                "iDataSort": 0
                            },
+                           {
+                                "targets": 4,
+                                "visible": false,
+                                "searchable": false,
+                                "type": 'num'
+                           },
+                           {
+                                 "targets": 5,
+                                 "visible": true,
+                                 "searchable": false,
+                                 "iDataSort": 4
+                           }
                         ],
                         initComplete: function () {
                             var count = 0;
                             this.api().columns().every(function () {
                                 count++;
-                                if (count === 3 || count === 5) {
+                                if (count === 3 || count === 7) {
                                     var column = this;
                                     var select = $('<select><option value=""></option></select>')
                                         .appendTo($(column.footer()).empty())

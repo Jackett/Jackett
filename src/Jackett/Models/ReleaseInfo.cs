@@ -21,11 +21,10 @@ namespace Jackett.Models
         public long? Size { get; set; }
         public string Description { get; set; }
         public long? RageID { get; set; }
-        public long? TheTvDbId { get; set; }
+        public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
         public int? Seeders { get; set; }
         public int? Peers { get; set; }
-        public Uri ConverUrl { get; set; }
         public Uri BannerUrl { get; set; }
         public string InfoHash { get; set; }
         public Uri MagnetUri { get; set; }
@@ -48,7 +47,6 @@ namespace Jackett.Models
                 Imdb = Imdb,
                 Seeders = Seeders,
                 Peers = Peers,
-                ConverUrl = ConverUrl,
                 BannerUrl = BannerUrl,
                 InfoHash = InfoHash,
                 MagnetUri = MagnetUri,

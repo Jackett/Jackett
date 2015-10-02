@@ -76,12 +76,16 @@ namespace Jackett.Utils.Clients
             }
             else
             {
-                if (request.PostData != null && request.PostData.Count() > 0)
+                if (!string.IsNullOrEmpty(request.RawBody))
+                {
+                    logger.Debug("UnixLibCurlWebClient: Posting " + request.RawBody);
+                }
+                else if (request.PostData != null && request.PostData.Count() > 0)
                 {
                     logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
-                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer);
+                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody);
             }
 
             var result = new WebClientByteResult()
