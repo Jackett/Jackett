@@ -255,6 +255,7 @@
     <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
     <Compile Include="Indexers\BroadcastTheNet.cs" />
+    <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
     <Compile Include="Indexers\NxtGn.cs" />
     <Compile Include="Indexers\Freshon.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="Models\DTO\ChannelDTO.cs" />
     <Compile Include="Models\DTO\IRCommandDTO.cs" />
     <Compile Include="Models\DTO\NetworkDTO.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\Irc\Channel.cs" />
     <Compile Include="Models\Irc\ChannelInfoResult.cs" />
     <Compile Include="Models\Irc\DTO\ChannelInfo.cs" />
