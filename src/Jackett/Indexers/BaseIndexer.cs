@@ -364,7 +364,7 @@ namespace Jackett.Indexers
 
             if (response.IsRedirect)
             {
-                await FollowIfRedirect(response, request.Url, null, response.Cookies);
+                await FollowIfRedirect(response, request.Url, redirectUrlOverride, response.Cookies);
             }
 
             if (returnCookiesFromFirstCall)
