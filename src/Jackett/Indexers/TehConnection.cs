@@ -98,8 +98,7 @@ namespace Jackett.Indexers
                     var mqRow = mrow.Cq();
 
                     Uri movieReleasesLink = new Uri(SiteLink.TrimEnd('/') + mqRow.Find("a[title='View Torrent']").First().Attr("href").Trim());
-                    bool commentsPresent = !mqRow.Find("font[class='tags'] > strong > a:contains('Comment')").First().Text().Trim().Contains("0 Comments");
-                    Uri commentsLink = new Uri(SiteLink.TrimEnd('/') + mqRow.Find("font[class='tags'] > strong > a:contains('Comment')").First().Attr("href").Trim());
+                    Uri commentsLink = new Uri(movieReleasesLink + "#comments");
 
                     string imdblink = mqRow.Find("span[class='imdb-number-rating']").Length > 0 ? mqRow.Find("span[class='imdb-number-rating'] > a").First().Attr("href").Trim() : "";
                     long imdb_id = 0;
@@ -129,13 +128,13 @@ namespace Jackett.Indexers
                         string pubDateStr = qRow.Find("div[class='box pad'] > p:contains('Uploaded by') > span").First().Attr("title").Trim();
                         DateTime pubDate = DateTime.ParseExact(pubDateStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         string sizeStr = qRow.Find("[id^=desc_] > div > table > tbody > tr > td > strong:contains('Size:')").First().Parent().Parent().Find("td").Last().Text().Trim();
-                        Int32 seeders = Convert.ToInt32(qRow.Find("img[title='Seeders']").First().Parent().Text().Trim());
-                        Int32 peers = Convert.ToInt32(qRow.Find("img[title='Leechers']").First().Parent().Text().Trim()) + seeders;
+                        var seeders = ParseUtil.CoerceInt(qRow.Find("img[title='Seeders']").First().Parent().Text().Trim());
+                        var peers = ParseUtil.CoerceInt(qRow.Find("img[title='Leechers']").First().Parent().Text().Trim()) + seeders;
                         Uri CoverUrl = new Uri(SiteLink.TrimEnd('/') + dom.Find("div[id='poster'] > a > img").First().Attr("src").Trim());
                         bool freeleech = qRow.Find("span[class='freeleech']").Length == 1 ? true : false;
                         bool qualityEncode = qRow.Find("img[class='approved']").Length == 1 ? true : false;
                         string grabs = qRow.Find("img[title='Snatches']").First().Parent().Text().Trim();
-                        if (String.IsNullOrWhiteSpace(sizeStr))
+                        if (string.IsNullOrWhiteSpace(sizeStr))
                         {
                             string secondSizeStr = qRow.Find("div[class='details_title'] > strong:contains('(')").Last().Text().Trim();
                             if (secondSizeStr.Length > 3 && secondSizeStr.Contains("(") && secondSizeStr.Contains(")"))
@@ -155,8 +154,10 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
                         release.Category = 2000;
-                        if (commentsPresent) { release.Comments = commentsLink; }
-                        if (imdb_id > 0) { release.Imdb = imdb_id; }
+                        release.Comments = commentsLink;
+                        if (imdb_id > 0) {
+                            release.Imdb = imdb_id;
+                        }
 
                         if (configFreeLeechOnly && !freeleech)
                         {
