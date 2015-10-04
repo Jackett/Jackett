@@ -49,6 +49,7 @@ We were previously focused on TV but are working on extending searches to allow 
  * [ShowRSS](https://showrss.info/)
  * [Strike](https://getstrike.net/)
  * [T411](http://www.t411.io/)
+ * [TehConnection](https://tehconnection.eu/) 
  * [The Pirate Bay](https://thepiratebay.se/)
  * [TorrentBytes](https://www.torrentbytes.net/)
  * [TorrentDay](https://torrentday.eu/)
