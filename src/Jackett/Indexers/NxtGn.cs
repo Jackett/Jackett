@@ -53,16 +53,15 @@ namespace Jackett.Indexers
             AddCategoryMapping(22, TorznabCatType.MoviesSD);
             AddCategoryMapping(4, TorznabCatType.TVFOREIGN);
             AddCategoryMapping(4, TorznabCatType.TVSD);
-            AddCategoryMapping(4, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(4, TorznabCatType.TVSport);
             AddCategoryMapping(4, TorznabCatType.TV);
+            AddCategoryMapping(4, TorznabCatType.TVHD);
             AddCategoryMapping(31, TorznabCatType.TVHD);
             AddCategoryMapping(21, TorznabCatType.TVFOREIGN);
             AddCategoryMapping(46, TorznabCatType.TV);
             AddCategoryMapping(46, TorznabCatType.TVHD);
-            //AddCategoryMapping(45, TorznabCatType.TV);
-            //AddCategoryMapping(45, TorznabCatType.TVSD);
-            //AddCategoryMapping(24, TorznabCatType.TVFOREIGN);
+            AddCategoryMapping(45, TorznabCatType.TV);
+            AddCategoryMapping(45, TorznabCatType.TVSD);
+            AddCategoryMapping(24, TorznabCatType.TVFOREIGN);
             AddCategoryMapping(26, TorznabCatType.TV);
             AddCategoryMapping(26, TorznabCatType.TVHD);
             AddCategoryMapping(26, TorznabCatType.TVWEBDL);
@@ -146,7 +145,7 @@ namespace Jackett.Indexers
                         var qDesc = qRow.Find("#torrent-udgivelse2-users > p").FirstOrDefault();
 
                         var moviesCats = new[] { 47, 38, 5, 23, 22, 33, 17, 9 };
-                        var seriesCats = new[] { 46, 26, 43 };
+                        var seriesCats = new[] { 46, 26, 43, 31, 4 };
                         var catUrl = qRow.Find(".torrent-icon > a").Attr("href");
                         var cat = catUrl.Substring(catUrl.LastIndexOf('=') + 1);
                         var catNo = int.Parse(cat);
