@@ -91,114 +91,118 @@ namespace Jackett.Indexers
 
             WebClientStringResult results = null;
 
+
+            var pairs = new Dictionary<string, string> {
+                { "portlet", "true"}
+            };
+
             if (!string.IsNullOrWhiteSpace(queryString))
             {
-                var pairs = new Dictionary<string, string> {
-                    { "search", queryString},
-                    { "portlet", "true"}
-                };
-
+                pairs.Add("search", queryString);
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
-
-                try
-                {
-                    CQ dom = results.Content;
-                    var rows = dom["#torrent-table tr"];
-
-                    if (!string.IsNullOrWhiteSpace(queryString))
-                    {
-                        rows = dom["table tr"];
-                    }
-
-                    foreach (var row in rows.Skip(1))
-                    {
-                        var release = new ReleaseInfo();
-                        var qRow = row.Cq();
-                        var titleRow = qRow.Find("td:eq(2)").First();
-                        titleRow.Children().Remove();
-                        release.Title = titleRow.Text().Trim();
-                        if (string.IsNullOrWhiteSpace(release.Title))
-                            continue;
-                        release.Description = release.Title;
-
-                        var qLink = row.Cq().Find("td:eq(4) a:eq(0)");
-                        release.Link = new Uri(SiteLink + qLink.Attr("href"));
-                        release.Guid = release.Link;
-                        var qLinkComm = row.Cq().Find("td:eq(4) a:eq(1)");
-                        release.Comments = new Uri(SiteLink + qLinkComm.Attr("href"));
-
-                        var dateString = qRow.Find(".datetime").Attr("data-timestamp");
-                        release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString));
-                        var infoString = row.Cq().Find("td:eq(3)").Text();
-
-                        release.Size = ParseUtil.CoerceLong(Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
-
-                        var infosplit = infoString.Replace("/", string.Empty).Split(":".ToCharArray());
-                        release.Seeders = ParseUtil.CoerceInt(infosplit[1]);
-                        release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
-
-                        // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
-
-                        releases.Add(release);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(results.Content, ex);
-                }
-            }
-            else
+            } else
             {
-                var rssUrl = SiteLink + "rss/recent?passkey=" + configData.RSSKey.Value;
-
-                results = await RequestStringWithCookiesAndRetry(rssUrl);
-                try
-                {
-                    var doc = XDocument.Parse(results.Content);
-                    foreach (var result in doc.Descendants("item"))
-                    {
-                        var xTitle = result.Element("title").Value;
-                        var xLink = result.Element("link").Value;
-                        var xGUID = result.Element("guid").Value;
-                        var xDesc = result.Element("description").Value;
-                        var xDate = result.Element("pubDate").Value;
-                        var release = new ReleaseInfo();
-                        release.Guid  =release.Link =  new Uri(xLink);
-                        release.MinimumRatio = 1;
-                        release.Seeders = 1; // We are not supplied with peer info so just mark it as one.
-                        foreach (var element in xDesc.Split(";".ToCharArray()))
-                        {
-                            var split = element.IndexOf(':');
-                            if (split > -1)
-                            {
-                                var key = element.Substring(0, split).Trim();
-                                var value = element.Substring(split+1).Trim();
-
-                                switch (key)
-                                {
-                                    case "Filename":
-                                        release.Title = release.Description = value;
-                                        break;
-                                }
-                            }
-                        }
-
-                        //"Thu, 24 Sep 2015 18:07:07 +0000"
-                        release.PublishDate = DateTime.ParseExact(xDate, "ddd, dd MMM yyyy HH:mm:ss +0000", CultureInfo.InvariantCulture);
-
-                        if (!string.IsNullOrWhiteSpace(release.Title))
-                        {
-                            releases.Add(release);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(results.Content, ex);
-                }
+                results = await PostDataWithCookiesAndRetry(TorrentsUrl, pairs, null, TorrentsUrl);
             }
 
-            foreach(var release in releases)
+            try
+            {
+                CQ dom = results.Content;
+                var rows = dom["#torrent-table tr"];
+
+                if (!string.IsNullOrWhiteSpace(queryString))
+                {
+                    rows = dom["table tr"];
+                }
+
+                foreach (var row in rows.Skip(1))
+                {
+                    var release = new ReleaseInfo();
+                    var qRow = row.Cq();
+                    var titleRow = qRow.Find("td:eq(2)").First();
+                    titleRow.Children().Remove();
+                    release.Title = titleRow.Text().Trim();
+                    if (string.IsNullOrWhiteSpace(release.Title))
+                        continue;
+                    release.Description = release.Title;
+
+                    var qLink = row.Cq().Find("td:eq(4) a:eq(0)");
+                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Guid = release.Link;
+                    var qLinkComm = row.Cq().Find("td:eq(4) a:eq(1)");
+                    release.Comments = new Uri(SiteLink + qLinkComm.Attr("href"));
+
+                    var dateString = qRow.Find(".datetime").Attr("data-timestamp");
+                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString));
+                    var infoString = row.Cq().Find("td:eq(3)").Text();
+
+                    release.Size = ParseUtil.CoerceLong(Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
+
+                    var infosplit = infoString.Replace("/", string.Empty).Split(":".ToCharArray());
+                    release.Seeders = ParseUtil.CoerceInt(infosplit[1]);
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
+
+                    // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
+
+                    releases.Add(release);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
+            }
+            /* else
+             {
+                 var rssUrl = SiteLink + "rss/recent?passkey=" + configData.RSSKey.Value;
+
+                 results = await RequestStringWithCookiesAndRetry(rssUrl);
+                 try
+                 {
+                     var doc = XDocument.Parse(results.Content);
+                     foreach (var result in doc.Descendants("item"))
+                     {
+                         var xTitle = result.Element("title").Value;
+                         var xLink = result.Element("link").Value;
+                         var xGUID = result.Element("guid").Value;
+                         var xDesc = result.Element("description").Value;
+                         var xDate = result.Element("pubDate").Value;
+                         var release = new ReleaseInfo();
+                         release.Guid  =release.Link =  new Uri(xLink);
+                         release.MinimumRatio = 1;
+                         release.Seeders = 1; // We are not supplied with peer info so just mark it as one.
+                         foreach (var element in xDesc.Split(";".ToCharArray()))
+                         {
+                             var split = element.IndexOf(':');
+                             if (split > -1)
+                             {
+                                 var key = element.Substring(0, split).Trim();
+                                 var value = element.Substring(split+1).Trim();
+
+                                 switch (key)
+                                 {
+                                     case "Filename":
+                                         release.Title = release.Description = value;
+                                         break;
+                                 }
+                             }
+                         }
+
+                         //"Thu, 24 Sep 2015 18:07:07 +0000"
+                         release.PublishDate = DateTime.ParseExact(xDate, "ddd, dd MMM yyyy HH:mm:ss +0000", CultureInfo.InvariantCulture);
+
+                         if (!string.IsNullOrWhiteSpace(release.Title))
+                         {
+                             releases.Add(release);
+                         }
+                     }
+                 }
+                 catch (Exception ex)
+                 {
+                     OnParseError(results.Content, ex);
+                 }*/
+
+
+            foreach (var release in releases)
             {
                 if (release.Title.Contains("1080p") || release.Title.Contains("720p"))
                 {
