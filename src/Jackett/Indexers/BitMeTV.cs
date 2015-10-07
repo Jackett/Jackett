@@ -21,10 +21,11 @@ namespace Jackett.Indexers
 {
     public class BitMeTV : BaseIndexer, IIndexer
     {
+        //https is poorly implemented on BitMeTV. Site uses http to login, but then redirects to https for search
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string LoginPost { get { return SiteLink + "takelogin.php"; } }
         private string CaptchaUrl { get { return SiteLink + "visual.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl { get { return "https://www.bitmetv.org/browse.php"; } }
 
         new ConfigurationDataCaptchaLogin configData
         {
