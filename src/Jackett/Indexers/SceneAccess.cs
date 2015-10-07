@@ -19,7 +19,7 @@ namespace Jackett.Indexers
     class SceneAccess : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "login"; } }
-        private string SearchUrl { get { return SiteLink + "{0}?method=1&c{1}=1&search={2}"; } }
+        private string SearchUrl { get { return SiteLink + "browse?search={0}&method=2&c27=27&c17=17&c11=11"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -67,10 +67,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchSection = string.IsNullOrEmpty(query.Episode) ? "archive" : "browse";
-            var searchCategory = string.IsNullOrEmpty(query.Episode) ? "26" : "27";
-            var searchUrl = string.Format(SearchUrl, searchSection, searchCategory, query.GetQueryString());
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestStringWithCookiesAndRetry(string.Format(SearchUrl, query.GetQueryString()));
 
             try
             {
@@ -101,6 +98,17 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".ttr_seeders").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".ttr_leechers").Text()) + release.Seeders;
+
+                    var cat = qRow.Find(".ttr_type a").Attr("href");
+
+                    if (cat == "?cat=27")
+                    {
+                        release.Category = TorznabCatType.TVHD.ID;
+                    }
+                    else if (cat == "?cat=17")
+                    {
+                        release.Category = TorznabCatType.TVSD.ID;
+                    }
 
                     releases.Add(release);
                 }
