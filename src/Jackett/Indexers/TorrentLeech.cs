@@ -32,13 +32,13 @@ namespace Jackett.Indexers
         public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentLeech",
                 description: "This is what happens when you seed",
-                link: "http://www.torrentleech.org/",
+                link: "https://www.torrentleech.org/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
                 logger: l,
                 p: ps,
-                downloadBase: "http://www.torrentleech.org/download/",
+                downloadBase: "https://www.torrentleech.org/download/",
                 configData: new ConfigurationDataBasicLogin())
         {
 
