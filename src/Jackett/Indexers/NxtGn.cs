@@ -1,4 +1,4 @@
-﻿using CsQuery;
+using CsQuery;
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
@@ -44,37 +44,48 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSS())
         {
-            AddCategoryMapping(47, TorznabCatType.Movies3D);
-            AddCategoryMapping(38, TorznabCatType.MoviesHD);
-            AddCategoryMapping(38, TorznabCatType.MoviesWEBDL);
-            AddCategoryMapping(38, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(5, TorznabCatType.MoviesSD);
-            AddCategoryMapping(23, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(22, TorznabCatType.MoviesSD);
-            AddCategoryMapping(4, TorznabCatType.TVFOREIGN);
-            AddCategoryMapping(4, TorznabCatType.TVSD);
-            AddCategoryMapping(4, TorznabCatType.TV);
-            AddCategoryMapping(4, TorznabCatType.TVHD);
-            AddCategoryMapping(31, TorznabCatType.TVHD);
-            AddCategoryMapping(21, TorznabCatType.TVFOREIGN);
-            AddCategoryMapping(46, TorznabCatType.TV);
-            AddCategoryMapping(46, TorznabCatType.TVHD);
-            AddCategoryMapping(45, TorznabCatType.TV);
-            AddCategoryMapping(45, TorznabCatType.TVSD);
-            AddCategoryMapping(24, TorznabCatType.TVFOREIGN);
-            AddCategoryMapping(26, TorznabCatType.TV);
-            AddCategoryMapping(26, TorznabCatType.TVHD);
-            AddCategoryMapping(26, TorznabCatType.TVWEBDL);
-            AddCategoryMapping(33, TorznabCatType.MoviesHD);
-            AddCategoryMapping(33, TorznabCatType.Movies);
-            AddCategoryMapping(17, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(17, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(9, TorznabCatType.MoviesHD);
-            AddCategoryMapping(9, TorznabCatType.Movies);
-            AddCategoryMapping(9, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(43, TorznabCatType.TV);
-            AddCategoryMapping(43, TorznabCatType.TVHD);
-            AddCategoryMapping(43, TorznabCatType.TVWEBDL);
+			//Movies Mapping
+			AddCategoryMapping(9, TorznabCatType.MoviesHD);
+			AddCategoryMapping(9, TorznabCatType.Movies);
+			AddCategoryMapping(9, TorznabCatType.MoviesBluRay);
+			AddCategoryMapping(47, TorznabCatType.Movies3D);
+			AddCategoryMapping(38, TorznabCatType.MoviesHD);
+			AddCategoryMapping(38, TorznabCatType.MoviesWEBDL);
+			AddCategoryMapping(38, TorznabCatType.MoviesBluRay);
+			AddCategoryMapping(5, TorznabCatType.MoviesSD);
+			AddCategoryMapping(23, TorznabCatType.MoviesForeign);
+			AddCategoryMapping(22, TorznabCatType.MoviesSD);
+			AddCategoryMapping(33, TorznabCatType.MoviesHD);
+			AddCategoryMapping(33, TorznabCatType.Movies);
+			AddCategoryMapping(17, TorznabCatType.MoviesForeign);
+			AddCategoryMapping(17, TorznabCatType.MoviesDVD);
+
+			//TV Mapping
+			//Category 4: TV (Working)
+			AddCategoryMapping(4, TorznabCatType.TVSD);
+			AddCategoryMapping(4, TorznabCatType.TV);
+			AddCategoryMapping(4, TorznabCatType.TVHD);
+			//Category 21: Boxset/SD (Working)
+			AddCategoryMapping(21, TorznabCatType.TVFOREIGN);
+			//Category 24: Boxsets/TV (Working)
+			AddCategoryMapping(24, TorznabCatType.TVFOREIGN);
+			//Category 26: NG Serier WEB-DL (Working)
+			AddCategoryMapping(26, TorznabCatType.TVHD);
+			AddCategoryMapping(26, TorznabCatType.TV);
+			AddCategoryMapping(26, TorznabCatType.TVWEBDL);
+			//Category 31: TVHD (Working)
+			AddCategoryMapping(31, TorznabCatType.TVHD);
+			AddCategoryMapping(31, TorznabCatType.TV);
+			//Category 43: NG WWW HD (Working)
+			AddCategoryMapping(43, TorznabCatType.TVHD);
+			AddCategoryMapping(43, TorznabCatType.TV);
+			AddCategoryMapping(43, TorznabCatType.TVWEBDL);
+			//Category 45: TV-Misc (Working)
+			AddCategoryMapping(45, TorznabCatType.TV);
+			AddCategoryMapping(45, TorznabCatType.TVSD);
+			//Category 46: NG Serier HDTV (Working)
+			AddCategoryMapping(46, TorznabCatType.TVHD);
+			AddCategoryMapping(46, TorznabCatType.TV);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -145,7 +156,7 @@ namespace Jackett.Indexers
                         var qDesc = qRow.Find("#torrent-udgivelse2-users > p").FirstOrDefault();
 
                         var moviesCats = new[] { 47, 38, 5, 23, 22, 33, 17, 9 };
-                        var seriesCats = new[] { 46, 26, 43, 31, 4 };
+						var seriesCats = new[] { 4, 21, 24, 26, 31, 43, 45, 46 };
                         var catUrl = qRow.Find(".torrent-icon > a").Attr("href");
                         var cat = catUrl.Substring(catUrl.LastIndexOf('=') + 1);
                         var catNo = int.Parse(cat);
