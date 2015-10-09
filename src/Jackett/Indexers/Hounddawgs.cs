@@ -43,6 +43,20 @@ namespace Jackett.Indexers
 				p: ps,
 				configData: new ConfigurationDataBasicLogin())
 		{
+			AddCategoryMapping(92, TorznabCatType.TV);
+			AddCategoryMapping(92, TorznabCatType.TVHD);
+			AddCategoryMapping(92, TorznabCatType.TVWEBDL);
+
+			AddCategoryMapping(93, TorznabCatType.TVSD);
+			AddCategoryMapping(93, TorznabCatType.TV);
+
+			AddCategoryMapping(57, TorznabCatType.TV);
+			AddCategoryMapping(57, TorznabCatType.TVHD);
+			AddCategoryMapping(57, TorznabCatType.TVWEBDL);
+
+			AddCategoryMapping(74, TorznabCatType.TVSD);
+			AddCategoryMapping(74, TorznabCatType.TV);
+
 		}
 
 		public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -71,29 +85,36 @@ namespace Jackett.Indexers
 		{
 			var releases = new List<ReleaseInfo>();
 			var episodeSearchUrl = string.Format("{0}?&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-				var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+			var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 			if (results.Content.Contains("Din søgning gav intet resultat."))
 			{
 				return releases;
 			}
-				try
-				{
-					CQ dom = results.Content;
+			try
+			{
+				CQ dom = results.Content;
 
 				var rows = dom["#torrent_table > tbody > tr"].ToArray();
 
-					foreach (var row in rows.Skip(1))
-					{
+				foreach (var row in rows.Skip(1))
+				{
 					var release = new ReleaseInfo();
 					release.MinimumRatio = 1;
 					release.MinimumSeedTime = 172800;
 
-					release.PublishDate = DateTime.Now;
+					var seriesCats = new[] { 92, 93, 57, 74 };
+					var qCat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).Cq();
+					var catUrl = qCat.Attr("href");
+					var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1);
+					var catNo = int.Parse(cat.Trim(']'));
+					if (seriesCats.Contains(catNo))
+						release.Category = TorznabCatType.TV.ID;
+					else
+						continue;
 
-//					var qAdded = row.ChildElements.ElementAt(4).Cq();
-//					var addedStr = qAdded.Attr("title").Trim();
-//					//var addedStr = "Oct 02 2015, 03:55";
-//					//release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+					var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
+					var addedStr = qAdded.Attr("title");
+					release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
 
 					var qLink = row.ChildElements.ElementAt(1).ChildElements.ElementAt(2).Cq();
 					release.Title = qLink.Text().Trim();
@@ -112,12 +133,12 @@ namespace Jackett.Indexers
 					release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text()) + release.Seeders;
 
 					releases.Add(release);
-					}
 				}
-				catch (Exception ex)
-				{
-					OnParseError(results.Content, ex);
-				}
+			}
+			catch (Exception ex)
+			{
+				OnParseError(results.Content, ex);
+			}
 
 			return releases;
 		}
