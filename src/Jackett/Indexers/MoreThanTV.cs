@@ -55,8 +55,10 @@ namespace Jackett.Indexers
                 { "keeplogged", "1" }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php?"), () =>
+            var preRequest = await RequestStringWithCookiesAndRetry(LoginUrl, string.Empty);
+
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, SearchUrl, SiteLink);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("status\":\"success\""), () =>
             {
                 CQ dom = result.Content;
                 dom["#loginform > table"].Remove();

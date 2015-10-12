@@ -202,7 +202,7 @@ namespace Jackett.Controllers
                     baseIndexer.ResetBaseConfig();
                 if (ex is ExceptionWithConfigData)
                 {
-                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null);
+                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null,false);
                 }
                 else
                 {
