@@ -118,7 +118,7 @@ namespace Jackett.Indexers
                     var date = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
                     release.PublishDate = DateTime.SpecifyKind(date, DateTimeKind.Utc).ToLocalTime();
 
-                    release.Link = new Uri(SiteLink + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
+                    release.Link = new Uri(SiteLink.Replace("http:", "https:") + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
                     var sizeStr = row.ChildElements.ElementAt(6).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
