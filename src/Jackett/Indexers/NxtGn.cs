@@ -94,6 +94,11 @@ namespace Jackett.Indexers
                 AddCategoryMapping(45, TorznabCatType.TV);
                 AddCategoryMapping(45, TorznabCatType.TVSD);
             }
+
+            // Audio Books
+            AddCategoryMapping(37, TorznabCatType.AudioAudiobook);
+
+            AddCategoryMapping(8, TorznabCatType.BooksEbook);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
