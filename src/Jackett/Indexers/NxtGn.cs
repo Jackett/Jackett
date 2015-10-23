@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
+using CsQuery.ExtensionMethods;
 using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
@@ -27,9 +28,9 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string ProfileUrl { get { return SiteLink + "my.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSS configData
+        new NxtGnConfigurationData configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
+            get { return (NxtGnConfigurationData)base.configData; }
             set { base.configData = value; }
         }
 
@@ -42,7 +43,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSS())
+                configData: new NxtGnConfigurationData())
         {
 			//Movies Mapping
 			AddCategoryMapping(9, TorznabCatType.MoviesHD);
@@ -155,8 +156,17 @@ namespace Jackett.Indexers
                         var qLink = qRow.Find("#torrent-udgivelse2-users > a").First();
                         var qDesc = qRow.Find("#torrent-udgivelse2-users > p").FirstOrDefault();
 
-                        var moviesCats = new[] { 47, 38, 5, 23, 22, 33, 17, 9 };
-						var seriesCats = new[] { 4, 21, 24, 26, 31, 43, 45, 46 };
+                        
+                        var moviesCatsDanish = new[] { 38, 23, 22, 33, 17 };
+                        var moviesCatsIntl = new[] { 47, 5, 9 };
+                        var moviesCats = configData.OnlyDanishCategories.Value
+                            ? moviesCatsDanish
+                            : moviesCatsDanish.Concat(moviesCatsIntl);
+                        var seriesCatsDanish = new[] {26, 43, 46};
+                        var seriesCatsIntl = new[] { 4, 21, 24, 31, 45 };
+                        var seriesCats = configData.OnlyDanishCategories.Value
+                            ? seriesCatsDanish
+                            : seriesCatsDanish.Concat(seriesCatsIntl);
                         var catUrl = qRow.Find(".torrent-icon > a").Attr("href");
                         var cat = catUrl.Substring(catUrl.LastIndexOf('=') + 1);
                         var catNo = int.Parse(cat);
@@ -218,6 +228,21 @@ namespace Jackett.Indexers
                     break;
             }
             return releases;
+        }
+
+        public class NxtGnConfigurationData : ConfigurationData
+        {
+            public NxtGnConfigurationData()
+            {
+                Username = new StringItem { Name = "Username" };
+                Password = new StringItem { Name = "Password" };
+                RSSKey = new HiddenItem { Name = "RSSKey" };
+                OnlyDanishCategories = new BoolItem { Name = "Only Danish Categories" };
+            }
+            public StringItem Username { get; private set; }
+            public StringItem Password { get; private set; }
+            public HiddenItem RSSKey { get; private set; }
+            public BoolItem OnlyDanishCategories { get; private set; }
         }
     }
 }
