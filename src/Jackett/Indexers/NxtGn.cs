@@ -98,6 +98,7 @@ namespace Jackett.Indexers
             // Audio Books
             AddCategoryMapping(37, TorznabCatType.AudioAudiobook);
 
+            // Books
             AddCategoryMapping(8, TorznabCatType.BooksEbook);
         }
 
@@ -130,7 +131,7 @@ namespace Jackett.Indexers
             passKey = passKey.Substring(0, passKey.IndexOf(' '));
             configData.RSSKey.Value = passKey;
             SaveConfig();
-            return IndexerConfigurationStatus.RequiresTesting;
+            return IndexerConfigurationStatus.Completed;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
