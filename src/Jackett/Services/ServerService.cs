@@ -32,7 +32,7 @@ namespace Jackett.Services
         void ReserveUrls(bool doInstall = true);
         ServerConfig Config { get; }
         void SaveConfig();
-        Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "/t.torrent");
+        Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
     }
 
     public class ServerService : IServerService
@@ -65,13 +65,13 @@ namespace Jackett.Services
             get { return config; }
         }
 
-        public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "/t.torrent")
+        public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent")
         {
             if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
                 return link;
          
-            var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString())) + file;
-            var proxyLink = string.Format("{0}{1}/{2}/{3}/{4}", serverUrl, action, indexerId, config.APIKey, encodedLink);
+            var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString()));
+            var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, file);
             return new Uri(proxyLink);
         }
 

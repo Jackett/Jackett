@@ -29,7 +29,7 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Download(string indexerID, string path, string apikey)
+        public async Task<HttpResponseMessage> Download(string indexerID, string path, string apikey, string file)
         {
             try
             {
@@ -54,6 +54,10 @@ namespace Jackett.Controllers
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = file
+                };
                 return result;
             }
             catch (Exception e)

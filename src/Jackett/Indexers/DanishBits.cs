@@ -168,6 +168,27 @@ namespace Jackett.Indexers
                 episodeSearchUrl = $"{SearchUrl}?page={page}&group=0&{catsUrlPart}&search={HttpUtility.UrlEncode(query.GetQueryString())}&pre_type=torrents&type=";
             }
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            if (string.IsNullOrEmpty(results.Content))
+            {
+                CookieHeader = string.Empty;
+                var pairs = new Dictionary<string, string>
+                {
+                    {"username", configData.Username.Value},
+                    {"password", configData.Password.Value},
+                    {"langlang", null},
+                    {"login", "login"}
+                };
+                var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl);
+
+                await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+                {
+                    CQ dom = response.Content;
+                    var messageEl = dom["#loginform .warning"];
+                    var errorMessage = messageEl.Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
+                results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            }
             try
             {
                 CQ dom = results.Content;
@@ -206,13 +227,16 @@ namespace Jackett.Indexers
                     else
                         continue;
 
-                    var dlUrlAnchor = qRow.Find("span.right a").FirstElement();
-                    var dlUrl = dlUrlAnchor.GetAttribute("href");
-                    release.Link = new Uri(SiteLink + dlUrl);
-
                     var titleAnchor = qRow.Find("div.croptorrenttext a").FirstElement();
                     var title = titleAnchor.GetAttribute("title");
                     release.Title = title;
+
+                    var dlUrlAnchor = qRow.Find("span.right a").FirstElement();
+                    var dlUrl = dlUrlAnchor.GetAttribute("href");
+                    var authkey = Regex.Match(dlUrl, "authkey=(?<authkey>[0-9a-zA-Z]+)").Groups["authkey"].Value;
+                    var torrentPass = Regex.Match(dlUrl, "torrent_pass=(?<torrent_pass>[0-9a-zA-Z]+)").Groups["torrent_pass"].Value;
+                    var torrentId = Regex.Match(dlUrl, "id=(?<id>[0-9]+)").Groups["id"].Value;
+                    release.Link = new Uri($"{SearchUrl}/{title}.torrent/?action=download&authkey={authkey}&torrent_pass={torrentPass}&id={torrentId}");
 
                     var torrentLink = titleAnchor.GetAttribute("href");
                     release.Guid = new Uri(SiteLink + torrentLink);

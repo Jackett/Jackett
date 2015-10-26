@@ -425,7 +425,7 @@ namespace Jackett.Controllers
             foreach (var result in results)
             {
                 var link = result.Link;
-                result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId);
+                result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", result.Title + ".torrent");
                 if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", string.Empty);
 
