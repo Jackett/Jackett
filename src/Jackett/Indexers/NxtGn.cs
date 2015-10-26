@@ -37,7 +37,7 @@ namespace Jackett.Indexers
         public NxtGn(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "NextGen",
                 description: "A danish closed torrent tracker",
-                link: "https://nxtgn.info/",
+                link: "https://nxtgn.biz/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
