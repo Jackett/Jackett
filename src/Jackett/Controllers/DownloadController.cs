@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using MonoTorrent.BEncoding;
 
 namespace Jackett.Controllers
 {
@@ -50,6 +51,10 @@ namespace Jackett.Controllers
                 target = indexer.UncleanLink(target);
 
                 var downloadBytes = await indexer.Download(target);
+
+                // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
+                var torrentDictionary = BEncodedDictionary.DecodeTorrent(downloadBytes);
+                downloadBytes = torrentDictionary.Encode();
 
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);
