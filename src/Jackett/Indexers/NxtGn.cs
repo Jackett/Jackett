@@ -138,7 +138,7 @@ namespace Jackett.Indexers
         {
             var releasesPerPage = 100;
             var releases = new List<ReleaseInfo>();
-            var page = (query.Offset / releasesPerPage) + 1;
+            var page = (query.Offset / releasesPerPage);
             string episodeSearchUrl;
             if (string.IsNullOrEmpty(query.GetQueryString()))
             {
