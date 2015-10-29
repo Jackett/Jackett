@@ -1,6 +1,6 @@
 ## Jackett
 
-This project is currently in hibernation and is unmaintained, feel free to fork and continue development.    
+This project is a new fork and is recruiting development help.  If you are able to help out please contact us.
 
 #### Overview
 This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/master/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) API server on your machine.  Torznab enables software such as [Sonarr](https://sonarr.tv) to access data from your favorite indexers in a similar fashion to rss but with added features such as searching.  TorrentPotato is an interface accessible to [CouchPotato](https://couchpota.to/).
@@ -58,8 +58,6 @@ We were previously focused on TV but are working on extending searches to allow 
 
 #### Installation on Windows
 
-Grab the latest release from the [website](http://jackett.net/Download).
-
 We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
 
 Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
@@ -70,7 +68,7 @@ Jackett can also be run from the command line using JackettConsole.exe if you wo
        * Debian/Ubunutu: apt-get install libcurl-dev
        * Redhat/Fedora: yum install libcurl-devel
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
- 3. Download and extract the latest ```.tar.bz2``` release from the [website](http://jackett.net/Download)  and run Jackett using mono with the command "mono JackettConsole.exe".
+ 3. Download and extract the latest ```.tar.bz2``` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command "mono JackettConsole.exe".
 
 #### Installation on Synology
 1. Install Sonarr & Mono 3.10 from synocommunity.
@@ -95,12 +93,9 @@ Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcu
 
 You can get additional logging with the switches "-t -l".  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
 
-
 ### Contributing
 All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.
 
-### Contact & Support
-Use the github issues pages or talk to us directly at: [irc.freenode.net#jackett](http://webchat.freenode.net/?channels=#jackett).
 
 ### Screenshots
 
