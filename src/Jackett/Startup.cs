@@ -111,7 +111,7 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "download",
-                routeTemplate: "dl/{indexerID}/{apikey}/{path}/t.torrent",
+                routeTemplate: "dl/{indexerID}/{apiKey}",
                 defaults: new { controller = "Download", action = "Download" }
             );
 

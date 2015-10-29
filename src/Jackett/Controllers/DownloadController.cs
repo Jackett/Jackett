@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using MonoTorrent.BEncoding;
 
 namespace Jackett.Controllers
 {
@@ -29,7 +30,7 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Download(string indexerID, string path, string apikey)
+        public async Task<HttpResponseMessage> Download(string indexerID, string path, string apikey, string file)
         {
             try
             {
@@ -51,9 +52,17 @@ namespace Jackett.Controllers
 
                 var downloadBytes = await indexer.Download(target);
 
+                // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
+                var torrentDictionary = BEncodedDictionary.DecodeTorrent(downloadBytes);
+                downloadBytes = torrentDictionary.Encode();
+
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = file
+                };
                 return result;
             }
             catch (Exception e)

@@ -126,7 +126,7 @@ namespace Jackett.Controllers
             foreach (var r in releases)
             {
                 var release = Mapper.Map<ReleaseInfo>(r);
-                release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, indexerID);
+                release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, indexerID, "dl", release.Title + ".torrent");
 
                 // Only accept torrent links, magnet is not supported
                 if (release.Link != null)

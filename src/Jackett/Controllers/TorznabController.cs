@@ -116,7 +116,7 @@ namespace Jackett.Controllers
             foreach(var result in releases)
             {
                 var clone = Mapper.Map<ReleaseInfo>(result);
-                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, indexerID);
+                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, indexerID, "dl", result.Title + ".torrent");
                 resultPage.Releases.Add(clone);
             }
 

@@ -110,6 +110,10 @@
       <HintPath>..\packages\Microsoft.Owin.StaticFiles.3.0.1\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MonoTorrent, Version=0.80.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoTorrent.0.9.0\lib\net20\MonoTorrent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -186,6 +190,7 @@
     <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
     <Compile Include="Indexers\BroadcastTheNet.cs" />
+    <Compile Include="Indexers\DanishBits.cs" />
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
@@ -435,6 +440,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\broadcastthenet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\danishbits.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\demonoid.png">
