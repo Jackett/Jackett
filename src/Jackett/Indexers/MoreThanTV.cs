@@ -100,7 +100,8 @@ namespace Jackett.Indexers
 
             try
             {
-                var json = JObject.Parse(response.Content);
+                string decodedResponse = WebUtility.HtmlDecode(response.Content);
+                var json = JObject.Parse(decodedResponse);
                 foreach (JObject r in json["response"]["results"])
                 {
                     DateTime pubDate = DateTime.MinValue;
