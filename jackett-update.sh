@@ -21,6 +21,7 @@ if [[ $WVERSION != $CVERSION ]]; then
 		sudo rm -rf Jackett
 		echo $WVERSION > cur-jackett.txt
 		echo "New version $WVERSION!"
+		sudo reboot
 	else
 		echo "File not found!"
 	fi
