@@ -1,5 +1,5 @@
 ## Jackett
-Test appveyor
+
 This project is a new fork and is recruiting development help.  If you are able to help out please contact us.
 
 #### Overview
