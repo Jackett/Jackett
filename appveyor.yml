@@ -40,4 +40,4 @@ deploy:
   tag: 
   auth_token:
     secure: OSSu9VL6WpnJvSqaccsIxUxuxeQsr8dHI1/wuGZyUQ0ojlBgL2LKInteOVXsj902
-  draft: true
+  draft: false
