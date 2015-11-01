@@ -1,0 +1,43 @@
+version: 0.6.{build}.0
+os: Visual Studio 2015
+configuration: Release
+install:
+- cmd: choco install InnoSetup
+before_build:
+- cmd: nuget restore src\Jackett.sln
+build:
+  publish_nuget: true
+  include_nuget_references: true
+  verbosity: minimal
+after_build:
+- cmd: >-
+    xcopy src\Jackett.Console\bin\Release build.windows\  /e /y
+
+    copy /Y src\Jackett.Service\bin\Release\JackettService.exe build.windows\JackettService.exe
+
+    copy /Y src\Jackett.Service\bin\Release\JackettService.exe.config build.windows\JackettService.exe.config
+
+    copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build.windows\JackettTray.exe
+
+    copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe.config build.windows\JackettTray.exe.config
+
+    copy /Y LICENSE build.windows\LICENSE
+
+    copy /Y README.md build.windows\README.md
+
+
+    "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Installer.iss
+
+    RENAME Output\setup.exe Jackett.Installer.v%APPVEYOR_BUILD_VERSION%.exe
+test: off
+artifacts:
+- path: build.windows
+  name: Jackett.Binaries.v$(appveyor_build_version)
+- path: Output\Jackett.Installer.v$(appveyor_build_version).exe
+  name: Jackett.v$(appveyor_build_version).exe
+deploy:
+- provider: GitHub
+  tag: 
+  auth_token:
+    secure: OSSu9VL6WpnJvSqaccsIxUxuxeQsr8dHI1/wuGZyUQ0ojlBgL2LKInteOVXsj902
+  draft: true
