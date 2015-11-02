@@ -35,13 +35,18 @@ namespace Jackett.Indexers
             : base(name: "nCore",
                 description: "A Hungarian private torrent site.",
                 link: "https://ncore.cc/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataNCore())
         {
+            AddCategoryMapping("Sorozatok SD felbontásban angolul és egyéb nyelveken.", TorznabCatType.TVSD);
+            AddCategoryMapping("Nagyfelbontású sorozatok angolul és egyéb nyelveken.", TorznabCatType.TVHD);
+            AddCategoryMapping("Sorozatok SD felbontásban magyarul.", TorznabCatType.TVFOREIGN);
+            AddCategoryMapping("Nagyfelbontású filmek, angolul és egyéb nyelveken.", TorznabCatType.MoviesHD);
+            AddCategoryMapping("Nagyfelbontású filmek, magyarul.", TorznabCatType.MoviesForeign);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -102,7 +107,11 @@ namespace Jackett.Indexers
                 baseList.AddRange(CreateKeyValueList(
                     new[] { searchTypeKey, "xvidser" },
                     new[] { searchTypeKey, "dvdser" },
-                    new[] { searchTypeKey, "hdser" }
+                    new[] { searchTypeKey, "hdser" },
+                    new[] { searchTypeKey, "xvid" },
+                    new[] { searchTypeKey, "dvd" },
+                    new[] { searchTypeKey, "dvd9" },
+                    new[] { searchTypeKey, "hd" }
                 ));
             }
 
@@ -111,7 +120,11 @@ namespace Jackett.Indexers
                 baseList.AddRange(CreateKeyValueList(
                     new[] { searchTypeKey, "xvidser_hun" },
                     new[] { searchTypeKey, "dvdser_hun" },
-                    new[] { searchTypeKey, "hdser_hun" }
+                    new[] { searchTypeKey, "hdser_hun" },
+                    new[] { searchTypeKey, "xvid_hun" },
+                    new[] { searchTypeKey, "dvd_hun" },
+                    new[] { searchTypeKey, "dvd9_hun" },
+                    new[] { searchTypeKey, "hd_hun" }
                 ));
             }
             return baseList;
@@ -152,6 +165,8 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTime.Parse(qRow.Find(".box_feltoltve2").Get(0).InnerHTML.Replace("<br />", " "), CultureInfo.InvariantCulture);
                     string[] sizeSplit = qRow.Find(".box_meret2").Get(0).InnerText.Split(' ');
                     release.Size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
+                    string cat = qRow.Find("img[class='categ_link']").First().Attr("title").Trim();
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }
