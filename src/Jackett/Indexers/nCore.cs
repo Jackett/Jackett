@@ -35,13 +35,40 @@ namespace Jackett.Indexers
             : base(name: "nCore",
                 description: "A Hungarian private torrent site.",
                 link: "https://ncore.cc/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataNCore())
         {
+            AddCategoryMapping("Sorozatok SD felbontásban angolul és egyéb nyelveken.", TorznabCatType.TVSD);
+            AddCategoryMapping("Nagyfelbontású sorozatok angolul és egyéb nyelveken.", TorznabCatType.TVHD);
+            AddCategoryMapping("Sorozatok SD felbontásban magyarul.", TorznabCatType.TVFOREIGN);
+            AddCategoryMapping("Nagyfelbontású sorozatok magyarul.", TorznabCatType.TVFOREIGN);
+            AddCategoryMapping("Nagyfelbontású filmek, angolul és egyéb nyelveken.", TorznabCatType.MoviesHD);
+            AddCategoryMapping("Nagyfelbontású filmek, magyarul.", TorznabCatType.MoviesForeign);
+            AddCategoryMapping("Filmek tömörített formátumban, angolul.", TorznabCatType.MoviesSD);
+            AddCategoryMapping("Filmek tömörített formátumban, magyarul.", TorznabCatType.MoviesForeign);
+            AddCategoryMapping("Filmek DVD-n, angolul és egyéb nyelveken.", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("Filmek DVD-n, magyarul.", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("Filmek DVD9 formátumban angolul és egyéb nyelveken.", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("Filmek DVD9 formátumban magyarul.", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("Zene külföldi előadóktól (MP3).", TorznabCatType.AudioMP3);
+            AddCategoryMapping("Zene magyar előadóktól (MP3).", TorznabCatType.AudioForeign);
+            AddCategoryMapping("Lossless, azaz veszteségmentes formátumú zene külföldi eloadótól (APE/FLAC/DTS/WAV).", TorznabCatType.AudioLossless);
+            AddCategoryMapping("Lossless, azaz veszteségmentes formátumú zene magyar eloadótól (APE/FLAC/DTS/WAV).", TorznabCatType.AudioLossless);
+            AddCategoryMapping("Koncertek, Zenei anyagok.", TorznabCatType.AudioVideo);
+            AddCategoryMapping("Erotikus tartalom.", TorznabCatType.XXXXviD);
+            AddCategoryMapping("Erotikus tartalom (HD).", TorznabCatType.XXXx264);
+            AddCategoryMapping("Erotikus tartalom (DVD).", TorznabCatType.XXXDVD);
+            AddCategoryMapping("Erotikus tartalom (Képsorozatok).", TorznabCatType.XXXImageset);
+            AddCategoryMapping("Könyvek, dokumentációk, tananyagok, eBook-ok angolul.", TorznabCatType.BooksEbook);
+            AddCategoryMapping("Könyvek, dokumentációk, tananyagok, eBook-ok magyarul.", TorznabCatType.BooksForeign);
+            AddCategoryMapping("Játékok CD/DVD képben.", TorznabCatType.PCGames);
+            AddCategoryMapping("Szoftverek, programok CD/DVD képben.", TorznabCatType.PCISO);
+            AddCategoryMapping("Programok és játékok mobilra.", TorznabCatType.PCPhoneOther);
+            AddCategoryMapping("Játékok Xbox-ra, PS-re, PSP-re, GC-re, Wii-re.", TorznabCatType.Console);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -102,7 +129,24 @@ namespace Jackett.Indexers
                 baseList.AddRange(CreateKeyValueList(
                     new[] { searchTypeKey, "xvidser" },
                     new[] { searchTypeKey, "dvdser" },
-                    new[] { searchTypeKey, "hdser" }
+                    new[] { searchTypeKey, "hdser" },
+                    new[] { searchTypeKey, "xvid" },
+                    new[] { searchTypeKey, "dvd" },
+                    new[] { searchTypeKey, "dvd9" },
+                    new[] { searchTypeKey, "hd" },
+                    new[] { searchTypeKey, "dvdser" },
+                    new[] { searchTypeKey, "xxx_xvid" },
+                    new[] { searchTypeKey, "xxx_dvd" },
+                    new[] { searchTypeKey, "xxx_imageset" },
+                    new[] { searchTypeKey, "xxx_hd" },
+                    new[] { searchTypeKey, "mp3" },
+                    new[] { searchTypeKey, "lossless" },
+                    new[] { searchTypeKey, "clip" },
+                    new[] { searchTypeKey, "game_iso" },
+                    new[] { searchTypeKey, "console" },
+                    new[] { searchTypeKey, "ebook" },
+                    new[] { searchTypeKey, "iso" },
+                    new[] { searchTypeKey, "mobil" }
                 ));
             }
 
@@ -111,7 +155,14 @@ namespace Jackett.Indexers
                 baseList.AddRange(CreateKeyValueList(
                     new[] { searchTypeKey, "xvidser_hun" },
                     new[] { searchTypeKey, "dvdser_hun" },
-                    new[] { searchTypeKey, "hdser_hun" }
+                    new[] { searchTypeKey, "hdser_hun" },
+                    new[] { searchTypeKey, "xvid_hun" },
+                    new[] { searchTypeKey, "dvd_hun" },
+                    new[] { searchTypeKey, "dvd9_hun" },
+                    new[] { searchTypeKey, "hd_hun" },
+                    new[] { searchTypeKey, "mp3_hun" },
+                    new[] { searchTypeKey, "lossless_hun" },
+                    new[] { searchTypeKey, "ebook_hun" }
                 ));
             }
             return baseList;
@@ -152,6 +203,8 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTime.Parse(qRow.Find(".box_feltoltve2").Get(0).InnerHTML.Replace("<br />", " "), CultureInfo.InvariantCulture);
                     string[] sizeSplit = qRow.Find(".box_meret2").Get(0).InnerText.Split(' ');
                     release.Size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
+                    string cat = qRow.Find("img[class='categ_link']").First().Attr("title").Trim();
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }
