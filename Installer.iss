@@ -4,7 +4,7 @@
 #define MyAppName "Jackett"
 #define MyAppVersion GetFileVersion("build.windows/Jackett.dll")
 #define MyAppPublisher "Jackett  Inc."
-#define MyAppURL "https://github.com/zone117x/Jackett"
+#define MyAppURL "https://github.com/Jackett/Jackett"
 #define MyAppExeName "JackettTray.exe"
 
 [Setup]
