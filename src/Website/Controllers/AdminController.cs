@@ -10,12 +10,14 @@ namespace Website.Controllers
 {
     public class AdminController : Controller
     {
-        // GET: Admin
-        public async Task<ActionResult> Sync()
-        {
+        //Commented out code below as Sync.cshtml is missing
+        
+        //// GET: Admin
+        //public async Task<ActionResult> Sync()
+        //{
            
-            await new DatabaseService().Sync();
-            return View();
-        }
+        //    await new DatabaseService().Sync();
+        //    return View();
+        //}
     }
 }
