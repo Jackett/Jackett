@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Octokit, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.14.0\lib\net45\Octokit.dll</HintPath>
+    <Reference Include="Octokit, Version=0.16.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.16.0\lib\net45\Octokit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
