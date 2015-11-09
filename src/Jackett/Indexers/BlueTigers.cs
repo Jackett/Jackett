@@ -87,9 +87,13 @@ namespace Jackett.Indexers
             AddCategoryMapping("16", TorznabCatType.TVHD);
             AddCategoryMapping("130", TorznabCatType.TVHD);
             AddCategoryMapping("10", TorznabCatType.TVSD);
-            AddCategoryMapping("131", TorznabCatType.TV);
-            AddCategoryMapping("17", TorznabCatType.TV);
-            AddCategoryMapping("18", TorznabCatType.TV);
+            AddCategoryMapping("131", TorznabCatType.TVSD);
+            AddCategoryMapping("131", TorznabCatType.TVHD);
+            AddCategoryMapping("17", TorznabCatType.TVSD);
+            AddCategoryMapping("18", TorznabCatType.TVSD);
+            AddCategoryMapping("18", TorznabCatType.TVHD);
+            AddCategoryMapping("19", TorznabCatType.TVSD);
+            AddCategoryMapping("19", TorznabCatType.TVHD);
             AddCategoryMapping("19", TorznabCatType.TV);
             AddCategoryMapping("58", TorznabCatType.TVSport);
             AddCategoryMapping("33", TorznabCatType.TVOTHER);
