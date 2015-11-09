@@ -8,24 +8,22 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
     public class BeyondHD : BaseIndexer, IIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
+        private string LoginUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
+        private string AjaxLoginUrl { get { return SiteLink + "ajax/takelogin.php"; } }
 
-        new ConfigurationDataCookie configData
+        new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
+            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,7 +36,7 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataCookie())
+                configData: new ConfigurationDataRecaptchaLogin())
         {
             AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.Movies3D,
@@ -78,20 +76,55 @@ namespace Jackett.Indexers
 
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            string recaptchaSiteKey = new Regex(@"loginwidget', \{[\s]{4,30}'sitekey' : '([0-9A-Za-z]{5,60})',[\s]{4,30}'theme'").Match(loginPage.Content).Groups[1].ToString().Trim();
+            var result = new ConfigurationDataRecaptchaLogin();
+            result.CookieHeader.Value = loginPage.Cookies;
+            result.Captcha.SiteKey = recaptchaSiteKey;
+            return result;
+        }
+
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "g-recaptcha-response", configData.Captcha.Value }
+            };
 
-            var response = await webclient.GetString(new Utils.Clients.WebRequest()
+            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
             {
-                Url = SiteLink,
-                Cookies = configData.Cookie.Value
-            });
+                // Cookie was manually supplied
+                CookieHeader = configData.Captcha.Cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (!results.Any())
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
 
-            await ConfigureIfOK(configData.Cookie.Value, response.Content.Contains("logout.php"), () =>
+                    SaveConfig();
+                    IsConfigured = true;
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
+
+            var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
+            JToken token = JObject.Parse(result.Content);
+            bool success = token.Value<bool?>("success") ?? false;
+            await ConfigureIfOK(result.Cookies, success, () =>
             {
-                CQ dom = response.Content;
-                throw new ExceptionWithConfigData("Invalid cookie header", configData);
+                var errorMessage = result.Content;
+                throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -135,7 +168,7 @@ namespace Jackett.Indexers
 
                     var qLink = row.ChildElements.ElementAt(2).FirstChild.Cq();
                     release.Link = new Uri(SiteLink + "/" + qLink.Attr("href"));
-                    var torrentID = qLink.Attr("href").Split('=').Last();
+                    var torrentId = qLink.Attr("href").Split('=').Last();
 
                     var descCol = row.ChildElements.ElementAt(3);
                     var qCommentLink = descCol.FirstChild.Cq();
@@ -143,6 +176,7 @@ namespace Jackett.Indexers
                     release.Description = release.Title;
                     release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href"));
                     release.Guid = release.Comments;
+                    release.Link = new Uri($"{SiteLink}download.php?torrent={torrentId}");
 
                     var dateStr = descCol.ChildElements.Last().Cq().Text().Split('|').Last().ToLowerInvariant().Replace("ago.", "").Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
