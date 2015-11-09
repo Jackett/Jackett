@@ -214,7 +214,7 @@ namespace Jackett.Indexers
                     string stats = tRow.Find("div[id=kt" + torrentId.ToString() + "]").First().Text();
                     string sizeStr = new Regex("Taille:(.*)Vitesse:").Match(stats).Groups[1].ToString().Trim();
                     string pubDateStr = new Regex("Ajout.:(.*)Compl.t.s").Match(stats).Groups[1].ToString().Trim();
-                    DateTime pubDate = DateTime.ParseExact(pubDateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+                    DateTime pubDate = DateTime.ParseExact(pubDateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     string statistics = tRow.Find("a[href*=torrents-details.php?id=]").First().RenderSelection().Trim();
                     string startTag = "<table ";
