@@ -61,7 +61,7 @@
         <hr />
         <h3>Jackett Configuration</h3>
         <div class="input-area">
-            <span class="input-header">Admin Password: </span>
+            <span class="input-header">Admin password: </span>
             <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
             <button id="change-jackett-password" class="btn btn-primary btn-sm">
                 <i class="fa fa-user-secret"></i>  Set Password <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
@@ -87,6 +87,13 @@
         <div class="input-area">
             <span class="input-header">External access: </span>
             <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
+        </div>
+        <div class="input-area">
+            <span class="input-header">Disable auto update: </span>
+            <input id="jackett-allowupdate" class="form-control input-right" type="checkbox" />
+            <button id="trigger-updater" class="btn btn-warning btn-sm">
+                <i class="fa fa-wrench"></i>   Check for updates <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+            </button>
         </div>
         <hr />
         <div id="footer">

@@ -22,7 +22,7 @@ namespace Jackett.Services
         void Stop();
     }
 
-    class ServiceConfigService : IServiceConfigService
+    public class ServiceConfigService : IServiceConfigService
     {
         private const string NAME = "Jackett";
         private const string DESCRIPTION = "Additional indexers for Sonarr";

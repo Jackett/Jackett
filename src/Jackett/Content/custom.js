@@ -24,6 +24,7 @@ function loadJackettSettings() {
         $("#jackett-port").val(data.config.port);
         $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
+        $("#jackett-allowupdate").attr('checked', data.config.updatedisabled);
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
         if (password != null && password != '') {
@@ -544,9 +545,11 @@ function bindUIButtons() {
     $("#change-jackett-port").click(function () {
         var jackett_port = $("#jackett-port").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
+        var jackett_update = $("#jackett-allowupdate").is(':checked');
         var jsonObject = {
             port: jackett_port,
             external: jackett_external,
+            updatedisabled: jackett_update,
             blackholedir: $("#jackett-savedir").val()
         };
         var jqxhr = $.post("/admin/set_config", JSON.stringify(jsonObject), function (data) {
@@ -564,6 +567,19 @@ function bindUIButtons() {
                     }
                 }, 3000);
 
+            }
+        }).fail(function () {
+            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+        });
+    });
+
+    $("#trigger-updater").click(function () {
+        var jqxhr = $.get("/admin/trigger_update", function (data) {
+            if (data.result == "error") {
+                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                return;
+            } else {
+                doNotify("Updater triggered see log for details..", "success", "glyphicon glyphicon-ok");
             }
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");

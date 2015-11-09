@@ -39,8 +39,9 @@ namespace Jackett.Controllers
         private ICacheService cacheService;
         private Logger logger;
         private ILogCacheService logCache;
+        private IUpdateService updater;
 
-        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l, ILogCacheService lc)
+        public AdminController(IConfigurationService config, IIndexerManagerService i, IServerService ss, ISecuityService s, IProcessService p, ICacheService c, Logger l, ILogCacheService lc, IUpdateService u)
         {
             this.config = config;
             indexerService = i;
@@ -50,6 +51,7 @@ namespace Jackett.Controllers
             cacheService = c;
             logger = l;
             logCache = lc;
+            updater = u;
         }
 
         private async Task<JToken> ReadPostDataJson()
@@ -291,6 +293,15 @@ namespace Jackett.Controllers
             return Json(jsonReply);
         }
 
+        [Route("trigger_update")]
+        [HttpGet]
+        public IHttpActionResult TriggerUpdates()
+        {
+            var jsonReply = new JObject();
+            updater.CheckForUpdatesNow();
+            return Json(jsonReply);
+        }
+
         [Route("get_jackett_config")]
         [HttpGet]
         public IHttpActionResult GetConfig()
@@ -303,6 +314,7 @@ namespace Jackett.Controllers
                 cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;
                 cfg["blackholedir"] = serverService.Config.BlackholeDir;
+                cfg["updatedisabled"] = serverService.Config.UpdateDisabled;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword) ? string.Empty : serverService.Config.AdminPassword.Substring(0, 10);
 
                 jsonReply["config"] = cfg;
@@ -331,8 +343,9 @@ namespace Jackett.Controllers
                 int port = (int)postData["port"];
                 bool external = (bool)postData["external"];
                 string saveDir = (string)postData["blackholedir"];
+                bool updateDisabled = (bool)postData["updatedisabled"];
 
-                if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
+                if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal || Engine.Server.Config.UpdateDisabled != updateDisabled)
                 {
                     if (ServerUtil.RestrictedPorts.Contains(port))
                     {
@@ -344,6 +357,7 @@ namespace Jackett.Controllers
                     // Save port to the config so it can be picked up by the if needed when running as admin below.
                     Engine.Server.Config.AllowExternal = external;
                     Engine.Server.Config.Port = port;
+                    Engine.Server.Config.UpdateDisabled = updateDisabled;
                     Engine.Server.SaveConfig();
 
                     // On Windows change the url reservations

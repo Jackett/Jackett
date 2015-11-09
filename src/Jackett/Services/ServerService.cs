@@ -47,8 +47,9 @@ namespace Jackett.Services
         private IConfigurationService configService;
         private Logger logger;
         private IWebClient client;
+        private IUpdateService updater;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u)
         {
             indexerService = i;
             processService = p;
@@ -56,6 +57,7 @@ namespace Jackett.Services
             configService = c;
             logger = l;
             client = w;
+            updater = u;
 
             LoadConfig();
         }
@@ -139,6 +141,7 @@ namespace Jackett.Services
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
             _server = WebApp.Start<Startup>(startOptions);
             logger.Debug("Web server started");
+            updater.StartUpdateChecker();
         }
 
         public void ReserveUrls(bool doInstall = true)

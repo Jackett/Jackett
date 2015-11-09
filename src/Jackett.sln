@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Distribution", "Jac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{6B6AB1B0-5ABD-4696-A3D2-70E991174625}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Updater", "Jackett.Updater\Jackett.Updater.csproj", "{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,6 +11,8 @@ copy /Y src\Jackett.Service\bin\Release\JackettService.exe build.windows\Jackett
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe.config build.windows\JackettService.exe.config
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build.windows\JackettTray.exe
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe.config build.windows\JackettTray.exe.config
+copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe build.windows\JackettUpdater.exe
+copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe.config build.windows\JackettUpdater.exe.config
 copy /Y LICENSE build.windows\LICENSE
 copy /Y README.md build.windows\README.md
 
@@ -25,6 +27,8 @@ copy /Y src\Jackett.Service\bin\Release\JackettService.exe build.mono\JackettSer
 copy /Y src\Jackett.Service\bin\Release\JackettService.exe.config build.mono\JackettService.exe.config
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe build.mono\JackettTray.exe
 copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe.config build.mono\JackettTray.exe.config
+copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe build.mono\JackettUpdater.exe
+copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe.config build.mono\JackettUpdater.exe.config
 copy /Y LICENSE build.mono\LICENSE
 copy /Y README.md build.mono\README.md
 copy /Y Upstart.config build.mono\Upstart.config
