@@ -41,13 +41,59 @@ namespace Jackett.Indexers
                                                             If you select 2 languages below, results will contain all 3 languages.
                                                             <br> For best results change the torrents per page setting to 50 in your BlueTigers profile."))
         {
-            AddCategoryMapping(19, TorznabCatType.TV);
-            AddCategoryMapping(2, TorznabCatType.TV);
-            AddCategoryMapping(17, TorznabCatType.TV);
-
-            AddCategoryMapping(52, TorznabCatType.ConsoleXbox);
-
-            AddCategoryMapping(29, TorznabCatType.PCMac);
+            AddCategoryMapping("14", TorznabCatType.ConsolePSP);
+            AddCategoryMapping("150", TorznabCatType.ConsoleWii);
+            AddCategoryMapping("150", TorznabCatType.ConsoleWiiwareVC);
+            AddCategoryMapping("150", TorznabCatType.ConsoleWiiU);
+            AddCategoryMapping("52", TorznabCatType.ConsoleXbox);
+            AddCategoryMapping("52", TorznabCatType.ConsoleXbox360);
+            AddCategoryMapping("52", TorznabCatType.ConsoleXBOX360DLC);
+            AddCategoryMapping("52", TorznabCatType.ConsoleXboxOne);
+            AddCategoryMapping("11", TorznabCatType.PCGames);
+            AddCategoryMapping("13", TorznabCatType.ConsolePS4);
+            AddCategoryMapping("13", TorznabCatType.ConsolePS3);
+            AddCategoryMapping("13", TorznabCatType.ConsolePSVita);
+            AddCategoryMapping("12", TorznabCatType.Console3DS);
+            AddCategoryMapping("160", TorznabCatType.PCPhoneIOS);
+            AddCategoryMapping("160", TorznabCatType.PCPhoneAndroid);
+            AddCategoryMapping("1", TorznabCatType.PCPhoneAndroid);
+            AddCategoryMapping("29", TorznabCatType.PCMac);
+            AddCategoryMapping("27", TorznabCatType.PC);
+            AddCategoryMapping("41", TorznabCatType.PC);
+            AddCategoryMapping("50", TorznabCatType.PC);
+            AddCategoryMapping("333", TorznabCatType.BooksMagazines);
+            AddCategoryMapping("38", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("37", TorznabCatType.BooksEbook);
+            AddCategoryMapping("61", TorznabCatType.Movies3D);
+            AddCategoryMapping("45", TorznabCatType.XXX);
+            AddCategoryMapping("59", TorznabCatType.MoviesHD);
+            AddCategoryMapping("222", TorznabCatType.MoviesHD);
+            AddCategoryMapping("22", TorznabCatType.MoviesHD);
+            AddCategoryMapping("60", TorznabCatType.MoviesHD);
+            AddCategoryMapping("56", TorznabCatType.MoviesBluRay);
+            AddCategoryMapping("23", TorznabCatType.MoviesOther);
+            AddCategoryMapping("15", TorznabCatType.MoviesOther);
+            AddCategoryMapping("43", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("24", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("25", TorznabCatType.MoviesOther);
+            AddCategoryMapping("21", TorznabCatType.MoviesOther);
+            AddCategoryMapping("20", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("9", TorznabCatType.TVAnime);
+            AddCategoryMapping("34", TorznabCatType.Other);
+            AddCategoryMapping("35", TorznabCatType.Audio);
+            AddCategoryMapping("36", TorznabCatType.AudioVideo);
+            AddCategoryMapping("31", TorznabCatType.AudioVideo);
+            AddCategoryMapping("2", TorznabCatType.TVOTHER);
+            AddCategoryMapping("16", TorznabCatType.TVHD);
+            AddCategoryMapping("130", TorznabCatType.TVHD);
+            AddCategoryMapping("10", TorznabCatType.TVSD);
+            AddCategoryMapping("131", TorznabCatType.TV);
+            AddCategoryMapping("17", TorznabCatType.TV);
+            AddCategoryMapping("18", TorznabCatType.TV);
+            AddCategoryMapping("19", TorznabCatType.TV);
+            AddCategoryMapping("58", TorznabCatType.TVSport);
+            AddCategoryMapping("33", TorznabCatType.TVOTHER);
+            AddCategoryMapping("34", TorznabCatType.Other);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
