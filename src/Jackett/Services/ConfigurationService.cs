@@ -110,7 +110,7 @@ namespace Jackett.Services
             var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
             if (Directory.Exists(oldDir))
             {
-                foreach (var file in Directory.GetFiles(oldDir, "*.json", SearchOption.AllDirectories))
+                foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
                 {
                     var path = file.Replace(oldDir, "");
                     var destPath = GetAppDataFolder() + path;

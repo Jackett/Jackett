@@ -24,7 +24,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=setup
 SetupIconFile=src\Jackett.Console\jackett.ico
-UninstallDisplayIcon={userappdata}\Jackett\JackettConsole.exe
+UninstallDisplayIcon={commonappdata}\Jackett\JackettConsole.exe
 Compression=lzma
 SolidCompression=yes
 DisableDirPage=yes
@@ -37,27 +37,27 @@ Name: "windowsService"; Description: "Install as a Windows Service"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "build.windows\JackettTray.exe"; DestDir: "{userappdata}\Jackett"; Flags: ignoreversion
-Source: "build.windows\JackettUpdater.exe"; DestDir: "{userappdata}\Jackett"; Flags: ignoreversion
-Source: "build.windows\*"; DestDir: "{userappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "build.windows\JackettTray.exe"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion
+Source: "build.windows\JackettUpdater.exe"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion
+Source: "build.windows\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{userappdata}\Jackett\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{userappdata}\Jackett\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{userappdata}\Jackett\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Run]
-Filename: "{userappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated;
-Filename: "{userappdata}\Jackett\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated;
-Filename: "{userappdata}\Jackett\JackettConsole.exe"; Parameters: "--MigrateSettings"; Flags: waituntilterminated;
-Filename: "{userappdata}\Jackett\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated; Tasks: windowsService
-Filename: "{userappdata}\Jackett\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated;
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated;
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--MigrateSettings"; Flags: waituntilterminated;
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated; Tasks: windowsService
 
 [UninstallRun]
-Filename: "{userappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated skipifdoesntexist
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated skipifdoesntexist
 
 
