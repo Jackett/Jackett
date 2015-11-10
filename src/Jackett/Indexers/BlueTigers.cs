@@ -153,7 +153,7 @@ namespace Jackett.Indexers
             List<string> catList = MapTorznabCapsToTrackers(query);
             foreach (string cat in catList)
             {
-                qParams.Add("cat", cat);
+                qParams.Add("c" + cat, "1");
             }
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
