@@ -21,8 +21,8 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
-            Console.WriteLine("Jackett Updater v" + GetCurrentVersion());
-            Console.WriteLine("Waiting for Jackett to close..");
+            Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
+            Engine.Logger.Info("Waiting for Jackett to close..");
             Thread.Sleep(2000);
 
             try {
@@ -33,14 +33,13 @@ namespace Jackett.Updater
                 }
                 else
                 {
-                    Console.WriteLine("Failed to process update arguments!: " + string.Join(" ", args));
+                    Engine.Logger.Error("Failed to process update arguments!: " + string.Join(" ", args));
                     Console.ReadKey();
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception applying update: " + e.Message);
-                Console.ReadKey();
+                Engine.Logger.Error(e, "Exception applying update!");
             }
         }
 
@@ -70,7 +69,7 @@ namespace Jackett.Updater
                     {
                         try
                         {
-                            Console.WriteLine("Killing tray process " + proc.Id);
+                            Engine.Logger.Info("Killing tray process " + proc.Id);
                             proc.Kill();
                             trayRunning = true;
                         }
@@ -91,7 +90,7 @@ namespace Jackett.Updater
                     continue;
                 }
 
-                Console.WriteLine("Copying " + fileName);
+                Engine.Logger.Info("Copying " + fileName);
                 var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
                 File.Copy(file, dest, true);
             }
@@ -130,6 +129,7 @@ namespace Jackett.Updater
                     startInfo.FileName = "mono";
                 }
 
+                Engine.Logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
                 Process.Start(startInfo);
             }
         }

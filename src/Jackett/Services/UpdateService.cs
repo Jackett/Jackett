@@ -223,6 +223,7 @@ namespace Jackett.Services
 
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
+            logger.Info("Exiting Jackett..");
             Environment.Exit(0);
         }
     }
