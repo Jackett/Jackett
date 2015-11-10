@@ -82,9 +82,9 @@ namespace Jackett.Services
             try
             {
                 var github = new GitHubClient(new ProductHeaderValue("Jackett"));
-                if(config!=null && !string.IsNullOrWhiteSpace(config.GitHubUsername))
+                if(config!=null && !string.IsNullOrWhiteSpace(config.GitHubToken))
                 {
-                    github.Credentials = new Credentials(config.GitHubUsername, config.GitHubPassword);
+                    github.Credentials = new Credentials(config.GitHubToken);
                 }
 
                 var releases = await github.Release.GetAll("Jackett", "Jackett");
@@ -98,11 +98,14 @@ namespace Jackett.Services
                         logger.Info($"New release found.  Current: {currentVersion} New: {latestRelease.Name}");
                         try
                         {
-                            var tempDir = await DownloadRelease(latestRelease.Name, isWindows);
+                            var assets = await github.Release.GetAllAssets("Jackett", "Jackett", latestRelease.Id);
+
+                            var tempDir = await DownloadRelease(assets, isWindows,  latestRelease.Name, config.GitHubToken);
                             // Copy updater
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
-                            StartUpdate(updaterPath, installDir, isWindows);
+                            if (updaterPath != null)
+                                StartUpdate(updaterPath, installDir, isWindows);
                         }
                         catch (Exception e)
                         {
@@ -128,20 +131,39 @@ namespace Jackett.Services
             return fvi.FileVersion;
         }
 
-        private async Task<string> DownloadRelease(string version, bool isWindows)
+        private WebRequest SetDownloadHeaders(WebRequest req, string token)
         {
-            var downloadUrl = $"https://github.com/Jackett/Jackett/releases/download/{version}/";
-           
-            if (isWindows)
+            req.Headers = new Dictionary<string, string>()
             {
-                downloadUrl += "Jackett.Binaries.Windows.zip";
-            }
-            else
+                { "Accept", "application/octet-stream" }
+            };
+
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                downloadUrl += "Jackett.Binaries.Mono.tar.gz";
+                req.Headers.Add("Authorization", "token " + token);
             }
 
-            var data = await client.GetBytes(new WebRequest() { Url = downloadUrl, EmulateBrowser = true, Type = RequestType.GET });
+            return req;
+        }
+
+        private async Task<string> DownloadRelease(IReadOnlyList<ReleaseAsset> assets, bool isWindows, string version, string token)
+        {
+            var targetAsset = assets.Where(a => isWindows ? a.BrowserDownloadUrl.ToLowerInvariant().EndsWith(".zip") : a.BrowserDownloadUrl.ToLowerInvariant().EndsWith(".gz")).FirstOrDefault();
+
+            if (targetAsset == null)
+            {
+                logger.Error("Failed to find asset to download!");
+                return null;
+            }
+
+            var url = targetAsset.BrowserDownloadUrl;
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                url = targetAsset.Url;
+            }
+
+            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }, token));
 
             while (data.IsRedirect)
             {
