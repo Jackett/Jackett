@@ -199,11 +199,8 @@
     <Compile Include="Indexers\Demonoid.cs" />
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
     <Compile Include="Indexers\BroadcastTheNet.cs" />
-<<<<<<< HEAD
     <Compile Include="Indexers\DanishBits.cs" />
-=======
     <Compile Include="Indexers\GFTracker.cs" />
->>>>>>> refs/remotes/origin/GFTracker
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
