@@ -200,6 +200,7 @@
     <Compile Include="Indexers\FrenchTorrentDb.cs" />
     <Compile Include="Indexers\BroadcastTheNet.cs" />
     <Compile Include="Indexers\DanishBits.cs" />
+    <Compile Include="Indexers\GFTracker.cs" />
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
@@ -469,6 +470,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\frenchtorrentdb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\gftracker.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\hdspace.png">
