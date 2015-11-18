@@ -190,7 +190,6 @@
     <Compile Include="Indexers\BlueTigers.cs" />
     <Compile Include="Indexers\EuTorrents.cs" />
     <Compile Include="Indexers\Avistaz.cs" />
-    <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Indexers\BB.cs" />
     <Compile Include="Indexers\BeyondHD.cs" />
@@ -212,15 +211,12 @@
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
-    <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
-    <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
-    <Compile Include="Indexers\RuTor.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
@@ -228,15 +224,10 @@
     <Compile Include="Indexers\PrivateHD.cs" />
     <Compile Include="Indexers\SceneAccess.cs" />
     <Compile Include="Indexers\SceneTime.cs" />
-    <Compile Include="Indexers\ShowRSS.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
-    <Compile Include="Indexers\Strike.cs" />
-    <Compile Include="Indexers\T411.cs" />
-    <Compile Include="Indexers\ThePirateBay.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
     <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="Indexers\TorrentShack.cs" />
-    <Compile Include="Indexers\Torrentz.cs" />
     <Compile Include="JackettProtectedAttribute.cs" />
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
@@ -437,13 +428,7 @@
     <Content Include="Content\logos\animebytes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\logos\animetorrents.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\logos\avistaz.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\bakabt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\bb.png">
@@ -500,12 +485,6 @@
     <Content Include="Content\logos\privatehd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\logos\rarbg.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\rutor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\logos\sceneaccess.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -515,13 +494,7 @@
     <Content Include="Content\logos\shazbat.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\logos\showrss.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\logos\speedcd.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\t411.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\tehconnection.png">
@@ -584,16 +557,7 @@
     <Content Include="Content\logos\morethantv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\logos\strike.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\thepiratebay.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\logos\torrentleech.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\torrentz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\tvchaosuk.png">
