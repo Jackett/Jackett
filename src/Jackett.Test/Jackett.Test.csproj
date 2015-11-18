@@ -158,7 +158,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Indexers\BakaBTTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ProtectionServiceTests.cs" />
     <Compile Include="TestBase.cs" />
@@ -180,10 +179,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Indexers\BakaBTTestsSearchPage.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Indexers\BakaBTTestsLoginError.html" />
+    <Folder Include="Indexers\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
