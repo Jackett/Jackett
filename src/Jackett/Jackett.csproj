@@ -271,6 +271,7 @@
     <Compile Include="Services\CacheService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
     <Compile Include="Services\ProtectionService.cs" />
+    <Compile Include="Services\TrayLockService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Utils\Clients\BaseWebResult.cs" />
     <Compile Include="Utils\Clients\UnixLibCurlWebClient.cs" />

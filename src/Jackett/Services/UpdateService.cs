@@ -10,7 +10,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Security;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,12 +31,15 @@ namespace Jackett.Services
         IWebClient client;
         IConfigurationService configService;
         ManualResetEvent locker = new ManualResetEvent(false);
+        ITrayLockService lockService;
+        bool forceupdatecheck = false;
 
-        public UpdateService(Logger l, IWebClient c, IConfigurationService cfg)
+        public UpdateService(Logger l, IWebClient c, IConfigurationService cfg, ITrayLockService ls)
         {
             logger = l;
             client = c;
             configService = cfg;
+            lockService = ls;
         }
 
         private string ExePath()
@@ -50,6 +55,7 @@ namespace Jackett.Services
 
         public void CheckForUpdatesNow()
         {
+            forceupdatecheck = true;
             locker.Set();
         }
 
@@ -63,14 +69,21 @@ namespace Jackett.Services
             }
         }
 
+        private bool AcceptCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
+
         private async Task CheckForUpdates()
         {
             var config = configService.GetConfig<ServerConfig>();
-            if (config.UpdateDisabled)
+            if (config.UpdateDisabled && !forceupdatecheck)
             {
                 logger.Info($"Skipping update check as it is disabled.");
                 return;
             }
+
+            forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
             if (Debugger.IsAttached)
@@ -81,7 +94,14 @@ namespace Jackett.Services
 
             try
             {
+                if (!isWindows)
+                {
+                    // Linux distros don't seem to like these certs.. todo local cert verification?
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback += AcceptCert;
+                }
+
                 var github = new GitHubClient(new ProductHeaderValue("Jackett"));
+               
                 if(config!=null && !string.IsNullOrWhiteSpace(config.GitHubToken))
                 {
                     github.Credentials = new Credentials(config.GitHubToken);
@@ -121,6 +141,13 @@ namespace Jackett.Services
             catch (Exception e)
             {
                 logger.Error(e, "Error checking for updates.");
+            }
+            finally
+            {
+                if (!isWindows)
+                {
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
+                }
             }
         }
 
@@ -224,6 +251,7 @@ namespace Jackett.Services
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
             logger.Info("Exiting Jackett..");
+            lockService.Signal();
             Environment.Exit(0);
         }
     }

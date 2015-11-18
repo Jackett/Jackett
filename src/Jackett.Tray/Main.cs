@@ -42,6 +42,14 @@ namespace JackettTray
                 Engine.Logger.Info("Starting server from tray");
                 Engine.Server.Start();
             }
+
+            Task.Factory.StartNew(WaitForEvent);
+        }
+
+        private void WaitForEvent()
+        {
+            Engine.LockService.WaitForSignal();
+            Application.Exit();
         }
 
         void toolStripMenuItemWebUI_Click(object sender, EventArgs e)

@@ -74,6 +74,14 @@ namespace Jackett
             }
         }
 
+        public static ITrayLockService LockService
+        {
+            get
+            {
+                return container.Resolve<ITrayLockService>();
+            }
+        }
+
         public static IServerService Server
         {
             get

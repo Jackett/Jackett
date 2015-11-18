@@ -22,8 +22,6 @@ namespace Jackett.Updater
         private void Run(string[] args)
         {
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
-            Engine.Logger.Info("Waiting for Jackett to close..");
-            Thread.Sleep(2000);
 
             try {
                 var options = new UpdaterConsoleOptions();
@@ -60,7 +58,7 @@ namespace Jackett.Updater
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
             var trayRunning = false;
-            var trayProcesses = Process.GetProcessesByName("JackettTray.exe");
+            var trayProcesses = Process.GetProcessesByName("JackettTray");
             if (isWindows)
             {
                 if (trayProcesses.Count() > 0)
@@ -78,6 +76,9 @@ namespace Jackett.Updater
                 }
             }
 
+            Engine.Logger.Info("Waiting for Jackett to close..");
+            Thread.Sleep(2000);
+
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
             foreach(var file in files)
             {
@@ -89,10 +90,15 @@ namespace Jackett.Updater
                 {
                     continue;
                 }
-
-                Engine.Logger.Info("Copying " + fileName);
-                var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
-                File.Copy(file, dest, true);
+                try {
+                    Engine.Logger.Info("Copying " + fileName);
+                    var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
+                    File.Copy(file, dest, true);
+                }
+                catch(Exception e)
+                {
+                    Engine.Logger.Error(e);
+                }
             }
 
             if (trayRunning)
