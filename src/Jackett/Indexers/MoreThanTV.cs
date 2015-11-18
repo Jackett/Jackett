@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
@@ -93,10 +94,17 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(query.GetQueryString());
-            WebClientStringResult response = null;
+            string qryString = query.GetQueryString();
 
-            response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            Match matchQry = new Regex(@".*\s[Ss]{1}\d{2}$").Match(qryString);
+            if (matchQry.Success)
+            {
+                //If search string ends in S## eg. S03 (season search) add an asterix to search term
+                qryString += "*";
+            }
+
+            var episodeSearchUrl = SearchUrl + HttpUtility.UrlEncode(qryString);
+            WebClientStringResult response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
             try
             {
@@ -112,16 +120,18 @@ namespace Jackett.Indexers
                         pubDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Utc).ToLocalTime();
                     }
 
-                    var groupName = (string)r["groupName"];
+                    string groupName = (string)r["groupName"];
 
                     if (r["torrents"] is JArray)
                     {
+                        string showName = (string) r["artist"];
+
                         foreach (JObject t in r["torrents"])
                         {
                             var release = new ReleaseInfo();
                             release.PublishDate = pubDate;
-                            release.Title = groupName;
-                            release.Description = groupName;
+                            release.Title = $"{showName} {groupName}";
+                            release.Description = $"{showName} {groupName}";
                             FillReleaseInfoFromJson(release, t);
                             releases.Add(release);
                         }
