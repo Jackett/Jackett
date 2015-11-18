@@ -54,71 +54,80 @@ namespace Jackett.Indexers
             };
             client = new HttpClient(handler);
 
-
-
-            AddCategoryMapping("Film\\/Vidéo", TorznabCatType.Movies);
-            AddCategoryMapping("Vidéo-clips", TorznabCatType.Other);
-            AddCategoryMapping("Série TV", TorznabCatType.TV);
-            AddCategoryMapping("Animation", TorznabCatType.TVAnime);
-            AddCategoryMapping("Film", TorznabCatType.Movies);
-            AddCategoryMapping("Concert", TorznabCatType.AudioVideo);
-            AddCategoryMapping("Documentaire", TorznabCatType.Audio);
-            AddCategoryMapping("Spectacle", TorznabCatType.TV);
-            AddCategoryMapping("Sport", TorznabCatType.TVSport);
-            AddCategoryMapping("Animation Série", TorznabCatType.TVAnime);
-            AddCategoryMapping("Emission TV", TorznabCatType.TV);
-
-
-            AddCategoryMapping("Application", TorznabCatType.PC0day);
-            AddCategoryMapping("Linux", TorznabCatType.PC);
-            AddCategoryMapping("MacOS", TorznabCatType.PCMac);
-            AddCategoryMapping("Windows", TorznabCatType.PC);
-            AddCategoryMapping("Smartphone", TorznabCatType.PCPhoneOther);
-            AddCategoryMapping("Tablette", TorznabCatType.PCPhoneOther);
-            AddCategoryMapping("Autre", TorznabCatType.PC);
-            AddCategoryMapping("Formation", TorznabCatType.PC);
-
-            AddCategoryMapping("Emulation", TorznabCatType.PC);
-            AddCategoryMapping("Emulateurs", TorznabCatType.PC);
-            AddCategoryMapping("Roms", TorznabCatType.PC);
-
-            AddCategoryMapping("GPS", TorznabCatType.Other);
-            AddCategoryMapping("Applications", TorznabCatType.Other);
-            AddCategoryMapping("Cartes", TorznabCatType.Other);
-            AddCategoryMapping("Divers", TorznabCatType.Other);
-
-            AddCategoryMapping("Audio", TorznabCatType.Audio);
-            AddCategoryMapping("Karaoke", TorznabCatType.Audio);
-            AddCategoryMapping("Samples", TorznabCatType.Audio);
-            AddCategoryMapping("Musique", TorznabCatType.Audio);
-            AddCategoryMapping("Podcast Radio", TorznabCatType.Audio);
-
-            AddCategoryMapping("eBook", TorznabCatType.BooksEbook);
-            AddCategoryMapping("Audio", TorznabCatType.AudioAudiobook);
-            AddCategoryMapping("Bds", TorznabCatType.AudioVideo);
-            AddCategoryMapping("Comics", TorznabCatType.BooksComics);
-            AddCategoryMapping("Livres", TorznabCatType.Books);
-            AddCategoryMapping("Mangas", TorznabCatType.BooksForeign);
-            AddCategoryMapping("Presse", TorznabCatType.BooksMagazines);
-
-            AddCategoryMapping("xXx", TorznabCatType.XXX);
-            AddCategoryMapping("eBooks", TorznabCatType.XXXImageset);
-            AddCategoryMapping("Jeux vidéo", TorznabCatType.XXX);
-            AddCategoryMapping("Video", TorznabCatType.XXXDVD);
-            //AddCategoryMapping("Animation", TorznabCatType.XXX); Used above :/
-
-            AddCategoryMapping("Jeu vidéo", TorznabCatType.PCGames);
-            AddCategoryMapping("Linux", TorznabCatType.PCGames);
-            AddCategoryMapping("MacOS", TorznabCatType.PCGames);
-            // AddCategoryMapping("Windows", TorznabCatType.PCGames); Used above :/
-            AddCategoryMapping("Nintendo", TorznabCatType.Console);
-            AddCategoryMapping("Sony", TorznabCatType.Console);
-            AddCategoryMapping("Microsoft", TorznabCatType.PCGames);
-            AddCategoryMapping("Smartphone", TorznabCatType.PCPhoneOther);
-            AddCategoryMapping("Tablette", TorznabCatType.PCPhoneOther);
-            AddCategoryMapping("Autre", TorznabCatType.Other);
-
-            AddCategoryMapping("Jeux vidéo", TorznabCatType.Other);
+            AddCategoryMapping("624", TorznabCatType.Console);
+            AddCategoryMapping("307", TorznabCatType.ConsoleNDS);
+            AddCategoryMapping("308", TorznabCatType.ConsolePSP);
+            AddCategoryMapping("307", TorznabCatType.ConsoleWii);
+            AddCategoryMapping("309", TorznabCatType.ConsoleXbox);
+            AddCategoryMapping("309", TorznabCatType.ConsoleXbox360);
+            AddCategoryMapping("307", TorznabCatType.ConsoleWiiwareVC);
+            AddCategoryMapping("309", TorznabCatType.ConsoleXBOX360DLC);
+            AddCategoryMapping("308", TorznabCatType.ConsolePS3);
+            AddCategoryMapping("239", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("245", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("246", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("626", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("628", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("630", TorznabCatType.ConsoleOther);
+            AddCategoryMapping("307", TorznabCatType.Console3DS);
+            AddCategoryMapping("308", TorznabCatType.ConsolePSVita);
+            AddCategoryMapping("307", TorznabCatType.ConsoleWiiU);
+            AddCategoryMapping("309", TorznabCatType.ConsoleXboxOne);
+            AddCategoryMapping("308", TorznabCatType.ConsolePS4);
+            AddCategoryMapping("631", TorznabCatType.Movies);
+            AddCategoryMapping("631", TorznabCatType.MoviesForeign);
+            AddCategoryMapping("455", TorznabCatType.MoviesOther);
+            AddCategoryMapping("633", TorznabCatType.MoviesOther);
+            AddCategoryMapping("631", TorznabCatType.MoviesSD);
+            AddCategoryMapping("631", TorznabCatType.MoviesHD);
+            AddCategoryMapping("631", TorznabCatType.Movies3D);
+            AddCategoryMapping("631", TorznabCatType.MoviesBluRay);
+            AddCategoryMapping("631", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("631", TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping("395", TorznabCatType.Audio);
+            AddCategoryMapping("623", TorznabCatType.AudioMP3);
+            AddCategoryMapping("400", TorznabCatType.AudioVideo);
+            AddCategoryMapping("402", TorznabCatType.AudioVideo);
+            AddCategoryMapping("405", TorznabCatType.AudioAudiobook);
+            AddCategoryMapping("403", TorznabCatType.AudioOther);
+            AddCategoryMapping("642", TorznabCatType.AudioOther);
+            AddCategoryMapping("233", TorznabCatType.PC);
+            AddCategoryMapping("236", TorznabCatType.PC);
+            AddCategoryMapping("235", TorznabCatType.PCMac);
+            AddCategoryMapping("627", TorznabCatType.PCPhoneOther);
+            AddCategoryMapping("246", TorznabCatType.PCGames);
+            AddCategoryMapping("625", TorznabCatType.PCPhoneIOS);
+            AddCategoryMapping("625", TorznabCatType.PCPhoneAndroid);
+            AddCategoryMapping("639", TorznabCatType.TV);
+            AddCategoryMapping("433", TorznabCatType.TV);
+            AddCategoryMapping("639", TorznabCatType.TVWEBDL);
+            AddCategoryMapping("433", TorznabCatType.TVWEBDL);
+            AddCategoryMapping("639", TorznabCatType.TVFOREIGN);
+            AddCategoryMapping("433", TorznabCatType.TVFOREIGN);
+            AddCategoryMapping("639", TorznabCatType.TVSD);
+            AddCategoryMapping("433", TorznabCatType.TVSD);
+            AddCategoryMapping("639", TorznabCatType.TVHD);
+            AddCategoryMapping("433", TorznabCatType.TVHD);
+            AddCategoryMapping("635", TorznabCatType.TVOTHER);
+            AddCategoryMapping("636", TorznabCatType.TVSport);
+            AddCategoryMapping("637", TorznabCatType.TVAnime);
+            AddCategoryMapping("634", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("340", TorznabCatType.Other);
+            AddCategoryMapping("342", TorznabCatType.Other);
+            AddCategoryMapping("344", TorznabCatType.Other);
+            AddCategoryMapping("391", TorznabCatType.Other);
+            AddCategoryMapping("392", TorznabCatType.Other);
+            AddCategoryMapping("393", TorznabCatType.Other);
+            AddCategoryMapping("394", TorznabCatType.Other);
+            AddCategoryMapping("234", TorznabCatType.Other);
+            AddCategoryMapping("638", TorznabCatType.Other);
+            AddCategoryMapping("629", TorznabCatType.Other);
+            AddCategoryMapping("408", TorznabCatType.Books);
+            AddCategoryMapping("404", TorznabCatType.BooksEbook);
+            AddCategoryMapping("406", TorznabCatType.BooksComics);
+            AddCategoryMapping("407", TorznabCatType.BooksComics);
+            AddCategoryMapping("409", TorznabCatType.BooksComics);
+            AddCategoryMapping("410", TorznabCatType.BooksMagazines);
         }
 
         async Task<string> GetAuthToken(bool forceFetch = false)
