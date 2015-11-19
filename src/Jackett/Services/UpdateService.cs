@@ -232,14 +232,24 @@ namespace Jackett.Services
 
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows)
         {
+            logger.Info($"updaterExePath: {updaterExePath.ToString()}");
+            logger.Info($"installLocation: {installLocation.ToString()}");
+            logger.Info($"isWindows: {isWindows.ToString()}");
+
             var exe = Path.GetFileName(ExePath()).ToLowerInvariant();
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
+
+            logger.Info($"exe: {exe.ToString()}");
+            logger.Info($"args: {args.ToString()}");
 
             if (!isWindows)
             {
                 // Wrap mono
                 args = exe + " " + args;
                 exe = "mono";
+
+                logger.Info($"MONOargs: {args.ToString()}");
+                logger.Info($"MONOexe: {exe.ToString()}");
             }
 
             var startInfo = new ProcessStartInfo()
@@ -248,7 +258,19 @@ namespace Jackett.Services
                 FileName = Path.Combine(updaterExePath)
             };
 
+            logger.Info($"startInfoArguments: {startInfo.Arguments.ToString()}");
+            logger.Info($"startInfoFileName: {startInfo.FileName.ToString()}");
+
             var procInfo = Process.Start(startInfo);
+            if (procInfo == null)
+            {
+                logger.Info($"procInfo is NULL");
+            }
+            else
+            {
+                logger.Info($"procInfo: {procInfo.ToString()}");
+            }
+            
             logger.Info($"Updater started process id: {procInfo.Id}");
             logger.Info("Exiting Jackett..");
             lockService.Signal();
