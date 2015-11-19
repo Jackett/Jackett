@@ -255,7 +255,8 @@ namespace Jackett.Services
             var startInfo = new ProcessStartInfo()
             {
                 Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \"{args}\"",
-                FileName = Path.Combine(updaterExePath)
+                FileName = Path.Combine(updaterExePath),
+                UseShellExecute = false
             };
 
             logger.Info($"startInfoArguments: {startInfo.Arguments.ToString()}");
