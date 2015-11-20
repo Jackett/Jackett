@@ -235,18 +235,25 @@ namespace Jackett.Services
             var exe = Path.GetFileName(ExePath()).ToLowerInvariant();
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
 
-            if (!isWindows)
+            var startInfo = new ProcessStartInfo();
+
+            if (isWindows)
+            {
+                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \"{args}\"";
+                startInfo.FileName = Path.Combine(updaterExePath);
+            }
+            else
             {
                 // Wrap mono
                 args = exe + " " + args;
                 exe = "mono";
+
+                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{exe}\" --Args \"{args}\"";
+                startInfo.FileName = "mono";
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
             }
 
-            var startInfo = new ProcessStartInfo()
-            {
-                Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \"{args}\"",
-                FileName = Path.Combine(updaterExePath)
-            };
 
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
