@@ -17,28 +17,32 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlphaRatio
  * AnimeBytes
  * Avistaz
- * BakaBT
  * bB
  * BeyondHD
  * BIT-HDTV
  * BitMeTV
  * BlueTigers
  * BTN
+ * DanishBits
+ * Demonoid
  * EuTorrents
  * FileList
+ * FrenchTorrentDb
  * Freshon
  * HD-Space
  * HD-Torrents
+ * Hounddawgs
  * Immortalseed
  * IPTorrents
- * MoreThan
+ * MoreThanTV
+ * NCore
  * NextGen
  * Pretome
  * PrivateHD
  * SceneAccess
  * SceneTime
  * Shazbat
- * Strike
+ * SpeedCD
  * TehConnection
  * TorrentBytes
  * TorrentDay
