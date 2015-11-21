@@ -165,6 +165,7 @@
     <Compile Include="TestUtil.cs" />
     <Compile Include="TestWebClient.cs" />
     <Compile Include="Util\ServerUtilTests.cs" />
+    <Compile Include="Util\TvCategoryParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

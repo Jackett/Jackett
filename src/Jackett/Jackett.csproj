@@ -311,6 +311,7 @@
     <Compile Include="Utils\StringUtil.cs" />
     <Compile Include="Utils\TorznabCapsUtil.cs" />
     <Compile Include="Utils\Clients\UnixSafeCurlWebClient.cs" />
+    <Compile Include="Utils\TvCategoryParser.cs" />
     <Compile Include="Utils\WebApiRootRedirectMiddleware.cs" />
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
