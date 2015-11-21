@@ -316,6 +316,8 @@ namespace Jackett.Controllers
                 cfg["blackholedir"] = serverService.Config.BlackholeDir;
                 cfg["updatedisabled"] = serverService.Config.UpdateDisabled;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword) ? string.Empty : serverService.Config.AdminPassword.Substring(0, 10);
+                cfg["logging"] = Startup.TracingEnabled;
+               
 
                 jsonReply["config"] = cfg;
                 jsonReply["app_version"] = config.GetVersion();
@@ -344,9 +346,18 @@ namespace Jackett.Controllers
                 bool external = (bool)postData["external"];
                 string saveDir = (string)postData["blackholedir"];
                 bool updateDisabled = (bool)postData["updatedisabled"];
+                bool logging = (bool)postData["logging"];
 
-                if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal || Engine.Server.Config.UpdateDisabled != updateDisabled)
+
+                Engine.Server.Config.UpdateDisabled = updateDisabled;
+                Engine.Server.SaveConfig();
+
+                Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
+                Startup.TracingEnabled = logging;
+
+                if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
                 {
+
                     if (ServerUtil.RestrictedPorts.Contains(port))
                     {
                         jsonReply["result"] = "error";
@@ -357,7 +368,6 @@ namespace Jackett.Controllers
                     // Save port to the config so it can be picked up by the if needed when running as admin below.
                     Engine.Server.Config.AllowExternal = external;
                     Engine.Server.Config.Port = port;
-                    Engine.Server.Config.UpdateDisabled = updateDisabled;
                     Engine.Server.SaveConfig();
 
                     // On Windows change the url reservations
@@ -385,17 +395,16 @@ namespace Jackett.Controllers
                         }
                     }
 
-                    (new Thread(() =>
-                    {
-                        Thread.Sleep(500);
-                        serverService.Stop();
-                        Engine.BuildContainer();
-                        Engine.Server.Initalize();
-                        Engine.Server.Start();
-                    })).Start();
+                (new Thread(() =>
+                {
+                    Thread.Sleep(500);
+                    serverService.Stop();
+                    Engine.BuildContainer();
+                    Engine.Server.Initalize();
+                    Engine.Server.Start();
+                })).Start();
                 }
-
-
+                
                 if (saveDir != Engine.Server.Config.BlackholeDir)
                 {
                     if (!string.IsNullOrEmpty(saveDir))

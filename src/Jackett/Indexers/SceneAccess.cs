@@ -19,7 +19,7 @@ namespace Jackett.Indexers
     class SceneAccess : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "login"; } }
-        private string SearchUrl { get { return SiteLink + "browse?search={0}&method=2&c27=27&c17=17&c11=11"; } }
+        private string SearchUrl { get { return SiteLink + "all?search={0}&method=2"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -38,6 +38,53 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+
+            AddCategoryMapping(8, TorznabCatType.MoviesSD);
+            AddCategoryMapping(22, TorznabCatType.MoviesHD);
+            AddCategoryMapping(7, TorznabCatType.MoviesSD);
+            AddCategoryMapping(4, TorznabCatType.Movies);
+
+            AddCategoryMapping(27, TorznabCatType.TVHD);
+            AddCategoryMapping(17, TorznabCatType.TVSD);
+            AddCategoryMapping(11, TorznabCatType.MoviesSD);
+            AddCategoryMapping(26, TorznabCatType.TV);
+
+            AddCategoryMapping(3, TorznabCatType.PCGames);
+            AddCategoryMapping(5, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(20, TorznabCatType.ConsolePSP);
+            AddCategoryMapping(28, TorznabCatType.TV);
+            AddCategoryMapping(23, TorznabCatType.Console);
+            AddCategoryMapping(29, TorznabCatType.Console);
+
+            AddCategoryMapping(40, TorznabCatType.AudioLossless);
+            AddCategoryMapping(13, TorznabCatType.AudioMP3);
+            AddCategoryMapping(15, TorznabCatType.AudioVideo);
+
+            AddCategoryMapping(1, TorznabCatType.PCISO);
+            AddCategoryMapping(2, TorznabCatType.PCISO);
+            AddCategoryMapping(14, TorznabCatType.PCISO);
+            AddCategoryMapping(21, TorznabCatType.Other);
+
+            AddCategoryMapping(41, TorznabCatType.MoviesHD);
+            AddCategoryMapping(42, TorznabCatType.MoviesSD);
+            AddCategoryMapping(43, TorznabCatType.MoviesSD);
+            AddCategoryMapping(44, TorznabCatType.TVHD);
+            AddCategoryMapping(45, TorznabCatType.TVSD);
+
+            AddCategoryMapping(12, TorznabCatType.XXXXviD);
+            AddCategoryMapping(35, TorznabCatType.XXXx264);
+            AddCategoryMapping(36, TorznabCatType.XXX);
+
+            AddCategoryMapping(30, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(31, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(32, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(33, TorznabCatType.TVFOREIGN);
+            AddCategoryMapping(34, TorznabCatType.TVFOREIGN);
+
+            AddCategoryMapping(4, TorznabCatType.Movies);
+            AddCategoryMapping(37, TorznabCatType.XXX);
+            AddCategoryMapping(38, TorznabCatType.Audio);
+
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -82,9 +129,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 129600;
                     release.Title = qRow.Find(".ttr_name > a").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + "/" + qRow.Find(".ttr_name > a").Attr("href"));
+                    release.Guid = new Uri(SiteLink  + qRow.Find(".ttr_name > a").Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + "/" + qRow.Find(".td_dl > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find(".td_dl > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".ttr_size").Contents()[0].NodeValue;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
@@ -99,16 +146,9 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".ttr_seeders").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".ttr_leechers").Text()) + release.Seeders;
 
-                    var cat = qRow.Find(".ttr_type a").Attr("href");
+                    var cat = qRow.Find(".ttr_type a").Attr("href").Replace("?cat=",string.Empty);
 
-                    if (cat == "?cat=27")
-                    {
-                        release.Category = TorznabCatType.TVHD.ID;
-                    }
-                    else if (cat == "?cat=17")
-                    {
-                        release.Category = TorznabCatType.TVSD.ID;
-                    }
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }

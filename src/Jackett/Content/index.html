@@ -60,6 +60,20 @@
         </div>
         <hr />
         <h3>Jackett Configuration</h3>
+        <div class="text-center">
+            <div class="btn-group">
+                <button id="change-jackett-port" class="btn btn-primary btn-sm">
+                    <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                </button>
+                <button id="view-jackett-logs" class="btn btn-danger btn-sm">
+                    <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                </button>
+                <button id="trigger-updater" class="btn btn-warning btn-sm">
+                    <i class="fa fa-wrench"></i>   Check for updates <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <br />
         <div class="input-area">
             <span class="input-header">Admin password: </span>
             <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
@@ -73,12 +87,7 @@
         <div class="input-area">
             <span class="input-header">Server port: </span>
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
-            <button id="change-jackett-port" class="btn btn-primary btn-sm">
-                <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-            <button id="view-jackett-logs" class="btn btn-danger btn-sm">
-                <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
+
         </div>
         <div class="input-area">
             <span class="input-header">Manual download blackhole directory: </span>
@@ -91,9 +100,11 @@
         <div class="input-area">
             <span class="input-header">Disable auto update: </span>
             <input id="jackett-allowupdate" class="form-control input-right" type="checkbox" />
-            <button id="trigger-updater" class="btn btn-warning btn-sm">
-                <i class="fa fa-wrench"></i>   Check for updates <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
+
+        </div>
+        <div class="input-area">
+            <span class="input-header">Enhanced logging: </span>
+            <input id="jackett-logging" class="form-control input-right" type="checkbox" />
         </div>
         <hr />
         <div id="footer">

@@ -25,6 +25,7 @@ function loadJackettSettings() {
         $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
         $("#jackett-allowupdate").attr('checked', data.config.updatedisabled);
+        $("#jackett-logging").attr('checked', data.config.logging);
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
         if (password != null && password != '') {
@@ -546,11 +547,13 @@ function bindUIButtons() {
         var jackett_port = $("#jackett-port").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
         var jackett_update = $("#jackett-allowupdate").is(':checked');
+        var jackett_logging = $("#jackett-logging").is(':checked');
         var jsonObject = {
             port: jackett_port,
             external: jackett_external,
             updatedisabled: jackett_update,
-            blackholedir: $("#jackett-savedir").val()
+            blackholedir: $("#jackett-savedir").val(),
+            logging: jackett_logging
         };
         var jqxhr = $.post("/admin/set_config", JSON.stringify(jsonObject), function (data) {
             if (data.result == "error") {

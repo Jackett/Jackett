@@ -20,7 +20,7 @@ namespace Jackett
         static Engine()
         {
             BuildContainer();
-           
+
         }
 
         public static void BuildContainer()
@@ -136,20 +136,34 @@ namespace Jackett
 
             var logConsole = new ColoredConsoleTarget();
             logConfig.AddTarget("console", logConsole);
-            
+
             logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
             var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
 
             var logService = new LogCacheService();
             logConfig.AddTarget("service", logService);
-            var serviceRule = new LoggingRule("*", logLevel,logService);
+            var serviceRule = new LoggingRule("*", logLevel, logService);
             logConfig.LoggingRules.Add(serviceRule);
 
             LogManager.Configuration = logConfig;
             builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
+
+
+        }
+
+        public static void SetLogLevel(LogLevel level)
+        {
+
+            foreach (var rule in LogManager.Configuration.LoggingRules)
+            {
+                rule.EnableLoggingForLevel(level);
+            }
+
+            LogManager.ReconfigExistingLoggers();
         }
     }
+
 
     [LayoutRenderer("simpledatetime")]
     public class SimpleDateTimeRenderer : LayoutRenderer
