@@ -157,7 +157,21 @@ namespace Jackett
 
             foreach (var rule in LogManager.Configuration.LoggingRules)
             {
-                rule.EnableLoggingForLevel(level);
+                if (level == LogLevel.Debug)
+                {
+                    if (!rule.Levels.Contains(LogLevel.Debug))
+                    {
+                        rule.EnableLoggingForLevel(LogLevel.Debug);
+                    }
+                }
+                else
+                {
+                    if (rule.Levels.Contains(LogLevel.Debug))
+                    {
+                        rule.DisableLoggingForLevel(LogLevel.Debug);
+                    }
+                }
+
             }
 
             LogManager.ReconfigExistingLoggers();
