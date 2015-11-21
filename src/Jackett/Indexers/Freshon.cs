@@ -70,6 +70,13 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            TimeZoneInfo romaniaTz = TimeZoneInfo.CreateCustomTimeZone("Romania Time", new TimeSpan(2, 0, 0), "(GMT+02:00) Romania Time", "Romania Time", "Romania Daylight Time", adjustments);
+
             var releases = new List<ReleaseInfo>();
             string episodeSearchUrl;
 
@@ -77,7 +84,7 @@ namespace Jackett.Indexers
                 episodeSearchUrl = SearchUrl;
             else
             {
-                episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+                episodeSearchUrl = $"{SearchUrl}?search={HttpUtility.UrlEncode(query.GetQueryString())}&cat=0";
             }
 
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
@@ -101,22 +108,25 @@ namespace Jackett.Indexers
                     release.Guid = new Uri(SiteLink + qLink.Attr("href"));
                     release.Comments = release.Guid;
                     release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href"));
-
-                    DateTime pubDate;
-                    var dateString = qRow.Find("td.table_added").Text().Trim();
-                    if (dateString.StartsWith("Today "))
-                        pubDate = (DateTime.UtcNow + TimeSpan.Parse(dateString.Split(' ')[1])).ToLocalTime();
-                    else if (dateString.StartsWith("Yesterday "))
-                        pubDate = (DateTime.UtcNow + TimeSpan.Parse(dateString.Split(' ')[1]) - TimeSpan.FromDays(1)).ToLocalTime();
-                    else
-                        pubDate = DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-                    release.PublishDate = pubDate;
+                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find("td.table_leechers").Text().Trim()) + release.Seeders;
 
                     var sizeStr = qRow.Find("td.table_size")[0].Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                    DateTime pubDateRomania;
+                    var dateString = qRow.Find("td.table_added").Text().Trim();
+                    if (dateString.StartsWith("Today "))
+                    {   pubDateRomania = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateString.Split(' ')[1]); }
+                    else if (dateString.StartsWith("Yesterday "))
+                    {   pubDateRomania = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateString.Split(' ')[1]) - TimeSpan.FromDays(1); }
+                    else
+                    {   pubDateRomania = DateTime.SpecifyKind(DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified); }
+
+                    DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(pubDateRomania, romaniaTz);
+                    release.PublishDate = pubDateUtc.ToLocalTime();
 
                     releases.Add(release);
                 }
