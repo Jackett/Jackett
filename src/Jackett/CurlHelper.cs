@@ -135,6 +135,12 @@ namespace Jackett
                         easy.ForbidReuse = true;
                     }
 
+                    if (Startup.IgnoreSslErrors == true)
+                    {
+                        easy.SetOpt(CurlOption.SslVerifyhost, false);
+                        easy.SetOpt(CurlOption.SslVerifyPeer, false);
+                    }
+
                     easy.Perform();
 
                     if (easy.LastErrorCode != CurlCode.Ok)
