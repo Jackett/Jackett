@@ -85,6 +85,14 @@ namespace JackettConsole
                         Engine.Logger.Info("SSL ECC workaround enabled.");
                     else if (options.SSLFix == false)
                         Engine.Logger.Info("SSL ECC workaround has been disabled.");
+
+                    // Ignore SSL errors on Curl
+                    Startup.IgnoreSslErrors = options.IgnoreSslErrors;
+                    if (options.IgnoreSslErrors == true)
+                    {
+                        Engine.Logger.Info("Curl will ignore SSL certificate errors.");
+                    }
+
                     /*  ======     Actions    =====  */
 
                     // Install service

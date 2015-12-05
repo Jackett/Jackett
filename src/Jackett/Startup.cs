@@ -46,6 +46,12 @@ namespace Jackett
             set;
         }
 
+        public static bool? IgnoreSslErrors
+        {
+            get;
+            set;
+        }
+
         public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
