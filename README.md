@@ -67,13 +67,7 @@ Jackett can also be run from the command line using JackettConsole.exe if you wo
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
 
 #### Installation on Synology
-1. Install Sonarr & Mono 3.10 from synocommunity.
-2. Install Mono beta 3.12 from the main Synology repo (Or newer if available).
-3. Download jackett and place it in /opt/Jackett
-4. cd /opt
-5. chown -R {user who will run jackett} Jackett
-6. Copy Upstart.config to /etc/init/jackett.conf and replace the braces {} in the script with the username that you wish to run Jackett with.
-9. From anywhere on command line type "start jackett" . You should see output telling you that Jackett is running and you should be able to browse to {IP Address}:9117 . If not you should check /var/log/upstart/jackett.log and see what that says.
+Jackett is available as beta package from [SynoCommuniy](https://synocommunity.com/)
 
 #### Troubleshooting
 
