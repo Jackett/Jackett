@@ -1,4 +1,4 @@
-﻿using CsQuery;
+using CsQuery;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
@@ -23,7 +23,7 @@ namespace Jackett.Indexers
     {
         private string LoginUrl { get { return SiteLink + "take.login.php"; } }
         private string SearchUrl { get { return SiteLink + "V3/API/API.php"; } }
-        private string SearchFormData { get { return "c53=1&c49=1&c2=1&c52=1&c41=1&c50=1&c30=1&jxt=4&jxw=b"; } }
+        private string SearchFormData { get { return "c53=1&c49=1&c2=1&c52=1&c41=1&c50=1&c30=1&c1=1&c42=1&c32=1&c43=1&c47=1&c28=1&c48=1&c40=1&jxt=4&jxw=b"; } }
         private string CommentsUrl { get { return SiteLink + "t/{0}"; } }
         private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
 
@@ -37,13 +37,24 @@ namespace Jackett.Indexers
             : base(name: "Speed.cd",
                 description: "Your home now!",
                 link: "http://speed.cd/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(TorznabCatType.Movies,
+                                              TorznabCatType.TV,
+                                              TorznabCatType.TVSD,
+                                              TorznabCatType.TVHD,
+                                              TorznabCatType.Movies,
+                                              TorznabCatType.MoviesOther,
+                                              TorznabCatType.MoviesHD,
+                                              TorznabCatType.Movies3D,
+                                              TorznabCatType.MoviesBluRay,
+                                              TorznabCatType.MoviesDVD
+                                              ),
                 manager: i,
                 client: wc,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+        
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
