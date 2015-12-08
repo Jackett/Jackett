@@ -1,4 +1,4 @@
-﻿using CsQuery;
+using CsQuery;
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
@@ -26,9 +26,9 @@ namespace Jackett.Indexers
 		private string LoginUrl { get { return SiteLink + "login.php"; } }
 		private string SearchUrl { get { return SiteLink + "torrents.php"; } }
 
-		new ConfigurationDataBasicLogin configData
+		new NxtGnConfigurationData configData
 		{
-			get { return (ConfigurationDataBasicLogin)base.configData; }
+			get { return (NxtGnConfigurationData)base.configData; }
 			set { base.configData = value; }
 		}
 
@@ -41,7 +41,7 @@ namespace Jackett.Indexers
 				client: c,
 				logger: l,
 				p: ps,
-				configData: new ConfigurationDataBasicLogin())
+				configData: new NxtGnConfigurationData())
 		{
 			AddCategoryMapping(92, TorznabCatType.TV);
 			AddCategoryMapping(92, TorznabCatType.TVHD);
@@ -65,13 +65,13 @@ namespace Jackett.Indexers
 			var pairs = new Dictionary<string, string> {
 				{ "username", configData.Username.Value },
 				{ "password", configData.Password.Value },
-				{ "Submit", "Submit" }
+				{ "login", "Login" }
 
 			};
 			// Get inital cookies
-			var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, "https://hounddawgs.org/");
 
-			await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("Velkommen til vores seneste bruger"), () =>
+			await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("Velkommen til"), () =>
 				{
 					CQ dom = response.Content;
 					var messageEl = dom["inputs"];
@@ -141,6 +141,16 @@ namespace Jackett.Indexers
 			}
 
 			return releases;
+		}
+		public class NxtGnConfigurationData : ConfigurationData
+		{
+			public NxtGnConfigurationData()
+			{
+				Username = new StringItem { Name = "Username" };
+				Password = new StringItem { Name = "Password" };
+			}
+			public StringItem Username { get; private set; }
+			public StringItem Password { get; private set; }
 		}
 	}
 }
