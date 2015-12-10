@@ -182,6 +182,7 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\WiHD.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Indexers\BitSoup.cs" />
     <Compile Include="Indexers\BlueTigers.cs" />
@@ -563,6 +564,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\xspeeds.png" />
+    <Content Include="Content\logos\wihd.png" />
     <Content Include="Content\setup_indexer.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
