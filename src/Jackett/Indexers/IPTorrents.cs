@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
                 logger: l,
@@ -165,7 +165,7 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
