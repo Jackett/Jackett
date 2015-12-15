@@ -11,6 +11,9 @@ namespace Jackett
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
+            if(null!= actionExecutedContext && 
+               null!= actionExecutedContext.Response && 
+               null!= actionExecutedContext.Response.Headers)
             actionExecutedContext.Response.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue()
             {
                 NoStore = true,
