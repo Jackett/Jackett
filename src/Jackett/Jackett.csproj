@@ -202,7 +202,6 @@
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
-    <Compile Include="Indexers\NxtGn.cs" />
     <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDSpace.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
@@ -471,9 +470,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\ncore.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\nxtgn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\pretome.png">
