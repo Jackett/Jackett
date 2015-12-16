@@ -65,6 +65,7 @@ namespace Jackett.Indexers
 			var pairs = new Dictionary<string, string> {
 				{ "username", configData.Username.Value },
 				{ "password", configData.Password.Value },
+				{ "keeplogged", "1" },
 				{ "login", "Login" }
 
 			};
