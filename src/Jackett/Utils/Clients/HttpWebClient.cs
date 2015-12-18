@@ -121,7 +121,7 @@ namespace Jackett.Utils.Clients
 
             // some cloudflare clients are using a refresh header
             // Pull it out manually 
-            if (response.statusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
+            if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
             {
                 var refreshHeaders = response.Headers.GetValues("Refresh");
                 var redirval = "";
