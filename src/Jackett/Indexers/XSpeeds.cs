@@ -30,9 +30,9 @@ namespace Jackett.Indexers
         string CommentUrl { get { return SiteLink + "details.php?id={0}"; } }
         string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
 
-        new ConfigurationDataBasicLoginWithRSS configData
+        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
+            get {return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
         }
 
@@ -45,8 +45,10 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithRSS())
+                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            this.configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
+            this.configData.DisplayText.Name = "Notice";
             AddCategoryMapping(70, TorznabCatType.TVAnime);
             AddCategoryMapping(80, TorznabCatType.AudioAudiobook);
             AddCategoryMapping(66, TorznabCatType.MoviesBluRay);
@@ -73,7 +75,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("Apps", TorznabCatType.PC);
             AddCategoryMapping("Music", TorznabCatType.Audio);
             AddCategoryMapping("Audiobooks", TorznabCatType.AudioAudiobook);
-
+            
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -85,7 +87,7 @@ namespace Jackett.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
-            result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
+            result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink,true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
