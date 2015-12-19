@@ -177,8 +177,38 @@ namespace Jackett.Indexers
                     { "category", "0" },
                     { "include_dead_torrents", "no" }
                 };
+                var pairs = new Dictionary<string, string> {
+                    { "username", configData.Username.Value },
+                    { "password", configData.Password.Value }
+                };
+                var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, this.CookieHeader, true, null, SiteLink, true);
+                result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
+                this.CookieHeader = result.Cookies;
 
-                var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                var attempt = 1;
+                var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams,this.CookieHeader);
+                while (searchPage.IsRedirect && attempt < 3)
+                {
+                    // add any cookies
+                    var cookieString = this.CookieHeader;
+                    if (searchPage.Cookies != null)
+                    {
+                        cookieString += " " + searchPage.Cookies;
+                        // resolve cookie conflicts - really no need for this as the webclient will handle it
+                        System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
+                        Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
+                        var matches = expression.Match(cookieString);
+                        while (matches.Success)
+                        {
+                            if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
+                            matches = matches.NextMatch();
+                        }
+                        cookieString = string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+                    }
+                    this.CookieHeader = cookieString;
+                    attempt++;
+                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, this.CookieHeader);
+                }
                 try
                 {
                     CQ dom = searchPage.Content;
