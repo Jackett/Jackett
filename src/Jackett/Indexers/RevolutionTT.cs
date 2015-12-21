@@ -19,13 +19,14 @@ using Jackett.Models.IndexerConfig;
 namespace Jackett.Indexers
 {
     public class RevolutionTT : BaseIndexer, IIndexer
-    {
+    {        
+        private string LandingPageURL { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataCookie configData
+        new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataCookie)base.configData; }
+            get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -39,7 +40,7 @@ namespace Jackett.Indexers
                 logger: l,
                 p: ps,
                 downloadBase: "https://revolutiontt.me/download.php/",
-                configData: new ConfigurationDataCookie())
+                configData: new ConfigurationDataBasicLogin())
         {
 
             /* Original RevolutionTT Categories -
@@ -151,8 +152,16 @@ namespace Jackett.Indexers
         {
             configData.LoadValuesFromJson(configJson);
 
-            var result = await RequestStringWithCookies(SearchUrl, configData.Cookie.Value, null, null);
-            await ConfigureIfOK(configData.Cookie.Value, result.Content != null && result.Content.Contains("/logout.php"), () =>
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
+            };
+
+            //--need to do an initial request to get PHP session cookie (any better way to do this?)
+            var homePageLoad = await RequestLoginAndFollowRedirect(LandingPageURL, new Dictionary<string, string> { }, null, true, null, SiteLink);
+
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, homePageLoad.Cookies, true, null, LoginUrl);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/logout.php"), () =>
             {
                 CQ dom = result.Content;
                 var messageEl = dom[".error"];
