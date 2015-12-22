@@ -187,6 +187,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
+    <Compile Include="Indexers\BitSoup.cs" />
     <Compile Include="Indexers\BlueTigers.cs" />
     <Compile Include="Indexers\EuTorrents.cs" />
     <Compile Include="Indexers\Avistaz.cs" />
@@ -438,6 +439,7 @@
     <Content Include="Content\logos\beyondhd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\logos\bitsoup.png" />
     <Content Include="Content\logos\bluetigers.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
