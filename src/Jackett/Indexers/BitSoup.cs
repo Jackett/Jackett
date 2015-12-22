@@ -218,8 +218,9 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
 
                     release.Title = row.Cq().Find("td:eq(1) a").First().Text().Trim();
+                    release.Comments = new Uri(SiteLink + row.Cq().Find("td:eq(1) a").First().Attr("href"));
 
-                    release.Link = new Uri(SiteLink + row.Cq().Find("td:eq(1) a").First().Attr("href"));
+                    release.Link = new Uri(SiteLink + row.Cq().Find("td:eq(2) a").First().Attr("href"));
                     release.Description = release.Title;
                     var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(cat);
