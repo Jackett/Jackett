@@ -85,6 +85,7 @@ namespace Jackett
 
                 using (var easy = new CurlEasy())
                 {
+                    
                     easy.Url = curlRequest.Url;
                     easy.BufferSize = 64 * 1024;
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
@@ -141,6 +142,11 @@ namespace Jackett
                         easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
+                    if (Startup.ProxyConnection != null)
+                    {
+                        easy.SetOpt(CurlOption.Proxy, Startup.ProxyConnection);
+                    }                    
+
                     easy.Perform();
 
                     if (easy.LastErrorCode != CurlCode.Ok)
@@ -155,6 +161,15 @@ namespace Jackett
 
                 var headerBytes = Combine(headerBuffers.ToArray());
                 var headerString = Encoding.UTF8.GetString(headerBytes);
+                if (Startup.ProxyConnection != null)
+                {
+                    var firstcrlf = headerString.IndexOf("\r\n\r\n");
+                    var secondcrlf = headerString.IndexOf("\r\n\r\n", firstcrlf + 1);
+                    if (secondcrlf > 0)
+                    {
+                        headerString = headerString.Substring(firstcrlf + 4, secondcrlf - (firstcrlf));
+                    }
+                }
                 var headerParts = headerString.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 var headers = new List<string[]>();
                 var headerCount = 0;

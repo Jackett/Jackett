@@ -65,6 +65,11 @@ namespace JackettConsole
                     if (options.Client != null)
                         Startup.ClientOverride = options.Client.ToLowerInvariant();
 
+                    // Use Proxy
+                    if (options.ProxyConnection != null)
+                    {
+                        Startup.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
+                    }
                     // Logging
                     if (options.Logging)
                         Startup.LogRequests = true;

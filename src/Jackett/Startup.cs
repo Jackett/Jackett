@@ -40,6 +40,11 @@ namespace Jackett
             set;
         }
 
+        public static string ProxyConnection
+        {
+            get;
+            set;
+        }
         public static bool? DoSSLFix
         {
             get;

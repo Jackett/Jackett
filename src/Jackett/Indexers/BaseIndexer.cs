@@ -147,28 +147,28 @@ namespace Jackett.Indexers
             }
         }
 
-        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null)
+        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             var byteResult = new WebClientByteResult();
             // Map to byte
             Mapper.Map(response, byteResult);
-            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies);
+            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
             // Map to string
             Mapper.Map(byteResult, response);
         }
 
-        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null)
+        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             // Follow up  to 5 redirects
             for (int i = 0; i < 5; i++)
             {
                 if (!response.IsRedirect)
                     break;
-                await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies);
-                if (response.Cookies != null && overrideCookies != null)
+                await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
+                if (accumulateCookies)
                 {
-                    response.Cookies = overrideCookies + " " + response.Cookies;
-                    overrideCookies = response.Cookies;
+                    CookieHeader = ResolveCookies(response.Cookies);
+                    response.Cookies = CookieHeader;
                 }
                 if (overrideCookies != null && response.Cookies == null)
                 {
@@ -177,16 +177,39 @@ namespace Jackett.Indexers
             }
         }
 
-        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null)
+        private String ResolveCookies(String incomingCookies = "")
+        {
+            var redirRequestCookies = (CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
+            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
+            Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
+            var matches = expression.Match(redirRequestCookies);
+            while (matches.Success)
+            {
+                if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
+                matches = matches.NextMatch();
+            }
+            return string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            
+        }
+
+        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             if (incomingResponse.IsRedirect)
             {
+                var redirRequestCookies = "";
+                if (accumulateCookies)
+                {
+                    redirRequestCookies = ResolveCookies((CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null ? overrideCookies : ""));
+                } else
+                {
+                    redirRequestCookies = (overrideCookies != null ? overrideCookies : "");
+                }
                 // Do redirect
                 var redirectedResponse = await webclient.GetBytes(new WebRequest()
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,
-                    Cookies = overrideCookies ?? CookieHeader
+                    Cookies = redirRequestCookies
                 });
                 Mapper.Map(redirectedResponse, incomingResponse);
             }
@@ -371,30 +394,20 @@ namespace Jackett.Indexers
             var response = await webclient.GetString(request);
             if (accumulateCookies)
             {
-                response.Cookies = (request.Cookies == null ? "" : request.Cookies + " ") + response.Cookies;
+                response.Cookies = ResolveCookies((request.Cookies == null ? "" : request.Cookies + " ") + response.Cookies);
             }
             var firstCallCookies = response.Cookies;
 
             if (response.IsRedirect)
             {
-                await FollowIfRedirect(response, request.Url, redirectUrlOverride, response.Cookies);
+                await FollowIfRedirect(response, request.Url, redirectUrlOverride, response.Cookies, accumulateCookies);
             }
 
             if (returnCookiesFromFirstCall)
             {
-                response.Cookies = firstCallCookies + (accumulateCookies ? " " + response.Cookies : "");
+                response.Cookies = ResolveCookies(firstCallCookies + (accumulateCookies ? " " + response.Cookies : ""));
             }
-            // resolve cookie conflicts - really no need for this as the webclient will handle it
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
-            Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
-            var matches = expression.Match(response.Cookies);
-            while (matches.Success)
-            {
-                if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
-                matches = matches.NextMatch();
-            }
-            response.Cookies = string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
-
+            
             return response;
         }
 

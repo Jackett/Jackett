@@ -127,6 +127,9 @@ namespace Jackett.Indexers
             if (string.IsNullOrWhiteSpace(searchString))
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
+                if (rssPage.Content.EndsWith("\0")) {
+                    rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
+                }
                 var rssDoc = XDocument.Parse(rssPage.Content);
 
                 foreach (var item in rssDoc.Descendants("item"))
@@ -170,6 +173,11 @@ namespace Jackett.Indexers
             }
             else
             {
+                if (searchString.Length < 3)
+                {
+                    OnParseError("", new Exception("Minimum search length is 3"));
+                    return releases;
+                }
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
                     { "keywords",  searchString },

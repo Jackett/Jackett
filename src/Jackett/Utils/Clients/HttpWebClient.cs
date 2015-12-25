@@ -62,18 +62,28 @@ namespace Jackett.Utils.Clients
                     }
                 }
             }
-
+            var useProxy = false;
+            WebProxy proxyServer = null;
+            if (Startup.ProxyConnection != null)
+            {
+                proxyServer = new WebProxy(Startup.ProxyConnection, false);
+                useProxy = true;
+            }
             var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookies,
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
+                Proxy = proxyServer,
+                UseProxy = useProxy
             });
+            
 
-            if(webRequest.EmulateBrowser)
+            if (webRequest.EmulateBrowser)
                 client.DefaultRequestHeaders.Add("User-Agent",  BrowserUtil.ChromeUserAgent);
             else
                 client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
+            
             HttpResponseMessage response = null;
             var request = new HttpRequestMessage();
             request.Headers.ExpectContinue = false;
@@ -158,6 +168,7 @@ namespace Jackett.Utils.Clients
             // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
             IEnumerable<string> cookieHeaders;
             var responseCookies = new List<Tuple<string, string>>();
+
             if (response.Headers.TryGetValues("set-cookie", out cookieHeaders))
             {
                 foreach (var value in cookieHeaders)

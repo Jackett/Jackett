@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -16,17 +15,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
     public class BitSoup : BaseIndexer, IIndexer
     {
-        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string UseLink { get { return (this.configData.AlternateLink.Value != "" ? this.configData.AlternateLink.Value : SiteLink); } }
+        private string BrowseUrl { get { return UseLink + "browse.php"; } }
+        private string LoginUrl { get { return UseLink + "takelogin.php"; } }
+        private string LoginReferer {  get { return UseLink + "login.php";  } }
+        private List<String> KnownURLs = new List<String>{ "https://www.bitsoup.me/","https://www.bitsoup.org/"};
 
-        new ConfigurationDataBasicLogin configData
+        new NxtGnConfigurationData configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (NxtGnConfigurationData)base.configData; }
             set { base.configData = value; }
         }
 
@@ -39,8 +43,11 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new NxtGnConfigurationData())
         {
+            this.configData.DisplayText.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
+            this.configData.DisplayText.Value += "The following are some known URLs for " + this.DisplayName;
+            this.configData.DisplayText.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             //AddCategoryMapping("624", TorznabCatType.Console);
             //AddCategoryMapping("307", TorznabCatType.ConsoleNDS);
@@ -139,20 +146,33 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            if (configData.AlternateLink.Value != null && configData.AlternateLink.Value != "")
+            {
+                if (!configData.AlternateLink.Value.EndsWith("/"))
+                {
+                    configData.AlternateLink.Value = null;
+                    throw new Exception("AlternateLink must end with a slash.");
+                }
+                var match = Regex.Match(configData.AlternateLink.Value, "^https?:\\/\\/(?:[\\w]+\\.)+(?:[a-zA-Z]+)\\/$");
+                if (!match.Success)
+                {
+                    configData.AlternateLink.Value = null;
+                    throw new Exception("AlternateLink must be a valid url.");
+                }              
+            }
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "returnto", "/" },
-                { "login", "Log in!" }
+                
             };
 
-            var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
+            var loginPage = await RequestStringWithCookies(UseLink, string.Empty);
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink, true);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginReferer, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
-                var messageEl = dom["body > div"].First();
+                var messageEl = dom["body > table.statusbar1 > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td"].First();
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -218,9 +238,9 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
 
                     release.Title = row.Cq().Find("td:eq(1) a").First().Text().Trim();
-                    release.Comments = new Uri(SiteLink + row.Cq().Find("td:eq(1) a").First().Attr("href"));
+                    release.Comments = new Uri(UseLink + row.Cq().Find("td:eq(1) a").First().Attr("href"));
 
-                    release.Link = new Uri(SiteLink + row.Cq().Find("td:eq(2) a").First().Attr("href"));
+                    release.Link = new Uri(UseLink + row.Cq().Find("td:eq(2) a").First().Attr("href"));
                     release.Description = release.Title;
                     var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(cat);
@@ -241,6 +261,24 @@ namespace Jackett.Indexers
             {
                 OnParseError(results, ex);
             }
+        }
+
+        public class NxtGnConfigurationData : ConfigurationData
+        {
+            public StringItem Username { get; private set; }
+            public StringItem Password { get; private set; }
+            public DisplayItem DisplayText { get; private set; }
+            public StringItem AlternateLink { get; set; }
+           
+
+            public NxtGnConfigurationData()
+            {
+                Username = new StringItem { Name = "Username" };
+                Password = new StringItem { Name = "Password" };
+                DisplayText = new DisplayItem("") { Name = "" };
+                AlternateLink = new StringItem { Name = "AlternateLinks" };
+            }
+            
         }
     }
 }
