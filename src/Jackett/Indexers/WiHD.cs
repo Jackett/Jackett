@@ -4,6 +4,7 @@ using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -54,10 +55,10 @@ namespace Jackett.Indexers
             AddCategoryMapping("565af82b1fd35761568b457c", TorznabCatType.Movies3D);        // Bluray 3D
 
             // TV
-            AddCategoryMapping("Séries - 1080p", TorznabCatType.TVHD);                      // 1080P
-            AddCategoryMapping("Séries - 720p", TorznabCatType.TVHD);                       // 720P
-            AddCategoryMapping("Séries - HDTV", TorznabCatType.TVHD);                       // HDTV
-            AddCategoryMapping("Séries - Bluray", TorznabCatType.TVHD);                     // Bluray
+            AddCategoryMapping("565af82d1fd35761568b4587", TorznabCatType.TVHD);            // 1080P
+            AddCategoryMapping("565af82d1fd35761568b4589", TorznabCatType.TVHD);            // 720P
+            AddCategoryMapping("565af82d1fd35761568b458b", TorznabCatType.TVHD);            // HDTV
+            AddCategoryMapping("565af82d1fd35761568b458d", TorznabCatType.TVHD);            // Bluray
             AddCategoryMapping("565af82d1fd35761568b458f", TorznabCatType.TVHD);            // Bluray Remux
             AddCategoryMapping("565af82d1fd35761568b4591", TorznabCatType.TVHD);            // Bluray 3D
 
@@ -151,8 +152,6 @@ namespace Jackett.Indexers
             Console.WriteLine("\n#####################################");
             Console.WriteLine("##    WiHD Provider for Jackett    ##");
             Console.WriteLine("##        Created by JigSaw        ##");
-            Console.WriteLine("#####################################");
-            Console.WriteLine("##          CONFIDENTIAL           ##");
             Console.WriteLine("#####################################\n");
 
             var releases = new List<ReleaseInfo>();
@@ -209,7 +208,7 @@ namespace Jackett.Indexers
             {
                 
                 // Cheking if we have cached search for our query
-                /*var path = @"D:\wihd.txt";
+                var path = @"D:\wihd.txt";
                 CQ fDom = null;
                 if (System.IO.File.Exists(path))
                 {
@@ -226,14 +225,14 @@ namespace Jackett.Indexers
                     var results = await RequestStringWithCookiesAndRetry(searchUrl, null, null, emulatedBrowserHeaders);
                     System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(results.Content));
                     fDom = results.Content;
-                }*/
+                }
 
 
-                CQ fDom = null;
+                /*CQ fDom = null;
                 latencyNow();
                 Console.WriteLine("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
                 var results = await RequestStringWithCookiesAndRetry(searchUrl, null, null, emulatedBrowserHeaders);
-                fDom = results.Content;
+                fDom = results.Content;*/
 
                 int nbResults = 0;
                 int.TryParse(fDom["div.ajaxtotaltorrentcount"].Text().Trim(new Char[] { ' ', '(', ')' }), out nbResults);
@@ -269,8 +268,9 @@ namespace Jackett.Indexers
                     Console.WriteLine("Release: " + name);
 
                     // Category
-                    string cat = tRow.Find(".category > img").Attr("title").ToString();
-                    Console.WriteLine("Category: " + MapTrackerCatToNewznab(cat) + " (" + cat + ")");
+                    string categoryID = tRow.Find(".category > img").Attr("src").Split('/').Last().ToString();
+                    string categoryName = tRow.Find(".category > img").Attr("title").ToString();
+                    Console.WriteLine("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID)) + " (" + categoryName + ")");
 
                     // Uploader
                     string uploader = tRow.Find(".uploader > span > a").Attr("title").ToString();
@@ -321,7 +321,7 @@ namespace Jackett.Indexers
 
                     // Building release infos
                     var release = new ReleaseInfo();
-                    release.Category = MapTrackerCatToNewznab(cat);
+                    release.Category = MapTrackerCatToNewznab(mediaToCategory(categoryID));
                     release.Title = name;
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
@@ -448,6 +448,52 @@ namespace Jackett.Indexers
                 }
             }
             return release;
+        }
+
+        /// <summary>
+        /// Retrieve category ID from media ID
+        /// </summary>
+        /// <param name="media">Media ID</param>
+        /// <returns>Category ID</returns>
+        private string mediaToCategory(string media)
+        {
+            // Declare our Dictionnary -- Media <-> Media ID
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+
+            // Movies
+            dictionary.Add("565af82b1fd35761568b4573", "565af82b1fd35761568b4572");         // 1080P
+            dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
+            dictionary.Add("565af82b1fd35761568b4577", "565af82b1fd35761568b4576");         // HDTV
+            dictionary.Add("565af82b1fd35761568b4579", "565af82b1fd35761568b4578");         // Bluray
+            dictionary.Add("565af82b1fd35761568b457b", "565af82b1fd35761568b457a");         // Bluray Remux
+            dictionary.Add("565af82b1fd35761568b457d", "565af82b1fd35761568b457c");         // Bluray 3D
+
+            // TV
+            dictionary.Add("565af82d1fd35761568b4588", "565af82d1fd35761568b4587");         // 1080P
+            dictionary.Add("565af82d1fd35761568b458a", "565af82d1fd35761568b4589");         // 720P
+            dictionary.Add("565af82d1fd35761568b458c", "565af82d1fd35761568b458b");         // HDTV
+            dictionary.Add("565af82d1fd35761568b458e", "565af82d1fd35761568b458d");         // Bluray
+            dictionary.Add("565af82d1fd35761568b4590", "565af82d1fd35761568b458f");         // Bluray Remux
+            dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b4591");         // Bluray 3D
+
+            // Anime TODO: Terminer mapping
+            //dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
+            //dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
+            //dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
+
+            // Check if we know this media ID
+            if (dictionary.ContainsKey(media))
+            {
+                // Return category ID for media ID
+                string value = dictionary[media];
+                //Console.WriteLine(value);
+                return value;
+            }
+            else
+            {
+                // Media ID unknown
+                throw new Exception("Media ID Unknow !");
+            }
         }
     }
 }
