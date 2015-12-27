@@ -109,6 +109,11 @@ namespace Jackett.Services
 
                 var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
 
+                if (!config.UpdatePrerelease)
+                {
+                    releases = releases.Where(r => !r.Prerelease).ToList();
+                }
+
                 if (releases.Count > 0)
                 {
                     var latestRelease = releases.OrderByDescending(o => o.Created_at).First();
