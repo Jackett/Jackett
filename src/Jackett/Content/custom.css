@@ -220,7 +220,7 @@ hr {
     text-align: center;
 }
 
-#jackett-allowext, #jackett-allowupdate, #jackett-logging {
+#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease {
     width: 25px;
 }
 
