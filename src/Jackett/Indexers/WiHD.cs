@@ -190,7 +190,7 @@ namespace Jackett.Indexers
             foreach (string category in categoriesList)
             {
                 // Adding category to URL
-                //queryParams.Add(Uri.EscapeDataString("subcat[]"), category);
+                queryParams.Add(Uri.EscapeDataString("subcat[]"), category);
             }
 
             // Add timestamp as a query param (for no caching)
@@ -208,7 +208,7 @@ namespace Jackett.Indexers
             {
                 
                 // Cheking if we have cached search for our query
-                var path = @"D:\wihd.txt";
+                /*var path = @"D:\wihd.txt";
                 CQ fDom = null;
                 if (System.IO.File.Exists(path))
                 {
@@ -225,14 +225,14 @@ namespace Jackett.Indexers
                     var results = await RequestStringWithCookiesAndRetry(searchUrl, null, null, emulatedBrowserHeaders);
                     System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(results.Content));
                     fDom = results.Content;
-                }
+                }*/
 
 
-                /*CQ fDom = null;
+                CQ fDom = null;
                 latencyNow();
                 Console.WriteLine("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
                 var results = await RequestStringWithCookiesAndRetry(searchUrl, null, null, emulatedBrowserHeaders);
-                fDom = results.Content;*/
+                fDom = results.Content;
 
                 int nbResults = 0;
                 int.TryParse(fDom["div.ajaxtotaltorrentcount"].Text().Trim(new Char[] { ' ', '(', ')' }), out nbResults);
@@ -270,7 +270,7 @@ namespace Jackett.Indexers
                     // Category
                     string categoryID = tRow.Find(".category > img").Attr("src").Split('/').Last().ToString();
                     string categoryName = tRow.Find(".category > img").Attr("title").ToString();
-                    Console.WriteLine("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID)) + " (" + categoryName + ")");
+                    Console.WriteLine("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName)) + " (" + categoryName + ")");
 
                     // Uploader
                     string uploader = tRow.Find(".uploader > span > a").Attr("title").ToString();
@@ -321,7 +321,7 @@ namespace Jackett.Indexers
 
                     // Building release infos
                     var release = new ReleaseInfo();
-                    release.Category = MapTrackerCatToNewznab(mediaToCategory(categoryID));
+                    release.Category = MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName));
                     release.Title = name;
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
@@ -455,7 +455,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="media">Media ID</param>
         /// <returns>Category ID</returns>
-        private string mediaToCategory(string media)
+        private string mediaToCategory(string media, string name)
         {
             // Declare our Dictionnary -- Media <-> Media ID
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
@@ -482,7 +482,8 @@ namespace Jackett.Indexers
             dictionary.Add("565af82d1fd35761568b45a1", "565af82d1fd35761568b45a0");         // HDTV
             dictionary.Add("565af82d1fd35761568b45a3", "565af82d1fd35761568b45a2");         // Bluray
             dictionary.Add("565af82d1fd35761568b45a5", "565af82d1fd35761568b45a4");         // Bluray Remux
-            dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b45a6");         // Bluray 3D
+            // BUG ~~ Media ID for Anime BR 3D is same as TV BR 3D ~~
+            //dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b45a6");       // Bluray 3D
 
             // Other
             dictionary.Add("565af82d1fd35761568b45b0", "565af82d1fd35761568b45af");         // Apps
@@ -494,9 +495,18 @@ namespace Jackett.Indexers
             // Check if we know this media ID
             if (dictionary.ContainsKey(media))
             {
-                // Return category ID for media ID
-                string value = dictionary[media];
-                return value;
+                // Due to a bug on tracker side, check for a specific id/name as image is same for TV/Anime BR 3D
+                if(media == "565af82d1fd35761568b4592" && name == "Animations - Bluray 3D")
+                {
+                    // If it's an Anime BR 3D
+                    return "565af82d1fd35761568b45a6";
+                }
+                else
+                {
+                    // Return category ID for media ID
+                    string value = dictionary[media];
+                    return value;
+                }
             }
             else
             {
