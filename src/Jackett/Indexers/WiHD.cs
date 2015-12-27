@@ -476,17 +476,26 @@ namespace Jackett.Indexers
             dictionary.Add("565af82d1fd35761568b4590", "565af82d1fd35761568b458f");         // Bluray Remux
             dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b4591");         // Bluray 3D
 
-            // Anime TODO: Terminer mapping
-            //dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
-            //dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
-            //dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
+            // Anime
+            dictionary.Add("565af82d1fd35761568b459d", "565af82d1fd35761568b459c");         // 1080P
+            dictionary.Add("565af82d1fd35761568b459f", "565af82d1fd35761568b459e");         // 720P
+            dictionary.Add("565af82d1fd35761568b45a1", "565af82d1fd35761568b45a0");         // HDTV
+            dictionary.Add("565af82d1fd35761568b45a3", "565af82d1fd35761568b45a2");         // Bluray
+            dictionary.Add("565af82d1fd35761568b45a5", "565af82d1fd35761568b45a4");         // Bluray Remux
+            dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b45a6");         // Bluray 3D
+
+            // Other
+            dictionary.Add("565af82d1fd35761568b45b0", "565af82d1fd35761568b45af");         // Apps
+            dictionary.Add("565af82d1fd35761568b45b2", "565af82d1fd35761568b45b1");         // Clips
+            dictionary.Add("565af82d1fd35761568b45b4", "565af82d1fd35761568b45b3");         // Audios Tracks of Movies/TV/Anime
+            dictionary.Add("565af82d1fd35761568b45b6", "565af82d1fd35761568b45b5");         // Documentary
+            dictionary.Add("565af82d1fd35761568b45b8", "565af82d1fd35761568b45b7");         // Bluray (ALL)
 
             // Check if we know this media ID
             if (dictionary.ContainsKey(media))
             {
                 // Return category ID for media ID
                 string value = dictionary[media];
-                //Console.WriteLine(value);
                 return value;
             }
             else
