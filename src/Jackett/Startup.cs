@@ -123,7 +123,7 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
               name: "blackhole",
-              routeTemplate: "bh/{indexerID}/{apikey}/{path}",
+              routeTemplate: "bh/{indexerID}/{apikey}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
           );
 
