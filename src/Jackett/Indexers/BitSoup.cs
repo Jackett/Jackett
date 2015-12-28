@@ -189,8 +189,14 @@ namespace Jackett.Indexers
 
 
             queryCollection.Add("search", string.IsNullOrWhiteSpace(searchString)? "" : searchString);
-            queryCollection.Add("incldead", "0");
-            queryCollection.Add("cat", (trackerCats.Count < 2 ? "0" : trackerCats.ElementAt(0)));
+            if (trackerCats.Count > 1)
+            {
+               for (var ct = 0; ct < trackerCats.Count; ct++) queryCollection.Add("cat" + (ct+1), trackerCats.ElementAt(ct));
+            } else
+            {
+                queryCollection.Add("cat", (trackerCats.Count == 1 ? trackerCats.ElementAt(0) : "0"));
+            }
+            //queryCollection.Add("cat", (trackerCats.Count == 1 ? trackerCats.ElementAt(0) : "0"));
             searchUrl += "?" + queryCollection.GetQueryString();
             await ProcessPage(releases, searchUrl);
 
