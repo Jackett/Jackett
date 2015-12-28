@@ -29,6 +29,7 @@ namespace Jackett.Indexers
         private string GuidUrl { get { return SiteLink + "torrents/view/"; } }
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private bool Latency { get { return true; } }
+        private bool DevMode { get { return true; } }
 
         public WiHD(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
             : base(
@@ -149,10 +150,10 @@ namespace Jackett.Indexers
         /// <returns>Releases</returns>
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            Console.WriteLine("\n#####################################");
-            Console.WriteLine("##    WiHD Provider for Jackett    ##");
-            Console.WriteLine("##        Created by JigSaw        ##");
-            Console.WriteLine("#####################################\n");
+            output("\n#####################################");
+            output("##    WiHD Provider for Jackett    ##");
+            output("##        Created by JigSaw        ##");
+            output("#####################################\n");
 
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();
@@ -190,31 +191,32 @@ namespace Jackett.Indexers
                 {
                     // No cached version
                     latencyNow();
-                    //Console.WriteLine("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
+                    //output("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
                     var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
                     System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(results.Content));
                     fDom = results.Content;
                 }*/
 
 
-                CQ fDom = null;
+                CQ fDom;
+                int nbResults;
+
                 latencyNow();
                 var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
                 fDom = results.Content;
 
-                int nbResults;
+                // Find number of results
                 int.TryParse(fDom["div.ajaxtotaltorrentcount"].Text().Trim(new Char[] { ' ', '(', ')' }), out nbResults);
-                Console.WriteLine("Found " + nbResults + " results for query !");
-                logger.Debug("Found " + nbResults + " results for query !");
+                output("Found " + nbResults + " results for query !");
+
+                // Find torrent rows
                 var firstPageRows = fDom[".torrent-item"];
-                Console.WriteLine("There are " + firstPageRows.Length + " results on the first page !");
-                logger.Debug("There are " + firstPageRows.Length + " results on the first page !");
+                output("There are " + firstPageRows.Length + " results on the first page !");
                 torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
                 // If a search term is used, follow upto the first 4 pages (initial plus 3 more)
                 int pageLinkCount = (int)Math.Ceiling((double)nbResults / firstPageRows.Length);    // Based on number results and number of torrents on first page
-                Console.WriteLine("--> Pages available for query: " + pageLinkCount);
-                logger.Debug("--> Pages available for query: " + pageLinkCount);
+                output("--> Pages available for query: " + pageLinkCount);
 
                 // If we have a term used for search and pagination result superior to one
                 if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
@@ -222,7 +224,7 @@ namespace Jackett.Indexers
                     // Starting with page #2
                     for (int i = 2; i <= Math.Min(4, pageLinkCount); i++)
                     {
-                        Console.WriteLine("Processing page #" + i);
+                        output("Processing page #" + i);
                         latencyNow();
                         results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
                         var additionalPageRows = fDom[".torrent-item"];
@@ -233,44 +235,36 @@ namespace Jackett.Indexers
                 // Loop on results
                 foreach (CQ tRow in torrentRowList)
                 {
-                    Console.WriteLine("\n=>> Torrent #" + (releases.Count + 1));
-                    logger.Debug("\n=>> Torrent #" + (releases.Count + 1));
+                    output("\n=>> Torrent #" + (releases.Count + 1));
 
                     // Release Name
                     string name = tRow.Find(".torrent-h3 > h3 > a").Attr("title").ToString();
-                    Console.WriteLine("Release: " + name);
-                    logger.Debug("Release: " + name);
+                    output("Release: " + name);
 
                     // Category
                     string categoryID = tRow.Find(".category > img").Attr("src").Split('/').Last().ToString();
                     string categoryName = tRow.Find(".category > img").Attr("title").ToString();
-                    Console.WriteLine("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName)) + " (" + categoryName + ")");
-                    logger.Debug("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName)) + " (" + categoryName + ")");
+                    output("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName)) + " (" + categoryName + ")");
 
                     // Uploader
                     string uploader = tRow.Find(".uploader > span > a").Attr("title").ToString();
-                    Console.WriteLine("Uploader: " + uploader);
-                    logger.Debug("Uploader: " + uploader);
+                    output("Uploader: " + uploader);
 
                     // Seeders
                     int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".seeders")[0].LastChild.ToString(), @"\d+").Value);
-                    Console.WriteLine("Seeders: " + seeders);
-                    logger.Debug("Seeders: " + seeders);
+                    output("Seeders: " + seeders);
 
                     // Leechers
                     int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".leechers")[0].LastChild.ToString(), @"\d+").Value);
-                    Console.WriteLine("Leechers: " + leechers);
-                    logger.Debug("Leechers: " + leechers);
+                    output("Leechers: " + leechers);
 
                     // Completed
                     int completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".completed")[0].LastChild.ToString(), @"\d+").Value);
-                    Console.WriteLine("Completed: " + completed);
-                    logger.Debug("Completed: " + completed);
+                    output("Completed: " + completed);
 
                     // Comments
                     int comments = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".comments")[0].LastChild.ToString(), @"\d+").Value);
-                    Console.WriteLine("Comments: " + comments);
-                    logger.Debug("Comments: " + comments);
+                    output("Comments: " + comments);
 
                     // Size & Publish Date
                     string infosData = tRow.Find(".torrent-h3 > span")[0].LastChild.ToString().Trim();
@@ -278,31 +272,26 @@ namespace Jackett.Indexers
 
                     // --> Size
                     var size = ReleaseInfo.GetBytes(infosList[1].Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb"));
-                    Console.WriteLine("Size: " + infosList[1] + " (" + size + " bytes)");
-                    logger.Debug("Size: " + infosList[1] + " (" + size + " bytes)");
+                    output("Size: " + infosList[1] + " (" + size + " bytes)");
 
                     // --> Publish Date
                     IList<string> clockList = infosList[0].Replace("Il y a", "").Split(',').Select(s => s.Trim()).Where(s => s != String.Empty).ToList();
                     var clock = agoToDate(clockList);
-                    Console.WriteLine("Released on: " + clock.ToString());
-                    logger.Debug("Released on: " + clock.ToString());
+                    output("Released on: " + clock.ToString());
 
                     // Torrent Details URL
                     string details = tRow.Find(".torrent-h3 > h3 > a").Attr("href").ToString().TrimStart('/');
                     Uri detailsLink = new Uri(SiteLink + details);
-                    Console.WriteLine("Details: " + detailsLink.AbsoluteUri);
-                    logger.Debug("Details: " + detailsLink.AbsoluteUri);
+                    output("Details: " + detailsLink.AbsoluteUri);
 
                     // Torrent Comments URL
                     Uri commentsLink = new Uri(SiteLink + details + "#tab_2");
-                    Console.WriteLine("Comments: " + commentsLink.AbsoluteUri);
-                    logger.Debug("Comments: " + commentsLink.AbsoluteUri);
+                    output("Comments: " + commentsLink.AbsoluteUri);
 
                     // Torrent Download URL
                     string download = tRow.Find(".download-item > a").Attr("href").ToString().TrimStart('/');
                     Uri downloadLink = new Uri(SiteLink + download);
-                    Console.WriteLine("Download: " + downloadLink.AbsoluteUri);
-                    logger.Debug("Download: " + downloadLink.AbsoluteUri);
+                    output("Download: " + downloadLink.AbsoluteUri);
 
                     // Building release infos
                     var release = new ReleaseInfo();
@@ -386,7 +375,7 @@ namespace Jackett.Indexers
             // Building our query
             url += parameters.GetQueryString();
 
-            Console.WriteLine("Builded query for \"" + term + "\"... with " + url);
+            output("Builded query for \"" + term + "\"... with " + url);
 
             // Return our search url
             return url;
@@ -401,8 +390,7 @@ namespace Jackett.Indexers
             {
                 var random = new Random(DateTime.Now.Millisecond);
                 int waiting = random.Next(1589, 3674);
-                Console.WriteLine("Latency Faker => Sleeping for " + waiting + " ms...");
-                logger.Debug("Latency Faker => Sleeping for " + waiting + " ms...");
+                output("Latency Faker => Sleeping for " + waiting + " ms...");
                 System.Threading.Thread.Sleep(waiting);
             }
         }
@@ -489,8 +477,7 @@ namespace Jackett.Indexers
                 }
                 else
                 {
-                    Console.WriteLine("## ERROR ## - Unable to detect AGO content");
-                    logger.Error("## ERROR ## - Unable to detect AGO content");
+                    output("## ERROR ## - Unable to detect AGO content", "error");
                 }
             }
             return release;
@@ -557,6 +544,39 @@ namespace Jackett.Indexers
             {
                 // Media ID unknown
                 throw new Exception("Media ID Unknow !");
+            }
+        }
+
+        /// <summary>
+        /// Output message for logging or developpment (console)
+        /// </summary>
+        /// <param name="message">Message to output</param>
+        /// <param name="level">Level for Logger</param>
+        private void output(string message, string level = "debug")
+        {
+            // Check if we are in dev mode
+            if(DevMode)
+            {
+                // Output message to console
+                Console.WriteLine(message);
+            }
+            else
+            {
+                // Send message to logger with level
+                switch (level)
+                {
+                    default:
+                        goto case "debug";
+                    case "debug":
+                        logger.Debug(message);
+                        break;
+                    case "info":
+                        logger.Info(message);
+                        break;
+                    case "error":
+                        logger.Error(message);
+                        break;
+                }
             }
         }
     }
