@@ -38,6 +38,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NextGen
  * Pretome
  * PrivateHD
+ * RevolutionTT
  * SceneAccess
  * SceneTime
  * Shazbat
