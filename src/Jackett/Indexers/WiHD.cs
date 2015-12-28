@@ -92,8 +92,10 @@ namespace Jackett.Indexers
             // Retrieve config values set by Jackett's user
             ConfigData.LoadValuesFromJson(configJson);
 
+            // Check & Validate Config
+            validateConfig();
+
             // Setting our data for a better emulated browser (maximum security)
-            // Get your default browser values here: https://www.whatismybrowser.com/detect/what-http-headers-is-my-browser-sending
             // TODO: Encoded Content not supported by Jackett at this time
             // emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
 
@@ -117,8 +119,10 @@ namespace Jackett.Indexers
             {
                 Url = LoginUrl
             };
+
             // Add our headers to request
             myRequest.Headers = emulatedBrowserHeaders;
+
             // Get login page
             var loginPage = await webclient.GetString(myRequest);
 
@@ -596,6 +600,101 @@ namespace Jackett.Indexers
                     case "error":
                         logger.Error(message);
                         break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validate Config entered by user on Jackett
+        /// </summary>
+        private void validateConfig()
+        {
+            // Check Username Setting
+            if (string.IsNullOrEmpty(ConfigData.Username.Value))
+            {
+                throw new ExceptionWithConfigData("You must provide a username for this tracker to login !", ConfigData);
+            }
+
+            // Check Password Setting
+            if (string.IsNullOrEmpty(ConfigData.Password.Value))
+            {
+                throw new ExceptionWithConfigData("You must provide a password with your username for this tracker to login !", ConfigData);
+            }
+
+            // Check Max Page Setting
+            if (!string.IsNullOrEmpty(ConfigData.Pages.Value))
+            {
+                try
+                {
+                    output("Settings -- Max Pages => " + Convert.ToInt32(ConfigData.Pages.Value));
+                }
+                catch (Exception)
+                {
+                    throw new ExceptionWithConfigData("Please enter a numeric maximum number of pages to crawl !", ConfigData);
+                }
+            }
+            else
+            {
+                throw new ExceptionWithConfigData("Please enter a maximum number of pages to crawl !", ConfigData);
+            }
+
+            // Check Latency Setting
+            if (ConfigData.Latency.Value)
+            {
+                // Check Latency Start Setting
+                if (!string.IsNullOrEmpty(ConfigData.LatencyStart.Value))
+                {
+                    try
+                    {
+                        output("Settings -- Latency Start => " + Convert.ToInt32(ConfigData.LatencyStart.Value));
+                    }
+                    catch (Exception)
+                    {
+                        throw new ExceptionWithConfigData("Please enter a numeric latency start in ms !", ConfigData);
+                    }
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData("Latency Simulation enabled, Please enter a start latency !", ConfigData);
+                }
+
+                // Check Latency End Setting
+                if (!string.IsNullOrEmpty(ConfigData.LatencyEnd.Value))
+                {
+                    try
+                    {
+                        output("Settings -- Latency End => " + Convert.ToInt32(ConfigData.LatencyEnd.Value));
+                    }
+                    catch (Exception)
+                    {
+                        throw new ExceptionWithConfigData("Please enter a numeric latency end in ms !", ConfigData);
+                    }
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData("Latency Simulation enabled, Please enter a end latency !", ConfigData);
+                }
+            }
+
+            // Check Browser Setting
+            if (ConfigData.Browser.Value)
+            {
+                // Check ACCEPT header Setting
+                if (string.IsNullOrEmpty(ConfigData.HeaderAccept.Value))
+                {
+                    throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an ACCEPT header !", ConfigData);
+                }
+
+                // Check ACCEPT-LANG header Setting
+                if (string.IsNullOrEmpty(ConfigData.HeaderAcceptLang.Value))
+                {
+                    throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an ACCEPT-LANG header !", ConfigData);
+                }
+
+                // Check USER-AGENT header Setting
+                if (string.IsNullOrEmpty(ConfigData.HeaderUserAgent.Value))
+                {
+                    throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an USER-AGENT header !", ConfigData);
                 }
             }
         }
