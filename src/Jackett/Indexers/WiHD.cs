@@ -338,7 +338,7 @@ namespace Jackett.Indexers
 
             if (string.IsNullOrWhiteSpace(term))
             {
-                // If no search string provided, use default (for test)
+                // If no search string provided, use default (for testing purposes)
                 term = "the walking dead";
             }
 
