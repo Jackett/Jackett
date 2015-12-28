@@ -48,6 +48,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentLeech
  * TorrentShack
  * TV Chaos UK
+ * World-In-HD
 
 #### Installation on Windows
 
