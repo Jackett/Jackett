@@ -223,7 +223,7 @@ namespace Jackett.Indexers
 
                         // Request our page
                         latencyNow();
-                        results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
+                        results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl, i), null, null, emulatedBrowserHeaders);
 
                         var additionalPageRows = fDom[".torrent-item"];
                         torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
