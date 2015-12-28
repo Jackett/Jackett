@@ -26,7 +26,7 @@ namespace Jackett.Indexers
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ fDom = null;
         private bool Latency { get { return ConfigData.Latency.Value; }}
-        private bool DevMode { get { return false; } }
+        private bool DevMode { get { return true; } }
 
         private ConfigurationDataWiHD ConfigData
         {
@@ -55,7 +55,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("565af82b1fd35761568b4574", TorznabCatType.MoviesHD);        // 720P
             AddCategoryMapping("565af82b1fd35761568b4576", TorznabCatType.MoviesHD);        // HDTV
             AddCategoryMapping("565af82b1fd35761568b4578", TorznabCatType.MoviesBluRay);    // Bluray
-            AddCategoryMapping("565af82b1fd35761568b457a", TorznabCatType.MoviesHD);        // Bluray Remux
+            AddCategoryMapping("565af82b1fd35761568b457a", TorznabCatType.MoviesBluRay);    // Bluray Remux
             AddCategoryMapping("565af82b1fd35761568b457c", TorznabCatType.Movies3D);        // Bluray 3D
 
             // TV
@@ -360,17 +360,27 @@ namespace Jackett.Indexers
 
             // Loop on Categories needed
             List<string> categoriesList = MapTorznabCapsToTrackers(query);
+            var categories = "";
             foreach (string category in categoriesList)
             {
-                // Adding category to URL
-                parameters.Add(Uri.EscapeDataString("subcat[]"), category);
+                // If last, build !
+                if(categoriesList.Last() == category)
+                {
+                    // Adding previous categories to URL with latest category
+                    parameters.Add(Uri.EscapeDataString("subcat[]"), category + categories);
+                }
+                else
+                {
+                    // Build categories parameter
+                    categories += "&" + Uri.EscapeDataString("subcat[]") + "=" + category;
+                }
             }
 
             // Add timestamp as a query param (for no caching)
             parameters.Add("_", UnixTimeNow().ToString());
 
-            // Building our query
-            url += parameters.GetQueryString();
+            // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong subcat[] param)
+            url += string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
 
             output("Builded query for \"" + term + "\"... with " + url);
 
