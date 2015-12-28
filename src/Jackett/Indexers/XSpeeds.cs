@@ -122,6 +122,7 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
+            var prevCook = CookieHeader + "";
 
             // If we have no query use the RSS Page as their server is slow enough at times!
             if (string.IsNullOrWhiteSpace(searchString))
@@ -190,7 +191,10 @@ namespace Jackett.Indexers
                     { "password", configData.Password.Value }
                 };
                 var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, this.CookieHeader, true, null, SiteLink, true);
-                result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
+                if (!result.Cookies.Trim().Equals(prevCook.Trim()))
+                {
+                    result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
+                }
                 this.CookieHeader = result.Cookies;
 
                 var attempt = 1;
@@ -235,7 +239,7 @@ namespace Jackett.Indexers
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
-                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51 
+                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51 
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                         release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
@@ -259,7 +263,10 @@ namespace Jackett.Indexers
                     OnParseError(searchPage.Content, ex);
                 }
             }
-
+            if (!CookieHeader.Trim().Equals(prevCook.Trim()))
+            {
+                this.SaveConfig();
+            }
             return releases;
         }
     }
