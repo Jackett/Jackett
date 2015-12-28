@@ -315,6 +315,7 @@ namespace Jackett.Controllers
                 cfg["api_key"] = serverService.Config.APIKey;
                 cfg["blackholedir"] = serverService.Config.BlackholeDir;
                 cfg["updatedisabled"] = serverService.Config.UpdateDisabled;
+                cfg["prerelease"] = serverService.Config.UpdatePrerelease;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword) ? string.Empty : serverService.Config.AdminPassword.Substring(0, 10);
                 cfg["logging"] = Startup.TracingEnabled;
                
@@ -346,10 +347,11 @@ namespace Jackett.Controllers
                 bool external = (bool)postData["external"];
                 string saveDir = (string)postData["blackholedir"];
                 bool updateDisabled = (bool)postData["updatedisabled"];
+                bool preRelease = (bool)postData["prerelease"];
                 bool logging = (bool)postData["logging"];
 
-
                 Engine.Server.Config.UpdateDisabled = updateDisabled;
+                Engine.Server.Config.UpdatePrerelease = preRelease;
                 Engine.Server.SaveConfig();
 
                 Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);

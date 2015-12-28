@@ -2,9 +2,10 @@
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using Jackett.Models.Config;
+using Jackett.Models.GitHub;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using NLog;
-using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -94,23 +95,28 @@ namespace Jackett.Services
 
             try
             {
-                if (!isWindows)
+
+                var response = await client.GetString(new WebRequest()
                 {
-                    // Linux distros don't seem to like these certs.. todo local cert verification?
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback += AcceptCert;
+                    Url = "https://api.github.com/repos/Jackett/Jackett/releases",
+                    EmulateBrowser = false
+                });
+
+                if(response.Status != System.Net.HttpStatusCode.OK)
+                {
+                    logger.Error("Failed to get the release list: " + response.Status);
                 }
 
-                var github = new GitHubClient(new ProductHeaderValue("Jackett"));
-               
-                if(config!=null && !string.IsNullOrWhiteSpace(config.GitHubToken))
+                var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
+
+                if (!config.UpdatePrerelease)
                 {
-                    github.Credentials = new Credentials(config.GitHubToken);
+                    releases = releases.Where(r => !r.Prerelease).ToList();
                 }
 
-                var releases = await github.Release.GetAll("Jackett", "Jackett");
                 if (releases.Count > 0)
                 {
-                    var latestRelease = releases.OrderByDescending(o => o.CreatedAt).First();
+                    var latestRelease = releases.OrderByDescending(o => o.Created_at).First();
                     var currentVersion = $"v{GetCurrentVersion()}";
 
                     if (latestRelease.Name != currentVersion && currentVersion != "v0.0.0.0")
@@ -118,9 +124,7 @@ namespace Jackett.Services
                         logger.Info($"New release found.  Current: {currentVersion} New: {latestRelease.Name}");
                         try
                         {
-                            var assets = await github.Release.GetAllAssets("Jackett", "Jackett", latestRelease.Id);
-
-                            var tempDir = await DownloadRelease(assets, isWindows,  latestRelease.Name, config.GitHubToken);
+                            var tempDir = await DownloadRelease(latestRelease.Assets, isWindows,  latestRelease.Name);
                             // Copy updater
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
@@ -158,24 +162,19 @@ namespace Jackett.Services
             return fvi.FileVersion;
         }
 
-        private WebRequest SetDownloadHeaders(WebRequest req, string token)
+        private WebRequest SetDownloadHeaders(WebRequest req)
         {
             req.Headers = new Dictionary<string, string>()
             {
                 { "Accept", "application/octet-stream" }
             };
 
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                req.Headers.Add("Authorization", "token " + token);
-            }
-
             return req;
         }
 
-        private async Task<string> DownloadRelease(IReadOnlyList<ReleaseAsset> assets, bool isWindows, string version, string token)
+        private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            var targetAsset = assets.Where(a => isWindows ? a.BrowserDownloadUrl.ToLowerInvariant().EndsWith(".zip") : a.BrowserDownloadUrl.ToLowerInvariant().EndsWith(".gz")).FirstOrDefault();
+            var targetAsset = assets.Where(a => isWindows ? a.Browser_download_url.ToLowerInvariant().EndsWith(".zip") : a.Browser_download_url.ToLowerInvariant().EndsWith(".gz")).FirstOrDefault();
 
             if (targetAsset == null)
             {
@@ -183,14 +182,9 @@ namespace Jackett.Services
                 return null;
             }
 
-            var url = targetAsset.BrowserDownloadUrl;
+            var url = targetAsset.Browser_download_url;
 
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                url = targetAsset.Url;
-            }
-
-            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }, token));
+            var data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = url, EmulateBrowser = true, Type = RequestType.GET }));
 
             while (data.IsRedirect)
             {

@@ -123,15 +123,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.2.0\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.Windows.Forms.4.0\lib\net35\NLog.Windows.Forms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Octokit, Version=0.16.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.16.0\lib\net45\Octokit.dll</HintPath>
+      <HintPath>..\packages\NLog.Windows.Forms.4.1\lib\net35\NLog.Windows.Forms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -200,6 +196,7 @@
     <Compile Include="Indexers\BroadcastTheNet.cs" />
     <Compile Include="Indexers\DanishBits.cs" />
     <Compile Include="Indexers\GFTracker.cs" />
+    <Compile Include="Indexers\RevolutionTT.cs" />
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
@@ -211,6 +208,8 @@
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
     <Compile Include="Indexers\XSpeeds.cs" />
+    <Compile Include="Models\GitHub\Asset.cs" />
+    <Compile Include="Models\GitHub\Release.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
@@ -480,6 +479,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\privatehd.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\revolutiontt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\sceneaccess.png">
