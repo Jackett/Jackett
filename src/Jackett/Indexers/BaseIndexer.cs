@@ -167,8 +167,8 @@ namespace Jackett.Indexers
                 await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
                 if (accumulateCookies)
                 {
-                    CookieHeader = ResolveCookies(response.Cookies);
-                    response.Cookies = CookieHeader;
+                    CookieHeader = ResolveCookies((CookieHeader != null && CookieHeader != ""? CookieHeader + " " : "") + (overrideCookies != null && overrideCookies != "" ? overrideCookies + " " : "") + response.Cookies);
+                    overrideCookies = response.Cookies = CookieHeader;
                 }
                 if (overrideCookies != null && response.Cookies == null)
                 {
