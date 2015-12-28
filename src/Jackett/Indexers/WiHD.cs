@@ -24,9 +24,8 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string LoginCheckUrl { get { return SiteLink + "login_check"; } }
         private string SearchUrl { get { return SiteLink + "torrent/ajaxfiltertorrent/"; } }
-        private string DownloadUrl { get { return SiteLink + "torrents/download/"; } }
-        private string GuidUrl { get { return SiteLink + "torrents/view/"; } }
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
+        private CQ fDom = null;
         private bool Latency { get { return true; } }
         private bool DevMode { get { return true; } }
 
@@ -83,14 +82,19 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) {
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
             var incomingConfig = new ConfigurationDataBasicLogin();
+
+            // Retrieve config values set by Jackett's user
             incomingConfig.LoadValuesFromJson(configJson);
 
             // Setting our data for a better emulated browser (maximum security)
             // Get your default browser values here: https://www.whatismybrowser.com/detect/what-http-headers-is-my-browser-sending
+            // TODO: Encoded Content not supported by Jackett at this time
+            // emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
+
             emulatedBrowserHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-            //emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
             emulatedBrowserHeaders.Add("Accept-Language", "fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4,es;q=0.2");
             emulatedBrowserHeaders.Add("DNT", "1");
             emulatedBrowserHeaders.Add("Upgrade-Insecure-Requests", "1");
@@ -102,7 +106,9 @@ namespace Jackett.Indexers
             {
                 Url = LoginUrl
             };
+            // Add our headers to request
             myRequest.Headers = emulatedBrowserHeaders;
+            // Get login page
             var loginPage = await webclient.GetString(myRequest);
 
             // Retrieving our CSRF token
@@ -130,7 +136,7 @@ namespace Jackett.Indexers
 
             // Perform loggin
             latencyNow();
-            Console.WriteLine("Perform loggin.. with " + LoginCheckUrl);
+            output("Perform loggin.. with " + LoginCheckUrl);
             var response = await RequestLoginAndFollowRedirect(LoginCheckUrl, pairs, loginPage.Cookies, true, null, null);
 
             // Test if we are logged in
@@ -155,50 +161,29 @@ namespace Jackett.Indexers
             var searchUrl = SearchUrl;
 
             // Check cache first so we don't query the server
-            /*lock (cache)
+            if(!DevMode)
             {
-                // Remove old cache items
-                CleanCache();
+                lock (cache)
+                {
+                    // Remove old cache items
+                    CleanCache();
 
-                var cachedResult = cache.Where(i => i.Query == searchTerm).FirstOrDefault();
-                if (cachedResult != null)
-                    return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
-            }*/
+                    var cachedResult = cache.Where(i => i.Query == searchTerm).FirstOrDefault();
+                    if (cachedResult != null)
+                        return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
+                }
+            }
 
             // Add emulated XHR request
             emulatedBrowserHeaders.Add("X-Requested-With", "XMLHttpRequest");
 
+            // Request our first page
+            latencyNow();
+            var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
+            fDom = results.Content;
+
             try
             {
-                
-                // Cheking if we have cached search for our query
-                /*var path = @"D:\wihd.txt";
-                CQ fDom = null;
-                if (System.IO.File.Exists(path))
-                {
-                    // Yes
-                    Console.WriteLine("Using cached version on hard drive");
-                    var json = System.IO.File.ReadAllText(path);
-                    fDom = JsonConvert.DeserializeObject<CQ>(json);
-                }
-                else
-                {
-                    // No cached version
-                    latencyNow();
-                    //output("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
-                    var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
-                    System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(results.Content));
-                    fDom = results.Content;
-                }*/
-
-
-                CQ fDom;
-
-                // Request our first page
-                latencyNow();
-                var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
-                fDom = results.Content;
-
                 // Find number of results
                 int nbResults = ParseUtil.CoerceInt(Regex.Match(fDom["div.ajaxtotaltorrentcount"].Text(), @"\d+").Value);
                 output("\nFound " + nbResults + " results for query !");
