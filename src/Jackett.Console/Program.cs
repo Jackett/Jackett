@@ -69,6 +69,7 @@ namespace JackettConsole
                     if (options.ProxyConnection != null)
                     {
                         Startup.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
+                        Engine.Logger.Info("Proxy enabled. " + Startup.ProxyConnection);
                     }
                     // Logging
                     if (options.Logging)

@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 {
     public class BitSoup : BaseIndexer, IIndexer
     {
-        private string UseLink { get { return (this.configData.AlternateLink.Value != "" ? this.configData.AlternateLink.Value : SiteLink); } }
+        private string UseLink { get { return (this.configData.AlternateLink.Value != null && this.configData.AlternateLink.Value != "" ? this.configData.AlternateLink.Value : SiteLink); } }
         private string BrowseUrl { get { return UseLink + "browse.php"; } }
         private string LoginUrl { get { return UseLink + "takelogin.php"; } }
         private string LoginReferer {  get { return UseLink + "login.php";  } }
@@ -187,40 +187,13 @@ namespace Jackett.Indexers
             var trackerCats = MapTorznabCapsToTrackers(query);
             var queryCollection = new NameValueCollection();
 
-            
-            
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                queryCollection.Add("search", searchString);
-                queryCollection.Add("incldead", "0");
-                queryCollection.Add("cat", "0");
-                // Tracker cannot search multi categories
-                // so we either search "all"
-                // or do multiple searches
-                if (trackerCats.Count == 0)
-                {
-                    searchUrl += "?" + queryCollection.GetQueryString();
-                    await ProcessPage(releases, searchUrl);
-                } else
-                {
-                    foreach (var cat in trackerCats)
-                    {
-                        queryCollection.Remove("cat");
-                        queryCollection.Add("cat", cat);
-                        searchUrl += "?" + queryCollection.GetQueryString();
-                        await ProcessPage(releases, searchUrl);
-                    }
-                }           
-                
-            }
-            else
-            {
-                queryCollection.Add("search", "");
-                queryCollection.Add("cat", "0");
-                searchUrl += "?" + queryCollection.GetQueryString();
-                await ProcessPage(releases, searchUrl);
-            }
-         
+
+            queryCollection.Add("search", string.IsNullOrWhiteSpace(searchString)? "" : searchString);
+            queryCollection.Add("incldead", "0");
+            queryCollection.Add("cat", (trackerCats.Count < 2 ? "0" : trackerCats.ElementAt(0)));
+            searchUrl += "?" + queryCollection.GetQueryString();
+            await ProcessPage(releases, searchUrl);
+
             return releases;
         }
 
