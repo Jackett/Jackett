@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Models;
-using Jackett.Models.IndexerConfig;
 using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services;
 using Jackett.Utils;
