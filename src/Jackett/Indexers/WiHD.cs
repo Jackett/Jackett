@@ -1,18 +1,17 @@
-﻿using CsQuery;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -189,7 +188,7 @@ namespace Jackett.Indexers
                 output("\nFound " + nbResults + " results for query !");
 
                 // Find torrent rows
-                var firstPageRows = fDom[".torrent-item"];
+                var firstPageRows = findTorrentRows();
                 output("There are " + firstPageRows.Length + " results on the first page !");
                 torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
@@ -209,8 +208,11 @@ namespace Jackett.Indexers
                         latencyNow();
                         results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl, i), null, null, emulatedBrowserHeaders);
 
+                        // Assign response
+                        fDom = results.Content;
+
                         // Process page results
-                        var additionalPageRows = fDom[".torrent-item"];
+                        var additionalPageRows = findTorrentRows();
                         torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
                     }
                 }
@@ -388,6 +390,16 @@ namespace Jackett.Indexers
         {
             var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
             return (long)timeSpan.TotalSeconds;
+        }
+
+        /// <summary>
+        /// Find torrent rows in search pages
+        /// </summary>
+        /// <returns>JQuery Object</returns>
+        private CQ findTorrentRows()
+        {
+            // Return all occurencis of torrents found
+            return fDom[".torrent-item"];
         }
 
         /// <summary>
