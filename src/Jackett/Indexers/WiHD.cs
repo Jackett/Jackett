@@ -193,7 +193,6 @@ namespace Jackett.Indexers
 
 
                 CQ fDom;
-                int nbResults;
 
                 // Request our first page
                 latencyNow();
@@ -201,8 +200,8 @@ namespace Jackett.Indexers
                 fDom = results.Content;
 
                 // Find number of results
-                int.TryParse(fDom["div.ajaxtotaltorrentcount"].Text().Trim(new Char[] { ' ', '(', ')' }), out nbResults);
-                output("Found " + nbResults + " results for query !");
+                int nbResults = ParseUtil.CoerceInt(Regex.Match(fDom["div.ajaxtotaltorrentcount"].Text(), @"\d+").Value);
+                output("\nFound " + nbResults + " results for query !");
 
                 // Find torrent rows
                 var firstPageRows = fDom[".torrent-item"];
@@ -225,6 +224,7 @@ namespace Jackett.Indexers
                         latencyNow();
                         results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl, i), null, null, emulatedBrowserHeaders);
 
+                        // Process page results
                         var additionalPageRows = fDom[".torrent-item"];
                         torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
                     }
