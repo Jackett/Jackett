@@ -17,8 +17,7 @@ using System.Threading.Tasks;
 namespace Jackett.Indexers
 {
     /// <summary>
-    /// Provider for WiHD Private Tracker
-    /// Created by JigSaw
+    /// Provider for WiHD Private French Tracker
     /// </summary>
     public class WiHD : BaseIndexer, IIndexer
     {
@@ -150,11 +149,6 @@ namespace Jackett.Indexers
         /// <returns>Releases</returns>
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            output("\n#####################################");
-            output("##    WiHD Provider for Jackett    ##");
-            output("##        Created by JigSaw        ##");
-            output("#####################################\n");
-
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();
             var searchTerm = query.GetQueryString();
@@ -201,6 +195,7 @@ namespace Jackett.Indexers
                 CQ fDom;
                 int nbResults;
 
+                // Request our first page
                 latencyNow();
                 var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
                 fDom = results.Content;
@@ -225,8 +220,11 @@ namespace Jackett.Indexers
                     for (int i = 2; i <= Math.Min(4, pageLinkCount); i++)
                     {
                         output("Processing page #" + i);
+
+                        // Request our page
                         latencyNow();
                         results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
+
                         var additionalPageRows = fDom[".torrent-item"];
                         torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
                     }
@@ -384,13 +382,15 @@ namespace Jackett.Indexers
         /// <summary>
         /// Generate a random fake latency to avoid detection on tracker side
         /// </summary>
-        private void latencyNow()
+        private void latencyNow(int first = 1589, int second = 3674)
         {
+            // Need latency ?
             if(Latency)
             {
                 var random = new Random(DateTime.Now.Millisecond);
-                int waiting = random.Next(1589, 3674);
+                int waiting = random.Next(first, second);
                 output("Latency Faker => Sleeping for " + waiting + " ms...");
+                // Sleep now...
                 System.Threading.Thread.Sleep(waiting);
             }
         }
@@ -477,7 +477,8 @@ namespace Jackett.Indexers
                 }
                 else
                 {
-                    output("## ERROR ## - Unable to detect AGO content", "error");
+                    output("Unable to detect release date of torrent", "error");
+                    //throw new Exception("Unable to detect release date of torrent");
                 }
             }
             return release;
