@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
+using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -25,8 +26,14 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrent/ajaxfiltertorrent/"; } }
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ fDom = null;
-        private bool Latency { get { return true; } }
+        private bool Latency { get { return ConfigData.Latency.Value; }}
         private bool DevMode { get { return true; } }
+
+        private ConfigurationDataWiHD ConfigData
+        {
+            get { return (ConfigurationDataWiHD)configData; }
+            set { base.configData = value; }
+        }
 
         public WiHD(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
             : base(
@@ -39,7 +46,7 @@ namespace Jackett.Indexers
                 logger: l,
                 p: ps,
                 downloadBase: "http://world-in-hd.net/torrents/download/",
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataWiHD())
         {
             // Clean capabilities
             TorznabCaps.Categories.Clear();
@@ -83,21 +90,27 @@ namespace Jackett.Indexers
         /// <returns>Configuration state</returns>
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-
             // Retrieve config values set by Jackett's user
-            incomingConfig.LoadValuesFromJson(configJson);
+            ConfigData.LoadValuesFromJson(configJson);
 
             // Setting our data for a better emulated browser (maximum security)
             // Get your default browser values here: https://www.whatismybrowser.com/detect/what-http-headers-is-my-browser-sending
             // TODO: Encoded Content not supported by Jackett at this time
             // emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
 
-            emulatedBrowserHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-            emulatedBrowserHeaders.Add("Accept-Language", "fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4,es;q=0.2");
-            emulatedBrowserHeaders.Add("DNT", "1");
-            emulatedBrowserHeaders.Add("Upgrade-Insecure-Requests", "1");
-            emulatedBrowserHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36");
+            // If we want to simulate a browser
+            if (ConfigData.Browser.Value) {
+
+                // Clean headers
+                emulatedBrowserHeaders.Clear();
+
+                // Inject headers
+                emulatedBrowserHeaders.Add("Accept", ConfigData.HeaderAccept.Value);
+                emulatedBrowserHeaders.Add("Accept-Language", ConfigData.HeaderAcceptLang.Value);
+                emulatedBrowserHeaders.Add("DNT", Convert.ToInt32(ConfigData.HeaderDNT.Value).ToString());
+                emulatedBrowserHeaders.Add("Upgrade-Insecure-Requests", Convert.ToInt32(ConfigData.HeaderUpgradeInsecure.Value).ToString());
+                emulatedBrowserHeaders.Add("User-Agent", ConfigData.HeaderUserAgent.Value);
+            }
 
 
             // Getting login form to retrieve CSRF token
@@ -117,8 +130,8 @@ namespace Jackett.Indexers
             // Building login form data
             var pairs = new Dictionary<string, string> {
                 { "_csrf_token", csrfToken.Attr("value") },
-                { "_username", incomingConfig.Username.Value },
-                { "_password", incomingConfig.Password.Value },
+                { "_username", ConfigData.Username.Value },
+                { "_password", ConfigData.Password.Value },
                 { "_remember_me", "on" },
                 { "_submit", "" }
             };
@@ -192,7 +205,7 @@ namespace Jackett.Indexers
                 output("There are " + firstPageRows.Length + " results on the first page !");
                 torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
-                // If a search term is used, follow upto the first 4 pages (initial plus 3 more)
+                // Calculate numbers of pages available for this search query
                 int pageLinkCount = (int)Math.Ceiling((double)nbResults / firstPageRows.Length);    // Based on number results and number of torrents on first page
                 output("--> Pages available for query: " + pageLinkCount);
 
@@ -200,7 +213,7 @@ namespace Jackett.Indexers
                 if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
                 {
                     // Starting with page #2
-                    for (int i = 2; i <= Math.Min(4, pageLinkCount); i++)
+                    for (int i = 2; i <= Math.Min(Int32.Parse(ConfigData.Pages.Value), pageLinkCount); i++)
                     {
                         output("Processing page #" + i);
 
@@ -318,7 +331,7 @@ namespace Jackett.Indexers
         /// <param name="freeleech">Freeleech state</param>
         /// <param name="reseed">Reseed state</param>
         /// <returns>URL to query for parsing and processing results</returns>
-        private string buildQuery(string term, TorznabQuery query, string url, int page = 1, int exclu = 0, int freeleech = 0, int reseed = 0)
+        private string buildQuery(string term, TorznabQuery query, string url, int page = 1)
         {
             var parameters = new NameValueCollection();
 
@@ -342,9 +355,9 @@ namespace Jackett.Indexers
             url += "?";
 
             // Building our tracker query
-            parameters.Add("exclu", exclu.ToString());
-            parameters.Add("freeleech", freeleech.ToString());
-            parameters.Add("reseed", reseed.ToString());
+            parameters.Add("exclu", Convert.ToInt32(ConfigData.Exclusive.Value).ToString());
+            parameters.Add("freeleech", Convert.ToInt32(ConfigData.Freeleech.Value).ToString());
+            parameters.Add("reseed", Convert.ToInt32(ConfigData.Reseed.Value).ToString());
 
             // Loop on Categories needed
             List<string> categoriesList = MapTorznabCapsToTrackers(query);
@@ -369,13 +382,13 @@ namespace Jackett.Indexers
         /// <summary>
         /// Generate a random fake latency to avoid detection on tracker side
         /// </summary>
-        private void latencyNow(int first = 1589, int second = 3674)
+        private void latencyNow()
         {
             // Need latency ?
             if(Latency)
             {
                 var random = new Random(DateTime.Now.Millisecond);
-                int waiting = random.Next(first, second);
+                int waiting = random.Next(Convert.ToInt32(ConfigData.LatencyStart.Value), Convert.ToInt32(ConfigData.LatencyEnd.Value));
                 output("Latency Faker => Sleeping for " + waiting + " ms...");
                 // Sleep now...
                 System.Threading.Thread.Sleep(waiting);
