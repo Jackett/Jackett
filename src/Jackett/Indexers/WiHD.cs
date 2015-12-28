@@ -27,7 +27,7 @@ namespace Jackett.Indexers
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ fDom = null;
         private bool Latency { get { return ConfigData.Latency.Value; }}
-        private bool DevMode { get { return true; } }
+        private bool DevMode { get { return false; } }
 
         private ConfigurationDataWiHD ConfigData
         {
