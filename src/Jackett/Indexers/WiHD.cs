@@ -333,6 +333,8 @@ namespace Jackett.Indexers
         private string buildQuery(string term, TorznabQuery query, string url, int page = 1)
         {
             var parameters = new NameValueCollection();
+            List<string> categoriesList = MapTorznabCapsToTrackers(query);
+            string categories = null;
 
             if (string.IsNullOrWhiteSpace(term))
             {
@@ -359,8 +361,6 @@ namespace Jackett.Indexers
             parameters.Add("reseed", Convert.ToInt32(ConfigData.Reseed.Value).ToString());
 
             // Loop on Categories needed
-            List<string> categoriesList = MapTorznabCapsToTrackers(query);
-            var categories = "";
             foreach (string category in categoriesList)
             {
                 // If last, build !
