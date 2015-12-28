@@ -236,7 +236,6 @@ namespace Jackett.Indexers
 
                 int nbResults = 0;
                 int.TryParse(fDom["div.ajaxtotaltorrentcount"].Text().Trim(new Char[] { ' ', '(', ')' }), out nbResults);
-                //int nbResults = ParseUtil.CoerceInt(Regex.Match(fDom.Find(".ajaxtotaltorrentcount")[0].LastChild.ToString(), @"\d+").Value);
                 Console.WriteLine("Found " + nbResults + " results for query << " + searchTerm + " >> !");
                 var firstPageRows = fDom[".torrent-item"];
                 Console.WriteLine("There are " + firstPageRows.Length + " results on the first page !");
@@ -266,31 +265,38 @@ namespace Jackett.Indexers
                     // Release Name
                     string name = tRow.Find(".torrent-h3 > h3 > a").Attr("title").ToString();
                     Console.WriteLine("Release: " + name);
+                    logger.Debug("Release: " + name);
 
                     // Category
                     string categoryID = tRow.Find(".category > img").Attr("src").Split('/').Last().ToString();
                     string categoryName = tRow.Find(".category > img").Attr("title").ToString();
                     Console.WriteLine("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName)) + " (" + categoryName + ")");
+                    logger.Debug("Category: " + MapTrackerCatToNewznab(mediaToCategory(categoryID, categoryName)) + " (" + categoryName + ")");
 
                     // Uploader
                     string uploader = tRow.Find(".uploader > span > a").Attr("title").ToString();
                     Console.WriteLine("Uploader: " + uploader);
+                    logger.Debug("Uploader: " + uploader);
 
                     // Seeders
                     int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".seeders")[0].LastChild.ToString(), @"\d+").Value);
                     Console.WriteLine("Seeders: " + seeders);
+                    logger.Debug("Seeders: " + seeders);
 
                     // Leechers
                     int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".leechers")[0].LastChild.ToString(), @"\d+").Value);
                     Console.WriteLine("Leechers: " + leechers);
+                    logger.Debug("Leechers: " + leechers);
 
                     // Completed
                     int completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".completed")[0].LastChild.ToString(), @"\d+").Value);
                     Console.WriteLine("Completed: " + completed);
+                    logger.Debug("Completed: " + completed);
 
                     // Comments
                     int comments = ParseUtil.CoerceInt(Regex.Match(tRow.Find(".comments")[0].LastChild.ToString(), @"\d+").Value);
                     Console.WriteLine("Comments: " + comments);
+                    logger.Debug("Comments: " + comments);
 
                     // Size & Publish Date
                     string infosData = tRow.Find(".torrent-h3 > span")[0].LastChild.ToString().Trim();
@@ -299,25 +305,30 @@ namespace Jackett.Indexers
                     // --> Size
                     var size = ReleaseInfo.GetBytes(infosList[1].Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb"));
                     Console.WriteLine("Size: " + infosList[1] + " (" + size + " bytes)");
+                    logger.Debug("Size: " + infosList[1] + " (" + size + " bytes)");
 
                     // --> Publish Date
                     IList<string> clockList = infosList[0].Replace("Il y a", "").Split(',').Select(s => s.Trim()).Where(s => s != String.Empty).ToList();
                     var clock = agoToDate(clockList);
                     Console.WriteLine("Released on: " + clock.ToString());
+                    logger.Debug("Released on: " + clock.ToString());
 
                     // Torrent Details URL
                     string details = tRow.Find(".torrent-h3 > h3 > a").Attr("href").ToString().TrimStart('/');
                     Uri detailsLink = new Uri(SiteLink + details);
                     Console.WriteLine("Details: " + detailsLink.AbsoluteUri);
+                    logger.Debug("Details: " + detailsLink.AbsoluteUri);
 
                     // Torrent Comments URL
                     Uri commentsLink = new Uri(SiteLink + details + "#tab_2");
                     Console.WriteLine("Comments: " + commentsLink.AbsoluteUri);
+                    logger.Debug("Comments: " + commentsLink.AbsoluteUri);
 
                     // Torrent Download URL
                     string download = tRow.Find(".download-item > a").Attr("href").ToString().TrimStart('/');
                     Uri downloadLink = new Uri(SiteLink + download);
                     Console.WriteLine("Download: " + downloadLink.AbsoluteUri);
+                    logger.Debug("Download: " + downloadLink.AbsoluteUri);
 
                     // Building release infos
                     var release = new ReleaseInfo();
@@ -338,7 +349,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError("ERROR"/*results.Content*/, ex);
+                OnParseError("Error, unable to parse result", ex);
             }
 
             // Remove our XHR request header
@@ -358,6 +369,7 @@ namespace Jackett.Indexers
                 var random = new Random(DateTime.Now.Millisecond);
                 int waiting = random.Next(1589, 3674);
                 Console.WriteLine("Latency Faker => Sleeping for " + waiting + " ms...");
+                logger.Debug("Latency Faker => Sleeping for " + waiting + " ms...");
                 System.Threading.Thread.Sleep(waiting);
             }
         }
@@ -445,6 +457,7 @@ namespace Jackett.Indexers
                 else
                 {
                     Console.WriteLine("## ERROR ## - Unable to detect AGO content");
+                    logger.Error("## ERROR ## - Unable to detect AGO content");
                 }
             }
             return release;
