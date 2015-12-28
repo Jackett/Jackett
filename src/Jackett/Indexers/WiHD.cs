@@ -25,8 +25,8 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrent/ajaxfiltertorrent/"; } }
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ fDom = null;
-        private bool Latency { get { return ConfigData.Latency.Value; }}
-        private bool DevMode { get { return true; } }
+        private bool Latency { get { return ConfigData.Latency.Value; } }
+        private bool DevMode { get { return ConfigData.DevMode.Value; } }
 
         private ConfigurationDataWiHD ConfigData
         {

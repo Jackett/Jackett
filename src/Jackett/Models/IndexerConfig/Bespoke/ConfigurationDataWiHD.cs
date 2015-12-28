@@ -22,6 +22,8 @@
         public BoolItem HeaderDNT { get; private set; }
         public BoolItem HeaderUpgradeInsecure { get; private set; }
         public StringItem HeaderUserAgent { get; private set; }
+        public DisplayItem DevWarning { get; private set; }
+        public BoolItem DevMode { get; private set; }
 
         public ConfigurationDataWiHD()
             : base()
@@ -46,6 +48,8 @@
             HeaderDNT = new BoolItem { Name = "DNT", Value = true };
             HeaderUpgradeInsecure = new BoolItem { Name = "Upgrade-Insecure-Requests", Value = true };
             HeaderUserAgent = new StringItem { Name = "User-Agent", Value = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36" };
+            DevWarning = new DisplayItem("<b>Devlopement Facility</b> (<i>For Developers ONLY</i>),<br /><br /> <ul><li>By enabling devlopement mode, <b>Jackett will bypass his cache</b> and will <u>output debug messages to console</u> instead of his log file.</li></ul>") { Name = "Devlopement" };
+            DevMode = new BoolItem { Name = "Enable DEV", Value = false };
         }
     }
 }
