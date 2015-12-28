@@ -155,19 +155,9 @@ namespace Jackett.Indexers
             Console.WriteLine("#####################################\n");
 
             var releases = new List<ReleaseInfo>();
-            var queryParams = new NameValueCollection();
             var torrentRowList = new List<CQ>();
             var searchTerm = query.GetQueryString();
-
             var searchUrl = SearchUrl;
-
-            if (string.IsNullOrWhiteSpace(searchTerm))
-            {
-                // If no search string provided, use default (for test)
-                searchTerm = "the walking dead";
-            }
-            // Encode & Add search term to URL
-            searchUrl += Uri.EscapeDataString(searchTerm) + "?";
 
             // Check cache first so we don't query the server
             /*lock (cache)
@@ -179,27 +169,6 @@ namespace Jackett.Indexers
                 if (cachedResult != null)
                     return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
             }*/
-
-            // Building our tracker query
-            queryParams.Add("exclu", "0");
-            queryParams.Add("freeleech", "0");
-            queryParams.Add("reseed", "0");
-            
-            // Loop on Categories needed
-            List<string> categoriesList = MapTorznabCapsToTrackers(query);
-            foreach (string category in categoriesList)
-            {
-                // Adding category to URL
-                queryParams.Add(Uri.EscapeDataString("subcat[]"), category);
-            }
-
-            // Add timestamp as a query param (for no caching)
-            queryParams.Add("_", UnixTimeNow().ToString());
-
-            // Building our query
-            string queryString = queryParams.GetQueryString();
-
-            searchUrl += queryString;
 
             // Add emulated XHR request
             emulatedBrowserHeaders.Add("X-Requested-With", "XMLHttpRequest");
@@ -221,8 +190,8 @@ namespace Jackett.Indexers
                 {
                     // No cached version
                     latencyNow();
-                    Console.WriteLine("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
-                    var results = await RequestStringWithCookiesAndRetry(searchUrl, null, null, emulatedBrowserHeaders);
+                    //Console.WriteLine("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
+                    var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
                     System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(results.Content));
                     fDom = results.Content;
                 }*/
@@ -230,37 +199,42 @@ namespace Jackett.Indexers
 
                 CQ fDom = null;
                 latencyNow();
-                Console.WriteLine("Perform search for \"" + searchTerm + "\"... with " + searchUrl);
-                var results = await RequestStringWithCookiesAndRetry(searchUrl, null, null, emulatedBrowserHeaders);
+                var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
                 fDom = results.Content;
 
-                int nbResults = 0;
+                int nbResults;
                 int.TryParse(fDom["div.ajaxtotaltorrentcount"].Text().Trim(new Char[] { ' ', '(', ')' }), out nbResults);
-                Console.WriteLine("Found " + nbResults + " results for query << " + searchTerm + " >> !");
+                Console.WriteLine("Found " + nbResults + " results for query !");
+                logger.Debug("Found " + nbResults + " results for query !");
                 var firstPageRows = fDom[".torrent-item"];
                 Console.WriteLine("There are " + firstPageRows.Length + " results on the first page !");
+                logger.Debug("There are " + firstPageRows.Length + " results on the first page !");
                 torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
-                //If a search term is used, follow upto the first 4 pages (initial plus 3 more)
-                //var pageLinkCount = fDom[".pagination > li"].Filter(":not(.disabled)").Filter(":not(.active)").Filter(":not(.next)");
-                int pageLinkCount = (int)Math.Ceiling((double)nbResults / 20);
+                // If a search term is used, follow upto the first 4 pages (initial plus 3 more)
+                int pageLinkCount = (int)Math.Ceiling((double)nbResults / firstPageRows.Length);    // Based on number results and number of torrents on first page
                 Console.WriteLine("--> Pages available for query: " + pageLinkCount);
-                /*if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
+                logger.Debug("--> Pages available for query: " + pageLinkCount);
+
+                // If we have a term used for search and pagination result superior to one
+                if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
                 {
-                    for (int i = 1; i < Math.Min(4, pageLinkCount); i++)
+                    // Starting with page #2
+                    for (int i = 2; i <= Math.Min(4, pageLinkCount); i++)
                     {
-                        // https://world-in-hd.net/torrent/ajaxfiltertorrent/the%20walking%20dead/2?exclu=0&freeleech=0&reseed=0&subcat%5B0%5D=565af82d1fd35761568b4589&_=1450798034357
-                        var sResults = await RequestStringWithCookiesAndRetry($"{searchUrl}&page={i}");
-                        CQ sDom = sResults.Content;
-                        var additionalPageRows = sDom["table[class='ttable_headinner'] > tbody > tr:not(:First-child)"];
-                        torrentRowList.AddRange(additionalPageRows.Select(sRow => sRow.Cq()));
+                        Console.WriteLine("Processing page #" + i);
+                        latencyNow();
+                        results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
+                        var additionalPageRows = fDom[".torrent-item"];
+                        torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
                     }
-                }*/
+                }
 
                 // Loop on results
                 foreach (CQ tRow in torrentRowList)
                 {
                     Console.WriteLine("\n=>> Torrent #" + (releases.Count + 1));
+                    logger.Debug("\n=>> Torrent #" + (releases.Count + 1));
 
                     // Release Name
                     string name = tRow.Find(".torrent-h3 > h3 > a").Attr("title").ToString();
@@ -360,6 +334,65 @@ namespace Jackett.Indexers
         }
 
         /// <summary>
+        /// Build query to process
+        /// </summary>
+        /// <param name="term">Term to search</param>
+        /// <param name="query">Torznab Query for categories mapping</param>
+        /// <param name="url">Search url for provider</param>
+        /// <param name="page">Page number to request</param>
+        /// <param name="exclu">Exclusive state</param>
+        /// <param name="freeleech">Freeleech state</param>
+        /// <param name="reseed">Reseed state</param>
+        /// <returns>URL to query for parsing and processing results</returns>
+        private string buildQuery(string term, TorznabQuery query, string url, int page = 1, int exclu = 0, int freeleech = 0, int reseed = 0)
+        {
+            var parameters = new NameValueCollection();
+
+            if (string.IsNullOrWhiteSpace(term))
+            {
+                // If no search string provided, use default (for test)
+                term = "the walking dead";
+            }
+
+            // Encode & Add search term to URL
+            url += Uri.EscapeDataString(term);
+
+            // Check if we are processing a new page
+            if (page > 1)
+            {
+                // Adding page number to query
+                url += "/" + page.ToString();
+            }
+
+            // Adding interrogation point
+            url += "?";
+
+            // Building our tracker query
+            parameters.Add("exclu", exclu.ToString());
+            parameters.Add("freeleech", freeleech.ToString());
+            parameters.Add("reseed", reseed.ToString());
+
+            // Loop on Categories needed
+            List<string> categoriesList = MapTorznabCapsToTrackers(query);
+            foreach (string category in categoriesList)
+            {
+                // Adding category to URL
+                parameters.Add(Uri.EscapeDataString("subcat[]"), category);
+            }
+
+            // Add timestamp as a query param (for no caching)
+            parameters.Add("_", UnixTimeNow().ToString());
+
+            // Building our query
+            url += parameters.GetQueryString();
+
+            Console.WriteLine("Builded query for \"" + term + "\"... with " + url);
+
+            // Return our search url
+            return url;
+        }
+
+        /// <summary>
         /// Generate a random fake latency to avoid detection on tracker side
         /// </summary>
         private void latencyNow()
@@ -388,7 +421,7 @@ namespace Jackett.Indexers
         /// Convert Ago date to DateTime
         /// </summary>
         /// <param name="clockList"></param>
-        /// <returns></returns>
+        /// <returns>A DateTime</returns>
         private DateTime agoToDate(IList<string> clockList)
         {
             DateTime release = DateTime.Now;
@@ -470,7 +503,7 @@ namespace Jackett.Indexers
         /// <returns>Category ID</returns>
         private string mediaToCategory(string media, string name)
         {
-            // Declare our Dictionnary -- Media <-> Media ID
+            // Declare our Dictionnary -- Media ID (key) <-> Category ID (value)
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
             // Movies
@@ -517,8 +550,7 @@ namespace Jackett.Indexers
                 else
                 {
                     // Return category ID for media ID
-                    string value = dictionary[media];
-                    return value;
+                    return dictionary[media];
                 }
             }
             else
