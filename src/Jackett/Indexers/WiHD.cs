@@ -175,8 +175,8 @@ namespace Jackett.Indexers
             var searchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
 
-            // Check cache first so we don't query the server
-            if(!DevMode)
+            // Check cache first so we don't query the server (if search term used or not in dev mode)
+            if(!DevMode && !string.IsNullOrEmpty(searchTerm))
             {
                 lock (cache)
                 {
