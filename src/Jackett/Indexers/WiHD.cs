@@ -592,7 +592,10 @@ namespace Jackett.Indexers
                     default:
                         goto case "debug";
                     case "debug":
-                        logger.Debug(message);
+                        // Only if Debug Level Enabled on Jackett
+                        if(Engine.Logger.IsDebugEnabled) {
+                            logger.Debug(message);
+                        }
                         break;
                     case "info":
                         logger.Info(message);
