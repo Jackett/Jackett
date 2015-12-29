@@ -62,18 +62,28 @@ namespace Jackett.Utils.Clients
                     }
                 }
             }
-
+            var useProxy = false;
+            WebProxy proxyServer = null;
+            if (Startup.ProxyConnection != null)
+            {
+                proxyServer = new WebProxy(Startup.ProxyConnection, false);
+                useProxy = true;
+            }
             var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookies,
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
+                Proxy = proxyServer,
+                UseProxy = useProxy
             });
+            
 
-            if(webRequest.EmulateBrowser)
-               client.DefaultRequestHeaders.Add("User-Agent",  BrowserUtil.ChromeUserAgent);
+            if (webRequest.EmulateBrowser)
+                client.DefaultRequestHeaders.Add("User-Agent",  BrowserUtil.ChromeUserAgent);
             else
-               client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
+                client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
+            
             HttpResponseMessage response = null;
             var request = new HttpRequestMessage();
             request.Headers.ExpectContinue = false;
@@ -118,6 +128,35 @@ namespace Jackett.Utils.Clients
 
             var result = new WebClientByteResult();
             result.Content = await response.Content.ReadAsByteArrayAsync();
+
+            // some cloudflare clients are using a refresh header
+            // Pull it out manually 
+            if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
+            {
+                var refreshHeaders = response.Headers.GetValues("Refresh");
+                var redirval = "";
+                var redirtime = 0;
+                if (refreshHeaders != null)
+                {
+                    foreach (var value in refreshHeaders)
+                    {
+                        var start = value.IndexOf("=");
+                        var end = value.IndexOf(";");
+                        var len = value.Length;
+                        if (start > -1)
+                        {
+                            redirval = value.Substring(start + 1);
+                            result.RedirectingTo = redirval;
+                            // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
+                            // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
+                            // it shoudln't include service unavailable..only if we have this redirect header.
+                            response.StatusCode = System.Net.HttpStatusCode.Redirect;
+                            redirtime = Int32.Parse(value.Substring(0, end));
+                            System.Threading.Thread.Sleep(redirtime * 1000);
+                        }
+                    }
+                }
+            }
             if (response.Headers.Location != null)
             {
                 result.RedirectingTo = response.Headers.Location.ToString();
@@ -129,6 +168,7 @@ namespace Jackett.Utils.Clients
             // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
             IEnumerable<string> cookieHeaders;
             var responseCookies = new List<Tuple<string, string>>();
+
             if (response.Headers.TryGetValues("set-cookie", out cookieHeaders))
             {
                 foreach (var value in cookieHeaders)

@@ -1,4 +1,4 @@
-﻿using Owin;
+using Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +35,12 @@ namespace Jackett
         }
 
         public static string ClientOverride
+        {
+            get;
+            set;
+        }
+
+        public static string ProxyConnection
         {
             get;
             set;
