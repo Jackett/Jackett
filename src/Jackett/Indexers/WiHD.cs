@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
@@ -10,6 +11,7 @@ using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -23,10 +25,13 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string LoginCheckUrl { get { return SiteLink + "login_check"; } }
         private string SearchUrl { get { return SiteLink + "torrent/ajaxfiltertorrent/"; } }
-        private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
-        private CQ fDom = null;
         private bool Latency { get { return ConfigData.Latency.Value; } }
         private bool DevMode { get { return ConfigData.DevMode.Value; } }
+        private bool CacheMode { get { return ConfigData.HardDriveCache.Value; } }
+        private string directory { get { return System.IO.Path.GetTempPath() + "Jackett\\" + MethodBase.GetCurrentMethod().DeclaringType.Name + "\\"; } }
+
+        private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
+        private CQ fDom = null;
 
         private ConfigurationDataWiHD ConfigData
         {
@@ -151,14 +156,18 @@ namespace Jackett.Indexers
 
             // Perform loggin
             latencyNow();
-            output("Perform loggin.. with " + LoginCheckUrl);
+            output("\nPerform loggin.. with " + LoginCheckUrl);
             var response = await RequestLoginAndFollowRedirect(LoginCheckUrl, pairs, loginPage.Cookies, true, null, null);
 
             // Test if we are logged in
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout"), () => {
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout"), () => 
+            {
                 // Oops, unable to login
+                output("-> Login failed", "error");
                 throw new ExceptionWithConfigData("Failed to login", configData);
             });
+
+            output("-> Login Success");
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -174,15 +183,18 @@ namespace Jackett.Indexers
             var torrentRowList = new List<CQ>();
             var searchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
+            int nbResults = 0;
+            int pageLinkCount = 0;
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
-            if(!DevMode && !string.IsNullOrEmpty(searchTerm))
+            if (!DevMode && !string.IsNullOrEmpty(searchTerm))
             {
                 lock (cache)
                 {
                     // Remove old cache items
                     CleanCache();
 
+                    // Search in cache
                     var cachedResult = cache.Where(i => i.Query == searchTerm).FirstOrDefault();
                     if (cachedResult != null)
                         return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
@@ -192,25 +204,49 @@ namespace Jackett.Indexers
             // Add emulated XHR request
             emulatedBrowserHeaders.Add("X-Requested-With", "XMLHttpRequest");
 
-            // Request our first page
-            latencyNow();
-            var results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl), null, null, emulatedBrowserHeaders);
+            // Build our query
+            var request = buildQuery(searchTerm, query, searchUrl);
+
+            // Getting results & Store content
+            WebClientStringResult results = await queryExec(request);
             fDom = results.Content;
 
             try
             {
                 // Find number of results
-                int nbResults = ParseUtil.CoerceInt(Regex.Match(fDom["div.ajaxtotaltorrentcount"].Text(), @"\d+").Value);
-                output("\nFound " + nbResults + " results for query !");
+                nbResults = ParseUtil.CoerceInt(Regex.Match(fDom["div.ajaxtotaltorrentcount"].Text(), @"\d+").Value);
 
                 // Find torrent rows
                 var firstPageRows = findTorrentRows();
-                output("There are " + firstPageRows.Length + " results on the first page !");
+
+                // Add them to torrents list
                 torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
-                // Calculate numbers of pages available for this search query
-                int pageLinkCount = (int)Math.Ceiling((double)nbResults / firstPageRows.Length);    // Based on number results and number of torrents on first page
-                output("--> Pages available for query: " + pageLinkCount);
+                // Check if there are pagination links at bottom
+                Boolean pagination = (nbResults != 0);
+
+                // If pagination available
+                if (pagination)
+                {
+                    // Calculate numbers of pages available for this search query (Based on number results and number of torrents on first page)
+                    pageLinkCount = (int)Math.Ceiling((double)nbResults / firstPageRows.Length);
+                }
+                else {
+                    // Check if we have a minimum of one result
+                    if (firstPageRows.Length >= 1)
+                    {
+                        // Set page count arbitrary to one
+                        pageLinkCount = 1;
+                    }
+                    else
+                    {
+                        output("\nNo result found for your query, please try another search term ...\n", "info");
+                        // No result found for this query
+                        return releases;
+                    }
+                }
+                output("\nFound " + nbResults + " result(s) in " + pageLinkCount + " page(s) for this query !");
+                output("\nThere are " + firstPageRows.Length + " results on the first page !");
 
                 // If we have a term used for search and pagination result superior to one
                 if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
@@ -218,17 +254,24 @@ namespace Jackett.Indexers
                     // Starting with page #2
                     for (int i = 2; i <= Math.Min(Int32.Parse(ConfigData.Pages.Value), pageLinkCount); i++)
                     {
-                        output("Processing page #" + i);
+                        output("\nProcessing page #" + i);
 
                         // Request our page
                         latencyNow();
-                        results = await RequestStringWithCookiesAndRetry(buildQuery(searchTerm, query, searchUrl, i), null, null, emulatedBrowserHeaders);
+
+                        // Build our query
+                        var pageRequest = buildQuery(searchTerm, query, searchUrl, i);
+
+                        // Getting results & Store content
+                        WebClientStringResult pageResults = await queryExec(pageRequest);
 
                         // Assign response
-                        fDom = results.Content;
+                        fDom = pageResults.Content;
 
                         // Process page results
                         var additionalPageRows = findTorrentRows();
+
+                        // Add them to torrents list
                         torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
                     }
                 }
@@ -287,12 +330,12 @@ namespace Jackett.Indexers
 
                     // Torrent Comments URL
                     Uri commentsLink = new Uri(SiteLink + details + "#tab_2");
-                    output("Comments: " + commentsLink.AbsoluteUri);
+                    output("Comments Link: " + commentsLink.AbsoluteUri);
 
                     // Torrent Download URL
                     string download = tRow.Find(".download-item > a").Attr("href").ToString().TrimStart('/');
                     Uri downloadLink = new Uri(SiteLink + download);
-                    output("Download: " + downloadLink.AbsoluteUri);
+                    output("Download Link: " + downloadLink.AbsoluteUri);
 
                     // Building release infos
                     var release = new ReleaseInfo();
@@ -313,11 +356,13 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError("Error, unable to parse result", ex);
+                OnParseError("Error, unable to parse result \n" + ex.StackTrace, ex);
             }
-
-            // Remove our XHR request header
-            emulatedBrowserHeaders.Remove("X-Requested-With");
+            finally
+            {
+                // Remove our XHR request header
+                emulatedBrowserHeaders.Remove("X-Requested-With");
+            }
 
             // Return found releases
             return releases;
@@ -330,9 +375,6 @@ namespace Jackett.Indexers
         /// <param name="query">Torznab Query for categories mapping</param>
         /// <param name="url">Search url for provider</param>
         /// <param name="page">Page number to request</param>
-        /// <param name="exclu">Exclusive state</param>
-        /// <param name="freeleech">Freeleech state</param>
-        /// <param name="reseed">Reseed state</param>
         /// <returns>URL to query for parsing and processing results</returns>
         private string buildQuery(string term, TorznabQuery query, string url, int page = 1)
         {
@@ -340,10 +382,11 @@ namespace Jackett.Indexers
             List<string> categoriesList = MapTorznabCapsToTrackers(query);
             string categories = null;
 
+            // If search term not provided
             if (string.IsNullOrWhiteSpace(term))
             {
-                // If no search string provided, use default (for testing purposes)
-                term = "the walking dead";
+                // Showing all torrents (just for output function)
+                term = "null";
             }
 
             // Encode & Add search term to URL
@@ -386,10 +429,144 @@ namespace Jackett.Indexers
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong subcat[] param)
             url += string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
 
-            output("Builded query for \"" + term + "\"... with " + url);
+            output("\nBuilded query for \"" + term + "\"... " + url);
 
             // Return our search url
             return url;
+        }
+
+        /// <summary>
+        /// Switch Method for Querying
+        /// </summary>
+        /// <param name="request">URL created by Query Builder</param>
+        /// <returns>Results from query</returns>
+        private async Task<WebClientStringResult> queryExec(string request)
+        {
+            WebClientStringResult results = null;
+
+            // Switch in we are in DEV mode with Hard Drive Cache or not
+            if (DevMode && CacheMode)
+            {
+                // Check Cache before querying and load previous results if available
+                results = await queryCache(request);
+            }
+            else
+            {
+                // Querying tracker directly
+                results = await queryTracker(request);
+            }
+            return results;
+        }
+
+        /// <summary>
+        /// Get Torrents Page from Cache by Query Provided
+        /// </summary>
+        /// <param name="request">URL created by Query Builder</param>
+        /// <returns>Results from query</returns>
+        private async Task<WebClientStringResult> queryCache(string request)
+        {
+            WebClientStringResult results = null;
+
+            // Create Directory if not exist
+            System.IO.Directory.CreateDirectory(directory);
+
+            // Clean Storage Provider Directory from outdated cached queries
+            cleanCacheStorage();
+
+            // Remove timestamp from query
+            string file = string.Join("&", Regex.Split(request, "&").Where(s => !Regex.IsMatch(s, @"_=\d")).ToList());
+
+            // Create fingerprint for request
+            file = directory + file.GetHashCode() + ".json";
+
+            // Checking modes states
+            if (System.IO.File.Exists(file))
+            {
+                // File exist... loading it right now !
+                output("Loading results from hard drive cache ..." + request.GetHashCode() + ".json");
+                results = JsonConvert.DeserializeObject<WebClientStringResult>(System.IO.File.ReadAllText(file));
+            }
+            else
+            {
+                // No cached file found, querying tracker directly
+                results = await queryTracker(request);
+
+                // Cached file didn't exist for our query, writing it right now !
+                output("Writing results to hard drive cache ..." + request.GetHashCode() + ".json");
+                System.IO.File.WriteAllText(file, JsonConvert.SerializeObject(results));
+            }
+            return results;
+        }
+
+        /// <summary>
+        /// Get Torrents Page from Tracker by Query Provided
+        /// </summary>
+        /// <param name="request">URL created by Query Builder</param>
+        /// <returns>Results from query</returns>
+        private async Task<WebClientStringResult> queryTracker(string request)
+        {
+            WebClientStringResult results = null;
+
+            // Cache mode not enabled or cached file didn't exist for our query
+            output("\nQuerying tracker for results....");
+
+            // Request our first page
+            latencyNow();
+            results = await RequestStringWithCookiesAndRetry(request, null, null, emulatedBrowserHeaders);
+
+            // Return results from tracker
+            return results;
+        }
+
+        /// <summary>
+        /// Clean Hard Drive Cache Storage
+        /// </summary>
+        /// <param name="force">Force Provider Folder deletion</param>
+        private void cleanCacheStorage(Boolean force = false)
+        {
+            // Check cleaning method
+            if (force)
+            {
+                // Deleting Provider Storage folder and all files recursively
+                output("\nDeleting Provider Storage folder and all files recursively ...");
+
+                // Check if directory exist
+                if (System.IO.Directory.Exists(directory))
+                {
+                    // Delete storage directory of provider
+                    System.IO.Directory.Delete(directory, true);
+                    output("-> Storage folder deleted successfully.");
+                }
+                else
+                {
+                    // No directory, so nothing to do
+                    output("-> No Storage folder found for this provider !");
+                }
+            }
+            else
+            {
+                int i = 0;
+                // Check if there is file older than ... and delete them
+                output("\nCleaning Provider Storage folder... in progress.");
+                System.IO.Directory.GetFiles(directory)
+                .Select(f => new System.IO.FileInfo(f))
+                .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
+                .ToList()
+                .ForEach(f => {
+                    output("Deleting cached file << " + f.Name + " >> ... done.");
+                    f.Delete();
+                    i++;
+                });
+
+                // Inform on what was cleaned during process
+                if (i > 0)
+                {
+                    output("-> Deleted " + i + " cached files during cleaning.");
+                }
+                else {
+                    output("-> Nothing deleted during cleaning.");
+                }
+            }
         }
 
         /// <summary>
@@ -400,9 +577,11 @@ namespace Jackett.Indexers
             // Need latency ?
             if(Latency)
             {
+                // Generate a random value in our range
                 var random = new Random(DateTime.Now.Millisecond);
                 int waiting = random.Next(Convert.ToInt32(ConfigData.LatencyStart.Value), Convert.ToInt32(ConfigData.LatencyEnd.Value));
-                output("Latency Faker => Sleeping for " + waiting + " ms...");
+                output("\nLatency Faker => Sleeping for " + waiting + " ms...");
+
                 // Sleep now...
                 System.Threading.Thread.Sleep(waiting);
             }
@@ -593,7 +772,8 @@ namespace Jackett.Indexers
                         goto case "debug";
                     case "debug":
                         // Only if Debug Level Enabled on Jackett
-                        if(Engine.Logger.IsDebugEnabled) {
+                        if(Engine.Logger.IsDebugEnabled)
+                        {
                             logger.Debug(message);
                         }
                         break;
@@ -612,10 +792,16 @@ namespace Jackett.Indexers
         /// </summary>
         private void validateConfig()
         {
+            output("\nValidating Settings ... \n");
+
             // Check Username Setting
             if (string.IsNullOrEmpty(ConfigData.Username.Value))
             {
                 throw new ExceptionWithConfigData("You must provide a username for this tracker to login !", ConfigData);
+            }
+            else
+            {
+                output("Validated Setting -- Username (auth) => " + ConfigData.Username.Value.ToString());
             }
 
             // Check Password Setting
@@ -623,13 +809,17 @@ namespace Jackett.Indexers
             {
                 throw new ExceptionWithConfigData("You must provide a password with your username for this tracker to login !", ConfigData);
             }
+            else
+            {
+                output("Validated Setting -- Password (auth) => " + ConfigData.Password.Value.ToString());
+            }
 
             // Check Max Page Setting
             if (!string.IsNullOrEmpty(ConfigData.Pages.Value))
             {
                 try
                 {
-                    output("Settings -- Max Pages => " + Convert.ToInt32(ConfigData.Pages.Value));
+                    output("Validated Setting -- Max Pages => " + Convert.ToInt32(ConfigData.Pages.Value));
                 }
                 catch (Exception)
                 {
@@ -644,12 +834,14 @@ namespace Jackett.Indexers
             // Check Latency Setting
             if (ConfigData.Latency.Value)
             {
+                output("\nValidated Setting -- Latency Simulation enabled");
+
                 // Check Latency Start Setting
                 if (!string.IsNullOrEmpty(ConfigData.LatencyStart.Value))
                 {
                     try
                     {
-                        output("Settings -- Latency Start => " + Convert.ToInt32(ConfigData.LatencyStart.Value));
+                        output("Validated Setting -- Latency Start => " + Convert.ToInt32(ConfigData.LatencyStart.Value));
                     }
                     catch (Exception)
                     {
@@ -666,7 +858,7 @@ namespace Jackett.Indexers
                 {
                     try
                     {
-                        output("Settings -- Latency End => " + Convert.ToInt32(ConfigData.LatencyEnd.Value));
+                        output("Validated Setting -- Latency End => " + Convert.ToInt32(ConfigData.LatencyEnd.Value));
                     }
                     catch (Exception)
                     {
@@ -682,10 +874,16 @@ namespace Jackett.Indexers
             // Check Browser Setting
             if (ConfigData.Browser.Value)
             {
+                output("\nValidated Setting -- Browser Simulation enabled");
+
                 // Check ACCEPT header Setting
                 if (string.IsNullOrEmpty(ConfigData.HeaderAccept.Value))
                 {
                     throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an ACCEPT header !", ConfigData);
+                }
+                else
+                {
+                    output("Validated Setting -- ACCEPT (header) => " + ConfigData.HeaderAccept.Value.ToString());
                 }
 
                 // Check ACCEPT-LANG header Setting
@@ -693,12 +891,54 @@ namespace Jackett.Indexers
                 {
                     throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an ACCEPT-LANG header !", ConfigData);
                 }
+                else
+                {
+                    output("Validated Setting -- ACCEPT-LANG (header) => " + ConfigData.HeaderAcceptLang.Value.ToString());
+                }
 
                 // Check USER-AGENT header Setting
                 if (string.IsNullOrEmpty(ConfigData.HeaderUserAgent.Value))
                 {
                     throw new ExceptionWithConfigData("Browser Simulation enabled, Please enter an USER-AGENT header !", ConfigData);
                 }
+                else
+                {
+                    output("Validated Setting -- USER-AGENT (header) => " + ConfigData.HeaderUserAgent.Value.ToString());
+                }
+            }
+
+            // Check Dev Cache Settings
+            if (ConfigData.HardDriveCache.Value == true)
+            {
+                output("\nValidated Setting -- DEV Hard Drive Cache enabled");
+
+                // Check if Dev Mode enabled !
+                if (!ConfigData.DevMode.Value)
+                {
+                    throw new ExceptionWithConfigData("Hard Drive is enabled but not in DEV MODE, Please enable DEV MODE !", ConfigData);
+                }
+
+                // Check Cache Keep Time Setting
+                if (!string.IsNullOrEmpty(ConfigData.HardDriveCacheKeepTime.Value))
+                {
+                    try
+                    {
+                        output("Validated Setting -- Cache Keep Time (ms) => " + Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value));
+                    }
+                    catch (Exception)
+                    {
+                        throw new ExceptionWithConfigData("Please enter a numeric hard drive keep time in ms !", ConfigData);
+                    }
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData("Hard Drive Cache enabled, Please enter a maximum keep time for cache !", ConfigData);
+                }
+            }
+            else
+            {
+                // Delete cache if previously existed
+                cleanCacheStorage(true);
             }
         }
     }
