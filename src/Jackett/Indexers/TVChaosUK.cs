@@ -39,7 +39,7 @@ namespace Jackett.Indexers
         public TVChaosUK(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "TV Chaos",
                 description: "Total Chaos",
-                link: "https://tvchaosuk.com/",
+                link: "https://www.tvchaosuk.com/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
