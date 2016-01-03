@@ -222,7 +222,7 @@ namespace Jackett.Indexers
             int pageLinkCount = 0;
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
-            if (!DevMode && !string.IsNullOrEmpty(searchTerm))
+            if(!DevMode && !string.IsNullOrEmpty(searchTerm))
             {
                 lock (cache)
                 {
@@ -272,7 +272,7 @@ namespace Jackett.Indexers
                     }
                     else
                     {
-                        output("\nNo result found for your query, please try another search term ...", "info");
+                        output("\nNo result found for your query, please try another search term ...\n", "info");
                         // No result found for this query
                         return releases;
                     }
@@ -323,7 +323,6 @@ namespace Jackett.Indexers
 
                     // Category
                     int categoryID = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(0) > a").Attr("href").ToString(), @"\d+").Value);
-                    //string categoryName = tRow.Find(".category > img").Attr("title").ToString();
                     output("Category: " + MapTrackerCatToNewznab(categoryID.ToString()) + " (" + categoryID + ")");
 
                     // Uploader & Size & Publish Date & Seeders & Leechers & Completed
@@ -417,7 +416,7 @@ namespace Jackett.Indexers
             // Building our tracker query
             parameters.Add("afficher", "1");
 
-            // If search term provider
+            // If search term provided
             if (!string.IsNullOrWhiteSpace(term))
             {
                 // Add search term
