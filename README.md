@@ -21,6 +21,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BeyondHD
  * BIT-HDTV
  * BitMeTV
+ * BitSoup
  * BlueTigers
  * BTN
  * DanishBits
@@ -50,6 +51,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentShack
  * TV Chaos UK
  * World-In-HD
+ * XSpeeds
 
 #### Installation on Windows
 
