@@ -24,6 +24,8 @@
         public StringItem HeaderUserAgent { get; private set; }
         public DisplayItem DevWarning { get; private set; }
         public BoolItem DevMode { get; private set; }
+        public BoolItem HardDriveCache { get; private set; }
+        public StringItem HardDriveCacheKeepTime { get; private set; }
 
         public ConfigurationDataWiHD()
             : base()
@@ -48,8 +50,10 @@
             HeaderDNT = new BoolItem { Name = "DNT", Value = false };
             HeaderUpgradeInsecure = new BoolItem { Name = "Upgrade-Insecure-Requests", Value = false };
             HeaderUserAgent = new StringItem { Name = "User-Agent", Value = "" };
-            DevWarning = new DisplayItem("<b>Devlopement Facility</b> (<i>For Developers ONLY</i>),<br /><br /> <ul><li>By enabling devlopement mode, <b>Jackett will bypass his cache</b> and will <u>output debug messages to console</u> instead of his log file.</li></ul>") { Name = "Devlopement" };
+            DevWarning = new DisplayItem("<b>Development Facility</b> (<i>For Developers ONLY</i>),<br /><br /> <ul><li>By enabling development mode, <b>Jackett will bypass his cache</b> and will <u>output debug messages to console</u> instead of his log file.</li><li>By enabling Hard Drive Cache, <b>This provider</b> will <u>save each query answers from tracker</u> in temp directory, in fact this reduce drastically HTTP requests when building a provider at parsing step for example. So, <b> Jackett will search for a cached query answer on hard drive before executing query on tracker side !</b> <i>DEV MODE must be enabled to use it !</li></ul>") { Name = "Development" };
             DevMode = new BoolItem { Name = "Enable DEV MODE (Developers ONLY)", Value = false };
+            HardDriveCache = new BoolItem { Name = "Enable HARD DRIVE CACHE (Developers ONLY)", Value = false };
+            HardDriveCacheKeepTime = new StringItem { Name = "Keep Cached files for (ms)", Value = "300000" };
         }
     }
 }
