@@ -53,7 +53,7 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "http://fnt.nu/download.php?id={id}&dl=oui",
+                downloadBase: "http://fnt.nu/download.php?id=",
                 configData: new ConfigurationDataFnt())
         {
             // Clean capabilities
