@@ -47,13 +47,13 @@ namespace Jackett.Indexers
             : base(
                 name: "Fnt",
                 description: "Your French Movies & Series Provider",
-                link: "http://fnt.nu/",
+                link: "https://fnt.nu/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "http://fnt.nu/download.php?id={id}&dl=oui",
+                downloadBase: "https://fnt.nu/download.php?id=",
                 configData: new ConfigurationDataFnt())
         {
             // Clean capabilities
