@@ -29,6 +29,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EuTorrents
  * FileList
  * Fnt
+ * French-ADN
  * Freshon
  * HD-Space
  * HD-Torrents
