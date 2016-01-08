@@ -80,7 +80,7 @@ namespace Jackett.Controllers
             var ctx = Request.GetOwinContext();
             var authManager = ctx.Authentication;
             authManager.SignOut("ApplicationCookie");
-            return Redirect("/Admin/Dashboard");
+            return Redirect("Admin/Dashboard");
         }
 
         [HttpGet]
