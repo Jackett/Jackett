@@ -4,27 +4,27 @@
 <head>
     <meta charset="utf-8" />
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
-    <script src="../../libs/filesize.min.js"></script>
-    <script src="../../libs/jquery.min.js"></script>
-    <script src="../../libs/jquery.dataTables.min.js"></script>
-    <script src="../../libs/handlebars.min.js"></script>
-    <script src="../../libs/moment.min.js"></script>
-    <script src="../../libs/handlebarsmoment.js"></script>
-    <script src="../../bootstrap/bootstrap.min.js"></script>
-    <script src="../../libs/bootstrap-notify.js"></script>
+    <script src="../libs/filesize.min.js"></script>
+    <script src="../libs/jquery.min.js"></script>
+    <script src="../libs/jquery.dataTables.min.js"></script>
+    <script src="../libs/handlebars.min.js"></script>
+    <script src="../libs/moment.min.js"></script>
+    <script src="../libs/handlebarsmoment.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="../libs/bootstrap-notify.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
-    <link href="../../bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="../../animate.css" rel="stylesheet">
-    <link href="../../custom.css" rel="stylesheet">
-    <link href="../../css/jquery.dataTables.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link href="../bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="../animate.css" rel="stylesheet">
+    <link href="../custom.css" rel="stylesheet">
+    <link href="../css/jquery.dataTables.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
     <title>Jackett</title>
 </head>
 <body>
     <div id="page">
 
-        <img id="logo" src="../../jacket_medium.png" alt="Logo" /><span id="header-title">Jackett</span>
+        <img id="logo" src="../jacket_medium.png" alt="Logo" /><span id="header-title">Jackett</span>
 
         <div class="pull-right jackett-apikey">
             <span class="input-header">API Key: </span>
@@ -85,9 +85,12 @@
             </a>
         </div>
         <div class="input-area">
+            <span class="input-header">Base Path Override: </span>
+            <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="jackett/">
+        </div>
+        <div class="input-area">
             <span class="input-header">Server port: </span>
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
-
         </div>
         <div class="input-area">
             <span class="input-header">Manual download blackhole directory: </span>
@@ -172,7 +175,7 @@
             <div class="indexer-logo">
                 <!-- Make section browser searchable -->
                 <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../../logos/{{id}}.png" />
+                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
             </div>
             <div class="indexer-buttons">
                 <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
@@ -206,7 +209,7 @@
             <div class="indexer-logo indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
                 <!-- Make section browser searchable -->
                 <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../../logos/{{id}}.png" />
+                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
               
             </div>
         </div>
@@ -478,6 +481,6 @@
         <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>
 
-    <script src="../../custom.js"></script>
+    <script src="../custom.js"></script>
 </body>
 </html>
