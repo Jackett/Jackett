@@ -323,6 +323,7 @@
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\HttpWebClient.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
+    <Compile Include="Indexers\DigitalHive.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -574,6 +575,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\frenchadn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\digitalhive.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\wihd.png">
