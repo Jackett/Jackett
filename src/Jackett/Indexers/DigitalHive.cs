@@ -29,7 +29,7 @@ namespace Jackett.Indexers
 
         public DigitalHive(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "DigitalHive",
-                description: "DigitalHive is one if the oldest general trackers",
+                description: "DigitalHive is one of the oldest general trackers",
                 link: "https://www.digitalhive.org/",
                 caps: new TorznabCapabilities(),
                 manager: i,
@@ -118,6 +118,8 @@ namespace Jackett.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
+
+            // Not sure if I have to check for this since doing a search would also give a connected stated or not
             if (result.RedirectingTo != "https://www.digitalhive.org/")
             {
                 throw new ExceptionWithConfigData("Credentials incorrect", configData);
