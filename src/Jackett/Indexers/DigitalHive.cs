@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
+            AddCategoryMapping(0, TorznabCatType.AllCats);
             AddCategoryMapping(48, TorznabCatType.AllCats); // 0Day
             AddCategoryMapping(56, TorznabCatType.XXXImageset); // 0Day-Imagesets
             AddCategoryMapping(6, TorznabCatType.Audio); // 0Day-Music
@@ -161,6 +162,7 @@ namespace Jackett.Indexers
         private IEnumerable<ReleaseInfo> contentToReleaseInfos(CQ dom) {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
+            // Doesn't handle pagination yet...
             var rows = dom["div.panel-body > table > tbody > tr"];
             foreach (var row in rows)
             {
@@ -181,6 +183,8 @@ namespace Jackett.Indexers
                 release.Peers = Int32.Parse(qRow.Find("td:nth-child(10)").First().Text()) + release.Seeders;
                 releases.Add(release);
             }
+
+            return releases;
         }
     }
 }
