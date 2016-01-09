@@ -446,7 +446,8 @@ namespace Jackett.Controllers
 
         private void ConfigureCacheResults(List<TrackerCacheResult> results)
         {
-            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, ServerService.BasePath(Request.RequestUri.AbsolutePath));
+            // TODO: figure out the reverse proxy path by getting the path up to /admin?
             foreach (var result in results)
             {
                 var link = result.Link;
