@@ -120,10 +120,10 @@ namespace Jackett.Indexers
             var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
 
             // Not sure if I have to check for this since doing a search would also give a connected stated or not
-            if (result.RedirectingTo != "https://www.digitalhive.org/")
-            {
-                throw new ExceptionWithConfigData("Credentials incorrect", configData);
-            }
+//            if (result.RedirectingTo != "https://www.digitalhive.org/" || result.RedirectingTo != "/")
+//            {
+//                throw new ExceptionWithConfigData("Credentials incorrect", configData);
+//            }
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -146,44 +146,63 @@ namespace Jackett.Indexers
                 queryCollection.Add("cat", cat);
                 queryCollection.Add("blah", "0");
 
-                var results = await RequestStringWithCookiesAndRetry(searchUrl + queryCollection.GetQueryString());
-                await FollowIfRedirect(results);
-                try
-                {
-                    releases.AddRange(contentToReleaseInfos(results.Content));
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(results.Content, ex);
-                }
+                releases.AddRange(await handleUrl(searchUrl + queryCollection.GetQueryString()));
             }
 
             return releases;
         }
 
-        private IEnumerable<ReleaseInfo> contentToReleaseInfos(CQ dom) {
+        private async Task<IEnumerable<ReleaseInfo>> handleUrl(String url) 
+        {
+            var results = await RequestStringWithCookiesAndRetry(url);
+            await FollowIfRedirect(results); // TODO Is this necessary? 
+            try
+            {
+                return parsePage(results.Content);
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
+            }
+        }
+
+        private ReleaseInfo parseRow(CQ row)
+        {
+            var release = new ReleaseInfo();
+            release.MinimumRatio = 1;
+            release.MinimumSeedTime = 259200;
+
+            release.Title = row["td:nth-child(2) > a"].First().Text().Trim();
+            release.Description = release.Title;
+            release.Guid = new Uri(SiteLink + row["td:nth-child(2) > a"].First().Attr("href"));
+            release.Comments = release.Guid;
+            release.Link = new Uri(SiteLink + row["td:nth-child(3) > a"].First().Attr("href"));
+            release.PublishDate = DateTime.Parse(row["td:nth-child(2) > span"].First().Text().Trim());
+            release.Category = MapTrackerCatToNewznab(row["td:nth-child(1) > a"].First().Attr("href").Split('=')[1]);
+            release.Size = ReleaseInfo.GetBytes(row["td:nth-child(7)"].First().Text());
+            release.Seeders = Int32.Parse(row["td:nth-child(9)"].First().Text());
+            release.Peers = Int32.Parse(row["td:nth-child(10)"].First().Text()) + release.Seeders;
+
+            return release;
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> parsePage(CQ dom) 
+        {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            // Doesn't handle pagination yet...
+            var siteLink = SiteLink;
+
             var rows = dom["div.panel-body > table > tbody > tr"];
             foreach (var row in rows)
             {
-                var release = new ReleaseInfo();
-                release.MinimumRatio = 1;
-                release.MinimumSeedTime = 259200;
+                releases.Add(parseRow(row.Cq()));
+            }
 
-                var qRow = row.Cq();
-                release.Title = qRow.Find("td:nth-child(2) > a").First().Text().Trim();
-                release.Description = release.Title;
-                release.Guid = new Uri(SiteLink + qRow.Find("td:nth-child(2) > a").First().Attr("href"));
-                release.Comments = release.Guid;
-                release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").First().Attr("href"));
-                release.PublishDate = DateTime.Parse(qRow.Find("td:nth-child(2) > span").First().Text().Trim());
-                release.Category = MapTrackerCatToNewznab(qRow.Find("td:nth-child(1) > a").First().Attr("href").Split('=')[1]);
-                release.Size = ReleaseInfo.GetBytes(qRow.Find("td:nth-child(7)").First().Text());
-                release.Seeders = Int32.Parse(qRow.Find("td:nth-child(9)").First().Text());
-                release.Peers = Int32.Parse(qRow.Find("td:nth-child(10)").First().Text()) + release.Seeders;
-                releases.Add(release);
+            // Check if there is a next button
+            if (dom["body > div.page-container > div.main-content > p:nth-child(5)"].Children().Last().Is("body > div.page-container > div.main-content > p:nth-child(5) > a:nth-child(10)")) 
+            {
+                // If so, handle and add it to the collection
+                releases.AddRange(await handleUrl(siteLink + dom["body > div.page-container > div.main-content > p:nth-child(5) > a:nth-child(10)"].Attr("href")));
             }
 
             return releases;
