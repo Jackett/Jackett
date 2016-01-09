@@ -19,7 +19,7 @@ namespace Jackett.Indexers
     public class Demonoid : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "account_handler.php"; } }
-        private string SearchUrl { get { return SiteLink + "files/?category=3&subcategory=All&quality=All&seeded=0&to=1&query={0}"; } }
+        private string SearchUrl { get { return SiteLink + "files/?category={0}&subcategory=All&quality=All&seeded=0&to=1&query={1}"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -38,6 +38,10 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            AddCategoryMapping(3, TorznabCatType.TV);
+            AddCategoryMapping(3, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.TVHD);
+            AddCategoryMapping(1, TorznabCatType.Movies);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -64,9 +68,12 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            var trackerCats = MapTorznabCapsToTrackers(query);
+            var cat = (trackerCats.Count == 1 ? trackerCats.ElementAt(0) : "0");
+            var episodeSearchUrl = string.Format(SearchUrl, cat, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
+            
             if (results.Content.Contains("No torrents found"))
             {
                 return releases;
