@@ -14,6 +14,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Private Trackers
+ * Abnormal
  * AlphaRatio
  * AnimeBytes
  * Avistaz
