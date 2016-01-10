@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using Jackett.Services;
+using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Jackett.Utils
             {
                 // 301 is the status code of permanent redirect
                 context.Response.StatusCode = 301;
-                context.Response.Headers.Set("Location", "/Admin/Dashboard");
+                context.Response.Headers.Set("Location", ServerService.BasePath(context.Request.Uri.AbsolutePath) + "Admin/Dashboard");
             }
             else
             {

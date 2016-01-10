@@ -19,6 +19,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -75,6 +76,16 @@ namespace Jackett.Services
             var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString()));
             var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, file);
             return new Uri(proxyLink);
+        }
+
+        public static string BasePath(string absolutePath)
+        {
+            var regex = new Regex(@"(/[^/]+)*/[Aa]dmin.*");
+            var match = regex.Match(absolutePath);
+            if (match.Success && match.Groups.Count > 1) {
+                return match.Groups[1] + "/";
+            }
+            return "/";
         }
 
         private void LoadConfig()

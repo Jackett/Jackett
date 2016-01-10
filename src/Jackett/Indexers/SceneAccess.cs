@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
+using System.Web;
 
 namespace Jackett.Indexers
 {
@@ -114,7 +115,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var results = await RequestStringWithCookiesAndRetry(string.Format(SearchUrl, query.GetQueryString()));
+            var results = await RequestStringWithCookiesAndRetry(string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString())));
 
             try
             {
