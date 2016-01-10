@@ -77,7 +77,7 @@ namespace Jackett.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            string recaptchaSiteKey = new Regex(@"<div class=""g-recaptcha"" data-sitekey=""([0-9A-Za-z]{5,60})"">").Match(loginPage.Content).Groups[1].ToString().Trim();
+            string recaptchaSiteKey = loginPage.Content["div.g-recaptcha"].Attr("data-sitekey").Trim();
             var result = new ConfigurationDataRecaptchaLogin();
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
