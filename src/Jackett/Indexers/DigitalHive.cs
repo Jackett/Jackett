@@ -38,8 +38,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
-            AddCategoryMapping(0, TorznabCatType.AllCats);
-            AddCategoryMapping(48, TorznabCatType.AllCats); // 0Day
+            AddMultiCategoryMapping(0, TorznabCatType.AllCats);
+            AddMultiCategoryMapping(48, TorznabCatType.AllCats); // 0Day
             AddCategoryMapping(56, TorznabCatType.XXXImageset); // 0Day-Imagesets
             AddCategoryMapping(6, TorznabCatType.Audio); // 0Day-Music
             AddCategoryMapping(51, TorznabCatType.XXX); // 0Day-XXX
@@ -117,13 +117,7 @@ namespace Jackett.Indexers
                 }
             }
 
-            var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
-
-            // Not sure if I have to check for this since doing a search would also give a connected stated or not
-//            if (result.RedirectingTo != "https://www.digitalhive.org/" || result.RedirectingTo != "/")
-//            {
-//                throw new ExceptionWithConfigData("Credentials incorrect", configData);
-//            }
+            await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -158,12 +152,14 @@ namespace Jackett.Indexers
             await FollowIfRedirect(results); // TODO Is this necessary? 
             try
             {
-                return parsePage(results.Content);
+                return await parsePage(results.Content);
             }
             catch (Exception ex)
             {
                 OnParseError(results.Content, ex);
             }
+
+            return new List<ReleaseInfo>();
         }
 
         private ReleaseInfo parseRow(CQ row)
