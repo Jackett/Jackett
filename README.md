@@ -2,10 +2,12 @@
 
 This project is a new fork and is recruiting development help.  If you are able to help out please contact us.
 
+#### Overview
+This software creates a [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/master/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) API server on your machine.  Torznab enables software such as [Sonarr](https://sonarr.tv) to access data from your favorite indexers in a similar fashion to rss but with added features such as searching.  TorrentPotato is an interface accessible to [CouchPotato](https://couchpota.to/).
+
 Jackett works as a proxy server: it translates queries from apps (Sonarr, SickRage, CouchPotato, Mylar, etc) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps. 
 
-Developer note: The software implements the [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/master/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs.
-
+We were previously focused on TV but are working on extending searches to allow for searching other items such as movies, comics, and music.
 
 
 #### Supported Systems
@@ -13,45 +15,47 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Linux and OSX using Mono 4 (v3 should work but you may experience crashes).
 
 
-#### Supported Private Trackers
- * AlphaRatio
- * AnimeBytes
- * Avistaz
- * bB
- * BeyondHD
- * BIT-HDTV
- * BitMeTV
- * BitSoup
- * BlueTigers
- * BTN
- * DanishBits
- * Demonoid
- * EuTorrents
- * FileList
- * Fnt
- * French-ADN
- * Freshon
- * HD-Space
- * HD-Torrents
- * Hounddawgs
- * Immortalseed
- * IPTorrents
- * MoreThanTV
- * NCore
- * NextGen
- * Pretome
- * PrivateHD
- * RevolutionTT
- * SceneAccess
- * SceneTime
- * Shazbat
- * SpeedCD
- * TehConnection
- * TorrentBytes
- * TorrentDay
- * TorrentLeech
- * TorrentShack
- * TV Chaos UK
+#### Supported Trackers
+ * [AlphaRatio](https://alpharatio.cc/)
+ * [AnimeBytes](https://animebytes.tv/)
+ * [AnimeTorrents](http://animetorrents.me/)
+ * [Avistaz](https://avistaz.to/)
+ * [BakaBT](http://bakabt.me/)
+ * [bB](http://reddit.com/r/baconbits)
+ * [BeyondHD](https://beyondhd.me/)
+ * [BIT-HDTV](https://www.bit-hdtv.com)
+ * [BitMeTV](http://www.bitmetv.org/)
+ * [BlueTigers](https://www.bluetigers.ca/)
+ * [BTN](http://broadcasthe.net)
+ * [Demonoid](http://www.demonoid.pw/)
+ * [EuTorrents](https://eutorrents.to/)
+ * [FileList](http://filelist.ro/)
+ * [FrenchTorrentDb](http://www.frenchtorrentdb.com/)
+ * [Freshon](https://freshon.tv/)
+ * [HD-Space](https://hd-space.org/)
+ * [HD-Torrents.org](https://hd-torrents.org/)
+ * [Immortalseed.me](http://immortalseed.me)
+ * [IPTorrents](https://iptorrents.com/)
+ * [MoreThan.tv](https://morethan.tv/)
+ * [NextGen](https://nxtgn.org/)
+ * [pretome](https://pretome.info)
+ * [PrivateHD](https://privatehd.to/)
+ * [RARBG](https://rarbg.to/)
+ * [RuTor](http://rutor.org/)
+ * [SceneAccess](https://sceneaccess.eu/login)
+ * [SceneTime](https://www.scenetime.com/)
+ * [Shazbat](www.shazbat.tv/login)
+ * [ShowRSS](https://showrss.info/)
+ * [Strike](https://getstrike.net/)
+ * [T411](http://www.t411.io/)
+ * [TehConnection](https://tehconnection.eu/) 
+ * [The Pirate Bay](https://thepiratebay.se/)
+ * [TorrentBytes](https://www.torrentbytes.net/)
+ * [TorrentDay](https://torrentday.eu/)
+ * [TorrentLeech](http://www.torrentleech.org/)
+ * [TorrentShack](http://torrentshack.me/)
+ * [Torrentz](https://torrentz.eu/)
+ * [TV Chaos UK](https://tvchaosuk.com/)
  * World-In-HD
  * XSpeeds
 
@@ -92,7 +96,7 @@ You can get additional logging with the switches "-t -l".  Please post logs if y
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
 
 ### Contributing
-All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.  We currently only support private trackers.
+All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/zone117x/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.
 
 
 ### Screenshots
