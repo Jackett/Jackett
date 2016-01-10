@@ -301,6 +301,7 @@
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\HttpWebClient.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
+    <Compile Include="Indexers\MyAnonamouse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -599,6 +600,9 @@
     </Content>
     <Content Include="Resources\validator_reply.xml" />
     <Content Include="Content\logos\alpharatio.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\myanonamouse.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
