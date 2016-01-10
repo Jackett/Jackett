@@ -75,8 +75,7 @@ namespace Jackett.Indexers
             };
 
             var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, null, null);
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SearchUrl, SiteLink);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
@@ -104,6 +103,7 @@ namespace Jackett.Indexers
             }
 
             queryCollection.Add("cat", cat);
+            queryCollection.Add("dlable", "1");
             queryCollection.Add("searchin", "filename");
             queryCollection.Add("search", searchString);
             queryCollection.Add("page", "1");
@@ -117,57 +117,60 @@ namespace Jackett.Indexers
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrlReferer, extraHeaders);
 
             var results = response.Content;
-            try
+            if (!string.IsNullOrWhiteSpace(results))
             {
-                CQ dom = results;
-
-                var rows = dom["tr"];
-                foreach (var row in rows.Skip(1))
+                try
                 {
-                    var release = new ReleaseInfo();
-                    var qRow = row.Cq();
-                    var qTitleLink = qRow.Find("td:eq(1) a:eq(0)").First();
-                    release.Title = qTitleLink.Find("strong").Text().Trim();
+                    CQ dom = results;
 
-                    // If we search an get no results, we still get a table just with no info.
-                    if (string.IsNullOrWhiteSpace(release.Title))
+                    var rows = dom["tr"];
+                    foreach (var row in rows.Skip(1))
                     {
-                        break;
+                        var release = new ReleaseInfo();
+                        var qRow = row.Cq();
+                        var qTitleLink = qRow.Find("td:eq(1) a:eq(0)").First();
+                        release.Title = qTitleLink.Find("strong").Text().Trim();
+
+                        // If we search an get no results, we still get a table just with no info.
+                        if (string.IsNullOrWhiteSpace(release.Title))
+                        {
+                            break;
+                        }
+
+                        release.Description = release.Title;
+                        release.Guid = new Uri(qTitleLink.Attr("href"));
+                        release.Comments = release.Guid;
+
+                        var dateString = qRow.Find("td:eq(4)").Text();
+                        release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
+
+                        var qLink = qRow.Find("td:eq(2) a");
+                        release.Link = new Uri(qLink.Attr("href"));
+
+                        var sizeStr = qRow.Find("td:eq(5)").Text();
+                        release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                        var connections = qRow.Find("td:eq(7)").Text().Trim().Split("/".ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
+
+                        release.Seeders = ParseUtil.CoerceInt(connections[0].Trim());
+                        release.Peers = ParseUtil.CoerceInt(connections[1].Trim()) + release.Seeders;
+
+                        var rCat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                        var rCatIdx = rCat.IndexOf("cat=");
+                        if (rCatIdx > -1)
+                        {
+                            rCat = rCat.Substring(rCatIdx + 4);
+                        }
+
+                        release.Category = MapTrackerCatToNewznab(rCat);
+
+                        releases.Add(release);
                     }
-
-                    release.Description = release.Title;
-                    release.Guid = new Uri(qTitleLink.Attr("href"));
-                    release.Comments = release.Guid;
-
-                    var dateString = qRow.Find("td:eq(4)").Text();
-                    release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
-
-                    var qLink = qRow.Find("td:eq(2) a");
-                    release.Link = new Uri(qLink.Attr("href"));
-
-                    var sizeStr = qRow.Find("td:eq(5)").Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    var connections = qRow.Find("td:eq(7)").Text().Trim().Split("/".ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
-
-                    release.Seeders = ParseUtil.CoerceInt(connections[0].Trim());
-                    release.Peers = ParseUtil.CoerceInt(connections[1].Trim()) + release.Seeders;
-
-                    var rCat = row.Cq().Find("td:eq(0) a").First().Attr("href");
-                    var rCatIdx = rCat.IndexOf("cat=");
-                    if (rCatIdx > -1)
-                    {
-                        rCat = rCat.Substring(rCatIdx + 4);
-                    }
-
-                    release.Category = MapTrackerCatToNewznab(rCat);
-
-                    releases.Add(release);
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results, ex);
+                catch (Exception ex)
+                {
+                    OnParseError(results, ex);
+                }
             }
 
             return releases;
