@@ -115,7 +115,7 @@ namespace Jackett
         }
 
 
-        private static void SetupLogging(ContainerBuilder builder)
+        public static void SetupLogging(ContainerBuilder builder = null, string logfile = "log.txt")
         {
             var logLevel = Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
@@ -125,7 +125,7 @@ namespace Jackett
             var logFile = new FileTarget();
             logConfig.AddTarget("file", logFile);
             logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-            logFile.FileName = Path.Combine(ConfigurationService.GetAppDataFolderStatic(), "log.txt");
+            logFile.FileName = Path.Combine(ConfigurationService.GetAppDataFolderStatic(), logfile);
             logFile.ArchiveFileName = "log.{#####}.txt";
             logFile.ArchiveAboveSize = 500000;
             logFile.MaxArchiveFiles = 5;
@@ -147,9 +147,10 @@ namespace Jackett
             logConfig.LoggingRules.Add(serviceRule);
 
             LogManager.Configuration = logConfig;
-            builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
-
-
+            if (builder != null)
+            {
+                builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
+            }
         }
 
         public static void SetLogLevel(LogLevel level)

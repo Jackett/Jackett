@@ -21,8 +21,9 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
+            Engine.SetupLogging(null, "updater.txt");
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
-
+            Engine.Logger.Info("Options " + string.Join(" ", args));
             try {
                 var options = new UpdaterConsoleOptions();
                 if (Parser.Default.ParseArguments(args, options))
@@ -78,7 +79,7 @@ namespace Jackett.Updater
 
             Engine.Logger.Info("Waiting for Jackett to close..");
             Thread.Sleep(2000);
-
+            Engine.Logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
             foreach(var file in files)
             {
