@@ -1,11 +1,13 @@
-﻿$(document).ready(function () {
+﻿var basePath = "";
+
+$(document).ready(function () {
     $.ajaxSetup({ cache: false });
     window.jackettIsLocal = window.location.hostname === 'localhost' ||
                     window.location.hostname === '127.0.0.1';
 
     bindUIButtons();
-    reloadIndexers();
     loadJackettSettings();
+    reloadIndexers();
 });
 
 function getJackettConfig(callback) {
@@ -22,6 +24,8 @@ function loadJackettSettings() {
         $("#api-key-input").val(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
+        $("#jackett-basepathoverride").val(data.config.basepathoverride);
+        basePath = data.config.basepathoverride;
         $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
         $("#jackett-allowupdate").attr('checked', data.config.updatedisabled);
@@ -52,8 +56,8 @@ function displayIndexers(items) {
     $('#unconfigured-indexers-template').empty();
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        item.torznab_host = resolveUrl("/torznab/" + item.id);
-        item.potato_host = resolveUrl("/potato/" + item.id);
+        item.torznab_host = resolveUrl("/" + basePath + "/torznab/" + item.id);
+        item.potato_host = resolveUrl("/" + basePath + "/potato/" + item.id);
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
@@ -548,6 +552,7 @@ function bindUIButtons() {
 
     $("#change-jackett-port").click(function () {
         var jackett_port = $("#jackett-port").val();
+        var jackett_basepathoverride = $("#jackett-basepathoverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
         var jackett_update = $("#jackett-allowupdate").is(':checked'); 
         var jackett_prerelease = $("#jackett-prerelease").is(':checked'); 
@@ -558,7 +563,8 @@ function bindUIButtons() {
             updatedisabled: jackett_update,
             prerelease: jackett_prerelease,
             blackholedir: $("#jackett-savedir").val(),
-            logging: jackett_logging
+            logging: jackett_logging,
+            basepathoverride: jackett_basepathoverride
         };
         var jqxhr = $.post("set_config", JSON.stringify(jsonObject), function (data) {
             if (data.result == "error") {
@@ -567,12 +573,7 @@ function bindUIButtons() {
             } else {
                 doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
                 window.setTimeout(function () {
-                    url = window.location.href;
-                    if (data.external) {
-                        window.location.href = url.substr(0, url.lastIndexOf(":") + 1) + data.port;
-                    } else {
-                        window.location.href = 'http://127.0.0.1:' + data.port;
-                    }
+                    window.location.reload(true);
                 }, 3000);
 
             }

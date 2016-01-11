@@ -100,7 +100,7 @@ namespace Jackett.Controllers
 
             logger.Info(logBuilder.ToString());
 
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, ServerService.BasePath(Request.RequestUri.AbsolutePath));
+            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
             var resultPage = new ResultPage(new ChannelInfo
             {
                 Title = indexer.DisplayName,

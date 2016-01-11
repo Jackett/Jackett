@@ -34,6 +34,7 @@ namespace Jackett.Services
         ServerConfig Config { get; }
         void SaveConfig();
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
+        string BasePath();
     }
 
     public class ServerService : IServerService
@@ -78,14 +79,21 @@ namespace Jackett.Services
             return new Uri(proxyLink);
         }
 
-        public static string BasePath(string absolutePath)
+        public string BasePath()
         {
-            var regex = new Regex(@"(/[^/]+)*/[Aa]dmin.*");
-            var match = regex.Match(absolutePath);
-            if (match.Success && match.Groups.Count > 1) {
-                return match.Groups[1] + "/";
+            if (config.BasePathOverride == null || config.BasePathOverride == "") {
+                return "/";
             }
-            return "/";
+            var path = config.BasePathOverride;
+            if (!path.EndsWith("/"))
+            {
+                path = path + "/";
+            }
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
+            return path;
         }
 
         private void LoadConfig()
@@ -150,6 +158,7 @@ namespace Jackett.Services
             logger.Info("Starting web server at " + config.GetListenAddresses()[0]);
             var startOptions = new StartOptions();
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
+            Startup.BasePath = BasePath();
             _server = WebApp.Start<Startup>(startOptions);
             logger.Debug("Web server started");
             updater.StartUpdateChecker();
