@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using Jackett.Services;
+using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Jackett.Utils
     {
         public WebApiRootRedirectMiddleware(OwinMiddleware next)
             : base(next)
-        { 
+        {
         }
 
         public async override Task Invoke(IOwinContext context)
@@ -21,7 +22,9 @@ namespace Jackett.Utils
             {
                 // 301 is the status code of permanent redirect
                 context.Response.StatusCode = 301;
-                context.Response.Headers.Set("Location", "/Admin/Dashboard");
+                var redir = Startup.BasePath + "Admin/Dashboard";
+                Engine.Logger.Info("redirecting to " + redir);
+                context.Response.Headers.Set("Location", redir);
             }
             else
             {

@@ -58,6 +58,12 @@ namespace Jackett
             set;
         }
 
+        public static string BasePath
+        {
+            get;
+            set;
+        }
+
         public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
