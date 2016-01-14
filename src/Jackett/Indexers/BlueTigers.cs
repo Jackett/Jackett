@@ -31,7 +31,7 @@ namespace Jackett.Indexers
         public BlueTigers(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BlueTigers",
                 description: "BlueTigers - No Ratio - Private",
-                link: "https://www.bluetigers.ca/",
+                link: "http://www.bluetigers.ca/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
