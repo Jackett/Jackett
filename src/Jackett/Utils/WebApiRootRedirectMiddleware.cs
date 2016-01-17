@@ -18,6 +18,11 @@ namespace Jackett.Utils
         public async override Task Invoke(IOwinContext context)
         {
             var url = context.Request.Uri;
+            if(context.Request.Path != null && context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(Startup.BasePath))
+            {
+                context.Request.Path = new PathString(context.Request.Path.Value.Substring(Startup.BasePath.Length-1));
+            }
+
             if (string.IsNullOrWhiteSpace(url.AbsolutePath) || url.AbsolutePath == "/")
             {
                 // 301 is the status code of permanent redirect
@@ -28,6 +33,8 @@ namespace Jackett.Utils
             }
             else
             {
+
+
                 await Next.Invoke(context);
             }
         }

@@ -1,4 +1,4 @@
-﻿var basePath = "";
+﻿var basePath = '';
 
 $(document).ready(function () {
     $.ajaxSetup({ cache: false });
@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     bindUIButtons();
     loadJackettSettings();
-    reloadIndexers();
+   
 });
 
 function getJackettConfig(callback) {
@@ -26,6 +26,10 @@ function loadJackettSettings() {
         $("#jackett-port").val(data.config.port);
         $("#jackett-basepathoverride").val(data.config.basepathoverride);
         basePath = data.config.basepathoverride;
+        if (basePath === null || basePath === undefined) {
+            basePath = '';
+        }
+       
         $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
         $("#jackett-allowupdate").attr('checked', data.config.updatedisabled);
@@ -36,6 +40,8 @@ function loadJackettSettings() {
         if (password != null && password != '') {
             $("#logoutBtn").show();
         }
+
+        reloadIndexers();
     });
 }
 
@@ -56,8 +62,8 @@ function displayIndexers(items) {
     $('#unconfigured-indexers-template').empty();
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        item.torznab_host = resolveUrl("/" + basePath + "/torznab/" + item.id);
-        item.potato_host = resolveUrl("/" + basePath + "/potato/" + item.id);
+        item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
+        item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
