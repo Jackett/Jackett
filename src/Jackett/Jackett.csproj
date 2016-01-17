@@ -164,7 +164,6 @@
     <Compile Include="Indexers\BroadcastTheNet.cs" />
     <Compile Include="Indexers\DanishBits.cs" />
     <Compile Include="Indexers\Abnormal.cs" />
-    <Compile Include="Indexers\Fnt.cs" />
     <Compile Include="Indexers\GFTracker.cs" />
     <Compile Include="Indexers\RevolutionTT.cs" />
     <Compile Include="Indexers\TehConnection.cs" />
@@ -185,7 +184,6 @@
     <Compile Include="Models\GitHub\Release.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFnt.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFrenchADN.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
@@ -448,9 +446,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\filelist.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\fnt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\gftracker.png">
