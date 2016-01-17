@@ -26,7 +26,7 @@ namespace Jackett.Utils
             if (string.IsNullOrWhiteSpace(url.AbsolutePath) || url.AbsolutePath == "/")
             {
                 // 301 is the status code of permanent redirect
-                context.Response.StatusCode = 301;
+                context.Response.StatusCode = 302;
                 var redir = Startup.BasePath + "Admin/Dashboard";
                 Engine.Logger.Info("redirecting to " + redir);
                 context.Response.Headers.Set("Location", redir);

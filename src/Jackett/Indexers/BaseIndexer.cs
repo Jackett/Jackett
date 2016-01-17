@@ -141,7 +141,7 @@ namespace Jackett.Indexers
 
         protected void CleanCache()
         {
-            foreach (var expired in cache.Where(i => i.Created - DateTime.Now > cacheTime).ToList())
+            foreach (var expired in cache.Where(i => DateTime.Now - i.Created > cacheTime).ToList())
             {
                 cache.Remove(expired);
             }
