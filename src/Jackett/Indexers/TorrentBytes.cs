@@ -152,15 +152,18 @@ namespace Jackett.Indexers
                         break;
                     }
 
-                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(15);
-                    release.Category = MapTrackerCatToNewznab(cat);
-
+                    // Check if the release has been assigned a category
+                    if (row.Cq().Find("td:eq(0) a").Length > 0)
+                    {
+                        var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(15);
+                        release.Category = MapTrackerCatToNewznab(cat);
+                    }
 
                     var qLink = row.Cq().Find("td:eq(1) a").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var added = row.Cq().Find("td:eq(4)").First().Text().Trim();
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(added);
+                    release.PublishDate = DateTime.ParseExact(added, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     var sizeStr = row.Cq().Find("td:eq(6)").First().Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
