@@ -50,6 +50,11 @@ namespace Jackett.Utils.Clients
         private async Task<WebClientByteResult> Run(WebRequest request)
         {
             var args = new StringBuilder();
+            if (Startup.ProxyConnection != null)
+            {
+                args.AppendFormat("-x " + Startup.ProxyConnection + " ");
+            }
+            
             args.AppendFormat("--url \"{0}\" ", request.Url);
            
             if (request.EmulateBrowser)
@@ -86,11 +91,16 @@ namespace Jackett.Utils.Clients
                 // https://git.fedorahosted.org/cgit/mod_nss.git/plain/docs/mod_nss.html
                 args.Append("--cipher " + SSLFix.CipherList);
             }
-
+            if (Startup.IgnoreSslErrors == true)
+            {
+                args.Append("-k ");
+            }
+            args.Append("-H \"Accept-Language: en-US,en\" ");
+            args.Append("-H \"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\" ");
             string stdout = null;
             await Task.Run(() =>
             {
-                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix ? "curl" : "curl.exe", args.ToString(), true);
+                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix ? "curl" : "curl.exe", args.ToString() , true);
             });
 
             var outputData = File.ReadAllBytes(tempFile);
@@ -101,6 +111,16 @@ namespace Jackett.Utils.Clients
             if (headSplit < 0)
                 throw new Exception("Invalid response");
             var headers = stdout.Substring(0, headSplit);
+            if (Startup.ProxyConnection != null)
+            {
+                // the proxy provided headers too so we need to split headers again
+                var headSplit1 = stdout.IndexOf("\r\n\r\n",headSplit + 4);
+                if (headSplit1 > 0)
+                {
+                    headers = stdout.Substring(headSplit + 4,headSplit1 - (headSplit + 4));
+                    headSplit = headSplit1;
+                }
+            }
             var headerCount = 0;
             var cookieBuilder = new StringBuilder();
             var cookies = new List<Tuple<string, string>>();
@@ -130,6 +150,24 @@ namespace Jackett.Utils.Clients
                                 break;
                             case "location":
                                 result.RedirectingTo = value.Trim();
+                                break;
+                            case "refresh":
+                                //"Refresh: 8;URL=/cdn-cgi/l/chk_jschl?pass=1451000679.092-1vJFUJLb9R"
+                                var redirval = "";
+                                var start = value.IndexOf("=");
+                                var end = value.IndexOf(";");
+                                var len = value.Length;
+                                if (start > -1)
+                                {
+                                    redirval = value.Substring(start + 1);
+                                    result.RedirectingTo = redirval;
+                                    // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
+                                    // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
+                                    // it shoudln't include service unavailable..only if we have this redirect header.
+                                    result.Status = System.Net.HttpStatusCode.Redirect;
+                                    var redirtime = Int32.Parse(value.Substring(0, end));
+                                    System.Threading.Thread.Sleep(redirtime * 1000);
+                                }
                                 break;
                         }
                     }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett", "Jackett\Jackett.csproj", "{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}"
 EndProject
@@ -22,10 +22,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Tray", "Jackett.Tray\Jackett.Tray.csproj", "{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Test", "Jackett.Test\Jackett.Test.csproj", "{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Distribution", "Jackett.Distribution\Jackett.Distribution.csproj", "{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{6B6AB1B0-5ABD-4696-A3D2-70E991174625}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Updater", "Jackett.Updater\Jackett.Updater.csproj", "{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}"
 EndProject
@@ -59,14 +55,6 @@ Global
 		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99D893EC-1A8A-42A9-AC6B-FE047AFC32F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B6AB1B0-5ABD-4696-A3D2-70E991174625}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU

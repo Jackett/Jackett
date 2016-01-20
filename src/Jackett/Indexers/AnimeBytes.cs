@@ -27,6 +27,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "user/login"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
+        public bool InsertSeason { get { return configData.InsertSeason!=null && configData.InsertSeason.Value; } }
 
         new ConfigurationDataAnimeBytes configData
         {
@@ -51,6 +52,13 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataAnimeBytes())
         {
 
+        }
+
+
+        public IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
+        {
+            // Prevent filtering
+            return input;
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -119,12 +127,20 @@ namespace Jackett.Indexers
             base.LoadFromSavedConfiguration(jsonConfig);
         }
 
+        private string StripEpisodeNumber(string term)
+        {
+            // Tracer does not support searching with episode number so strip it if we have one
+            term = Regex.Replace(term, @"\W(\dx)?\d?\d$", string.Empty);
+            term = Regex.Replace(term, @"\W(S\d\d?E)?\d?\d$", string.Empty);
+            return term;
+        }
+
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             // The result list
             var releases = new List<ReleaseInfo>();
 
-            foreach (var result in await GetResults(query.SanitizedSearchTerm))
+            foreach (var result in await GetResults(StripEpisodeNumber(query.SanitizedSearchTerm)))
             {
                 releases.Add(result);
             }
@@ -135,14 +151,6 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> GetResults(string searchTerm)
         {
             var cleanSearchTerm = HttpUtility.UrlEncode(searchTerm);
-
-            // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                var splitindex = searchTerm.LastIndexOf(' ');
-                if (splitindex > -1)
-                    searchTerm = searchTerm.Substring(0, splitindex);
-            }
 
             // The result list
             var releases = new List<ReleaseInfo>();
@@ -244,6 +252,12 @@ namespace Jackett.Indexers
                                 releaseInfo = releaseInfo.Replace("Episode ", "");
                                 releaseInfo = releaseInfo.Replace("Season ", "S");
                                 releaseInfo = releaseInfo.Trim();
+                                int test = 0;
+                                if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length==1)
+                                {
+                                    releaseInfo = "S01E0" + releaseInfo;
+                                }
+
                             }
                             else if (rowCq.HasClass("torrent"))
                             {

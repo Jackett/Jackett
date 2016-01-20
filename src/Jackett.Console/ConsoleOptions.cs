@@ -27,6 +27,9 @@ namespace Jackett.Console
         [Option('c', "UseClient",  HelpText = "Override web client selection. [automatic(Default)/libcurl/safecurl/httpclient]")]
         public string Client { get; set; }
 
+        [Option('j', "ProxyConnection", HelpText = "use proxy - e.g. 127.0.0.1:8888")]
+        public string ProxyConnection { get; set; }
+
         [Option('s', "Start",  HelpText = "Start the Jacket Windows service (Must be admin)")]
         public bool StartService { get; set; }
 

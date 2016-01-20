@@ -1,15 +1,17 @@
-﻿$(document).ready(function () {
+﻿var basePath = '';
+
+$(document).ready(function () {
     $.ajaxSetup({ cache: false });
     window.jackettIsLocal = window.location.hostname === 'localhost' ||
                     window.location.hostname === '127.0.0.1';
 
     bindUIButtons();
-    reloadIndexers();
     loadJackettSettings();
+   
 });
 
 function getJackettConfig(callback) {
-    var jqxhr = $.get("/admin/get_jackett_config", function (data) {
+    var jqxhr = $.get("get_jackett_config", function (data) {
 
         callback(data);
     }).fail(function () {
@@ -22,15 +24,24 @@ function loadJackettSettings() {
         $("#api-key-input").val(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
+        $("#jackett-basepathoverride").val(data.config.basepathoverride);
+        basePath = data.config.basepathoverride;
+        if (basePath === null || basePath === undefined) {
+            basePath = '';
+        }
+       
         $("#jackett-savedir").val(data.config.blackholedir);
         $("#jackett-allowext").attr('checked', data.config.external);
         $("#jackett-allowupdate").attr('checked', data.config.updatedisabled);
+        $("#jackett-prerelease").attr('checked', data.config.prerelease);
         $("#jackett-logging").attr('checked', data.config.logging);
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
         if (password != null && password != '') {
             $("#logoutBtn").show();
         }
+
+        reloadIndexers();
     });
 }
 
@@ -38,7 +49,7 @@ function reloadIndexers() {
     $('#indexers').hide();
     $('#indexers > .indexer').remove();
     $('#unconfigured-indexers').empty();
-    var jqxhr = $.get("/admin/get_indexers", function (data) {
+    var jqxhr = $.get("get_indexers", function (data) {
         displayIndexers(data.items);
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -51,8 +62,8 @@ function displayIndexers(items) {
     $('#unconfigured-indexers-template').empty();
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        item.torznab_host = resolveUrl("/torznab/" + item.id);
-        item.potato_host = resolveUrl("/potato/" + item.id);
+        item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
+        item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
         if (item.configured)
             $('#indexers').append(indexerTemplate(item));
         else
@@ -71,9 +82,10 @@ function displayIndexers(items) {
         $('.indexer-setup').each(function (i, btn) {
             var $btn = $(btn);
             var id = $btn.data("id");
+            var link = $btn.data("link");
             $btn.click(function () {
                 $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                    displayIndexerSetup(id);
+                    displayIndexerSetup(id, link);
                 });
             });
         });
@@ -90,7 +102,7 @@ function prepareDeleteButtons() {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            var jqxhr = $.post("/admin/delete_indexer", JSON.stringify({ indexer: id }), function (data) {
+            var jqxhr = $.post("delete_indexer", JSON.stringify({ indexer: id }), function (data) {
                 if (data.result == "error") {
                     doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
                 }
@@ -110,8 +122,9 @@ function prepareSetupButtons() {
     $('.indexer-setup').each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
+        var link = $btn.data("link");
         $btn.click(function () {
-            displayIndexerSetup(id);
+            displayIndexerSetup(id, link);
         });
     });
 }
@@ -122,7 +135,7 @@ function prepareTestButtons() {
         var id = $btn.data("id");
         $btn.click(function () {
             doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-            var jqxhr = $.post("/admin/test_indexer", JSON.stringify({ indexer: id }), function (data) {
+            var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
                 if (data.result == "error") {
                     doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
                 }
@@ -136,15 +149,15 @@ function prepareTestButtons() {
     });
 }
 
-function displayIndexerSetup(id) {
+function displayIndexerSetup(id, link) {
 
-    var jqxhr = $.post("/admin/get_config_form", JSON.stringify({ indexer: id }), function (data) {
+    var jqxhr = $.post("get_config_form", JSON.stringify({ indexer: id }), function (data) {
         if (data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         }
 
-        populateSetupForm(id, data.name, data.config, data.caps);
+        populateSetupForm(id, data.name, data.config, data.caps, link);
 
     }).fail(function () {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -195,9 +208,9 @@ function populateConfigItems(configForm, config) {
     }
 }
 
-function newConfigModal(title, config, caps) {
+function newConfigModal(title, config, caps, link) {
     var configTemplate = Handlebars.compile($("#jackett-config-setup-modal").html());
-    var configForm = $(configTemplate({ title: title, caps: caps }));
+    var configForm = $(configTemplate({ title: title, caps: caps, link:link }));
     $("#modals").append(configForm);
     populateConfigItems(configForm, config);
     return configForm;
@@ -233,8 +246,8 @@ function getConfigModalJson(configForm) {
     return configJson;
 }
 
-function populateSetupForm(indexerId, name, config, caps) {
-    var configForm = newConfigModal(name, config, caps);
+function populateSetupForm(indexerId, name, config, caps, link) {
+    var configForm = newConfigModal(name, config, caps, link);
     var $goButton = configForm.find(".setup-indexer-go");
     $goButton.click(function () {
         var data = { indexer: indexerId, name: name };
@@ -244,7 +257,7 @@ function populateSetupForm(indexerId, name, config, caps) {
         $goButton.prop('disabled', true);
         $goButton.html($('#spinner').html());
 
-        var jqxhr = $.post("/admin/configure_indexer", JSON.stringify(data), function (data) {
+        var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
             if (data.result == "error") {
                 if (data.config) {
                     populateConfigItems(configForm, data.config);
@@ -318,7 +331,7 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-releases").click(function () {
-        var jqxhr = $.get("/admin/GetCache", function (data) {
+        var jqxhr = $.get("GetCache", function (data) {
             var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
             var item = { releases: data, Title: 'Releases' };
             var releaseDialog = $(releaseTemplate(item));
@@ -400,7 +413,7 @@ function bindUIButtons() {
 
     $("#jackett-show-search").click(function () {
         $('#select-indexer-modal').remove();
-        var jqxhr = $.get("/admin/get_indexers", function (data) {
+        var jqxhr = $.get("get_indexers", function (data) {
             var scope = {
                 items: data.items
             };
@@ -456,7 +469,7 @@ function bindUIButtons() {
                 $('#searchResults').empty();
 
                 $('#jackett-search-perform').html($('#spinner').html());
-                var jqxhr = $.post("/admin/search", queryObj, function (data) {
+                var jqxhr = $.post("search", queryObj, function (data) {
                     $('#jackett-search-perform').html('Search trackers');
                     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
                     var results = $('#searchResults');
@@ -531,7 +544,7 @@ function bindUIButtons() {
     });
 
     $("#view-jackett-logs").click(function () {
-        var jqxhr = $.get("/admin/GetLogs", function (data) {
+        var jqxhr = $.get("GetLogs", function (data) {
             var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
             var item = { logs: data };
             var releaseDialog = $(releaseTemplate(item));
@@ -545,29 +558,28 @@ function bindUIButtons() {
 
     $("#change-jackett-port").click(function () {
         var jackett_port = $("#jackett-port").val();
+        var jackett_basepathoverride = $("#jackett-basepathoverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
-        var jackett_update = $("#jackett-allowupdate").is(':checked');
+        var jackett_update = $("#jackett-allowupdate").is(':checked'); 
+        var jackett_prerelease = $("#jackett-prerelease").is(':checked'); 
         var jackett_logging = $("#jackett-logging").is(':checked');
         var jsonObject = {
             port: jackett_port,
             external: jackett_external,
             updatedisabled: jackett_update,
+            prerelease: jackett_prerelease,
             blackholedir: $("#jackett-savedir").val(),
-            logging: jackett_logging
+            logging: jackett_logging,
+            basepathoverride: jackett_basepathoverride
         };
-        var jqxhr = $.post("/admin/set_config", JSON.stringify(jsonObject), function (data) {
+        var jqxhr = $.post("set_config", JSON.stringify(jsonObject), function (data) {
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
             } else {
                 doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
                 window.setTimeout(function () {
-                    url = window.location.href;
-                    if (data.external) {
-                        window.location.href = url.substr(0, url.lastIndexOf(":") + 1) + data.port;
-                    } else {
-                        window.location.href = 'http://127.0.0.1:' + data.port;
-                    }
+                    window.location.reload(true);
                 }, 3000);
 
             }
@@ -577,7 +589,7 @@ function bindUIButtons() {
     });
 
     $("#trigger-updater").click(function () {
-        var jqxhr = $.get("/admin/trigger_update", function (data) {
+        var jqxhr = $.get("trigger_update", function (data) {
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
@@ -593,7 +605,7 @@ function bindUIButtons() {
         var password = $("#jackett-adminpwd").val();
         var jsonObject = { password: password };
 
-        var jqxhr = $.post("/admin/set_admin_password", JSON.stringify(jsonObject), function (data) {
+        var jqxhr = $.post("set_admin_password", JSON.stringify(jsonObject), function (data) {
 
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");

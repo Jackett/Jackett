@@ -8,18 +8,17 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.RegularExpressions;
+using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class SpeedCD : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "take.login.php"; } }
-        private string SearchUrl { get { return SiteLink + "V3/API/API.php"; } }
-        private string CommentsUrl { get { return SiteLink + "t/{0}"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -30,7 +29,7 @@ namespace Jackett.Indexers
         public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Speed.cd",
                 description: "Your home now!",
-                link: "http://speed.cd/",
+                link: "https://speed.cd/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
@@ -91,13 +90,11 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            Dictionary<string, string> qParams = new Dictionary<string, string>();
-            qParams.Add("jxt", "4");
-            qParams.Add("jxw", "b");
+            NameValueCollection qParams = new NameValueCollection();
 
-            if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
+            if (!string.IsNullOrEmpty(query.GetQueryString()))
             {
-                qParams.Add("search", query.SanitizedSearchTerm);
+                qParams.Add("search", query.GetQueryString());
             }
 
             List<string> catList = MapTorznabCapsToTrackers(query);
@@ -105,40 +102,58 @@ namespace Jackett.Indexers
             {
                 qParams.Add("c" + cat, "1");
             }
-            
-            var response = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
+
+            string urlSearch = SearchUrl;
+            if (qParams.Count > 0)
+            {
+                urlSearch += $"?{qParams.GetQueryString()}";
+            }
+
+            var response = await RequestStringWithCookiesAndRetry(urlSearch);
+
             try
             {
-                var jsonResult = JObject.Parse(response.Content);
-                var resultArray = ((JArray)jsonResult["Fs"])[0]["Cn"]["torrents"];
-                foreach (var jobj in resultArray)
+                CQ dom = response.Content;
+                var rows = dom["div[id='torrentTable'] > div[class='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
+
+                foreach (IDomObject row in rows)
                 {
+                    CQ torrentData = row.OuterHTML;
+                    CQ cells = row.Cq().Find("td");
+
+                    string title = torrentData.Find("a[class='torrent']").First().Text().Trim();
+                    Uri link = new Uri(SiteLink + torrentData.Find("img[class='icos save']").First().Parent().Attr("href").Trim());
+                    Uri guid = new Uri(SiteLink + torrentData.Find("a[class='torrent']").First().Attr("href").Trim().TrimStart('/'));
+                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
+                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
+                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+
+                    string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
+                    DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                    long category = 0;
+                    string cat = torrentData.Find("a[class='cat']").First().Attr("id").Trim();
+                    long.TryParse(cat, out category);
+
+
                     var release = new ReleaseInfo();
 
-                    var id = (int)jobj["id"];
-                    release.Comments = new Uri(string.Format(CommentsUrl, id));
-                    release.Guid = release.Comments;
-                    release.Link = new Uri(string.Format(DownloadUrl, id));
-
-                    release.Title = Regex.Replace((string)jobj["name"], "<.*?>", String.Empty);
-
-                    var SizeStr = ((string)jobj["size"]);
-                    release.Size = ReleaseInfo.GetBytes(SizeStr);
-
-                    var cat = (int)jobj["cat"];
-                    release.Category = MapTrackerCatToNewznab(cat.ToString());
-
-                    release.Seeders = ParseUtil.CoerceInt((string)jobj["seed"]);
-                    release.Peers = ParseUtil.CoerceInt((string)jobj["leech"]) + release.Seeders;
-
-                    // ex: Tuesday, May 26, 2015 at 6:00pm
-                    var dateStr = new Regex("title=\"(.*?)\"").Match((string)jobj["added"]).Groups[1].ToString();
-                    dateStr = dateStr.Replace(" at", "");
-                    var dateTime = DateTime.ParseExact(dateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
-                    release.PublishDate = dateTime.ToLocalTime();
+                    release.Title = title;
+                    release.Guid = guid;
+                    release.Link = link;
+                    release.PublishDate = publishDate;
+                    release.Size = size;
+                    release.Description = release.Title;
+                    release.Seeders = seeders;
+                    release.Peers = seeders + leechers;
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    release.Category = MapTrackerCatToNewznab(category.ToString());
+                    release.Comments = guid;
 
                     releases.Add(release);
                 }
+
             }
             catch (Exception ex)
             {

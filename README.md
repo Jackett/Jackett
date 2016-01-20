@@ -14,6 +14,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Private Trackers
+ * Abnormal
  * AlphaRatio
  * AnimeBytes
  * Avistaz
@@ -21,12 +22,15 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BeyondHD
  * BIT-HDTV
  * BitMeTV
+ * BitSoup
  * BlueTigers
  * BTN
  * DanishBits
  * Demonoid
  * EuTorrents
  * FileList
+ * Fnt
+ * French-ADN
  * Freshon
  * HD-Space
  * HD-Torrents
@@ -38,6 +42,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NextGen
  * Pretome
  * PrivateHD
+ * RevolutionTT
  * SceneAccess
  * SceneTime
  * Shazbat
@@ -48,6 +53,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentLeech
  * TorrentShack
  * TV Chaos UK
+ * World-In-HD
+ * XSpeeds
 
 #### Installation on Windows
 

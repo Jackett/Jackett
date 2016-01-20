@@ -80,7 +80,7 @@ namespace Jackett.Controllers
             var ctx = Request.GetOwinContext();
             var authManager = ctx.Authentication;
             authManager.SignOut("ApplicationCookie");
-            return Redirect("/Admin/Dashboard");
+            return Redirect("Admin/Dashboard");
         }
 
         [HttpGet]
@@ -315,8 +315,10 @@ namespace Jackett.Controllers
                 cfg["api_key"] = serverService.Config.APIKey;
                 cfg["blackholedir"] = serverService.Config.BlackholeDir;
                 cfg["updatedisabled"] = serverService.Config.UpdateDisabled;
+                cfg["prerelease"] = serverService.Config.UpdatePrerelease;
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword) ? string.Empty : serverService.Config.AdminPassword.Substring(0, 10);
                 cfg["logging"] = Startup.TracingEnabled;
+                cfg["basepathoverride"] = serverService.Config.BasePathOverride;
                
 
                 jsonReply["config"] = cfg;
@@ -346,10 +348,14 @@ namespace Jackett.Controllers
                 bool external = (bool)postData["external"];
                 string saveDir = (string)postData["blackholedir"];
                 bool updateDisabled = (bool)postData["updatedisabled"];
+                bool preRelease = (bool)postData["prerelease"];
                 bool logging = (bool)postData["logging"];
-
+                string basePathOverride = (string)postData["basepathoverride"];
 
                 Engine.Server.Config.UpdateDisabled = updateDisabled;
+                Engine.Server.Config.UpdatePrerelease = preRelease;
+                Engine.Server.Config.BasePathOverride = basePathOverride;
+                Startup.BasePath = Engine.Server.BasePath();
                 Engine.Server.SaveConfig();
 
                 Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
@@ -444,7 +450,7 @@ namespace Jackett.Controllers
 
         private void ConfigureCacheResults(List<TrackerCacheResult> results)
         {
-            var serverUrl = string.Format("{0}://{1}:{2}/", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port);
+            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
             foreach (var result in results)
             {
                 var link = result.Link;

@@ -21,8 +21,9 @@ namespace Jackett.Models.Config
         public string AdminPassword { get; set; }
         public string InstanceId { get; set; }
         public string BlackholeDir { get; set; }
-        public string GitHubToken { get; set; }
         public bool UpdateDisabled { get; set; }
+        public bool UpdatePrerelease { get; set; }
+        public string BasePathOverride { get; set; }
 
         public string[] GetListenAddresses(bool? external = null)
         {

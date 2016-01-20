@@ -1,4 +1,4 @@
-﻿using Owin;
+using Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +40,12 @@ namespace Jackett
             set;
         }
 
+        public static string ProxyConnection
+        {
+            get;
+            set;
+        }
+
         public static bool? DoSSLFix
         {
             get;
@@ -47,6 +53,12 @@ namespace Jackett
         }
 
         public static bool? IgnoreSslErrors
+        {
+            get;
+            set;
+        }
+
+        public static string BasePath
         {
             get;
             set;
@@ -123,7 +135,7 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
               name: "blackhole",
-              routeTemplate: "bh/{indexerID}/{apikey}/{path}",
+              routeTemplate: "bh/{indexerID}/{apikey}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
           );
 

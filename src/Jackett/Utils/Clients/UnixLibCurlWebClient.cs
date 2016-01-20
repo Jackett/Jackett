@@ -104,6 +104,28 @@ namespace Jackett.Utils.Clients
                         case "location":
                             result.RedirectingTo = header[1];
                             break;
+                        case "refresh":
+                            if (response.Status == System.Net.HttpStatusCode.ServiceUnavailable)
+                            {
+                                //"Refresh: 8;URL=/cdn-cgi/l/chk_jschl?pass=1451000679.092-1vJFUJLb9R"
+                                var redirval = "";
+                                var value = header[1];
+                                var start = value.IndexOf("=");
+                                var end = value.IndexOf(";");
+                                var len = value.Length;
+                                if (start > -1)
+                                {
+                                    redirval = value.Substring(start + 1);
+                                    result.RedirectingTo = redirval;
+                                    // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
+                                    // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
+                                    // it shoudln't include service unavailable..only if we have this redirect header.
+                                    result.Status = System.Net.HttpStatusCode.Redirect;
+                                    var redirtime = Int32.Parse(value.Substring(0, end));
+                                    System.Threading.Thread.Sleep(redirtime * 1000);
+                                }
+                            }
+                            break;
                     }
                 }
             }

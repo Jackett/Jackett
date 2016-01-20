@@ -42,13 +42,16 @@
    text-align: center;
 }
 
-    #unconfigured-indexers .card {
-     width: 200px;
-    }
+#unconfigured-indexers .card {
+    width: 200px;
+    position: relative;
+}
 
 .unconfigured-indexer {
-    height: 120px;
+    height: 70px;
 }
+
+
 
 .indexer {
     height: 252px;
@@ -62,16 +65,20 @@
     padding-bottom: 5px;
 }
 
-    .indexer-logo > .hidden-name {
-        position: absolute;
-        color: rgba(255, 255, 255, 0);
-        left: 0;
-    }
+.indexer-logo > .hidden-name {
+    position: absolute;
+    color: rgba(255, 255, 255, 0);
+    left: 0;
+}
 
-    .indexer-logo > img {
-        width: 100%;
-        border-bottom: 1px solid #FFF;
-    }
+.indexer-logo  img {
+    width: 100%;
+    border-bottom: 1px solid #FFF;
+}
+
+#unconfigured-indexers .indexer-logo  img {
+    cursor: pointer;
+}
 
 .indexer-name > h3 {
     margin-top: 13px;
@@ -82,10 +89,9 @@
     text-align: center;
 }
 
-    .indexer-buttons > .btn {
-        margin-bottom: 2px;
-    }
-
+.indexer-buttons > .btn {
+    margin-bottom: 2px;
+}
 
 .indexer-button-test {
     width: 60px;
@@ -220,7 +226,7 @@ hr {
     text-align: center;
 }
 
-#jackett-allowext, #jackett-allowupdate, #jackett-logging {
+#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease {
     width: 25px;
 }
 
