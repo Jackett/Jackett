@@ -92,9 +92,9 @@ namespace Jackett.Indexers
 
             NameValueCollection qParams = new NameValueCollection();
 
-            if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
+            if (!string.IsNullOrEmpty(query.GetQueryString()))
             {
-                qParams.Add("search", query.SanitizedSearchTerm);
+                qParams.Add("search", query.GetQueryString());
             }
 
             List<string> catList = MapTorznabCapsToTrackers(query);
@@ -113,7 +113,6 @@ namespace Jackett.Indexers
 
             try
             {
-
                 CQ dom = response.Content;
                 var rows = dom["div[id='torrentTable'] > div[class='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
 
@@ -125,27 +124,9 @@ namespace Jackett.Indexers
                     string title = torrentData.Find("a[class='torrent']").First().Text().Trim();
                     Uri link = new Uri(SiteLink + torrentData.Find("img[class='icos save']").First().Parent().Attr("href").Trim());
                     Uri guid = new Uri(SiteLink + torrentData.Find("a[class='torrent']").First().Attr("href").Trim().TrimStart('/'));
-                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).InnerText);
-
-                    int seeders = 0;
-                    if (cells.Elements.ElementAt(5).FirstChild.HasChildren)
-                    {
-                        seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).FirstChild.InnerText);
-                    }
-                    else
-                    {
-                        seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).InnerText);
-                    };
-
-                    int leechers = 0;
-                    if (cells.Elements.ElementAt(6).FirstChild.HasChildren)
-                    {
-                        leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).FirstChild.InnerText);
-                    }
-                    else
-                    {
-                        leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).InnerText);
-                    }
+                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
+                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
+                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
 
                     string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
                     DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
