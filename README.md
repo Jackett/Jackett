@@ -89,6 +89,11 @@ Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcu
 
 You can get additional logging with the switches "-t -l".  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
 
+* Provide relevant logs
+
+To give developpers and community more informations about your problem, you have to provide logs. 
+__Please upload your log on a website like http://pastebin.com and add the link into your post.__
+
 #### Creating an issue
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
 
