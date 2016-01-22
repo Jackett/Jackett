@@ -9,16 +9,27 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Jackett.Models.IndexerConfig;
+using System.Xml;
+using HtmlAgilityPack;
+using System.IO;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace Jackett.Indexers
 {
     public class SpeedCD : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "take.login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?s=4&t=2&"; } }
+        private string CommentsUrl { get { return SiteLink + "t/{0}"; } }
+        private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -29,7 +40,7 @@ namespace Jackett.Indexers
         public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Speed.cd",
                 description: "Your home now!",
-                link: "https://speed.cd/",
+                link: "http://speed.cd/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
@@ -37,34 +48,157 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-            AddCategoryMapping("1", TorznabCatType.MoviesOther);
-            AddCategoryMapping("42", TorznabCatType.Movies);
-            AddCategoryMapping("32", TorznabCatType.Movies);
-            AddCategoryMapping("43", TorznabCatType.MoviesHD);
-            AddCategoryMapping("47", TorznabCatType.Movies);
-            AddCategoryMapping("28", TorznabCatType.MoviesBluRay);
-            AddCategoryMapping("48", TorznabCatType.Movies3D);
-            AddCategoryMapping("40", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("49", TorznabCatType.TVHD);
-            AddCategoryMapping("50", TorznabCatType.TVSport);
-            AddCategoryMapping("52", TorznabCatType.TVHD);
-            AddCategoryMapping("53", TorznabCatType.TVSD);
-            AddCategoryMapping("41", TorznabCatType.TV);
-            AddCategoryMapping("55", TorznabCatType.TV);
-            AddCategoryMapping("2", TorznabCatType.TV);
-            AddCategoryMapping("30", TorznabCatType.TVAnime);
-            AddCategoryMapping("25", TorznabCatType.PCISO);
-            AddCategoryMapping("39", TorznabCatType.ConsoleWii);
-            AddCategoryMapping("45", TorznabCatType.ConsolePS3);
-            AddCategoryMapping("35", TorznabCatType.Console);
-            AddCategoryMapping("33", TorznabCatType.ConsoleXbox360);
-            AddCategoryMapping("46", TorznabCatType.PCPhoneOther);
-            AddCategoryMapping("24", TorznabCatType.PC0day);
-            AddCategoryMapping("51", TorznabCatType.PCMac);
-            AddCategoryMapping("27", TorznabCatType.Books);
-            AddCategoryMapping("26", TorznabCatType.Audio);
-            AddCategoryMapping("44", TorznabCatType.Audio);
-            AddCategoryMapping("29", TorznabCatType.AudioVideo);
+            AddMultiCategoryMapping(TorznabCatType.Movies,
+                    1	//	Moviex/Xvid
+                    , 42	//	Movies/Packs    42
+                    , 32	//	Movies/Kids     32
+                    , 43	//	Movies/HD       43
+                    , 47	//	Movies/Deversity   47
+                    , 28	//	Movies/BluRay      28
+                    , 48	//	Movies/3D          48
+                    , 40	//	Movies/DVD-R       40
+                    );
+
+            AddMultiCategoryMapping(TorznabCatType.Movies3D
+                    , 48	//	Movies/3D          48
+                    );
+
+            AddMultiCategoryMapping(TorznabCatType.MoviesBluRay
+        , 28    //	Movies/BluRay      28
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.MoviesDVD
+        , 40    //	Movies/DVD-R       40
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.MoviesHD
+, 43    //	Movies/HD       43
+, 47    //	Movies/Deversity   47
+);
+
+            AddMultiCategoryMapping(TorznabCatType.MoviesOther
+, 1   //	Moviex/Xvid
+, 42    //	Movies/Packs    42
+, 32    //	Movies/Kids     32
+, 47    //	Movies/Deversity   47
+);
+
+            AddMultiCategoryMapping(TorznabCatType.MoviesSD
+, 1   //	Moviex/Xvid
+);
+
+
+            AddMultiCategoryMapping(TorznabCatType.TV
+        , 49    //	TV/HD              49
+        , 50    //	TV/Sports          50
+        , 52    //	TV/BluRay          52
+        , 53    //	TV/DVD-R           53
+        , 41    //	TV/Packs           41
+        , 55    //	TV/Kids            55
+        , 2 //	TV/Episodes        2
+                    , 30	//	Anime              30
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.TVAnime
+        , 30    //	Anime              30
+);
+
+            AddMultiCategoryMapping(TorznabCatType.TVHD
+, 49    //	TV/HD              49
+, 52    //	TV/BluRay          52
+);
+
+            AddMultiCategoryMapping(TorznabCatType.TVOTHER
+, 41    //	TV/Packs           41
+, 55    //	TV/Kids            55
+);
+
+            AddMultiCategoryMapping(TorznabCatType.TVSD
+, 53    //	TV/DVD-R           53
+, 2 //	TV/Episodes        2
+);
+
+            AddMultiCategoryMapping(TorznabCatType.TVSport
+, 50    //	TV/Sports          50
+);
+
+            AddMultiCategoryMapping(TorznabCatType.Console
+                    , 39	//	Games/WII
+                    , 45	//	Games/PS3
+                    , 35	//	Games/Nintendo
+                    , 33	//	Games/XBOX360
+                    );
+
+            AddMultiCategoryMapping(TorznabCatType.ConsoleWii
+        , 39    //	Games/WII
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.ConsolePS3
+        , 45    //	Games/PS3
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.Console3DS
+        , 35    //	Games/Nintendo
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.ConsoleXbox360
+                    , 33	//	Games/XBOX360
+                    );
+
+
+
+            AddMultiCategoryMapping(TorznabCatType.PCGames
+        , 25    //	Games/PC           25
+        );
+
+
+            AddMultiCategoryMapping(TorznabCatType.PC0day
+        , 24    //	Other/0Day
+        );
+
+
+            AddMultiCategoryMapping(TorznabCatType.PCPhoneAndroid
+        , 46    //	Other/Mobile
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.PCPhoneIOS
+, 46    //	Other/Mobile
+);
+
+            AddMultiCategoryMapping(TorznabCatType.PCPhoneOther
+, 46    //	Other/Mobile
+);
+
+            AddMultiCategoryMapping(TorznabCatType.PCMac
+        , 51    //	Other/Mac
+        );
+
+            AddMultiCategoryMapping(TorznabCatType.Other
+, 54    //	Other/Educational
+);
+
+            AddMultiCategoryMapping(TorznabCatType.Books
+, 27    //	Other/Books
+);
+
+            AddMultiCategoryMapping(TorznabCatType.Audio
+, 26    //	Music/Audio
+, 44    //	Music/Pack
+, 29    //	Music/Video
+);
+
+            AddMultiCategoryMapping(TorznabCatType.AudioMP3
+, 26    //	Music/Audio
+, 44    //	Music/Pack
+);
+
+            AddMultiCategoryMapping(TorznabCatType.AudioVideo
+, 29    //	Music/Video
+);
+
+
+            TorznabCaps.Categories.AddRange(TorznabCatType.AllCats);
+
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -89,76 +223,83 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
+            var releasesAppend = new List<ReleaseInfo>();
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
 
-            NameValueCollection qParams = new NameValueCollection();
-
-            if (!string.IsNullOrEmpty(query.GetQueryString()))
+            if (!string.IsNullOrWhiteSpace(searchString))
             {
-                qParams.Add("search", query.GetQueryString());
+                queryCollection.Add("search", searchString);
             }
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            foreach (var cat in MapTorznabCapsToTrackers(query))
             {
-                qParams.Add("c" + cat, "1");
+                queryCollection.Add("c" + cat, "1");
+                Console.WriteLine("c" + cat);
             }
 
-            string urlSearch = SearchUrl;
-            if (qParams.Count > 0)
+            searchUrl += queryCollection.GetQueryString();
+
+            for (int i = 1; i <= 10; i++)
             {
-                urlSearch += $"?{qParams.GetQueryString()}";
-            }
 
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
+                var response = await RequestStringWithCookiesAndRetry(searchUrl + "&p=" + i);
 
-            try
-            {
-                CQ dom = response.Content;
-                var rows = dom["div[id='torrentTable'] > div[class='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
-
-                foreach (IDomObject row in rows)
+                try
                 {
-                    CQ torrentData = row.OuterHTML;
-                    CQ cells = row.Cq().Find("td");
-
-                    string title = torrentData.Find("a[class='torrent']").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[class='icos save']").First().Parent().Attr("href").Trim());
-                    Uri guid = new Uri(SiteLink + torrentData.Find("a[class='torrent']").First().Attr("href").Trim().TrimStart('/'));
-                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
-
-                    string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
-                    DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-                    long category = 0;
-                    string cat = torrentData.Find("a[class='cat']").First().Attr("id").Trim();
-                    long.TryParse(cat, out category);
 
 
-                    var release = new ReleaseInfo();
+                    HtmlDocument html = new HtmlDocument();
+                    TextReader reader = new StringReader(response.Content);
+                    html.Load(reader);
 
-                    release.Title = title;
-                    release.Guid = guid;
-                    release.Link = link;
-                    release.PublishDate = publishDate;
-                    release.Size = size;
-                    release.Description = release.Title;
-                    release.Seeders = seeders;
-                    release.Peers = seeders + leechers;
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Category = MapTrackerCatToNewznab(category.ToString());
-                    release.Comments = guid;
+                    HtmlNode tableDiv = html.GetElementbyId("torrentTable");
+                    if (tableDiv == null) goto EndSearch;
 
-                    releases.Add(release);
+                    HtmlNode table = tableDiv.ChildNodes[0].ChildNodes[1].ChildNodes[1];
+                    if (table == null) goto EndSearch;
+
+                    HtmlNode tableBody = table.ChildNodes[1];
+                    if(tableBody == null) goto EndSearch;
+
+                    if (tableBody.ChildNodes.Count == 0) goto EndSearch;
+
+                    releasesAppend = (from r in tableBody.ChildNodes
+                                      select new ReleaseInfo()
+                                      {
+                                          Guid = new Uri(string.Format(CommentsUrl, r.GetAttributeValue("id", Guid.NewGuid().ToString()).Remove(0, 2)))
+                                          ,
+                                          Title = r.ChildNodes[1].ChildNodes[0].ChildNodes[0].ChildNodes[0].InnerText
+                                          ,
+                                          Comments = new Uri(string.Format(CommentsUrl, r.GetAttributeValue("id", Guid.NewGuid().ToString()).Remove(0, 2)))
+                                          ,
+                                          Link = new Uri(string.Format(DownloadUrl, r.GetAttributeValue("id", Guid.NewGuid().ToString()).Remove(0, 2)))
+                                          ,
+                                          PublishDate = DateTime.ParseExact(r.SelectSingleNode(string.Format("//*[contains(@class,'{0}')]", "elapsedDate")).GetAttributeValue("title", "").Replace(" at", ""), "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture)
+                                          ,
+                                          Size = ReleaseInfo.GetBytes(r.ChildNodes[4].InnerText)
+                                          ,
+                                          Seeders = ParseUtil.CoerceInt(r.ChildNodes[5].InnerText)
+                                          ,
+                                          Peers = ParseUtil.CoerceInt(r.ChildNodes[5].InnerText)
+                                      }).ToList<ReleaseInfo>();
+
+                    releases.AddRange(releasesAppend);
+
+
+                    if (releases.Count(x => x.Seeders == 0) > 0) goto EndSearch;
+
+                }
+                catch (Exception ex)
+                {
+                    OnParseError(response.Content, ex);
                 }
 
             }
-            catch (Exception ex)
-            {
-                OnParseError(response.Content, ex);
-            }
+
+            EndSearch:
+
             return releases;
         }
     }
