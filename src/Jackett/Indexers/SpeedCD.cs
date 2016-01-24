@@ -108,7 +108,6 @@ namespace Jackett.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 qParams.Add("c" + cat, "1");
-                Console.WriteLine("c" + cat);
             }
 
             // Append the query string parameters to the search url
