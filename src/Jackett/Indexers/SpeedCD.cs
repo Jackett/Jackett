@@ -18,7 +18,9 @@ namespace Jackett.Indexers
     public class SpeedCD : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "take.login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?s=4&t=2&"; } }
+        private string CommentsUrl { get { return SiteLink + "t/{0}"; } }
+        private string DownloadUrl { get { return SiteLink + "download.php?torrent={0}"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -88,77 +90,97 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>(); // Create new variable to hold release info list
+            var releasesAppend = new List<ReleaseInfo>(); // Create new list to hold release info to be appended
+            var searchString = query.GetQueryString(); // Get the query string
+            var searchUrl = SearchUrl; // Get the search url
+            var qParams = new NameValueCollection(); // Greate a new variable to hold query string parameters
+            int i = 1; // Creaate new variable to control loop limit
+            CQ csquery; // Create new csquery object for html selections
 
-            NameValueCollection qParams = new NameValueCollection();
-
-            if (!string.IsNullOrEmpty(query.GetQueryString()))
+            // If exists then add the search parameter to the query string parameters
+            if (!string.IsNullOrWhiteSpace(searchString))
             {
-                qParams.Add("search", query.GetQueryString());
+                qParams.Add("search", searchString);
             }
 
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            // Add category parameters to the query string parameters
+            foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 qParams.Add("c" + cat, "1");
             }
 
-            string urlSearch = SearchUrl;
+            // Append the query string parameters to the search url
             if (qParams.Count > 0)
             {
-                urlSearch += $"?{qParams.GetQueryString()}";
+                searchUrl += qParams.GetQueryString();
             }
 
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
-
-            try
+            // Begin loop (if looped 10 times (10 page requests, each containing 25 torrents) or torrent with zero seeds is found then exist loop)
+            while (i <= 10 && !releases.Exists(x => x.Seeders == 0))
             {
-                CQ dom = response.Content;
-                var rows = dom["div[id='torrentTable'] > div[class='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
+                // Execute web request to Speed.cd
+                var response = await RequestStringWithCookiesAndRetry(searchUrl + "&p=" + i);
 
-                foreach (IDomObject row in rows)
+                try
                 {
-                    CQ torrentData = row.OuterHTML;
-                    CQ cells = row.Cq().Find("td");
+                    // Populate the csquery wiht the web request response content
+                    csquery = response.Content;
+                    // Query the cs object for the rows of the torrent table
+                    var rows = csquery["#torrentTable > div > div.boxContent > table > tbody > tr"];
 
-                    string title = torrentData.Find("a[class='torrent']").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[class='icos save']").First().Parent().Attr("href").Trim());
-                    Uri guid = new Uri(SiteLink + torrentData.Find("a[class='torrent']").First().Attr("href").Trim().TrimStart('/'));
-                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    // Populate append variable with release info to append
+                    releasesAppend = rows.Select(r => {
+                        try {
+                            string id = r.Attributes["id"].Remove(0, 2); // Get ID
+                            int seeders = 0; int.TryParse(r.ChildNodes[5].Cq().Text(), out seeders); // Get seeders
+                            int leechers = 0; int.TryParse(r.ChildNodes[6].Cq().Text(), out leechers); // Get leechers
+                            long category; long.TryParse(csquery["a.cat", r].Attr("id").Trim(), out category); // Get category code
 
-                    string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
-                    DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                            // Create release info
+                            ReleaseInfo info = new ReleaseInfo()
+                            {
+                                Guid = new Uri(string.Format(CommentsUrl, id)),
+                                Title = csquery["a.torrent", r].Text(),
+                                Description = csquery["a.torrent", r].Text(),
+                                Comments = new Uri(string.Format(CommentsUrl, id)),
+                                Link = new Uri(string.Format(DownloadUrl, id)),
+                                PublishDate = DateTime.ParseExact(csquery["span.elapsedDate", r].FirstOrDefault().Attributes["title"].Replace(" at", ""), "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
+                                Size = ReleaseInfo.GetBytes(r.ChildNodes[4].InnerText),
+                                Seeders = seeders,
+                                Peers = seeders + leechers,
+                                Category = MapTrackerCatToNewznab(category.ToString()),
+                                MinimumSeedTime = 172800,
+                                MinimumRatio = 1
+                            };
 
-                    long category = 0;
-                    string cat = torrentData.Find("a[class='cat']").First().Attr("id").Trim();
-                    long.TryParse(cat, out category);
+                            // Return release info
+                            return info;
+                        } catch(Exception ex) {
+                            // Log error if individual row parsing fails
+                            logger.Error("Speed.cd row parsing error", ex, new { searchUrl, r.OuterHTML });
+                            return null;
+                        }
+                    })
+                    .Where(x => x != null) // Ensure that failed rows are not appended
+                    .ToList<ReleaseInfo>(); // Convert results to list of release info
 
+                    // Add the rows to the append to the releases list
+                    releases.AddRange(releasesAppend);
 
-                    var release = new ReleaseInfo();
+                    // Increment to next page
+                    i++;
 
-                    release.Title = title;
-                    release.Guid = guid;
-                    release.Link = link;
-                    release.PublishDate = publishDate;
-                    release.Size = size;
-                    release.Description = release.Title;
-                    release.Seeders = seeders;
-                    release.Peers = seeders + leechers;
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Category = MapTrackerCatToNewznab(category.ToString());
-                    release.Comments = guid;
-
-                    releases.Add(release);
+                }
+                catch (Exception ex)
+                {
+                    // Log parser error is entire routine fails
+                    OnParseError(response.Content, ex);
                 }
 
             }
-            catch (Exception ex)
-            {
-                OnParseError(response.Content, ex);
-            }
+
+            // Return the releases
             return releases;
         }
     }
