@@ -75,7 +75,8 @@ namespace Jackett.Services
                 return link;
          
             var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString()));
-            var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, file);
+            string urlEncodedFile = WebUtility.UrlEncode(file);
+            var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
             return new Uri(proxyLink);
         }
 
