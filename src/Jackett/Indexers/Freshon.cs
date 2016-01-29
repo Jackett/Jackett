@@ -1,6 +1,4 @@
-﻿using CsQuery;
-using Jackett.Indexers;
-using Jackett.Models;
+﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -10,14 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.UI.WebControls;
 using Jackett.Models.IndexerConfig;
+using AngleSharp;
 
 namespace Jackett.Indexers
 {
@@ -42,7 +36,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the FreshOn webpage."))
         {
         }
 
@@ -60,15 +54,32 @@ namespace Jackett.Indexers
 
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>
             {
-                CQ dom = response.Content;
-                var messageEl = dom[".error_text"];
-                var errorMessage = messageEl.Text().Trim();
+                var parser = new AngleSharp.Parser.Html.HtmlParser();
+                var document = parser.Parse(response.Content);
+                var messageEl = document.QuerySelector(".error_text");
+                var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            string Url;
+            if (string.IsNullOrEmpty(query.GetQueryString()))
+                Url = SearchUrl;
+            else
+            {
+                Url = $"{SearchUrl}?search={HttpUtility.UrlEncode(query.GetQueryString())}&cat=0";
+            }
+
+            var response = await RequestStringWithCookiesAndRetry(Url);
+            List<ReleaseInfo> releases = ParseResponse(response.Content);
+
+            return releases;
+        }
+
+        private List<ReleaseInfo> ParseResponse(string htmlResponse)
         {
             TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
             TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
@@ -77,53 +88,40 @@ namespace Jackett.Indexers
             TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
             TimeZoneInfo romaniaTz = TimeZoneInfo.CreateCustomTimeZone("Romania Time", new TimeSpan(2, 0, 0), "(GMT+02:00) Romania Time", "Romania Time", "Romania Daylight Time", adjustments);
 
-            var releases = new List<ReleaseInfo>();
-            string episodeSearchUrl;
+            List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            if (string.IsNullOrEmpty(query.GetQueryString()))
-                episodeSearchUrl = SearchUrl;
-            else
-            {
-                episodeSearchUrl = $"{SearchUrl}?search={HttpUtility.UrlEncode(query.GetQueryString())}&cat=0";
-            }
-
-            var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
-                CQ dom = results.Content;
+                var parser = new AngleSharp.Parser.Html.HtmlParser();
+                var document = parser.Parse(htmlResponse);
+                var rows = document.QuerySelectorAll("#highlight > tbody > tr:not(:First-child)");
 
-                var rows = dom["#highlight > tbody > tr"];
-
-                foreach (var row in rows.Skip(1))
+                foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
 
-                    var qRow = row.Cq();
-                    var qLink = qRow.Find("a.torrent_name_link").First();
+                    var linkNameElement = row.QuerySelector("a.torrent_name_link");
 
+                    release.Title = linkNameElement.GetAttribute("title");
+                    release.Description = release.Title;
+                    release.Guid = new Uri(SiteLink + linkNameElement.GetAttribute("href"));
+                    release.Comments = release.Guid;
+                    release.Link = new Uri(SiteLink + row.QuerySelector("td.table_links > a").GetAttribute("href"));
+                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td.table_seeders").TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td.table_leechers").TextContent.Trim()) + release.Seeders;
+                    release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td.table_size").TextContent);
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
-                    release.Title = qLink.Attr("title");
-                    release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
-                    release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href"));
-                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
-
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td.table_leechers").Text().Trim()) + release.Seeders;
-
-                    var sizeStr = qRow.Find("td.table_size")[0].Cq().Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     DateTime pubDateRomania;
-                    var dateString = qRow.Find("td.table_added").Text().Trim();
+                    var dateString = row.QuerySelector("td.table_added").TextContent.Trim();
                     if (dateString.StartsWith("Today "))
-                    {   pubDateRomania = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateString.Split(' ')[1]); }
+                    { pubDateRomania = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateString.Split(' ')[1]); }
                     else if (dateString.StartsWith("Yesterday "))
-                    {   pubDateRomania = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateString.Split(' ')[1]) - TimeSpan.FromDays(1); }
+                    { pubDateRomania = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateString.Split(' ')[1]) - TimeSpan.FromDays(1); }
                     else
-                    {   pubDateRomania = DateTime.SpecifyKind(DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified); }
+                    { pubDateRomania = DateTime.SpecifyKind(DateTime.ParseExact(dateString, "d-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified); }
 
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(pubDateRomania, romaniaTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
@@ -133,7 +131,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(htmlResponse, ex);
             }
 
             return releases;
