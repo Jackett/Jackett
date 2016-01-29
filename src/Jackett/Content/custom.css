@@ -293,3 +293,7 @@ pre {
     width: 80px;
 }
 
+.setup-item-displayinfo:empty {
+    display: none;
+}
+
