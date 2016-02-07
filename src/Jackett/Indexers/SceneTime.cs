@@ -98,11 +98,11 @@ namespace Jackett.Indexers
 
                     release.PublishDate = DateTimeUtil.FromTimeAgo(descCol.ChildNodes.Last().InnerText);
 
-                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
+                    var sizeStr = row.ChildElements.ElementAt(3).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(4).Cq().Text().Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(5).Cq().Text().Trim()) + release.Seeders;
 
                     releases.Add(release);
                 }
