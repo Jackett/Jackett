@@ -42,7 +42,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataCaptchaLogin())
+                configData: new ConfigurationDataCaptchaLogin("Ensure that you have the 'Force SSL' option set to 'yes' in your profile on the BitMeTv webpage."))
         {
         }
 
