@@ -11,7 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -38,8 +37,45 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
         {
-            AddCategoryMapping(77, TorznabCatType.TVSD);
+            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            AddCategoryMapping(3, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(47, TorznabCatType.MoviesSD);
+            AddCategoryMapping(57, TorznabCatType.MoviesSD);
+            AddCategoryMapping(59, TorznabCatType.MoviesHD);
+            AddCategoryMapping(61, TorznabCatType.MoviesSD);
+            AddCategoryMapping(64, TorznabCatType.Movies3D);
+            AddCategoryMapping(80, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(81, TorznabCatType.MoviesBluRay);
+            AddCategoryMapping(82, TorznabCatType.MoviesOther);
+            AddCategoryMapping(102, TorznabCatType.MoviesOther);
+            AddCategoryMapping(103, TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping(105, TorznabCatType.Movies);
+
+            AddCategoryMapping(6, TorznabCatType.PCGames);
+            AddCategoryMapping(48, TorznabCatType.ConsoleXbox);
+            AddCategoryMapping(49, TorznabCatType.ConsolePSP);
+            AddCategoryMapping(50, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(51, TorznabCatType.ConsoleWii);
+            AddCategoryMapping(55, TorznabCatType.ConsoleNDS);
+            AddCategoryMapping(107, TorznabCatType.ConsolePS4);
+
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(43, TorznabCatType.TV);
             AddCategoryMapping(9, TorznabCatType.TVHD);
+            AddCategoryMapping(63, TorznabCatType.TV);
+            AddCategoryMapping(77, TorznabCatType.TVSD);
+            AddCategoryMapping(79, TorznabCatType.TVSport);
+            AddCategoryMapping(100, TorznabCatType.TVFOREIGN);
+            AddCategoryMapping(83, TorznabCatType.TVWEBDL);
+
+            AddCategoryMapping(5, TorznabCatType.PC0day);
+            AddCategoryMapping(7, TorznabCatType.Books);
+            AddCategoryMapping(52, TorznabCatType.PCMac);
+            AddCategoryMapping(65, TorznabCatType.BooksComics);
+            AddCategoryMapping(53, TorznabCatType.PC);
+
+            AddCategoryMapping(4, TorznabCatType.Audio);
+            AddCategoryMapping(11, TorznabCatType.AudioVideo);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -64,10 +100,10 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            NameValueCollection qParams = new NameValueCollection();
+            Dictionary<string, string> qParams = new Dictionary<string, string>();
             qParams.Add("cata", "yes");
             qParams.Add("sec", "jax");
-
+            
             List<string> catList = MapTorznabCapsToTrackers(query);
             foreach (string cat in catList)
             {
@@ -79,9 +115,7 @@ namespace Jackett.Indexers
                 qParams.Add("search", query.GetQueryString());
             }
 
-            string torrentSearchUrl = $"{SearchUrl}?{qParams.GetQueryString()}";
-
-            var results = await RequestStringWithCookiesAndRetry(torrentSearchUrl);
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
             List<ReleaseInfo> releases = ParseResponse(results.Content);
             
             return releases;
