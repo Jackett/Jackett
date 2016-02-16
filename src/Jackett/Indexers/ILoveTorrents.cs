@@ -40,8 +40,29 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+
+            AddCategoryMapping(85, TorznabCatType.Movies3D);
+            AddCategoryMapping(23, TorznabCatType.TVAnime);
+            AddCategoryMapping(24, TorznabCatType.BooksEbook);
+            AddCategoryMapping(4, TorznabCatType.PCGames);
+            AddCategoryMapping(38, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(38, TorznabCatType.ConsolePS4);
+            AddCategoryMapping(38, TorznabCatType.ConsolePSP);
+            AddCategoryMapping(43, TorznabCatType.ConsoleWii);
+            AddCategoryMapping(43, TorznabCatType.ConsoleWiiU);
+            AddCategoryMapping(12, TorznabCatType.ConsoleXBOX360DLC);
+            AddCategoryMapping(12, TorznabCatType.ConsoleXbox);
+            AddCategoryMapping(12, TorznabCatType.ConsoleXbox360);
+            AddCategoryMapping(12, TorznabCatType.ConsoleXboxOne);
+            AddCategoryMapping(6, TorznabCatType.Audio);
+
             AddCategoryMapping(7, TorznabCatType.TV);
+            AddCategoryMapping(40, TorznabCatType.TVSD);
             AddCategoryMapping(8, TorznabCatType.TVHD);
+
+            AddCategoryMapping(9, TorznabCatType.XXX);
+            AddCategoryMapping(11, TorznabCatType.XXXDVD);
+            AddCategoryMapping(10, TorznabCatType.XXXx264);
 
             AddCategoryMapping(80, TorznabCatType.MoviesBluRay);
             AddCategoryMapping(20, TorznabCatType.MoviesDVD);
@@ -115,11 +136,10 @@ namespace Jackett.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    var link = row.Cq().Find("td:eq(2) a:eq(0)").First();
-                    var text = row.Cq().Find("td:eq(1) a:eq(0)").First();
+                    var link = row.Cq().Find("td:eq(1) a:eq(0)").First();
                     release.Guid = new Uri(SiteLink + link.Attr("href"));
                     release.Comments = release.Guid;
-                    release.Title = text.Text().Trim(); //link.Text().Trim();
+                    release.Title = link.Text().Trim(); 
                     release.Description = release.Title;
 
                     // If we search an get no results, we still get a table just with no info.
@@ -135,7 +155,7 @@ namespace Jackett.Indexers
                         release.Category = MapTrackerCatToNewznab(cat);
                     }
 
-                    var qLink = row.Cq().Find("td:eq(1) a").First();
+                    var qLink = row.Cq().Find("td:eq(2) a").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var added = row.Cq().Find("td:eq(7)").First().Text().Trim();
