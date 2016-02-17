@@ -1,8 +1,6 @@
 using CsQuery;
-using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
-using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -10,14 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.UI.WebControls;
 using CsQuery.ExtensionMethods;
 using Jackett.Models.IndexerConfig;
 
@@ -38,7 +31,7 @@ namespace Jackett.Indexers
             : base(name: "DanishBits",
                 description: "A danish closed torrent tracker",
                 link: "https://danishbits.org/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: c,
                 logger: l,
@@ -151,6 +144,13 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 2, 0, 0), 3, 5, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 10, 5, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            TimeZoneInfo denmarkTz = TimeZoneInfo.CreateCustomTimeZone("Denmark Time", new TimeSpan(1, 0, 0), "(GMT+01:00) Denmark Time", "Denmark Time", "Denmark DST", adjustments);
+
             var releasesPerPage = 100;
             var releases = new List<ReleaseInfo>();
 
@@ -244,9 +244,8 @@ namespace Jackett.Indexers
 
                     var addedElement = qRow.Find("span.time").FirstElement();
                     var addedStr = addedElement.GetAttribute("title");
-                    release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm",
-                        CultureInfo.InvariantCulture);
-
+                    release.PublishDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), denmarkTz).ToLocalTime();
+                    
                     var columns = qRow.Children();
                     var seedersElement = columns.Reverse().Skip(1).First();
                     release.Seeders = int.Parse(seedersElement.InnerText);
