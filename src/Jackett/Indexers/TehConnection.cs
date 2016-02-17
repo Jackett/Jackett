@@ -1,5 +1,4 @@
 ﻿using CsQuery;
-using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
@@ -41,27 +40,35 @@ namespace Jackett.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>QualityEncodeOnly</code><br><code>FreeLeechOnly</code>"))
         {
-            AddCategoryMapping(7, TorznabCatType.Movies);
-            AddCategoryMapping(7, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(7, TorznabCatType.MoviesOther);
-            AddCategoryMapping(7, TorznabCatType.MoviesSD);
-            AddCategoryMapping(7, TorznabCatType.MoviesHD);
-            AddCategoryMapping(7, TorznabCatType.Movies3D);
-            AddCategoryMapping(7, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(7, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(7, TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(1, TorznabCatType.MoviesOther);
+            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            AddCategoryMapping(1, TorznabCatType.Movies3D);
+            AddCategoryMapping(1, TorznabCatType.MoviesBluRay);
+            AddCategoryMapping(1, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(1, TorznabCatType.MoviesWEBDL);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+
+            await DoLogin();
+
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
                 { "keeplogged", "1" },
                 { "login", "Log In!" }
             };
-         
+
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, indexUrl, SiteLink);
 
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout.php"), () =>
@@ -70,11 +77,24 @@ namespace Jackett.Indexers
                 string errorMessage = "Unable to login to TehConnection";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            if (!loggedInCheck.Content.Contains("/logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                DateTime lastLoggedInCheck;
+                DateTime.TryParse(configData.LastLoggedInCheck.Value, out lastLoggedInCheck);
+                if (lastLoggedInCheck < DateTime.Now.AddMinutes(-15))
+                {
+                    await DoLogin();
+                    configData.LastLoggedInCheck.Value = DateTime.Now.ToString("o");
+                    SaveConfig();
+                }
+            }
+
             var releases = new List<ReleaseInfo>();
             bool configFreeLeechOnly = configData.FilterString.Value.ToLowerInvariant().Contains("freeleechonly");
             bool configQualityEncodeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("qualityencodeonly");
