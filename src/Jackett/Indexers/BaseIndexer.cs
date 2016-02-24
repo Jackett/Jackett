@@ -436,43 +436,23 @@ namespace Jackett.Indexers
             }
         }
 
-        protected void AddCategoryMapping(string trackerCategory, int newznabCategory)
+        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory, newznabCategory));
+            categoryMapping.Add(new CategoryMapping(trackerCategory, newznabCategory.ID));
+            if (!TorznabCaps.Categories.Contains(newznabCategory))
+                TorznabCaps.Categories.Add(newznabCategory);
         }
 
         protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory)
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
-            if (!TorznabCaps.Categories.Contains(newznabCategory))
-                TorznabCaps.Categories.Add(newznabCategory);
-        }
-
-        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
-        {
-            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
-            if (!TorznabCaps.Categories.Contains(newznabCategory))
-                TorznabCaps.Categories.Add(newznabCategory);
-        }
-
-        protected void AddCategoryMapping(int trackerCategory, int newznabCategory)
-        {
-            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory));
+            AddCategoryMapping(trackerCategory.ToString(), newznabCategory);
         }
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
         {
             foreach (var trackerCat in trackerCategories)
             {
-                categoryMapping.Add(new CategoryMapping(trackerCat.ToString(), newznabCategory.ID));
-            }
-        }
-
-        protected void AddMultiCategoryMapping(int trackerCategory, params TorznabCategory[] newznabCategories)
-        {
-            foreach (var newznabCat in newznabCategories)
-            {
-                categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCat.ID));
+                AddCategoryMapping(trackerCat, newznabCategory);
             }
         }
 
