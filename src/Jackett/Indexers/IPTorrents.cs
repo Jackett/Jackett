@@ -165,7 +165,7 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
+                    release.Link = new Uri(SiteLink + HttpUtility.UrlEncode(qLink.Attr("href").TrimStart('/')));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
