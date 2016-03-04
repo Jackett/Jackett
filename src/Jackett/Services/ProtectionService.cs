@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Utils;
 
 namespace Jackett.Services
 {
@@ -18,6 +19,7 @@ namespace Jackett.Services
     public class ProtectionService : IProtectionService
     {
         DataProtectionScope PROTECTION_SCOPE = DataProtectionScope.LocalMachine;
+        private const string JACKETT_KEY = "JACKETT_KEY";
         const string APPLICATION_KEY = "Dvz66r3n8vhTGip2/quiw5ISyM37f7L2iOdupzdKmzkvXGhAgQiWK+6F+4qpxjPVNks1qO7LdWuVqRlzgLzeW8mChC6JnBMUS1Fin4N2nS9lh4XPuCZ1che75xO92Nk2vyXUo9KSFG1hvEszAuLfG2Mcg1r0sVyVXd2gQDU/TbY=";
 
         IServerService serverService;
@@ -34,6 +36,34 @@ namespace Jackett.Services
         }
 
         public string Protect(string plainText)
+        {
+            var jackettKey = Environment.GetEnvironmentVariable(JACKETT_KEY);
+
+            if (jackettKey == null)
+            {
+                return ProtectDefaultMethod(plainText);
+            }
+            else
+            {
+                return ProtectUsingKey(plainText, jackettKey);
+            }
+        }
+
+        public string UnProtect(string plainText)
+        {
+            var jackettKey = Environment.GetEnvironmentVariable(JACKETT_KEY);
+
+            if (jackettKey == null)
+            {
+                return UnProtectDefaultMethod(plainText);
+            }
+            else
+            {
+                return UnProtectUsingKey(plainText, jackettKey);
+            }
+        }
+
+        private string ProtectDefaultMethod(string plainText)
         {
             if (string.IsNullOrEmpty(plainText))
                 return string.Empty;
@@ -72,7 +102,7 @@ namespace Jackett.Services
             return Convert.ToBase64String(protectedBytes);
         }
 
-        public string UnProtect(string plainText)
+        private string UnProtectDefaultMethod(string plainText)
         {
             if (string.IsNullOrEmpty(plainText))
                 return string.Empty;
@@ -109,6 +139,16 @@ namespace Jackett.Services
 
             var unprotectedBytes = ProtectedData.Unprotect(protectedBytes, entropy, PROTECTION_SCOPE);
             return Encoding.UTF8.GetString(unprotectedBytes);
+        }
+
+        private string ProtectUsingKey(string plainText, string key)
+        {
+            return StringCipher.Encrypt(plainText, key);
+        }
+
+        private string UnProtectUsingKey(string plainText, string key)
+        {
+            return StringCipher.Decrypt(plainText, key);
         }
 
         public void Protect<T>(T obj)
