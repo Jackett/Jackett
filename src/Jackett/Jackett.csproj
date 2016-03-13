@@ -319,6 +319,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Models\TorznabQuery.cs" />
     <Compile Include="CurlHelper.cs" />
+    <Compile Include="Utils\StringCipher.cs" />
     <Compile Include="Utils\StringUtil.cs" />
     <Compile Include="Utils\TorznabCapsUtil.cs" />
     <Compile Include="Utils\Clients\UnixSafeCurlWebClient.cs" />
