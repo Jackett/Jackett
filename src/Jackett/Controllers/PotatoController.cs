@@ -99,7 +99,8 @@ namespace Jackett.Controllers
             {
                 ApiKey =  request.passkey,
                 Categories = MOVIE_CATS,
-                SearchTerm = request.search
+                SearchTerm = request.search,
+                ImdbID = request.imdbid
             };
 
             IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
