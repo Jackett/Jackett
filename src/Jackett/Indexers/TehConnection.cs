@@ -104,7 +104,14 @@ namespace Jackett.Indexers
                 movieListSearchUrl = SearchUrl;
             else
             {
-                movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+                if (!string.IsNullOrEmpty(query.ImdbID))
+                {
+                    movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
+                }
+                else
+                {
+                    movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+                } 
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
