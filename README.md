@@ -41,6 +41,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MoreThanTV
  * NCore
  * NextGen
+ * PhxBit
  * Pretome
  * PrivateHD
  * RevolutionTT
