@@ -201,6 +201,7 @@
     <Compile Include="Indexers\BroadcastTheNet.cs" />
     <Compile Include="Indexers\DanishBits.cs" />
     <Compile Include="Indexers\Abnormal.cs" />
+    <Compile Include="Indexers\Fuzer.cs" />
     <Compile Include="Indexers\GFTracker.cs" />
     <Compile Include="Indexers\ILoveTorrents.cs" />
     <Compile Include="Indexers\RevolutionTT.cs" />
@@ -475,6 +476,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\filelist.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\fuzer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\gftracker.png">
