@@ -80,6 +80,7 @@ namespace Jackett.Indexers
 
             // Anime
             AddCategoryMapping(1, TorznabCatType.TVAnime);              // ANIME
+            AddCategoryMapping(28, TorznabCatType.TVAnime);             // MANGA ANIME
 
             // Documentaries
             AddCategoryMapping(17, TorznabCatType.TVDocumentary);       // DOCS
@@ -99,7 +100,6 @@ namespace Jackett.Indexers
             AddCategoryMapping(30, TorznabCatType.ConsolePSP);          // GAMES
             AddCategoryMapping(31, TorznabCatType.ConsoleNDS);          // GAMES
             AddCategoryMapping(8, TorznabCatType.BooksEbook);           // EBOOKS
-            AddCategoryMapping(28, TorznabCatType.BooksEbook);          // EBOOKS MANGA
             AddCategoryMapping(11, TorznabCatType.BooksEbook);          // EBOOKS AUDIO
             AddCategoryMapping(35, TorznabCatType.PCPhoneAndroid);      // ANDROID
         }
