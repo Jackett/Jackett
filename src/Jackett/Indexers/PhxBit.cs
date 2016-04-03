@@ -26,7 +26,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "sphinx.php"; } }
         private string TorrentCommentUrl { get { return TorrentDescriptionUrl; } }
         private string TorrentDescriptionUrl { get { return SiteLink + "torrent.php?id="; } }
-        private string TorrentDownloadUrl { get { return SiteLink + "get.php?action=torrent&id={id}&passkey={passkey}"; } }
+        private string TorrentDownloadUrl { get { return SiteLink + "get.php?action=private&id={id}&passkey={passkey}"; } }
         private bool Latency { get { return ConfigData.Latency.Value; } }
         private bool DevMode { get { return ConfigData.DevMode.Value; } }
         private bool CacheMode { get { return ConfigData.HardDriveCache.Value; } }
@@ -51,7 +51,7 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "https://phxbit.com/torrents.php?action=download&id=",
+                downloadBase: "https://phxbit.com/get.php?action=private",
                 configData: new ConfigurationDataPhxBit())
         {
             // Clean capabilities
