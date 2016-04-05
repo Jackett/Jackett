@@ -1,6 +1,6 @@
 ﻿namespace Jackett.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataFrenchADN : ConfigurationData
+    internal class ConfigurationDataFrenchAdn : ConfigurationData
     {
         public DisplayItem CredentialsWarning { get; private set; }
         public StringItem Username { get; private set; }
@@ -16,7 +16,7 @@
         public DisplayItem HeadersWarning { get; private set; }
         public StringItem HeaderAccept { get; private set; }
         public StringItem HeaderAcceptLang { get; private set; }
-        public BoolItem HeaderDNT { get; private set; }
+        public BoolItem HeaderDnt { get; private set; }
         public BoolItem HeaderUpgradeInsecure { get; private set; }
         public StringItem HeaderUserAgent { get; private set; }
         public DisplayItem DevWarning { get; private set; }
@@ -24,8 +24,7 @@
         public BoolItem HardDriveCache { get; private set; }
         public StringItem HardDriveCacheKeepTime { get; private set; }
 
-        public ConfigurationDataFrenchADN()
-            : base()
+        public ConfigurationDataFrenchAdn()
         {
             CredentialsWarning = new DisplayItem("<b>Credentials Configuration</b> (<i>Private Tracker</i>),<br /><br /> <ul><li><b>Username</b> is your account name on this tracker.</li><li><b>Password</b> is your password associated to your account name.</li></ul>") { Name = "Credentials" };
             Username = new StringItem { Name = "Username (Required)", Value = "" };
@@ -41,7 +40,7 @@
             HeadersWarning = new DisplayItem("<b>Browser Headers Configuration</b> (<i>Required if browser simulation enabled</i>),<br /><br /> <ul><li>By filling these fields, <b>Jackett will inject headers</b> with your values <u>to simulate a real browser</u>.</li><li>You can get <b>your browser values</b> here: <a href='https://www.whatismybrowser.com/detect/what-http-headers-is-my-browser-sending' target='blank'>www.whatismybrowser.com</a></li></ul><br /><i><b>Note that</b> some headers are not necessary because they are injected automatically by this provider such as Accept_Encoding, Connection, Host or X-Requested-With</i>") { Name = "Injecting headers" };
             HeaderAccept = new StringItem { Name = "Accept", Value = "" };
             HeaderAcceptLang = new StringItem { Name = "Accept-Language", Value = "" };
-            HeaderDNT = new BoolItem { Name = "DNT", Value = false };
+            HeaderDnt = new BoolItem { Name = "DNT", Value = false };
             HeaderUpgradeInsecure = new BoolItem { Name = "Upgrade-Insecure-Requests", Value = false };
             HeaderUserAgent = new StringItem { Name = "User-Agent", Value = "" };
             DevWarning = new DisplayItem("<b>Development Facility</b> (<i>For Developers ONLY</i>),<br /><br /> <ul><li>By enabling development mode, <b>Jackett will bypass his cache</b> and will <u>output debug messages to console</u> instead of his log file.</li><li>By enabling Hard Drive Cache, <b>This provider</b> will <u>save each query answers from tracker</u> in temp directory, in fact this reduce drastically HTTP requests when building a provider at parsing step for example. So, <b> Jackett will search for a cached query answer on hard drive before executing query on tracker side !</b> <i>DEV MODE must be enabled to use it !</li></ul>") { Name = "Development" };
