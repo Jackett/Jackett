@@ -18,7 +18,7 @@ namespace Jackett.Indexers
     public class TransmitheNet : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php"; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0"; } }
 
         new ConfigurationDataBasicLogin configData
         {
