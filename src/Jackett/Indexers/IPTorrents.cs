@@ -25,9 +25,9 @@ namespace Jackett.Indexers
         private string BrowseUrl { get { return UseLink + "t"; } }
         private List<String> KnownURLs = new List<String> { "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
 
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataBasicLoginWithAlternateLink configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
             set { base.configData = value; }
         }
 
@@ -40,7 +40,7 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLoginWithAlternateLink())
         {
             this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
             this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
