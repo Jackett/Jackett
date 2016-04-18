@@ -25,12 +25,12 @@ namespace Jackett.Indexers
         private string UseLink { get { return (this.configData.AlternateLink.Value != null && this.configData.AlternateLink.Value != "" ? this.configData.AlternateLink.Value : SiteLink); } }
         private string BrowseUrl { get { return UseLink + "browse.php"; } }
         private string LoginUrl { get { return UseLink + "takelogin.php"; } }
-        private string LoginReferer {  get { return UseLink + "login.php";  } }
-        private List<String> KnownURLs = new List<String>{ "https://www.bitsoup.me/","https://www.bitsoup.org/"};
+        private string LoginReferer { get { return UseLink + "login.php"; } }
+        private List<String> KnownURLs = new List<String> { "https://www.bitsoup.me/", "https://www.bitsoup.org/" };
 
-        new NxtGnConfigurationData configData
+        new ConfigurationDataBasicLoginWithAlternateLink configData
         {
-            get { return (NxtGnConfigurationData)base.configData; }
+            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
             set { base.configData = value; }
         }
 
@@ -43,11 +43,11 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new NxtGnConfigurationData())
+                configData: new ConfigurationDataBasicLoginWithAlternateLink())
         {
-            this.configData.DisplayText.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
-            this.configData.DisplayText.Value += "The following are some known URLs for " + this.DisplayName;
-            this.configData.DisplayText.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
+            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
+            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
+            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             //AddCategoryMapping("624", TorznabCatType.Console);
             //AddCategoryMapping("307", TorznabCatType.ConsoleNDS);
@@ -158,12 +158,12 @@ namespace Jackett.Indexers
                 {
                     configData.AlternateLink.Value = null;
                     throw new Exception("AlternateLink must be a valid url.");
-                }              
+                }
             }
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                
+
             };
 
             var loginPage = await RequestStringWithCookies(UseLink, string.Empty);
@@ -188,11 +188,12 @@ namespace Jackett.Indexers
             var queryCollection = new NameValueCollection();
 
 
-            queryCollection.Add("search", string.IsNullOrWhiteSpace(searchString)? "" : searchString);
+            queryCollection.Add("search", string.IsNullOrWhiteSpace(searchString) ? "" : searchString);
             if (trackerCats.Count > 1)
             {
-               for (var ct = 0; ct < trackerCats.Count; ct++) queryCollection.Add("cat" + (ct+1), trackerCats.ElementAt(ct));
-            } else
+                for (var ct = 0; ct < trackerCats.Count; ct++) queryCollection.Add("cat" + (ct + 1), trackerCats.ElementAt(ct));
+            }
+            else
             {
                 queryCollection.Add("cat", (trackerCats.Count == 1 ? trackerCats.ElementAt(0) : "0"));
             }
@@ -241,24 +242,6 @@ namespace Jackett.Indexers
             {
                 OnParseError(results, ex);
             }
-        }
-
-        public class NxtGnConfigurationData : ConfigurationData
-        {
-            public StringItem Username { get; private set; }
-            public StringItem Password { get; private set; }
-            public DisplayItem DisplayText { get; private set; }
-            public StringItem AlternateLink { get; set; }
-           
-
-            public NxtGnConfigurationData()
-            {
-                Username = new StringItem { Name = "Username" };
-                Password = new StringItem { Name = "Password" };
-                DisplayText = new DisplayItem("") { Name = "" };
-                AlternateLink = new StringItem { Name = "AlternateLinks" };
-            }
-            
         }
     }
 }
