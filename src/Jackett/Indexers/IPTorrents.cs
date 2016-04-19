@@ -21,11 +21,13 @@ namespace Jackett.Indexers
 {
     public class IPTorrents : BaseIndexer, IIndexer
     {
-        private string BrowseUrl { get { return SiteLink + "t"; } }
+        private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
+        private string BrowseUrl { get { return UseLink + "t"; } }
+        private List<String> KnownURLs = new List<String> { "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
 
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataBasicLoginWithAlternateLink configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,8 +40,12 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLoginWithAlternateLink())
         {
+            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
+            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
+            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
+
             AddCategoryMapping(72, TorznabCatType.Movies);
             AddCategoryMapping(77, TorznabCatType.MoviesSD);
             AddCategoryMapping(89, TorznabCatType.MoviesSD);
@@ -92,9 +98,9 @@ namespace Jackett.Indexers
             };
             var request = new Utils.Clients.WebRequest()
             {
-                Url = SiteLink,
+                Url = UseLink,
                 Type = RequestType.POST,
-                Referer = SiteLink,
+                Referer = UseLink,
                 PostData = pairs
             };
             var response = await webclient.GetString(request);
@@ -156,7 +162,7 @@ namespace Jackett.Indexers
                     }
 
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
+                    release.Guid = new Uri(UseLink + qTitleLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
                     var descString = qRow.Find(".t_ctime").Text();
@@ -165,7 +171,7 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(SiteLink + HttpUtility.UrlEncode(qLink.Attr("href").TrimStart('/')));
+                    release.Link = new Uri(UseLink + HttpUtility.UrlEncode(qLink.Attr("href").TrimStart('/')));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
