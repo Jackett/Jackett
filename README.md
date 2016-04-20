@@ -39,6 +39,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Immortalseed
  * IPTorrents
  * MoreThanTV
+ * MyAnonamouse
  * NCore
  * NextGen
  * PhxBit
