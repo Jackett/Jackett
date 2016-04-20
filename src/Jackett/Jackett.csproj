@@ -186,6 +186,8 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\MyAnonamouse.cs" />
+    <Compile Include="Indexers\Xthor.cs" />
     <Compile Include="Indexers\PhxBit.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Indexers\BitSoup.cs" />
@@ -215,20 +217,22 @@
     <Compile Include="Indexers\ImmortalSeed.cs" />
     <Compile Include="Indexers\FileList.cs" />
     <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
-    <Compile Include="Indexers\FrenchADN.cs" />
+    <Compile Include="Indexers\FrenchAdn.cs" />
     <Compile Include="Indexers\TransmitheNet.cs" />
     <Compile Include="Indexers\WiHD.cs" />
     <Compile Include="Indexers\XSpeeds.cs" />
     <Compile Include="Models\GitHub\Asset.cs" />
     <Compile Include="Models\GitHub\Release.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataXthor.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataPhxBit.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFrenchADN.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFrenchAdn.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithAlternateLink.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
@@ -440,6 +444,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\login.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\myanonamouse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\xthor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\phxbit.png">
