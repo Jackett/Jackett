@@ -70,7 +70,7 @@ namespace Jackett.Indexers
                 Url = SearchUrl;
             else
             {
-                Url = $"{SearchUrl}?searchtext={HttpUtility.UrlEncode(query.GetQueryString())}";
+                Url = $"{SearchUrl}&searchtext={HttpUtility.UrlEncode(query.GetQueryString())}";
             }
 
             var response = await RequestStringWithCookiesAndRetry(Url);
