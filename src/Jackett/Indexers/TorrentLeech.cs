@@ -151,6 +151,10 @@ namespace Jackett.Indexers
                     release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href").Substring(1));
 
                     var dateString = qRow.Find(".name")[0].InnerText.Trim().Replace(" ", string.Empty).Replace("Addedinon", string.Empty);
+
+                    //Fix for issue 2016-04-30
+                    dateString = dateString.Replace("\r", "").Replace("\n", "");
+
                     //"2015-04-25 23:38:12"
                     //"yyyy-MMM-dd hh:mm:ss"
                     release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
