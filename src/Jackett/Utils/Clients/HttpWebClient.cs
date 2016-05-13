@@ -70,8 +70,11 @@ namespace Jackett.Utils.Clients
                 useProxy = true;
             }
 
+            // SecurityProtocolType values below not available in Mono < 4.3 
+            const int SecurityProtocolTypeTls11 = 768;
+            const int SecurityProtocolTypeTls12 = 3072;
             // Specify to use TLS 1.2 as default connection
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)(SecurityProtocolTypeTls12 | SecurityProtocolTypeTls11);
 
             var client = new HttpClient(new HttpClientHandler
             {
