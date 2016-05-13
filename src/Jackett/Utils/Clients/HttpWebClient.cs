@@ -69,6 +69,10 @@ namespace Jackett.Utils.Clients
                 proxyServer = new WebProxy(Startup.ProxyConnection, false);
                 useProxy = true;
             }
+
+            // Specify to use TLS 1.2 as default connection
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
             var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookies,
