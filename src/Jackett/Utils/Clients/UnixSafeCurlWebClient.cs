@@ -85,11 +85,11 @@ namespace Jackett.Utils.Clients
             var tempFile = Path.GetTempFileName();
             args.AppendFormat("--output \"{0}\" ", tempFile);
 
-            if (Startup.DoSSLFix.GetValueOrDefault(true))
+            if (Startup.DoSSLFix == true)
             {
                 // http://stackoverflow.com/questions/31107851/how-to-fix-curl-35-cannot-communicate-securely-with-peer-no-common-encryptio
                 // https://git.fedorahosted.org/cgit/mod_nss.git/plain/docs/mod_nss.html
-                args.Append("--cipher " + SSLFix.CiphersList());
+                args.Append("--cipher " + SSLFix.CipherList);
             }
             if (Startup.IgnoreSslErrors == true)
             {
