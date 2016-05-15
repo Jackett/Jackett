@@ -610,41 +610,6 @@ namespace Jackett.Indexers
         }
 
         /// <summary>
-        /// Format Date to DateTime
-        /// </summary>
-        /// <param name="clock"></param>
-        /// <returns>A DateTime</returns>
-        private static DateTime FormatDate(string clock)
-        {
-            DateTime date;
-
-            // Switch from date format
-            if(clock.Contains("Aujourd'hui") || clock.Contains("Hier"))
-            {
-                // Get hours & minutes
-                IList<int> infosClock = clock.Split(':').Select(s => ParseUtil.CoerceInt(Regex.Match(s, @"\d+").Value)).ToList();
-
-                // Ago date with today
-                date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, Convert.ToInt32(infosClock[0]), Convert.ToInt32(infosClock[1]), DateTime.Now.Second);
-
-                // Set yesterday if necessary
-                if (clock.Contains("Hier"))
-                {
-                    // Remove one day from date
-                    // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-                    date.AddDays(-1);
-                }
-            }
-            else
-            {
-                // Parse Date if full
-                date = DateTime.ParseExact(clock, "MM-dd-yyyy HH:mm", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.AssumeLocal);
-            }
-
-            return date.ToUniversalTime();
-        }
-
-        /// <summary>
         /// Download torrent file from tracker
         /// </summary>
         /// <param name="link">URL string</param>
