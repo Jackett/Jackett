@@ -15,8 +15,6 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Web;
-using System.Text;
 
 namespace Jackett.Indexers
 {
@@ -266,37 +264,9 @@ namespace Jackett.Indexers
                             return releases;
                         }
                     }
-//                }
 
                 Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
                 Output("\nThere are " + firstPageRows.Length + " results on the first page !");
-                // If we have a term used for search and pagination result superior to one
-                if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
-                {
-                    // Starting with page #2
-                    for (var i = 2; i <= Math.Min(int.Parse(ConfigData.Pages.Value), pageLinkCount); i++)
-                    {
-                        Output("\nProcessing page #" + i);
-
-                        // Request our page
-                        LatencyNow();
-
-                        // Build our query -- Minus 1 to page due to strange pagination number on tracker side, starting with page 0...
-                        var pageRequest = BuildQuery(searchTerm, query, searchUrl, i);
-
-                        // Getting results & Store content
-                        WebClientStringResult pageResults = await QueryExec(pageRequest);
-
-                        // Assign response
-                        _fDom = pageResults.Content;
-
-                        // Process page results
-                        var additionalPageRows = FindTorrentRows();
-
-                        // Add them to torrents list
-                        torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
-                    }
-                }
 
                 // Loop on results
 
@@ -452,8 +422,7 @@ namespace Jackett.Indexers
             // If search term provided
             if (!string.IsNullOrWhiteSpace(term))
             {
-                // Add search term ~~ Strange search engine, need to replace space with dot for results !
-                parameters.Add("search", term.Replace(' ', '.'));
+                parameters.Add("search", term);
             }
             else
             {
@@ -463,7 +432,7 @@ namespace Jackett.Indexers
             }
 
             var CatAll = "main_cat[]=2";
-            //var CatTest = Uri.EscapeUriString(Unicode);
+
             var CatTest = categoriesList.Count > 0 ? string.Join(",", categoriesList) : "";
             Output(CatTest);
             if (CatTest == "")
