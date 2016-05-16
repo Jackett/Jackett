@@ -280,7 +280,21 @@ namespace Jackett.Indexers
 
                     // Release Name
                     var name = tRow.Find("td:eq(1) > a:eq(0)").Attr("title");
-                    Output("Release: " + name);
+                    
+                    Encoding iso_8859_1 = System.Text.Encoding.GetEncoding("iso-8859-1");
+                    Encoding utf_8 = System.Text.Encoding.UTF8;
+
+                    // Unicode string.
+                    string s_unicode = name;
+
+                    // Convert to ISO-8859-1 bytes.
+                    byte[] isoBytes = iso_8859_1.GetBytes(s_unicode);
+
+                    // Convert to UTF-8.
+                    byte[] utf8Bytes = Encoding.Convert(iso_8859_1, utf_8, isoBytes);
+                    string result = Encoding.UTF8.GetString(utf8Bytes);
+                    
+                    Output("Release: " + result);
 
                     // Category
                     var categoryId = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
@@ -377,7 +391,7 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo
                     {
                         Category = MapTrackerCatToNewznab(testcat.ToString()),
-                        Title = name,
+                        Title = result,
                         Seeders = seeders,
                         Peers = seeders + leechers,
                         MinimumRatio = 1,
