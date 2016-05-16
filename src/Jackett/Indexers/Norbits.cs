@@ -433,9 +433,9 @@ namespace Jackett.Indexers
 
             var CatAll = "main_cat[]=2";
 
-            var CatTest = categoriesList.Count > 0 ? string.Join(",", categoriesList) : "";
+        var CatTest = categoriesList.Count > 0 ? string.Join(",", categoriesList) : "";
             Output(CatTest);
-            if (CatTest == "")
+            if (CatTest == "" || CatTest == "main_cat[]=2&sub2_cat[]=22,main_cat[]=2&sub2_cat[]=20")
             {
                 CatTest = Uri.EscapeUriString(CatAll);
             }
