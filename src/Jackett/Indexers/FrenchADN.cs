@@ -392,16 +392,8 @@ namespace Jackett.Indexers
                     var id = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(1) > div:first > a").Attr("name"), @"\d+").Value);
                     Output("ID: " + id);
 
-                    // Check if torrent is not nuked by tracker or rulez, can't download it
-                    if (tRow.Find("td:eq(2) > a").Length == 0)
-                    {
-                        // Next item
-                        Output("Torrent is nuked, we can't download it, going to next torrent...");
-                        continue;
-                    }
-
-                    // Release Name
-                    var name = tRow.Find("td:eq(2) > a").Attr("title").Substring(24).Trim();
+                    // Release Name -- Can be truncated ... Need FIX on tracker's side !
+                    var name = tRow.Find("td:eq(1) > div > a:eq(2)").Text().Trim();
                     Output("Release: " + name);
 
                     // Category
@@ -410,35 +402,31 @@ namespace Jackett.Indexers
                     Output("Category: " + MapTrackerCatToNewznab(categoryId.ToString()) + " (" + categoryId + " - " + categoryName + ")");
 
                     // Seeders
-                    var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5) > div > font").Select(s => Regex.Replace(s.ToString(), "<.*?>", string.Empty)).ToString(), @"\d+").Value);
+                    var seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(4) > div > font > a").Text(), @"\d+").Value);
                     Output("Seeders: " + seeders);
 
                     // Leechers
-                    var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6) > div > font").Text(), @"\d+").Value);
+                    var leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5) > div > font").Text(), @"\d+").Value);
                     Output("Leechers: " + leechers);
 
-                    // Completed
-                    var completed = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(4)").Text(), @"\d+").Value);
-                    Output("Completed: " + completed);
-
                     // Files
-                    var files = 1;
-                    if (tRow.Find("td:eq(3) > a").Length == 1)
-                    {
-                        files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(3) > a").Text(), @"\d+").Value);
-                    }
+                    var files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(2)").Text(), @"\d+").Value);
                     Output("Files: " + files);
 
+                    // Comments
+                    var comments = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(3)").Text(), @"\d+").Value);
+                    Output("Comments: " + files);
+
                     // Health
-                    var percent = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(7) > img").Attr("src"), @"\d+").Value) * 10;
+                    var percent = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6) > img").Attr("src"), @"\d+").Value) * 10;
                     Output("Health: " + percent + "%");
 
                     // Size
-                    var humanSize = tRow.Find("td:eq(8)").Text().ToLowerInvariant();
+                    var humanSize = tRow.Find("td:eq(7)").Text().ToLowerInvariant();
                     var size = ReleaseInfo.GetBytes(humanSize);
                     Output("Size: " + humanSize + " (" + size + " bytes)");
 
-                    // Date & IMDB & Genre
+                    // Date & Genre
                     var infosData = tRow.Find("td:eq(1) > div:last").Text();
                     var infosList = Regex.Split(infosData, "\\|").ToList();
                     var infosTorrent = infosList.Select(s => s.Split(new[] { ':' }, 2)[1].Trim()).ToList();
