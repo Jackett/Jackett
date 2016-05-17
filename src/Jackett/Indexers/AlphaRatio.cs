@@ -56,13 +56,18 @@ namespace Jackett.Indexers
             AddCategoryMapping(23, TorznabCatType.Audio);
         }
 
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            var incomingConfig = new ConfigurationDataBasicLogin();
-            incomingConfig.LoadValuesFromJson(configJson);
+            configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
-                { "username", incomingConfig.Username.Value },
-                { "password", incomingConfig.Password.Value },
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
                 { "login", "Login" },
                 { "keeplogged", "1" }
             };
@@ -74,7 +79,7 @@ namespace Jackett.Indexers
                    CQ dom = response.Content;
                    dom["#loginform > table"].Remove();
                    var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");
-                   throw new ExceptionWithConfigData(errorMessage, (ConfigurationData)incomingConfig);
+                   throw new ExceptionWithConfigData(errorMessage, configData);
                });
             return IndexerConfigurationStatus.RequiresTesting;
         }
