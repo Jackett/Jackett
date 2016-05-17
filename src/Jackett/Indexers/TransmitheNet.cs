@@ -101,7 +101,10 @@ namespace Jackett.Indexers
                     }
                     else
                     {
-                        title = title.Remove(title.LastIndexOf("."));
+                        if (title.Length > 5 && title.Substring(title.Length - 5).Contains("."))
+                        {
+                            title = title.Remove(title.LastIndexOf("."));
+                        }
                     }
 
                     release.Title = title;
