@@ -46,6 +46,8 @@ namespace Jackett.Utils.Clients
 
         private async Task<WebClientByteResult> Run(WebRequest webRequest)
         {
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+
             var cookies = new CookieContainer();
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
