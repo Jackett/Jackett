@@ -61,9 +61,12 @@ namespace Jackett.Indexers
             AddCategoryMapping(44, TorznabCatType.MoviesSD);
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
 
-            // Music foreign
-            // Music packs
-            // Music videos
+            // Music
+            AddCategoryMapping(17, TorznabCatType.AudioMP3);
+            AddCategoryMapping(44, TorznabCatType.AudioLossless);
+            AddCategoryMapping(23, TorznabCatType.AudioForeign);
+            AddCategoryMapping(41, TorznabCatType.AudioOther);
+            AddCategoryMapping(16, TorznabCatType.AudioVideo);
 
             AddCategoryMapping(4, TorznabCatType.PCGames);
             // ps3
