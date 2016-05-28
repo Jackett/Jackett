@@ -58,6 +58,12 @@ namespace Jackett
             set;
         }
 
+        public static string CustomDataFolder
+        {
+            get;
+            set;
+        }
+
         public static string BasePath
         {
             get;

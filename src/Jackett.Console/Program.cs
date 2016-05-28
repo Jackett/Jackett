@@ -99,6 +99,13 @@ namespace JackettConsole
                         Engine.Logger.Info("Curl will ignore SSL certificate errors.");
                     }
 
+                    // Choose Data Folder
+                    if (!string.IsNullOrWhiteSpace(options.DataFolder))
+                    {
+                        Startup.CustomDataFolder = options.DataFolder.Replace("\"", string.Empty).Replace("'", string.Empty).Replace(@"\\", @"\");
+                        Engine.Logger.Info("Jackett Data will be stored in: " + Startup.CustomDataFolder);
+                    }
+
                     /*  ======     Actions    =====  */
 
                     // Install service
