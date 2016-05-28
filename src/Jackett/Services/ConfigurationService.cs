@@ -213,6 +213,11 @@ namespace Jackett.Services
         /// <returns></returns>
         public static string GetAppDataFolderStatic()
         {
+            if (!string.IsNullOrWhiteSpace(Startup.CustomDataFolder))
+            {
+                return Startup.CustomDataFolder;
+            }
+
             if (System.Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
