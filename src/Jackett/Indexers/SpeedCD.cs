@@ -17,7 +17,7 @@ namespace Jackett.Indexers
 {
     public class SpeedCD : BaseIndexer, IIndexer
     {
-        private string LoginUrl { get { return SiteLink + "take.login.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         new ConfigurationDataBasicLogin configData
@@ -70,24 +70,39 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+
+            await DoLogin();
+
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
+
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
                 var errorMessage = dom["h5"].First().Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            if (!loggedInCheck.Content.Contains("/logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+            }
+
+
             var releases = new List<ReleaseInfo>();
 
             NameValueCollection qParams = new NameValueCollection();
