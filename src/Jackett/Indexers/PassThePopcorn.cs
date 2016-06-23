@@ -73,12 +73,12 @@ namespace Jackett.Indexers
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, indexUrl, SiteLink);
             JObject js_response = JObject.Parse(response.Content);
-            await ConfigureIfOK(response.Cookies, response.Content != null && (string)js_response["Result"] == "Error", () =>
+            await ConfigureIfOK(response.Cookies, response.Content != null && (string)js_response["Result"] != "Error", () =>
             {
                 // Landing page wil have "Result":"Error" if log in fails
                 string errorMessage = (string)js_response["Message"];
                 throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            });   
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -92,17 +92,17 @@ namespace Jackett.Indexers
             string movieListSearchUrl;
 
             if (string.IsNullOrEmpty(query.GetQueryString()))
-                movieListSearchUrl = SearchUrl;
+                movieListSearchUrl = string.Format("{0}?json=noredirect", SearchUrl);
             else
             {
                 if (!string.IsNullOrEmpty(query.ImdbID))
                 {
-                    movieListSearchUrl = string.Format("{0}?searchstr={1}&json=noredirect", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
+                    movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
                 }
                 else
                 {
-                    movieListSearchUrl = string.Format("{0}?searchstr={1}&json=noredirect", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-                } 
+                    movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+                }
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
@@ -126,7 +126,7 @@ namespace Jackett.Indexers
                         release.Size = long.Parse((string)torrent["Size"]);
                         release.Seeders = int.Parse((string)torrent["Seeders"]);
                         release.Peers = int.Parse((string)torrent["Leechers"]);
-                        release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "MMM dd yyyy, HH:mm", 
+                        release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", 
                                                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         release.Link = new Uri(string.Format("{0}?action=download&id={1}&authkey={2}&torrent_pass={3}", 
                                                 SearchUrl, HttpUtility.UrlEncode((string)torrent["Id"]), HttpUtility.UrlEncode(AuthKey), HttpUtility.UrlEncode(configData.Passkey.Value)));
