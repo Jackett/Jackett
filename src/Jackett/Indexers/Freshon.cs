@@ -105,9 +105,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href").TrimStart('/'));
                     release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
