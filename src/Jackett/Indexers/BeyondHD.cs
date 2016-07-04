@@ -30,7 +30,7 @@ namespace Jackett.Indexers
         public BeyondHD(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
-                link: "https://beyondhd.me/",
+                link: "https://beyond-hd.me/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
