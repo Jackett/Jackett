@@ -94,7 +94,6 @@ namespace Jackett.Indexers
                 }
             }
 
-            logger.Info("searchUrl: " + searchUrl);
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
