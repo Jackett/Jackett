@@ -17,7 +17,7 @@ namespace Jackett.Indexers
 {
     public class SpeedCD : BaseIndexer, IIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string LoginUrl { get { return SiteLink + "takeElogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         new ConfigurationDataBasicLogin configData
@@ -35,7 +35,8 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLogin(@"Speed.Cd have increased their security. If you are having problems please check the security tab in your Speed.Cd profile.
+                                                            eg. Geo Locking, your seedbox may be in a different country to the one where you login via your web browser"))
         {
             AddCategoryMapping("1", TorznabCatType.MoviesOther);
             AddCategoryMapping("42", TorznabCatType.Movies);
@@ -85,10 +86,10 @@ namespace Jackett.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
 
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/browse.php"), () =>
             {
                 CQ dom = result.Content;
-                var errorMessage = dom["h5"].First().Text().Trim();
+                var errorMessage = dom.Text();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
