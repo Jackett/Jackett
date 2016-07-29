@@ -82,6 +82,12 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -91,17 +97,23 @@ namespace Jackett.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
-            {
-                CQ dom = result.Content;
-                var messageEl = dom[".ui-state-error"].Last();
-                var errorMessage = messageEl.Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                {
+                    CQ dom = result.Content;
+                    var messageEl = dom[".ui-state-error"].Last();
+                    var errorMessage = messageEl.Text().Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            if (!loggedInCheck.Content.Contains("/logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+            }
+
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
