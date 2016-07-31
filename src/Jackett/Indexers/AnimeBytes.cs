@@ -24,8 +24,15 @@ namespace Jackett.Indexers
 {
     public class AnimeBytes : BaseIndexer, IIndexer
     {
+        enum SearchType
+        {
+            Video,
+            Audio
+        }
+
         private string LoginUrl { get { return SiteLink + "user/login"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
+        private string MusicSearchUrl { get { return SiteLink + "torrents2.php?"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
         public bool InsertSeason { get { return configData.InsertSeason!=null && configData.InsertSeason.Value; } }
 
@@ -46,7 +53,10 @@ namespace Jackett.Indexers
                                               TorznabCatType.BooksComics,
                                               TorznabCatType.ConsolePSP,
                                               TorznabCatType.ConsoleOther,
-                                              TorznabCatType.PCGames),
+                                              TorznabCatType.PCGames,
+                                              TorznabCatType.AudioMP3,
+                                              TorznabCatType.AudioLossless,
+                                              TorznabCatType.AudioOther),
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataAnimeBytes())
@@ -139,8 +149,16 @@ namespace Jackett.Indexers
         {
             // The result list
             var releases = new List<ReleaseInfo>();
+            
+            if (ContainsMusicCategories(query.Categories))
+            {
+                foreach (var result in await GetResults(SearchType.Audio, query.SanitizedSearchTerm))
+                {
+                    releases.Add(result);
+                }
+            }
 
-            foreach (var result in await GetResults(StripEpisodeNumber(query.SanitizedSearchTerm)))
+            foreach (var result in await GetResults(SearchType.Video, StripEpisodeNumber(query.SanitizedSearchTerm)))
             {
                 releases.Add(result);
             }
@@ -148,12 +166,33 @@ namespace Jackett.Indexers
             return releases.ToArray();
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> GetResults(string searchTerm)
+        private bool ContainsMusicCategories(int[] categories)
+        {
+            var music = new[]
+            {
+                TorznabCatType.Audio.ID,
+                TorznabCatType.AudioMP3.ID,
+                TorznabCatType.AudioLossless.ID,
+                TorznabCatType.AudioOther.ID,
+                TorznabCatType.AudioForeign.ID
+            };
+
+            return categories.Length == 0 || music.Any(categories.Contains);
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> GetResults(SearchType searchType, string searchTerm)
         {
             var cleanSearchTerm = HttpUtility.UrlEncode(searchTerm);
 
             // The result list
             var releases = new List<ReleaseInfo>();
+
+            var queryUrl = searchType == SearchType.Video ? SearchUrl : MusicSearchUrl;
+            // Only include the query bit if its required as hopefully the site caches the non query page
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                queryUrl += string.Format("searchstr={0}&action=advanced&search_type=title&year=&year2=&tags=&tags_type=0&sort=time_added&way=desc&hentai=2&releasegroup=&epcount=&epcount2=&artbooktitle=", cleanSearchTerm);
+            }
 
             // Check cache first so we don't query the server for each episode when searching for each episode in a series.
             lock (cache)
@@ -161,18 +200,11 @@ namespace Jackett.Indexers
                 // Remove old cache items
                 CleanCache();
 
-                var cachedResult = cache.Where(i => i.Query == searchTerm).FirstOrDefault();
+                var cachedResult = cache.Where(i => i.Query == queryUrl).FirstOrDefault();
                 if (cachedResult != null)
                     return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
             }
-
-            var queryUrl = SearchUrl;
-            // Only include the query bit if its required as hopefully the site caches the non query page
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                queryUrl += string.Format("searchstr={0}&action=advanced&search_type=title&year=&year2=&tags=&tags_type=0&sort=time_added&way=desc&hentai=2&releasegroup=&epcount=&epcount2=&artbooktitle=", cleanSearchTerm);
-            }
-
+            
             // Get the content from the tracker
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
             CQ dom = response.Content;
@@ -191,7 +223,11 @@ namespace Jackett.Indexers
                     var seriesCq = series.Cq();
 
                     var synonyms = new List<string>();
-                    var mainTitle = seriesCq.Find(".group_title strong a").First().Text().Trim();
+                    string mainTitle;
+                    if (searchType == SearchType.Video)
+                        mainTitle = seriesCq.Find(".group_title strong a").First().Text().Trim();
+                    else
+                        mainTitle = seriesCq.Find(".group_title strong").Text().Trim();
 
                     var yearStr = seriesCq.Find(".group_title strong").First().Text().Trim().Replace("]", "").Trim();
                     int yearIndex = yearStr.LastIndexOf("[");
@@ -282,33 +318,52 @@ namespace Jackett.Indexers
                                 release.Guid = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
                                 release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"), UriKind.Relative);
 
-                                var category = seriesCq.Find("a[title=\"View Torrent\"]").Text().Trim();
-                                if (category == "TV Series")
-                                    release.Category = TorznabCatType.TVAnime.ID;
-
-                                // Ignore these categories as they'll cause hell with the matcher
-                                // TV Special, OVA, ONA, DVD Special, BD Special
-
-                                if (category == "Movie")
-                                    release.Category = TorznabCatType.Movies.ID;
-
-                                if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
-                                    release.Category = TorznabCatType.BooksComics.ID;
-
-                                if (category == "Novel" || category == "Artbook")
-                                    release.Category = TorznabCatType.BooksComics.ID;
-
-                                if (category == "Game" || category == "Visual Novel")
+                                string category = null;
+                                if (searchType == SearchType.Video)
                                 {
-                                    var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
-                                    if (description.Contains(" PSP "))
-                                        release.Category = TorznabCatType.ConsolePSP.ID;
-                                    if (description.Contains("PSX"))
-                                        release.Category = TorznabCatType.ConsoleOther.ID;
-                                    if (description.Contains(" NES "))
-                                        release.Category = TorznabCatType.ConsoleOther.ID;
-                                    if (description.Contains(" PC "))
-                                        release.Category = TorznabCatType.PCGames.ID;
+                                    category = seriesCq.Find("a[title=\"View Torrent\"]").Text().Trim();
+                                    if (category == "TV Series")
+                                        release.Category = TorznabCatType.TVAnime.ID;
+
+                                    // Ignore these categories as they'll cause hell with the matcher
+                                    // TV Special, OVA, ONA, DVD Special, BD Special
+
+                                    if (category == "Movie")
+                                        release.Category = TorznabCatType.Movies.ID;
+
+                                    if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
+                                        release.Category = TorznabCatType.BooksComics.ID;
+
+                                    if (category == "Novel" || category == "Artbook")
+                                        release.Category = TorznabCatType.BooksComics.ID;
+
+                                    if (category == "Game" || category == "Visual Novel")
+                                    {
+                                        var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
+                                        if (description.Contains(" PSP "))
+                                            release.Category = TorznabCatType.ConsolePSP.ID;
+                                        if (description.Contains("PSX"))
+                                            release.Category = TorznabCatType.ConsoleOther.ID;
+                                        if (description.Contains(" NES "))
+                                            release.Category = TorznabCatType.ConsoleOther.ID;
+                                        if (description.Contains(" PC "))
+                                            release.Category = TorznabCatType.PCGames.ID;
+                                    }
+                                }
+
+                                if (searchType == SearchType.Audio)
+                                {
+                                    category = seriesCq.Find(".group_img .cat a").Text();
+                                    if (category == "Single" || category == "Album" || category == "Compilation" || category == "Soundtrack" || category == "Remix CD")
+                                    {
+                                        var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
+                                        if (description.Contains(" Lossless "))
+                                            release.Category = TorznabCatType.AudioLossless.ID;
+                                        else if (description.Contains("MP3"))
+                                            release.Category = TorznabCatType.AudioMP3.ID;
+                                        else
+                                            release.Category = TorznabCatType.AudioOther.ID;
+                                    }
                                 }
 
 
@@ -386,7 +441,7 @@ namespace Jackett.Indexers
             // Add to the cache
             lock (cache)
             {
-                cache.Add(new CachedQueryResult(searchTerm, releases));
+                cache.Add(new CachedQueryResult(queryUrl, releases));
             }
 
             return releases.Select(s => (ReleaseInfo)s.Clone());
