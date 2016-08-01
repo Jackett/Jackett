@@ -97,12 +97,12 @@ namespace Jackett.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
-                {
-                    CQ dom = result.Content;
-                    var messageEl = dom[".ui-state-error"].Last();
-                    var errorMessage = messageEl.Text().Trim();
-                    throw new ExceptionWithConfigData(errorMessage, configData);
-                });
+            {
+                CQ dom = result.Content;
+                var messageEl = dom[".ui-state-error"].Last();
+                var errorMessage = messageEl.Text().Trim();
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
