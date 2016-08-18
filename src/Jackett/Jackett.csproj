@@ -190,7 +190,6 @@
     <Compile Include="Indexers\MyAnonamouse.cs" />
     <Compile Include="Indexers\PassThePopcorn.cs" />
     <Compile Include="Indexers\Xthor.cs" />
-    <Compile Include="Indexers\PhxBit.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Indexers\BitSoup.cs" />
     <Compile Include="Indexers\BlueTigers.cs" />
@@ -454,9 +453,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\xthor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\phxbit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\animebytes.png">
