@@ -42,6 +42,12 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -60,11 +66,17 @@ namespace Jackett.Indexers
                 var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            if (!loggedInCheck.Content.Contains("logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+            }
+
             string Url;
             if (string.IsNullOrEmpty(query.GetQueryString()))
                 Url = SearchUrl;
