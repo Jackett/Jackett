@@ -455,6 +455,13 @@ function bindUIButtons() {
                 setCategories(trackerId, this.items);
             }, scope));
 
+            document.getElementById("searchquery")
+            .addEventListener("keyup", function (event) {
+                event.preventDefault();
+                if (event.keyCode == 13) {
+                    document.getElementById("jackett-search-perform").click();
+                }
+            });
 
             $('#jackett-search-perform').click(function () {
                 if ($('#jackett-search-perform').text().trim() !== 'Search trackers') {
