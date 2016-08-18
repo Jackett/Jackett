@@ -78,6 +78,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("25", TorznabCatType.MoviesOther);
             AddCategoryMapping("21", TorznabCatType.MoviesOther);
             AddCategoryMapping("20", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("26", TorznabCatType.MoviesWEBDL);
             AddCategoryMapping("9", TorznabCatType.TVAnime);
             AddCategoryMapping("34", TorznabCatType.Other);
             AddCategoryMapping("35", TorznabCatType.Audio);
