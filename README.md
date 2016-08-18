@@ -44,6 +44,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MyAnonamouse
  * NCore
  * NextGen
+ * Pretome
  * PrivateHD
  * RevolutionTT
  * SceneAccess
