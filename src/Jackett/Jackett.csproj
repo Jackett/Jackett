@@ -241,7 +241,6 @@
     <Compile Include="Indexers\TorrentBytes.cs" />
     <Compile Include="Indexers\IPTorrents.cs" />
     <Compile Include="Indexers\MoreThanTV.cs" />
-    <Compile Include="Indexers\Pretome.cs" />
     <Compile Include="Indexers\PrivateHD.cs" />
     <Compile Include="Indexers\SceneAccess.cs" />
     <Compile Include="Indexers\SceneFZ.cs" />
@@ -510,9 +509,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\ncore.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\pretome.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\privatehd.png">
