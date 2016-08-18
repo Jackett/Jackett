@@ -147,7 +147,7 @@ namespace Jackett.Indexers
             {
                 CQ dom = results;
 
-                var rows = dom["table.torrents > tbody > tr"];
+                var rows = dom["table[id='torrents'] > tbody > tr"];
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
