@@ -65,7 +65,7 @@ namespace Jackett.Indexers
         }
 
 
-        public IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
+        public override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
         {
             // Prevent filtering
             return input;
