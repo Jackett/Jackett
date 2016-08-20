@@ -99,7 +99,7 @@ namespace Jackett.Indexers
             {
                 var parser = new HtmlParser();
                 var document = parser.Parse(htmlResponse);
-                var rows = document.QuerySelectorAll(".torrent_table > tbody > tr:not(:First-child)");
+                var rows = document.QuerySelectorAll(".torrent_table > tbody > tr[class^='torrent row']");
 
                 foreach (var row in rows)
                 {
