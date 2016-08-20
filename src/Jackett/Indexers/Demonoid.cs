@@ -59,7 +59,7 @@ namespace Jackett.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("user_control_panel.php"), () =>
             {
                 CQ dom = result.Content;
-                var errorMessage = dom[".red"].ElementAt(1).Cq().Text().Trim();
+                string errorMessage = dom["form[id='bb_code_form']"].Parent().Find("font[class='red']").Text();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -118,7 +118,7 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                     release.Guid = release.Comments;
 
-                    var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(1).Cq();
+                    var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(0).Cq();
                     release.Link = new Uri(SiteLink + qDownload.Attr("href"));
 
                     var sizeStr = rowB.ChildElements.ElementAt(3).Cq().Text();
