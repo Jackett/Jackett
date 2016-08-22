@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 logger: l,
                 p: ps,
                 downloadBase: "https://www.torrentleech.org/download/",
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLogin("For best results, change the 'Default Number of Torrents per Page' setting to the maximum in your profile on the TorrentLeech webpage."))
         {
 
             AddCategoryMapping(8, TorznabCatType.MoviesSD); // cam
