@@ -54,6 +54,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(25, TorznabCatType.MoviesSD);
             AddCategoryMapping(11, TorznabCatType.MoviesHD);
             AddCategoryMapping(5, TorznabCatType.MoviesHD);
+            AddCategoryMapping(48, TorznabCatType.Movies);
             AddCategoryMapping(3, TorznabCatType.MoviesSD);
             AddCategoryMapping(21, TorznabCatType.MoviesSD);
             AddCategoryMapping(22, TorznabCatType.MoviesForeign);
@@ -154,8 +155,15 @@ namespace Jackett.Indexers
             var queryUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-                queryCollection.Add("search", searchString);
+            if (query.QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(query.ImdbID) && query.ImdbID.ToLower().StartsWith("tt"))
+            {
+                queryCollection.Add("search", query.ImdbID);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(searchString))
+                    queryCollection.Add("search", searchString);
+            }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("c" + cat, "1");
