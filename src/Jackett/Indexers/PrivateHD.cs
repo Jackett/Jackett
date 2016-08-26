@@ -72,6 +72,13 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 2, 0, 0), 3, 2, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 2, 0, 0), 11, 1, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            TimeZoneInfo easternTz = TimeZoneInfo.CreateCustomTimeZone("Eastern Time", new TimeSpan(-5, 0, 0), "(GMT-05:00) Eastern Time", "Eastern Standard Time", "Eastern Daylight Time", adjustments);
+
             var releases = new List<ReleaseInfo>();
 
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct();
@@ -96,7 +103,7 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
-
+                    
                     release.Title = qRow.Find("a[class='torrent-filename']").Text().Trim();
                     release.Comments = new Uri(qRow.Find("a[class='torrent-filename']").Attr("href"));
                     release.Guid = release.Comments;
@@ -105,9 +112,8 @@ namespace Jackett.Indexers
 
                     //05 Aug 2016 01:08
                     var dateString = row.ChildElements.ElementAt(3).Cq().Find("span").Attr("title");
-                    TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                    DateTime pubDateEastern = DateTime.SpecifyKind(DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                    release.PublishDate = TimeZoneInfo.ConvertTimeToUtc(pubDateEastern, easternZone).ToLocalTime();
+                    DateTime pubDateSite = DateTime.SpecifyKind(DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
+                    release.PublishDate = TimeZoneInfo.ConvertTimeToUtc(pubDateSite, easternTz).ToLocalTime();
                     
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
