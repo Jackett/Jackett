@@ -104,4 +104,4 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 
 ### Screenshots
 
-![screenshot](http://i.imgur.com/t1sVva6.png "screenshot")
+![screenshot](https://i.imgur.com/SCGLzFq.png "screenshot")
