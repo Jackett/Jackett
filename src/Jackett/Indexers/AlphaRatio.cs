@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: "https://alpharatio.cc/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
                 logger: l,
@@ -93,6 +93,7 @@ namespace Jackett.Indexers
             release.Guid = new Uri(GuidUrl + id);
             release.Comments = release.Guid;
             release.Link = new Uri(DownloadUrl + id);
+            release.Category = MapTrackerCatToNewznab(CategoryReverseMapper((string)r["category"]));
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -164,7 +165,23 @@ namespace Jackett.Indexers
         {
             DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             long unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
-            return new DateTime(unixStart.Ticks + unixTimeStampInTicks);
+            return new DateTime(unixStart.Ticks + unixTimeStampInTicks, DateTimeKind.Utc).ToLocalTime();
+        }
+
+        static string CategoryReverseMapper(string categoryName)
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+
+            dictionary.Add("TvSD", "1");
+            dictionary.Add("TvHD", "2");
+            dictionary.Add("MovieSD", "6");
+            dictionary.Add("MovieHD", "7");
+
+            if (dictionary.ContainsKey(categoryName))
+            {
+                return dictionary[categoryName];
+            }
+            return string.Empty;
         }
     }
 }
