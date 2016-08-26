@@ -39,7 +39,36 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-        }
+            AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
+            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
+                19, // Movie / 1080p
+                41, // Movie / 4K UHD
+                18, // Movie / 720p
+                40, // Movie / Remux
+                16 // Movie / HD-DVD
+            );
+
+            AddMultiCategoryMapping(TorznabCatType.TVHD,
+                21, // TV Show / 720p HDTV
+                22 // TV Show / 1080p HDTV
+            );
+
+            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / Lossless
+            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
+            
+            AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
+                24, // TV Show / Documentary / 720p
+                25 // TV Show / Documentary / 1080p
+            );
+            
+            AddMultiCategoryMapping(TorznabCatType.XXX,
+                33, // XXX / 720p
+                34 // XXX / 1080p
+            );
+            
+            AddCategoryMapping("37", TorznabCatType.PC);
+            AddCategoryMapping("38", TorznabCatType.Other);
+         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
