@@ -54,9 +54,9 @@ namespace Jackett.Indexers
             );
 
             AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / Lossless
-            AddCategoryMapping(31, TorznabCatType.AudioVideo,); // Music / Videos
+            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
             
-            AddmultiCategoryMapping(TorznabCatType.TVDocumentary,
+            AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
                 24, // TV Show / Documentary / 720p
                 25 // TV Show / Documentary / 1080p
             );
