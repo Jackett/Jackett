@@ -110,7 +110,7 @@ namespace Jackett.Indexers
                 var parser = new HtmlParser();
                 var document = parser.Parse(response.Content);
                 var groups = document.QuerySelectorAll(".torrent_table > tbody > tr.group");
-                var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent"); // TODO: Handle individual torrents
+                var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent");
 
                 // Loop through all torrent (season) groups
                 foreach (var group in groups)
