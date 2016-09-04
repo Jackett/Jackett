@@ -18,6 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlphaRatio
  * AnimeBytes
  * Avistaz
+ * BakaBT
  * bB
  * BeyondHD
  * BIT-HDTV
