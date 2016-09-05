@@ -83,6 +83,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(26, TorznabCatType.TVSD);
             AddCategoryMapping(7, TorznabCatType.TVHD);
             AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(34, TorznabCatType.TV);
 
             AddCategoryMapping(6, TorznabCatType.XXX);
             AddCategoryMapping(15, TorznabCatType.XXX);
