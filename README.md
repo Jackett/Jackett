@@ -31,6 +31,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FileList
  * Freshon
  * Fuzer
+ * Ghost City
  * HD-Space
  * HD-Torrents
  * Hebits
