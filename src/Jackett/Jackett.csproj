@@ -152,6 +152,7 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\GhostCity.cs" />
     <Compile Include="Indexers\Hebits.cs" />
     <Compile Include="Indexers\MyAnonamouse.cs" />
     <Compile Include="Indexers\PassThePopcorn.cs" />
@@ -412,6 +413,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\login.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\ghostcity.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\myanonamouse.png">
