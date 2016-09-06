@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CloudFlareUtilities;
 using Jackett.Models;
 using Jackett.Services;
 using NLog;
@@ -71,15 +72,19 @@ namespace Jackett.Utils.Clients
                 proxyServer = new WebProxy(Startup.ProxyConnection, false);
                 useProxy = true;
             }
-            var client = new HttpClient(new HttpClientHandler
+
+            ClearanceHandler clearanceHandlr = new ClearanceHandler();
+            HttpClientHandler clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
                 Proxy = proxyServer,
                 UseProxy = useProxy
-            });
-            
+            };
+
+            clearanceHandlr.InnerHandler = clientHandlr;
+            var client = new HttpClient(clearanceHandlr);
 
             if (webRequest.EmulateBrowser)
                 client.DefaultRequestHeaders.Add("User-Agent",  BrowserUtil.ChromeUserAgent);
