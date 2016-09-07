@@ -156,6 +156,7 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\BitCityReloaded.cs" />
     <Compile Include="Indexers\GhostCity.cs" />
     <Compile Include="Indexers\Hebits.cs" />
     <Compile Include="Indexers\MyAnonamouse.cs" />
@@ -598,6 +599,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\hebits.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\bitcityreloaded.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Models\TorznabCatType.tt">
