@@ -58,6 +58,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDay
  * TorrentLeech
  * TorrentShack
+ * Torrent-Syndikat
  * TransmitheNet
  * TV Chaos UK
  * World-In-HD
