@@ -161,6 +161,7 @@
     <Compile Include="Indexers\Hebits.cs" />
     <Compile Include="Indexers\MyAnonamouse.cs" />
     <Compile Include="Indexers\PassThePopcorn.cs" />
+    <Compile Include="Indexers\PirateTheNet.cs" />
     <Compile Include="Indexers\TorrentSyndikat.cs" />
     <Compile Include="Indexers\Xthor.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
@@ -428,6 +429,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\passthepopcorn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\piratethenet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\torrentsyndikat.png">
