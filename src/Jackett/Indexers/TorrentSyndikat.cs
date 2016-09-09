@@ -21,7 +21,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "eing2.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        TimeZoneInfo germanyTz = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+        TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
 
         new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
