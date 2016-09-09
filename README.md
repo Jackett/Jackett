@@ -21,6 +21,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BakaBT
  * bB
  * BeyondHD
+ * Bit-City Reloaded
  * BIT-HDTV
  * BitMeTV
  * BitSoup
@@ -41,6 +42,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Immortalseed
  * IPTorrents
  * PassThePopcorn
+ * PirateTheNet
  * MoreThanTV
  * MyAnonamouse
  * NCore
@@ -58,6 +60,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDay
  * TorrentLeech
  * TorrentShack
+ * Torrent-Syndikat
  * TransmitheNet
  * TV Chaos UK
  * World-In-HD

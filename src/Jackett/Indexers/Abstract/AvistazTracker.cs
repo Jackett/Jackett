@@ -52,12 +52,12 @@ namespace Jackett.Indexers
         {
             configData.LoadValuesFromJson(configJson);
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var token = new Regex("Avz.CSRF_TOKEN = '(.*?)';").Match(loginPage.Content).Groups[1].ToString();
+            var token = new Regex("<meta name=\"_token\" content=\"(.*?)\">").Match(loginPage.Content).Groups[1].ToString();
             var pairs = new Dictionary<string, string> {
                 { "_token", token },
-                { "username_email", configData.Username.Value },
+                { "email_username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "remember", "on" }
+                { "remember", "1" }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
@@ -100,27 +100,29 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
 
-                    var qLink = row.ChildElements.ElementAt(1).FirstElementChild.Cq();
+                    var qLink = qRow.Find("a.torrent-filename"); ;
                     release.Title = qLink.Text().Trim();
                     release.Comments = new Uri(qLink.Attr("href"));
                     release.Guid = release.Comments;
 
-                    var qDownload = row.ChildElements.ElementAt(3).FirstElementChild.Cq();
+                    var qDownload = qRow.Find("a.torrent-download-icon"); ;
                     release.Link = new Uri(qDownload.Attr("href"));
 
-                    var dateStr = row.ChildElements.ElementAt(5).Cq().Text().Trim();
+                    var dateStr = qRow.Find("td:eq(3) > span").Text().Trim();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var sizeStr = row.ChildElements.ElementAt(6).Cq().Text();
+                    var sizeStr = qRow.Find("td:eq(5) > span").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text().Trim());
+                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim()) + release.Seeders;
 
                     var cat = row.Cq().Find("td:eq(0) i").First().Attr("class")
-                                            .Replace("gi gi-film", "1")
-                                            .Replace("gi gi-tv", "2")
-                                            .Replace("gi gi-music", "3")
+                                            .Replace("torrent-icon", string.Empty)
+                                            .Replace("fa fa-", string.Empty)
+                                            .Replace("film", "1")
+                                            .Replace("tv", "2")
+                                            .Replace("music", "3")
                                             .Replace("text-pink", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat.Trim());
                     releases.Add(release);

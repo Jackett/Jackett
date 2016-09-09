@@ -1,0 +1,211 @@
+﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
+using System.Globalization;
+
+namespace Jackett.Indexers
+{
+    public class PirateTheNet : BaseIndexer, IIndexer
+    {
+        private string SearchUrl { get { return SiteLink + "torrentsutils.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
+        TimeZoneInfo germanyTz = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+        private readonly List<String> categories = new List<string>() { "1080P", "720P", "BDRip", "BluRay", "BRRip", "DVDR", "DVDRip", "FLAC", "MP3", "MP4", "Packs", "R5", "Remux", "TVRip", "WebRip" };
+
+        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        {
+            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public PirateTheNet(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+            : base(name: "PirateTheNet",
+                description: "A movie tracker",
+                link: "http://piratethe.net/",
+                caps: new TorznabCapabilities(),
+                manager: i,
+                client: w,
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+        {
+            this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
+            this.configData.DisplayText.Name = "Notice";
+
+            AddCategoryMapping("1080P", TorznabCatType.MoviesHD);
+            AddCategoryMapping("720P", TorznabCatType.MoviesHD);
+            AddCategoryMapping("BDRip", TorznabCatType.MoviesSD);
+            AddCategoryMapping("BluRay", TorznabCatType.MoviesBluRay);
+            AddCategoryMapping("BRRip", TorznabCatType.MoviesSD);
+            AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("DVDRip", TorznabCatType.MoviesSD);
+            AddCategoryMapping("FLAC", TorznabCatType.AudioLossless);
+            AddCategoryMapping("MP3", TorznabCatType.AudioMP3);
+            AddCategoryMapping("MP4", TorznabCatType.AudioOther);
+            AddCategoryMapping("Packs", TorznabCatType.Movies);
+            AddCategoryMapping("R5", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("Remux", TorznabCatType.Movies);
+            AddCategoryMapping("TVRip", TorznabCatType.MoviesOther);
+            AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL);
+        }
+
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            configData.LoadValuesFromJson(configJson);
+
+            var result1 = await RequestStringWithCookies(CaptchaUrl);
+            var json1 = JObject.Parse(result1.Content);
+            var captchaSelection = json1["images"][0]["hash"];
+
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "captchaSelection", (string)captchaSelection }
+            };
+
+            var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
+
+            await ConfigureIfOK(result2.Cookies, result2.Content.Contains("logout.php"), () =>
+            {
+                var errorMessage = "Login Failed";
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+            queryCollection.Add("action", "torrentstable");
+            queryCollection.Add("viewtype", "0");
+            queryCollection.Add("visiblecategories", "Action,Adventure,Animation,Biography,Comedy,Crime,Documentary,Drama,Eastern,Family,Fantasy,History,Holiday,Horror,Kids,Musical,Mystery,Romance,Sci-Fi,Short,Sports,Thriller,War,Western");
+            queryCollection.Add("page", "1");
+            queryCollection.Add("visibility", "showall");
+            queryCollection.Add("compression", "showall");
+            queryCollection.Add("sort", "added");
+            queryCollection.Add("order", "DESC");
+            queryCollection.Add("titleonly", "true");
+            queryCollection.Add("packs", "showall");
+            queryCollection.Add("bookmarks", "showall");
+            queryCollection.Add("subscriptions", "showall");
+            queryCollection.Add("skw", "showall");
+            queryCollection.Add("advancedsearchparameters", "");
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                // search keywords use OR by default and it seems like there's no way to change it, expect unwanted results
+                queryCollection.Add("searchstring", searchString);
+            }
+
+            var cats = MapTorznabCapsToTrackers(query);
+            var hiddenqualities = "";
+            if (cats.Count > 0)
+            {
+                hiddenqualities = String.Join(",", categories.Where(cat => !cats.Contains(cat)));
+            }
+            queryCollection.Add("hiddenqualities", hiddenqualities);
+
+            searchUrl += "?" + queryCollection.GetQueryString();
+
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            try
+            {
+                CQ dom = results.Content;
+                /*
+                // parse logic for viewtype=1, unfortunately it's missing the release time so we can't use it
+                var movieBlocks = dom["table.main"];
+                foreach (var movieBlock in movieBlocks)
+                {
+                    var qMovieBlock = movieBlock.Cq();
+
+                    var movieLink = qMovieBlock.Find("tr > td[class=colhead] > a").First();
+                    var movieName = movieLink.Text();
+
+                    var qDetailsBlock = qMovieBlock.Find("tr > td.torrentstd > table > tbody > tr");
+                    var qDetailsHeader = qDetailsBlock.ElementAt(0);
+                    var qDetailsTags = qDetailsBlock.ElementAt(1);
+                    var qTorrents = qDetailsBlock.Find("td.moviestorrentstd > table > tbody > tr:eq(0)");
+
+                    foreach (var torrent in qTorrents)
+                    {
+                        var qTorrent = torrent.Cq();
+                        var qCatIcon = qTorrent.Find("td:eq(0) > img");
+                        var qDetailsLink = qTorrent.Find("td:eq(1) > a:eq(0)");
+                        var qSeeders = qTorrent.Find("td:eq(1) > b > a[alt=\"Number of Seeders\"]");
+                        var qLeechers = qTorrent.Find("td:eq(1) > span[alt=\"Number of Leechers\"]");
+                        var qDownloadLink = qTorrent.Find("td:eq(1) > a:has(img[alt=\"Download Torrent\"])");
+                    }
+                }
+                */
+
+                var rows = dom["table.main > tbody > tr"];
+                foreach (var row in rows.Skip(1))
+                {
+                    var release = new ReleaseInfo();
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 72 * 60 * 60;
+
+                    var qRow = row.Cq();
+
+                    var qCatIcon = qRow.Find("td:eq(0) > img");
+                    var qDetailsLink = qRow.Find("td:eq(1) > a:eq(0)"); // link to the movie, not the actual torrent
+                    var qSeeders = qRow.Find("td:eq(8)");
+                    var qLeechers = qRow.Find("td:eq(9)");
+                    var qDownloadLink = qRow.Find("td > a:has(img[alt=\"Download Torrent\"])");
+                    var qPudDate = qRow.Find("td:eq(5) > nobr");
+                    var qSize = qRow.Find("td:eq(6)");
+
+                    var catStr = qCatIcon.Attr("alt");
+                    release.Category = MapTrackerCatToNewznab(catStr);
+
+                    release.Link = new Uri(SiteLink + qDownloadLink.Attr("href").Substring(1));
+                    release.Title = qDetailsLink.Text();
+                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
+                    release.Guid = release.Link;
+
+                    var dateStr = qPudDate.Text().Trim();
+                    DateTime pubDateUtc;
+                    var Timeparts = dateStr.Split(new char[] { ' ' }, 2)[1];
+                    if (dateStr.StartsWith("Today "))
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + DateTime.ParseExact(dateStr.Split(new char[] { ' ' }, 2)[1], "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+                    else if (dateStr.StartsWith("Yesterday "))
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) +
+                            DateTime.ParseExact(dateStr.Split(new char[] { ' ' }, 2)[1], "hh:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay - TimeSpan.FromDays(1);
+                    else
+                        pubDateUtc = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMM d yyyy hh:mm tt", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
+
+                    release.PublishDate = pubDateUtc.ToLocalTime();
+
+                    var sizeStr = qSize.Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                    release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
+                    release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
+
+                    releases.Add(release);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
+            }
+
+            return releases;
+        }
+    }
+}
