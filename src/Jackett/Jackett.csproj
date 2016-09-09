@@ -167,7 +167,7 @@
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Indexers\BitSoup.cs" />
     <Compile Include="Indexers\BlueTigers.cs" />
-    <Compile Include="Indexers\EuTorrents.cs" />
+    <Compile Include="Indexers\CinemaZ.cs" />
     <Compile Include="Indexers\Avistaz.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
     <Compile Include="Indexers\BB.cs" />
@@ -467,7 +467,7 @@
     <Content Include="Content\logos\demonoid.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\logos\eutorrents.png">
+    <Content Include="Content\logos\cinemaz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\filelist.png">
