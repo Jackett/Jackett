@@ -19,7 +19,7 @@ namespace Jackett.Indexers
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string BrowseUrl { get { return SiteLink + "uebersicht.php"; } }
-        TimeZoneInfo germanyTz = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+        TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
 
         new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
