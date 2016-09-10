@@ -28,8 +28,8 @@ namespace Jackett.Indexers
             set { configData.Url.Value = value.ToString (); }
         }
 
-        private string SearchUrl { get { return BaseUri + "search/{0}/0/99/208,205"; } }
-        private string RecentUrl { get { return BaseUri + "recent"; } }
+        private string SearchUrl { get { return BaseUri + "search/{0}/0/99/0"; } }
+        //private string RecentUrl { get { return BaseUri + "recent"; } }
 
         new ConfigurationDataUrl configData {
             get { return (ConfigurationDataUrl)base.configData; }
@@ -78,8 +78,11 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo> ();
             var queryStr = HttpUtility.UrlEncode (query.GetQueryString ());
-            var episodeSearchUrl = string.IsNullOrWhiteSpace (queryStr) ? RecentUrl : string.Format (SearchUrl, queryStr);
-            var response = await RequestStringWithCookiesAndRetry (episodeSearchUrl, string.Empty);
+            var episodeSearchUrl = string.IsNullOrWhiteSpace (queryStr) ? SearchUrl : string.Format (SearchUrl, queryStr);
+            var episodeSearchUrl1 = episodeSearchUrl.Replace ("+", "%20");
+            var response = await RequestStringWithCookiesAndRetry (episodeSearchUrl1, string.Empty);
+
+            logger.Info (episodeSearchUrl1);
 
             try {
                 CQ dom = response.Content;
@@ -95,7 +98,7 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Text ().Trim ();
-                    logger.Info (release.Title);
+
                     release.Description = release.Title;
 
 
