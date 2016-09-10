@@ -86,43 +86,93 @@ namespace Jackett.Indexers
 
                 var rows = dom ["#searchResult > tbody > tr"];
                 foreach (var row in rows) {
-                    if (row.ChildElements.Count () < 1)
+                    if (row.ChildElements.Count () < 2)
                         continue;
 
                     var release = new ReleaseInfo ();
                     CQ qRow = row.Cq ();
                     CQ qLink = qRow.Find (".detName > .detLink").First ();
-
-
-
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Text ().Trim ();
+                    logger.Info (release.Title);
                     release.Description = release.Title;
-                    release.Comments = new Uri (BaseUri + qLink.Attr ("href").TrimStart ('/'));
-                    release.Guid = release.Comments;
+
 
                     var downloadCol = row.ChildElements.ElementAt (1).Cq ().Children ("a");
-                    logger.Warn (downloadCol);
                     release.MagnetUri = new Uri (downloadCol.Attr ("href"));
+                    release.Comments = new Uri (BaseUri + qLink.Attr ("href").TrimStart ('/'));
+                    release.Guid = release.Comments;
                     release.InfoHash = release.MagnetUri.ToString ().Split (':') [3].Split ('&') [0];
-
                     var descString = qRow.Find (".detDesc").Text ().Trim ();
                     var descParts = descString.Split (',');
                     var timeString = descParts [0].Split (' ') [1];
+                    //logger.Warn (timeString);
 
                     //time shit
                     if (timeString.Contains (":")) {
-                        string s = timeString.Replace ("\u00a0", "_");
-                        DateTime dt = DateTime.Now;
-                        bool success = DateTime.TryParseExact (s, "MM-dd_HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt);
-                        release.PublishDate = dt;
+
+                        if (timeString.Contains ("Today")) {
+                            var s = timeString.Trim ().TrimStart ('T', 'o', 'd', 'a', 'y', ' ');
+                            var ss = s.Replace ("\u00a0", "_");
+                            //logger.Warn (ss);
+                            DateTime dt;
+                            bool success = DateTime.TryParseExact (ss, "_hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt);
+                            //working
+                            //logger.Warn ("Is Parsing Successful? {0}   TODAY", success);
+                            release.PublishDate = dt;
+                            //logger.Error (dt);
+
+                        } else {
+                            string s = timeString.Replace ("\u00a0", "_");
+                            DateTime dt;
+                            bool success = DateTime.TryParseExact (s, "MM-dd_HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt);
+                            //logger.Warn ("Is Parsing Successful? {0}      MM-DD HH:MM", success);
+                            release.PublishDate = dt;
+                            //working
+                            //logger.Error ("1");
+                        }
+
+                    } else if (timeString.Contains ("ago")) {
+                        if (timeString.Contains ("mins")) {
+                            //logger.Info (timeString);
+                            string foundN = Regex.Match (timeString, @"\d+").Value;
+                            //logger.Warn (foundN);
+                            double d = Convert.ToDouble (foundN);
+                            double d2 = d * -1;
+                            DateTime dt = DateTime.Now.AddMinutes (d2);
+                            release.PublishDate = dt;
+                            //working 
+                            //logger.Error (dt + " MINSAGO");
+
+                        } else if (timeString.Contains ("min")) {
+                            //logger.Info (timeString);
+                            string foundN = Regex.Match (timeString, @"\d+").Value;
+                            //logger.Warn (foundN);
+                            double d = Convert.ToDouble (foundN);
+                            double d2 = d * -1;
+                            DateTime dt = DateTime.Now.AddMinutes (d2);
+                            release.PublishDate = dt;
+                            //working
+                            //logger.Error (dt + " MINAGO"); ;
+                        } else {
+
+
+                        }
+
+
                     } else {
                         string s = timeString.Replace ("\u00a0", "_");
-                        DateTime dt = DateTime.Now;
+                        DateTime dt;
                         bool success = DateTime.TryParseExact (s, "MM-dd_yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt);
+                        //logger.Warn ("Is Parsing Successful? {0}", success);
                         release.PublishDate = dt;
+                        //working
+                        //logger.Error ("3");
                     }
+
+
+                    //logger.Warn (release.PublishDate + " the pirate bay");
                     release.Size = ReleaseInfo.GetBytes (descParts [1]);
                     release.Seeders = ParseUtil.CoerceInt (row.ChildElements.ElementAt (2).Cq ().Text ());
                     release.Peers = ParseUtil.CoerceInt (row.ChildElements.ElementAt (3).Cq ().Text ()) + release.Seeders;
