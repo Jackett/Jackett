@@ -82,8 +82,6 @@ namespace Jackett.Indexers
             var episodeSearchUrl1 = episodeSearchUrl.Replace ("+", "%20");
             var response = await RequestStringWithCookiesAndRetry (episodeSearchUrl1, string.Empty);
 
-            logger.Info (episodeSearchUrl1);
-
             try {
                 CQ dom = response.Content;
 
@@ -98,10 +96,7 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Text ().Trim ();
-
                     release.Description = release.Title;
-
-
                     var downloadCol = row.ChildElements.ElementAt (1).Cq ().Children ("a");
                     release.MagnetUri = new Uri (downloadCol.Attr ("href"));
                     release.Comments = new Uri (BaseUri + qLink.Attr ("href").TrimStart ('/'));
@@ -110,7 +105,6 @@ namespace Jackett.Indexers
                     var descString = qRow.Find (".detDesc").Text ().Trim ();
                     var descParts = descString.Split (',');
                     var timeString = descParts [0].Split (' ') [1];
-                    //logger.Warn (timeString);
 
                     //time shit
                     if (timeString.Contains (":")) {
@@ -160,9 +154,7 @@ namespace Jackett.Indexers
                             //logger.Error (dt + " MINAGO"); ;
                         } else {
 
-
                         }
-
 
                     } else {
                         string s = timeString.Replace ("\u00a0", "_");
@@ -173,13 +165,11 @@ namespace Jackett.Indexers
                         //working
                         //logger.Error ("3");
                     }
-
-
-                    //logger.Warn (release.PublishDate + " the pirate bay");
                     release.Size = ReleaseInfo.GetBytes (descParts [1]);
                     release.Seeders = ParseUtil.CoerceInt (row.ChildElements.ElementAt (2).Cq ().Text ());
                     release.Peers = ParseUtil.CoerceInt (row.ChildElements.ElementAt (3).Cq ().Text ()) + release.Seeders;
                     releases.Add (release);
+
                 }
             } catch (Exception ex) {
                 OnParseError (response.Content, ex);
