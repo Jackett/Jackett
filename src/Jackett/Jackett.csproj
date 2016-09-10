@@ -314,7 +314,6 @@
     <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\ThePirateBay.cs" />
-    <Compile Include="Indexers\Kickass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -622,9 +621,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\thepiratebay.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\kickass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
