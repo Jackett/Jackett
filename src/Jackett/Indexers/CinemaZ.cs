@@ -18,12 +18,12 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class EuTorrents : AvistazTracker, IIndexer
+    public class CinemaZ : AvistazTracker, IIndexer
     {
-        public EuTorrents(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "EuTorrents",
+        public CinemaZ(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+            : base(name: "CinemaZ",
                 desc: "Part of the Avistaz network.",
-                link: "https://eutorrents.to/",
+                link: "https://cinemaz.to/",
                 indexerManager: indexerManager,
                 logger: logger,
                 protectionService: protectionService,

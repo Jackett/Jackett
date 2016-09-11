@@ -174,7 +174,7 @@ namespace Jackett.Indexers
                     release.Category = MapTrackerCatToNewznab(catStr);
 
                     release.Link = new Uri(SiteLink + qDownloadLink.Attr("href").Substring(1));
-                    release.Title = qDetailsLink.Text();
+                    release.Title = qDetailsLink.Attr("alt");
                     release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
                     release.Guid = release.Link;
 
