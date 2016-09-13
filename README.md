@@ -64,6 +64,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TransmitheNet
  * TV Chaos UK
  * World-In-HD
+ * x264
  * XSpeeds
  * Xthor
 
