@@ -200,9 +200,35 @@ function populateConfigItems(configForm, config) {
             var template = setupItemTemplate(item);
             $formItemContainer.append(template);
             if (item.type === 'recaptcha') {
-                grecaptcha.render($('.jackettrecaptcha')[0], {
-                    'sitekey': item.sitekey
-                });
+                var jackettrecaptcha = $('.jackettrecaptcha');
+                jackettrecaptcha.data("version", item.version);
+                switch (item.version) {
+                    case "1":
+                        // The v1 reCAPTCHA code uses document.write() calls to write the CAPTCHA to the location where the script was loaded.
+                        // As it's loaded async this doesn't work.
+                        // We use an iframe to work around this problem.
+                        var html = '<script type="text/javascript" src="https://www.google.com/recaptcha/api/challenge?k='+encodeURIComponent(item.sitekey)+'"></script>';
+                        var frame = document.createElement('iframe');
+                        frame.id = "jackettrecaptchaiframe";
+                        frame.style.height = "145px";
+                        frame.style.weight = "326px";
+                        frame.style.border = "none";
+                        frame.onload = function () {
+                            // auto resize iframe to content
+                            frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
+                            frame.style.width = frame.contentWindow.document.body.scrollWidth + 'px';
+                        }
+                        jackettrecaptcha.append(frame);
+                        frame.contentDocument.open();
+                        frame.contentDocument.write(html);
+                        frame.contentDocument.close();
+                        break;
+                    case "2":
+                        grecaptcha.render(jackettrecaptcha[0], {
+                            'sitekey': item.sitekey
+                        });
+                        break;
+                }
             }
         }
     }
@@ -235,7 +261,18 @@ function getConfigModalJson(configForm) {
                 break;
             case "recaptcha":
                 if (window.jackettIsLocal) {
-                    itemEntry.value = $('.g-recaptcha-response').val();
+                    var version = $el.find('.jackettrecaptcha').data("version");
+                    switch (version) {
+                        case "1":
+                            var frameDoc = $("#jackettrecaptchaiframe")[0].contentDocument;
+                            itemEntry.version = version;
+                            itemEntry.challenge = $("#recaptcha_challenge_field", frameDoc).val()
+                            itemEntry.value = $("#recaptcha_response_field", frameDoc).val()
+                            break;
+                        case "2":
+                            itemEntry.value = $('.g-recaptcha-response').val();
+                            break;
+                    }
                 } else {
                     itemEntry.cookie = $el.find(".setup-item-recaptcha input").val();
                 }

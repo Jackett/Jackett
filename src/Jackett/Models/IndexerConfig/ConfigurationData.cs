@@ -73,6 +73,8 @@ namespace Jackett.Models.IndexerConfig
                     case ItemType.Recaptcha:
                         ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
                         ((RecaptchaItem)item).Cookie = arrItem.Value<string>("cookie");
+                        ((RecaptchaItem)item).Version = arrItem.Value<string>("version");
+                        ((RecaptchaItem)item).Challenge = arrItem.Value<string>("challenge");
                         break;
                 }
             }
@@ -92,6 +94,7 @@ namespace Jackett.Models.IndexerConfig
                 {
                     case ItemType.Recaptcha:
                         jObject["sitekey"] = ((RecaptchaItem)item).SiteKey;
+                        jObject["version"] = ((RecaptchaItem)item).Version;
                         break;
                     case ItemType.InputString:
                     case ItemType.HiddenData:
@@ -177,8 +180,11 @@ namespace Jackett.Models.IndexerConfig
 
         public class RecaptchaItem : StringItem
         {
+            public string Version { get; set; }
+            public string Challenge { get; set; }
             public RecaptchaItem()
             {
+                this.Version = "2";
                 ItemType = ConfigurationData.ItemType.Recaptcha;
             }
         }

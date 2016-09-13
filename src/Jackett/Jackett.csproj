@@ -163,6 +163,7 @@
     <Compile Include="Indexers\PassThePopcorn.cs" />
     <Compile Include="Indexers\PirateTheNet.cs" />
     <Compile Include="Indexers\TorrentSyndikat.cs" />
+    <Compile Include="Indexers\x264.cs" />
     <Compile Include="Indexers\Xthor.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Indexers\BitSoup.cs" />
@@ -435,6 +436,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\torrentsyndikat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\x264.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\xthor.png">
