@@ -91,7 +91,7 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = response.Content;
-                var rows = dom["table > tbody > tr"];
+                var rows = dom["table:has(thead) > tbody > tr"];
                 foreach (var row in rows)
                 {
                     CQ qRow = row.Cq();
