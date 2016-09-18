@@ -194,6 +194,12 @@ namespace Jackett.Indexers
             }
             else
             {
+                // The TVChaos UK search requires an exact match of the search string.
+                // But it seems like they just send the unfiltered search to the SQL server in a like query (LIKE '%$searchstring%').
+                // So we replace any whitespace/special character with % to make the search more usable.
+                Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+                searchString = ReplaceRegex.Replace(searchString, "%");
+
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
                     { "keywords",  searchString },
