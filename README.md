@@ -27,9 +27,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitSoup
  * BlueTigers
  * BTN
+ * CinemaZ
  * DanishBits
  * Demonoid
- * EuTorrents
  * FileList
  * Freshon
  * FunFile
