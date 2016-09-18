@@ -42,11 +42,11 @@ namespace Jackett.Utils
                     timeAgo += TimeSpan.FromSeconds(val);
                 else if (unit.Contains("min"))
                     timeAgo += TimeSpan.FromMinutes(val);
-                else if (unit.Contains("hour"))
+                else if (unit.Contains("hour") || unit.Contains("hr"))
                     timeAgo += TimeSpan.FromHours(val);
                 else if (unit.Contains("day"))
                     timeAgo += TimeSpan.FromDays(val);
-                else if (unit.Contains("week"))
+                else if (unit.Contains("week") || unit.Contains("wk"))
                     timeAgo += TimeSpan.FromDays(val * 7);
                 else if (unit.Contains("month"))
                     timeAgo += TimeSpan.FromDays(val * 30);
