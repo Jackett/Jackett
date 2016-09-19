@@ -39,6 +39,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Torrents
  * Hebits
  * Hounddawgs
+ * House-of-Torrents
  * ILoveTorrents
  * Immortalseed
  * IPTorrents
