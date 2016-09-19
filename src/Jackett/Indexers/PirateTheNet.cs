@@ -162,8 +162,14 @@ namespace Jackett.Indexers
 
                     var qRow = row.Cq();
 
-                    var qCatIcon = qRow.Find("td:eq(0) > img");
                     var qDetailsLink = qRow.Find("td:eq(1) > a:eq(0)"); // link to the movie, not the actual torrent
+                    release.Title = qDetailsLink.Attr("alt");
+
+                    // PtN search returns a lot of unrelated releases and offers no option to use AND logic, so we filter it ourself
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
+                    var qCatIcon = qRow.Find("td:eq(0) > img");
                     var qSeeders = qRow.Find("td:eq(8)");
                     var qLeechers = qRow.Find("td:eq(9)");
                     var qDownloadLink = qRow.Find("td > a:has(img[alt=\"Download Torrent\"])");
@@ -172,7 +178,6 @@ namespace Jackett.Indexers
 
                     var catStr = qCatIcon.Attr("alt");
                     release.Category = MapTrackerCatToNewznab(catStr);
-
                     release.Link = new Uri(SiteLink + qDownloadLink.Attr("href").Substring(1));
                     release.Title = qDetailsLink.Attr("alt");
                     release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
