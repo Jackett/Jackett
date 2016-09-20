@@ -156,6 +156,7 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\BestFriends.cs" />
     <Compile Include="Indexers\BitCityReloaded.cs" />
     <Compile Include="Indexers\FunFile.cs" />
     <Compile Include="Indexers\GhostCity.cs" />
@@ -423,6 +424,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\login.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\bestfriends.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\funfile.png">
