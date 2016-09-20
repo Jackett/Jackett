@@ -20,6 +20,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Avistaz
  * BakaBT
  * bB
+ * Best Friends
  * BeyondHD
  * Bit-City Reloaded
  * BIT-HDTV
@@ -38,7 +39,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Space
  * HD-Torrents
  * Hebits
+ * New Real World
  * Hounddawgs
+ * House-of-Torrents
  * ILoveTorrents
  * Immortalseed
  * IPTorrents

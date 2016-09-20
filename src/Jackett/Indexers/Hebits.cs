@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Jackett.Indexers
 {
@@ -94,10 +95,11 @@ namespace Jackett.Indexers
                 }
             }
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestBytesWithCookies(searchUrl);
+            var results = Encoding.GetEncoding("windows-1255").GetString(response.Content);
             try
             {
-                CQ dom = results.Content;
+                CQ dom = results;
 
                 CQ qRows = dom[".browse > div > div"];
 
@@ -140,7 +142,7 @@ namespace Jackett.Indexers
 
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results, ex);
             }
 
             return releases;
