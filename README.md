@@ -50,6 +50,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PirateTheNet
  * MoreThanTV
  * MyAnonamouse
+ * myAmity
  * NCore
  * NextGen
  * Pretome
