@@ -156,6 +156,7 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\TorrentHeaven.cs" />
     <Compile Include="Indexers\NewRealWorld.cs" />
     <Compile Include="Indexers\BestFriends.cs" />
     <Compile Include="Indexers\BitCityReloaded.cs" />
@@ -449,6 +450,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\piratethenet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\torrentheaven.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\torrentsyndikat.png">
