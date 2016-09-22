@@ -16,6 +16,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 #### Supported Private Trackers
  * Abnormal
  * AlphaRatio
+ * Andraste
  * AnimeBytes
  * Avistaz
  * BakaBT
@@ -49,6 +50,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PirateTheNet
  * MoreThanTV
  * MyAnonamouse
+ * myAmity
  * NCore
  * NextGen
  * Pretome
@@ -60,8 +62,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shazbat
  * SpeedCD
  * TehConnection
+ * Torrent Network
  * TorrentBytes
  * TorrentDay
+ * TorrentHeaven
  * TorrentLeech
  * TorrentShack
  * Torrent-Syndikat

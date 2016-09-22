@@ -156,6 +156,10 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\myAmity.cs" />
+    <Compile Include="Indexers\TorrentNetwork.cs" />
+    <Compile Include="Indexers\Andraste.cs" />
+    <Compile Include="Indexers\TorrentHeaven.cs" />
     <Compile Include="Indexers\NewRealWorld.cs" />
     <Compile Include="Indexers\BestFriends.cs" />
     <Compile Include="Indexers\BitCityReloaded.cs" />
@@ -427,6 +431,9 @@
     <Content Include="Content\login.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\logos\andraste.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\logos\bestfriends.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -439,6 +446,9 @@
     <Content Include="Content\logos\houseoftorrents.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\logos\myamity.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\logos\myanonamouse.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -449,6 +459,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\piratethenet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\torrentheaven.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\torrentnetwork.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\torrentsyndikat.png">
