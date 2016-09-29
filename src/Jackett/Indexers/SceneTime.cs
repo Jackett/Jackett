@@ -108,6 +108,28 @@ namespace Jackett.Indexers
                 { "g-recaptcha-response", configData.Captcha.Value }
             };
 
+            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            {
+                CookieHeader = configData.Captcha.Cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (results.Count() == 0)
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
+
+                    SaveConfig();
+                    IsConfigured = true;
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
+
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
