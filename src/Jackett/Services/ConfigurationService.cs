@@ -172,7 +172,7 @@ namespace Jackett.Services
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error reading config file " + fullPath);
+                logger.Error(e, "Error writing config file " + fullPath);
             }
         }
 
