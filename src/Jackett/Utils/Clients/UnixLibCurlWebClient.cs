@@ -11,22 +11,31 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Jackett.Utils.Clients
 {
     public class UnixLibCurlWebClient : IWebClient
     {
         private Logger logger;
+        private Assembly CloudFlareUtilities;
+        private MethodInfo ChallengeSolverSolveMethod;
+        private MethodInfo ChallengeSolutionGetClearanceQueryMethod;
 
         public UnixLibCurlWebClient(Logger l)
         {
             logger = l;
+
+            // use reflections to get the internal CloudFlareUtilities methods we need
+            CloudFlareUtilities = Assembly.LoadFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/CloudFlareUtilities.dll");
+            ChallengeSolverSolveMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolver").GetMethod("Solve");
+            ChallengeSolutionGetClearanceQueryMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolution").GetMethod("get_ClearanceQuery");
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
-            var result = await Run(request);
+            var result = await RunCloudFlare(request);
             logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
@@ -34,11 +43,19 @@ namespace Jackett.Utils.Clients
         public async Task<WebClientStringResult> GetString(WebRequest request)
         {
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
-            var result = await Run(request);
+            var result = await RunCloudFlare(request);
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
             return Mapper.Map<WebClientStringResult>(result);
         }
 
+        private string CloudFlareChallengeSolverSolve(string challengePageContent, Uri uri)
+        {
+            var solution = ChallengeSolverSolveMethod.Invoke(null, new object[] { challengePageContent, uri.Host });
+            string clearanceQuery = (string)ChallengeSolutionGetClearanceQueryMethod.Invoke(solution, new object[] { });
+            string clearanceUri = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port + clearanceQuery;
+            return clearanceUri;
+        }
+        
         public void Init()
         {
             try
@@ -67,6 +84,41 @@ namespace Jackett.Utils.Clients
             }
         }
 
+        // Wrapper for Run which takes care of CloudFlare challenges
+        private async Task<WebClientByteResult> RunCloudFlare(WebRequest request)
+        {
+            WebClientByteResult result = await Run(request);
+
+            // check if we've received a CloudFlare challenge
+            if (result.Status == HttpStatusCode.ServiceUnavailable && ((request.Cookies != null && request.Cookies.Contains("__cfduid")) || result.Cookies.Contains("__cfduid")))
+            {
+                logger.Info("UnixLibCurlWebClient: Received a new CloudFlare challenge");
+
+                // solve the challenge
+                string pageContent = Encoding.UTF8.GetString(result.Content);
+                Uri uri = new Uri(request.Url);
+                string clearanceUri = CloudFlareChallengeSolverSolve(pageContent, uri);
+                logger.Info(string.Format("UnixLibCurlWebClient: CloudFlare clearanceUri: {0}", clearanceUri));
+
+                // wait...
+                await Task.Delay(5000);
+
+                // request clearanceUri to get cf_clearance cookie
+                var response = await CurlHelper.GetAsync(clearanceUri, request.Cookies, request.Referer);
+                logger.Info(string.Format("UnixLibCurlWebClient: received CloudFlare clearance cookie: {0}", response.Cookies));
+
+                // add new cf_clearance cookies to the original request
+                request.Cookies = response.Cookies + request.Cookies;
+
+                // re-run the original request with updated cf_clearance cookie
+                result = await Run(request);
+
+                // add cf_clearance cookie to the final result so we update the config for the next request
+                result.Cookies = response.Cookies + " " + result.Cookies;
+            }
+            return result;
+        }
+
         private async Task<WebClientByteResult> Run(WebRequest request)
         {
             Jackett.CurlHelper.CurlResponse response;
@@ -85,7 +137,7 @@ namespace Jackett.Utils.Clients
                     logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
-                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody);
+                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody); 
             }
 
             var result = new WebClientByteResult()
