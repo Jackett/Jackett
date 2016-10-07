@@ -179,7 +179,7 @@ namespace Jackett.Indexers
 
         private String ResolveCookies(String incomingCookies = "")
         {
-            var redirRequestCookies = (CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
+            var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
             System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
             Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
             var matches = expression.Match(redirRequestCookies);
@@ -190,6 +190,19 @@ namespace Jackett.Indexers
             }
             return string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
             
+        }
+
+        // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
+        protected void UpdateCookieHeader(string newCookies, string cookieOverride = null)
+        {
+            string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
+            if (CookieHeader != newCookieHeader)
+            {
+                logger.Debug(string.Format("updating Cookies {0} => {1}", CookieHeader, newCookieHeader));
+                CookieHeader = newCookieHeader;
+                if (IsConfigured)
+                    SaveConfig();
+            }
         }
 
         private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
@@ -306,7 +319,9 @@ namespace Jackett.Indexers
 
             if (cookieOverride != null)
                 request.Cookies = cookieOverride;
-            return await webclient.GetString(request);
+            WebClientStringResult result = await webclient.GetString(request);
+            UpdateCookieHeader(result.Cookies, cookieOverride);
+            return result;
         }
 
         protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
@@ -358,7 +373,9 @@ namespace Jackett.Indexers
 
             if (emulateBrowser.HasValue)
                 request.EmulateBrowser = emulateBrowser.Value;
-            return await webclient.GetString(request);
+            WebClientStringResult result = await webclient.GetString(request);
+            UpdateCookieHeader(result.Cookies, cookieOverride);
+            return result;
         }
 
         protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
