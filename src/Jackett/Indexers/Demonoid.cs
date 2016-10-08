@@ -30,7 +30,7 @@ namespace Jackett.Indexers
         public Demonoid(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Demonoid",
                 description: "Demonoid",
-                link: "http://www.demonoid.cc/",
+                link: "http://www.dnoid.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
