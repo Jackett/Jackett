@@ -18,18 +18,32 @@ namespace Jackett.Utils.Clients
     public class UnixLibCurlWebClient : IWebClient
     {
         private Logger logger;
-        private Assembly CloudFlareUtilities;
-        private MethodInfo ChallengeSolverSolveMethod;
-        private MethodInfo ChallengeSolutionGetClearanceQueryMethod;
+        private static Boolean CloudFlareUtilitiesInit = false;
+        private static Assembly CloudFlareUtilities = null;
+        private static MethodInfo ChallengeSolverSolveMethod = null;
+        private static MethodInfo ChallengeSolutionGetClearanceQueryMethod = null;
 
         public UnixLibCurlWebClient(Logger l)
         {
             logger = l;
 
-            // use reflections to get the internal CloudFlareUtilities methods we need
-            CloudFlareUtilities = Assembly.LoadFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/CloudFlareUtilities.dll");
-            ChallengeSolverSolveMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolver").GetMethod("Solve");
-            ChallengeSolutionGetClearanceQueryMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolution").GetMethod("get_ClearanceQuery");
+            // try loading CloudFlareUtilities 
+            if (!CloudFlareUtilitiesInit)
+            { 
+                try
+                {
+                    // use reflections to get the internal CloudFlareUtilities methods we need
+                    CloudFlareUtilities = Assembly.LoadFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/CloudFlareUtilities.dll");
+                    ChallengeSolverSolveMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolver").GetMethod("Solve");
+                    ChallengeSolutionGetClearanceQueryMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolution").GetMethod("get_ClearanceQuery");
+                }
+                catch (Exception e)
+                {
+                    Engine.Logger.Error(e.ToString());
+                    Engine.Logger.Error(string.Format("UnixLibCurlWebClient: Error while loading CloudFlareUtilities.dll from {0}", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+                }
+            }
+            CloudFlareUtilitiesInit = true;
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
@@ -93,6 +107,11 @@ namespace Jackett.Utils.Clients
             if (result.Status == HttpStatusCode.ServiceUnavailable && ((request.Cookies != null && request.Cookies.Contains("__cfduid")) || result.Cookies.Contains("__cfduid")))
             {
                 logger.Info("UnixLibCurlWebClient: Received a new CloudFlare challenge");
+                if(ChallengeSolutionGetClearanceQueryMethod == null)
+                {
+                    logger.Error("UnixLibCurlWebClient: CloudFlareUtilities not available, can't solve challenge");
+                    return result;
+                }
 
                 // solve the challenge
                 string pageContent = Encoding.UTF8.GetString(result.Content);
