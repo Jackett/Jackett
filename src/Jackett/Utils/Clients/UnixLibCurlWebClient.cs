@@ -11,39 +11,17 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Reflection;
+using CloudFlareUtilities;
 
 namespace Jackett.Utils.Clients
 {
     public class UnixLibCurlWebClient : IWebClient
     {
         private Logger logger;
-        private static Boolean CloudFlareUtilitiesInit = false;
-        private static Assembly CloudFlareUtilities = null;
-        private static MethodInfo ChallengeSolverSolveMethod = null;
-        private static MethodInfo ChallengeSolutionGetClearanceQueryMethod = null;
 
         public UnixLibCurlWebClient(Logger l)
         {
             logger = l;
-
-            // try loading CloudFlareUtilities 
-            if (!CloudFlareUtilitiesInit)
-            { 
-                try
-                {
-                    // use reflections to get the internal CloudFlareUtilities methods we need
-                    CloudFlareUtilities = Assembly.LoadFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/CloudFlareUtilities.dll");
-                    ChallengeSolverSolveMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolver").GetMethod("Solve");
-                    ChallengeSolutionGetClearanceQueryMethod = CloudFlareUtilities.GetType("CloudFlareUtilities.ChallengeSolution").GetMethod("get_ClearanceQuery");
-                }
-                catch (Exception e)
-                {
-                    Engine.Logger.Error(e.ToString());
-                    Engine.Logger.Error(string.Format("UnixLibCurlWebClient: Error while loading CloudFlareUtilities.dll from {0}", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
-                }
-            }
-            CloudFlareUtilitiesInit = true;
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
@@ -64,21 +42,20 @@ namespace Jackett.Utils.Clients
 
         private string CloudFlareChallengeSolverSolve(string challengePageContent, Uri uri)
         {
-            var solution = ChallengeSolverSolveMethod.Invoke(null, new object[] { challengePageContent, uri.Host });
-            string clearanceQuery = (string)ChallengeSolutionGetClearanceQueryMethod.Invoke(solution, new object[] { });
-            string clearanceUri = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port + clearanceQuery;
+            var solution = ChallengeSolver.Solve(challengePageContent, uri.Host);
+            string clearanceUri = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port + solution.ClearanceQuery;
             return clearanceUri;
         }
-        
+
         public void Init()
         {
             try
             {
                 Engine.Logger.Info("LibCurl init " + Curl.GlobalInit(CurlInitFlag.All).ToString());
                 CurlHelper.OnErrorMessage += (msg) =>
-                 {
-                     Engine.Logger.Error(msg);
-                 };
+                {
+                    Engine.Logger.Error(msg);
+                };
             }
             catch (Exception e)
             {
@@ -107,11 +84,6 @@ namespace Jackett.Utils.Clients
             if (result.Status == HttpStatusCode.ServiceUnavailable && ((request.Cookies != null && request.Cookies.Contains("__cfduid")) || result.Cookies.Contains("__cfduid")))
             {
                 logger.Info("UnixLibCurlWebClient: Received a new CloudFlare challenge");
-                if(ChallengeSolutionGetClearanceQueryMethod == null)
-                {
-                    logger.Error("UnixLibCurlWebClient: CloudFlareUtilities not available, can't solve challenge");
-                    return result;
-                }
 
                 // solve the challenge
                 string pageContent = Encoding.UTF8.GetString(result.Content);
@@ -156,7 +128,7 @@ namespace Jackett.Utils.Clients
                     logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
-                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody); 
+                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody);
             }
 
             var result = new WebClientByteResult()

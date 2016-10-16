@@ -50,8 +50,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CloudFlareUtilities, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CloudFlareUtilities.0.3.1-alpha\lib\portable45-net45+win8+wpa81\CloudFlareUtilities.dll</HintPath>
+    <Reference Include="CloudFlareUtilities, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CloudFlareUtilities.0.3.2-alpha\lib\portable45-net45+win8+wpa81\CloudFlareUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
