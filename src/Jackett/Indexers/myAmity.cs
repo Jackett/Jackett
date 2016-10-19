@@ -126,6 +126,9 @@ namespace Jackett.Indexers
                     var qDetailsLink = qRow.Find("a[href^=torrents-details.php?id=]").First();
                     release.Title = qDetailsLink.Attr("title");
 
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     var qCatLink = qRow.Find("a[href^=torrents.php?cat=]").First();
                     var qDLLink = qRow.Find("a[href^=download.php]").First();
                     var qSeeders = qRow.Find("td:eq(6)");
