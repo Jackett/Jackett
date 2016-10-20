@@ -40,6 +40,9 @@ namespace Jackett.Models
                                                   || char.IsWhiteSpace(c)
                                                   || c == '-'
                                                   || c == '.'
+                                                  || c == '_'
+                                                  || c == '('
+                                                  || c == ')'
                                                   ));
                 var safetitle = new string(arr);
                 return safetitle;
