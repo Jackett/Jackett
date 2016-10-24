@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Cliver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Utils
 {
     public static class DateTimeUtil
     {
+        public static string RFC1123ZPattern = "ddd, dd MMM yyyy HH':'mm':'ss z";
+
         public static DateTime UnixTimestampToDateTime(double unixTime)
         {
             DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
@@ -59,6 +63,80 @@ namespace Jackett.Utils
             }
 
             return DateTime.SpecifyKind(DateTime.Now - timeAgo, DateTimeKind.Local);
+        }
+
+        // Uses the DateTimeRoutines library to parse the date
+        // http://www.codeproject.com/Articles/33298/C-Date-Time-Parser
+        public static DateTime FromFuzzyTime(string str, DateTimeRoutines.DateTimeFormat format = DateTimeRoutines.DateTimeFormat.USA_DATE)
+        {
+            DateTimeRoutines.ParsedDateTime dt;
+            if (DateTimeRoutines.TryParseDateOrTime(str, format, out dt))
+            {
+                return dt.DateTime;
+            }
+            throw new Exception("FromFuzzyTime parsing failed");
+        }
+
+        public static Regex timeAgoRegexp = new Regex(@"(?i)\bago", RegexOptions.Compiled);
+        public static Regex todayRegexp = new Regex(@"(?i)\btoday([\s,]+|$)", RegexOptions.Compiled);
+        public static Regex tomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]+|$)", RegexOptions.Compiled);
+        public static Regex yesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]+|$)", RegexOptions.Compiled);
+        public static Regex missingYearRegexp = new Regex(@"^\d{1,2}-\d{1,2}\b", RegexOptions.Compiled);
+
+        public static DateTime FromUnknown(string str)
+        {
+            str = ParseUtil.NormalizeSpace(str);
+            Match match;
+
+            // ... ago
+            match = timeAgoRegexp.Match(str);
+            if (match.Success)
+            {
+                var timeago = str;
+                return FromTimeAgo(timeago);
+            }
+
+            // Today ...
+            match = todayRegexp.Match(str);
+            if (match.Success)
+            {
+                var time = str.Replace(match.Groups[0].Value, "");
+                DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                dt += TimeSpan.Parse(time);
+                return dt;
+            }
+
+            // Yesterday ...
+            match = yesterdayRegexp.Match(str);
+            if (match.Success)
+            {
+                var time = str.Replace(match.Groups[0].Value, "");
+                DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                dt += TimeSpan.Parse(time);
+                dt -= TimeSpan.FromDays(1);
+                return dt;
+            }
+
+            // Tomorrow ...
+            match = tomorrowRegexp.Match(str);
+            if (match.Success)
+            {
+                var time = str.Replace(match.Groups[0].Value, "");
+                DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                dt += TimeSpan.Parse(time);
+                dt += TimeSpan.FromDays(1);
+                return dt;
+            }
+
+            // add missing year
+            match = missingYearRegexp.Match(str);
+            if (match.Success)
+            {
+                var date = match.Groups[0].Value;
+                string newDate = date+"-"+DateTime.Now.Year.ToString();
+                str = str.Replace(date, newDate);
+            }
+            return FromFuzzyTime(str);
         }
     }
 }

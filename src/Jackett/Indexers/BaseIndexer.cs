@@ -17,13 +17,13 @@ namespace Jackett.Indexers
 {
     public abstract class BaseIndexer
     {
-        public string SiteLink { get; private set; }
-        public string DisplayDescription { get; private set; }
-        public string DisplayName { get; private set; }
+        public string SiteLink { get; protected set; }
+        public string DisplayDescription { get; protected set; }
+        public string DisplayName { get; protected set; }
         public string ID { get { return GetIndexerID(GetType()); } }
 
         public bool IsConfigured { get; protected set; }
-        public TorznabCapabilities TorznabCaps { get; private set; }
+        public TorznabCapabilities TorznabCaps { get; protected set; }
         protected Logger logger;
         protected IIndexerManagerService indexerService;
         protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
@@ -44,7 +44,9 @@ namespace Jackett.Indexers
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
 
+        // standard constructor used by most indexers
         public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
+            : this(manager, client, logger, p)
         {
             if (!link.EndsWith("/"))
                 throw new Exception("Site link must end with a slash.");
@@ -52,18 +54,22 @@ namespace Jackett.Indexers
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
-            this.logger = logger;
-            indexerService = manager;
-            webclient = client;
-            protectionService = p;
             this.downloadUrlBase = downloadBase;
-
             this.configData = configData;
 
             if (caps == null)
                 caps = TorznabUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
 
+        }
+
+        // minimal constructor used by e.g. cardigann generic indexer
+        public BaseIndexer(IIndexerManagerService manager, IWebClient client, Logger logger, IProtectionService p)
+        {
+            this.logger = logger;
+            indexerService = manager;
+            webclient = client;
+            protectionService = p;
         }
 
         public IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases)

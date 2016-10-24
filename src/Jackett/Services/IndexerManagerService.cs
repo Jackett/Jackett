@@ -22,6 +22,7 @@ namespace Jackett.Services
         IEnumerable<IIndexer> GetAllIndexers();
         void SaveConfig(IIndexer indexer, JToken obj);
         void InitIndexers();
+        void InitCardigannIndexers(string path);
     }
 
     public class IndexerManagerService : IIndexerManagerService
@@ -40,26 +41,53 @@ namespace Jackett.Services
             cacheService = cache;
         }
 
+        protected void LoadIndexerConfig(IIndexer idx)
+        {
+            var configFilePath = GetIndexerConfigFilePath(idx);
+            if (File.Exists(configFilePath))
+            {
+                var fileStr = File.ReadAllText(configFilePath);
+                var jsonString = JToken.Parse(fileStr);
+                try
+                {
+                    idx.LoadFromSavedConfiguration(jsonString);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, "Failed loading configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                }
+            }
+        }
+
         public void InitIndexers()
         {
             logger.Info("Using HTTP Client: " + container.Resolve<IWebClient>().GetType().Name);
 
-            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
+            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().Where(p => p.ID != "cardigannindexer").OrderBy(_ => _.DisplayName))
             {
                 indexers.Add(idx.ID, idx);
-                var configFilePath = GetIndexerConfigFilePath(idx);
-                if (File.Exists(configFilePath))
+                LoadIndexerConfig(idx);
+            }
+        }
+
+        public void InitCardigannIndexers(string path)
+        {
+            logger.Info("Loading Cardigann definitions from: " + path);
+
+            DirectoryInfo d = new DirectoryInfo(path);
+
+            foreach (var file in d.GetFiles("*.yml"))
+            {
+                string DefinitionString = File.ReadAllText(file.FullName);
+                CardigannIndexer idx = new CardigannIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), DefinitionString);
+                if (indexers.ContainsKey(idx.ID))
                 {
-                    var fileStr = File.ReadAllText(configFilePath);
-                    var jsonString = JToken.Parse(fileStr);
-                    try
-                    {
-                        idx.LoadFromSavedConfiguration(jsonString);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(ex, "Failed loading configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
-                    }
+                    logger.Debug(string.Format("Ignoring definition ID={0}, file={1}: Indexer already exists", idx.ID, file.FullName));
+                }
+                else
+                { 
+                    indexers.Add(idx.ID, idx);
+                    LoadIndexerConfig(idx);
                 }
             }
         }

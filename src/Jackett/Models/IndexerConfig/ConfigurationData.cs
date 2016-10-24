@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.IndexerConfig
 {
-    public abstract class ConfigurationData
+    public class ConfigurationData
     {
         const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
+        protected Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
 
         public enum ItemType
         {
@@ -132,6 +133,8 @@ namespace Jackett.Models.IndexerConfig
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
                 .Select(p => (Item)p.GetValue(this));
 
+            properties = properties.Concat(dynamics.Values).ToArray();
+
             if (!forDisplay)
             {
                 properties = properties
@@ -140,6 +143,16 @@ namespace Jackett.Models.IndexerConfig
             }
 
             return properties.ToArray();
+        }
+
+        public void AddDynamic(string ID, Item item)
+        {
+            dynamics.Add(ID, item);
+        }
+
+        public Item GetDynamic(string ID)
+        {
+            return dynamics[ID];
         }
 
         public class Item
