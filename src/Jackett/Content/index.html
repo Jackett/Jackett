@@ -236,26 +236,34 @@
                                     <th>Name</th>
                                     <th>Size</th>
                                     <th>Size</th>
+                                    <th>Files</th>
                                     <th>Category</th>
+                                    <th>Grabs</th>
                                     <th>Seeds</th>
                                     <th>Leechers</th>
+                                    <th>DL Factor</th>
+                                    <th>UL Factor</th>
                                     <th>Download</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr>
+                                <tr class="jackett-releases-row">
                                     <td>{{PublishDate}}</td>
                                     <td>{{FirstSeen}}</td>
                                     <td>{{jacketTimespan PublishDate}}</td>
                                     <td>{{jacketTimespan FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
-                                    <td><a href="{{Comments}}">{{Title}}</a></td>
+                                    <td><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                                     <td>{{Size}}</td>
                                     <td>{{jacketSize Size}}</td>
+                                    <td>{{Files}}</td>
                                     <td>{{CategoryDesc}}</td>
+                                    <td>{{Grabs}}</td>
                                     <td>{{Seeders}}</td>
                                     <td>{{Peers}}</td>
+                                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                                     <td class="downloadcolumn">
                                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
                                         {{#if BlackholeLink}}
@@ -267,6 +275,12 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -334,24 +348,32 @@
                     <th>Name</th>
                     <th>Size</th>
                     <th>Size</th>
+                    <th>Files</th>
                     <th>Category</th>
+                    <th>Grabs</th>
                     <th>Seeds</th>
                     <th>Leechers</th>
+                    <th>DL Factor</th>
+                    <th>UL Factor</th>
                     <th>Download</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr>
+                <tr class="jackett-search-results-row">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td><a href="{{Comments}}">{{Title}}</a></td>
+                    <td><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
                     <td>{{jacketSize Size}}</td>
+                    <td>{{Files}}</td>
                     <td>{{CategoryDesc}}</td>
+                    <td>{{Grabs}}</td>
                     <td>{{Seeders}}</td>
                     <td>{{Peers}}</td>
+                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                     <td class="downloadcolumn">
                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
                         {{#if BlackholeLink}}
@@ -363,6 +385,12 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

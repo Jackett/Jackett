@@ -345,6 +345,32 @@ function clearNotifications() {
     $('[data-notify="container"]').remove();
 }
 
+function updateReleasesRow(row)
+{    
+    var labels = $(row).find("span.release-labels");
+    var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
+    var UploadVolumeFactor = parseFloat($(row).find("td.UploadVolumeFactor").html());
+
+    labels.empty();
+
+    if (!isNaN(DownloadVolumeFactor)) {
+        if (DownloadVolumeFactor == 0) {
+            labels.append('\n<span class="label label-success">FREELEECH</span>');
+        } else if (DownloadVolumeFactor < 1) {
+            labels.append('\n<span class="label label-primary">' + DownloadVolumeFactor * 100 + '%DL</span>');
+        } else if (DownloadVolumeFactor > 1) {
+            labels.append('\n<span class="label label-danger">' + DownloadVolumeFactor * 100 + '%DL</span>');
+        }
+    }
+
+    if (!isNaN(UploadVolumeFactor)) {
+        if (UploadVolumeFactor == 0) {
+            labels.append('\n<span class="label label-warning">NO UPLOAD</span>');
+        } else if (UploadVolumeFactor != 1) {
+            labels.append('\n<span class="label label-info">' + UploadVolumeFactor * 100 + '%UL</span>');
+        }
+    }
+}
 
 function bindUIButtons() {
     $('body').on('click', '.downloadlink', function (e, b) {
@@ -372,6 +398,7 @@ function bindUIButtons() {
             var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
             var item = { releases: data, Title: 'Releases' };
             var releaseDialog = $(releaseTemplate(item));
+            releaseDialog.find('tr.jackett-releases-row').each(function () { updateReleasesRow(this); });
             releaseDialog.find('table').DataTable(
                  {
                      "pageLength": 20,
@@ -419,7 +446,7 @@ function bindUIButtons() {
                          var count = 0;
                          this.api().columns().every(function () {
                              count++;
-                             if (count === 5 || count === 9) {
+                             if (count === 5 || count === 10) {
                                  var column = this;
                                  var select = $('<select><option value=""></option></select>')
                                      .appendTo($(column.footer()).empty())
@@ -522,6 +549,7 @@ function bindUIButtons() {
                     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
                     var results = $('#searchResults');
                     results.html($(resultsTemplate(data)));
+                    results.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
 
                     results.find('table').DataTable(
                     {
@@ -558,7 +586,7 @@ function bindUIButtons() {
                             var count = 0;
                             this.api().columns().every(function () {
                                 count++;
-                                if (count === 3 || count === 7) {
+                                if (count === 3 || count === 8) {
                                     var column = this;
                                     var select = $('<select><option value=""></option></select>')
                                         .appendTo($(column.footer()).empty())
