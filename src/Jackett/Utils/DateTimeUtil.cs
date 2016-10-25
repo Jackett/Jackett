@@ -36,29 +36,39 @@ namespace Jackett.Utils
                 return DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
             }
 
-            var dateParts = str.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+            str = str.Replace(",", "");
+            str = str.Replace("ago", "");
+            str = str.Replace("and", "");
+
             TimeSpan timeAgo = TimeSpan.Zero;
-            for (var i = 0; i < dateParts.Length / 2; i++)
+            Regex TimeagoRegex = new Regex(@"\s*?([\d\.]+)\s*?([^\d\s\.]+)\s*?");
+            var TimeagoMatches = TimeagoRegex.Match(str);
+
+            while (TimeagoMatches.Success)
             {
-                var val = ParseUtil.CoerceFloat(dateParts[i * 2]);
-                var unit = dateParts[i * 2 + 1];
-                if (unit.Contains("sec"))
+                string expanded = string.Empty;
+
+                var val = ParseUtil.CoerceFloat(TimeagoMatches.Groups[1].Value);
+                var unit = TimeagoMatches.Groups[2].Value;
+                TimeagoMatches = TimeagoMatches.NextMatch();
+
+                if (unit.Contains("sec") || unit == "s")
                     timeAgo += TimeSpan.FromSeconds(val);
-                else if (unit.Contains("min"))
+                else if (unit.Contains("min") || unit == "m")
                     timeAgo += TimeSpan.FromMinutes(val);
-                else if (unit.Contains("hour") || unit.Contains("hr"))
+                else if (unit.Contains("hour") || unit.Contains("hr") || unit == "h")
                     timeAgo += TimeSpan.FromHours(val);
-                else if (unit.Contains("day"))
+                else if (unit.Contains("day") ||unit == "d")
                     timeAgo += TimeSpan.FromDays(val);
-                else if (unit.Contains("week") || unit.Contains("wk"))
+                else if (unit.Contains("week") || unit.Contains("wk") || unit == "w")
                     timeAgo += TimeSpan.FromDays(val * 7);
-                else if (unit.Contains("month"))
+                else if (unit.Contains("month") || unit == "mo")
                     timeAgo += TimeSpan.FromDays(val * 30);
-                else if (unit.Contains("year"))
+                else if (unit.Contains("year") || unit == "y")
                     timeAgo += TimeSpan.FromDays(val * 365);
                 else
                 {
-                    throw new Exception("TimeAgo parsing failed");
+                    throw new Exception("TimeAgo parsing failed, unknown unit: "+unit);
                 }
             }
 
