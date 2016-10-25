@@ -42,5 +42,10 @@ namespace JackettTest
         {
             throw new NotImplementedException();
         }
+
+        public void InitCardigannIndexers(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
