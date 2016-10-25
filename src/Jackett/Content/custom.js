@@ -467,6 +467,10 @@ function bindUIButtons() {
             var releaseDialog = $(releaseTemplate({ indexers: indexers }));
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
+            
+            releaseDialog.on('shown.bs.modal', function() {
+                releaseDialog.find('#searchquery').focus();
+            });
 
             var setCategories = function (tracker, items) {
                 var cats = {};
