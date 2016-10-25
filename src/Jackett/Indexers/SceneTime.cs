@@ -160,12 +160,12 @@ namespace Jackett.Indexers
             }
 
             var results = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
-            List<ReleaseInfo> releases = ParseResponse(results.Content);
+            List<ReleaseInfo> releases = ParseResponse(query, results.Content);
             
             return releases;
         }
 
-        public List<ReleaseInfo> ParseResponse(string htmlResponse)
+        public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
@@ -196,6 +196,9 @@ namespace Jackett.Indexers
                     var qDescCol = descCol.Cq();
                     var qLink = qDescCol.Find("a");
                     release.Title = qLink.Text();
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Description = release.Title;
                     release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     release.Guid = release.Comments;

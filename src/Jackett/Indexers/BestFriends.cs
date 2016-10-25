@@ -170,6 +170,9 @@ namespace Jackett.Indexers
                     var qDetailsLink = qRow.Find("a[href^=details.php?id=]").First();
                     release.Title = qDetailsLink.Attr("title");
 
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();
                     var qSeeders = qRow.Find("td:eq(7)");
                     var qLeechers = qRow.Find("td:eq(8)");
