@@ -131,6 +131,7 @@ namespace Jackett.Indexers
                 if (rssPage.Content.EndsWith("\0")) {
                     rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
                 }
+                rssPage.Content = rssPage.Content.Replace("\0x10", "").Replace("\0x07", "");
                 var rssDoc = XDocument.Parse(rssPage.Content);
 
                 foreach (var item in rssDoc.Descendants("item"))
