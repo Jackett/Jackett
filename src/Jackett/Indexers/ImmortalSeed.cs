@@ -74,23 +74,13 @@ namespace Jackett.Indexers
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }
             };
-            var request = new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                Type = RequestType.POST,
-                Referer = SiteLink,
-                PostData = pairs
-            };
-            var response = await webclient.GetString(request);
-            CQ splashDom = response.Content;
-            var link = splashDom[".trow2 a"].First();
-            var resultPage = await RequestStringWithCookies(link.Attr("href"), response.Cookies);
-            CQ resultDom = resultPage.Content;
 
-            await ConfigureIfOK(response.Cookies, resultPage.Content.Contains("/logout.php"), () =>
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            CQ resultDom = response.Content;
+
+            await ConfigureIfOK(response.Cookies, response.Content.Contains("/logout.php"), () =>
             {
-                var tries = resultDom["#main tr:eq(1) td font"].First().Text();
-                var errorMessage = "Incorrect username or password! " + tries + " tries remaining.";
+                var errorMessage = response.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
