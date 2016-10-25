@@ -70,7 +70,7 @@ namespace Jackett.Models
                             r.Comments == null ? null : new XElement("comments", r.Comments.ToString()),
                             r.PublishDate == DateTime.MinValue ? null : new XElement("pubDate", xmlDateFormat(r.PublishDate)),
                             r.Size == null ? null : new XElement("size", r.Size),
-                            r.Files == null ? null : new XElement("fiels", r.Files),
+                            r.Files == null ? null : new XElement("files", r.Files),
                             r.Grabs == null ? null : new XElement("grabs", r.Grabs),
                             new XElement("description", r.Description),
                             new XElement("link", r.Link ?? r.MagnetUri),
