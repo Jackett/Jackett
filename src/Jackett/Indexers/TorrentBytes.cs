@@ -135,8 +135,8 @@ namespace Jackett.Indexers
             {
                 CQ dom = results;
 
-                var rows = dom["#content table:eq(4) tr"];
-                foreach (var row in rows.Skip(1))
+                var rows = dom["table > tbody:has(tr > td.colhead) > tr:not(:has(td.colhead))"];
+                foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
 
