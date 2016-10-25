@@ -104,6 +104,9 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Description = release.Title;
                     release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
                     release.Comments = release.Guid;
