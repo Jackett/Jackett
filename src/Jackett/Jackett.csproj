@@ -217,6 +217,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithAlternateLink.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLoginWithAlternateLink.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
