@@ -147,6 +147,10 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + titleLink.Attr("href").Replace("&hit=1", ""));
                     release.Link = new Uri(SiteLink + DLLink.Attr("href"));
                     release.Title = titleLink.Text().Trim();
+
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Description = String.Join(", ", flags);
                     release.Guid = release.Link;
 

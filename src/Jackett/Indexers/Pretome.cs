@@ -250,7 +250,15 @@ namespace Jackett.Indexers
             if (tags.Split(',').Length < 7)
             {
                 queryCollection.Add("tags", tags);
-                queryCollection.Add("tf", "any");
+                if(!string.IsNullOrWhiteSpace(tags)) {
+                    // if tags are specified match any
+                    queryCollection.Add("tf", "any");
+                }
+                else
+                { 
+                    // if no tags are specified match all, with any we get random results
+                    queryCollection.Add("tf", "all");
+                }
             }
 
             if (queryCollection.Count > 0)

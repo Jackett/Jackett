@@ -116,6 +116,7 @@ namespace Jackett.Indexers
 
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
+            searchString = searchString.Replace('-', ' '); // remove dashes as they exclude search strings
             var searchUrl = SearchUrl;
 
             if (!string.IsNullOrWhiteSpace(searchString))
