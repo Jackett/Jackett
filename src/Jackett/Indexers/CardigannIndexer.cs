@@ -407,8 +407,12 @@ namespace Jackett.Indexers
                     case "split":
                         var sep = (string)Filter.Args[0];
                         var pos = (string)Filter.Args[1];
-                        var posInt = ParseUtil.CoerceInt(pos);
+                        var posInt = int.Parse(pos);
                         var strParts = Data.Split(sep[0]);
+                        if (posInt < 0)
+                        {
+                            posInt += strParts.Length;
+                        }
                         Data = strParts[posInt];
                         break;
                     case "replace":
