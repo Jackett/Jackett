@@ -198,6 +198,15 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
 
+                    var files = qRow.Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:nth-child(8)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

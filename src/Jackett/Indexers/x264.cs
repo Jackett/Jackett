@@ -131,6 +131,11 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = results.Content;
+
+                var sideWideFreeLeech = false;
+                if (dom.Find("td > b > font[color=\"white\"]:contains(Free Leech)").Length >= 1)
+                    sideWideFreeLeech = true;
+
                 var rows = dom["table > tbody > tr[height=36]"];
                 foreach (var row in rows)
                 {
@@ -165,6 +170,18 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());
                     release.Peers = ParseUtil.CoerceInt(qLeechers.Text()) + release.Seeders;
+
+                    var files = qRow.Find("td:nth-child(3)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:nth-child(8)").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (sideWideFreeLeech || qRow.Find("font[color=\"red\"]:contains(FREE)").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

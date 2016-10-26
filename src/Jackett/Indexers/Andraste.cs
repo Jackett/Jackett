@@ -177,6 +177,19 @@ namespace Jackett.Indexers
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
+                    var files = qRow.Find("a[href*=\"&filelist=1\"] ~ font ~ b").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("a[href*=\"&tosnatchers=1\"] ~ font ~ b").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[alt=\"OU\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

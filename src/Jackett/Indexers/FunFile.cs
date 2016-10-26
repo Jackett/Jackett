@@ -128,6 +128,18 @@ namespace Jackett.Indexers
                     var dateStr = qTimeAgo.Text();
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
+                    var files = qRow.Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:nth-child(9)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    var ka = qRow.Next();
+                    var DLFactor = ka.Find("table > tbody > tr:nth-child(3) > td:nth-child(2)").Text().Replace("X", "");
+                    var ULFactor = ka.Find("table > tbody > tr:nth-child(3) > td:nth-child(1)").Text().Replace("X", "");
+                    release.DownloadVolumeFactor = ParseUtil.CoerceDouble(DLFactor);
+                    release.UploadVolumeFactor = ParseUtil.CoerceDouble(ULFactor);
+
                     releases.Add(release);
                 }
             }

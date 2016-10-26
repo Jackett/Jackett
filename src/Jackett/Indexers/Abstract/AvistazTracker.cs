@@ -125,6 +125,22 @@ namespace Jackett.Indexers
                                             .Replace("music", "3")
                                             .Replace("text-pink", string.Empty);
                     release.Category = MapTrackerCatToNewznab(cat.Trim());
+
+                    var grabs = row.Cq().Find("td:nth-child(9)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (row.Cq().Find("i.fa-star").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.Cq().Find("i.fa-star-half-o").Any())
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    if (row.Cq().Find("i.fa-diamond").Any())
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

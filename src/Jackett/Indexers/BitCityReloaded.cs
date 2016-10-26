@@ -168,6 +168,22 @@ namespace Jackett.Indexers
                     var catId = qRow.Find("td:eq(0) a").First().Attr("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catId);
 
+                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Substring(1);
+                    release.Category = MapTrackerCatToNewznab(cat);
+
+                    var files = qRow.Find("td:has(a[href*=\"&filelist=1\"])> b:nth-child(2)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:has(a[href*=\"&tosnatchers=1\"])> b:nth-child(1)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[src=\"pic/torrent_ou.gif\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

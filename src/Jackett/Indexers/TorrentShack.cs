@@ -96,6 +96,12 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(6).InnerText.Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(7).InnerText.Trim()) + release.Seeders;
 
+                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

@@ -198,6 +198,16 @@ namespace Jackett.Indexers
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc;
 
+                    var files = qRow.Find("td:contains(Datei) > strong ~ strong").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    if (qRow.Find("img[title=\"OnlyUpload\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

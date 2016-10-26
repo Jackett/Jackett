@@ -151,6 +151,15 @@ namespace Jackett.Indexers
 
                     release.Category = MapTrackerCatToNewznab(cat);
 
+                    var files = qRow.Find("td.ttr_size > a").Text().Split(' ')[0];
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td.ttr_snatched").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

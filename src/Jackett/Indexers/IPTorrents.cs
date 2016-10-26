@@ -182,6 +182,16 @@ namespace Jackett.Indexers
                     var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(1);
                     release.Category = MapTrackerCatToNewznab(cat);
 
+                    var grabs = row.Cq().Find("td:nth-child(7)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if(row.Cq().Find("span.t_tag_free_leech").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

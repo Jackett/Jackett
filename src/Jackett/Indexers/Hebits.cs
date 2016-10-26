@@ -136,6 +136,24 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".bUping").Text().Trim());
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".bDowning").Text().Trim());
 
+                    var files = qRow.Find("div.bFiles").Get(0).LastChild.ToString();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("div.bFinish").Get(0).LastChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[src=\"/pic/free.jpg\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    if (qRow.Find("img[src=\"/pic/triple.jpg\"]").Length >= 1)
+                        release.UploadVolumeFactor = 3;
+                    else if (qRow.Find("img[src=\"/pic/double.jpg\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }
