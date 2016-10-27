@@ -147,6 +147,10 @@ namespace Jackett.Indexers
 
                     if (qRow.Find("img[title=\"FreeLeech\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[src=\"images/sf.png\"]").Length >= 1) // side freeleech
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[title=\"Half FreeLeech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
