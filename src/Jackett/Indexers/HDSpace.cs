@@ -14,13 +14,14 @@ using System.Web;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class HDSpace : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
-        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&active=0&options=0&category=21%3B22&search={0}"; } }
+        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -98,8 +99,22 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+            queryCollection.Add("active", "0");
+            queryCollection.Add("options", "0");
+            queryCollection.Add("category", string.Join(";", MapTorznabCapsToTrackers(query)));
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
+
+            searchUrl += queryCollection.GetQueryString();
+
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.Content;
 
             try
@@ -155,6 +170,10 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 1;
 
                     release.UploadVolumeFactor = 1;
+
+                    var qCat = qRow.Find("a[href^=\"index.php?page=torrents&category=\"]");
+                    var cat = qCat.Attr("href").Split('=')[2];
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }
