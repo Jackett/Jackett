@@ -163,6 +163,8 @@ namespace Jackett.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }
