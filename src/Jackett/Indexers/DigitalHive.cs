@@ -88,9 +88,10 @@ namespace Jackett.Indexers
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             CQ cq = loginPage.Content;
             string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            var result = new ConfigurationDataRecaptchaLogin();
+            var result = this.configData;
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
+            result.Captcha.Version = "2";
             return result;
         }
 
