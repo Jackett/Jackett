@@ -25,6 +25,7 @@ namespace Jackett.Services
         T GetConfig<T>();
         void SaveConfig<T>(T config);
         string ApplicationFolder();
+        string GetCardigannDefinitionsFolder();
         void CreateOrMigrateSettings();
         void PerformMigration();
     }
@@ -189,6 +190,22 @@ namespace Jackett.Services
 #if DEBUG
             // When we are running in debug use the source files
             var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Content"));
+            if (Directory.Exists(sourcePath))
+            {
+                dir = sourcePath;
+            }
+#endif
+            return dir;
+        }
+
+        public string GetCardigannDefinitionsFolder()
+        {
+            // If we are debugging we can use the non copied definitions.
+            string dir = Path.Combine(ApplicationFolder(), "Definitions"); ;
+
+#if DEBUG
+            // When we are running in debug use the source files
+            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Definitions"));
             if (Directory.Exists(sourcePath))
             {
                 dir = sourcePath;
