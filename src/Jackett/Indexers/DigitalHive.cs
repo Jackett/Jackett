@@ -196,6 +196,20 @@ namespace Jackett.Indexers
                 release.Size = ReleaseInfo.GetBytes(qRow.Find("td:nth-child(7)").First().Text());
                 release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").First().Text());
                 release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").First().Text()) + release.Seeders;
+
+                var files = row.Cq().Find("td:nth-child(5)").Text();
+                release.Files = ParseUtil.CoerceInt(files);
+
+                var grabs = row.Cq().Find("td:nth-child(8)").Text();
+                release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                if (row.Cq().Find("i.fa-star").Any())
+                    release.DownloadVolumeFactor = 0;
+                else
+                    release.DownloadVolumeFactor = 1;
+
+                release.UploadVolumeFactor = 1;
+
                 releases.Add(release);
             }
 

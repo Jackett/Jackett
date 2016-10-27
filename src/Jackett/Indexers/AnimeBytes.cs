@@ -426,6 +426,17 @@ namespace Jackett.Indexers
                                 release.Seeders = ParseUtil.CoerceInt(rowCq.Find(".torrent_seeders").Text());
                                 release.Peers = release.Seeders + ParseUtil.CoerceInt(rowCq.Find(".torrent_leechers").Text());
 
+                                // grabs
+                                var grabs = rowCq.Find("td.torrent_snatched").Text();
+                                release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                                // freeleech
+                                if (rowCq.Find("img[alt=\"Freeleech!\"]").Length >= 1)
+                                    release.DownloadVolumeFactor = 0;
+                                else
+                                    release.DownloadVolumeFactor = 1;
+                                release.UploadVolumeFactor = 1;
+
                                 if (release.Category != 0)
                                     releases.Add(release);
                             }

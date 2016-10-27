@@ -181,6 +181,12 @@ namespace Jackett.Indexers
                     var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/", string.Empty);
                     release.Category = MapTrackerCatToNewznab(category);
 
+                    var grabs = qRow.Find("td:nth-child(5)").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

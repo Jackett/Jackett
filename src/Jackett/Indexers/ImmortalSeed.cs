@@ -119,7 +119,7 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(qRow.Find(".tooltip-target a").First().Attr("href"));
 
                     // 07-22-2015 11:08 AM
-                    var dateString = qRow.Find("td:eq(1) div").Last().Children().Remove().End().Text().Trim();
+                    var dateString = qRow.Find("td:eq(1) div").Last().Get(0).LastChild.ToString().Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Find("td:eq(4)").Text().Trim();
@@ -136,6 +136,19 @@ namespace Jackett.Indexers
                     }
 
                     release.Category = MapTrackerCatToNewznab(catLink);
+
+                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[title^=\"Free Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[title^=\"Silver Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

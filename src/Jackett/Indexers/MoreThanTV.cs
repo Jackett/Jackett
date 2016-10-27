@@ -203,6 +203,7 @@ namespace Jackett.Indexers
             // Parse required data
             var downloadAnchorHref = downloadAnchor.Attributes["href"].Value;
             var torrentId = downloadAnchorHref.Substring(downloadAnchorHref.LastIndexOf('=') + 1);
+            var files = int.Parse(row.QuerySelector("td:nth-child(4)").TextContent);
             var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
             var torrentData = row.QuerySelectorAll(".number_column"); // Size (xx.xx GB[ (Max)]) Snatches (xx) Seeders (xx) Leechers (xx)
 
@@ -213,6 +214,7 @@ namespace Jackett.Indexers
                 torrentId = torrentId.Split('#')[0];
 
             var size = ParseSizeToBytes(torrentData[0].TextContent);
+            var grabs = int.Parse(torrentData[1].TextContent);
             var seeders = int.Parse(torrentData[2].TextContent);
             var guid = new Uri(GuidUrl + torrentId);
 
@@ -226,9 +228,13 @@ namespace Jackett.Indexers
                 PublishDate = publishDate,
                 Seeders = seeders,
                 Peers = seeders,
+                Files = files,
                 Size = size,
+                Grabs = grabs,
                 Guid = guid,
-                Comments = guid
+                Comments = guid,
+                DownloadVolumeFactor = 0, // ratioless tracker
+                UploadVolumeFactor = 1
             };
         }
 

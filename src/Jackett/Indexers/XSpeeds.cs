@@ -256,6 +256,19 @@ namespace Jackett.Indexers
                         if (release.Category == 0)
                             release.Category = 5030;
 
+                        var grabs = qRow.Find("td:nth-child(6)").Text();
+                        release.Grabs = ParseUtil.CoerceInt(grabs);
+                        
+                        if (qRow.Find("img[alt*=\"Free Torrent\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        if (qRow.Find("img[alt*=\"x2 Torrent\"]").Length >= 1)
+                            release.UploadVolumeFactor = 2;
+                        else
+                            release.UploadVolumeFactor = 1;
+
                         releases.Add(release);
                     }
                 }

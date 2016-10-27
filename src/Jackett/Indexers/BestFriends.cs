@@ -199,6 +199,19 @@ namespace Jackett.Indexers
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc;
 
+                    var files = qRow.Find("td:nth-child(3)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:nth-child(7)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("font[color=\"red\"]:contains(OnlyUp)").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

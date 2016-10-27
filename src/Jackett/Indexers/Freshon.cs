@@ -131,6 +131,18 @@ namespace Jackett.Indexers
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(pubDateRomania, romaniaTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
+                    var grabs = row.Cq().Find("td.table_snatch").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (row.Cq().Find("img[alt=\"100% Free\"]").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.Cq().Find("img[alt=\"50% Free\"]").Any())
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

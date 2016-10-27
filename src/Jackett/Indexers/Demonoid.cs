@@ -127,6 +127,12 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
 
+                    var grabs = rowB.Cq().Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
 

@@ -216,6 +216,13 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(seedersIndex).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(leechersIndex).Cq().Text().Trim()) + release.Seeders;
 
+                    if (row.Cq().Find("font > b:contains(Freeleech)").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

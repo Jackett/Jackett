@@ -230,6 +230,13 @@ namespace Jackett.Indexers
                     var cat = qRow.Find("td:eq(0) a").First().Attr("href").Substring(15);//browse.php?cat=24
                     release.Category = MapTrackerCatToNewznab(cat);
 
+                    if (qRow.Find("span.flTags").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

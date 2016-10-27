@@ -143,7 +143,7 @@ namespace Jackett.Indexers
                     var link = row.Cq().Find("td:eq(1) a:eq(1)").First();
                     release.Guid = new Uri(SiteLink + link.Attr("href"));
                     release.Comments = release.Guid;
-                    release.Title = link.Text().Trim();
+                    release.Title = link.Get(0).FirstChild.ToString();
                     release.Description = release.Title;
 
                     // If we search an get no results, we still get a table just with no info.
@@ -170,6 +170,20 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.Cq().Find("td:eq(8)").First().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.Cq().Find("td:eq(9)").First().Text().Trim()) + release.Seeders;
+
+                    var files = row.Cq().Find("td:nth-child(3)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = row.Cq().Find("td:nth-child(8)").Text();
+                    if (grabs != "----")
+                        release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (row.Cq().Find("font[color=\"green\"]:contains(F):contains(L)").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

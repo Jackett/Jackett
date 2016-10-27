@@ -188,6 +188,16 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text()) + release.Seeders;
 
+                    var grabs = qRow.Find("td:nth-child(7)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("span.torrent-tag-free").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

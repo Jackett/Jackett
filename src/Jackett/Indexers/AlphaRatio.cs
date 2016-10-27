@@ -94,6 +94,24 @@ namespace Jackett.Indexers
             release.Comments = release.Guid;
             release.Link = new Uri(DownloadUrl + id);
             release.Category = MapTrackerCatToNewznab(CategoryReverseMapper((string)r["category"]));
+            release.Files = (int)r["fileCount"];
+            release.Grabs = (int)r["snatches"];
+            release.DownloadVolumeFactor = 1;
+            release.UploadVolumeFactor = 1;
+            if ((bool)r["isFreeleech"])
+            {
+                release.DownloadVolumeFactor = 0;
+            }
+            if ((bool)r["isPersonalFreeleech"])
+            {
+                release.DownloadVolumeFactor = 0;
+            }
+            if ((bool)r["isNeutralLeech"])
+            {
+                release.DownloadVolumeFactor = 0;
+                release.UploadVolumeFactor = 0;
+            }
+
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
