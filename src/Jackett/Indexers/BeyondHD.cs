@@ -80,9 +80,10 @@ namespace Jackett.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             string recaptchaSiteKey = new Regex(@"loginwidget', \{[\s]{4,30}'sitekey' : '([0-9A-Za-z-]{5,60})',[\s]{4,30}'theme'").Match(loginPage.Content).Groups[1].ToString().Trim();
-            var result = new ConfigurationDataRecaptchaLogin();
+            var result = this.configData;
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
+            result.Captcha.Version = "2";
             return result;
         }
 

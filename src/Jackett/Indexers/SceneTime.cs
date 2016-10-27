@@ -83,7 +83,8 @@ namespace Jackett.Indexers
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
             CQ cq = loginPage.Content;
-            var result = new ConfigurationDataRecaptchaLogin();
+            var result = this.configData;
+            result.Captcha.Version = "2";
             CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
             if (recaptcha.Length != 0)
             {
@@ -94,6 +95,8 @@ namespace Jackett.Indexers
             else
             {
                 var stdResult = new ConfigurationDataBasicLogin();
+                stdResult.Username.Value = configData.Username.Value;
+                stdResult.Password.Value = configData.Password.Value;
                 stdResult.CookieHeader.Value = loginPage.Cookies;
                 return stdResult;
             }

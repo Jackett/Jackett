@@ -150,6 +150,7 @@ namespace Jackett.Services
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers();
+            indexerService.InitCardigannIndexers(configService.GetCardigannDefinitionsFolder());
             client.Init();
         }
 

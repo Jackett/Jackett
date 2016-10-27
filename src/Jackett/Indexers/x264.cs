@@ -55,7 +55,7 @@ namespace Jackett.Indexers
             CQ recaptchaScript = dom.Find("script").First();
 
             string recaptchaSiteKey = recaptchaScript.Attr("src").Split('=')[1];
-            var result = new ConfigurationDataRecaptchaLogin();
+            var result = this.configData;
             result.CookieHeader.Value = loginPage.Cookies;
             result.Captcha.SiteKey = recaptchaSiteKey;
             result.Captcha.Version = "1";

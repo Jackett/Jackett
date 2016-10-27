@@ -27,5 +27,21 @@ namespace Jackett.Models
             return string.Empty;
         }
 
+        public static string NormalizeCatName(string name)
+        {
+            return name.Replace(" ", "").ToLower();
+        }
+
+        public static TorznabCategory GetCatByName(string name)
+        {
+            var cat = AllCats.FirstOrDefault(c => NormalizeCatName(c.Name) == NormalizeCatName(name));
+            if (cat != null)
+            {
+                return cat;
+            }
+
+            return null;
+        }
+
     }
 }
