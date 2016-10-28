@@ -22,6 +22,7 @@ namespace Jackett.Indexers
     public class IPTorrents : BaseIndexer, IIndexer
     {
         private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
+        string TakeLoginUrl { get { return UseLink + "take_login.php"; } }
         private string BrowseUrl { get { return UseLink + "t"; } }
         private List<String> KnownURLs = new List<String> { "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
 
@@ -98,7 +99,7 @@ namespace Jackett.Indexers
             };
             var request = new Utils.Clients.WebRequest()
             {
-                Url = UseLink,
+                Url = TakeLoginUrl,
                 Type = RequestType.POST,
                 Referer = UseLink,
                 PostData = pairs
