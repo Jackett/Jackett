@@ -370,9 +370,9 @@
     <None Include="CurlSharp.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Definitions\hdme.yml">
+    <Content Include="Definitions\hdme.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
