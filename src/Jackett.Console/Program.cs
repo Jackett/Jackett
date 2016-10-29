@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -96,7 +97,7 @@ namespace JackettConsole
                     Startup.IgnoreSslErrors = options.IgnoreSslErrors;
                     if (options.IgnoreSslErrors == true)
                     {
-                        Engine.Logger.Info("Curl will ignore SSL certificate errors.");
+                        Engine.Logger.Info("Jackett will ignore SSL certificate errors.");
                     }
 
                     // Choose Data Folder

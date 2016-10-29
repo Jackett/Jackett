@@ -57,7 +57,7 @@ namespace Jackett.Console
         [Option('f', "SSLFix", HelpText = "[true/false] Linux Libcurl NSS Missing ECC Ciphers workaround (Use if you can't access some trackers) .")]
         public bool? SSLFix { get; set; }
 
-        [Option('n', "IgnoreSslErrors", HelpText = "[true/false] Linux Libcurl - Ignores invalid SSL certificates")]
+        [Option('n', "IgnoreSslErrors", HelpText = "[true/false] Ignores invalid SSL certificates")]
         public bool? IgnoreSslErrors { get; set; }
 
         [Option('d', "DataFolder", HelpText = "Specify the location of the data folder (Must be admin on Windows) eg. --DataFolder=\"D:\\Your Data\\Jackett\\\"")]
