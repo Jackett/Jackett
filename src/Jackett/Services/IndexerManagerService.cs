@@ -74,21 +74,28 @@ namespace Jackett.Services
         {
             logger.Info("Loading Cardigann definitions from: " + path);
 
-            DirectoryInfo d = new DirectoryInfo(path);
-
-            foreach (var file in d.GetFiles("*.yml"))
+            try
             {
-                string DefinitionString = File.ReadAllText(file.FullName);
-                CardigannIndexer idx = new CardigannIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), DefinitionString);
-                if (indexers.ContainsKey(idx.ID))
+                DirectoryInfo d = new DirectoryInfo(path);
+
+                foreach (var file in d.GetFiles("*.yml"))
                 {
-                    logger.Debug(string.Format("Ignoring definition ID={0}, file={1}: Indexer already exists", idx.ID, file.FullName));
+                    string DefinitionString = File.ReadAllText(file.FullName);
+                    CardigannIndexer idx = new CardigannIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), DefinitionString);
+                    if (indexers.ContainsKey(idx.ID))
+                    {
+                        logger.Debug(string.Format("Ignoring definition ID={0}, file={1}: Indexer already exists", idx.ID, file.FullName));
+                    }
+                    else
+                    {
+                        indexers.Add(idx.ID, idx);
+                        LoadIndexerConfig(idx);
+                    }
                 }
-                else
-                { 
-                    indexers.Add(idx.ID, idx);
-                    LoadIndexerConfig(idx);
-                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Error while loading Cardigann definitions: "+ ex.Message);
             }
         }
 
