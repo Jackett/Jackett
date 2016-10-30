@@ -279,7 +279,7 @@ namespace Jackett.Indexers
             if (Login == null)
                 return false;
 
-            if (Login.Method == "post")
+            if (Login.Method == null || Login.Method == "post")
             {
                 var pairs = new Dictionary<string, string>();
                 foreach (var Input in Definition.Login.Inputs)
