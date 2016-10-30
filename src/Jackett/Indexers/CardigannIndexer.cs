@@ -648,7 +648,7 @@ namespace Jackett.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}': {2}", ID, Row.OuterHtml, ex.Message));
+                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}': {2}", ID, Row.OuterHtml, ex));
                     }
                 }
             }
