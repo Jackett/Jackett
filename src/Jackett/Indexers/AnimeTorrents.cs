@@ -143,7 +143,10 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
 
                     var qLink = qRow.Find("td:eq(2) a");
-                    release.Link = new Uri(qLink.Attr("href"));
+                    if (qLink.Length != 0) // newbie users don't see DL links
+                    {
+                        release.Link = new Uri(qLink.Attr("href"));
+                    }
 
                     var sizeStr = qRow.Find("td:eq(5)").Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
