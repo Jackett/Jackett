@@ -155,6 +155,7 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(connections[0].Trim());
                     release.Peers = ParseUtil.CoerceInt(connections[1].Trim()) + release.Seeders;
+                    release.Grabs = ParseUtil.CoerceLong(connections[2].Trim());
 
                     var rCat = row.Cq().Find("td:eq(0) a").First().Attr("href");
                     var rCatIdx = rCat.IndexOf("cat=");
@@ -165,6 +166,23 @@ namespace Jackett.Indexers
 
                     release.Category = MapTrackerCatToNewznab(rCat);
 
+                    if (qRow.Find("img[alt=\"Gold Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    var ULFactorImg = qRow.Find("img[alt*=\"x Multiplier Torrent\"]");
+                    if (ULFactorImg.Length >= 1)
+                    {
+                        release.UploadVolumeFactor = ParseUtil.CoerceDouble(ULFactorImg.Attr("alt").Split('x')[0]);
+                    }
+                    else
+                    {
+                        release.UploadVolumeFactor = 1;
+                    }
+                    
                     releases.Add(release);
                 }
             }
