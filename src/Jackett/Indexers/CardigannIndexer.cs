@@ -632,7 +632,7 @@ namespace Jackett.Indexers
                                         release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
                                         break;
                                     case "uploadvolumefactor":
-                                        release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                        release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
                                         break;
                                     default:
                                         break;
