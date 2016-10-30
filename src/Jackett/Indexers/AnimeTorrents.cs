@@ -1,0 +1,176 @@
+﻿using CsQuery;
+using Jackett.Models;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
+using System.Globalization;
+
+namespace Jackett.Indexers
+{
+    public class AnimeTorrents : BaseIndexer, IIndexer
+    {
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string SearchUrl { get { return SiteLink + "ajax/torrents_data.php"; } }
+        private string SearchUrlReferer { get { return SiteLink + "torrents.php?cat=0&searchin=filename&search="; } }
+
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
+        public AnimeTorrents(IIndexerManagerService i, HttpWebClient c, Logger l, IProtectionService ps)
+            : base(name: "AnimeTorrents",
+                description: "Definitive source for anime and manga",
+                link: "http://animetorrents.me/",
+                caps: new TorznabCapabilities(),
+                manager: i,
+                client: c, // Forced HTTP client for custom headers
+                logger: l,
+                p: ps,
+                configData: new ConfigurationDataBasicLogin())
+        {
+            AddCategoryMapping(1, TorznabCatType.MoviesSD); // Anime Movie
+            AddCategoryMapping(6, TorznabCatType.MoviesHD); // Anime Movie HD
+            AddCategoryMapping(2, TorznabCatType.TVAnime); // Anime Series
+            AddCategoryMapping(7, TorznabCatType.TVAnime); // Anime Series HD
+            AddCategoryMapping(5, TorznabCatType.XXXDVD); // Hentai (censored)
+            AddCategoryMapping(9, TorznabCatType.XXXDVD); // Hentai (censored) HD
+            AddCategoryMapping(4, TorznabCatType.XXXDVD); // Hentai (un-censored)
+            AddCategoryMapping(8, TorznabCatType.XXXDVD); // Hentai (un-censored) HD
+            AddCategoryMapping(13, TorznabCatType.BooksForeign); // Light Novel
+            AddCategoryMapping(3, TorznabCatType.BooksComics); // Manga
+            AddCategoryMapping(10, TorznabCatType.BooksComics); // Manga 18+
+            AddCategoryMapping(11, TorznabCatType.TVAnime); // OVA
+            AddCategoryMapping(12, TorznabCatType.TVAnime); // OVA HD
+            AddCategoryMapping(14, TorznabCatType.BooksComics); // Doujin Anime
+            AddCategoryMapping(15, TorznabCatType.XXXDVD); // Doujin Anime 18+
+            AddCategoryMapping(16, TorznabCatType.AudioForeign); // Doujin Music
+            AddCategoryMapping(17, TorznabCatType.BooksComics); // Doujinshi
+            AddCategoryMapping(18, TorznabCatType.BooksComics); // Doujinshi 18+
+            AddCategoryMapping(19, TorznabCatType.Audio); // OST
+        }
+
+        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            configData.LoadValuesFromJson(configJson);
+            var pairs = new Dictionary<string, string> {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "form", "login" },
+                { "rememberme[]", "1" }
+            };
+
+            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, null, null);
+
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            {
+                CQ dom = result.Content;
+                var errorMessage = dom[".ui-state-error"].Text().Trim();
+                throw new ExceptionWithConfigData(errorMessage, configData);
+            });
+
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = new List<ReleaseInfo>();
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+
+            queryCollection.Add("total", "146"); // Not sure what this is about but its required!
+
+            var cat = "0";
+            var queryCats = MapTorznabCapsToTrackers(query);
+            if (queryCats.Count == 1)
+            {
+                cat = queryCats.First().ToString();
+            }
+
+            queryCollection.Add("cat", cat);
+            queryCollection.Add("searchin", "filename");
+            queryCollection.Add("search", searchString);
+            queryCollection.Add("page", "1");
+            searchUrl += "?" + queryCollection.GetQueryString();
+
+            var extraHeaders = new Dictionary<string, string>()
+            {
+                { "X-Requested-With", "XMLHttpRequest" }
+            };
+
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrlReferer, extraHeaders);
+
+            var results = response.Content;
+            try
+            {
+                CQ dom = results;
+
+                var rows = dom["tr"];
+                foreach (var row in rows.Skip(1))
+                {
+                    var release = new ReleaseInfo();
+                    var qRow = row.Cq();
+                    var qTitleLink = qRow.Find("td:eq(1) a:eq(0)").First();
+                    release.Title = qTitleLink.Find("strong").Text().Trim();
+
+                    // If we search an get no results, we still get a table just with no info.
+                    if (string.IsNullOrWhiteSpace(release.Title))
+                    {
+                        break;
+                    }
+
+                    release.Description = release.Title;
+                    release.Guid = new Uri(qTitleLink.Attr("href"));
+                    release.Comments = release.Guid;
+
+                    var dateString = qRow.Find("td:eq(4)").Text();
+                    release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yy", CultureInfo.InvariantCulture);
+
+                    var qLink = qRow.Find("td:eq(2) a");
+                    release.Link = new Uri(qLink.Attr("href"));
+
+                    var sizeStr = qRow.Find("td:eq(5)").Text();
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                    var connections = qRow.Find("td:eq(7)").Text().Trim().Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                    release.Seeders = ParseUtil.CoerceInt(connections[0].Trim());
+                    release.Peers = ParseUtil.CoerceInt(connections[1].Trim()) + release.Seeders;
+
+                    var rCat = row.Cq().Find("td:eq(0) a").First().Attr("href");
+                    var rCatIdx = rCat.IndexOf("cat=");
+                    if (rCatIdx > -1)
+                    {
+                        rCat = rCat.Substring(rCatIdx + 4);
+                    }
+
+                    release.Category = MapTrackerCatToNewznab(rCat);
+
+                    releases.Add(release);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results, ex);
+            }
+
+            return releases;
+        }
+    }
+}
