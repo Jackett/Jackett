@@ -25,7 +25,7 @@ namespace Jackett.Services
         T GetConfig<T>();
         void SaveConfig<T>(T config);
         string ApplicationFolder();
-        string GetCardigannDefinitionsFolder();
+        List<string> GetCardigannDefinitionsFolders();
         void CreateOrMigrateSettings();
         void PerformMigration();
     }
@@ -198,8 +198,21 @@ namespace Jackett.Services
             return dir;
         }
 
-        public string GetCardigannDefinitionsFolder()
+        public List<string> GetCardigannDefinitionsFolders()
         {
+            List<string> dirs = new List<string>();
+
+            if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                dirs.Add(Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config/cardigann/definitions/"));
+                dirs.Add("/etc/xdg/cardigan/definitions/");
+            }
+            else
+            {
+                dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cardigann\\definitions\\"));
+                dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "cardigann\\definitions\\"));
+            }
+
             // If we are debugging we can use the non copied definitions.
             string dir = Path.Combine(ApplicationFolder(), "Definitions"); ;
 
@@ -211,7 +224,8 @@ namespace Jackett.Services
                 dir = sourcePath;
             }
 #endif
-            return dir;
+            dirs.Add(dir);
+            return dirs;
         }
 
         public string GetVersion()

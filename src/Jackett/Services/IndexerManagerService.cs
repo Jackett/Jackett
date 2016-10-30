@@ -76,10 +76,14 @@ namespace Jackett.Services
 
             try
             {
+                if (!Directory.Exists(path))
+                    return;
+
                 DirectoryInfo d = new DirectoryInfo(path);
 
                 foreach (var file in d.GetFiles("*.yml"))
                 {
+                    logger.Info("Loading Cardigann definition " + file.FullName);
                     string DefinitionString = File.ReadAllText(file.FullName);
                     CardigannIndexer idx = new CardigannIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), DefinitionString);
                     if (indexers.ContainsKey(idx.ID))
