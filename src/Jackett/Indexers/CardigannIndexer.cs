@@ -16,6 +16,7 @@ using static Jackett.Models.IndexerConfig.ConfigurationData;
 using AngleSharp.Parser.Html;
 using System.Text.RegularExpressions;
 using System.Web;
+using AngleSharp.Dom;
 
 namespace Jackett.Indexers
 {
@@ -438,37 +439,55 @@ namespace Jackett.Indexers
             return Data;
         }
 
-        protected string handleSelector(selectorBlock Selector, AngleSharp.Dom.IElement Dom)
+        protected string handleSelector(selectorBlock Selector, IElement Dom)
         {
             if (Selector.Text != null)
             {
                 return applyFilters(Selector.Text, Selector.Filters);
             }
+
+            IElement selection = Dom;
             string value = null;
+
             if (Selector.Selector != null)
             {
-                AngleSharp.Dom.IElement selection = Dom.QuerySelector(Selector.Selector);
+                selection = Dom.QuerySelector(Selector.Selector);
                 if (selection == null)
                 {
                     throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.OuterHtml));
                 }
-                if (Selector.Remove != null)
+            }
+
+            if (Selector.Remove != null)
+            {
+                foreach(var i in selection.QuerySelectorAll(Selector.Remove))
                 {
-                    foreach(var i in selection.QuerySelectorAll(Selector.Remove))
+                    i.Remove();
+                }
+            }
+
+            if (Selector.Case != null)
+            {
+                foreach(var Case in Selector.Case)
+                {
+                    if (selection.Matches(Case.Key) || selection.QuerySelector(Case.Key) != null)
                     {
-                        i.Remove();
+                        value = Case.Value;
+                        break;
                     }
                 }
-                if (Selector.Attribute != null)
-                {
-                    value = selection.GetAttribute(Selector.Attribute);
-                }
-                else
-                {
-                    value = selection.TextContent;
-                }
-                
+                if(value == null)
+                    throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.OuterHtml));
             }
+            else if (Selector.Attribute != null)
+            {
+                value = selection.GetAttribute(Selector.Attribute);
+            }
+            else
+            {
+                value = selection.TextContent;
+            }
+                
             return applyFilters(value, Selector.Filters); ;
         }
 
