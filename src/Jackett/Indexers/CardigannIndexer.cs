@@ -603,6 +603,18 @@ namespace Jackett.Indexers
                                     case "date":
                                         release.PublishDate = DateTimeUtil.FromUnknown(value);
                                         break;
+                                    case "files":
+                                        release.Files = ParseUtil.CoerceLong(value);
+                                        break;
+                                    case "grabs":
+                                        release.Grabs = ParseUtil.CoerceLong(value);
+                                        break;
+                                    case "downloadvolumefactor":
+                                        release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                        break;
+                                    case "uploadvolumefactor":
+                                        release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                        break;
                                     default:
                                         break;
                                 }
