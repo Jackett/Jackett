@@ -287,10 +287,7 @@ namespace Jackett.Indexers
                     var value = applyGoTemplateText(Input.Value);
                     pairs.Add(Input.Key, value);
                 }
-                foreach (var x in pairs)
-                {
-                    logger.Error(x.Key + ": " + x.Value);
-                }
+
                 var LoginUrl = SiteLink + Login.Path;
                 configData.CookieHeader.Value = null;
                 var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
