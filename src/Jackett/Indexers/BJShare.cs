@@ -12,6 +12,7 @@ using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using AngleSharp.Parser.Html;
 using AngleSharp.Dom;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -82,12 +83,20 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
+        private string StripSearchString(string term)
+        {
+            // Search does not support searching with episode numbers so strip it if we have one
+            // Ww AND filter the result later to archive the proper result
+            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty);
+            return term.Trim();
+        }
+
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             
             var searchString = query.GetQueryString();
-
+            
             // if the search string is empty use the "last 24h torrents" view
             if (string.IsNullOrWhiteSpace(searchString))
             {
@@ -182,7 +191,7 @@ namespace Jackett.Indexers
                 var searchUrl = BrowseUrl;
 
                 var queryCollection = new NameValueCollection();
-                queryCollection.Add("searchstr", searchString);
+                queryCollection.Add("searchstr", StripSearchString(searchString));
                 queryCollection.Add("order_by", "time");
                 queryCollection.Add("order_way", "desc");
                 queryCollection.Add("group_results", "1");
@@ -267,6 +276,10 @@ namespace Jackett.Indexers
 
                             release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
                             release.Title += " " + release.Description; // add year and Description to the release Title to add some meaning to it
+
+                            // check for previously stripped search terms
+                            if (!query.MatchQueryStringAND(release.Title))
+                                continue;
 
                             var Size = qSize.TextContent;
                             release.Size = ReleaseInfo.GetBytes(Size);
