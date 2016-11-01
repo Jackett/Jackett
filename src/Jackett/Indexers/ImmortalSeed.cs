@@ -108,15 +108,23 @@ namespace Jackett.Indexers
                 {
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
-                    release.Title = qRow.Find(".tooltip-content div").First().Text();
-                    if (string.IsNullOrWhiteSpace(release.Title))
-                        continue;
-                    release.Description = qRow.Find(".tooltip-content div").Get(1).InnerText.Trim();
+
+                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
+                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                    if (!qTitle.Any()) // fallback to Details link if there's no tooltip
+                    {
+                        qTitle = qDetails;
+                    }
+                    release.Title = qTitle.Text();
+
+                    var qDesciption = qRow.Find(".tooltip-content > div");
+                    if (qDesciption.Any())
+                        release.Description = qDesciption.Get(1).InnerText.Trim();
 
                     var qLink = row.Cq().Find("td:eq(2) a:eq(1)");
                     release.Link = new Uri(qLink.Attr("href"));
                     release.Guid = release.Link;
-                    release.Comments = new Uri(qRow.Find(".tooltip-target a").First().Attr("href"));
+                    release.Comments = new Uri(qDetails.Attr("href"));
 
                     // 07-22-2015 11:08 AM
                     var dateString = qRow.Find("td:eq(1) div").Last().Get(0).LastChild.ToString().Trim();
