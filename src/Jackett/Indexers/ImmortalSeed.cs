@@ -117,9 +117,6 @@ namespace Jackett.Indexers
                     }
                     release.Title = qTitle.Text();
 
-                    if (string.IsNullOrWhiteSpace(release.Title))
-                        continue;
-
                     var qDesciption = qRow.Find(".tooltip-content > div");
                     if (qDesciption.Any())
                         release.Description = qDesciption.Get(1).InnerText.Trim();
