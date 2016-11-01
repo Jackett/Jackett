@@ -378,7 +378,7 @@ namespace Jackett.Indexers
                     case "querystring":
                         var param = (string)Filter.Args;
                         var qsStr = Data.Split(new char[] { '?' }, 2)[1];
-                        qsStr = Data.Split(new char[] { '#' }, 2)[0];
+                        qsStr = qsStr.Split(new char[] { '#' }, 2)[0];
                         var qs = HttpUtility.ParseQueryString(qsStr);
                         Data = qs.Get(param);
                         break;
