@@ -147,7 +147,7 @@ namespace Jackett.Indexers
                     if (string.IsNullOrWhiteSpace(torrentId))
                         throw new Exception("Missing torrent id");
 
-                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>\d*)\W\/\WLeechers:\W(?<leechers>\d*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
+                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d\,]*)\W\/\WLeechers:\W(?<leechers>[\d\,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
                     if (!infoMatch.Success)
                         throw new Exception("Unable to find info");
 
