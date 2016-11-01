@@ -14,6 +14,7 @@ using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using CsQuery;
 using Jackett.Models.IndexerConfig;
+using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
@@ -155,7 +156,7 @@ namespace Jackett.Indexers
                                 qualityEdition, // Audio quality should be after this one. Unobtainable at the moment.
                                 $"{qualityData[0].Trim()}-MTV"
                             });
-                            
+
                             releases.Add(GetReleaseInfo(groupItem, downloadAnchor, title, TorznabCatType.TV.ID));
                         }
                         else
@@ -203,7 +204,8 @@ namespace Jackett.Indexers
             // Parse required data
             var downloadAnchorHref = downloadAnchor.Attributes["href"].Value;
             var torrentId = downloadAnchorHref.Substring(downloadAnchorHref.LastIndexOf('=') + 1);
-            var files = int.Parse(row.QuerySelector("td:nth-child(4)").TextContent);
+            var qFiles = row.QuerySelector("td:nth-last-child(6)");
+            var files = ParseUtil.CoerceLong(qFiles.TextContent);
             var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
             var torrentData = row.QuerySelectorAll(".number_column"); // Size (xx.xx GB[ (Max)]) Snatches (xx) Seeders (xx) Leechers (xx)
 
