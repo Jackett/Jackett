@@ -46,10 +46,10 @@ namespace Jackett.Services
             var configFilePath = GetIndexerConfigFilePath(idx);
             if (File.Exists(configFilePath))
             {
-                var fileStr = File.ReadAllText(configFilePath);
-                var jsonString = JToken.Parse(fileStr);
                 try
                 {
+                    var fileStr = File.ReadAllText(configFilePath);
+                    var jsonString = JToken.Parse(fileStr);
                     idx.LoadFromSavedConfiguration(jsonString);
                 }
                 catch (Exception ex)
