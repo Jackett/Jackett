@@ -237,10 +237,7 @@ namespace Jackett.Indexers
                         {
                             qTitle = qDetails;
                         }
-                        release.Title = qDetails.Text();
-
-                        if (string.IsNullOrWhiteSpace(release.Title))
-                            continue;
+                        release.Title = qTitle.Text();
 
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
