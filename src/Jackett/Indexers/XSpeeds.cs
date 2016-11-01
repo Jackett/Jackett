@@ -225,21 +225,26 @@ namespace Jackett.Indexers
                 try
                 {
                     CQ dom = searchPage.Content;
-                    var rows = dom["#listtorrents tbody tr"];
-                    foreach (var row in rows.Skip(1))
+                    var rows = dom["table#sortabletable > tbody > tr:not(:has(td.thead))"];
+                    foreach (var row in rows)
                     {
                         var release = new ReleaseInfo();
                         var qRow = row.Cq();
 
-                        release.Title = qRow.Find("td:eq(1) .tooltip-content div:eq(0)").Text();
+                        var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
+                        var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                        if(!qTitle.Any()) // fallback to Details link if there's no tooltip
+                        {
+                            qTitle = qDetails;
+                        }
+                        release.Title = qDetails.Text();
 
                         if (string.IsNullOrWhiteSpace(release.Title))
                             continue;
 
-                        release.Description = release.Title;
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
-                        release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
+                        release.Comments = new Uri(qDetails.Attr("href"));
                         release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51 
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
@@ -258,13 +263,15 @@ namespace Jackett.Indexers
 
                         var grabs = qRow.Find("td:nth-child(6)").Text();
                         release.Grabs = ParseUtil.CoerceInt(grabs);
-                        
-                        if (qRow.Find("img[alt*=\"Free Torrent\"]").Length >= 1)
+
+                        if (qRow.Find("img[alt^=\"Free Torrent\"]").Length >= 1)
                             release.DownloadVolumeFactor = 0;
+                        else if (qRow.Find("img[alt^=\"Silver Torrent\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0.5;
                         else
                             release.DownloadVolumeFactor = 1;
 
-                        if (qRow.Find("img[alt*=\"x2 Torrent\"]").Length >= 1)
+                        if (qRow.Find("img[alt^=\"x2 Torrent\"]").Length >= 1)
                             release.UploadVolumeFactor = 2;
                         else
                             release.UploadVolumeFactor = 1;
