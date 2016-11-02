@@ -493,7 +493,15 @@ namespace Jackett.Indexers
 
         protected Uri resolvePath(string path)
         {
-            return new Uri(SiteLink + path);
+            if(path.StartsWith("http"))
+            {
+                return new Uri(path);
+            }
+            else
+            {
+                return new Uri(SiteLink + path);
+            }
+            
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
