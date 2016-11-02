@@ -75,6 +75,24 @@ namespace Jackett.Utils
             return DateTime.SpecifyKind(DateTime.Now - timeAgo, DateTimeKind.Local);
         }
 
+        public static TimeSpan ParseTimeSpan(string time)
+        {
+            TimeSpan offset = TimeSpan.Zero;
+            if (time.EndsWith("AM"))
+            {
+                time = time.Substring(0, time.Length - 2);
+            }
+            else if (time.EndsWith("PM"))
+            {
+                time = time.Substring(0, time.Length - 2);
+                offset = TimeSpan.FromHours(12);
+            }
+
+            var ts = TimeSpan.Parse(time);
+            ts += offset;
+            return ts;
+        }
+
         // Uses the DateTimeRoutines library to parse the date
         // http://www.codeproject.com/Articles/33298/C-Date-Time-Parser
         public static DateTime FromFuzzyTime(string str, DateTimeRoutines.DateTimeFormat format = DateTimeRoutines.DateTimeFormat.USA_DATE)
@@ -112,7 +130,7 @@ namespace Jackett.Utils
             {
                 var time = str.Replace(match.Groups[0].Value, "");
                 DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
-                dt += TimeSpan.Parse(time);
+                dt += ParseTimeSpan(time);
                 return dt;
             }
 
@@ -122,7 +140,7 @@ namespace Jackett.Utils
             {
                 var time = str.Replace(match.Groups[0].Value, "");
                 DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
-                dt += TimeSpan.Parse(time);
+                dt += ParseTimeSpan(time);
                 dt -= TimeSpan.FromDays(1);
                 return dt;
             }
@@ -133,24 +151,10 @@ namespace Jackett.Utils
             {
                 var time = str.Replace(match.Groups[0].Value, "");
                 DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
-                dt += TimeSpan.Parse(time);
+                dt += ParseTimeSpan(time);
                 dt += TimeSpan.FromDays(1);
                 return dt;
             }
-
-            try
-            {
-                // try parsing the str as an unix timestamp
-                var unixTimeStamp = long.Parse(str);
-                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
-                return dt;
-            }
-            catch (FormatException)
-            {
-                // it wasn't a timestamp, continue....
-            }
-            
 
             // add missing year
             match = missingYearRegexp.Match(str);
