@@ -156,6 +156,19 @@ namespace Jackett.Utils
                 return dt;
             }
 
+            try
+            {
+                // try parsing the str as an unix timestamp
+                var unixTimeStamp = long.Parse(str);
+                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
+                return dt;
+            }
+            catch (FormatException)
+            {
+                // it wasn't a timestamp, continue....
+            }
+
             // add missing year
             match = missingYearRegexp.Match(str);
             if (match.Success)
