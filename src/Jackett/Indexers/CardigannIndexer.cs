@@ -585,6 +585,7 @@ namespace Jackett.Indexers
                         foreach (var Field in Search.Fields)
                         {
                             string value = handleSelector(Field.Value, Row);
+                            value = ParseUtil.NormalizeSpace(value);
                             try
                             {
                                 switch (Field.Key)
