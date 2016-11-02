@@ -493,7 +493,15 @@ namespace Jackett.Indexers
 
         protected Uri resolvePath(string path)
         {
-            return new Uri(SiteLink + path);
+            if(path.StartsWith("http"))
+            {
+                return new Uri(path);
+            }
+            else
+            {
+                return new Uri(SiteLink + path);
+            }
+            
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -577,6 +585,7 @@ namespace Jackett.Indexers
                         foreach (var Field in Search.Fields)
                         {
                             string value = handleSelector(Field.Value, Row);
+                            value = ParseUtil.NormalizeSpace(value);
                             try
                             {
                                 switch (Field.Key)
