@@ -87,9 +87,10 @@ Jackett can also be run from the command line using JackettConsole.exe if you wo
 
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
+       * Follow the instructions on the mono website and install the `mono-devel` package.
  2. Install  libcurl:
-       * Debian/Ubunutu: apt-get install libcurl-dev
-       * Redhat/Fedora: yum install libcurl-devel
+       * Debian/Ubunutu: `apt-get install libcurl-dev`
+       * Redhat/Fedora: `yum install libcurl-devel`
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
  3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono JackettConsole.exe`.
 
