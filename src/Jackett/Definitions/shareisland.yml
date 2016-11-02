@@ -1,4 +1,4 @@
----
+ï»¿---
   site: shareisland
   name: Shareisland
   description: "A general italian tracker"
@@ -16,7 +16,7 @@
        51: Movies/HD # H-265
        41: Movies/Other # Cartoons
        14: Movies/SD # DivX
-       16: Movies/other # Cine News
+       16: Movies/Other # Cine News
        39: Movies/HD # 720p
        40: Movies/HD # 1080p
        46: Movies/BluRay # Blu Ray Disk
@@ -133,15 +133,15 @@
           - name: replace
             args: ["Ieri", "Yesterday"]
           - name: replace
-            args: ["lunedì", "Monday"]
+            args: ["lunedÃ¬", "Monday"]
           - name: replace
-            args: ["martedì", "Tuesday"]
+            args: ["martedÃ¬", "Tuesday"]
           - name: replace
-            args: ["Mercoledì", "Wednesday"]
+            args: ["MercoledÃ¬", "Wednesday"]
           - name: replace
-            args: ["Giovedì", "Thursday"]
+            args: ["GiovedÃ¬", "Thursday"]
           - name: replace
-            args: ["Venerdì", "Friday"]
+            args: ["VenerdÃ¬", "Friday"]
           - name: replace
             args: ["Sabato", "Saturday"]
           - name: replace
