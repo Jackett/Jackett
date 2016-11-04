@@ -48,7 +48,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(2, TorznabCatType.PC);
             AddCategoryMapping(3, TorznabCatType.BooksEbook);
             AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
-            AddCategoryMapping(6, TorznabCatType.BooksComics);
+            AddCategoryMapping(7, TorznabCatType.BooksComics);
             AddCategoryMapping(8, TorznabCatType.TVAnime);
             AddCategoryMapping(9, TorznabCatType.Movies);
             AddCategoryMapping(10, TorznabCatType.TVHD);
