@@ -1,9 +1,15 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Utils
 {
     public static class ParseUtil
     {
+        private static readonly Regex InvalidXmlChars =
+            new Regex(
+                @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
+                RegexOptions.Compiled);
+
         public static string NormalizeSpace(string s)
         {
             return s.Trim();
@@ -15,6 +21,11 @@ namespace Jackett.Utils
             normalized = normalized.Replace("-", "0");
             normalized = normalized.Replace(",", "");
             return normalized;
+        }
+
+        public static string RemoveInvalidXmlChars(string text)
+        {
+            return string.IsNullOrEmpty(text) ? "" : InvalidXmlChars.Replace(text, "");
         }
 
         public static double CoerceDouble(string str)

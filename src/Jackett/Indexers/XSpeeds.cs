@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using static Jackett.Utils.ParseUtil;
 
 namespace Jackett.Indexers
 {
@@ -128,7 +129,7 @@ namespace Jackett.Indexers
                 if (rssPage.Content.EndsWith("\0")) {
                     rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
                 }
-                rssPage.Content = rssPage.Content.Replace("\0x10", "").Replace("\0x07", "");
+                rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
                 var rssDoc = XDocument.Parse(rssPage.Content);
 
                 foreach (var item in rssDoc.Descendants("item"))

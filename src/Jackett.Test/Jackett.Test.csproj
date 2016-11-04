@@ -164,6 +164,7 @@
     <Compile Include="TestIIndexerManagerServiceHelper.cs" />
     <Compile Include="TestUtil.cs" />
     <Compile Include="TestWebClient.cs" />
+    <Compile Include="Util\ParseUtilTests.cs" />
     <Compile Include="Util\ServerUtilTests.cs" />
     <Compile Include="Util\TvCategoryParserTests.cs" />
   </ItemGroup>
@@ -181,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Indexers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Util\Invalid-RSS.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
