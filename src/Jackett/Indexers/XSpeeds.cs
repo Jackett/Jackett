@@ -18,12 +18,12 @@ namespace Jackett.Indexers
 {
     public class XSpeeds : BaseIndexer, IIndexer
     {
-        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
-        string SearchUrl { get { return SiteLink + "browse.php"; } }
-        string RSSUrl { get { return SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all"; } }
-        string CommentUrl { get { return SiteLink + "details.php?id={0}"; } }
-        string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
+        string LoginUrl => SiteLink + "takelogin.php";
+        string GetRSSKeyUrl => SiteLink + "getrss.php";
+        string SearchUrl => SiteLink + "browse.php";
+        string RSSUrl => SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all";
+        string CommentUrl => SiteLink + "details.php?id={0}";
+        string DownloadUrl => SiteLink + "download.php?id={0}";
 
         new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -42,8 +42,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            this.configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
-            this.configData.DisplayText.Name = "Notice";
+            configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
+            configData.DisplayText.Name = "Notice";
             AddCategoryMapping(70, TorznabCatType.TVAnime);
             AddCategoryMapping(80, TorznabCatType.AudioAudiobook);
             AddCategoryMapping(66, TorznabCatType.MoviesBluRay);
@@ -70,34 +70,36 @@ namespace Jackett.Indexers
             AddCategoryMapping("Apps", TorznabCatType.PC);
             AddCategoryMapping("Music", TorznabCatType.Audio);
             AddCategoryMapping("Audiobooks", TorznabCatType.AudioAudiobook);
-            
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value }
-            };
+            var pairs = new Dictionary<string, string>
+                        {
+                            {"username", configData.Username.Value},
+                            {"password", configData.Password.Value}
+                        };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
-            result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink,true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
-            {
-                CQ dom = result.Content;
-                var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+            result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"),
+                () =>
+                {
+                    CQ dom = result.Content;
+                    var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
 
             try
             {
                 // Get RSS key
-                var rssParams = new Dictionary<string, string> {
-                { "feedtype", "download" },
-                { "timezone", "0" },
-                { "showrows", "50" }
-            };
+                var rssParams = new Dictionary<string, string>
+                                {
+                                    {"feedtype", "download"},
+                                    {"timezone", "0"},
+                                    {"showrows", "50"}
+                                };
                 var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
                 var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
@@ -105,10 +107,10 @@ namespace Jackett.Indexers
                     throw new Exception("Failed to get RSS Key");
                 SaveConfig();
             }
-            catch (Exception e)
+            catch
             {
                 IsConfigured = false;
-                throw e;
+                throw;
             }
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -146,7 +148,7 @@ namespace Jackett.Indexers
                     if (!infoMatch.Success)
                         throw new Exception("Unable to find info");
 
-                    var release = new ReleaseInfo()
+                    var release = new ReleaseInfo
                     {
                         Title = title,
                         Description = title,
@@ -186,25 +188,25 @@ namespace Jackett.Indexers
                     { "username", configData.Username.Value },
                     { "password", configData.Password.Value }
                 };
-                var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, this.CookieHeader, true, null, SiteLink, true);
+                var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, SiteLink, true);
                 if (!result.Cookies.Trim().Equals(prevCook.Trim()))
                 {
                     result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
                 }
-                this.CookieHeader = result.Cookies;
+                CookieHeader = result.Cookies;
 
                 var attempt = 1;
-                var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams,this.CookieHeader);
+                var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
                 while (searchPage.IsRedirect && attempt < 3)
                 {
                     // add any cookies
-                    var cookieString = this.CookieHeader;
+                    var cookieString = CookieHeader;
                     if (searchPage.Cookies != null)
                     {
                         cookieString += " " + searchPage.Cookies;
                         // resolve cookie conflicts - really no need for this as the webclient will handle it
-                        System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
-                        Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
+                        var expression = new Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
+                        var cookieDIctionary = new Dictionary<string, string>();
                         var matches = expression.Match(cookieString);
                         while (matches.Success)
                         {
@@ -213,9 +215,9 @@ namespace Jackett.Indexers
                         }
                         cookieString = string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
                     }
-                    this.CookieHeader = cookieString;
+                    CookieHeader = cookieString;
                     attempt++;
-                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, this.CookieHeader);
+                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
                 }
                 try
                 {
@@ -278,7 +280,7 @@ namespace Jackett.Indexers
             }
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
             {
-                this.SaveConfig();
+                SaveConfig();
             }
             return releases;
         }
