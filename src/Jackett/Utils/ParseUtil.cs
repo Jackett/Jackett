@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace Jackett.Utils
 {
@@ -16,7 +11,7 @@ namespace Jackett.Utils
 
         public static string NormalizeNumber(string s)
         {
-            string normalized = NormalizeSpace(s);
+            var normalized = NormalizeSpace(s);
             normalized = normalized.Replace("-", "0");
             normalized = normalized.Replace(",", "");
             return normalized;
@@ -42,7 +37,6 @@ namespace Jackett.Utils
             return long.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
-
         public static bool TryCoerceDouble(string str, out double result)
         {
             return double.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
@@ -62,6 +56,5 @@ namespace Jackett.Utils
         {
             return long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
-
     }
 }
