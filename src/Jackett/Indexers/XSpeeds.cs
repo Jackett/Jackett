@@ -45,32 +45,79 @@ namespace Jackett.Indexers
         {
             configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
             configData.DisplayText.Name = "Notice";
-            AddCategoryMapping(70, TorznabCatType.TVAnime);
-            AddCategoryMapping(80, TorznabCatType.AudioAudiobook);
-            AddCategoryMapping(66, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(48, TorznabCatType.Books);
-            AddCategoryMapping(68, TorznabCatType.MoviesOther);
-            AddCategoryMapping(65, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(10, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(74, TorznabCatType.TVOTHER);
-            AddCategoryMapping(44, TorznabCatType.TVSport);
-            AddCategoryMapping(12, TorznabCatType.Movies);
-            AddCategoryMapping(13, TorznabCatType.Audio);
-            AddCategoryMapping(6, TorznabCatType.PC);
-            AddCategoryMapping(4, TorznabCatType.PC);
-            AddCategoryMapping(31, TorznabCatType.ConsolePS3);
-            AddCategoryMapping(31, TorznabCatType.ConsolePS4);
-            AddCategoryMapping(20, TorznabCatType.TVSport);
-            AddCategoryMapping(86, TorznabCatType.TVSport);
-            AddCategoryMapping(47, TorznabCatType.TVHD);
-            AddCategoryMapping(16, TorznabCatType.TVSD);
-            AddCategoryMapping(7, TorznabCatType.ConsoleWii);
-            AddCategoryMapping(8, TorznabCatType.ConsoleXbox);
+
+            AddCategoryMapping(70, TorznabCatType.TVAnime); // Anime
+            AddCategoryMapping(4, TorznabCatType.PC); // Apps
+            AddCategoryMapping(82, TorznabCatType.PCMac); // Mac
+            AddCategoryMapping(80, TorznabCatType.AudioAudiobook); // Audiobooks
+            AddCategoryMapping(66, TorznabCatType.MoviesBluRay); // Blu-Ray
+            AddCategoryMapping(48, TorznabCatType.Books); // Books Magazines
+            AddCategoryMapping(68, TorznabCatType.MoviesOther); // Cams/TS
+            AddCategoryMapping(65, TorznabCatType.TVDocumentary); // Documentaries
+            AddCategoryMapping(10, TorznabCatType.MoviesDVD); // DVDR
+            AddCategoryMapping(72, TorznabCatType.MoviesForeign); // Foreign
+            AddCategoryMapping(74, TorznabCatType.TVOTHER); // Kids
+            AddCategoryMapping(44, TorznabCatType.TVSport); // MMA
+            AddCategoryMapping(11, TorznabCatType.Movies); // Movie Boxsets
+            AddCategoryMapping(12, TorznabCatType.Movies); // Movies
+            AddCategoryMapping(13, TorznabCatType.Audio); // Music
+            AddCategoryMapping(15, TorznabCatType.AudioVideo); // Music Videos
+            AddCategoryMapping(32, TorznabCatType.ConsoleNDS); // NDS Games
+            AddCategoryMapping(9, TorznabCatType.Other); // Other
+            AddCategoryMapping(6, TorznabCatType.PCGames); // PC Games
+            AddCategoryMapping(45, TorznabCatType.Other); // Pictures
+            AddCategoryMapping(31, TorznabCatType.ConsolePS4); // Playstation
+            AddCategoryMapping(71, TorznabCatType.TV); // PPV
+            AddCategoryMapping(54, TorznabCatType.TV); // Soaps
+            AddCategoryMapping(20, TorznabCatType.TVSport); // Sports
+            AddCategoryMapping(86, TorznabCatType.TVSport); // MotorSports
+            AddCategoryMapping(89, TorznabCatType.TVSport); // Olympics 2016
+            AddCategoryMapping(88, TorznabCatType.TVSport); // World Cup
+            AddCategoryMapping(83, TorznabCatType.Movies); // TOTM
+            AddCategoryMapping(21, TorznabCatType.TVSD); // TV Boxsets
+            AddCategoryMapping(76, TorznabCatType.TVHD); // HD Boxsets
+            AddCategoryMapping(47, TorznabCatType.TVHD); // TV-HD
+            AddCategoryMapping(16, TorznabCatType.TVSD); // TV-SD
+            AddCategoryMapping(7, TorznabCatType.ConsoleWii); // Wii Games
+            AddCategoryMapping(43, TorznabCatType.TVSport); // Wrestling
+            AddCategoryMapping(8, TorznabCatType.ConsoleXbox); // Xbox Games
 
             // RSS Textual categories
+            AddCategoryMapping("Anime", TorznabCatType.TVAnime);
             AddCategoryMapping("Apps", TorznabCatType.PC);
-            AddCategoryMapping("Music", TorznabCatType.Audio);
+            AddCategoryMapping("Mac", TorznabCatType.PCMac);
             AddCategoryMapping("Audiobooks", TorznabCatType.AudioAudiobook);
+            AddCategoryMapping("Blu-Ray", TorznabCatType.MoviesBluRay);
+            AddCategoryMapping("Books Magazines", TorznabCatType.Books);
+            AddCategoryMapping("Cams/TS", TorznabCatType.MoviesOther);
+            AddCategoryMapping("Documentaries", TorznabCatType.TVDocumentary);
+            AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
+            AddCategoryMapping("Foreign", TorznabCatType.MoviesForeign);
+            AddCategoryMapping("Kids", TorznabCatType.TVOTHER);
+            AddCategoryMapping("MMA", TorznabCatType.TVSport);
+            AddCategoryMapping("Movie Boxsets", TorznabCatType.Movies);
+            AddCategoryMapping("Movies", TorznabCatType.Movies);
+            AddCategoryMapping("Music", TorznabCatType.Audio);
+            AddCategoryMapping("Music Videos", TorznabCatType.AudioVideo);
+            AddCategoryMapping("NDS Games", TorznabCatType.ConsoleNDS);
+            AddCategoryMapping("Other", TorznabCatType.Other);
+            AddCategoryMapping("PC Games", TorznabCatType.PCGames);
+            AddCategoryMapping("Pictures", TorznabCatType.Other);
+            AddCategoryMapping("Playstation", TorznabCatType.ConsolePS4);
+            AddCategoryMapping("PPV", TorznabCatType.TV);
+            AddCategoryMapping("Soaps", TorznabCatType.TV);
+            AddCategoryMapping("Sports", TorznabCatType.TVSport);
+            AddCategoryMapping("MotorSports", TorznabCatType.TVSport);
+            AddCategoryMapping("Olympics 2016", TorznabCatType.TVSport);
+            AddCategoryMapping("World Cup", TorznabCatType.TVSport);
+            AddCategoryMapping("TOTM", TorznabCatType.Movies);
+            AddCategoryMapping("TV Boxsets", TorznabCatType.TVSD);
+            AddCategoryMapping("HD Boxsets", TorznabCatType.TVHD);
+            AddCategoryMapping("TV-HD", TorznabCatType.TVHD);
+            AddCategoryMapping("TV-SD", TorznabCatType.TVSD);
+            AddCategoryMapping("Wii Games", TorznabCatType.ConsoleWii);
+            AddCategoryMapping("Wrestling", TorznabCatType.TVSport);
+            AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXbox);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -160,12 +207,8 @@ namespace Jackett.Indexers
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
                         Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
-                        Category = MapTrackerCatToNewznab(infoMatch.Groups["cat"].Value)
+                        Category = MapTrackerCatToNewznab(category)
                     };
-
-                    // If its not apps or audio we can only mark as general TV
-                    if (release.Category == 0)
-                        release.Category = 5030;
 
                     release.Peers += release.Seeders;
                     releases.Add(release);
