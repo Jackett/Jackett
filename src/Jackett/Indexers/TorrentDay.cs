@@ -60,50 +60,49 @@ namespace Jackett.Indexers
             this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
             this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
-            AddCategoryMapping(29, TorznabCatType.TVAnime);
-            AddCategoryMapping(28, TorznabCatType.PC);
-            AddCategoryMapping(28, TorznabCatType.AudioAudiobook);
-            AddCategoryMapping(20, TorznabCatType.Books);
-            AddCategoryMapping(30, TorznabCatType.TVDocumentary);
-            //Freelech
-            //Mac
+            AddCategoryMapping(29, TorznabCatType.TVAnime); // Anime
+            AddCategoryMapping(28, TorznabCatType.PC); // Appz/Packs
+            AddCategoryMapping(42, TorznabCatType.AudioAudiobook); // Audio Books
+            AddCategoryMapping(20, TorznabCatType.Books); // Books
+            AddCategoryMapping(30, TorznabCatType.TVDocumentary); // Documentary
+            AddCategoryMapping(47, TorznabCatType.Other); // Fonts
+            AddCategoryMapping(43, TorznabCatType.PCMac); // Mac
 
-            AddCategoryMapping(25, TorznabCatType.MoviesSD);
-            AddCategoryMapping(11, TorznabCatType.MoviesHD);
-            AddCategoryMapping(5, TorznabCatType.MoviesHD);
-            AddCategoryMapping(48, TorznabCatType.Movies);
-            AddCategoryMapping(3, TorznabCatType.MoviesSD);
-            AddCategoryMapping(21, TorznabCatType.MoviesSD);
-            AddCategoryMapping(22, TorznabCatType.MoviesForeign);
-            // Movie packs
-            AddCategoryMapping(44, TorznabCatType.MoviesSD);
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            AddCategoryMapping(25, TorznabCatType.MoviesSD); // Movies/480p
+            AddCategoryMapping(11, TorznabCatType.MoviesBluRay); // Movies/Bluray
+            AddCategoryMapping(5, TorznabCatType.MoviesBluRay); // Movies/Bluray-Full
+            AddCategoryMapping(3, TorznabCatType.MoviesDVD); // Movies/DVD-R
+            AddCategoryMapping(21, TorznabCatType.MoviesSD); // Movies/MP4
+            AddCategoryMapping(22, TorznabCatType.MoviesForeign); // Movies/Non-English
+            AddCategoryMapping(13, TorznabCatType.Movies); // Movies/Packs
+            AddCategoryMapping(44, TorznabCatType.MoviesSD); // Movies/SD/x264
+            AddCategoryMapping(48, TorznabCatType.MoviesHD); // Movies/x265
+            AddCategoryMapping(1, TorznabCatType.MoviesSD); // Movies/XviD
 
-            // Music
-            AddCategoryMapping(17, TorznabCatType.AudioMP3);
-            AddCategoryMapping(44, TorznabCatType.AudioLossless);
-            AddCategoryMapping(23, TorznabCatType.AudioForeign);
-            AddCategoryMapping(41, TorznabCatType.AudioOther);
-            AddCategoryMapping(16, TorznabCatType.AudioVideo);
+            AddCategoryMapping(23, TorznabCatType.AudioForeign); // Music/Non-English
+            AddCategoryMapping(41, TorznabCatType.Audio); // Music/Packs
+            AddCategoryMapping(16, TorznabCatType.AudioVideo); // Music/Video
+            AddCategoryMapping(45, TorznabCatType.AudioOther); // Podcast
 
-            AddCategoryMapping(4, TorznabCatType.PCGames);
-            // ps3
-            // psp
-            // wii
-            // 360
+            AddCategoryMapping(4, TorznabCatType.PCGames); // PC/Games
+            AddCategoryMapping(18, TorznabCatType.ConsolePS3); // PS3
+            AddCategoryMapping(8, TorznabCatType.ConsolePSP); // PSP
+            AddCategoryMapping(10, TorznabCatType.ConsoleWii); // Wii
+            AddCategoryMapping(9, TorznabCatType.ConsoleXbox360); // Xbox-360
 
-            AddCategoryMapping(24, TorznabCatType.TVSD);
-            AddCategoryMapping(32, TorznabCatType.TVHD);
-            AddCategoryMapping(31, TorznabCatType.TVSD);
-            AddCategoryMapping(33, TorznabCatType.TVSD);
-            AddCategoryMapping(14, TorznabCatType.TVHD);
-            AddCategoryMapping(26, TorznabCatType.TVSD);
-            AddCategoryMapping(7, TorznabCatType.TVHD);
-            AddCategoryMapping(2, TorznabCatType.TVSD);
-            AddCategoryMapping(34, TorznabCatType.TV);
+            AddCategoryMapping(24, TorznabCatType.TVSD); // TV/480p
+            AddCategoryMapping(32, TorznabCatType.TVHD); // TV/Bluray
+            AddCategoryMapping(31, TorznabCatType.TVSD); // TV/DVD-R
+            AddCategoryMapping(33, TorznabCatType.TVSD); // TV/DVD-Rip
+            AddCategoryMapping(46, TorznabCatType.TVSD); // TV/Mobile
+            AddCategoryMapping(14, TorznabCatType.TV); // TV/Packs
+            AddCategoryMapping(26, TorznabCatType.TVSD); // TV/SD/x264
+            AddCategoryMapping(7, TorznabCatType.TVHD); // TV/x264
+            AddCategoryMapping(34, TorznabCatType.TVHD); // TV/x265
+            AddCategoryMapping(2, TorznabCatType.TVSD); // TV/XviD
 
-            AddCategoryMapping(6, TorznabCatType.XXX);
-            AddCategoryMapping(15, TorznabCatType.XXX);
+            AddCategoryMapping(6, TorznabCatType.XXX); // XXX/Movies
+            AddCategoryMapping(15, TorznabCatType.XXXPacks); // XXX/Packs
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -227,7 +226,7 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
 
-                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Substring(15);//browse.php?cat=24
+                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Split('#')[0].Substring(15);//browse.php?cat=24
                     release.Category = MapTrackerCatToNewznab(cat);
 
                     if (qRow.Find("span.flTags").Length >= 1)
