@@ -82,9 +82,20 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Installation on Windows
 
-We recommend you install Jackett as a Windows service using the supplied installer.  When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
+We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
 
-Jackett can also be run from the command line using JackettConsole.exe if you would like to see log messages (Ensure the server isn't already running from the tray/service).
+To get started with using the installer for Jackett, follow the steps below:
+
+1. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
+2. When prompted if you would like this app to make changes to your computer, select "yes".
+3. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
+4. Once the installation has finished, check the "Launch Jackett" box to get started.
+5. Navigate your web browser to: http://127.0.0.1:9117
+6. You're now ready to begin adding your trackers and using Jackett.
+
+When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
+
+Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett". 
 
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
