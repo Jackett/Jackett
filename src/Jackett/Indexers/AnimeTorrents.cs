@@ -147,6 +147,10 @@ namespace Jackett.Indexers
                     {
                         release.Link = new Uri(qLink.Attr("href"));
                     }
+                    else
+                    {
+                        continue;
+                    }
 
                     var sizeStr = qRow.Find("td:eq(5)").Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
