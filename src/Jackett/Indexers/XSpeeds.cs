@@ -266,7 +266,7 @@ namespace Jackett.Indexers
                 try
                 {
                     CQ dom = searchPage.Content;
-                    var rows = dom["table#sortabletable > tbody > tr:not(:has(td.thead))"];
+                    var rows = dom["table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])"];
                     foreach (var row in rows)
                     {
                         var release = new ReleaseInfo();
