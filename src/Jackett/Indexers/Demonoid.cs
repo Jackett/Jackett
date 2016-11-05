@@ -55,8 +55,8 @@ namespace Jackett.Indexers
                 { "Submit", "Submit" }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("user_control_panel.php"), () =>
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SiteLink, SiteLink);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains("uid="), () =>
             {
                 CQ dom = result.Content;
                 string errorMessage = dom["form[id='bb_code_form']"].Parent().Find("font[class='red']").Text();
