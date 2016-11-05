@@ -22,13 +22,14 @@ namespace Jackett.Indexers
     public class IPTorrents : BaseIndexer, IIndexer
     {
         private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
+        string LoginUrl { get { return UseLink + "login.php"; } }
         string TakeLoginUrl { get { return UseLink + "take_login.php"; } }
         private string BrowseUrl { get { return UseLink + "t"; } }
         private List<String> KnownURLs = new List<String> { "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
 
-        new ConfigurationDataBasicLoginWithAlternateLink configData
+        new ConfigurationDataRecaptchaLoginWithAlternateLink configData
         {
-            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
+            get { return (ConfigurationDataRecaptchaLoginWithAlternateLink)base.configData; }
             set { base.configData = value; }
         }
 
@@ -41,7 +42,7 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithAlternateLink())
+                configData: new ConfigurationDataRecaptchaLoginWithAlternateLink())
         {
             this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
             this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
@@ -90,13 +91,62 @@ namespace Jackett.Indexers
             AddCategoryMapping(94, TorznabCatType.BooksComics);
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            CQ cq = loginPage.Content;
+            var captcha = cq.Find(".g-recaptcha");
+            if(captcha.Any())
+            {
+                var result = this.configData;
+                result.CookieHeader.Value = loginPage.Cookies;
+                result.Captcha.SiteKey = captcha.Attr("data-sitekey");
+                result.Captcha.Version = "2";
+                return result;
+            }
+            else
+            {
+                var result = new ConfigurationDataBasicLoginWithAlternateLink();
+                result.Instructions.Value = configData.Instructions.Value;
+                result.Username.Value = configData.Username.Value;
+                result.Password.Value = configData.Password.Value;
+                result.CookieHeader.Value = loginPage.Cookies;
+                return result;
+            }
+            
+        }
+
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
-                { "password", configData.Password.Value }
+                { "password", configData.Password.Value },
+                { "g-recaptcha-response", configData.Captcha.Value }
             };
+
+            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            {
+                CookieHeader = configData.Captcha.Cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (results.Count() == 0)
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
+
+                    SaveConfig();
+                    IsConfigured = true;
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
+
             var request = new Utils.Clients.WebRequest()
             {
                 Url = TakeLoginUrl,
