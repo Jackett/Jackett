@@ -73,7 +73,8 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            if(configJson != null)
+                configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -130,6 +131,13 @@ namespace Jackett.Indexers
         private async Task ProcessPage(List<ReleaseInfo> releases, string searchUrl)
         {
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            // On IP change the cookies become invalid, login again and retry
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            }
+
             var results = response.Content;
             try
             {
