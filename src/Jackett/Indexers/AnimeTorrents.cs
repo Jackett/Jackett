@@ -149,7 +149,10 @@ namespace Jackett.Indexers
                     }
                     else
                     {
-                        continue;
+                        // use comments link as placeholder
+                        // null causes errors during export to torznab
+                        // skipping the release prevents newbie users from adding the tracker (empty result)
+                        release.Link = release.Comments;
                     }
 
                     var sizeStr = qRow.Find("td:eq(5)").Text();
