@@ -97,8 +97,13 @@ namespace Jackett.Indexers
 
             try
             {
+                var globalFreeleech = false;
                 var parser = new HtmlParser();
                 var document = parser.Parse(htmlResponse);
+
+                if (document.QuerySelector("div.nicebar > span:contains(\"Personal Freeleech\")") != null)
+                    globalFreeleech = true;
+
                 var rows = document.QuerySelectorAll(".torrent_table > tbody > tr[class^='torrent row']");
 
                 foreach (var row in rows)
@@ -133,6 +138,19 @@ namespace Jackett.Indexers
                     release.Size = ReleaseInfo.GetBytes(timeAnchor.ParentElement.PreviousElementSibling.TextContent);
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+
+                    release.Files = ParseUtil.CoerceLong(row.QuerySelector("td > div:contains(\"Files:\")").TextContent.Split(':')[1].Trim());
+                    release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-last-child(3)").TextContent);
+
+                    if (globalFreeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.QuerySelector("img[alt=\"Freeleech\"]") != null)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
 
                     releases.Add(release);
                 }
