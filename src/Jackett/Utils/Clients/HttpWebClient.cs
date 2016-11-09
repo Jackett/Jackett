@@ -27,6 +27,11 @@ namespace Jackett.Utils.Clients
 
         public void Init()
         {
+            if (Startup.IgnoreSslErrors == true)
+            {
+                logger.Info(string.Format("WindowsWebClient: Disabling certificate validation"));
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
+            }
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
