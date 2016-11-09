@@ -81,7 +81,14 @@ namespace Jackett.Models
                 return BytesFromMB(value);
             if (unit.Contains("gb"))
                 return BytesFromGB(value);
-            return 0;
+            if (unit.Contains("tb"))
+                return BytesFromTB(value);
+            return (long)value;
+        }
+
+        public static long BytesFromTB(float tb)
+        {
+            return BytesFromGB(tb * 1024f);
         }
 
         public static long BytesFromGB(float gb)
