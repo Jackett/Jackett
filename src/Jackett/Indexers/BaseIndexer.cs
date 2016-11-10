@@ -186,7 +186,7 @@ namespace Jackett.Indexers
         private String ResolveCookies(String incomingCookies = "")
         {
             var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
+            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]+)");
             Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
             var matches = expression.Match(redirRequestCookies);
             while (matches.Success)
@@ -194,7 +194,7 @@ namespace Jackett.Indexers
                 if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
                 matches = matches.NextMatch();
             }
-            return string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
             
         }
 
