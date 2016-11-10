@@ -161,9 +161,9 @@ namespace Jackett.Services
                 throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.ID));
             }
 
-            if (content.Contains("NULL"))
+            if (content.Contains("\x00"))
             {
-                throw new Exception(string.Format("New config content for {0} contains NULL, please report this bug. Content: {1}", indexer.ID, content));
+                throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.ID, content));
             }
 
             // make sure the config directory exists
