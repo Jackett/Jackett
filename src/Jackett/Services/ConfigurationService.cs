@@ -204,7 +204,7 @@ namespace Jackett.Services
 
             if (System.Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                dirs.Add(Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config/cardigann/definitions/"));
+                dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cardigann/definitions/"));
                 dirs.Add("/etc/xdg/cardigan/definitions/");
             }
             else
