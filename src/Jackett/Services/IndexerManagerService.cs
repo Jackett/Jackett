@@ -200,7 +200,7 @@ namespace Jackett.Services
             }
             catch (IOException ex)
             {
-                logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePath, configFilePathBak, ex.ToString()));
+                logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex.ToString()));
             }
         }
     }
