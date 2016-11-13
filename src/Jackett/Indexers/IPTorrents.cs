@@ -25,7 +25,7 @@ namespace Jackett.Indexers
         string LoginUrl { get { return UseLink + "login.php"; } }
         string TakeLoginUrl { get { return UseLink + "take_login.php"; } }
         private string BrowseUrl { get { return UseLink + "t"; } }
-        private List<String> KnownURLs = new List<String> { "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
+        private List<String> KnownURLs = new List<String> { "https://iptorrents.com/", "https://iptorrents.eu", "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
 
         new ConfigurationDataRecaptchaLoginWithAlternateLink configData
         {
