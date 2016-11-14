@@ -168,6 +168,7 @@
     <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
+    <Compile Include="Indexers\HD4Free.cs" />
     <Compile Include="Indexers\myAmity.cs" />
     <Compile Include="Indexers\TorrentNetwork.cs" />
     <Compile Include="Indexers\Andraste.cs" />
