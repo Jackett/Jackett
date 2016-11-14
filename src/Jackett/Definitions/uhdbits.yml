@@ -56,6 +56,9 @@
       download:
         selector: a[title="Download"]
         attribute: href
+        filters:
+          - name: replace
+            args: ["\t", " "]
       title:
         selector: div.group_info
         remove: span, div.tags
@@ -100,6 +103,9 @@
       comments:
         selector: a.torrent_name
         attribute: href
+        filters:
+          - name: replace
+            args: ["\t", " "]
       size:
         selector: td:nth-child(5)
       grabs:
