@@ -81,6 +81,8 @@ namespace Jackett.Utils
             if (time.EndsWith("AM"))
             {
                 time = time.Substring(0, time.Length - 2);
+                if(time.StartsWith("12")) // 12:15 AM becomes 00:15
+                    time = "00" + time.Substring(2);
             }
             else if (time.EndsWith("PM"))
             {
@@ -110,74 +112,90 @@ namespace Jackett.Utils
         public static Regex tomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]+|$)", RegexOptions.Compiled);
         public static Regex yesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]+|$)", RegexOptions.Compiled);
         public static Regex missingYearRegexp = new Regex(@"^\d{1,2}-\d{1,2}\b", RegexOptions.Compiled);
+        public static Regex missingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
         public static DateTime FromUnknown(string str)
         {
-            str = ParseUtil.NormalizeSpace(str);
-            Match match;
+            try {
+                str = ParseUtil.NormalizeSpace(str);
+                Match match;
 
-            // ... ago
-            match = timeAgoRegexp.Match(str);
-            if (match.Success)
-            {
-                var timeago = str;
-                return FromTimeAgo(timeago);
-            }
+                // ... ago
+                match = timeAgoRegexp.Match(str);
+                if (match.Success)
+                {
+                    var timeago = str;
+                    return FromTimeAgo(timeago);
+                }
 
-            // Today ...
-            match = todayRegexp.Match(str);
-            if (match.Success)
-            {
-                var time = str.Replace(match.Groups[0].Value, "");
-                DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
-                dt += ParseTimeSpan(time);
-                return dt;
-            }
+                // Today ...
+                match = todayRegexp.Match(str);
+                if (match.Success)
+                {
+                    var time = str.Replace(match.Groups[0].Value, "");
+                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    dt += ParseTimeSpan(time);
+                    return dt;
+                }
 
-            // Yesterday ...
-            match = yesterdayRegexp.Match(str);
-            if (match.Success)
-            {
-                var time = str.Replace(match.Groups[0].Value, "");
-                DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
-                dt += ParseTimeSpan(time);
-                dt -= TimeSpan.FromDays(1);
-                return dt;
-            }
+                // Yesterday ...
+                match = yesterdayRegexp.Match(str);
+                if (match.Success)
+                {
+                    var time = str.Replace(match.Groups[0].Value, "");
+                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    dt += ParseTimeSpan(time);
+                    dt -= TimeSpan.FromDays(1);
+                    return dt;
+                }
 
-            // Tomorrow ...
-            match = tomorrowRegexp.Match(str);
-            if (match.Success)
-            {
-                var time = str.Replace(match.Groups[0].Value, "");
-                DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
-                dt += ParseTimeSpan(time);
-                dt += TimeSpan.FromDays(1);
-                return dt;
-            }
+                // Tomorrow ...
+                match = tomorrowRegexp.Match(str);
+                if (match.Success)
+                {
+                    var time = str.Replace(match.Groups[0].Value, "");
+                    DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified);
+                    dt += ParseTimeSpan(time);
+                    dt += TimeSpan.FromDays(1);
+                    return dt;
+                }
 
-            try
-            {
-                // try parsing the str as an unix timestamp
-                var unixTimeStamp = long.Parse(str);
-                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
-                return dt;
-            }
-            catch (FormatException)
-            {
-                // it wasn't a timestamp, continue....
-            }
+                try
+                {
+                    // try parsing the str as an unix timestamp
+                    var unixTimeStamp = long.Parse(str);
+                    DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                    dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
+                    return dt;
+                }
+                catch (FormatException)
+                {
+                    // it wasn't a timestamp, continue....
+                }
 
-            // add missing year
-            match = missingYearRegexp.Match(str);
-            if (match.Success)
-            {
-                var date = match.Groups[0].Value;
-                string newDate = date+"-"+DateTime.Now.Year.ToString();
-                str = str.Replace(date, newDate);
+                // add missing year
+                match = missingYearRegexp.Match(str);
+                if (match.Success)
+                {
+                    var date = match.Groups[0].Value;
+                    string newDate = date+"-"+DateTime.Now.Year.ToString();
+                    str = str.Replace(date, newDate);
+                }
+
+                // add missing year 2
+                match = missingYearRegexp2.Match(str);
+                if (match.Success)
+                {
+                    var date = match.Groups[1].Value;
+                    var time = match.Groups[2].Value;
+                    str = date + " " + DateTime.Now.Year.ToString() + " " + time;
+                }
+                return FromFuzzyTime(str);
             }
-            return FromFuzzyTime(str);
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("DateTime parsing failed for \"{0}\": {1}", str, ex.ToString()));
+            }
         }
     }
 }
