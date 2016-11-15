@@ -38,49 +38,52 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
-            AddCategoryMapping(0, TorznabCatType.Other);
-            AddCategoryMapping(48, TorznabCatType.Other); // 0Day
-            AddCategoryMapping(56, TorznabCatType.XXXImageset); // 0Day-Imagesets
-            AddCategoryMapping(6, TorznabCatType.Audio); // 0Day-Music
-            AddCategoryMapping(51, TorznabCatType.XXX); // 0Day-XXX
-            AddCategoryMapping(2, TorznabCatType.TVAnime); // Anime
-            AddCategoryMapping(59, TorznabCatType.MoviesBluRay); // BluRay
-            AddCategoryMapping(40, TorznabCatType.TVDocumentary); // Documentary
-            AddCategoryMapping(20, TorznabCatType.MoviesDVD); // DVD-R
-            AddCategoryMapping(25, TorznabCatType.BooksEbook); // Ebooks
-            AddCategoryMapping(38, TorznabCatType.PCPhoneIOS); // HandHeld
-            AddCategoryMapping(38, TorznabCatType.PCPhoneAndroid); // HandHeld
-            AddCategoryMapping(38, TorznabCatType.PCPhoneOther); // HandHeld
-            AddCategoryMapping(37, TorznabCatType.Other); // Kids Stuff
-            AddCategoryMapping(23, TorznabCatType.PC); // Linux
-            AddCategoryMapping(24, TorznabCatType.PCMac); // Mac
-            AddCategoryMapping(22, TorznabCatType.OtherMisc); // Misc
-            AddCategoryMapping(35, TorznabCatType.MoviesOther); // Movie Pack
-            AddCategoryMapping(36, TorznabCatType.MoviesHD); // Movie-HD
-            AddCategoryMapping(19, TorznabCatType.MoviesSD); // Movie-SD
-            AddCategoryMapping(50, TorznabCatType.Audio); // Music
-            AddCategoryMapping(53, TorznabCatType.AudioLossless); // Music-FLAC
-            AddCategoryMapping(49, TorznabCatType.AudioVideo); // MVID
-            AddCategoryMapping(1, TorznabCatType.PC); // PC Apps
-            AddCategoryMapping(4, TorznabCatType.PCGames); // PC Games
-            AddCategoryMapping(17, TorznabCatType.ConsolePS3); // Playstation
-            AddCategoryMapping(17, TorznabCatType.ConsolePS4); // Playstation
-            AddCategoryMapping(17, TorznabCatType.ConsolePSVita); // Playstation
-            AddCategoryMapping(17, TorznabCatType.ConsolePSP); // Playstation
-            AddCategoryMapping(28, TorznabCatType.ConsolePSP); // PSP
-            AddCategoryMapping(34, TorznabCatType.TVOTHER); // TV Pack
-            AddCategoryMapping(32, TorznabCatType.TVHD); // TV-HD
-            AddCategoryMapping(55, TorznabCatType.TVOTHER); // TV-HDRip
-            AddCategoryMapping(7, TorznabCatType.TVSD); // TV-SD
-            AddCategoryMapping(57, TorznabCatType.TVOTHER); // TV-SDRip
-            AddCategoryMapping(33, TorznabCatType.ConsoleWii); // WII
-            AddCategoryMapping(33, TorznabCatType.ConsoleWiiU); // WII
-            AddCategoryMapping(45, TorznabCatType.ConsoleXbox); // XBox
-            AddCategoryMapping(45, TorznabCatType.ConsoleXbox360); // XBox
-            AddCategoryMapping(45, TorznabCatType.ConsoleXBOX360DLC); // XBox
-            AddCategoryMapping(45, TorznabCatType.ConsoleXboxOne); // XBox
-            AddCategoryMapping(9, TorznabCatType.XXX); // XXX
-            AddCategoryMapping(52, TorznabCatType.XXXOther); // XXX-ISO
+            AddCategoryMapping(42, TorznabCatType.MoviesSD); // LEGi0N 480p
+            AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p 
+            AddCategoryMapping(16, TorznabCatType.MoviesHD); // LEGi0N  1080p 
+            AddCategoryMapping(84, TorznabCatType.Movies3D); // LEGi0N 3D 1080p
+            AddCategoryMapping(31, TorznabCatType.MoviesOther); // LEGi0N  REMUX
+            AddCategoryMapping(70, TorznabCatType.MoviesBluRay); // LEGi0N BD BD25 & BD50
+            AddCategoryMapping(55, TorznabCatType.Movies); // LEGi0N  Movie/TV PACKS
+            AddCategoryMapping(60, TorznabCatType.Other); // shadz shack
+            AddCategoryMapping(85, TorznabCatType.MoviesHD); // MarGe 720p
+            AddCategoryMapping(86, TorznabCatType.MoviesHD); // MarGe 1080p
+            AddCategoryMapping(73, TorznabCatType.MoviesBluRay); // GF44 BD-50
+            AddCategoryMapping(74, TorznabCatType.MoviesBluRay); // GF44 BD-25
+            AddCategoryMapping(88, TorznabCatType.MoviesBluRay); // taterzero BD50
+            AddCategoryMapping(89, TorznabCatType.MoviesBluRay); // taterzero BD25
+            AddCategoryMapping(90, TorznabCatType.Movies3D); // taterzero 3D BD
+            AddCategoryMapping(39, TorznabCatType.MoviesBluRay); // Bluray REMUX
+            AddCategoryMapping(38, TorznabCatType.MoviesBluRay); // Bluray 
+            AddCategoryMapping(75, TorznabCatType.MoviesBluRay); // Bluray 25
+            AddCategoryMapping(36, TorznabCatType.MoviesHD); // Encodes 720p
+            AddCategoryMapping(35, TorznabCatType.MoviesHD); // Encodes 1080p
+            AddCategoryMapping(45, TorznabCatType.Movies3D); // 1080p 3D Encodes
+            AddCategoryMapping(77, TorznabCatType.MoviesHD); // WEB-DL 720p
+            AddCategoryMapping(78, TorznabCatType.MoviesHD); // WEB-DL 1080p
+            AddCategoryMapping(83, TorznabCatType.MoviesDVD); // DVD 5/9's
+            AddCategoryMapping(47, TorznabCatType.Movies); // General x264
+            AddCategoryMapping(58, TorznabCatType.Movies); // General XViD
+            AddCategoryMapping(66, TorznabCatType.Movies); // x265 HEVC
+            AddCategoryMapping(34, TorznabCatType.MoviesHD); // 4K
+            AddCategoryMapping(61, TorznabCatType.Movies); // MOViE PACKS
+            AddCategoryMapping(44, TorznabCatType.TVHD); // HDTV 720p
+            AddCategoryMapping(43, TorznabCatType.TVHD); // HDTV 1080p
+            AddCategoryMapping(41, TorznabCatType.TVHD); // WEB-DL 720p TV
+            AddCategoryMapping(40, TorznabCatType.TVHD); // WEB-DL 1080p TV
+            AddCategoryMapping(52, TorznabCatType.TVHD); // 720p TV BluRay
+            AddCategoryMapping(53, TorznabCatType.TVHD); // 1080p TV BluRay
+            AddCategoryMapping(62, TorznabCatType.TVHD); // HDTV Packs
+            AddCategoryMapping(82, TorznabCatType.TVSD); // SDTV TV PACKS
+            AddCategoryMapping(63, TorznabCatType.PC0day); // Apps Windows
+            AddCategoryMapping(57, TorznabCatType.PCMac); // Appz Mac
+            AddCategoryMapping(72, TorznabCatType.AudioAudiobook); // Audio Books
+            AddCategoryMapping(71, TorznabCatType.Books); // Ebooks
+            AddCategoryMapping(46, TorznabCatType.AudioLossless); // FLAC/Lossless
+            AddCategoryMapping(81, TorznabCatType.AudioMP3); // MP3 Music
+            AddCategoryMapping(87, TorznabCatType.AudioVideo); // HD MUSiC ViDEOS
+            AddCategoryMapping(32, TorznabCatType.Other); // Covers And Artwork
+            AddCategoryMapping(50, TorznabCatType.XXX); // Porn XXX
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -152,18 +155,129 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
 
+            pairs.Add("draw", "1");
+            pairs.Add("columns[0][data]", "");
+            pairs.Add("columns[0][name]", "");
+            pairs.Add("columns[0][searchable]", "false");
+            pairs.Add("columns[0][orderable]", "false");
+            pairs.Add("columns[0][search][value]", "");
+            pairs.Add("columns[0][search][regex]", "false");
+            pairs.Add("columns[1][data]", "id");
+            pairs.Add("columns[1][name]", "");
+            pairs.Add("columns[1][searchable]", "false");
+            pairs.Add("columns[1][orderable]", "true");
+            pairs.Add("columns[1][search][value]", "");
+            pairs.Add("columns[1][search][regex]", "false");
+            pairs.Add("columns[2][data]", "cat");
+            pairs.Add("columns[2][name]", "");
+            pairs.Add("columns[2][searchable]", "false");
+            pairs.Add("columns[2][orderable]", "true");
+            pairs.Add("columns[2][search][value]", "");
+            pairs.Add("columns[2][search][regex]", "false");
+            pairs.Add("columns[3][data]", "name");
+            pairs.Add("columns[3][name]", "");
+            pairs.Add("columns[3][searchable]", "true");
+            pairs.Add("columns[3][orderable]", "true");
+            pairs.Add("columns[3][search][value]", "");
+            pairs.Add("columns[3][search][regex]", "false");
+            pairs.Add("columns[4][data]", "username");
+            pairs.Add("columns[4][name]", "");
+            pairs.Add("columns[4][searchable]", "true");
+            pairs.Add("columns[4][orderable]", "true");
+            pairs.Add("columns[4][search][value]", "");
+            pairs.Add("columns[4][search][regex]", "false");
+            pairs.Add("columns[5][data]", "cat-image");
+            pairs.Add("columns[5][name]", "");
+            pairs.Add("columns[5][searchable]", "false");
+            pairs.Add("columns[5][orderable]", "true");
+            pairs.Add("columns[5][search][value]", "");
+            pairs.Add("columns[5][search][regex]", "false");
+            pairs.Add("columns[6][data]", "cat-name");
+            pairs.Add("columns[6][name]", "");
+            pairs.Add("columns[6][searchable]", "false");
+            pairs.Add("columns[6][orderable]", "true");
+            pairs.Add("columns[6][search][value]", "");
+            pairs.Add("columns[6][search][regex]", "false");
+            pairs.Add("columns[7][data]", "imdbid");
+            pairs.Add("columns[7][name]", "");
+            pairs.Add("columns[7][searchable]", "true");
+            pairs.Add("columns[7][orderable]", "true");
+            pairs.Add("columns[7][search][value]", "");
+            pairs.Add("columns[7][search][regex]", "false");
+            pairs.Add("columns[8][data]", "genre");
+            pairs.Add("columns[8][name]", "");
+            pairs.Add("columns[8][searchable]", "false");
+            pairs.Add("columns[8][orderable]", "true");
+            pairs.Add("columns[8][search][value]", "");
+            pairs.Add("columns[8][search][regex]", "false");
+            pairs.Add("columns[9][data]", "added");
+            pairs.Add("columns[9][name]", "");
+            pairs.Add("columns[9][searchable]", "false");
+            pairs.Add("columns[9][orderable]", "true");
+            pairs.Add("columns[9][search][value]", "");
+            pairs.Add("columns[9][search][regex]", "false");
+            pairs.Add("columns[10][data]", "size");
+            pairs.Add("columns[10][name]", "");
+            pairs.Add("columns[10][searchable]", "false");
+            pairs.Add("columns[10][orderable]", "true");
+            pairs.Add("columns[10][search][value]", "");
+            pairs.Add("columns[10][search][regex]", "false");
+            pairs.Add("columns[11][data]", "rating");
+            pairs.Add("columns[11][name]", "");
+            pairs.Add("columns[11][searchable]", "false");
+            pairs.Add("columns[11][orderable]", "true");
+            pairs.Add("columns[11][search][value]", "");
+            pairs.Add("columns[11][search][regex]", "false");
+            pairs.Add("columns[12][data]", "comments");
+            pairs.Add("columns[12][name]", "");
+            pairs.Add("columns[12][searchable]", "false");
+            pairs.Add("columns[12][orderable]", "true");
+            pairs.Add("columns[12][search][value]", "");
+            pairs.Add("columns[12][search][regex]", "false");
+            pairs.Add("columns[13][data]", "numfiles");
+            pairs.Add("columns[13][name]", "");
+            pairs.Add("columns[13][searchable]", "false");
+            pairs.Add("columns[13][orderable]", "true");
+            pairs.Add("columns[13][search][value]", "");
+            pairs.Add("columns[13][search][regex]", "false");
+            pairs.Add("columns[14][data]", "seeders");
+            pairs.Add("columns[14][name]", "");
+            pairs.Add("columns[14][searchable]", "false");
+            pairs.Add("columns[14][orderable]", "true");
+            pairs.Add("columns[14][search][value]", "");
+            pairs.Add("columns[14][search][regex]", "false");
+            pairs.Add("columns[15][data]", "leechers");
+            pairs.Add("columns[15][name]", "");
+            pairs.Add("columns[15][searchable]", "false");
+            pairs.Add("columns[15][orderable]", "true");
+            pairs.Add("columns[15][search][value]", "");
+            pairs.Add("columns[15][search][regex]", "false");
+            pairs.Add("columns[16][data]", "to_go");
+            pairs.Add("columns[16][name]", "");
+            pairs.Add("columns[16][searchable]", "false");
+            pairs.Add("columns[16][orderable]", "true");
+            pairs.Add("columns[16][search][value]", "");
+            pairs.Add("columns[16][search][regex]", "false");
+            pairs.Add("columns[17][data]", "genre");
+            pairs.Add("columns[17][name]", "");
+            pairs.Add("columns[17][searchable]", "true");
+            pairs.Add("columns[17][orderable]", "true");
+            pairs.Add("columns[17][search][value]", "");
+            pairs.Add("columns[17][search][regex]", "false");
+            pairs.Add("order[0][column]", "9");
+            pairs.Add("order[0][dir]", "desc");
             pairs.Add("start", "0");
             pairs.Add("length", "100");
             pairs.Add("visible", "1");
             pairs.Add("uid", "-1");
-            pairs.Add("order[0][column]", "9");
-            pairs.Add("order[0][dir]", "desc");
-
-            pairs.Add("cats", string.Join(",+", MapTorznabCapsToTrackers(query)));
+            pairs.Add("genre", "");
             
+            pairs.Add("cats", string.Join(",+", MapTorznabCapsToTrackers(query)));
+
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 pairs.Add("search[value]", searchString);
+                pairs.Add("search[regex]", "false");
             }
 
             var results = await PostDataWithCookiesAndRetry(searchUrl, pairs);
@@ -173,10 +287,9 @@ namespace Jackett.Indexers
                 var json = JObject.Parse(results.Content);
                 foreach (var row in json["data"])
                 {
-                    logger.Error(row.ToString(Newtonsoft.Json.Formatting.Indented));
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 259200;
+                    release.MinimumSeedTime = 72 * 24 * 60 * 60;
 
                     var hParser = new HtmlParser();
                     var hName = hParser.Parse(row["name"].ToString());
@@ -210,7 +323,8 @@ namespace Jackett.Indexers
                     var added = row["added"].ToString().Replace("<br>", " ");
                     release.PublishDate = DateTimeUtil.FromUnknown(added);
 
-                    release.Category = ParseUtil.CoerceInt(row["catid"].ToString());
+                    var catid = row["catid"].ToString();
+                    release.Category = MapTrackerCatToNewznab(catid);
 
                     release.Seeders = ParseUtil.CoerceInt(hSeeders.QuerySelector("a").TextContent);
                     release.Peers = ParseUtil.CoerceInt(hLeechers.QuerySelector("a").TextContent) + release.Seeders;
