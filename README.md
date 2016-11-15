@@ -39,6 +39,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile
  * Fuzer
  * Ghost City
+ * HD4Free
  * HD-Space
  * HD-Torrents
  * Hebits
