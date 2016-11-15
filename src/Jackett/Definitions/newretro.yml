@@ -1,0 +1,112 @@
+﻿---
+  site: newretro
+  name: The New Retro
+  description: "A German gerneral tracker"
+  language: de-de
+  links:
+    - http://new-retro.ddns.net/
+
+  caps:
+    categories:
+      101: TV/Anime # Filme - Animie
+      102: Movies/BluRay # Filme - Bluray
+      131: Movies/Other # Filme - Bollywood
+      103: Movies/DVD # Filme - DVD
+      104: Movies/DVD # Filme - DVD-R
+      132: Movies/DVD # Filme - HD2DVD
+      130: Movies # Filme - Klassiker
+      105: Movies # Filme - x264
+      106: Movies # Filme - XviD / DivX
+      69: XXX #  XXX
+      124: Audio # Musik - Alben
+      122: Audio/Audiobook # Musik - Hörbuch
+      123: Audio # Musik - Mixe
+      133: Audio/MP3 # Musik - MP3
+      125: Audio/Video # Musik - Video
+      113: PC # Programme - Linux
+      114: PC/Mac # Programme - Mac
+      115: PC # Programme - Windows
+      117: TV # Allgemein - Serien
+      116: TV/Documentary # Serien - Dokus
+      118: TV/Sport # Serien - Sport
+      119: Other # Bilder
+      120: Books # Ebook
+      127: Other # Für Unsere kleinsten
+      121: Other # Handy Stuff
+      129: Other # Sonstiges
+      109: Other # Spiele - Handy
+      112: Console # Spiele - Konsolen
+      111: PC/Games # Spiele - Mac / Linux
+      110: PC/Games # Spiele - PC
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      returnto: "/"
+    error:
+    - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
+    test:
+      path: /usercp.php
+
+  ratio:
+    path: /usercp.php
+    selector: div#lmtd table > tbody > tr:contains("Ratio:") > td:nth-child(2)
+    filters:
+      - name: replace
+        args: [".", ""]
+      - name: replace
+        args: [",", "."]
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      showsearch: "1"
+      orderby: "added"
+      sort: "desc"
+      incldead: "1"
+
+    rows:
+      selector: table.tableinborder[summary] > tbody > tr
+    fields:
+      download:
+        selector: a[href^="download.php?torrent="]
+        attribute: href
+      title:
+        selector: a[href^="details.php?id="]:has(b)
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      comments:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(4) > a
+        attribute: href
+      size:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+      grabs:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(3) > b
+      files:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+      seeders:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+      leechers:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+      date:
+        selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(5)
+      downloadvolumefactor:
+        case:
+          "font[color=\"red\"]:contains(\"Only Upload\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
