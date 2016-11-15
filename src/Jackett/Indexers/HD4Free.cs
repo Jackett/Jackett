@@ -10,8 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
+
+using AngleSharp.Parser.Html;
 
 namespace Jackett.Indexers
 {
@@ -129,7 +129,7 @@ namespace Jackett.Indexers
                 }
             }
 
-            var result = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, null, true, SiteLink, LoginUrl);
 
             await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
             {
@@ -140,7 +140,7 @@ namespace Jackett.Indexers
                     errorMessage = result.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-
+            
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -154,7 +154,10 @@ namespace Jackett.Indexers
 
             pairs.Add("start", "0");
             pairs.Add("length", "100");
-            pairs.Add("visible", "2");
+            pairs.Add("visible", "1");
+            pairs.Add("uid", "-1");
+            pairs.Add("order[0][column]", "9");
+            pairs.Add("order[0][dir]", "desc");
 
             pairs.Add("cats", string.Join(",+", MapTorznabCapsToTrackers(query)));
             
@@ -175,37 +178,48 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 259200;
 
-                    CQ qName = row["name"].ToString();
-                    var qDetailsLink = qName.Find("a[href^=\"details.php?id=\"]");
-                    qDetailsLink = qName.Find("div");
-                    qDetailsLink = qName[0].Cq();
-                    release.Title = qDetailsLink.Text();
-                    //release.Description = release.Title;
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
-                    release.Guid = release.Comments;
+                    var hParser = new HtmlParser();
+                    var hName = hParser.Parse(row["name"].ToString());
+                    var hComments = hParser.Parse(row["comments"].ToString());
+                    var hNumfiles = hParser.Parse(row["numfiles"].ToString());
+                    var hSeeders = hParser.Parse(row["seeders"].ToString());
+                    var hLeechers = hParser.Parse(row["leechers"].ToString());
+
+                    var hDetailsLink = hName.QuerySelector("a[href^=\"details.php?id=\"]");
+                    var hCommentsLink = hComments.QuerySelector("a");
+                    var hDownloadLink = hName.QuerySelector("a[title=\"Download Torrent\"]");
+
+                    release.Title = hDetailsLink.TextContent;
+                    release.Comments = new Uri(SiteLink + hCommentsLink.GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + hDownloadLink.GetAttribute("href"));
+                    release.Guid = release.Link;
+
+                    release.Description = row["genre"].ToString();
+
+                    var poster = row["poster"].ToString();
+                    if(!string.IsNullOrWhiteSpace(poster))
+                    {
+                        release.BannerUrl = new Uri(SiteLink + poster);
+                    }
+
+                    release.Size = ReleaseInfo.GetBytes(row["size"].ToString());
+                    var imdbId = row["imdbid"].ToString();
+                    if (imdbId.StartsWith("tt"))
+                        release.Imdb = ParseUtil.CoerceLong(imdbId.Substring(2));
+
+                    var added = row["added"].ToString().Replace("<br>", " ");
+                    release.PublishDate = DateTimeUtil.FromUnknown(added);
 
                     release.Category = ParseUtil.CoerceInt(row["catid"].ToString());
-                    /*release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").First().Attr("href"));
-                    var pubDate = qRow.Find("td:nth-child(2) > span").First().Text().Trim().Replace("Added: ", "");
-                    release.PublishDate = DateTime.Parse(pubDate).ToLocalTime();
-                    
-                    release.Size = ReleaseInfo.GetBytes(qRow.Find("td:nth-child(7)").First().Text());
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").First().Text());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").First().Text()) + release.Seeders;
 
-                    var files = row.Cq().Find("td:nth-child(5)").Text();
-                    release.Files = ParseUtil.CoerceInt(files);
+                    release.Seeders = ParseUtil.CoerceInt(hSeeders.QuerySelector("a").TextContent);
+                    release.Peers = ParseUtil.CoerceInt(hLeechers.QuerySelector("a").TextContent) + release.Seeders;
 
-                    var grabs = row.Cq().Find("td:nth-child(8)").Text();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
+                    release.Files = ParseUtil.CoerceInt(hNumfiles.QuerySelector("a").TextContent);
 
-                    if (row.Cq().Find("i.fa-star").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
-                    */
+
                     releases.Add(release);
                     
                 }
