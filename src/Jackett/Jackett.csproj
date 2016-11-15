@@ -168,6 +168,7 @@
     <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
+    <Compile Include="Indexers\HD4Free.cs" />
     <Compile Include="Indexers\myAmity.cs" />
     <Compile Include="Indexers\TorrentNetwork.cs" />
     <Compile Include="Indexers\Andraste.cs" />
@@ -377,6 +378,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\bjshare.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\logos\hd4free.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\shareisland.png">
