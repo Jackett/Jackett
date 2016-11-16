@@ -14,6 +14,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Linq;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -172,10 +173,10 @@ namespace Jackett.Indexers
                 queryCollection.Add("dirs" + cat, "1");
             }
             searchUrl += "?" + queryCollection.GetQueryString();
-            logger.Error(searchUrl);
-            logger.Error(CookieHeader);
+
             var response = await RequestBytesWithCookies(searchUrl);
             var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var TitleRegexp = new Regex(@"^return buildTable\('(.*?)',\s+");
             try
             {
                 CQ dom = results;
@@ -189,7 +190,7 @@ namespace Jackett.Indexers
                     var qRow = row.Cq();
 
                     var qDetailsLink = qRow.Find("a[href^=index.php?strWebValue=torrent&strWebAction=details]").First();
-                    release.Title = qDetailsLink.Text();
+                    release.Title = TitleRegexp.Match(qDetailsLink.Attr("onmouseover")).Groups[1].Value;
 
                     var qCatLink = qRow.Find("a[href^=index.php?strWebValue=torrent&strWebAction=search&dir=]").First();
                     var qDLLink = qRow.Find("a[href^=index.php?strWebValue=torrent&strWebAction=download&id=]").First();
