@@ -103,6 +103,11 @@
         selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
       date:
         selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["\u00a0", " "]
+          - name: dateparse
+            args: "02.01.2006 15:04:05"
       downloadvolumefactor:
         case:
           "font[color=\"red\"]:contains(\"Only Upload\")": "0"
