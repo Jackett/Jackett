@@ -1,6 +1,7 @@
 ﻿using Cliver;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -195,6 +196,82 @@ namespace Jackett.Utils
             catch (Exception ex)
             {
                 throw new Exception(string.Format("DateTime parsing failed for \"{0}\": {1}", str, ex.ToString()));
+            }
+        }
+
+        // converts a date/time string to a DateTime object using a GoLang layout
+        public static DateTime ParseDateTimeGoLang(string date, string layout)
+        {
+            var pattern = layout;
+
+            // year
+            pattern = pattern.Replace("2006", "yyyy");
+            pattern = pattern.Replace("06", "yy");
+
+            // month
+            pattern = pattern.Replace("January", "MMMM");
+            pattern = pattern.Replace("Jan", "MMM");
+            pattern = pattern.Replace("01", "MM");
+
+            // day
+            pattern = pattern.Replace("Monday", "dddd");
+            pattern = pattern.Replace("Mon", "ddd");
+            pattern = pattern.Replace("02", "dd");
+            //pattern = pattern.Replace("_2", ""); // space padding not supported nativly by C#?
+            pattern = pattern.Replace("2", "d");
+
+            // hours/minutes/seconds
+            pattern = pattern.Replace("05", "ss");
+
+            pattern = pattern.Replace("15", "HH");
+            pattern = pattern.Replace("03", "hh");
+            pattern = pattern.Replace("3", "h");
+
+            pattern = pattern.Replace("04", "mm");
+            pattern = pattern.Replace("4", "m");
+
+            pattern = pattern.Replace("5", "s");
+
+            // month again
+            pattern = pattern.Replace("1", "M");
+
+            // fractional seconds
+            pattern = pattern.Replace(".0000", "ffff");
+            pattern = pattern.Replace(".000", "fff");
+            pattern = pattern.Replace(".00", "ff");
+            pattern = pattern.Replace(".0", "f");
+
+            pattern = pattern.Replace(".9999", "FFFF");
+            pattern = pattern.Replace(".999", "FFF");
+            pattern = pattern.Replace(".99", "FF");
+            pattern = pattern.Replace(".9", "F");
+
+            // AM/PM
+            pattern = pattern.Replace("PM", "tt");
+            pattern = pattern.Replace("pm", "tt"); // not sure if this works
+
+            // timezones
+            // these might need further tuning
+            //pattern = pattern.Replace("MST", "");
+            //pattern = pattern.Replace("Z07:00:00", "");
+            pattern = pattern.Replace("Z07:00", "'Z'zzz");
+            pattern = pattern.Replace("Z07", "'Z'zz");
+            //pattern = pattern.Replace("Z070000", "");
+            //pattern = pattern.Replace("Z0700", "");
+            pattern = pattern.Replace("Z07:00", "'Z'zzz");
+            pattern = pattern.Replace("Z07", "'Z'zz");
+            //pattern = pattern.Replace("-07:00:00", "");
+            pattern = pattern.Replace("-07:00", "zzz");
+            //pattern = pattern.Replace("-0700", "zz");
+            pattern = pattern.Replace("-07", "zz");
+
+            try
+            {
+                return DateTime.ParseExact(date, pattern, CultureInfo.InvariantCulture);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("Error while parsing DateTime \"{0}\", using layout \"{1}\" ({2}): {3}", date, layout, pattern, ex.ToString()));
             }
         }
     }

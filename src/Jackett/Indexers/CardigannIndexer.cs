@@ -384,18 +384,17 @@ namespace Jackett.Indexers
                         break;
                     case "timeparse":
                     case "dateparse":
-                        throw new NotImplementedException("Filter " + Filter.Name + " not implemented");
-                        /*
-                        TODO: implement golang time format conversion, see http://fuckinggodateformat.com/
-                        if args == nil {
-			                return filterDateParse(nil, value)
-		                }
-		                if layout, ok := args.(string); ok {
-			                return filterDateParse([]string{layout}, value)
-		                }
-		                return "", fmt.Errorf("Filter argument type %T was invalid", args)
-                         */
-                        break;
+                        var layout = (string)Filter.Args;
+                        try
+                        {
+                            var Date = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
+                            Data = Date.ToString(DateTimeUtil.RFC1123ZPattern);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Debug(ex.ToString());
+                        }
+                    break;
                     case "regexp":
                         var pattern = (string)Filter.Args;
                         var Regexp = new Regex(pattern);
@@ -626,7 +625,6 @@ namespace Jackett.Indexers
                                             release.Peers = release.Seeders;
                                         else
                                             release.Peers += release.Seeders;
-
                                         break;
                                     case "date":
                                         release.PublishDate = DateTimeUtil.FromUnknown(value);
