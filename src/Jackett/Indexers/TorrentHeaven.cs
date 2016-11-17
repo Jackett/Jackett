@@ -98,6 +98,10 @@ namespace Jackett.Indexers
                 var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
                 configData.CaptchaImage.Value = captchaImage.Content;
             }
+            else
+            {
+                configData.CaptchaImage.Value = new byte[0];
+            }
             configData.CaptchaCookie.Value = loginPage.Cookies;
             return configData;
         }
@@ -122,7 +126,7 @@ namespace Jackett.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(IndexUrl, pairs, configData.CaptchaCookie.Value, true, null, IndexUrl, true);
-            if (result.Content == null || !result.Content.Contains("login_complete"))
+            if (result.Content == null || (!result.Content.Contains("login_complete") && !result.Content.Contains("index.php?strWebValue=account&strWebAction=logout")))
             {
                 CQ dom = result.Content;
                 var errorMessage = dom["table > tbody > tr > td[valign=top][width=100%]"].Html();
