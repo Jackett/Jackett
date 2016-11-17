@@ -174,10 +174,12 @@ namespace Jackett.Indexers
                         continue;
 
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();
-                    var qSeeders = qRow.Find("td:eq(7)");
-                    var qLeechers = qRow.Find("td:eq(8)");
-                    var qDateStr = qRow.Find("td:eq(4)");
-                    var qSize = qRow.Find("td:eq(5)");
+
+                    // use negative indexes as if a user has "Wartezeit" there's an extra column after the title
+                    var qSeeders = qRow.Find("td:nth-last-child(4)");
+                    var qLeechers = qRow.Find("td:nth-last-child(3)");
+                    var qDateStr = qRow.Find("td:nth-last-child(7)");
+                    var qSize = qRow.Find("td:nth-last-child(6)");
 
                     var torrentId = qDetailsLink.Attr("href").Replace("&hit=1", "").Split('=')[1];
 
@@ -199,10 +201,10 @@ namespace Jackett.Indexers
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc;
 
-                    var files = qRow.Find("td:nth-child(3)").Text();
+                    var files = qRow.Find("td:nth-last-child(9)").Text();
                     release.Files = ParseUtil.CoerceInt(files);
 
-                    var grabs = qRow.Find("td:nth-child(7)").Text();
+                    var grabs = qRow.Find("td:nth-last-child(5)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     if (qRow.Find("font[color=\"red\"]:contains(OnlyUp)").Length >= 1)
