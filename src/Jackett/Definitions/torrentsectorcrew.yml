@@ -99,7 +99,15 @@
       path: my.php
       
   ratio:
-    text: "∞"
+    path: /my.php
+    selector: td.navi_top:contains(\"Deine Ratio:\")
+    filters:
+      - name: replace
+        args: ["Deine Ratio: ", ""]
+      - name: replace
+        args: [".", ""]
+      - name: replace
+        args: [",", "."]
 
   search:
     path: browse.php
