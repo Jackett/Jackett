@@ -314,6 +314,83 @@ namespace Jackett.Indexers
                     }
                 }
             }
+            else if (Login.Method == "form")
+            {
+                var LoginUrl = SiteLink + Login.Path;
+
+                var FormSelector = Login.Form;
+                if (FormSelector == null)
+                    FormSelector = "form";
+
+                var pairs = new Dictionary<string, string>();
+
+                configData.CookieHeader.Value = null;
+                var landingResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, false, null, SiteLink, true);
+
+                var htmlParser = new HtmlParser();
+                var landingResultDocument = htmlParser.Parse(landingResult.Content);
+
+                var form = landingResultDocument.QuerySelector(FormSelector);
+                if (form == null)
+                {
+                    throw new ExceptionWithConfigData(string.Format("Login failed: No form found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
+                }
+
+                var inputs = form.QuerySelectorAll("input");
+                if (inputs == null)
+                {
+                    throw new ExceptionWithConfigData(string.Format("Login failed: No inputs found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
+                }
+
+                var submitUrl = resolvePath(form.GetAttribute("action"));
+                
+                foreach (var input in inputs)
+                {
+                    var name = input.GetAttribute("name");
+                    if (name == null)
+                        continue;
+
+                    var value = input.GetAttribute("value");
+                    if (value == null)
+                        value = "";
+
+                    pairs[name] = value;
+                }
+   
+                foreach (var Input in Definition.Login.Inputs)
+                {
+                    var value = applyGoTemplateText(Input.Value);
+                    pairs[Input.Key] = value;
+                }
+                logger.Error(submitUrl);
+                foreach(var a in pairs)
+                {
+                    logger.Error(a.Key + ": " + a.Value);
+                }
+                logger.Error(landingResult.Cookies);
+                var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, landingResult.Cookies, true, null, SiteLink, true);
+                configData.CookieHeader.Value = loginResult.Cookies;
+
+                if (Login.Error != null)
+                {
+                    var loginResultParser = new HtmlParser();
+                    var loginResultDocument = loginResultParser.Parse(loginResult.Content);
+                    foreach (errorBlock error in Login.Error)
+                    {
+                        var selection = loginResultDocument.QuerySelector(error.Selector);
+                        if (selection != null)
+                        {
+                            string errorMessage = selection.TextContent;
+                            if (error.Message != null)
+                            {
+                                var errorSubMessage = loginResultDocument.QuerySelector(error.Message.Selector);
+                                errorMessage = errorSubMessage.TextContent;
+                            }
+                            throw new ExceptionWithConfigData(string.Format("Login failed: {0}", errorMessage.Trim()), configData);
+                        }
+                    }
+                }
+            }
             else if (Login.Method == "cookie")
             {
                 configData.CookieHeader.Value = ((StringItem)configData.GetDynamic("cookie")).Value;
