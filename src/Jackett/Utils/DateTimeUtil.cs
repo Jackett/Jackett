@@ -202,6 +202,7 @@ namespace Jackett.Utils
         // converts a date/time string to a DateTime object using a GoLang layout
         public static DateTime ParseDateTimeGoLang(string date, string layout)
         {
+            date = ParseUtil.NormalizeSpace(date);
             var pattern = layout;
 
             // year
