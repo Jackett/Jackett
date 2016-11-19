@@ -68,6 +68,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The New Retro
  * TehConnection
  * Torrent Network
+ * Torrent Sector Crew
  * TorrentBytes
  * TorrentDay
  * TorrentHeaven
