@@ -273,6 +273,32 @@ namespace Jackett.Indexers
             return template;
         }
 
+        protected bool checkForLoginError(WebClientStringResult loginResult)
+        {
+            var ErrorBlocks = Definition.Login.Error;
+
+            if (ErrorBlocks == null)
+                return true; // no error
+
+                var loginResultParser = new HtmlParser();
+            var loginResultDocument = loginResultParser.Parse(loginResult.Content);
+            foreach (errorBlock error in ErrorBlocks)
+            {
+                var selection = loginResultDocument.QuerySelector(error.Selector);
+                if (selection != null)
+                {
+                    string errorMessage = selection.TextContent;
+                    if (error.Message != null)
+                    {
+                        var errorSubMessage = loginResultDocument.QuerySelector(error.Message.Selector);
+                        errorMessage = errorSubMessage.TextContent;
+                    }
+                    throw new ExceptionWithConfigData(string.Format("Login failed: {0}", errorMessage.Trim()), configData);
+                }
+            }
+            return true; // no error
+        }
+
         protected async Task<bool> DoLogin()
         {
             var Login = Definition.Login;
@@ -294,25 +320,7 @@ namespace Jackett.Indexers
                 var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                if (Login.Error != null)
-                {
-                    var loginResultParser = new HtmlParser();
-                    var loginResultDocument = loginResultParser.Parse(loginResult.Content);
-                    foreach (errorBlock error in Login.Error)
-                    {
-                        var selection = loginResultDocument.QuerySelector(error.Selector);
-                        if (selection != null)
-                        {
-                            string errorMessage = selection.TextContent;
-                            if (error.Message != null)
-                            {
-                                var errorSubMessage = loginResultDocument.QuerySelector(error.Message.Selector);
-                                errorMessage = errorSubMessage.TextContent;
-                            }
-                            throw new ExceptionWithConfigData(string.Format("Login failed: {0}", errorMessage.Trim()), configData);
-                        }
-                    }
-                }
+                checkForLoginError(loginResult);
             }
             else if (Login.Method == "form")
             {
@@ -362,34 +370,11 @@ namespace Jackett.Indexers
                     var value = applyGoTemplateText(Input.Value);
                     pairs[Input.Key] = value;
                 }
-                logger.Error(submitUrl);
-                foreach(var a in pairs)
-                {
-                    logger.Error(a.Key + ": " + a.Value);
-                }
-                logger.Error(landingResult.Cookies);
+                
                 var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, landingResult.Cookies, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                if (Login.Error != null)
-                {
-                    var loginResultParser = new HtmlParser();
-                    var loginResultDocument = loginResultParser.Parse(loginResult.Content);
-                    foreach (errorBlock error in Login.Error)
-                    {
-                        var selection = loginResultDocument.QuerySelector(error.Selector);
-                        if (selection != null)
-                        {
-                            string errorMessage = selection.TextContent;
-                            if (error.Message != null)
-                            {
-                                var errorSubMessage = loginResultDocument.QuerySelector(error.Message.Selector);
-                                errorMessage = errorSubMessage.TextContent;
-                            }
-                            throw new ExceptionWithConfigData(string.Format("Login failed: {0}", errorMessage.Trim()), configData);
-                        }
-                    }
-                }
+                checkForLoginError(loginResult);
             }
             else if (Login.Method == "cookie")
             {
