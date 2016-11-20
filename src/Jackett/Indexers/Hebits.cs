@@ -120,6 +120,8 @@ namespace Jackett.Indexers
                     else
                         release.Title = titleParts[0].Trim();
 
+                    var qDetailsLink = qRow.Find("a[title][href^=\"details.php\"]");
+                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("a").Attr("href"));
                     release.Guid = release.Link;
 
