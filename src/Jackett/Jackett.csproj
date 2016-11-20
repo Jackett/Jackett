@@ -166,6 +166,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Indexers\HDCity.cs" />
     <Compile Include="Indexers\TVVault.cs" />
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
