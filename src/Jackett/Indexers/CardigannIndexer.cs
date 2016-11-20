@@ -661,7 +661,10 @@ namespace Jackett.Indexers
                                             release.Comments = url;
                                         break;
                                     case "comments":
-                                        release.Comments = resolvePath(value);
+                                        var CommentsUrl = resolvePath(value);
+                                        release.Comments = CommentsUrl;
+                                        if (release.Guid == null)
+                                            release.Guid = CommentsUrl;
                                         break;
                                     case "title":
                                         release.Title = value;
