@@ -189,7 +189,6 @@
     <Compile Include="Indexers\Xthor.cs" />
     <Compile Include="Indexers\AlphaRatio.cs" />
     <Compile Include="Indexers\BitSoup.cs" />
-    <Compile Include="Indexers\BlueTigers.cs" />
     <Compile Include="Indexers\CinemaZ.cs" />
     <Compile Include="Indexers\Avistaz.cs" />
     <Compile Include="Indexers\BaseIndexer.cs" />
@@ -559,9 +558,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\bitsoup.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\logos\bluetigers.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\broadcastthenet.png">
