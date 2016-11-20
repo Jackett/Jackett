@@ -370,7 +370,19 @@ namespace Jackett.Indexers
                     var value = applyGoTemplateText(Input.Value);
                     pairs[Input.Key] = value;
                 }
-                
+
+                // automatically solve simpleCaptchas, if used
+                var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
+                if(simpleCaptchaPresent != null)
+                {
+                    var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
+                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), landingResult.Cookies, LoginUrl);
+                    var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.Content);
+                    var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
+                    pairs["captchaSelection"] = captchaSelection;
+                    pairs["submitme"] = "X";
+                }
+
                 var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, landingResult.Cookies, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
@@ -633,7 +645,35 @@ namespace Jackett.Indexers
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results);
                 
-                var Rows = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                List<IElement> Rows = new List<IElement>();
+                foreach (var RowDom in RowsDom)
+                {
+                    Rows.Add(RowDom);
+                }
+
+                // merge following rows for After selector
+                var After = Definition.Search.Rows.After;
+                if (After > 0)
+                {
+                    for (int i = 0; i < Rows.Count; i += 1)
+                    {
+                        var CurrentRow = Rows[i];
+                        for (int j = 0; j < After; j += 1)
+                        {
+                            var MergeRowIndex = i + j + 1;
+                            var MergeRow = Rows[MergeRowIndex];
+                            List<INode> MergeNodes = new List<INode>();
+                            foreach (var node in MergeRow.QuerySelectorAll("td"))
+                            {
+                                MergeNodes.Add(node);
+                            }
+                            CurrentRow.Append(MergeNodes.ToArray());
+                        }
+                        Rows.RemoveRange(i + 1, After);
+                    }
+                }
+
                 foreach (var Row in Rows)
                 {
                     try
@@ -661,7 +701,10 @@ namespace Jackett.Indexers
                                             release.Comments = url;
                                         break;
                                     case "comments":
-                                        release.Comments = resolvePath(value);
+                                        var CommentsUrl = resolvePath(value);
+                                        release.Comments = CommentsUrl;
+                                        if (release.Guid == null)
+                                            release.Guid = CommentsUrl;
                                         break;
                                     case "title":
                                         release.Title = value;
