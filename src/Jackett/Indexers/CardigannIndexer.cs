@@ -370,7 +370,19 @@ namespace Jackett.Indexers
                     var value = applyGoTemplateText(Input.Value);
                     pairs[Input.Key] = value;
                 }
-                
+
+                // automatically solve simpleCaptchas, if used
+                var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
+                if(simpleCaptchaPresent != null)
+                {
+                    var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
+                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), landingResult.Cookies, LoginUrl);
+                    var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.Content);
+                    var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
+                    pairs["captchaSelection"] = captchaSelection;
+                    pairs["submitme"] = "X";
+                }
+
                 var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, landingResult.Cookies, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
