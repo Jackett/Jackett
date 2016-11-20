@@ -645,7 +645,35 @@ namespace Jackett.Indexers
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results);
                 
-                var Rows = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                List<IElement> Rows = new List<IElement>();
+                foreach (var RowDom in RowsDom)
+                {
+                    Rows.Add(RowDom);
+                }
+
+                // merge following rows for After selector
+                var After = Definition.Search.Rows.After;
+                if (After > 0)
+                {
+                    for (int i = 0; i < Rows.Count; i += 1)
+                    {
+                        var CurrentRow = Rows[i];
+                        for (int j = 0; j < After; j += 1)
+                        {
+                            var MergeRowIndex = i + j + 1;
+                            var MergeRow = Rows[MergeRowIndex];
+                            List<INode> MergeNodes = new List<INode>();
+                            foreach (var node in MergeRow.QuerySelectorAll("td"))
+                            {
+                                MergeNodes.Add(node);
+                            }
+                            CurrentRow.Append(MergeNodes.ToArray());
+                        }
+                        Rows.RemoveRange(i + 1, After);
+                    }
+                }
+
                 foreach (var Row in Rows)
                 {
                     try
