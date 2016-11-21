@@ -206,7 +206,7 @@ namespace Jackett.Indexers
             var torrentId = downloadAnchorHref.Substring(downloadAnchorHref.LastIndexOf('=') + 1);
             var qFiles = row.QuerySelector("td:nth-last-child(6)");
             var files = ParseUtil.CoerceLong(qFiles.TextContent);
-            var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+            var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
             var torrentData = row.QuerySelectorAll(".number_column"); // Size (xx.xx GB[ (Max)]) Snatches (xx) Seeders (xx) Leechers (xx)
 
             if (torrentData.Length != 4)
