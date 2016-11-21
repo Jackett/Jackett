@@ -33,6 +33,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DanishBits
  * Demonoid
  * DigitalHive
+ * EoT-Forum
  * FileList
  * Freshon
  * FunFile
