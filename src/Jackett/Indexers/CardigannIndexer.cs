@@ -114,7 +114,7 @@ namespace Jackett.Indexers
         {
             public int After { get; set; }
             //public string Remove { get; set; } // already inherited
-            public string Dateheaders { get; set; }
+            public selectorBlock Dateheaders { get; set; }
         }
 
         public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
@@ -754,6 +754,32 @@ namespace Jackett.Indexers
                             {
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
                             }
+                        }
+
+                        // if DateHeaders is set go through the previous rows and look for the header selector
+                        var DateHeaders = Definition.Search.Rows.Dateheaders;
+                        if (DateHeaders != null)
+                        {
+                            var PrevRow = Row.PreviousElementSibling;
+                            string value = null;
+                            while (PrevRow != null)
+                            {
+                                try
+                                {
+                                    value = handleSelector(DateHeaders, PrevRow);
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    // do nothing
+                                }
+                                PrevRow = PrevRow.PreviousElementSibling;
+                            }
+                            
+                            if (value == null)
+                                throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
+
+                            release.PublishDate = DateTimeUtil.FromUnknown(value);
                         }
 
                         releases.Add(release);
