@@ -1,0 +1,113 @@
+﻿---
+  site: ethor
+  name: Ethor.net (Thor's Land)
+  description: "A French gerneral tracker"
+  language: fr-fr
+  links:
+    - https://ethor.net/
+
+  caps:
+    categories:
+      22: PC # Applications/Divers
+      1: PC # Applications/PC ISO
+      44: PC # Applications/Portable
+      47: Movies/BluRay # Films/Bluray
+      20: Movies/DVD # Films/DVDr
+      42: Movies/HD # Films/HD Rip
+      19: Movies/SD # Films/SD Rip
+      5: Movies/SD # Films/VCD
+      4: PC/Games # Jeux/PC
+      41: Console # Jeux/Portable
+      34: Console/PS4 # Jeux/PS2-PS3
+      38: Console/Wii # Jeux/Wii-GC
+      40: Console/Xbox # Jeux/Xbox360
+      6: Audio # Musique
+      37: Audio/Video # Musique/Video
+      48: TV/HD # Série-Télé/Bluray
+      45: TV/SD # Série-Télé/DVDr
+      43: TV/HD # Série-Télé/HD Rip
+      7: TV/SD # Série-Télé/SD Rip
+      23: Books # E-Books
+      46: Other # Évé. sportif
+      36: Other # Kidz
+      25: Other # Misc
+      9: XXX # XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+
+  login:
+    method: cookie
+    inputs:
+      cookie: "{{ .Config.cookie }}"
+    test:
+      path: browse.php
+
+  ratio:
+    path: browse.php
+    selector: span#ratioRatio
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      advcat: "0"
+      incldead: "1"
+      stype: "b"
+      dp: "0"
+      isUserClick: "0"
+    rows:
+      selector: p + table > tbody > tr:has(a[href^="/details.php"])
+    fields:
+      download:
+        selector: a[href^="/details.php"]:has(b)
+        attribute: href
+        filters:
+          - name: replace
+            args: ["/details.php", "/download.php"]
+      title:
+        selector: a[href^="/details.php"]:has(b)
+      category:
+        selector: a[href^="/browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      comments:
+        selector: a[href^="/details.php"]:has(b)
+        attribute: href
+      files:
+        selector: a[href*="#filelist"]
+      size:
+        selector: td:nth-child(6)
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: regexp
+            args: "(\\d+)"
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: append
+            args: " -05:00" # timezone offset
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          "img[title^=\"Freeleech: \"]": "0"
+          "img[title^=\"Half Freeleech: \"]": "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
