@@ -333,7 +333,7 @@ namespace Jackett.Indexers
                 var pairs = new Dictionary<string, string>();
 
                 configData.CookieHeader.Value = null;
-                var landingResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, false, null, SiteLink, true);
+                var landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
 
                 var htmlParser = new HtmlParser();
                 var landingResultDocument = htmlParser.Parse(landingResult.Content);
