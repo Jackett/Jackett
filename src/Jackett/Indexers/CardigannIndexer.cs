@@ -692,7 +692,15 @@ namespace Jackett.Indexers
                                 switch (Field.Key)
                                 {
                                     case "download":
-                                        release.Link = resolvePath(value);
+                                        if (value.StartsWith("magnet:"))
+                                        {
+                                            release.MagnetUri = new Uri(value);
+                                            release.Link = release.MagnetUri;
+                                        }
+                                        else
+                                        {
+                                            release.Link = resolvePath(value);
+                                        }
                                         break;
                                     case "details":
                                         var url = resolvePath(value);
