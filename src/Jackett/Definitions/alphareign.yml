@@ -34,6 +34,7 @@
 
     test:
       path: settings
+      selector: a[href="/logout"]
 
   ratio:
     text: "∞"
