@@ -172,47 +172,58 @@ namespace Jackett.Indexers
             // If we have no query use the RSS Page as their server is slow enough at times!
             if (string.IsNullOrWhiteSpace(searchString))
             {
+                
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
-                if (rssPage.Content.EndsWith("\0")) {
-                    rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
-                }
-                rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
-                var rssDoc = XDocument.Parse(rssPage.Content);
-
-                foreach (var item in rssDoc.Descendants("item"))
+                try
                 {
-                    var title = item.Descendants("title").First().Value;
-                    var description = item.Descendants("description").First().Value;
-                    var link = item.Descendants("link").First().Value;
-                    var category = item.Descendants("category").First().Value;
-                    var date = item.Descendants("pubDate").First().Value;
+                    if (rssPage.Content.EndsWith("\0")) {
+                        rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
+                    }
+                    rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
+                    var rssDoc = XDocument.Parse(rssPage.Content);
 
-                    var torrentIdMatch = Regex.Match(link, "(?<=id=)(\\d)*");
-                    var torrentId = torrentIdMatch.Success ? torrentIdMatch.Value : string.Empty;
-                    if (string.IsNullOrWhiteSpace(torrentId))
-                        throw new Exception("Missing torrent id");
-
-                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d\,]*)\W\/\WLeechers:\W(?<leechers>[\d\,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
-                    if (!infoMatch.Success)
-                        throw new Exception("Unable to find info");
-
-                    var release = new ReleaseInfo
+                    foreach (var item in rssDoc.Descendants("item"))
                     {
-                        Title = title,
-                        Description = title,
-                        Guid = new Uri(string.Format(DownloadUrl, torrentId)),
-                        Comments = new Uri(string.Format(CommentUrl, torrentId)),
-                        PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
-                        Link = new Uri(string.Format(DownloadUrl, torrentId)),
-                        Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
-                        Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
-                        Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
-                        Category = MapTrackerCatToNewznab(category)
-                    };
+                        var title = item.Descendants("title").First().Value;
+                        var description = item.Descendants("description").First().Value;
+                        var link = item.Descendants("link").First().Value;
+                        var category = item.Descendants("category").First().Value;
+                        var date = item.Descendants("pubDate").First().Value;
 
-                    release.Peers += release.Seeders;
-                    releases.Add(release);
+                        var torrentIdMatch = Regex.Match(link, "(?<=id=)(\\d)*");
+                        var torrentId = torrentIdMatch.Success ? torrentIdMatch.Value : string.Empty;
+                        if (string.IsNullOrWhiteSpace(torrentId))
+                            throw new Exception("Missing torrent id");
+
+                        var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d\,]*)\W\/\WLeechers:\W(?<leechers>[\d\,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
+                        if (!infoMatch.Success)
+                            throw new Exception("Unable to find info");
+
+                        var release = new ReleaseInfo
+                        {
+                            Title = title,
+                            Description = title,
+                            Guid = new Uri(string.Format(DownloadUrl, torrentId)),
+                            Comments = new Uri(string.Format(CommentUrl, torrentId)),
+                            PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
+                            Link = new Uri(string.Format(DownloadUrl, torrentId)),
+                            Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
+                            Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
+                            Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
+                            Category = MapTrackerCatToNewznab(category)
+                        };
+
+                        release.Peers += release.Seeders;
+                        releases.Add(release);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    logger.Error("XSpeeds: Error while parsing the RSS feed:");
+                    logger.Error(rssPage.Content);
+                    throw ex;
+                }
+                
             }
             else
             {
