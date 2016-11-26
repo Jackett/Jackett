@@ -17,6 +17,7 @@ using AngleSharp.Parser.Html;
 using System.Text.RegularExpressions;
 using System.Web;
 using AngleSharp.Dom;
+using AngleSharp.Dom.Html;
 
 namespace Jackett.Indexers
 {
@@ -428,6 +429,24 @@ namespace Jackett.Indexers
             return true;
         }
 
+        protected bool CheckIfLoginIsNeeded(WebClientByteResult Result, IHtmlDocument document)
+        {
+            if (Result.IsRedirect)
+            {
+                return true;
+            }
+
+            if (Definition.Login.Test.Selector != null)
+            {
+                var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
+                if (selection.Length == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
@@ -644,7 +663,19 @@ namespace Jackett.Indexers
             {
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results);
-                
+
+                // check if we need to login again
+                var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                if (loginNeeded)
+                {
+                    logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
+                    await DoLogin();
+                    await TestLogin();
+                    response = await RequestBytesWithCookies(searchUrl);
+                    results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+                    SearchResultDocument = SearchResultParser.Parse(results);
+                }
+
                 var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
                 List<IElement> Rows = new List<IElement>();
                 foreach (var RowDom in RowsDom)
