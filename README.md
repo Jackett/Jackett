@@ -16,10 +16,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 #### Supported Private Trackers
  * Abnormal
  * AlphaRatio
- * AlphaReign
  * Andraste
  * AnimeBytes
  * AnimeTorrents
+ * Apollo (XANAX)
  * Avistaz
  * BakaBT
  * bB
