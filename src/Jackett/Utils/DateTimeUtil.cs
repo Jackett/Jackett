@@ -121,6 +121,11 @@ namespace Jackett.Utils
                 str = ParseUtil.NormalizeSpace(str);
                 Match match;
 
+                if(str.ToLower().Contains("now"))
+                {
+                    return DateTime.UtcNow;
+                }
+
                 // ... ago
                 match = timeAgoRegexp.Match(str);
                 if (match.Success)
