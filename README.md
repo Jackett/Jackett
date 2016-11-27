@@ -20,6 +20,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Andraste
  * AnimeBytes
  * AnimeTorrents
+ * Apollo (XANAX)
  * Avistaz
  * BakaBT
  * bB
