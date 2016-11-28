@@ -121,8 +121,8 @@ namespace Jackett.Indexers
                     release.Comments = release.Guid;
 
                     //22:05:3716/02/2013
-                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim()+" -0200";
-                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy ZZZ", CultureInfo.InvariantCulture);
+                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim()+" +0200";
+                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
                     var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
