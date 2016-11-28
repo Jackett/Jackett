@@ -39,6 +39,7 @@ namespace Jackett.Indexers
             public string Name { get; set; }
             public string Description { get; set; }
             public string Language { get; set; }
+            public string Encoding { get; set; }
             public List<string> Links { get; set; }
             public capabilitiesBlock Caps { get; set; }
             public loginBlock Login { get; set; }
@@ -152,6 +153,9 @@ namespace Jackett.Indexers
                 Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
                 Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
             }
+
+            if (Definition.Encoding == null)
+                Definition.Encoding = "iso-8859-1";
 
             // init missing mandatory attributes
             DisplayName = Definition.Name;
@@ -658,7 +662,7 @@ namespace Jackett.Indexers
 
             // send HTTP request
             var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var results = Encoding.GetEncoding(Definition.Encoding).GetString(response.Content);
             try
             {
                 var SearchResultParser = new HtmlParser();
@@ -672,7 +676,7 @@ namespace Jackett.Indexers
                     await DoLogin();
                     await TestLogin();
                     response = await RequestBytesWithCookies(searchUrl);
-                    results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+                    results = Encoding.GetEncoding(Definition.Encoding).GetString(response.Content);
                     SearchResultDocument = SearchResultParser.Parse(results);
                 }
 
