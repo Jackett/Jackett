@@ -736,12 +736,14 @@ namespace Jackett.Indexers
                                     case "details":
                                         var url = resolvePath(value);
                                         release.Guid = url;
-                                        if (release.Comments == null)
-                                            release.Comments = url;
+                                        release.Comments = url;
+                                        if (release.Guid == null)
+                                            release.Guid = url;
                                         break;
                                     case "comments":
                                         var CommentsUrl = resolvePath(value);
-                                        release.Comments = CommentsUrl;
+                                        if(release.Comments == null)
+                                            release.Comments = CommentsUrl;
                                         if (release.Guid == null)
                                             release.Guid = CommentsUrl;
                                         break;
