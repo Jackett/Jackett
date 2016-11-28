@@ -39,6 +39,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EoT-Forum
  * Ethor.net (Thor's Land)
  * FileList
+ * Freaks Tracking System
  * Freshon
  * FunFile
  * Fuzer
