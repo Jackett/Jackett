@@ -78,6 +78,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(79, TorznabCatType.TVSD);
             AddCategoryMapping(4, TorznabCatType.TVSD);
             AddCategoryMapping(5, TorznabCatType.TVHD);
+            AddCategoryMapping(99, TorznabCatType.TVHD); // TV/x265
 
             AddCategoryMapping(75, TorznabCatType.Audio);
             AddCategoryMapping(73, TorznabCatType.Audio);
