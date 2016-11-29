@@ -26,6 +26,9 @@ namespace Jackett.Indexers
         protected IndexerDefinition Definition;
         public new string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
 
+        protected WebClientStringResult landingResult;
+        protected IHtmlDocument landingResultDocument;
+
         new ConfigurationData configData
         {
             get { return (ConfigurationData)base.configData; }
@@ -156,6 +159,9 @@ namespace Jackett.Indexers
 
             if (Definition.Encoding == null)
                 Definition.Encoding = "iso-8859-1";
+
+            if (Definition.Login != null && Definition.Login.Method == null)
+                Definition.Login.Method = "form";
 
             // init missing mandatory attributes
             DisplayName = Definition.Name;
@@ -303,7 +309,7 @@ namespace Jackett.Indexers
             }
             return true; // no error
         }
-
+        
         protected async Task<bool> DoLogin()
         {
             var Login = Definition.Login;
@@ -311,7 +317,7 @@ namespace Jackett.Indexers
             if (Login == null)
                 return false;
 
-            if (Login.Method == null || Login.Method == "post")
+            if (Login.Method == "post")
             {
                 var pairs = new Dictionary<string, string>();
                 foreach (var Input in Definition.Login.Inputs)
@@ -331,17 +337,51 @@ namespace Jackett.Indexers
             {
                 var LoginUrl = SiteLink + Login.Path;
 
+                var pairs = new Dictionary<string, string>();
+
+                var CaptchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
+
+                if (CaptchaConfigItem != null)
+                { 
+                    if (!string.IsNullOrWhiteSpace(CaptchaConfigItem.Cookie))
+                    {
+                        // for remote users just set the cookie and return
+                        CookieHeader = CaptchaConfigItem.Cookie;
+                        return true;
+                    }
+
+                    var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
+                    if (CloudFlareCaptchaChallenge != null)
+                    {
+                        var CloudFlareQueryCollection = new NameValueCollection();
+                        CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
+                    
+                        CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
+                        var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
+
+                        var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
+
+                        if (ClearanceResult.IsRedirect) // clearance successfull
+                        {
+                            // request real login page again
+                            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                            var htmlParser = new HtmlParser();
+                            landingResultDocument = htmlParser.Parse(landingResult.Content);
+                        }
+                        else
+                        {
+                            throw new ExceptionWithConfigData(string.Format("Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader, ClearanceResult.Content), configData);
+                        }
+                    }
+                    else
+                    {
+                        pairs.Add("g-recaptcha-response", CaptchaConfigItem.Value);
+                    }
+                }
+
                 var FormSelector = Login.Form;
                 if (FormSelector == null)
                     FormSelector = "form";
-
-                var pairs = new Dictionary<string, string>();
-
-                configData.CookieHeader.Value = null;
-                var landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
-
-                var htmlParser = new HtmlParser();
-                var landingResultDocument = htmlParser.Parse(landingResult.Content);
 
                 var form = landingResultDocument.QuerySelector(FormSelector);
                 if (form == null)
@@ -381,14 +421,14 @@ namespace Jackett.Indexers
                 if(simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
-                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), landingResult.Cookies, LoginUrl);
+                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), null, LoginUrl);
                     var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.Content);
                     var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
                     pairs["submitme"] = "X";
                 }
-
-                var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, landingResult.Cookies, true, null, SiteLink, true);
+                
+                var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForLoginError(loginResult);
@@ -449,6 +489,37 @@ namespace Jackett.Indexers
                 }
             }
             return false;
+        }
+
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var Login = Definition.Login;
+
+            if (Login == null || Login.Method != "form")
+                return configData;
+
+            var LoginUrl = SiteLink + Login.Path;
+
+            configData.CookieHeader.Value = null;
+            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+
+            var htmlParser = new HtmlParser();
+            landingResultDocument = htmlParser.Parse(landingResult.Content);
+
+            var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
+            if (grecaptcha != null)
+            {
+                var CaptchaItem = new RecaptchaItem();
+                CaptchaItem.Name = "Captcha";
+                CaptchaItem.Version = "2";
+                CaptchaItem.SiteKey = grecaptcha.GetAttribute("data-sitekey");
+                if (CaptchaItem.SiteKey == null) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
+                    CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
+
+                configData.AddDynamic("Captcha", CaptchaItem);
+            }
+
+            return configData;
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -592,6 +663,11 @@ namespace Jackett.Indexers
             if(path.StartsWith("http"))
             {
                 return new Uri(path);
+            }
+            else if(path.StartsWith("/"))
+            {
+                var basepath = new Uri(SiteLink);
+                return new Uri(basepath.Scheme+"://"+ basepath.Host + path);
             }
             else
             {
@@ -814,7 +890,7 @@ namespace Jackett.Indexers
                                     value = handleSelector(DateHeaders, PrevRow);
                                     break;
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     // do nothing
                                 }

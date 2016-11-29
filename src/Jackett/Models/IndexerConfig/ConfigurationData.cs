@@ -147,12 +147,19 @@ namespace Jackett.Models.IndexerConfig
 
         public void AddDynamic(string ID, Item item)
         {
-            dynamics.Add(ID, item);
+            dynamics[ID] = item;
         }
 
         public Item GetDynamic(string ID)
         {
-            return dynamics[ID];
+            try
+            {
+                return dynamics[ID];
+            }
+            catch(KeyNotFoundException)
+            {
+                return null;
+            }
         }
 
         public class Item
