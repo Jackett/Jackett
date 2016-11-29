@@ -72,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SpeedCD
  * The Horror Charnel
  * The New Retro
+ * The Shinning
  * TehConnection
  * Torrent Network
  * Torrent Sector Crew
