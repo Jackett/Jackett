@@ -228,6 +228,7 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilterAndPasskey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataLoginLink.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithAlternateLink.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLoginWithAlternateLink.cs" />
