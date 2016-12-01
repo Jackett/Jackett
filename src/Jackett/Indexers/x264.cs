@@ -183,6 +183,9 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
+                    // time is needed for sonarr, just set it to now
+                    release.PublishDate = DateTime.Now;
+
                     releases.Add(release);
                 }
             }
