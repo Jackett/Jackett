@@ -20,6 +20,7 @@ namespace Jackett.Indexers
         public string SiteLink { get; protected set; }
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
+        public string Language { get; protected set; }
         public string ID { get { return GetIndexerID(GetType()); } }
 
         public bool IsConfigured { get; protected set; }

@@ -232,6 +232,7 @@ namespace Jackett.Controllers
                     item["description"] = indexer.DisplayDescription;
                     item["configured"] = indexer.IsConfigured;
                     item["site_link"] = indexer.SiteLink;
+                    item["language"] = indexer.Language;
                     item["potatoenabled"] = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => PotatoController.MOVIE_CATS.Contains(i));
 
                     var caps = new JObject();
