@@ -606,6 +606,20 @@ namespace Jackett.Indexers
             return Data;
         }
 
+        protected IElement QuerySelector(IElement Element, string Selector)
+        {
+            // AngleSharp doesn't support the :root pseudo selector, so we check for it manually
+            if (Selector.StartsWith(":root"))
+            {
+                Selector = Selector.Substring(5);
+                while (Element.ParentElement != null)
+                {
+                    Element = Element.ParentElement;
+                }
+            }
+            return Element.QuerySelector(Selector);
+        }
+
         protected string handleSelector(selectorBlock Selector, IElement Dom)
         {
             if (Selector.Text != null)
@@ -618,7 +632,7 @@ namespace Jackett.Indexers
 
             if (Selector.Selector != null)
             {
-                selection = Dom.QuerySelector(Selector.Selector);
+                selection = QuerySelector(Dom, Selector.Selector);
                 if (selection == null)
                 {
                     throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.OuterHtml));
@@ -637,7 +651,7 @@ namespace Jackett.Indexers
             {
                 foreach(var Case in Selector.Case)
                 {
-                    if (selection.Matches(Case.Key) || selection.QuerySelector(Case.Key) != null)
+                    if (selection.Matches(Case.Key) || QuerySelector(selection, Case.Key) != null)
                     {
                         value = Case.Value;
                         break;
