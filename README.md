@@ -54,13 +54,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ILoveTorrents
  * Immortalseed
  * IPTorrents
- * PassThePopcorn
- * PirateTheNet
  * MoreThanTV
  * MyAnonamouse
  * myAmity
  * NCore
  * NextGen
+ * PassThePopcorn
+ * PirateTheNet
  * Pretome
  * PrivateHD
  * RevolutionTT
