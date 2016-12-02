@@ -169,6 +169,7 @@ namespace Jackett.Indexers
             SiteLink = Definition.Links[0]; // TODO: implement alternative links
             if (!SiteLink.EndsWith("/"))
                 SiteLink += "/";
+            Language = Definition.Language;
             TorznabCaps = TorznabUtil.CreateDefaultTorznabTVCaps(); // TODO implement caps
 
             // init config Data
