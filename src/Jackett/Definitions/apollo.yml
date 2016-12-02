@@ -85,6 +85,7 @@
         selector: td:nth-child(8)
       downloadvolumefactor:
         case:
+          ":root div.alertbar:contains(\"freeleech\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:
