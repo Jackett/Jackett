@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Web;
 using CsQuery.ExtensionMethods;
 using Jackett.Models.IndexerConfig;
+using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
@@ -264,6 +265,23 @@ namespace Jackett.Indexers
                         var referrerUrl = imdbAnchor.GetAttribute("href");
                         release.Imdb = long.Parse(Regex.Match(referrerUrl, "tt(?<imdbId>[0-9]+)").Groups["imdbId"].Value);
                     }
+
+                    var Files = qRow.Find("td:nth-child(3) > div");
+                    release.Files = ParseUtil.CoerceLong(Files.Text().Split(' ')[0]);
+
+                    var Grabs = qRow.Find("td:nth-child(6)");
+                    release.Grabs = ParseUtil.CoerceLong(Grabs.Text());
+
+                    if (qRow.Find("img[src=\"/static/common/torrents/gratis.png\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    if (qRow.Find("img[src=\"/static/common/torrents/toxupload.png\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }
