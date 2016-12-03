@@ -167,6 +167,11 @@ namespace Jackett.Indexers
                             if (secondSizeStr.Length > 3 && secondSizeStr.Contains("(") && secondSizeStr.Contains(")"))
                             { sizeStr = secondSizeStr.Replace("(", "").Replace(")", "").Trim(); }
                         }
+
+                        if(string.IsNullOrWhiteSpace(title))
+                        {
+                            title = dom.Find("div.title_text").Text() + " - " + qRow.Find("div.details_title > a").Text();
+                        }
                         
                         var release = new ReleaseInfo();
 
