@@ -255,6 +255,90 @@
         </table>
     </script>
 
+    <script id="configured-indexer-table" type="text/x-handlebars-template">
+        <table class="indexer-table configured-indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <thead>
+                <tr>
+                    <th>Indexer</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each indexers}}
+                <tr class="configured-indexer-row">
+                    <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                    <td class="fit">
+                        <div class="indexer-buttons">
+                            <button title="{{torznab_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</button>
+                            <button title="{{potato_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</button>
+
+                            <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                            </button>
+                            <button title="Delete" class="btn btn-danger btn-xs indexer-button-delete" data-id="{{id}}">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                            <button title="Test" class="btn btn-warning btn-xs indexer-button-test" data-id="{{id}}">
+                                Test
+                                {{#if isOK}}
+                                <span class="glyphicon glyphicon-ok test-success" aria-hidden="true"></span>
+                                {{else if isError}}
+                                <span class="glyphicon glyphicon-remove test-error" aria-hidden="true"></span>
+                                {{else if isInProgress}}
+                                <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate test-inprogres" aria-hidden="true"></span>
+                                {{/if}}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>      
+    </script>
+
+    <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
+        <table class="indexer-table configured-indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <thead>
+                <tr>
+                    <th>Indexer</th>
+                    <th>Description</th>
+                    <th>Language</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each indexers}}
+                <tr class="unconfigured-indexer-row">
+                    <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                    <td>{{description}}</td>
+                    <td>{{language}}</td>
+                    <td class="fit">
+                        <div class="indexer-buttons">
+                            <button title="Configure" class="btn btn-success btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </script>
+
     <script id="jackett-releases" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-fillwidth">
