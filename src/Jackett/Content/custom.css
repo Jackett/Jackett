@@ -37,6 +37,22 @@
    margin-top: 30px;
 }
 
+.indexer-table {
+   text-align: left;
+}
+
+.test-success {
+    color: #449d44;
+}
+
+.test-error {
+    color: #c9302c;
+}
+
+.test-inprogress {
+    color: #286090;
+}
+
 
 #unconfigured-indexers{
    text-align: center;
@@ -295,5 +311,25 @@ pre {
 
 .setup-item-displayinfo:empty {
     display: none;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+.table td.fit{
+    white-space: nowrap;
+    width: 1%;
 }
 
