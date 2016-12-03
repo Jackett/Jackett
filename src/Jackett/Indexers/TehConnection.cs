@@ -191,6 +191,17 @@ namespace Jackett.Indexers
                             release.Imdb = imdb_id;
                         }
 
+                        var files = qRow.Find("div[id^=\"filelist\"] tr").Count()-1;
+                        release.Files = files;
+                        release.Grabs = ParseUtil.CoerceLong(grabs);
+
+                        if (freeleech)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
+
                         if (configFreeLeechOnly && !freeleech)
                         {
                             continue; //Skip release if user only wants FreeLeech
