@@ -48,9 +48,24 @@ function loadJackettSettings() {
 function reloadIndexers() {
     $('#indexers').hide();
     $('#indexers > .indexer').remove();
-    $('#unconfigured-indexers').empty();
     var jqxhr = $.get("get_indexers", function (data) {
-        displayIndexers(data.items);
+        var configuredIndexers = [];
+        var unconfiguredIndexers = [];
+        for (var i = 0; i < data.items.length; i++) {
+            var item = data.items[i];
+            item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
+            item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
+            
+            item.isOK = true;
+            item.isError = false;
+           
+            if (item.configured)
+                configuredIndexers.push(item);
+            else
+                unconfiguredIndexers.push(item);
+        }
+        displayConfiguredIndexersList(configuredIndexers);
+        displayUnconfiguredIndexersList(unconfiguredIndexers);
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -95,6 +110,117 @@ function displayIndexers(items) {
     prepareSetupButtons();
     prepareTestButtons();
     prepareDeleteButtons();
+}
+
+function displayConfiguredIndexersList(indexers) {
+    var indexersTemplate = Handlebars.compile($("#configured-indexer-table").html());
+    var indexersTable = $(indexersTemplate({ indexers: indexers }));
+    indexersTable.find('table').DataTable(
+         {
+             "pageLength": 100,
+             "lengthMenu": [[10, 20, 50, 100, 200, -1], [10, 20, 50, 100, 200, "All"]],
+             "order": [[0, "desc"]],
+             "columnDefs": [
+                {
+                    "targets": 0,
+                    "visible": true,
+                    "searchable": true
+                },
+                {
+                    "targets": 1,
+                    "visible": true,
+                    "searchable": false
+                }
+             ]
+         });
+    $('#indexers').empty();
+    $('#indexers').append(indexersTable);
+    $('#indexers').fadeIn();
+    prepareSetupButtons();
+    prepareTestButtons();
+    prepareDeleteButtons();
+    prepareCopyButtons();
+}
+
+function displayUnconfiguredIndexersList(indexers) {
+    var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
+    var indexersTable = $(indexersTemplate({ indexers: indexers }));
+    indexersTable.find('table').DataTable(
+         {
+             "pageLength": 100,
+             "lengthMenu": [[10, 20, 50, 100, 200, -1], [10, 20, 50, 100, 200, "All"]],
+             "order": [[0, "desc"]],
+             "columnDefs": [
+                {
+                    "targets": 0,
+                    "visible": true,
+                    "searchable": true
+                },
+                {
+                    "targets": 1,
+                    "visible": true,
+                    "searchable": true
+                },
+                {
+                    "targets": 2,
+                    "visible": true,
+                    "searchable": true
+                },
+                {
+                    "targets": 3,
+                    "visible": true,
+                    "searchable": false
+                }
+             ]
+         });
+    $('#unconfigured-indexers-template').empty();
+    $('#unconfigured-indexers-template').append(indexersTable);
+}
+
+function copyToClipboard(text) {
+    // create hidden text element, if it doesn't already exist
+    var targetId = "_hiddenCopyText_";
+    // must use a temporary form element for the selection and copy
+    target = document.getElementById(targetId);
+    if (!target) {
+        var target = document.createElement("textarea");
+        target.style.position = "absolute";
+        target.style.left = "-9999px";
+        target.style.top = "0";
+        target.id = targetId;
+        document.body.appendChild(target);
+    }
+    target.textContent = text;
+    // select the content
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+
+    // copy the selection
+    var succeed;
+    try {
+        succeed = document.execCommand("copy");
+    } catch (e) {
+        succeed = false;
+    }
+    // restore original focus
+    if (currentFocus && typeof currentFocus.focus === "function") {
+        currentFocus.focus();
+    }
+
+    target.textContent = "";
+
+    return succeed;
+}
+
+function prepareCopyButtons() {
+    $(".indexer-button-copy").each(function (i, btn) {
+        var $btn = $(btn);
+        var title = $btn[0].title;
+        $btn.click(function () {
+            copyToClipboard(title);
+        });
+    });
 }
 
 function prepareDeleteButtons() {
@@ -391,6 +517,24 @@ function bindUIButtons() {
         });
         event.preventDefault();
         return false;
+    });
+
+    $('#jackett-add-indexer').click(function () {
+        $("#modals").empty();
+        var dialog = $($("#select-indexer").html());
+        dialog.find('#unconfigured-indexers').html($('#unconfigured-indexers-template').html());
+        $("#modals").append(dialog);
+        dialog.modal("show");
+        $('.indexer-setup').each(function (i, btn) {
+            var $btn = $(btn);
+            var id = $btn.data("id");
+            var link = $btn.data("link");
+            $btn.click(function () {
+                $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
+                    displayIndexerSetup(id, link);
+                });
+            });
+        });
     });
 
     $("#jackett-show-releases").click(function () {
