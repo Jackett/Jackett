@@ -234,10 +234,7 @@ namespace Jackett.Indexers
 
                     var dlUrlAnchor = qRow.Find("span.right a").FirstElement();
                     var dlUrl = dlUrlAnchor.GetAttribute("href");
-                    var authkey = Regex.Match(dlUrl, "authkey=(?<authkey>[0-9a-zA-Z]+)").Groups["authkey"].Value;
-                    var torrentPass = Regex.Match(dlUrl, "torrent_pass=(?<torrent_pass>[0-9a-zA-Z]+)").Groups["torrent_pass"].Value;
-                    var torrentId = Regex.Match(dlUrl, "id=(?<id>[0-9]+)").Groups["id"].Value;
-                    release.Link = new Uri($"{SearchUrl}/{title}.torrent/?action=download&authkey={authkey}&torrent_pass={torrentPass}&id={torrentId}");
+                    release.Link = new Uri(SiteLink + dlUrl);
 
                     var torrentLink = titleAnchor.GetAttribute("href");
                     release.Guid = new Uri(SiteLink + torrentLink);
