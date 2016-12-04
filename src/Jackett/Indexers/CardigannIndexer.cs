@@ -384,6 +384,12 @@ namespace Jackett.Indexers
                 if (FormSelector == null)
                     FormSelector = "form";
 
+                // landingResultDocument might not be initiated if the login is caused by a relogin during a query
+                if (landingResultDocument == null)
+                {
+                    await GetConfigurationForSetup();
+                }
+
                 var form = landingResultDocument.QuerySelector(FormSelector);
                 if (form == null)
                 {
