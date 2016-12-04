@@ -176,50 +176,6 @@
         </div>
     </script>
 
-    <script id="configured-indexer" type="text/x-handlebars-template">
-        <div class="configured-indexer indexer card">
-            <div class="indexer-logo">
-                <!-- Make section browser searchable -->
-                <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
-            </div>
-            <div class="indexer-buttons">
-                <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
-                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
-                </a>
-                <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
-                    Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="indexer-host">
-                <b>Torznab Host:</b>
-                <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
-                <b>CouchPotato Host:</b>
-                {{#if potatoenabled}}
-
-                <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
-                {{else}}
-                <input class="form-control" type="text" value="Not available" placeholder="Torznab Host" readonly="">
-                {{/if}}
-            </div>
-        </div>
-    </script>
-    <script id="unconfigured-indexer" type="text/x-handlebars-template">
-        <div class="unconfigured-indexer card">
-            <div class="indexer-logo indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                <!-- Make section browser searchable -->
-                <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
-              
-            </div>
-        </div>
-    </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <table class="indexer-table configured-indexer-table dataTable compact cell-border hover stripe table table-responsive">
@@ -251,7 +207,7 @@
                                 {{else if isError}}
                                 <span class="glyphicon glyphicon-remove test-error" aria-hidden="true"></span>
                                 {{else if isInProgress}}
-                                <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate test-inprogres" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-refresh spinner test-inprogres" aria-hidden="true"></span>
                                 {{/if}}
                             </button>
                         </div>
@@ -587,14 +543,7 @@
             </div>
         </div>
     </script>
-    <script id="add-indexer" type="text/x-handlebars-template">
-        <button class="indexer card add-indexer" data-toggle="modal">
-            <div class="indexer-add-content">
-                <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <div class="light-text">Add</div>
-            </div>
-        </button>
-    </script>
+
     <script id="spinner" type="text/x-handlebars-template">
         <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>
