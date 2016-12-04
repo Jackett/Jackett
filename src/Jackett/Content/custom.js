@@ -56,6 +56,14 @@ function reloadIndexers() {
             item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
             
             item.state = "success";
+
+            item.main_cats_list = [];
+            for (var catID in item.caps) {
+                var isMainCat = (catID % 1000) == 0;
+                if (isMainCat)
+                    item.main_cats_list.push(item.caps[catID]);
+            }
+            item.mains_cats = item.main_cats_list.join(", ");
            
             if (item.configured)
                 configuredIndexers.push(item);
