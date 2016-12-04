@@ -55,8 +55,7 @@ function reloadIndexers() {
             item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
             item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
             
-            item.isOK = true;
-            item.isError = false;
+            item.state = "success";
            
             if (item.configured)
                 configuredIndexers.push(item);
@@ -91,11 +90,12 @@ function displayConfiguredIndexersList(indexers) {
                 }
              ]
          });
+    
     $('#indexers').empty();
     $('#indexers').append(indexersTable);
+    prepareTestButtons();
     $('#indexers').fadeIn();
     prepareSetupButtons();
-    prepareTestButtons();
     prepareDeleteButtons();
     prepareCopyButtons();
 }
@@ -213,22 +213,54 @@ function prepareSetupButtons() {
     });
 }
 
+function updateTestState(id, state, message)
+{
+    var btn = $(".indexer-button-test[data-id=" + id + "]");
+    if (message) {
+        btn.data('bs.tooltip', false).tooltip({ title: message });
+    }
+    var icon = btn.find("span");
+    icon.removeClass("glyphicon-ok test-success glyphicon-remove test-error glyphicon-refresh spinner test-inprogres");
+
+    if (state == "success") {
+        icon.addClass("glyphicon-ok test-success");
+    } else if (state == "error") {
+        icon.addClass("glyphicon-alert test-error");
+    } else if (state == "inprogres") {
+        icon.addClass("glyphicon-refresh test-inprogres spinner");
+    }
+}
+
+function testIndexer(id, notifyResult) {
+    updateTestState(id, "inprogres", null);
+    
+    if (notifyResult)
+        doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
+    var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
+        if (data.result == "error") {
+            updateTestState(id, "error", data.error);
+            if (notifyResult)
+                doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
+        }
+        else {
+            updateTestState(id, "success", "Test successful");
+            if (notifyResult)
+                doNotify("Test successful for " + id, "success", "glyphicon glyphicon-ok");
+        }
+    }).fail(function () {
+        doNotify("Error testing indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
+    });
+}
+
 function prepareTestButtons() {
     $(".indexer-button-test").each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
+        var state = $btn.data("state");
+        $btn.tooltip();
+        updateTestState(id, state, null);
         $btn.click(function () {
-            doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-            var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
-                if (data.result == "error") {
-                    doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
-                }
-                else {
-                    doNotify("Test successful for " + id, "success", "glyphicon glyphicon-ok");
-                }
-            }).fail(function () {
-                doNotify("Error testing indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
-            });
+            testIndexer(id, true);
         });
     });
 }
@@ -492,6 +524,14 @@ function bindUIButtons() {
                     displayIndexerSetup(id, link);
                 });
             });
+        });
+    });
+
+    $("#jackett-test-all").click(function () {
+        $(".indexer-button-test").each(function (i, btn) {
+            var $btn = $(btn);
+            var id = $btn.data("id");
+            testIndexer(id, false);
         });
     });
 
