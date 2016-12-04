@@ -59,10 +59,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * myAmity
  * NCore
  * NextGen
-<<<<<<< HEAD
  * Norbits
-=======
->>>>>>> refs/remotes/Jackett/master
  * PassThePopcorn
  * PirateTheNet
  * Pretome
