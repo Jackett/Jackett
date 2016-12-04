@@ -59,10 +59,6 @@ namespace Jackett
             Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
             {
                 str.Content = Encoding.UTF8.GetString(be.Content);
-                if(str.Content.Contains("NorBits"))
-                {
-                    str.Content = Encoding.GetEncoding("iso-8859-1").GetString(be.Content);
-                }
             });
 
             Mapper.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
