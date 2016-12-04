@@ -481,6 +481,9 @@ namespace Jackett.Indexers
                 return true;
             }
 
+            if (Definition.Login == null || Definition.Login.Test == null)
+                return false;
+
             if (Definition.Login.Test.Selector != null)
             {
                 var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
