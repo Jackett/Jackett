@@ -232,7 +232,7 @@ namespace Jackett.Indexers
                     var title = titleAnchor.GetAttribute("title");
                     release.Title = title;
 
-                    var dlUrlAnchor = qRow.Find("span.right a").FirstElement();
+                    var dlUrlAnchor = qRow.Find("span.right a[title=\"Direkte download link\"]").FirstElement();
                     var dlUrl = dlUrlAnchor.GetAttribute("href");
                     release.Link = new Uri(SiteLink + dlUrl);
 
@@ -269,7 +269,7 @@ namespace Jackett.Indexers
                     var Grabs = qRow.Find("td:nth-child(6)");
                     release.Grabs = ParseUtil.CoerceLong(Grabs.Text());
 
-                    if (qRow.Find("img[src=\"/static/common/torrents/gratis.png\"]").Length >= 1)
+                    if (qRow.Find("span.freeleech, img[src=\"/static/common/torrents/gratis.png\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
