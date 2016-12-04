@@ -119,6 +119,11 @@ namespace Jackett.Services
         public void RemoveService()
         {
             var service = GetService(NAME);
+            if(service == null)
+            {
+                logger.Warn("The service is already uninstalled");
+                return;
+            }
             if (service.Status != ServiceControllerStatus.Stopped)
             {
                 service.Stop();

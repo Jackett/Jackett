@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Models
@@ -24,6 +25,8 @@ namespace Jackett.Models
         public string Episode { get; set; }
         public string SearchTerm { get; set; }
 
+        protected string[] QueryStringParts = null;
+
         public string SanitizedSearchTerm
         {
             get
@@ -37,6 +40,9 @@ namespace Jackett.Models
                                                   || char.IsWhiteSpace(c)
                                                   || c == '-'
                                                   || c == '.'
+                                                  || c == '_'
+                                                  || c == '('
+                                                  || c == ')'
                                                   ));
                 var safetitle = new string(arr);
                 return safetitle;
@@ -51,6 +57,28 @@ namespace Jackett.Models
         public string GetQueryString()
         {
             return (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
+        }
+
+        // Some trackers don't support AND logic for search terms resulting in unwanted results.
+        // Using this method we can AND filter it within jackett.
+        public bool MatchQueryStringAND(string title)
+        {
+            // We cache the regex split results so we have to do it only once for each query.
+            if (QueryStringParts == null)
+            {
+                Regex SplitRegex = new Regex("[^a-zA-Z0-9]+");
+                QueryStringParts = SplitRegex.Split(GetQueryString());
+            }
+
+            // Check if each part of the query string is in the given title.
+            foreach (var QueryStringPart in QueryStringParts)
+            {
+                if (title.IndexOf(QueryStringPart, StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public string GetEpisodeSearchString()

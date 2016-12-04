@@ -33,7 +33,7 @@ namespace Jackett.Indexers
         }
 
         public Myanonamouse(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
-            : base(name: "Myanonamouse",
+            : base(name: "MyAnonamouse",
                 description: "Friendliness, Warmth and Sharing",
                 link: "https://www.myanonamouse.net/",
                 caps: new TorznabCapabilities(TorznabCatType.Books,
@@ -187,48 +187,59 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = response.Content;
-                var rows = dom["table[class='newTorTable'] > tbody > tr"];
+                var rows = dom["table[class='newTorTable'] > tbody > tr[id^=\"tdr\"]"];
 
                 foreach (IDomObject row in rows)
                 {
                     CQ torrentData = row.OuterHTML;
                     CQ cells = row.Cq().Find("td");
 
-                    if (cells.Any() && torrentData.Find("a[class='directDownload']").Any())
-                    {
-                        string title = torrentData.Find("a[class='title']").First().Text().Trim();
-                        string author = torrentData.Find("a[class='author']").First().Text().Trim();
-                        Uri link = new Uri(SiteLink + torrentData.Find("a[class='directDownload']").First().Attr("href").Trim().TrimStart('/'));
-                        Uri guid = new Uri(SiteLink + torrentData.Find("a[class='directDownload']").First().Attr("href").Trim().TrimStart('/'));
-                        long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text().Split('[')[1].TrimEnd(']'));
-                        int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Find("p").ElementAt(0).Cq().Text());
-                        int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Find("p").ElementAt(1).Cq().Text());
+                    string tid = torrentData.Attr("id").Substring(4);
+                    var qTitle = torrentData.Find("a[class='title']").First();
+                    string title = qTitle.Text().Trim();
+                    var details = new Uri(SiteLink + qTitle.Attr("href")); 
+                    string author = torrentData.Find("a[class='author']").First().Text().Trim();
+                    Uri link = new Uri(SiteLink + "tor/download.php?tid="+tid); // DL Link is no long available directly, build it ourself
+                    long files = ParseUtil.CoerceLong(cells.Elements.ElementAt(4).Cq().Find("a").Text());
+                    long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text().Split('[')[1].TrimEnd(']'));
+                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Find("p").ElementAt(0).Cq().Text());
+                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Find("p").ElementAt(1).Cq().Text());
+                    long grabs = ParseUtil.CoerceLong(cells.Elements.ElementAt(6).Cq().Find("p").ElementAt(2).Cq().Text());
+                    bool freeleech = torrentData.Find("img[alt=\"freeleech\"]").Any();
 
-                        string pubDateStr = cells.Elements.ElementAt(5).Cq().Text().Split('[')[0];
-                        DateTime publishDate = DateTime.Parse(pubDateStr).ToLocalTime();
+                    string pubDateStr = cells.Elements.ElementAt(5).Cq().Text().Split('[')[0];
+                    DateTime publishDate = DateTime.Parse(pubDateStr).ToLocalTime();
 
-                        long category = 0;
-                        string cat = torrentData.Find("a[class='newCatLink']").First().Attr("href").Remove(0, "/tor/browse.php?tor[cat][]]=".Length);
-                        long.TryParse(cat, out category);
+                    long category = 0;
+                    string cat = torrentData.Find("a[class='newCatLink']").First().Attr("href").Remove(0, "/tor/browse.php?tor[cat][]]=".Length);
+                    long.TryParse(cat, out category);
 
 
-                        var release = new ReleaseInfo();
+                    var release = new ReleaseInfo();
 
-                        release.Title = String.IsNullOrEmpty(author) ? title : String.Format("{0} by {1}", title, author);
-                        release.Guid = guid;
-                        release.Link = link;
-                        release.PublishDate = publishDate;
-                        release.Size = size;
-                        release.Description = release.Title;
-                        release.Seeders = seeders;
-                        release.Peers = seeders + leechers;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800;
-                        release.Category = MapTrackerCatToNewznab(category.ToString());
-                        release.Comments = guid;
+                    release.Title = String.IsNullOrEmpty(author) ? title : String.Format("{0} by {1}", title, author);
+                    release.Guid = link;
+                    release.Link = link;
+                    release.PublishDate = publishDate;
+                    release.Files = files;
+                    release.Size = size;
+                    release.Description = release.Title;
+                    release.Seeders = seeders;
+                    release.Peers = seeders + leechers;
+                    release.Grabs = grabs;
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    release.Category = MapTrackerCatToNewznab(category.ToString());
+                    release.Comments = details;
 
-                        releases.Add(release);
-                    }
+                    if (freeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

@@ -250,7 +250,15 @@ namespace Jackett.Indexers
             if (tags.Split(',').Length < 7)
             {
                 queryCollection.Add("tags", tags);
-                queryCollection.Add("tf", "any");
+                if(!string.IsNullOrWhiteSpace(tags)) {
+                    // if tags are specified match any
+                    queryCollection.Add("tf", "any");
+                }
+                else
+                { 
+                    // if no tags are specified match all, with any we get random results
+                    queryCollection.Add("tf", "all");
+                }
             }
 
             if (queryCollection.Count > 0)
@@ -296,6 +304,15 @@ namespace Jackett.Indexers
 
                     var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href").Replace("browse.php?", string.Empty);
                     release.Category = MapTrackerResultCatToNewznab(cat);
+
+                    var files = qRow.Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:nth-child(9)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

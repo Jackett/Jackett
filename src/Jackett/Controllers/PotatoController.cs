@@ -100,7 +100,8 @@ namespace Jackett.Controllers
                 ApiKey =  request.passkey,
                 Categories = MOVIE_CATS,
                 SearchTerm = request.search,
-                ImdbID = request.imdbid
+                ImdbID = request.imdbid,
+                QueryType = "TorrentPotato"
             };
 
             IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();

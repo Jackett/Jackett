@@ -16,6 +16,7 @@ namespace Jackett.Indexers
 
         string DisplayName { get; }
         string DisplayDescription { get; }
+        string Language { get; }
         string ID { get; }
 
         TorznabCapabilities TorznabCaps { get; }

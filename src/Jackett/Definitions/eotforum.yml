@@ -1,0 +1,176 @@
+﻿---
+  site: eotforum
+  name: EoT-Forum
+  description: "A German gerneral tracker"
+  language: de-de
+  links:
+    - http://eot-forum.net
+
+  caps:
+    categories:
+      # Filme
+      14: Movies/SD # SD XviD
+      15: Movies/SD # SD x264
+      16: Movies/HD # HD
+      68: Movies/HD # UHD
+      17: Movies/3D # 3D
+      18: Movies/DVD # DVD-R
+      19: Movies # Pack
+      20: Movies # International
+      21: XXX # XXX
+
+      # Serien/TV
+      23: TV/SD # SD XviD
+      24: TV/SD # SD x264
+      25: TV/HD # HD
+      26: TV/SD # DVD-R
+      27: TV # Pack
+      28: TV # International
+      29: TV/Sport # Sport
+
+      # Dokus
+      31: TV/Documentary # SD XviD
+      32: TV/Documentary # SD x264
+      33: TV/Documentary # HD
+      34: TV/Documentary # 3D
+      35: TV/Documentary # Pack
+      67: TV/Documentary # DVD-R
+      36: TV/Documentary # International
+
+      # Audio
+      38: Audio # Charts
+      39: Audio/MP3 # MP3
+      40: Audio/Lossless # Flac
+      41: Audio # Pack
+      42: Audio/Video # MusikVideo
+      43: Audio/Audiobook # Hörbücher
+
+      # Spiele
+      45: PC/Games # Windows
+      46: PC/Mac # MacOS
+      47: Console/PS4 # Sony PS
+      48: Console/Xbox  # Microsoft XBox
+      49: Console/NDS # Nintendo
+      50: PC/Games # Linux
+      51: Console # Andere
+
+      # Software
+      53: PC # Windows
+      54: PC/Mac # MacOS
+      55: PC # Linux
+      56: PC/Phone-Android # Android
+      57: PC/Phone-IOS # Apple IOS
+      58: PC/Phone-Other # Andere
+
+      # Sonstiges
+      60: Books # EBooks
+      61: Other # Bilder
+      62: TV/Anime # Anime
+      63: Other # MISC
+      64: XXX # XXX-Bilder/EBooks/Audio
+
+      # EOT-Specials
+      66: Other # Special
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+      rememberme: "forever"
+      submit: "Login"
+    error:
+    - selector: td.lista[align="center"][colspan="2"] > span
+    test:
+      path: index.php
+      selector: img[alt="Ratio"]
+
+  ratio:
+    path: index.php
+    selector: img[alt="Ratio"] + font
+
+  search:
+    path: index.php
+    inputs:
+      page: "torrents"
+      search: "{{ .Query.Keywords }}"
+      options: "0"
+      active: "0"
+      gold: "0"
+    rows:
+      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+      dateheaders:
+        selector: ":has(td.header > b)"
+        filters:
+          - name: replace
+            args: ["Torrents vom ", ""]
+          - name: replace
+            args: ["Januar", "January"]
+          - name: replace
+            args: ["Februar", "February"]
+          - name: replace
+            args: ["March", "März"]
+          - name: replace
+            args: ["Mai", "May"]
+          - name: replace
+            args: ["Juni", "June"]
+          - name: replace
+            args: ["Juli", "July"]
+          - name: replace
+            args: ["Oktober", "October"]
+          - name: replace
+            args: ["Dezember", "December"]
+          - name: dateparse
+            args: "02.January.2006"
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="index.php?page=torrent-details&id="]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["Details anzeigen: ", ""]
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
+      size:
+        selector: td:nth-child(3)
+      grabs:
+        selector: td:nth-child(5) > font:nth-child(3)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-child(5) > font:nth-child(1)
+      leechers:
+        selector: td:nth-child(5) > font:nth-child(2)
+      downloadvolumefactor:
+        case:
+          img[alt="gold"]: "0"
+          img[alt="silver"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt="2x Upload Multiplier"]: "2"
+          img[alt="3x Upload Multiplier"]: "3"
+          img[alt="4x Upload Multiplier"]: "4"
+          img[alt="5x Upload Multiplier"]: "5"
+          img[alt="6x Upload Multiplier"]: "6"
+          img[alt="7x Upload Multiplier"]: "7"
+          img[alt="8x Upload Multiplier"]: "8"
+          img[alt="9x Upload Multiplier"]: "9"
+          img[alt="10x Upload Multiplier"]: "10"
+          "*": "1"

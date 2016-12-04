@@ -23,7 +23,7 @@ namespace Jackett.Indexers
     {
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?/{0}/dl.torrent"; } }
+        private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
 
         new ConfigurationDataBasicLogin configData
         {

@@ -233,7 +233,7 @@ namespace Jackett.Indexers
             // Getting results & Store content
             var response = await RequestBytesWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
             var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
-            _fDom = results.Content;
+            _fDom = results;
 
             try
             {
@@ -439,7 +439,7 @@ namespace Jackett.Indexers
             // If search term provided
             if (!string.IsNullOrWhiteSpace(term))
             {
-                searchterm = "search=" + HttpUtility.UrlEncode(term, Encoding.GetEncoding(28591));
+                searchterm = "search=" + System.Web.HttpUtility.UrlEncode(term, Encoding.GetEncoding(28591));
             }
             else
             {

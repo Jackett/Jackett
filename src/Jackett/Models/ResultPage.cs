@@ -70,6 +70,8 @@ namespace Jackett.Models
                             r.Comments == null ? null : new XElement("comments", r.Comments.ToString()),
                             r.PublishDate == DateTime.MinValue ? null : new XElement("pubDate", xmlDateFormat(r.PublishDate)),
                             r.Size == null ? null : new XElement("size", r.Size),
+                            r.Files == null ? null : new XElement("files", r.Files),
+                            r.Grabs == null ? null : new XElement("grabs", r.Grabs),
                             new XElement("description", r.Description),
                             new XElement("link", r.Link ?? r.MagnetUri),
                             r.Category == 0 ? null : new XElement("category", r.Category),
@@ -87,7 +89,9 @@ namespace Jackett.Models
                             getTorznabElement("peers", r.Peers),
                             getTorznabElement("infohash", r.InfoHash),
                             getTorznabElement("minimumratio", r.MinimumRatio),
-                            getTorznabElement("minimumseedtime", r.MinimumSeedTime)
+                            getTorznabElement("minimumseedtime", r.MinimumSeedTime),
+							getTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
+							getTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
                         )
                     )
                 )

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CloudFlareUtilities;
 using Jackett.Models;
 using Jackett.Services;
 using NLog;
@@ -26,6 +27,11 @@ namespace Jackett.Utils.Clients
 
         public void Init()
         {
+            if (Startup.IgnoreSslErrors == true)
+            {
+                logger.Info(string.Format("WindowsWebClient: Disabling certificate validation"));
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
+            }
         }
 
         public async Task<WebClientByteResult> GetBytes(WebRequest request)
@@ -46,6 +52,8 @@ namespace Jackett.Utils.Clients
 
         private async Task<WebClientByteResult> Run(WebRequest webRequest)
         {
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+
             var cookies = new CookieContainer();
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
@@ -69,15 +77,19 @@ namespace Jackett.Utils.Clients
                 proxyServer = new WebProxy(Startup.ProxyConnection, false);
                 useProxy = true;
             }
-            var client = new HttpClient(new HttpClientHandler
+
+            ClearanceHandler clearanceHandlr = new ClearanceHandler();
+            HttpClientHandler clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
                 Proxy = proxyServer,
                 UseProxy = useProxy
-            });
-            
+            };
+
+            clearanceHandlr.InnerHandler = clientHandlr;
+            var client = new HttpClient(clearanceHandlr);
 
             if (webRequest.EmulateBrowser)
                 client.DefaultRequestHeaders.Add("User-Agent",  BrowserUtil.ChromeUserAgent);
@@ -176,7 +188,7 @@ namespace Jackett.Utils.Clients
                     var nameSplit = value.IndexOf('=');
                     if (nameSplit > -1)
                     {
-                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') + 1)));
+                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';') + 1))));
                     }
                 }
 

@@ -241,6 +241,17 @@ namespace Jackett.Indexers
                     }
 
                     release.Category = MapTrackerCatToNewznab(category);
+
+                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[src=\"/images/FL.png\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }
