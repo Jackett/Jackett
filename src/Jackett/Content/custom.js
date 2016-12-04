@@ -47,7 +47,6 @@ function loadJackettSettings() {
 
 function reloadIndexers() {
     $('#indexers').hide();
-    $('#indexers > .indexer').remove();
     var jqxhr = $.get("get_indexers", function (data) {
         var configuredIndexers = [];
         var unconfiguredIndexers = [];
@@ -69,47 +68,6 @@ function reloadIndexers() {
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
-}
-
-function displayIndexers(items) {
-    var indexerTemplate = Handlebars.compile($("#configured-indexer").html());
-    var unconfiguredIndexerTemplate = Handlebars.compile($("#unconfigured-indexer").html());
-    $('#unconfigured-indexers-template').empty();
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
-        item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
-        if (item.configured)
-            $('#indexers').append(indexerTemplate(item));
-        else
-            $('#unconfigured-indexers-template').append($(unconfiguredIndexerTemplate(item)));
-    }
-
-    var addIndexerButton = $($('#add-indexer').html());
-    addIndexerButton.appendTo($('#indexers'));
-
-    addIndexerButton.click(function () {
-        $("#modals").empty();
-        var dialog = $($("#select-indexer").html());
-        dialog.find('#unconfigured-indexers').html($('#unconfigured-indexers-template').html());
-        $("#modals").append(dialog);
-        dialog.modal("show");
-        $('.indexer-setup').each(function (i, btn) {
-            var $btn = $(btn);
-            var id = $btn.data("id");
-            var link = $btn.data("link");
-            $btn.click(function () {
-                $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                    displayIndexerSetup(id, link);
-                });
-            });
-        });
-    });
-
-    $('#indexers').fadeIn();
-    prepareSetupButtons();
-    prepareTestButtons();
-    prepareDeleteButtons();
 }
 
 function displayConfiguredIndexersList(indexers) {
