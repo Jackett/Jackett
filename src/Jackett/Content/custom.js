@@ -55,7 +55,7 @@ function reloadIndexers() {
             item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
             item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
             
-            item.state = "success";
+            item.state = "unknown";
 
             item.main_cats_list = [];
             for (var catID in item.caps) {
