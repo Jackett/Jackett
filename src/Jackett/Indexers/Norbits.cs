@@ -231,7 +231,8 @@ namespace Jackett.Indexers
             var request = BuildQuery(searchTerm, query, searchUrl);
 
             // Getting results & Store content
-            var results = await QueryExec(request);
+            var response = await RequestBytesWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
+            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
             _fDom = results.Content;
 
             try
@@ -428,6 +429,7 @@ namespace Jackett.Indexers
         {
             var parameters = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
+            string searchterm = term;
 
             // Building our tracker query
             parameters.Add("incldead", "0");
@@ -437,12 +439,12 @@ namespace Jackett.Indexers
             // If search term provided
             if (!string.IsNullOrWhiteSpace(term))
             {
-                parameters.Add("search", term);
+                searchterm = "search=" + HttpUtility.UrlEncode(term, Encoding.GetEncoding(28591));
             }
             else
             {
                 // Showing all torrents (just for output function)
-                parameters.Add("search", "");
+                searchterm = "search=";
                 term = "all";
             }
 
@@ -457,7 +459,7 @@ namespace Jackett.Indexers
 
 
             // Building our query
-            url += "?" + parameters.GetQueryString() + "&" + CatTest;
+            url += "?" + searchterm + "&" + parameters.GetQueryString() + "&" + CatTest;
 
             Output("\nBuilded query for \"" + term + "\"... " + url);
 
