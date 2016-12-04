@@ -42,6 +42,12 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -60,11 +66,17 @@ namespace Jackett.Indexers
                 var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            if (!loggedInCheck.Content.Contains("logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+            }
+
             string Url;
             if (string.IsNullOrEmpty(query.GetQueryString()))
                 Url = SearchUrl;
@@ -85,9 +97,14 @@ namespace Jackett.Indexers
 
             try
             {
+                var globalFreeleech = false;
                 var parser = new HtmlParser();
                 var document = parser.Parse(htmlResponse);
-                var rows = document.QuerySelectorAll(".torrent_table > tbody > tr:not(:First-child)");
+
+                if (document.QuerySelector("div.nicebar > span:contains(\"Personal Freeleech\")") != null)
+                    globalFreeleech = true;
+
+                var rows = document.QuerySelectorAll(".torrent_table > tbody > tr[class^='torrent row']");
 
                 foreach (var row in rows)
                 {
@@ -101,7 +118,10 @@ namespace Jackett.Indexers
                     }
                     else
                     {
-                        title = title.Remove(title.LastIndexOf("."));
+                        if (title.Length > 5 && title.Substring(title.Length - 5).Contains("."))
+                        {
+                            title = title.Remove(title.LastIndexOf("."));
+                        }
                     }
 
                     release.Title = title;
@@ -118,6 +138,19 @@ namespace Jackett.Indexers
                     release.Size = ReleaseInfo.GetBytes(timeAnchor.ParentElement.PreviousElementSibling.TextContent);
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+
+                    release.Files = ParseUtil.CoerceLong(row.QuerySelector("td > div:contains(\"Files:\")").TextContent.Split(':')[1].Trim());
+                    release.Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-last-child(3)").TextContent);
+
+                    if (globalFreeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.QuerySelector("img[alt=\"Freeleech\"]") != null)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
 
                     releases.Add(release);
                 }

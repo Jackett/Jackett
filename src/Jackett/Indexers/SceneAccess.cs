@@ -98,10 +98,8 @@ namespace Jackett.Indexers
                 { "submit", "come on in" }
             };
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, LoginUrl);
-            await ConfigureIfOK(result.Cookies + " " + loginPage.Cookies, result.Content != null && result.Content.Contains("nav_profile"), () =>
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SiteLink, LoginUrl);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("nav_profile"), () =>
             {
                 CQ dom = result.Content;
                 var messageEl = dom["#login_box_desc"];
@@ -150,6 +148,15 @@ namespace Jackett.Indexers
                     var cat = qRow.Find(".ttr_type a").Attr("href").Replace("?cat=",string.Empty);
 
                     release.Category = MapTrackerCatToNewznab(cat);
+
+                    var files = qRow.Find("td.ttr_size > a").Text().Split(' ')[0];
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td.ttr_snatched").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

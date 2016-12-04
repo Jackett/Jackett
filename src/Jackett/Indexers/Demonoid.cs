@@ -30,7 +30,7 @@ namespace Jackett.Indexers
         public Demonoid(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Demonoid",
                 description: "Demonoid",
-                link: "http://www.demonoid.pw/",
+                link: "http://www.dnoid.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
@@ -55,11 +55,11 @@ namespace Jackett.Indexers
                 { "Submit", "Submit" }
             };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("user_control_panel.php"), () =>
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SiteLink, SiteLink);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Cookies.Contains("uid="), () =>
             {
                 CQ dom = result.Content;
-                var errorMessage = dom[".red"].ElementAt(1).Cq().Text().Trim();
+                string errorMessage = dom["form[id='bb_code_form']"].Parent().Find("font[class='red']").Text();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -118,7 +118,7 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                     release.Guid = release.Comments;
 
-                    var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(1).Cq();
+                    var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(0).Cq();
                     release.Link = new Uri(SiteLink + qDownload.Attr("href"));
 
                     var sizeStr = rowB.ChildElements.ElementAt(3).Cq().Text();
@@ -126,6 +126,12 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
+
+                    var grabs = rowB.Cq().Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

@@ -16,13 +16,14 @@ namespace Jackett.Indexers
 {
     public class SceneTime : BaseIndexer, IIndexer
     {
+        private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse_API.php"; } }
         private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
 
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -35,7 +36,7 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
+                configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
         {
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(3, TorznabCatType.MoviesDVD);
@@ -78,13 +79,59 @@ namespace Jackett.Indexers
             AddCategoryMapping(11, TorznabCatType.AudioVideo);
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            CQ cq = loginPage.Content;
+            var result = this.configData;
+            result.Captcha.Version = "2";
+            CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
+            if (recaptcha.Length != 0)
+            {
+                result.CookieHeader.Value = loginPage.Cookies;
+                result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+                return result;
+            }
+            else
+            {
+                var stdResult = new ConfigurationDataBasicLogin();
+                stdResult.Username.Value = configData.Username.Value;
+                stdResult.Password.Value = configData.Password.Value;
+                stdResult.CookieHeader.Value = loginPage.Cookies;
+                return stdResult;
+            }
+        }
+
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
-                { "password", configData.Password.Value }
+                { "password", configData.Password.Value },
+                { "g-recaptcha-response", configData.Captcha.Value }
             };
+
+            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            {
+                CookieHeader = configData.Captcha.Cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (results.Count() == 0)
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
+
+                    SaveConfig();
+                    IsConfigured = true;
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
@@ -116,12 +163,12 @@ namespace Jackett.Indexers
             }
 
             var results = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
-            List<ReleaseInfo> releases = ParseResponse(results.Content);
+            List<ReleaseInfo> releases = ParseResponse(query, results.Content);
             
             return releases;
         }
 
-        public List<ReleaseInfo> ParseResponse(string htmlResponse)
+        public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
@@ -152,6 +199,9 @@ namespace Jackett.Indexers
                     var qDescCol = descCol.Cq();
                     var qLink = qDescCol.Find("a");
                     release.Title = qLink.Text();
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Description = release.Title;
                     release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     release.Guid = release.Comments;
@@ -165,6 +215,13 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(seedersIndex).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(leechersIndex).Cq().Text().Trim()) + release.Seeders;
+
+                    if (row.Cq().Find("font > b:contains(Freeleech)").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

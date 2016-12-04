@@ -1,0 +1,143 @@
+﻿---
+  site: tspate
+  name: Tspate
+  description: "A French gerneral tracker"
+  language: fr-fr
+  links:
+    - https://www.tspate.me/
+
+  caps:
+    categories:
+      50: TV/Anime # Anime: Tout
+      40: PC # Apps: Windows
+      41: PC/Mac # Apps: Mac
+      42: PC/Phone-Android # Apps: Android
+      43: PC/Phone-IOS # Apps: Ipod/Iphone
+      44: PC # Apps: Autres
+      45: PC # Apps: Linux
+      27: Books # E-Books: Livres
+      28: Books # E-Books: Audio
+      29: Books/Comics # E-Books: Comics
+      30: Books # E-Books: Mangas
+      32: Books # E-Books: Bds
+      31: Books # E-Books: Presse
+      63: Books # E-Books: ePUB
+      1: Movies/SD # Films: DVDRip
+      2: Movies/SD # Films: DVDRip VOSTFR
+      3: Movies/DVD # Films: DVD-R
+      4: Movies/HD # Films: 720p
+      5: Movies/HD # Films: 1080p
+      6: Movies/BluRay # Films: BluRay x264 et x265
+      7: Movies/3D # Films: BluRay-3D
+      11: Movies/HD # Films: BDRip
+      9: Movies/DVD # Films: R5
+      10: Movies/SD # Films: DVDSCR
+      56: Movies/HD # Films: mHD
+      12: Movies/HD # Films: BRRip
+      13: Movies/HD # Films: WEBRip
+      58: Movies/HD # Films: WEBRip 720p
+      59: Movies/HD # Films: WEBRip 1080p
+      8: Movies/SD # Films: Cam / TS
+      62: Movies/HD # Films: Uhd4k
+      35: Console/Xbox # Jeux: XBOX
+      36: Console/Wii # Jeux: WII
+      37: Console/PSP # Jeux: PSP
+      38: Console/NDS # Jeux: DS
+      39: PC/Phone-Android # Jeux: Android
+      34: Console/PS3 # Jeux: PS3
+      55: PC/Mac # Jeux: Mac
+      33: PC/Games # Jeux: PC
+      46: Audio/MP3 # Musiques: MP3
+      47: Audio/Lossless # Musiques: FLAC
+      48: Audio # Musiques: WMA
+      49: Audio # Musiques: Autres
+      14: TV/SD # Series: HDTV
+      15: TV # Series: TV VOSTFR
+      16: TV # Series: TV VOSTA
+      17: TV # Series: TV PACK
+      18: TV/HD # Series: HDTV 1080p
+      57: TV/HD # Series: TVHD VOSTFR
+      20: TV # Series: TV VO
+      19: TV/HD # Series: HDTV 720p
+      64: TV/SD # Series: WEBRip
+      60: TV/HD # Series: WEBRip 720p
+      61: TV/HD # Series: WEBRip 1080p
+      21: TV/SD # Series: DVD-R TV
+      26: TV # Television: Television
+      24: TV # Television: Spectacles
+      23: TV/Sport # Television: Sports
+      25: TV/Anime # Television: Animes
+      22: TV/Documentary # Television: Documentaires
+      51: XXX # XXX: Tous
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: account-login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: "yes"
+      returnto: "/"
+    error:
+    - selector: div#nfobar > p#msgError
+    test:
+      path: torrents-search.php
+
+  ratio:
+    path: torrents-search.php
+    selector: div#infobar0 > ul > li:nth-child(1) > font:last-child
+
+  search:
+    path: torrents-search.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+
+    rows:
+      selector: table.ttable_headinner > tbody > tr.t-row
+      after: 1
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      comments:
+        selector: a[href^="comments.php"]
+        attribute: href
+      size:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: small > i
+        filters:
+          - name: replace
+            args: ["Date: ", ""]
+          - name: replace
+            args: ["le ", ""]
+          - name: dateparse
+            args: "15:04:05 02-01-2006"
+      downloadvolumefactor:
+        case:
+          img[src="images/free.gif"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

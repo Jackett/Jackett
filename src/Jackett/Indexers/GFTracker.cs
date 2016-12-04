@@ -63,16 +63,19 @@ namespace Jackett.Indexers
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
             CQ cq = loginPage.Content;
-            var result = new ConfigurationDataRecaptchaLogin();
+            var result = this.configData;
             CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
             if(recaptcha.Length != 0)   // recaptcha not always present in login form, perhaps based on cloudflare uid or just phase of the moon
             {
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+                result.Captcha.Version = "2";
                 return result;
             } else
             {
                 var stdResult = new ConfigurationDataBasicLogin();
+                stdResult.Username.Value = configData.Username.Value;
+                stdResult.Password.Value = configData.Password.Value;
                 stdResult.CookieHeader.Value = loginPage.Cookies;
                 return stdResult;
             }           

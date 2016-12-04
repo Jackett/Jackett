@@ -104,10 +104,13 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href").TrimStart('/'));
                     release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
@@ -127,6 +130,18 @@ namespace Jackett.Indexers
 
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(pubDateRomania, romaniaTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
+
+                    var grabs = row.Cq().Find("td.table_snatch").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (row.Cq().Find("img[alt=\"100% Free\"]").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.Cq().Find("img[alt=\"50% Free\"]").Any())
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

@@ -133,7 +133,17 @@ namespace Jackett.Indexers
 					release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text());
 					release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text()) + release.Seeders;
 
-					releases.Add(release);
+                    var files = row.Cq().Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    if (row.Cq().Find("img[src=\"/static//common/browse/freeleech.png\"]").Any())
+                         release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
+                    releases.Add(release);
 				}
 			}
 			catch (Exception ex)

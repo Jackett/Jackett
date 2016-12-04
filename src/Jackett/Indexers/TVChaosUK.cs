@@ -194,6 +194,12 @@ namespace Jackett.Indexers
             }
             else
             {
+                // The TVChaos UK search requires an exact match of the search string.
+                // But it seems like they just send the unfiltered search to the SQL server in a like query (LIKE '%$searchstring%').
+                // So we replace any whitespace/special character with % to make the search more usable.
+                Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+                searchString = ReplaceRegex.Replace(searchString, "%");
+
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
                     { "keywords",  searchString },
@@ -236,6 +242,19 @@ namespace Jackett.Indexers
                         // If its not apps or audio we can only mark as general TV
                         if (release.Category == 0)
                             release.Category = 5030;
+
+                        var grabs = qRow.Find("td:nth-child(6)").Text();
+                        release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                        if (qRow.Find("img[alt*=\"Free Torrent\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        if (qRow.Find("img[alt*=\"x2 Torrent\"]").Length >= 1)
+                            release.UploadVolumeFactor = 2;
+                        else
+                            release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
                     }

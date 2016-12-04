@@ -129,6 +129,15 @@ namespace Jackett.Indexers
                     //if (!release.Title.ToLower().Contains(title.ToLower()))
                     //    continue;
 
+                    var files = row.Cq().Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = row.Cq().Find("td:nth-child(8)").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

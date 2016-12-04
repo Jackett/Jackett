@@ -1,54 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Utils
 {
     public static class ParseUtil
     {
+        private static readonly Regex InvalidXmlChars =
+            new Regex(
+                @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
+                RegexOptions.Compiled);
+
+        public static string NormalizeSpace(string s)
+        {
+            return s.Trim();
+        }
+
+        public static string NormalizeNumber(string s)
+        {
+            var normalized = NormalizeSpace(s);
+            normalized = normalized.Replace("-", "0");
+            normalized = normalized.Replace(",", "");
+            return normalized;
+        }
+
+        public static string RemoveInvalidXmlChars(string text)
+        {
+            return string.IsNullOrEmpty(text) ? "" : InvalidXmlChars.Replace(text, "");
+        }
+
         public static double CoerceDouble(string str)
         {
-            return double.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
+            return double.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
         public static float CoerceFloat(string str)
         {
-            return float.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
+            return float.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
         public static int CoerceInt(string str)
         {
-            return int.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
+            return int.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
         public static long CoerceLong(string str)
         {
-            return long.Parse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture);
+            return long.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
         }
-
 
         public static bool TryCoerceDouble(string str, out double result)
         {
-            return double.TryParse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+            return double.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
         public static bool TryCoerceFloat(string str, out float result)
         {
-            return float.TryParse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+            return float.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
         public static bool TryCoerceInt(string str, out int result)
         {
-            return int.TryParse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+            return int.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
         public static bool TryCoerceLong(string str, out long result)
         {
-            return long.TryParse(str.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+            return long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
-
     }
 }

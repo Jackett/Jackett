@@ -167,6 +167,11 @@ namespace Jackett.Indexers
                             if (secondSizeStr.Length > 3 && secondSizeStr.Contains("(") && secondSizeStr.Contains(")"))
                             { sizeStr = secondSizeStr.Replace("(", "").Replace(")", "").Trim(); }
                         }
+
+                        if(string.IsNullOrWhiteSpace(title))
+                        {
+                            title = dom.Find("div.title_text").Text() + " - " + qRow.Find("div.details_title > a").Text();
+                        }
                         
                         var release = new ReleaseInfo();
 
@@ -181,10 +186,21 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
                         release.Category = 2000;
-                        release.Comments = commentsLink;
+                        release.Comments = movieReleasesLink;
                         if (imdb_id > 0) {
                             release.Imdb = imdb_id;
                         }
+
+                        var files = qRow.Find("div[id^=\"filelist\"] tr").Count()-1;
+                        release.Files = files;
+                        release.Grabs = ParseUtil.CoerceLong(grabs);
+
+                        if (freeleech)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
 
                         if (configFreeLeechOnly && !freeleech)
                         {

@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 logger: l,
                 p: ps,
                 downloadBase: "https://www.torrentleech.org/download/",
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLogin("For best results, change the 'Default Number of Torrents per Page' setting to the maximum in your profile on the TorrentLeech webpage."))
         {
 
             AddCategoryMapping(8, TorznabCatType.MoviesSD); // cam
@@ -82,6 +82,12 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -97,13 +103,20 @@ namespace Jackett.Indexers
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
+            if (!loggedInCheck.Content.Contains("/logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+            }
+
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
+            searchString = searchString.Replace('-', ' '); // remove dashes as they exclude search strings
             var searchUrl = SearchUrl;
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -167,6 +180,12 @@ namespace Jackett.Indexers
 
                     var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/", string.Empty);
                     release.Category = MapTrackerCatToNewznab(category);
+
+                    var grabs = qRow.Find("td:nth-child(6)").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

@@ -73,7 +73,8 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            if(configJson != null)
+                configData.LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -130,20 +131,27 @@ namespace Jackett.Indexers
         private async Task ProcessPage(List<ReleaseInfo> releases, string searchUrl)
         {
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            // On IP change the cookies become invalid, login again and retry
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            }
+
             var results = response.Content;
             try
             {
                 CQ dom = results;
 
-                var rows = dom["#content table:eq(4) tr"];
-                foreach (var row in rows.Skip(1))
+                var rows = dom["table > tbody:has(tr > td.colhead) > tr:not(:has(td.colhead))"];
+                foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
 
                     var link = row.Cq().Find("td:eq(1) a:eq(1)").First();
                     release.Guid = new Uri(SiteLink + link.Attr("href"));
                     release.Comments = release.Guid;
-                    release.Title = link.Text().Trim();
+                    release.Title = link.Get(0).FirstChild.ToString();
                     release.Description = release.Title;
 
                     // If we search an get no results, we still get a table just with no info.
@@ -170,6 +178,20 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.Cq().Find("td:eq(8)").First().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.Cq().Find("td:eq(9)").First().Text().Trim()) + release.Seeders;
+
+                    var files = row.Cq().Find("td:nth-child(3)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = row.Cq().Find("td:nth-child(8)").Text();
+                    if (grabs != "----")
+                        release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (row.Cq().Find("font[color=\"green\"]:contains(F):contains(L)").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

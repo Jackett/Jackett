@@ -226,7 +226,10 @@
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
+<<<<<<< HEAD
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNorbits.cs" />
+=======
+>>>>>>> refs/remotes/Jackett/master
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilterAndPasskey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
@@ -585,9 +588,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\piratethenet.png">
+<<<<<<< HEAD
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\norbits.png">
+=======
+>>>>>>> refs/remotes/Jackett/master
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\logos\torrentheaven.png">

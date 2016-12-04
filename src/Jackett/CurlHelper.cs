@@ -173,7 +173,7 @@ namespace Jackett
                 var headerParts = headerString.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 var headers = new List<string[]>();
                 var headerCount = 0;
-                HttpStatusCode status = HttpStatusCode.InternalServerError;
+                HttpStatusCode status = HttpStatusCode.NotImplemented;
                 var cookieBuilder = new StringBuilder();
                 var cookies = new List<Tuple<string, string>>();
                 foreach (var headerPart in headerParts)
@@ -216,6 +216,31 @@ namespace Jackett
                     cookieBuilder.AppendFormat("{0} ", cookieGroup.Last().Item2);
                 }
 
+                // add some debug output to track down the problem causing people getting InternalServerError results
+                if (status == HttpStatusCode.NotImplemented || status == HttpStatusCode.InternalServerError)
+                {
+                    try
+                    {
+                        OnErrorMessage("got NotImplemented/InternalServerError");
+                        OnErrorMessage("request.Method: " + curlRequest.Method);
+                        OnErrorMessage("request.Url: " + curlRequest.Url);
+                        OnErrorMessage("request.Cookies: " + curlRequest.Cookies);
+                        OnErrorMessage("request.Referer: " + curlRequest.Referer);
+                        OnErrorMessage("request.RawPOSTDdata: " + curlRequest.RawPOSTDdata);
+                        OnErrorMessage("cookies: "+ cookieBuilder.ToString().Trim());
+                        OnErrorMessage("headerString:\n" + headerString);
+                    
+                        foreach (var headerPart in headerParts)
+                        {
+                            OnErrorMessage("headerParts: "+headerPart);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        OnErrorMessage(string.Format("CurlHelper: error while handling NotImplemented/InternalServerError:\n{0}", ex));
+                    }
+                }
+                
                 var contentBytes = Combine(contentBuffers.ToArray());
                 var curlResponse = new CurlResponse(headers, contentBytes, status, cookieBuilder.ToString().Trim());
                 return curlResponse;
