@@ -32,11 +32,17 @@
         </div>
         <hr />
         <div class="pull-right">
+            <button id="jackett-add-indexer" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
+            </button>
             <button id="jackett-show-search" class="btn btn-success btn-sm">
-                <i class="fa fa-search"></i> Manual Search <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Manual Search 
             </button>
             <button id="jackett-show-releases" class="btn btn-primary btn-sm">
-                <i class="fa fa-database"></i>  View cached releases <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                <i class="fa fa-database"></i>  View cached releases
+            </button>
+            <button id="jackett-test-all" class="btn btn-warning btn-sm">
+                <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> Test All 
             </button>
         </div>
         <h3>Configured Indexers</h3>
@@ -170,49 +176,83 @@
         </div>
     </script>
 
-    <script id="configured-indexer" type="text/x-handlebars-template">
-        <div class="configured-indexer indexer card">
-            <div class="indexer-logo">
-                <!-- Make section browser searchable -->
-                <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
-            </div>
-            <div class="indexer-buttons">
-                <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
-                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
-                </a>
-                <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
-                    Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="indexer-host">
-                <b>Torznab Host:</b>
-                <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
-                <b>CouchPotato Host:</b>
-                {{#if potatoenabled}}
 
-                <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
-                {{else}}
-                <input class="form-control" type="text" value="Not available" placeholder="Torznab Host" readonly="">
-                {{/if}}
-            </div>
-        </div>
+    <script id="configured-indexer-table" type="text/x-handlebars-template">
+        <table class="indexer-table configured-indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <thead>
+                <tr>
+                    <th>Indexer</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each indexers}}
+                <tr class="configured-indexer-row">
+                    <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                    <td class="fit">
+                        <div class="indexer-buttons">
+                            <button title="{{torznab_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</button>
+                            <button title="{{potato_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</button>
+
+                            <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                            </button>
+                            <button title="Delete" class="btn btn-danger btn-xs indexer-button-delete" data-id="{{id}}">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                            <button title="{{last_error}}" class="btn btn-warning btn-xs indexer-button-test" data-toggle="tooltip" data-id="{{id}}" data-state="{{state}}">
+                                Test
+                                <span class="glyphicon" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>      
     </script>
-    <script id="unconfigured-indexer" type="text/x-handlebars-template">
-        <div class="unconfigured-indexer card">
-            <div class="indexer-logo indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                <!-- Make section browser searchable -->
-                <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
-              
-            </div>
-        </div>
+
+    <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
+        <table class="indexer-table configured-indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <thead>
+                <tr>
+                    <th>Indexer</th>
+                    <th>Categories</th>
+                    <th>Language</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each indexers}}
+                <tr class="unconfigured-indexer-row">
+                    <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                    <td>{{mains_cats}}</td>
+                    <td>{{language}}</td>
+                    <td class="fit">
+                        <div class="indexer-buttons">
+                            <button title="Configure" class="btn btn-success btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
     </script>
 
     <script id="jackett-releases" type="text/x-handlebars-template">
@@ -497,14 +537,7 @@
             </div>
         </div>
     </script>
-    <script id="add-indexer" type="text/x-handlebars-template">
-        <button class="indexer card add-indexer" data-toggle="modal">
-            <div class="indexer-add-content">
-                <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <div class="light-text">Add</div>
-            </div>
-        </button>
-    </script>
+
     <script id="spinner" type="text/x-handlebars-template">
         <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>
