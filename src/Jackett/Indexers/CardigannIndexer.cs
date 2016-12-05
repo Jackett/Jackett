@@ -915,7 +915,7 @@ namespace Jackett.Indexers
 
                         // if DateHeaders is set go through the previous rows and look for the header selector
                         var DateHeaders = Definition.Search.Rows.Dateheaders;
-                        if (DateHeaders != null)
+                        if (release.PublishDate == null && DateHeaders != null)
                         {
                             var PrevRow = Row.PreviousElementSibling;
                             string value = null;
