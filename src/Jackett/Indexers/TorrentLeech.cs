@@ -136,6 +136,10 @@ namespace Jackett.Indexers
                     searchUrl += cat;
                 }
             }
+            else
+            {
+                searchUrl += "newfilter/2"; // include 0day and music
+            }
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
