@@ -26,6 +26,7 @@ namespace Jackett.Models.IndexerConfig
         }
 
         public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
+        public HiddenItem LastError { get; private set; } = new HiddenItem { Name = "LastError" };
 
         public ConfigurationData()
         {

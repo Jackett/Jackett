@@ -233,6 +233,7 @@ namespace Jackett.Controllers
                     item["configured"] = indexer.IsConfigured;
                     item["site_link"] = indexer.SiteLink;
                     item["language"] = indexer.Language;
+                    item["last_error"] = indexer.LastError;
                     item["potatoenabled"] = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => PotatoController.MOVIE_CATS.Contains(i));
 
                     var caps = new JObject();
@@ -257,19 +258,24 @@ namespace Jackett.Controllers
         public async Task<IHttpActionResult> Test()
         {
             JToken jsonReply = new JObject();
+            IIndexer indexer = null;
             try
             {
                 var postData = await ReadPostDataJson();
                 string indexerString = (string)postData["indexer"];
+                indexer = indexerService.GetIndexer(indexerString);
                 await indexerService.TestIndexer(indexerString);
-                jsonReply["name"] = indexerService.GetIndexer(indexerString).DisplayName;
+                jsonReply["name"] = indexer.DisplayName;
                 jsonReply["result"] = "success";
+                indexer.LastError = null;
             }
             catch (Exception ex)
             {
                 logger.Error(ex, "Exception in test_indexer");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = ex.Message;
+                if (indexer != null)
+                    indexer.LastError = ex.Message;
             }
             return Json(jsonReply);
         }

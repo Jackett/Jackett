@@ -39,7 +39,17 @@ namespace Jackett.Indexers
             set { configData.CookieHeader.Value = value; }
         }
 
-
+        public string LastError
+        {
+            get { return configData.LastError.Value; }
+            set
+            {
+                bool SaveNeeded = configData.LastError.Value != value && IsConfigured;
+                configData.LastError.Value = value;
+                if (SaveNeeded)
+                    SaveConfig();
+            }
+        }
 
         protected ConfigurationData configData;
 
