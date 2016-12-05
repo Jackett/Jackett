@@ -68,6 +68,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SceneFZ
  * SceneTime
  * SDBits
+ * Secret Cinema
  * Shareisland
  * Shazbat
  * SpeedCD
