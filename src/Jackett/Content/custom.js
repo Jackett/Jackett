@@ -55,7 +55,10 @@ function reloadIndexers() {
             item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
             item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
             
-            item.state = "unknown";
+            if (item.last_error)
+                item.state = "error";
+            else
+                item.state = "success";
 
             item.main_cats_list = [];
             for (var catID in item.caps) {
@@ -225,10 +228,11 @@ function updateTestState(id, state, message)
 {
     var btn = $(".indexer-button-test[data-id=" + id + "]");
     if (message) {
+        btn.tooltip("hide");
         btn.data('bs.tooltip', false).tooltip({ title: message });
     }
     var icon = btn.find("span");
-    icon.removeClass("glyphicon-ok test-success glyphicon-remove test-error glyphicon-refresh spinner test-inprogres");
+    icon.removeClass("glyphicon-ok test-success glyphicon-alert test-error glyphicon-refresh spinner test-inprogres");
 
     if (state == "success") {
         icon.addClass("glyphicon-ok test-success");
