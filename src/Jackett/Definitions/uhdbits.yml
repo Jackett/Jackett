@@ -51,8 +51,6 @@
     rows:
       selector: table#torrent_table > tbody > tr.torrent
     fields:
-      description:
-        selector: div.tags
       download:
         selector: a[title="Download"]
         attribute: href
