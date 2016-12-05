@@ -106,6 +106,7 @@ function displayConfiguredIndexersList(indexers) {
     $('#indexers').append(indexersTable);
     prepareTestButtons();
     $('#indexers').fadeIn();
+    prepareSearchButtons();
     prepareSetupButtons();
     prepareDeleteButtons();
     prepareCopyButtons();
@@ -209,6 +210,16 @@ function prepareDeleteButtons() {
             }).always(function () {
                 reloadIndexers();
             });
+        });
+    });
+}
+
+function prepareSearchButtons() {
+    $('.indexer-button-search').each(function (i, btn) {
+        var $btn = $(btn);
+        var id = $btn.data("id");
+        $btn.click(function() {
+            showSearch(id);
         });
     });
 }
@@ -500,6 +511,156 @@ function updateReleasesRow(row)
     }
 }
 
+function showSearch(selectedIndexer) {
+    $('#select-indexer-modal').remove();
+    var jqxhr = $.get("get_indexers", function (data) {
+        var scope = {
+            items: data.items
+        };
+
+        var indexers = [];
+        indexers.push({
+            id: '', name: '-- All --'
+        });
+        for (var i = 0; i < data.items.length; i++) {
+            if (data.items[i].configured === true) {
+                indexers.push(data.items[i]);
+            }
+        }
+
+        var releaseTemplate = Handlebars.compile($("#jackett-search").html());
+        var releaseDialog = $(releaseTemplate({
+            indexers: indexers
+        }));
+        if (selectedIndexer)
+            releaseDialog.find("#searchTracker").val(selectedIndexer);
+        $("#modals").append(releaseDialog);
+        releaseDialog.modal("show");
+
+        releaseDialog.on('shown.bs.modal', function () {
+            releaseDialog.find('#searchquery').focus();
+        });
+
+        var setCategories = function (tracker, items) {
+            var cats = {};
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].configured === true && (items[i].id === tracker || tracker === '')) {
+                    indexers["'" + items[i].id + "'"] = items[i].name;
+                    for (var prop in items[i].caps) {
+                        cats[prop] = items[i].caps[prop];
+                    }
+                }
+            }
+            var select = $('#searchCategory');
+            select.html("<option value=''>-- All --</option>");
+            $.each(cats, function (value, key) {
+                select.append($("<option></option>")
+                    .attr("value", value).text(key + ' (' + value + ')'));
+            });
+        };
+
+        setCategories('', data.items);
+        $('#searchTracker').change(jQuery.proxy(function () {
+            var trackerId = $('#searchTracker').val();
+            setCategories(trackerId, this.items);
+        }, scope));
+
+        document.getElementById("searchquery")
+        .addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode == 13) {
+                document.getElementById("jackett-search-perform").click();
+            }
+        });
+
+        $('#jackett-search-perform').click(function () {
+            if ($('#jackett-search-perform').text().trim() !== 'Search trackers') {
+                // We are searchin already
+                return;
+            }
+            var queryObj = {
+                Query: releaseDialog.find('#searchquery').val(),
+                Category: releaseDialog.find('#searchCategory').val(),
+                Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
+            };
+            $('#searchResults').empty();
+
+            $('#jackett-search-perform').html($('#spinner').html());
+            var jqxhr = $.post("search", queryObj, function (data) {
+                $('#jackett-search-perform').html('Search trackers');
+                var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
+                var results = $('#searchResults');
+                results.html($(resultsTemplate(data)));
+                results.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
+
+                results.find('table').DataTable(
+                    {
+                        "pageLength": 20,
+                        "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+                        "order": [[0, "desc"]],
+                        "columnDefs": [
+                            {
+                                "targets": 0,
+                                "visible": false,
+                                "searchable": false,
+                                "type": 'date'
+                            },
+                            {
+                                "targets": 1,
+                                "visible": true,
+                                "searchable": false,
+                                "iDataSort": 0
+                            },
+                            {
+                                "targets": 4,
+                                "visible": false,
+                                "searchable": false,
+                                "type": 'num'
+                            },
+                                {
+                                    "targets": 5,
+                                    "visible": true,
+                                    "searchable": false,
+                                    "iDataSort": 4
+                                }
+                        ],
+                        initComplete: function () {
+                            var count = 0;
+                            this.api().columns().every(function () {
+                                count++;
+                                if (count === 3 || count === 8) {
+                                    var column = this;
+                                    var select = $('<select><option value=""></option></select>')
+                                        .appendTo($(column.footer()).empty())
+                                        .on('change', function () {
+                                            var val = $.fn.dataTable.util.escapeRegex(
+                                                $(this).val()
+                                            );
+
+                                            column
+                                                .search(val ? '^' + val + '$' : '', true, false)
+                                                .draw();
+                                        });
+
+                                    column.data().unique().sort().each(function (d, j) {
+                                        select.append('<option value="' + d + '">' + d + '</option>')
+                                    });
+                                }
+                            });
+                        }
+                    });
+
+            }).fail(function () {
+                $('#jackett-search-perform').html('Search trackers');
+                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            });
+        });
+
+    }).fail(function () {
+        doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+    });
+}
+
 function bindUIButtons() {
     $('body').on('click', '.downloadlink', function (e, b) {
         $(e.target).addClass('jackettdownloaded');
@@ -630,147 +791,7 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-search").click(function () {
-        $('#select-indexer-modal').remove();
-        var jqxhr = $.get("get_indexers", function (data) {
-            var scope = {
-                items: data.items
-            };
-
-            var indexers = [];
-            indexers.push({ id: '', name: '-- All --' });
-            for (var i = 0; i < data.items.length; i++) {
-                if (data.items[i].configured === true) {
-                    indexers.push(data.items[i]);
-                }
-            }
-
-            var releaseTemplate = Handlebars.compile($("#jackett-search").html());
-            var releaseDialog = $(releaseTemplate({ indexers: indexers }));
-            $("#modals").append(releaseDialog);
-            releaseDialog.modal("show");
-            
-            releaseDialog.on('shown.bs.modal', function() {
-                releaseDialog.find('#searchquery').focus();
-            });
-
-            var setCategories = function (tracker, items) {
-                var cats = {};
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].configured === true && (items[i].id === tracker || tracker === '')) {
-                        indexers["'" + items[i].id + "'"] = items[i].name;
-                        for (var prop in items[i].caps) {
-                            cats[prop] = items[i].caps[prop];
-                        }
-                    }
-                }
-                var select = $('#searchCategory');
-                select.html("<option value=''>-- All --</option>");
-                $.each(cats, function (value, key) {
-                    select.append($("<option></option>")
-                       .attr("value", value).text(key + ' (' + value + ')'));
-                });
-            };
-
-            setCategories('', data.items);
-            $('#searchTracker').change(jQuery.proxy(function () {
-                var trackerId = $('#searchTracker').val();
-                setCategories(trackerId, this.items);
-            }, scope));
-
-            document.getElementById("searchquery")
-            .addEventListener("keyup", function (event) {
-                event.preventDefault();
-                if (event.keyCode == 13) {
-                    document.getElementById("jackett-search-perform").click();
-                }
-            });
-
-            $('#jackett-search-perform').click(function () {
-                if ($('#jackett-search-perform').text().trim() !== 'Search trackers') {
-                    // We are searchin already
-                    return;
-                }
-                var queryObj = {
-                    Query: releaseDialog.find('#searchquery').val(),
-                    Category: releaseDialog.find('#searchCategory').val(),
-                    Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
-                };
-                $('#searchResults').empty();
-
-                $('#jackett-search-perform').html($('#spinner').html());
-                var jqxhr = $.post("search", queryObj, function (data) {
-                    $('#jackett-search-perform').html('Search trackers');
-                    var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
-                    var results = $('#searchResults');
-                    results.html($(resultsTemplate(data)));
-                    results.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
-
-                    results.find('table').DataTable(
-                    {
-                        "pageLength": 20,
-                        "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
-                        "order": [[0, "desc"]],
-                        "columnDefs": [
-                           {
-                               "targets": 0,
-                               "visible": false,
-                               "searchable": false,
-                               "type": 'date'
-                           },
-                           {
-                               "targets": 1,
-                               "visible": true,
-                               "searchable": false,
-                               "iDataSort": 0
-                           },
-                           {
-                                "targets": 4,
-                                "visible": false,
-                                "searchable": false,
-                                "type": 'num'
-                           },
-                           {
-                                 "targets": 5,
-                                 "visible": true,
-                                 "searchable": false,
-                                 "iDataSort": 4
-                           }
-                        ],
-                        initComplete: function () {
-                            var count = 0;
-                            this.api().columns().every(function () {
-                                count++;
-                                if (count === 3 || count === 8) {
-                                    var column = this;
-                                    var select = $('<select><option value=""></option></select>')
-                                        .appendTo($(column.footer()).empty())
-                                        .on('change', function () {
-                                            var val = $.fn.dataTable.util.escapeRegex(
-                                                $(this).val()
-                                            );
-
-                                            column
-                                                .search(val ? '^' + val + '$' : '', true, false)
-                                                .draw();
-                                        });
-
-                                    column.data().unique().sort().each(function (d, j) {
-                                        select.append('<option value="' + d + '">' + d + '</option>')
-                                    });
-                                }
-                            });
-                        }
-                    });
-
-                }).fail(function () {
-                    $('#jackett-search-perform').html('Search trackers');
-                    doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
-                });
-            });
-
-        }).fail(function () {
-            doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
-        });
+        showSearch(null);
     });
 
     $("#view-jackett-logs").click(function () {
