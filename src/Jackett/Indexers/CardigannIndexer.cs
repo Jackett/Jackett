@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
+using System.Linq;
 
 namespace Jackett.Indexers
 {
@@ -121,6 +122,8 @@ namespace Jackett.Indexers
             //public string Remove { get; set; } // already inherited
             public selectorBlock Dateheaders { get; set; }
         }
+
+        protected readonly string[] OptionalFileds = new string[] { "imdb" };
 
         public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(manager: i,
@@ -820,10 +823,11 @@ namespace Jackett.Indexers
                         // Parse fields
                         foreach (var Field in Search.Fields)
                         {
-                            string value = handleSelector(Field.Value, Row);
-                            value = ParseUtil.NormalizeSpace(value);
+                            string value = null;
                             try
                             {
+                                value = handleSelector(Field.Value, Row);
+                                value = ParseUtil.NormalizeSpace(value);
                                 switch (Field.Key)
                                 {
                                     case "download":
@@ -891,12 +895,20 @@ namespace Jackett.Indexers
                                     case "uploadvolumefactor":
                                         release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
                                         break;
+                                    case "imdb":
+                                        Regex IMDBRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                        var IMDBMatch = IMDBRegEx.Match(value);
+                                        var IMDBId = IMDBMatch.Groups[1].Value;
+                                        release.Imdb = ParseUtil.CoerceLong(IMDBId);
+                                        break;
                                     default:
                                         break;
                                 }
                             }
                             catch (Exception ex)
                             {
+                                if (OptionalFileds.Contains(Field.Key))
+                                    continue;
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
                             }
                         }
