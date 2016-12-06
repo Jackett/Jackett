@@ -47,7 +47,14 @@ namespace Jackett.Utils.Clients
             logger.Debug(string.Format("WindowsWebClient:GetString(Url:{0})", request.Url));
             var result = await Run(request);
             logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            return Mapper.Map<WebClientStringResult>(result);
+            WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
+            string[] server;
+            if (stringResult.Headers.TryGetValue("server", out server))
+            {
+                if (server[0] == "cloudflare-nginx")
+                    stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
+            }
+            return stringResult;
         }
 
         private async Task<WebClientByteResult> Run(WebRequest webRequest)
@@ -141,6 +148,12 @@ namespace Jackett.Utils.Clients
             var result = new WebClientByteResult();
             result.Content = await response.Content.ReadAsByteArrayAsync();
 
+            foreach (var header in response.Headers)
+            {
+                IEnumerable<string> value = header.Value;
+                result.Headers[header.Key.ToLowerInvariant()] = value.ToArray();
+            }
+
             // some cloudflare clients are using a refresh header
             // Pull it out manually 
             if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
@@ -199,7 +212,6 @@ namespace Jackett.Utils.Clients
                 }
                 result.Cookies = cookieBuilder.ToString().Trim();
             }
-
             ServerUtil.ResureRedirectIsFullyQualified(webRequest, result);
             return result;
         }

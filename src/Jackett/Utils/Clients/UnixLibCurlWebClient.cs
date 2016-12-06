@@ -37,7 +37,14 @@ namespace Jackett.Utils.Clients
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
             var result = await RunCloudFlare(request);
             logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            return Mapper.Map<WebClientStringResult>(result);
+            WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
+            string[] server;
+            if (stringResult.Headers.TryGetValue("server", out server))
+            {
+                if (server[0] == "cloudflare-nginx")
+                    stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
+            }
+            return stringResult;
         }
 
         private string CloudFlareChallengeSolverSolve(string challengePageContent, Uri uri)
@@ -142,7 +149,11 @@ namespace Jackett.Utils.Clients
             {
                 foreach (var header in response.HeaderList)
                 {
-                    switch (header[0].ToLowerInvariant())
+                    var key = header[0].ToLowerInvariant();
+                    
+                    result.Headers[key] = new string[] { header[1] }; // doesn't support multiple identical headers?
+
+                    switch (key)
                     {
                         case "location":
                             result.RedirectingTo = header[1];
