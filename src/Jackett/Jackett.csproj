@@ -166,6 +166,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Indexers\Norbits.cs" />
     <Compile Include="Indexers\TVVault.cs" />
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Indexers\XSpeeds.cs" />
     <Compile Include="Models\GitHub\Asset.cs" />
     <Compile Include="Models\GitHub\Release.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNorbits.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataXthor.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataPhxBit.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
