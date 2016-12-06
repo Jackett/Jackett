@@ -52,6 +52,8 @@ namespace Jackett.Indexers
                 downloadBase: "https://norbits.net/download.php?id=",
                 configData: new ConfigurationDataNorbits())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+
             // Clean capabilities
             TorznabCaps.Categories.Clear();
 
@@ -110,7 +112,8 @@ namespace Jackett.Indexers
             {
                 Type = RequestType.GET,
                 Url = SiteLink,
-                Headers = _emulatedBrowserHeaders
+                Headers = _emulatedBrowserHeaders,
+                Encoding = Encoding
             };
 
             // Get index page for cookies
@@ -130,7 +133,8 @@ namespace Jackett.Indexers
                 Url = LoginUrl,
                 Headers = _emulatedBrowserHeaders,
                 Cookies = indexPage.Cookies,
-                Referer = SiteLink
+                Referer = SiteLink,
+                Encoding = Encoding
             };
 
             // Get login page -- (not used, but simulation needed by tracker security's checks)
@@ -147,7 +151,7 @@ namespace Jackett.Indexers
                 Url = LoginCheckUrl,
                 Headers = _emulatedBrowserHeaders,
                 Cookies = indexPage.Cookies,
-
+                Encoding = Encoding
             };
 
             // Perform loggin
@@ -231,9 +235,8 @@ namespace Jackett.Indexers
             var request = BuildQuery(searchTerm, query, searchUrl);
 
             // Getting results & Store content
-            var response = await RequestBytesWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
-            _fDom = results;
+            var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
+            _fDom = response.Content;
 
             try
             {
@@ -282,21 +285,6 @@ namespace Jackett.Indexers
 
                     // Release Name
                     var name = tRow.Find("td:eq(1) > a:eq(0)").Attr("title");
-                    
-                    Encoding iso_8859_1 = System.Text.Encoding.GetEncoding("iso-8859-1");
-                    Encoding utf_8 = System.Text.Encoding.UTF8;
-
-                    // Unicode string.
-                    string s_unicode = name;
-
-                    // Convert to ISO-8859-1 bytes.
-                    byte[] isoBytes = iso_8859_1.GetBytes(s_unicode);
-
-                    // Convert to UTF-8.
-                    byte[] utf8Bytes = Encoding.Convert(iso_8859_1, utf_8, isoBytes);
-                    string result = Encoding.UTF8.GetString(utf8Bytes);
-                    
-                    Output("Release: " + result);
 
                     // Category
                     var categoryId = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
@@ -393,7 +381,7 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo
                     {
                         Category = MapTrackerCatToNewznab(testcat.ToString()),
-                        Title = result,
+                        Title = name,
                         Seeders = seeders,
                         Peers = seeders + leechers,
                         MinimumRatio = 1,
