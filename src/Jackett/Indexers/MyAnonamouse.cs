@@ -48,6 +48,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping("61", TorznabCatType.BooksComics);
             AddCategoryMapping("91", TorznabCatType.BooksTechnical);
             AddCategoryMapping("80", TorznabCatType.BooksTechnical);

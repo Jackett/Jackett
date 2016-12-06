@@ -17,34 +17,11 @@ namespace Jackett.Utils.Clients
 {
     public class UnixLibCurlWebClient : IWebClient
     {
-        private Logger logger;
-
-        public UnixLibCurlWebClient(Logger l)
+        public UnixLibCurlWebClient(IProcessService p, Logger l, IConfigurationService c)
+            : base(p: p,
+                   l: l,
+                   c: c)
         {
-            logger = l;
-        }
-
-        public async Task<WebClientByteResult> GetBytes(WebRequest request)
-        {
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
-            var result = await RunCloudFlare(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
-            return result;
-        }
-
-        public async Task<WebClientStringResult> GetString(WebRequest request)
-        {
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
-            var result = await RunCloudFlare(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
-            string[] server;
-            if (stringResult.Headers.TryGetValue("server", out server))
-            {
-                if (server[0] == "cloudflare-nginx")
-                    stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
-            }
-            return stringResult;
         }
 
         private string CloudFlareChallengeSolverSolve(string challengePageContent, Uri uri)
@@ -54,7 +31,7 @@ namespace Jackett.Utils.Clients
             return clearanceUri;
         }
 
-        public void Init()
+        override public void Init()
         {
             try
             {
@@ -117,7 +94,7 @@ namespace Jackett.Utils.Clients
             return result;
         }
 
-        private async Task<WebClientByteResult> Run(WebRequest request)
+        override protected async Task<WebClientByteResult> Run(WebRequest request)
         {
             Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)

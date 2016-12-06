@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
@@ -38,6 +39,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(3, TorznabCatType.MoviesDVD);
             AddCategoryMapping(47, TorznabCatType.MoviesSD);

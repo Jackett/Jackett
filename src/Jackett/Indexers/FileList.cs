@@ -42,6 +42,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataFileList())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(24, TorznabCatType.TVAnime);
             AddCategoryMapping(11, TorznabCatType.Audio);
             AddCategoryMapping(15, TorznabCatType.TV);

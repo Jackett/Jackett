@@ -3,6 +3,7 @@
   name: Blu-bits
   description: "A HD tracker"
   language: en-us
+  encoding: UTF-8
   links:
     - https://blu-bits.com/
 

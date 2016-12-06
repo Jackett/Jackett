@@ -21,6 +21,7 @@ namespace Jackett.Indexers
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
+        public Encoding Encoding { get; protected set; }
         public string ID { get { return GetIndexerID(GetType()); } }
 
         public bool IsConfigured { get; protected set; }
@@ -239,7 +240,8 @@ namespace Jackett.Indexers
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,
-                    Cookies = redirRequestCookies
+                    Cookies = redirRequestCookies,
+                    Encoding = Encoding
                 });
                 Mapper.Map(redirectedResponse, incomingResponse);
             }
@@ -338,7 +340,8 @@ namespace Jackett.Indexers
                 Type = RequestType.GET,
                 Cookies = CookieHeader,
                 Referer = referer,
-                Headers = headers
+                Headers = headers,
+                Encoding = Encoding
             };
 
             if (cookieOverride != null)
@@ -374,7 +377,8 @@ namespace Jackett.Indexers
             {
                 Url = url,
                 Type = RequestType.GET,
-                Cookies = cookieOverride ?? CookieHeader
+                Cookies = cookieOverride ?? CookieHeader,
+                Encoding = Encoding
             };
 
             if (cookieOverride != null)
@@ -392,7 +396,8 @@ namespace Jackett.Indexers
                 PostData = data,
                 Referer = referer,
                 Headers = headers,
-                RawBody = rawbody
+                RawBody = rawbody,
+                Encoding = Encoding
             };
 
             if (emulateBrowser.HasValue)
@@ -430,7 +435,8 @@ namespace Jackett.Indexers
                 Type = RequestType.POST,
                 Cookies = cookies,
                 Referer = referer,
-                PostData = data
+                PostData = data,
+                Encoding = Encoding
             };
             var response = await webclient.GetString(request);
             if (accumulateCookies)

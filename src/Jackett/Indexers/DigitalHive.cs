@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
@@ -38,6 +39,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+
             AddCategoryMapping(0, TorznabCatType.Other);
             AddCategoryMapping(48, TorznabCatType.Other); // 0Day
             AddCategoryMapping(56, TorznabCatType.XXXImageset); // 0Day-Imagesets

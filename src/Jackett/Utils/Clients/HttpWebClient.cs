@@ -9,23 +9,21 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Utils.Clients
 {
     public class HttpWebClient : IWebClient
     {
-        Logger logger;
-        IConfigurationService configService;
-
-        public HttpWebClient(Logger l, IConfigurationService c)
+        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c)
+            : base(p: p,
+                   l: l,
+                   c: c)
         {
-            logger = l;
-            configService = c;
         }
 
-
-        public void Init()
+        override public void Init()
         {
             if (Startup.IgnoreSslErrors == true)
             {
@@ -34,30 +32,7 @@ namespace Jackett.Utils.Clients
             }
         }
 
-        public async Task<WebClientByteResult> GetBytes(WebRequest request)
-        {
-            logger.Debug(string.Format("WindowsWebClient:GetBytes(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
-            return result;
-        }
-
-        public async Task<WebClientStringResult> GetString(WebRequest request)
-        {
-            logger.Debug(string.Format("WindowsWebClient:GetString(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
-            string[] server;
-            if (stringResult.Headers.TryGetValue("server", out server))
-            {
-                if (server[0] == "cloudflare-nginx")
-                    stringResult.Content = BrowserUtil.DecodeCloudFlareProtectedEmailFromHTML(stringResult.Content);
-            }
-            return stringResult;
-        }
-
-        private async Task<WebClientByteResult> Run(WebRequest webRequest)
+        override protected async Task<WebClientByteResult> Run(WebRequest webRequest)
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 

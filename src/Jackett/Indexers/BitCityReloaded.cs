@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using CsQuery;
 using System.Web;
 using System;
+using System.Text;
 using System.Globalization;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
@@ -38,6 +39,8 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum).";
             this.configData.DisplayText.Name = "Notice";
 

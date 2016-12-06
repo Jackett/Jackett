@@ -42,6 +42,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("Windows-1255");
             TorznabCaps.Categories.Clear();
 
             AddMultiCategoryMapping(TorznabCatType.Movies, 7, 9, 58, 59, 60, 61, 83);
@@ -169,11 +170,10 @@ namespace Jackett.Indexers
                 searchUrl += "text=" + strEncoded + "&category=0&search=1";
             }
 
-            var data = await RequestBytesWithCookiesAndRetry(searchUrl);
-            var results = Encoding.GetEncoding("Windows-1255").GetString(data.Content);
+            var data = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
-                CQ dom = results;
+                CQ dom = data.Content;
                 ReleaseInfo release;
 
                 int rowCount = 0;
@@ -257,7 +257,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(data.Content, ex);
             }
 
             return releases;

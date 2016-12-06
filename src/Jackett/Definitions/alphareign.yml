@@ -3,7 +3,7 @@
   name: AlphaReign
   description: "A DHT only tracker"
   language: en-us
-
+  encoding: UTF-8
   links:
     - https://alphareign.se
 

@@ -170,6 +170,7 @@ namespace Jackett.Indexers
             DisplayName = Definition.Name;
             DisplayDescription = Definition.Description;
             SiteLink = Definition.Links[0]; // TODO: implement alternative links
+            Encoding = Encoding.GetEncoding(Definition.Encoding);
             if (!SiteLink.EndsWith("/"))
                 SiteLink += "/";
             Language = Definition.Language;
@@ -483,7 +484,7 @@ namespace Jackett.Indexers
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(WebClientByteResult Result, IHtmlDocument document)
+        protected bool CheckIfLoginIsNeeded(WebClientStringResult Result, IHtmlDocument document)
         {
             if (Result.IsRedirect)
             {
@@ -764,8 +765,8 @@ namespace Jackett.Indexers
             searchUrl += "&" + queryCollection.GetQueryString();
 
             // send HTTP request
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding(Definition.Encoding).GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
+            var results = response.Content;
             try
             {
                 var SearchResultParser = new HtmlParser();
@@ -778,8 +779,8 @@ namespace Jackett.Indexers
                     logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
                     await DoLogin();
                     await TestLogin();
-                    response = await RequestBytesWithCookies(searchUrl);
-                    results = Encoding.GetEncoding(Definition.Encoding).GetString(response.Content);
+                    response = await RequestStringWithCookies(searchUrl);
+                    results = results = response.Content;
                     SearchResultDocument = SearchResultParser.Parse(results);
                 }
 

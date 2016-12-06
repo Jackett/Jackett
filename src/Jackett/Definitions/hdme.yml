@@ -2,6 +2,7 @@
   site: hdme
   name: HDME
   language: en-us
+  encoding: windows-1252
   links:
     - https://hdme.eu
 

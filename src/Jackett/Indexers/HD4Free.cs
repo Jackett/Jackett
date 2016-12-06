@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 
@@ -38,6 +39,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(42, TorznabCatType.MoviesSD); // LEGi0N 480p
             AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p 
             AddCategoryMapping(16, TorznabCatType.MoviesHD); // LEGi0N  1080p 

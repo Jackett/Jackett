@@ -3,6 +3,7 @@
   name: Tspate
   description: "A French gerneral tracker"
   language: fr-fr
+  encoding: UTF-8
   links:
     - https://www.tspate.me/
 

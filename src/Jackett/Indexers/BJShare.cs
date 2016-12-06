@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System;
+using System.Text;
 using System.Globalization;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
@@ -39,6 +40,8 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(14, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(3, TorznabCatType.PC0day); // Aplicativos
             AddCategoryMapping(8, TorznabCatType.Other); // Apostilas/Tutoriais

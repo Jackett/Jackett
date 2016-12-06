@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -39,6 +40,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new NxtGnConfigurationData())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             // Movies Mapping
             // DanishBits HD
             AddCategoryMapping(2, TorznabCatType.MoviesHD);

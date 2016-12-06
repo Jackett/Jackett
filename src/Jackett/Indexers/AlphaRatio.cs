@@ -38,6 +38,8 @@ namespace Jackett.Indexers
                 downloadBase: "https://alpharatio.cc/torrents.php?action=download&id=",
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(1, TorznabCatType.TVSD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(6, TorznabCatType.MoviesSD);

@@ -44,6 +44,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(1, TorznabCatType.Audio);
             AddCategoryMapping(2, TorznabCatType.PC);
             AddCategoryMapping(3, TorznabCatType.BooksEbook);
