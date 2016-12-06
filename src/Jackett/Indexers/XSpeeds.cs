@@ -173,7 +173,7 @@ namespace Jackett.Indexers
             var prevCook = CookieHeader + "";
 
             // If we have no query use the RSS Page as their server is slow enough at times!
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
                 
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
@@ -228,9 +228,9 @@ namespace Jackett.Indexers
                 }
                 
             }
-            else
+            if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
             {
-                if (searchString.Length < 3)
+                if (searchString.Length < 3 && !query.IsTest)
                 {
                     OnParseError("", new Exception("Minimum search length is 3"));
                     return releases;
