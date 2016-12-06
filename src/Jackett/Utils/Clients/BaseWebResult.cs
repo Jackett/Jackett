@@ -12,6 +12,7 @@ namespace Jackett.Utils.Clients
         public HttpStatusCode Status { get; set; }
         public string Cookies { get; set; }
         public string RedirectingTo { get; set; }
+        public Dictionary<string, string[]> Headers = new Dictionary<string, string[]>();
 
         public bool IsRedirect
         {
