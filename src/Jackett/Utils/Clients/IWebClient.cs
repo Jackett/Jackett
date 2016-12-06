@@ -24,7 +24,7 @@ namespace Jackett.Utils.Clients
             configService = c;
         }
 
-        public async Task<WebClientByteResult> GetBytes(WebRequest request)
+        virtual public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
             logger.Debug(string.Format("IWebClient.GetBytes(Url:{0})", request.Url));
             var result = await Run(request);
@@ -32,7 +32,7 @@ namespace Jackett.Utils.Clients
             return result;
         }
 
-        public async Task<WebClientStringResult> GetString(WebRequest request)
+        virtual public async Task<WebClientStringResult> GetString(WebRequest request)
         {
             logger.Debug(string.Format("IWebClient.GetString(Url:{0})", request.Url));
             var result = await Run(request);
