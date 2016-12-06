@@ -107,10 +107,10 @@ namespace Jackett.Indexers
 
 
 
-            queryCollection.Add("active", "1");
+            queryCollection.Add("active", "0");
             queryCollection.Add("options", "0");
 
-            searchUrl += queryCollection.GetQueryString();
+            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29"); // maually url encode brackets to prevent "hacking" detection
 
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
@@ -119,21 +119,15 @@ namespace Jackett.Indexers
                 CQ dom = results.Content;
                 ReleaseInfo release;
 
-                int rowCount = 0;
-                var rows = dom[".mainblockcontenttt > tbody > tr"];
+                var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
                 foreach (var row in rows)
                 {
                     CQ qRow = row.Cq();
-                    if (rowCount < 2 || qRow.Children().Count() != 12) //skip 2 rows because there's an empty row & a title/sort row
-                    {
-                        rowCount++;
-                        continue;
-                    }
 
                     release = new ReleaseInfo();
 
                     release.Title = qRow.Find("td.mainblockcontent b a").Text();
-                    release.Description = release.Title;
+                    release.Description = qRow.Find("td:nth-child(3) > span").Text();
 
                     if (0 != qRow.Find("td.mainblockcontent u").Length)
                     {
@@ -160,12 +154,14 @@ namespace Jackett.Indexers
                         }
                     }
 
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(12)").Text());
+
                     string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
                     release.Guid = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("td.mainblockcontent").Get(3).FirstChild.GetAttribute("href"));
-                    release.Comments = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href") + "#comments");
+                    release.Comments = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
 
                     string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
                     string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
@@ -173,6 +169,17 @@ namespace Jackett.Indexers
 
                     string category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
+
+                    if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else if (qRow.Find("img[alt=\"Bronze Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.75;
+                    else if (qRow.Find("img[alt=\"Blue Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.25;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
