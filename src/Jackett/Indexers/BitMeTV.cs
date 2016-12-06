@@ -44,6 +44,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataCaptchaLogin("Ensure that you have the 'Force SSL' option set to 'yes' in your profile on the BitMeTv webpage."))
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

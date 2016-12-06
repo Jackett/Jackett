@@ -3,6 +3,7 @@
   name: WorldOfP2P
   description: "A general tracker"
   language: en-us
+  encoding: UTF-8
   links:
     - https://worldofp2p.net
 

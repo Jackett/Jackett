@@ -3,6 +3,7 @@
   name: Torrent Sector Crew
   description: "A German general tracker"
   language: de-de
+  encoding: windows-1252
   links:
     - https://tsctracker.net/
 

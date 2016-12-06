@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Web;
+using System.Text;
 using Jackett.Models.IndexerConfig;
 using AngleSharp.Parser.Html;
 using System.Text.RegularExpressions;
@@ -37,6 +38,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TTN webpage."))
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

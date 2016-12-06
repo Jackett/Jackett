@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Jackett.Indexers
 {
@@ -36,6 +37,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataLoginLink())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             configData.DisplayText.Value = "Go to the general tab of your BeyondHD user profile and create/copy the Login Link.";
 
             AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movie / Blu-ray

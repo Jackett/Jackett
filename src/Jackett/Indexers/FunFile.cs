@@ -6,6 +6,7 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
@@ -35,6 +36,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+
             AddCategoryMapping(44, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(22, TorznabCatType.PC); // Applications
             AddCategoryMapping(43, TorznabCatType.AudioAudiobook); // Audio Books

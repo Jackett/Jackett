@@ -37,6 +37,8 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+
             AddCategoryMapping(39, TorznabCatType.TVAnime); // Anime: HD|1080p
             AddCategoryMapping(38, TorznabCatType.TVAnime); // Anime: HD|720p
             AddCategoryMapping(1,  TorznabCatType.TVAnime); // Anime: SD
@@ -146,8 +148,8 @@ namespace Jackett.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
+            var results = response.Content;
             try
             {
                 CQ dom = results;
@@ -187,7 +189,6 @@ namespace Jackett.Indexers
                     release.Guid = release.Link;
 
                     var sizeStr = qSize.Text();
-                    logger.Error(sizeStr);
                     release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(".", "").Replace(",", "."));
 
                     release.Seeders = ParseUtil.CoerceInt(qSeeders.Text());

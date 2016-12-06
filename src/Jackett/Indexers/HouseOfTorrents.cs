@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
@@ -39,6 +40,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(42, TorznabCatType.PCMac); // Applications/Mac
             AddCategoryMapping(34, TorznabCatType.PC); // Applications/PC
             AddCategoryMapping(66, TorznabCatType.MoviesForeign); // Foreign

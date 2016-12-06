@@ -41,6 +41,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(600, TorznabCatType.TVHD); // TV/HD
             AddCategoryMapping(960, TorznabCatType.MoviesForeign); // Foreign
             AddCategoryMapping(300, TorznabCatType.MoviesHD); // Movies/HD

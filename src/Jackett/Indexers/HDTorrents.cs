@@ -41,6 +41,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             TorznabCaps.Categories.Clear();
 
             AddCategoryMapping("1", TorznabCatType.MoviesHD);// Movie/Blu-Ray

@@ -43,7 +43,9 @@ namespace Jackett.Indexers
 				p: ps,
 				configData: new NxtGnConfigurationData())
 		{
-			AddCategoryMapping(92, TorznabCatType.TV);
+            Encoding = Encoding.GetEncoding("UTF-8");
+
+            AddCategoryMapping(92, TorznabCatType.TV);
 			AddCategoryMapping(92, TorznabCatType.TVHD);
 			AddCategoryMapping(92, TorznabCatType.TVWEBDL);
 

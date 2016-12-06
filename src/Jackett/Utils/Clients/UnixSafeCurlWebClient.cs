@@ -16,38 +16,18 @@ namespace Jackett.Utils.Clients
 {
     public class UnixSafeCurlWebClient : IWebClient
     {
-        IProcessService processService;
-        Logger logger;
-        IConfigurationService configService;
-
         public UnixSafeCurlWebClient(IProcessService p, Logger l, IConfigurationService c)
-        {
-            processService = p;
-            logger = l;
-            configService = c;
-        }
-
-        public void Init()
+            : base(p: p,
+                   l: l,
+                   c: c)
         {
         }
 
-        public async Task<WebClientByteResult> GetBytes(WebRequest request)
+        override public void Init()
         {
-            logger.Debug(string.Format("UnixSafeCurlWebClient:GetBytes(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
-            return result;
         }
 
-        public async Task<WebClientStringResult> GetString(WebRequest request)
-        {
-            logger.Debug(string.Format("UnixSafeCurlWebClient:GetString(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("UnixSafeCurlWebClient: Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            return Mapper.Map<WebClientStringResult>(result);
-        }
-
-        private async Task<WebClientByteResult> Run(WebRequest request)
+        override protected async Task<WebClientByteResult> Run(WebRequest request)
         {
             var args = new StringBuilder();
             if (Startup.ProxyConnection != null)

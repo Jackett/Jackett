@@ -37,6 +37,8 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(1,  TorznabCatType.AudioAudiobook); // aBook
             AddCategoryMapping(4,  TorznabCatType.PCMac); // App|Mac
             AddCategoryMapping(5,  TorznabCatType.PC); // App|Win
@@ -130,8 +132,8 @@ namespace Jackett.Indexers
             }
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
+            var results = response.Content;
             try
             {
                 CQ dom = results;

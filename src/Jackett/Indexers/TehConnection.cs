@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
@@ -40,6 +41,8 @@ namespace Jackett.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>QualityEncodeOnly</code><br><code>FreeLeechOnly</code>"))
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
