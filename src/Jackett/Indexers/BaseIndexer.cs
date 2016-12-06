@@ -294,7 +294,12 @@ namespace Jackett.Indexers
 
         public async virtual Task<byte[]> Download(Uri link)
         {
-            var response = await RequestBytesWithCookiesAndRetry(link.ToString());
+            // do some extra escaping, needed for HD-Torrents
+            var requestLink = link.ToString()
+                .Replace("(", "%28")
+                .Replace(")", "%29")
+                .Replace("'", "%27");
+            var response = await RequestBytesWithCookiesAndRetry(requestLink);
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 if(response.Content != null)
