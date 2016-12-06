@@ -44,6 +44,9 @@ namespace Jackett.Models
                                                   || c == '('
                                                   || c == ')'
                                                   || c == '@'
+                                                  || c == '\''
+                                                  || c == '['
+                                                  || c == ']'
                                                   ));
                 var safetitle = new string(arr);
                 return safetitle;
