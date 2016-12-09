@@ -82,7 +82,7 @@ function reloadIndexers() {
 
 function displayConfiguredIndexersList(indexers) {
     var indexersTemplate = Handlebars.compile($("#configured-indexer-table").html());
-    var indexersTable = $(indexersTemplate({ indexers: indexers }));
+    var indexersTable = $(indexersTemplate({ indexers: indexers, total_configured_indexers: indexers.length }));
     indexersTable.find('table').DataTable(
          {
              "pageLength": 100,
@@ -114,7 +114,7 @@ function displayConfiguredIndexersList(indexers) {
 
 function displayUnconfiguredIndexersList(indexers) {
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
-    var indexersTable = $(indexersTemplate({ indexers: indexers }));
+    var indexersTable = $(indexersTemplate({ indexers: indexers, total_unconfigured_indexers: indexers.length  }));
     indexersTable.find('table').DataTable(
          {
              "pageLength": 100,
