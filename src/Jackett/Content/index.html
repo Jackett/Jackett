@@ -358,6 +358,7 @@
                         <select name="category" id="searchCategory"></select>
                         <label>Tracker</label>
                         <select name="tracker" id="searchTracker">
+                            <option value="">-- All --</option>
                             {{#each indexers}}
                             <option value="{{id}}">{{name}}</option>
                             {{/each}}
