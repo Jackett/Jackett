@@ -11,16 +11,17 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Text;
 using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class PassThePopcorn : BaseIndexer, IIndexer
     {
-        private string LoginUrl { get { return "https://tls.passthepopcorn.me/ajax.php?action=login"; } }
-        private string indexUrl { get { return "https://tls.passthepopcorn.me/ajax.php?action=login"; } }
-        private string SearchUrl { get { return "https://tls.passthepopcorn.me/torrents.php"; } }
-        private string DetailURL { get { return "https://tls.passthepopcorn.me/torrents.php?torrentid="; } }
+        private string LoginUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
+        private string indexUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
+        private string SearchUrl { get { return "https://passthepopcorn.me/torrents.php"; } }
+        private string DetailURL { get { return "https://passthepopcorn.me/torrents.php?torrentid="; } }
         private string AuthKey { get; set; } 
         new ConfigurationDataBasicLoginWithFilterAndPasskey configData
         {
@@ -41,6 +42,8 @@ namespace Jackett.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code>"))
         {
+            Encoding = Encoding.UTF8;
+
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
