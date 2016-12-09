@@ -119,6 +119,7 @@ Jackett can also be run from the command line if you would like to see log messa
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
        * Follow the instructions on the mono website and install the `mono-devel` package.
+       * On Red Hat/CentOS  the `mono-locale-extras` package is also required
  2. Install  libcurl:
        * Debian/Ubunutu: `apt-get install libcurl-dev`
        * Redhat/Fedora: `yum install libcurl-devel`
