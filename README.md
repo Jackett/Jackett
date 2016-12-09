@@ -58,6 +58,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MyAnonamouse
  * myAmity
  * NCore
+ * NetHD
  * NextGen
  * Norbits
  * PassThePopcorn

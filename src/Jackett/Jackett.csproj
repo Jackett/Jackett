@@ -431,7 +431,7 @@
     <Content Include="Definitions\secretcinema.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Definitions\tenyardtracker.yml">
+    <Content Include="Definitions\nethd.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config">
