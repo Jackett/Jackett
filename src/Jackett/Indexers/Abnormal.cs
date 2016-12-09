@@ -55,6 +55,7 @@ namespace Jackett.Indexers
                 downloadBase: "https://abnormal.ws/torrents.php?action=download&id=",
                 configData: new ConfigurationDataAbnormal())
         {
+            Language = "fr-fr";
             // Clean capabilities
             TorznabCaps.Categories.Clear();
 

@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(42, TorznabCatType.PCMac); // Applications/Mac
             AddCategoryMapping(34, TorznabCatType.PC); // Applications/PC

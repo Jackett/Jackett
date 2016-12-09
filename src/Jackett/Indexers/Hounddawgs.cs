@@ -44,6 +44,7 @@ namespace Jackett.Indexers
 				configData: new NxtGnConfigurationData())
 		{
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "da-dk";
 
             AddCategoryMapping(92, TorznabCatType.TV);
 			AddCategoryMapping(92, TorznabCatType.TVHD);

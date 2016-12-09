@@ -42,6 +42,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataPinNumber())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping("cat[]=22&tags=Windows", TorznabCatType.PC0day);
             AddCategoryMapping("cat[]=22&tags=MAC", TorznabCatType.PCMac);

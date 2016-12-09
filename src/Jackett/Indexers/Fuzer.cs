@@ -43,6 +43,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("Windows-1255");
+            Language = "he-il";
             TorznabCaps.Categories.Clear();
 
             AddMultiCategoryMapping(TorznabCatType.Movies, 7, 9, 58, 59, 60, 61, 83);

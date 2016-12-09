@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(42, TorznabCatType.MoviesSD); // LEGi0N 480p
             AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p 

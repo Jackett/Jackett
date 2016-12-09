@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 configData: new NxtGnConfigurationData())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "da-dk";
 
             // Movies Mapping
             // DanishBits HD

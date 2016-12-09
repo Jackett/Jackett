@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
+            Language = "he-il";
 
             AddCategoryMapping(19, TorznabCatType.MoviesSD);
             AddCategoryMapping(25, TorznabCatType.MoviesOther); // Israeli Content

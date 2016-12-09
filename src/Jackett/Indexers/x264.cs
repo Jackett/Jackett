@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping(20, TorznabCatType.Movies); // Movies&TV/Sources
             AddCategoryMapping(53, TorznabCatType.MoviesHD); // Movies/1080p

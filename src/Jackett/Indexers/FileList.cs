@@ -43,6 +43,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataFileList())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "ro-ro";
 
             AddCategoryMapping(24, TorznabCatType.TVAnime);
             AddCategoryMapping(11, TorznabCatType.Audio);

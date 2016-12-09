@@ -42,6 +42,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
+
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
             AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries

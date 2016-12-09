@@ -53,6 +53,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataNorbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "nn-no";
 
             // Clean capabilities
             TorznabCaps.Categories.Clear();

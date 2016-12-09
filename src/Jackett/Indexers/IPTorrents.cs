@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLoginWithAlternateLink())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
             this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;

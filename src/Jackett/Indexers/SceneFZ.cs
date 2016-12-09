@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
+            Language = "ro-ro";
 
             this.configData.Instructions.Value = "The published date is only available if you set \"Torrent Listing\" to Complex is your profile.";
 

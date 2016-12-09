@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
 
             AddCategoryMapping(9,  TorznabCatType.Other); // Anderes
             AddCategoryMapping(23, TorznabCatType.TVAnime); // Animation - Film &; Serie

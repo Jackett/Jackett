@@ -42,6 +42,7 @@ namespace Jackett.Indexers
                                                                         <br><code>QualityEncodeOnly</code><br><code>FreeLeechOnly</code>"))
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);

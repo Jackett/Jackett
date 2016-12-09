@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TTN webpage."))
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "pt-br";
 
             AddCategoryMapping(14, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(3, TorznabCatType.PC0day); // Aplicativos

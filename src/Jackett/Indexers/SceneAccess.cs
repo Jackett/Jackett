@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(8, TorznabCatType.MoviesSD);
             AddCategoryMapping(22, TorznabCatType.MoviesHD);

@@ -43,6 +43,7 @@ namespace Jackett.Indexers
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code>"))
         {
             Encoding = Encoding.UTF8;
+            Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);

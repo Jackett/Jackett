@@ -45,6 +45,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
+
             AddCategoryMapping(4, TorznabCatType.TV);               // TV/XVID
             AddCategoryMapping(17, TorznabCatType.TVHD);            // TV/X264
             AddCategoryMapping(19, TorznabCatType.TV);              // TV/DVDRIP
