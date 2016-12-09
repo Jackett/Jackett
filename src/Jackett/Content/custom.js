@@ -65,13 +65,13 @@ function reloadIndexers() {
             else
                 item.state = "success";
 
-            item.main_cats_list = [];
+            var main_cats_list = [];
             for (var catID in item.caps) {
-                var isMainCat = (catID % 1000) == 0;
-                if (isMainCat)
-                    item.main_cats_list.push(item.caps[catID]);
+                var cat = item.caps[catID];
+                var mainCat = cat.split("/")[0];
+                main_cats_list.push(mainCat);
             }
-            item.mains_cats = item.main_cats_list.join(", ");
+            item.mains_cats = $.unique(main_cats_list).join(", ");
            
             if (item.configured)
                 configuredIndexers.push(item);
