@@ -438,8 +438,34 @@ namespace Jackett.Indexers
                     pairs["captchaSelection"] = captchaSelection;
                     pairs["submitme"] = "X";
                 }
-                
-                var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
+
+                WebClientStringResult loginResult = null;
+                var enctype = form.GetAttribute("enctype");
+                if (enctype == "multipart/form-data")
+                {
+                    var headers = new Dictionary<string, string>();
+                    var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "");
+                    var bodyParts = new List<string>();
+
+                    foreach (var pair in pairs)
+                    {
+                        var part = "--" + boundary + "\r\n" +
+                          "Content-Disposition: form-data; name=\"" + pair.Key + "\"\r\n" +
+                          "\r\n" +
+                          pair.Value;
+                        bodyParts.Add(part);
+                    }
+
+                    bodyParts.Add("--" + boundary + "--");
+
+                    headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+                    var body = string.Join("\r\n",  bodyParts);
+                    logger.Error(body);
+                    loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                } else {
+                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
+                }
+
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForLoginError(loginResult);
