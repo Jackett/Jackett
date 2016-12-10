@@ -24,6 +24,7 @@ namespace Jackett.Indexers
 {
     public class CardigannIndexer : BaseIndexer, IIndexer
     {
+        public string DefinitionString { get; protected set; }
         protected IndexerDefinition Definition;
         public new string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
 
@@ -144,6 +145,7 @@ namespace Jackett.Indexers
 
         protected void Init(string DefinitionString)
         {
+            this.DefinitionString = DefinitionString;
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .IgnoreUnmatchedProperties()

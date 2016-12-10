@@ -140,7 +140,14 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             var configPath = GetIndexerConfigFilePath(indexer);
             File.Delete(configPath);
-            indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
+            if (indexer.GetType() == typeof(CardigannIndexer))
+            {
+                indexers[name] = new CardigannIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), ((CardigannIndexer)indexer).DefinitionString);
+            }
+            else
+            {
+                indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
+            }
         }
 
         private string GetIndexerConfigFilePath(IIndexer indexer)
