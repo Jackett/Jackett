@@ -137,6 +137,11 @@ namespace Jackett.Indexers
 
             searchUrl += queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {
