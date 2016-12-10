@@ -93,6 +93,7 @@ namespace Jackett
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
                     easy.FollowLocation = false;
                     easy.ConnectTimeout = 20;
+                    easy.FailOnError = true;
                     if(curlRequest.Headers != null)
                     {
                         CurlSlist curlHeaders = new CurlSlist();
@@ -162,7 +163,7 @@ namespace Jackett
 
                     if (easy.LastErrorCode != CurlCode.Ok)
                     {
-                        var message = "Error " + easy.LastErrorCode.ToString() + " " + easy.LastErrorDescription;
+                        var message = "Error " + easy.LastErrorCode.ToString() + " " + easy.LastErrorDescription + " " + easy.ErrorBuffer;
                         if (null != OnErrorMessage)
                             OnErrorMessage(message);
                         else
