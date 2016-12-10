@@ -89,6 +89,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentLeech
  * TorrentShack
  * Torrent-Syndikat
+ * ToTheGlory
  * TransmitheNet
  * Tspate
  * TV Chaos UK
