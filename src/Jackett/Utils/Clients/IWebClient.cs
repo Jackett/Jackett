@@ -86,7 +86,9 @@ namespace Jackett.Utils.Clients
             return stringResult;
         }
 
-        virtual protected async Task<WebClientByteResult> Run(WebRequest webRequest) { return null; }
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        virtual protected async Task<WebClientByteResult> Run(WebRequest webRequest) { throw new NotImplementedException(); }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         abstract public void Init();
     }
