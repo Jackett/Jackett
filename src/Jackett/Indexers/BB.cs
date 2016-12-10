@@ -135,7 +135,6 @@ namespace Jackett.Indexers
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
                     var linkStr = qLink.Attr("href");
-                    release.Title = qLink.Text();
                     release.Comments = new Uri(BaseUrl + "/" + linkStr);
                     release.Guid = release.Comments;
 
@@ -162,6 +161,10 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 1;
 
                     release.UploadVolumeFactor = 1;
+
+                    var title = qRow.Find("td:nth-child(2)");
+                    title.Find("span, strong, div, br").Remove();
+                    release.Title = title.Text().Replace(" - ]", "]");
 
                     releases.Add(release);
                 }
