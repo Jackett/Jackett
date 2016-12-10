@@ -460,7 +460,6 @@ namespace Jackett.Indexers
 
                     headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
                     var body = string.Join("\r\n",  bodyParts);
-                    logger.Error(body);
                     loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
                 } else {
                     loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
