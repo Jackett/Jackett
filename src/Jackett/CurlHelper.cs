@@ -93,7 +93,6 @@ namespace Jackett
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
                     easy.FollowLocation = false;
                     easy.ConnectTimeout = 20;
-                    easy.FailOnError = true;
                     if(curlRequest.Headers != null)
                     {
                         CurlSlist curlHeaders = new CurlSlist();
