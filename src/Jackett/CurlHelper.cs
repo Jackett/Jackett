@@ -24,14 +24,16 @@ namespace Jackett
             public string Referer { get; private set; }
             public HttpMethod Method { get; private set; }
             public IEnumerable<KeyValuePair<string, string>> PostData { get; set; }
+            public Dictionary<string, string> Headers { get; set; }
             public string RawPOSTDdata { get; set;}
 
-            public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null, string rawPOSTData = null)
+            public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPOSTData = null)
             {
                 Method = method;
                 Url = url;
                 Cookies = cookies;
                 Referer = referer;
+                Headers = headers;
                 RawPOSTDdata = rawPOSTData;
             }
         }
@@ -52,16 +54,16 @@ namespace Jackett
             }
         }
 
-        public static async Task<CurlResponse> GetAsync(string url, string cookies = null, string referer = null)
+        public static async Task<CurlResponse> GetAsync(string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null)
         {
-            var curlRequest = new CurlRequest(HttpMethod.Get, url, cookies, referer);
+            var curlRequest = new CurlRequest(HttpMethod.Get, url, cookies, referer, headers);
             var result = await PerformCurlAsync(curlRequest);
             return result;
         }
 
-        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, string rawPostData =null)
+        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData =null)
         {
-            var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer);
+            var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer, headers);
             curlRequest.PostData = formData;
             curlRequest.RawPOSTDdata = rawPostData;
             var result = await PerformCurlAsync(curlRequest);
@@ -91,6 +93,15 @@ namespace Jackett
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
                     easy.FollowLocation = false;
                     easy.ConnectTimeout = 20;
+                    if(curlRequest.Headers != null)
+                    {
+                        CurlSlist curlHeaders = new CurlSlist();
+                        foreach (var header in curlRequest.Headers)
+                        {
+                            curlHeaders.Append(header.Key + ": " + header.Value);
+                        }
+                        easy.SetOpt(CurlOption.HttpHeader, curlHeaders);
+                    }
 
                     easy.WriteFunction = (byte[] buf, int size, int nmemb, object data) =>
                     {

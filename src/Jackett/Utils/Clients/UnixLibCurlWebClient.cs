@@ -100,7 +100,7 @@ namespace Jackett.Utils.Clients
             Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
             {
-                response = await CurlHelper.GetAsync(request.Url, request.Cookies, request.Referer);
+                response = await CurlHelper.GetAsync(request.Url, request.Cookies, request.Referer, request.Headers);
             }
             else
             {
@@ -113,7 +113,7 @@ namespace Jackett.Utils.Clients
                     logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
-                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody);
+                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.Headers, request.RawBody);
             }
 
             var result = new WebClientByteResult()
