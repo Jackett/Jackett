@@ -196,7 +196,7 @@ namespace Jackett.Indexers
 
             // Check for being logged out
             if (results.IsRedirect)
-                throw new AuthenticationException();
+                throw new ExceptionWithConfigData("Login failed, please reconfigure the tracker to update the cookies", configData);
 
             try
             {
