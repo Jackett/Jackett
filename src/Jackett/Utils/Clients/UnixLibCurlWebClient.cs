@@ -59,13 +59,14 @@ namespace Jackett.Utils.Clients
             }
         }
 
-        // Wrapper for Run which takes care of CloudFlare challenges
-        private async Task<WebClientByteResult> RunCloudFlare(WebRequest request)
+        // Wrapper for Run which takes care of CloudFlare challenges, calls RunCurl
+        override protected async Task<WebClientByteResult> Run(WebRequest request)
         {
-            WebClientByteResult result = await Run(request);
+            WebClientByteResult result = await RunCurl(request);
 
             // check if we've received a CloudFlare challenge
-            if (result.Status == HttpStatusCode.ServiceUnavailable && ((request.Cookies != null && request.Cookies.Contains("__cfduid")) || result.Cookies.Contains("__cfduid")))
+            string[] server;
+            if (result.Status == HttpStatusCode.ServiceUnavailable && result.Headers.TryGetValue("server", out server) && server[0] == "cloudflare-nginx")
             {
                 logger.Info("UnixLibCurlWebClient: Received a new CloudFlare challenge");
 
@@ -86,7 +87,7 @@ namespace Jackett.Utils.Clients
                 request.Cookies = response.Cookies + request.Cookies;
 
                 // re-run the original request with updated cf_clearance cookie
-                result = await Run(request);
+                result = await RunCurl(request);
 
                 // add cf_clearance cookie to the final result so we update the config for the next request
                 result.Cookies = response.Cookies + " " + result.Cookies;
@@ -94,7 +95,7 @@ namespace Jackett.Utils.Clients
             return result;
         }
 
-        override protected async Task<WebClientByteResult> Run(WebRequest request)
+        protected async Task<WebClientByteResult> RunCurl(WebRequest request)
         {
             Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
