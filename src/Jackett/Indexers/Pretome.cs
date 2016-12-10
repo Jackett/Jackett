@@ -270,6 +270,12 @@ namespace Jackett.Indexers
 
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
 
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(queryUrl);
+            }
+
             try
             {
                 CQ dom = response.Content;
