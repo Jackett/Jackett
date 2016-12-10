@@ -40,6 +40,9 @@ namespace Jackett.Models.IndexerConfig
 
         public void LoadValuesFromJson(JToken json, IProtectionService ps= null)
         {
+            if (json == null)
+                return;
+
             var arr = (JArray)json;
             foreach (var item in GetItems(forDisplay: false))
             {
