@@ -164,7 +164,7 @@ namespace Jackett.Indexers
 
                     var title = qRow.Find("td:nth-child(2)");
                     title.Find("span, strong, div, br").Remove();
-                    release.Title = title.Text().Replace(" - ]", "]");
+                    release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
 
                     releases.Add(release);
                 }
