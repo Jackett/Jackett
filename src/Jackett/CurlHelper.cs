@@ -30,7 +30,7 @@ namespace Jackett
             public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPOSTData = null)
             {
                 Method = method;
-                Url = url;
+                Url = url.Replace(" ", "+"); // avoids bad request to cloudflare for urls containing a space followed by H (" H")
                 Cookies = cookies;
                 Referer = referer;
                 Headers = headers;
