@@ -53,6 +53,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(14, TorznabCatType.MoviesHD);
             AddCategoryMapping(15, TorznabCatType.Movies); // Boxsets
             AddCategoryMapping(29, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(41, TorznabCatType.MoviesHD);
 
             AddCategoryMapping(26, TorznabCatType.TVSD);
             AddCategoryMapping(27, TorznabCatType.TV); // Boxsets
@@ -169,14 +170,8 @@ namespace Jackett.Indexers
 
                     release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href").Substring(1));
 
-                    var dateString = qRow.Find(".name")[0].InnerText.Trim().Replace(" ", string.Empty).Replace("Addedinon", string.Empty);
-
-                    //Fix for issue 2016-04-30
-                    dateString = dateString.Replace("\r", "").Replace("\n", "");
-
-                    //"2015-04-25 23:38:12"
-                    //"yyyy-MMM-dd hh:mm:ss"
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
+                    var dateString = qRow.Find(".name").Get(0).LastChild.NodeValue.Replace("on", string.Empty).Trim(); ;
+                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Children().ElementAt(4).InnerText;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
