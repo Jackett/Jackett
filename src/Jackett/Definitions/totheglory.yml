@@ -35,8 +35,8 @@
       华语剧包: TV/HD # 华语剧包
 
       # 音乐
-      (电影原声&amp;Game)OST: Audio # (电影原声&Game)OST
-      无损音乐FLAC&amp;APE: Audio/Lossless  # 无损音乐FLAC&APE
+      (电影原声&Game)OST: Audio # (电影原声&Game)OST
+      无损音乐FLAC&APE: Audio/Lossless  # 无损音乐FLAC&APE
       MV&amp;演唱会: Audio/Video # MV&演唱会
 
       # 其他
@@ -131,6 +131,9 @@
             args: " +0800"
           - name: dateparse
             args: "2006-01-0215:04:05 -0700"
+      imdb:
+        selector: span.imdb_rate > a
+        attribute: href
       downloadvolumefactor:
         case:
           img[alt="free"]: "0"
