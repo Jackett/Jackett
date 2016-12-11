@@ -58,7 +58,7 @@
       incldead: 1
 
     rows:
-      selector: p + table > tbody > tr:has(a[href^="details.php?id="])
+      selector: p + table > tbody > tr:has(a[href^="details.php?id="]), p + table > tbody > tr[id^="kdescr"]
       after: 1
     fields:
       title:
