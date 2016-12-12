@@ -25,6 +25,8 @@ namespace Jackett.Models
         public string Episode { get; set; }
         public string SearchTerm { get; set; }
 
+        public bool IsTest { get; set; }
+
         protected string[] QueryStringParts = null;
 
         public string SanitizedSearchTerm
@@ -43,6 +45,10 @@ namespace Jackett.Models
                                                   || c == '_'
                                                   || c == '('
                                                   || c == ')'
+                                                  || c == '@'
+                                                  || c == '\''
+                                                  || c == '['
+                                                  || c == ']'
                                                   ));
                 var safetitle = new string(arr);
                 return safetitle;
@@ -52,6 +58,7 @@ namespace Jackett.Models
         public TorznabQuery()
         {
             Categories = new int[0];
+            IsTest = false;
         }
 
         public string GetQueryString()

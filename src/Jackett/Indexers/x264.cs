@@ -8,6 +8,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
@@ -37,6 +38,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
+
             AddCategoryMapping(20, TorznabCatType.Movies); // Movies&TV/Sources
             AddCategoryMapping(53, TorznabCatType.MoviesHD); // Movies/1080p
             AddCategoryMapping(30, TorznabCatType.MoviesHD); // Movies/576p
@@ -182,6 +186,9 @@ namespace Jackett.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
+
+                    // time is needed for sonarr, just set it to now
+                    release.PublishDate = DateTime.Now;
 
                     releases.Add(release);
                 }

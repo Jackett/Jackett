@@ -26,6 +26,7 @@ namespace Jackett.Models.IndexerConfig
         }
 
         public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
+        public HiddenItem LastError { get; private set; } = new HiddenItem { Name = "LastError" };
 
         public ConfigurationData()
         {
@@ -39,6 +40,9 @@ namespace Jackett.Models.IndexerConfig
 
         public void LoadValuesFromJson(JToken json, IProtectionService ps= null)
         {
+            if (json == null)
+                return;
+
             var arr = (JArray)json;
             foreach (var item in GetItems(forDisplay: false))
             {
@@ -147,12 +151,19 @@ namespace Jackett.Models.IndexerConfig
 
         public void AddDynamic(string ID, Item item)
         {
-            dynamics.Add(ID, item);
+            dynamics[ID] = item;
         }
 
         public Item GetDynamic(string ID)
         {
-            return dynamics[ID];
+            try
+            {
+                return dynamics[ID];
+            }
+            catch(KeyNotFoundException)
+            {
+                return null;
+            }
         }
 
         public class Item

@@ -44,6 +44,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLoginWithAlternateLink())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+
             this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
             this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
             this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
@@ -78,6 +81,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(79, TorznabCatType.TVSD);
             AddCategoryMapping(4, TorznabCatType.TVSD);
             AddCategoryMapping(5, TorznabCatType.TVHD);
+            AddCategoryMapping(99, TorznabCatType.TVHD); // TV/x265
 
             AddCategoryMapping(75, TorznabCatType.Audio);
             AddCategoryMapping(73, TorznabCatType.Audio);

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
@@ -38,6 +39,9 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin(@"Speed.Cd have increased their security. If you are having problems please check the security tab in your Speed.Cd profile.
                                                             eg. Geo Locking, your seedbox may be in a different country to the one where you login via your web browser"))
         {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
+
             AddCategoryMapping("1", TorznabCatType.MoviesOther);
             AddCategoryMapping("42", TorznabCatType.Movies);
             AddCategoryMapping("32", TorznabCatType.Movies);

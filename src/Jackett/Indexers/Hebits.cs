@@ -40,6 +40,8 @@ namespace Jackett.Indexers
                 downloadBase: "https://hebits.net/",
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("windows-1255");
+            Language = "he-il";
 
             AddCategoryMapping(19, TorznabCatType.MoviesSD);
             AddCategoryMapping(25, TorznabCatType.MoviesOther); // Israeli Content
@@ -95,11 +97,10 @@ namespace Jackett.Indexers
                 }
             }
 
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("windows-1255").GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
             try
             {
-                CQ dom = results;
+                CQ dom = response.Content;
 
                 CQ qRows = dom[".browse > div > div"];
 
@@ -162,7 +163,7 @@ namespace Jackett.Indexers
 
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.Content, ex);
             }
 
             return releases;

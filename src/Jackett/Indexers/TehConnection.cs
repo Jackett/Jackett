@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
@@ -40,6 +41,9 @@ namespace Jackett.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>QualityEncodeOnly</code><br><code>FreeLeechOnly</code>"))
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
@@ -167,6 +171,11 @@ namespace Jackett.Indexers
                             if (secondSizeStr.Length > 3 && secondSizeStr.Contains("(") && secondSizeStr.Contains(")"))
                             { sizeStr = secondSizeStr.Replace("(", "").Replace(")", "").Trim(); }
                         }
+
+                        if(string.IsNullOrWhiteSpace(title))
+                        {
+                            title = dom.Find("div.title_text").Text() + " - " + qRow.Find("div.details_title > a").Text();
+                        }
                         
                         var release = new ReleaseInfo();
 
@@ -181,10 +190,21 @@ namespace Jackett.Indexers
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
                         release.Category = 2000;
-                        release.Comments = commentsLink;
+                        release.Comments = movieReleasesLink;
                         if (imdb_id > 0) {
                             release.Imdb = imdb_id;
                         }
+
+                        var files = qRow.Find("div[id^=\"filelist\"] tr").Count()-1;
+                        release.Files = files;
+                        release.Grabs = ParseUtil.CoerceLong(grabs);
+
+                        if (freeleech)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
 
                         if (configFreeLeechOnly && !freeleech)
                         {

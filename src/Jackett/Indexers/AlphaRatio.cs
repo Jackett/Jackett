@@ -38,6 +38,9 @@ namespace Jackett.Indexers
                 downloadBase: "https://alpharatio.cc/torrents.php?action=download&id=",
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+
             AddCategoryMapping(1, TorznabCatType.TVSD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(6, TorznabCatType.MoviesSD);
@@ -134,6 +137,11 @@ namespace Jackett.Indexers
 
             searchUrl += queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {

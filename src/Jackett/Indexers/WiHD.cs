@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -52,6 +53,9 @@ namespace Jackett.Indexers
                 downloadBase: "http://world-in-hd.net/torrents/download/",
                 configData: new ConfigurationDataWiHD())
         {
+            Encoding = Encoding.UTF8;
+            Language = "fr-fr";
+
             // Clean capabilities
             TorznabCaps.Categories.Clear();
 

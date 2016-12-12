@@ -6,6 +6,7 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
@@ -35,6 +36,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
+
             AddCategoryMapping(44, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(22, TorznabCatType.PC); // Applications
             AddCategoryMapping(43, TorznabCatType.AudioAudiobook); // Audio Books
@@ -49,7 +53,9 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            if (configJson != null)
+                configData.LoadValuesFromJson(configJson);
+
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -92,6 +98,14 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
+
+            // Occasionally the cookies become invalid, login again if that happens
+            if (results.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;

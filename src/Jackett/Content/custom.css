@@ -20,69 +20,25 @@
     display: none;
 }
 
-.card {
-    background-color: #f9f9f9;
-    border-radius: 6px;
-    box-shadow: 1px 1px 5px 2px #cdcdcd;
-    width: 270px;
-    display: inline-block;
-    vertical-align: top;
-    margin: 5px;
-    overflow: hidden;
-    position: relative;
-}
-
 #indexers {
    text-align: center;
    margin-top: 30px;
 }
 
-
-#unconfigured-indexers{
-   text-align: center;
+.indexer-table {
+   text-align: left;
 }
 
-#unconfigured-indexers .card {
-    width: 200px;
-    position: relative;
+.test-success {
+    color: #449d44;
 }
 
-.unconfigured-indexer {
-    height: 70px;
+.test-error {
+    color: #c9302c;
 }
 
-
-
-.indexer {
-    height: 252px;
-}
-
-.add-indexer {
-    border: 0;
-}
-
-.indexer-logo {
-    padding-bottom: 5px;
-}
-
-.indexer-logo > .hidden-name {
-    position: absolute;
-    color: rgba(255, 255, 255, 0);
-    left: 0;
-}
-
-.indexer-logo  img {
-    width: 100%;
-    border-bottom: 1px solid #FFF;
-}
-
-#unconfigured-indexers .indexer-logo  img {
-    cursor: pointer;
-}
-
-.indexer-name > h3 {
-    margin-top: 13px;
-    text-align: center;
+.test-inprogress {
+    color: #286090;
 }
 
 .indexer-buttons {
@@ -94,33 +50,7 @@
 }
 
 .indexer-button-test {
-    width: 60px;
-}
-
-.indexer-add-content {
-    color: gray;
-    text-align: center;
-}
-
-    .indexer-add-content > .glyphicon {
-        font-size: 50px;
-        vertical-align: bottom;
-    }
-
-    .indexer-add-content > .light-text {
-        margin-top: 11px;
-        font-size: 18px;
-        margin-left: -5px;
-    }
-
-.indexer-host {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.indexer-host > input {
-    font-size: 12px;
-    padding: 2px;
+   width: 60px;
 }
 
 .setup-item-inputstring {
@@ -295,5 +225,10 @@ pre {
 
 .setup-item-displayinfo:empty {
     display: none;
+}
+
+.table td.fit{
+    white-space: nowrap;
+    width: 1%;
 }
 

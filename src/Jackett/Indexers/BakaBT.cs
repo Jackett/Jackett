@@ -40,6 +40,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
         }
 
 

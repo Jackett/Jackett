@@ -47,5 +47,10 @@ namespace JackettTest
         {
             throw new NotImplementedException();
         }
+
+        public void SortIndexers()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

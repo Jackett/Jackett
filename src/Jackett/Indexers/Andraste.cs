@@ -38,6 +38,9 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
+
             AddCategoryMapping(9,  TorznabCatType.Other); // Anderes
             AddCategoryMapping(23, TorznabCatType.TVAnime); // Animation - Film &; Serie
             AddCategoryMapping(1,  TorznabCatType.PC); // Appz
@@ -121,8 +124,8 @@ namespace Jackett.Indexers
             }
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
+            var results = response.Content;
             try
             {
                 CQ dom = results;

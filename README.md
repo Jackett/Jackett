@@ -16,9 +16,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 #### Supported Private Trackers
  * Abnormal
  * AlphaRatio
+ * AlphaReign
  * Andraste
  * AnimeBytes
  * AnimeTorrents
+ * Apollo (XANAX)
  * Avistaz
  * BakaBT
  * bB
@@ -28,13 +30,16 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BIT-HDTV
  * BitMeTV
  * BitSoup
- * BlueTigers
+ * Blu-bits
  * BTN
  * CinemaZ
  * DanishBits
  * Demonoid
  * DigitalHive
+ * EoT-Forum
+ * Ethor.net (Thor's Land)
  * FileList
+ * Freaks Tracking System
  * Freshon
  * FunFile
  * Fuzer
@@ -50,35 +55,47 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ILoveTorrents
  * Immortalseed
  * IPTorrents
- * PassThePopcorn
- * PirateTheNet
  * MoreThanTV
  * MyAnonamouse
  * myAmity
+ * MySpleen
  * NCore
+ * NetHD
  * NextGen
+ * Norbits
+ * PassThePopcorn
+ * PirateTheNet
  * Pretome
  * PrivateHD
  * RevolutionTT
  * SceneAccess
  * SceneFZ
  * SceneTime
+ * SDBits
+ * Secret Cinema
  * Shareisland
  * Shazbat
  * SpeedCD
+ * The Horror Charnel
  * The New Retro
+ * The Shinning
  * TehConnection
+ * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
+ * TorrentBD
  * TorrentBytes
  * TorrentDay
  * TorrentHeaven
  * TorrentLeech
  * TorrentShack
  * Torrent-Syndikat
+ * ToTheGlory
  * TransmitheNet
+ * Tspate
  * TV Chaos UK
  * TV-Vault
+ * UHDBits
  * World-In-HD
  * WorldOfP2P
  * x264
@@ -105,6 +122,7 @@ Jackett can also be run from the command line if you would like to see log messa
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
        * Follow the instructions on the mono website and install the `mono-devel` package.
+       * On Red Hat/CentOS  the `mono-locale-extras` package is also required
  2. Install  libcurl:
        * Debian/Ubunutu: `apt-get install libcurl-dev`
        * Redhat/Fedora: `yum install libcurl-devel`
@@ -139,4 +157,4 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 
 ### Screenshots
 
-![screenshot](https://i.imgur.com/SCGLzFq.png "screenshot")
+![screenshot](https://i.imgur.com/0d1nl7g.png "screenshot")

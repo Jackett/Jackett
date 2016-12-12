@@ -3,6 +3,7 @@
   name: Torrent Sector Crew
   description: "A German general tracker"
   language: de-de
+  encoding: windows-1252
   links:
     - https://tsctracker.net/
 
@@ -118,7 +119,7 @@
       orderby: "added"
       sort: desc
     rows:
-      selector: "h2 +p + br + table.tablebrowse > tbody > tr[style=\"height: 45px;\"], tr:contains(\"Alle Torrents\") + tr > td > table.tablebrowse > tbody > tr[style=\"height: 45px;\"]"
+      selector: "h2 +p + br + table.tablebrowse > tbody > tr[style=\"height: 45px;\"], tr:contains(\"Weiter\") > td > table.tablebrowse > tbody > tr[style=\"height: 45px;\"]"
     fields:
       title:
         selector: a[title][href^="details.php"]

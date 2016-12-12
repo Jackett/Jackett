@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -39,6 +40,8 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -206,7 +209,7 @@ namespace Jackett.Indexers
             var torrentId = downloadAnchorHref.Substring(downloadAnchorHref.LastIndexOf('=') + 1);
             var qFiles = row.QuerySelector("td:nth-last-child(6)");
             var files = ParseUtil.CoerceLong(qFiles.TextContent);
-            var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+            var publishDate = DateTime.ParseExact(row.QuerySelector(".time.tooltip").Attributes["title"].Value, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
             var torrentData = row.QuerySelectorAll(".number_column"); // Size (xx.xx GB[ (Max)]) Snatches (xx) Seeders (xx) Leechers (xx)
 
             if (torrentData.Length != 4)
@@ -215,7 +218,7 @@ namespace Jackett.Indexers
             if (torrentId.Contains('#'))
                 torrentId = torrentId.Split('#')[0];
 
-            var size = ParseSizeToBytes(torrentData[0].TextContent);
+            var size = ReleaseInfo.GetBytes(torrentData[0].TextContent);
             var grabs = int.Parse(torrentData[1].TextContent);
             var seeders = int.Parse(torrentData[2].TextContent);
             var guid = new Uri(GuidUrl + torrentId);
@@ -251,30 +254,5 @@ namespace Jackett.Indexers
 
             return season;
         }
-
-        // Changes "xx.xx GB/MB" to bytes
-        private static long ParseSizeToBytes(string strSize)
-        {
-            var sizeParts = strSize.Split(' ');
-            if (sizeParts.Length != 2)
-                throw new Exception($"We expected 2 size parts, instead we have {sizeParts.Length}.");
-
-            var size = double.Parse(sizeParts[0]);
-
-            switch (sizeParts[1].Trim())
-            {
-                case "GB":
-                    size = size*1000*1000*1000;
-                    break;
-                case "MB":
-                    size = size*1000*1000;
-                    break;
-                default:
-                    throw new Exception($"Unknown size type {sizeParts[1].Trim()}.");
-            }
-
-            return (long) Math.Ceiling(size);
-        }
-
     }
 }

@@ -48,7 +48,7 @@ namespace Jackett.Indexers
         public TorrentDay(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay",
-                link: "https://torrentday.it/",
+                link: "https://www.torrentday.com/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: wc,
@@ -56,6 +56,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLoginWithAlternateLink())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+
             this.configData.Instructions.Value = this.DisplayName + " has multiple URLs. The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
             this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
             this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
@@ -108,6 +111,10 @@ namespace Jackett.Indexers
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
+            if (loginPage.IsRedirect)
+                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
+            if (loginPage.IsRedirect)
+                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
             CQ cq = loginPage.Content;
             var result = this.configData;
             result.CookieHeader.Value = loginPage.Cookies;
@@ -161,6 +168,11 @@ namespace Jackett.Indexers
                     errorMessage = dom.Text();
                 }
 
+                if (string.IsNullOrWhiteSpace(errorMessage) && result.IsRedirect)
+                {
+                    errorMessage = string.Format("Got a redirect to {0}, please adjust your the alternative link", result.RedirectingTo);
+                }
+
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -193,7 +205,10 @@ namespace Jackett.Indexers
 
             // Check for being logged out
             if (results.IsRedirect)
-                throw new AuthenticationException();
+                if (results.RedirectingTo.Contains("login.php"))
+                    throw new ExceptionWithConfigData("Login failed, please reconfigure the tracker to update the cookies", configData);
+                else
+                    throw new ExceptionWithConfigData(string.Format("Got a redirect to {0}, please adjust your the alternative link", results.RedirectingTo), configData);
 
             try
             {

@@ -23,6 +23,7 @@ namespace Jackett.Services
         void SaveConfig(IIndexer indexer, JToken obj);
         void InitIndexers();
         void InitCardigannIndexers(string path);
+        void SortIndexers();
     }
 
     public class IndexerManagerService : IIndexerManagerService
@@ -125,6 +126,7 @@ namespace Jackett.Services
         {
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
+            browseQuery.IsTest = true;
             var results = await indexer.PerformQuery(browseQuery);
             results = indexer.CleanLinks(results);
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
@@ -138,7 +140,14 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             var configPath = GetIndexerConfigFilePath(indexer);
             File.Delete(configPath);
-            indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
+            if (indexer.GetType() == typeof(CardigannIndexer))
+            {
+                indexers[name] = new CardigannIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), ((CardigannIndexer)indexer).DefinitionString);
+            }
+            else
+            {
+                indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
+            }
         }
 
         private string GetIndexerConfigFilePath(IIndexer indexer)
@@ -202,6 +211,16 @@ namespace Jackett.Services
             {
                 logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex.ToString()));
             }
+        }
+
+        public void SortIndexers()
+        {
+            // Apparently Dictionary are ordered but can't be sorted again
+            // This will recreate the indexers Dictionary to workaround this limitation
+            Dictionary<string, IIndexer> newIndexers = new Dictionary<string, IIndexer>();
+            foreach (var indexer in indexers.OrderBy(_ => _.Value.DisplayName))
+                newIndexers.Add(indexer.Key, indexer.Value);
+            indexers = newIndexers;
         }
     }
 }

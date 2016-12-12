@@ -42,6 +42,9 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataNCore())
         {
+            Encoding = Encoding.UTF8;
+            Language = "hu-hu";
+
             AddCategoryMapping("Sorozatok SD felbontásban angolul és egyéb nyelveken.", TorznabCatType.TVSD);
             AddCategoryMapping("Nagyfelbontású sorozatok angolul és egyéb nyelveken.", TorznabCatType.TVHD);
             AddCategoryMapping("Sorozatok SD felbontásban magyarul.", TorznabCatType.TVFOREIGN);

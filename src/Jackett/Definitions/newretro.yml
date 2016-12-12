@@ -3,6 +3,7 @@
   name: The New Retro
   description: "A German gerneral tracker"
   language: de-de
+  encoding: windows-1252
   links:
     - http://new-retro.ddns.net/
 

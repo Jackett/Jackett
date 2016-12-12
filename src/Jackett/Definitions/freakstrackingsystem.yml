@@ -1,0 +1,101 @@
+﻿---
+  site: freakstrackingsystem
+  name: Freaks Tracking System
+  description: "A German gerneral tracker"
+  language: de-de
+  encoding: UTF-8
+  links:
+    - https://fts.to
+
+  caps:
+    categories:
+      1: Movies
+      2: TV
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /index.php?form=UserLogin
+    method: form
+    inputs:
+      loginUsername: "{{ .Config.username }}"
+      loginPassword: "{{ .Config.password }}"
+    error:
+      - selector: p.innerError
+    test:
+      path: index.php?page=FTSAttachmentList
+      selector: "span:contains(\"Freaks-Punkte:\") > span"
+
+  ratio:
+    path: index.php?page=FTSAttachmentList
+    selector: "span:contains(\"Freaks-Punkte:\") > span"
+
+  search:
+    path: index.php
+    inputs:
+      page: "FTSAttachmentList"
+      sortField: "uploadTime"
+      sortOrder: "DESC"
+      filename: "{{ .Query.Keywords }}"
+    rows:
+      selector: table.tableList > tbody > tr[class^="container-"]:has(td:nth-child(5) > a, td:nth-child(6) > a) # has makes sure that we can build a download link
+    fields:
+      download:
+        selector: td:nth-child(5) > a, td:nth-child(6) > a
+        attribute: href
+        filters:
+          - name: replace
+            args: ["page=FTSPeerList&torrentID=", "page=Attachment&attachmentID="]
+      title:
+        selector: td:nth-child(4) > a
+      category:
+        text: 2
+      details:
+        selector: td:nth-child(4) > a
+        attribute: href
+      size:
+        selector: td:nth-child(8)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      grabs:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(5)
+      leechers:
+        selector: td:nth-child(6)
+      date:
+        selector: td:nth-child(3)
+        filters:
+          - name: replace
+            args: ["Heute", "Today"]
+          - name: replace
+            args: ["Gestern", "Yesterday"]
+          - name: replace
+            args: ["Januar", "January"]
+          - name: replace
+            args: ["Februar", "February"]
+          - name: replace
+            args: ["März", "March"]
+          - name: replace
+            args: ["Mai", "May"]
+          - name: replace
+            args: ["Juni", "June"]
+          - name: replace
+            args: ["Juli", "July"]
+          - name: replace
+            args: ["Oktober", "October"]
+          - name: replace
+            args: ["Dezember", "December"]
+          - name: dateparse
+            args: "2. January 2006, 15:04"
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

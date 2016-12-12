@@ -17,13 +17,19 @@ using AngleSharp.Parser.Html;
 using System.Text.RegularExpressions;
 using System.Web;
 using AngleSharp.Dom;
+using AngleSharp.Dom.Html;
+using System.Linq;
 
 namespace Jackett.Indexers
 {
     public class CardigannIndexer : BaseIndexer, IIndexer
     {
+        public string DefinitionString { get; protected set; }
         protected IndexerDefinition Definition;
         public new string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
+
+        protected WebClientStringResult landingResult;
+        protected IHtmlDocument landingResultDocument;
 
         new ConfigurationData configData
         {
@@ -38,6 +44,7 @@ namespace Jackett.Indexers
             public string Name { get; set; }
             public string Description { get; set; }
             public string Language { get; set; }
+            public string Encoding { get; set; }
             public List<string> Links { get; set; }
             public capabilitiesBlock Caps { get; set; }
             public loginBlock Login { get; set; }
@@ -114,8 +121,10 @@ namespace Jackett.Indexers
         {
             public int After { get; set; }
             //public string Remove { get; set; } // already inherited
-            public string Dateheaders { get; set; }
+            public selectorBlock Dateheaders { get; set; }
         }
+
+        protected readonly string[] OptionalFileds = new string[] { "imdb" };
 
         public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(manager: i,
@@ -136,6 +145,7 @@ namespace Jackett.Indexers
 
         protected void Init(string DefinitionString)
         {
+            this.DefinitionString = DefinitionString;
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .IgnoreUnmatchedProperties()
@@ -152,12 +162,20 @@ namespace Jackett.Indexers
                 Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
             }
 
+            if (Definition.Encoding == null)
+                Definition.Encoding = "iso-8859-1";
+
+            if (Definition.Login != null && Definition.Login.Method == null)
+                Definition.Login.Method = "form";
+
             // init missing mandatory attributes
             DisplayName = Definition.Name;
             DisplayDescription = Definition.Description;
             SiteLink = Definition.Links[0]; // TODO: implement alternative links
+            Encoding = Encoding.GetEncoding(Definition.Encoding);
             if (!SiteLink.EndsWith("/"))
                 SiteLink += "/";
+            Language = Definition.Language;
             TorznabCaps = TorznabUtil.CreateDefaultTorznabTVCaps(); // TODO implement caps
 
             // init config Data
@@ -298,7 +316,7 @@ namespace Jackett.Indexers
             }
             return true; // no error
         }
-
+        
         protected async Task<bool> DoLogin()
         {
             var Login = Definition.Login;
@@ -306,7 +324,7 @@ namespace Jackett.Indexers
             if (Login == null)
                 return false;
 
-            if (Login.Method == null || Login.Method == "post")
+            if (Login.Method == "post")
             {
                 var pairs = new Dictionary<string, string>();
                 foreach (var Input in Definition.Login.Inputs)
@@ -326,17 +344,57 @@ namespace Jackett.Indexers
             {
                 var LoginUrl = SiteLink + Login.Path;
 
+                var pairs = new Dictionary<string, string>();
+
+                var CaptchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
+
+                if (CaptchaConfigItem != null)
+                { 
+                    if (!string.IsNullOrWhiteSpace(CaptchaConfigItem.Cookie))
+                    {
+                        // for remote users just set the cookie and return
+                        CookieHeader = CaptchaConfigItem.Cookie;
+                        return true;
+                    }
+
+                    var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src=\"/cdn-cgi/scripts/cf.challenge.js\"]");
+                    if (CloudFlareCaptchaChallenge != null)
+                    {
+                        var CloudFlareQueryCollection = new NameValueCollection();
+                        CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
+                    
+                        CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
+                        var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
+
+                        var ClearanceResult = await RequestStringWithCookies(ClearanceUrl.ToString(), null, SiteLink);
+
+                        if (ClearanceResult.IsRedirect) // clearance successfull
+                        {
+                            // request real login page again
+                            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                            var htmlParser = new HtmlParser();
+                            landingResultDocument = htmlParser.Parse(landingResult.Content);
+                        }
+                        else
+                        {
+                            throw new ExceptionWithConfigData(string.Format("Login failed: Cloudflare clearance failed using cookies {0}: {1}", CookieHeader, ClearanceResult.Content), configData);
+                        }
+                    }
+                    else
+                    {
+                        pairs.Add("g-recaptcha-response", CaptchaConfigItem.Value);
+                    }
+                }
+
                 var FormSelector = Login.Form;
                 if (FormSelector == null)
                     FormSelector = "form";
 
-                var pairs = new Dictionary<string, string>();
-
-                configData.CookieHeader.Value = null;
-                var landingResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, false, null, SiteLink, true);
-
-                var htmlParser = new HtmlParser();
-                var landingResultDocument = htmlParser.Parse(landingResult.Content);
+                // landingResultDocument might not be initiated if the login is caused by a relogin during a query
+                if (landingResultDocument == null)
+                {
+                    await GetConfigurationForSetup();
+                }
 
                 var form = landingResultDocument.QuerySelector(FormSelector);
                 if (form == null)
@@ -376,14 +434,39 @@ namespace Jackett.Indexers
                 if(simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
-                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), landingResult.Cookies, LoginUrl);
+                    var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), null, LoginUrl);
                     var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.Content);
                     var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
                     pairs["submitme"] = "X";
                 }
 
-                var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, landingResult.Cookies, true, null, SiteLink, true);
+                WebClientStringResult loginResult = null;
+                var enctype = form.GetAttribute("enctype");
+                if (enctype == "multipart/form-data")
+                {
+                    var headers = new Dictionary<string, string>();
+                    var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "");
+                    var bodyParts = new List<string>();
+
+                    foreach (var pair in pairs)
+                    {
+                        var part = "--" + boundary + "\r\n" +
+                          "Content-Disposition: form-data; name=\"" + pair.Key + "\"\r\n" +
+                          "\r\n" +
+                          pair.Value;
+                        bodyParts.Add(part);
+                    }
+
+                    bodyParts.Add("--" + boundary + "--");
+
+                    headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+                    var body = string.Join("\r\n",  bodyParts);
+                    loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                } else {
+                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
+                }
+
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForLoginError(loginResult);
@@ -426,6 +509,58 @@ namespace Jackett.Indexers
                 }
             }
             return true;
+        }
+
+        protected bool CheckIfLoginIsNeeded(WebClientStringResult Result, IHtmlDocument document)
+        {
+            if (Result.IsRedirect)
+            {
+                return true;
+            }
+
+            if (Definition.Login == null || Definition.Login.Test == null)
+                return false;
+
+            if (Definition.Login.Test.Selector != null)
+            {
+                var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
+                if (selection.Length == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var Login = Definition.Login;
+
+            if (Login == null || Login.Method != "form")
+                return configData;
+
+            var LoginUrl = SiteLink + Login.Path;
+
+            configData.CookieHeader.Value = null;
+            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+
+            var htmlParser = new HtmlParser();
+            landingResultDocument = htmlParser.Parse(landingResult.Content);
+
+            var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
+            if (grecaptcha != null)
+            {
+                var CaptchaItem = new RecaptchaItem();
+                CaptchaItem.Name = "Captcha";
+                CaptchaItem.Version = "2";
+                CaptchaItem.SiteKey = grecaptcha.GetAttribute("data-sitekey");
+                if (CaptchaItem.SiteKey == null) // some sites don't store the sitekey in the .g-recaptcha div (e.g. cloudflare captcha challenge page)
+                    CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
+
+                configData.AddDynamic("Captcha", CaptchaItem);
+            }
+
+            return configData;
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -512,6 +647,20 @@ namespace Jackett.Indexers
             return Data;
         }
 
+        protected IElement QuerySelector(IElement Element, string Selector)
+        {
+            // AngleSharp doesn't support the :root pseudo selector, so we check for it manually
+            if (Selector.StartsWith(":root"))
+            {
+                Selector = Selector.Substring(5);
+                while (Element.ParentElement != null)
+                {
+                    Element = Element.ParentElement;
+                }
+            }
+            return Element.QuerySelector(Selector);
+        }
+
         protected string handleSelector(selectorBlock Selector, IElement Dom)
         {
             if (Selector.Text != null)
@@ -524,7 +673,7 @@ namespace Jackett.Indexers
 
             if (Selector.Selector != null)
             {
-                selection = Dom.QuerySelector(Selector.Selector);
+                selection = QuerySelector(Dom, Selector.Selector);
                 if (selection == null)
                 {
                     throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.OuterHtml));
@@ -543,7 +692,7 @@ namespace Jackett.Indexers
             {
                 foreach(var Case in Selector.Case)
                 {
-                    if (selection.Matches(Case.Key) || selection.QuerySelector(Case.Key) != null)
+                    if (selection.Matches(Case.Key) || QuerySelector(selection, Case.Key) != null)
                     {
                         value = Case.Value;
                         break;
@@ -569,6 +718,11 @@ namespace Jackett.Indexers
             if(path.StartsWith("http"))
             {
                 return new Uri(path);
+            }
+            else if(path.StartsWith("/"))
+            {
+                var basepath = new Uri(SiteLink);
+                return new Uri(basepath.Scheme+"://"+ basepath.Host + path);
             }
             else
             {
@@ -638,13 +792,25 @@ namespace Jackett.Indexers
             searchUrl += "&" + queryCollection.GetQueryString();
 
             // send HTTP request
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
+            var results = response.Content;
             try
             {
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results);
-                
+
+                // check if we need to login again
+                var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                if (loginNeeded)
+                {
+                    logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
+                    await DoLogin();
+                    await TestLogin();
+                    response = await RequestStringWithCookies(searchUrl);
+                    results = results = response.Content;
+                    SearchResultDocument = SearchResultParser.Parse(results);
+                }
+
                 var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
                 List<IElement> Rows = new List<IElement>();
                 foreach (var RowDom in RowsDom)
@@ -685,24 +851,35 @@ namespace Jackett.Indexers
                         // Parse fields
                         foreach (var Field in Search.Fields)
                         {
-                            string value = handleSelector(Field.Value, Row);
-                            value = ParseUtil.NormalizeSpace(value);
+                            string value = null;
                             try
                             {
+                                value = handleSelector(Field.Value, Row);
+                                value = ParseUtil.NormalizeSpace(value);
                                 switch (Field.Key)
                                 {
                                     case "download":
-                                        release.Link = resolvePath(value);
+                                        if (value.StartsWith("magnet:"))
+                                        {
+                                            release.MagnetUri = new Uri(value);
+                                            release.Link = release.MagnetUri;
+                                        }
+                                        else
+                                        {
+                                            release.Link = resolvePath(value);
+                                        }
                                         break;
                                     case "details":
                                         var url = resolvePath(value);
                                         release.Guid = url;
-                                        if (release.Comments == null)
-                                            release.Comments = url;
+                                        release.Comments = url;
+                                        if (release.Guid == null)
+                                            release.Guid = url;
                                         break;
                                     case "comments":
                                         var CommentsUrl = resolvePath(value);
-                                        release.Comments = CommentsUrl;
+                                        if(release.Comments == null)
+                                            release.Comments = CommentsUrl;
                                         if (release.Guid == null)
                                             release.Guid = CommentsUrl;
                                         break;
@@ -746,14 +923,48 @@ namespace Jackett.Indexers
                                     case "uploadvolumefactor":
                                         release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
                                         break;
+                                    case "imdb":
+                                        Regex IMDBRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                        var IMDBMatch = IMDBRegEx.Match(value);
+                                        var IMDBId = IMDBMatch.Groups[1].Value;
+                                        release.Imdb = ParseUtil.CoerceLong(IMDBId);
+                                        break;
                                     default:
                                         break;
                                 }
                             }
                             catch (Exception ex)
                             {
+                                if (OptionalFileds.Contains(Field.Key))
+                                    continue;
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
                             }
+                        }
+
+                        // if DateHeaders is set go through the previous rows and look for the header selector
+                        var DateHeaders = Definition.Search.Rows.Dateheaders;
+                        if (release.PublishDate == null && DateHeaders != null)
+                        {
+                            var PrevRow = Row.PreviousElementSibling;
+                            string value = null;
+                            while (PrevRow != null)
+                            {
+                                try
+                                {
+                                    value = handleSelector(DateHeaders, PrevRow);
+                                    break;
+                                }
+                                catch (Exception)
+                                {
+                                    // do nothing
+                                }
+                                PrevRow = PrevRow.PreviousElementSibling;
+                            }
+                            
+                            if (value == null)
+                                throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
+
+                            release.PublishDate = DateTimeUtil.FromUnknown(value);
                         }
 
                         releases.Add(release);

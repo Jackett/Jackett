@@ -40,6 +40,9 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataCaptchaLogin())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
+
             AddCategoryMapping(1,   TorznabCatType.PCGames); // GAMES/PC
             AddCategoryMapping(3,   TorznabCatType.Console); // GAMES/Sonstige
             AddCategoryMapping(59,  TorznabCatType.ConsolePS4); // GAMES/PlayStation
@@ -178,8 +181,8 @@ namespace Jackett.Indexers
             }
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestBytesWithCookies(searchUrl);
-            var results = Encoding.GetEncoding("iso-8859-1").GetString(response.Content);
+            var response = await RequestStringWithCookies(searchUrl);
+            var results = response.Content;
             var TitleRegexp = new Regex(@"^return buildTable\('(.*?)',\s+");
             try
             {

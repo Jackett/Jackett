@@ -20,6 +20,8 @@ namespace Jackett.Indexers
         public string SiteLink { get; protected set; }
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
+        public string Language { get; protected set; }
+        public Encoding Encoding { get; protected set; }
         public string ID { get { return GetIndexerID(GetType()); } }
 
         public bool IsConfigured { get; protected set; }
@@ -38,7 +40,17 @@ namespace Jackett.Indexers
             set { configData.CookieHeader.Value = value; }
         }
 
-
+        public string LastError
+        {
+            get { return configData.LastError.Value; }
+            set
+            {
+                bool SaveNeeded = configData.LastError.Value != value && IsConfigured;
+                configData.LastError.Value = value;
+                if (SaveNeeded)
+                    SaveConfig();
+            }
+        }
 
         protected ConfigurationData configData;
 
@@ -228,7 +240,8 @@ namespace Jackett.Indexers
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,
-                    Cookies = redirRequestCookies
+                    Cookies = redirRequestCookies,
+                    Encoding = Encoding
                 });
                 Mapper.Map(redirectedResponse, incomingResponse);
             }
@@ -283,7 +296,12 @@ namespace Jackett.Indexers
 
         public async virtual Task<byte[]> Download(Uri link)
         {
-            var response = await RequestBytesWithCookiesAndRetry(link.ToString());
+            // do some extra escaping, needed for HD-Torrents
+            var requestLink = link.ToString()
+                .Replace("(", "%28")
+                .Replace(")", "%29")
+                .Replace("'", "%27");
+            var response = await RequestBytesWithCookiesAndRetry(requestLink);
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 if(response.Content != null)
@@ -322,7 +340,8 @@ namespace Jackett.Indexers
                 Type = RequestType.GET,
                 Cookies = CookieHeader,
                 Referer = referer,
-                Headers = headers
+                Headers = headers,
+                Encoding = Encoding
             };
 
             if (cookieOverride != null)
@@ -358,7 +377,8 @@ namespace Jackett.Indexers
             {
                 Url = url,
                 Type = RequestType.GET,
-                Cookies = cookieOverride ?? CookieHeader
+                Cookies = cookieOverride ?? CookieHeader,
+                Encoding = Encoding
             };
 
             if (cookieOverride != null)
@@ -376,7 +396,8 @@ namespace Jackett.Indexers
                 PostData = data,
                 Referer = referer,
                 Headers = headers,
-                RawBody = rawbody
+                RawBody = rawbody,
+                Encoding = Encoding
             };
 
             if (emulateBrowser.HasValue)
@@ -414,7 +435,8 @@ namespace Jackett.Indexers
                 Type = RequestType.POST,
                 Cookies = cookies,
                 Referer = referer,
-                PostData = data
+                PostData = data,
+                Encoding = Encoding
             };
             var response = await webclient.GetString(request);
             if (accumulateCookies)

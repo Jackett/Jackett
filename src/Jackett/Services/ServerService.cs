@@ -154,6 +154,7 @@ namespace Jackett.Services
             {
                 indexerService.InitCardigannIndexers(dir);
             }
+            indexerService.SortIndexers();
             client.Init();
         }
 

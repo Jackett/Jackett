@@ -15,6 +15,7 @@ namespace Jackett.Utils.Clients
             Type = RequestType.GET;
             Headers = new Dictionary<string, string>();
             EmulateBrowser = true;
+            Encoding Encoding;
         }
 
         public WebRequest(string url)
@@ -24,6 +25,7 @@ namespace Jackett.Utils.Clients
             Url = url;
             Headers = new Dictionary<string, string>();
             EmulateBrowser = true;
+            Encoding Encoding;
         }
 
         public string Url { get; set; }
@@ -33,6 +35,7 @@ namespace Jackett.Utils.Clients
         public RequestType Type { get; set; }
         public string RawBody { get; set; }
         public bool EmulateBrowser { get; set; }
+        public Encoding Encoding { get; set; }
 
         /// <summary>
         /// Warning this is only implemented on HTTPWebClient currently!
@@ -76,6 +79,7 @@ namespace Jackett.Utils.Clients
                        other.Referer == Referer &&
                        other.Cookies == Cookies &&
                        other.Type == Type &&
+                       other.Encoding == Encoding &&
                        postDataSame;
 
             }
