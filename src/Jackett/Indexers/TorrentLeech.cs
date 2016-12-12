@@ -107,13 +107,6 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("/user/account/logout"))
-            {
-                //Cookie appears to expire after a period of time or logging in to the site via browser
-                await DoLogin();
-            }
-
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             searchString = searchString.Replace('-', ' '); // remove dashes as they exclude search strings
@@ -142,6 +135,14 @@ namespace Jackett.Indexers
             }
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
+
+            if (!results.Content.Contains("/user/account/logout"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;
