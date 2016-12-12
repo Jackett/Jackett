@@ -47,6 +47,7 @@ namespace Jackett.Indexers
             TorznabCaps.Categories.Clear();
 
             //Movies
+            addCategoryMappingByMediaType("1", TorznabCatType.MoviesHD, "movie");// Movie/ diferents types
             addCategoryMappingByMediaType("12", TorznabCatType.MoviesBluRay,"movie");// Movie/Blu-Ray
             addCategoryMappingByMediaType("13", TorznabCatType.MoviesHD, "movie");//Movie/Blu-ray 1080 rip
             addCategoryMappingByMediaType("14", TorznabCatType.MoviesHD, "movie");//Movie/720p rip
@@ -58,6 +59,7 @@ namespace Jackett.Indexers
             addCategoryMappingByMediaType("110", TorznabCatType.MoviesHD, "movie"); //Movies/4K HDTV & WEB-DL 
 
             //TVShows
+            addCategoryMappingByMediaType("2", TorznabCatType.TVWEBDL, "tvshow");//TV Show/diferents types
             addCategoryMappingByMediaType("22", TorznabCatType.TVHD,"tvshow");//TV Show/Blu-ray 1080 rip
             addCategoryMappingByMediaType("23", TorznabCatType.TVHD, "tvshow");//TV Show/Blu-ray 720 rip
             addCategoryMappingByMediaType("24", TorznabCatType.TVWEBDL, "tvshow");//TV Show/1080 HDTV & WEB-DL
@@ -67,12 +69,14 @@ namespace Jackett.Indexers
             addCategoryMappingByMediaType("111", TorznabCatType.TVHD, "tvshow");//TV Show/4K WEB-DL
 
             //Anime
+            addCategoryMappingByMediaType("3", TorznabCatType.TVAnime, "tvshow");//Anime/ diferents types
             addCategoryMappingByMediaType("28", TorznabCatType.TVAnime, "tvshow");//Anime/Blu-ray 1080 rip
             addCategoryMappingByMediaType("29", TorznabCatType.TVAnime, "tvshow");//Anime/Blu-ray 720 rip
             addCategoryMappingByMediaType("32", TorznabCatType.TVAnime, "tvshow");//Anime/Blu-ray Remux
             addCategoryMappingByMediaType("107", TorznabCatType.TVAnime, "tvshow");//Anime/HDTV 4K
 
             //XXX
+            addCategoryMappingByMediaType("7", TorznabCatType.XXX, "xxx");//XXX/diferent type
             addCategoryMappingByMediaType("49", TorznabCatType.XXX, "xxx");//XXX/Blu-ray 1080 rip
             addCategoryMappingByMediaType("52", TorznabCatType.XXX, "xxx");//XXX/Blu-ray 720 rip
             addCategoryMappingByMediaType("56", TorznabCatType.XXX, "xxx");//XXX/HDTV 1080
@@ -82,6 +86,7 @@ namespace Jackett.Indexers
             addCategoryMappingByMediaType("115", TorznabCatType.XXX, "xxx");//XXX/4K HDTV & WEB-DL
 
             //Animation
+            addCategoryMappingByMediaType("9", TorznabCatType.TVAnime, "tvshow");//Animation/diferents types
             addCategoryMappingByMediaType("41", TorznabCatType.TVAnime, "tvshow");//Animation/Blu-ray 1080
             addCategoryMappingByMediaType("42", TorznabCatType.TVAnime, "tvshow");//Animation/Blu-ray 720
             addCategoryMappingByMediaType("43", TorznabCatType.TVAnime, "tvshow");//Animation/WEB-DL 1080
@@ -92,6 +97,7 @@ namespace Jackett.Indexers
             addCategoryMappingByMediaType("108", TorznabCatType.TVAnime, "tvshow");//Animation/4K HDTV WEB-DL
 
             //Show Animation
+            addCategoryMappingByMediaType("10", TorznabCatType.TVAnime, "tvshow");//Animation/diferent type
             addCategoryMappingByMediaType("30", TorznabCatType.TVAnime, "tvshow");//Animation/Blu-ray 1080
             addCategoryMappingByMediaType("31", TorznabCatType.TVAnime, "tvshow");//Animation/Blu-ray 720
             addCategoryMappingByMediaType("33", TorznabCatType.TVAnime, "tvshow");//Animation/WEB-DL 1080
@@ -266,8 +272,9 @@ namespace Jackett.Indexers
 
                 if (configData.TVShowEnglishMode.Value && mediaType.Equals("tvshow"))
                 {
-                    title = title.Replace("ª", "").ToLower();
-                   
+                    title = title.Replace("ª", "").Replace("°","").ToLower();
+
+
                     Regex qariRegex = new Regex("(temporada|temp)( *)(?<season>[0-9]{1,3})|(?<season>[0-9]{1,3})( *)(temporada|temp)|t(?<season>[0-9]{1,3})|s?(?<season>[0-9]{1,3})(( *)[xe]( *)(?<episode>[0-9]{1,4}))?");
                     MatchCollection mc = qariRegex.Matches(title);
                     //We are finding tv shows
@@ -418,7 +425,7 @@ namespace Jackett.Indexers
                         //Find only season
                         if (mc[0].Groups["episode"].Value.Equals(""))
                         {
-                            releases.AddRange(await performSimpleSearch(query, queryCollection, string.Format("{0} Temporada {1} {2}", tvshow, season, suffix)));
+                            releases.AddRange(await performSimpleSearch(query, queryCollection, string.Format("{0} temp {1} {2}", tvshow, season, suffix)));
                             releases.AddRange(await performSimpleSearch(query, queryCollection, string.Format("{0} T{1} {2}", tvshow, season, suffix)));
                             if (releases.Count == 0)
                             {
