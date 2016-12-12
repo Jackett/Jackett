@@ -171,6 +171,7 @@
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
     <Compile Include="Indexers\HD4Free.cs" />
+	<Compile Include="Indexers\HDCity.cs" />
     <Compile Include="Indexers\myAmity.cs" />
     <Compile Include="Indexers\TorrentNetwork.cs" />
     <Compile Include="Indexers\Andraste.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
+	<Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataHDCity.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilterAndPasskey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
