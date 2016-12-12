@@ -46,7 +46,7 @@
       inclbookmarked: 0
       incldead: 1
     rows:
-      selector: tr.stickyrow
+      selector: tr:has(td.name)
     fields:
       title:
         selector: td.name > div > a.poster-preview[title]
