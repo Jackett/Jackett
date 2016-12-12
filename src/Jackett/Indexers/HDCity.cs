@@ -8,16 +8,13 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
+
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using Jackett.Models.IndexerConfig.Bespoke;
-using Newtonsoft.Json;
-using System.IO;
-using System.Web.Script.Serialization;
+
 
 namespace Jackett.Indexers
 {
@@ -116,7 +113,7 @@ namespace Jackett.Indexers
 
         }
 
-        public void imdbSearch(string title)
+        /**public void imdbSearch(string title)
         {
             String encodedTitle = HttpUtility.UrlEncode(title);
             string url = String.Format("https://v2.sg.media-imdb.com/suggests/{0}/{1}.json",encodedTitle.Substring(0,1).ToLower(), encodedTitle);
@@ -146,7 +143,7 @@ namespace Jackett.Indexers
 
 
             }
-        }
+        }**/
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
