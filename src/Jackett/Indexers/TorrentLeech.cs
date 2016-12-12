@@ -111,7 +111,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("/logout.php"))
+            if (!loggedInCheck.Content.Contains("/user/account/logout"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
