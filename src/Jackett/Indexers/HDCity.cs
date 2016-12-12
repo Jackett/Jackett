@@ -388,10 +388,10 @@ namespace Jackett.Indexers
                 var searchUrl = SearchUrl;// string.Format(SearchUrl, HttpUtility.UrlEncode()));
                 var queryCollection = new NameValueCollection();
                 var searchString = query.GetQueryString();
-                if (configData.TranslateMediaNamesToEnglish.Value)
+                /**if (configData.TranslateMediaNamesToEnglish.Value)
                 {
                     //imdbSearch(searchString);
-                }
+                }**/
 
 
                 List<String> categories = MapTorznabCapsToTrackers(query);

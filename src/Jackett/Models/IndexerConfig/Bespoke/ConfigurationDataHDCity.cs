@@ -10,12 +10,12 @@ namespace Jackett.Models.IndexerConfig.Bespoke
     {
         public DisplayItem FormatExplication { get; private set; }
         public DisplayItem ResultFilters { get; private set; }
-        public DisplayItem TranslateExplication { get; private set; }
+        //public DisplayItem TranslateExplication { get; private set; }
 
         public BoolItem TVShowEnglishMode { get; private set; }
         public StringItem TVShowsFilter { get; private set; }
         public StringItem MoviesFilter { get; private set; }
-        public BoolItem TranslateMediaNamesToEnglish { get; private set; }
+        //public BoolItem TranslateMediaNamesToEnglish { get; private set; }
 
         public ConfigurationDataHDCity()
             : base()
@@ -32,10 +32,10 @@ namespace Jackett.Models.IndexerConfig.Bespoke
             TVShowsFilter = new StringItem { Name = "TV Show Filters", Value = "dual|triaudio|multi|(es|spa|cas?t|v( *)(\\.?)( *)o)( *)[/|-]|[/|-](en|es|spa|cas?t|v( *)(\\.?)( *)o)" };
             MoviesFilter = new StringItem { Name = "Movies Filters", Value = "" };
 
-            TranslateExplication = new DisplayItem("<b>Translations:</b><br/>Sonarr and Couch potato will always check for Original/English media names<br/>"+
+            /*TranslateExplication = new DisplayItem("<b>Translations:</b><br/>Sonarr and Couch potato will always check for Original/English media names<br/>"+
                 "Check <b>Automated Translations</b> if you want Jackett try to transform the names for better matchings")
             { Name = "Translations" };
-            TranslateMediaNamesToEnglish = new BoolItem() { Name = "Automatic Translation", Value = false };
+            TranslateMediaNamesToEnglish = new BoolItem() { Name = "Automatic Translation", Value = false };*/
         }
     }
 }
