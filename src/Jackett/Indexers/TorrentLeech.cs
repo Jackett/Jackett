@@ -93,17 +93,14 @@ namespace Jackett.Indexers
         {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "remember_me", "on" },
-                { "login", "submit" }
+                { "password", configData.Password.Value }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
                 CQ dom = result.Content;
-                var messageEl = dom[".ui-state-error"].Last();
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = dom["div#login_heading + div.card-panel-error"].Text();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
