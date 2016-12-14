@@ -173,7 +173,14 @@ namespace Jackett.Indexers
                     string category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
 
-                    if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
+                    release.UploadVolumeFactor = 1;
+
+                    if (qRow.Find("img[alt=\"Free Torrent\"]").Length >= 1)
+                    { 
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 0;
+                    }
+                    else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.5;
                     else if (qRow.Find("img[alt=\"Bronze Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.75;
@@ -181,8 +188,6 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 0.25;
                     else
                         release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
