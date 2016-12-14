@@ -441,6 +441,10 @@ namespace Jackett.Indexers
                     pairs["submitme"] = "X";
                 }
 
+                // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
+                landingResult = null;
+                landingResultDocument = null;
+
                 WebClientStringResult loginResult = null;
                 var enctype = form.GetAttribute("enctype");
                 if (enctype == "multipart/form-data")
