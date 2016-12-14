@@ -100,6 +100,11 @@ namespace Jackett.Indexers
         {
             configData.LoadValuesFromJson(configJson);
 
+            // reset cookies, if we send expired cookies for a new session their code seems to get confused
+            // Due to the session not getting initiated correctly it will result in errors like this:
+            // Notice: Undefined index: simpleCaptchaAnswer in /var/www/html/takelogin.php on line 17
+            CookieHeader = null;
+
             var result1 = await RequestStringWithCookies(CaptchaUrl);
             var json1 = JObject.Parse(result1.Content);
             var captchaSelection = json1["images"][0]["hash"];
