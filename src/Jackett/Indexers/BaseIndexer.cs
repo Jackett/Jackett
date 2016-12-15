@@ -304,9 +304,10 @@ namespace Jackett.Indexers
             var response = await RequestBytesWithCookiesAndRetry(requestLink);
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
-                if(response.Content != null)
+                logger.Error("Failed download cookies: " + this.CookieHeader);
+                if (response.Content != null)
                     logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
-                throw new Exception($"Remote server returned {response.Status.ToString()}");
+                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => "+response.RedirectingTo : ""));
             }
 
             return response.Content;
