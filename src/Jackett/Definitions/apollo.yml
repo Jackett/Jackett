@@ -87,6 +87,7 @@
       downloadvolumefactor:
         case:
           ":root div.alertbar:contains(\"freeleech\")": "0"
+          ":root div.alertbar:contains(\"FREELEECH\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:
