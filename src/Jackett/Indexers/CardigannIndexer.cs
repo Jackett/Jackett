@@ -50,6 +50,7 @@ namespace Jackett.Indexers
             public loginBlock Login { get; set; }
             public ratioBlock Ratio { get; set; }
             public searchBlock Search { get; set; }
+            public downloadBlock Download { get; set; }
             // IndexerDefinitionStats not needed/implemented
         }
         public class settingsField
@@ -122,6 +123,11 @@ namespace Jackett.Indexers
             public int After { get; set; }
             //public string Remove { get; set; } // already inherited
             public selectorBlock Dateheaders { get; set; }
+        }
+
+        public class downloadBlock
+        {
+            public string Selector { get; set; }
         }
 
         protected readonly string[] OptionalFileds = new string[] { "imdb" };
@@ -985,6 +991,34 @@ namespace Jackett.Indexers
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            if(Definition.Download != null)
+            {
+                var Download = Definition.Download;
+                if (Download.Selector != null)
+                {
+                    var response = await RequestStringWithCookies(link.ToString());
+                    var results = response.Content;
+                    var SearchResultParser = new HtmlParser();
+                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var DlUri = SearchResultDocument.QuerySelector(Download.Selector);
+                    if (DlUri != null)
+                    {
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.OuterHtml));
+                        var href = DlUri.GetAttribute("href");
+                        link = resolvePath(href);
+                    }
+                    else
+                    {
+                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, Download.Selector, results));
+                        throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
+                    }
+                }
+            }
+            return await base.Download(link);
         }
     }
 }
