@@ -68,6 +68,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PirateTheNet
  * Pretome
  * PrivateHD
+ * QcTorrent
  * RevolutionTT
  * SceneAccess
  * SceneFZ
