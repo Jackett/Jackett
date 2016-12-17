@@ -252,7 +252,7 @@ namespace Jackett.Indexers
                 //Check filter
                 if (mediaType == "tvshow" && configData.TVShowsFilter.Value != "")
                 {
-                    if (!checkRegularExpressionMatching(title.ToLower(), configData.TVShowsFilter.Value)){
+                    if (!checkRegularExpressionMatching(title, configData.TVShowsFilter.Value)){
                         Console.WriteLine(String.Format("{0} not match {1}. DISCARTED", title.ToLower(), configData.TVShowsFilter.Value));
                         continue;
                     }
@@ -260,7 +260,7 @@ namespace Jackett.Indexers
                 //Check filter
                 if (mediaType == "movie" && configData.MoviesFilter.Value != "")
                 {
-                    if (!checkRegularExpressionMatching(title.ToLower(), configData.MoviesFilter.Value)){
+                    if (!checkRegularExpressionMatching(title, configData.MoviesFilter.Value)){
                         Console.WriteLine(String.Format("{0} not match {1}. DISCARTED", title.ToLower(), configData.MoviesFilter.Value));
                         continue;
                     }
@@ -269,7 +269,8 @@ namespace Jackett.Indexers
 
                 if (configData.TVShowEnglishMode.Value && mediaType.Equals("tvshow"))
                 {
-                    title = title.Replace("ª", "").Replace("°","").ToLower();
+                    title = title.ToLower().Replace("ª", "").Replace("°","").Replace("[pack]","").Trim();
+                    
 
 
                     Regex qariRegex = new Regex("(temporada|temp)( *)(?<season>[0-9]{1,3})|(?<season>[0-9]{1,3})( *)(temporada|temp)|t(?<season>[0-9]{1,3})|s?(?<season>[0-9]{1,3})(( *)[xe]( *)(?<episode>[0-9]{1,4}))?");
@@ -334,7 +335,7 @@ namespace Jackett.Indexers
 
         private bool checkRegularExpressionMatching(string stringToCheck, string regularExpression)
         {
-            Regex qariRegex = new Regex(regularExpression);
+            Regex qariRegex = new Regex(regularExpression,RegexOptions.IgnoreCase);
             MatchCollection mc = qariRegex.Matches(stringToCheck);
             return mc.Count > 0 && mc[0].Success;
         }
