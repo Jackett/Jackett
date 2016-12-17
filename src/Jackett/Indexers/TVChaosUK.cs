@@ -151,7 +151,7 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
 
             // If we have no query use the RSS Page as their server is slow enough at times!
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 var rssDoc = XDocument.Parse(rssPage.Content);
@@ -195,7 +195,7 @@ namespace Jackett.Indexers
                     releases.Add(release);
                 }
             }
-            else
+            if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
             {
                 // The TVChaos UK search requires an exact match of the search string.
                 // But it seems like they just send the unfiltered search to the SQL server in a like query (LIKE '%$searchstring%').
