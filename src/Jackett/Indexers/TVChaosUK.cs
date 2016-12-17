@@ -212,6 +212,13 @@ namespace Jackett.Indexers
                 };
 
                 var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                if (searchPage.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                }
+
                 try
                 {
                     CQ dom = searchPage.Content;
