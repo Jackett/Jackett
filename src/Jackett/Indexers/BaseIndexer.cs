@@ -118,8 +118,20 @@ namespace Jackett.Indexers
         {
             if (null != input)
             {
-                input = input.ToLowerInvariant();
                 var mapping = categoryMapping.Where(m => m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
+                if (mapping != null)
+                {
+                    return mapping.NewzNabCategory;
+                }
+            }
+            return 0;
+        }
+
+        protected int MapTrackerCatDescToNewznab(string input)
+        {
+            if (null != input)
+            {
+                var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
                 if (mapping != null)
                 {
                     return mapping.NewzNabCategory;
@@ -484,16 +496,16 @@ namespace Jackett.Indexers
             }
         }
 
-        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
+        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory, newznabCategory.ID));
+            categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
                 TorznabCaps.Categories.Add(newznabCategory);
         }
 
-        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory)
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
-            AddCategoryMapping(trackerCategory.ToString(), newznabCategory);
+            AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
         }
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)

@@ -166,7 +166,7 @@ namespace Jackett.Indexers
 
         protected void AddResultCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
         {
-            resultMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
+            resultMapping.Add(new CategoryMapping(trackerCategory.ToString(), null, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
                 TorznabCaps.Categories.Add(newznabCategory);
         }

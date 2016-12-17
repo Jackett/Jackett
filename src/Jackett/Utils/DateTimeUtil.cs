@@ -13,6 +13,13 @@ namespace Jackett.Utils
     {
         public static string RFC1123ZPattern = "ddd, dd MMM yyyy HH':'mm':'ss z";
 
+        public static DateTime UnixTimestampToDateTime(long unixTime)
+        {
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dt = dt.AddSeconds(unixTime).ToLocalTime();
+            return dt;
+        }
+
         public static DateTime UnixTimestampToDateTime(double unixTime)
         {
             DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
@@ -170,9 +177,7 @@ namespace Jackett.Utils
                 {
                     // try parsing the str as an unix timestamp
                     var unixTimeStamp = long.Parse(str);
-                    DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                    dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
-                    return dt;
+                    return UnixTimestampToDateTime(unixTimeStamp);
                 }
                 catch (FormatException)
                 {
