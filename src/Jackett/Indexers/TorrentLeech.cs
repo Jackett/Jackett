@@ -168,7 +168,7 @@ namespace Jackett.Indexers
 
                     release.Link = new Uri(qRow.Find(".quickdownload > a").Attr("href"));
 
-                    var dateString = qRow.Find(".name").Get(0).LastChild.NodeValue.Replace("on", string.Empty).Trim(); ;
+                    var dateString = qRow.Find("span.addedInLine").Get(0).LastChild.NodeValue.Replace("on", string.Empty).Trim(); ;
                     release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Children().ElementAt(4).InnerText;
