@@ -224,6 +224,26 @@ namespace Jackett.Indexers
                 variables = getTemplateVariablesFromConfigData();
             }
 
+            // handle re_replace expression
+            // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
+            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.+)""\s+""(.+?)""\s*}}");
+            var ReReplaceRegexMatches = ReReplaceRegex.Match(template);
+
+            while (ReReplaceRegexMatches.Success)
+            {
+                string all = ReReplaceRegexMatches.Groups[0].Value;
+                string variable = ReReplaceRegexMatches.Groups[1].Value;
+                string regexp = ReReplaceRegexMatches.Groups[2].Value;
+                string newvalue = ReReplaceRegexMatches.Groups[3].Value;
+
+                Regex ReplaceRegex = new Regex(regexp);
+                var input = (string)variables[variable];
+                var expanded = ReplaceRegex.Replace(input, newvalue);
+
+                template = template.Replace(all, expanded);
+                ReReplaceRegexMatches = ReReplaceRegexMatches.NextMatch();
+            }
+
             // handle if ... else ... expression
             Regex IfElseRegex = new Regex(@"{{if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
             var IfElseRegexMatches = IfElseRegex.Match(template);
