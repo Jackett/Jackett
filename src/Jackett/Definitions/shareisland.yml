@@ -75,7 +75,7 @@
       p: "torrents"
       pid: "32"
       $raw: "{{range .Categories}}cid[]:{{.}}&{{end}}"
-      keywords: "{{ .Query.Keywords }}"
+      keywords: "{{ re_replace .Query.Keywords \"[^a-zA-Z0-9]+\" \"%\" }}"
       search_type: "name"
       searchin: "title"
 
