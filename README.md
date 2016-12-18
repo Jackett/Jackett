@@ -63,6 +63,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NetHD
  * NextGen
  * Norbits
+ * notwhat.cd
  * PassTheHeadphones
  * PassThePopcorn
  * PirateTheNet
