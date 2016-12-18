@@ -167,6 +167,8 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\Abstract\GazelleTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Indexers\nostream.cs" />
+    <Compile Include="Indexers\notwhatcd.cs" />
     <Compile Include="Indexers\PassTheHeadphones.cs" />
     <Compile Include="Indexers\Norbits.cs" />
     <Compile Include="Indexers\TVVault.cs" />
