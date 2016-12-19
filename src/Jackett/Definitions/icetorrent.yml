@@ -76,6 +76,9 @@
       title:
         selector: a[title][href^="details.php?id="]
         attribute: title
+      details:
+        selector: a[title][href^="details.php?id="]
+        attribute: href
       category:
         selector: a[href^="browse.php?cat="]
         attribute: href
