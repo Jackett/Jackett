@@ -456,6 +456,9 @@
     <Content Include="Definitions\torviet.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Definitions\icetorrent.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

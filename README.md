@@ -52,6 +52,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * New Real World
  * Hounddawgs
  * House-of-Torrents
+ * ICE Torrent
  * ILoveTorrents
  * Immortalseed
  * IPTorrents
