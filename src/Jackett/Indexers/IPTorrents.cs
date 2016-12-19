@@ -36,7 +36,7 @@ namespace Jackett.Indexers
         public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
-                link: "https://ipt-update.com/",
+                link: "https://iptorrents.com/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: wc,
