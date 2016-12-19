@@ -106,6 +106,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * x264
  * XSpeeds
  * Xthor
+ * Xtreme Zone
 
 #### Installation on Windows
 
