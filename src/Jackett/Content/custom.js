@@ -492,10 +492,15 @@ function clearNotifications() {
 function updateReleasesRow(row)
 {    
     var labels = $(row).find("span.release-labels");
+    var IMDBId = $(row).data("imdb");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
     var UploadVolumeFactor = parseFloat($(row).find("td.UploadVolumeFactor").html());
 
     labels.empty();
+
+    if (IMDBId) {
+        labels.append('\n<a href="http://www.imdb.com/title/tt' + IMDBId + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+    }
 
     if (!isNaN(DownloadVolumeFactor)) {
         if (DownloadVolumeFactor == 0) {
