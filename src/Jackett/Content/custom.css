@@ -227,7 +227,7 @@ pre {
     display: none;
 }
 
-.table td.fit{
+table td.fit{
     white-space: nowrap;
     width: 1%;
 }
