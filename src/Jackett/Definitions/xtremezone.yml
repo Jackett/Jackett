@@ -102,6 +102,12 @@
         selector: td:nth-child(8)
       leechers:
         selector: td:nth-child(9)
+      banner:
+        selector: a[onmouseover][href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
       downloadvolumefactor:
         case:
           "img[title^=\"FreeLech: \"]": "0"
