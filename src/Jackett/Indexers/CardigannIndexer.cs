@@ -130,7 +130,7 @@ namespace Jackett.Indexers
             public string Selector { get; set; }
         }
 
-        protected readonly string[] OptionalFileds = new string[] { "imdb" };
+        protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
         public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(manager: i,
@@ -953,11 +953,33 @@ namespace Jackett.Indexers
                                     case "uploadvolumefactor":
                                         release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
                                         break;
+                                    case "minimumratio":
+                                        release.MinimumRatio = ParseUtil.CoerceDouble(value);
+                                        break;
+                                    case "minimumseedtime":
+                                        release.MinimumSeedTime = ParseUtil.CoerceLong(value);
+                                        break;
                                     case "imdb":
                                         Regex IMDBRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                         var IMDBMatch = IMDBRegEx.Match(value);
                                         var IMDBId = IMDBMatch.Groups[1].Value;
                                         release.Imdb = ParseUtil.CoerceLong(IMDBId);
+                                        break;
+                                    case "rageid":
+                                        Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                        var RageIDMatch = RageIDRegEx.Match(value);
+                                        var RageID = RageIDMatch.Groups[1].Value;
+                                        release.RageID = ParseUtil.CoerceLong(RageID);
+                                        break;
+                                    case "tvdbid":
+                                        Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                        var TVDBIdMatch = TVDBIdRegEx.Match(value);
+                                        var TVDBId = TVDBIdMatch.Groups[1].Value;
+                                        release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                                        break;
+                                    case "banner":
+                                        var bannerurl = resolvePath(value);
+                                        release.BannerUrl = bannerurl;
                                         break;
                                     default:
                                         break;
