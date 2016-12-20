@@ -66,7 +66,7 @@
   search:
     path: /browse.php
     inputs:
-      cat: "{{range .Categories}}{{.}};{{end}}"
+      cat: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
       incldead: 1
       search_by: "name"
@@ -87,6 +87,9 @@
             args: cat
       imdb:
         selector: a[title="IMDB"]
+        attribute: href
+      banner:
+        attribute: rel
       download:
         selector: a[href^="download.php"]
         attribute: href
@@ -119,4 +122,8 @@
           "*": "1"
       description:
         selector: td:nth-child(2)
-        remove: a[title][href^="details.php?id="] div
+        remove: a[title][href^="details.php?id="], div
+      seeders:
+        text: "9999"
+      leechers:
+        text: "9999"
