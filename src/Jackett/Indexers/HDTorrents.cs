@@ -21,28 +21,34 @@ namespace Jackett.Indexers
 {
     public class HDTorrents : BaseIndexer, IIndexer
     {
-        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
+        private string SearchUrl { get { return UseLink + "torrents.php?"; } }
+        private string LoginUrl { get { return UseLink + "login.php"; } }
         private const int MAXPAGES = 3;
+        private List<String> KnownURLs = new List<String> { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
 
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataBasicLoginWithAlternateLink configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
             set { base.configData = value; }
         }
 
         public HDTorrents(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-                link: "http://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+                link: "https://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
                 manager: i,
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLoginWithAlternateLink())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
+
+            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
+            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
+            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             TorznabCaps.Categories.Clear();
 
@@ -71,6 +77,9 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+            if (!string.IsNullOrWhiteSpace(configData.AlternateLink.Value) && !configData.AlternateLink.Value.EndsWith("/"))
+                configData.AlternateLink.Value += "/";
+
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
