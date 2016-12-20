@@ -978,8 +978,10 @@ namespace Jackett.Indexers
                                         release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                                         break;
                                     case "banner":
-                                        var bannerurl = resolvePath(value);
-                                        release.BannerUrl = bannerurl;
+                                        if(!string.IsNullOrWhiteSpace(value)) { 
+                                            var bannerurl = resolvePath(value);
+                                            release.BannerUrl = bannerurl;
+                                        }
                                         break;
                                     default:
                                         break;
