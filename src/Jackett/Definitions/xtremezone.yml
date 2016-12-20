@@ -113,4 +113,4 @@
           "*": "1"
       description:
         selector: td:nth-child(2)
-        remove: a img
+        remove: a, img
