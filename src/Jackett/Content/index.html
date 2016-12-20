@@ -400,11 +400,11 @@
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}">
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
                     <td>{{jacketSize Size}}</td>
                     <td>{{Files}}</td>

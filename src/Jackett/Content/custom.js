@@ -492,9 +492,26 @@ function clearNotifications() {
 function updateReleasesRow(row)
 {    
     var labels = $(row).find("span.release-labels");
+    var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
+    var Banner = $(row).data("banner");
+    var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
     var UploadVolumeFactor = parseFloat($(row).find("td.UploadVolumeFactor").html());
+
+    var TitleTooltip = "";
+    if (Banner)
+        TitleTooltip += "<img src='" + Banner + "' /><br />";
+    if (Description)
+        TitleTooltip += Description;
+
+    if (TitleTooltip) {
+        TitleLink.data("toggle", "tooltip");
+        TitleLink.tooltip({
+            title: TitleTooltip,
+            html: true
+        });
+    }
 
     labels.empty();
 

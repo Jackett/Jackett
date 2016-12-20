@@ -235,3 +235,12 @@ pre {
 .label-imdb {
     background-color: #d0ab44;
 }
+
+.tooltip-inner {
+    max-width: 500px !important;
+}
+
+.tooltip-inner img {
+    max-width: 250px;
+    height: auto;      
+}
