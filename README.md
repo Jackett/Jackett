@@ -94,6 +94,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDay
  * TorrentHeaven
  * TorrentLeech
+ * Torrents.Md
  * TorrentShack
  * Torrent-Syndikat
  * ToTheGlory
