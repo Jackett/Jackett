@@ -287,13 +287,13 @@
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr class="jackett-releases-row">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
                                     <td>{{PublishDate}}</td>
                                     <td>{{FirstSeen}}</td>
                                     <td>{{jacketTimespan PublishDate}}</td>
                                     <td>{{jacketTimespan FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
-                                    <td><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                                     <td>{{Size}}</td>
                                     <td class="fit">{{jacketSize Size}}</td>
                                     <td>{{Files}}</td>
