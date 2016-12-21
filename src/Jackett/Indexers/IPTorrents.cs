@@ -156,6 +156,7 @@ namespace Jackett.Indexers
                 Url = TakeLoginUrl,
                 Type = RequestType.POST,
                 Referer = UseLink,
+                Encoding = Encoding,
                 PostData = pairs
             };
             var response = await webclient.GetString(request);
