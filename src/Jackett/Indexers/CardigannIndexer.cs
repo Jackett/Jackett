@@ -66,6 +66,13 @@ namespace Jackett.Indexers
             public Dictionary<string, List<string>> Modes { get; set; }
         }
 
+        public class captchaBlock
+        {
+            public string Type { get; set; }
+            public string Image { get; set; }
+            public string Input { get; set; }
+        }
+
         public class loginBlock
         {
             public string Path { get; set; }
@@ -74,6 +81,7 @@ namespace Jackett.Indexers
             public Dictionary<string, string> Inputs { get; set; }
             public List<errorBlock> Error { get; set; }
             public pageTestBlock Test { get; set; }
+            public captchaBlock Captcha { get; set; }
         }
 
         public class errorBlock
@@ -467,6 +475,17 @@ namespace Jackett.Indexers
                     pairs["submitme"] = "X";
                 }
 
+                if (Login.Captcha != null)
+                {
+                    var Captcha = Login.Captcha;
+                    if (Captcha.Type == "image")
+                    {
+                        var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
+                        if (CaptchaText != null)
+                            pairs[Captcha.Input] = CaptchaText.Value;
+                    }
+                }
+
                 // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
                 landingResult = null;
                 landingResultDocument = null;
@@ -588,6 +607,34 @@ namespace Jackett.Indexers
                     CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
 
                 configData.AddDynamic("Captcha", CaptchaItem);
+            }
+
+            if (Login.Captcha != null)
+            {
+                var Captcha = Login.Captcha;
+                if (Captcha.Type == "image")
+                {
+                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
+                    if (captchaElement != null) {
+                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"));
+                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies);
+                        var CaptchaImage = new ImageItem { Name = "Captcha Image" };
+                        var CaptchaText = new StringItem { Name = "Captcha Text" };
+                        logger.Error("captchaImageData Cookies: " + captchaImageData.Cookies);
+                        CaptchaImage.Value = captchaImageData.Content;
+
+                        configData.AddDynamic("CaptchaImage", CaptchaImage);
+                        configData.AddDynamic("CaptchaText", CaptchaText);
+                    }
+                    else
+                    {
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException(string.Format("Captcha type \"{0}\" is not implemented", Captcha.Type));
+                }
             }
 
             return configData;
