@@ -311,11 +311,11 @@ namespace Jackett.Indexers
                     output("Category: " + MapTrackerCatToNewznab(categoryID) + " (" + categoryID + ")");
 
                     // Seeders
-                    int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6)").Text(), @"\d+").Value);
+                    int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
                     output("Seeders: " + seeders);
 
                     // Leechers
-                    int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(7)").Text(), @"\d+").Value);
+                    int leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(6)").Text(), @"\d+").Value);
                     output("Leechers: " + leechers);
 
                     // Completed
