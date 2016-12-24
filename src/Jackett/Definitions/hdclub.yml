@@ -24,6 +24,7 @@
   login:
     path: login.php
     method: form
+    form: form[action="takelogin.php"]
     captcha:
       type: image
       image: img#captcha
@@ -35,6 +36,7 @@
       - selector: td.embedded > div.error
     test:
       path: browse.php
+      selector: td.main_bottom
       
   search:
     path: browse.php
@@ -57,6 +59,9 @@
             args: ["details.php", "download.php"]
       title:
         selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
       category:
         selector: a[href^="browse.php?cat="]
         attribute: href
