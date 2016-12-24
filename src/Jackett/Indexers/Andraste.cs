@@ -129,6 +129,7 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = results;
+                var globalFreeleech = dom.Find("div > img[alt=\"Only Upload\"][title^=\"ONLY UPLOAD \"]").Any();
                 var rows = dom["table.tableinborder > tbody > tr:has(td.tableb)"];
 
                 foreach (var row in rows)
@@ -186,7 +187,9 @@ namespace Jackett.Indexers
                     var grabs = qRow.Find("a[href*=\"&tosnatchers=1\"] ~ font ~ b").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[alt=\"OU\"]").Length >= 1)
+                    if (globalFreeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[alt=\"OU\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
