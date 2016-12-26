@@ -169,7 +169,7 @@ namespace Jackett.Indexers
                     var qCommentLink = descCol.FirstElementChild.Cq();
                     var torrentTag = descCol.Cq().Find("span.torrent-tag");
                     var torrentTags = torrentTag.Elements.Select(x => x.InnerHTML).ToList();
-                    release.Title = qCommentLink.Text();
+                    release.Title = qCommentLink.Attr("title");
                     release.Description = String.Join(", ", torrentTags);
                     release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
