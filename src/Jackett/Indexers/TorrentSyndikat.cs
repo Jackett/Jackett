@@ -149,6 +149,7 @@ namespace Jackett.Indexers
             {
                 CQ dom = results.Content;
                 var rows = dom["table.torrent_table > tbody > tr"];
+                var globalFreeleech = dom.Find("legend:contains(\"Freeleech\")+ul > li > b:contains(\"Freeleech\")").Any();
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
@@ -195,7 +196,9 @@ namespace Jackett.Indexers
                     var grabs = qRow.Find("td:nth-child(7)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("span.torrent-tag-free").Length >= 1)
+                    if (globalFreeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("span.torrent-tag-free").Length >= 1)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
