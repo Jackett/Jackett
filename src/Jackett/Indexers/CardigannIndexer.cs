@@ -190,7 +190,7 @@ namespace Jackett.Indexers
             if (!SiteLink.EndsWith("/"))
                 SiteLink += "/";
             Language = Definition.Language;
-            TorznabCaps = TorznabUtil.CreateDefaultTorznabTVCaps(); // TODO implement caps
+            TorznabCaps = new TorznabCapabilities();
 
             // init config Data
             configData = new ConfigurationData();
