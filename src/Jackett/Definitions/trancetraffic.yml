@@ -30,7 +30,7 @@
     inputs:
       search: "{{ .Query.Keywords }}"
     rows:
-      selector: table.main + table > tbody > tr:has(a[href^="details.php?id="])
+      selector: table > tbody > tr:has(a[href^="details.php?id="])
     fields:
       download:
         selector: a[href^="download.php/"]
