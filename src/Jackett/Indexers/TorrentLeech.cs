@@ -164,7 +164,9 @@ namespace Jackett.Indexers
                     release.Guid = new Uri(SiteLink + qLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
                     release.Title = qLink.Text();
-                    release.Description = release.Title;
+
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
 
                     release.Link = new Uri(qRow.Find(".quickdownload > a").Attr("href"));
 
