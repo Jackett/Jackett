@@ -117,15 +117,14 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
 
             var cats = MapTorznabCapsToTrackers(query);
-            string cat = "0";
+            string cat = "a1";
 
             if (cats.Count == 1)
             {
                 cat = cats[0];
             }
 
-            if (!string.IsNullOrWhiteSpace(searchString) || cat != "0")
-                searchUrl += string.Format("?search={0}&param_val=0&complex_search=0&incldead={1}&orderby=added&sort=desc", HttpUtility.UrlEncode(searchString), cat);
+            searchUrl += string.Format("?search={0}&param_val=0&complex_search=0&incldead={1}&orderby=added&sort=desc", HttpUtility.UrlEncode(searchString), cat);
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             var results = response.Content;
@@ -165,8 +164,10 @@ namespace Jackett.Indexers
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 
-                    var catLink = qRow.Find("a[onclick^=\"bparam('incldead=\"]");
+                    var catLink = qRow.Find("a[onclick^=\"bparam(\"][onclick*=\"cat\"]");
                     var catId = catLink.Attr("onclick").Split('=')[1].Replace("');", "");
+                    if (!catId.StartsWith("scat"))
+                        catId = "mc" + catId;
                     release.Category = MapTrackerCatToNewznab(catId);
 
                     releases.Add(release);
