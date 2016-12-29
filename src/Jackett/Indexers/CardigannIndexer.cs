@@ -1042,6 +1042,35 @@ namespace Jackett.Indexers
                             }
                         }
 
+                        var Filters = Definition.Search.Rows.Filters;
+                        var SkipRelease = false;
+                        if (Filters != null)
+                        {
+                            foreach (filterBlock Filter in Filters)
+                            {
+                                switch (Filter.Name)
+                                {
+                                    case "andmatch":
+                                        int CharacterLimit = -1;
+                                        if (Filter.Args != null)
+                                            CharacterLimit = int.Parse(Filter.Args);
+
+                                        if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                        {
+                                            logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                            SkipRelease = true;
+                                        }
+                                        break;
+                                    default:
+                                        logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (SkipRelease)
+                            continue;
+
                         // if DateHeaders is set go through the previous rows and look for the header selector
                         var DateHeaders = Definition.Search.Rows.Dateheaders;
                         if (release.PublishDate == null && DateHeaders != null)
