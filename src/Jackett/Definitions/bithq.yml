@@ -9,7 +9,7 @@
   caps:
     categories:
       7: Movies # Approved Film Series
-      81: Movies/HD # BD-MKV
+      81: TV/HD # BD-MKV
       62: Audio # CD-R/OST
       51: Movies/DVD # DVD-R/Animation
       48: Movies/DVD # DVD-R/Asian Cinema
@@ -18,7 +18,7 @@
       55: Movies/DVD # DVD-R/Kids
       49: Movies/DVD # DVD-R/Movies
       52: Audio/Video # DVD-R/Music
-      53: Movies/TV # DVD-R/TV
+      53: TV # DVD-R/TV
       70: Movies # Empire's 500
       80: Movies # Global Lens | trigon-film
       65: Other # Hi-Res Covers
@@ -51,7 +51,7 @@
       search: "{{ .Query.Keywords }}"
       incldead: 1
     rows:
-      selector: table > tbody > tr:has(a[href^="details.php?id="])
+      selector: td > table > tbody > tr:has(a[href^="details.php?id="])
     fields:
       download:
         selector: a[href^="download.php/"]
