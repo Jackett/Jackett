@@ -139,11 +139,18 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.7;
                     release.MinimumSeedTime = 48 * 60 * 60;
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
+
                     var qRow = row.Cq();
                     var flagImgs = qRow.Find("table tbody tr: eq(0) td > img");
                     List<string> flags = new List<string>();
                     flagImgs.Each(flagImg => {
-                        flags.Add(flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper());
+                        var flag = flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper();
+                        if (flag == "OU")
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            flags.Add(flag);
                     });
                         
                     var titleLink = qRow.Find("table tbody tr:eq(0) td a:has(b)").First();
@@ -177,13 +184,6 @@ namespace Jackett.Indexers
 
                     var grabs = qRow.Find("td:has(a[href*=\"&tosnatchers=1\"])> b:nth-child(1)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (qRow.Find("img[src=\"pic/torrent_ou.gif\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
