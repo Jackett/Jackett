@@ -91,6 +91,7 @@
         case:
           span.star: "0"
           span.fltime: "0"
+          ":root li[id=\"alert-fl\"][class=\"alert\"]:contains(\"Freeleech ends in \")": 0
           "*": "1"
       uploadvolumefactor:
         case:
