@@ -172,9 +172,6 @@ namespace Jackett.Indexers
                     var catId = qRow.Find("td:eq(0) a").First().Attr("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catId);
 
-                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Substring(1);
-                    release.Category = MapTrackerCatToNewznab(cat);
-
                     var files = qRow.Find("td:has(a[href*=\"&filelist=1\"])> b:nth-child(2)").Text();
                     release.Files = ParseUtil.CoerceInt(files);
 
