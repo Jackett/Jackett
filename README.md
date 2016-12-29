@@ -28,6 +28,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BeyondHD
  * Bit-City Reloaded
  * BIT-HDTV
+ * BitHQ
  * BitMeTV
  * BitSoup
  * Blu-bits
