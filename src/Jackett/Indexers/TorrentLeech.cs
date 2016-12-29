@@ -53,20 +53,27 @@ namespace Jackett.Indexers
             AddCategoryMapping(14, TorznabCatType.MoviesHD);
             AddCategoryMapping(15, TorznabCatType.Movies); // Boxsets
             AddCategoryMapping(29, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(41, TorznabCatType.MoviesHD);
+            AddCategoryMapping(41, TorznabCatType.MoviesHD, "Movies/4K");
+            AddCategoryMapping(36, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(37, TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping(43, TorznabCatType.MoviesSD, "Movies/HDRip");
 
             AddCategoryMapping(26, TorznabCatType.TVSD);
             AddCategoryMapping(27, TorznabCatType.TV); // Boxsets
             AddCategoryMapping(32, TorznabCatType.TVHD);
+            AddCategoryMapping(44, TorznabCatType.TVFOREIGN, "TV/Foreign");
 
             AddCategoryMapping(17, TorznabCatType.PCGames);
             AddCategoryMapping(18, TorznabCatType.ConsoleXbox);
             AddCategoryMapping(19, TorznabCatType.ConsoleXbox360);
-            // 20 PS2
+            AddCategoryMapping(40, TorznabCatType.ConsoleXbox, "Games/XBOXONE");
+            AddCategoryMapping(20, TorznabCatType.ConsolePS3); // PS2
             AddCategoryMapping(21, TorznabCatType.ConsolePS3);
             AddCategoryMapping(22, TorznabCatType.ConsolePSP);
             AddCategoryMapping(28, TorznabCatType.ConsoleWii);
             AddCategoryMapping(30, TorznabCatType.ConsoleNDS);
+            AddCategoryMapping(39, TorznabCatType.ConsolePS4);
+            AddCategoryMapping(42, TorznabCatType.PCMac, "Games/Mac");
 
             AddCategoryMapping(16, TorznabCatType.AudioVideo);
             AddCategoryMapping(31, TorznabCatType.Audio);
@@ -75,11 +82,15 @@ namespace Jackett.Indexers
             AddCategoryMapping(35, TorznabCatType.TV); // Cartoons
 
             AddCategoryMapping(5, TorznabCatType.Books);
+            AddCategoryMapping(45, TorznabCatType.BooksEbook, "Books/EBooks");
+            AddCategoryMapping(46, TorznabCatType.BooksComics, "Books/Comics");
 
             AddCategoryMapping(23, TorznabCatType.PCISO);
             AddCategoryMapping(24, TorznabCatType.PCMac);
             AddCategoryMapping(25, TorznabCatType.PCPhoneOther);
             AddCategoryMapping(33, TorznabCatType.PC0day);
+
+            AddCategoryMapping(38, TorznabCatType.Other, "Education");
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
