@@ -59,6 +59,8 @@
 
     rows:
       selector: p + table > tbody > tr:has(a[href^="details.php?id="]), p + table > tbody > tr[id^="kdescr"]
+      filters:
+        - name: andmatch
       after: 1
     fields:
       title:

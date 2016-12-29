@@ -81,6 +81,8 @@
 
     rows:
       selector: table#torrents_table_classic > tbody > tr:not([id="torrents_table_classic_head"])
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td.torrent_name > a

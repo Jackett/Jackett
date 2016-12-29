@@ -77,6 +77,8 @@
 
     rows:
       selector: table.tableinborder[summary] > tbody > tr
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="download.php?torrent="]
