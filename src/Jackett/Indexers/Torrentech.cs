@@ -102,7 +102,7 @@ namespace Jackett.Indexers
             }
             try
             {
-                string RowsSelector = "td.ipbwrapper > div.borderwrap:has(div.maintitle) > table > tbody > tr:has(td.row2)";
+                string RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
 
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results.Content);
@@ -174,7 +174,7 @@ namespace Jackett.Indexers
                         else
                             release.Category = TorznabCatType.AudioOther.ID;
 
-                        var lastAction = Row.QuerySelector("span.lastaction").FirstChild.NodeValue;
+                        var lastAction = Row.QuerySelector("td:nth-child(9) > span").FirstChild.NodeValue;
                         release.PublishDate = DateTimeUtil.FromUnknown(lastAction, "UK");
 
                         releases.Add(release);
