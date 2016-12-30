@@ -33,6 +33,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitSoup
  * Blu-bits
  * BTN
+ * CHDBits
  * CinemaZ
  * DanishBits
  * DataScene
