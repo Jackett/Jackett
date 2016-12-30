@@ -45,7 +45,7 @@ namespace Jackett.Indexers
 		{
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "da-dk";
-
+            // TV Mapping
             AddCategoryMapping(92, TorznabCatType.TV);
 			AddCategoryMapping(92, TorznabCatType.TVHD);
 			AddCategoryMapping(92, TorznabCatType.TVWEBDL);
@@ -60,7 +60,26 @@ namespace Jackett.Indexers
 			AddCategoryMapping(74, TorznabCatType.TVSD);
 			AddCategoryMapping(74, TorznabCatType.TV);
 
-		}
+            // Movie mapping
+            AddCategoryMapping(90, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(60, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(89, TorznabCatType.MoviesHD);
+            AddCategoryMapping(59, TorznabCatType.MoviesHD);
+            AddCategoryMapping(73, TorznabCatType.MoviesSD);
+            AddCategoryMapping(91, TorznabCatType.MoviesSD);
+            AddCategoryMapping(82, TorznabCatType.MoviesBluRay);
+            AddCategoryMapping(81, TorznabCatType.MoviesOther);
+            AddCategoryMapping(68, TorznabCatType.Movies3D);
+
+            // Boxsets
+            AddCategoryMapping(84, TorznabCatType.MoviesSD);
+            AddCategoryMapping(84, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(84, TorznabCatType.MoviesHD);
+            AddCategoryMapping(84, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(84, TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping(84, TorznabCatType.MoviesBluRay);
+
+        }
 
 		public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
 		{
@@ -107,16 +126,19 @@ namespace Jackett.Indexers
 					release.MinimumSeedTime = 172800;
 
 					var seriesCats = new[] { 92, 93, 57, 74 };
+                    var moviesCats = new[] { 90, 60, 89, 59, 73, 91, 82, 81, 68, 84 };
 					var qCat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).Cq();
 					var catUrl = qCat.Attr("href");
 					var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1);
 					var catNo = int.Parse(cat.Trim(']'));
 					if (seriesCats.Contains(catNo))
 						release.Category = TorznabCatType.TV.ID;
-					else
-						continue;
+					else if (moviesCats.Contains(catNo))
+                        release.Category = TorznabCatType.Movies.ID;
+                    else
+                        continue;
 
-					var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
+                    var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
 					var addedStr = qAdded.Attr("title");
 					release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
 
