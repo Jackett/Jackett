@@ -19,7 +19,7 @@ namespace Jackett.Indexers
     public class Demonoid : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "account_handler.php"; } }
-        private string SearchUrl { get { return SiteLink + "files/?category={0}&subcategory=All&quality=All&seeded=0&to=1&query={1}"; } }
+        private string SearchUrl { get { return SiteLink + "files/?category={0}&subcategory=All&quality=All&seeded=2&to=1&query={1}&external=2"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -41,10 +41,18 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
 
-            AddCategoryMapping(3, TorznabCatType.TV);
-            AddCategoryMapping(3, TorznabCatType.TVSD);
-            AddCategoryMapping(3, TorznabCatType.TVHD);
-            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(5, TorznabCatType.PC0day, "Applications");
+            AddCategoryMapping(17, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(11, TorznabCatType.Books, "Books");
+            AddCategoryMapping(10, TorznabCatType.BooksComics, "Comics");
+            AddCategoryMapping(4, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(9, TorznabCatType.TVAnime, "Japanese Anime");
+            AddCategoryMapping(6, TorznabCatType.Other, "Miscellaneous");
+            AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(2, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(13, TorznabCatType.AudioVideo, "Music Videos");
+            AddCategoryMapping(8, TorznabCatType.Other, "Pictures");
+            AddCategoryMapping(3, TorznabCatType.TV, "TV");
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -114,9 +122,13 @@ namespace Jackett.Indexers
 
                     release.PublishDate = lastDateTime;
 
+                    var catUrl = rowA.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href");
+                    var catId = HttpUtility.ParseQueryString(catUrl).Get("category");
+                    release.Category = MapTrackerCatToNewznab(catId);
+
                     var qLink = rowA.ChildElements.ElementAt(1).FirstElementChild.Cq();
                     release.Title = qLink.Text().Trim();
-                    release.Description = release.Title;
+                    release.Description = rowB.ChildElements.ElementAt(0).Cq().Text();
 
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                     release.Guid = release.Comments;
