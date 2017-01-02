@@ -21,15 +21,14 @@ namespace Jackett.Indexers
 {
     public class HDTorrents : BaseIndexer, IIndexer
     {
-        private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
-        private string SearchUrl { get { return UseLink + "torrents.php?"; } }
-        private string LoginUrl { get { return UseLink + "login.php"; } }
+        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
-        private List<String> KnownURLs = new List<String> { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
+        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
 
-        new ConfigurationDataBasicLoginWithAlternateLink configData
+        new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
+            get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -41,14 +40,10 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithAlternateLink())
+                configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
-
-            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
-            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
-            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             TorznabCaps.Categories.Clear();
 
@@ -76,9 +71,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
-            if (!string.IsNullOrWhiteSpace(configData.AlternateLink.Value) && !configData.AlternateLink.Value.EndsWith("/"))
-                configData.AlternateLink.Value += "/";
+            LoadValuesFromJson(configJson);
 
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 

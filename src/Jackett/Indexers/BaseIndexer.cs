@@ -12,12 +12,15 @@ using Jackett.Utils.Clients;
 using AutoMapper;
 using System.Threading;
 using Jackett.Models.IndexerConfig;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
     public abstract class BaseIndexer
     {
         public string SiteLink { get; protected set; }
+        public string DefaultSiteLink { get; protected set; }
+        public string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
@@ -66,8 +69,10 @@ namespace Jackett.Indexers
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
+            DefaultSiteLink = link;
             this.downloadUrlBase = downloadBase;
             this.configData = configData;
+            LoadValuesFromJson(null);
 
             if (caps == null)
                 caps = TorznabUtil.CreateDefaultTorznabTVCaps();
@@ -290,11 +295,33 @@ namespace Jackett.Indexers
             }
         }
 
+        public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            IProtectionService ps = null;
+            if (useProtectionService)
+                ps = protectionService;
+            configData.LoadValuesFromJson(jsonConfig, ps);
+            if (string.IsNullOrWhiteSpace(configData.SiteLink.Value))
+            {
+                configData.SiteLink.Value = DefaultSiteLink;
+            }
+            if (!configData.SiteLink.Value.EndsWith("/"))
+                configData.SiteLink.Value += "/";
+
+            var match = Regex.Match(configData.SiteLink.Value, "^https?:\\/\\/[\\w\\-\\/\\.]+$");
+            if (!match.Success)
+            {
+                throw new Exception(string.Format("\"{0}\" is not a valid URL.", configData.SiteLink.Value));
+            }
+
+            SiteLink = configData.SiteLink.Value;
+        }
+
         public virtual void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             if (jsonConfig is JArray)
             {
-                configData.LoadValuesFromJson(jsonConfig, protectionService);
+                LoadValuesFromJson(jsonConfig, true);
                 IsConfigured = true;
             }
             // read and upgrade old settings file format

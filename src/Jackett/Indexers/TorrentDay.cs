@@ -21,11 +21,10 @@ namespace Jackett.Indexers
 {
     public class TorrentDay : BaseIndexer, IIndexer
     {
-        private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
-        private string StartPageUrl { get { return UseLink + "login.php"; } }
-        private string LoginUrl { get { return UseLink + "tak3login.php"; } }
-        private string SearchUrl { get { return UseLink + "browse.php"; } }
-        private List<String> KnownURLs = new List<String> {
+        private string StartPageUrl { get { return SiteLink + "login.php"; } }
+        private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
             "https://torrentday.eu/",
@@ -39,9 +38,9 @@ namespace Jackett.Indexers
             "https://www.td.af/",
         };
 
-        new ConfigurationDataRecaptchaLoginWithAlternateLink configData
+        new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLoginWithAlternateLink)base.configData; }
+            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -54,14 +53,10 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLoginWithAlternateLink())
+                configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
-
-            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs. The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
-            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
-            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             AddCategoryMapping(29, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(28, TorznabCatType.PC); // Appz/Packs
@@ -125,7 +120,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -155,7 +150,7 @@ namespace Jackett.Indexers
                 }
             }
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, UseLink, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
@@ -223,9 +218,9 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
                     release.Title = qRow.Find(".torrentName").Text();
                     release.Description = release.Title;
-                    release.Guid = new Uri(UseLink + qRow.Find(".torrentName").Attr("href"));
+                    release.Guid = new Uri(SiteLink + qRow.Find(".torrentName").Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(UseLink + qRow.Find(".dlLinksInfo > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find(".dlLinksInfo > a").Attr("href"));
 
                     var sizeStr = qRow.Find(".sizeInfo").Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

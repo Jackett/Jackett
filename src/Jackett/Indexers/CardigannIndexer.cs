@@ -185,10 +185,10 @@ namespace Jackett.Indexers
             // init missing mandatory attributes
             DisplayName = Definition.Name;
             DisplayDescription = Definition.Description;
-            SiteLink = Definition.Links[0]; // TODO: implement alternative links
+            DefaultSiteLink = Definition.Links[0]; // TODO: implement alternative links
             Encoding = Encoding.GetEncoding(Definition.Encoding);
-            if (!SiteLink.EndsWith("/"))
-                SiteLink += "/";
+            if (!DefaultSiteLink.EndsWith("/"))
+                DefaultSiteLink += "/";
             Language = Definition.Language;
             TorznabCaps = new TorznabCapabilities();
 
@@ -208,8 +208,8 @@ namespace Jackett.Indexers
                     continue;
                 }
                 AddCategoryMapping(Category.Key, TorznabCatType.GetCatByName(Category.Value));
-                
             }
+            LoadValuesFromJson(null);
         }
 
         protected Dictionary<string, object> getTemplateVariablesFromConfigData()

@@ -95,7 +95,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             await DoLogin();
             return IndexerConfigurationStatus.RequiresTesting;
         }

@@ -21,15 +21,14 @@ namespace Jackett.Indexers
 {
     public class IPTorrents : BaseIndexer, IIndexer
     {
-        private string UseLink { get { return (!String.IsNullOrEmpty(this.configData.AlternateLink.Value) ? this.configData.AlternateLink.Value : SiteLink); } }
-        string LoginUrl { get { return UseLink + "login.php"; } }
-        string TakeLoginUrl { get { return UseLink + "take_login.php"; } }
-        private string BrowseUrl { get { return UseLink + "t"; } }
-        private List<String> KnownURLs = new List<String> { "https://ipt-update.com/", "https://iptorrents.com/", "https://iptorrents.eu", "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
+        string LoginUrl { get { return SiteLink + "login.php"; } }
+        string TakeLoginUrl { get { return SiteLink + "take_login.php"; } }
+        private string BrowseUrl { get { return SiteLink + "t"; } }
+        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://ipt-update.com/", "https://iptorrents.com/", "https://iptorrents.eu/", "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
 
-        new ConfigurationDataRecaptchaLoginWithAlternateLink configData
+        new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataRecaptchaLoginWithAlternateLink)base.configData; }
+            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -42,14 +41,10 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLoginWithAlternateLink())
+                configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
-
-            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
-            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
-            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             AddCategoryMapping(72, TorznabCatType.Movies);
             AddCategoryMapping(77, TorznabCatType.MoviesSD);
@@ -110,19 +105,21 @@ namespace Jackett.Indexers
             }
             else
             {
-                var result = new ConfigurationDataBasicLoginWithAlternateLink();
+                var result = new ConfigurationDataBasicLogin();
+                result.SiteLink.Value = configData.SiteLink.Value;
                 result.Instructions.Value = configData.Instructions.Value;
                 result.Username.Value = configData.Username.Value;
                 result.Password.Value = configData.Password.Value;
                 result.CookieHeader.Value = loginPage.Cookies;
                 return result;
             }
-            
         }
+
+        
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -155,7 +152,7 @@ namespace Jackett.Indexers
             {
                 Url = TakeLoginUrl,
                 Type = RequestType.POST,
-                Referer = UseLink,
+                Referer = SiteLink,
                 Encoding = Encoding,
                 PostData = pairs
             };
@@ -218,7 +215,7 @@ namespace Jackett.Indexers
                     }
 
                     release.Description = release.Title;
-                    release.Guid = new Uri(UseLink + qTitleLink.Attr("href").Substring(1));
+                    release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
                     var descString = qRow.Find(".t_ctime").Text();
@@ -227,7 +224,7 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
 
                     var qLink = row.ChildElements.ElementAt(3).Cq().Children("a");
-                    release.Link = new Uri(UseLink + HttpUtility.UrlEncode(qLink.Attr("href").TrimStart('/')));
+                    release.Link = new Uri(SiteLink + HttpUtility.UrlEncode(qLink.Attr("href").TrimStart('/')));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

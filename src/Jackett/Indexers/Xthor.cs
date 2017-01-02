@@ -114,7 +114,7 @@ namespace Jackett.Indexers
             IsConfigured = false;
 
             // Retrieve config values set by Jackett's user
-            ConfigData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             // Check & Validate Config
             ValidateConfig();

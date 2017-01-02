@@ -22,15 +22,14 @@ namespace Jackett.Indexers
 {
     public class BitSoup : BaseIndexer, IIndexer
     {
-        private string UseLink { get { return (this.configData.AlternateLink.Value != null && this.configData.AlternateLink.Value != "" ? this.configData.AlternateLink.Value : SiteLink); } }
-        private string BrowseUrl { get { return UseLink + "browse.php"; } }
-        private string LoginUrl { get { return UseLink + "takelogin.php"; } }
-        private string LoginReferer { get { return UseLink + "login.php"; } }
-        private List<String> KnownURLs = new List<String> { "https://www.bitsoup.me/", "https://www.bitsoup.org/" };
+        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string LoginReferer { get { return SiteLink + "login.php"; } }
+        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://www.bitsoup.me/", "https://www.bitsoup.org/" };
 
-        new ConfigurationDataBasicLoginWithAlternateLink configData
+        new ConfigurationDataBasicLogin configData
         {
-            get { return (ConfigurationDataBasicLoginWithAlternateLink)base.configData; }
+            get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -43,14 +42,10 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithAlternateLink())
+                configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-
-            this.configData.Instructions.Value = this.DisplayName + " has multiple URLs.  The default (" + this.SiteLink + ") can be changed by entering a new value in the box below.";
-            this.configData.Instructions.Value += "The following are some known URLs for " + this.DisplayName;
-            this.configData.Instructions.Value += "<ul><li>" + String.Join("</li><li>", this.KnownURLs.ToArray()) + "</li></ul>";
 
             //AddCategoryMapping("624", TorznabCatType.Console);
             //AddCategoryMapping("307", TorznabCatType.ConsoleNDS);
@@ -148,28 +143,14 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
-            if (configData.AlternateLink.Value != null && configData.AlternateLink.Value != "")
-            {
-                if (!configData.AlternateLink.Value.EndsWith("/"))
-                {
-                    configData.AlternateLink.Value = null;
-                    throw new Exception("AlternateLink must end with a slash.");
-                }
-                var match = Regex.Match(configData.AlternateLink.Value, "^https?:\\/\\/(?:[\\w]+\\.)+(?:[a-zA-Z]+)\\/$");
-                if (!match.Success)
-                {
-                    configData.AlternateLink.Value = null;
-                    throw new Exception("AlternateLink must be a valid url.");
-                }
-            }
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
 
             };
 
-            var loginPage = await RequestStringWithCookies(UseLink, string.Empty);
+            var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginReferer, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
@@ -221,9 +202,9 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
 
                     release.Title = row.Cq().Find("td:eq(1) a").First().Text().Trim();
-                    release.Comments = new Uri(UseLink + row.Cq().Find("td:eq(1) a").First().Attr("href"));
+                    release.Comments = new Uri(SiteLink + row.Cq().Find("td:eq(1) a").First().Attr("href"));
 
-                    release.Link = new Uri(UseLink + row.Cq().Find("td:eq(2) a").First().Attr("href"));
+                    release.Link = new Uri(SiteLink + row.Cq().Find("td:eq(2) a").First().Attr("href"));
                     release.Guid = release.Link;
                     release.Description = release.Title;
                     var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(15);

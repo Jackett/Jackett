@@ -72,7 +72,7 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             // Retrieve config values set by Jackett's user
-            ConfigData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             // Check & Validate Config
             ValidateConfig();

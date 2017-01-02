@@ -98,7 +98,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             // reset cookies, if we send expired cookies for a new session their code seems to get confused
             // Due to the session not getting initiated correctly it will result in errors like this:

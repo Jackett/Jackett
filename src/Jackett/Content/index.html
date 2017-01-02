@@ -175,6 +175,16 @@
             <input class="form-control" type="text" value="{{{value}}}" />
         </div>
     </script>
+    <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
+        <div class="setup-item-alternativesitelinks alert alert-info" role="alert">
+            This indexer has multiple known URLs which you can change above:
+            <ul>
+                {{#each alternativesitelinks}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </script>
 
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">

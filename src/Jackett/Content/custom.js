@@ -301,7 +301,7 @@ function displayIndexerSetup(id, link) {
             return;
         }
 
-        populateSetupForm(id, data.name, data.config, data.caps, link);
+        populateSetupForm(id, data.name, data.config, data.caps, link, data.alternativesitelinks);
 
     }).fail(function () {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -378,11 +378,18 @@ function populateConfigItems(configForm, config) {
     }
 }
 
-function newConfigModal(title, config, caps, link) {
+function newConfigModal(title, config, caps, link, alternativesitelinks) {
     var configTemplate = Handlebars.compile($("#jackett-config-setup-modal").html());
     var configForm = $(configTemplate({ title: title, caps: caps, link:link }));
     $("#modals").append(configForm);
     populateConfigItems(configForm, config);
+
+    if (alternativesitelinks.length >= 1) {
+        var AlternativeSiteLinksTemplate = Handlebars.compile($("#setup-item-alternativesitelinks").html());
+        var template = $(AlternativeSiteLinksTemplate({ "alternativesitelinks": alternativesitelinks }));
+        configForm.find("div[data-id='sitelink']").after(template);
+    }
+
     return configForm;
 }
 
@@ -427,8 +434,8 @@ function getConfigModalJson(configForm) {
     return configJson;
 }
 
-function populateSetupForm(indexerId, name, config, caps, link) {
-    var configForm = newConfigModal(name, config, caps, link);
+function populateSetupForm(indexerId, name, config, caps, link, alternativesitelinks) {
+    var configForm = newConfigModal(name, config, caps, link, alternativesitelinks);
     var $goButton = configForm.find(".setup-indexer-go");
     $goButton.click(function () {
         var data = { indexer: indexerId, name: name };

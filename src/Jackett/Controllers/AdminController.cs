@@ -161,6 +161,7 @@ namespace Jackett.Controllers
                 jsonReply["config"] = config.ToJson(null);
                 jsonReply["caps"] = indexer.TorznabCaps.CapsToJson();
                 jsonReply["name"] = indexer.DisplayName;
+                jsonReply["alternativesitelinks"] = JToken.FromObject(indexer.AlternativeSiteLinks);
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)

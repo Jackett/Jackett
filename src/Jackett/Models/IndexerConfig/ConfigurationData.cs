@@ -27,6 +27,7 @@ namespace Jackett.Models.IndexerConfig
 
         public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
         public HiddenItem LastError { get; private set; } = new HiddenItem { Name = "LastError" };
+        public StringItem SiteLink { get; private set; } = new StringItem { Name = "Site Link" };
 
         public ConfigurationData()
         {
@@ -44,6 +45,14 @@ namespace Jackett.Models.IndexerConfig
                 return;
 
             var arr = (JArray)json;
+
+            // transistion from alternatelink to sitelink
+            var alternatelinkItem = arr.FirstOrDefault(f => f.Value<string>("id") == "alternatelink");
+            if (alternatelinkItem != null && !string.IsNullOrEmpty(alternatelinkItem.Value<string>("value")))
+            {
+                //SiteLink.Value = alternatelinkItem.Value<string>("value");
+            }
+
             foreach (var item in GetItems(forDisplay: false))
             {
                 var arrItem = arr.FirstOrDefault(f => f.Value<string>("id") == item.ID);
@@ -64,7 +73,8 @@ namespace Jackett.Models.IndexerConfig
                                 if (ps != null)
                                     sItem.Value = ps.UnProtect(newValue);
                             }
-                        } else
+                        }
+                        else
                         {
                             sItem.Value = newValue;
                         }
@@ -131,19 +141,23 @@ namespace Jackett.Models.IndexerConfig
 
         Item[] GetItems(bool forDisplay)
         {
-            var properties = GetType()
+            List<Item> properties = GetType()
                 .GetProperties()
                 .Where(p => p.CanRead)
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
-                .Select(p => (Item)p.GetValue(this));
+                .Select(p => (Item)p.GetValue(this)).ToList();
 
-            properties = properties.Concat(dynamics.Values).ToArray();
+            // remove/insert Site Link manualy to make sure it shows up first
+            properties.Remove(SiteLink);
+            properties.Insert(0, SiteLink);
+
+            properties.AddRange(dynamics.Values);
 
             if (!forDisplay)
             {
                 properties = properties
                     .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
-                    .ToArray();
+                    .ToList();
             }
 
             return properties.ToArray();
