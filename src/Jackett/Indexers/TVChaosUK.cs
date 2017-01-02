@@ -169,20 +169,21 @@ namespace Jackett.Indexers
                     if (string.IsNullOrWhiteSpace(torrentId))
                         throw new Exception("Missing torrent id");
 
-                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>\d*)\W\/\WLeechers:\W(?<leechers>\d*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
+                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d,]*)\W\/\WLeechers:\W(?<leechers>[\d,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)\W\/\WSnatched:\W(?<snatched>[\d,]*) x times");
                     if (!infoMatch.Success)
-                        throw new Exception("Unable to find info");
+                        throw new Exception(string.Format("Unable to find info in {0}: ", description));
 
                     var release = new ReleaseInfo()
                     {
                         Title = title,
-                        Description = title,
+                        Description = description,
                         Guid = new Uri(string.Format(DownloadUrl, torrentId)),
                         Comments = new Uri(string.Format(CommentUrl, torrentId)),
                         PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
                         Link = new Uri(string.Format(DownloadUrl, torrentId)),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
+                        Grabs = ParseUtil.CoerceInt(infoMatch.Groups["snatched"].Value),
                         Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
                         Category = MapTrackerCatToNewznab(infoMatch.Groups["cat"].Value)
                     };
@@ -233,7 +234,11 @@ namespace Jackett.Indexers
                         if (string.IsNullOrWhiteSpace(release.Title))
                             continue;
 
-                        release.Description = release.Title;
+                        var tooltip = qRow.Find("div.tooltip-content");
+                        var banner = tooltip.Find("img");
+                        release.Description = tooltip.Text();
+                        if (banner.Any())
+                            release.BannerUrl = new Uri(banner.Attr("src"));
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
