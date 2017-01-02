@@ -169,6 +169,8 @@ namespace Jackett.Indexers
 
                         if (format.Contains("MP3"))
                             release.Category = TorznabCatType.AudioMP3.ID;
+                        else if (format.Contains("AAC"))
+                            release.Category = TorznabCatType.AudioOther.ID;
                         else if (format.Contains("Lossless"))
                             release.Category = TorznabCatType.AudioLossless.ID;
                         else
