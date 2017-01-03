@@ -94,6 +94,9 @@ namespace Jackett.Utils.Clients
                 }
             }
 
+            if (!string.IsNullOrEmpty(webRequest.Referer))
+                request.Headers.Referrer = new Uri(webRequest.Referer);
+
             if (!string.IsNullOrEmpty(webRequest.RawBody))
             {
                 var type = webRequest.Headers.Where(h => h.Key == "Content-Type").Cast<KeyValuePair<string,string>?>().FirstOrDefault();

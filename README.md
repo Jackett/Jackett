@@ -14,6 +14,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Private Trackers
+ * 7tor
  * Abnormal
  * AlphaRatio
  * AlphaReign
@@ -53,6 +54,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Space
  * HD-Torrents
  * HDClub
+ * HDSky
  * Hebits
  * New Real World
  * Hounddawgs
@@ -61,6 +63,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ILoveTorrents
  * Immortalseed
  * IPTorrents
+ * M-Team - TP
  * MoreThanTV
  * MyAnonamouse
  * myAmity

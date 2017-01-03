@@ -167,6 +167,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\Abstract\GazelleTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Indexers\7tor.cs" />
     <Compile Include="Indexers\EliteTracker.cs" />
     <Compile Include="Indexers\Torrentech.cs" />
     <Compile Include="Indexers\nostream.cs" />
@@ -487,6 +488,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\chdbits.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\hdsky.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\mteamtp.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config">

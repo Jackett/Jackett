@@ -335,12 +335,17 @@ namespace Jackett.Indexers
 
         public async virtual Task<byte[]> Download(Uri link)
         {
+            return await Download(link, RequestType.GET);
+        }
+
+        public async virtual Task<byte[]> Download(Uri link, RequestType method = RequestType.GET)
+        {
             // do some extra escaping, needed for HD-Torrents
             var requestLink = link.ToString()
                 .Replace("(", "%28")
                 .Replace(")", "%29")
                 .Replace("'", "%27");
-            var response = await RequestBytesWithCookiesAndRetry(requestLink);
+            var response = await RequestBytesWithCookiesAndRetry(requestLink, null, method);
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 logger.Error("Failed download cookies: " + this.CookieHeader);
@@ -352,14 +357,14 @@ namespace Jackett.Indexers
             return response.Content;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await RequestBytesWithCookies(url, cookieOverride);
+                    return await RequestBytesWithCookies(url, cookieOverride, method);
                 }
                 catch (Exception e)
                 {
@@ -411,12 +416,12 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET)
         {
             var request = new Utils.Clients.WebRequest()
             {
                 Url = url,
-                Type = RequestType.GET,
+                Type = method,
                 Cookies = cookieOverride ?? CookieHeader,
                 Encoding = Encoding
             };
