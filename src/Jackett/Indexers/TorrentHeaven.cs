@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
 
             AddCategoryMapping(1,   TorznabCatType.PCGames); // GAMES/PC
             AddCategoryMapping(3,   TorznabCatType.Console); // GAMES/Sonstige
@@ -110,7 +111,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             
             var pairs = new Dictionary<string, string>
             {

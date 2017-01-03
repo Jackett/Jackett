@@ -42,6 +42,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataPinNumber())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping("cat[]=22&tags=Windows", TorznabCatType.PC0day);
             AddCategoryMapping("cat[]=22&tags=MAC", TorznabCatType.PCMac);
@@ -165,14 +166,14 @@ namespace Jackett.Indexers
 
         protected void AddResultCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
         {
-            resultMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
+            resultMapping.Add(new CategoryMapping(trackerCategory.ToString(), null, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
                 TorznabCaps.Categories.Add(newznabCategory);
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
@@ -268,6 +269,12 @@ namespace Jackett.Indexers
             }
 
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
+
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(queryUrl);
+            }
 
             try
             {

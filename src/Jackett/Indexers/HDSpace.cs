@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,
@@ -75,7 +76,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 

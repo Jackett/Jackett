@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(42, TorznabCatType.PCMac); // Applications/Mac
             AddCategoryMapping(34, TorznabCatType.PC); // Applications/PC
@@ -97,7 +98,12 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
+
+            // reset cookies, if we send expired cookies for a new session their code seems to get confused
+            // Due to the session not getting initiated correctly it will result in errors like this:
+            // Notice: Undefined index: simpleCaptchaAnswer in /var/www/html/takelogin.php on line 17
+            CookieHeader = null;
 
             var result1 = await RequestStringWithCookies(CaptchaUrl);
             var json1 = JObject.Parse(result1.Content);
@@ -147,6 +153,13 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
+
+            if (results.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;

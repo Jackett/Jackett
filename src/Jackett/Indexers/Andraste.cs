@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
 
             AddCategoryMapping(9,  TorznabCatType.Other); // Anderes
             AddCategoryMapping(23, TorznabCatType.TVAnime); // Animation - Film &; Serie
@@ -74,7 +75,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {
@@ -128,6 +129,7 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = results;
+                var globalFreeleech = dom.Find("div > img[alt=\"Only Upload\"][title^=\"ONLY UPLOAD \"]").Any();
                 var rows = dom["table.tableinborder > tbody > tr:has(td.tableb)"];
 
                 foreach (var row in rows)
@@ -185,7 +187,9 @@ namespace Jackett.Indexers
                     var grabs = qRow.Find("a[href*=\"&tosnatchers=1\"] ~ font ~ b").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (qRow.Find("img[alt=\"OU\"]").Length >= 1)
+                    if (globalFreeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[alt=\"OU\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;

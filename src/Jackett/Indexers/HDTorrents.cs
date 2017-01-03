@@ -24,6 +24,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
+        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
 
         new ConfigurationDataBasicLogin configData
         {
@@ -34,7 +35,7 @@ namespace Jackett.Indexers
         public HDTorrents(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-                link: "http://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
+                link: "https://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me
                 manager: i,
                 client: w,
                 logger: l,
@@ -42,6 +43,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             TorznabCaps.Categories.Clear();
 
@@ -69,7 +71,8 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
+
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {
@@ -172,7 +175,14 @@ namespace Jackett.Indexers
                     string category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
 
-                    if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
+                    release.UploadVolumeFactor = 1;
+
+                    if (qRow.Find("img[alt=\"Free Torrent\"]").Length >= 1)
+                    { 
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 0;
+                    }
+                    else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.5;
                     else if (qRow.Find("img[alt=\"Bronze Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.75;
@@ -180,8 +190,6 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 0.25;
                     else
                         release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

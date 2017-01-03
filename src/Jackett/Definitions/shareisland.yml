@@ -75,12 +75,14 @@
       p: "torrents"
       pid: "32"
       $raw: "{{range .Categories}}cid[]:{{.}}&{{end}}"
-      keywords: "{{ .Query.Keywords }}"
+      keywords: "{{ re_replace .Query.Keywords \"[^a-zA-Z0-9]+\" \"%\" }}"
       search_type: "name"
       searchin: "title"
 
     rows:
       selector: table#torrents_table_classic > tbody > tr:not([id="torrents_table_classic_head"])
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td.torrent_name > a
@@ -149,3 +151,5 @@
             args: ["Domenica", "Sunday"]
           - name: replace
             args: [" alle", ""]
+          - name: dateparse
+            args: "02-01-2006 15:04"

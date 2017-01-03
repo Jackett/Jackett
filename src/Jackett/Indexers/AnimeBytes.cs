@@ -62,6 +62,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataAnimeBytes())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
         }
 
 
@@ -73,7 +74,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             lock (cache)
             {

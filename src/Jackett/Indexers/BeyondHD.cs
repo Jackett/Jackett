@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataLoginLink())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             configData.DisplayText.Value = "Go to the general tab of your BeyondHD user profile and create/copy the Login Link.";
 
@@ -85,7 +86,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             
             var result = await RequestStringWithCookies(configData.LoginLink.Value);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Welcome Back"), () =>

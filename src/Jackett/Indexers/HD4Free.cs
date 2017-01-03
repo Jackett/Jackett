@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(42, TorznabCatType.MoviesSD); // LEGi0N 480p
             AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p 
@@ -103,7 +104,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "returnto" , "/" },
                 { "username", configData.Username.Value },

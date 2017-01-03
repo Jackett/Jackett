@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
 
             AddCategoryMapping(39, TorznabCatType.TVAnime); // Anime: HD|1080p
             AddCategoryMapping(38, TorznabCatType.TVAnime); // Anime: HD|720p
@@ -95,7 +96,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {

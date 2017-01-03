@@ -38,6 +38,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "de-de";
 
             AddCategoryMapping(1,  TorznabCatType.AudioAudiobook); // aBook
             AddCategoryMapping(4,  TorznabCatType.PCMac); // App|Mac
@@ -83,7 +84,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {

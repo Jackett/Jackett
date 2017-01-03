@@ -42,6 +42,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping(41, TorznabCatType.TV);
             AddCategoryMapping(33, TorznabCatType.TVSD);
@@ -74,8 +75,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            if(configJson != null)
-                configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },

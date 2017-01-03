@@ -122,7 +122,7 @@
       details:
         selector: a[onmouseover][href^="torrents-details.php?id="]
         attribute: href
-      details:
+      comments:
         selector: a[href*="#comments"]
         attribute: href
       size:

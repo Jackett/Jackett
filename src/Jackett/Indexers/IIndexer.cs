@@ -13,6 +13,7 @@ namespace Jackett.Indexers
     public interface IIndexer
     {
         string SiteLink { get; }
+        string[] AlternativeSiteLinks { get; }
 
         string DisplayName { get; }
         string DisplayDescription { get; }

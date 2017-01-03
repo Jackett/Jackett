@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
@@ -43,6 +44,9 @@ namespace Jackett.Indexers
                 downloadBase: "https://xthor.bz/download.php?torrent=",
                 configData: new ConfigurationDataXthor())
         {
+            Encoding = Encoding.UTF8;
+            Language = "fr-fr";
+
             // Clean capabilities
             TorznabCaps.Categories.Clear();
 
@@ -110,7 +114,7 @@ namespace Jackett.Indexers
             IsConfigured = false;
 
             // Retrieve config values set by Jackett's user
-            ConfigData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             // Check & Validate Config
             ValidateConfig();

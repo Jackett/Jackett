@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(3, TorznabCatType.MoviesDVD);
@@ -98,6 +99,7 @@ namespace Jackett.Indexers
             else
             {
                 var stdResult = new ConfigurationDataBasicLogin();
+                stdResult.SiteLink.Value = configData.SiteLink.Value;
                 stdResult.Username.Value = configData.Username.Value;
                 stdResult.Password.Value = configData.Password.Value;
                 stdResult.CookieHeader.Value = loginPage.Cookies;
@@ -107,7 +109,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },

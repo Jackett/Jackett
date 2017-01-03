@@ -41,6 +41,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
+            Language = "he-il";
 
             AddCategoryMapping(19, TorznabCatType.MoviesSD);
             AddCategoryMapping(25, TorznabCatType.MoviesOther); // Israeli Content
@@ -56,7 +57,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }

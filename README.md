@@ -14,6 +14,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Private Trackers
+ * 7tor
  * Abnormal
  * AlphaRatio
  * AlphaReign
@@ -28,42 +29,58 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BeyondHD
  * Bit-City Reloaded
  * BIT-HDTV
+ * BitHQ
  * BitMeTV
  * BitSoup
  * Blu-bits
  * BTN
+ * CHDBits
  * CinemaZ
  * DanishBits
+ * DataScene
  * Demonoid
  * DigitalHive
  * EoT-Forum
  * Ethor.net (Thor's Land)
+ * FANO.IN
  * FileList
  * Freaks Tracking System
  * Freshon
  * FunFile
  * Fuzer
  * Ghost City
+ * Gormogon
  * HD4Free
  * HD-Space
  * HD-Torrents
+ * HDClub
+ * HDSky
  * Hebits
  * New Real World
  * Hounddawgs
  * House-of-Torrents
+ * ICE Torrent
  * ILoveTorrents
  * Immortalseed
  * IPTorrents
+ * M-Team - TP
  * MoreThanTV
  * MyAnonamouse
  * myAmity
+ * MySpleen
  * NCore
+ * NetHD
  * NextGen
  * Norbits
+ * nostream
+ * notwhat.cd
+ * PassTheHeadphones
  * PassThePopcorn
  * PirateTheNet
  * Pretome
  * PrivateHD
+ * QcTorrent
+ * RapideTracker
  * RevolutionTT
  * SceneAccess
  * SceneFZ
@@ -85,18 +102,23 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentDay
  * TorrentHeaven
  * TorrentLeech
+ * Torrents.Md
  * TorrentShack
  * Torrent-Syndikat
+ * ToTheGlory
+ * TranceTraffic
  * TransmitheNet
  * Tspate
  * TV Chaos UK
  * TV-Vault
+ * u-Torrent
  * UHDBits
  * World-In-HD
  * WorldOfP2P
  * x264
  * XSpeeds
  * Xthor
+ * Xtreme Zone
 
 #### Installation on Windows
 
@@ -118,6 +140,7 @@ Jackett can also be run from the command line if you would like to see log messa
 #### Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/) or better
        * Follow the instructions on the mono website and install the `mono-devel` package.
+       * On Red Hat/CentOS  the `mono-locale-extras` package is also required
  2. Install  libcurl:
        * Debian/Ubunutu: `apt-get install libcurl-dev`
        * Redhat/Fedora: `yum install libcurl-devel`

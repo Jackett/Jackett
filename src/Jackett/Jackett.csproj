@@ -165,7 +165,13 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\Abstract\GazelleTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
+    <Compile Include="Indexers\7tor.cs" />
+    <Compile Include="Indexers\Torrentech.cs" />
+    <Compile Include="Indexers\nostream.cs" />
+    <Compile Include="Indexers\notwhatcd.cs" />
+    <Compile Include="Indexers\PassTheHeadphones.cs" />
     <Compile Include="Indexers\Norbits.cs" />
     <Compile Include="Indexers\TVVault.cs" />
     <Compile Include="Indexers\BJShare.cs" />
@@ -232,8 +238,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginLink.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithAlternateLink.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLoginWithAlternateLink.cs" />
     <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
@@ -432,6 +436,63 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\tenyardtracker.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\nethd.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\myspleen.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\totheglory.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\gormogon.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\qctorrent.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\torviet.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\icetorrent.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\xtremezone.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\datascene.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\utorrents.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\torrentsmd.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\fanoin.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\rapidetracker.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\hdclub.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\trancetraffic.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\bithq.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\chdbits.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\hdsky.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\mteamtp.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config">

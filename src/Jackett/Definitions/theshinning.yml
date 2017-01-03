@@ -106,6 +106,8 @@
       sort: "desc"
     rows:
       selector: table.main > tbody > tr:contains("Alle Torrents") + tr > td > table.tableinborder > tbody > tr
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="download-ssl.php?torrent="]

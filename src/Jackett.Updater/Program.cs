@@ -94,9 +94,35 @@ namespace Jackett.Updater
                 try {
                     Engine.Logger.Info("Copying " + fileName);
                     var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
+                    var destDir = Path.GetDirectoryName(dest);
+                    if (!Directory.Exists(destDir))
+                    {
+                        Engine.Logger.Info("Creating directory " + destDir);
+                        Directory.CreateDirectory(destDir);
+                    }
                     File.Copy(file, dest, true);
                 }
                 catch(Exception e)
+                {
+                    Engine.Logger.Error(e);
+                }
+            }
+
+            // delete old files
+            string[] oldDirs = new string[] { "Content/logos" };
+
+            foreach (var oldDir in oldDirs)
+            {
+                try
+                {
+                    var deleteDir = Path.Combine(options.Path, oldDir);
+                    if (Directory.Exists(deleteDir))
+                    {
+                        Engine.Logger.Info("Deleting directory " + deleteDir);
+                        Directory.Delete(deleteDir, true);
+                    }
+                }
+                catch (Exception e)
                 {
                     Engine.Logger.Error(e);
                 }

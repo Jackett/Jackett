@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataCaptchaLogin("Ensure that you have the 'Force SSL' option set to 'yes' in your profile on the BitMeTv webpage."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -62,7 +63,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -88,7 +89,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            var episodeSearchUrl = string.Format("{0}?search={1}&cat=0&incldead=1", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {

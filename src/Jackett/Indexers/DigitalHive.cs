@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping(0, TorznabCatType.Other);
             AddCategoryMapping(48, TorznabCatType.Other); // 0Day
@@ -100,7 +101,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "returnto" , "/" },
                 { "username", configData.Username.Value },

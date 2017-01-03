@@ -15,6 +15,11 @@ namespace Jackett.Utils
             return s.Trim();
         }
 
+        public static string NormalizeMultiSpaces(string s)
+        {
+            return new Regex(@"\s+").Replace(NormalizeSpace(s), " "); ;
+        }
+
         public static string NormalizeNumber(string s)
         {
             var normalized = NormalizeSpace(s);

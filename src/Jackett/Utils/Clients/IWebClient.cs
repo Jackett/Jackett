@@ -28,7 +28,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("IWebClient.GetBytes(Url:{0})", request.Url));
             var result = await Run(request);
-            logger.Debug(string.Format("IWebClient: Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
+            logger.Debug(string.Format("IWebClient: Returning {0} => {1} bytes", result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
 
@@ -75,7 +75,7 @@ namespace Jackett.Utils.Clients
                 decodedContent = encoding.GetString(result.Content);
 
             stringResult.Content = decodedContent;
-            logger.Debug(string.Format("IWebClient: Returning {0} => {1}", result.Status, (decodedContent == null ? "<NULL>" : decodedContent)));
+            logger.Debug(string.Format("IWebClient: Returning {0} => {1}", result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
 
             string[] server;
             if (stringResult.Headers.TryGetValue("server", out server))
@@ -86,7 +86,9 @@ namespace Jackett.Utils.Clients
             return stringResult;
         }
 
-        virtual protected async Task<WebClientByteResult> Run(WebRequest webRequest) { return null; }
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        virtual protected async Task<WebClientByteResult> Run(WebRequest webRequest) { throw new NotImplementedException(); }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         abstract public void Init();
     }

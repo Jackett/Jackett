@@ -41,11 +41,12 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            ConfigData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", ConfigData.Username.Value },
                 { "password", ConfigData.Password.Value },
@@ -217,7 +218,7 @@ namespace Jackett.Indexers
             if (torrentId.Contains('#'))
                 torrentId = torrentId.Split('#')[0];
 
-            var size = ParseSizeToBytes(torrentData[0].TextContent);
+            var size = ReleaseInfo.GetBytes(torrentData[0].TextContent);
             var grabs = int.Parse(torrentData[1].TextContent);
             var seeders = int.Parse(torrentData[2].TextContent);
             var guid = new Uri(GuidUrl + torrentId);
@@ -253,30 +254,5 @@ namespace Jackett.Indexers
 
             return season;
         }
-
-        // Changes "xx.xx GB/MB" to bytes
-        private static long ParseSizeToBytes(string strSize)
-        {
-            var sizeParts = strSize.Split(' ');
-            if (sizeParts.Length != 2)
-                throw new Exception($"We expected 2 size parts, instead we have {sizeParts.Length}.");
-
-            var size = double.Parse(sizeParts[0]);
-
-            switch (sizeParts[1].Trim())
-            {
-                case "GB":
-                    size = size*1000*1000*1000;
-                    break;
-                case "MB":
-                    size = size*1000*1000;
-                    break;
-                default:
-                    throw new Exception($"Unknown size type {sizeParts[1].Trim()}.");
-            }
-
-            return (long) Math.Ceiling(size);
-        }
-
     }
 }

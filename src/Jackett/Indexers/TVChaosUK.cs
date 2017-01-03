@@ -48,6 +48,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLoginWithRSS())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-uk";
 
             AddCategoryMapping(72, TorznabCatType.PC);
             AddCategoryMapping(86, TorznabCatType.Audio);
@@ -107,7 +108,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }
@@ -150,7 +151,7 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
 
             // If we have no query use the RSS Page as their server is slow enough at times!
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 var rssDoc = XDocument.Parse(rssPage.Content);
@@ -168,20 +169,21 @@ namespace Jackett.Indexers
                     if (string.IsNullOrWhiteSpace(torrentId))
                         throw new Exception("Missing torrent id");
 
-                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>\d*)\W\/\WLeechers:\W(?<leechers>\d*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
+                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d,]*)\W\/\WLeechers:\W(?<leechers>[\d,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)\W\/\WSnatched:\W(?<snatched>[\d,]*) x times");
                     if (!infoMatch.Success)
-                        throw new Exception("Unable to find info");
+                        throw new Exception(string.Format("Unable to find info in {0}: ", description));
 
                     var release = new ReleaseInfo()
                     {
                         Title = title,
-                        Description = title,
+                        Description = description,
                         Guid = new Uri(string.Format(DownloadUrl, torrentId)),
                         Comments = new Uri(string.Format(CommentUrl, torrentId)),
                         PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
                         Link = new Uri(string.Format(DownloadUrl, torrentId)),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
+                        Grabs = ParseUtil.CoerceInt(infoMatch.Groups["snatched"].Value),
                         Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
                         Category = MapTrackerCatToNewznab(infoMatch.Groups["cat"].Value)
                     };
@@ -194,7 +196,7 @@ namespace Jackett.Indexers
                     releases.Add(release);
                 }
             }
-            else
+            if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
             {
                 // The TVChaos UK search requires an exact match of the search string.
                 // But it seems like they just send the unfiltered search to the SQL server in a like query (LIKE '%$searchstring%').
@@ -211,6 +213,13 @@ namespace Jackett.Indexers
                 };
 
                 var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                if (searchPage.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                }
+
                 try
                 {
                     CQ dom = searchPage.Content;
@@ -225,7 +234,11 @@ namespace Jackett.Indexers
                         if (string.IsNullOrWhiteSpace(release.Title))
                             continue;
 
-                        release.Description = release.Title;
+                        var tooltip = qRow.Find("div.tooltip-content");
+                        var banner = tooltip.Find("img");
+                        release.Description = tooltip.Text();
+                        if (banner.Any())
+                            release.BannerUrl = new Uri(banner.Attr("src"));
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));

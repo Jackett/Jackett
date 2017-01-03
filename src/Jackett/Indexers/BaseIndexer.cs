@@ -12,12 +12,15 @@ using Jackett.Utils.Clients;
 using AutoMapper;
 using System.Threading;
 using Jackett.Models.IndexerConfig;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
     public abstract class BaseIndexer
     {
         public string SiteLink { get; protected set; }
+        public string DefaultSiteLink { get; protected set; }
+        public string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
@@ -66,8 +69,10 @@ namespace Jackett.Indexers
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
+            DefaultSiteLink = link;
             this.downloadUrlBase = downloadBase;
             this.configData = configData;
+            LoadValuesFromJson(null);
 
             if (caps == null)
                 caps = TorznabUtil.CreateDefaultTorznabTVCaps();
@@ -118,8 +123,20 @@ namespace Jackett.Indexers
         {
             if (null != input)
             {
-                input = input.ToLowerInvariant();
                 var mapping = categoryMapping.Where(m => m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
+                if (mapping != null)
+                {
+                    return mapping.NewzNabCategory;
+                }
+            }
+            return 0;
+        }
+
+        protected int MapTrackerCatDescToNewznab(string input)
+        {
+            if (null != input)
+            {
+                var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
                 if (mapping != null)
                 {
                     return mapping.NewzNabCategory;
@@ -278,11 +295,33 @@ namespace Jackett.Indexers
             }
         }
 
+        public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            IProtectionService ps = null;
+            if (useProtectionService)
+                ps = protectionService;
+            configData.LoadValuesFromJson(jsonConfig, ps);
+            if (string.IsNullOrWhiteSpace(configData.SiteLink.Value))
+            {
+                configData.SiteLink.Value = DefaultSiteLink;
+            }
+            if (!configData.SiteLink.Value.EndsWith("/"))
+                configData.SiteLink.Value += "/";
+
+            var match = Regex.Match(configData.SiteLink.Value, "^https?:\\/\\/[\\w\\-\\/\\.]+$");
+            if (!match.Success)
+            {
+                throw new Exception(string.Format("\"{0}\" is not a valid URL.", configData.SiteLink.Value));
+            }
+
+            SiteLink = configData.SiteLink.Value;
+        }
+
         public virtual void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             if (jsonConfig is JArray)
             {
-                configData.LoadValuesFromJson(jsonConfig, protectionService);
+                LoadValuesFromJson(jsonConfig, true);
                 IsConfigured = true;
             }
             // read and upgrade old settings file format
@@ -296,30 +335,36 @@ namespace Jackett.Indexers
 
         public async virtual Task<byte[]> Download(Uri link)
         {
+            return await Download(link, RequestType.GET);
+        }
+
+        public async virtual Task<byte[]> Download(Uri link, RequestType method = RequestType.GET)
+        {
             // do some extra escaping, needed for HD-Torrents
             var requestLink = link.ToString()
                 .Replace("(", "%28")
                 .Replace(")", "%29")
                 .Replace("'", "%27");
-            var response = await RequestBytesWithCookiesAndRetry(requestLink);
+            var response = await RequestBytesWithCookiesAndRetry(requestLink, null, method);
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
-                if(response.Content != null)
+                logger.Error("Failed download cookies: " + this.CookieHeader);
+                if (response.Content != null)
                     logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
-                throw new Exception($"Remote server returned {response.Status.ToString()}");
+                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => "+response.RedirectingTo : ""));
             }
 
             return response.Content;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await RequestBytesWithCookies(url, cookieOverride);
+                    return await RequestBytesWithCookies(url, cookieOverride, method);
                 }
                 catch (Exception e)
                 {
@@ -371,12 +416,12 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET)
         {
             var request = new Utils.Clients.WebRequest()
             {
                 Url = url,
-                Type = RequestType.GET,
+                Type = method,
                 Cookies = cookieOverride ?? CookieHeader,
                 Encoding = Encoding
             };
@@ -483,16 +528,16 @@ namespace Jackett.Indexers
             }
         }
 
-        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
+        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory, newznabCategory.ID));
+            categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
                 TorznabCaps.Categories.Add(newznabCategory);
         }
 
-        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory)
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
-            AddCategoryMapping(trackerCategory.ToString(), newznabCategory);
+            AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
         }
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)

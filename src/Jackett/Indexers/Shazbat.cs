@@ -48,11 +48,13 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSS())
         {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "referer", "login"},
                 { "query", ""},

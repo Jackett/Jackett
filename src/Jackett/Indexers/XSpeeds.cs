@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
             configData.DisplayText.Name = "Notice";
@@ -125,7 +126,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string>
                         {
                             {"username", configData.Username.Value},
@@ -246,37 +247,15 @@ namespace Jackett.Indexers
                     { "username", configData.Username.Value },
                     { "password", configData.Password.Value }
                 };
-                var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, SiteLink, true);
-                if (!result.Cookies.Trim().Equals(prevCook.Trim()))
-                {
-                    result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
-                }
-                CookieHeader = result.Cookies;
 
-                var attempt = 1;
                 var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
-                while (searchPage.IsRedirect && attempt < 3)
+                // Occasionally the cookies become invalid, login again if that happens
+                if (searchPage.IsRedirect)
                 {
-                    // add any cookies
-                    var cookieString = CookieHeader;
-                    if (searchPage.Cookies != null)
-                    {
-                        cookieString += " " + searchPage.Cookies;
-                        // resolve cookie conflicts - really no need for this as the webclient will handle it
-                        var expression = new Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
-                        var cookieDIctionary = new Dictionary<string, string>();
-                        var matches = expression.Match(cookieString);
-                        while (matches.Success)
-                        {
-                            if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
-                            matches = matches.NextMatch();
-                        }
-                        cookieString = string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
-                    }
-                    CookieHeader = cookieString;
-                    attempt++;
+                    await ApplyConfiguration(null);
                     searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
                 }
+
                 try
                 {
                     CQ dom = searchPage.Content;

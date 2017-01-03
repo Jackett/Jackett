@@ -48,6 +48,8 @@ namespace Jackett.Indexers
                 downloadBase: "https://revolutiontt.me/download.php/",
                 configData: new ConfigurationDataBasicLoginWithRSS())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             /* Original RevolutionTT Categories -
 			
@@ -185,7 +187,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },

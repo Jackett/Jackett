@@ -68,7 +68,7 @@ namespace Jackett.Models
                             new XElement("title", r.Title),
                             new XElement("guid", r.Guid),
                             r.Comments == null ? null : new XElement("comments", r.Comments.ToString()),
-                            r.PublishDate == DateTime.MinValue ? null : new XElement("pubDate", xmlDateFormat(r.PublishDate)),
+                            r.PublishDate == DateTime.MinValue ? new XElement("pubDate", DateTime.Now) : new XElement("pubDate", xmlDateFormat(r.PublishDate)),
                             r.Size == null ? null : new XElement("size", r.Size),
                             r.Files == null ? null : new XElement("files", r.Files),
                             r.Grabs == null ? null : new XElement("grabs", r.Grabs),

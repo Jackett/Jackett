@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
 
             AddCategoryMapping(20, TorznabCatType.Movies); // Movies&TV/Sources
             AddCategoryMapping(53, TorznabCatType.MoviesHD); // Movies/1080p
@@ -55,24 +56,22 @@ namespace Jackett.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             CQ dom = loginPage.Content;
-            CQ recaptchaScript = dom.Find("script").First();
 
-            string recaptchaSiteKey = recaptchaScript.Attr("src").Split('=')[1];
             var result = this.configData;
+            var captcha = dom.Find(".g-recaptcha");
             result.CookieHeader.Value = loginPage.Cookies;
-            result.Captcha.SiteKey = recaptchaSiteKey;
-            result.Captcha.Version = "1";
+            result.Captcha.SiteKey = captcha.Attr("data-sitekey");
+            result.Captcha.Version = "2";
             return result;
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "recaptcha_challenge_field", configData.Captcha.Challenge },
-                { "recaptcha_response_field", configData.Captcha.Value },
+                { "g-recaptcha-response", configData.Captcha.Value }
             };
 
             if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
@@ -185,9 +184,6 @@ namespace Jackett.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
-
-                    // time is needed for sonarr, just set it to now
-                    release.PublishDate = DateTime.Now;
 
                     releases.Add(release);
                 }

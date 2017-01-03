@@ -45,6 +45,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.Audio);
             AddCategoryMapping(2, TorznabCatType.PC);
@@ -61,8 +62,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            if (configJson != null)
-                configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -134,7 +134,6 @@ namespace Jackett.Indexers
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
                     var linkStr = qLink.Attr("href");
-                    release.Title = qLink.Text();
                     release.Comments = new Uri(BaseUrl + "/" + linkStr);
                     release.Guid = release.Comments;
 
@@ -161,6 +160,10 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 1;
 
                     release.UploadVolumeFactor = 1;
+
+                    var title = qRow.Find("td:nth-child(2)");
+                    title.Find("span, strong, div, br").Remove();
+                    release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
 
                     releases.Add(release);
                 }

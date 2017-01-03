@@ -42,6 +42,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             this.configData.DisplayText.Name = "Notice";
@@ -65,7 +66,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var result1 = await RequestStringWithCookies(CaptchaUrl);
             var json1 = JObject.Parse(result1.Content);

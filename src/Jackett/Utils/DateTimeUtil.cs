@@ -13,6 +13,13 @@ namespace Jackett.Utils
     {
         public static string RFC1123ZPattern = "ddd, dd MMM yyyy HH':'mm':'ss z";
 
+        public static DateTime UnixTimestampToDateTime(long unixTime)
+        {
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dt = dt.AddSeconds(unixTime).ToLocalTime();
+            return dt;
+        }
+
         public static DateTime UnixTimestampToDateTime(double unixTime)
         {
             DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
@@ -98,10 +105,16 @@ namespace Jackett.Utils
 
         // Uses the DateTimeRoutines library to parse the date
         // http://www.codeproject.com/Articles/33298/C-Date-Time-Parser
-        public static DateTime FromFuzzyTime(string str, DateTimeRoutines.DateTimeFormat format = DateTimeRoutines.DateTimeFormat.USA_DATE)
+        public static DateTime FromFuzzyTime(string str, string format = null)
         {
+            DateTimeRoutines.DateTimeFormat dt_format = DateTimeRoutines.DateTimeFormat.USA_DATE;
+            if (format == "UK")
+            {
+                dt_format = DateTimeRoutines.DateTimeFormat.UK_DATE;
+            }
+
             DateTimeRoutines.ParsedDateTime dt;
-            if (DateTimeRoutines.TryParseDateOrTime(str, format, out dt))
+            if (DateTimeRoutines.TryParseDateOrTime(str, dt_format, out dt))
             {
                 return dt.DateTime;
             }
@@ -115,7 +128,7 @@ namespace Jackett.Utils
         public static Regex missingYearRegexp = new Regex(@"^\d{1,2}-\d{1,2}\b", RegexOptions.Compiled);
         public static Regex missingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
-        public static DateTime FromUnknown(string str)
+        public static DateTime FromUnknown(string str, string format = null)
         {
             try {
                 str = ParseUtil.NormalizeSpace(str);
@@ -170,9 +183,7 @@ namespace Jackett.Utils
                 {
                     // try parsing the str as an unix timestamp
                     var unixTimeStamp = long.Parse(str);
-                    DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                    dt = dt.AddSeconds(unixTimeStamp).ToLocalTime();
-                    return dt;
+                    return UnixTimestampToDateTime(unixTimeStamp);
                 }
                 catch (FormatException)
                 {
@@ -196,7 +207,8 @@ namespace Jackett.Utils
                     var time = match.Groups[2].Value;
                     str = date + " " + DateTime.Now.Year.ToString() + " " + time;
                 }
-                return FromFuzzyTime(str);
+
+                return FromFuzzyTime(str, format);
             }
             catch (Exception ex)
             {

@@ -40,6 +40,7 @@ namespace Jackett.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "de-de";
 
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum).";
             this.configData.DisplayText.Name = "Notice";
@@ -83,7 +84,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {
@@ -138,11 +139,18 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 0.7;
                     release.MinimumSeedTime = 48 * 60 * 60;
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
+
                     var qRow = row.Cq();
                     var flagImgs = qRow.Find("table tbody tr: eq(0) td > img");
                     List<string> flags = new List<string>();
                     flagImgs.Each(flagImg => {
-                        flags.Add(flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper());
+                        var flag = flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper();
+                        if (flag == "OU")
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            flags.Add(flag);
                     });
                         
                     var titleLink = qRow.Find("table tbody tr:eq(0) td a:has(b)").First();
@@ -171,21 +179,11 @@ namespace Jackett.Indexers
                     var catId = qRow.Find("td:eq(0) a").First().Attr("href").Split('=')[1];
                     release.Category = MapTrackerCatToNewznab(catId);
 
-                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Substring(1);
-                    release.Category = MapTrackerCatToNewznab(cat);
-
                     var files = qRow.Find("td:has(a[href*=\"&filelist=1\"])> b:nth-child(2)").Text();
                     release.Files = ParseUtil.CoerceInt(files);
 
                     var grabs = qRow.Find("td:has(a[href*=\"&tosnatchers=1\"])> b:nth-child(1)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (qRow.Find("img[src=\"pic/torrent_ou.gif\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

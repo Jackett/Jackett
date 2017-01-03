@@ -39,6 +39,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.TVSD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
@@ -66,7 +67,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -136,6 +137,11 @@ namespace Jackett.Indexers
 
             searchUrl += queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {

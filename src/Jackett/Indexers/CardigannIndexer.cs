@@ -24,6 +24,7 @@ namespace Jackett.Indexers
 {
     public class CardigannIndexer : BaseIndexer, IIndexer
     {
+        public string DefinitionString { get; protected set; }
         protected IndexerDefinition Definition;
         public new string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
 
@@ -49,6 +50,7 @@ namespace Jackett.Indexers
             public loginBlock Login { get; set; }
             public ratioBlock Ratio { get; set; }
             public searchBlock Search { get; set; }
+            public downloadBlock Download { get; set; }
             // IndexerDefinitionStats not needed/implemented
         }
         public class settingsField
@@ -64,6 +66,13 @@ namespace Jackett.Indexers
             public Dictionary<string, List<string>> Modes { get; set; }
         }
 
+        public class captchaBlock
+        {
+            public string Type { get; set; }
+            public string Image { get; set; }
+            public string Input { get; set; }
+        }
+
         public class loginBlock
         {
             public string Path { get; set; }
@@ -72,6 +81,7 @@ namespace Jackett.Indexers
             public Dictionary<string, string> Inputs { get; set; }
             public List<errorBlock> Error { get; set; }
             public pageTestBlock Test { get; set; }
+            public captchaBlock Captcha { get; set; }
         }
 
         public class errorBlock
@@ -123,7 +133,13 @@ namespace Jackett.Indexers
             public selectorBlock Dateheaders { get; set; }
         }
 
-        protected readonly string[] OptionalFileds = new string[] { "imdb" };
+        public class downloadBlock
+        {
+            public string Selector { get; set; }
+            public string Method { get; set; }
+        }
+
+        protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
         public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(manager: i,
@@ -144,6 +160,7 @@ namespace Jackett.Indexers
 
         protected void Init(string DefinitionString)
         {
+            this.DefinitionString = DefinitionString;
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .IgnoreUnmatchedProperties()
@@ -169,12 +186,12 @@ namespace Jackett.Indexers
             // init missing mandatory attributes
             DisplayName = Definition.Name;
             DisplayDescription = Definition.Description;
-            SiteLink = Definition.Links[0]; // TODO: implement alternative links
+            DefaultSiteLink = Definition.Links[0]; // TODO: implement alternative links
             Encoding = Encoding.GetEncoding(Definition.Encoding);
-            if (!SiteLink.EndsWith("/"))
-                SiteLink += "/";
+            if (!DefaultSiteLink.EndsWith("/"))
+                DefaultSiteLink += "/";
             Language = Definition.Language;
-            TorznabCaps = TorznabUtil.CreateDefaultTorznabTVCaps(); // TODO implement caps
+            TorznabCaps = new TorznabCapabilities();
 
             // init config Data
             configData = new ConfigurationData();
@@ -192,8 +209,8 @@ namespace Jackett.Indexers
                     continue;
                 }
                 AddCategoryMapping(Category.Key, TorznabCatType.GetCatByName(Category.Value));
-                
             }
+            LoadValuesFromJson(null);
         }
 
         protected Dictionary<string, object> getTemplateVariablesFromConfigData()
@@ -214,6 +231,26 @@ namespace Jackett.Indexers
             if (variables == null)
             {
                 variables = getTemplateVariablesFromConfigData();
+            }
+
+            // handle re_replace expression
+            // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
+            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.+)""\s+""(.+?)""\s*}}");
+            var ReReplaceRegexMatches = ReReplaceRegex.Match(template);
+
+            while (ReReplaceRegexMatches.Success)
+            {
+                string all = ReReplaceRegexMatches.Groups[0].Value;
+                string variable = ReReplaceRegexMatches.Groups[1].Value;
+                string regexp = ReReplaceRegexMatches.Groups[2].Value;
+                string newvalue = ReReplaceRegexMatches.Groups[3].Value;
+
+                Regex ReplaceRegex = new Regex(regexp);
+                var input = (string)variables[variable];
+                var expanded = ReplaceRegex.Replace(input, newvalue);
+
+                template = template.Replace(all, expanded);
+                ReReplaceRegexMatches = ReReplaceRegexMatches.NextMatch();
             }
 
             // handle if ... else ... expression
@@ -438,8 +475,48 @@ namespace Jackett.Indexers
                     pairs["captchaSelection"] = captchaSelection;
                     pairs["submitme"] = "X";
                 }
-                
-                var loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
+
+                if (Login.Captcha != null)
+                {
+                    var Captcha = Login.Captcha;
+                    if (Captcha.Type == "image")
+                    {
+                        var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
+                        if (CaptchaText != null)
+                            pairs[Captcha.Input] = CaptchaText.Value;
+                    }
+                }
+
+                // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
+                landingResult = null;
+                landingResultDocument = null;
+
+                WebClientStringResult loginResult = null;
+                var enctype = form.GetAttribute("enctype");
+                if (enctype == "multipart/form-data")
+                {
+                    var headers = new Dictionary<string, string>();
+                    var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "");
+                    var bodyParts = new List<string>();
+
+                    foreach (var pair in pairs)
+                    {
+                        var part = "--" + boundary + "\r\n" +
+                          "Content-Disposition: form-data; name=\"" + pair.Key + "\"\r\n" +
+                          "\r\n" +
+                          pair.Value;
+                        bodyParts.Add(part);
+                    }
+
+                    bodyParts.Add("--" + boundary + "--");
+
+                    headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+                    var body = string.Join("\r\n",  bodyParts);
+                    loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
+                } else {
+                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
+                }
+
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForLoginError(loginResult);
@@ -531,6 +608,34 @@ namespace Jackett.Indexers
                     CaptchaItem.SiteKey = landingResultDocument.QuerySelector("[data-sitekey]").GetAttribute("data-sitekey");
 
                 configData.AddDynamic("Captcha", CaptchaItem);
+            }
+
+            if (Login.Captcha != null)
+            {
+                var Captcha = Login.Captcha;
+                if (Captcha.Type == "image")
+                {
+                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
+                    if (captchaElement != null) {
+                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"));
+                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies);
+                        var CaptchaImage = new ImageItem { Name = "Captcha Image" };
+                        var CaptchaText = new StringItem { Name = "Captcha Text" };
+                        logger.Error("captchaImageData Cookies: " + captchaImageData.Cookies);
+                        CaptchaImage.Value = captchaImageData.Content;
+
+                        configData.AddDynamic("CaptchaImage", CaptchaImage);
+                        configData.AddDynamic("CaptchaText", CaptchaText);
+                    }
+                    else
+                    {
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException(string.Format("Captcha type \"{0}\" is not implemented", Captcha.Type));
+                }
             }
 
             return configData;
@@ -896,11 +1001,35 @@ namespace Jackett.Indexers
                                     case "uploadvolumefactor":
                                         release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
                                         break;
+                                    case "minimumratio":
+                                        release.MinimumRatio = ParseUtil.CoerceDouble(value);
+                                        break;
+                                    case "minimumseedtime":
+                                        release.MinimumSeedTime = ParseUtil.CoerceLong(value);
+                                        break;
                                     case "imdb":
                                         Regex IMDBRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                         var IMDBMatch = IMDBRegEx.Match(value);
                                         var IMDBId = IMDBMatch.Groups[1].Value;
                                         release.Imdb = ParseUtil.CoerceLong(IMDBId);
+                                        break;
+                                    case "rageid":
+                                        Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                        var RageIDMatch = RageIDRegEx.Match(value);
+                                        var RageID = RageIDMatch.Groups[1].Value;
+                                        release.RageID = ParseUtil.CoerceLong(RageID);
+                                        break;
+                                    case "tvdbid":
+                                        Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                        var TVDBIdMatch = TVDBIdRegEx.Match(value);
+                                        var TVDBId = TVDBIdMatch.Groups[1].Value;
+                                        release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                                        break;
+                                    case "banner":
+                                        if(!string.IsNullOrWhiteSpace(value)) { 
+                                            var bannerurl = resolvePath(value);
+                                            release.BannerUrl = bannerurl;
+                                        }
                                         break;
                                     default:
                                         break;
@@ -913,6 +1042,35 @@ namespace Jackett.Indexers
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
                             }
                         }
+
+                        var Filters = Definition.Search.Rows.Filters;
+                        var SkipRelease = false;
+                        if (Filters != null)
+                        {
+                            foreach (filterBlock Filter in Filters)
+                            {
+                                switch (Filter.Name)
+                                {
+                                    case "andmatch":
+                                        int CharacterLimit = -1;
+                                        if (Filter.Args != null)
+                                            CharacterLimit = int.Parse(Filter.Args);
+
+                                        if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                        {
+                                            logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                            SkipRelease = true;
+                                        }
+                                        break;
+                                    default:
+                                        logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (SkipRelease)
+                            continue;
 
                         // if DateHeaders is set go through the previous rows and look for the header selector
                         var DateHeaders = Definition.Search.Rows.Dateheaders;
@@ -944,7 +1102,7 @@ namespace Jackett.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}': {2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
                     }
                 }
             }
@@ -954,6 +1112,40 @@ namespace Jackett.Indexers
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var method = RequestType.GET;
+            if (Definition.Download != null)
+            {
+                var Download = Definition.Download;
+                if (Download.Method != null)
+                {
+                    if (Download.Method == "post")
+                        method = RequestType.POST;
+                }
+                if (Download.Selector != null)
+                {
+                    var response = await RequestStringWithCookies(link.ToString());
+                    var results = response.Content;
+                    var SearchResultParser = new HtmlParser();
+                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var DlUri = SearchResultDocument.QuerySelector(Download.Selector);
+                    if (DlUri != null)
+                    {
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.OuterHtml));
+                        var href = DlUri.GetAttribute("href");
+                        link = resolvePath(href);
+                    }
+                    else
+                    {
+                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", ID, Download.Selector, results));
+                        throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
+                    }
+                }
+            }
+            return await base.Download(link, method);
         }
     }
 }

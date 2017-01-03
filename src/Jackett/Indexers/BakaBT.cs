@@ -40,12 +40,14 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
         }
 
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var loginForm = await webclient.GetString(new Utils.Clients.WebRequest()
                 {

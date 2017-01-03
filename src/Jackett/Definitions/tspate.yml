@@ -101,6 +101,8 @@
 
     rows:
       selector: table.ttable_headinner > tbody > tr.t-row
+      filters:
+        - name: andmatch
       after: 1
     fields:
       download:

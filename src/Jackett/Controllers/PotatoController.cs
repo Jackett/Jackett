@@ -140,7 +140,7 @@ namespace Jackett.Controllers
                         details_url = release.Comments.ToString(),
                         download_url = release.Link.ToString(),
                         imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
-                        freeleech = false,
+                        freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                         type = "movie",
                         size = (long)release.Size / (1024 * 1024), // This is in MB
                         leechers = (int)release.Peers - (int)release.Seeders,

@@ -227,8 +227,20 @@ pre {
     display: none;
 }
 
-.table td.fit{
+table td.fit{
     white-space: nowrap;
     width: 1%;
 }
 
+.label-imdb {
+    background-color: #d0ab44;
+}
+
+.tooltip-inner {
+    max-width: 500px !important;
+}
+
+.tooltip-inner img {
+    max-width: 250px;
+    height: auto;      
+}

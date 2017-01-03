@@ -175,6 +175,16 @@
             <input class="form-control" type="text" value="{{{value}}}" />
         </div>
     </script>
+    <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
+        <div class="setup-item-alternativesitelinks alert alert-info" role="alert">
+            This indexer has multiple known URLs which you can change above:
+            <ul>
+                {{#each alternativesitelinks}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </script>
 
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
@@ -214,8 +224,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td></td>
-                    <td></td>
+                    <td colspan="2">Total configured indexers: {{total_configured_indexers}}</td>
                 </tr>
             </tfoot>
         </table>      
@@ -249,10 +258,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="4">Total unconfigured indexers: {{total_unconfigured_indexers}}</td>
                 </tr>
             </tfoot>
         </table>
@@ -291,15 +297,15 @@
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr class="jackett-releases-row">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
                                     <td>{{PublishDate}}</td>
                                     <td>{{FirstSeen}}</td>
                                     <td>{{jacketTimespan PublishDate}}</td>
                                     <td>{{jacketTimespan FirstSeen}}</td>
                                     <td>{{Tracker}}</td>
-                                    <td><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                                     <td>{{Size}}</td>
-                                    <td>{{jacketSize Size}}</td>
+                                    <td class="fit">{{jacketSize Size}}</td>
                                     <td>{{Files}}</td>
                                     <td>{{CategoryDesc}}</td>
                                     <td>{{Grabs}}</td>
@@ -362,6 +368,7 @@
                         <select name="category" id="searchCategory"></select>
                         <label>Tracker</label>
                         <select name="tracker" id="searchTracker">
+                            <option value="">-- All --</option>
                             {{#each indexers}}
                             <option value="{{id}}">{{name}}</option>
                             {{/each}}
@@ -403,13 +410,13 @@
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr class="jackett-search-results-row">
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
-                    <td>{{jacketSize Size}}</td>
+                    <td class="fit">{{jacketSize Size}}</td>
                     <td>{{Files}}</td>
                     <td>{{CategoryDesc}}</td>
                     <td>{{Grabs}}</td>
