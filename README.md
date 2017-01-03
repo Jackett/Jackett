@@ -53,6 +53,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Space
  * HD-Torrents
  * HDClub
+ * HDSky
  * Hebits
  * New Real World
  * Hounddawgs

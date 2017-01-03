@@ -1,0 +1,117 @@
+﻿---
+  site: hdsky
+  name: HDSky
+  description: "A chinese tracker"
+  language: zh-cn
+  encoding: UTF-8
+  links:
+    - https://hdsky.me
+
+  caps:
+    categories:
+      401: Movies # Movies/电影
+      404: TV/Documentary # Documentaries/纪录片
+      410: Movies # iPad/iPad影视
+      405: TV/Anime # Animations/动漫
+      402: TV # TV Series/剧集
+      403: TV # TV Shows/综艺
+      406: Audio/Video # Music Videos/音乐MV
+      407: TV/Sport # Sports/体育
+      408: Audio # HQ Audio/无损音乐
+      409: Other # Misc/其他
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    captcha:
+      type: image
+      image: img[alt="CAPTCHA"]
+      input: imagestring
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /torrents.php
+
+  ratio:
+    path: /torrents.php
+    selector: table#info_block
+    filters:
+      - name: regexp
+        args: "Ratio:\\s(.*?)\\s\\s"
+        
+  download:
+    method: post
+
+  search:
+    path: /torrents.php
+    method: post
+    inputs:
+      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      spstate: "0"
+      inclbookmarked: "0"
+      search_area: "0"
+      search_mode: "0"
+    rows:
+      selector: table.torrents > tbody > tr:has(table.torrentname)
+    fields:
+      title:
+        selector: a[title][href^="details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[title][href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: form[action^="download.php?id="]
+        attribute: action
+      imdb:
+        selector: a[href^="http://www.imdb.com/title/tt"]
+        attribute: href
+      size:
+        selector: td.rowfollow:nth-child(5)
+      grabs:
+        selector: td.rowfollow:nth-child(8)
+      seeders:
+        selector: td.rowfollow:nth-child(6)
+      leechers:
+        selector: td.rowfollow:nth-child(7)
+      date:
+        selector: td.rowfollow:nth-child(4) > span[title]
+        attribute: title
+        filters:
+          - name: append
+            args: " +08:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          img.pro_free: "0"
+          img.pro_free2up: "0"
+          img.pro_50pctdown: "0.5"
+          img.pro_50pctdown2up: "0.5"
+          img.pro_30pctdown: "0.3"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img.pro_50pctdown2up: "2"
+          img.pro_free2up: "2"
+          img.pro_2up: "2"
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a, img
