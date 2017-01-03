@@ -136,6 +136,7 @@ namespace Jackett.Indexers
         public class downloadBlock
         {
             public string Selector { get; set; }
+            public string Method { get; set; }
         }
 
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
@@ -1115,9 +1116,15 @@ namespace Jackett.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            if(Definition.Download != null)
+            var method = RequestType.GET;
+            if (Definition.Download != null)
             {
                 var Download = Definition.Download;
+                if (Download.Method != null)
+                {
+                    if (Download.Method == "post")
+                        method = RequestType.POST;
+                }
                 if (Download.Selector != null)
                 {
                     var response = await RequestStringWithCookies(link.ToString());
@@ -1138,7 +1145,7 @@ namespace Jackett.Indexers
                     }
                 }
             }
-            return await base.Download(link);
+            return await base.Download(link, method);
         }
     }
 }
