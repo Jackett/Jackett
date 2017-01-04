@@ -43,45 +43,81 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "fr-fr";
 
-            // Audio
-            AddCategoryMapping(23, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(26, TorznabCatType.AudioVideo, "Music Clip/Concert");
-            AddCategoryMapping(61, TorznabCatType.AudioLossless, "Music LossLess");
-            AddCategoryMapping(60, TorznabCatType.AudioMP3, "Music MP3");
+            AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation/Animes");
+            AddCategoryMapping(63, TorznabCatType.TVAnime, "Animes DVD");
+            AddCategoryMapping(56, TorznabCatType.TVAnime, "Animes HD");
+            AddCategoryMapping(59, TorznabCatType.TVAnime, "Animes Serie");
 
-            // Movies
-            AddCategoryMapping(7, TorznabCatType.Movies, "Films");
-            AddCategoryMapping(11, TorznabCatType.MoviesDVD, "Films DVD");
-            AddCategoryMapping(70, TorznabCatType.Movies3D, "Films 3D");
-            AddCategoryMapping(49, TorznabCatType.MoviesBluRay, "Films BluRay");
+            AddCategoryMapping(3, TorznabCatType.PC0day, "APPLICATION");
+            AddCategoryMapping(74, TorznabCatType.PCPhoneAndroid, "ANDROID");
+            AddCategoryMapping(57, TorznabCatType.PCPhoneIOS, "IPHONE");
+            AddCategoryMapping(6, TorznabCatType.PC0day, "LINUX");
+            AddCategoryMapping(5, TorznabCatType.PCMac, "MAC");
+            AddCategoryMapping(4, TorznabCatType.PC0day, "WINDOWS");
 
-            // TV
-            AddCategoryMapping(30, TorznabCatType.TV, "Séries");
-            AddCategoryMapping(27, TorznabCatType.TVAnime, "Animes");
-            AddCategoryMapping(35, TorznabCatType.TVSport, "Sport");
-            AddCategoryMapping(38, TorznabCatType.TVDocumentary, "Documentaires");
-            AddCategoryMapping(47, TorznabCatType.TVOTHER, "TV SPECTACLES / EMISSIONS");
+            AddCategoryMapping(38, TorznabCatType.TVDocumentary, "DOCUMENTAIRES");
 
-            // Apps
-            AddCategoryMapping(4, TorznabCatType.PC, "PC Apps");
-            AddCategoryMapping(74, TorznabCatType.PCPhoneAndroid, "Android Apps");
-            AddCategoryMapping(57, TorznabCatType.PCPhoneIOS, "IOS Apps");
-            AddCategoryMapping(5, TorznabCatType.PCMac, "MAC Apps");
+            AddCategoryMapping(34, TorznabCatType.Books, "EBOOKS");
 
-            // Games
-            AddCategoryMapping(23, TorznabCatType.Console, "Console");
-            AddCategoryMapping(76, TorznabCatType.Console3DS, "Console 3DS");
-            AddCategoryMapping(18, TorznabCatType.ConsoleNDS, "Console NDS");
-            AddCategoryMapping(58, TorznabCatType.ConsolePS3, "Console PS3");
-            AddCategoryMapping(81, TorznabCatType.ConsolePS4, "Console PS4");
-            AddCategoryMapping(20, TorznabCatType.ConsolePSP, "Console PSP");
-            AddCategoryMapping(19, TorznabCatType.ConsoleWii, "Console Wii");
-            AddCategoryMapping(83, TorznabCatType.ConsoleWiiU, "Console WiiU");
-            AddCategoryMapping(16, TorznabCatType.ConsoleXbox, "Console Xbox");
-            AddCategoryMapping(17, TorznabCatType.ConsoleXbox360, "Console Xbox360");
+            AddCategoryMapping(7, TorznabCatType.Movies, "FILMS");
+            AddCategoryMapping(11, TorznabCatType.MoviesDVD, "DVD");
+            AddCategoryMapping(10, TorznabCatType.MoviesSD, "DVD-RIP/BD-RIP");
+            AddCategoryMapping(53, TorznabCatType.MoviesSD, "DVD-SCREENER");
+            AddCategoryMapping(9, TorznabCatType.MoviesDVD, "R5");
+            AddCategoryMapping(8, TorznabCatType.MoviesSD, "SCREENER");
+            AddCategoryMapping(40, TorznabCatType.Movies, "VO");
+            AddCategoryMapping(39, TorznabCatType.Movies, "VOSTFR");
+            AddCategoryMapping(48, TorznabCatType.MoviesHD, "HD");
+            AddCategoryMapping(51, TorznabCatType.MoviesHD, "1080P");
+            AddCategoryMapping(70, TorznabCatType.Movies3D, "3D");
+            AddCategoryMapping(50, TorznabCatType.MoviesHD, "720P");
+            AddCategoryMapping(49, TorznabCatType.MoviesBluRay, "BluRay");
+            AddCategoryMapping(78, TorznabCatType.MoviesHD, "M - HD");
 
-            // Others
-            AddCategoryMapping(34, TorznabCatType.Books, "EBooks");
+            AddCategoryMapping(15, TorznabCatType.Console, "JEUX VIDEO");
+            AddCategoryMapping(76, TorznabCatType.Console3DS, "3DS");
+            AddCategoryMapping(18, TorznabCatType.ConsoleNDS, "DS");
+            AddCategoryMapping(55, TorznabCatType.PCPhoneIOS, "IPHONE");
+            AddCategoryMapping(80, TorznabCatType.PCGames, "LINUX");
+            AddCategoryMapping(79, TorznabCatType.PCMac, "OSX");
+            AddCategoryMapping(22, TorznabCatType.PCGames, "PC");
+            AddCategoryMapping(66, TorznabCatType.ConsolePS3, "PS2");
+            AddCategoryMapping(58, TorznabCatType.ConsolePS3, "PS3");
+            AddCategoryMapping(81, TorznabCatType.ConsolePS4, "PS4");
+            AddCategoryMapping(20, TorznabCatType.ConsolePSP, "PSP");
+            AddCategoryMapping(75, TorznabCatType.ConsolePS3, "PSX");
+            AddCategoryMapping(19, TorznabCatType.ConsoleWii, "WII");
+            AddCategoryMapping(83, TorznabCatType.ConsoleWiiU, "WiiU");
+            AddCategoryMapping(16, TorznabCatType.ConsoleXbox, "XBOX");
+            AddCategoryMapping(82, TorznabCatType.ConsoleXboxOne, "XBOX ONE");
+            AddCategoryMapping(17, TorznabCatType.ConsoleXbox360, "XBOX360");
+            AddCategoryMapping(44, TorznabCatType.ConsoleXbox360, "XBOX360.E");
+            AddCategoryMapping(54, TorznabCatType.ConsoleXbox360, "XBOX360.JTAG");
+            AddCategoryMapping(43, TorznabCatType.ConsoleXbox360, "XBOX360.NTSC");
+
+            AddCategoryMapping(23, TorznabCatType.Audio, "MUSIQUES");
+            AddCategoryMapping(26, TorznabCatType.Audio, "CLIP/CONCERT");
+            AddCategoryMapping(61, TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping(60, TorznabCatType.AudioMP3, "MP3");
+
+            AddCategoryMapping(30, TorznabCatType.TV, "SERIES");
+            AddCategoryMapping(73, TorznabCatType.TV, "Pack TV");
+            AddCategoryMapping(31, TorznabCatType.TV, "Series FR");
+            AddCategoryMapping(32, TorznabCatType.TV, "Series VO");
+            AddCategoryMapping(33, TorznabCatType.TV, "Series VO-STFR");
+            AddCategoryMapping(77, TorznabCatType.TVSD, "Series.DVD");
+            AddCategoryMapping(67, TorznabCatType.TVHD, "Series.FR.HD");
+            AddCategoryMapping(68, TorznabCatType.TVHD, "Series.VO.HD");
+            AddCategoryMapping(69, TorznabCatType.TVHD, "Series.VOSTFR.HD");
+
+            AddCategoryMapping(47, TorznabCatType.TV, "SPECTACLES/EMISSIONS");
+            AddCategoryMapping(71, TorznabCatType.TV, "Emissions");
+            AddCategoryMapping(72, TorznabCatType.TV, "Spectacles");
+
+            AddCategoryMapping(35, TorznabCatType.TVSport, "SPORT");
+            AddCategoryMapping(36, TorznabCatType.TVSport, "CATCH");
+            AddCategoryMapping(65, TorznabCatType.TVSport, "UFC");
+
             AddCategoryMapping(37, TorznabCatType.XXX, "XXX");
         }
 
@@ -109,18 +145,13 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var categoriesList = MapTorznabCapsToTrackers(query);
             var searchString = query.GetQueryString();
 
             var queryCollection = new Dictionary<string, string>();
             queryCollection.Add("search_type", "t_name");
             queryCollection.Add("do", "search");
             queryCollection.Add("keywords", searchString);
-
-            if (categoriesList.Count > 0)
-            {
-                queryCollection.Add("category", categoriesList[0]);
-            }
+            queryCollection.Add("category", "0"); // multi cat search not supported
 
             var results = await PostDataWithCookies(BrowseUrl, queryCollection);
 
@@ -137,33 +168,87 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 0;
 
+                    var category = Row.QuerySelector("td:nth-child(1) > a");
                     var title = Row.QuerySelector("td:nth-child(2)").QuerySelector("div > div");
-                    var added = Row.QuerySelector("td:nth-child(2)");
+                    var added = Row.QuerySelector("td:nth-child(2) > div:has(span[style=\"float: right;\"])");
+                    var pretime = added.QuerySelector("font.mkprettytime");
+                    var tooltip = Row.QuerySelector("td:nth-child(2) > div.tooltip-content");
+
                     var link = Row.QuerySelector("td:nth-child(3)").QuerySelector("a");
-                    var comments = Row.QuerySelector("td:nth-child(3)").QuerySelector("a");
+                    var comments = Row.QuerySelector("td:nth-child(2)").QuerySelector("a");
                     var Size = Row.QuerySelector("td:nth-child(5)");
                     var Grabs = Row.QuerySelector("td:nth-child(6)").QuerySelector("a");
                     var Seeders = Row.QuerySelector("td:nth-child(7)").QuerySelector("a");
                     var Leechers = Row.QuerySelector("td:nth-child(8)").QuerySelector("a");
 
-                    release.Title = title.InnerHtml;
+                    var categoryIdparts = category.GetAttribute("href").Split('-');
+                    var categoryId = categoryIdparts[categoryIdparts.Length-1].Replace(".ts", "");
 
-                    var addedRegEx = Regex.Matches(added.TextContent, @"[0-9]{2}\.[0-9]{2}\.[0-9]{4}\s[0-9]{2}:[0-9]{2}", RegexOptions.Multiline);
-
-                    if (addedRegEx.Count > 0)
-                    {
-                        release.PublishDate = DateTime.ParseExact(addedRegEx[0].Value, "dd.MM.yyyy HH:mm",  CultureInfo.InvariantCulture);
-                    }
-
-                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
+                    release.Title = title.TextContent;
+                    release.Category = MapTrackerCatToNewznab(categoryId);
                     release.Link = new Uri(link.GetAttribute("href"));
                     release.Comments = new Uri(comments.GetAttribute("href"));
                     release.Guid = release.Link;
                     release.Size = ReleaseInfo.GetBytes(Size.TextContent);
                     release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
                     release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
-                    release.Grabs = ReleaseInfo.GetBytes(Grabs.TextContent);
-                    release.UploadVolumeFactor = 1;
+                    release.Grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+
+                    if (added.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
+                        release.DownloadVolumeFactor = 0;
+                    else if (added.QuerySelector("img[alt^=\"TORRENT SILVER\"]") != null)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    if (added.QuerySelector("img[alt^=\"TORRENT X2\"]") != null)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
+
+                    if (tooltip != null)
+                    {
+                        var banner = tooltip.QuerySelector("img");
+                        if (banner != null)
+                        {
+                            release.BannerUrl = new Uri(banner.GetAttribute("src"));
+                            banner.Remove();
+                        }
+
+                        tooltip.QuerySelector("div:contains(\"Total Hits: \")").Remove();
+
+                        var longtitle = tooltip.QuerySelectorAll("div").First();
+                        release.Title = longtitle.TextContent;
+                        longtitle.Remove();
+
+                        var desc = tooltip.TextContent.Trim();
+                        if (!string.IsNullOrWhiteSpace(desc))
+                            release.Description = desc;
+                    }
+
+                    // if even the tooltip title is shortened we use the URL
+                    if (release.Title.EndsWith("..."))
+                    {
+                        var tregex = new Regex(@"/([^/]+)-s-\d+\.ts");
+                        var tmatch = tregex.Match(release.Comments.ToString());
+                        release.Title = tmatch.Groups[1].Value;
+                    }
+
+                    if (pretime != null)
+                    {
+                        var timestr = pretime.TextContent;
+                        timestr = timestr.Replace("PRE:", "");
+                        timestr = timestr.Replace("Année", "year");
+                        timestr = timestr.Replace("Moi", "month");
+                        timestr = timestr.Replace("Semaine", "week");
+                        timestr = timestr.Replace("Jour", "day");
+                        timestr = timestr.Replace("Heure", "hour");
+                        release.PublishDate = DateTimeUtil.FromTimeAgo(timestr);
+                    }
+                    else
+                    {
+                        release.PublishDate = DateTime.ParseExact(added.TextContent.Trim(), "dd.M.yyyy HH:mm", CultureInfo.InvariantCulture);
+                    }
 
                     releases.Add(release);
                 }
