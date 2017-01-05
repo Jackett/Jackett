@@ -165,6 +165,7 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\rutracker.cs" />
     <Compile Include="Indexers\Abstract\GazelleTracker.cs" />
     <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Indexers\7tor.cs" />
