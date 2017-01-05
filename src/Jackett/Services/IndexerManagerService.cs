@@ -55,7 +55,27 @@ namespace Jackett.Services
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(ex, "Failed loading configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                    logger.Error(ex, "Failed loading configuration for {0}, trying backup", idx.DisplayName);
+                    var configFilePathBak = configFilePath + ".bak";
+                    if (File.Exists(configFilePathBak))
+                    {
+                        try
+                        {
+                            var fileStrBak = File.ReadAllText(configFilePathBak);
+                            var jsonStringBak = JToken.Parse(fileStrBak);
+                            idx.LoadFromSavedConfiguration(jsonStringBak);
+                            logger.Info("Successfully loaded backup config for {0}", idx.DisplayName);
+                            idx.SaveConfig();
+                        }
+                        catch (Exception exbak)
+                        {
+                            logger.Error(exbak, "Failed loading backup configuration for {0}, you must reconfigure this indexer", idx.DisplayName);
+                        }
+                    }
+                    else
+                    {
+                        logger.Error(ex, "Failed loading backup configuration for {0} (no backup available), you must reconfigure this indexer", idx.DisplayName);
+                    }
                 }
             }
         }

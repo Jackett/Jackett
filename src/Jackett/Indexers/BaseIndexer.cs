@@ -161,7 +161,7 @@ namespace Jackett.Indexers
             IsConfigured = false;
         }
 
-        protected virtual void SaveConfig()
+        public virtual void SaveConfig()
         {
             indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
         }
