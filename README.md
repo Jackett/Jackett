@@ -82,6 +82,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * QcTorrent
  * RapideTracker
  * RevolutionTT
+ * RuTracker
  * SceneAccess
  * SceneFZ
  * SceneTime
