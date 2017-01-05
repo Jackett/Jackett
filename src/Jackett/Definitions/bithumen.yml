@@ -1,0 +1,132 @@
+﻿---
+  site: bithumen
+  name: BitHUmen
+  language: hu-hu
+  encoding: ISO-8859-2
+  links:
+    - https://bithumen.be/
+
+  caps:
+    categories:
+      23: Movies/SD # Film/Hun/SD
+      24: Movies/DVD # Film/Hun/DVD-R
+      25: Movies/HD # Film/Hun/720p
+      37: Movies/HD # Film/Hun/1080p
+      33: Movies/BluRay # Film/Hun/Blu-ray
+      30: XXX # XXX/SD
+      19: Movies/SD # Film/Eng/SD
+      20: Movies/DVD # Film/Eng/DVD-R
+      5: Movies/HD # Film/Eng/720p
+      39: Movies/HD # Film/Eng/1080p
+      40: Movies/BluRay # Film/Eng/Blu-ray
+      34: XXX # XXX/HD
+      7: TV/SD # Sorozat/Hun/SD
+      41: TV/HD # Sorozat/Hun/HD
+      26: TV/SD # Sorozat/Eng/SD
+      42: TV/HD # Sorozat/Eng/HD
+      28: Books # eBook/Hun
+      29: Books # eBook/Eng
+      9: Audio/MP3 # Mp3/Hun
+      35: Audio/Lossless # Lossless/Hun
+      1: PC/0day # Programok/ISO
+      4: PC/Games # Játékok/ISO
+      31: Console/PS4 # Játékok/PS
+      36: Console/Wii # Játékok/Wii
+      6: Audio/MP3 # Mp3/Eng
+      38: Audio/Lossless # Lossless/Eng
+      22: PC # Programok/egyéb
+      21: PC # Játékok/Rip/Dox
+      32: Console/Xbox360 # Játékok/Xbox360
+      27: Other # Klipek
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("bejelentkezés"))
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: table#torrenttable > tbody > tr:has(a[href^="details.php?id="])
+      filters:
+        - name: andmatch
+    fields:
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      title:
+        selector: a[href^="details.php?id="]
+      title|optional:
+        selector: a[href^="details.php?id="]
+        attribute: title
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      imdb:
+        selector: a[href^="http://anonym.to/?http://www.imdb.com/title/"]
+        attribute: href
+      banner:
+        selector: a[onmouseover^="bithumen.UI.images.coverShow"]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "\"(.*?)\""
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+        filters:
+          - name: regexp
+            args: /\s*([\d,]+)
+      grabs:
+        selector: td:nth-child(7)
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(6) > u
+      downloadvolumefactor:
+        text: "1"
+      downloadvolumefactor|optional:
+        selector: td:nth-child(6) > nobr > font:contains(" × ")
+        filters:
+          - name: replace
+            args: ["×", ""]
+      uploadvolumefactor:
+        text: "1"
+      uploadvolumefactor|optional:
+        selector: td:nth-child(5) > nobr > font:contains(" × ")
+        filters:
+          - name: replace
+            args: ["×", ""]
+      date:
+        selector: td:nth-child(5)
+        remove: font
+        filters:
+          - name: replace
+            args: ["ma", "today"]
+          - name: replace
+            args: ["tegnap", "yesterday"]
+      
+      description:
+        selector: td:nth-child(2) > div
+        
