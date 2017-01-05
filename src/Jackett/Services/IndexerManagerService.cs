@@ -28,6 +28,8 @@ namespace Jackett.Services
 
     public class IndexerManagerService : IIndexerManagerService
     {
+        private static readonly object configWriteLock = new object();
+
         private IContainer container;
         private IConfigurationService configService;
         private Logger logger;
@@ -177,59 +179,62 @@ namespace Jackett.Services
 
         public void SaveConfig(IIndexer indexer, JToken obj)
         {
-            var uID = Guid.NewGuid().ToString("N");
-            var configFilePath = GetIndexerConfigFilePath(indexer);
-            var configFilePathBak = configFilePath + ".bak";
-            var configFilePathTmp = configFilePath + "." + uID + ".tmp";
-            var content = obj.ToString();
+            lock (configWriteLock)
+            { 
+                var uID = Guid.NewGuid().ToString("N");
+                var configFilePath = GetIndexerConfigFilePath(indexer);
+                var configFilePathBak = configFilePath + ".bak";
+                var configFilePathTmp = configFilePath + "." + uID + ".tmp";
+                var content = obj.ToString();
 
-            logger.Debug(string.Format("Saving new config file: {0}", configFilePathTmp));
+                logger.Debug(string.Format("Saving new config file: {0}", configFilePathTmp));
 
-            if (string.IsNullOrWhiteSpace(content))
-            {
-                throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.ID));
-            }
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.ID));
+                }
 
-            if (content.Contains("\x00"))
-            {
-                throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.ID, content));
-            }
+                if (content.Contains("\x00"))
+                {
+                    throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.ID, content));
+                }
 
-            // make sure the config directory exists
-            if (!Directory.Exists(configService.GetIndexerConfigDir()))
-                Directory.CreateDirectory(configService.GetIndexerConfigDir());
+                // make sure the config directory exists
+                if (!Directory.Exists(configService.GetIndexerConfigDir()))
+                    Directory.CreateDirectory(configService.GetIndexerConfigDir());
 
-            // create new temporary config file
-            File.WriteAllText(configFilePathTmp, content);
-            var fileInfo = new FileInfo(configFilePathTmp);
-            if (fileInfo.Length == 0)
-            {
-                throw new Exception(string.Format("New config file {0} is empty, please report this bug.", configFilePathTmp));
-            }
+                // create new temporary config file
+                File.WriteAllText(configFilePathTmp, content);
+                var fileInfo = new FileInfo(configFilePathTmp);
+                if (fileInfo.Length == 0)
+                {
+                    throw new Exception(string.Format("New config file {0} is empty, please report this bug.", configFilePathTmp));
+                }
 
-            // create backup file
-            File.Delete(configFilePathBak);
-            if (File.Exists(configFilePath))
-            {
+                // create backup file
+                File.Delete(configFilePathBak);
+                if (File.Exists(configFilePath))
+                {
+                    try
+                    {
+                        File.Move(configFilePath, configFilePathBak);
+                    }
+                    catch (IOException ex)
+                    {
+                        logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePath, configFilePathBak, ex.ToString()));
+                    }
+                }
+
+                // replace the actual config file
+                File.Delete(configFilePath);
                 try
                 {
-                    File.Move(configFilePath, configFilePathBak);
+                    File.Move(configFilePathTmp, configFilePath);
                 }
                 catch (IOException ex)
                 {
-                    logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePath, configFilePathBak, ex.ToString()));
+                    logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex.ToString()));
                 }
-            }
-
-            // replace the actual config file
-            File.Delete(configFilePath);
-            try
-            {
-                File.Move(configFilePathTmp, configFilePath);
-            }
-            catch (IOException ex)
-            {
-                logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex.ToString()));
             }
         }
 
