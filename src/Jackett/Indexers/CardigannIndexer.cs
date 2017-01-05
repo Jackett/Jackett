@@ -782,6 +782,8 @@ namespace Jackett.Indexers
             else if (Selector.Attribute != null)
             {
                 value = selection.GetAttribute(Selector.Attribute);
+                if (value == null)
+                    throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.OuterHtml));
             }
             else
             {
@@ -929,12 +931,18 @@ namespace Jackett.Indexers
                         // Parse fields
                         foreach (var Field in Search.Fields)
                         {
+                            var FieldParts = Field.Key.Split('|');
+                            var FieldName = FieldParts[0];
+                            var FieldModifier = "";
+                            if (FieldParts.Length >= 2)
+                                FieldModifier = FieldParts[1];
+
                             string value = null;
                             try
                             {
                                 value = handleSelector(Field.Value, Row);
                                 value = ParseUtil.NormalizeSpace(value);
-                                switch (Field.Key)
+                                switch (FieldName)
                                 {
                                     case "download":
                                         if (value.StartsWith("magnet:"))
@@ -1037,7 +1045,7 @@ namespace Jackett.Indexers
                             }
                             catch (Exception ex)
                             {
-                                if (OptionalFileds.Contains(Field.Key))
+                                if (OptionalFileds.Contains(Field.Key) || FieldModifier == "optional")
                                     continue;
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
                             }
