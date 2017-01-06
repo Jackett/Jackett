@@ -107,6 +107,8 @@ namespace Jackett.Indexers
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
+                Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+                searchString = ReplaceRegex.Replace(searchString, "%");
                 queryCollection.Add("search", searchString);
             }
 
