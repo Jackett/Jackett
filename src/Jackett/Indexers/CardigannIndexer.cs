@@ -368,7 +368,7 @@ namespace Jackett.Indexers
                     pairs.Add(Input.Key, value);
                 }
 
-                var LoginUrl = SiteLink + Login.Path;
+                var LoginUrl = resolvePath(Login.Path).ToString();
                 configData.CookieHeader.Value = null;
                 var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
@@ -377,7 +377,7 @@ namespace Jackett.Indexers
             }
             else if (Login.Method == "form")
             {
-                var LoginUrl = SiteLink + Login.Path;
+                var LoginUrl = resolvePath(Login.Path).ToString();
 
                 var pairs = new Dictionary<string, string>();
 
@@ -540,7 +540,7 @@ namespace Jackett.Indexers
                 return false;
 
             // test if login was successful
-            var LoginTestUrl = SiteLink + Login.Test.Path;
+            var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
             var testResult = await RequestStringWithCookies(LoginTestUrl);
 
             if (testResult.IsRedirect)
@@ -589,7 +589,7 @@ namespace Jackett.Indexers
             if (Login == null || Login.Method != "form")
                 return configData;
 
-            var LoginUrl = SiteLink + Login.Path;
+            var LoginUrl = resolvePath(Login.Path).ToString();
 
             configData.CookieHeader.Value = null;
             landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
@@ -799,6 +799,11 @@ namespace Jackett.Indexers
             {
                 return new Uri(path);
             }
+            else if (path.StartsWith("//"))
+            {
+                var basepath = new Uri(SiteLink);
+                return new Uri(basepath.Scheme + ":" + path);
+            }
             else if(path.StartsWith("/"))
             {
                 var basepath = new Uri(SiteLink);
@@ -808,7 +813,6 @@ namespace Jackett.Indexers
             {
                 return new Uri(SiteLink + path);
             }
-            
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -856,7 +860,7 @@ namespace Jackett.Indexers
             variables[".Keywords"] = variables[".Query.Keywords"];
 
             // build search URL
-            var searchUrl = SiteLink + applyGoTemplateText(Search.Path, variables) + "?";
+            var searchUrl = resolvePath(applyGoTemplateText(Search.Path, variables) + "?").ToString();
             var queryCollection = new NameValueCollection();
             if (Search.Inputs != null)
             { 
