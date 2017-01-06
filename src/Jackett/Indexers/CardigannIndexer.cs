@@ -525,6 +525,22 @@ namespace Jackett.Indexers
             {
                 configData.CookieHeader.Value = ((StringItem)configData.GetDynamic("cookie")).Value;
             }
+            else if (Login.Method == "get")
+            {
+                var queryCollection = new NameValueCollection();
+                foreach (var Input in Definition.Login.Inputs)
+                {
+                    var value = applyGoTemplateText(Input.Value);
+                    queryCollection.Add(Input.Key, value);
+                }
+
+                var LoginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
+                configData.CookieHeader.Value = null;
+                var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+                configData.CookieHeader.Value = loginResult.Cookies;
+
+                checkForLoginError(loginResult);
+            }
             else
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
