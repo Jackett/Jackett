@@ -110,7 +110,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory
  * TranceTraffic
  * TransmitheNet
- * Tspate
  * TV Chaos UK
  * TV-Vault
  * u-Torrent
