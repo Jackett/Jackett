@@ -161,6 +161,7 @@ namespace Jackett.Indexers
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
+                var lastDate = DateTime.Now;
 
                 foreach (var Row in Rows.Skip(1))
                 {
@@ -169,7 +170,7 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 0;
 
                     var category = Row.QuerySelector("td:nth-child(1) > a");
-                    var title = Row.QuerySelector("td:nth-child(2)").QuerySelector("div > div");
+                    var title = Row.QuerySelector("td:nth-child(2) a");
                     var added = Row.QuerySelector("td:nth-child(2) > div:has(span[style=\"float: right;\"])");
                     var pretime = added.QuerySelector("font.mkprettytime");
                     var tooltip = Row.QuerySelector("td:nth-child(2) > div.tooltip-content");
@@ -236,18 +237,16 @@ namespace Jackett.Indexers
 
                     if (pretime != null)
                     {
-                        var timestr = pretime.TextContent;
-                        timestr = timestr.Replace("PRE:", "");
-                        timestr = timestr.Replace("Année", "year");
-                        timestr = timestr.Replace("Moi", "month");
-                        timestr = timestr.Replace("Semaine", "week");
-                        timestr = timestr.Replace("Jour", "day");
-                        timestr = timestr.Replace("Heure", "hour");
-                        release.PublishDate = DateTimeUtil.FromTimeAgo(timestr);
+                        if (release.Description == null)
+                            release.Description = pretime.TextContent;
+                        else
+                            release.Description += "<br>\n" + pretime.TextContent;
+                        release.PublishDate = lastDate;
                     }
                     else
                     {
                         release.PublishDate = DateTime.ParseExact(added.TextContent.Trim(), "dd.M.yyyy HH:mm", CultureInfo.InvariantCulture);
+                        lastDate = release.PublishDate;
                     }
 
                     releases.Add(release);
