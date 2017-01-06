@@ -90,6 +90,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shareisland
  * Shazbat
  * SpeedCD
+ * Superbits
  * The Horror Charnel
  * The New Retro
  * The Shinning
