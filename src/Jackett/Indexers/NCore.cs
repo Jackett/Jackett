@@ -194,6 +194,8 @@ namespace Jackett.Indexers
                     release.Description = release.Title;
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+                    release.DownloadVolumeFactor = 0;
+                    release.UploadVolumeFactor = 1;
 
                     string downloadLink = SiteLink + torrentTxt.GetAttribute("href");
                     string downloadId = downloadLink.Substring(downloadLink.IndexOf("&id=") + 4);
