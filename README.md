@@ -47,6 +47,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FileList
  * Freshon
  * FunFile
+ * FunkyTorrents
  * Fuzer
  * Ghost City
  * Gormogon
