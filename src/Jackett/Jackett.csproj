@@ -405,7 +405,7 @@
     <Content Include="Definitions\thehorrorcharnel.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Definitions\tspate.yml">
+    <Content Include="Definitions\sharespacedb.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\eotforum.yml">

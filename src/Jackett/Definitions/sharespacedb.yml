@@ -1,11 +1,11 @@
 ﻿---
-  site: tspate
-  name: Tspate
+  site: sharespacedb
+  name: ShareSpaceDB
   description: "A French gerneral tracker"
   language: fr-fr
   encoding: UTF-8
   links:
-    - https://www.tspate.me/
+    - https://www.sharespacedb.me/
 
   caps:
     categories:
@@ -117,9 +117,18 @@
         filters:
           - name: querystring
             args: cat
+      details:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
       comments:
         selector: a[href^="comments.php"]
         attribute: href
+      banner:
+        selector: a[onmouseover][href^="torrents-details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: <td align=left><img src=(.*?) width
       size:
         selector: td:nth-child(7)
       grabs:
