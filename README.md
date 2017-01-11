@@ -92,6 +92,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shareisland
  * ShareSpaceDB
  * Shazbat
+ * Shellife
  * SpeedCD
  * Superbits
  * The Horror Charnel
