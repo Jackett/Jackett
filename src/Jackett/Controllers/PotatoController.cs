@@ -83,7 +83,9 @@ namespace Jackett.Controllers
             if (string.IsNullOrWhiteSpace(request.search))
             {
                 // We are searching by IMDB id so look up the name
-                var response = await webClient.GetString(new Utils.Clients.WebRequest("http://www.omdbapi.com/?type=movie&i=" + request.imdbid));
+                var omdbapiRequest = new Utils.Clients.WebRequest("http://www.omdbapi.com/?type=movie&i=" + request.imdbid);
+                omdbapiRequest.Encoding = Encoding.UTF8;
+                var response = await webClient.GetString(omdbapiRequest);
                 if (response.Status == HttpStatusCode.OK)
                 {
                     JObject result = JObject.Parse(response.Content);
