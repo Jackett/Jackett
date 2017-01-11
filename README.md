@@ -45,6 +45,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ethor.net (Thor's Land)
  * FANO.IN
  * FileList
+ * Freedom-HD
  * Freshon
  * FunFile
  * FunkyTorrents
