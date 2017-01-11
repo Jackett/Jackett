@@ -21,7 +21,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: td.embedded:has(h2:contains("failed"))
+      - selector: td:has(h2:contains("failed"))
     test:
       path: browse.php
 
