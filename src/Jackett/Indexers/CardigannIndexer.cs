@@ -805,8 +805,8 @@ namespace Jackett.Indexers
             {
                 value = selection.TextContent;
             }
-                
-            return applyFilters(value, Selector.Filters); ;
+
+            return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters);
         }
 
         protected Uri resolvePath(string path)
@@ -953,15 +953,14 @@ namespace Jackett.Indexers
                         {
                             var FieldParts = Field.Key.Split('|');
                             var FieldName = FieldParts[0];
-                            var FieldModifier = "";
-                            if (FieldParts.Length >= 2)
-                                FieldModifier = FieldParts[1];
+                            var FieldModifiers = new List<string>();
+                            for (var i = 1; i < FieldParts.Length; i++)
+                                FieldModifiers.Add(FieldParts[i]);
 
                             string value = null;
                             try
                             {
                                 value = handleSelector(Field.Value, Row);
-                                value = ParseUtil.NormalizeSpace(value);
                                 switch (FieldName)
                                 {
                                     case "download":
@@ -990,10 +989,16 @@ namespace Jackett.Indexers
                                             release.Guid = CommentsUrl;
                                         break;
                                     case "title":
-                                        release.Title = value;
+                                        if (FieldModifiers.Contains("append"))
+                                            release.Title += value;
+                                        else
+                                            release.Title = value;
                                         break;
                                     case "description":
-                                        release.Description = value;
+                                        if (FieldModifiers.Contains("append"))
+                                            release.Description += value;
+                                        else
+                                            release.Description = value;
                                         break;
                                     case "category":
                                         release.Category = MapTrackerCatToNewznab(value);
@@ -1065,7 +1070,7 @@ namespace Jackett.Indexers
                             }
                             catch (Exception ex)
                             {
-                                if (OptionalFileds.Contains(Field.Key) || FieldModifier == "optional")
+                                if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional"))
                                     continue;
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
                             }
