@@ -29,7 +29,7 @@ namespace Jackett.Models.IndexerConfig.Bespoke
                 "All the titles will be lower case for easiest regular expression matching.")
             { Name = "Regular expresions Filters" };
 
-            TVShowsFilter = new StringItem { Name = "TV Show Filters", Value = "dual|triaudio|multi|(es|spa|cas?t|v( *)(\\.?)( *)o)( *)[/|-]|[/|-](en|es|spa|cas?t|v( *)(\\.?)( *)o)" };
+            TVShowsFilter = new StringItem { Name = "TV Show Filters", Value = "(dual|triaudio|multi)|((es|spa|cast?)( *)[ /|-]( *)(eng?|v( *)(\\.?)( *)o)( *))|((eng?|v( *)(\\.?)( *)o)( *)[ /|-]( *)(es|spa|cast?))" };
             MoviesFilter = new StringItem { Name = "Movies Filters", Value = "" };
 
             /*TranslateExplication = new DisplayItem("<b>Translations:</b><br/>Sonarr and Couch potato will always check for Original/English media names<br/>"+

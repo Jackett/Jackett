@@ -273,7 +273,7 @@ namespace Jackett.Indexers
                     
 
 
-                    Regex qariRegex = new Regex("(temporada|temp)( *)(?<season>[0-9]{1,3})|(?<season>[0-9]{1,3})( *)(temporada|temp)|t(?<season>[0-9]{1,3})|s?(?<season>[0-9]{1,3})(( *)[xe]( *)(?<episode>[0-9]{1,4}))?");
+                    Regex qariRegex = new Regex("((temporada|temp|t)( *)(?<season>[0-9]{1,3})|(?<season>[0-9]{1,3})( *)(temporada|temp))(( *)[xe]( *)(?<episode>[0-9]{1,4}))?");
                     MatchCollection mc = qariRegex.Matches(title);
                     //We are finding tv shows
                     if (mc.Count > 0 && mc[0].Success)
@@ -336,7 +336,7 @@ namespace Jackett.Indexers
         private bool checkRegularExpressionMatching(string stringToCheck, string regularExpression)
         {
             Regex qariRegex = new Regex(regularExpression,RegexOptions.IgnoreCase);
-            MatchCollection mc = qariRegex.Matches(stringToCheck);
+            MatchCollection mc = qariRegex.Matches(stringToCheck.ToLower());
             return mc.Count > 0 && mc[0].Success;
         }
            
