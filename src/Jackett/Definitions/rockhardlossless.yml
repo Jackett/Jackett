@@ -23,6 +23,7 @@
       password: "{{ .Config.password }}"
     error:
       - selector: tbody:has(td.colhead > span:contains("Error"))
+      - selector: tbody:has(td.colhead > span:contains("failed"))
     test:
       path: /browse.php
 
