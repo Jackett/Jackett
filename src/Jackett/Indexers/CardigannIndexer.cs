@@ -1161,6 +1161,8 @@ namespace Jackett.Indexers
                 if (Download.Selector != null)
                 {
                     var response = await RequestStringWithCookies(link.ToString());
+                    if (response.IsRedirect)
+                        response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
                     var SearchResultParser = new HtmlParser();
                     var SearchResultDocument = SearchResultParser.Parse(results);
