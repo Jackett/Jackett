@@ -64,6 +64,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ICE Torrent
  * ILoveTorrents
  * Immortalseed
+ * Infinity-T
  * IPTorrents
  * M-Team - TP
  * MoreThanTV
