@@ -1,0 +1,118 @@
+﻿---
+  site: nachtwerk
+  name: Nachtwerk
+  language: de-de
+  encoding: ISO-8859-15
+  links:
+    - https://nwtracker.com/
+
+  caps:
+    categories:
+      410: Movies/HD # Movies 1080p
+      411: Movies/HD # Movies 720p
+      401: Movies/BluRay # Movies Blu-ray
+      415: Movies # Movies REMUX
+      416: Movies/3D # Movies 3D
+      414: Movies/DVD # Movies DVD
+      412: Movies/WEBDL # Movies WEB-DL
+      413: Movies/SD # Movies HDTV
+      417: Movies/Other # Movies iPad
+      402: TV # TV Series
+      403: TV # TV Shows
+      404: TV/Documentary # Documentaries
+      405: TV/Anime # Animations
+      406: Audio/Video # Music Videos
+      407: TV/Sport # Sports
+      408: Audio # HQ Audio
+      418: Books # Book
+      409: Other # Misc
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /browse.php
+
+  download:
+    selector: a[href^="download.php?torrent="]
+      
+  search:
+    path: /browse.php
+    method: post
+    inputs:
+      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      spstate: "0"
+      inclbookmarked: "0"
+      search_area: "0"
+      search_mode: "0"
+    rows:
+      selector: table.tableinborder[cellspacing="1"][cellpadding="0"] > tbody > tr
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+        filters:
+          - name: replace
+            args: ["[NW] ", ""]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:  
+          - name: replace
+            args: ["details.php?id=", "thanks1.php?torrentid="]
+      banner:
+        selector: a[onmouseover][href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=.*'\\);"
+      size:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      files:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+      grabs:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1)
+      seeders:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+      leechers:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+      date:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["\xA0", " "]
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02.01.2006 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          img[src="pic/onlyuploadd.gif"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
