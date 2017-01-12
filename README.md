@@ -59,7 +59,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDSky
  * Hebits
  * Hyperay
- * New Real World
  * Hounddawgs
  * House-of-Torrents
  * ICE Torrent
@@ -74,6 +73,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MySpleen
  * NCore
  * NetHD
+ * New Real World
  * NextGen
  * Norbits
  * nostream
