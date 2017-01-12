@@ -8,24 +8,57 @@
 
   caps:
     categories:
-      410: Movies/HD # Movies 1080p
-      411: Movies/HD # Movies 720p
-      401: Movies/BluRay # Movies Blu-ray
-      415: Movies # Movies REMUX
-      416: Movies/3D # Movies 3D
-      414: Movies/DVD # Movies DVD
-      412: Movies/WEBDL # Movies WEB-DL
-      413: Movies/SD # Movies HDTV
-      417: Movies/Other # Movies iPad
-      402: TV # TV Series
-      403: TV # TV Shows
-      404: TV/Documentary # Documentaries
-      405: TV/Anime # Animations
-      406: Audio/Video # Music Videos
-      407: TV/Sport # Sports
-      408: Audio # HQ Audio
-      418: Books # Book
-      409: Other # Misc
+      75: Movies/3D # Filme - 3D
+      34: Movies # Filme - Xvid / x264
+      55: Movies/BluRay # Filme - Blu-Ray
+      20: Movies/DVD # Filme - DVD-R
+      71: Movies/HD # Filme - HD 1080p
+      70: Movies/HD # Filme - HD 720p
+      35: Movies/Foreign # Filme - Inter
+      104: Movies/HD # Filme - UHD
+      107: Movies/Other # Filme - Remux
+      7: TV/SD # Serien - Xvid / x264
+      72: TV/HD # Serien - HD
+      82: TV/Foreign # Serien - Inter
+      69: TV # Serien - Pack's
+      42: TV # Serien - TV Show
+      105: TV/HD # Serien - UHD
+      51: XXX # XXX - Xvid / x264
+      73: XXX # XXX - HD
+      84: XXX # XXX - Pack's
+      85: XXX # XXX - Sonstiges
+      102: XXX # XXX - Hentai
+      103: XXX # XXX - UHD
+      6: Audio/MP3 # Audio - MP3
+      74: Audio/Lossless # Audio - Flac
+      86: Audio/Video # Audio - Videos
+      24: Audio/Audiobook # Audio - Hörspiel/Hörbuch
+      93: PC/Mac # Appz - Mac
+      67: PC/0day # Appz - Windows
+      31: PC/Phone-Other # Appz - Handy
+      81: PC # Appz - Sonstiges
+      25: TV/Documentary # Dokus - Xvid / x264
+      76: TV/Documentary # Dokus - HD
+      99: TV/Documentary # Dokus - Pack's
+      100: TV/Documentary # Dokus - 3D
+      106: TV/Documentary # Dokus - UHD
+      90: Console/PS3 # Games - PSX
+      56: Console/Wii # Games - WII
+      43: Console/Xbox # Games - XboX
+      4: PC/Games # Games - PC
+      88: Console/NDS # Games - xDS
+      91: PC/Mac # Games - Mac
+      92: Console # Games - Sonstiges
+      23: TV/Anime # Anime - Xvid / x264
+      80: TV/Anime # Anime - HD
+      98: TV/Anime # Anime - Serien
+      94: Books/Magazines # eBooks - Magazine/Zeitungen
+      95: Books/Comics # eBooks - Comics
+      30: Books # eBooks - Bücher
+      96: TV/Sport # Sport - Wrestling
+      97: TV/Sport # Sport - Fussball
+      45: TV/Sport # Sport - Sonstiges
+      9: Other # Diverses - Sonstiges
 
     modes:
       search: [q]
@@ -49,7 +82,7 @@
     path: /browse.php
     method: post
     inputs:
-      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
       incldead: "1"
       spstate: "0"
