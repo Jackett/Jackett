@@ -145,7 +145,6 @@ namespace Jackett.Indexers
 
                     if (row.imdbid2 != null && row.imdbid2.ToString().StartsWith("tt"))
                     { 
-                        https://superbits.org/img/imdb/tt5288312.jpg
                         release.Imdb = ParseUtil.CoerceLong(row.imdbid2.ToString().Substring(2));
                         descriptions.Add("Title: " + row.title);
                         descriptions.Add("Year: " + row.year);
