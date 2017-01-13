@@ -65,6 +65,8 @@
       incldead: "1"
     rows:
       selector: table > tbody > tr[class]
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: a[href^="details.php?id="]
