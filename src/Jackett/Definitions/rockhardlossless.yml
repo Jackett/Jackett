@@ -36,6 +36,8 @@
       searchin: "title"
     rows:
       selector: table > tbody tr.tt
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: a[href^="details.php?id="]
