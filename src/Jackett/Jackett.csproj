@@ -345,6 +345,7 @@
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\HttpWebClient.cs" />
+    <Compile Include="WebAPIExceptionHandler.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
   </ItemGroup>

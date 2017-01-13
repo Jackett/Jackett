@@ -16,6 +16,7 @@ using Jackett.Services;
 using System.Web.Http.Tracing;
 using Jackett.Utils;
 using Microsoft.AspNet.Identity;
+using System.Web.Http.ExceptionHandling;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -76,6 +77,9 @@ namespace Jackett
             var config = new HttpConfiguration();
 
             appBuilder.Use<WebApiRootRedirectMiddleware>();
+
+            // register exception handler
+            config.Services.Replace(typeof(IExceptionHandler), new WebAPIExceptionHandler());
 
             // Setup tracing if enabled
             if (TracingEnabled)
