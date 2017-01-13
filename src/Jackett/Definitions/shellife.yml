@@ -32,6 +32,8 @@
       incldead: 1
     rows:
       selector: table#ct > tbody > tr.torrent_row
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="download.php?id="]
