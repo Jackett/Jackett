@@ -115,6 +115,9 @@
       title:
         selector: div.title_wrap
         attribute: title
+        filters:
+          - name: replace
+            args: ["[TsH]", ""]
       category:
         selector: a[href^="browse.php?cat="]
         attribute: href
