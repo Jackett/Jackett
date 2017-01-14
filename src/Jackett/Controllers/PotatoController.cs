@@ -146,7 +146,8 @@ namespace Jackett.Controllers
                         type = "movie",
                         size = (long)release.Size / (1024 * 1024), // This is in MB
                         leechers = (int)release.Peers - (int)release.Seeders,
-                        seeders = (int)release.Seeders
+                        seeders = (int)release.Seeders,
+                        publish_date = release.PublishDate
                     });
                 }
             }
