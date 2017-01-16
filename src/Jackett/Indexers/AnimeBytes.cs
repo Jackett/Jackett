@@ -319,7 +319,7 @@ namespace Jackett.Indexers
                                 var infoLink = links.Get(1);
                                 release.Comments = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href"));
                                 release.Guid = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"), UriKind.Relative);
+                                release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"));
 
                                 string category = null;
                                 if (searchType == SearchType.Video)
@@ -459,20 +459,6 @@ namespace Jackett.Indexers
             }
 
             return releases.Select(s => (ReleaseInfo)s.Clone());
-        }
-
-
-        public async override Task<byte[]> Download(Uri link)
-        {
-            // The urls for this tracker are quite long so append the domain after the incoming request.
-            var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
-            {
-                Url = SiteLink + link.ToString(),
-                Cookies = CookieHeader,
-                Encoding = Encoding
-            });
-
-            return response.Content;
         }
     }
 }
