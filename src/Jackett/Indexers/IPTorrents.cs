@@ -46,6 +46,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(72, TorznabCatType.Movies);
             AddCategoryMapping(77, TorznabCatType.MoviesSD);
             AddCategoryMapping(89, TorznabCatType.MoviesSD);
@@ -179,7 +181,11 @@ namespace Jackett.Indexers
             var searchUrl = BrowseUrl;
             var queryCollection = new NameValueCollection();
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            {
+                queryCollection.Add("q", query.ImdbID);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("q", searchString);
             }
