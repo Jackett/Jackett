@@ -908,7 +908,11 @@ namespace Jackett.Indexers
                         queryCollection.Add(Input.Key, value);
                 }
             }
-            searchUrl += "&" + queryCollection.GetQueryString();
+            if (queryCollection.Count > 0)
+                searchUrl += "&" + queryCollection.GetQueryString();
+
+            // in case no args are added remove ? again (needed for KAT)
+            searchUrl = searchUrl.TrimEnd('?');
 
             // send HTTP request
             var response = await RequestStringWithCookies(searchUrl);
