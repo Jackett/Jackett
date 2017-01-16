@@ -78,6 +78,7 @@ namespace Jackett.Indexers
             public string Path { get; set; }
             public string Method { get; set; }
             public string Form { get; set; }
+            public bool Selectors { get; set; } = false;
             public Dictionary<string, string> Inputs { get; set; }
             public List<errorBlock> Error { get; set; }
             public pageTestBlock Test { get; set; }
@@ -461,7 +462,15 @@ namespace Jackett.Indexers
                 foreach (var Input in Definition.Login.Inputs)
                 {
                     var value = applyGoTemplateText(Input.Value);
-                    pairs[Input.Key] = value;
+                    var input = Input.Key;
+                    if (Login.Selectors)
+                    { 
+                        var inputElement = landingResultDocument.QuerySelector(Input.Key);
+                        if (inputElement == null)
+                            throw new ExceptionWithConfigData(string.Format("Login failed: No input found using selector {0}", Input.Key), configData);
+                        input = inputElement.GetAttribute("name");
+                    }
+                    pairs[input] = value;
                 }
 
                 // automatically solve simpleCaptchas, if used
@@ -483,7 +492,17 @@ namespace Jackett.Indexers
                     {
                         var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
                         if (CaptchaText != null)
-                            pairs[Captcha.Input] = CaptchaText.Value;
+                        {
+                            var input = Captcha.Input;
+                            if (Login.Selectors)
+                            { 
+                                var inputElement = landingResultDocument.QuerySelector(Captcha.Input);
+                                if (inputElement == null)
+                                    throw new ExceptionWithConfigData(string.Format("Login failed: No captcha input found using {0}", Captcha.Input), configData);
+                                input = inputElement.GetAttribute("name");
+                            }
+                            pairs[input] = CaptchaText.Value;
+                        }
                     }
                 }
 
@@ -637,7 +656,7 @@ namespace Jackett.Indexers
                         var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies);
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                         var CaptchaText = new StringItem { Name = "Captcha Text" };
-                        logger.Error("captchaImageData Cookies: " + captchaImageData.Cookies);
+
                         CaptchaImage.Value = captchaImageData.Content;
 
                         configData.AddDynamic("CaptchaImage", CaptchaImage);
