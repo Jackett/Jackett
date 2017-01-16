@@ -84,7 +84,8 @@ namespace Jackett.Indexers
             // Get the login form as we need the CSRF Token
             var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
             {
-                Url = LoginUrl
+                Url = LoginUrl,
+                Encoding = Encoding
             });
 
             CQ loginPageDom = loginPage.Content;
@@ -107,6 +108,7 @@ namespace Jackett.Indexers
                 PostData = pairs,
                 Referer = LoginUrl,
                 Type = RequestType.POST,
+                Encoding = Encoding,
                 Url = LoginUrl
             };
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
@@ -466,7 +468,8 @@ namespace Jackett.Indexers
             var response = await webclient.GetBytes(new Utils.Clients.WebRequest()
             {
                 Url = SiteLink + link.ToString(),
-                Cookies = CookieHeader
+                Cookies = CookieHeader,
+                Encoding = Encoding
             });
 
             return response.Content;
