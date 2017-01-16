@@ -58,6 +58,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(29, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(28, TorznabCatType.PC); // Appz/Packs
             AddCategoryMapping(42, TorznabCatType.AudioAudiobook); // Audio Books
@@ -180,7 +182,7 @@ namespace Jackett.Indexers
             var queryUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
-            if (query.QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(query.ImdbID) && query.ImdbID.ToLower().StartsWith("tt"))
+            if (!string.IsNullOrWhiteSpace(query.ImdbID) && query.ImdbID.ToLower().StartsWith("tt"))
             {
                 queryCollection.Add("search", query.ImdbID);
             }
