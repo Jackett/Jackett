@@ -213,7 +213,7 @@ namespace Jackett.Indexers
             if (response.IsRedirect)
             {
                 // re-login
-                ApplyConfiguration(null);
+                await ApplyConfiguration(null);
                 response = await RequestStringWithCookiesAndRetry(queryUrl);
             }
 
