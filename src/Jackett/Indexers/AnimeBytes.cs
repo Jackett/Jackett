@@ -210,6 +210,13 @@ namespace Jackett.Indexers
             
             // Get the content from the tracker
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
+            if (response.IsRedirect)
+            {
+                // re-login
+                ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(queryUrl);
+            }
+
             CQ dom = response.Content;
 
             // Parse
