@@ -44,6 +44,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
@@ -104,18 +106,17 @@ namespace Jackett.Indexers
             bool configQualityEncodeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("qualityencodeonly");
             string movieListSearchUrl;
 
-            if (string.IsNullOrEmpty(query.GetQueryString()))
-                movieListSearchUrl = SearchUrl;
+            if (!string.IsNullOrEmpty(query.ImdbID))
+            {
+                movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
+            }
+            else if(!string.IsNullOrEmpty(query.GetQueryString()))
+            {
+                movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            }
             else
             {
-                if (!string.IsNullOrEmpty(query.ImdbID))
-                {
-                    movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
-                }
-                else
-                {
-                    movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-                } 
+                movieListSearchUrl = SearchUrl;
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
@@ -151,6 +152,7 @@ namespace Jackett.Indexers
                     var rows = dom[".torrent_widget.box.pad"];
                     foreach (var row in rows)
                     {
+                        var release = new ReleaseInfo();
                         var qRow = row.Cq();
                         
                         string title = qRow.Find("[id^=desc_] > h2 > strong").First().Text().Trim();
@@ -161,7 +163,13 @@ namespace Jackett.Indexers
                         string sizeStr = qRow.Find("[id^=desc_] > div > table > tbody > tr > td > strong:contains('Size:')").First().Parent().Parent().Find("td").Last().Text().Trim();
                         var seeders = ParseUtil.CoerceInt(qRow.Find("img[title='Seeders']").First().Parent().Text().Trim());
                         var peers = ParseUtil.CoerceInt(qRow.Find("img[title='Leechers']").First().Parent().Text().Trim()) + seeders;
-                        Uri CoverUrl = new Uri(SiteLink.TrimEnd('/') + dom.Find("div[id='poster'] > a > img").First().Attr("src").Trim());
+                        var CoverElement = dom.Find("div[id='poster'] > a > img");
+                        if (CoverElement.Any())
+                        {
+                            Uri CoverUrl = new Uri(dom.Find("div[id='poster'] > a > img").First().Attr("src").Trim());
+                            release.BannerUrl = CoverUrl;
+                        }
+                        
                         bool freeleech = qRow.Find("span[class='freeleech']").Length == 1 ? true : false;
                         bool qualityEncode = qRow.Find("img[class='approved']").Length == 1 ? true : false;
                         string grabs = qRow.Find("img[title='Snatches']").First().Parent().Text().Trim();
@@ -177,7 +185,6 @@ namespace Jackett.Indexers
                             title = dom.Find("div.title_text").Text() + " - " + qRow.Find("div.details_title > a").Text();
                         }
                         
-                        var release = new ReleaseInfo();
 
                         release.Title = title;
                         release.Guid = guid;
