@@ -9,6 +9,7 @@ namespace Jackett.Utils
             new Regex(
                 @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
                 RegexOptions.Compiled);
+        private static readonly Regex ImdbId = new Regex(@"^tt(\d{7})$",RegexOptions.Compiled);
 
         public static string NormalizeSpace(string s)
         {
@@ -71,6 +72,15 @@ namespace Jackett.Utils
         public static bool TryCoerceLong(string str, out long result)
         {
             return long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+        }
+
+        public static int? GetImdbID(string imdbstr)
+        {
+            var match = ImdbId.Match(imdbstr);
+            if (!match.Success)
+                return null;
+
+            return CoerceInt(match.Groups[1].Value);
         }
     }
 }
