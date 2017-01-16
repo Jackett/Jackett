@@ -26,6 +26,17 @@ namespace Jackett.Models
             SubCategories = new List<TorznabCategory>();
         }
 
+        public bool Contains(TorznabCategory cat)
+        {
+            if (this == cat)
+                return true;
+
+            if (SubCategories.Contains(cat))
+                return true;
+
+            return false;
+        }
+
         public JToken ToJson()
         {
             var t = new JObject();

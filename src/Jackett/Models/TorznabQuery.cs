@@ -131,10 +131,13 @@ namespace Jackett.Models
 
             if (query["cat"] != null)
             {
-                q.Categories = query["cat"].Split(',').Select(s => int.Parse(s)).ToArray();
+                q.Categories = query["cat"].Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s)).ToArray();
             }else
             {
-                q.Categories = new int[0];
+                if (q.QueryType == "movie" && string.IsNullOrWhiteSpace(query["imdbid"]))
+                    q.Categories = new int[] { TorznabCatType.Movies.ID };
+                else
+                    q.Categories = new int[0];
             }
 
             if (query["extended"] != null)
@@ -150,6 +153,8 @@ namespace Jackett.Models
             {
                 q.Offset = ParseUtil.CoerceInt(query["offset"]);
             }
+
+            q.ImdbID = query["imdbid"];
 
             int rageId;
             if (int.TryParse(query["rid"], out rageId))

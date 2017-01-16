@@ -15,7 +15,11 @@ namespace Jackett.Models
 
         public bool TVSearchAvailable { get; set; }
 
+        public bool MovieSearchAvailable { get; set; }
+
         public bool SupportsTVRageSearch { get; set; }
+
+        public bool SupportsImdbSearch { get; set; }
 
         public List<TorznabCategory> Categories { get; private set; }
 
@@ -24,7 +28,9 @@ namespace Jackett.Models
             Categories = new List<TorznabCategory>();
             SearchAvailable = true;
             TVSearchAvailable = true;
+            MovieSearchAvailable = false;
             SupportsTVRageSearch = false;
+            SupportsImdbSearch = false;
         }
 
         public TorznabCapabilities(params TorznabCategory[] cats)
@@ -32,8 +38,10 @@ namespace Jackett.Models
             SearchAvailable = true;
             TVSearchAvailable = true;
             SupportsTVRageSearch = false;
+            SupportsImdbSearch = false;
             Categories = new List<TorznabCategory>();
             Categories.AddRange(cats);
+            MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
         }
 
         string SupportedTVSearchParams
@@ -43,6 +51,17 @@ namespace Jackett.Models
                 var parameters = new List<string>() { "q", "season", "ep" };
                 if (SupportsTVRageSearch)
                     parameters.Add("rid");
+                return string.Join(",", parameters);
+            }
+        }
+
+        string SupportedMovieSearchParams
+        {
+            get
+            {
+                var parameters = new List<string>() { "q" };
+                if (SupportsImdbSearch)
+                    parameters.Add("imdbid");
                 return string.Join(",", parameters);
             }
         }
@@ -70,6 +89,10 @@ namespace Jackett.Models
                         new XElement("tv-search",
                             new XAttribute("available", TVSearchAvailable ? "yes" : "no"),
                             new XAttribute("supportedParams", SupportedTVSearchParams)
+                        ),
+                        new XElement("movie-search",
+                            new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedMovieSearchParams)
                         )
                     ),
                     new XElement("categories",

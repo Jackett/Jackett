@@ -532,7 +532,11 @@ namespace Jackett.Indexers
         {
             categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
+            {
                 TorznabCaps.Categories.Add(newznabCategory);
+                if (TorznabCatType.Movies.Contains(newznabCategory))
+                    TorznabCaps.MovieSearchAvailable = true;
+            }
         }
 
         protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
