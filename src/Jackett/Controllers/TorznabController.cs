@@ -92,7 +92,7 @@ namespace Jackett.Controllers
                     return GetErrorXML(201, "Incorrect parameter: only movie-search supports the imdbid parameter");
                 }
 
-                if (torznabQuery.SearchTerm != null)
+                if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
                 {
                     logger.Warn(string.Format("A movie-search request from {0} was made contining q and imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
@@ -102,6 +102,12 @@ namespace Jackett.Controllers
                 {
                     logger.Warn(string.Format("A movie-search request from {0} was made with an invalid imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
+                }
+
+                if (!indexer.TorznabCaps.SupportsImdbSearch)
+                {
+                    logger.Warn(string.Format("A movie-search request with imdbid from {0} was made but the indexer {1} doesn't support it.", Request.GetOwinContext().Request.RemoteIpAddress, indexer.DisplayName));
+                    return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");
                 }
             }
 
