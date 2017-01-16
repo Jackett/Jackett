@@ -42,7 +42,7 @@ namespace Jackett.Controllers
             {
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/rss+xml")
+                    Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/xml")
                 };
             }
 
