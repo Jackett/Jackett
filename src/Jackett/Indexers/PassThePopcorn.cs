@@ -45,6 +45,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
@@ -95,18 +97,17 @@ namespace Jackett.Indexers
             bool configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
             string movieListSearchUrl;
 
-            if (string.IsNullOrEmpty(query.GetQueryString()))
-                movieListSearchUrl = string.Format("{0}?json=noredirect", SearchUrl);
+            if (!string.IsNullOrEmpty(query.ImdbID))
+            {
+                movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
+            }
+            else if(!string.IsNullOrEmpty(query.GetQueryString()))
+            {
+                movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            }
             else
             {
-                if (!string.IsNullOrEmpty(query.ImdbID))
-                {
-                    movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
-                }
-                else
-                {
-                    movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-                }
+                movieListSearchUrl = string.Format("{0}?json=noredirect", SearchUrl);
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
