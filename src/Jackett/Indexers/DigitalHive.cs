@@ -164,6 +164,12 @@ namespace Jackett.Indexers
             queryCollection.Add("blah", "0");
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl + "?" + queryCollection.GetQueryString());
+            if (results.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl + "?" + queryCollection.GetQueryString());
+            }
             try
             {
                 releases.AddRange(contentToReleaseInfos(results.Content));
