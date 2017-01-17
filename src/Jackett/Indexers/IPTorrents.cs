@@ -212,7 +212,7 @@ namespace Jackett.Indexers
                 {
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
-                    var qTitleLink = qRow.Find("a.t_title").First();
+                    var qTitleLink = qRow.Find("a[href^=\"/details.php?id=\"]").First();
                     release.Title = qTitleLink.Text().Trim();
 
                     // If we search an get no results, we still get a table just with no info.
