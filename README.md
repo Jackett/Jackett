@@ -53,6 +53,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunkyTorrents
  * Fuzer
  * Ghost City
+ * GODS
  * Gormogon
  * HD4Free
  * HD-Space
