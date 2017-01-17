@@ -43,6 +43,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Demonoid
  * DigitalHive
  * EoT-Forum
+ * eStone
  * Ethor.net (Thor's Land)
  * FANO.IN
  * FileList
