@@ -653,7 +653,7 @@ namespace Jackett.Indexers
                     var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
                     if (captchaElement != null) {
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"));
-                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies);
+                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.ToString());
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                         var CaptchaText = new StringItem { Name = "Captcha Text" };
 
