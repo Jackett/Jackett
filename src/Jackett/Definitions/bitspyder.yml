@@ -68,6 +68,7 @@
       filters:
         - name: andmatch
     fields:
+      # there are two styles, we support both
       title:
         selector: a[href^="details.php?id="]
       category:
@@ -88,25 +89,35 @@
           - name: replace
             args: ["&hit=1", "/dummy.torrent"]
       size:
-        selector: td:nth-child(6)
+        selector: td.rowcol:nth-child(6):has(br), font:contains("Size:") + font
       files:
-        selector: td:nth-child(3)
+        selector: a[href*="&filelist=1"]
       grabs:
-        selector: td:nth-child(7)
+        selector: td.rowcol:nth-child(7):contains("times"), font:contains("Snatches:")
         filters:
           - name: regexp
             args: ([\d\,]+)
       seeders:
-        selector: td:nth-child(8)
+        selector: td.rowcol:nth-last-child(3)
       leechers:
-        selector: td:nth-child(9)
-      date:
+        selector: td.rowcol:nth-last-child(2)
+      date|optional|1:
         selector: font[color="5F5F5F"]
         filters:
           - name: split
             args: [" (", 0]
           - name: replace
             args: ["\xA0", " "]
+          - name: append
+            args: " +00:00"
+          - name: dateparse 
+            args: "2006-01-02 15:04:05 -07:00"
+      date|optional|2:
+        selector: a[title^="Upploaded at"]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["Upploaded at - ", ""]
           - name: append
             args: " +00:00"
           - name: dateparse 
