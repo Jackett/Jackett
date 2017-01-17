@@ -248,7 +248,6 @@ namespace Jackett.Indexers
                         break;
                     }
 
-                    release.Description = release.Title;
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
 
