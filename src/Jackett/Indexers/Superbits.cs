@@ -96,7 +96,6 @@ namespace Jackett.Indexers
             queryCollection.Add("order", "desc");
             queryCollection.Add("page", "search");
             queryCollection.Add("searchText", searchString);
-            queryCollection.Add("section", "all");
             queryCollection.Add("sort", "d");
             queryCollection.Add("section", "all");
             queryCollection.Add("stereoscopic", "false");
