@@ -38,15 +38,18 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings:
-    - name: cookie
-      type: text
-      label: Cookie
-
   login:
-    method: cookie
+    path: login3.php
+    method: form
+    form: form[action="login3.php?takelogin=1"]
+    captcha:
+      type: image
+      image: img#validationimage
+      input: validationcode
     inputs:
-      cookie: "{{ .Config.cookie }}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      secure_cookie: "0"
     test:
       path: browse.php
 
