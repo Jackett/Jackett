@@ -56,6 +56,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ghost City
  * GODS
  * Gormogon
+ * Hardbay
  * HD4Free
  * HD-Space
  * HD-Torrents
