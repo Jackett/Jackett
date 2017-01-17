@@ -344,8 +344,7 @@ namespace Jackett.Indexers
                     string errorMessage = selection.TextContent;
                     if (error.Message != null)
                     {
-                        var errorSubMessage = loginResultDocument.QuerySelector(error.Message.Selector);
-                        errorMessage = errorSubMessage.TextContent;
+                        errorMessage = handleSelector(error.Message, loginResultDocument.FirstElementChild);
                     }
                     throw new ExceptionWithConfigData(string.Format("Login failed: {0}", errorMessage.Trim()), configData);
                 }
