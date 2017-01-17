@@ -742,6 +742,10 @@ namespace Jackett.Indexers
                         var cutset = (string)Filter.Args;
                         Data = Data.Trim(cutset[0]);
                         break;
+                    case "prepend":
+                        var prependstr = (string)Filter.Args;
+                        Data = prependstr + Data;
+                        break;
                     case "append":
                         var str = (string)Filter.Args;
                         Data += str;
