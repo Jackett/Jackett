@@ -80,6 +80,7 @@ namespace Jackett.Indexers
             public string Form { get; set; }
             public bool Selectors { get; set; } = false;
             public Dictionary<string, string> Inputs { get; set; }
+            public Dictionary<string, selectorBlock> Selectorinputs { get; set; }
             public List<errorBlock> Error { get; set; }
             public pageTestBlock Test { get; set; }
             public captchaBlock Captcha { get; set; }
@@ -470,6 +471,21 @@ namespace Jackett.Indexers
                         input = inputElement.GetAttribute("name");
                     }
                     pairs[input] = value;
+                }
+
+                // selector inputs
+                foreach (var Selectorinput in Login.Selectorinputs)
+                {
+                    string value = null;
+                    try
+                    {
+                        value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
+                        pairs[Selectorinput.Key] = value;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(string.Format("Error while parsing selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                    }
                 }
 
                 // automatically solve simpleCaptchas, if used
