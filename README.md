@@ -73,6 +73,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IPTorrents
  * LinkoManija
  * M-Team - TP
+ * Magico
  * Mononoké-BT
  * MoreThanTV
  * MyAnonamouse
