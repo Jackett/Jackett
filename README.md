@@ -72,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Infinity-T
  * IPTorrents
  * M-Team - TP
+ * Mononoké-BT
  * MoreThanTV
  * MyAnonamouse
  * myAmity
