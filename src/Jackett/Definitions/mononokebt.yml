@@ -32,8 +32,6 @@
       incldead: 1
     rows:
       selector: table#torrentstable > tbody > tr:has(a[href^="details.php?id="])
-      filters:
-        - name: andmatch
     fields:
       download:
         selector: a[href^="gettorrent.php?id="]
@@ -61,13 +59,6 @@
         filters:
           - name: replace
             args: ["o", "b"]
-      downloadvolumefactor:
-        text: "1"
-      downloadvolumefactor|optional:
-        selector: td:nth-child(6) > nobr > font:contains(" × ")
-        filters:
-          - name: replace
-            args: ["×", ""]
       downloadvolumefactor:
         case:
           img[src="/pic/icons/cadeau1.png"]: "0"
