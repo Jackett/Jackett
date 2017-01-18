@@ -76,6 +76,7 @@ namespace Jackett.Indexers
         public class loginBlock
         {
             public string Path { get; set; }
+            public string Submitpath { get; set; }
             public string Method { get; set; }
             public string Form { get; set; }
             public bool Selectors { get; set; } = false;
@@ -445,7 +446,9 @@ namespace Jackett.Indexers
                 }
 
                 var submitUrl = resolvePath(form.GetAttribute("action"));
-                
+                if (Login.Submitpath != null)
+                    submitUrl = resolvePath(Login.Submitpath);
+
                 foreach (var input in inputs)
                 {
                     var name = input.GetAttribute("name");
