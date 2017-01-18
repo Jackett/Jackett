@@ -71,6 +71,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Immortalseed
  * Infinity-T
  * IPTorrents
+ * LinkoManija
  * M-Team - TP
  * Mononoké-BT
  * MoreThanTV
