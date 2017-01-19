@@ -44,6 +44,8 @@
       11: Audio # Trance
       36: Audio # Trip-Hop
       24: Audio # World/Ethnic
+      3010: Audio/MP3
+      3040: Audio/Lossless
 
     modes:
       search: [q]
@@ -63,7 +65,7 @@
   search:
     path: /browse.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
       incldead: 1
     rows:
@@ -80,6 +82,10 @@
         filters:
           - name: querystring
             args: cat
+      category|optional:
+        case:
+          a[href="/browse.php?ext=1&bitrate=Lossless"]: "3040"
+          a[href="/browse.php?ext=1&format=MP3"]: "3010"
       details:
         selector: a[href^="details.php?id="]
         attribute: href
