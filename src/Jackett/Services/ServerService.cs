@@ -177,6 +177,7 @@ namespace Jackett.Services
             }
             indexerService.SortIndexers();
             client.Init();
+            updater.CleanupTempDir();
         }
 
         public void Start()

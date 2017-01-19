@@ -24,6 +24,7 @@ namespace Jackett.Services
     {
         void StartUpdateChecker();
         void CheckForUpdatesNow();
+        void CleanupTempDir();
     }
 
     public class UpdateService: IUpdateService
@@ -170,6 +171,38 @@ namespace Jackett.Services
             };
 
             return req;
+        }
+
+        public void CleanupTempDir()
+        {
+            var tempDir = Path.GetTempPath();
+
+            if (!Directory.Exists(tempDir))
+            {
+                logger.Error("Temp dir doesn't exist: " + tempDir.ToString());
+                return;
+            }
+            
+            try { 
+                DirectoryInfo d = new DirectoryInfo(tempDir);
+                foreach (var dir in d.GetDirectories("JackettUpdate-*"))
+                {
+                    try {
+                        logger.Info("Deleting JackettUpdate temp files from " + dir.FullName);
+                        dir.Delete(true);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error("Error while deleting temp files from " + dir.FullName);
+                        logger.Error(e);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Unexpected error while deleting temp files from " + tempDir.ToString());
+                logger.Error(e);
+            }
         }
 
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
