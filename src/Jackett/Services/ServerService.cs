@@ -17,6 +17,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -147,6 +149,25 @@ namespace Jackett.Services
         public void Initalize()
         {
             logger.Info("Starting Jackett " + configService.GetVersion());
+            try
+            {
+                var x = Environment.OSVersion;
+                logger.Info("Environment version: " + Environment.Version.ToString() + " (" + RuntimeEnvironment.GetRuntimeDirectory() + ")");
+                logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
+                Type monotype = Type.GetType("Mono.Runtime");
+                if (monotype != null)
+                {
+                    MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var monoVersion = "unknown";
+                    if (displayName != null)
+                        monoVersion = displayName.Invoke(null, null).ToString();
+                    logger.Info("mono version: " + monoVersion);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error while getting environment details: " + e);
+            }
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers();
