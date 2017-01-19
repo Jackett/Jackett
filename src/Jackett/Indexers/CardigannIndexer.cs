@@ -477,17 +477,20 @@ namespace Jackett.Indexers
                 }
 
                 // selector inputs
-                foreach (var Selectorinput in Login.Selectorinputs)
+                if (Login.Selectorinputs != null)
                 {
-                    string value = null;
-                    try
+                    foreach (var Selectorinput in Login.Selectorinputs)
                     {
-                        value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
-                        pairs[Selectorinput.Key] = value;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(string.Format("Error while parsing selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                        string value = null;
+                        try
+                        {
+                            value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
+                            pairs[Selectorinput.Key] = value;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(string.Format("Error while parsing selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                        }
                     }
                 }
 
