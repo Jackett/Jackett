@@ -36,6 +36,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitSoup
  * Bitspyder
  * Blu-bits
+ * BlueBird
  * BTN
  * CHDBits
  * CinemaZ
