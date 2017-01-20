@@ -63,6 +63,9 @@ namespace Jackett.Console
         [Option('d', "DataFolder", HelpText = "Specify the location of the data folder (Must be admin on Windows) eg. --DataFolder=\"D:\\Your Data\\Jackett\\\"")]
         public string DataFolder { get; set; }
 
+        [Option(HelpText = "Don't restart after update")]
+        public bool NoRestart { get; set; }
+
         [ParserState]
         public IParserState LastParserState { get; set; }
     }

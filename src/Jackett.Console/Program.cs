@@ -217,6 +217,8 @@ namespace JackettConsole
                             Engine.Server.SaveConfig();
                         }
                     }
+
+                    Startup.NoRestart = options.NoRestart;
                 }
 
                 Engine.Server.Initalize();

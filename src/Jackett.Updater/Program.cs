@@ -9,6 +9,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+#if __MonoCS__
+using Mono.Unix.Native;
+#endif
 
 namespace Jackett.Updater
 {
@@ -23,7 +26,7 @@ namespace Jackett.Updater
         {
             Engine.SetupLogging(null, "updater.txt");
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
-            Engine.Logger.Info("Options " + string.Join(" ", args));
+            Engine.Logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
             try {
                 var options = new UpdaterConsoleOptions();
                 if (Parser.Default.ParseArguments(args, options))
@@ -32,7 +35,7 @@ namespace Jackett.Updater
                 }
                 else
                 {
-                    Engine.Logger.Error("Failed to process update arguments!: " + string.Join(" ", args));
+                    Engine.Logger.Error("Failed to process update arguments!");
                     Console.ReadKey();
                 }
             }
@@ -49,12 +52,48 @@ namespace Jackett.Updater
             return fvi.FileVersion;
         }
 
+        private void KillPids(int[] pids)
+        {
+            foreach (var pid in pids)
+            {
+                try
+                {
+                    var proc = Process.GetProcessById(pid);
+                    Engine.Logger.Info("Killing process " + proc.Id);
+                    proc.Kill();
+                    var exited = proc.WaitForExit(5000);
+                    if (!exited)
+                        Engine.Logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds");
+#if __MonoCS__
+                    Engine.Logger.Info("Sending SIGKILL to process " + pid.ToString());
+                    Syscall.kill(proc.Id, Signum.SIGKILL);
+#endif
+                }
+                catch (ArgumentException e)
+                {
+                    Engine.Logger.Info("Process " + pid.ToString() + " is already dead");
+                }
+                catch (Exception e)
+                {
+                    Engine.Logger.Info("Error killing process " + pid.ToString());
+                    Engine.Logger.Info(e);
+                }
+            }
+        }
+
         private void ProcessUpdate(UpdaterConsoleOptions options)
         {
             var updateLocation = GetUpdateLocation();
             if(!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
             {
                 updateLocation += Path.DirectorySeparatorChar;
+            }
+
+            var pids = new int[] { };
+            if (options.KillPids != null)
+            {
+                var pidsStr = options.KillPids.Split(',').Where(pid => !string.IsNullOrWhiteSpace(pid)).ToArray();
+                pids = Array.ConvertAll(pidsStr, pid => int.Parse(pid));
             }
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
@@ -75,10 +114,11 @@ namespace Jackett.Updater
                         catch { }
                     }
                 }
-            }
 
-            Engine.Logger.Info("Waiting for Jackett to close..");
-            Thread.Sleep(2000);
+                // on unix we don't have to wait (we can overwrite files which are in use)
+                // On unix we kill the PIDs after the update so e.g. systemd can automatically restart the process
+                KillPids(pids);
+            }
             Engine.Logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
             foreach(var file in files)
@@ -128,42 +168,49 @@ namespace Jackett.Updater
                 }
             }
 
-            if (trayRunning)
-            {
-                var startInfo = new ProcessStartInfo()
-                {
-                    Arguments = options.Args,
-                    FileName = Path.Combine(options.Path, "JackettTray.exe"),
-                    UseShellExecute = true
-                };
+            // kill pids after the update on UNIX
+            if (!isWindows)
+                KillPids(pids);
 
-                Process.Start(startInfo);
-            }
-
-            if(string.Equals(options.Type, "JackettService.exe", StringComparison.InvariantCultureIgnoreCase))
+            if (options.NoRestart == false)
             {
-                var serviceHelper = new ServiceConfigService(null, null);
-                if (serviceHelper.ServiceExists())
+                if (trayRunning)
                 {
-                    serviceHelper.Start();
-                }
-            } else
-            {
-                var startInfo = new ProcessStartInfo()
-                {
-                    Arguments = options.Args,
-                    FileName = Path.Combine(options.Path, "JackettConsole.exe"),
-                    UseShellExecute = true
-                };
+                    var startInfo = new ProcessStartInfo()
+                    {
+                        Arguments = options.Args,
+                        FileName = Path.Combine(options.Path, "JackettTray.exe"),
+                        UseShellExecute = true
+                    };
 
-                if (!isWindows)
-                {
-                    startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
-                    startInfo.FileName = "mono";
+                    Process.Start(startInfo);
                 }
 
-                Engine.Logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
-                Process.Start(startInfo);
+                if(string.Equals(options.Type, "JackettService.exe", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var serviceHelper = new ServiceConfigService(null, null);
+                    if (serviceHelper.ServiceExists())
+                    {
+                        serviceHelper.Start();
+                    }
+                } else
+                {
+                    var startInfo = new ProcessStartInfo()
+                    {
+                        Arguments = options.Args,
+                        FileName = Path.Combine(options.Path, "JackettConsole.exe"),
+                        UseShellExecute = true
+                    };
+
+                    if (!isWindows)
+                    {
+                        startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
+                        startInfo.FileName = "mono";
+                    }
+
+                    Engine.Logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
+                    Process.Start(startInfo);
+                }
             }
         }
 

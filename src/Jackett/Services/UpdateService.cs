@@ -130,7 +130,7 @@ namespace Jackett.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
                             if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows);
+                                StartUpdate(updaterPath, installDir, isWindows, Startup.NoRestart);
                         }
                         catch (Exception e)
                         {
@@ -257,16 +257,17 @@ namespace Jackett.Services
             return tempDir;
         }
 
-        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows)
+        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart)
         {
             var exe = Path.GetFileName(ExePath()).ToLowerInvariant();
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
 
             var startInfo = new ProcessStartInfo();
 
+            // Note: add a leading space to the --Args argument to avoid parsing as arguments
             if (isWindows)
             {
-                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \"{args}\"";
+                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \" {args}\"";
                 startInfo.FileName = Path.Combine(updaterExePath);
             }
             else
@@ -275,18 +276,33 @@ namespace Jackett.Services
                 args = exe + " " + args;
                 exe = "mono";
 
-                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{exe}\" --Args \"{args}\"";
+                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{exe}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
                 startInfo.UseShellExecute = false;
                 startInfo.CreateNoWindow = true;
             }
 
+            try { 
+                var pid = Process.GetCurrentProcess().Id;
+                startInfo.Arguments += $" --KillPids \"{pid}\"";
+            }
+            catch (Exception e)
+            {
+                logger.Error("Unexpected error while retriving the PID");
+                logger.Error(e);
+            }
+
+            if (NoRestart)
+                startInfo.Arguments += " --NoRestart";
 
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
-            logger.Info("Exiting Jackett..");
-            lockService.Signal();
-            Environment.Exit(0);
+            if (NoRestart == false)
+            { 
+                logger.Info("Exiting Jackett..");
+                lockService.Signal();
+                Environment.Exit(0);
+            }
         }
     }
 }
