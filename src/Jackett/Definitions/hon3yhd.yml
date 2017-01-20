@@ -42,7 +42,7 @@
       16: Movies # Telugu Movies
       27: Other # Tutorial
       29: Movies/SD # Upscaled DvDRips
-      3: Movies # WEB-HD</a></td>
+      3: Movies # WEB-HD
 
     modes:
       search: [q]
