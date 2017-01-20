@@ -64,9 +64,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDClub
  * HDSky
  * Hebits
- * Hyperay
+ * Hon3y HD
  * Hounddawgs
  * House-of-Torrents
+ * Hyperay
  * ICE Torrent
  * ILoveTorrents
  * Immortalseed
