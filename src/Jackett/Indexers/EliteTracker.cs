@@ -154,6 +154,12 @@ namespace Jackett.Indexers
             queryCollection.Add("category", "0"); // multi cat search not supported
 
             var results = await PostDataWithCookies(BrowseUrl, queryCollection);
+            if (results.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                results = await PostDataWithCookies(BrowseUrl, queryCollection);
+            }
 
             try
             {
