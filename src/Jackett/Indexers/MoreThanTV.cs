@@ -70,7 +70,7 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var isTv = Array.IndexOf(query.Categories, TorznabCatType.TV.ID) > -1;
+            var isTv = TorznabCatType.QueryContainsParentCategory(query.Categories, TorznabCatType.TV.ID);
             var releases = new List<ReleaseInfo>();
             var searchQuery = query.GetQueryString();
 
