@@ -43,9 +43,8 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
-      dsearch: ""
-      stype: "or"
-      incldead: "1"
+      stype: "exact"
+      incldead: "0"
       webdl: "0"
       3d: "0"
     rows:
