@@ -98,11 +98,13 @@ namespace Jackett.Controllers
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
 
-                if (ParseUtil.GetImdbID(torznabQuery.ImdbID) == null)
+                var imdbid = ParseUtil.GetImdbID(torznabQuery.ImdbID);
+                if (imdbid == null)
                 {
                     logger.Warn(string.Format("A movie-search request from {0} was made with an invalid imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
+                torznabQuery.ImdbID = "tt" + ((int)imdbid).ToString("D7");
 
                 if (!indexer.TorznabCaps.SupportsImdbSearch)
                 {

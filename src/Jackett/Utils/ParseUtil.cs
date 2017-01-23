@@ -80,7 +80,7 @@ namespace Jackett.Utils
             if (!match.Success)
                 return null;
 
-            return CoerceInt(match.Groups[1].Value);
+            return int.Parse(match.Groups[1].Value, NumberStyles.Any, CultureInfo.InvariantCulture);
         }
     }
 }
