@@ -26,6 +26,7 @@ function getJackettConfig(callback) {
 function loadJackettSettings() {
     getJackettConfig(function (data) {
         $("#api-key-input").val(data.config.api_key);
+        $(".api-key-text").text(data.config.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.config.port);
         $("#jackett-basepathoverride").val(data.config.basepathoverride);
