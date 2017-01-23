@@ -934,7 +934,7 @@ namespace Jackett.Indexers
                 }
             }
             if (queryCollection.Count > 0)
-                searchUrl += "&" + queryCollection.GetQueryString();
+                searchUrl += "&" + queryCollection.GetQueryString(Encoding);
 
             // in case no args are added remove ? again (needed for KAT)
             searchUrl = searchUrl.TrimEnd('?');
