@@ -9,26 +9,16 @@
 
   caps:
     categories:
-      44: TV/Anime # Anime
-      22: PC # Applications
-      43: Audio/Audiobook # Audio Books
-      27: Books # Ebook
-      4:  PC/Games # Games
-      40: Other/Misc # Miscellaneous
-      19: Movies # Movies
-      6:  Audio # Music
-      31: PC/Phone-Other # Portable
-      7:  TV # TV
-      9:  TV/Anime  # Anime
+      9: TV/Anime # Anime
       15: PC/0day # Apps-Linux
       16: PC/Mac # Apps-Macintosh
-      1: PC/0day # Apps-Misc
       17: PC/Phone-Other # Apps-Mobile
+      1:  PC/0day # Apps-Windows
       49: Audio # Audio Tracks
       51: Audio/Audiobook # AudioBook
       50: Books # Ebooks
-      23: Console # Games-Mixed
-      32: Other # Games-Packs
+      23: Console/Other # Games-Mixed
+      32: Console # Games-Packs
       2: PC/Games # Games-PC
       12: PC/Games # Games-PC Rips
       20: Console/Other # Games-PS1
@@ -41,6 +31,7 @@
       45: Console/Xbox # Games-Xbox One
       43: Console/Xbox # Gamex-Xbox
       30: Movies/HD # Movies-1080p
+      56: Movies/HD # Movies-2160p
       24: Movies/3D # Movies-3D
       53: Movies/SD # Movies-480p
       52: Movies/SD # Movies-576p
@@ -51,6 +42,7 @@
       10: Movies/DVD # Movies-DVDR
       28: Movies/Other # Movies-Oldies
       31: Movies/Other # Movies-Packs
+      57: Movies/HD # Movies-Remux
       33: Movies/Other # Movies-Sport
       29: Movies/WEBDL # Movies-Web/DL
       3: Movies/SD # Movies-XviD
@@ -58,13 +50,16 @@
       4: Audio/MP3 # Music-MP3
       18: Audio # Music-Packs
       19: Audio/Video # Music-Videos
+      37: TV/HD # TV-1080p
+      54: TV/HD # TV-2160p
+      55: TV/SD # TV-480p
+      39: TV/HD # TV-720p
       38: TV/HD # TV-Bluray
       35: TV/SD # TV-DVDR
       36: TV/SD # TV-DVDRip
-      37: TV/HD # TV-HD-x264
       41: TV # TV-Packs
-      39: TV/SD # TV-SD-x264
       42: TV/WEB-DL # TV-Web/DL
+      58: TV/HD # TV-x264
       5:  TV/SD # TV-XviD
       46: XXX # xXx-HD
       47: XXX/Imageset # xXx-Images
@@ -101,7 +96,7 @@
       searchin: "title"
 
     rows:
-      selector: div#browse > form > div > table.browsewidth100 > tbody > tr:has(a[href^="download.php?torrent="])
+      selector: table.browsewidth100 > tbody > tr:has(a[href^="download.php?torrent="])
       filters:
         - name: andmatch
     fields:
