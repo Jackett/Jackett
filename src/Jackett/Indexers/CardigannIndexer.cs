@@ -762,7 +762,10 @@ namespace Jackett.Indexers
                         break;
                     case "trim":
                         var cutset = (string)Filter.Args;
-                        Data = Data.Trim(cutset[0]);
+                        if (cutset != null)
+                            Data = Data.Trim(cutset[0]);
+                        else
+                            Data = Data.Trim();
                         break;
                     case "prepend":
                         var prependstr = (string)Filter.Args;
@@ -1120,7 +1123,7 @@ namespace Jackett.Indexers
                             {
                                 if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional"))
                                     continue;
-                                throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, value, ex.Message));
+                                throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                             }
                         }
 
