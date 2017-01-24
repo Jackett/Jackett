@@ -53,6 +53,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
+ * EZTV
  * FANO.IN
  * FileList
  * Freedom-HD
@@ -104,6 +105,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * QcTorrent
  * RapideTracker
  * RevolutionTT
+ * KickAssTorrent
  * Rockhard Lossless
  * RuTracker
  * SceneAccess
@@ -119,11 +121,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * The Horror Charnel
  * The New Retro
+ * The Pirate Bay
  * The Shinning
  * TehConnection
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
+ * Torrent411
  * TorrentBD
  * TorrentBytes
  * TorrentDay
