@@ -83,10 +83,6 @@
     test:
       path: /usercp.php?action=default
 
-  ratio:
-    path: /usercp.php?action=default
-    selector: div#sts_tex1 > span.colorblue > span
-
   search:
     path: /browse.php
     inputs:
