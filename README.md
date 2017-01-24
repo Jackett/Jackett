@@ -79,10 +79,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Immortalseed
  * Infinity-T
  * IPTorrents
+ * LimeTorrents
  * LinkoManija
  * M-Team - TP
  * Magico
- * MononokÃ©-BT
+ * Mononoké-BT
  * MoreThanTV
  * MyAnonamouse
  * myAmity
