@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 /*
 // no supported by appveyor, disabeling for now
 #if __MonoCS__
@@ -223,7 +224,7 @@ namespace Jackett.Updater
         private string GetUpdateLocation()
         {
             var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
-            return new FileInfo(location.AbsolutePath).DirectoryName;
+            return new FileInfo(HttpUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
         }
     }
 }
