@@ -45,6 +45,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "ro-ro";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(24, TorznabCatType.TVAnime);
             AddCategoryMapping(11, TorznabCatType.Audio);
             AddCategoryMapping(15, TorznabCatType.TV);
@@ -101,10 +103,22 @@ namespace Jackett.Indexers
                 cat = cats[0];
             }
 
-            if (!string.IsNullOrWhiteSpace(searchString) || cat != "0")
-                searchUrl += string.Format("?search={0}&cat={1}&searchin=0&sort=0", HttpUtility.UrlEncode(searchString), cat);
+            var queryCollection = new NameValueCollection();
 
+            if (query.ImdbID != null)
+            {
+                queryCollection.Add("search", query.ImdbID);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
 
+            queryCollection.Add("cat", cat);
+            queryCollection.Add("searchin", "0");
+            queryCollection.Add("sort", "0");
+
+            searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             var results = response.Content;
@@ -119,7 +133,12 @@ namespace Jackett.Indexers
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
                     release.Title = qRow.Find(".torrenttable:eq(1) a").Attr("title");
-                    release.Description = release.Title;
+
+                    if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
+                        continue;
+
+                    release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
+
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
