@@ -42,6 +42,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(42, TorznabCatType.MoviesSD); // LEGi0N 480p
             AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p 
             AddCategoryMapping(16, TorznabCatType.MoviesHD); // LEGi0N  1080p 
@@ -278,7 +280,12 @@ namespace Jackett.Indexers
             
             pairs.Add("cats", string.Join(",+", MapTorznabCapsToTrackers(query)));
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (query.ImdbID != null)
+            {
+                pairs.Add("search[value]", query.ImdbID);
+                pairs.Add("search[regex]", "false");
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 pairs.Add("search[value]", searchString);
                 pairs.Add("search[regex]", "false");
@@ -316,7 +323,10 @@ namespace Jackett.Indexers
                     var poster = row["poster"].ToString();
                     if(!string.IsNullOrWhiteSpace(poster))
                     {
-                        release.BannerUrl = new Uri(SiteLink + poster);
+                        var posterurl = poster;
+                        if (!poster.StartsWith("http"))
+                            posterurl = SiteLink + poster;
+                        release.BannerUrl = new Uri(posterurl);
                     }
 
                     release.Size = ReleaseInfo.GetBytes(row["size"].ToString());
