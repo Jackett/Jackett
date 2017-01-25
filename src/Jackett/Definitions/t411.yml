@@ -68,6 +68,8 @@
       search: "{{ .Query.Keywords }}"
     rows:
       selector: table > tbody > tr
+      filters:
+        - name: andmatch
     fields:
       category:
        selector: td:nth-child(1) > a
