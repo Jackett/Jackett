@@ -50,7 +50,7 @@ namespace Jackett.Indexers
             TorznabCaps.Categories.Clear();
 
             // Movie
-            AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray
+            AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray");
             AddCategoryMapping("2", TorznabCatType.MoviesHD, "Movie/Remux");
             AddCategoryMapping("5", TorznabCatType.MoviesHD, "Movie/1080p/i");
             AddCategoryMapping("3", TorznabCatType.MoviesHD, "Movie/720p");
