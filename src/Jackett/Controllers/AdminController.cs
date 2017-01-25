@@ -481,13 +481,25 @@ namespace Jackett.Controllers
         public ManualSearchResult Search([FromBody]AdminSearch value)
         {
             var results = new List<TrackerCacheResult>();
-            var query = new TorznabQuery()
+            var stringQuery = new TorznabQuery()
             {
                 SearchTerm = value.Query,
                 Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category }
             };
+            stringQuery.ExpandCatsToSubCats();
 
-            query.ExpandCatsToSubCats();
+            // try to build an IMDB Query
+            var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
+            TorznabQuery imdbQuery = null;
+            if (imdbID != null)
+            {
+                imdbQuery = new TorznabQuery()
+                {
+                    ImdbID = imdbID,
+                    Categories = stringQuery.Categories
+                };
+                imdbQuery.ExpandCatsToSubCats();
+            }
 
             var trackers = indexerService.GetAllIndexers().Where(t => t.IsConfigured).ToList();
             if (!string.IsNullOrWhiteSpace(value.Tracker))
@@ -504,6 +516,11 @@ namespace Jackett.Controllers
             {
                 try
                 {
+                    var query = stringQuery;
+                    // use imdb Query for trackers which support it
+                    if (imdbQuery != null && indexer.TorznabCaps.SupportsImdbSearch)
+                        query = imdbQuery;
+
                     var searchResults = indexer.PerformQuery(query).Result;
                     searchResults = indexer.CleanLinks(searchResults);
                     cacheService.CacheRssResults(indexer, searchResults);
@@ -544,7 +561,7 @@ namespace Jackett.Controllers
             if (manualResult.Indexers.Count == 0)
                 manualResult.Indexers = new List<string>() { "None" };
 
-            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", query.GetQueryString(), string.Join(", ", manualResult.Indexers), manualResult.Results.Count));
+            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", stringQuery.GetQueryString(), string.Join(", ", manualResult.Indexers), manualResult.Results.Count));
             return manualResult;
         }
     }
