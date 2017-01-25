@@ -37,6 +37,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q, imdbid]
 
   login:
     path: login3.php
@@ -61,7 +62,7 @@
     path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
       advcat: "0"
       incldead: "1"
       stype: "b"
