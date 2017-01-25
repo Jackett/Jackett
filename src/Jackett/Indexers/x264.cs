@@ -41,6 +41,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(20, TorznabCatType.Movies); // Movies&TV/Sources
             AddCategoryMapping(53, TorznabCatType.MoviesHD); // Movies/1080p
             AddCategoryMapping(30, TorznabCatType.MoviesHD); // Movies/576p
@@ -117,7 +119,11 @@ namespace Jackett.Indexers
             queryCollection.Add("xtype", "0");
             queryCollection.Add("stype", "0");
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (query.ImdbID != null)
+            {
+                queryCollection.Add("search", query.ImdbID);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("search", searchString);
             }
