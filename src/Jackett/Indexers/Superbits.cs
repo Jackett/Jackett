@@ -40,6 +40,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "sv-sw";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");
             AddCategoryMapping(3, TorznabCatType.BooksEbook, "eBok");
@@ -95,7 +97,10 @@ namespace Jackett.Indexers
             queryCollection.Add("limit", "100");
             queryCollection.Add("order", "desc");
             queryCollection.Add("page", "search");
-            queryCollection.Add("searchText", searchString);
+            if (query.ImdbID != null)
+                queryCollection.Add("searchText", query.ImdbID);
+            else
+                queryCollection.Add("searchText", searchString);
             queryCollection.Add("sort", "d");
             queryCollection.Add("section", "all");
             queryCollection.Add("stereoscopic", "false");
