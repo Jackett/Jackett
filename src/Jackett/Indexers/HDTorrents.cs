@@ -45,28 +45,37 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             TorznabCaps.Categories.Clear();
 
-            AddCategoryMapping("1", TorznabCatType.MoviesHD);// Movie/Blu-Ray
-            AddCategoryMapping("2", TorznabCatType.MoviesHD);// Movie/Remux
-            AddCategoryMapping("5", TorznabCatType.MoviesHD);//Movie/1080p/i
-            AddCategoryMapping("3", TorznabCatType.MoviesHD);//Movie/720p
-            AddCategoryMapping("63", TorznabCatType.Audio);//Movie/Audio Track
-
-            AddCategoryMapping("59", TorznabCatType.TVHD);//TV Show/Blu-ray
-            AddCategoryMapping("60", TorznabCatType.TVHD);//TV Show/Remux
-            AddCategoryMapping("30", TorznabCatType.TVHD);//TV Show/1080p/i
-            AddCategoryMapping("38", TorznabCatType.TVHD);//TV Show/720p
-
-            AddCategoryMapping("44", TorznabCatType.Audio);//Music/Album
-            AddCategoryMapping("61", TorznabCatType.AudioVideo);//Music/Blu-Ray
-            AddCategoryMapping("62", TorznabCatType.AudioVideo);//Music/Remux
-            AddCategoryMapping("57", TorznabCatType.AudioVideo);//Music/1080p/i
-            AddCategoryMapping("45", TorznabCatType.AudioVideo);//Music/720p
-
-            AddCategoryMapping("58", TorznabCatType.XXX);//XXX/Blu-ray
-            AddCategoryMapping("48", TorznabCatType.XXX);//XXX/1080p/i
-            AddCategoryMapping("47", TorznabCatType.XXX);//XXX/720p
+            // Movie
+            AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray
+            AddCategoryMapping("2", TorznabCatType.MoviesHD, "Movie/Remux");
+            AddCategoryMapping("5", TorznabCatType.MoviesHD, "Movie/1080p/i");
+            AddCategoryMapping("3", TorznabCatType.MoviesHD, "Movie/720p");
+            AddCategoryMapping("64", TorznabCatType.MoviesHD, "Movie/2160p");
+            AddCategoryMapping("63", TorznabCatType.Audio, "Movie/Audio Track");
+            // TV Show
+            AddCategoryMapping("59", TorznabCatType.TVHD, "TV Show/Blu-ray");
+            AddCategoryMapping("60", TorznabCatType.TVHD, "TV Show/Remux");
+            AddCategoryMapping("30", TorznabCatType.TVHD, "TV Show/1080p/i");
+            AddCategoryMapping("38", TorznabCatType.TVHD, "TV Show/720p");
+            AddCategoryMapping("65", TorznabCatType.TVHD, "TV Show/2160p");
+            // Music
+            AddCategoryMapping("44", TorznabCatType.Audio, "Music/Album");
+            AddCategoryMapping("61", TorznabCatType.AudioVideo, "Music/Blu-Ray");
+            AddCategoryMapping("62", TorznabCatType.AudioVideo, "Music/Remux");
+            AddCategoryMapping("57", TorznabCatType.AudioVideo, "Music/1080p/i");
+            AddCategoryMapping("45", TorznabCatType.AudioVideo, "Music/720p");
+            AddCategoryMapping("66", TorznabCatType.AudioVideo, "Music/2160p");
+            // XXX
+            AddCategoryMapping("58", TorznabCatType.XXX, "XXX/Blu-ray");
+            AddCategoryMapping("48", TorznabCatType.XXX, "XXX/1080p/i");
+            AddCategoryMapping("47", TorznabCatType.XXX, "XXX/720p");
+            AddCategoryMapping("67", TorznabCatType.XXX, "XXX/2160p");
+            // 3D
+            AddCategoryMapping("67", TorznabCatType.Movies3D, "3D");
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -105,7 +114,11 @@ namespace Jackett.Indexers
             }
 
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (query.ImdbID != null)
+            {
+                queryCollection.Add("search", query.ImdbID);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("search", searchString);
             }
