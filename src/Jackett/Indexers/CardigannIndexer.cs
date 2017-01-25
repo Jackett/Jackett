@@ -196,6 +196,8 @@ namespace Jackett.Indexers
             Language = Definition.Language;
             TorznabCaps = new TorznabCapabilities();
 
+            TorznabCaps.SupportsImdbSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+
             // init config Data
             configData = new ConfigurationData();
             foreach (var Setting in Definition.Settings)
