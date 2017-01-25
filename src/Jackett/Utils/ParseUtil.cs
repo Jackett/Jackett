@@ -82,5 +82,14 @@ namespace Jackett.Utils
 
             return int.Parse(match.Groups[1].Value, NumberStyles.Any, CultureInfo.InvariantCulture);
         }
+
+        public static string GetFullImdbID(string imdbstr)
+        {
+            var imdbid = GetImdbID(imdbstr);
+            if (imdbid == null)
+                return null;
+         
+            return "tt" + ((int)imdbid).ToString("D7");
+        }
     }
 }
