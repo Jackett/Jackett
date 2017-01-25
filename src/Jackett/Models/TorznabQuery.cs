@@ -27,6 +27,8 @@ namespace Jackett.Models
 
         public bool IsTest { get; set; }
 
+        public string ImdbIDShort { get { return (ImdbID != null ? ImdbID.TrimStart('t') : null); } }
+
         protected string[] QueryStringParts = null;
 
         public string SanitizedSearchTerm

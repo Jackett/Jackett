@@ -904,6 +904,7 @@ namespace Jackett.Indexers
             variables[".Query.TVDBID"] = null;
             variables[".Query.TVRageID"] = query.RageID;
             variables[".Query.IMDBID"] = query.ImdbID;
+            variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
             variables[".Query.TVMazeID"] = null;
             variables[".Query.TraktID"] = null;
 
