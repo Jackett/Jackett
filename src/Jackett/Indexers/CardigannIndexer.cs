@@ -735,9 +735,9 @@ namespace Jackett.Indexers
                             var Date = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
                             Data = Date.ToString(DateTimeUtil.RFC1123ZPattern);
                         }
-                        catch (Exception ex)
+                        catch (FormatException ex)
                         {
-                            logger.Debug(ex.ToString());
+                            logger.Debug(ex.Message);
                         }
                     break;
                     case "regexp":

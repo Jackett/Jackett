@@ -290,9 +290,9 @@ namespace Jackett.Utils
             {
                 return DateTime.ParseExact(date, pattern, CultureInfo.InvariantCulture);
             }
-            catch (Exception ex)
+            catch (FormatException ex)
             {
-                throw new Exception(string.Format("Error while parsing DateTime \"{0}\", using layout \"{1}\" ({2}): {3}", date, layout, pattern, ex.ToString()));
+                throw new FormatException(string.Format("Error while parsing DateTime \"{0}\", using layout \"{1}\" ({2}): {3}", date, layout, pattern, ex.Message));
             }
         }
     }
