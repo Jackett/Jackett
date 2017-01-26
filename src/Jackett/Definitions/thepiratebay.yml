@@ -53,6 +53,10 @@
         filters:
           - name: regexp
             args: "Uploaded (.+?),"
+          - name: replace
+            args: ["\xA0", " "]
+          - name: dateparse
+            args: "01-02 2006"
       seeders:
         selector: td:nth-child(3)
       leechers:
