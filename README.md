@@ -82,6 +82,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Infinity-T
  * IPTorrents
  * Isohunt
+ * JPopsuki
  * LimeTorrents
  * LinkoManija
  * M-Team - TP
