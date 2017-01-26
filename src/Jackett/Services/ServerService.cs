@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -187,7 +188,20 @@ namespace Jackett.Services
             var startOptions = new StartOptions();
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
             Startup.BasePath = BasePath();
-            _server = WebApp.Start<Startup>(startOptions);
+            try
+            {
+                _server = WebApp.Start<Startup>(startOptions);
+            }
+            catch (TargetInvocationException e)
+            {
+                var inner = e.InnerException;
+                if (inner is SocketException && ((SocketException)inner).SocketErrorCode == SocketError.AddressAlreadyInUse)
+                {
+                    logger.Error("Address already in use: Most likely Jackett is already running");
+                    Environment.Exit(1);
+                }
+                throw e;
+            }
             logger.Debug("Web server started");
             updater.StartUpdateChecker();
         }
