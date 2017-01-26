@@ -783,6 +783,10 @@ namespace Jackett.Indexers
                         var timestr = (string)Filter.Args;
                         Data = DateTimeUtil.FromUnknown(timestr).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
+                    case "hexdump":
+                        // this is mainly for debugging invisible special char related issues
+                        Data = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
+                        break;
                     default:
                         break;
                 }
