@@ -153,7 +153,8 @@ namespace Jackett.Services
             try
             {
                 var x = Environment.OSVersion;
-                logger.Info("Environment version: " + Environment.Version.ToString() + " (" + RuntimeEnvironment.GetRuntimeDirectory() + ")");
+                var runtimedir = RuntimeEnvironment.GetRuntimeDirectory();
+                logger.Info("Environment version: " + Environment.Version.ToString() + " (" + runtimedir + ")");
                 logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
                 Type monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null)
@@ -163,6 +164,21 @@ namespace Jackett.Services
                     if (displayName != null)
                         monoVersion = displayName.Invoke(null, null).ToString();
                     logger.Info("mono version: " + monoVersion);
+
+                    try
+                    {
+                        // Check for mono-devel
+                        // Is there any better way which doesn't involve a hard cashes?
+                        var mono_devel_file = Path.Combine(runtimedir, "mono-api-info.exe"); 
+                        if (!File.Exists(mono_devel_file))
+                        {
+                            logger.Error("It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error while checking for mono-devel");
+                    }
 
                     try
                     {
