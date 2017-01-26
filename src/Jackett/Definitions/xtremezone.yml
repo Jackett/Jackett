@@ -84,11 +84,6 @@
       download:
         selector: a[href^="dwn.php"]
         attribute: href
-      grabs:
-        selector: td:nth-child(7)
-        filters:
-          - name: regexp
-            args: (\d+)
       size:
         selector: td:nth-child(6)
       date:
@@ -99,9 +94,9 @@
           - name: dateparse
             args: "02-01-200615:04:05 -07:00"
       seeders:
-        selector: td:nth-child(8)
+        selector: td:nth-child(7)
       leechers:
-        selector: td:nth-child(9)
+        selector: td:nth-child(8)
       banner:
         selector: a[onmouseover][href^="details.php?id="]
         attribute: onmouseover
