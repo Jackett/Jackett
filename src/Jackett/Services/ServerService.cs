@@ -163,21 +163,22 @@ namespace Jackett.Services
                     if (displayName != null)
                         monoVersion = displayName.Invoke(null, null).ToString();
                     logger.Info("mono version: " + monoVersion);
+
+                    try
+                    {
+                        Encoding.GetEncoding("windows-1255");
+                    }
+                    catch (NotSupportedException e)
+                    {
+                        logger.Debug(e);
+                        logger.Error(e.Message + " Most likely the mono-locale-extras package is not installed.");
+                        Environment.Exit(2);
+                    }
                 }
             }
             catch (Exception e)
             {
                 logger.Error("Error while getting environment details: " + e);
-            }
-
-            try {
-                Encoding.GetEncoding("windows-1255");
-            }
-            catch (NotSupportedException e)
-            {
-                logger.Debug(e);
-                logger.Error(e.Message + " Most likely the mono-locale-extras package is not installed.");
-                Environment.Exit(2);
             }
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
