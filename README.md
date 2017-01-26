@@ -146,6 +146,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TV-Vault
  * u-Torrent
  * UHDBits
+ * ULTRAHDCLUB
  * World-In-HD
  * WorldOfP2P
  * x264
