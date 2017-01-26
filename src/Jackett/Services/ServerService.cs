@@ -223,9 +223,14 @@ namespace Jackett.Services
             catch (TargetInvocationException e)
             {
                 var inner = e.InnerException;
-                if (inner is SocketException && ((SocketException)inner).SocketErrorCode == SocketError.AddressAlreadyInUse)
+                if (inner is SocketException && ((SocketException)inner).SocketErrorCode == SocketError.AddressAlreadyInUse) // Linux (mono)
                 {
-                    logger.Error("Address already in use: Most likely Jackett is already running");
+                    logger.Error("Address already in use: Most likely Jackett is already running.");
+                    Environment.Exit(1);
+                }
+                else if (inner is HttpListenerException && ((HttpListenerException)inner).ErrorCode == 183) // Windows
+                {
+                    logger.Error(inner.Message + " Most likely Jackett is already running.");
                     Environment.Exit(1);
                 }
                 throw e;
