@@ -44,32 +44,30 @@ namespace Jackett.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(85, TorznabCatType.Movies3D);
-            AddCategoryMapping(23, TorznabCatType.TVAnime);
-            AddCategoryMapping(24, TorznabCatType.BooksEbook);
-            AddCategoryMapping(4, TorznabCatType.PCGames);
-            AddCategoryMapping(38, TorznabCatType.ConsolePS3);
-            AddCategoryMapping(38, TorznabCatType.ConsolePS4);
-            AddCategoryMapping(38, TorznabCatType.ConsolePSP);
-            AddCategoryMapping(43, TorznabCatType.ConsoleWii);
-            AddCategoryMapping(43, TorznabCatType.ConsoleWiiU);
+            AddCategoryMapping(13, TorznabCatType.Movies3D);
+            AddCategoryMapping(1, TorznabCatType.TVAnime);
+            AddCategoryMapping(5, TorznabCatType.BooksEbook);
+            AddCategoryMapping(10, TorznabCatType.PCGames);
+            AddCategoryMapping(11, TorznabCatType.ConsolePS3);
+            AddCategoryMapping(11, TorznabCatType.ConsolePS4);
+            AddCategoryMapping(11, TorznabCatType.ConsolePSP);
             AddCategoryMapping(12, TorznabCatType.ConsoleXBOX360DLC);
             AddCategoryMapping(12, TorznabCatType.ConsoleXbox);
             AddCategoryMapping(12, TorznabCatType.ConsoleXbox360);
             AddCategoryMapping(12, TorznabCatType.ConsoleXboxOne);
             AddCategoryMapping(6, TorznabCatType.Audio);
 
-            AddCategoryMapping(7, TorznabCatType.TV);
-            AddCategoryMapping(40, TorznabCatType.TVSD);
-            AddCategoryMapping(8, TorznabCatType.TVHD);
+            AddCategoryMapping(21, TorznabCatType.TV);
+            AddCategoryMapping(20, TorznabCatType.TVSD);
+            AddCategoryMapping(21, TorznabCatType.TVHD);
 
-            AddCategoryMapping(9, TorznabCatType.XXX);
-            AddCategoryMapping(11, TorznabCatType.XXXDVD);
-            AddCategoryMapping(10, TorznabCatType.XXXx264);
+            AddCategoryMapping(50, TorznabCatType.XXX);
+            AddCategoryMapping(49, TorznabCatType.XXXDVD);
+            AddCategoryMapping(50, TorznabCatType.XXXx264);
 
-            AddCategoryMapping(80, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(20, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(41, TorznabCatType.MoviesHD);
+            AddCategoryMapping(14, TorznabCatType.MoviesBluRay);
+            AddCategoryMapping(15, TorznabCatType.MoviesDVD);
+            AddCategoryMapping(16, TorznabCatType.MoviesHD);
             AddCategoryMapping(19, TorznabCatType.Movies);
         }
 
