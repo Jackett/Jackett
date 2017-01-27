@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     public class GimmePeers : BaseIndexer, IIndexer
     {
         private string BrowseUrl => SiteLink + "browse.php";
-        private string LoginUrl => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
 
         new ConfigurationDataBasicLogin configData
         {
