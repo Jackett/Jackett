@@ -124,6 +124,7 @@ namespace Jackett.Indexers
         public class searchBlock
         {
             public string Path { get; set; }
+            public List<filterBlock> Keywordsfilters { get; set; }
             public Dictionary<string, string> Inputs { get; set; }
             public rowsBlock Rows { get; set; }
             public Dictionary<string, selectorBlock> Fields { get; set; }
@@ -136,10 +137,18 @@ namespace Jackett.Indexers
             public selectorBlock Dateheaders { get; set; }
         }
 
+        public class requestBlock
+        {
+            public string Path { get; set; }
+            public string Method { get; set; }
+            public Dictionary<string, string> Inputs { get; set; }
+        }
+
         public class downloadBlock
         {
             public string Selector { get; set; }
             public string Method { get; set; }
+            public requestBlock Before { get; set; }
         }
 
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
@@ -933,7 +942,7 @@ namespace Jackett.Indexers
             if (!string.IsNullOrWhiteSpace((string)variables[".Query.Episode"]))
                 KeywordTokens.Add((string)variables[".Query.Episode"]);
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
-            variables[".Keywords"] = variables[".Query.Keywords"];
+            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
 
             // build search URL
             var searchUrl = resolvePath(applyGoTemplateText(Search.Path, variables) + "?").ToString();
@@ -1211,12 +1220,71 @@ namespace Jackett.Indexers
             return releases;
         }
 
+        protected async Task<WebClientByteResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
+        {
+            var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
+
+            Dictionary<string, string> pairs = null;
+            var queryCollection = new NameValueCollection();
+
+            RequestType method = RequestType.GET;
+            if (String.Equals(request.Method, "post", StringComparison.OrdinalIgnoreCase))
+            {
+                method = RequestType.POST;
+                pairs = new Dictionary<string, string>();
+            }
+
+            foreach (var Input in request.Inputs)
+            {
+                var value = applyGoTemplateText(Input.Value, variables);
+                if (method == RequestType.GET)
+                    queryCollection.Add(Input.Key, value);
+                else if (method == RequestType.POST)
+                    pairs.Add(Input.Key, value);
+            }
+
+            if (queryCollection.Count > 0)
+            {
+                if (!requestLinkStr.Contains("?"))
+                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding).Substring(1);
+                else
+                    requestLinkStr += queryCollection.GetQueryString(Encoding);
+            }
+
+            var response = await RequestBytesWithCookiesAndRetry(requestLinkStr, null, method, referer, pairs);
+            logger.Debug($"CardigannIndexer ({ID}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
+            return response;
+        }
+
+        protected IDictionary<string, object> AddTemplateVariablesFromUri(IDictionary<string, object> variables, Uri uri, string prefix = "")
+        {
+            variables[prefix + ".AbsoluteUri"] = uri.AbsoluteUri;
+            variables[prefix + ".AbsolutePath"] = uri.AbsolutePath;
+            variables[prefix + ".Scheme"] = uri.Scheme;
+            variables[prefix + ".Host"] = uri.Host;
+            variables[prefix + ".Port"] = uri.Port.ToString();
+            variables[prefix + ".PathAndQuery"] = uri.PathAndQuery;
+            variables[prefix + ".Query"] = uri.Query;
+            var queryString = HttpUtility.ParseQueryString(uri.Query);
+            foreach (string key in queryString.Keys)
+            {
+                variables[prefix + ".Query." + key] = queryString.Get(key);
+            }
+            return variables;
+        }
+
         public override async Task<byte[]> Download(Uri link)
         {
             var method = RequestType.GET;
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
+                if (Download.Before != null)
+                {
+                    var beforeVariables = getTemplateVariablesFromConfigData();
+                    AddTemplateVariablesFromUri(beforeVariables, link, ".DownloadUri");
+                    var beforeresult = await handleRequest(Download.Before, beforeVariables, link.ToString());
+                }
                 if (Download.Method != null)
                 {
                     if (Download.Method == "post")
