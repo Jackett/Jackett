@@ -63,6 +63,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunkyTorrents
  * Fuzer
  * Ghost City
+ * GimmePeers
  * GODS
  * Gormogon
  * Hardbay
@@ -77,7 +78,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * House-of-Torrents
  * Hyperay
  * ICE Torrent
- * ILoveTorrents
  * Immortalseed
  * Infinity-T
  * IPTorrents
@@ -87,7 +87,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LinkoManija
  * M-Team - TP
  * Magico
- * Mononoké-BT
+ * MononokÃ©-BT
  * MoreThanTV
  * MyAnonamouse
  * myAmity
