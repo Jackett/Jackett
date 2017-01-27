@@ -228,7 +228,7 @@
     <Compile Include="Indexers\Abnormal.cs" />
     <Compile Include="Indexers\Fuzer.cs" />
     <Compile Include="Indexers\GFTracker.cs" />
-    <Compile Include="Indexers\ILoveTorrents.cs" />
+    <Compile Include="Indexers\GimmePeers.cs" />
     <Compile Include="Indexers\RevolutionTT.cs" />
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
