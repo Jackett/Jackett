@@ -237,7 +237,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
-
+  
   login:
     path: takelogin.php
     method: post
@@ -250,11 +250,22 @@
       path: browse.php
       selector: a[href^="http://dream-team.ml/logout.php"]
 
+  download:
+    before:
+      path: "takethanks.php"
+      method: "post"
+      inputs:
+        torrentid: "{{ .DownloadUri.Query.id }}"
+      
   search:
     path: browse.php
+    keywordsfilters:
+      # remove words <= 3 characters and surrounding special characters
+      - name: re_replace
+        args: ["(?:^|\\s)[_\\+\\/\\.\\-\\(\\)]*[\\S]{0,3}[_\\+\\/\\.\\-\\(\\)]*(?:\\s|$)", " "]
     inputs:
       do: "search"
-      keywords: "{{ .Query.Keywords }}"
+      keywords: "{{ .Keywords }}"
       search_type: "t_name"
       category: "0" # multi cat search not supported
       include_dead_torrents: "yes"
