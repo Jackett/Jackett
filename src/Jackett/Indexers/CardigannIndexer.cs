@@ -370,7 +370,7 @@ namespace Jackett.Indexers
             var Login = Definition.Login;
 
             if (Login == null)
-                return false;
+                return true;
 
             if (Login.Method == "post")
             {
@@ -441,7 +441,11 @@ namespace Jackett.Indexers
                 // landingResultDocument might not be initiated if the login is caused by a relogin during a query
                 if (landingResultDocument == null)
                 {
-                    await GetConfigurationForSetup();
+                    var ConfigurationResult = await GetConfigurationForSetup(true);
+                    if (ConfigurationResult == null) // got captcha
+                    {
+                        return false;
+                    }
                 }
 
                 var form = landingResultDocument.QuerySelector(FormSelector);
@@ -651,6 +655,11 @@ namespace Jackett.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
+            return await GetConfigurationForSetup(false);
+        }
+
+        public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin)
+        {
             var Login = Definition.Login;
 
             if (Login == null || Login.Method != "form")
@@ -664,9 +673,12 @@ namespace Jackett.Indexers
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.Parse(landingResult.Content);
 
+            var hasCaptcha = false;
+
             var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
             if (grecaptcha != null)
             {
+                hasCaptcha = true;
                 var CaptchaItem = new RecaptchaItem();
                 CaptchaItem.Name = "Captcha";
                 CaptchaItem.Version = "2";
@@ -684,6 +696,8 @@ namespace Jackett.Indexers
                 {
                     var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
                     if (captchaElement != null) {
+                        hasCaptcha = true;
+
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"));
                         var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.ToString());
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
@@ -703,6 +717,13 @@ namespace Jackett.Indexers
                 {
                     throw new NotImplementedException(string.Format("Captcha type \"{0}\" is not implemented", Captcha.Type));
                 }
+            }
+
+            if (hasCaptcha && automaticlogin)
+            {
+                configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
+                logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", ID));
+                return null;
             }
 
             return configData;
@@ -977,7 +998,9 @@ namespace Jackett.Indexers
                 if (loginNeeded)
                 {
                     logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
-                    await DoLogin();
+                    var LoginResult = await DoLogin();
+                    if (!LoginResult)
+                        throw new Exception(string.Format("Relogin failed"));
                     await TestLogin();
                     response = await RequestStringWithCookies(searchUrl);
                     results = results = response.Content;
