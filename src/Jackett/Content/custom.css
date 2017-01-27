@@ -212,6 +212,10 @@ pre {
     overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
 }
 
+.dataTables_filter input {
+    width: 400px 
+}
+
 #unconfigured-indexers-template {
     display: none;
 }

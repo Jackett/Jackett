@@ -93,7 +93,7 @@ function reloadIndexers() {
                 unconfiguredIndexers.push(item);
         }
         displayConfiguredIndexersList(configuredIndexers);
-        displayUnconfiguredIndexersList(unconfiguredIndexers);
+        $('#indexers div.dataTables_filter input').focus();
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -102,28 +102,31 @@ function reloadIndexers() {
 function displayConfiguredIndexersList(indexers) {
     var indexersTemplate = Handlebars.compile($("#configured-indexer-table").html());
     var indexersTable = $(indexersTemplate({ indexers: indexers, total_configured_indexers: indexers.length }));
-    indexersTable.find('table').DataTable(
+    prepareTestButtons(indexersTable);
+    indexersTable.find("table").DataTable(
          {
-             "pageLength": 100,
-             "lengthMenu": [[10, 20, 50, 100, 200, -1], [10, 20, 50, 100, 200, "All"]],
-             "order": [[0, "desc"]],
+             "stateSave": true,
+             "pageLength": -1,
+             "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
+             "order": [[0, "asc"]],
              "columnDefs": [
                 {
                     "targets": 0,
                     "visible": true,
-                    "searchable": true
+                    "searchable": true,
+                    "orderable": true
                 },
                 {
                     "targets": 1,
                     "visible": true,
-                    "searchable": false
+                    "searchable": false,
+                    "orderable": false
                 }
              ]
          });
-    
+
     $('#indexers').empty();
     $('#indexers').append(indexersTable);
-    prepareTestButtons();
     $('#indexers').fadeIn();
     prepareSearchButtons();
     prepareSetupButtons();
@@ -131,39 +134,89 @@ function displayConfiguredIndexersList(indexers) {
     prepareCopyButtons();
 }
 
-function displayUnconfiguredIndexersList(indexers) {
+function displayUnconfiguredIndexersList() {
+    var UnconfiguredIndexersDialog = $($("#select-indexer").html());
+       
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
-    var indexersTable = $(indexersTemplate({ indexers: indexers, total_unconfigured_indexers: indexers.length  }));
-    indexersTable.find('table').DataTable(
-         {
-             "pageLength": 100,
-             "lengthMenu": [[10, 20, 50, 100, 200, -1], [10, 20, 50, 100, 200, "All"]],
-             "order": [[0, "desc"]],
-             "columnDefs": [
+    var indexersTable = $(indexersTemplate({ indexers: unconfiguredIndexers, total_unconfigured_indexers: unconfiguredIndexers.length  }));
+    indexersTable.find("table").DataTable(
+        {
+            "stateSave": true,
+            "bAutoWidth": false,
+            "pageLength": -1,
+            "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
+            "order": [[0, "asc"]],
+            "columnDefs": [
                 {
+                    "name": "name",
                     "targets": 0,
                     "visible": true,
-                    "searchable": true
+                    "searchable": true,
+                    "orderable": true
                 },
                 {
+                    "name": "description",
                     "targets": 1,
                     "visible": true,
-                    "searchable": true
+                    "searchable": true,
+                    "orderable": true
                 },
                 {
+                    "name": "type",
                     "targets": 2,
                     "visible": true,
-                    "searchable": true
+                    "searchable": true,
+                    "orderable": true
                 },
                 {
+                    "name": "type_string",
                     "targets": 3,
+                    "visible": false,
+                    "searchable": true,
+                    "orderable": true,
+                },
+                {
+                    "name": "language",
+                    "targets": 4,
                     "visible": true,
-                    "searchable": false
+                    "searchable": true,
+                    "orderable": true
+                },
+                {
+                    "name": "buttons",
+                    "targets": 5,
+                    "visible": true,
+                    "searchable" : false,
+                    "orderable": false
                 }
-             ]
-         });
-    $('#unconfigured-indexers-template').empty();
-    $('#unconfigured-indexers-template').append(indexersTable);
+            ]
+        });
+
+    indexersTable.find('.indexer-setup').each(function(i, btn) {
+            var $btn = $(btn);
+            var id = $btn.data("id");
+            var link = $btn.data("link");
+            $btn.click(function () {
+                $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
+                    displayIndexerSetup(id, link);
+                    });
+                    });
+    });
+
+    var undefindexers = UnconfiguredIndexersDialog.find('#unconfigured-indexers');
+    undefindexers.append(indexersTable);
+    
+    UnconfiguredIndexersDialog.on('shown.bs.modal', function() {
+        $(this).find('div.dataTables_filter input').focus();
+    });
+
+    UnconfiguredIndexersDialog.on('hidden.bs.modal', function (e) {
+        $('#indexers div.dataTables_filter input').focus();
+    });
+
+    $("#modals").append(UnconfiguredIndexersDialog);
+    
+    UnconfiguredIndexersDialog.modal("show");
 }
 
 function copyToClipboard(text) {
@@ -206,6 +259,13 @@ function prepareCopyButtons() {
     $(".indexer-button-copy").each(function (i, btn) {
         var $btn = $(btn);
         var title = $btn[0].title;
+
+        // don't take the focus
+        $btn.on('mousedown',
+            function(event) {
+                event.preventDefault();
+                }
+        );
         $btn.click(function () {
             copyToClipboard(title);
         });
@@ -254,9 +314,9 @@ function prepareSetupButtons() {
     });
 }
 
-function updateTestState(id, state, message)
+function updateTestState(id, state, message, parent)
 {
-    var btn = $(".indexer-button-test[data-id=" + id + "]");
+    var btn = parent.find(".indexer-button-test[data-id=" +id + "]");
     if (message) {
         btn.tooltip("hide");
         btn.data('bs.tooltip', false).tooltip({ title: message });
@@ -274,18 +334,19 @@ function updateTestState(id, state, message)
 }
 
 function testIndexer(id, notifyResult) {
-    updateTestState(id, "inprogres", null);
+    var indexers = $('#indexers');
+    updateTestState(id, "inprogres", null, indexers);
     
     if (notifyResult)
         doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
     var jqxhr = $.post("test_indexer", JSON.stringify({ indexer: id }), function (data) {
         if (data.result == "error") {
-            updateTestState(id, "error", data.error);
+            updateTestState(id, "error", data.error, indexers);
             if (notifyResult)
                 doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
         }
         else {
-            updateTestState(id, "success", "Test successful");
+            updateTestState(id, "success", "Test successful", indexers);
             if (notifyResult)
                 doNotify("Test successful for " + id, "success", "glyphicon glyphicon-ok");
         }
@@ -294,13 +355,13 @@ function testIndexer(id, notifyResult) {
     });
 }
 
-function prepareTestButtons() {
-    $(".indexer-button-test").each(function (i, btn) {
+function prepareTestButtons(element) {
+    element.find(".indexer-button-test").each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
         var state = $btn.data("state");
         $btn.tooltip();
-        updateTestState(id, state, null);
+        updateTestState(id, state, null, element);
         $btn.click(function () {
             testIndexer(id, true);
         });
@@ -479,6 +540,9 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
         });
     });
 
+    configForm.on('hidden.bs.modal', function (e) {
+        $('#indexers div.dataTables_filter input').focus();
+        });
     configForm.modal("show");
 }
 
@@ -572,6 +636,10 @@ function showSearch(selectedIndexer) {
         releaseDialog.find('#searchquery').focus();
     });
 
+    releaseDialog.on('hidden.bs.modal', function (e) {
+        $('#indexers div.dataTables_filter input').focus();
+    }) ;
+
     var setCategories = function (tracker, items) {
         var cats = {};
         for (var i = 0; i < items.length; i++) {
@@ -625,6 +693,7 @@ function showSearch(selectedIndexer) {
 
             results.find('table').DataTable(
                 {
+                    "stateSave": true,
                     "pageLength": 20,
                     "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
                     "order": [[0, "desc"]],
@@ -679,6 +748,7 @@ function showSearch(selectedIndexer) {
                         });
                     }
                 });
+                results.find('div.dataTables_filter input').focus();
 
         }).fail(function () {
             $('#jackett-search-perform').html('Search trackers');
@@ -716,20 +786,7 @@ function bindUIButtons() {
 
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
-        var dialog = $($("#select-indexer").html());
-        dialog.find('#unconfigured-indexers').html($('#unconfigured-indexers-template').html());
-        $("#modals").append(dialog);
-        dialog.modal("show");
-        $('.indexer-setup').each(function (i, btn) {
-            var $btn = $(btn);
-            var id = $btn.data("id");
-            var link = $btn.data("link");
-            $btn.click(function () {
-                $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                    displayIndexerSetup(id, link);
-                });
-            });
-        });
+        displayUnconfiguredIndexersList();
     });
 
     $("#jackett-test-all").click(function () {
@@ -746,8 +803,19 @@ function bindUIButtons() {
             var item = { releases: data, Title: 'Releases' };
             var releaseDialog = $(releaseTemplate(item));
             releaseDialog.find('tr.jackett-releases-row').each(function () { updateReleasesRow(this); });
-            releaseDialog.find('table').DataTable(
+            releaseDialog.on('hidden.bs.modal', function (e) {
+                $('#indexers div.dataTables_filter input').focus();
+            });
+            var table = releaseDialog.find('table');
+            table.DataTable(
                  {
+                     stateSave: true,
+                     stateSaveCallback: function (settings, data) {
+                        localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                     },
+                     stateLoadCallback: function (settings) {
+                        return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                     },
                      "pageLength": 20,
                      "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
                      "order": [[0, "desc"]],
