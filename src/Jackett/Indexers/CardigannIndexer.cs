@@ -746,6 +746,12 @@ namespace Jackett.Indexers
                         var Match = Regexp.Match(Data);
                         Data = Match.Groups[1].Value;
                         break;
+                    case "regexpreplace":
+                        var regexpreplace_pattern = (string)Filter.Args[0];
+                        var regexpreplace_replacement = (string)Filter.Args[1];
+                        Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
+                        Data = regexpreplace_regex.Replace(Data, regexpreplace_replacement);
+                        break;                        
                     case "split":
                         var sep = (string)Filter.Args[0];
                         var pos = (string)Filter.Args[1];
