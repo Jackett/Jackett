@@ -746,7 +746,7 @@ namespace Jackett.Indexers
                         var Match = Regexp.Match(Data);
                         Data = Match.Groups[1].Value;
                         break;
-                    case "regexpreplace":
+                    case "re_replace":
                         var regexpreplace_pattern = (string)Filter.Args[0];
                         var regexpreplace_replacement = (string)Filter.Args[1];
                         Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
