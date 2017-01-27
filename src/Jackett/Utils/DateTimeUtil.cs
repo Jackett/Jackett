@@ -128,7 +128,7 @@ namespace Jackett.Utils
         public static Regex todayRegexp = new Regex(@"(?i)\btoday([\s,]*|$)", RegexOptions.Compiled);
         public static Regex tomorrowRegexp = new Regex(@"(?i)\btomorrow([\s,]*|$)", RegexOptions.Compiled);
         public static Regex yesterdayRegexp = new Regex(@"(?i)\byesterday([\s,]*|$)", RegexOptions.Compiled);
-        public static Regex missingYearRegexp = new Regex(@"^\d{1,2}-\d{1,2}\b", RegexOptions.Compiled);
+        public static Regex missingYearRegexp = new Regex(@"^\d{1,2}-\d{1,2}(\s|$)", RegexOptions.Compiled);
         public static Regex missingYearRegexp2 = new Regex(@"^(\d{1,2}\s+\w{3})\s+(\d{1,2}\:\d{1,2}.*)$", RegexOptions.Compiled); // 1 Jan 10:30
 
         public static DateTime FromUnknown(string str, string format = null)
