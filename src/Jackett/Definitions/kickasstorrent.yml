@@ -2,6 +2,7 @@
   site: kickasstorrent
   name: KickAssTorrent
   language: en-us
+  type: public
   encoding: UTF-8
   links:
     - https://kat.how

@@ -1,7 +1,9 @@
 ﻿---
   site: inperil
   name: inPeril
+  type: private
   language: lv-lv
+  type: private
   encoding: UTF-8
   links:
     - http://www.inperil.net/

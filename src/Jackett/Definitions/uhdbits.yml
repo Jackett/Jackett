@@ -3,6 +3,7 @@
   name: UHDBits
   description: "A vietnamese general tracker"
   language: en-us
+  type: private
   encoding: UTF-8
   links:
     - https://uhdbits.org/

@@ -43,6 +43,7 @@ namespace Jackett.Indexers
             public List<settingsField> Settings { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
+            public string Type { get; set; }
             public string Language { get; set; }
             public string Encoding { get; set; }
             public List<string> Links { get; set; }
@@ -203,6 +204,7 @@ namespace Jackett.Indexers
             if (!DefaultSiteLink.EndsWith("/"))
                 DefaultSiteLink += "/";
             Language = Definition.Language;
+            Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities();
 
             TorznabCaps.SupportsImdbSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();

@@ -2,6 +2,7 @@
   site: gormogon
   name: Gormogon
   language: en-us
+  type: private
   encoding: UTF-8
   links:
     - http://www.gormogon.com

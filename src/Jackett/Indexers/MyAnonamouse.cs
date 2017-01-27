@@ -50,6 +50,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping("61", TorznabCatType.BooksComics);
             AddCategoryMapping("91", TorznabCatType.BooksTechnical);

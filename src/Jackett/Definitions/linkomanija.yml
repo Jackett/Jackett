@@ -2,6 +2,7 @@
   site: linkomanija
   name: LinkoManija
   language: lt-lt
+  type: private
   encoding: UTF-8
   links:
     - https://www.linkomanija.net

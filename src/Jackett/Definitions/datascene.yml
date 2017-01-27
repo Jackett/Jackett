@@ -2,6 +2,7 @@
   site: datascene
   name: DataScene
   language: ro-ro
+  type: private
   encoding: windows-1252
   links:
     - http://datascene.net/

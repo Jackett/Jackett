@@ -28,6 +28,7 @@ namespace Jackett.Indexers
                 webClient: webClient
                 )
         {
+            Type = "private";
         }
     }
 }

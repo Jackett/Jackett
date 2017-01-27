@@ -2,6 +2,7 @@
   site: 2fast4you
   name: 2 Fast 4 You
   language: fr-fr
+  type: private
   encoding: UTF-8
   links:
     - http://www.2f4y.me/

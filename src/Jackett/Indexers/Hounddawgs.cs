@@ -46,6 +46,7 @@ namespace Jackett.Indexers
 		{
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "da-dk";
+            Type = "private";
 
             AddCategoryMapping(68, TorznabCatType.Movies3D, "3D");
             AddCategoryMapping(80, TorznabCatType.PCPhoneAndroid, "Appz / Android");

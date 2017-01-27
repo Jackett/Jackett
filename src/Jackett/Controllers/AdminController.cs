@@ -231,6 +231,7 @@ namespace Jackett.Controllers
                     item["id"] = indexer.ID;
                     item["name"] = indexer.DisplayName;
                     item["description"] = indexer.DisplayDescription;
+                    item["type"] = indexer.Type;
                     item["configured"] = indexer.IsConfigured;
                     item["site_link"] = indexer.SiteLink;
                     item["language"] = indexer.Language;

@@ -40,6 +40,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "de-de";
+            Type = "private";
 
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             this.configData.DisplayText.Name = "Notice";

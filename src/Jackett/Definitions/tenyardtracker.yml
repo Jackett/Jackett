@@ -3,6 +3,7 @@
   name: TenYardTracker
   description: "An American football tracker"
   language: en-us
+  type: private
   encoding: UTF-8
   links:
     - http://tenyardtracker.com/

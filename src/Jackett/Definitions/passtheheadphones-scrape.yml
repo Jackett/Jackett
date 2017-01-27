@@ -1,24 +1,22 @@
 ---
-  site: jpopsuki
-  name: JPopsuki
+  site: passtheheadphones-scrape
+  name: PassTheHeadphones (scrape)
+  description: "A music tracker"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://jpopsuki.eu/
+    - https://passtheheadphones.me
 
   caps:
     categories:
-      1: Audio # Album
-      2: Audio # Single
-      3: Movies # PV
-      4: Movies/DVD # DVD
-      5: TV # TV-Music
-      6: TV # TV-Variety
-      7: TV # TV-Drama
-      8: Other # Fansubs
-      9: Other # Pictures
-      10: Other/Misc # Misc
+      1: Audio # Music
+      2: PC # Applications
+      3: Books # E-Books
+      4: Audio/Audiobook # Audiobooks
+      5: Movies # E-Learning Videos
+      6: TV # Comedy
+      7: Books/Comics # Comics
 
     modes:
       search: [q]
@@ -51,55 +49,55 @@
       action: basic
       searchsubmit: 1
     rows:
-      selector: table#torrent_table > tbody > tr[class^="torrent"]
+      selector: table#torrent_table > tbody > tr.torrent
     fields:
       download:
         selector: a[href^="torrents.php?action=download&id="]
         attribute: href
       description:
-        selector: div.tags
+        selector: div.group_info
+        remove: span
       title:
-        selector: td:nth-child(4)
-        remove: span, div.tags, a[title="View Comments"]
+        selector: div.group_info
+        remove: span, div.tags
         filters:
           - name: replace
-            args: [" ()", ""]
+            args: [" / Neutral Leech!", ""]
           - name: replace
             args: [" / Freeleech!", ""]
       category:
-        selector: a[href*="filter_cat"]
-        attribute: href
-        filters:
-          - name: regexp
-            args: "%5B(\\d+?)%5D"
-      details:
+        selector: td.cats_col
+        case:
+          div.cats_music: 1
+          div.cats_applications: 2
+          div.cats_ebooks: 3
+          div.cats_audiobooks: 4
+          div.cats_elearningvideos: 5
+          div.cats_comedy: 6
+          div.cats_comics: 7
+      comments:
         selector: a[href^="torrents.php?id="]
         attribute: href
-      banner:
-        selector: td:nth-child(3) img
-        attribute: src
       files:
-        selector: td:nth-child(5)
+        selector: td:nth-child(3)
       date:
-        selector: td:nth-child(6)
-        attribute: title
-        filters:
-          - name: append
-            args: " +00:00"
-          - name: dateparse
-            args: "Jan 02 2006, 15:04 -07:00"
+        selector: td:nth-child(4)
       size:
-        selector: td:nth-child(7)
+        selector: td:nth-child(5)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(6)
       seeders:
-        selector: td:nth-child(9)
+        selector: td:nth-child(7)
       leechers:
-        selector: td:nth-child(10)
+        selector: td:nth-child(8)
       downloadvolumefactor:
         case:
-          "strong:contains(\"Freeleech!\")": "0"
+          "strong.tl_free": "0"
+          "strong.tl_neutral": "0"
+          ":root div.alertbar:contains(\"freeleech\")": "0"
+          ":root div.alertbar:contains(\"FREELEECH\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:
+          "strong.tl_neutral": "0"
           "*": "1"

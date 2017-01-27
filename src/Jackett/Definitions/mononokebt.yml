@@ -2,6 +2,7 @@
   site: mononokebt
   name: Mononoké-BT
   language: fr-fr
+  type: private
   encoding: ISO-8859-15
   links:
     - http://mononoke-bt.org/

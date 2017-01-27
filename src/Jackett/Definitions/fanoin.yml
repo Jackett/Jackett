@@ -2,6 +2,7 @@
   site: fanoin
   name: FANO.IN
   language: lv-lv
+  type: private
   encoding: UTF-8
   links:
     - https://www.fano.in

@@ -44,6 +44,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "hu-hu";
+            Type = "private";
 
             AddCategoryMapping("Sorozatok SD felbontásban angolul és egyéb nyelveken.", TorznabCatType.TVSD);
             AddCategoryMapping("Nagyfelbontású sorozatok angolul és egyéb nyelveken.", TorznabCatType.TVHD);

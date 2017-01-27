@@ -41,6 +41,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-ru";
+            Type = "semi-private";
 
             // Новости
             AddCategoryMapping(2317, TorznabCatType.Other, "NEW YEAR'S SECTION");

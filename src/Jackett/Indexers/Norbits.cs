@@ -54,6 +54,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "nb-no";
+            Type = "private";
 
             // Clean capabilities
             TorznabCaps.Categories.Clear();

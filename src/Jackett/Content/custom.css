@@ -244,3 +244,15 @@ table td.fit{
     max-width: 250px;
     height: auto;      
 }
+
+.type-public {
+    color: #449d44
+}
+
+.type-private {
+    color: #c9302c
+}
+
+.type-semi-private {
+    color: #ec971f
+}

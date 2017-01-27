@@ -43,6 +43,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
+            Type = "private";
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

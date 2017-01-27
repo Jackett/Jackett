@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
+            Type = "private";
 
             AddCategoryMapping(1,   TorznabCatType.PCGames); // GAMES/PC
             AddCategoryMapping(3,   TorznabCatType.Console); // GAMES/Sonstige

@@ -46,6 +46,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
+            Type = "private";
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

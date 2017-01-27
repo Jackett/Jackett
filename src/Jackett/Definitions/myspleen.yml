@@ -2,6 +2,7 @@
   site: myspleen
   name: MySpleen
   language: en-us
+  type: private
   encoding: UTF-8
   links:
     - https://www.myspleen.org

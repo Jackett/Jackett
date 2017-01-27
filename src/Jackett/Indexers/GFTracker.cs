@@ -47,6 +47,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(2, TorznabCatType.PC0day, "0DAY");
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Anime");

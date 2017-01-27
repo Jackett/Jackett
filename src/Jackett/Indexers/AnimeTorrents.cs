@@ -45,6 +45,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.MoviesSD); // Anime Movie
             AddCategoryMapping(6, TorznabCatType.MoviesHD); // Anime Movie HD

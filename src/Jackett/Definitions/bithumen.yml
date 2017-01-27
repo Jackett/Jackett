@@ -2,6 +2,7 @@
   site: bithumen
   name: BitHUmen
   language: hu-hu
+  type: private
   encoding: ISO-8859-2
   links:
     - https://bithumen.be/

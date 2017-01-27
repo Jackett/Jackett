@@ -1,11 +1,11 @@
 ﻿---
-  site: utorrents
-  name: u-Torrent
+  site: rodvd
+  name: RoDVD
   language: ro-ro
   type: private
   encoding: windows-1252
   links:
-    - http://www.u-torrents.ro/
+    - http://rodvd.net/
 
   caps:
     categories:
@@ -50,31 +50,39 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
-    method: post
+    path: login.php
+    method: form
+    form: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: td.embedded:has(h2:contains("failed"))
+      - selector: td.loginerr
     test:
-      path: /browse.php
+      path: browse.php
       
   ratio:
-    path: /browse.php
-    selector: font:contains("Ratio:") > span
+    path: browse.php
+    selector: a#link14
 
   search:
-    path: /browse.php
+    path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
-      incldead: 1
+      key: 9
     rows:
       selector: td.outer > table > tbody > tr:has(a[href^="details.php?id="])
+      dateheaders:
+        selector: ":has(td.days > font > b)"
+        filters:
+          - name: replace
+            args: ["Torrents Added: ", ""]
+          - name: dateparse
+            args: "01.02.2016"
     fields:
       title:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="details.php?id="] font
       details:
         selector: a[href^="details.php?id="]
         attribute: href
@@ -85,43 +93,29 @@
           - name: querystring
             args: cat
       download:
-        selector: a[href^="download2.php"]
+        selector: a[href^="download.php"]
         attribute: href
-      grabs:
-        selector: td:nth-child(7)
-        filters:
-          - name: regexp
-            args: (\d+)
-      files:
-        selector: td:nth-child(3)
+      imdb:
+        selector: a[href^="href="http://anonymz.com/?http://www.imdb.com/title/tt"]
+        attribute: href
       size:
         selector: td:nth-child(6)
-      date:
-        selector: td:nth-child(5)
-        filters:
-          - name: trim
-            args: "\xF0"
-          - name: append
-            args: " +02:00"
-          - name: dateparse
-            args: "02-01-200615:04:05 -07:00"
       seeders:
-        selector: td:nth-child(8)
+        text: 9999
       leechers:
-        selector: td:nth-child(9)
+        text: 9999
       banner:
         selector: a[onmouseover][href^="details.php?id="]
         attribute: onmouseover
         filters:
           - name: regexp
-            args: src=([^\s]+)
+            args: "src=\"([^\"]+)"
       downloadvolumefactor:
         case:
-          button.btnfree: "0"
+          "font.small[color]:contains(\"Free\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:
-          button.btn2xup: "2"
           "*": "1"
       description:
         selector: td:nth-child(2)

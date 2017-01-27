@@ -2,6 +2,7 @@
   site: xtremezone
   name: Xtreme Zone
   language: ro-ro
+  type: private
   encoding: UTF-8
   links:
     - http://myxz.org/

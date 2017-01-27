@@ -3,6 +3,7 @@
   name: Apollo
   description: "A music tracker"
   language: en-us
+  type: private
   encoding: UTF-8
   links:
     - https://apollo.rip

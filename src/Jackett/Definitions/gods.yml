@@ -2,6 +2,7 @@
   site: gods
   name: GODS
   language: de-de
+  type: private
   encoding: windows-1252
   links:
     - https://gods.lu/

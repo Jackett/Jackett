@@ -2,6 +2,7 @@
   site: freedomhd
   name: Freedom-HD
   language: fr-fr
+  type: private
   encoding: UTF-8
   links:
     - http://freedom-paradise.eu/

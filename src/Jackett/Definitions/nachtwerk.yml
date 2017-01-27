@@ -2,6 +2,7 @@
   site: nachtwerk
   name: Nachtwerk
   language: de-de
+  type: private
   encoding: ISO-8859-15
   links:
     - https://nwtracker.com/

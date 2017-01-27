@@ -199,7 +199,7 @@
             <tbody>
                 {{#each indexers}}
                 <tr class="configured-indexer-row">
-                    <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                    <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
                     <td class="fit">
                         <div class="indexer-buttons">
                             <button title="{{torznab_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</button>
@@ -237,6 +237,7 @@
                 <tr>
                     <th>Indexer</th>
                     <th>Categories</th>
+                    <th>Type</th>
                     <th>Language</th>
                     <th></th>
                 </tr>
@@ -246,6 +247,7 @@
                 <tr class="unconfigured-indexer-row">
                     <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
                     <td>{{mains_cats}}</td>
+                    <td><span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
                     <td>{{language}}</td>
                     <td class="fit">
                         <div class="indexer-buttons">
@@ -259,7 +261,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">Total unconfigured indexers: {{total_unconfigured_indexers}}</td>
+                    <td colspan="5">Total unconfigured indexers: {{total_unconfigured_indexers}}</td>
                 </tr>
             </tfoot>
         </table>

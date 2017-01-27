@@ -2,6 +2,7 @@
   site: hdclub
   name: HDClub
   language: ru-ru
+  type: private
   encoding: windows-1251
   links:
     - http://hdclub.org

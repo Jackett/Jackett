@@ -2,6 +2,7 @@
   site: thepiratebay
   name: The Pirate Bay
   language: en-us
+  type: public
   encoding: UTF-8
   links:
     - https://thepiratebay.org/

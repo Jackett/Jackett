@@ -50,6 +50,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
+            Type = "private";
 
             /* Original RevolutionTT Categories -
 			

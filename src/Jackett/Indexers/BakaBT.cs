@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
+            Type = "private";
         }
 
 

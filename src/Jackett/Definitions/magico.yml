@@ -2,6 +2,7 @@
   site: magico
   name: Magico
   language: el-gr
+  type: private
   encoding: UTF-8
   links:
     - http://magico.info/

@@ -19,6 +19,7 @@ namespace Jackett.Indexers
                 )
         {
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");

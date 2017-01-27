@@ -39,6 +39,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "de-de";
+            Type = "private";
 
             AddCategoryMapping(1,  TorznabCatType.AudioAudiobook); // aBook
             AddCategoryMapping(4,  TorznabCatType.PCMac); // App|Mac

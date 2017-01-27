@@ -40,6 +40,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
+            Type = "private";
 
             AddCategoryMapping(18, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(8,  TorznabCatType.PCMac); // Appz MAC

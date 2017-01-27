@@ -2,6 +2,7 @@
   site: torrenting
   name: Torrenting
   language: en-us
+  type: private
   encoding: windows-1252
   links:
     - https://torrenting.com

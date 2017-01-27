@@ -3,6 +3,7 @@
   name: Shareisland
   description: "A general italian tracker"
   language: it-it
+  type: private
   encoding: UTF-8
   links:
     - http://shareisland.org

@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "fr-fr";
+            Type = "private";
 
             AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation/Animes");
             AddCategoryMapping(63, TorznabCatType.TVAnime, "Animes DVD");

@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "da-dk";
+            Type = "private";
 
             // Movies Mapping
             // DanishBits HD

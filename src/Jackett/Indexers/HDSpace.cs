@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,

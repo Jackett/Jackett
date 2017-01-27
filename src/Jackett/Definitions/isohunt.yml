@@ -2,6 +2,7 @@
   site: isohunt
   name: Isohunt
   language: en-us
+  type: public
   encoding: UTF-8
   links:
     - https://isohunt.to/

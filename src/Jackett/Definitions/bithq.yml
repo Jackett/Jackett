@@ -2,6 +2,7 @@
   site: bithq
   name: BitHQ
   language: en-us
+  type: private
   encoding: windows-1252
   links:
     - http://www.bithq.org

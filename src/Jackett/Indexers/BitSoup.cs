@@ -46,6 +46,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
+            Type = "private";
 
             //AddCategoryMapping("624", TorznabCatType.Console);
             //AddCategoryMapping("307", TorznabCatType.ConsoleNDS);

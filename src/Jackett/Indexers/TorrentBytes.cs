@@ -43,6 +43,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(41, TorznabCatType.TV);
             AddCategoryMapping(33, TorznabCatType.TVSD);

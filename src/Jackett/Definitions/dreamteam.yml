@@ -2,6 +2,7 @@
   site: dreamteam
   name: Dream Team
   language: el-gr
+  type: private
   encoding: UTF-8
   links:
     - http://dream-team.ml/

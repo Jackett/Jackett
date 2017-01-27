@@ -39,6 +39,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
+            Type = "private";
 
             AddCategoryMapping(39, TorznabCatType.TVAnime); // Anime: HD|1080p
             AddCategoryMapping(38, TorznabCatType.TVAnime); // Anime: HD|720p

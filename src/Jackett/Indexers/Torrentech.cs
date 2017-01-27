@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.AudioMP3);
             AddCategoryMapping(2, TorznabCatType.AudioLossless);

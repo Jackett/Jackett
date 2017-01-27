@@ -66,6 +66,19 @@ function reloadIndexers() {
             else
                 item.state = "success";
 
+            if (item.type == "public") {
+                item.type_icon_content = "🔓\uFE0E";
+            }
+            else if (item.type == "private") {
+                item.type_icon_content = "🔐\uFE0E";
+            }
+            else if (item.type == "semi-private") {
+                item.type_icon_content = "🔒\uFE0E";
+            }
+            else {
+                item.type_icon_content = "";
+            }
+
             var main_cats_list = [];
             for (var catID in item.caps) {
                 var cat = item.caps[catID];

@@ -45,6 +45,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
+            Type = "private";
 
             TorznabCaps.SupportsImdbSearch = true;
 

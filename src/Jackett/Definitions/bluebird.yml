@@ -2,6 +2,7 @@
   site: bluebirdhd
   name: BlueBird
   language: ru-ru
+  type: private
   encoding: windows-1251
   links:
     - https://bluebird-hd.org/

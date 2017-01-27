@@ -42,6 +42,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
+            Type = "semi-private";
 
             AddCategoryMapping(30, TorznabCatType.Movies, "Video content");
             AddCategoryMapping(31, TorznabCatType.TVDocumentary, "   Documentary films, TV and other video");

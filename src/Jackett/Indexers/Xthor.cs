@@ -46,6 +46,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
+            Type = "private";
 
             // Clean capabilities
             TorznabCaps.Categories.Clear();

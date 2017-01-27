@@ -2,6 +2,7 @@
   site: torrentsmd
   name: Torrents.Md
   language: ru-mo
+  type: private
   encoding: UTF-8
   links:
     - https://torrentsmd.com/

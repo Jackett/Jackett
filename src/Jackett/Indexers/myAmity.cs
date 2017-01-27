@@ -39,6 +39,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "de-de";
+            Type = "private";
 
             AddCategoryMapping(20, TorznabCatType.PC); // Apps - PC
             AddCategoryMapping(24, TorznabCatType.AudioAudiobook); // Audio - Hoerbuch/-spiel

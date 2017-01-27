@@ -39,6 +39,7 @@ namespace Jackett.Indexers
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
+            Type = "private";
 
             configData.DisplayText.Value = "Go to the general tab of your BeyondHD user profile and create/copy the Login Link.";
 
