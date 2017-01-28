@@ -4,6 +4,24 @@ var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
 
+$.fn.inView = function() {
+    if(!this.length) return false;
+    var rect = this.get(0).getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+};
+
+$.fn.focusWithoutScrolling = function () {
+    if (this.inView())
+        this.focus();
+    return this;
+};
+
 $(document).ready(function () {
     $.ajaxSetup({ cache: false });
     window.jackettIsLocal = window.location.hostname === 'localhost' ||
@@ -93,7 +111,7 @@ function reloadIndexers() {
                 unconfiguredIndexers.push(item);
         }
         displayConfiguredIndexersList(configuredIndexers);
-        $('#indexers div.dataTables_filter input').focus();
+        $('#indexers div.dataTables_filter input').focusWithoutScrolling();
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -207,11 +225,11 @@ function displayUnconfiguredIndexersList() {
     undefindexers.append(indexersTable);
     
     UnconfiguredIndexersDialog.on('shown.bs.modal', function() {
-        $(this).find('div.dataTables_filter input').focus();
+        $(this).find('div.dataTables_filter input').focusWithoutScrolling();
     });
 
     UnconfiguredIndexersDialog.on('hidden.bs.modal', function (e) {
-        $('#indexers div.dataTables_filter input').focus();
+        $('#indexers div.dataTables_filter input').focusWithoutScrolling();
     });
 
     $("#modals").append(UnconfiguredIndexersDialog);
@@ -226,7 +244,7 @@ function copyToClipboard(text) {
     target = document.getElementById(targetId);
     if (!target) {
         var target = document.createElement("textarea");
-        target.style.position = "absolute";
+        target.style.position = "fixed";
         target.style.left = "-9999px";
         target.style.top = "0";
         target.id = targetId;
@@ -247,7 +265,7 @@ function copyToClipboard(text) {
     }
     // restore original focus
     if (currentFocus && typeof currentFocus.focus === "function") {
-        currentFocus.focus();
+        $(currentFocus).focusWithoutScrolling();
     }
 
     target.textContent = "";
@@ -260,12 +278,6 @@ function prepareCopyButtons(element) {
         var $btn = $(btn);
         var title = $btn[0].title;
 
-        // don't take the focus
-        $btn.on('mousedown',
-            function(event) {
-                event.preventDefault();
-                }
-        );
         $btn.click(function () {
             copyToClipboard(title);
         });
@@ -541,7 +553,7 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
     });
 
     configForm.on('hidden.bs.modal', function (e) {
-        $('#indexers div.dataTables_filter input').focus();
+        $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         });
     configForm.modal("show");
 }
@@ -633,11 +645,11 @@ function showSearch(selectedIndexer) {
     $("#modals").append(releaseDialog);
 
     releaseDialog.on('shown.bs.modal', function () {
-        releaseDialog.find('#searchquery').focus();
+        releaseDialog.find('#searchquery').focusWithoutScrolling();
     });
 
     releaseDialog.on('hidden.bs.modal', function (e) {
-        $('#indexers div.dataTables_filter input').focus();
+        $('#indexers div.dataTables_filter input').focusWithoutScrolling();
     }) ;
 
     var setCategories = function (tracker, items) {
@@ -748,7 +760,7 @@ function showSearch(selectedIndexer) {
                         });
                     }
                 });
-                results.find('div.dataTables_filter input').focus();
+            results.find('div.dataTables_filter input').focusWithoutScrolling();
 
         }).fail(function () {
             $('#jackett-search-perform').html('Search trackers');
@@ -804,7 +816,7 @@ function bindUIButtons() {
             var releaseDialog = $(releaseTemplate(item));
             releaseDialog.find('tr.jackett-releases-row').each(function () { updateReleasesRow(this); });
             releaseDialog.on('hidden.bs.modal', function (e) {
-                $('#indexers div.dataTables_filter input').focus();
+                $('#indexers div.dataTables_filter input').focusWithoutScrolling();
             });
             var table = releaseDialog.find('table');
             table.DataTable(
