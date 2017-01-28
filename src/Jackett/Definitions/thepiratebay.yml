@@ -25,6 +25,8 @@
     modes:
       tv-search: [q, season, ep]
 
+  settings: []
+  
   search:
     path: "{{if .Query.Keywords}}search/{{ .Query.Keywords}}/0/99/0{{else}}/recent{{end}}"
     rows:

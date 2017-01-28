@@ -23,6 +23,8 @@
       search: [q]
       tv-search: [q, season, ep]
 
+  settings: []
+
   download:
     selector: a.btn-download
       

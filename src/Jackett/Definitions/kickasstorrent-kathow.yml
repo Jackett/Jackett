@@ -22,6 +22,8 @@
       search: [q]
       tv-search: [q, season, ep]
 
+  settings: []
+
   search:
     path: "search.php"
     inputs:
