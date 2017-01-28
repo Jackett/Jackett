@@ -103,6 +103,10 @@ function displayConfiguredIndexersList(indexers) {
     var indexersTemplate = Handlebars.compile($("#configured-indexer-table").html());
     var indexersTable = $(indexersTemplate({ indexers: indexers, total_configured_indexers: indexers.length }));
     prepareTestButtons(indexersTable);
+    prepareSearchButtons(indexersTable);
+    prepareSetupButtons(indexersTable);
+    prepareDeleteButtons(indexersTable);
+    prepareCopyButtons(indexersTable);
     indexersTable.find("table").DataTable(
          {
              "stateSave": true,
@@ -128,10 +132,6 @@ function displayConfiguredIndexersList(indexers) {
     $('#indexers').empty();
     $('#indexers').append(indexersTable);
     $('#indexers').fadeIn();
-    prepareSearchButtons();
-    prepareSetupButtons();
-    prepareDeleteButtons();
-    prepareCopyButtons();
 }
 
 function displayUnconfiguredIndexersList() {
@@ -255,8 +255,8 @@ function copyToClipboard(text) {
     return succeed;
 }
 
-function prepareCopyButtons() {
-    $(".indexer-button-copy").each(function (i, btn) {
+function prepareCopyButtons(element) {
+    element.find(".indexer-button-copy").each(function (i, btn) {
         var $btn = $(btn);
         var title = $btn[0].title;
 
@@ -272,8 +272,8 @@ function prepareCopyButtons() {
     });
 }
 
-function prepareDeleteButtons() {
-    $(".indexer-button-delete").each(function (i, btn) {
+function prepareDeleteButtons(element) {
+    element.find(".indexer-button-delete").each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
@@ -293,8 +293,8 @@ function prepareDeleteButtons() {
     });
 }
 
-function prepareSearchButtons() {
-    $('.indexer-button-search').each(function (i, btn) {
+function prepareSearchButtons(element) {
+    element.find('.indexer-button-search').each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function() {
@@ -303,8 +303,8 @@ function prepareSearchButtons() {
     });
 }
 
-function prepareSetupButtons() {
-    $('.indexer-setup').each(function (i, btn) {
+function prepareSetupButtons(element) {
+    element.find('.indexer-setup').each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
         var link = $btn.data("link");
