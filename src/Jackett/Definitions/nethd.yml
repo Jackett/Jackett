@@ -3,7 +3,7 @@
   name: NetHD
   description: "A vietnamese tracker"
   language: vi-vn
-  type: private
+  type: semi-private
   encoding: UTF-8
   links:
     - http://nethd.org/
