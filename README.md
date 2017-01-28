@@ -111,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD
  * QcTorrent
  * RapideTracker
+ * RARBG
  * RevolutionTT
  * Rockhard Lossless
  * RuTracker

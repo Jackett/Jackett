@@ -1,0 +1,91 @@
+﻿---
+  site: rarbg
+  name: RARBG
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://rarbg.to/
+
+  caps:
+    categories:
+      4: XXX # XXX (18+)
+      14: Movies/SD # Movies/XVID
+      48: Movies/HD # Movies/XVID/720
+      17: Movies/SD # Movies/x264
+      44: Movies/HD # Movies/x264/1080
+      45: Movies/HD # Movies/x264/720
+      47: Movies/3D # Movies/x264/3D
+      42: Movies/BluRay # Movies/Full BD
+      46: Movies/HD # Movies/BD Remux
+      18: TV/SD # TV Episodes
+      41: TV/HD # TV HD Episodes
+      23: Audio/MP3 # Music/MP3
+      25: Audio/Lossless # Music/FLAC
+      27: PC/Games # Games/PC ISO
+      28: PC/Games # Games/PC RIP
+      40: Console/PS3 # Games/PS3
+      32: Console/Xbox # Games/XBOX-360
+      33: PC/0day # Software/PC ISO
+      35: Books # e-Books
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q, imdbid]
+    
+  settings: []
+
+  search:
+    path: /torrents.php
+    inputs:
+      $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
+
+    rows:
+      selector: table.lista2t > tbody > tr.lista2
+    fields:
+      download:
+        selector: a[href^="/torrent/"]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["/torrent/", "/download.php?id="]
+          - name: append
+            args: "&f=dummy.torrent"
+      title:
+        selector: a[href^="/torrent/"]
+      details:
+        selector: a[href^="/torrent/"]
+        attribute: href
+      banner:
+        selector: a[href^="/torrent/"]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=\\'(.+?)\\'
+      imdb|optional:
+        selector: a[href^="/torrents.php?imdb="]
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
+      category:
+        selector: a[href^="/torrents.php?category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      size:
+        selector: td:nth-child(4)
+      seeders:
+        selector: td:nth-child(5)
+      leechers:
+        selector: td:nth-child(6)
+      date:
+        selector: td:nth-child(3)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
