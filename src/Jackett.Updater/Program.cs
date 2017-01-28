@@ -155,7 +155,7 @@ namespace Jackett.Updater
                 }
             }
 
-            // delete old files
+            // delete old dirs
             string[] oldDirs = new string[] { "Content/logos" };
 
             foreach (var oldDir in oldDirs)
@@ -167,6 +167,32 @@ namespace Jackett.Updater
                     {
                         Engine.Logger.Info("Deleting directory " + deleteDir);
                         Directory.Delete(deleteDir, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Engine.Logger.Error(e);
+                }
+            }
+
+
+            // delete old files
+            string[] oldFiles = new string[] {
+                "Content/css/jquery.dataTables.css",
+                "Content/css/jquery.dataTables_themeroller.css",
+                "Definitions/tspate.yml",
+                "Definitions/freakstrackingsystem.yml",
+            };
+
+            foreach (var oldFIle in oldFiles)
+            {
+                try
+                {
+                    var deleteFile = Path.Combine(options.Path, oldFIle);
+                    if (File.Exists(deleteFile))
+                    {
+                        Engine.Logger.Info("Deleting file " + deleteFile);
+                        File.Delete(deleteFile);
                     }
                 }
                 catch (Exception e)
