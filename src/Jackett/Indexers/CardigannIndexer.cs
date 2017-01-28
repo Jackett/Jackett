@@ -197,7 +197,9 @@ namespace Jackett.Indexers
             // init missing mandatory attributes
             DisplayName = Definition.Name;
             DisplayDescription = Definition.Description;
-            DefaultSiteLink = Definition.Links[0]; // TODO: implement alternative links
+            if (Definition.Links.Count > 1)
+                AlternativeSiteLinks = Definition.Links.ToArray();
+            DefaultSiteLink = Definition.Links[0];
             Encoding = Encoding.GetEncoding(Definition.Encoding);
             if (!DefaultSiteLink.EndsWith("/"))
                 DefaultSiteLink += "/";
