@@ -182,10 +182,8 @@ namespace Jackett.Indexers
 
             // Add default data if necessary
             if (Definition.Settings == null)
+            { 
                 Definition.Settings = new List<settingsField>();
-
-            if (Definition.Settings.Count == 0)
-            {
                 Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
                 Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
             }
