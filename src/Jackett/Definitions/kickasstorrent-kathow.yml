@@ -1,11 +1,11 @@
 ---
-  site: kickasstorrent
-  name: KickAssTorrent
+  site: kickasstorrent-kathow
+  name: KickAssTorrent (kat.how)
   language: en-us
   type: public
   encoding: UTF-8
   links:
-    - https://katcr.co/
+    - https://kat.how
 
   caps:
     categories:

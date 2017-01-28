@@ -84,6 +84,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IPTorrents
  * Isohunt
  * JPopsuki
+ * KickAssTorrent
+ * KickAssTorrent (kat.how clone)
  * LimeTorrents
  * LinkoManija
  * M-Team - TP
@@ -109,7 +111,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * QcTorrent
  * RapideTracker
  * RevolutionTT
- * KickAssTorrent
  * Rockhard Lossless
  * RuTracker
  * SceneAccess
