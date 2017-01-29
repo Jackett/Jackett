@@ -155,8 +155,9 @@ namespace Jackett
 
                     if (Startup.ProxyConnection != null)
                     {
+                        easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
                         easy.SetOpt(CurlOption.Proxy, Startup.ProxyConnection);
-                    }                    
+                    }
 
                     easy.Perform();
 
