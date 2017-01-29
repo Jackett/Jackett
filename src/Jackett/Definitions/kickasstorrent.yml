@@ -9,52 +9,188 @@
 
   caps:
     categories:
-      movies: Movies
-      tv: TV
-      music: Audio
-      books: Books
-      Games: Console
-      applications: PC
-      xxx: XXX
-      other: Other
+      118: TV/Anime # Anime - English Translated
+      133: TV/Anime # Anime - Other
+      144: PC/Phone-Other # Applications - Handheld
+      142: PC/0day # Applications - Linux
+      140: PC/Mac # Applications - Mac
+      131: PC/0day # Applications - Other
+      139: PC/0day # Applications - Windows
+      109: Audio/Audiobook # Books - Audio books
+      110: Books # Books - Biography
+      102: Books # Books - Children
+      103: Books/Comics # Books - Comics
+      113: Books # Books - Computers & Technology
+      115: Books # Books - Cooking
+      114: Books # Books - Educational
+      107: Books # Books - Fiction
+      112: Books # Books - History
+      105: Books # Books - Magazines
+      104: Books # Books - Manga
+      108: Books # Books - Non-fiction
+      132: Books # Books - Other
+      111: Books # Books - Religion
+      116: Books # Books - Sport
+      106: Books # Books - Textbooks
+      92: Console/Other # Games - Handheld
+      87: PC/Games # Games - Linux
+      130: Console/Other # Games - Other
+      97: Console/PS4 # Games - Playstation
+      91: Console/Wii # Games - Wii
+      85: PC/Games # Games - Windows
+      90: Console/Xbox # Games - Xbox
+      69: Movies/3D # Movies - 3D Movies
+      80: Movies # Movies - Animation
+      79: Movies # Movies - Asian/Bollywood
+      148: Movies/BluRay # Movies - Blu-Ray Disc
+      149: Movies/SD # Movies - Cam
+      81: Movies # Movies - Documentary
+      78: Movies # Movies - Dubbed Movies
+      150: Movies/DVD # Movies - DVD Disc
+      71: Movies/HD # Movies - HD
+      128: Movies/Other # Movies - Other
+      74: Movies/SD # Movies - Screener
+      75: Movies/HD # Movies - UltraHD
+      64: Audio/Other # Music - AAC
+      67: Audio/Other # Music - Karaoke
+      23: Audio/Lossless # Music - Lossless
+      22: Audio/MP3 # Music - MP3
+      129: Audio/Other # Music - Other
+      26: Audio/Other # Music - Radio Shows
+      66: Audio/Other # Music - Soundtrack
+      65: Audio/Other # Music - Transcode
+      68: Audio/Video # Music - Videos/Concerts
+      154: Other # Other - DazPoser
+      138: Other # Other - Other
+      136: Other # Other - Pictures
+      134: Other # Other - Subtitles
+      145: Other # Other - Tutorials
+      153: Other # Other - Wordpress
+      6: TV/HD # TV - Blu-Ray Disc
+      7: TV/Documentary # TV - Documentary
+      5: TV/SD # TV - DVD Disc
+      41: TV/HD # TV - HD
+      151: TV/Other # TV - Other
+      146: TV/Sport # TV - Sport
+      152: TV/HD # TV - Ultra HD
+      124: XXX # XXX - Books
+      125: XXX # XXX - Hentai
+      123: XXX # XXX - Magazines
+      122: XXX/Imageset # XXX - Pictures
+      121: XXX # XXX - UltraHD
+      119: XXX # XXX - Videos
+      126: XXX # XXX - XXX Games
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
 
+  settings: []
+
   search:
-    path: "search.php"
+    path: "/new/torrents-search.php"
     inputs:
-      q: "{{ .Query.Keywords }}"
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
     rows:
-      selector: table[class="data"] tr[id]
+      selector: table.ttable_headinner > tbody > tr[class^="t-row"]
     fields:
-      category:
-        selector: span[id^="cat_"] > strong > a
-        attribute: href
-        filters:
-          - name: trim
-            args: /
-      title:
-        selector: td:nth-child(1) > div > div > a[class="cellMainLink"]
-      details:
-        selector: td:nth-child(1) > div > div > a[class="cellMainLink"]
-        attribute: href
       download:
-        selector: td:nth-child(1) > div > a[data-download=""]
+        selector: a[data-download]
+        attribute: href
+      title:
+        selector: a.cellMainLink
+      category:
+        selector: span[id^="cat_"]
+        case:
+          ":has(a:contains(\"Anime\")):contains(\"English Translated\")": 118
+          ":has(a:contains(\"Anime\")):contains(\"Other\")": 133
+          ":has(a:contains(\"Applications\")):contains(\"Handheld\")": 144
+          ":has(a:contains(\"Applications\")):contains(\"Linux\")": 142
+          ":has(a:contains(\"Applications\")):contains(\"Mac\")": 140
+          ":has(a:contains(\"Applications\")):contains(\"Other\")": 131
+          ":has(a:contains(\"Applications\")):contains(\"Windows\")": 139
+          ":has(a:contains(\"Books\")):contains(\"Audio books\")": 109
+          ":has(a:contains(\"Books\")):contains(\"Biography\")": 110
+          ":has(a:contains(\"Books\")):contains(\"Children\")": 102
+          ":has(a:contains(\"Books\")):contains(\"Comics\")": 103
+          ":has(a:contains(\"Books\")):contains(\"Computers &amp; Technology\")": 113
+          ":has(a:contains(\"Books\")):contains(\"Cooking\")": 115
+          ":has(a:contains(\"Books\")):contains(\"Educational\")": 114
+          ":has(a:contains(\"Books\")):contains(\"Fiction\")": 107
+          ":has(a:contains(\"Books\")):contains(\"History\")": 112
+          ":has(a:contains(\"Books\")):contains(\"Magazines\")": 105
+          ":has(a:contains(\"Books\")):contains(\"Manga\")": 104
+          ":has(a:contains(\"Books\")):contains(\"Non-fiction\")": 108
+          ":has(a:contains(\"Books\")):contains(\"Other\")": 132
+          ":has(a:contains(\"Books\")):contains(\"Religion\")": 111
+          ":has(a:contains(\"Books\")):contains(\"Sport\")": 116
+          ":has(a:contains(\"Books\")):contains(\"Textbooks\")": 106
+          ":has(a:contains(\"Games\")):contains(\"Handheld\")": 92
+          ":has(a:contains(\"Games\")):contains(\"Linux\")": 87
+          ":has(a:contains(\"Games\")):contains(\"Other\")": 130
+          ":has(a:contains(\"Games\")):contains(\"Playstation\")": 97
+          ":has(a:contains(\"Games\")):contains(\"Wii\")": 91
+          ":has(a:contains(\"Games\")):contains(\"Windows\")": 85
+          ":has(a:contains(\"Games\")):contains(\"Xbox\")": 90
+          ":has(a:contains(\"Movies\")):contains(\"3D Movies\")": 69
+          ":has(a:contains(\"Movies\")):contains(\"Animation\")": 80
+          ":has(a:contains(\"Movies\")):contains(\"Asian/Bollywood\")": 79
+          ":has(a:contains(\"Movies\")):contains(\"Blu-Ray Disc\")": 148
+          ":has(a:contains(\"Movies\")):contains(\"Cam\")": 149
+          ":has(a:contains(\"Movies\")):contains(\"Documentary\")": 81
+          ":has(a:contains(\"Movies\")):contains(\"Dubbed Movies\")": 78
+          ":has(a:contains(\"Movies\")):contains(\"DVD Disc\")": 150
+          ":has(a:contains(\"Movies\")):contains(\"HD\")": 71
+          ":has(a:contains(\"Movies\")):contains(\"Other\")": 128
+          ":has(a:contains(\"Movies\")):contains(\"Screener\")": 74
+          ":has(a:contains(\"Movies\")):contains(\"UltraHD\")": 75
+          ":has(a:contains(\"Music\")):contains(\"AAC\")": 64
+          ":has(a:contains(\"Music\")):contains(\"Karaoke\")": 67
+          ":has(a:contains(\"Music\")):contains(\"Lossless\")": 23
+          ":has(a:contains(\"Music\")):contains(\"MP3\")": 22
+          ":has(a:contains(\"Music\")):contains(\"Other\")": 129
+          ":has(a:contains(\"Music\")):contains(\"Radio Shows\")": 26
+          ":has(a:contains(\"Music\")):contains(\"Soundtrack\")": 66
+          ":has(a:contains(\"Music\")):contains(\"Transcode\")": 65
+          ":has(a:contains(\"Music\")):contains(\"Videos/Concerts\")": 68
+          ":has(a:contains(\"Other\")):contains(\"DazPoser\")": 154
+          ":has(a:contains(\"Other\")):contains(\"Other\")": 138
+          ":has(a:contains(\"Other\")):contains(\"Pictures\")": 136
+          ":has(a:contains(\"Other\")):contains(\"Subtitles\")": 134
+          ":has(a:contains(\"Other\")):contains(\"Tutorials\")": 145
+          ":has(a:contains(\"Other\")):contains(\"Wordpress\")": 153
+          ":has(a:contains(\"TV\")):contains(\"Blu-Ray Disc\")": 6
+          ":has(a:contains(\"TV\")):contains(\"Documentary\")": 7
+          ":has(a:contains(\"TV\")):contains(\"DVD Disc\")": 5
+          ":has(a:contains(\"TV\")):contains(\"HD\")": 41
+          ":has(a:contains(\"TV\")):contains(\"Other\")": 151
+          ":has(a:contains(\"TV\")):contains(\"Sport\")": 146
+          ":has(a:contains(\"TV\")):contains(\"Ultra HD\")": 152
+          ":has(a:contains(\"XXX\")):contains(\"Books\")": 124
+          ":has(a:contains(\"XXX\")):contains(\"Hentai\")": 125
+          ":has(a:contains(\"XXX\")):contains(\"Magazines\")": 123
+          ":has(a:contains(\"XXX\")):contains(\"Pictures\")": 122
+          ":has(a:contains(\"XXX\")):contains(\"UltraHD\")": 121
+          ":has(a:contains(\"XXX\")):contains(\"Videos\")": 119
+          ":has(a:contains(\"XXX\")):contains(\"XXX Games\")": 126
+      details:
+        selector: a.cellMainLink
         attribute: href
       size:
         selector: td:nth-child(2)
       date:
         selector: td:nth-child(3)
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "02-01-2006 15:04:05 -07:00"
       seeders:
         selector: td:nth-child(4)
       leechers:
         selector: td:nth-child(5)
-      description:
-        selector: td:nth-child(1) > div > div > span
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
         text: "1"
-
