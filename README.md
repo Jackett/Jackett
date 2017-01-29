@@ -15,7 +15,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows using .NET 4.5
-* Linux and OSX using Mono 4 (With v3 you'll experience crashes).
+* Linux and OSX using Mono 4 (mono 3 is no longer supported).
 
 
 #### Supported Private Trackers
