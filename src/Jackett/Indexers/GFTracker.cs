@@ -206,7 +206,10 @@ namespace Jackett.Indexers
                     release.Category = MapTrackerCatToNewznab(catNum);
 
                     var dateString = qRow.Children().ElementAt(6).Cq().Text().Trim();
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
+                    if (dateString.Contains("ago"))
+                        release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
+                    else
+                        release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Children().ElementAt(7).Cq().Text().Split(new char[] { '/' })[0];
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
@@ -221,7 +224,8 @@ namespace Jackett.Indexers
 
                     var desc = qRow.Find("td:nth-child(2)");
                     desc.Find("a").Remove();
-                    release.Description = desc.Text();
+                    desc.Find("small").Remove(); // Remove release name (if enabled in the user cp)
+                    release.Description = desc.Text().Trim(new char[] {'-', ' '});
 
                     releases.Add(release);
                 }
