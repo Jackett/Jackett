@@ -94,6 +94,8 @@
       search: "{{ .Query.Keywords }}"
     rows:
       selector: table.ttable_headinner > tbody > tr[class^="t-row"]
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[data-download]
