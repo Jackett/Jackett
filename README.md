@@ -17,7 +17,16 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Windows using .NET 4.5
 * Linux and OSX using Mono 4 (mono 3 is no longer supported).
 
-
+#### Supported Public Trackers
+ * EZTV
+ * Isohunt
+ * KickAssTorrent
+ * KickAssTorrent (kat.how clone)
+ * LimeTorrents
+ * RARBG
+ * Sky torrents
+ * The Pirate Bay
+ 
 #### Supported Private Trackers
  * 2 Fast 4 You
  * 7tor
@@ -54,7 +63,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
- * EZTV
  * FANO.IN
  * FileList
  * Freedom-HD
@@ -82,11 +90,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Infinity-T
  * inPeril
  * IPTorrents
- * Isohunt
  * JPopsuki
- * KickAssTorrent
- * KickAssTorrent (kat.how clone)
- * LimeTorrents
  * LinkoManija
  * M-Team - TP
  * Magico
@@ -111,7 +115,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD
  * QcTorrent
  * RapideTracker
- * RARBG
  * RevolutionTT
  * Rockhard Lossless
  * RuTracker
@@ -124,12 +127,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShareSpaceDB
  * Shazbat
  * Shellife
- * Sky torrents
  * SpeedCD
  * Superbits
  * The Horror Charnel
  * The New Retro
- * The Pirate Bay
  * The Shinning
  * TehConnection
  * TenYardTracker
