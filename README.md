@@ -70,6 +70,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile
  * FunkyTorrents
  * Fuzer
+ * GFXPeers
  * Ghost City
  * GimmePeers
  * GODS
