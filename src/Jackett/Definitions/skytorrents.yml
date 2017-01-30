@@ -22,6 +22,8 @@
     path: "search/all/{{if .Query.Keywords}}ed{{else}}ad{{end}}/1/{{ .Query.Keywords}}"
     rows:
       selector: "table > tbody > tr"
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(1) > a:first-child[title]
