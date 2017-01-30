@@ -315,6 +315,9 @@ namespace Jackett.Indexers
                     var hDownloadLink = hName.QuerySelector("a[title=\"Download Torrent\"]");
 
                     release.Title = hDetailsLink.TextContent;
+                    if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Comments = new Uri(SiteLink + hCommentsLink.GetAttribute("href"));
                     release.Link = new Uri(SiteLink + hDownloadLink.GetAttribute("href"));
                     release.Guid = release.Link;
