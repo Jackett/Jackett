@@ -58,6 +58,8 @@
             args: "Uploaded (.+?),"
           - name: replace
             args: ["\xA0", " "]
+          - name: replace
+            args: ["Y-day", "yesterday"]
           - name: dateparse
             args: "01-02 2006"
       seeders:
