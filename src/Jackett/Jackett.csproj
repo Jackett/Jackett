@@ -180,6 +180,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\PiXELHD.cs" />
     <Compile Include="Indexers\Hardbay.cs" />
+    <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\Superbits.cs" />
     <Compile Include="Indexers\rutracker.cs" />
     <Compile Include="Indexers\Abstract\GazelleTracker.cs" />
@@ -602,9 +603,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\kickasstorrent-kathow.yml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Definitions\rarbg.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\gfxpeers.yml">

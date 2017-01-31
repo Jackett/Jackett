@@ -182,6 +182,7 @@ namespace Jackett.Updater
                 "Content/css/jquery.dataTables_themeroller.css",
                 "Definitions/tspate.yml",
                 "Definitions/freakstrackingsystem.yml",
+                "Definitions/rarbg.yml",
             };
 
             foreach (var oldFIle in oldFiles)
