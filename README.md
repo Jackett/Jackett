@@ -144,6 +144,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentBytes
  * TorrentDay
  * TorrentHeaven
+ * TorrentHR
  * Torrenting
  * TorrentLeech
  * Torrents.Md
