@@ -18,7 +18,7 @@ namespace Jackett.Models
         public string ApiKey { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
-        public int RageID { get; set; }
+        public int? RageID { get; set; }
         public string ImdbID { get; set; }
 
         public int Season { get; set; }
