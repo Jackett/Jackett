@@ -821,13 +821,7 @@ function bindUIButtons() {
             var table = releaseDialog.find('table');
             table.DataTable(
                  {
-                     stateSave: true,
-                     stateSaveCallback: function (settings, data) {
-                        localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
-                     },
-                     stateLoadCallback: function (settings) {
-                        return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
-                     },
+                     "stateSave": true,
                      "pageLength": 20,
                      "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
                      "order": [[0, "desc"]],

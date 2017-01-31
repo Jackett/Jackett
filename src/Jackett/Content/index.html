@@ -190,7 +190,7 @@
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <div class="configured-indexer-div">
-            <table class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
                 <thead>
                     <tr>
                         <th>Indexer</th>
@@ -235,7 +235,7 @@
 
     <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
         <div class="unconfigured-indexer-div">
-            <table class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
                 <thead>
                     <tr>
                         <th>Indexer</th>
@@ -283,7 +283,7 @@
                     </div>
                     <div class="modal-body">
                         <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
-                        <table class="dataTable compact cell-border hover stripe">
+                        <table id="jackett-releases-datatable" class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
                                     <th>Published</th>
@@ -398,7 +398,7 @@
     <script id="jackett-search-results" type="text/x-handlebars-template">
         <hr />
         <p>Your search was done using: {{#each Indexers}}{{this}}, {{/each}}</p>
-        <table class="dataTable compact cell-border hover stripe">
+        <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
             <thead>
                 <tr>
                     <th>Published</th>
