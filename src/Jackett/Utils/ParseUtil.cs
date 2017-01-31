@@ -76,6 +76,8 @@ namespace Jackett.Utils
 
         public static int? GetImdbID(string imdbstr)
         {
+            if (imdbstr == null)
+                return null;
             var match = ImdbId.Match(imdbstr);
             if (!match.Success)
                 return null;
