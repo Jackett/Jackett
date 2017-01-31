@@ -198,11 +198,14 @@ namespace Jackett.Indexers
 
                     var episode_info = item.Value<JToken>("episode_info");
 
-                    var imdb = episode_info.Value<string>("imdb");
-                    release.Imdb = ParseUtil.GetImdbID(imdb);
-                    release.TVDBId = episode_info.Value<long?>("tvdb");
-                    release.RageID = episode_info.Value<long?>("tvrage");
-                    release.TMDb = episode_info.Value<long?>("themoviedb");
+                    if (episode_info.HasValues)
+                    {
+                        var imdb = episode_info.Value<string>("imdb");
+                        release.Imdb = ParseUtil.GetImdbID(imdb);
+                        release.TVDBId = episode_info.Value<long?>("tvdb");
+                        release.RageID = episode_info.Value<long?>("tvrage");
+                        release.TMDb = episode_info.Value<long?>("themoviedb");
+                    }
 
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
