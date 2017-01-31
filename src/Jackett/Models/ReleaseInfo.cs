@@ -25,6 +25,7 @@ namespace Jackett.Models
         public long? RageID { get; set; }
         public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
+        public long? TMDb { get; set; }
         public int? Seeders { get; set; }
         public int? Peers { get; set; }
         public Uri BannerUrl { get; set; }
@@ -51,6 +52,7 @@ namespace Jackett.Models
                 Description = Description,
                 RageID = RageID,
                 Imdb = Imdb,
+                TMDb = TMDb,
                 Seeders = Seeders,
                 Peers = Peers,
                 BannerUrl = BannerUrl,
