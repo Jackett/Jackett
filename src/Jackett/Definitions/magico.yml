@@ -118,11 +118,14 @@
 
   search:
     path: /
+    keywordsfilters:
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
       p: "torrents"
       pid: "32"
       $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
-      keywords: "{{ re_replace .Query.Keywords \"[^a-zA-Z0-9]+\" \"%25\" }}"
+      keywords: "{{ .Keywords }}"
       search_type: "name"
       searchin: "title"
 
