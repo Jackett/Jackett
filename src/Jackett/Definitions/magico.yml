@@ -118,7 +118,9 @@
 
   search:
     path: /
-    keywordsfilters:
+    keywordsfilters: 
+      - name: replace # use this as a workaround till #893 is implemented
+        args: ["Greys Anatomy", "Grey's Anatomy"]
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
@@ -136,6 +138,9 @@
     fields:
       title:
         selector: a[href*="?p=torrents&pid=10&action=details"]
+        filters:
+          - name: replace
+            args: ["Grey's Anatomy", "Greys Anatomy"]
       category:
         selector: div.categoryImage > a
         attribute: href
