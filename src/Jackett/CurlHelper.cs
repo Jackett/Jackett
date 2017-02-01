@@ -142,9 +142,11 @@ namespace Jackett
                     {
                         // http://stackoverflow.com/questions/31107851/how-to-fix-curl-35-cannot-communicate-securely-with-peer-no-common-encryptio
                         // https://git.fedorahosted.org/cgit/mod_nss.git/plain/docs/mod_nss.html
-                        easy.SslCipherList = SSLFix.CipherList;
-                        easy.FreshConnect = true;
-                        easy.ForbidReuse = true;
+                        //easy.SslCipherList = SSLFix.CipherList;
+                        //easy.FreshConnect = true;
+                        //easy.ForbidReuse = true;
+                        easy.SetOpt(CurlOption.SslVerifyhost, false);
+                        easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
                     if (Startup.IgnoreSslErrors == true)
