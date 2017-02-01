@@ -190,7 +190,7 @@ Jackett can also be run from the command line if you would like to see log messa
        * Debian/Ubunutu: `apt-get install libcurl-dev`
        * Redhat/Fedora: `yum install libcurl-devel`
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
- 3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono JackettConsole.exe`.
+ 3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
 
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
 
