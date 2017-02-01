@@ -165,6 +165,16 @@ namespace Jackett.Services
                         monoVersion = displayName.Invoke(null, null).ToString();
                     logger.Info("mono version: " + monoVersion);
 
+                    if (monoVersion.StartsWith("3."))
+                    {
+                        logger.Error("Your mono version is to old (mono 3 is no longer supported). Please update to the latest version from http://www.mono-project.com/download/");
+                        Environment.Exit(2);
+                    }
+                    else if (monoVersion.StartsWith("4.2."))
+                    {
+                        logger.Error("mono version 4.2.* is known to cause problems with Jackett. If you experience any problems please try updating to the latest mono version from http://www.mono-project.com/download/ first.");
+                    }
+
                     try
                     {
                         // Check for mono-devel
