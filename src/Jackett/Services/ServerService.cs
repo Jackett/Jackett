@@ -156,6 +156,26 @@ namespace Jackett.Services
                 var runtimedir = RuntimeEnvironment.GetRuntimeDirectory();
                 logger.Info("Environment version: " + Environment.Version.ToString() + " (" + runtimedir + ")");
                 logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
+
+                try
+                {
+                    var issuefile = "/etc/issue";
+                    if (File.Exists(issuefile))
+                    {
+                        using (StreamReader reader = new StreamReader(issuefile))
+                        {
+                            string firstLine;
+                            firstLine = reader.ReadLine();
+                            if (firstLine != null)
+                                logger.Info("issue: " + firstLine);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Error while reading the issue file");
+                }
+
                 Type monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null)
                 {
