@@ -206,9 +206,9 @@ Jackett is available as beta package from [SynoCommuniy](https://synocommunity.c
 
   You can pass various options when running via the command line, see --help for details.
 
-* __Unable to  connect to certain trackers on Linux__
+* __Unable to  connect to trackers with invalid SSL certificates__
 
-  Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcurl.  If the tracker is currently configured try removing it and adding it again. Alternatively try running with a different client via --UseClient (Warning: safecurl just executes curl and your details may be seen from the process list). You can also try running with the "--IgnoreSslErrors true" option which is useful if the site has an invalid SSL certificate.
+  You can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
 
 *  __Enable logging__
 
