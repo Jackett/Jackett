@@ -53,6 +53,8 @@
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
       title:
+        selector: a[href^="details.php?id="]
+      title|optional:
         selector: a[title][href^="details.php?id="]
         attribute: title
       category:
@@ -62,7 +64,7 @@
           - name: querystring
             args: cat
       details:
-        selector: a[title][href^="details.php?id="]
+        selector: a[href^="details.php?id="]
         attribute: href    
       download:
         selector: a[href^="download.php?id="]
