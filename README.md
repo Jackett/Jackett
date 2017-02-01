@@ -1,4 +1,4 @@
-﻿## Jackett
+# Jackett
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
@@ -17,7 +17,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Windows using .NET 4.5
 * Linux and OSX using Mono 4 (mono 3 is no longer supported).
 
-#### Supported Public Trackers
+### Supported Public Trackers
  * EZTV
  * Isohunt
  * KickAssTorrent
@@ -27,7 +27,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Sky torrents
  * The Pirate Bay
  
-#### Supported Private Trackers
+### Supported Private Trackers
  * 2 Fast 4 You
  * 7tor
  * Abnormal
@@ -165,7 +165,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Xthor
  * Xtreme Zone
 
-#### Installation on Windows
+## Installation on Windows
 
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
 
@@ -182,7 +182,7 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett". 
 
-#### Installation on Linux/OSX
+## Installation on Linux/OSX
  1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (the latest version is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` package.
        * On Red Hat/CentOS/openSUSE the `mono-locale-extras` package is also required
@@ -194,33 +194,35 @@ Jackett can also be run from the command line if you would like to see log messa
 
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
 
-#### Installation using Docker
+## Installation using Docker
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
 
-#### Installation on Synology
+## Installation on Synology
 Jackett is available as beta package from [SynoCommuniy](https://synocommunity.com/)
 
-#### Troubleshooting
+## Troubleshooting
 
-* Command line switches
+* __Command line switches__
 
-You can pass various options when running via the command line, see --help for details.
+  You can pass various options when running via the command line, see --help for details.
 
-* Unable to  connect to certain trackers on Linux
+* __Unable to  connect to certain trackers on Linux__
 
-Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcurl.  If the tracker is currently configured try removing it and adding it again. Alternatively try running with a different client via --UseClient (Warning: safecurl just executes curl and your details may be seen from the process list). You can also try running with the "--IgnoreSslErrors true" option which is useful if the site has an invalid SSL certificate.
+  Try running with the "--SSLFix true" if you are on Redhat/Fedora/NNS based libcurl.  If the tracker is currently configured try removing it and adding it again. Alternatively try running with a different client via --UseClient (Warning: safecurl just executes curl and your details may be seen from the process list). You can also try running with the "--IgnoreSslErrors true" option which is useful if the site has an invalid SSL certificate.
 
-*  Enable logging
+*  __Enable logging__
 
-You can get additional logging with the switches "-t -l".  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
+  You can get additional logging with the command line switches `-t -l` or by enabeling `Enhanced logging` via the web interface.
+  Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
+  The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/OSX.
 
-#### Creating an issue
+## Creating an issue
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
 
-### Contributing
+## Contributing
 All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/Jackett/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.
 
 
-### Screenshots
+## Screenshots
 
 ![screenshot](https://i.imgur.com/0d1nl7g.png "screenshot")
