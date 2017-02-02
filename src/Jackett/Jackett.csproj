@@ -624,6 +624,7 @@
     <Content Include="Definitions\kapaki.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Definitions\passtheheadphones-scrape.yml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
