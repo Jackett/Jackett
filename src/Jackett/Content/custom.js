@@ -645,6 +645,7 @@ function showSearch(selectedIndexer) {
     $("#modals").append(releaseDialog);
 
     releaseDialog.on('shown.bs.modal', function () {
+        updateSearchResultTable($('#searchResults'), []);
         releaseDialog.find('#searchquery').focusWithoutScrolling();
     });
 
@@ -693,75 +694,14 @@ function showSearch(selectedIndexer) {
             Category: releaseDialog.find('#searchCategory').val(),
             Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
         };
-        $('#searchResults').empty();
 
         $('#jackett-search-perform').html($('#spinner').html());
         var jqxhr = $.post("search", queryObj, function (data) {
             $('#jackett-search-perform').html('Search trackers');
-            var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
-            var results = $('#searchResults');
-            results.html($(resultsTemplate(data)));
-            results.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
-
-            results.find('table').DataTable(
-                {
-                    "stateSave": true,
-                    "pageLength": 20,
-                    "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
-                    "order": [[0, "desc"]],
-                    "columnDefs": [
-                        {
-                            "targets": 0,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'date'
-                        },
-                        {
-                            "targets": 1,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 0
-                        },
-                        {
-                            "targets": 4,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'num'
-                        },
-                            {
-                                "targets": 5,
-                                "visible": true,
-                                "searchable": false,
-                                "iDataSort": 4
-                            }
-                    ],
-                    initComplete: function () {
-                        var count = 0;
-                        this.api().columns().every(function () {
-                            count++;
-                            if (count === 3 || count === 8) {
-                                var column = this;
-                                var select = $('<select><option value=""></option></select>')
-                                    .appendTo($(column.footer()).empty())
-                                    .on('change', function () {
-                                        var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                        );
-
-                                        column
-                                            .search(val ? '^' + val + '$' : '', true, false)
-                                            .draw();
-                                    });
-
-                                column.data().unique().sort().each(function (d, j) {
-                                    select.append('<option value="' + d + '">' + d + '</option>')
-                                });
-                            }
-                        });
-                    }
-                });
-            results.find('div.dataTables_filter input').focusWithoutScrolling();
-
+            var searchResults = $('#searchResults');
+            searchResults.empty();
+            var datatable = updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
+            searchResults.find('div.dataTables_filter input').focusWithoutScrolling();
         }).fail(function () {
             $('#jackett-search-perform').html('Search trackers');
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -773,6 +713,71 @@ function showSearch(selectedIndexer) {
         searchTracker.val(selectedIndexer);
     searchTracker.trigger("change");
     releaseDialog.modal("show");
+}
+
+function updateSearchResultTable(element, results) {
+    var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
+    element.html($(resultsTemplate(results)));
+    element.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
+
+    var datatable = element.find('table').DataTable(
+        {
+            "stateSave": true,
+            "pageLength": 20,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "order": [[0, "desc"]],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "visible": false,
+                    "searchable": false,
+                    "type": 'date'
+                },
+                {
+                    "targets": 1,
+                    "visible": true,
+                    "searchable": false,
+                    "iDataSort": 0
+                },
+                {
+                    "targets": 4,
+                    "visible": false,
+                    "searchable": false,
+                    "type": 'num'
+                },
+                    {
+                        "targets": 5,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 4
+                    }
+            ],
+            initComplete: function () {
+                var count = 0;
+                this.api().columns().every(function () {
+                    count++;
+                    if (count === 3 || count === 8) {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    }
+                });
+            }
+        });
+    return datatable;
 }
 
 function bindUIButtons() {
