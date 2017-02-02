@@ -72,7 +72,7 @@
       search: "{{ .Query.Keywords }}"
       key: 9
     rows:
-      selector: td.outer > table > tbody > tr:has(a[href^="details.php?id="])
+      selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
       dateheaders:
         selector: ":has(td.days > font > b)"
         filters:
@@ -103,7 +103,7 @@
       seeders:
         text: 9999
       leechers:
-        text: 9999
+        text: 0
       banner:
         selector: a[onmouseover][href^="details.php?id="]
         attribute: onmouseover
