@@ -91,6 +91,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Immortalseed
  * Infinity-T
  * inPeril
+ * Insane Tracker
  * IPTorrents
  * JPopsuki
  * Kapaki
