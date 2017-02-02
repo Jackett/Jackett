@@ -48,6 +48,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q, imdbid]
 
   login:
     path: login.php
@@ -69,7 +70,7 @@
     path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
       key: 9
     rows:
       selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
@@ -95,8 +96,8 @@
       download:
         selector: a[href^="download.php"]
         attribute: href
-      imdb:
-        selector: a[href^="href="http://anonymz.com/?http://www.imdb.com/title/tt"]
+      imdb|optional:
+        selector: a[href*="http://www.imdb.com/title/tt"]
         attribute: href
       size:
         selector: td:nth-child(6)
