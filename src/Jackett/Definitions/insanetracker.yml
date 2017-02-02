@@ -42,6 +42,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q, imdbid]
 
   login:
     path: takelogin.php
@@ -59,7 +60,7 @@
     path: /browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
       t: "all"
     rows:
       selector: table.torrentable > tbody > tr:has(td.maintd)
