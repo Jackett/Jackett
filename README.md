@@ -93,6 +93,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * inPeril
  * IPTorrents
  * JPopsuki
+ * Kapaki
  * Le Paradis Du Net
  * LinkoManija
  * M-Team - TP
