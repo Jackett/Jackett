@@ -531,6 +531,11 @@ namespace Jackett.Indexers
             }
         }
 
+        protected List<string> GetAllTrackerCategories()
+        {
+            return categoryMapping.Select(x => x.TrackerCategory).ToList();
+        }
+
         protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
             categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
