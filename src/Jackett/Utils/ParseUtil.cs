@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Jackett.Utils
 {
@@ -72,6 +73,16 @@ namespace Jackett.Utils
         public static bool TryCoerceLong(string str, out long result)
         {
             return long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+        }
+
+        public static string GetArgumentFromQueryString(string url, string argument)
+        {
+            if (url == null || argument == null)
+                return null;
+            var qsStr = url.Split(new char[] { '?' }, 2)[1];
+            qsStr = qsStr.Split(new char[] { '#' }, 2)[0];
+            var qs = HttpUtility.ParseQueryString(qsStr);
+            return qs.Get(argument);
         }
 
         public static long? GetLongFromString(string str)
