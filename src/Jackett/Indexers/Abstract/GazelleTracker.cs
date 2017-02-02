@@ -216,7 +216,7 @@ namespace Jackett.Indexers.Abstract
             release.Guid = release.Comments;
             release.Link = new Uri(DownloadUrl + torrentId);
             var category = (string)torrent["category"];
-            if (category == null)
+            if (category == null || category.Contains("Select Category"))
                 release.Category = MapTrackerCatToNewznab("1");
             else
                 release.Category = MapTrackerCatDescToNewznab(category);
