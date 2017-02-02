@@ -270,7 +270,7 @@ namespace Jackett.Indexers
             }
 
             // handle if ... else ... expression
-            Regex IfElseRegex = new Regex(@"{{if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
+            Regex IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
             var IfElseRegexMatches = IfElseRegex.Match(template);
 
             while (IfElseRegexMatches.Success)
