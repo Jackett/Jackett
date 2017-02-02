@@ -17,12 +17,12 @@ namespace Jackett.Utils
         public JsonContent(object value)
             : this(value, Encoding.UTF8)
         {
+            Headers.ContentType.CharSet = "utf-8";
         }
 
         public JsonContent(object value, Encoding encoding)
             : base(JsonConvert.SerializeObject(value, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), encoding, "application/json")
         {
-            this.Headers.ContentType.CharSet = "utf-8";
         }
     }
 }
