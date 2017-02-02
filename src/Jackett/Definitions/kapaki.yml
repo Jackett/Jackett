@@ -9,86 +9,34 @@
 
   caps:
     categories:
-      1: Movies # Movies
-      84: Movies # N ees (2016, 2017)
-      14: Movies/SD # DVDRip-BDRip-BRRip (e?? 2015) FREE
-      16: Movies/SD # In Avouri (CAM) FREE
-      17: Movies/BluRay # B LU-RAY
-      44: Movies # E English Movies
-      76: Movies # N tokimanter
-      82: Movies # I EATP
+      1: Movies
+      16: Movies
+      17: Movies/SD
+      59: Movies/SD
+      44: Movies
+      84: Movies
+      79: Movies
 
-      52: TV # series
-      53: TV/SD # , O Enes
-      70: TV/HD # O Enes (720p)
-      54: TV # E English
-      86: TV # O Enes Complete Seasons
-      92: TV # O Enes Complete Seasons (720p)
-      87: TV # E English Complete Seasons
-      63: TV # Y ychagogikes Emissions
-      83: TV/Sport # TV Sports
+      58: TV
+      79: TV/SD
+      81: TV
+      84: TV/Documentary
 
-      55: Movies # Children
-      38: Movies # M etaglotismena (Movies)
-      39: Movies # M e Subtitled (Movies)
-      93: Movies # M etaglotismena (Series)
-      94: Movies # M e Subtitled (Series)
-      45: Movies # I absent Anime
-      98: Movies # M etaglotismena 3D
-      64: Movies # M music for Children
+      55: Movies
+      38: Movies
+      39: Movies
+      93: Movies
+      94: Movies
+      45: Movies
+      98: Movies
+      64: Movies
 
-      7: Audio # Foreign music
-      21: Audio # N ees Releases
-      46: Audio # P. Alai Releases
-      32: Audio # D. iskografies
-      20: Audio # In ylloges
-      102: Audio # M AGICO Radio
-      81: Audio # K araoke
-      95: Audio # Soundtrack
-
-      47: Audio # Greek music
-      48: Audio # N ees Releases
-      49: Audio # P. Alai Releases
-      51: Audio # D. iskografies
-      50: Audio # In ylloges
-      101: Audio # M AGICO Radio
-      97: Audio # Live Cd 's
-      57: Audio # P empetika
-      58: Audio # D. imotika
-      59: Audio # K exception of preservatives
-      60: Audio # N isiotika
-      62: Audio # P. ontiaka
-      80: Audio # K araoke
-      96: Audio # Soundtracks
-
-      73: Audio # seasonal Music
-      74: Audio # X ristougenna
-      79: Audio # P. ascha
-      75: Audio # A pokriatika
-      78: Audio # A Tariff Valentine
-
-      33: Books # Books
-      41: Books # E nglis
-      65: Books # K omix
-      43: Books # P. periods
-      72: Books # P. aidika
-      66: Books # L. exika - Educational
-      42: Books # O enoglossa
-      67: Books # E. Konya-Photos
-
-      6: PC # programs
-      18: PC/0day # PC
-      40: PC/Phone-Android # Android
-      19: PC/Mac # Mac
-
-      2: PC/Games # Games
-      27: PC/Games # PC
-      68: PC/Phone-Android # Android
-
-      88: Other # Design / Tutorials / Accessories
-      89: Other # Photoshop Tutorials
-      91: Other # Illustrator Tutorials
-      90: Other # After Effects Tutorials
+      61: Movies
+      62: Movies/SD
+      67: Movies/WEBDL
+      63: Movies/SD
+      69: Movies/HD
+      77: Movies
 
     modes:
       search: [q]
