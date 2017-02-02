@@ -74,6 +74,18 @@ namespace Jackett.Utils
             return long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
         }
 
+        public static long? GetLongFromString(string str)
+        {
+            if (str == null)
+                return null;
+            Regex IdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+            var IdMatch = IdRegEx.Match(str);
+            if (!IdMatch.Success)
+                return null;
+            var Id = IdMatch.Groups[1].Value;
+            return CoerceLong(Id);
+        }
+
         public static int? GetImdbID(string imdbstr)
         {
             if (imdbstr == null)

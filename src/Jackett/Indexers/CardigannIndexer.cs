@@ -1139,10 +1139,7 @@ namespace Jackett.Indexers
                                         release.MinimumSeedTime = ParseUtil.CoerceLong(value);
                                         break;
                                     case "imdb":
-                                        Regex IMDBRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                        var IMDBMatch = IMDBRegEx.Match(value);
-                                        var IMDBId = IMDBMatch.Groups[1].Value;
-                                        release.Imdb = ParseUtil.CoerceLong(IMDBId);
+                                        release.Imdb = ParseUtil.GetLongFromString(value);
                                         break;
                                     case "rageid":
                                         Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
