@@ -73,6 +73,11 @@
   search:
     path: /
     keywordsfilters:
+      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
+      - name: re_replace
+        args: ["S0?(\\d{1,2})", " $1 "]
+      - name: re_replace
+        args: ["E(\\d{2,3})", " $1 "]
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
@@ -90,6 +95,12 @@
     fields:
       title:
         selector: td.torrent_name > a
+        filters:
+          # normalize to SXXEYY format
+          - name: re_replace
+            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
+          - name: re_replace
+            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
       category:
         selector: div.category_image > a
         attribute: href
