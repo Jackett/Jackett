@@ -132,7 +132,7 @@ namespace Jackett.Indexers.Abstract
                         release.Title += " [" + releaseType + "]";
 
                     release.Description = "";
-                    if (tags != null)
+                    if (tags != null && tags.Count > 0 && (string)tags[0] != "")
                         release.Description += "Tags: " + string.Join(", ", tags) + "\n";
 
                     if (r["torrents"] is JArray)
@@ -141,13 +141,15 @@ namespace Jackett.Indexers.Abstract
                         {
                             ReleaseInfo release2 = (ReleaseInfo)release.Clone();
                             FillReleaseInfoFromJson(release2, torrent);
-                            releases.Add(release2);
+                            if (ReleaseInfoPostParse(release2, torrent, r))
+                                releases.Add(release2);
                         }
                     }
                     else
                     {
                         FillReleaseInfoFromJson(release, r);
-                        releases.Add(release);
+                        if (ReleaseInfoPostParse(release, r, r))
+                            releases.Add(release);
                     }
                 }
             }
@@ -157,6 +159,12 @@ namespace Jackett.Indexers.Abstract
             }
 
             return releases;
+        }
+
+        // hook to add/modify the parsed information, return false to exclude the torrent from the results
+        protected virtual bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
+        {
+            return true;
         }
 
         void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
