@@ -820,7 +820,13 @@ namespace Jackett.Indexers
                         break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
-                        Data = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
+                        var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
+                        logger.Info(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
+                        break;
+                    case "strdump":
+                        // for debugging
+                        var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n");
+                        logger.Info(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
                         break;
                     default:
                         break;
