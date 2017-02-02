@@ -96,6 +96,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Kapaki
  * Le Paradis Du Net
  * LinkoManija
+ * LosslessClub
  * M-Team - TP
  * Magico
  * Mononoké-BT
