@@ -644,7 +644,6 @@ function showSearch(selectedIndexer) {
     $("#modals").append(releaseDialog);
 
     releaseDialog.on('shown.bs.modal', function () {
-        updateSearchResultTable($('#searchResults'), []);
         releaseDialog.find('#searchquery').focusWithoutScrolling();
     });
 
@@ -711,6 +710,11 @@ function showSearch(selectedIndexer) {
     if (selectedIndexer)
         searchTracker.val(selectedIndexer);
     searchTracker.trigger("change");
+
+    updateSearchResultTable($('#searchResults'), []);
+    $("#jackett-search-results-datatable").empty();
+    $("#jackett-search-results-datatable_info").empty();
+    $("#jackett-search-results-datatable_paginate").empty();
     releaseDialog.modal("show");
 }
 
