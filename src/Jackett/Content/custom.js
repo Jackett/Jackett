@@ -723,6 +723,7 @@ function updateSearchResultTable(element, results) {
     var datatable = element.find('table').DataTable(
         {
             "stateSave": true,
+            "bAutoWidth": false,
             "pageLength": 20,
             "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
             "order": [[0, "desc"]],
@@ -819,14 +820,16 @@ function bindUIButtons() {
             var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
             var item = { releases: data, Title: 'Releases' };
             var releaseDialog = $(releaseTemplate(item));
+            var table = releaseDialog.find('table');
             releaseDialog.find('tr.jackett-releases-row').each(function () { updateReleasesRow(this); });
             releaseDialog.on('hidden.bs.modal', function (e) {
                 $('#indexers div.dataTables_filter input').focusWithoutScrolling();
             });
-            var table = releaseDialog.find('table');
+            
             table.DataTable(
                  {
                      "stateSave": true,
+                     "bAutoWidth": false,
                      "pageLength": 20,
                      "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
                      "order": [[0, "desc"]],
@@ -895,7 +898,6 @@ function bindUIButtons() {
                  });
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
-
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });

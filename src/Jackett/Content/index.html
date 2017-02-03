@@ -299,30 +299,30 @@
                                     <th>Grabs</th>
                                     <th>Seeds</th>
                                     <th>Leechers</th>
-                                    <th>DL Factor</th>
-                                    <th>UL Factor</th>
+                                    <th class="fit">DL Factor</th>
+                                    <th class="fit">UL Factor</th>
                                     <th>Download</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each releases}}
                                 <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
-                                    <td>{{PublishDate}}</td>
-                                    <td>{{FirstSeen}}</td>
-                                    <td>{{jacketTimespan PublishDate}}</td>
-                                    <td>{{jacketTimespan FirstSeen}}</td>
-                                    <td>{{Tracker}}</td>
+                                    <td class="fit">{{PublishDate}}</td>
+                                    <td class="fit">{{FirstSeen}}</td>
+                                    <td class="fit">{{jacketTimespan PublishDate}}</td>
+                                    <td class="fit">{{jacketTimespan FirstSeen}}</td>
+                                    <td class="fit">{{Tracker}}</td>
                                     <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
-                                    <td>{{Size}}</td>
+                                    <td class="fit">{{Size}}</td>
                                     <td class="fit">{{jacketSize Size}}</td>
-                                    <td>{{Files}}</td>
-                                    <td>{{CategoryDesc}}</td>
-                                    <td>{{Grabs}}</td>
-                                    <td>{{Seeders}}</td>
-                                    <td>{{Peers}}</td>
-                                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
-                                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
-                                    <td class="downloadcolumn">
+                                    <td class="fit">{{Files}}</td>
+                                    <td class="fit">{{CategoryDesc}}</td>
+                                    <td class="fit">{{Grabs}}</td>
+                                    <td class="fit">{{Seeders}}</td>
+                                    <td class="fit">{{Peers}}</td>
+                                    <td class="fit DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                                    <td class="fit UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                                    <td class="fit downloadcolumn">
                                         {{#if Link}}
                                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
                                         {{/if}}
