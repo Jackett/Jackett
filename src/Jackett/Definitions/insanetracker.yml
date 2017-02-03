@@ -91,23 +91,37 @@
         attribute: href
       files:
         selector: td:nth-child(6)
+        filters:
+          - name: replace
+            args: [".", ""]
       size:
         selector: td:nth-child(8)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
       grabs:
         selector: td:nth-child(9) > div:first-child
         filters:
+          - name: replace
+            args: [".", ""]
           - name: regexp
-            args: "^([\\.\\d]+)"
+            args: "^([\\d]+)"
       seeders:
         selector: td:nth-child(9) > div:first-child
         filters:
+          - name: replace
+            args: [".", ""]
           - name: regexp
-            args: "\\|\\s*([\\.\\d]+)\\s*\\|"
+            args: "\\|\\s*([\\d]+)\\s*\\|"
       leechers:
         selector: td:nth-child(9) > div:first-child
         filters:
+          - name: replace
+            args: [".", ""]
           - name: regexp
-            args: "([\\.\\d]+)$"
+            args: "([\\d]+)$"
       date:
         selector: td.date
         filters:
