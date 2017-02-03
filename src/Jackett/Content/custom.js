@@ -714,17 +714,44 @@ function showSearch(selectedIndexer) {
     releaseDialog.modal("show");
 }
 
+// dataTable dead torrent filter
+$.fn.dataTable.ext.search = [
+    function (settings, data, dataIndex) {
+        if (settings.sInstance != "jackett-search-results-datatable")
+            return true;
+        var deadfiltercheckbox = $(settings.nTableWrapper).find(".dataTables_deadfilter input")
+        if (!deadfiltercheckbox.length) {
+            return true;
+        }
+        var seeders = data[9];
+        if (!deadfiltercheckbox.get(0).checked && seeders == 0)
+            return false;
+        return true;
+    }
+]
+
 function updateSearchResultTable(element, results) {
     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
     element.html($(resultsTemplate(results)));
     element.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
-
+    var settings = { "deadfilter": true };
     var datatable = element.find('table').DataTable(
         {
+            "fnStateSaveParams": function (oSettings, sValue) {
+                console.log(oSettings);
+                sValue.deadfilter = settings.deadfilter;
+                return sValue;
+            },
+            "fnStateLoadParams": function (oSettings, sValue) {
+                if ("deadfilter" in sValue)
+                    settings.deadfilter = sValue.deadfilter;
+            },
+            
+            "dom": "lfr<\"dataTables_deadfilter\">tip",
             "stateSave": true,
             "bAutoWidth": false,
             "pageLength": 20,
-            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
             "order": [[0, "desc"]],
             "columnDefs": [
                 {
@@ -752,6 +779,22 @@ function updateSearchResultTable(element, results) {
                         "iDataSort": 4
                     }
             ],
+            fnPreDrawCallback: function () {
+                var table = this;
+                var deadfilterdiv = element.find(".dataTables_deadfilter");
+                var deadfiltercheckbox = deadfilterdiv.find("input");
+                if (!deadfiltercheckbox.length) {
+                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1">Show dead torrents</label>'
+                        );
+                    deadfilterdiv.append(deadfilterlabel);
+                    deadfiltercheckbox = deadfilterlabel.find("input")
+                    deadfiltercheckbox.on("change", function () {
+                        settings.deadfilter = this.checked;
+                        table.api().draw();
+                    });
+                    deadfiltercheckbox.prop('checked', settings.deadfilter);
+                }
+            },
             initComplete: function () {
                 var count = 0;
                 this.api().columns().every(function () {

@@ -260,3 +260,9 @@ table td.fit{
 .type-semi-private {
     color: #ec971f
 }
+
+.dataTables_deadfilter {
+    float: right;
+    text-align: right;
+    margin-right: 1em;
+}
