@@ -95,12 +95,17 @@ namespace Jackett.Indexers
             {
                 CQ dom = response.Content;
                 var rows = dom[".torrents tr.torrent"];
+                var rows_alt = dom[".torrents tr.torrent_alt"]; // finds alternate releases
+                rows = rows.Add(rows_alt);
 
                 foreach (var row in rows)
                 {
 
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find("a.title").First();
+                    if (qTitleLink.Length == 0) // alternate releases have a different class
+                        qTitleLink = qRow.Find("a.alt_title").First();
+
                     var title = qTitleLink.Text().Trim();
 
                     // Insert before the release info
