@@ -157,6 +157,16 @@ function displayUnconfiguredIndexersList() {
        
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
     var indexersTable = $(indexersTemplate({ indexers: unconfiguredIndexers, total_unconfigured_indexers: unconfiguredIndexers.length  }));
+    indexersTable.find('.indexer-setup').each(function (i, btn) {
+        var $btn = $(btn);
+        var id = $btn.data("id");
+        var link = $btn.data("link");
+        $btn.click(function () {
+            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
+                displayIndexerSetup(id, link);
+            });
+        });
+    });
     indexersTable.find("table").DataTable(
         {
             "stateSave": true,
@@ -209,17 +219,6 @@ function displayUnconfiguredIndexersList() {
                 }
             ]
         });
-
-    indexersTable.find('.indexer-setup').each(function(i, btn) {
-            var $btn = $(btn);
-            var id = $btn.data("id");
-            var link = $btn.data("link");
-            $btn.click(function () {
-                $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                    displayIndexerSetup(id, link);
-                    });
-                    });
-    });
 
     var undefindexers = UnconfiguredIndexersDialog.find('#unconfigured-indexers');
     undefindexers.append(indexersTable);
