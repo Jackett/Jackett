@@ -59,7 +59,7 @@ namespace Jackett.Services
                     }
                 }
 
-                logger.Debug("App config/log directory: " + GetAppDataFolder());
+                logger.Info("App config/log directory: " + GetAppDataFolder());
             }
             catch (Exception ex)
             {
