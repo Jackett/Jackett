@@ -323,7 +323,12 @@
                                     <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
                                     <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                                     <td class="downloadcolumn">
+                                        {{#if Link}}
                                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                                        {{/if}}
+                                        {{#if MagnetUri}}
+                                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                                        {{/if}}
                                         {{#if BlackholeLink}}
                                         <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
                                         {{/if}}
@@ -434,7 +439,12 @@
                     <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
                     <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                     <td class="downloadcolumn">
+                        {{#if Link}}
                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                        {{/if}}
+                        {{#if MagnetUri}}
+                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                        {{/if}}
                         {{#if BlackholeLink}}
                         <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
                         {{/if}}
