@@ -1,0 +1,177 @@
+﻿---
+  site: torrentsectorcrew
+  name: Torrent Sector Crew
+  description: "A German general tracker"
+  language: de-de
+  type: private
+  encoding: windows-1252
+  links:
+    - https://tsctracker.net/
+
+  caps:
+    categories:
+      # Apps
+      65: PC/Phone-Android # Android
+      83: PC/Phone-IOS # iOS
+      107: PC/0day # Linux
+      48: PC/Mac # MAC
+      109: PC # Sonstige
+      22: PC/0day # Win
+
+      # Audio
+      24: Audio/Audiobook # aBooks
+      104: Audio # Disco's
+      38: Audio/Audiobook # Hörspiel
+      6: Audio # Musik
+      82: Audio # Tracks
+      29: Audio/Video # Videos
+
+      # Doku
+      113: TV/Documentary # 3D
+      76: TV/Documentary # HD
+      78: TV/Documentary # Packs
+      75: TV/Documentary # SD
+      114: TV/Documentary # Sonstige
+      77: TV/Documentary # Untouched
+
+      # Filme
+      54: Movies/HD # 1080p
+      5: Movies/3D # 3D
+      55: Movies/HD # 720p
+      111: Movies # Anime
+      43: Movies/BluRay # BluRay
+      20: Movies/DVD # DVDR
+      120: Movies/Foreign # Int.
+      119: Movies # Remux
+      121: Movies/HD # UHD
+      36: Movies/HD # x264
+      19: Movies/SD # XviD
+
+      # Serien
+      112: TV/Anime # Anime
+      69: TV/HD # HD
+      72: TV/Foreign # Int.
+      68: TV # Packs
+      66: TV/SD # SD
+      108: TV # TV-Shows
+
+      # Sonstige
+      117: Other # Diverses
+      28: Books # eBooks
+      42: TV/Sport # Sport
+      103: Other # Tutorials
+      9: Other # Wallpaper
+      64: XXX # XXX
+
+      # Spiele
+      115: PC/Mac # MAC
+      37: Console/NDS # Nintendo
+      4: PC/Games # PC
+      58: Console/PS4 # PSX
+      116: Other # Sonstige
+      50: Console/Xbox # XBOX
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings:
+    - name: pin
+      type: text
+      label: Pin
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+
+  login:
+    path: landing.php
+    method: form
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      pin: "{{ .Config.pin }}"
+    error:
+      - selector: "#login_box_desc"
+    test:
+      path: my.php
+      
+  ratio:
+    path: /my.php
+    selector: td.navi_top:contains("Deine Ratio:")
+    filters:
+      - name: replace
+        args: ["Deine Ratio: ", ""]
+      - name: replace
+        args: [".", ""]
+      - name: replace
+        args: [",", "."]
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      orderby: "added"
+      sort: desc
+    rows:
+      selector: "h2 +p + br + table.tablebrowse > tbody > tr[style=\"height: 45px;\"], tr:contains(\"Weiter\") > td > table.tablebrowse > tbody > tr[style=\"height: 45px;\"]"
+    fields:
+      title:
+        selector: a[title][href^="details.php"]
+        attribute: title
+      category:
+        selector: a[href*="cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      comments:
+        selector: a[href*="&tocomm="]
+        attribute: href
+      download:
+        selector: a[href^="download_ssl.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(3)
+      grabs:
+        selector: td:nth-child(9)
+        filters:
+          - name: replace
+            args: ["-mal", ""]
+      size:
+        selector: td:nth-child(6)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      seeders:
+        selector: td:nth-child(7)
+        filters:
+          - name: regexp
+            args: "(\\d+)"
+      leechers:
+        selector: td:nth-child(8)
+        filters:
+          - name: regexp
+            args: "(\\d+)"
+      date:
+        selector: td:nth-child(5)
+        remove: br
+        filters:
+          - name: dateparse
+            args: "02.01.200615:04:05"
+      downloadvolumefactor:
+        case:
+          "font:contains(\"[OnlyUpload]\")": "0"
+          "font:contains(\"[-40 Download]\")": "0.6"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

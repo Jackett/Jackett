@@ -1,0 +1,130 @@
+﻿---
+  site: freedomhd
+  name: Freedom-HD
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - http://freedom-paradise.eu/
+
+  caps:
+    categories:
+      # ANIMES
+      105: TV/Anime # 1080p
+      104: TV/Anime # 720p
+      90: TV/Anime # HDRIP-720p
+      93: TV/Anime # HDRIP1080p
+      131: TV/Anime # SD
+      120: TV/Anime # X265-1080p
+      119: TV/Anime # X265-720p
+      107: TV/Anime # 1080p
+      106: TV/Anime # 720p
+      94: TV/Anime # HDRIP1080p
+      91: TV/Anime # HDRIP720p
+
+      # EBOOK
+      124: Books # Livres et Magazines
+
+      # FILMS
+      97: Movies/HD # 1080p
+      103: Movies/3D # 3D
+      111: Movies/HD # 4K
+      96: Movies/HD # 720p
+      127: Movies/HD # BDrip
+      128: Movies/HD # BRrip
+      126: Movies/SD # DVDrip
+      89: Movies/HD # HDRIP-720p
+      92: Movies/HD # HDRIP1080p
+      112: Movies/SD # Team-Hush
+      129: Movies/HD # Team-Romkent
+      125: Movies/Other # WEBrip
+      110: Movies/HD # X265-1080p
+      109: Movies/HD # X265-720p
+
+      # MUSIQUES
+      114: Audio/Lossless # Flac
+      113: Audio/MP3 # MP3
+      132: Audio # Musiques-HQ
+      130: Audio/Video # video clip
+
+      # SERIE-sd
+      121: TV/SD # SD
+
+      # SERIES-HD
+      102: TV/HD # 1080p
+      101: TV/HD # 720p
+      100: TV/HD # HDrip1080p
+      99: TV/HD # HDrip720p
+
+      # SPECTACLES
+      118: TV/Sport # HDRIP1080p
+      117: TV/Sport # HDRIP720p
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: account-login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: "yes"
+      returnto: "/"
+    error:
+      - selector: div.myFrame:has(font.error)
+    test:
+      path: torrents-search.php
+
+  search:
+    path: torrents-search.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+
+    rows:
+      selector: table.ttable_headinner > tbody > tr[class^="t-row"]
+      filters:
+        - name: andmatch
+      after: 1
+    fields:
+      download:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["torrents-details.php", "download.php"]
+      title:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+      description:
+        selector: ul
+      banner:
+        selector: img.rounded-img
+        attribute: src
+      size:
+        selector: td:nth-child(3)
+      grabs:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(4)
+      leechers:
+        selector: td:nth-child(5)
+      downloadvolumefactor:
+        case:
+          img[alt="freeleech"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

@@ -16,6 +16,8 @@ using Jackett.Services;
 using System.Web.Http.Tracing;
 using Jackett.Utils;
 using Microsoft.AspNet.Identity;
+using System.Web.Http.ExceptionHandling;
+using System.Net;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -58,7 +60,19 @@ namespace Jackett
             set;
         }
 
+        public static string CustomDataFolder
+        {
+            get;
+            set;
+        }
+
         public static string BasePath
+        {
+            get;
+            set;
+        }
+
+        public static bool NoRestart
         {
             get;
             set;
@@ -69,7 +83,27 @@ namespace Jackett
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
 
+            // try to fix SocketException crashes
+            // based on http://stackoverflow.com/questions/23368885/signalr-owin-self-host-on-linux-mono-socketexception-when-clients-lose-connectio/30583109#30583109
+            try
+            {
+                object httpListener;
+                if (appBuilder.Properties.TryGetValue(typeof(HttpListener).FullName, out httpListener) && httpListener is HttpListener)
+                {
+                    // HttpListener should not return exceptions that occur when sending the response to the client
+                    ((HttpListener)httpListener).IgnoreWriteExceptions = true;
+                    Engine.Logger.Info("set HttpListener.IgnoreWriteExceptions = true");
+                }
+            }
+            catch (Exception e)
+            {
+                Engine.Logger.Error(e, "Error while setting HttpListener.IgnoreWriteExceptions = true");
+            }
+
             appBuilder.Use<WebApiRootRedirectMiddleware>();
+
+            // register exception handler
+            config.Services.Replace(typeof(IExceptionHandler), new WebAPIExceptionHandler());
 
             // Setup tracing if enabled
             if (TracingEnabled)

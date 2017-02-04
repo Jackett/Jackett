@@ -18,6 +18,8 @@ namespace Jackett.Utils
 
         public static string BytesToDataUrl(byte[] bytes, string mimeType = "image/jpg")
         {
+            if (bytes == null)
+                return null;
             return "data:" + mimeType + ";base64," + Convert.ToBase64String(bytes);
         }
     }

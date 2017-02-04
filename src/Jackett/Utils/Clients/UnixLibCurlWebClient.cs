@@ -11,43 +11,35 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CloudFlareUtilities;
 
 namespace Jackett.Utils.Clients
 {
     public class UnixLibCurlWebClient : IWebClient
     {
-        private Logger logger;
-
-        public UnixLibCurlWebClient(Logger l)
+        public UnixLibCurlWebClient(IProcessService p, Logger l, IConfigurationService c)
+            : base(p: p,
+                   l: l,
+                   c: c)
         {
-            logger = l;
         }
 
-        public async Task<WebClientByteResult> GetBytes(WebRequest request)
+        private string CloudFlareChallengeSolverSolve(string challengePageContent, Uri uri)
         {
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetBytes Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
-            return result;
+            var solution = ChallengeSolver.Solve(challengePageContent, uri.Host);
+            string clearanceUri = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port + solution.ClearanceQuery;
+            return clearanceUri;
         }
 
-        public async Task<WebClientStringResult> GetString(WebRequest request)
-        {
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetString(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("UnixLibCurlWebClient:GetString Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            return Mapper.Map<WebClientStringResult>(result);
-        }
-
-        public void Init()
+        override public void Init()
         {
             try
             {
                 Engine.Logger.Info("LibCurl init " + Curl.GlobalInit(CurlInitFlag.All).ToString());
                 CurlHelper.OnErrorMessage += (msg) =>
-                 {
-                     Engine.Logger.Error(msg);
-                 };
+                {
+                    Engine.Logger.Error(msg);
+                };
             }
             catch (Exception e)
             {
@@ -67,12 +59,48 @@ namespace Jackett.Utils.Clients
             }
         }
 
-        private async Task<WebClientByteResult> Run(WebRequest request)
+        // Wrapper for Run which takes care of CloudFlare challenges, calls RunCurl
+        override protected async Task<WebClientByteResult> Run(WebRequest request)
+        {
+            WebClientByteResult result = await RunCurl(request);
+
+            // check if we've received a CloudFlare challenge
+            string[] server;
+            if (result.Status == HttpStatusCode.ServiceUnavailable && result.Headers.TryGetValue("server", out server) && server[0] == "cloudflare-nginx")
+            {
+                logger.Info("UnixLibCurlWebClient: Received a new CloudFlare challenge");
+
+                // solve the challenge
+                string pageContent = Encoding.UTF8.GetString(result.Content);
+                Uri uri = new Uri(request.Url);
+                string clearanceUri = CloudFlareChallengeSolverSolve(pageContent, uri);
+                logger.Info(string.Format("UnixLibCurlWebClient: CloudFlare clearanceUri: {0}", clearanceUri));
+
+                // wait...
+                await Task.Delay(5000);
+
+                // request clearanceUri to get cf_clearance cookie
+                var response = await CurlHelper.GetAsync(clearanceUri, request.Cookies, request.Referer);
+                logger.Info(string.Format("UnixLibCurlWebClient: received CloudFlare clearance cookie: {0}", response.Cookies));
+
+                // add new cf_clearance cookies to the original request
+                request.Cookies = response.Cookies + request.Cookies;
+
+                // re-run the original request with updated cf_clearance cookie
+                result = await RunCurl(request);
+
+                // add cf_clearance cookie to the final result so we update the config for the next request
+                result.Cookies = response.Cookies + " " + result.Cookies;
+            }
+            return result;
+        }
+
+        protected async Task<WebClientByteResult> RunCurl(WebRequest request)
         {
             Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
             {
-                response = await CurlHelper.GetAsync(request.Url, request.Cookies, request.Referer);
+                response = await CurlHelper.GetAsync(request.Url, request.Cookies, request.Referer, request.Headers);
             }
             else
             {
@@ -85,7 +113,7 @@ namespace Jackett.Utils.Clients
                     logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
-                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.RawBody);
+                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.Headers, request.RawBody);
             }
 
             var result = new WebClientByteResult()
@@ -99,7 +127,11 @@ namespace Jackett.Utils.Clients
             {
                 foreach (var header in response.HeaderList)
                 {
-                    switch (header[0].ToLowerInvariant())
+                    var key = header[0].ToLowerInvariant();
+                    
+                    result.Headers[key] = new string[] { header[1] }; // doesn't support multiple identical headers?
+
+                    switch (key)
                     {
                         case "location":
                             result.RedirectingTo = header[1];

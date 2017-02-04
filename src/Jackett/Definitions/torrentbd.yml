@@ -1,0 +1,151 @@
+﻿---
+  site: torrentbd
+  name: TorrentBD
+  description: "A general tracker"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.torrentbd.com/torrent
+
+  caps:
+    categories:
+      28: TV/Anime # Anime - All
+      65: PC/Phone-Android # Apps - Android
+      20: PC # Apps - Linux
+      19: PC/Mac # Apps - Mac
+      18: PC # Apps - PC
+      21: Audio # Bangla - Audio
+      7: Movies # Bangla - Movies | Natok
+      49: TV # Cartoons - All
+      9: TV/Documentary # Documentaries - All
+      73: Books/Comics # E-Books - Comics
+      77: Books # E-Books - Manga
+      60: PC/Games # Games - Cracks | Patches
+      17: Console # Games - Other
+      10: PC # Games - PC
+      11: Console/PS3 # Games - PS2
+      43: Console/PS3 # Games - PS3
+      12: Console/PSP # Games - PSP
+      52: PC/Games # Games - Updates | DLC
+      13: Console/Xbox # Games - Xbox
+      14: Console/Xbox360 # Games - Xbox360
+      23: Movies/BluRay # Hindi - Blu-ray
+      51: Movies/SD # Hindi - CAM | TS | TC
+      27: Movies/DVD # Hindi - DVDRip
+      58: Movies/SD # Hindi - DVDScr | Pre-DVD
+      68: Movies/SD # Hindi - HD-Rip
+      59: Movies # Hindi - Web-Rip
+      47: Movies/HD # Movies - 1080p BluRay
+      67: Movies/3D # Movies - 3D
+      42: Movies/BluRay # Movies - 720p BluRay
+      57: Movies # Movies - Animation
+      4: Movies/SD # Movies - CAM | TS | TC
+      69: Movies # Movies - Dual Audio
+      1: Movies/SD # Movies - DVDRip
+      56: Movies/SD # Movies - DVDSCR | R5 | R6
+      46: Movies/SD # Movies - HD-Rip
+      76: Movies/BluRay # Movies - Lossless BluRay
+      2: Movies # Movies - Packs
+      24: Movies/SD # Movies - SD BluRay
+      34: Movies # Movies - Tamil
+      3: Movies # Movies - Unrated
+      72: Movies # Movies - WEB Rip
+      55: Movies # Movies - WEB-DL
+      22: Audio # Music - Audio
+      64: Audio # Music - Concerts | Live Shows
+      71: Audio/Lossless # Music - FLAC
+      50: Audio # Music - OST
+      26: Audio # Music - Radio
+      25: Audio # Music - Video
+      78: Audio # Music - Video 4K
+      36: Books # Other - E-Books
+      37: Other # Other - Images
+      38: PC/Phone-Other # Other - Mobile Phone
+      40: Other # Other - Other | Misc
+      39: Other # Other - Tutorial
+      44: Other # Religious  - Islam
+      48: TV/Sport # Sports - All
+      70: TV/Sport # Sports - Football
+      6: TV/Sport # Sports - Pro Wrestling
+      33: Other # Trailers - Movie | Games
+      66: TV # TV - Awards | Ceremonies
+      5: TV/SD # TV - Episodes
+      61: TV/HD # TV - Episodes - 720p | 1080p
+      41: TV/SD # TV - Packs
+      62: TV/HD # TV - Packs - HD | BRRip
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: account-login.php
+    method: form
+    form: form[action="account-login.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.myFrame:has(div.myF-caption > font.error)
+    test:
+      path: torrents-search.php
+      selector: div.myB-content:contains("Ratio:")
+
+  ratio:
+    path: torrents-search.php
+    selector: div.myB-content:contains("Ratio:")
+    filters:
+      - name: regexp
+        args: "Ratio: (.*?)$"
+
+  search:
+    path: torrents-search.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: tr.t-row
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: span.torrname
+        attribute: title
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[onmouseover][href^="torrents-details.php?id="]
+        attribute: href
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
+      size:
+        selector: td:nth-child(6)
+      grabs:
+        selector: td:nth-child(9)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      date:
+        selector: a[onmouseover][href^="torrents-details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "Date Added: </b>(\\d+-\\d+-\\d+)<br />"
+          - name: dateparse
+            args: "02-01-2006"
+      downloadvolumefactor:
+        case:
+          img[title^="FreeLeech "]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

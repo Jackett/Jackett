@@ -1,0 +1,111 @@
+﻿---
+  site: linkomanija
+  name: LinkoManija
+  language: lt-lt
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.linkomanija.net
+
+  caps:
+    categories:
+      29: Movies/SD # movies
+      52: Movies/HD # movies HD
+      30: TV/SD # TV
+      60: TV/HD # HD TV
+      45: PC/Games # PC Games
+      37: Audio # Music
+      56: Books # Books
+      40: Other/Misc # misc
+      53: Movies/SD # movies E
+      61: Movies/HD # E HD Movies
+      28: TV/SD # TV E
+      62: TV/HD # E HD TV
+      63: PC/Games # PC Games Misc
+      33: Audio # Music E
+      57: Books # Books E
+      43: Other/Misc # misc E
+      51: Movies/SD # movies RU
+      64: Movies/HD # RU Movies HD
+      65: TV # TV RU
+      25: Movies/DVD # DVD
+      42: Console/Xbox # XBOX
+      66: Audio/Lossless # Music Lossless
+      41: PC/Mac # MAC
+      69: PC/Phone-Android # Android
+      46: TV/Sport # Sports
+      58: TV/Documentary # Documentaries
+      38: TV/Anime # Anime
+      26: Movies/DVD # DVD E
+      44: Console/Other # Consoles
+      31: Audio/Video # Music Videos
+      32: PC/0day # Appz
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.klaida
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table> tbody > tr:has(a[href^="details?"])
+      filters:
+        - name: andmatch
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="details?"]
+      description|optional:
+        selector: td:nth-child(2) > span
+      details:
+        selector: a[href^="details?"]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      grabs:
+        selector: td:nth-child(7)
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(6)
+      downloadvolumefactor:
+        case:
+          img[src="//static.linkomanija.net/images/flag_green.gif"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+
+        

@@ -1,0 +1,89 @@
+﻿---
+  site: bluebirdhd
+  name: BlueBird
+  language: ru-ru
+  type: private
+  encoding: windows-1251
+  links:
+    - https://bluebird-hd.org/
+
+  caps:
+    categories:
+      1: Movies # Films
+      2: TV/Anime # Cartoons
+      3: TV/Documentary # documentary
+      4: Audio # Show / Music
+      5: TV/Sport # Sport
+      6: TV # TV series
+      7: XXX # erotica
+      8: Other # Demo / Misc
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.error
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      grabs:
+        selector: a[href*="&snatched=1#snatched"]
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(7)
+        remove: a
+      date:
+        selector: div#cleft > font
+      seeders:
+        selector: td:nth-child(5)
+      leechers:
+        selector: td:nth-child(6)
+      banner:
+        selector: a.tname
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
+      downloadvolumefactor:
+        case:
+          img[src="pic/diamond.png"]: "0"
+          img[src="pic/freedownload.gif"]: "0"
+          img[src="pic/silver.gif"]: "0.5"
+          img[src="pic/bronze.gif"]: "0.75"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[src="pic/diamond.png"]: "2"
+          "*": "1"

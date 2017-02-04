@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CloudFlareUtilities;
 using Jackett.Models;
 using Jackett.Services;
 using NLog;
@@ -8,44 +9,33 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Utils.Clients
 {
     public class HttpWebClient : IWebClient
     {
-        Logger logger;
-        IConfigurationService configService;
-
-        public HttpWebClient(Logger l, IConfigurationService c)
-        {
-            logger = l;
-            configService = c;
-        }
-
-
-        public void Init()
+        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c)
+            : base(p: p,
+                   l: l,
+                   c: c)
         {
         }
 
-        public async Task<WebClientByteResult> GetBytes(WebRequest request)
+        override public void Init()
         {
-            logger.Debug(string.Format("WindowsWebClient:GetBytes(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1} bytes", result.Status, (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
-            return result;
+            if (Startup.IgnoreSslErrors == true)
+            {
+                logger.Info(string.Format("WindowsWebClient: Disabling certificate validation"));
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
+            }
         }
 
-        public async Task<WebClientStringResult> GetString(WebRequest request)
+        override protected async Task<WebClientByteResult> Run(WebRequest webRequest)
         {
-            logger.Debug(string.Format("WindowsWebClient:GetString(Url:{0})", request.Url));
-            var result = await Run(request);
-            logger.Debug(string.Format("WindowsWebClient: Returning {0} => {1}", result.Status, (result.Content == null ? "<NULL>" : Encoding.UTF8.GetString(result.Content))));
-            return Mapper.Map<WebClientStringResult>(result);
-        }
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
-        private async Task<WebClientByteResult> Run(WebRequest webRequest)
-        {
             var cookies = new CookieContainer();
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
@@ -69,15 +59,20 @@ namespace Jackett.Utils.Clients
                 proxyServer = new WebProxy(Startup.ProxyConnection, false);
                 useProxy = true;
             }
-            var client = new HttpClient(new HttpClientHandler
+
+            ClearanceHandler clearanceHandlr = new ClearanceHandler();
+            HttpClientHandler clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
                 Proxy = proxyServer,
-                UseProxy = useProxy
-            });
-            
+                UseProxy = useProxy,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            clearanceHandlr.InnerHandler = clientHandlr;
+            var client = new HttpClient(clearanceHandlr);
 
             if (webRequest.EmulateBrowser)
                 client.DefaultRequestHeaders.Add("User-Agent",  BrowserUtil.ChromeUserAgent);
@@ -99,6 +94,9 @@ namespace Jackett.Utils.Clients
                     }
                 }
             }
+
+            if (!string.IsNullOrEmpty(webRequest.Referer))
+                request.Headers.Referrer = new Uri(webRequest.Referer);
 
             if (!string.IsNullOrEmpty(webRequest.RawBody))
             {
@@ -128,6 +126,12 @@ namespace Jackett.Utils.Clients
 
             var result = new WebClientByteResult();
             result.Content = await response.Content.ReadAsByteArrayAsync();
+
+            foreach (var header in response.Headers)
+            {
+                IEnumerable<string> value = header.Value;
+                result.Headers[header.Key.ToLowerInvariant()] = value.ToArray();
+            }
 
             // some cloudflare clients are using a refresh header
             // Pull it out manually 
@@ -176,7 +180,7 @@ namespace Jackett.Utils.Clients
                     var nameSplit = value.IndexOf('=');
                     if (nameSplit > -1)
                     {
-                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') + 1)));
+                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';') + 1))));
                     }
                 }
 
@@ -187,7 +191,6 @@ namespace Jackett.Utils.Clients
                 }
                 result.Cookies = cookieBuilder.ToString().Trim();
             }
-
             ServerUtil.ResureRedirectIsFullyQualified(webRequest, result);
             return result;
         }

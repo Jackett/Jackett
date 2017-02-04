@@ -1,0 +1,104 @@
+﻿---
+  site: inperil
+  name: inPeril
+  type: private
+  language: lv-lv
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.inperil.net/
+
+  caps:
+    categories:
+      34: TV/Anime # Animation
+      22: PC/0day # Appz
+      25: PC/Games # Games/Console
+      4: PC/Games # Games/PC
+      27: Other/Misc # Misc
+      35: Movies/HD # Movies/HD
+      37: Movies/Foreign # Movies/LAT
+      42: Movies # Movies/Pack
+      38: Movies # Movies/Retro
+      36: Movies/Foreign # Movies/RUS
+      19: Movies/SD # Movies/SD
+      6: Audio # Music
+      26: Audio/Video # Music Videos
+      31: Audio/Lossless # Music/FLAC
+      39: TV/HD # TV/HD
+      43: TV # TV/Pack
+      7: TV/SD # TV/SD
+      40: XXX # XXX/HD
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: font.logintext
+    test:
+      path: /browse.php
+      
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: table > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="][title]
+        attribute: title
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(6)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: append
+            args: " +02:00"
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: regexp
+            args: ([,\d]+)
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      banner:
+        selector: a[onmouseover][href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
+      downloadvolumefactor:
+        case:
+          "img[alt=\"Zelta Torrents\"]": "0"
+          "img[alt=\"Sudraba Torrents\"]": "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

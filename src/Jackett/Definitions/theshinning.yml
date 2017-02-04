@@ -1,0 +1,157 @@
+﻿---
+  site: theshinning
+  name: The Shinning
+  description: "A German gerneral tracker"
+  language: de-de
+  type: private
+  encoding: windows-1252
+  links:
+    - https://theshinning.org
+
+  caps:
+    categories:
+      # Filme
+      28: Movies/SD # HORROR
+      25: Movies/DVD # SD|DVD
+      99: Movies/SD # SD|SPORT
+      24: Movies/SD # SD|x264
+      22: Movies/SD # SD|XVID
+      26: XXX # SD|XxX
+
+      # High Definition
+      29: Movies/BluRay # BLURAY
+      19: Movies/HD # HD|1080p
+      21: Movies/3D # HD|3D
+      107: Movies/HD # HD|4K
+      20: Movies/HD # HD|720p
+      101: Movies/HD # HD|REMUX
+      100: Movies/HD # HD|SPORT
+      27: XXX # HD|XxX
+      102: Movies/HD # SMALL|HD
+
+      # Musik
+      13: Audio # CHARTS
+      31: Audio/Lossless # FLAC
+      97: Audio/Audiobook # HOERSPIELE
+      30: Audio/MP3 # MP3
+      106: Audio # SAMPLER
+
+      # Releaser
+      18: Movies # CR3WHD
+      16: Movies # ONKEL JENS
+      17: Movies # xTM|XviD
+
+      # Serie
+      11: TV/SD # DVD|SERIEN
+      9: TV/HD # HD|SERIEN
+      32: TV # MIXED|SERIEN
+      10: TV # PACK|SERIEN
+      8: TV/SD # SD|SERIEN
+      105: TV # SMALL|SERIE
+      12: TV # US|SERIEN
+
+      # Sonstige
+      98: PC # APPS
+      90: TV/Documentary # DOKUS
+      91: Books # EBOOKS
+      14: Movies # KINOHITS
+      15: Other # REQUEST
+      23: Other  # SONSTIGES
+      104: XXX/Imageset # XXX|IMAGE
+
+      # Spiele
+      96: Console/NDS # GAMES|NDS
+      92: PC/Games # GAMES|PC
+      94: Console/PS4 # GAMES|PS
+      95: Console/Wii # GAMES|WII
+      93: Console/Xbox # GAMES|XBOX
+
+      # Wrestling
+      3: TV/Sport # HD|RAW
+      1: TV/Sport # HD|SMACKD
+      6: TV/Sport # NXT
+      7: TV/Sport # PPV
+      4: TV/Sport # SD|RAW
+      2: TV/Sport # SD|SMACKD
+      5: TV/Sport # TNA
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /login.php
+    method: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.stderr_info_wrap
+    test:
+      path: /browse.php
+      selector: img[title="Ratio"] + i
+
+  ratio:
+    path: /browse.php
+    selector: img[title="Ratio"] + i
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      showsearch: "1"
+      incldead: "1"
+      orderby: "added"
+      sort: "desc"
+    rows:
+      selector: table.main > tbody > tr:contains("Alle Torrents") + tr > td > table.tableinborder > tbody > tr
+      filters:
+        - name: andmatch
+    fields:
+      download:
+        selector: a[href^="download-ssl.php?torrent="]
+        attribute: href
+      title:
+        selector: div.title_wrap
+        attribute: title
+        filters:
+          - name: replace
+            args: ["[TsH]", ""]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: div.title_wrap > a
+        attribute: href
+      size:
+        selector: div.bro_right_ad > b
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      grabs:
+        selector: div.bro_right_ae > b
+      seeders:
+        selector: div.bro_box1_aa > b
+      leechers:
+        selector: div.bro_box_aaa > b
+      date:
+        selector: div.bro_box_date > span
+        filters:
+          - name: replace
+            args: ["\u00a0", " "]
+          - name: dateparse
+            args: "02.01.2006 15:04:05"
+      downloadvolumefactor:
+        case:
+          span[title="OnlyUp"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

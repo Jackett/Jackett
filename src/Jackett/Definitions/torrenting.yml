@@ -1,0 +1,87 @@
+﻿---
+  site: torrenting
+  name: Torrenting
+  language: en-us
+  type: private
+  encoding: windows-1252
+  links:
+    - https://torrenting.com
+
+  caps:
+    categories:
+      1: Movies # Movies
+      2: Movies/DVD # Movies/DVD-R
+      3: Movies/BluRay # BluRay Movies
+      4: TV/SD # TV/SD-x264
+      5: TV/HD # TV/X264 HD
+      11: Movies/HD # Movies/HD
+      18: TV # TV/Packs
+      21: Console # Games/Consoles
+      26: Audio/Video # Music/Videos
+      27: Audio # Music/Audio
+      29: TV/Anime # Anime/Toons
+      30: Books # Books
+      34: PC/0day # Applications/0-day
+      35: PC/Games # Games/PC
+      40: XXX # XXX
+      47: Movies # Movies/Packs
+      49: Movies/HD # x265 (HEVC)
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="secure.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: table#torrentsTable > tbody > tr.torrentsTableTR
+    fields:
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      title:
+        selector: a.nameLink
+      details:
+        selector: a.nameLink
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      date:
+        selector: div.uploaded
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      size:
+        selector: td:nth-child(6)
+      downloadvolumefactor:
+        text: "1"
+      downloadvolumefactor:
+        case:
+          "span:contains(\"Freeleech\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+
+        

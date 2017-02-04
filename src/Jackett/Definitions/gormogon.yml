@@ -1,0 +1,193 @@
+---
+  site: gormogon
+  name: Gormogon
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.gormogon.com
+
+  caps:
+    categories:
+      # Movies:
+      1: Movies/DVD # DVD-R
+      2: Movies # Action
+      14: Movies # Adventure
+      15: Movies # Animation
+      16: Movies # Biography
+      17: Movies # Comedy
+      18: Movies # Crime
+      19: Movies # Disney
+      92: Movies # Documentary
+      20: Movies # Drama
+      21: Movies # Family
+      22: Movies # Fantasy
+      23: Movies # Film Noir
+      97: Movies # History
+      24: Movies # Horror
+      25: Movies # Martial Arts
+      26: Movies # Musicals
+      27: Movies # Mystery
+      28: Movies # Romance
+      29: Movies # Sci-Fi
+      30: Movies # Thriller
+      31: Movies # War
+      32: Movies # Western
+      33: Movies # Other
+
+      # Classic TV:
+      34: TV # Action
+      35: TV # Adventure
+      36: TV # Animation
+      37: TV # Biography
+      38: TV # Comedy
+      39: TV # Crime
+      40: TV # Disney
+      41: TV # Documentary
+      42: TV # Drama
+      43: TV # Family
+      44: TV # Fantasy
+      45: TV # TV Noir
+      46: TV # Horror
+      47: TV # Martial Arts
+      49: TV # Musicals
+      50: TV # Mystery
+      51: TV # Romance
+      52: TV # Sci-Fi
+      48: TV # Shows
+      53: TV # Thriller
+      54: TV # War
+      55: TV # Western
+      56: TV # Other
+      90: TV # TV Movies
+
+      # Old Time Radio
+      57: Audio # Action
+      58: Audio # Adventure
+      59: Audio # Biography
+      60: Audio # Comedy
+      61: Audio # Crime
+      62: Audio # Documentary
+      63: Audio # Drama
+      64: Audio # Family
+      65: Audio # Fantasy
+      66: Audio # Radio Noir
+      67: Audio # Horror
+      68: Audio # Musicals
+      69: Audio # Mystery
+      70: Audio # Romance
+      71: Audio # Sci-Fi
+      72: Audio # Shows
+      73: Audio # Thriller
+      74: Audio # War
+      75: Audio # Western
+      76: Audio # Other
+
+      # Music:
+      77: Audio # Official Sountracks
+      78: Audio # Theme Tunes
+      79: Audio # Music 30s
+      80: Audio # Music 40s
+      81: Audio # Music 50s
+      85: Audio # Music 60s
+      86: Audio # Music 70s
+      87: Audio # Music '80 - '84
+
+      # Printed:
+      82: Books # Books
+      91: Books # Newspaper
+      83: Books # Scripts
+      84: Books # Posters
+      88: Books # Comics
+      89: Books # Magazines
+
+      # Software:
+      94: Other # Screensavers
+      95: PC # Programs
+      96: Other # Other
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: index.php?page=login&returnto=index.php
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: td.lista > span[style="color:#FF0000;"]
+    test:
+      path: index.php
+      selector: form[name="jump1"]
+
+  ratio:
+    path: index.php
+    selector: form[name="jump1"] > table > tbody > tr > td:contains("SR ")
+    filters:
+      - name: trim
+        args: ")"
+      - name: split
+        args: [" ", 1]
+
+  download:
+    selector: a[href^="download.php?id="]
+        
+  search:
+    path: index.php
+    inputs:
+      search: "{{ .Query.Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: torrents
+      active: 0
+    rows:
+      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+    fields:
+      download:
+        selector: a[href^="index.php?page=downloadcheck&id="]
+        attribute: href
+      title:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: href
+      size:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      grabs:
+        selector: td:nth-child(8)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        case:
+          img[alt="gold"]: "0"
+          img[alt="silver"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt="2x Upload Multiplier"]: "2"
+          img[alt="3x Upload Multiplier"]: "3"
+          img[alt="4x Upload Multiplier"]: "4"
+          img[alt="5x Upload Multiplier"]: "5"
+          img[alt="6x Upload Multiplier"]: "6"
+          img[alt="7x Upload Multiplier"]: "7"
+          img[alt="8x Upload Multiplier"]: "8"
+          img[alt="9x Upload Multiplier"]: "9"
+          img[alt="10x Upload Multiplier"]: "10"
+          "*": "1"

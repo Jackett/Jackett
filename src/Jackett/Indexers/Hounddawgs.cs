@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -43,25 +44,48 @@ namespace Jackett.Indexers
 				p: ps,
 				configData: new NxtGnConfigurationData())
 		{
-			AddCategoryMapping(92, TorznabCatType.TV);
-			AddCategoryMapping(92, TorznabCatType.TVHD);
-			AddCategoryMapping(92, TorznabCatType.TVWEBDL);
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "da-dk";
+            Type = "private";
 
-			AddCategoryMapping(93, TorznabCatType.TVSD);
-			AddCategoryMapping(93, TorznabCatType.TV);
-
-			AddCategoryMapping(57, TorznabCatType.TV);
-			AddCategoryMapping(57, TorznabCatType.TVHD);
-			AddCategoryMapping(57, TorznabCatType.TVWEBDL);
-
-			AddCategoryMapping(74, TorznabCatType.TVSD);
-			AddCategoryMapping(74, TorznabCatType.TV);
-
-		}
+            AddCategoryMapping(68, TorznabCatType.Movies3D, "3D");
+            AddCategoryMapping(80, TorznabCatType.PCPhoneAndroid, "Appz / Android");
+            AddCategoryMapping(86, TorznabCatType.PC0day, "Appz / Div");
+            AddCategoryMapping(71, TorznabCatType.PCPhoneIOS, "Appz / iOS");
+            AddCategoryMapping(70, TorznabCatType.PCMac, "Appz / Mac");
+            AddCategoryMapping(69, TorznabCatType.PC0day, "Appz / PC");
+            AddCategoryMapping(72, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(82, TorznabCatType.MoviesBluRay, "BluRay/REMUX");
+            AddCategoryMapping(78, TorznabCatType.Books, "Books");
+            AddCategoryMapping(87, TorznabCatType.Other, "Cover");
+            AddCategoryMapping(90, TorznabCatType.MoviesDVD, "DK DVDr");
+            AddCategoryMapping(89, TorznabCatType.TVHD, "DK HD");
+            AddCategoryMapping(91, TorznabCatType.TVSD, "DK SD");
+            AddCategoryMapping(92, TorznabCatType.TVHD, "DK TV HD");
+            AddCategoryMapping(93, TorznabCatType.TVSD, "DK TV SD");
+            AddCategoryMapping(83, TorznabCatType.Other, "ELearning");
+            AddCategoryMapping(84, TorznabCatType.Movies, "Film Boxset");
+            AddCategoryMapping(81, TorznabCatType.MoviesSD, "Film CAM/TS");
+            AddCategoryMapping(60, TorznabCatType.MoviesDVD, "Film DVDr");
+            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Film HD");
+            AddCategoryMapping(73, TorznabCatType.MoviesSD, "Film SD");
+            AddCategoryMapping(77, TorznabCatType.MoviesOther, "Film Tablet");
+            AddCategoryMapping(61, TorznabCatType.Audio, "Musik");
+            AddCategoryMapping(76, TorznabCatType.AudioVideo, "MusikVideo/Koncert");
+            AddCategoryMapping(75, TorznabCatType.Console, "Spil / Konsol");
+            AddCategoryMapping(79, TorznabCatType.PCMac, "Spil / Mac");
+            AddCategoryMapping(64, TorznabCatType.PCGames, "Spil / PC");
+            AddCategoryMapping(85, TorznabCatType.TV, "TV Boxset");
+            AddCategoryMapping(58, TorznabCatType.TVSD, "TV DVDr");
+            AddCategoryMapping(57, TorznabCatType.TVHD, "TV HD");
+            AddCategoryMapping(74, TorznabCatType.TVSD, "TV SD");
+            AddCategoryMapping(94, TorznabCatType.TVOTHER, "TV Tablet");
+            AddCategoryMapping(67, TorznabCatType.XXX, "XXX");
+        }
 
 		public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
 		{
-			configData.LoadValuesFromJson(configJson);
+			LoadValuesFromJson(configJson);
 			var pairs = new Dictionary<string, string> {
 				{ "username", configData.Username.Value },
 				{ "password", configData.Password.Value },
@@ -85,8 +109,25 @@ namespace Jackett.Indexers
 		public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
 		{
 			var releases = new List<ReleaseInfo>();
-			var episodeSearchUrl = string.Format("{0}?&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-			var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+
+            queryCollection.Add("order_by", "time");
+            queryCollection.Add("order_way", "desc");
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("searchstr", searchString);
+            }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
+
+            searchUrl += "?" + queryCollection.GetQueryString();
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
 			if (results.Content.Contains("Din søgning gav intet resultat."))
 			{
 				return releases;
@@ -103,17 +144,12 @@ namespace Jackett.Indexers
 					release.MinimumRatio = 1;
 					release.MinimumSeedTime = 172800;
 
-					var seriesCats = new[] { 92, 93, 57, 74 };
 					var qCat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).Cq();
 					var catUrl = qCat.Attr("href");
-					var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1);
-					var catNo = int.Parse(cat.Trim(']'));
-					if (seriesCats.Contains(catNo))
-						release.Category = TorznabCatType.TV.ID;
-					else
-						continue;
+					var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1).Trim(']');
+                    release.Category = MapTrackerCatToNewznab(cat);
 
-					var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
+                    var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
 					var addedStr = qAdded.Attr("title");
 					release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
 
@@ -133,7 +169,17 @@ namespace Jackett.Indexers
 					release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text());
 					release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text()) + release.Seeders;
 
-					releases.Add(release);
+                    var files = row.Cq().Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    if (row.Cq().Find("img[src=\"/static//common/browse/freeleech.png\"]").Any())
+                         release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
+                    releases.Add(release);
 				}
 			}
 			catch (Exception ex)

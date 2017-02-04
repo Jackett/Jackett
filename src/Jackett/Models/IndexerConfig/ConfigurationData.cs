@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.IndexerConfig
 {
-    public abstract class ConfigurationData
+    public class ConfigurationData
     {
         const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
+        protected Dictionary<string, Item> dynamics = new Dictionary<string, Item>(); // list for dynamic items
 
         public enum ItemType
         {
@@ -25,6 +26,8 @@ namespace Jackett.Models.IndexerConfig
         }
 
         public HiddenItem CookieHeader { get; private set; } = new HiddenItem { Name = "CookieHeader" };
+        public HiddenItem LastError { get; private set; } = new HiddenItem { Name = "LastError" };
+        public StringItem SiteLink { get; private set; } = new StringItem { Name = "Site Link" };
 
         public ConfigurationData()
         {
@@ -38,7 +41,18 @@ namespace Jackett.Models.IndexerConfig
 
         public void LoadValuesFromJson(JToken json, IProtectionService ps= null)
         {
+            if (json == null)
+                return;
+
             var arr = (JArray)json;
+
+            // transistion from alternatelink to sitelink
+            var alternatelinkItem = arr.FirstOrDefault(f => f.Value<string>("id") == "alternatelink");
+            if (alternatelinkItem != null && !string.IsNullOrEmpty(alternatelinkItem.Value<string>("value")))
+            {
+                //SiteLink.Value = alternatelinkItem.Value<string>("value");
+            }
+
             foreach (var item in GetItems(forDisplay: false))
             {
                 var arrItem = arr.FirstOrDefault(f => f.Value<string>("id") == item.ID);
@@ -59,7 +73,8 @@ namespace Jackett.Models.IndexerConfig
                                 if (ps != null)
                                     sItem.Value = ps.UnProtect(newValue);
                             }
-                        } else
+                        }
+                        else
                         {
                             sItem.Value = newValue;
                         }
@@ -73,6 +88,8 @@ namespace Jackett.Models.IndexerConfig
                     case ItemType.Recaptcha:
                         ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
                         ((RecaptchaItem)item).Cookie = arrItem.Value<string>("cookie");
+                        ((RecaptchaItem)item).Version = arrItem.Value<string>("version");
+                        ((RecaptchaItem)item).Challenge = arrItem.Value<string>("challenge");
                         break;
                 }
             }
@@ -92,6 +109,7 @@ namespace Jackett.Models.IndexerConfig
                 {
                     case ItemType.Recaptcha:
                         jObject["sitekey"] = ((RecaptchaItem)item).SiteKey;
+                        jObject["version"] = ((RecaptchaItem)item).Version;
                         break;
                     case ItemType.InputString:
                     case ItemType.HiddenData:
@@ -123,20 +141,43 @@ namespace Jackett.Models.IndexerConfig
 
         Item[] GetItems(bool forDisplay)
         {
-            var properties = GetType()
+            List<Item> properties = GetType()
                 .GetProperties()
                 .Where(p => p.CanRead)
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(Item)))
-                .Select(p => (Item)p.GetValue(this));
+                .Select(p => (Item)p.GetValue(this)).ToList();
+
+            // remove/insert Site Link manualy to make sure it shows up first
+            properties.Remove(SiteLink);
+            properties.Insert(0, SiteLink);
+
+            properties.AddRange(dynamics.Values);
 
             if (!forDisplay)
             {
                 properties = properties
                     .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
-                    .ToArray();
+                    .ToList();
             }
 
             return properties.ToArray();
+        }
+
+        public void AddDynamic(string ID, Item item)
+        {
+            dynamics[ID] = item;
+        }
+
+        public Item GetDynamic(string ID)
+        {
+            try
+            {
+                return dynamics[ID];
+            }
+            catch(KeyNotFoundException)
+            {
+                return null;
+            }
         }
 
         public class Item
@@ -177,8 +218,11 @@ namespace Jackett.Models.IndexerConfig
 
         public class RecaptchaItem : StringItem
         {
+            public string Version { get; set; }
+            public string Challenge { get; set; }
             public RecaptchaItem()
             {
+                this.Version = "2";
                 ItemType = ConfigurationData.ItemType.Recaptcha;
             }
         }

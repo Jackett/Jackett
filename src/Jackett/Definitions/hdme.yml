@@ -1,0 +1,103 @@
+---
+  site: hdme
+  name: HDME
+  language: en-us
+  type: private
+  encoding: windows-1252
+  links:
+    - https://hdme.eu
+
+  caps:
+    categories:
+      24: TV/Anime       # Anime
+      25: PC/0day        # Appz
+      47: Movies/HD      # AVCHD
+      26: Movies/BluRay  # Bluray
+      54: Movies/HD      # dbREMUX
+      41: Movies/HD      # Documentaries
+      50: Movies/HD      # FourGHD
+      44: Movies/HD      # HDME
+      28: Audio/Lossless # HQ Music
+      48: Movies/HD      # iCandy
+      45: Movies/HD      # INtL
+      29: Other          # Misc
+      49: PC/Phone-Other # Mobile
+      30: Movies/HD      # Movie 1080i
+      31: Movies/HD      # Movie 1080p
+      32: Movies/HD      # Movie 720p
+      33: Audio/Video    # Music Videos
+      34: TV             # Packs
+      53: Movies/HD      # Remux
+      56: Movies/HD      # RUXi
+      55: Movies/HD      # SiNiSteR
+      36: TV/Sport       # Sports
+      37: TV/HD          # TV Series 1080i
+      38: TV/HD          # TV Series 1080p
+      39: TV/HD          # TV Series 720p
+      57: Movies         # UHD 2160p
+      40: XXX            # XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded
+        message:
+          selector: td.text
+    test:
+      path: /my.php
+
+  ratio:
+    path: /my.php
+    selector: span.smallfont > font
+    filters:
+      - name: regexp
+        args: "Ratio:(.+?)Uploaded"
+      - name: replace
+        args: [",", ""]
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: "1"
+      blah: "0"
+    rows:
+      selector: table[width="100%"] > tbody > tr:has(td.bottom[background="_images/bg_torrent.jpg"])
+    fields:
+      category:
+        selector: td:nth-child(2) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: td:nth-child(3) > a
+        attribute: title
+      comments:
+        selector: td:nth-child(3) > a
+        attribute: href
+      download:
+        selector: td:nth-child(11) > a
+        attribute: href
+      size:
+        selector: td:nth-child(6)
+        remove: br
+      date:
+        selector: td:nth-child(3)
+        filters:
+          - name: regexp
+            args: "Added: (.+?)\n"
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)

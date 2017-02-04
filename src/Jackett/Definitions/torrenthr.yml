@@ -1,0 +1,129 @@
+﻿---
+  site: torrenthr
+  name: TorrentHR
+  language: hr-hr
+  type: private
+  encoding: windows-1250
+  links:
+    - https://www.torrenthr.org/
+
+  caps:
+    categories:
+      31: TV/Anime # Anime
+      4: Movies/SD # Filmovi/SD
+      18: Movies/Foreign # Crtani Filmovi
+      5: PC/Games # Igre/PC
+      7: TV/SD # Serije/SD
+      1: PC/0day # Aplikacije
+      14: Movies/DVD # Filmovi/DVD
+      12: TV/Documentary # Dokumentarni Filmovi
+      27: Console/PS4 # Igre/PS
+      34: TV/HD # Serije/HD
+      25: Books # E-books
+      17: Movies/HD # Filmovi/HD
+      11: Audio # Koncerti/Spotovi
+      28: Console/Wii # Igre/Wii
+      30: Books/Comics # Stripovi
+      38: PC/Phone-Other # Smartphone
+      40: Movies/BluRay # Filmovi/BD
+      3: Audio/MP3 # Glazba/MP3
+      26: Console/Xbox # Igre/Xbox
+      10: XXX # XXX/SD
+      16: TV # THR Packs
+      15: TV/Sport # Sport
+      29: Audio/Lossless # Glazba/FLAC
+      13: Other # Ostalo
+      36: XXX # XXX/HD
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      ssl: "yes"
+    error:
+      - selector: div.glavni:has(div.glavni_naslov:contains("Greška"))
+    test:
+      path: /browse.php
+      
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      sort: "4"
+      type: "desc"
+    rows:
+      selector: div.glavni_txt > table > tbody > tr[id^="record-"]
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      title|optional|1:
+        selector: a[href^="details.php?id="][title]
+        attribute: title
+      title|optional|2:
+        selector: a[href^="details.php?id="][onmousemove]
+        attribute: onmousemove
+        filters:
+          - name: regexp
+            args: "return overlibImage\\('(.*)','.*'\\);"
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: td.kategorije > a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      files:
+        selector: td:nth-child(5)
+      size:
+        selector: td:nth-child(7)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: regexp
+            args: ([\d,]+)
+          - name: replace
+            args: [",", ""]
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      banner|optional:
+        selector: a[href^="details.php?id="][onmousemove]
+        attribute: onmousemove
+        filters:
+          - name: regexp
+            args: "return overlibImage\\('.*','(.*)'\\);"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
+      date:
+        selector: td:nth-child(2) > small
+        filters:
+          - name: replace
+            args: [" u ", " "]
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "02.01.2006 15:04:05 -07:00"
+      description|optional:
+        selector: td:nth-child(2)
+        remove: a, br, small

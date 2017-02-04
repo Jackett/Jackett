@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -52,6 +53,10 @@ namespace Jackett.Indexers
                 downloadBase: "http://world-in-hd.net/torrents/download/",
                 configData: new ConfigurationDataWiHD())
         {
+            Encoding = Encoding.UTF8;
+            Language = "fr-fr";
+            Type = "private";
+
             // Clean capabilities
             TorznabCaps.Categories.Clear();
 
@@ -95,7 +100,7 @@ namespace Jackett.Indexers
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             // Retrieve config values set by Jackett's user
-            ConfigData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             // Check & Validate Config
             validateConfig();

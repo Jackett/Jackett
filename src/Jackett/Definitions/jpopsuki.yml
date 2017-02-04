@@ -1,0 +1,105 @@
+---
+  site: jpopsuki
+  name: JPopsuki
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://jpopsuki.eu/
+
+  caps:
+    categories:
+      1: Audio # Album
+      2: Audio # Single
+      3: Movies # PV
+      4: Movies/DVD # DVD
+      5: TV # TV-Music
+      6: TV # TV-Variety
+      7: TV # TV-Drama
+      8: Other # Fansubs
+      9: Other # Pictures
+      10: Other/Misc # Misc
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      keeplogged: 1
+      login: "Log in"
+    error:
+      - selector: form#loginform > span.warning
+    test:
+      path: torrents.php
+
+  ratio:
+    path: torrents.php
+    selector: li#stats_ratio > span
+
+  search:
+    path: torrents.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      searchstr: "{{ .Query.Keywords }}"
+      order_by: time
+      order_way: desc
+      action: basic
+      searchsubmit: 1
+    rows:
+      selector: table#torrent_table > tbody > tr[class^="torrent"]
+    fields:
+      download:
+        selector: a[href^="torrents.php?action=download&id="]
+        attribute: href
+      description:
+        selector: div.tags
+      title:
+        selector: td:nth-child(4)
+        remove: span, div.tags, a[title="View Comments"]
+        filters:
+          - name: replace
+            args: [" ()", ""]
+          - name: replace
+            args: [" / Freeleech!", ""]
+      category:
+        selector: a[href*="filter_cat"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "%5B(\\d+?)%5D"
+      details:
+        selector: a[href^="torrents.php?id="]
+        attribute: href
+      banner:
+        selector: td:nth-child(3) img
+        attribute: src
+      files:
+        selector: td:nth-child(5)
+      date:
+        selector: td:nth-child(6)
+        attribute: title
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "Jan 02 2006, 15:04 -07:00"
+      size:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      downloadvolumefactor:
+        case:
+          "strong:contains(\"Freeleech!\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

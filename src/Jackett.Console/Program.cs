@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -96,7 +97,14 @@ namespace JackettConsole
                     Startup.IgnoreSslErrors = options.IgnoreSslErrors;
                     if (options.IgnoreSslErrors == true)
                     {
-                        Engine.Logger.Info("Curl will ignore SSL certificate errors.");
+                        Engine.Logger.Info("Jackett will ignore SSL certificate errors.");
+                    }
+
+                    // Choose Data Folder
+                    if (!string.IsNullOrWhiteSpace(options.DataFolder))
+                    {
+                        Startup.CustomDataFolder = options.DataFolder.Replace("\"", string.Empty).Replace("'", string.Empty).Replace(@"\\", @"\");
+                        Engine.Logger.Info("Jackett Data will be stored in: " + Startup.CustomDataFolder);
                     }
 
                     /*  ======     Actions    =====  */
@@ -209,6 +217,8 @@ namespace JackettConsole
                             Engine.Server.SaveConfig();
                         }
                     }
+
+                    Startup.NoRestart = options.NoRestart;
                 }
 
                 Engine.Server.Initalize();

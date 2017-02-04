@@ -41,11 +41,14 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataAPIKey())
         {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
+            Type = "private";
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             IsConfigured = false;
             try

@@ -42,10 +42,16 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataFileList())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "ro-ro";
+            Type = "private";
+
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(24, TorznabCatType.TVAnime);
             AddCategoryMapping(11, TorznabCatType.Audio);
             AddCategoryMapping(15, TorznabCatType.TV);
-            //AddCategoryMapping(18, TorznabCatType.); Other
+            AddCategoryMapping(18, TorznabCatType.Other);
             AddCategoryMapping(16, TorznabCatType.TVDocumentary);
             AddCategoryMapping(25, TorznabCatType.Movies3D);
             AddCategoryMapping(20, TorznabCatType.MoviesBluRay);
@@ -56,7 +62,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
             AddCategoryMapping(10, TorznabCatType.Console);
             AddCategoryMapping(9, TorznabCatType.PCGames);
-            //AddCategoryMapping(17, TorznabCatType); Linux No cat
+            AddCategoryMapping(17, TorznabCatType.PC);
             AddCategoryMapping(22, TorznabCatType.PCPhoneOther); //Apps/mobile
             AddCategoryMapping(8, TorznabCatType.PC);
             AddCategoryMapping(21, TorznabCatType.TVHD);
@@ -69,7 +75,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }
@@ -98,32 +104,50 @@ namespace Jackett.Indexers
                 cat = cats[0];
             }
 
-            if (!string.IsNullOrWhiteSpace(searchString) || cat != "0")
-                searchUrl += string.Format("?search={0}&cat={1}&searchin=0&sort=0", HttpUtility.UrlEncode(searchString), cat);
+            var queryCollection = new NameValueCollection();
 
+            if (query.ImdbID != null)
+            {
+                queryCollection.Add("search", query.ImdbID);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
 
+            queryCollection.Add("cat", cat);
+            queryCollection.Add("searchin", "0");
+            queryCollection.Add("sort", "0");
+
+            searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
             var results = response.Content;
             try
             {
                 CQ dom = results;
+                var globalFreeLeech = dom.Find("div.globalFreeLeech").Any();
                 var rows = dom[".torrentrow"];
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
-                    release.Title = qRow.Find(".torrenttable:eq(1) a b").Text().Trim();
-                    release.Description = release.Title;
+                    release.Title = qRow.Find(".torrenttable:eq(1) a").Attr("title");
+
+                    if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
+                        continue;
+
+                    release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
+
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
                     //22:05:3716/02/2013
-                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim();
-                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy", CultureInfo.InvariantCulture).AddHours(-2);
+                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim()+" +0200";
+                    release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
-                    var qLink = qRow.Find(".torrenttable:eq(2) a").First();
+                    var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var sizeStr = qRow.Find(".torrenttable:eq(6)").Text().Trim();
@@ -135,15 +159,21 @@ namespace Jackett.Indexers
                     var catId = qRow.Find(".torrenttable:eq(0) a").First().Attr("href").Substring(15);
                     release.Category = MapTrackerCatToNewznab(catId);
 
-                    // Skip other
-                    if (release.Category != 0)
-                    {
-                        // Skip Romanian releases
-                        if (release.Category == TorznabCatType.MoviesForeign.ID && !configData.IncludeRomanianReleases.Value)
-                            continue;
+                    var grabs = qRow.Find(".torrenttable:eq(7)").First().Get(0).FirstChild;
+                    release.Grabs = ParseUtil.CoerceLong(catId);
 
-                        releases.Add(release);
-                    }
+                    if (globalFreeLeech || row.Cq().Find("img[alt=\"FreeLeech\"]").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
+                    // Skip Romanian releases
+                    if (release.Category == TorznabCatType.MoviesForeign.ID && !configData.IncludeRomanianReleases.Value)
+                        continue;
+
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)

@@ -39,8 +39,11 @@ namespace Jackett.Indexers
                 logger: l,
                 p: ps,
                 downloadBase: "https://www.torrentleech.org/download/",
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLogin("For best results, change the 'Default Number of Torrents per Page' setting to the maximum in your profile on the TorrentLeech webpage."))
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
+            Type = "private";
 
             AddCategoryMapping(8, TorznabCatType.MoviesSD); // cam
             AddCategoryMapping(9, TorznabCatType.MoviesSD); //ts
@@ -51,19 +54,27 @@ namespace Jackett.Indexers
             AddCategoryMapping(14, TorznabCatType.MoviesHD);
             AddCategoryMapping(15, TorznabCatType.Movies); // Boxsets
             AddCategoryMapping(29, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(41, TorznabCatType.MoviesHD, "Movies/4K");
+            AddCategoryMapping(36, TorznabCatType.MoviesForeign);
+            AddCategoryMapping(37, TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping(43, TorznabCatType.MoviesSD, "Movies/HDRip");
 
             AddCategoryMapping(26, TorznabCatType.TVSD);
             AddCategoryMapping(27, TorznabCatType.TV); // Boxsets
             AddCategoryMapping(32, TorznabCatType.TVHD);
+            AddCategoryMapping(44, TorznabCatType.TVFOREIGN, "TV/Foreign");
 
             AddCategoryMapping(17, TorznabCatType.PCGames);
             AddCategoryMapping(18, TorznabCatType.ConsoleXbox);
             AddCategoryMapping(19, TorznabCatType.ConsoleXbox360);
-            // 20 PS2
+            AddCategoryMapping(40, TorznabCatType.ConsoleXbox, "Games/XBOXONE");
+            AddCategoryMapping(20, TorznabCatType.ConsolePS3); // PS2
             AddCategoryMapping(21, TorznabCatType.ConsolePS3);
             AddCategoryMapping(22, TorznabCatType.ConsolePSP);
             AddCategoryMapping(28, TorznabCatType.ConsoleWii);
             AddCategoryMapping(30, TorznabCatType.ConsoleNDS);
+            AddCategoryMapping(39, TorznabCatType.ConsolePS4);
+            AddCategoryMapping(42, TorznabCatType.PCMac, "Games/Mac");
 
             AddCategoryMapping(16, TorznabCatType.AudioVideo);
             AddCategoryMapping(31, TorznabCatType.Audio);
@@ -72,38 +83,45 @@ namespace Jackett.Indexers
             AddCategoryMapping(35, TorznabCatType.TV); // Cartoons
 
             AddCategoryMapping(5, TorznabCatType.Books);
+            AddCategoryMapping(45, TorznabCatType.BooksEbook, "Books/EBooks");
+            AddCategoryMapping(46, TorznabCatType.BooksComics, "Books/Comics");
 
             AddCategoryMapping(23, TorznabCatType.PCISO);
             AddCategoryMapping(24, TorznabCatType.PCMac);
             AddCategoryMapping(25, TorznabCatType.PCPhoneOther);
             AddCategoryMapping(33, TorznabCatType.PC0day);
+
+            AddCategoryMapping(38, TorznabCatType.Other, "Education");
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
+            await DoLogin();
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        private async Task DoLogin()
+        {
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "remember_me", "on" },
-                { "login", "submit" }
+                { "password", configData.Password.Value }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
                 CQ dom = result.Content;
-                var messageEl = dom[".ui-state-error"].Last();
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = dom["div#login_heading + div.card-panel-error"].Text();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-            return IndexerConfigurationStatus.RequiresTesting;
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
+            searchString = searchString.Replace('-', ' '); // remove dashes as they exclude search strings
             var searchUrl = SearchUrl;
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -123,8 +141,20 @@ namespace Jackett.Indexers
                     searchUrl += cat;
                 }
             }
+            else
+            {
+                searchUrl += "newfilter/2"; // include 0day and music
+            }
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
+
+            if (!results.Content.Contains("/user/account/logout"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;
@@ -146,14 +176,14 @@ namespace Jackett.Indexers
                     release.Guid = new Uri(SiteLink + qLink.Attr("href").Substring(1));
                     release.Comments = release.Guid;
                     release.Title = qLink.Text();
-                    release.Description = release.Title;
 
-                    release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href").Substring(1));
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
 
-                    var dateString = qRow.Find(".name")[0].InnerText.Trim().Replace(" ", string.Empty).Replace("Addedinon", string.Empty);
-                    //"2015-04-25 23:38:12"
-                    //"yyyy-MMM-dd hh:mm:ss"
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
+                    release.Link = new Uri(qRow.Find(".quickdownload > a").Attr("href"));
+
+                    var dateString = qRow.Find("span.addedInLine").Get(0).LastChild.NodeValue.Replace("on", string.Empty).Trim(); ;
+                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Children().ElementAt(4).InnerText;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
@@ -163,6 +193,12 @@ namespace Jackett.Indexers
 
                     var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/", string.Empty);
                     release.Category = MapTrackerCatToNewznab(category);
+
+                    var grabs = qRow.Find("td:nth-child(6)").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

@@ -1,0 +1,67 @@
+---
+  site: limetorrents
+  name: LimeTorrents
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.limetorrents.cc/
+
+  caps:
+    categories:
+      "TV shows": TV
+      "Movies": Movies
+      "Music": Audio
+      "Games": Console
+      "Applications": PC/0day
+      "Other": Other/Misc
+      "Anime": TV/Anime
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings: []
+
+  download:
+    selector: a.csprite_dltorrent
+
+  search:
+    path: "{{if .Query.Keywords}}search/all/{{ .Query.Keywords}}/{{else}}/index.php?page=latest100{{end}}"
+    rows:
+      selector: ".table2 > tbody > tr[bgcolor]"
+    fields:
+      title:
+        selector: div.tt-name > a[href^="/"]
+      details:
+        selector: div.tt-name > a[href^="/"]
+        attribute: href
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: .tdseed
+      leechers:
+        selector: .tdleech
+      date:
+        selector: td:nth-child(2)
+        filters:
+          - name: split
+            args: ["-", 0]
+          - name: replace
+            args: ["Last Month", "1 month ago"]
+          - name: replace
+            args: ["+", " ago"]
+      download:
+        selector: div.tt-name > a[href^="/"]
+        attribute: href
+      category|optional:
+        selector: td:nth-child(2)
+        filters:
+          - name: split
+            args: ["-", 1]
+          - name: replace
+            args: [" in ", ""]
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

@@ -1,0 +1,130 @@
+﻿---
+  site: icetorrent
+  name: ICE Torrent
+  language: ro-ro
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.icetorrent.org
+
+  caps:
+    categories:
+      1: PC/0day  # Appz
+      85: Audio/Audiobook # AudioBooks
+      68: Books # Carti/Reviste
+      23: Books # Cartoons
+      73: Audio/Video # Concert/Videoclip
+      75: Other # Diverse
+      69: Books # Documentare
+      51: TV/Documentary # Documentaries
+      43: Books # eBooks
+      63: Movies/DVD # Filme DVD
+      65: Movies/HD # Filme HD
+      64: Movies/SD # Filme Xvid
+      40: Console # Games/Console
+      26: PC/Games # Games/PC
+      38: PC/Phone-Other # Mobile
+      59: Movies/3D # Movies/3D
+      92: Movies/HD # Movies/4K-UHD
+      32: Movies/BluRay # Movies/Blu-Ray
+      28: Movies/DVD # Movies/DVD
+      42: Movies/HD # Movies/HD-x264
+      91: Movies/HD # Movies/HEVC-x265
+      79: Movies/HD # Movies/microHD
+      29: Movies/SD # Movies/SD
+      72: Audio/Lossless # Music/FLAC
+      6: Audio/MP3 # Music/MP3
+      37: Audio/Video # Music/Video
+      70: Audio/Lossless # Muzica FLAC
+      71: Audio/MP3 # Muzica MP3
+      74: Other # Other
+      41: Other # Pictures
+      67: TV # Seriale TV
+      48: TV/Sport # Sports
+      87: Other # TUTS
+      33: TV/SD # TV Episodes
+      34: TV/HD # TVHD Episodes
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /login.php
+    method: form
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: font:contains("failed") + table
+    test:
+      path: /browse.php
+      
+  ratio:
+    text: -1
+
+  search:
+    path: /browse.php
+    inputs:
+      cat: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+      search_by: "name"
+    rows:
+      selector: td.torrenttable > table > tbody > tr:has(a[title][href^="details.php?id="])
+    fields:
+      title:
+        selector: a[title][href^="details.php?id="]
+        attribute: title
+      details:
+        selector: a[title][href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      imdb:
+        selector: a[title="IMDB"]
+        attribute: href
+      banner:
+        attribute: rel
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(5) > a
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(5)
+        remove: a
+      date:
+        selector: td:nth-child(2) > div
+        filters:
+          - name: replace
+            args: ["Added on: ", ""]
+          - name: trim
+            args: "\xA0"
+          - name: append
+            args: " +03:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      grabs:
+        selector: td:nth-child(6)
+      downloadvolumefactor:
+        case:
+          "*": "0"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a[title][href^="details.php?id="], div
+      seeders:
+        text: "9999"
+      leechers:
+        text: "9999"

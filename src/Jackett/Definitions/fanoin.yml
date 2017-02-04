@@ -1,0 +1,130 @@
+﻿---
+  site: fanoin
+  name: FANO.IN
+  language: lv-lv
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.fano.in
+
+  caps:
+    categories:
+      20: Movies/SD # Movies/SD
+      6: TV/SD # TV/SD
+      7: PC/Games # Games/PC ISO
+      5: Audio # Music
+      47: Movies # Packs/Movies
+      44: Audio/Audiobook # A-Books
+      27: TV/Anime # Anime
+      17: Movies/Foreign # Movies/Rus
+      33: TV/Foreign # TV/Rus
+      12: PC/Games # Games/PC Rips
+      31: Audio/Lossless # Music/HQ
+      49: TV # Packs/TV
+      41: Books # E-Books
+      29: Books # Cartoons
+      24: Movies/Foreign # Movies/Lat
+      25: TV/Foreign # TV/Lat
+      34: Console/Xbox # Games/Xbox
+      19: Audio/Video # Music Videos
+      46: Console # Packs/Games
+      42: Other # Study
+      52: Movies/3D # 3D
+      37: Movies/HD # Movies/HD
+      35: TV/HD # TV/HD
+      43: Console/PS4 # Games/PS
+      38: PC/Phone-Other # Mobile
+      48: Audio # Packs/Music
+      36: Other # X-mas
+      53: Movies/SD # Movies/CAM
+      4: Movies/DVD # Movies/DVD-R
+      32: TV # TV/Facts
+      40: Console/Wii # Games/Wii
+      22: PC/0day # Appz/misc
+      50: XXX/Packs # Packs/XXX
+      9: XXX # XXX
+      45: XXX # XXX/HD
+      54: Movies # Movies/Retro
+      23: TV/Sport # TV/Sport
+      51: Console # Games/Misc
+      1: PC/0day # Appz/PC ISO
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: browse_old.php
+      
+  ratio:
+    path: browse_old.php
+    selector: img[title="Reitings:"]+font
+
+  search:
+    path: browse_old.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: tr.browse_actions
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse_old.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php", "download.php"]
+      imdb:
+        selector: a[href^="http://www.imdb.com/title/"]
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: (\d+)
+      date:
+        selector: td:nth-child(2) > small:nth-last-child(2)
+        filters:
+          - name: replace
+            args: ["Šodien", "Today"]
+          - name: replace
+            args: ["Vakar", "Yesterday"]
+      downloadvolumefactor:
+        case:
+          img[alt="Free"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt="x2"]: "2"
+          "*": "1"
+      description:
+        selector: td:nth-child(2) > small:nth-last-child(1)
+        remove: a[href^="details.php?id="]

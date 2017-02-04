@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Jackett.Models
@@ -17,11 +18,18 @@ namespace Jackett.Models
         public string ApiKey { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
-        public int RageID { get; set; }
+        public int? RageID { get; set; }
+        public string ImdbID { get; set; }
 
         public int Season { get; set; }
         public string Episode { get; set; }
         public string SearchTerm { get; set; }
+
+        public bool IsTest { get; set; }
+
+        public string ImdbIDShort { get { return (ImdbID != null ? ImdbID.TrimStart('t') : null); } }
+
+        protected string[] QueryStringParts = null;
 
         public string SanitizedSearchTerm
         {
@@ -36,6 +44,13 @@ namespace Jackett.Models
                                                   || char.IsWhiteSpace(c)
                                                   || c == '-'
                                                   || c == '.'
+                                                  || c == '_'
+                                                  || c == '('
+                                                  || c == ')'
+                                                  || c == '@'
+                                                  || c == '\''
+                                                  || c == '['
+                                                  || c == ']'
                                                   ));
                 var safetitle = new string(arr);
                 return safetitle;
@@ -45,11 +60,42 @@ namespace Jackett.Models
         public TorznabQuery()
         {
             Categories = new int[0];
+            IsTest = false;
         }
 
         public string GetQueryString()
         {
             return (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
+        }
+
+        // Some trackers don't support AND logic for search terms resulting in unwanted results.
+        // Using this method we can AND filter it within jackett.
+        // With limit we can limit the amount of characters which should be compared (use it if a tracker doesn't return the full title).
+        public bool MatchQueryStringAND(string title, int limit = -1)
+        {
+            // We cache the regex split results so we have to do it only once for each query.
+            if (QueryStringParts == null)
+            {
+                var queryString = GetQueryString();
+                if (limit > 0)
+                {
+                    if (limit > queryString.Length)
+                        limit = queryString.Length;
+                    queryString = queryString.Substring(0, limit);
+                }
+                Regex SplitRegex = new Regex("[^a-zA-Z0-9]+");
+                QueryStringParts = SplitRegex.Split(queryString);
+            }
+
+            // Check if each part of the query string is in the given title.
+            foreach (var QueryStringPart in QueryStringParts)
+            {
+                if (title.IndexOf(QueryStringPart, StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public string GetEpisodeSearchString()
@@ -87,10 +133,13 @@ namespace Jackett.Models
 
             if (query["cat"] != null)
             {
-                q.Categories = query["cat"].Split(',').Select(s => int.Parse(s)).ToArray();
+                q.Categories = query["cat"].Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s)).ToArray();
             }else
             {
-                q.Categories = new int[0];
+                if (q.QueryType == "movie" && string.IsNullOrWhiteSpace(query["imdbid"]))
+                    q.Categories = new int[] { TorznabCatType.Movies.ID };
+                else
+                    q.Categories = new int[0];
             }
 
             if (query["extended"] != null)
@@ -106,6 +155,8 @@ namespace Jackett.Models
             {
                 q.Offset = ParseUtil.CoerceInt(query["offset"]);
             }
+
+            q.ImdbID = query["imdbid"];
 
             int rageId;
             if (int.TryParse(query["rid"], out rageId))

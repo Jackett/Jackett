@@ -44,11 +44,15 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+            Type = "private";
+
             AddCategoryMapping(1, TorznabCatType.Audio);
             AddCategoryMapping(2, TorznabCatType.PC);
             AddCategoryMapping(3, TorznabCatType.BooksEbook);
             AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
-            AddCategoryMapping(6, TorznabCatType.BooksComics);
+            AddCategoryMapping(7, TorznabCatType.BooksComics);
             AddCategoryMapping(8, TorznabCatType.TVAnime);
             AddCategoryMapping(9, TorznabCatType.Movies);
             AddCategoryMapping(10, TorznabCatType.TVHD);
@@ -59,7 +63,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -93,6 +97,8 @@ namespace Jackett.Indexers
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
+            queryCollection.Add("action", "simple");
+
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("searchstr", searchString);
@@ -106,6 +112,13 @@ namespace Jackett.Indexers
             searchUrl += queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
+
+            // Occasionally the cookies become invalid, login again if that happens
+            if (results.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {
@@ -124,7 +137,6 @@ namespace Jackett.Indexers
 
                     var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
                     var linkStr = qLink.Attr("href");
-                    release.Title = qLink.Text();
                     release.Comments = new Uri(BaseUrl + "/" + linkStr);
                     release.Guid = release.Comments;
 
@@ -137,8 +149,24 @@ namespace Jackett.Indexers
                     var sizeStr = row.ChildElements.ElementAt(4).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
+                    release.Files = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text().Trim());
+                    release.Grabs = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text().Trim()) + release.Seeders;
+
+                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("strong:contains(\"Freeleech!\")").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
+                    var title = qRow.Find("td:nth-child(2)");
+                    title.Find("span, strong, div, br").Remove();
+                    release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
 
                     releases.Add(release);
                 }

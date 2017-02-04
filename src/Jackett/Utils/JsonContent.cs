@@ -12,29 +12,17 @@ using System.Threading.Tasks;
 
 namespace Jackett.Utils
 {
-    public class JsonContent : HttpContent
+    public class JsonContent : StringContent
     {
-        private readonly object _value;
-
         public JsonContent(object value)
+            : this(value, Encoding.UTF8)
         {
-            _value = value;
-            Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            Headers.ContentType.CharSet = "utf-8";
         }
 
-        protected override async Task SerializeToStreamAsync(Stream stream,
-            TransportContext context)
+        public JsonContent(object value, Encoding encoding)
+            : base(JsonConvert.SerializeObject(value, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), encoding, "application/json")
         {
-            var json = JsonConvert.SerializeObject(_value, Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
-            var writer = new StreamWriter(stream);
-            writer.Write(json);
-            await writer.FlushAsync();
-        }
-
-        protected override bool TryComputeLength(out long length)
-        {
-            length = -1;
-            return false;
         }
     }
 }

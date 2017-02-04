@@ -45,34 +45,61 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
-            AddCategoryMapping(4, TorznabCatType.TV);               // TV/XVID
-            AddCategoryMapping(17, TorznabCatType.TVHD);            // TV/X264
-            AddCategoryMapping(19, TorznabCatType.TV);              // TV/DVDRIP
-            AddCategoryMapping(26, TorznabCatType.TVHD);            // TV/BLURAY
-            AddCategoryMapping(37, TorznabCatType.TV);              // TV/DVDR
-            AddCategoryMapping(47, TorznabCatType.TV);              // TV/SD
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
+            Type = "private";
 
-            AddCategoryMapping(7, TorznabCatType.Movies);           // Movies/XVID
-            AddCategoryMapping(8, TorznabCatType.MoviesDVD);        // Movies/DVDR
-            AddCategoryMapping(12, TorznabCatType.MoviesBluRay);    // Movies/BLURAY
-            AddCategoryMapping(18, TorznabCatType.MoviesHD);        // Movies/X264-HD
-            AddCategoryMapping(49, TorznabCatType.MoviesSD);        // Movies/X264-SD
+            AddCategoryMapping(2, TorznabCatType.PC0day, "0DAY");
+            AddCategoryMapping(16, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(1, TorznabCatType.PC0day, "APPS");
+            AddCategoryMapping(9, TorznabCatType.Other, "E-Learning");
+            AddCategoryMapping(35, TorznabCatType.TVFOREIGN, "Foreign");
+            AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "Games/NDS");
+            AddCategoryMapping(6, TorznabCatType.PCGames, "Games/PC");
+            AddCategoryMapping(36, TorznabCatType.ConsolePS4, "Games/Playstation");
+            AddCategoryMapping(29, TorznabCatType.ConsolePSP, "Games/PSP");
+            AddCategoryMapping(23, TorznabCatType.ConsoleWii, "Games/WII");
+            AddCategoryMapping(12, TorznabCatType.ConsoleXbox, "Games/XBOX");
+            AddCategoryMapping(11, TorznabCatType.Other, "Misc");
+            AddCategoryMapping(48, TorznabCatType.MoviesBluRay, "Movies/BLURAY");
+            AddCategoryMapping(8, TorznabCatType.MoviesDVD, "Movies/DVDR");
+            AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movies/X264-HD");
+            AddCategoryMapping(49, TorznabCatType.MoviesSD, "Movies/X264-SD");
+            AddCategoryMapping(7, TorznabCatType.MoviesSD, "Movies/XVID");
+            AddCategoryMapping(38, TorznabCatType.AudioOther, "Music/DVDR");
+            AddCategoryMapping(46, TorznabCatType.AudioLossless, "Music/FLAC");
+            AddCategoryMapping(5, TorznabCatType.AudioMP3, "Music/MP3");
+            AddCategoryMapping(13, TorznabCatType.AudioVideo, "Music/Vids");
+            AddCategoryMapping(26, TorznabCatType.TVHD, "TV/BLURAY");
+            AddCategoryMapping(37, TorznabCatType.TVSD, "TV/DVDR");
+            AddCategoryMapping(19, TorznabCatType.TVSD, "TV/DVDRIP");
+            AddCategoryMapping(47, TorznabCatType.TVSD, "TV/SD");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "TV/X264");
+            AddCategoryMapping(4, TorznabCatType.TVSD, "TV/XVID");
+            AddCategoryMapping(22, TorznabCatType.XXX, "XXX/0DAY");
+            AddCategoryMapping(25, TorznabCatType.XXXDVD, "XXX/DVDR");
+            AddCategoryMapping(20, TorznabCatType.XXX, "XXX/HD");
+            AddCategoryMapping(3, TorznabCatType.XXXXviD, "XXX/XVID");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
             var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
             CQ cq = loginPage.Content;
-            var result = new ConfigurationDataRecaptchaLogin();
+            var result = this.configData;
             CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
             if(recaptcha.Length != 0)   // recaptcha not always present in login form, perhaps based on cloudflare uid or just phase of the moon
             {
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
+                result.Captcha.Version = "2";
                 return result;
             } else
             {
                 var stdResult = new ConfigurationDataBasicLogin();
+                stdResult.SiteLink.Value = configData.SiteLink.Value;
+                stdResult.Username.Value = configData.Username.Value;
+                stdResult.Password.Value = configData.Password.Value;
                 stdResult.CookieHeader.Value = loginPage.Cookies;
                 return stdResult;
             }           
@@ -80,7 +107,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -109,18 +136,17 @@ namespace Jackett.Indexers
                 }
             }
 
-            var cookieJar = configData.CookieHeader.Value;
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, null, StartPageUrl);
-            cookieJar += response.Cookies.ToString();
-            response = await RequestStringWithCookiesAndRetry(SearchUrl, cookieJar);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, SearchUrl, StartPageUrl);
+            UpdateCookieHeader(response.Cookies);
 
-            await ConfigureIfOK(cookieJar, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(configData.CookieHeader.Value, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 CQ dom = response.Content;
-                var messageEl = dom["h2"].Last();
+                var messageEl = dom["div:has(h2)"].Last();
                 messageEl.Children("a").Remove();
                 messageEl.Children("style").Remove();
                 var errorMessage = messageEl.Text().Trim();
+                IsConfigured = false;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -133,6 +159,8 @@ namespace Jackett.Indexers
             var queryCollection = new NameValueCollection();
 
             queryCollection.Add("view", "0");
+            queryCollection.Add("searchtype", "1");
+            queryCollection.Add("incldead", "1");
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("search", searchString);
@@ -145,7 +173,14 @@ namespace Jackett.Indexers
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl, CookieHeader);
+            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            if (results.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;
@@ -155,19 +190,11 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     CQ qRow = row.Cq();
 
-                    //CQ qLink = qRow.Children().ElementAt(1).Cq().Children("a").ElementAt(1).Cq();
-                    CQ qLink;
-                    CQ qTmp = qRow.Children().ElementAt(1).Cq().Find("a");                    
-                    if (qTmp.Length < 2) {
-                        qLink = qRow.Children().ElementAt(1).Cq().Find("a").ElementAt(0).Cq();
-                    } else {
-                        qLink = qRow.Children().ElementAt(1).Cq().Find("a").ElementAt(1).Cq();
-                    }
+                    release.MinimumRatio = 0;
+                    release.MinimumSeedTime = 2 * 24 * 60 * 60;
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    var qLink = qRow.Find("a[title][href^=\"details.php?id=\"]");
                     release.Title = qLink.Attr("title");
-                    release.Description = release.Title;
                     release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
                     release.Comments = release.Guid;
 
@@ -179,14 +206,26 @@ namespace Jackett.Indexers
                     release.Category = MapTrackerCatToNewznab(catNum);
 
                     var dateString = qRow.Children().ElementAt(6).Cq().Text().Trim();
-                    //var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    release.PublishDate = Jackett.Utils.DateTimeUtil.FromTimeAgo(dateString);
+                    if (dateString.Contains("ago"))
+                        release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
+                    else
+                        release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Children().ElementAt(7).Cq().Text().Split(new char[] { '/' })[0];
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Split(new char[] { '/' })[0].Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Split(new char[] { '/' })[1].Trim()) + release.Seeders;
+                    release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text());
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("a[href^=\"snatches.php?id=\"]").Text().Split(' ')[0]);
+
+                    release.DownloadVolumeFactor = 0;
+                    release.UploadVolumeFactor = 1;
+
+                    var desc = qRow.Find("td:nth-child(2)");
+                    desc.Find("a").Remove();
+                    desc.Find("small").Remove(); // Remove release name (if enabled in the user cp)
+                    release.Description = desc.Text().Trim(new char[] {'-', ' '});
 
                     releases.Add(release);
                 }

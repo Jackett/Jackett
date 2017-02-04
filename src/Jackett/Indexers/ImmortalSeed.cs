@@ -41,6 +41,10 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+            Type = "private";
+
             AddCategoryMapping(32, TorznabCatType.TVAnime);
             AddCategoryMapping(47, TorznabCatType.TVSD);
             AddCategoryMapping(8, TorznabCatType.TVHD);
@@ -69,28 +73,19 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
+
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }
             };
-            var request = new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                Type = RequestType.POST,
-                Referer = SiteLink,
-                PostData = pairs
-            };
-            var response = await webclient.GetString(request);
-            CQ splashDom = response.Content;
-            var link = splashDom[".trow2 a"].First();
-            var resultPage = await RequestStringWithCookies(link.Attr("href"), response.Cookies);
-            CQ resultDom = resultPage.Content;
 
-            await ConfigureIfOK(response.Cookies, resultPage.Content.Contains("/logout.php"), () =>
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            CQ resultDom = response.Content;
+
+            await ConfigureIfOK(response.Cookies, response.Content.Contains("/logout.php"), () =>
             {
-                var tries = resultDom["#main tr:eq(1) td font"].First().Text();
-                var errorMessage = "Incorrect username or password! " + tries + " tries remaining.";
+                var errorMessage = response.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 
@@ -109,6 +104,13 @@ namespace Jackett.Indexers
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
+            // Occasionally the cookies become invalid, login again if that happens
+            if (results.Content.Contains("You do not have permission to access this page."))
+            {
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;
@@ -118,18 +120,26 @@ namespace Jackett.Indexers
                 {
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
-                    release.Title = qRow.Find(".tooltip-content div").First().Text();
-                    if (string.IsNullOrWhiteSpace(release.Title))
-                        continue;
-                    release.Description = qRow.Find(".tooltip-content div").Get(1).InnerText.Trim();
+
+                    var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
+                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                    if (!qTitle.Any()) // fallback to Details link if there's no tooltip
+                    {
+                        qTitle = qDetails;
+                    }
+                    release.Title = qTitle.Text();
+
+                    var qDesciption = qRow.Find(".tooltip-content > div");
+                    if (qDesciption.Any())
+                        release.Description = qDesciption.Get(1).InnerText.Trim();
 
                     var qLink = row.Cq().Find("td:eq(2) a:eq(1)");
                     release.Link = new Uri(qLink.Attr("href"));
                     release.Guid = release.Link;
-                    release.Comments = new Uri(qRow.Find(".tooltip-target a").First().Attr("href"));
+                    release.Comments = new Uri(qDetails.Attr("href"));
 
                     // 07-22-2015 11:08 AM
-                    var dateString = qRow.Find("td:eq(1) div").Last().Children().Remove().End().Text().Trim();
+                    var dateString = qRow.Find("td:eq(1) div").Last().Get(0).LastChild.ToString().Trim();
                     release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
 
                     var sizeStr = qRow.Find("td:eq(4)").Text().Trim();
@@ -146,6 +156,19 @@ namespace Jackett.Indexers
                     }
 
                     release.Category = MapTrackerCatToNewznab(catLink);
+
+                    var grabs = qRow.Find("td:nth-child(6)").Text();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[title^=\"Free Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[title^=\"Silver Torrent\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

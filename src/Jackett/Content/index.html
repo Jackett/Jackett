@@ -3,10 +3,11 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
     <script src="../libs/filesize.min.js"></script>
     <script src="../libs/jquery.min.js"></script>
-    <script src="../libs/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="../libs/jquery.dataTables.min.js"></script>
+
     <script src="../libs/handlebars.min.js"></script>
     <script src="../libs/moment.min.js"></script>
     <script src="../libs/handlebarsmoment.js"></script>
@@ -17,7 +18,7 @@
     <link href="../bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../animate.css" rel="stylesheet">
     <link href="../custom.css" rel="stylesheet">
-    <link href="../css/jquery.dataTables.css" rel="stylesheet">
+    <link href="../css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/font-awesome.min.css">
     <title>Jackett</title>
 </head>
@@ -32,11 +33,17 @@
         </div>
         <hr />
         <div class="pull-right">
+            <button id="jackett-add-indexer" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
+            </button>
             <button id="jackett-show-search" class="btn btn-success btn-sm">
-                <i class="fa fa-search"></i> Manual Search <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Manual Search 
             </button>
             <button id="jackett-show-releases" class="btn btn-primary btn-sm">
-                <i class="fa fa-database"></i>  View cached releases <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                <i class="fa fa-database"></i>  View cached releases
+            </button>
+            <button id="jackett-test-all" class="btn btn-warning btn-sm">
+                <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> Test All 
             </button>
         </div>
         <h3>Configured Indexers</h3>
@@ -44,17 +51,18 @@
         <hr />
 
         <div class="input-area">
-            <h4>Adding a Jackett indexer in Sonarr</h4>
+            <h4>Adding a Jackett indexer in Sonarr or Radarr</h4>
             <ol>
                 <li>Go to <b>Settings > Indexers > Add > Torznab > Custom</b>.</li>
-                <li>For <b>URL</b> enter the <b>Torznab Host</b> of one of the indexers.</li>
-                <li>For the <b>API key</b> using the key above.</li>
+                <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy Torznab Feed</button> button and past it into the Sonarr/Radarr <b>URL</b> field.</li>
+                <li>For the <b>API key</b> use <b class="api-key-text"></b>.</li>
             </ol>
             <h4>Adding a Jackett indexer in CouchPotato</h4>
             <ol>
                 <li>Go to <b>Settings > Searchers</b>.</li>
-                <li>Enable <b>TorrentPotato</b> and in the host field enter the <b>TorrentPotato host</b> of one of the indexers.</li>
-                <li>For the <b>Passkey</b> use the <b>API key</b>.  Leave username blank.</li>
+                <li>Enable <b>TorrentPotato</b>.
+                <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy Potato Feed</button> button and past it into the CouchPotato <b>host</b> field.</li>
+                <li>For the <b>Passkey</b> use <b class="api-key-text"></b>. Leave the <b>username</b> field blank.</li>
             </ol>
 
         </div>
@@ -121,7 +129,6 @@
     </div>
 
     <div id="modals"></div>
-    <div id="unconfigured-indexers-template"></div>
 
     <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
         <div class="setup-item-recaptcha">
@@ -159,7 +166,7 @@
         </div>
     </script>
     <script id="setup-item-displayimage" type="text/x-handlebars-template">
-        <img class="setup-item-displayimage" src="{{{value}}}" />
+        <img class="setup-item-displayimage" src="{{{value}}}" alt="No image available" />
     </script>
     <script id="setup-item-displayinfo" type="text/x-handlebars-template">
         <div class="setup-item-displayinfo alert alert-info" role="alert">{{{value}}}</div>
@@ -169,49 +176,100 @@
             <input class="form-control" type="text" value="{{{value}}}" />
         </div>
     </script>
-
-    <script id="configured-indexer" type="text/x-handlebars-template">
-        <div class="configured-indexer indexer card">
-            <div class="indexer-logo">
-                <!-- Make section browser searchable -->
-                <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
-            </div>
-            <div class="indexer-buttons">
-                <button class="btn btn-primary btn-sm indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-danger btn-sm indexer-button-delete" data-id="{{id}}">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <a class="btn btn-info btn-sm" target="_blank" href="{{site_link}}">
-                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
-                </a>
-                <button class="btn btn-warning btn-sm indexer-button-test" data-id="{{id}}">
-                    Test <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="indexer-host">
-                <b>Torznab Host:</b>
-                <input class="form-control" type="text" value="{{torznab_host}}" placeholder="Torznab Host" readonly="">
-                <b>CouchPotato Host:</b>
-                {{#if potatoenabled}}
-
-                <input class="form-control" type="text" value="{{potato_host}}" placeholder="Torznab Host" readonly="">
-                {{else}}
-                <input class="form-control" type="text" value="Not available" placeholder="Torznab Host" readonly="">
-                {{/if}}
-            </div>
+    <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
+        <div class="setup-item-alternativesitelinks alert alert-info" role="alert">
+            This indexer has multiple known URLs which you can change above:
+            <ul>
+                {{#each alternativesitelinks}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
         </div>
     </script>
-    <script id="unconfigured-indexer" type="text/x-handlebars-template">
-        <div class="unconfigured-indexer card">
-            <div class="indexer-logo indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                <!-- Make section browser searchable -->
-                <span class="hidden-name">{{name}}</span>
-                <img alt="{{name}}" title="{{name}}" src="../logos/{{id}}.png" />
-              
-            </div>
+
+
+    <script id="configured-indexer-table" type="text/x-handlebars-template">
+        <div class="configured-indexer-div">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Indexer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each indexers}}
+                    <tr class="configured-indexer-row">
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
+                        <td class="fit">
+                            <div class="indexer-buttons">
+                                <button title="{{torznab_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</button>
+                                <button title="{{potato_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</button>
+
+                                <button title="Search" class="btn btn-success btn-xs indexer-button-search" data-id="{{id}}">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                                <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                                </button>
+                                <button title="Delete" class="btn btn-danger btn-xs indexer-button-delete" data-id="{{id}}">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                                <button title="{{last_error}}" class="btn btn-warning btn-xs indexer-button-test" data-toggle="tooltip" data-id="{{id}}" data-state="{{state}}">
+                                    Test
+                                    <span class="glyphicon" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </script>
+
+    <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
+        <div class="unconfigured-indexer-div">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Indexer</th>
+                        <th>Categories</th>
+                        <th>Type</th>
+                        <th>Type string</th>
+                        <th>Language</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each indexers}}
+                    <tr class="unconfigured-indexer-row">
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                        <td>{{mains_cats}}</td>
+                        <td class="fit"><span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
+                        <td>{{type}}</td>
+                        <td class="fit">{{language}}</td>
+                        <td class="fit">
+                            <div class="indexer-buttons">
+                                <button title="Configure" class="btn btn-success btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6"></td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </script>
 
@@ -225,7 +283,7 @@
                     </div>
                     <div class="modal-body">
                         <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
-                        <table class="dataTable compact cell-border hover stripe">
+                        <table id="jackett-releases-datatable" class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
                                     <th>Published</th>
@@ -236,28 +294,41 @@
                                     <th>Name</th>
                                     <th>Size</th>
                                     <th>Size</th>
+                                    <th>Files</th>
                                     <th>Category</th>
+                                    <th>Grabs</th>
                                     <th>Seeds</th>
                                     <th>Leechers</th>
+                                    <th class="fit">DL Factor</th>
+                                    <th class="fit">UL Factor</th>
                                     <th>Download</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr>
-                                    <td>{{PublishDate}}</td>
-                                    <td>{{FirstSeen}}</td>
-                                    <td>{{jacketTimespan PublishDate}}</td>
-                                    <td>{{jacketTimespan FirstSeen}}</td>
-                                    <td>{{Tracker}}</td>
-                                    <td><a href="{{Comments}}">{{Title}}</a></td>
-                                    <td>{{Size}}</td>
-                                    <td>{{jacketSize Size}}</td>
-                                    <td>{{CategoryDesc}}</td>
-                                    <td>{{Seeders}}</td>
-                                    <td>{{Peers}}</td>
-                                    <td class="downloadcolumn">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                                    <td class="fit">{{PublishDate}}</td>
+                                    <td class="fit">{{FirstSeen}}</td>
+                                    <td class="fit">{{jacketTimespan PublishDate}}</td>
+                                    <td class="fit">{{jacketTimespan FirstSeen}}</td>
+                                    <td class="fit">{{Tracker}}</td>
+                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="fit">{{Size}}</td>
+                                    <td class="fit">{{jacketSize Size}}</td>
+                                    <td class="fit">{{Files}}</td>
+                                    <td class="fit">{{CategoryDesc}}</td>
+                                    <td class="fit">{{Grabs}}</td>
+                                    <td class="fit">{{Seeders}}</td>
+                                    <td class="fit">{{Peers}}</td>
+                                    <td class="fit DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                                    <td class="fit UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                                    <td class="fit downloadcolumn">
+                                        {{#if Link}}
                                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                                        {{/if}}
+                                        {{#if MagnetUri}}
+                                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                                        {{/if}}
                                         {{#if BlackholeLink}}
                                         <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
                                         {{/if}}
@@ -267,6 +338,12 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -305,6 +382,7 @@
                         <select name="category" id="searchCategory"></select>
                         <label>Tracker</label>
                         <select name="tracker" id="searchTracker">
+                            <option value="">-- All --</option>
                             {{#each indexers}}
                             <option value="{{id}}">{{name}}</option>
                             {{/each}}
@@ -325,7 +403,7 @@
     <script id="jackett-search-results" type="text/x-handlebars-template">
         <hr />
         <p>Your search was done using: {{#each Indexers}}{{this}}, {{/each}}</p>
-        <table class="dataTable compact cell-border hover stripe">
+        <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
             <thead>
                 <tr>
                     <th>Published</th>
@@ -334,26 +412,39 @@
                     <th>Name</th>
                     <th>Size</th>
                     <th>Size</th>
+                    <th>Files</th>
                     <th>Category</th>
+                    <th>Grabs</th>
                     <th>Seeds</th>
                     <th>Leechers</th>
+                    <th>DL Factor</th>
+                    <th>UL Factor</th>
                     <th>Download</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr>
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td><a href="{{Comments}}">{{Title}}</a></td>
+                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
-                    <td>{{jacketSize Size}}</td>
+                    <td class="fit">{{jacketSize Size}}</td>
+                    <td>{{Files}}</td>
                     <td>{{CategoryDesc}}</td>
+                    <td>{{Grabs}}</td>
                     <td>{{Seeders}}</td>
                     <td>{{Peers}}</td>
+                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
                     <td class="downloadcolumn">
+                        {{#if Link}}
                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                        {{/if}}
+                        {{#if MagnetUri}}
+                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                        {{/if}}
                         {{#if BlackholeLink}}
                         <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
                         {{/if}}
@@ -363,6 +454,12 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -469,14 +566,7 @@
             </div>
         </div>
     </script>
-    <script id="add-indexer" type="text/x-handlebars-template">
-        <button class="indexer card add-indexer" data-toggle="modal">
-            <div class="indexer-add-content">
-                <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <div class="light-text">Add</div>
-            </div>
-        </button>
-    </script>
+
     <script id="spinner" type="text/x-handlebars-template">
         <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>

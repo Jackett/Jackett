@@ -14,13 +14,14 @@ using System.Web;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using Jackett.Models.IndexerConfig;
+using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     public class HDSpace : BaseIndexer, IIndexer
     {
         private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
-        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&active=0&options=0&category=21%3B22&search={0}"; } }
+        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -39,11 +40,44 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-        }
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+            Type = "private";
+
+            AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
+            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
+                19, // Movie / 1080p
+                41, // Movie / 4K UHD
+                18, // Movie / 720p
+                40, // Movie / Remux
+                16 // Movie / HD-DVD
+            );
+
+            AddMultiCategoryMapping(TorznabCatType.TVHD,
+                21, // TV Show / 720p HDTV
+                22 // TV Show / 1080p HDTV
+            );
+
+            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / Lossless
+            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
+            
+            AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
+                24, // TV Show / Documentary / 720p
+                25 // TV Show / Documentary / 1080p
+            );
+            
+            AddMultiCategoryMapping(TorznabCatType.XXX,
+                33, // XXX / 720p
+                34 // XXX / 1080p
+            );
+            
+            AddCategoryMapping("37", TorznabCatType.PC);
+            AddCategoryMapping("38", TorznabCatType.Other);
+         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
@@ -69,8 +103,22 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+
+            var searchString = query.GetQueryString();
+            var searchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+            queryCollection.Add("active", "0");
+            queryCollection.Add("options", "0");
+            queryCollection.Add("category", string.Join(";", MapTorznabCapsToTrackers(query)));
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                queryCollection.Add("search", searchString);
+            }
+
+            searchUrl += queryCollection.GetQueryString();
+
+            var response = await RequestStringWithCookiesAndRetry(searchUrl);
             var results = response.Content;
 
             try
@@ -111,6 +159,25 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text()) + release.Seeders;
+
+                    var grabs = qRow.Find("td:nth-child(10)").Text();
+                    grabs = grabs.Replace("---", "0");
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    if (qRow.Find("img[title=\"FreeLeech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[src=\"images/sf.png\"]").Length >= 1) // side freeleech
+                        release.DownloadVolumeFactor = 0;
+                    else if (qRow.Find("img[title=\"Half FreeLeech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
+                    var qCat = qRow.Find("a[href^=\"index.php?page=torrents&category=\"]");
+                    var cat = qCat.Attr("href").Split('=')[2];
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     releases.Add(release);
                 }

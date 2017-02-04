@@ -1,0 +1,80 @@
+﻿---
+  site: gfxpeers
+  name: GFXPeers
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://gfxpeers.net/
+
+  caps:
+    categories:
+      1: PC/0day # Applications
+      2: PC/0day # Plug-ins
+      3: Other # Tutorials
+      4: Other # Textures
+      5: Other # 3D Models
+      6: Other # Game-Dev
+      7: Other # Miscellaneous
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      keeplogged: "1"
+    error:
+      - selector: .auth_form > .warning
+    test:
+      path: /torrents.php
+
+  search:
+    path: /torrents.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      searchstr: "{{ .Query.Keywords }}"
+      order_by: "time"
+      order_way: "desc"
+      action: "advanced"
+      searchsubmit: "1"
+
+    rows:
+      selector: table#torrent_table > tbody > tr.torrent
+    fields:
+      download:
+        selector: a[href^="torrents.php?action=download&id="]
+        attribute: href
+      title:
+        selector: a[href^="torrents.php?id="]
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      category:
+        selector: a[href^="torrents.php?filter_cat"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "\\[(\\d+?)\\]"
+      details:
+        selector: a[href^="torrents.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+      files:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      date:
+        selector: td:nth-child(4)

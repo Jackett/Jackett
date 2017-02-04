@@ -69,9 +69,11 @@ namespace Jackett.Utils
             return String.Join("\n", fields);
         }
 
-        public static string GetQueryString(this NameValueCollection collection)
+        public static string GetQueryString(this NameValueCollection collection, Encoding encoding = null)
         {
-            return string.Join("&", collection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(collection[a])));
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+            return string.Join("&", collection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(collection[a], encoding)));
         }
 
         public static string GenerateRandom(int length)

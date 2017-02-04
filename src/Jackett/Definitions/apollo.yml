@@ -1,0 +1,95 @@
+---
+  site: apollo
+  name: Apollo
+  description: "A music tracker"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://apollo.rip
+
+  caps:
+    categories:
+      1: Audio # Music
+      2: PC # Applications
+      3: Books # E-Books
+      4: Audio/Audiobook # Audiobooks
+      5: Movies # E-Learning Videos
+      6: TV # Comedy
+      7: Books/Comics # Comics
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      keeplogged: 1
+      login: "Log in"
+    error:
+      - selector: form#loginform > span.warning
+    test:
+      path: torrents.php
+
+  ratio:
+    path: torrents.php
+    selector: li#stats_ratio > span
+
+  search:
+    path: torrents.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      searchstr: "{{ .Query.Keywords }}"
+      order_by: time
+      order_way: desc
+      action: basic
+      searchsubmit: 1
+    rows:
+      selector: table#torrent_table > tbody > tr.torrent
+    fields:
+      download:
+        selector: a[href^="torrents.php?action=download&id="]
+        attribute: href
+      description:
+        selector: div.group_info
+        remove: span
+      title:
+        selector: div.group_info
+        remove: span, div.tags
+      category:
+        selector: td.cats_col
+        case:
+          div.cats_music: 1
+          div.cats_applications: 2
+          div.cats_ebooks: 3
+          div.cats_audiobooks: 4
+          div.cats_elearningvideos: 5
+          div.cats_comedy: 6
+          div.cats_comics: 7
+      comments:
+        selector: a[href^="torrents.php?id="]
+        attribute: href
+      files:
+        selector: td:nth-child(3)
+      date:
+        selector: td:nth-child(4)
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          ":root div.alertbar:contains(\"freeleech\")": "0"
+          ":root div.alertbar:contains(\"FREELEECH\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

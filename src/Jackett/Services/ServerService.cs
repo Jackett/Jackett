@@ -17,6 +17,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -75,7 +78,8 @@ namespace Jackett.Services
                 return link;
          
             var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString()));
-            var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, file);
+            string urlEncodedFile = WebUtility.UrlEncode(file);
+            var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
             return new Uri(proxyLink);
         }
 
@@ -146,10 +150,93 @@ namespace Jackett.Services
         public void Initalize()
         {
             logger.Info("Starting Jackett " + configService.GetVersion());
+            try
+            {
+                var x = Environment.OSVersion;
+                var runtimedir = RuntimeEnvironment.GetRuntimeDirectory();
+                logger.Info("Environment version: " + Environment.Version.ToString() + " (" + runtimedir + ")");
+                logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
+
+                try
+                {
+                    var issuefile = "/etc/issue";
+                    if (File.Exists(issuefile))
+                    {
+                        using (StreamReader reader = new StreamReader(issuefile))
+                        {
+                            string firstLine;
+                            firstLine = reader.ReadLine();
+                            if (firstLine != null)
+                                logger.Info("issue: " + firstLine);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Error while reading the issue file");
+                }
+
+                Type monotype = Type.GetType("Mono.Runtime");
+                if (monotype != null)
+                {
+                    MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var monoVersion = "unknown";
+                    if (displayName != null)
+                        monoVersion = displayName.Invoke(null, null).ToString();
+                    logger.Info("mono version: " + monoVersion);
+
+                    if (monoVersion.StartsWith("3."))
+                    {
+                        logger.Error("Your mono version is to old (mono 3 is no longer supported). Please update to the latest version from http://www.mono-project.com/download/");
+                        Environment.Exit(2);
+                    }
+                    else if (monoVersion.StartsWith("4.2."))
+                    {
+                        logger.Error("mono version 4.2.* is known to cause problems with Jackett. If you experience any problems please try updating to the latest mono version from http://www.mono-project.com/download/ first.");
+                    }
+
+                    try
+                    {
+                        // Check for mono-devel
+                        // Is there any better way which doesn't involve a hard cashes?
+                        var mono_devel_file = Path.Combine(runtimedir, "mono-api-info.exe"); 
+                        if (!File.Exists(mono_devel_file))
+                        {
+                            logger.Error("It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error while checking for mono-devel");
+                    }
+
+                    try
+                    {
+                        Encoding.GetEncoding("windows-1255");
+                    }
+                    catch (NotSupportedException e)
+                    {
+                        logger.Debug(e);
+                        logger.Error(e.Message + " Most likely the mono-locale-extras package is not installed.");
+                        Environment.Exit(2);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error while getting environment details: " + e);
+            }
+
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers();
+            foreach(string dir in configService.GetCardigannDefinitionsFolders())
+            {
+                indexerService.InitCardigannIndexers(dir);
+            }
+            indexerService.SortIndexers();
             client.Init();
+            updater.CleanupTempDir();
         }
 
         public void Start()
@@ -159,7 +246,25 @@ namespace Jackett.Services
             var startOptions = new StartOptions();
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
             Startup.BasePath = BasePath();
-            _server = WebApp.Start<Startup>(startOptions);
+            try
+            {
+                _server = WebApp.Start<Startup>(startOptions);
+            }
+            catch (TargetInvocationException e)
+            {
+                var inner = e.InnerException;
+                if (inner is SocketException && ((SocketException)inner).SocketErrorCode == SocketError.AddressAlreadyInUse) // Linux (mono)
+                {
+                    logger.Error("Address already in use: Most likely Jackett is already running.");
+                    Environment.Exit(1);
+                }
+                else if (inner is HttpListenerException && ((HttpListenerException)inner).ErrorCode == 183) // Windows
+                {
+                    logger.Error(inner.Message + " Most likely Jackett is already running.");
+                    Environment.Exit(1);
+                }
+                throw e;
+            }
             logger.Debug("Web server started");
             updater.StartUpdateChecker();
         }

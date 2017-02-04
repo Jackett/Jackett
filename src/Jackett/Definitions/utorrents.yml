@@ -1,0 +1,128 @@
+﻿---
+  site: utorrents
+  name: u-Torrent
+  language: ro-ro
+  type: private
+  encoding: windows-1252
+  links:
+    - http://www.u-torrents.ro/
+
+  caps:
+    categories:
+      48: Movies/3D # 3D
+      1: PC/0day # Appz
+      3: Other # Cartoons
+      42: TV/Documentary # Documentaries
+      6: Books # eBooks
+      11: PC/Games # Games | PC
+      12: Console/PS3 # Games | PS2
+      36: Console/PS3 # Games | PS3
+      40: Console/PSP # Games | PSP
+      25: Console/Wii # Games | Wii
+      16: Console/Xbox # Games | XBOX
+      19: PC/Phone-Other # Mobile
+      43: Movies/BluRay # Movies | Blu-Ray
+      49: Movies/BluRay # Movies | Blu-Ray-RO
+      7: Movies/DVD # Movies | DVD-R
+      2: Movies/DVD # Movies | DVD-RO
+      17: Movies/HD # Movies | HD
+      45: Movies/HD # Movies | HD-RO
+      21: Movies # Movies | Oldies
+      38: Movies # Movies | Packs
+      8: Movies/SD # Movies | x264
+      4: Movies/SD # Movies | x264-RO
+      10: Movies/SD # Movies | XviD
+      44: Movies/SD # Movies | XviD-RO
+      5: Audio/MP3 # Music | Mp3
+      39: Audio # Music | Packs
+      23: Audio/Video # Music | Videos
+      18: Other # Pictures
+      46: XXX/Imageset # Pictures | xxx
+      22: TV/Sport # Sport
+      50: TV # STAR
+      20: TV/SD # TV | Episodes
+      47: TV/HD # TV | Episodes HD
+      41: TV # TV | Packs
+      15: XXX # xXx
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /browse.php
+      
+  ratio:
+    path: /browse.php
+    selector: font:contains("Ratio:") > span
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: td.outer > table > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="download2.php"]
+        attribute: href
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: regexp
+            args: (\d+)
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(6)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: trim
+            args: "\xF0"
+          - name: append
+            args: " +02:00"
+          - name: dateparse
+            args: "02-01-200615:04:05 -07:00"
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      banner:
+        selector: a[onmouseover][href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
+      downloadvolumefactor:
+        case:
+          button.btnfree: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          button.btn2xup: "2"
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a[href^="details.php?id="]

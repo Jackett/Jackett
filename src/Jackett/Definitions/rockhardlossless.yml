@@ -1,0 +1,80 @@
+﻿---
+  site: rockhardlossless
+  name: Rockhard Lossless
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://rockhard-lossless.org
+
+  caps:
+    categories:
+      1: Audio
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: tbody:has(td.colhead > span:contains("Error"))
+      - selector: tbody:has(td.colhead > span:contains("failed"))
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    method: post
+    inputs:
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      searchin: "title"
+    rows:
+      selector: table > tbody tr.tt
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      category:
+        text: "1"
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="download.php?torrent="]
+        attribute: href
+      banner:
+        selector: td:nth-child(2) > img
+        attribute: src
+      size:
+        selector: td:nth-child(8)
+      files:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(9)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      seeders:
+        selector: td:nth-child(10)
+      leechers:
+        selector: td:nth-child(11)
+      date:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        case:
+          "a.info > b:contains(\"Free\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      description:
+        selector: td:nth-child(3)
+        remove: a, div, font:contains("NEW!")

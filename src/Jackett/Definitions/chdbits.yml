@@ -1,0 +1,104 @@
+﻿---
+  site: chdbits
+  name: CHDBits
+  description: "A general tracker"
+  language: zh-cn
+  type: private
+  encoding: UTF-8
+  links:
+    - https://chdbits.co
+
+  caps:
+    categories:
+      401: Movies # Movies
+      404: TV/Documentary # Documentaries
+      405: TV/Anime # Animations
+      402: TV # TV Series
+      403: TV # TV Shows
+      406: Audio/Video # Music Videos
+      407: TV/Sport # Sports
+      409: Other # Misc
+      408: Audio # HQ Audio
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /torrents.php
+
+  ratio:
+    path: /torrents.php
+    selector: table#info_block
+    filters:
+      - name: regexp
+        args: "Ratio:\\s(.*?)\\s\\s"
+
+  search:
+    path: /torrents.php
+    method: post
+    inputs:
+      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table.torrents > tbody > tr:has(table.torrentname)
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      title|optional:
+        selector: a[title][href^="details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(8)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      date:
+        selector: td:nth-child(4) > span[title]
+        attribute: title
+        filters:
+          - name: append
+            args: " +08:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          img.pro_free: "0"
+          img.pro_free2up: "0"
+          img.pro_50pctdown: "0.5"
+          img.pro_50pctdown2up: "0.5"
+          img.pro_30pctdown: "0.3"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img.pro_50pctdown2up: "2"
+          img.pro_free2up: "2"
+          img.pro_2up: "2"
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a, img

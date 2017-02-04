@@ -1,0 +1,93 @@
+﻿---
+  site: bithq
+  name: BitHQ
+  language: en-us
+  type: private
+  encoding: windows-1252
+  links:
+    - http://www.bithq.org
+
+  caps:
+    categories:
+      7: Movies # Approved Film Series
+      81: TV/HD # BD-MKV
+      62: Audio # CD-R/OST
+      51: Movies/DVD # DVD-R/Animation
+      48: Movies/DVD # DVD-R/Asian Cinema
+      50: Movies/DVD # DVD-R/Documentaries
+      64: Movies/DVD # DVD-R/Foreign Films
+      55: Movies/DVD # DVD-R/Kids
+      49: Movies/DVD # DVD-R/Movies
+      52: Audio/Video # DVD-R/Music
+      53: TV # DVD-R/TV
+      70: Movies # Empire's 500
+      80: Movies # Global Lens | trigon-film
+      65: Other # Hi-Res Covers
+      66: Movies/HD # High Quality
+      57: Movies/SD # Low Quality
+      54: PC/0day # Software/DVD/BD
+      61: PC/0day # Software/System Utilities
+      69: TV/Sport # Sporting Events
+      68: Movies # The Criterion Collection
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: td > table > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      title:
+        selector: a[href^="details.php?id="]
+      description:
+        selector: td:nth-child(2) > strong
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: ([\d,]+)
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(5)
+      downloadvolumefactor:
+        case:
+          tr[bgcolor="#FFF6CB"]: "0"
+          img[alt^="Goodie.. Download for free!"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

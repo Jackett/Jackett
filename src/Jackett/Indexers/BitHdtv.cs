@@ -23,7 +23,7 @@ namespace Jackett.Indexers
     {
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php?/{0}/dl.torrent"; } }
+        private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
 
         new ConfigurationDataBasicLogin configData
         {
@@ -42,6 +42,10 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
+            Type = "private";
+
             AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay); // Blu-ray
             AddCategoryMapping(4, TorznabCatType.TVDocumentary); // Documentaries
@@ -56,7 +60,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -87,6 +91,8 @@ namespace Jackett.Indexers
                 queryCollection.Add("search", searchString);
             }
 
+            queryCollection.Add("incldead", "1");
+
             var searchUrl = SearchUrl + queryCollection.GetQueryString();
 
             var trackerCats = MapTorznabCapsToTrackers(query, mapChildrenCatsToParent: true);
@@ -108,8 +114,11 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qLink.Attr("title");
-                    release.Description = release.Title;
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
+                    release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(4)").Text());
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(8)").Text());
+                    release.Guid = new Uri(qLink.Attr("href"));
                     release.Comments = release.Guid;
                     release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
 
@@ -131,6 +140,27 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
 
+                    var bgcolor = qRow.Attr("bgcolor");
+                    if (bgcolor == "#DDDDDD")
+                    {
+                        release.DownloadVolumeFactor = 1;
+                        release.UploadVolumeFactor = 2;
+                    }
+                    else if (bgcolor == "#FFFF99")
+                    {
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
+                    }
+                    else if (bgcolor == "#CCFF99")
+                    {
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 2;
+                    }
+                    else
+                    {
+                        release.DownloadVolumeFactor = 1;
+                        release.UploadVolumeFactor = 1;
+                    }
                     releases.Add(release);
                 }
             }

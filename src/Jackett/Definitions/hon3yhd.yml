@@ -1,0 +1,119 @@
+﻿---
+  site: hon3yhd
+  name: Hon3y HD
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://hon3yhd.com/
+
+  caps:
+    categories:
+      31: Movies/BluRay # 1080p BluRay
+      70: Movies/3D # 3D Movies
+      30: Movies/BluRay # 720p BluRay
+      68: TV/Anime # Animation
+      9: Movies/BluRay # BD25
+      10: Movies/BluRay # BD50
+      8: Movies/DVD # DVD5
+      7: Movies/DVD # DvD9
+      1: Movies/SD # DVDRips
+      26: Books # Ebooks
+      13: PC/Games # Games
+      2: Movies/HD # HDRips
+      32: Movies/HD # HEVC Movies
+      33: Movies # Hollywood Dub
+      4: Movies # Hollywood Movies
+      21: TV # Hollywood TV
+      20: TV # Indian TV
+      18: Movies # Malayalam Movies
+      25: Audio # Music
+      24: Audio/Video # Music Videos
+      5: Movies # Pakistani Movies
+      19: TV # Pakistani TV
+      36: Other # Pre Releases
+      15: Movies # Punjabi Movies
+      28: Other # Religious
+      11: Movies # Remux
+      12: PC # Softwares
+      34: Movies # South Dub
+      14: TV/Sport # Sports
+      35: TV # Stage Drama
+      17: Movies # Tamil Movies
+      16: Movies # Telugu Movies
+      27: Other # Tutorial
+      29: Movies/SD # Upscaled DvDRips
+      3: Movies # WEB-HD
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      use_ssl: "1"
+      perm_ssl: "1"
+    error:
+      - selector: tbody:has(td.colhead > span:contains("Error"))
+      - selector: tbody:has(td.colhead > span:contains("failed"))
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table > tbody > tr.tt
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="download.php?torrent="]
+        attribute: href
+      banner|optional:
+        selector: a[href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=\\'(.+?)\\'
+          - name: replace
+            args: ["./pic/noposter.jpg", ""]
+      size:
+        selector: td:nth-child(7)
+      files:
+        selector: td:nth-child(4)
+      grabs:
+        selector: td:nth-child(8)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(6)
+      downloadvolumefactor:
+        case:
+          "a.info > b:contains(\"Free\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

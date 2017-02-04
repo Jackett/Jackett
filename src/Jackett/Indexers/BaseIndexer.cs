@@ -12,18 +12,24 @@ using Jackett.Utils.Clients;
 using AutoMapper;
 using System.Threading;
 using Jackett.Models.IndexerConfig;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
     public abstract class BaseIndexer
     {
-        public string SiteLink { get; private set; }
-        public string DisplayDescription { get; private set; }
-        public string DisplayName { get; private set; }
+        public string SiteLink { get; protected set; }
+        public string DefaultSiteLink { get; protected set; }
+        public string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
+        public string DisplayDescription { get; protected set; }
+        public string DisplayName { get; protected set; }
+        public string Language { get; protected set; }
+        public Encoding Encoding { get; protected set; }
+        public string Type { get; protected set; }
         public string ID { get { return GetIndexerID(GetType()); } }
 
         public bool IsConfigured { get; protected set; }
-        public TorznabCapabilities TorznabCaps { get; private set; }
+        public TorznabCapabilities TorznabCaps { get; protected set; }
         protected Logger logger;
         protected IIndexerManagerService indexerService;
         protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
@@ -38,13 +44,25 @@ namespace Jackett.Indexers
             set { configData.CookieHeader.Value = value; }
         }
 
-
+        public string LastError
+        {
+            get { return configData.LastError.Value; }
+            set
+            {
+                bool SaveNeeded = configData.LastError.Value != value && IsConfigured;
+                configData.LastError.Value = value;
+                if (SaveNeeded)
+                    SaveConfig();
+            }
+        }
 
         protected ConfigurationData configData;
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
 
+        // standard constructor used by most indexers
         public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
+            : this(manager, client, logger, p)
         {
             if (!link.EndsWith("/"))
                 throw new Exception("Site link must end with a slash.");
@@ -52,18 +70,24 @@ namespace Jackett.Indexers
             DisplayName = name;
             DisplayDescription = description;
             SiteLink = link;
-            this.logger = logger;
-            indexerService = manager;
-            webclient = client;
-            protectionService = p;
+            DefaultSiteLink = link;
             this.downloadUrlBase = downloadBase;
-
             this.configData = configData;
+            LoadValuesFromJson(null);
 
             if (caps == null)
                 caps = TorznabUtil.CreateDefaultTorznabTVCaps();
             TorznabCaps = caps;
 
+        }
+
+        // minimal constructor used by e.g. cardigann generic indexer
+        public BaseIndexer(IIndexerManagerService manager, IWebClient client, Logger logger, IProtectionService p)
+        {
+            this.logger = logger;
+            indexerService = manager;
+            webclient = client;
+            protectionService = p;
         }
 
         public IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases)
@@ -100,8 +124,20 @@ namespace Jackett.Indexers
         {
             if (null != input)
             {
-                input = input.ToLowerInvariant();
-                var mapping = categoryMapping.Where(m => m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
+                var mapping = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
+                if (mapping != null)
+                {
+                    return mapping.NewzNabCategory;
+                }
+            }
+            return 0;
+        }
+
+        protected int MapTrackerCatDescToNewznab(string input)
+        {
+            if (null != input)
+            {
+                var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc != null && m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
                 if (mapping != null)
                 {
                     return mapping.NewzNabCategory;
@@ -126,7 +162,7 @@ namespace Jackett.Indexers
             IsConfigured = false;
         }
 
-        protected virtual void SaveConfig()
+        public virtual void SaveConfig()
         {
             indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
         }
@@ -179,8 +215,8 @@ namespace Jackett.Indexers
 
         private String ResolveCookies(String incomingCookies = "")
         {
-            var redirRequestCookies = (CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\s]+)=([^=]+)(?:\s|$)");
+            var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
+            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]+)");
             Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
             var matches = expression.Match(redirRequestCookies);
             while (matches.Success)
@@ -188,8 +224,21 @@ namespace Jackett.Indexers
                 if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
                 matches = matches.NextMatch();
             }
-            return string.Join(" ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
             
+        }
+
+        // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
+        protected void UpdateCookieHeader(string newCookies, string cookieOverride = null)
+        {
+            string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
+            if (CookieHeader != newCookieHeader)
+            {
+                logger.Debug(string.Format("updating Cookies {0} => {1}", CookieHeader, newCookieHeader));
+                CookieHeader = newCookieHeader;
+                if (IsConfigured)
+                    SaveConfig();
+            }
         }
 
         private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
@@ -209,7 +258,8 @@ namespace Jackett.Indexers
                 {
                     Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
                     Referer = referrer,
-                    Cookies = redirRequestCookies
+                    Cookies = redirRequestCookies,
+                    Encoding = Encoding
                 });
                 Mapper.Map(redirectedResponse, incomingResponse);
             }
@@ -246,11 +296,33 @@ namespace Jackett.Indexers
             }
         }
 
+        public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            IProtectionService ps = null;
+            if (useProtectionService)
+                ps = protectionService;
+            configData.LoadValuesFromJson(jsonConfig, ps);
+            if (string.IsNullOrWhiteSpace(configData.SiteLink.Value))
+            {
+                configData.SiteLink.Value = DefaultSiteLink;
+            }
+            if (!configData.SiteLink.Value.EndsWith("/"))
+                configData.SiteLink.Value += "/";
+
+            var match = Regex.Match(configData.SiteLink.Value, "^https?:\\/\\/[\\w\\-\\/\\.]+$");
+            if (!match.Success)
+            {
+                throw new Exception(string.Format("\"{0}\" is not a valid URL.", configData.SiteLink.Value));
+            }
+
+            SiteLink = configData.SiteLink.Value;
+        }
+
         public virtual void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             if (jsonConfig is JArray)
             {
-                configData.LoadValuesFromJson(jsonConfig, protectionService);
+                LoadValuesFromJson(jsonConfig, true);
                 IsConfigured = true;
             }
             // read and upgrade old settings file format
@@ -264,23 +336,36 @@ namespace Jackett.Indexers
 
         public async virtual Task<byte[]> Download(Uri link)
         {
-            var response = await RequestBytesWithCookiesAndRetry(link.ToString());
+            return await Download(link, RequestType.GET);
+        }
+
+        public async virtual Task<byte[]> Download(Uri link, RequestType method = RequestType.GET)
+        {
+            // do some extra escaping, needed for HD-Torrents
+            var requestLink = link.ToString()
+                .Replace("(", "%28")
+                .Replace(")", "%29")
+                .Replace("'", "%27");
+            var response = await RequestBytesWithCookiesAndRetry(requestLink, null, method);
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
-                throw new Exception($"Remote server returned {response.Status.ToString()}");
+                logger.Error("Failed download cookies: " + this.CookieHeader);
+                if (response.Content != null)
+                    logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
+                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => "+response.RedirectingTo : ""));
             }
 
             return response.Content;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookiesAndRetry(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
         {
             Exception lastException = null;
             for (int i = 0; i < 3; i++)
             {
                 try
                 {
-                    return await RequestBytesWithCookies(url, cookieOverride);
+                    return await RequestBytesWithCookies(url, cookieOverride, method, referer, data);
                 }
                 catch (Exception e)
                 {
@@ -301,12 +386,15 @@ namespace Jackett.Indexers
                 Type = RequestType.GET,
                 Cookies = CookieHeader,
                 Referer = referer,
-                Headers = headers
+                Headers = headers,
+                Encoding = Encoding
             };
 
             if (cookieOverride != null)
                 request.Cookies = cookieOverride;
-            return await webclient.GetString(request);
+            WebClientStringResult result = await webclient.GetString(request);
+            UpdateCookieHeader(result.Cookies, cookieOverride);
+            return result;
         }
 
         protected async Task<WebClientStringResult> RequestStringWithCookiesAndRetry(string url, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null)
@@ -329,13 +417,16 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
                 Url = url,
-                Type = RequestType.GET,
-                Cookies = cookieOverride ?? CookieHeader
+                Type = method,
+                Cookies = cookieOverride ?? CookieHeader,
+                PostData = data,
+                Referer = referer,
+                Encoding = Encoding
             };
 
             if (cookieOverride != null)
@@ -353,12 +444,15 @@ namespace Jackett.Indexers
                 PostData = data,
                 Referer = referer,
                 Headers = headers,
-                RawBody = rawbody
+                RawBody = rawbody,
+                Encoding = Encoding
             };
 
             if (emulateBrowser.HasValue)
                 request.EmulateBrowser = emulateBrowser.Value;
-            return await webclient.GetString(request);
+            WebClientStringResult result = await webclient.GetString(request);
+            UpdateCookieHeader(result.Cookies, cookieOverride);
+            return result;
         }
 
         protected async Task<WebClientStringResult> PostDataWithCookiesAndRetry(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
@@ -389,7 +483,8 @@ namespace Jackett.Indexers
                 Type = RequestType.POST,
                 Cookies = cookies,
                 Referer = referer,
-                PostData = data
+                PostData = data,
+                Encoding = Encoding
             };
             var response = await webclient.GetString(request);
             if (accumulateCookies)
@@ -436,47 +531,36 @@ namespace Jackett.Indexers
             }
         }
 
-        protected void AddCategoryMapping(string trackerCategory, int newznabCategory)
+        protected List<string> GetAllTrackerCategories()
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory, newznabCategory));
+            return categoryMapping.Select(x => x.TrackerCategory).ToList();
         }
 
-        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory)
+        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
+            categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, newznabCategory.ID));
             if (!TorznabCaps.Categories.Contains(newznabCategory))
+            {
                 TorznabCaps.Categories.Add(newznabCategory);
+                if (TorznabCatType.Movies.Contains(newznabCategory))
+                    TorznabCaps.MovieSearchAvailable = true;
+            }
         }
 
-        protected void AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory)
+        protected void AddCategoryMapping(int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
         {
-            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory.ID));
-            if (!TorznabCaps.Categories.Contains(newznabCategory))
-                TorznabCaps.Categories.Add(newznabCategory);
-        }
-
-        protected void AddCategoryMapping(int trackerCategory, int newznabCategory)
-        {
-            categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCategory));
+            AddCategoryMapping(trackerCategory.ToString(), newznabCategory, trackerCategoryDesc);
         }
 
         protected void AddMultiCategoryMapping(TorznabCategory newznabCategory, params int[] trackerCategories)
         {
             foreach (var trackerCat in trackerCategories)
             {
-                categoryMapping.Add(new CategoryMapping(trackerCat.ToString(), newznabCategory.ID));
+                AddCategoryMapping(trackerCat, newznabCategory);
             }
         }
 
-        protected void AddMultiCategoryMapping(int trackerCategory, params TorznabCategory[] newznabCategories)
-        {
-            foreach (var newznabCat in newznabCategories)
-            {
-                categoryMapping.Add(new CategoryMapping(trackerCategory.ToString(), newznabCat.ID));
-            }
-        }
-
-        protected List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false)
+        protected virtual List<string> MapTorznabCapsToTrackers(TorznabQuery query, bool mapChildrenCatsToParent = false)
         {
             var result = new List<string>();
             foreach (var cat in query.Categories)

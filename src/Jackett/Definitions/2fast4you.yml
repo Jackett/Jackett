@@ -1,0 +1,139 @@
+﻿---
+  site: 2fast4you
+  name: 2 Fast 4 You
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.2f4y.me/
+
+  caps:
+    categories:
+      10: TV/Anime # Animation: HD720P
+      11: TV/Anime # Animation: HD1080P
+      56: TV/Anime # Animation: DVDRip
+      13: TV/Anime # Animation: DVD
+      18: PC/0day # Applications: PC
+      16: PC/Games # Applications: Jeux
+      19: PC/Phone-Android # Applications: Android
+      38: PC/Phone-IOS # Applications: Mobile Phone
+      17: PC/0day # Applications: Autres
+      67: TV # Autres: Emission TV
+      68: TV/Sport # Autres: Sport
+      40: Other # Autres: Autres
+      14: TV/Documentary # Documentaires: DivX
+      15: TV/Documentary # Documentaires: HD
+      76: TV/Documentary # Documentaires: TVRip
+      62: Audio/Audiobook # E-Books: E-Books Audio
+      50: Books # E-Books: Manuel Français
+      49: Books # E-Books: Manuel Anglais
+      36: Books # E-Books: Livres Français
+      53: Books # E-Books: Livre Anglais
+      52: Books # E-Books: Revue - Journaux
+      51: Books # E-Books: BD
+      66: Movies # Films: VOSTFR
+      71: Movies/WEBDL # Films: WEB-DL
+      65: Movies # Films: VO
+      72: Movies/SD # Films: TVRip/HDTV
+      70: Movies/HD # Films: MHD X265
+      57: Movies/SD # Films: TS/CAM
+      59: Movies # Films: Spectacle
+      55: Movies/HD # Films: MHD 720P
+      54: Movies/HD # Films: MHD 1080P
+      1: Movies/HD # Films: HD720P
+      2: Movies/HD # Films: HD1080P
+      90: Movies/HD # Films: HD X265
+      92: Movies/HD # Films: 4K
+      69: Movies/3D # Films: Film 3D
+      3: Movies/DVD # Films: DVDRIP
+      4: Movies/DVD # Films: DVD5
+      5: Movies/DVD # Films: DVD9
+      91: Movies/HD # Films: RemuX
+      89: Movies/HD # Films: BD/BR Rip
+      88: Movies/BluRay # Films: Full BD/BR
+      77: Other # GPS: Cartes
+      78: Other # GPS: Radars
+      79: TV/Anime # Mangas: HD
+      80: TV/Anime # Mangas: HD VO
+      81: TV/Anime # Mangas: HD VOSTFR
+      82: TV/Anime # Mangas: DVDRIP
+      83: TV/Anime # Mangas: DVDRIP VO
+      84: TV/Anime # Mangas: DVDRIP VOSTFR
+      85: TV/Anime # Mangas: Web-DL
+      86: TV/Anime # Mangas: TV-RIP
+      75: Audio # Musique: Concert TVRip
+      25: Audio/MP3 # Musique: Single MP3
+      24: Audio/Lossless # Musique: Single Flac
+      22: Audio/MP3 # Musique: Album MP3
+      23: Audio/Lossless # Musique: Album Flac
+      64: Audio # Musique: Mégamix Maison
+      58: Audio # Musique: Concert
+      61: TV # Serie TV: Episode VOSTFR
+      63: TV # Serie TV: Episode VO
+      12: TV/Anime # Serie TV: Animation
+      74: TV # Serie TV: TVRip
+      73: TV/WEB-DL # Serie TV: WEB-DL
+      7: TV # Serie TV: Episode FR
+      6: TV # Serie TV: Saison FR
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: account-login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: form:contains("Erreur")
+        message:
+          selector: form
+          remove: table
+    test:
+      path: torrents-search.php
+
+  search:
+    path: torrents-search.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+
+    rows:
+      selector: table.ttable_headinner > tbody > tr[class^="t-row"]
+    fields:
+      download:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["torrents-details.php", "download.php"]
+      title:
+        selector: a[href^="torrents-details.php?id="]
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+      banner:
+        selector: img.rounded-img
+        attribute: src
+      size:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        case:
+          img[title="freeleech"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Utils;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Xml.Linq;
 
 namespace Jackett.Controllers
 {
@@ -32,6 +34,24 @@ namespace Jackett.Controllers
             cacheService = c;
         }
 
+        public HttpResponseMessage GetErrorXML(int code, string description)
+        {
+            var xdoc = new XDocument(
+                new XDeclaration("1.0", "UTF-8", null),
+                new XElement("error",
+                    new XAttribute("code", code.ToString()),
+                    new XAttribute("description", description)
+                )
+            );
+
+            var xml = xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
+
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(xml, Encoding.UTF8, "application/xml")
+            };
+        }
+
         [HttpGet]
         public async Task<HttpResponseMessage> Call(string indexerID)
         {
@@ -42,7 +62,7 @@ namespace Jackett.Controllers
             {
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/rss+xml")
+                    Content = new StringContent(indexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/xml")
                 };
             }
 
@@ -62,6 +82,34 @@ namespace Jackett.Controllers
             {
                 logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
+            }
+
+            if (torznabQuery.ImdbID != null)
+            {
+                if (torznabQuery.QueryType != "movie")
+                {
+                    logger.Warn(string.Format("A non movie request with an imdbid was made from {0}.", Request.GetOwinContext().Request.RemoteIpAddress));
+                    return GetErrorXML(201, "Incorrect parameter: only movie-search supports the imdbid parameter");
+                }
+
+                if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
+                {
+                    logger.Warn(string.Format("A movie-search request from {0} was made contining q and imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
+                    return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
+                }
+
+                torznabQuery.ImdbID = ParseUtil.GetFullImdbID(torznabQuery.ImdbID); // normalize ImdbID
+                if (torznabQuery.ImdbID == null)
+                {
+                    logger.Warn(string.Format("A movie-search request from {0} was made with an invalid imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
+                    return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
+                }
+
+                if (!indexer.TorznabCaps.SupportsImdbSearch)
+                {
+                    logger.Warn(string.Format("A movie-search request with imdbid from {0} was made but the indexer {1} doesn't support it.", Request.GetOwinContext().Request.RemoteIpAddress, indexer.DisplayName));
+                    return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");
+                }
             }
 
             var releases = await indexer.PerformQuery(torznabQuery);

@@ -1,0 +1,124 @@
+﻿---
+  site: aox
+  name: AOX
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://aox.to/
+
+  caps:
+    categories:
+      # Japanese
+      1: Movies # jMovies
+      2: TV # TV Shows
+      3: TV/Other # Variety Shows
+
+      # Korean
+      6: Movies # kMovies
+      4: TV # TV Shows
+      14: TV/Other # Variety Shows
+
+      # Chinese
+      8: Movies # cMovies
+      9: TV # TV Shows
+      13: TV/Other # Variety Shows
+      
+      # Adult
+      13: XXX # Adult
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: body[onLoad^="makeAlert('"]
+        message:
+          selector: body[onLoad^="makeAlert('"]
+          attribute: onLoad
+          filters:
+            - name: replace
+              args: ["makeAlert('Error' , '", ""]
+            - name: replace
+              args: ["');", ""]
+    test:
+      path: index.php
+
+  download:
+    selector: a[href^="download.php?id="]
+
+  search:
+    path: index.php
+    inputs:
+      search: "{{ .Query.Keywords }}"
+      page: "torrents"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      options: "0"
+      active: "0"
+    rows:
+      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+    fields:
+      download:
+        selector: a[href^="index.php?page=downloadcheck&id="]
+        attribute: href
+      title:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      banner:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.*?) "
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: href
+      size:
+        selector: td:nth-child(12)
+      date:
+        selector: td:nth-child(7)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02/01/2006 -07:00"
+      grabs:
+        selector: td:nth-child(10)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      downloadvolumefactor:
+        case:
+          img[alt="Full Star 100% Free"]: "0"
+          img[alt="Half Star 50% Free"]: "0.5"
+          img[alt="Empty Star 25% Free"]: "0.75"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a
+      description|append:
+        selector: td:nth-child(3) > img
+        attribute: title
+        filters:
+          - name: prepend
+            args: "<br>Language: "
+        
+        

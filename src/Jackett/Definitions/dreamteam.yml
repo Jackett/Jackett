@@ -1,0 +1,320 @@
+﻿---
+  site: dreamteam
+  name: Dream Team
+  language: el-gr
+  type: private
+  encoding: UTF-8
+  links:
+    - http://dream-team.ml/
+
+  caps:
+    categories:
+#      115:  # 
+      115: Movies # One foreign films external subtitles
+      130: Movies # CAM / TS / TC
+      131: Movies # DVDSCR / PPVRiP / WebRip / R5
+      132: Movies # DVDRrip
+      133: Movies # BDRip / BRRip / HDRip
+      134: Movies # MicroHD
+      135: Movies # HD - WEB-DL
+      136: Movies # HD - 480p
+      137: Movies # HD - 720p
+      138: Movies # HD - 1080p
+      139: Movies # 9.01 3D HD 720p Half SBS & OU
+      140: Movies # 9.2 3D HD 1080p Half SBS & OU
+      141: Movies # 9.3 3D Bluray Disc HD 720p / 1080p
+      142: Movies # 9.4 3D MicroHD 720p / 1080p
+      144: Movies # 9.5 packages
+      145: Movies # 9.6 filmography
+      143: Movies # 9.7 Tv Movies
+#      130:  # 
+#      131:  # 
+#      132:  # 
+#      133:  # 
+#      134:  # 
+#      135:  # 
+#      136:  # 
+#      137:  # 
+#      138:  # 
+#      139:  # 
+#      140:  # 
+#      141:  # 
+#      142:  # 
+#      144:  # 
+#      145:  # 
+#      143:  # 
+#      116:  # 
+      116: Movies # Two foreign films integrated subtitles
+      146: Movies # CAM / TS / TC
+      147: Movies # DVDSCR / PPVRiP / WebRip / R5
+      148: Movies # DVDRrip
+      149: Movies # BDRip / BRRip / HDRip
+      150: Movies # MicroHD
+      151: Movies # HD - WEB-DL
+      152: Movies # Tv Movies
+#      242:  # 
+      153: Movies # Packages
+      154: Movies # filmography
+      243: Movies # HD 1080p
+      244: Movies # HD 480p
+#      146:  # 
+#      147:  # 
+#      148:  # 
+#      149:  # 
+#      150:  # 
+#      151:  # 
+#      152:  # 
+#      242:  # 
+#      153:  # 
+#      154:  # 
+#      243:  # 
+#      244:  # 
+#      117:  # 
+      117: Movies # ???????e? ?a???e?
+      155: Movies # CAM / TS / TC
+      156: Movies # SCR / PPVRiP / Webrip / R5
+      157: Movies # DVDRrip 3
+      158: Movies # BDRip / BRRip / HDRip
+      159: Movies # MicroHD 5
+      160: Movies # HD - 480p
+      161: Movies # 6.1 HD - 720p
+      162: Movies # HD 6.2 - 1080
+      163: Movies # TV Movies
+      164: Movies # ?a?eta 8
+      165: Movies # F??µ???af?e?
+#      155:  # 
+#      156:  # 
+#      157:  # 
+#      158:  # 
+#      159:  # 
+#      160:  # 
+#      161:  # 
+#      162:  # 
+#      163:  # 
+#      164:  # 
+#      165:  # 
+#      118:  # 
+      118: TV # Foreign Television external subtitles
+      166: TV # SD
+      167: TV # 720p
+      168: TV # 1080p
+      169: TV # Sport
+      170: TV # documentaries
+      171: TV # Packages
+#      166:  # 
+#      167:  # 
+#      168:  # 
+#      169:  # 
+#      170:  # 
+#      171:  # 
+#      119:  # 
+      119: TV # foreign Television integrated subtitles
+      172: TV # SD
+      173: TV # 720p
+      174: TV # 1080p
+      175: TV # Sport
+      176: TV # documentaries
+      177: TV # Tv Rips
+      178: TV # Packages
+#      172:  # 
+#      173:  # 
+#      174:  # 
+#      175:  # 
+#      176:  # 
+#      177:  # 
+#      178:  # 
+#      120:  # 
+      120: TV # Greek Television
+      179: TV # SD
+      180: TV # 720p
+      181: TV # 1080p
+      182: TV # Sport
+      183: TV # five documentaries
+      184: TV # six Tv Rips
+      185: TV # Packages
+#      179:  # 
+#      180:  # 
+#      181:  # 
+#      182:  # 
+#      183:  # 
+#      184:  # 
+#      185:  # 
+#      122:  # 
+      122: Audio # ?e?? ???s???
+      216: Audio # 1. DJs Stuff & Promos
+      217: Audio # 2. DJs Stuff & Promos (Flac)
+      218: Audio # 3. Singles
+      219: Audio # 4. Singles (Flac)
+      220: Audio # 5. ??s????af?e?
+      221: Audio # 6. ??s????af?e? (Flac)
+      222: Audio # 7. ??af??e? S?????e?
+      223: Audio # 8. ??af??e? S?????e? (Flac)
+      224: Audio # 9. SoundTracks
+      225: Audio # 9.1 Varius Artist
+      226: Audio # 9.2 Compact Disc Club
+      227: Audio # 9.3 ???s??a Video Clips
+#      123:  # 
+      123: Audio # ???????? ???s???
+      228: Audio # 1. DJs Stuff & Promos
+      229: Audio # 2. DJs Stuff & Promos (Flac)
+      230: Audio # 3. Singles
+      231: Audio # 4. Singles (Flac)
+      232: Audio # 5. ??s????af?e?
+      233: Audio # 6. ??s????af?e? (Flac)
+      234: Audio # 7. ??af??e? S?????e?
+      235: Audio # 8. ??af??e? S?????e? (Flac)
+      236: Audio # 9. ?a?d??a
+      237: Audio # 9.1 SoundTracks
+      238: Audio # 9.2 Varius Artist
+      239: Audio # 9.3 Compact Disc Club
+      240: Audio # 9.4 ???s??a Video Clips
+#      121:  # 
+      121: Movies # children
+      186: Movies # children's films external subtitles
+      187: Movies # two children's films integrated subtitles
+      188: Movies # three children's films Metaglotismenes
+      189: Movies # four cartoon series external subtitles
+      190: Movies # five children's series integrated subtitles
+      191: Movies # six children's series Metaglotismenes
+      192: Movies # Anime external subtitles
+      193: Movies # Anime integrated subtitles
+      194: Movies # Anime Metaglotismenes
+#      186:  # 
+#      187:  # 
+#      188:  # 
+#      189:  # 
+#      190:  # 
+#      191:  # 
+#      192:  # 
+#      193:  # 
+#      194:  # 
+#      128:  # 
+      128: Console # 9.1 ?a????d?a
+      195: Console # Windows Games
+      196: Console # Nintendo DS
+      197: Console # Sony PS1
+      198: Console # Sony PS2
+      199: Console # Sony PS3
+      200: Console # Sony PSP
+      201: Console # Wii
+      202: Console # XboX 360
+#      124:  # 
+      124: PC # 9.2 Applications
+      203: PC # Applications Windows
+      204: PC # Applications Mac
+      205: PC # Linux Applications
+#      203:  # 
+#      204:  # 
+#      205:  # 
+#      126:  # 
+      126: Books # 9.3 Electronic Books
+      206: Books # Electronic books
+      207: Books # Magazines
+      208: Books # Comic Books
+#      206:  # 
+#      207:  # 
+#      208:  # 
+#      125:  # 
+      125: Other # 9.4 Gallery
+      209: Other # Gallery
+      210: Other # Gallery HD
+      211: Other # Photos 3D
+      212: Other # Wallpapers
+      213: Other # Screensavers
+#      209:  # 
+#      210:  # 
+#      211:  # 
+#      212:  # 
+#      213:  # 
+#      127:  # 
+      127: PC/Phone-Other # 9.5 Mobile / Miscellaneous
+      214: PC/Phone-Other # Mobile
+      215: PC/Phone-Other # Miscellaneous
+#      214:  # 
+#      215:  # 
+#      129:  # 
+      129: Other # 9.6 Blocked DREAM TEAM
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+  
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td:contains("remaining tries")
+    test:
+      path: browse.php
+      selector: a[href^="http://dream-team.ml/logout.php"]
+
+  download:
+    before:
+      path: "takethanks.php"
+      method: "post"
+      inputs:
+        torrentid: "{{ .DownloadUri.Query.id }}"
+      
+  search:
+    path: browse.php
+    keywordsfilters:
+      # remove words <= 3 characters and surrounding special characters
+      - name: re_replace
+        args: ["(?:^|\\s)[_\\+\\/\\.\\-\\(\\)]*[\\S]{0,3}[_\\+\\/\\.\\-\\(\\)]*(?:\\s|$)", " "]
+    inputs:
+      do: "search"
+      keywords: "{{ .Keywords }}"
+      search_type: "t_name"
+      category: "0" # multi cat search not supported
+      include_dead_torrents: "yes"
+    rows:
+      selector: table#sortabletable > tbody > tr:has(a[href^="http://dream-team.ml/details.php?id="])
+      filters:
+        - name: andmatch
+          args: 66
+    fields:
+      download:
+        selector: a[href^="http://dream-team.ml/download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="http://dream-team.ml/details.php?id="]
+      title|optional:
+        selector: div.tooltip-content > div
+      details:
+        selector: a[href^="http://dream-team.ml/details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="http://dream-team.ml/browse.php?category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      banner|optional:
+        selector: div.tooltip-content > img
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          img[alt^="Free Torrent "]: "0"
+          img[alt^="Silver Torrent "]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      date:
+        selector: "td:nth-child(2) > div:has(span[style=\"float: right;\"])"
+        remove: span
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "02-01-2006 15:04 -07:00"

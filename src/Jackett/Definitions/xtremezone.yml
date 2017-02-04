@@ -1,0 +1,118 @@
+﻿---
+  site: xtremezone
+  name: Xtreme Zone
+  language: ro-ro
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://www.myxz.org/
+
+  caps:
+    categories:
+      3: TV/Anime # Anime/Hentai
+      1: PC/0day # Appz
+      9: TV/Documentary # Documentary
+      6: Books # eBooks
+      52: Console # Games-Console
+      11: PC/Games # Games-PC
+      18: Other # Images
+      14: PC # Linux
+      37: PC/Mac # Mac
+      19: PC/Phone-Other # Mobile
+      17: Movies/BluRay # Movies-BluRay
+      24: Movies/BluRay # Movies-BluRayRO
+      7: Movies/DVD # Movies-DVD
+      2: Movies/DVD # Movies-DVD-RO
+      8: Movies/HD # Movies-HD
+      29: Movies/HD # Movies-HD-RO
+      38: Movies # Movies-Packs
+      10: Movies/SD # Movies-SD
+      35: Movies/SD # Movies-SD-RO
+      5: Audio # Music
+      22: TV/Sport # Sport
+      43: TV/HD # TV-HD
+      44: TV/HD # TV-HD-RO
+      41: TV # TV-Packs
+      45: TV/SD # TV-SD
+      46: TV/SD # TV-SD-RO
+      15: XXX # XXX
+      47: XXX # XXX-DVD
+      48: XXX # XXX-HD
+      49: XXX/Imageset # XXX-IMGSet
+      50: XXX # XXX-Packs
+      51: XXX # XXX-SD
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /login.php
+    method: form
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(center > h2:contains(failed))
+    test:
+      path: /browse.php
+      
+  ratio:
+    path: /browse.php
+    selector: font:contains("Ratio:")+font
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: table.browser > tbody > tr.browse[style]
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="dwn.php"]
+        attribute: href
+      size:
+        selector: td:nth-child(6)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "02-01-200615:04:05 -07:00"
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      banner:
+        selector: a[onmouseover][href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
+      downloadvolumefactor:
+        case:
+          "img[title^=\"FreeLech: \"]": "0"
+          "img[title^=\"HALF: \"]": "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "img[title^=\"2xUP: \"]": "2"
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a, img

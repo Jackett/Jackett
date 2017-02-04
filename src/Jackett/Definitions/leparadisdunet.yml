@@ -1,0 +1,163 @@
+﻿---
+  site: leparadisdunet
+  name: Le Paradis Du Net
+  language: fr-fr
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://le-paradis-du-net.com/
+
+  caps:
+    categories:
+      10: Movies/3D # 3D
+      9: XXX # Adultes
+      1: PC # APPLICATION
+      33: PC/Phone-Other #   Iphone/Ipod/Android
+      3: PC/0day #   Linux
+      32: PC/Mac #   Mac
+      4: PC/0day #   Windows
+      70: Movies/HD # BDRIP
+      69: Movies/BluRay # Blueray
+      73: Movies/HD # BRRIP
+      22: Movies/SD # CAM TS SCREENER
+      39: Movies/DVD #   R5
+      13: TV/Anime # DESSINS ANIMES
+      48: TV/Anime #   Animations
+      47: TV/Anime #   Mangas
+      14: TV/Documentary # DOCUMENTAIRE
+      52: TV/Documentary #   EmissionsTV
+      49: TV/Documentary #   Tv docs
+      15: Movies/DVD # DVDR
+      16: Movies/SD # DVDRIP
+      35: Movies #   Action
+      64: Movies #   Autres
+      36: Movies #   Aventure
+      55: Movies #   Comédie
+      37: Movies #   Drame
+      38: Movies #   Fantastique
+      63: Movies #   Guerre
+      72: Movies #   Historique/Biopic
+      67: Movies #   Horreur
+      65: Movies #   Thriller
+      71: Movies #   Werstern
+      17: Movies/SD # DVDRIP VOSTFR
+      19: Books # EBOOK
+      54: Books #   Journaux
+      81: Books #   Magazines
+      82: Books #   People
+      40: Movies/HD # HD
+      41: Movies/HD #   1080p
+      42: Movies/HD #   720P
+      77: Movies/HD #   HD LIGHT
+      86: TV/SD #   HDTV
+      20: Console/Other # JEUX
+      56: Console/NDS #   DS
+      57: PC/Games #   Pc
+      26: Console/PS3 #   PS3
+      58: Console/PSP #   PSP
+      25: Console/Wii #   Wii
+      24: Console/Xbox360 #   Xbox360
+      21: Audio # MUSIQUES
+      29: Audio/Video #   Clip
+      68: Audio/Video #   Concert
+      31: Audio/Lossless #   FLAC
+      30: Audio/MP3 #   mp3
+      28: Audio/Lossless #   wave
+      27: Audio/Other #   wma
+      5: TV # SERIES
+      79: TV/HD #   SERIES HD 1080P
+      80: TV/HD #   SERIES HD 720p
+      75: TV #   TV pack
+      8: TV #   vf
+      6: TV #   vo
+      7: TV #   vost
+      12: TV/Sport # SPORTS
+      61: TV/Sport #   Autres 
+      45: TV/Sport #   Catch VF
+      59: TV/Sport #   Catch VO
+      44: TV/Sport #   Football
+      60: TV/Sport #   UFC/MMA
+      76: TV # Télévision
+      78: Movies/WEBDL # WEBRIP
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table:has(td:contains("Une erreur est survenue"))
+    test:
+      path: browse.php
+
+  download:
+    before:
+      path: "/takethanks.php"
+      method: "post"
+      inputs:
+        torrentid: "{{ re_replace .DownloadUri.AbsolutePath \"^.*download-torrent-(\\d+)/.*$\" \"$1\" }}"
+
+  search:
+    path: browse.php
+    inputs:
+      do: "chercher"
+      keywords: "{{ .Query.Keywords }}"
+      search_type: "t_name"
+      category: "0" # multi cat search not supported
+      include_dead_torrents: "yes"
+    rows:
+      selector: table#sortabletable > tbody > tr:has(a[href*="/torrent-details-"])
+    fields:
+      download:
+        selector: a[href*="/torrent-details-"]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["torrent-details-", "download-torrent-"]
+      title:
+        selector: a[href*="/torrent-details-"]
+      details:
+        selector: a[href*="/torrent-details-"]
+        attribute: href
+      category:
+        selector: a[href*="/torrent-category-"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: torrent-category-(\d+)
+      size:
+        selector: td:nth-child(4)
+      date:
+        selector: td:nth-child(2) > div > font[color="white"]
+        filters:
+          - name: replace
+            args: ["le ", ""]
+          - name: replace
+            args: [" à ", " "]
+          - name: trim
+            args: "\t"
+          - name: trim
+            args: "\n"
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02-01-2006 15:04 -07:00"
+      grabs:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        case:
+          img[alt^="Free Torrent "]: "0"
+          img[alt^="Silver Torrent "]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

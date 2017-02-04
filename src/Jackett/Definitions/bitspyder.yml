@@ -1,0 +1,133 @@
+﻿---
+  site: bitspyder
+  name: Bitspyder
+  language: en-us
+  type: private
+  encoding: windows-1252
+  links:
+    - http://bitspyder.net/
+
+  caps:
+    categories:
+      61: Books # 3D
+      69: Books # Anim|GFX
+      56: Books # Art
+      40: Audio/Audiobook # Audio Books
+      55: Books # Business
+      46: Books # Career
+      2: Books # CBTs
+      39: Books # Cert QA
+      63: Books # College
+      53: Books # Cooking
+      42: Books # Documentary
+      37: Books # e-Books
+      65: Books # Engineering
+      54: Books # Health-Fitness
+      64: Books # Kids
+      47: Books # Languages
+      49: Books # Linux CBTs
+      43: Books # Lynda.com
+      57: Books/Magazines # Magazines
+      71: Books # Magic
+      60: Books # Medical
+      44: Books # Misc Learning
+      51: Books # Music Learning
+      41: Books # Others
+      52: Books # Photography
+      35: Books # PPT 'n Docs
+      38: Books # Religion
+      68: Books # Self Growth
+      72: Books # Templates
+      58: Books # Total Training
+      45: Books # Trainsignal
+      59: Books # VTC
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: processid.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.msg_info > font > b
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    method: post
+    inputs:
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table > tbody > tr[class]
+      filters:
+        - name: andmatch
+    fields:
+      # there are two styles, we support both
+      title:
+        selector: a[href^="details.php?id="]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php/"]
+          - name: replace
+            args: ["&hit=1", "/dummy.torrent"]
+      size:
+        selector: td.rowcol:nth-child(6):has(br), font:contains("Size:") + font
+      files:
+        selector: a[href*="&filelist=1"]
+      grabs:
+        selector: td.rowcol:nth-child(7):contains("times"), font:contains("Snatches:")
+        filters:
+          - name: regexp
+            args: ([\d\,]+)
+      seeders:
+        selector: td.rowcol:nth-last-child(3)
+      leechers:
+        selector: td.rowcol:nth-last-child(2)
+      date|optional|1:
+        selector: font[color="5F5F5F"]
+        filters:
+          - name: split
+            args: [" (", 0]
+          - name: replace
+            args: ["\xA0", " "]
+          - name: append
+            args: " +00:00"
+          - name: dateparse 
+            args: "2006-01-02 15:04:05 -07:00"
+      date|optional|2:
+        selector: a[title^="Upploaded at"]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["Upploaded at - ", ""]
+          - name: append
+            args: " +00:00"
+          - name: dateparse 
+            args: "2006-01-02 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      description|optional:
+        selector: font[color="#990000"]

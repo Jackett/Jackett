@@ -83,7 +83,9 @@ namespace Jackett.Controllers
             if (string.IsNullOrWhiteSpace(request.search))
             {
                 // We are searching by IMDB id so look up the name
-                var response = await webClient.GetString(new Utils.Clients.WebRequest("http://www.omdbapi.com/?type=movie&i=" + request.imdbid));
+                var omdbapiRequest = new Utils.Clients.WebRequest("http://www.omdbapi.com/?type=movie&i=" + request.imdbid);
+                omdbapiRequest.Encoding = Encoding.UTF8;
+                var response = await webClient.GetString(omdbapiRequest);
                 if (response.Status == HttpStatusCode.OK)
                 {
                     JObject result = JObject.Parse(response.Content);
@@ -99,7 +101,9 @@ namespace Jackett.Controllers
             {
                 ApiKey =  request.passkey,
                 Categories = MOVIE_CATS,
-                SearchTerm = request.search
+                SearchTerm = request.search,
+                ImdbID = request.imdbid,
+                QueryType = "TorrentPotato"
             };
 
             IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
@@ -138,11 +142,12 @@ namespace Jackett.Controllers
                         details_url = release.Comments.ToString(),
                         download_url = release.Link.ToString(),
                         imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
-                        freeleech = false,
+                        freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                         type = "movie",
                         size = (long)release.Size / (1024 * 1024), // This is in MB
                         leechers = (int)release.Peers - (int)release.Seeders,
-                        seeders = (int)release.Seeders
+                        seeders = (int)release.Seeders,
+                        publish_date = r.PublishDate == DateTime.MinValue ? null : release.PublishDate.ToUniversalTime().ToString("s")
                     });
                 }
             }

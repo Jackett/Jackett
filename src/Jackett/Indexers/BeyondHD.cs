@@ -12,32 +12,37 @@ using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Jackett.Indexers
 {
     public class BeyondHD : BaseIndexer, IIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
-        private string LoginUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
-        private string AjaxLoginUrl { get { return SiteLink + "ajax/takelogin.php"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        new ConfigurationDataLoginLink configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
+            get { return (ConfigurationDataLoginLink)base.configData; }
             set { base.configData = value; }
         }
 
         public BeyondHD(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
-                link: "https://beyondhd.me/",
+                link: "https://beyond-hd.me/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+                configData: new ConfigurationDataLoginLink())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-us";
+            Type = "private";
+
+            configData.DisplayText.Value = "Go to the general tab of your BeyondHD user profile and create/copy the Login Link.";
+
             AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
             AddMultiCategoryMapping(TorznabCatType.Movies3D,
                 71,  // Movie / 3D
@@ -53,7 +58,10 @@ namespace Jackett.Indexers
                 75, // Internal / FraMeSToR 720p
                 49, // Internal / FraMeSToR REMUX
                 61, // Internal / HDX REMUX
-                86 // Internal / SC4R
+                86, // Internal / SC4R
+                95, // Nightripper 1080p
+                96, // Nightripper 720p
+                98 // Nightripper MicroHD
             );
 
             AddMultiCategoryMapping(TorznabCatType.TVHD,
@@ -62,7 +70,8 @@ namespace Jackett.Indexers
                 48, // TV Show / HDTV
                 89, // TV Show / Packs
                 46, // TV Show / Remux
-                45 // TV Show / WEB-DL
+                45, // TV Show / WEB-DL
+                97 //  Nightripper TV Show Encodes
             );
 
             AddCategoryMapping(36, TorznabCatType.AudioLossless); // Music / Lossless
@@ -76,52 +85,12 @@ namespace Jackett.Indexers
 
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            string recaptchaSiteKey = new Regex(@"loginwidget', \{[\s]{4,30}'sitekey' : '([0-9A-Za-z]{5,60})',[\s]{4,30}'theme'").Match(loginPage.Content).Groups[1].ToString().Trim();
-            var result = new ConfigurationDataRecaptchaLogin();
-            result.CookieHeader.Value = loginPage.Cookies;
-            result.Captcha.SiteKey = recaptchaSiteKey;
-            return result;
-        }
-
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
-            };
-
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
-            {
-                // Cookie was manually supplied
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                    {
-                        throw new Exception("Your cookie did not work");
-                    }
-
-                    SaveConfig();
-                    IsConfigured = true;
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
-            }
-
-            var result = await RequestLoginAndFollowRedirect(AjaxLoginUrl, pairs, configData.CookieHeader.Value, true, SiteLink, LoginUrl);
-            JToken token = JObject.Parse(result.Content);
-            bool success = token.Value<bool?>("success") ?? false;
-            await ConfigureIfOK(result.Cookies, success, () =>
+            LoadValuesFromJson(configJson);
+            
+            var result = await RequestStringWithCookies(configData.LoginLink.Value);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Welcome Back"), () =>
             {
                 var errorMessage = result.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -139,6 +108,8 @@ namespace Jackett.Indexers
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
+                Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+                searchString = "%" + ReplaceRegex.Replace(searchString, "%") + "%";
                 queryCollection.Add("search", searchString);
             }
 
@@ -186,6 +157,15 @@ namespace Jackett.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(9).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).Cq().Text()) + release.Seeders;
+
+                    var files = qRow.Find("td:nth-child(6)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = qRow.Find("td:nth-child(9) > a").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
 

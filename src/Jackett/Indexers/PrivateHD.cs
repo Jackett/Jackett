@@ -7,14 +7,12 @@ using Jackett.Models;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Jackett.Utils;
-using System.Net;
-using System.Net.Http;
 using CsQuery;
 using System.Web;
 using Jackett.Services;
 using Jackett.Utils.Clients;
-using System.Text.RegularExpressions;
 using Jackett.Models.IndexerConfig;
+using System.Globalization;
 
 namespace Jackett.Indexers
 {
@@ -30,6 +28,7 @@ namespace Jackett.Indexers
                 webClient: webClient
                 )
         {
+            Type = "private";
         }
     }
 }

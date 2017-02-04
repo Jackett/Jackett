@@ -18,5 +18,6 @@ namespace Jackett.Models
         public long size { get; set; }
         public int leechers { get; set; }
         public int seeders { get; set; }
+        public string publish_date { get; set; }
     }
 }

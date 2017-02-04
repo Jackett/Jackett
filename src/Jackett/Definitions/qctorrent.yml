@@ -1,0 +1,107 @@
+﻿---
+  site: qctorrent
+  name: QcTorrent
+  description: "A French gerneral tracker"
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.qctorrent.net/
+
+  caps:
+    categories:
+      30: PC # ++ Applications
+      1: PC # Applications/Divers
+      2: PC # Applications/PC ISO
+      3: PC # Applications/Portable
+      31: Movies # ++ Films
+      4: Movies/BluRay # Films/Bluray
+      5: Movies/DVD # Films/DVDr
+      6: Movies/HD # Films/HD Rip
+      7: Movies/SD # Films/SD Rip
+      8: Movies/SD # Films/VCD
+      32: Console # ++ Jeux
+      9: PC/Games # Jeux/PC
+      10: Console # Jeux/Portable
+      11: Console/PS4 # Jeux/PS
+      12: Console/Wii # Jeux/Wii
+      13: Console/Xbox # Jeux/Xbox
+      33: Audio # ++ Musique
+      14: Audio # Musique
+      15: Audio/Video # Musique/Video
+      34: TV # ++ Série-Télé
+      16: TV/HD # Série-Télé/Bluray
+      17: TV/SD # Série-Télé/DVDr
+      18: TV/HD # Série-Télé/HD Rip
+      19: TV/SD # Série-Télé/SD Rip
+      20: Books # E-Books
+      21: XXX # XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: post
+    inputs:
+      login-username: "{{ .Config.username }}"
+      login-password: "{{ .Config.password }}"
+      login-remember-me: "on"
+      login: ""
+    error:
+      - selector: "script[type=\"text/javascript\"]:contains(\"$.ambiance({message: \")"
+    test:
+      path: search.php
+      selector: div.top-bar > div.container > div.textleft > div.hidden-sm > font:contains("Ratio:") > font
+
+  ratio:
+    path: search.php
+    selector: div.top-bar > div.container > div.textleft > div.hidden-sm > font:contains("Ratio:") > font
+
+  search:
+    path: search.php
+    inputs:
+      category: "{{range .Categories}}{{.}};{{end}}"
+      title: "{{ .Query.Keywords }}"
+      search: "Recherche"
+    rows:
+      selector: tr[data-snatches]
+    fields:
+      download:
+        selector: td.name > a
+        attribute: href
+        filters:
+          - name: replace
+            args: ["/torrent/", "/dl/"]
+      title:
+        selector: td.name > a
+      category:
+        selector: td.coll-0 > a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: td.name > a
+        attribute: href
+      grabs:
+        attribute: data-snatches
+      seeders:
+        selector: td.seeds
+      leechers:
+        selector: td.leeches
+      date:
+        selector: td[data-date]
+        attribute: data-date
+      downloadvolumefactor:
+        case:
+          span[title^="Freeleech:"]: "0"
+          span[title^="Half Freeleech:"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      size:
+        selector: td.size
+        remove: span

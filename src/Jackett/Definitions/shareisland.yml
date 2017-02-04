@@ -1,0 +1,170 @@
+﻿---
+  site: shareisland
+  name: Shareisland
+  description: "A general italian tracker"
+  language: it-it
+  type: private
+  encoding: UTF-8
+  links:
+    - http://shareisland.org
+
+  caps:
+    categories:
+       32: Other # Vip
+       45: XXX # Vip XXX
+       33: Other # ex Vip
+       1: Movies # Movies
+       49: Movies/HD # H-264
+       51: Movies/HD # H-265
+       41: Movies/Other # Cartoons
+       14: Movies/SD # DivX
+       16: Movies/Other # Cine News
+       39: Movies/HD # 720p
+       40: Movies/HD # 1080p
+       46: Movies/BluRay # Blu Ray Disk
+       31: Movies/HD # BDRip
+       17: Movies/DVD # DVD
+       43: Movies/SD # DVDRip
+       6: PC # Applications
+       18: PC/0day # PC Applications
+       19: PC/Mac # Macintosh Applications
+       44: PC/Phone-Android # Android applications
+       7: Audio # Music
+       20: Audio/Video # Video
+       21: Audio/MP3 # Mp3
+       2: Console # Games
+       3: Console/PS4 # Sony PS
+       4: Console/Wii # Wii
+       26: Console/Xbox # XboX
+       27: PC/Games # PC
+       28: Console/NDS # Nintendo
+       34: Books # Edicola
+       52: Books # Quotidiani
+       53: Books # Libreria
+       35: TV # SerieTV
+       55: TV/HD # Serie Tv HD
+       36: Other # Rip By ShareIsland
+       47: Other # Disclaimer
+       48: Other # P2P network 
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /ajax/login.php
+    method: post
+    form: form
+    inputs:
+      loginbox_membername: "{{ .Config.username }}"
+      loginbox_password: "{{ .Config.password }}"
+      action: "login"
+      loginbox_remember: "true"
+    error:
+      - selector: div.error
+    test:
+      path: /?p=home&pid=1
+      selector: div#member_info_bar
+
+  ratio:
+    path: /?p=home&pid=1
+    selector: img[title="Ratio"] + span
+
+  search:
+    path: /
+    keywordsfilters:
+      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
+      - name: re_replace
+        args: ["S0?(\\d{1,2})", " $1 "]
+      - name: re_replace
+        args: ["E(\\d{2,3})", " $1 "]
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%25"]
+    inputs:
+      p: "torrents"
+      pid: "32"
+      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+      keywords: "{{ .Keywords }}"
+      search_type: "name"
+      searchin: "title"
+
+    rows:
+      selector: table#torrents_table_classic > tbody > tr:not([id="torrents_table_classic_head"])
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: td.torrent_name > a
+        filters:
+          # normalize to SXXEYY format
+          - name: re_replace
+            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
+          - name: re_replace
+            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
+      category:
+        selector: div.category_image > a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
+      comments:
+        selector: td.torrent_name > a
+        attribute: href
+      download:
+        selector: a:has(img[title="Download Torrent"])
+        attribute: href
+      size:
+        selector: td.size
+      seeders:
+        selector: td.seeders
+      leechers:
+        selector: td.leechers
+      grabs:
+        selector: td.completed
+      downloadvolumefactor:
+        case:
+          "img[title=\"FREE!\"]": "0"
+          "img[title=\"Download Multiplier: 0.5\"]": "0.5"
+          "img[title=\"Moltiplicatore Download: 0.5\"]": "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "img[title=\"Upload Multiplier: 3\"]": "3"
+          "img[title=\"Upload Multiplier: 2\"]": "2"
+          "img[title=\"Upload Multiplier: 1.5\"]": "1.5"
+          "img[title=\"Moltiplicatore Upload: 3\"]": "3"
+          "img[title=\"Moltiplicatore Upload: 2\"]": "2"
+          "img[title=\"Moltiplicatore Upload: 1.5\"]": "1.5"
+          "*": "1"
+      date:
+        selector: td.torrent_name
+        remove: a, span, div, br
+        filters:
+          - name: replace
+            args: ["Uploaded ", ""]
+          - name: replace
+            args: [" by", ""]
+          - name: replace
+            args: [" at", ""]
+          - name: replace
+            args: ["Oggi", "Today"]
+          - name: replace
+            args: ["Ieri", "Yesterday"]
+          - name: replace
+            args: ["lunedì", "Monday"]
+          - name: replace
+            args: ["martedì", "Tuesday"]
+          - name: replace
+            args: ["Mercoledì", "Wednesday"]
+          - name: replace
+            args: ["Giovedì", "Thursday"]
+          - name: replace
+            args: ["Venerdì", "Friday"]
+          - name: replace
+            args: ["Sabato", "Saturday"]
+          - name: replace
+            args: ["Domenica", "Sunday"]
+          - name: replace
+            args: [" alle", ""]
+          - name: dateparse
+            args: "02-01-2006 15:04"

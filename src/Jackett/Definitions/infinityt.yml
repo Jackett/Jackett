@@ -1,0 +1,106 @@
+﻿---
+  site: infinityt
+  name: Infinity-T
+  language: da-dk
+  type: private
+  encoding: UTF-8
+  links:
+    - https://infinity-t.org/
+
+  caps:
+    categories:
+      22: Audio/Audiobook # aBook
+      13: PC/Phone-Android # Appz/Android
+      14: PC/Phone-IOS # Appz/iPhone
+      12: PC/Mac # Appz/Mac
+      11: PC/0day # Appz/Win
+      19: Movies # AU/NEED
+      20: Books # eBook
+      17: Console # Games/Console
+      16: PC/Mac # Games/Mac
+      15: PC/Games # Games/PC
+      8: Movies # Movie/Boxset
+      7: Movies/DVD # Movie/DVD
+      5: Movies/HD # Movie/HD
+      6: Movies/SD # Movie/SD
+      10: Audio/Lossless # Music/FLAC
+      9: Audio/MP3 # Music/MP3
+      21: Movies/Bluray # REMUX/Bluray
+      4: TV # TV/Boxset
+      3: TV # TV/DVD
+      1: TV/HD # TV/HD
+      2: TV/SD # TV/SD
+      18: XXX # XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: td.outer > table > tbody > tr[id]
+    fields:
+      imdb:
+        selector: a[href^="https://www.nullrefer.com/?http://imdb.com/title/"]
+        attribute: href
+      banner:
+        selector: a[rel]
+        attribute: rel
+        filters:
+          - name: replace
+            args: ["pic/noposter.jpg", ""]
+      title:
+        selector: a[href^="details.php?id="]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["I Dag", "Today"]
+          - name: replace
+            args: ["I Går", "Yesterday"]
+            
+      grabs:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          td[style*="/pic/free.png"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

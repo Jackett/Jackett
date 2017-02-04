@@ -1,0 +1,94 @@
+﻿---
+  site: torrentsmd
+  name: Torrents.Md
+  language: ru-mo
+  type: private
+  encoding: UTF-8
+  links:
+    - https://torrentsmd.com/
+
+  caps:
+    categories:
+      1: Movies # Filme
+      2: Audio # Muzică
+      3: PC # Software
+      4: Console # Jocuri
+      5: TV # Tv
+      7: Other # Alte
+      8: Books # Cărţi
+      9: Audio/Video # Muzică video
+      10: TV/Anime # Anime
+      11: Movies # Filme animate
+      12: Movies/DVD # DVD
+      13: Movies # Filme documentare
+      14: Audio/Audiobook # Cărţi audio
+      15: Other # Lecţii video
+      16: Other # Fotografii
+      17: TV/Sport # Sport
+      18: TV/HD # HDTV
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: form
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("eşuată"))
+    test:
+      path: browse.php
+      
+  search:
+    path: "{{if .Query.Keywords}}search.php{{else}}browse.php{{end}}"
+    inputs:
+      search_str: "{{ .Query.Keywords }}"
+    rows:
+      selector: table.tableTorrents > tbody > tr:has(a[href^="/details.php?id="])
+    fields:
+      title:
+        selector: a[href^="/details.php?id="]
+      details:
+        selector: a[href^="/details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="/details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["/details.php", "/download.php"]
+      files:
+        selector: td:nth-child(3)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["ore", "hours ago"]
+          - name: replace
+            args: ["minute", "minutes ago"]
+          - name: dateparse
+            args: "01-02 2006"
+          - name: dateparse
+            args: "01-02"
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

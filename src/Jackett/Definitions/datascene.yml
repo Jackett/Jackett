@@ -1,0 +1,119 @@
+﻿---
+  site: datascene
+  name: DataScene
+  language: ro-ro
+  type: private
+  encoding: windows-1252
+  links:
+    - http://datascene.net/
+
+  caps:
+    categories:
+      3: TV/Anime # Anime | Cartoon
+      15: PC/0day # Appz | Win
+      4: PC/0day # Appz | Linux
+      6: Books # E-Book
+      10: PC/Games # Games | PC Iso
+      9: PC/Games # Games | PC Rips
+      11: Console # Games | Pack
+      43: Console # Games | Console
+      29: Other # Images
+      2: Other # MiSC
+      5: PC/Phone-Other # Mobile
+      27: Movies # Movies | Pack
+      46: Movies/3D # Movies | 3D
+      26: Movies/SD # Movies | Cam
+      25: Movies # Movies | Documentary
+      24: Movies/DVD # Movies | DVD-R
+      32: Movies/DVD # Movies | DVD-RO
+      23: Movies/HD # Movies | HD
+      31: Movies/HD # Movies | HD-Ro
+      34: Movies/Foreign # Movies | Hindi
+      30: Movies/SD # Movies | Xvid
+      36: Movies/SD # Movies | Xvid-Ro
+      21: Audio/Video # Music | Video
+      19: Audio  # Music | Mp3/Flac
+      18: Other # Other
+      42: Other # Premiera | DsT
+      14: TV/Sport # Sport
+      47: TV/SD # Tv | Episodes
+      28: TV/HD # Tv-HD | Episodes
+      13: Other # Tutoriale
+      12: XXX # XxX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /browse.php
+      
+  ratio:
+    path: /browse.php
+    selector: font:contains("Ratio:") > span
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+    rows:
+      selector: tr:has(a.tname)
+    fields:
+      title:
+        selector: a.tname
+        attribute: title
+      details:
+        selector: a.tname
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="/download.php/"]
+        attribute: href
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(6)
+      date:
+        selector: td:nth-child(2) > right > div:has(font:contains("Uploaded"))
+        remove: div > font
+        filters:
+          - name: trim
+            args: ":"
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      banner:
+        selector: a.tname
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
+      downloadvolumefactor:
+        case:
+          "img[src=\"pic/free.gif\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      description:
+        selector: td:nth-child(2) > right
+        remove: div

@@ -1,0 +1,96 @@
+﻿---
+  site: ultrahdclub
+  name: ULTRAHDCLUB
+  language: ru-ru
+  type: private
+  encoding: windows-1251
+  links:
+    - http://ultrahdclub.org
+
+  caps:
+    categories:
+      1: TV/Anime # Animation
+      2: Movies/HD # Movie
+      3: TV/HD # TV Show
+      4: TV/Documentary # Documentary
+      5: Audio # UHD Audio
+      6: Audio/Video # Music Video
+      7: TV/Sport # Sport
+      8: Other # Demo
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    captcha:
+      type: image
+      image: img#captcha
+      input: imagestring
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.msg-error
+    test:
+      path: browse.php
+      
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      dsearch: ""
+      stype: "or"
+      incldead: "1"
+      webdl: "0"
+      3d: "0"
+    rows:
+      selector: table > tbody > tr.br-torrent-row
+    fields:
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php", "download.php"]
+      title:
+        selector: span.br-torrent-name
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      date:
+        selector: div.br-torrent-info > div.fl-left > span
+        filters:
+          - name: append
+            args: " +02:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      seeders:
+        selector: td:nth-child(5)
+      leechers:
+        selector: td:nth-child(6)
+      grabs:
+        selector: td:nth-child(7) b
+        filters:
+          - name: regexp
+            args: ([\d,]+)
+      size:
+        selector: td:nth-child(7)
+        remove: a, br, b
+      downloadvolumefactor:
+        case:
+          "img[alt=\"freeleech: 100%\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

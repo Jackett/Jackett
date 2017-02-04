@@ -1,0 +1,162 @@
+﻿---
+  site: gods
+  name: GODS
+  language: de-de
+  type: private
+  encoding: windows-1252
+  links:
+    - https://gods.lu/
+
+  caps:
+    categories:
+      # Movie
+      132: Movies/BluRay # BluRay
+      146: Movies/HD # Remux
+      186: Movies/HD # UHD
+      189: Movies/HD # HD
+      190: Movies/SD # SD
+      20: Movies/DVD # DVD
+      131: Movies/3D # 3D
+      16: Movies # Packs
+
+      # Serien
+      187: TV/HD # Staffeln UHD
+      173: TV/HD # Staffeln HD
+      133: TV/SD # Staffeln SD
+      188: TV/HD # Folgen UHD
+      174: TV/HD # Folgen HD
+      7: TV/SD # Folgen SD
+
+      # Doku
+      152: TV/Documentary # HD
+      153: TV/Documentary # SD
+
+      # Spiele
+      4: PC/Games # Windows
+      29: Console/XBox360 # XBOX 360
+      126: Console/Wii # Wii
+      183: Console/Wii # Wii U
+      128: Console/PS3 # PS3
+      154: Console/Other # Andere
+
+      # Musik
+      6: Audio # Alben
+      139: Audio/Lossless # Lossless
+      177: Audio # Singles
+      157: Audio # Charts
+      192: Audio # Packs
+      161: Audio/Video # Video
+
+      22: PC/0day # Windows
+      129: PC/Mac # Mac OS
+      164: PC/0day # Linux
+      124: PC/Phone-Android # Android
+      165: PC/Phone-IOS # Apple iOS
+      167: PC/Phone-Other # Andere
+
+      # Sport
+      130: TV/Sport # HD
+      135: TV/Sport # SD
+
+      #  International
+      170: Movies/Foreign # Filme HD
+      134: Movies/Foreign # Filme SD
+      171: TV/Foreign # Folgen HD
+      172: TV/Foreign # Folgen SD
+
+      # Sonstiges
+      28: TV/Anime # Anime
+      13: Books # e-Book
+      11: Audio/Audiobook # Hören
+      136: Other # Bilder
+      9: Other # Tutorial
+      178: Other # Anderes
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings:
+    - name: pin
+      type: text
+      label: Pin
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+
+  login:
+    path: /login/
+    method: form
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      pin: "{{ .Config.pin }}"
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      intitle: "1"
+      incldead: "1"
+      team: "0"
+      orderby: "added"
+      sort: desc
+    rows:
+      selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
+    fields:
+      title:
+        selector: a[href^="details.php"]
+      banner:
+        selector: a[href^="details.php"] > span > img
+        attribute: src
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php"]
+        attribute: href
+      comments:
+        selector: a[href*="&tocomm="]
+        attribute: href
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+      grabs:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1)
+      size:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      seeders:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1)
+      leechers:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(3)
+      date:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(6)
+        filters:
+          - name: replace
+            args: ["\xA0", " "]
+          - name: dateparse
+            args: "02.01.2006 15:04:05"
+      downloadvolumefactor:
+        case:
+          img[alt="onlyupload"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

@@ -42,8 +42,11 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataCaptchaLogin())
+                configData: new ConfigurationDataCaptchaLogin("Ensure that you have the 'Force SSL' option set to 'yes' in your profile on the BitMeTv webpage."))
         {
+            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Language = "en-us";
+            Type = "private";
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -61,7 +64,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -87,7 +90,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var episodeSearchUrl = string.Format("{0}?search={1}&cat=0", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
+            var episodeSearchUrl = string.Format("{0}?search={1}&cat=0&incldead=1", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             try
             {
@@ -128,6 +131,15 @@ namespace Jackett.Indexers
 
                     //if (!release.Title.ToLower().Contains(title.ToLower()))
                     //    continue;
+
+                    var files = row.Cq().Find("td:nth-child(4)").Text();
+                    release.Files = ParseUtil.CoerceInt(files);
+
+                    var grabs = row.Cq().Find("td:nth-child(8)").Get(0).FirstChild.ToString();
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

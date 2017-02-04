@@ -1,8 +1,6 @@
 using CsQuery;
-using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
-using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -10,16 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.UI.WebControls;
 using CsQuery.ExtensionMethods;
 using Jackett.Models.IndexerConfig;
+using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
@@ -38,13 +33,17 @@ namespace Jackett.Indexers
             : base(name: "DanishBits",
                 description: "A danish closed torrent tracker",
                 link: "https://danishbits.org/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: i,
                 client: c,
                 logger: l,
                 p: ps,
                 configData: new NxtGnConfigurationData())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "da-dk";
+            Type = "private";
+
             // Movies Mapping
             // DanishBits HD
             AddCategoryMapping(2, TorznabCatType.MoviesHD);
@@ -128,7 +127,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
@@ -151,6 +150,13 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 2, 0, 0), 3, 5, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 10, 5, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            TimeZoneInfo denmarkTz = TimeZoneInfo.CreateCustomTimeZone("Denmark Time", new TimeSpan(1, 0, 0), "(GMT+01:00) Denmark Time", "Denmark Time", "Denmark DST", adjustments);
+
             var releasesPerPage = 100;
             var releases = new List<ReleaseInfo>();
 
@@ -231,12 +237,9 @@ namespace Jackett.Indexers
                     var title = titleAnchor.GetAttribute("title");
                     release.Title = title;
 
-                    var dlUrlAnchor = qRow.Find("span.right a").FirstElement();
+                    var dlUrlAnchor = qRow.Find("span.right a[title=\"Direkte download link\"]").FirstElement();
                     var dlUrl = dlUrlAnchor.GetAttribute("href");
-                    var authkey = Regex.Match(dlUrl, "authkey=(?<authkey>[0-9a-zA-Z]+)").Groups["authkey"].Value;
-                    var torrentPass = Regex.Match(dlUrl, "torrent_pass=(?<torrent_pass>[0-9a-zA-Z]+)").Groups["torrent_pass"].Value;
-                    var torrentId = Regex.Match(dlUrl, "id=(?<id>[0-9]+)").Groups["id"].Value;
-                    release.Link = new Uri($"{SearchUrl}/{title}.torrent/?action=download&authkey={authkey}&torrent_pass={torrentPass}&id={torrentId}");
+                    release.Link = new Uri(SiteLink + dlUrl);
 
                     var torrentLink = titleAnchor.GetAttribute("href");
                     release.Guid = new Uri(SiteLink + torrentLink);
@@ -244,9 +247,8 @@ namespace Jackett.Indexers
 
                     var addedElement = qRow.Find("span.time").FirstElement();
                     var addedStr = addedElement.GetAttribute("title");
-                    release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm",
-                        CultureInfo.InvariantCulture);
-
+                    release.PublishDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), denmarkTz).ToLocalTime();
+                    
                     var columns = qRow.Children();
                     var seedersElement = columns.Reverse().Skip(1).First();
                     release.Seeders = int.Parse(seedersElement.InnerText);
@@ -265,6 +267,23 @@ namespace Jackett.Indexers
                         var referrerUrl = imdbAnchor.GetAttribute("href");
                         release.Imdb = long.Parse(Regex.Match(referrerUrl, "tt(?<imdbId>[0-9]+)").Groups["imdbId"].Value);
                     }
+
+                    var Files = qRow.Find("td:nth-child(3) > div");
+                    release.Files = ParseUtil.CoerceLong(Files.Text().Split(' ')[0]);
+
+                    var Grabs = qRow.Find("td:nth-child(6)");
+                    release.Grabs = ParseUtil.CoerceLong(Grabs.Text());
+
+                    if (qRow.Find("span.freeleech, img[src=\"/static/common/torrents/gratis.png\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    if (qRow.Find("img[src=\"/static/common/torrents/toxupload.png\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
             }

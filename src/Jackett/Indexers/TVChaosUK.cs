@@ -47,6 +47,10 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithRSS())
         {
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "en-uk";
+            Type = "private";
+
             AddCategoryMapping(72, TorznabCatType.PC);
             AddCategoryMapping(86, TorznabCatType.Audio);
             AddCategoryMapping(87, TorznabCatType.AudioAudiobook);
@@ -105,7 +109,7 @@ namespace Jackett.Indexers
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value }
@@ -148,7 +152,7 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
 
             // If we have no query use the RSS Page as their server is slow enough at times!
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 var rssDoc = XDocument.Parse(rssPage.Content);
@@ -166,20 +170,21 @@ namespace Jackett.Indexers
                     if (string.IsNullOrWhiteSpace(torrentId))
                         throw new Exception("Missing torrent id");
 
-                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>\d*)\W\/\WLeechers:\W(?<leechers>\d*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)");
+                    var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d,]*)\W\/\WLeechers:\W(?<leechers>[\d,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)\W\/\WSnatched:\W(?<snatched>[\d,]*) x times");
                     if (!infoMatch.Success)
-                        throw new Exception("Unable to find info");
+                        throw new Exception(string.Format("Unable to find info in {0}: ", description));
 
                     var release = new ReleaseInfo()
                     {
                         Title = title,
-                        Description = title,
+                        Description = description,
                         Guid = new Uri(string.Format(DownloadUrl, torrentId)),
                         Comments = new Uri(string.Format(CommentUrl, torrentId)),
                         PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
                         Link = new Uri(string.Format(DownloadUrl, torrentId)),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
+                        Grabs = ParseUtil.CoerceInt(infoMatch.Groups["snatched"].Value),
                         Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
                         Category = MapTrackerCatToNewznab(infoMatch.Groups["cat"].Value)
                     };
@@ -192,8 +197,14 @@ namespace Jackett.Indexers
                     releases.Add(release);
                 }
             }
-            else
+            if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
             {
+                // The TVChaos UK search requires an exact match of the search string.
+                // But it seems like they just send the unfiltered search to the SQL server in a like query (LIKE '%$searchstring%').
+                // So we replace any whitespace/special character with % to make the search more usable.
+                Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+                searchString = ReplaceRegex.Replace(searchString, "%");
+
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
                     { "keywords",  searchString },
@@ -203,6 +214,13 @@ namespace Jackett.Indexers
                 };
 
                 var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                if (searchPage.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams);
+                }
+
                 try
                 {
                     CQ dom = searchPage.Content;
@@ -217,7 +235,11 @@ namespace Jackett.Indexers
                         if (string.IsNullOrWhiteSpace(release.Title))
                             continue;
 
-                        release.Description = release.Title;
+                        var tooltip = qRow.Find("div.tooltip-content");
+                        var banner = tooltip.Find("img");
+                        release.Description = tooltip.Text();
+                        if (banner.Any())
+                            release.BannerUrl = new Uri(banner.Attr("src"));
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
@@ -236,6 +258,19 @@ namespace Jackett.Indexers
                         // If its not apps or audio we can only mark as general TV
                         if (release.Category == 0)
                             release.Category = 5030;
+
+                        var grabs = qRow.Find("td:nth-child(6)").Text();
+                        release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                        if (qRow.Find("img[alt*=\"Free Torrent\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        if (qRow.Find("img[alt*=\"x2 Torrent\"]").Length >= 1)
+                            release.UploadVolumeFactor = 2;
+                        else
+                            release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
                     }

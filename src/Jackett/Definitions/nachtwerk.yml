@@ -1,0 +1,152 @@
+﻿---
+  site: nachtwerk
+  name: Nachtwerk
+  language: de-de
+  type: private
+  encoding: ISO-8859-15
+  links:
+    - https://nwtracker.com/
+
+  caps:
+    categories:
+      75: Movies/3D # Filme - 3D
+      34: Movies # Filme - Xvid / x264
+      55: Movies/BluRay # Filme - Blu-Ray
+      20: Movies/DVD # Filme - DVD-R
+      71: Movies/HD # Filme - HD 1080p
+      70: Movies/HD # Filme - HD 720p
+      35: Movies/Foreign # Filme - Inter
+      104: Movies/HD # Filme - UHD
+      107: Movies/Other # Filme - Remux
+      7: TV/SD # Serien - Xvid / x264
+      72: TV/HD # Serien - HD
+      82: TV/Foreign # Serien - Inter
+      69: TV # Serien - Pack's
+      42: TV # Serien - TV Show
+      105: TV/HD # Serien - UHD
+      51: XXX # XXX - Xvid / x264
+      73: XXX # XXX - HD
+      84: XXX # XXX - Pack's
+      85: XXX # XXX - Sonstiges
+      102: XXX # XXX - Hentai
+      103: XXX # XXX - UHD
+      6: Audio/MP3 # Audio - MP3
+      74: Audio/Lossless # Audio - Flac
+      86: Audio/Video # Audio - Videos
+      24: Audio/Audiobook # Audio - Hörspiel/Hörbuch
+      93: PC/Mac # Appz - Mac
+      67: PC/0day # Appz - Windows
+      31: PC/Phone-Other # Appz - Handy
+      81: PC # Appz - Sonstiges
+      25: TV/Documentary # Dokus - Xvid / x264
+      76: TV/Documentary # Dokus - HD
+      99: TV/Documentary # Dokus - Pack's
+      100: TV/Documentary # Dokus - 3D
+      106: TV/Documentary # Dokus - UHD
+      90: Console/PS3 # Games - PSX
+      56: Console/Wii # Games - WII
+      43: Console/Xbox # Games - XboX
+      4: PC/Games # Games - PC
+      88: Console/NDS # Games - xDS
+      91: PC/Mac # Games - Mac
+      92: Console # Games - Sonstiges
+      23: TV/Anime # Anime - Xvid / x264
+      80: TV/Anime # Anime - HD
+      98: TV/Anime # Anime - Serien
+      94: Books/Magazines # eBooks - Magazine/Zeitungen
+      95: Books/Comics # eBooks - Comics
+      30: Books # eBooks - Bücher
+      96: TV/Sport # Sport - Wrestling
+      97: TV/Sport # Sport - Fussball
+      45: TV/Sport # Sport - Sonstiges
+      9: Other # Diverses - Sonstiges
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /browse.php
+
+  download:
+    selector: a[href^="download.php?torrent="]
+      
+  search:
+    path: /browse.php
+    method: post
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      spstate: "0"
+      inclbookmarked: "0"
+      search_area: "0"
+      search_mode: "0"
+    rows:
+      selector: table.tableinborder[cellspacing="1"][cellpadding="0"] > tbody > tr
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+        filters:
+          - name: replace
+            args: ["[NW] ", ""]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:  
+          - name: replace
+            args: ["details.php?id=", "thanks1.php?torrentid="]
+      banner:
+        selector: a[onmouseover][href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=.*'\\);"
+      size:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      files:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+      grabs:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1)
+      seeders:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+      leechers:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+      date:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["\xA0", " "]
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02.01.2006 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          img[src="pic/onlyuploadd.gif"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
