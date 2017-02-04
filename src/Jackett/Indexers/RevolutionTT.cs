@@ -335,12 +335,13 @@ namespace Jackett.Indexers
 
                         release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(4) > a").Attr("href"));
 
-                        var dateString = qRow.Find("td:nth-child(6) nobr")[0].InnerText.Trim();
+                        var dateString = qRow.Find("td:nth-child(6) nobr")[0].TextContent.Trim();
                         //"2015-04-25 23:38:12"
                         //"yyyy-MMM-dd hh:mm:ss"
                         release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
-                        var sizeStr = qRow.Children().ElementAt(6).InnerText.Trim();
+                        var sizeStr = qRow.Children().ElementAt(6).InnerHTML.Trim();
+                        sizeStr = sizeStr.Substring(0, sizeStr.IndexOf('<'));
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").Text());
