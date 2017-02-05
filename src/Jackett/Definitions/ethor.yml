@@ -4,7 +4,7 @@
   description: "A French gerneral tracker"
   language: fr-fr
   type: private
-  encoding: windows-1252
+  encoding: UTF-8
   links:
     - https://ethor.net/
 
