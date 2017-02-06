@@ -210,7 +210,9 @@ namespace Jackett
                             {
                                 var nameSplit = value.IndexOf('=');
                                 if (nameSplit > -1) {
-                                    cookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') + 1)));
+                                    var cKey = value.Substring(0, nameSplit);
+                                    var cVal = value.Split(';')[0] + ";";
+                                    cookies.Add(new Tuple<string, string>(cKey, cVal));
                                 }
                             }
                             else
