@@ -694,6 +694,7 @@ function showSearch(selectedIndexer) {
         };
 
         $('#jackett-search-perform').html($('#spinner').html());
+        clearSearchResultTable($('#searchResults'));
         var jqxhr = $.post("search", queryObj, function (data) {
             $('#jackett-search-perform').html('Search trackers');
             var searchResults = $('#searchResults');
@@ -712,10 +713,15 @@ function showSearch(selectedIndexer) {
     searchTracker.trigger("change");
 
     updateSearchResultTable($('#searchResults'), []);
-    $("#jackett-search-results-datatable").empty();
-    $("#jackett-search-results-datatable_info").empty();
-    $("#jackett-search-results-datatable_paginate").empty();
+    clearSearchResultTable($('#searchResults'));
     releaseDialog.modal("show");
+}
+
+function clearSearchResultTable(element) {
+    element.find("#jackett-search-results-datatable > tbody").empty();
+    element.find("#jackett-search-results-datatable > tfoot").empty();
+    element.find("#jackett-search-results-datatable_info").empty();
+    element.find("#jackett-search-results-datatable_paginate").empty();
 }
 
 // dataTable dead torrent filter
