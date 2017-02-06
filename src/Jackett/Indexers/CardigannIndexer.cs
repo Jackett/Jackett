@@ -602,6 +602,7 @@ namespace Jackett.Indexers
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
             }
+            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", ID, CookieHeader));
             return true;
         }
 
