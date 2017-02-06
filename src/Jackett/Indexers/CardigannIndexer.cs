@@ -189,7 +189,7 @@ namespace Jackett.Indexers
             }
 
             if (Definition.Encoding == null)
-                Definition.Encoding = "iso-8859-1";
+                Definition.Encoding = "UTF-8";
 
             if (Definition.Login != null && Definition.Login.Method == null)
                 Definition.Login.Method = "form";
