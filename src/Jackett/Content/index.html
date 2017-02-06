@@ -54,7 +54,7 @@
             <h4>Adding a Jackett indexer in Sonarr or Radarr</h4>
             <ol>
                 <li>Go to <b>Settings > Indexers > Add > Torznab > Custom</b>.</li>
-                <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy Torznab Feed</button> button and past it into the Sonarr/Radarr <b>URL</b> field.</li>
+                <li>Click on the indexers corresponding <button role="button" class="btn btn-xs btn-info">Copy Torznab Feed</button> button and past it into the Sonarr/Radarr <b>URL</b> field.</li>
                 <li>For the <b>API key</b> use <b class="api-key-text"></b>.</li>
             </ol>
             <h4>Adding a Jackett indexer in CouchPotato</h4>
@@ -203,8 +203,8 @@
                         <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
                         <td class="fit">
                             <div class="indexer-buttons">
-                                <button title="{{torznab_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</button>
-                                <button title="{{potato_host}}" type="button" class="indexer-button-copy btn btn-xs btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</button>
+                                <a href="{{torznab_host}}" title="{{torznab_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</a>
+                                <a href="{{potato_host}}" title="{{potato_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</a>
 
                                 <button title="Search" class="btn btn-success btn-xs indexer-button-search" data-id="{{id}}">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>

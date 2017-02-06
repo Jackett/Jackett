@@ -279,6 +279,7 @@ function prepareCopyButtons(element) {
 
         $btn.click(function () {
             copyToClipboard(title);
+            return false;
         });
     });
 }
