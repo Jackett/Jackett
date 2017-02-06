@@ -631,6 +631,9 @@
     <Content Include="Definitions\insanetracker.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Definitions\btnext.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Definitions\passtheheadphones-scrape.yml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

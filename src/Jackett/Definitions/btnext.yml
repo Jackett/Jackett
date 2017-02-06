@@ -1,0 +1,192 @@
+﻿---
+  site: btnext
+  name: BTNext
+  language: pt-pt
+  type: private
+  encoding: UTF-8
+  links:
+    - http://tracker.btnext.com/
+
+  caps:
+    categories:
+      86: Other # Freeleech
+      88: Movies # Movies
+      89: Console # Games
+      87: TV # Series
+      93: Audio # Musica
+      1: Movies # Movies
+      70: Movies/3D # 3D
+      71: Movies/Sd # 480p
+      72: Movies/BluRay # BD-R
+      31: Movies/HD # BDRIP/BRRip
+      16: Movies/SD # CAM
+      74: Movies/DVD # DvD-R
+      17: Movies/HD # HD
+      91: Movies/Other # Kids
+      76: Movies # Packs
+      77: Movies/WEBDL # WEB-DL
+      14: Movies/SD # DVDRip/XViD
+      85: Movies/DVD # Custom-DVDR
+      96: Movies/HD # 4K
+      6: PC # Applications
+      18: PC/ISO # PC Applications
+      19: PC/Mac # Macintosh Applications
+      34: PC/ISO # Linux Applications
+      7: Audio # Music
+      20: Audio/Video # MVideo
+      21: Audio/MP3 # Mp3
+      33: Audio/Other # Mp4
+      32: Audio/Lossless # FLAC
+      2: Console # Games
+      78: PC/Games # Linux
+      79: PC/Mac # MacOSX
+      28: Console/NDS # Nintendo DS
+      27: PC/Games # PC/Windows
+      80: Console/PS3 # PS2
+      81: Console/PS3 # PS3
+      82: Console/PS4 # PS4
+      83: Console/PSP # PSP
+      95: Console/PSVita # PSVITA
+      4: Console/Wii # Wii
+      26: Console/Xbox360 # XBOX360
+      84: Console/Xbox # XONE
+      42: TV # TV Series
+      45: TV/Documentary # Documentaries
+      46: TV/Sport # Sports
+      47: TV/HD # TV-Bluray
+      48: TV/SD # TV-Dvd-R
+      49: TV/SD # TV-DVDRiP
+      50: TV # TV-Packs
+      92: TV/Anime # TV-Kids
+      52: TV/SD # TV-SDx264
+      53: TV/WEB-DL # TV-WEB-DL
+      55: TV/HD # TV-X264
+      56: TV/SD # TV-XViD
+      44: TV # Miscellaneous
+      51: TV/Anime # Anime
+      54: Audio/Audiobook # Audiobook
+      57: Books # E-Books
+      58: Books/Comics # Comics
+      59: Books # Educational
+      60: Books # Magazines/Journals
+      61: Other # Pics/Wallpapers
+      62: PC/Phone-Android # Android
+      63: PC/Phone-IOS # iOS
+      66: PC/Phone-Other # WindowsPhone
+      90: Other # GPS
+      68: Other # Others
+      41: XXX # XXX
+      64: XXX # XXX-Magazines
+      65: XXX # XXX-Movies
+      67: XXX/Packs # XXX-Packs
+      69: XXX/Imageset # XXX-Pics/Wallpapers
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /?p=home&pid=1
+    method: form
+    form: form#loginbox_form
+    submitpath: /ajax/login.php
+    inputs:
+      action: "login"
+      loginbox_membername: "{{ .Config.username }}"
+      loginbox_password: "{{ .Config.password }}"
+      loginbox_remember: "true"
+    selectorinputs:
+      securitytoken:
+        selector: "script:contains(\"stKey: \")"
+        filters:
+          - name: regexp
+            args: "stKey: \"(.+?)\","
+    error:
+      - selector: ":contains(\"-ERROR-\")"
+    test:
+      path: /?p=torrents&pid=32
+      selector: a#logout
+
+  search:
+    path: /
+    keywordsfilters: 
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%25"]
+    inputs:
+      p: "torrents"
+      pid: "32"
+      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
+      keywords: "{{ .Keywords }}"
+      search_type: "name"
+      searchin: "title"
+
+    rows:
+      selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
+    fields:
+      title:
+        selector: a[href*="?p=torrents&pid=10&action=details"]
+      category:
+        selector: div.category_image > a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
+      details:
+        selector: a[href*="?p=torrents&pid=10&action=details"]
+        attribute: href
+      download:
+        selector: a[href*="?p=torrents&pid=10&action=download"]
+        attribute: href
+      size:
+        selector: a[rel="torrent_size"]
+      seeders:
+        selector: a[rel="torrent_seeders"]
+      leechers:
+        selector: a[rel="torrent_leechers"]
+      grabs:
+        selector: a[rel="times_completed"]
+      banner|optional:
+        selector: a[rel="fancybox"]
+        attribute: href
+      downloadvolumefactor:
+        case:
+          "img[title=\"FREE!\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      date|optional|1:
+        selector: div.torrentOwner > abbr.timeago
+        attribute: data-time
+      date|optional|2:
+        selector: div.torrentOwner:not(:has(abbr.timeago))
+        remove: span
+        filters:
+          - name: replace
+            args: ["Enviado ", ""] # Uploaded
+          - name: replace
+            args: [" por", ""] # by
+          - name: replace
+            args: ["às ", ""] # at
+          - name: replace
+            args: ["Hoje", "Today"]
+          - name: replace
+            args: ["ontem", "Yesterday"]
+          - name: replace
+            args: ["Segunda", "Monday"]
+          - name: replace
+            args: ["Terça", "Tuesday"]
+          - name: replace
+            args: ["Quarta", "Wednesday"]
+          - name: replace
+            args: ["Quinta", "Thursday"]
+          - name: replace
+            args: ["Sexta", "Friday"]
+          - name: replace
+            args: ["Sábado", "Saturday"]
+          - name: replace
+            args: ["Domigo", "Sunday"]
+          - name: dateparse
+            args: "02-01-2006 15:04"
+
+        
