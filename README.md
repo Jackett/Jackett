@@ -38,6 +38,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AnimeTorrents
  * AOX
  * Apollo (XANAX)
+ * AsianDVDClub
  * Avistaz
  * BakaBT
  * bB

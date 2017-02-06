@@ -1,0 +1,108 @@
+﻿---
+  site: asiandvdclub
+  name: AsianDVDClub
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://asiandvdclub.org/
+
+  caps:
+    categories:
+      19: TV/Anime # Anime
+      12: Movies/Foreign # China
+      15: Movies/Foreign # Hong Kong
+      27: Movies/Foreign # India
+      13: Movies/Foreign # Japan
+      14: Movies/Foreign # Korea
+      20: Movies/Foreign # Music DVDs
+      18: Movies/Foreign # Other Asian
+      25: Movies/Foreign # Patches
+      24: Movies/Foreign # Philippines
+      23: Movies/Foreign # Pinku
+      21: Audio # Soundtracks
+      26: Movies/Foreign # Taiwan
+      17: Movies/Foreign # Thailand
+      22: TV # TV Series
+      16: Movies/Foreign # Viet Nam
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      apple: "evil"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    keywordsfilters:
+      - name: replace
+        args: ["-", " "]
+      - name: replace
+        args: ["(", " "]
+      - name: replace
+        args: [")", " "]
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table.torrenttable > tbody > tr
+    fields:
+      download:
+        selector: a[href^="/details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php", "download.php"]
+      title:
+        selector: td.torrentname > a
+      details:
+        selector: a[href^="/details.php?id="]
+        attribute: href
+      category:
+        selector: td.cat_pic > a
+        attribute: href
+        filters:
+          - name: regexp
+            args: c(\d+)=1
+      seeders:
+        selector: td.seeders
+        filters:
+          - name: replace
+            args: ["-\xA0-\xA0-", "0"]
+      leechers:
+        selector: td.leechers
+        filters:
+          - name: replace
+            args: ["-\xA0-\xA0-", "0"]
+      grabs:
+        selector: td.dls
+        filters:
+          - name: replace
+            args: ["-\xA0-\xA0-", "0"]
+      date:
+        selector: td.time
+        filters:
+          - name: append
+            args: " ago"
+      size:
+        selector: td.size
+      downloadvolumefactor:
+        case:
+          img[title="Free to download"]: "0"
+          img[title="Download counts 50%"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
