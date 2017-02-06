@@ -462,9 +462,10 @@ namespace Jackett.Indexers
                     throw new ExceptionWithConfigData(string.Format("Login failed: No inputs found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
                 }
 
-                var submitUrl = resolvePath(form.GetAttribute("action"));
+                var submitUrlstr = form.GetAttribute("action");
                 if (Login.Submitpath != null)
-                    submitUrl = resolvePath(Login.Submitpath);
+                    submitUrlstr = Login.Submitpath;
+                var submitUrl = resolvePath(submitUrlstr);
 
                 foreach (var input in inputs)
                 {
