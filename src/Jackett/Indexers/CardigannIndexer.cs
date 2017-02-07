@@ -1189,6 +1189,9 @@ namespace Jackett.Indexers
                                         if (Filter.Args != null)
                                             CharacterLimit = int.Parse(Filter.Args);
 
+                                        if (query.ImdbID != null && TorznabCaps.SupportsImdbSearch)
+                                            break; // skip andmatch filter for imdb searches
+
                                         if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
                                         {
                                             logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
