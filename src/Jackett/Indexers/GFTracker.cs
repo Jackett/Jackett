@@ -138,6 +138,7 @@ namespace Jackett.Indexers
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, SearchUrl, StartPageUrl);
             UpdateCookieHeader(response.Cookies);
+            UpdateCookieHeader("mybbuser=;"); // add dummy cookie, otherwise we get logged out after each request
 
             await ConfigureIfOK(configData.CookieHeader.Value, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
