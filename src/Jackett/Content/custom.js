@@ -170,6 +170,10 @@ function displayUnconfiguredIndexersList() {
     indexersTable.find("table").DataTable(
         {
             "stateSave": true,
+            "fnStateSaveParams": function (oSettings, sValue) {
+                sValue.search.search = ""; // don't save the search filter content
+                return sValue;
+            },
             "bAutoWidth": false,
             "pageLength": -1,
             "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
