@@ -749,7 +749,7 @@ function updateSearchResultTable(element, results) {
     var datatable = element.find('table').DataTable(
         {
             "fnStateSaveParams": function (oSettings, sValue) {
-                console.log(oSettings);
+                sValue.search.search = ""; // don't save the search filter content
                 sValue.deadfilter = settings.deadfilter;
                 return sValue;
             },
