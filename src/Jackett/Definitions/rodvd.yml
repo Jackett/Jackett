@@ -74,6 +74,8 @@
       key: 9
     rows:
       selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+      filters:
+        - name: andmatch
       dateheaders:
         selector: ":has(td.days > font > b)"
         filters:
