@@ -97,7 +97,7 @@ namespace Jackett.Indexers
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
-            queryCollection.Add("action", "simple");
+            queryCollection.Add("action", "basic");
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
