@@ -13,7 +13,7 @@ namespace Jackett.Utils.Clients
         {
             PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
-            Headers = new Dictionary<string, string>();
+            Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             EmulateBrowser = true;
             Encoding Encoding;
         }
@@ -23,7 +23,7 @@ namespace Jackett.Utils.Clients
             PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
             Url = url;
-            Headers = new Dictionary<string, string>();
+            Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             EmulateBrowser = true;
             Encoding Encoding;
         }
