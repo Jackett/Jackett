@@ -216,7 +216,7 @@ namespace Jackett.Indexers
         private String ResolveCookies(String incomingCookies = "")
         {
             var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]+)");
+            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
             Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
             var matches = expression.Match(redirRequestCookies);
             while (matches.Success)
