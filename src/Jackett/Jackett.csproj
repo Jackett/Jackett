@@ -640,6 +640,9 @@
     <Content Include="Definitions\diablotorrent.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Definitions\fullmixmusic.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Definitions\passtheheadphones-scrape.yml" />
     <Content Include="Definitions\torrentz2.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
