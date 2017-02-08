@@ -26,6 +26,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * Sky torrents
  * The Pirate Bay
+ * Torrentz2
  
 ### Supported Private Trackers
  * 2 Fast 4 You
@@ -157,7 +158,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentLeech
  * Torrents.Md
  * TorrentShack
- * Torrentz2
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
