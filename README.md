@@ -60,6 +60,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DanishBits
  * DataScene
  * Demonoid
+ * Diablo Torrent
  * DigitalHive
  * Dream Team
  * EoT-Forum

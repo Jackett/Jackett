@@ -1,0 +1,143 @@
+﻿---
+  site: diablotorrent
+  name: Diablo Torrent
+  language: hu-hu
+  type: private
+  encoding: UTF-8
+  links:
+    - https://diablotorrent.net/
+
+  caps:
+    categories:
+      49: Movies/SD # film / Cam
+      21: Movies/SD # film / Cam [magyar]
+      6: Movies/SD # film / DVDRip/XviD
+      5: Movies/SD # film / DVDRip/XviD [magyar]
+      32: Movies/SD # film / BDRip/XviD
+      33: Movies/SD # film / BDRip/XviD [magyar]
+      50: Movies/SD # film / BDRip/x264
+      51: Movies/SD # film / BDRip/x264 [magyar]
+      4: Movies/DVD # film / DVD-R
+      3: Movies/DVD # film / DVD-R [magyar]
+      45: Movies/DVD # film / DVD9
+      46: Movies/DVD # film / DVD9 [magyar]
+      30: Movies/HD # film / HD
+      31: Movies/HD # film / HD [magyar]
+      48: Movies/BluRay # film / Bluray
+      47: Movies/BluRay # film / Bluray [magyar]
+      10: TV/SD # Sorozat / XviD
+      11: TV/SD # Sorozat / XviD [magyar]
+      43: TV/SD # Sorozat / DVD-R
+      41: TV/SD # Sorozat / DVD-R [magyar]
+      44: TV/HD # Sorozat / HD
+      42: TV/HD # Sorozat / HD [magyar]
+      8: Audio/MP3 # Zene / MP3
+      9: Audio/MP3 # Zene / MP3 [magyar]
+      38: Audio/Lossless # Zene / Lossless
+      37: Audio/Lossless # Zene / Lossless [magyar]
+      27: Other # Egyéb / !! Feltöltési segédlet !!
+      29: Other # Egyéb / Képek
+      12: PC/Games # Játék / PC
+      14: Console/PS4 # Játék / PS
+      39: Console/Xbox # Játék / Xbox
+      40: Console/Other # Játék / Egyéb
+      16: PC/ISO # Programok / PC
+      24: PC/Phone-Other # Programok / Mobil
+      53: PC/0day # Programok / Egyéb
+      17: XXX/Xvid # Pornó / XviD
+      34: XXX/DVD # Pornó / DVD-R
+      35: XXX # Pornó / HD
+      36: XXX # Pornó / Képek
+      20: Books # E-Book / Magyar
+      52: Books # E-Book / Egyéb
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login.php
+    submitpath: login.php
+    method: form
+    inputs:
+      referer: ""
+      nev: "{{ .Config.username }}"
+      jelszo: "{{ .Config.password }}"
+      fsv: "-1"
+      ssl: "1"
+      belepes: "1"
+    getselectorinputs:
+      c:
+        selector: "script:contains(\"login.php\")"
+        filters:
+          - name: regexp
+            args: "login.php\\?c=(.*?)&rhash="
+      rhash:
+        text: "123"
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
+      cim: "{{ .Keywords }}"
+      s_alapjan: "7"
+      s_sorrend: "desc"
+    rows:
+      selector: div.torrent_row, div.torrent_details
+      after: 1
+    fields:
+      download:
+        selector: div.box_download > a
+        attribute: href
+      #title: # shortened
+      #  selector: a.box_name_a
+      title:
+        selector: div.torrent_details_po + h2
+      details:
+        selector: a.box_name_a
+        attribute: href
+      category:
+        selector: div.box_category > img
+        attribute: onclick
+        filters:
+          - name: regexp
+            args: "category\\((\\d+),\\d+\\);"
+      seeders:
+        selector: div.box_seeders
+      leechers:
+        selector: div.box_leechers
+      grabs:
+        selector: div.box_completed
+      files:
+        selector: div.box_files
+      date:
+        selector: div.box_uploaded
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+      size:
+        selector: div.box_size
+      banner|optional:
+        selector: a.cover_a
+        attribute: title
+        filters:
+          - name: regexp
+            args: src='(.*?)' 
+      imdb|optional:
+        selector: a[href^="http://www.imdb.com/title/"]
+        attribute: href
+      description:
+        selector: div.torrent_row_magyarcim
+        remove: span.torrent_row_new
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

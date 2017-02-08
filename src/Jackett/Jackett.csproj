@@ -637,6 +637,9 @@
     <Content Include="Definitions\asiandvdclub.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Definitions\diablotorrent.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Definitions\passtheheadphones-scrape.yml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
