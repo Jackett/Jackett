@@ -156,6 +156,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentLeech
  * Torrents.Md
  * TorrentShack
+ * Torrentz2
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
