@@ -767,7 +767,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected string applyFilters(string Data, List<filterBlock> Filters)
+        protected string applyFilters(string Data, List<filterBlock> Filters, Dictionary<string, object> variables = null)
         {
             if (Filters == null)
                 return Data;
@@ -802,6 +802,7 @@ namespace Jackett.Indexers
                     case "re_replace":
                         var regexpreplace_pattern = (string)Filter.Args[0];
                         var regexpreplace_replacement = (string)Filter.Args[1];
+                        regexpreplace_replacement = applyGoTemplateText(regexpreplace_replacement, variables);
                         Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
                         Data = regexpreplace_regex.Replace(Data, regexpreplace_replacement);
                         break;                        
@@ -819,6 +820,7 @@ namespace Jackett.Indexers
                     case "replace":
                         var from = (string)Filter.Args[0];
                         var to = (string)Filter.Args[1];
+                        to = applyGoTemplateText(to, variables);
                         Data = Data.Replace(from, to);
                         break;
                     case "trim":
@@ -830,15 +832,17 @@ namespace Jackett.Indexers
                         break;
                     case "prepend":
                         var prependstr = (string)Filter.Args;
-                        Data = prependstr + Data;
+                        Data = applyGoTemplateText(prependstr, variables) + Data;
                         break;
                     case "append":
                         var str = (string)Filter.Args;
-                        Data += str;
+                        Data += applyGoTemplateText(str, variables);
                         break;
                     case "timeago":
-                    case "fuzzytime":
                     case "reltime":
+                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        break;
+                    case "fuzzytime":
                         var timestr = (string)Filter.Args;
                         Data = DateTimeUtil.FromUnknown(timestr).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
@@ -873,11 +877,11 @@ namespace Jackett.Indexers
             return Element.QuerySelector(Selector);
         }
 
-        protected string handleSelector(selectorBlock Selector, IElement Dom)
+        protected string handleSelector(selectorBlock Selector, IElement Dom, Dictionary<string, object> variables = null)
         {
             if (Selector.Text != null)
             {
-                return applyFilters(Selector.Text, Selector.Filters);
+                return applyFilters(Selector.Text, Selector.Filters, variables);
             }
 
             IElement selection = Dom;
@@ -924,7 +928,7 @@ namespace Jackett.Indexers
                 value = selection.TextContent;
             }
 
-            return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters);
+            return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
         protected Uri resolvePath(string path)
@@ -1083,9 +1087,10 @@ namespace Jackett.Indexers
                                 FieldModifiers.Add(FieldParts[i]);
 
                             string value = null;
+                            var variablesKey = ".Result." + FieldName;
                             try
                             {
-                                value = handleSelector(Field.Value, Row);
+                                value = handleSelector(Field.Value, Row, variables);
                                 switch (FieldName)
                                 {
                                     case "download":
@@ -1098,6 +1103,7 @@ namespace Jackett.Indexers
                                         {
                                             release.Link = resolvePath(value);
                                         }
+                                        value = release.Link.ToString();
                                         break;
                                     case "details":
                                         var url = resolvePath(value);
@@ -1105,37 +1111,45 @@ namespace Jackett.Indexers
                                         release.Comments = url;
                                         if (release.Guid == null)
                                             release.Guid = url;
+                                        value = url.ToString();
                                         break;
                                     case "comments":
                                         var CommentsUrl = resolvePath(value);
-                                        if(release.Comments == null)
+                                        if (release.Comments == null)
                                             release.Comments = CommentsUrl;
                                         if (release.Guid == null)
                                             release.Guid = CommentsUrl;
+                                        value = CommentsUrl.ToString();
                                         break;
                                     case "title":
                                         if (FieldModifiers.Contains("append"))
                                             release.Title += value;
                                         else
                                             release.Title = value;
+                                        value = release.Title;
                                         break;
                                     case "description":
                                         if (FieldModifiers.Contains("append"))
                                             release.Description += value;
                                         else
                                             release.Description = value;
+                                        value = release.Description;
                                         break;
                                     case "category":
                                         release.Category = MapTrackerCatToNewznab(value);
+                                        value = release.Category.ToString();
                                         break;
                                     case "size":
                                         release.Size = ReleaseInfo.GetBytes(value);
+                                        value = release.Size.ToString();
                                         break;
                                     case "leechers":
+                                        var Leechers = ParseUtil.CoerceInt(value);
                                         if (release.Peers == null)
-                                            release.Peers = ParseUtil.CoerceInt(value);
+                                            release.Peers = Leechers;
                                         else
-                                            release.Peers += ParseUtil.CoerceInt(value);
+                                            release.Peers += Leechers;
+                                        value = Leechers.ToString();
                                         break;
                                     case "seeders":
                                         release.Seeders = ParseUtil.CoerceInt(value);
@@ -1143,55 +1157,70 @@ namespace Jackett.Indexers
                                             release.Peers = release.Seeders;
                                         else
                                             release.Peers += release.Seeders;
+                                        value = release.Seeders.ToString();
                                         break;
                                     case "date":
                                         release.PublishDate = DateTimeUtil.FromUnknown(value);
+                                        value = release.PublishDate.ToString(DateTimeUtil.RFC1123ZPattern);
                                         break;
                                     case "files":
                                         release.Files = ParseUtil.CoerceLong(value);
+                                        value = release.Files.ToString();
                                         break;
                                     case "grabs":
                                         release.Grabs = ParseUtil.CoerceLong(value);
+                                        value = release.Grabs.ToString();
                                         break;
                                     case "downloadvolumefactor":
                                         release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                        value = release.DownloadVolumeFactor.ToString();
                                         break;
                                     case "uploadvolumefactor":
                                         release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                        value = release.UploadVolumeFactor.ToString();
                                         break;
                                     case "minimumratio":
                                         release.MinimumRatio = ParseUtil.CoerceDouble(value);
+                                        value = release.MinimumRatio.ToString();
                                         break;
                                     case "minimumseedtime":
                                         release.MinimumSeedTime = ParseUtil.CoerceLong(value);
+                                        value = release.MinimumSeedTime.ToString();
                                         break;
                                     case "imdb":
                                         release.Imdb = ParseUtil.GetLongFromString(value);
+                                        value = release.Imdb.ToString();
                                         break;
                                     case "rageid":
                                         Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                         var RageIDMatch = RageIDRegEx.Match(value);
                                         var RageID = RageIDMatch.Groups[1].Value;
                                         release.RageID = ParseUtil.CoerceLong(RageID);
+                                        value = release.RageID.ToString();
                                         break;
                                     case "tvdbid":
                                         Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                                         var TVDBIdMatch = TVDBIdRegEx.Match(value);
                                         var TVDBId = TVDBIdMatch.Groups[1].Value;
                                         release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                                        value = release.TVDBId.ToString();
                                         break;
                                     case "banner":
                                         if(!string.IsNullOrWhiteSpace(value)) { 
                                             var bannerurl = resolvePath(value);
                                             release.BannerUrl = bannerurl;
                                         }
+                                        value = release.BannerUrl.ToString();
                                         break;
                                     default:
                                         break;
                                 }
+                                variables[variablesKey] = value;
                             }
                             catch (Exception ex)
                             {
+                                if (!variables.ContainsKey(variablesKey))
+                                    variables[variablesKey] = null;
                                 if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional"))
                                     continue;
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
