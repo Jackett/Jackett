@@ -1097,13 +1097,14 @@ namespace Jackett.Indexers
                                         if (value.StartsWith("magnet:"))
                                         {
                                             release.MagnetUri = new Uri(value);
-                                            release.Link = release.MagnetUri;
+                                            //release.Link = release.MagnetUri;
+                                            value = release.MagnetUri.ToString();
                                         }
                                         else
                                         {
                                             release.Link = resolvePath(value);
+                                            value = release.Link.ToString();
                                         }
-                                        value = release.Link.ToString();
                                         break;
                                     case "details":
                                         var url = resolvePath(value);
