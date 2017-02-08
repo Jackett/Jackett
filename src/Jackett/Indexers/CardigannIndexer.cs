@@ -83,6 +83,7 @@ namespace Jackett.Indexers
             public bool Selectors { get; set; } = false;
             public Dictionary<string, string> Inputs { get; set; }
             public Dictionary<string, selectorBlock> Selectorinputs { get; set; }
+            public Dictionary<string, selectorBlock> Getselectorinputs { get; set; }
             public List<errorBlock> Error { get; set; }
             public pageTestBlock Test { get; set; }
             public captchaBlock Captcha { get; set; }
@@ -394,6 +395,7 @@ namespace Jackett.Indexers
             {
                 var LoginUrl = resolvePath(Login.Path).ToString();
 
+                var queryCollection = new NameValueCollection();
                 var pairs = new Dictionary<string, string>();
 
                 var CaptchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
@@ -465,7 +467,6 @@ namespace Jackett.Indexers
                 var submitUrlstr = form.GetAttribute("action");
                 if (Login.Submitpath != null)
                     submitUrlstr = Login.Submitpath;
-                var submitUrl = resolvePath(submitUrlstr);
 
                 foreach (var input in inputs)
                 {
@@ -511,6 +512,27 @@ namespace Jackett.Indexers
                         }
                     }
                 }
+
+                // getselector inputs
+                if (Login.Getselectorinputs != null)
+                {
+                    foreach (var Selectorinput in Login.Getselectorinputs)
+                    {
+                        string value = null;
+                        try
+                        {
+                            value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
+                            queryCollection[Selectorinput.Key] = value;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(string.Format("Error while parsing get selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                        }
+                    }
+                }
+                if (queryCollection.Count > 0)
+                    submitUrlstr += "?" + queryCollection.GetQueryString();
+                var submitUrl = resolvePath(submitUrlstr);
 
                 // automatically solve simpleCaptchas, if used
                 var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
@@ -866,7 +888,7 @@ namespace Jackett.Indexers
                 selection = QuerySelector(Dom, Selector.Selector);
                 if (selection == null)
                 {
-                    throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.OuterHtml));
+                    throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.ToHtmlPretty()));
                 }
             }
 
@@ -889,13 +911,13 @@ namespace Jackett.Indexers
                     }
                 }
                 if(value == null)
-                    throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.OuterHtml));
+                    throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.ToHtmlPretty()));
             }
             else if (Selector.Attribute != null)
             {
                 value = selection.GetAttribute(Selector.Attribute);
                 if (value == null)
-                    throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.OuterHtml));
+                    throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.ToHtmlPretty()));
             }
             else
             {
@@ -1033,7 +1055,7 @@ namespace Jackett.Indexers
                             var MergeRowIndex = i + j + 1;
                             var MergeRow = Rows[MergeRowIndex];
                             List<INode> MergeNodes = new List<INode>();
-                            foreach (var node in MergeRow.QuerySelectorAll("td"))
+                            foreach (var node in MergeRow.ChildNodes)
                             {
                                 MergeNodes.Add(node);
                             }
@@ -1198,6 +1220,10 @@ namespace Jackett.Indexers
                                             SkipRelease = true;
                                         }
                                         break;
+                                    case "strdump":
+                                        // for debugging
+                                        logger.Info(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                        break;
                                     default:
                                         logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
                                         break;
@@ -1238,7 +1264,7 @@ namespace Jackett.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
+                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
                     }
                 }
             }
@@ -1331,7 +1357,7 @@ namespace Jackett.Indexers
                     var DlUri = SearchResultDocument.QuerySelector(Download.Selector);
                     if (DlUri != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.OuterHtml));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.ToHtmlPretty()));
                         var href = DlUri.GetAttribute("href");
                         link = resolvePath(href);
                     }
