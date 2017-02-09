@@ -12,6 +12,24 @@
       "video tv": TV
       "video": Movies
       "video movie hd": Movies/HD
+      "adult": XXX
+      "ebook comics": Books/Comics
+      "ebook": Books/Ebook
+      "ebook tutorial": Books/Technical
+      "ebook magazine": Books/Magazines
+      "audio music mp3": Audio/MP3
+      "ebook audio book": Audio/Audiobook
+      "audio music lossless": Audio/Lossless
+      "application": PC/0day
+      "game": PC/Games
+      "game xbox": Console/Xbox
+      "adult milf": XXX
+      "adult hairy": XXX
+      "adult anal": XXX
+      "adult blowjobs": XXX
+      "game pc": PC/Games
+      "audio": Audio
+      
 
     modes:
       search: [q]
@@ -44,7 +62,7 @@
             args: "magnet:?xt=urn:btih:"
           - name: append
             args: "&dn={{ .Result.title }}.torrent"
-      category:
+      category|optional:
         selector: dt
         remove: a
         filters:
