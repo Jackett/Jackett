@@ -105,6 +105,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LosslessClub
  * M-Team - TP
  * Magico
+ * Majomparádé 
  * Mononoké-BT
  * MoreThanTV
  * MyAnonamouse

@@ -1,0 +1,142 @@
+﻿---
+  site: majomparade
+  name: Majomparádé
+  language: hu-hu
+  type: private
+  encoding: UTF-8
+  links:
+    - https://majomparade.eu/
+
+  caps:
+    categories:
+      4: Movies/3D # 3D/Magyar
+      5: Movies/3D # 3D/Külföldi
+      48: Movies/HD # Film/BR-BDRIP/Külföldi
+      50: Movies/HD # Film/BR-BDRIP/Magyar
+      75: Movies/SD # Film/Cam/Külföldi
+      76: Movies/SD # Film/Cam/Magyar
+      26: Movies/DVD # Film/DVD/Külföldi
+      25: Movies/DVD # Film/DVD/Magyar
+      58: Movies/DVD # Film/DVD9/Külföld
+      59: Movies/DVD # Film/DVD9/Magyar
+      42: Movies/HD # Film/HD/Külföldi
+      51: Movies/HD # Film/HD/Magyar
+      38: Movies/SD # Film/XviD/Külföldi
+      24: Movies/Sd # Film/XviD/Magyar
+      85: TV/Sport # Sport/Külföldi
+      87: TV/Sport # Sport/Magyar
+      47: TV/SD # Sorozat/Külföldi
+      36: TV/SD # Sorozat/Magyar
+      6: TV/HD # Sorozat/HD/Magyar
+      7: TV/HD # Sorozat/HD/Külföldi
+      56: Audio/Audiobook # Hangoskönyv
+      33: Books # Könyv/Külföldi
+      44: Books # Könyv/Magyar
+      28: PC/Games # Játék/ISO
+      32: Console # Játék/Konzol
+      30: PC/Games # Játék/RIP
+      53: Audio/Lossless # Lossless/Külföldi
+      74: Audio/Lossless # Lossless/Magyar
+      40: Audio/Other # Zene/Külföldi
+      41: Audio/Other # Zene/Magyar
+      34: PC/Phone-Other # Mobil
+      35: PC/ISO # Programok/ISO
+      46: PC/0day # Programok/RIP
+
+      70: XXX/DVD # XXX/DVD
+      39: XXX/Xvid # XXX/XviD
+      57: XXX # XXX/HD
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q, imdbid]
+
+  login:
+    path: kezdolap.php
+    submitpath: kezdolap.php?belepes
+    method: form
+    form: form#login_form
+    inputs:
+      nev: "{{ .Config.username }}"
+      jelszo: "{{ .Config.password }}"
+    selectorinputs: # login form HTML is broken (no closing form tag), we've to add this manually
+      getUnique:
+        selector: input[name="getUnique"]
+        attribute: value
+    test:
+      path: letoltes.php
+
+  search:
+    path: letoltes.php
+    inputs:
+      $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
+      name: "{{if .Query.IMDBID}}http://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
+      imdb_search: "{{ if .Query.IMDBID }}yes{{else}}{{end}}"
+      tipus: "1"
+      k: "yes"
+      tipuska: "1"
+    rows:
+      selector: table#table > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      download:
+        selector: a[href^="download.php?torrent="]
+        attribute: href
+      title:
+        selector: a[href^="details.php?id="] > b
+        attribute: title
+        filters:
+          - name: regexp
+            args: "^Torrent neve: (.*?)<br />"
+      description:
+        selector: a[href^="details.php?id="] > b
+        attribute: title
+        filters:
+          - name: strdump
+          - name: regexp
+            args: "<br />(.*)"
+          - name: strdump
+      category:
+        selector: a[href*="&category[]="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category[]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      imdb|optional:
+        selector: a[href^="https://www.imdb.com/title/"]
+        attribute: href
+      banner|optional:
+        selector: img[src="pic/borito.png"]
+        attribute: title
+        filters:
+          - name: regexp
+            args: src='(.*?)'
+      files:
+        selector: td:nth-child(5)
+      size:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(6)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        case:
+          img[title="Ennél a torrentnél 2x szorzó van."]: "2"
+          img[title="Ennél a torrentnél 3x szorzó van."]: "3"
+          img[title="Ennél a torrentnél 4x szorzó van."]: "4"
+          "*": "1"
