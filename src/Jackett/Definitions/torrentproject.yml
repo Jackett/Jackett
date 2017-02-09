@@ -1,0 +1,74 @@
+---
+  site: torrentproject
+  name: TorrentProject
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://torrentproject.se/
+
+  caps:
+    categories:
+      "video tv": TV
+      "video dvd": Movies/SD
+      "Video Dvdrip": Movies/SD
+      "video hdrip": Movies/HD
+      "Video Lq": Movies/Foreign
+      "audio mp3": Audio/MP3
+      "audio lossless": Audio/Lossless
+      "video": Movies
+      "ebooks": Books/Ebook
+      "Ebooks Comics": Books/Comics
+      "Ebooks Magazines": Other
+      "Ebooks Audiobook": Audio/Audiobook
+      "Ebooks Tutorials": Books/Ebook
+      "Games PC": PC/Games
+      "Games Nintendo": Console
+      "Games PlayStation": Console
+      "Games XBox": Console/XBox
+      "Mobile": PC/Phone-Other
+      "Applications": PC
+      "Images": Other
+      
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
+    attribute: href
+
+  search:
+    path: "{{if .Query.Keywords}}?t={{ .Query.Keywords}}{{else}}?orderby=latest&t={{end}}"
+    rows:
+      selector: "#similarfiles > div:not(:first-child)"
+    fields:
+      title:
+        selector: span > a
+      details:
+        selector: span > a
+        attribute: href
+      download:
+        selector: span > a
+        attribute: href
+      category|optional:
+        selector: div > span:nth-child(1) > span
+      date:
+        selector: div > span:nth-child(4)
+        filters:
+          - name: append
+            args: " ago"
+      size:
+        selector: div > span:nth-child(5)
+      seeders:
+        selector: div > span:nth-child(2)
+      leechers:
+        selector: div > span:nth-child(3)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
