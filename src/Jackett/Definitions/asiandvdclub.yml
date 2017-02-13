@@ -58,6 +58,8 @@
       incldead: "1"
     rows:
       selector: table.torrenttable > tbody > tr
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="/details.php?id="]
