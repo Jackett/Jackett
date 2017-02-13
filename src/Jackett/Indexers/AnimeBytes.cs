@@ -90,11 +90,13 @@ namespace Jackett.Indexers
             });
 
             CQ loginPageDom = loginPage.Content;
-            var csrfToken = loginPageDom["input[name=\"csrf_token\"]"].Last();
+            var csrfIndex = loginPageDom["input[name=\"_CSRF_INDEX\"]"].Last();
+            var csrfToken = loginPageDom["input[name=\"_CSRF_TOKEN\"]"].Last();
 
             // Build login form
             var pairs = new Dictionary<string, string> {
-                    { "csrf_token", csrfToken.Attr("value") },
+                    { "_CSRF_INDEX", csrfIndex.Attr("value") },
+                    { "_CSRF_TOKEN", csrfToken.Attr("value") },
                     { "username", configData.Username.Value },
                     { "password", configData.Password.Value },
                     { "keeplogged_sent", "true" },
