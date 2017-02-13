@@ -26,6 +26,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * Sky torrents
  * The Pirate Bay
+ * TorrentProject
  * Torrentz2
  
 ### Supported Private Trackers
