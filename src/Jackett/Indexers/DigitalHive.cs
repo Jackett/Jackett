@@ -173,7 +173,7 @@ namespace Jackett.Indexers
             }
             try
             {
-                releases.AddRange(contentToReleaseInfos(results.Content));
+                releases.AddRange(contentToReleaseInfos(query, results.Content));
             }
             catch (Exception ex)
             {
@@ -183,7 +183,7 @@ namespace Jackett.Indexers
             return releases;
         }
 
-        private IEnumerable<ReleaseInfo> contentToReleaseInfos(CQ dom)
+        private IEnumerable<ReleaseInfo> contentToReleaseInfos(TorznabQuery query, CQ dom)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 
@@ -197,7 +197,10 @@ namespace Jackett.Indexers
 
                 var qRow = row.Cq();
                 release.Title = qRow.Find("td:nth-child(2) > a").First().Text().Trim();
-                release.Description = release.Title;
+
+                if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                    continue;
+
                 release.Guid = new Uri(SiteLink + qRow.Find("td:nth-child(2) > a").First().Attr("href"));
                 release.Comments = release.Guid;
                 release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").First().Attr("href"));
