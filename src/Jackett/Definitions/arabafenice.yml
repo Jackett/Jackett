@@ -1,0 +1,161 @@
+﻿---
+  site: arabafenice
+  name: ArabaFenice
+  language: it-it
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.arabafenice.me/
+
+  caps:
+    categories:
+      # HRS
+      34: Movies/HD # 1080p HRS x264
+      47: Movies/HD # 2160p 4k UltraHD HRS
+      35: TV # Serie TV HRS
+      36: Movies/SD # DVDRip HRS
+      41: Movies/SD # BDRip 576p HRS
+      39: Movies/HD # 1080p HRS x265 HEVC
+
+      # VIDEO
+      1: Movies # News Cinema
+      2: Movies/SD # BD-DVDRip
+      3: Movies/DVD # DVD 5
+      5: Movies/DVD # DVD 9
+      6: Movies/BluRay # BluRay Full
+      4: Movies/HD # 1080p 3D x264
+      7: Movies/HD # 1080p x264
+      46: Movies/HD # 1080p Video Untouch
+      44: Movies/HD # 1080p x265
+      9: TV/Anime # Cartoons
+      8: TV/Anime # 720p x264
+      12: TV # He concluded seasons
+      13: TV # Seasons in Onda
+      14: TV # TV Show
+      42: TV # Serie Tv Sub Ita
+      15: TV/Documentary # documentaries
+      33: TV # mp4
+      40: TV/HD # 2160p 4K UltraHD
+      38: XXX # xXx
+      43: Other # Arabic for social
+
+      # MUSICA
+      17: Audio # Italian music
+      45: Audio # Discography
+      18: Audio # MusicaInternazionale
+      19: Audio # Compilation
+
+      # PDF
+      21: Books # Ebook
+      22: Books/Comics # Comics
+      23: Books # Newsstand
+
+      # GAMES
+      25: Console/PS4 # Sony Games
+      26: Console/Xbox # XboX Games
+      27: Console/Other # Nintendo Games
+      28: PC/Games # PC Games
+
+      # SOFTWARE
+      30: PC/ISO # Windows APP
+      31: PC/Phone-IOS # Apple APP
+      32: PC/Phone-Android # Android APP
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: body[onLoad^="makeAlert('"]
+        message:
+          selector: body[onLoad^="makeAlert('"]
+          attribute: onLoad
+          filters:
+            - name: replace
+              args: ["makeAlert('Error' , '", ""]
+            - name: replace
+              args: ["');", ""]
+    test:
+      path: index.php
+
+  download:
+    before:
+      path: "takethanks.php"
+      method: "post"
+      inputs:
+        torrentid: "{{ .DownloadUri.Query.id }}"
+
+  search:
+    path: index.php
+    inputs:
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      page: "torrents"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      active: "0"
+    rows:
+      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+    fields:
+      download:
+        selector: a[href^="index.php?page=downloadcheck&id="]
+        attribute: href
+      title:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      banner:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.*?) "
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: href
+      size:
+        selector: td:nth-child(12)
+      date:
+        selector: td:nth-child(7)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02/01/2006 -07:00"
+      grabs:
+        selector: td:nth-child(10)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      downloadvolumefactor:
+        case:
+          img[alt="Gold 100% Free"]: "0"
+          img[alt="Silver 50% Free"]: "0.5"
+          img[alt="Bronze 25% Free"]: "0.75"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt="2x Upload Multiplier"]: "2"
+          img[alt="3x Upload Multiplier"]: "3"
+          img[alt="4x Upload Multiplier"]: "4"
+          img[alt="5x Upload Multiplier"]: "5"
+          img[alt="6x Upload Multiplier"]: "6"
+          img[alt="7x Upload Multiplier"]: "7"
+          img[alt="8x Upload Multiplier"]: "8"
+          img[alt="9x Upload Multiplier"]: "9"
+          img[alt="10x Upload Multiplier"]: "10"
+          "*": "1"
