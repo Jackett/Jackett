@@ -1,0 +1,109 @@
+﻿---
+  site: hdpter
+  name: HDPter
+  language: zh-cn
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.hdpter.net/
+
+  caps:
+    categories:
+      401: Movies/BluRay # Movies Blu-ray
+      402: Movies/HD # Movies REMUX
+      419: Movies/HD # Movies 1080p
+      404: Movies/HD # Movies 720p
+      405: Movies/3D # Movies 3D
+      406: Movies/DVD # Movies DVD
+      407: Movies/WEBDL # Movies WEB-DL
+      408: Movies/SD # Movies HDTV
+      409: Movies/Other # Movies iPad
+      410: TV/Documentary # Documentaries
+      411: TV/Anime # Animations
+      412: TV # TV Series
+      413: TV # TV Shows
+      414: Audio/Video # Music Videos
+      415: TV/Sport # Sports
+      416: Audio # Music
+      420: Other # Other
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [imdbid]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("登录失败"))
+    test:
+      path: /torrents.php
+
+  search:
+    path: /torrents.php
+    method: get
+    inputs:
+      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      incldead: "1"
+      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    rows:
+      selector: table.torrents > tbody > tr:has(table.torrentname)
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      title|optional:
+        selector: a[title][href^="details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      imdb|optional:
+        selector: div.imdb_100 > a
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(8)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      date:
+        selector: td:nth-child(4) > span[title]
+        attribute: title
+        filters:
+          - name: append
+            args: " +08:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          img.pro_free: "0"
+          img.pro_free2up: "0"
+          img.pro_50pctdown: "0.5"
+          img.pro_50pctdown2up: "0.5"
+          img.pro_30pctdown: "0.3"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img.pro_50pctdown2up: "2"
+          img.pro_free2up: "2"
+          img.pro_2up: "2"
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a, img

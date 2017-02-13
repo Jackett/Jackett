@@ -86,6 +86,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Torrents
  * HDClub
  * HDHome
+ * HDPter
  * HDSky
  * Hebits
  * Hon3y HD
