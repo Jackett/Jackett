@@ -136,8 +136,7 @@
         selector: div.torrent_row_magyarcim
         remove: span.torrent_row_new
       downloadvolumefactor:
-        case:
-          "*": "1"
+        text: "0"
       uploadvolumefactor:
         case:
           "*": "1"
