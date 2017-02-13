@@ -19,7 +19,8 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: /takelogin.php
@@ -40,8 +41,8 @@
     method: post
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      search_area: 0
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       search_mode: 0
       spstate: 0
       inclbookmarked: 0
