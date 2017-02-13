@@ -220,7 +220,10 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Title = qRow.Find(".torrentName").Text();
-                    release.Description = release.Title;
+
+                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                        continue;
+
                     release.Guid = new Uri(SiteLink + qRow.Find(".torrentName").Attr("href"));
                     release.Comments = release.Guid;
                     release.Link = new Uri(SiteLink + qRow.Find(".dlLinksInfo > a").Attr("href"));
