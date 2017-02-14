@@ -49,6 +49,13 @@ namespace Jackett.Utils
             var filteredResults = new List<ReleaseInfo>();
             foreach (var result in results)
             {
+                // don't filter results with IMDBID (will be filtered seperately)
+                if (result.Imdb != null)
+                {
+                    filteredResults.Add(result);
+                    continue;
+                }
+
                 if (result.Title == null)
                     continue;
 
