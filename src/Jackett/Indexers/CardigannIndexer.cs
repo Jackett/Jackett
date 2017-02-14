@@ -838,6 +838,12 @@ namespace Jackett.Indexers
                         var str = (string)Filter.Args;
                         Data += applyGoTemplateText(str, variables);
                         break;
+                    case "tolower":
+                        Data = Data.ToLower();
+                        break;
+                    case "toupper":
+                        Data = Data.ToUpper();
+                        break;
                     case "timeago":
                     case "reltime":
                         Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
