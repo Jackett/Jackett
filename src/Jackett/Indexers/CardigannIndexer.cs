@@ -214,7 +214,21 @@ namespace Jackett.Indexers
             configData = new ConfigurationData();
             foreach (var Setting in Definition.Settings)
             {
-                configData.AddDynamic(Setting.Name, new StringItem { Name = Setting.Label });
+                Item item;
+                if (Setting.Type != null && Setting.Type == "checkbox")
+                {
+                    item = new BoolItem() { Value = false };
+                }
+                else if(Setting.Type != null && Setting.Type == "password")
+                {
+                    item = new StringItem();
+                }
+                else
+                {
+                    item = new StringItem(); 
+                }
+                item.Name = Setting.Label;
+                configData.AddDynamic(Setting.Name, item);
             }
 
             foreach (var Category in Definition.Caps.Categories)
@@ -236,7 +250,17 @@ namespace Jackett.Indexers
 
             foreach (settingsField Setting in Definition.Settings)
             {
-                variables[".Config."+Setting.Name] = ((StringItem)configData.GetDynamic(Setting.Name)).Value;
+                string value;
+                var item = configData.GetDynamic(Setting.Name);
+                if (item.GetType() == typeof(BoolItem))
+                {
+                    value = (((BoolItem)item).Value == true ? "true" : "");
+                }
+                else
+                { 
+                    value = ((StringItem)item).Value;
+                }
+                variables[".Config."+Setting.Name] = value;
             }
             return variables;
         }
@@ -838,6 +862,12 @@ namespace Jackett.Indexers
                         var str = (string)Filter.Args;
                         Data += applyGoTemplateText(str, variables);
                         break;
+                    case "tolower":
+                        Data = Data.ToLower();
+                        break;
+                    case "toupper":
+                        Data = Data.ToUpper();
+                        break;
                     case "timeago":
                     case "reltime":
                         Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
@@ -881,7 +911,7 @@ namespace Jackett.Indexers
         {
             if (Selector.Text != null)
             {
-                return applyFilters(Selector.Text, Selector.Filters, variables);
+                return applyFilters(applyGoTemplateText(Selector.Text, variables), Selector.Filters, variables);
             }
 
             IElement selection = Dom;
@@ -1094,6 +1124,12 @@ namespace Jackett.Indexers
                                 switch (FieldName)
                                 {
                                     case "download":
+                                        if (string.IsNullOrEmpty(value))
+                                        {
+                                            value = null;
+                                            release.Link = null;
+                                            break;
+                                        }
                                         if (value.StartsWith("magnet:"))
                                         {
                                             release.MagnetUri = new Uri(value);
@@ -1105,6 +1141,10 @@ namespace Jackett.Indexers
                                             release.Link = resolvePath(value);
                                             value = release.Link.ToString();
                                         }
+                                        break;
+                                    case "magnet":
+                                        release.MagnetUri = new Uri(value);
+                                        value = release.MagnetUri.ToString();
                                         break;
                                     case "details":
                                         var url = resolvePath(value);

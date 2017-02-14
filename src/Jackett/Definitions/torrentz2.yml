@@ -36,7 +36,10 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: itorrents-links
+      type: checkbox
+      label: Add download links via itorrents.org
 
   search:
     path: searchA
@@ -52,7 +55,20 @@
       details:
         selector: dt a
         attribute: href
+      download-itorrents:
+        selector: dt a
+        attribute: href
+        filters:
+          - name: regexp
+            args: "/(\\w+)"
+          - name: toupper
+          - name: prepend
+            args: http://itorrents.org/torrent/
+          - name: append
+            args: ".torrent"
       download:
+        text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
+      magnet:
         selector: dt a
         attribute: href
         filters:

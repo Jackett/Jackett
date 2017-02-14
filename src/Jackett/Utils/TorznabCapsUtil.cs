@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -49,11 +50,18 @@ namespace Jackett.Utils
             var filteredResults = new List<ReleaseInfo>();
             foreach (var result in results)
             {
+                // don't filter results with IMDBID (will be filtered seperately)
+                if (result.Imdb != null)
+                {
+                    filteredResults.Add(result);
+                    continue;
+                }
+
                 if (result.Title == null)
                     continue;
 
                 // Match on title
-                if (CleanTitle(result.Title).Contains(name))
+                if (CultureInfo.InvariantCulture.CompareInfo.IndexOf(CleanTitle(result.Title), name, CompareOptions.IgnoreNonSpace) >= 0)
                 {
                     // Match on year
                     var titleYear = GetYearFromTitle(result.Title);
