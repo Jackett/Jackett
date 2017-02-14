@@ -1,63 +1,274 @@
-﻿var basePath = '';
+src/Jackett/Content/custom.css
 
-var indexers = [];
-var configuredIndexers = [];
-var unconfiguredIndexers = [];
-
-$.fn.inView = function() {
-    if(!this.length) return false;
-    var rect = this.get(0).getBoundingClientRect();
-
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-};
-
-$.fn.focusWithoutScrolling = function () {
-    if (this.inView())
-        this.focus();
-    return this;
-};
-
-$(document).ready(function () {
-    $.ajaxSetup({ cache: false });
-    window.jackettIsLocal = window.location.hostname === 'localhost' ||
-                    window.location.hostname === '127.0.0.1';
-
-    bindUIButtons();
-    loadJackettSettings();
-   
-});
-
-function getJackettConfig(callback) {
-    var jqxhr = $.get("get_jackett_config", function (data) {
-
-        callback(data);
-    }).fail(function () {
-        doNotify("Error loading Jackett settings, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
-    });
+body {
+    background-image: url("binding_dark.png");
+    background-repeat: repeat;
 }
 
-function loadJackettSettings() {
-    getJackettConfig(function (data) {
-        $("#api-key-input").val(data.config.api_key);
-        $(".api-key-text").text(data.config.api_key);
-        $("#app-version").html(data.app_version);
-        $("#jackett-port").val(data.config.port);
-        $("#jackett-basepathoverride").val(data.config.basepathoverride);
-        basePath = data.config.basepathoverride;
-        if (basePath === null || basePath === undefined) {
-            basePath = '';
-        }
-       
-        $("#jackett-savedir").val(data.config.blackholedir);
-        $("#jackett-allowext").attr('checked', data.config.external);
-        $("#jackett-allowupdate").attr('checked', data.config.updatedisabled);
-        $("#jackett-prerelease").attr('checked', data.config.prerelease);
-        $("#jackett-logging").attr('checked', data.config.logging);
+#page {
+    border-radius: 6px;
+    background-color: white;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 20px;
+    margin-bottom: 100px;
+}
+
+.container-fluid {
+}
+
+#templates {
+    display: none;
+}
+
+#indexers {
+   text-align: center;
+   margin-top: 30px;
+}
+
+.indexer-table {
+   text-align: left;
+}
+
+.test-success {
+    color: #449d44;
+}
+
+.test-error {
+    color: #c9302c;
+}
+
+.test-inprogress {
+    color: #286090;
+}
+
+.indexer-buttons {
+    text-align: center;
+}
+
+.indexer-buttons > .btn {
+    margin-bottom: 2px;
+}
+
+.indexer-button-test {
+   width: 60px;
+}
+
+.setup-item-inputstring {
+    max-width: 255px;
+}
+
+.setup-item-inputbool input {
+    max-width: 100px;
+    height: 20px;
+}
+
+[data-type=hiddendata]{
+    display: none;
+}
+
+.spinner {
+    -webkit-animation: spin 2s infinite linear;
+    -moz-animation: spin 2s infinite linear;
+    -o-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#setup-indexer-go {
+    width: 70px;
+}
+
+hr {
+    border-top-color: #cdcdcd;
+}
+
+.input-area {
+    margin: 4px 0px;
+}
+
+    .input-area > * {
+        vertical-align: middle;
+    }
+
+    .input-area > p {
+        margin-top: 10px;
+    }
+
+.input-header {
+    font-size: 18px;
+    width: 160px;
+    display: inline-block;
+}
+
+.input-right {
+    width: 300px;
+    display: inline-block;
+    font-family: monospace;
+}
+
+#sonarr-warning {
+    display: none;
+}
+
+#logo {
+    max-width: 50px;
+}
+
+#header-title {
+    font-size: 34px;
+    vertical-align: middle;
+    padding-left: 15px;
+}
+
+#footer {
+    color: #444444;
+    margin: 0 auto;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease {
+    width: 25px;
+}
+
+.modal-fillwidth {
+    width: 1200px;
+    min-width:80%;
+}
+
+.indexer-caps {
+   padding: 0px 15px 15px 15px;
+   border-top: 1px solid #e5e5e5;
+}
+
+.indexer-caps table {
+    border-bottom:   1px solid #ddd;
+}
+
+.jackettlogWarn {
+    background-color: #FFFF8E !important;
+}
+
+.jackettlogError {
+    background-color: #FF6060 !important;
+}
+
+.jackettdownloaded {
+    color: blueviolet;
+}
+
+.jacketdownloadlocal {
+    padding-left: 10px;
+}
+
+.downloadcolumn {
+    text-align:center;
+}
+
+pre {
+    display: block;
+    padding: 3px;
+    margin: 0 0 0px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: transparent;
+    border: 0px;
+    border-radius: 0px;
+}
+
+.modal-open .modal {
+    overflow-x: auto;  /* Model can be bigger than the screen on mobiles */
+}
+
+.dataTables_filter input {
+    width: 400px 
+}
+
+#unconfigured-indexers-template {
+    display: none;
+}
+.jackett-apikey{
+    margin-top: 10px;
+}
+
+.jackett-apikey .input-header{
+    width: 80px;
+}
+
+.setup-item-displayinfo:empty {
+    display: none;
+}
+
+table td.fit{
+    white-space: nowrap;
+    width: 1%;
+}
+
+.label-imdb {
+    background-color: #d0ab44;
+}
+
+.tooltip-inner {
+    max-width: 500px !important;
+}
+
+.tooltip-inner img {
+    max-width: 250px;
+    height: auto;      
+}
+
+.type-public {
+    color: #449d44
+}
+
+.type-private {
+    color: #c9302c
+}
+
+.type-semi-private {
+    color: #ec971f
+}
+
+.dataTables_deadfilter {
+    float: right;
+    text-align: right;
+    margin-right: 1em;
+}
+ Desktop version
         var password = data.config.password;
         $("#jackett-adminpwd").val(password);
         if (password != null && password != '') {
