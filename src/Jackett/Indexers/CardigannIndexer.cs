@@ -1112,6 +1112,10 @@ namespace Jackett.Indexers
                                             value = release.Link.ToString();
                                         }
                                         break;
+                                    case "magnet":
+                                        release.MagnetUri = new Uri(value);
+                                        value = release.MagnetUri.ToString();
+                                        break;
                                     case "details":
                                         var url = resolvePath(value);
                                         release.Guid = url;
