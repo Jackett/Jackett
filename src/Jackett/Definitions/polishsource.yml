@@ -1,0 +1,115 @@
+﻿---
+  site: polishsource
+  name: PolishSource
+  language: pl-pl
+  type: private
+  encoding: ISO-8859-2
+  links:
+    - https://polishsource.cz/
+
+  caps:
+    categories:
+      12: Movies/SD # Movies/SD
+      11: Movies/HD # Movies/HD
+      45: Movies/3D # Movies/3D
+      4: Movies/DVD # Movies/DVD
+      43: Movies/BluRay # Movies/BD
+      10: TV/SD # TV/SD
+      39: TV/HD # TV/HD
+      8: PC/Games # Games/PC
+      3: Console # Games/Consoles
+      5: Books # E-Books
+      42: Audio # Music
+      18: PC/0day # Apps
+      13: XXX # XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    captcha:
+      type: image
+      image: img[src="img.php"]
+      input: vImageCodP
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+      - selector: td.embedded:has(h2:contains("Error"))
+    test:
+      path: /browse.php
+        
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      scene: "0"
+      pl: "0"
+      sub: ""
+      search_in: "title"
+    rows:
+      selector: table#restable > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="downloadssl.php?id="]
+        attribute: href
+      description|optional:
+        selector: td:nth-child(2) > small
+        filters:
+          - name: prepend
+            args: "Genre: "
+          - name: append
+            args: "\n<br>"
+      description|optional|append|1:
+        selector: img[src="pic/pl.png"]
+        filters:
+          - name: append
+            args: "Language: polish\n<br>"
+      description|optional|append|2:
+        selector: img[src="pic/napisy.png"]
+        filters:
+          - name: append
+            args: "Subbed\n<br>"
+      imdb|optional:
+        selector: a[href^="http://www.imdb.com/title/tt"]
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(5)
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
