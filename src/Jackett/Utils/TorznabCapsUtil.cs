@@ -1,6 +1,7 @@
 ﻿using Jackett.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -60,7 +61,7 @@ namespace Jackett.Utils
                     continue;
 
                 // Match on title
-                if (CleanTitle(result.Title).Contains(name))
+                if (CultureInfo.InvariantCulture.CompareInfo.IndexOf(CleanTitle(result.Title), name, CompareOptions.IgnoreNonSpace) >= 0)
                 {
                     // Match on year
                     var titleYear = GetYearFromTitle(result.Title);
