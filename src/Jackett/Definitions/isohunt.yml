@@ -29,9 +29,11 @@
     selector: a.btn-download
       
   search:
-    path: "{{if .Query.Keywords}}torrents/?ihq={{ .Query.Keywords}}/{{else}}/latest.php{{end}}"
+    path: "{{if .Query.Keywords}}torrents/{{else}}latest.php{{end}}"
+    inputs:
+      ihq: "{{ .Keywords }}"
     rows:
-      selector: "#serps > table > tbody > tr"
+      selector: "#serps > table > tbody > tr:has(td.title-row)"
     fields:
       title:
         selector: td.title-row > a[href^="/"] > span
