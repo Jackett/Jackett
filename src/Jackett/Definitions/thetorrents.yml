@@ -1,0 +1,147 @@
+---
+  site: thetorrents
+  name: The-Torrents
+  language: ro-ro
+  type: private
+  encoding: UTF-8
+  links:
+    - http://the-torrents.org/
+
+  caps:
+    categories:
+      1: TV/Anime # Anime Movies
+      2: TV/Anime # Anime Movies-Ro
+      3: Movies/SD # BDRip Movies
+      4: Movies/SD # BDRip Movies Ro
+      5: Movies/BluRay # BluRay Movies
+      6: Movies/BluRay # BluRay Movies Ro
+      7: Movies/SD # Cam/TS Movies
+      8: Movies/SD # Cam/TS Movies Ro
+      9: Movies/DVD # DVD Movies
+      10: Movies/DVD # DVD Movies Ro
+      11: Movies/HD # HD Movies
+      12: Movies/HD # HD Movies Ro
+      24: Movies/SD # XVID Movies
+      25: Movies/SD # XVID Movies Ro
+      16: Movies # Old Movies
+      17: Movies # Old Movies Ro
+      18: Movies # Movie Packs
+      19: Movies # Movie Packs Ro
+      15: PC/Phone-Other # Mobile
+      20: TV/SD # TV Episodes
+      21: TV/SD # TV Episodes Ro
+      22: TV/SD # TV Series
+      23: TV/SD # TV Series Ro
+      13: TV/HD # HDTV Episodes
+      14: TV/HD # HDTV Episodes Ro
+      46: TV/HD # HDTV Series
+      47: TV/HD # HDTV Series Ro
+      27: XXX # Adult Movies
+      30: PC/Games # PC-ISO Games
+      31: PC/Games # PC-RIP Games
+      32: PC/Games # GOG Games
+      33: PC/Games # Game Packs
+      34: Console/Xbox # XBOX Games
+      35: Console/Xbox360 # XBOX-360 Games
+      36: Console/PS3 # Sony PS2 Games
+      37: Console/PS3 # Sony PS3 Games
+      38: Console/PSP # Sony PSP Games
+      39: Console/PS3 # Sony PSX Games
+      40: Console/Other # Nintendo Games
+      41: Console/Wii # WII Games
+      42: PC/Games # Game Updates
+      48: PC/Games # Game Cheats
+      28: Audio # Music
+      29: Audio/Video # Music Videos
+      26: PC/0day # Software
+      43: Other # Documents
+      44: Other # Images
+      49: Other # Diverse
+      45: PC/0day # Linux
+      50: TV/Sport # Sport
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table.main > tbody > tr > td.embedded td.text:contains("incorrect")
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+    rows:
+      selector: table > tbody > tr:has(a[href^="details.php?id="])
+      dateheaders:
+        selector: td[colspan="9"] > b
+        optional: true
+        filters:
+          - name: dateparse
+            args: "Monday 2-January-2006"
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="/download.php/"]
+        attribute: href
+      description:
+        selector: td:nth-child(2) > small
+        optional: true
+        filters:
+          - name: append
+            args: "\n<br>"
+      description|append|1:
+        selector: img[title="RoSubbed"]
+        optional: true
+        filters:
+          - name: append
+            args: "RoSubbed\n<br>"
+      banner:
+        selector: a[href^="details.php?id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) "
+          - name: replace
+            args: ["pic/noposter.jpg", ""]
+      files:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(8)
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      downloadvolumefactor:
+        case:
+          img[title="FreeLeech"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[title="DoubleUpload"]: "2"
+          "*": "1"
