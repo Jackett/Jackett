@@ -90,7 +90,7 @@ namespace Jackett.Utils.Clients
                 {
                     if (header.Key != "Content-Type")
                     {
-                        request.Headers.Add(header.Key, header.Value);
+                        request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                     }
                 }
             }
