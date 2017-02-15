@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -156,6 +157,18 @@ namespace Jackett.Services
                 var runtimedir = RuntimeEnvironment.GetRuntimeDirectory();
                 logger.Info("Environment version: " + Environment.Version.ToString() + " (" + runtimedir + ")");
                 logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
+
+                try
+                {
+                    int workerThreads;
+                    int completionPortThreads;
+                    ThreadPool.GetMaxThreads(out workerThreads, out completionPortThreads);
+                    logger.Info("ThreadPool MaxThreads: " + workerThreads + " workerThreads, " + completionPortThreads + " completionPortThreads");
+                }
+                catch (Exception e)
+                {
+                    logger.Error("Error while getting MaxThreads details: " + e);
+                }
 
                 try
                 {
