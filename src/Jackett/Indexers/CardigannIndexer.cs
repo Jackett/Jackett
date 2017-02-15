@@ -267,7 +267,8 @@ namespace Jackett.Indexers
 
         // A very bad implementation of the golang template/text templating engine.
         // But it should work for most basic constucts used by Cardigann definitions.
-        protected string applyGoTemplateText(string template, Dictionary<string, object> variables = null)
+        protected delegate string TemplateTextModifier(string str);
+        protected string applyGoTemplateText(string template, Dictionary<string, object> variables = null, TemplateTextModifier modifier = null)
         {
             if (variables == null)
             {
@@ -289,6 +290,9 @@ namespace Jackett.Indexers
                 Regex ReplaceRegex = new Regex(regexp);
                 var input = (string)variables[variable];
                 var expanded = ReplaceRegex.Replace(input, newvalue);
+
+                if (modifier != null)
+                    expanded = modifier(expanded);
 
                 template = template.Replace(all, expanded);
                 ReReplaceRegexMatches = ReReplaceRegexMatches.NextMatch();
@@ -342,7 +346,10 @@ namespace Jackett.Indexers
 
                 foreach (string value in (List<string>)variables[variable])
                 {
-                    expanded += prefix + value + postfix;
+                    var newvalue = value;
+                    if (modifier != null)
+                        newvalue = modifier(newvalue);
+                    expanded += prefix + newvalue + postfix;
                 }
                 template = template.Replace(all, expanded);
                 RangeRegexMatches = RangeRegexMatches.NextMatch();
@@ -360,6 +367,8 @@ namespace Jackett.Indexers
                 string variable = VariablesRegExMatches.Groups[1].Value;
 
                 string value = (string)variables[variable];
+                if (modifier != null)
+                    value = modifier(value);
                 template = template.Replace(all, value);
                 VariablesRegExMatches = VariablesRegExMatches.NextMatch();
             }
@@ -1029,17 +1038,17 @@ namespace Jackett.Indexers
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
 
             // build search URL
-            var searchUrl = resolvePath(applyGoTemplateText(Search.Path, variables) + "?").ToString();
+            // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
+            var searchUrl = resolvePath(applyGoTemplateText(Search.Path, variables, HttpUtility.UrlEncode).Replace("+", "%20") + "?").AbsoluteUri;
             var queryCollection = new NameValueCollection();
             if (Search.Inputs != null)
             { 
                 foreach (var Input in Search.Inputs)
                 {
-                    var value = applyGoTemplateText(Input.Value, variables);
                     if (Input.Key == "$raw")
-                        searchUrl += value;
+                        searchUrl += applyGoTemplateText(Input.Value, variables, HttpUtility.UrlEncode);
                     else
-                        queryCollection.Add(Input.Key, value);
+                        queryCollection.Add(Input.Key, applyGoTemplateText(Input.Value, variables));
                 }
             }
             if (queryCollection.Count > 0)
