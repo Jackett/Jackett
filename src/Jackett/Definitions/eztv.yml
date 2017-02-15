@@ -27,6 +27,13 @@
         text: 1
       title:
         selector: td:nth-child(2) a
+        attribute: title
+        filters:
+          - name: replace
+            args: ["[eztv]", ""]
+          - name: re_replace
+            args: ["\\(.*\\)$", ""]
+          - name: trim
       details:
         selector: td:nth-child(2) a
         attribute: href
