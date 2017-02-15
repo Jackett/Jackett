@@ -99,6 +99,7 @@ namespace Jackett.Indexers
         public class selectorBlock
         {
             public string Selector { get; set; }
+            public bool Optional { get; set; } = false;
             public string Text { get; set; }
             public string Attribute { get; set; }
             public string Remove { get; set; }
@@ -1271,7 +1272,7 @@ namespace Jackett.Indexers
                             {
                                 if (!variables.ContainsKey(variablesKey))
                                     variables[variablesKey] = null;
-                                if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional"))
+                                if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
                                     continue;
                                 throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                             }
@@ -1315,7 +1316,7 @@ namespace Jackett.Indexers
 
                         // if DateHeaders is set go through the previous rows and look for the header selector
                         var DateHeaders = Definition.Search.Rows.Dateheaders;
-                        if (release.PublishDate == null && DateHeaders != null)
+                        if (release.PublishDate == DateTime.MinValue && DateHeaders != null)
                         {
                             var PrevRow = Row.PreviousElementSibling;
                             string value = null;
@@ -1333,10 +1334,10 @@ namespace Jackett.Indexers
                                 PrevRow = PrevRow.PreviousElementSibling;
                             }
                             
-                            if (value == null)
+                            if (value == null && DateHeaders.Optional == false)
                                 throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
-
-                            release.PublishDate = DateTimeUtil.FromUnknown(value);
+                            if (value != null)
+                                release.PublishDate = DateTimeUtil.FromUnknown(value);
                         }
 
                         releases.Add(release);
