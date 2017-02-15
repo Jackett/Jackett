@@ -71,17 +71,19 @@ namespace Jackett.Models
         // Some trackers don't support AND logic for search terms resulting in unwanted results.
         // Using this method we can AND filter it within jackett.
         // With limit we can limit the amount of characters which should be compared (use it if a tracker doesn't return the full title).
-        public bool MatchQueryStringAND(string title, int limit = -1)
+        public bool MatchQueryStringAND(string title, int? limit = null, string queryStringOverride = null)
         {
             // We cache the regex split results so we have to do it only once for each query.
             if (QueryStringParts == null)
             {
                 var queryString = GetQueryString();
-                if (limit > 0)
+                if (queryStringOverride != null)
+                    queryString = queryStringOverride;
+                if (limit != null && limit > 0)
                 {
                     if (limit > queryString.Length)
                         limit = queryString.Length;
-                    queryString = queryString.Substring(0, limit);
+                    queryString = queryString.Substring(0, (int)limit);
                 }
                 Regex SplitRegex = new Regex("[^a-zA-Z0-9]+");
                 QueryStringParts = SplitRegex.Split(queryString);
