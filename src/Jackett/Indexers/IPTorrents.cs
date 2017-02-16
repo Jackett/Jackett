@@ -268,8 +268,12 @@ namespace Jackett.Indexers
 
                     var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(1);
                     release.Category = MapTrackerCatToNewznab(cat);
+                    
+                    var filesElement = row.Cq().Find("a[href*=\"/files\"]"); // optional
+                    if (filesElement.Length == 1)
+                        release.Files = ParseUtil.CoerceLong(filesElement.Text());
 
-                    var grabs = row.Cq().Find("td:nth-child(7)").Text();
+                    var grabs = row.Cq().Find("td:nth-last-child(3)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     if(row.Cq().Find("span.t_tag_free_leech").Any())
