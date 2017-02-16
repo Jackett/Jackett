@@ -409,6 +409,7 @@ namespace Jackett.Indexers
             {
                 Type = RequestType.GET,
                 Url = request,
+                Encoding = Encoding,
                 Headers = EmulatedBrowserHeaders
             };
 
