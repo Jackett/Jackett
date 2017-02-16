@@ -133,14 +133,15 @@ namespace Jackett.Controllers
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, indexerID, "dl", release.Title + ".torrent");
 
                 // Only accept torrent links, magnet is not supported
-                if (release.Link != null)
+                // This seems to be no longer the case, allowing magnet URIs for now
+                if (release.Link != null || release.MagnetUri != null)
                 {
                     potatoResponse.results.Add(new TorrentPotatoResponseItem()
                     {
                         release_name = release.Title + "[" + indexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                         torrent_id = release.Guid.ToString(),
                         details_url = release.Comments.ToString(),
-                        download_url = release.Link.ToString(),
+                        download_url = (release.Link != null ? release.Link.ToString() : release.MagnetUri.ToString()),
                         imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
                         freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                         type = "movie",
