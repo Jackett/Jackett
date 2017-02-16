@@ -1,4 +1,4 @@
-﻿var basePath = '';
+var basePath = '';
 
 var indexers = [];
 var configuredIndexers = [];
