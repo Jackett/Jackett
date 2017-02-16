@@ -361,6 +361,14 @@ namespace Jackett.Indexers
                     release.Guid = detailsLink;
                     release.Comments = commentsLink;
                     release.Link = downloadLink;
+
+                    // freeleech
+                    if (tRow.Find("img[alt=\"Freeleech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
 
