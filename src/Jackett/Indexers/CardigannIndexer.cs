@@ -127,6 +127,7 @@ namespace Jackett.Indexers
         public class searchBlock
         {
             public string Path { get; set; }
+            public List<searchPathBlock> Paths { get; set; }
             public List<filterBlock> Keywordsfilters { get; set; }
             public Dictionary<string, string> Inputs { get; set; }
             public rowsBlock Rows { get; set; }
@@ -138,6 +139,12 @@ namespace Jackett.Indexers
             public int After { get; set; }
             //public string Remove { get; set; } // already inherited
             public selectorBlock Dateheaders { get; set; }
+        }
+
+        public class searchPathBlock : requestBlock
+        {
+            public List<string> Categories { get; set; }
+            public bool Inheritinputs { get; set; } = true;
         }
 
         public class requestBlock
@@ -195,6 +202,20 @@ namespace Jackett.Indexers
 
             if (Definition.Login != null && Definition.Login.Method == null)
                 Definition.Login.Method = "form";
+
+            if (Definition.Search.Paths == null)
+            {
+                Definition.Search.Paths = new List<searchPathBlock>();
+            }
+
+            // convert definitions with a single search Path to a Paths entry
+            if (Definition.Search.Path != null)
+            {
+                var legacySearchPath = new searchPathBlock();
+                legacySearchPath.Path = Definition.Search.Path;
+                legacySearchPath.Inputs = Definition.Search.Inputs;
+                Definition.Search.Paths.Add(legacySearchPath);
+            }
 
             // init missing mandatory attributes
             DisplayName = Definition.Name;
@@ -1022,7 +1043,9 @@ namespace Jackett.Indexers
             variables[".Query.TraktID"] = null;
 
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
-            variables[".Categories"] = MapTorznabCapsToTrackers(query);
+
+            var mappedCategories = MapTorznabCapsToTrackers(query);
+            variables[".Categories"] = mappedCategories;
 
             var KeywordTokens = new List<string>();
             var KeywordTokenKeys = new List<string> { "Q", "Series", "Movie", "Year" };
@@ -1038,321 +1061,345 @@ namespace Jackett.Indexers
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
 
-            // build search URL
-            // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
-            var searchUrl = resolvePath(applyGoTemplateText(Search.Path, variables, HttpUtility.UrlEncode).Replace("+", "%20") + "?").AbsoluteUri;
-            var queryCollection = new NameValueCollection();
-            if (Search.Inputs != null)
-            { 
-                foreach (var Input in Search.Inputs)
-                {
-                    if (Input.Key == "$raw")
-                        searchUrl += applyGoTemplateText(Input.Value, variables, HttpUtility.UrlEncode);
-                    else
-                        queryCollection.Add(Input.Key, applyGoTemplateText(Input.Value, variables));
-                }
-            }
-            if (queryCollection.Count > 0)
-                searchUrl += "&" + queryCollection.GetQueryString(Encoding);
-
-            // in case no args are added remove ? again (needed for KAT)
-            searchUrl = searchUrl.TrimEnd('?');
-
-            // send HTTP request
-            var response = await RequestStringWithCookies(searchUrl);
-            var results = response.Content;
-            try
+            // TODO: prepare queries first and then send them parallel 
+            var SearchPaths = Search.Paths;
+            foreach (var SearchPath in SearchPaths)
             {
-                var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results);
-
-                // check if we need to login again
-                var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
-                if (loginNeeded)
+                // skip path if categories don't match
+                if (SearchPath.Categories != null && mappedCategories.Count > 0)
                 {
-                    logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
-                    var LoginResult = await DoLogin();
-                    if (!LoginResult)
-                        throw new Exception(string.Format("Relogin failed"));
-                    await TestLogin();
-                    response = await RequestStringWithCookies(searchUrl);
-                    results = results = response.Content;
-                    SearchResultDocument = SearchResultParser.Parse(results);
+                    var invertMatch = (SearchPath.Categories[0] == "!");
+                    var hasIntersect = mappedCategories.Intersect(SearchPath.Categories).Any();
+                    if (invertMatch)
+                        hasIntersect = !hasIntersect;
+                    if (!hasIntersect)
+                        continue;
                 }
 
-                var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
-                List<IElement> Rows = new List<IElement>();
-                foreach (var RowDom in RowsDom)
-                {
-                    Rows.Add(RowDom);
-                }
+                // build search URL
+                // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
+                var searchUrl = resolvePath(applyGoTemplateText(SearchPath.Path, variables, HttpUtility.UrlEncode).Replace("+", "%20") + "?").AbsoluteUri;
+                var queryCollection = new NameValueCollection();
 
-                // merge following rows for After selector
-                var After = Definition.Search.Rows.After;
-                if (After > 0)
-                {
-                    for (int i = 0; i < Rows.Count; i += 1)
-                    {
-                        var CurrentRow = Rows[i];
-                        for (int j = 0; j < After; j += 1)
+                var InputsList = new List<Dictionary<string, string>>();
+                if (SearchPath.Inheritinputs)
+                    InputsList.Add(Search.Inputs);
+                InputsList.Add(SearchPath.Inputs);
+
+                foreach (var Inputs in InputsList)
+                { 
+                    if (Inputs != null)
+                    { 
+                        foreach (var Input in Inputs)
                         {
-                            var MergeRowIndex = i + j + 1;
-                            var MergeRow = Rows[MergeRowIndex];
-                            List<INode> MergeNodes = new List<INode>();
-                            foreach (var node in MergeRow.ChildNodes)
-                            {
-                                MergeNodes.Add(node);
-                            }
-                            CurrentRow.Append(MergeNodes.ToArray());
+                            if (Input.Key == "$raw")
+                                searchUrl += applyGoTemplateText(Input.Value, variables, HttpUtility.UrlEncode);
+                            else
+                                queryCollection.Add(Input.Key, applyGoTemplateText(Input.Value, variables));
                         }
-                        Rows.RemoveRange(i + 1, After);
                     }
                 }
+                if (queryCollection.Count > 0)
+                    searchUrl += "&" + queryCollection.GetQueryString(Encoding);
 
-                foreach (var Row in Rows)
+                // in case no args are added remove ? again (needed for KAT)
+                searchUrl = searchUrl.TrimEnd('?');
+
+                // send HTTP request
+                var response = await RequestStringWithCookies(searchUrl);
+                var results = response.Content;
+                try
                 {
-                    try
+                    var SearchResultParser = new HtmlParser();
+                    var SearchResultDocument = SearchResultParser.Parse(results);
+
+                    // check if we need to login again
+                    var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                    if (loginNeeded)
                     {
-                        var release = new ReleaseInfo();
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 48 * 60 * 60;
+                        logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", ID));
+                        var LoginResult = await DoLogin();
+                        if (!LoginResult)
+                            throw new Exception(string.Format("Relogin failed"));
+                        await TestLogin();
+                        response = await RequestStringWithCookies(searchUrl);
+                        results = results = response.Content;
+                        SearchResultDocument = SearchResultParser.Parse(results);
+                    }
 
-                        // Parse fields
-                        foreach (var Field in Search.Fields)
+                    var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                    List<IElement> Rows = new List<IElement>();
+                    foreach (var RowDom in RowsDom)
+                    {
+                        Rows.Add(RowDom);
+                    }
+
+                    // merge following rows for After selector
+                    var After = Definition.Search.Rows.After;
+                    if (After > 0)
+                    {
+                        for (int i = 0; i < Rows.Count; i += 1)
                         {
-                            var FieldParts = Field.Key.Split('|');
-                            var FieldName = FieldParts[0];
-                            var FieldModifiers = new List<string>();
-                            for (var i = 1; i < FieldParts.Length; i++)
-                                FieldModifiers.Add(FieldParts[i]);
-
-                            string value = null;
-                            var variablesKey = ".Result." + FieldName;
-                            try
+                            var CurrentRow = Rows[i];
+                            for (int j = 0; j < After; j += 1)
                             {
-                                value = handleSelector(Field.Value, Row, variables);
-                                switch (FieldName)
+                                var MergeRowIndex = i + j + 1;
+                                var MergeRow = Rows[MergeRowIndex];
+                                List<INode> MergeNodes = new List<INode>();
+                                foreach (var node in MergeRow.ChildNodes)
                                 {
-                                    case "download":
-                                        if (string.IsNullOrEmpty(value))
-                                        {
-                                            value = null;
-                                            release.Link = null;
-                                            break;
-                                        }
-                                        if (value.StartsWith("magnet:"))
-                                        {
-                                            release.MagnetUri = new Uri(value);
-                                            //release.Link = release.MagnetUri;
-                                            value = release.MagnetUri.ToString();
-                                        }
-                                        else
-                                        {
-                                            release.Link = resolvePath(value);
-                                            value = release.Link.ToString();
-                                        }
-                                        break;
-                                    case "magnet":
-                                        release.MagnetUri = new Uri(value);
-                                        value = release.MagnetUri.ToString();
-                                        break;
-                                    case "details":
-                                        var url = resolvePath(value);
-                                        release.Guid = url;
-                                        release.Comments = url;
-                                        if (release.Guid == null)
-                                            release.Guid = url;
-                                        value = url.ToString();
-                                        break;
-                                    case "comments":
-                                        var CommentsUrl = resolvePath(value);
-                                        if (release.Comments == null)
-                                            release.Comments = CommentsUrl;
-                                        if (release.Guid == null)
-                                            release.Guid = CommentsUrl;
-                                        value = CommentsUrl.ToString();
-                                        break;
-                                    case "title":
-                                        if (FieldModifiers.Contains("append"))
-                                            release.Title += value;
-                                        else
-                                            release.Title = value;
-                                        value = release.Title;
-                                        break;
-                                    case "description":
-                                        if (FieldModifiers.Contains("append"))
-                                            release.Description += value;
-                                        else
-                                            release.Description = value;
-                                        value = release.Description;
-                                        break;
-                                    case "category":
-                                        release.Category = MapTrackerCatToNewznab(value);
-                                        value = release.Category.ToString();
-                                        break;
-                                    case "size":
-                                        release.Size = ReleaseInfo.GetBytes(value);
-                                        value = release.Size.ToString();
-                                        break;
-                                    case "leechers":
-                                        var Leechers = ParseUtil.CoerceInt(value);
-                                        if (release.Peers == null)
-                                            release.Peers = Leechers;
-                                        else
-                                            release.Peers += Leechers;
-                                        value = Leechers.ToString();
-                                        break;
-                                    case "seeders":
-                                        release.Seeders = ParseUtil.CoerceInt(value);
-                                        if (release.Peers == null)
-                                            release.Peers = release.Seeders;
-                                        else
-                                            release.Peers += release.Seeders;
-                                        value = release.Seeders.ToString();
-                                        break;
-                                    case "date":
-                                        release.PublishDate = DateTimeUtil.FromUnknown(value);
-                                        value = release.PublishDate.ToString(DateTimeUtil.RFC1123ZPattern);
-                                        break;
-                                    case "files":
-                                        release.Files = ParseUtil.CoerceLong(value);
-                                        value = release.Files.ToString();
-                                        break;
-                                    case "grabs":
-                                        release.Grabs = ParseUtil.CoerceLong(value);
-                                        value = release.Grabs.ToString();
-                                        break;
-                                    case "downloadvolumefactor":
-                                        release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
-                                        value = release.DownloadVolumeFactor.ToString();
-                                        break;
-                                    case "uploadvolumefactor":
-                                        release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
-                                        value = release.UploadVolumeFactor.ToString();
-                                        break;
-                                    case "minimumratio":
-                                        release.MinimumRatio = ParseUtil.CoerceDouble(value);
-                                        value = release.MinimumRatio.ToString();
-                                        break;
-                                    case "minimumseedtime":
-                                        release.MinimumSeedTime = ParseUtil.CoerceLong(value);
-                                        value = release.MinimumSeedTime.ToString();
-                                        break;
-                                    case "imdb":
-                                        release.Imdb = ParseUtil.GetLongFromString(value);
-                                        value = release.Imdb.ToString();
-                                        break;
-                                    case "rageid":
-                                        Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                        var RageIDMatch = RageIDRegEx.Match(value);
-                                        var RageID = RageIDMatch.Groups[1].Value;
-                                        release.RageID = ParseUtil.CoerceLong(RageID);
-                                        value = release.RageID.ToString();
-                                        break;
-                                    case "tvdbid":
-                                        Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                        var TVDBIdMatch = TVDBIdRegEx.Match(value);
-                                        var TVDBId = TVDBIdMatch.Groups[1].Value;
-                                        release.TVDBId = ParseUtil.CoerceLong(TVDBId);
-                                        value = release.TVDBId.ToString();
-                                        break;
-                                    case "banner":
-                                        if(!string.IsNullOrWhiteSpace(value)) { 
-                                            var bannerurl = resolvePath(value);
-                                            release.BannerUrl = bannerurl;
-                                        }
-                                        value = release.BannerUrl.ToString();
-                                        break;
-                                    default:
-                                        break;
+                                    MergeNodes.Add(node);
                                 }
-                                variables[variablesKey] = value;
+                                CurrentRow.Append(MergeNodes.ToArray());
                             }
-                            catch (Exception ex)
-                            {
-                                if (!variables.ContainsKey(variablesKey))
-                                    variables[variablesKey] = null;
-                                if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
-                                    continue;
-                                throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
-                            }
+                            Rows.RemoveRange(i + 1, After);
                         }
+                    }
 
-                        var Filters = Definition.Search.Rows.Filters;
-                        var SkipRelease = false;
-                        if (Filters != null)
+                    foreach (var Row in Rows)
+                    {
+                        try
                         {
-                            foreach (filterBlock Filter in Filters)
+                            var release = new ReleaseInfo();
+                            release.MinimumRatio = 1;
+                            release.MinimumSeedTime = 48 * 60 * 60;
+
+                            // Parse fields
+                            foreach (var Field in Search.Fields)
                             {
-                                switch (Filter.Name)
-                                {
-                                    case "andmatch":
-                                        int CharacterLimit = -1;
-                                        if (Filter.Args != null)
-                                            CharacterLimit = int.Parse(Filter.Args);
+                                var FieldParts = Field.Key.Split('|');
+                                var FieldName = FieldParts[0];
+                                var FieldModifiers = new List<string>();
+                                for (var i = 1; i < FieldParts.Length; i++)
+                                    FieldModifiers.Add(FieldParts[i]);
 
-                                        if (query.ImdbID != null && TorznabCaps.SupportsImdbSearch)
-                                            break; // skip andmatch filter for imdb searches
-
-                                        if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
-                                        {
-                                            logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
-                                            SkipRelease = true;
-                                        }
-                                        break;
-                                    case "strdump":
-                                        // for debugging
-                                        logger.Info(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
-                                        break;
-                                    default:
-                                        logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
-                                        break;
-                                }
-                            }
-                        }
-
-                        if (SkipRelease)
-                            continue;
-
-                        // if DateHeaders is set go through the previous rows and look for the header selector
-                        var DateHeaders = Definition.Search.Rows.Dateheaders;
-                        if (release.PublishDate == DateTime.MinValue && DateHeaders != null)
-                        {
-                            var PrevRow = Row.PreviousElementSibling;
-                            string value = null;
-                            while (PrevRow != null)
-                            {
+                                string value = null;
+                                var variablesKey = ".Result." + FieldName;
                                 try
                                 {
-                                    value = handleSelector(DateHeaders, PrevRow);
-                                    break;
+                                    value = handleSelector(Field.Value, Row, variables);
+                                    switch (FieldName)
+                                    {
+                                        case "download":
+                                            if (string.IsNullOrEmpty(value))
+                                            {
+                                                value = null;
+                                                release.Link = null;
+                                                break;
+                                            }
+                                            if (value.StartsWith("magnet:"))
+                                            {
+                                                release.MagnetUri = new Uri(value);
+                                                //release.Link = release.MagnetUri;
+                                                value = release.MagnetUri.ToString();
+                                            }
+                                            else
+                                            {
+                                                release.Link = resolvePath(value);
+                                                value = release.Link.ToString();
+                                            }
+                                            break;
+                                        case "magnet":
+                                            release.MagnetUri = new Uri(value);
+                                            value = release.MagnetUri.ToString();
+                                            break;
+                                        case "details":
+                                            var url = resolvePath(value);
+                                            release.Guid = url;
+                                            release.Comments = url;
+                                            if (release.Guid == null)
+                                                release.Guid = url;
+                                            value = url.ToString();
+                                            break;
+                                        case "comments":
+                                            var CommentsUrl = resolvePath(value);
+                                            if (release.Comments == null)
+                                                release.Comments = CommentsUrl;
+                                            if (release.Guid == null)
+                                                release.Guid = CommentsUrl;
+                                            value = CommentsUrl.ToString();
+                                            break;
+                                        case "title":
+                                            if (FieldModifiers.Contains("append"))
+                                                release.Title += value;
+                                            else
+                                                release.Title = value;
+                                            value = release.Title;
+                                            break;
+                                        case "description":
+                                            if (FieldModifiers.Contains("append"))
+                                                release.Description += value;
+                                            else
+                                                release.Description = value;
+                                            value = release.Description;
+                                            break;
+                                        case "category":
+                                            release.Category = MapTrackerCatToNewznab(value);
+                                            value = release.Category.ToString();
+                                            break;
+                                        case "size":
+                                            release.Size = ReleaseInfo.GetBytes(value);
+                                            value = release.Size.ToString();
+                                            break;
+                                        case "leechers":
+                                            var Leechers = ParseUtil.CoerceInt(value);
+                                            if (release.Peers == null)
+                                                release.Peers = Leechers;
+                                            else
+                                                release.Peers += Leechers;
+                                            value = Leechers.ToString();
+                                            break;
+                                        case "seeders":
+                                            release.Seeders = ParseUtil.CoerceInt(value);
+                                            if (release.Peers == null)
+                                                release.Peers = release.Seeders;
+                                            else
+                                                release.Peers += release.Seeders;
+                                            value = release.Seeders.ToString();
+                                            break;
+                                        case "date":
+                                            release.PublishDate = DateTimeUtil.FromUnknown(value);
+                                            value = release.PublishDate.ToString(DateTimeUtil.RFC1123ZPattern);
+                                            break;
+                                        case "files":
+                                            release.Files = ParseUtil.CoerceLong(value);
+                                            value = release.Files.ToString();
+                                            break;
+                                        case "grabs":
+                                            release.Grabs = ParseUtil.CoerceLong(value);
+                                            value = release.Grabs.ToString();
+                                            break;
+                                        case "downloadvolumefactor":
+                                            release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                            value = release.DownloadVolumeFactor.ToString();
+                                            break;
+                                        case "uploadvolumefactor":
+                                            release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
+                                            value = release.UploadVolumeFactor.ToString();
+                                            break;
+                                        case "minimumratio":
+                                            release.MinimumRatio = ParseUtil.CoerceDouble(value);
+                                            value = release.MinimumRatio.ToString();
+                                            break;
+                                        case "minimumseedtime":
+                                            release.MinimumSeedTime = ParseUtil.CoerceLong(value);
+                                            value = release.MinimumSeedTime.ToString();
+                                            break;
+                                        case "imdb":
+                                            release.Imdb = ParseUtil.GetLongFromString(value);
+                                            value = release.Imdb.ToString();
+                                            break;
+                                        case "rageid":
+                                            Regex RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var RageIDMatch = RageIDRegEx.Match(value);
+                                            var RageID = RageIDMatch.Groups[1].Value;
+                                            release.RageID = ParseUtil.CoerceLong(RageID);
+                                            value = release.RageID.ToString();
+                                            break;
+                                        case "tvdbid":
+                                            Regex TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                                            var TVDBIdMatch = TVDBIdRegEx.Match(value);
+                                            var TVDBId = TVDBIdMatch.Groups[1].Value;
+                                            release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                                            value = release.TVDBId.ToString();
+                                            break;
+                                        case "banner":
+                                            if(!string.IsNullOrWhiteSpace(value)) { 
+                                                var bannerurl = resolvePath(value);
+                                                release.BannerUrl = bannerurl;
+                                            }
+                                            value = release.BannerUrl.ToString();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    variables[variablesKey] = value;
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
-                                    // do nothing
+                                    if (!variables.ContainsKey(variablesKey))
+                                        variables[variablesKey] = null;
+                                    if (OptionalFileds.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                        continue;
+                                    throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
-                                PrevRow = PrevRow.PreviousElementSibling;
                             }
-                            
-                            if (value == null && DateHeaders.Optional == false)
-                                throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
-                            if (value != null)
-                                release.PublishDate = DateTimeUtil.FromUnknown(value);
-                        }
 
-                        releases.Add(release);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
+                            var Filters = Definition.Search.Rows.Filters;
+                            var SkipRelease = false;
+                            if (Filters != null)
+                            {
+                                foreach (filterBlock Filter in Filters)
+                                {
+                                    switch (Filter.Name)
+                                    {
+                                        case "andmatch":
+                                            int CharacterLimit = -1;
+                                            if (Filter.Args != null)
+                                                CharacterLimit = int.Parse(Filter.Args);
+
+                                            if (query.ImdbID != null && TorznabCaps.SupportsImdbSearch)
+                                                break; // skip andmatch filter for imdb searches
+
+                                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
+                                            {
+                                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", ID, release.Title));
+                                                SkipRelease = true;
+                                            }
+                                            break;
+                                        case "strdump":
+                                            // for debugging
+                                            logger.Info(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                            break;
+                                        default:
+                                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
+                                            break;
+                                    }
+                                }
+                            }
+
+                            if (SkipRelease)
+                                continue;
+
+                            // if DateHeaders is set go through the previous rows and look for the header selector
+                            var DateHeaders = Definition.Search.Rows.Dateheaders;
+                            if (release.PublishDate == DateTime.MinValue && DateHeaders != null)
+                            {
+                                var PrevRow = Row.PreviousElementSibling;
+                                string value = null;
+                                while (PrevRow != null)
+                                {
+                                    try
+                                    {
+                                        value = handleSelector(DateHeaders, PrevRow);
+                                        break;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        // do nothing
+                                    }
+                                    PrevRow = PrevRow.PreviousElementSibling;
+                                }
+                            
+                                if (value == null && DateHeaders.Optional == false)
+                                    throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
+                                if (value != null)
+                                    release.PublishDate = DateTimeUtil.FromUnknown(value);
+                            }
+
+                            releases.Add(release);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(string.Format("CardigannIndexer ({0}): Error while parsing row '{1}':\n\n{2}", ID, Row.ToHtmlPretty(), ex));
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    OnParseError(results, ex);
+                }
             }
-            catch (Exception ex)
-            {
-                OnParseError(results, ex);
-            }
-
             return releases;
         }
 
