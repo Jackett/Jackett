@@ -10,10 +10,11 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using AutoMapper;
 using Jackett.Models;
+using System.Reflection;
 
 namespace Jackett
 {
-    public class JackettModule : Module
+    public class JackettModule : Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -39,7 +40,32 @@ namespace Jackett
                     default:
                     if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                     {
-                        builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                        var usehttpclient = false;
+                        try { 
+                            Type monotype = Type.GetType("Mono.Runtime");
+                            if (monotype != null)
+                            {
+                                MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                                if (displayName != null)
+                                { 
+                                    var monoVersion = displayName.Invoke(null, null).ToString();
+                                    var monoVersionO = new Version(monoVersion.Split(' ')[0]);
+                                    if (monoVersionO.Major >= 4 && monoVersionO.Minor >= 8)
+                                    {
+                                        usehttpclient = true;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.Out.WriteLine("Error while deciding which HttpWebClient to use: " + e);
+                        }
+
+                        if (usehttpclient)
+                            builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                        else
+                            builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
                     }
                     else
                     {

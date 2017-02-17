@@ -198,12 +198,14 @@ namespace Jackett.Services
                         monoVersion = displayName.Invoke(null, null).ToString();
                     logger.Info("mono version: " + monoVersion);
 
-                    if (monoVersion.StartsWith("3."))
+                    var monoVersionO = new Version(monoVersion.Split(' ')[0]);
+
+                    if (monoVersionO.Major < 4)
                     {
                         logger.Error("Your mono version is to old (mono 3 is no longer supported). Please update to the latest version from http://www.mono-project.com/download/");
                         Environment.Exit(2);
                     }
-                    else if (monoVersion.StartsWith("4.2."))
+                    else if (monoVersionO.Major == 4 && monoVersionO.Minor == 2)
                     {
                         logger.Error("mono version 4.2.* is known to cause problems with Jackett. If you experience any problems please try updating to the latest mono version from http://www.mono-project.com/download/ first.");
                     }
@@ -221,6 +223,28 @@ namespace Jackett.Services
                     catch (Exception e)
                     {
                         logger.Error(e, "Error while checking for mono-devel");
+                    }
+
+                    try
+                    {
+                        // Check for ca-certificates-mono
+                        var mono_cert_file = Path.Combine(runtimedir, "cert-sync.exe");
+                        if (!File.Exists(mono_cert_file))
+                        {
+                            if (monoVersionO.Major >= 4 && monoVersionO.Minor >= 8)
+                            {
+                                logger.Error("The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.");
+                            } 
+                            else
+                            {
+                                logger.Info("The ca-certificates-mono package is not installed, it will become mandatory once mono >= 4.8 is used.");
+                            }
+                            
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error while checking for ca-certificates-mono");
                     }
 
                     try
