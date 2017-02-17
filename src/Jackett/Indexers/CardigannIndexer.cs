@@ -213,7 +213,7 @@ namespace Jackett.Indexers
             {
                 var legacySearchPath = new searchPathBlock();
                 legacySearchPath.Path = Definition.Search.Path;
-                legacySearchPath.Inputs = Definition.Search.Inputs;
+                legacySearchPath.Inheritinputs = true;
                 Definition.Search.Paths.Add(legacySearchPath);
             }
 
