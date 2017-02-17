@@ -69,12 +69,21 @@
       path: letoltes.php
 
   search:
-    path: letoltes.php
+    paths:
+      - path: letoltes.php
+        categories: ["!", 70, 39, 57]
+        inputs:
+          tipus: "1"
+      - path: letoltes.php
+        categories: ["!", 70, 39, 57]
+        inputs:
+          tipus: "2"
+      - path: xxx.php
+        categories: [70, 39, 57]
     inputs:
       $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
       name: "{{if .Query.IMDBID}}http://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
       imdb_search: "{{ if .Query.IMDBID }}yes{{else}}{{end}}"
-      tipus: "1"
       k: "yes"
       tipuska: "1"
     rows:
@@ -87,16 +96,16 @@
         selector: a[href^="details.php?id="] > b
         attribute: title
         filters:
-          - name: regexp
-            args: "^Torrent neve: (.*?)<br />"
+          - name: re_replace
+            args: ["^Torrent neve: ", ""]
+          - name: re_replace
+            args: ["<br />.*", ""]
       description:
         selector: a[href^="details.php?id="] > b
         attribute: title
         filters:
-          - name: strdump
           - name: regexp
             args: "<br />(.*)"
-          - name: strdump
       category:
         selector: a[href*="&category[]="]
         attribute: href
