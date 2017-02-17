@@ -198,9 +198,9 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett". 
 
 ## Installation on Linux/OSX
- 1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (the latest version is recommended)
-       * Follow the instructions on the mono website and install the `mono-devel` package.
-       * On Red Hat/CentOS/openSUSE the `mono-locale-extras` package is also required
+ 1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (version 4.8 beta is recommended)
+       * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
+       * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:
        * Debian/Ubunutu: `apt-get install libcurl-dev`
        * Redhat/Fedora: `yum install libcurl-devel`
