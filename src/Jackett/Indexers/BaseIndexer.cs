@@ -417,7 +417,7 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null)
+        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -426,6 +426,7 @@ namespace Jackett.Indexers
                 Cookies = cookieOverride ?? CookieHeader,
                 PostData = data,
                 Referer = referer,
+                Headers = headers,
                 Encoding = Encoding
             };
 

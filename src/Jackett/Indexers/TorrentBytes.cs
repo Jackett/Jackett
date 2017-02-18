@@ -90,8 +90,10 @@ namespace Jackett.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
             {
                 CQ dom = result.Content;
-                var messageEl = dom["body > div"].First();
-                var errorMessage = messageEl.Text().Trim();
+                var messageEl = dom["td.embedded"].First();
+                var errorMessage = messageEl.Text();
+                if (string.IsNullOrWhiteSpace(errorMessage))
+                    errorMessage = result.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;

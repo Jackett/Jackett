@@ -183,6 +183,7 @@ namespace Jackett.Updater
                 "Definitions/tspate.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/rarbg.yml",
+                "Definitions/t411.yml",
             };
 
             foreach (var oldFIle in oldFiles)

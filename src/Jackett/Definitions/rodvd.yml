@@ -77,12 +77,12 @@
       filters:
         - name: andmatch
       dateheaders:
-        selector: ":has(td.days > font > b)"
+        selector: "td.days > font > b"
         filters:
           - name: replace
             args: ["Torrents Added: ", ""]
           - name: dateparse
-            args: "01.02.2016"
+            args: "2.1.2006"
     fields:
       title:
         selector: a[href^="details.php?id="] font

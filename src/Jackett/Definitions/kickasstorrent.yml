@@ -46,7 +46,7 @@
       149: Movies/SD # Movies - Cam
       81: Movies # Movies - Documentary
       78: Movies # Movies - Dubbed Movies
-      150: Movies/DVD # Movies - DVD Disc
+      150: Movies/DVD # Movies - DVD ISO
       71: Movies/HD # Movies - HD
       128: Movies/Other # Movies - Other
       74: Movies/SD # Movies - Screener
@@ -142,7 +142,7 @@
           ":has(a:contains(\"Movies\")):contains(\"Cam\")": 149
           ":has(a:contains(\"Movies\")):contains(\"Documentary\")": 81
           ":has(a:contains(\"Movies\")):contains(\"Dubbed Movies\")": 78
-          ":has(a:contains(\"Movies\")):contains(\"DVD Disc\")": 150
+          ":has(a:contains(\"Movies\")):contains(\"DVD ISO\")": 150
           ":has(a:contains(\"Movies\")):contains(\"HD\")": 71
           ":has(a:contains(\"Movies\")):contains(\"Other\")": 128
           ":has(a:contains(\"Movies\")):contains(\"Screener\")": 74
