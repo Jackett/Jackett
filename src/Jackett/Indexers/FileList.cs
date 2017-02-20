@@ -48,29 +48,28 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            AddCategoryMapping(24, TorznabCatType.TVAnime);
-            AddCategoryMapping(11, TorznabCatType.Audio);
-            AddCategoryMapping(15, TorznabCatType.TV);
-            AddCategoryMapping(18, TorznabCatType.Other);
-            AddCategoryMapping(16, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(25, TorznabCatType.Movies3D);
-            AddCategoryMapping(20, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(2, TorznabCatType.MoviesSD);
-            AddCategoryMapping(3, TorznabCatType.MoviesForeign); //RO
-            AddCategoryMapping(4, TorznabCatType.MoviesHD);
-            AddCategoryMapping(19, TorznabCatType.MoviesForeign); // RO
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(10, TorznabCatType.Console);
-            AddCategoryMapping(9, TorznabCatType.PCGames);
-            AddCategoryMapping(17, TorznabCatType.PC);
+            AddCategoryMapping(24, TorznabCatType.TVAnime); //Anime
+            AddCategoryMapping(11, TorznabCatType.Audio); //Audio
+            AddCategoryMapping(18, TorznabCatType.Other); //Misc
+            AddCategoryMapping(16, TorznabCatType.Books); //Docs
+            AddCategoryMapping(25, TorznabCatType.Movies3D); //Movies 3D
+            AddCategoryMapping(20, TorznabCatType.MoviesBluRay); // Movies Blu-Ray
+            AddCategoryMapping(2, TorznabCatType.MoviesDVD); //Movies DVD
+            AddCategoryMapping(3, TorznabCatType.MoviesForeign); //Movies DVD-RO
+            AddCategoryMapping(4, TorznabCatType.MoviesHD); //Movies HD
+            AddCategoryMapping(19, TorznabCatType.MoviesForeign); //Movies HD-RO
+            AddCategoryMapping(1, TorznabCatType.MoviesSD); //Movies SD
+            AddCategoryMapping(10, TorznabCatType.Console); //Console Games
+            AddCategoryMapping(9, TorznabCatType.PCGames); //PC Games
+            AddCategoryMapping(17, TorznabCatType.PC); //Linux
             AddCategoryMapping(22, TorznabCatType.PCPhoneOther); //Apps/mobile
-            AddCategoryMapping(8, TorznabCatType.PC);
-            AddCategoryMapping(21, TorznabCatType.TVHD);
-            AddCategoryMapping(23, TorznabCatType.TVSD);
-            AddCategoryMapping(13, TorznabCatType.TVSport);
-            AddCategoryMapping(14, TorznabCatType.TV);
-            AddCategoryMapping(12, TorznabCatType.AudioVideo);
-            AddCategoryMapping(7, TorznabCatType.XXX);
+            AddCategoryMapping(8, TorznabCatType.PC); //Software
+            AddCategoryMapping(21, TorznabCatType.TVHD); //TV HD
+            AddCategoryMapping(23, TorznabCatType.TVSD); //TV SD
+            AddCategoryMapping(13, TorznabCatType.TVSport); //Sport
+            AddCategoryMapping(14, TorznabCatType.TV); //TV
+            AddCategoryMapping(12, TorznabCatType.AudioVideo); //Music Video
+            AddCategoryMapping(7, TorznabCatType.XXX); //XXX
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
