@@ -266,8 +266,11 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".t_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".t_leechers").Text().Trim()) + release.Seeders;
 
-                    var cat = row.Cq().Find("td:eq(0) a").First().Attr("href").Substring(1);
-                    release.Category = MapTrackerCatToNewznab(cat);
+                    var catIcon = row.Cq().Find("td:eq(0) a");
+                    if (catIcon.Length >= 1) // Torrents - Category column == Icons
+                        release.Category = MapTrackerCatToNewznab(catIcon.First().Attr("href").Substring(1));
+                    else // Torrents - Category column == Text (Code is not supported)
+                        release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text());
                     
                     var filesElement = row.Cq().Find("a[href*=\"/files\"]"); // optional
                     if (filesElement.Length == 1)
