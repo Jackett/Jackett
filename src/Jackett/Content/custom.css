@@ -1,4 +1,4 @@
-﻿body {
+body {
     background-image: url("binding_dark.png");
     background-repeat: repeat;
 }
@@ -10,7 +10,7 @@
     margin: 0 auto;
     margin-top: 30px;
     padding: 20px;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
 }
 
 .container-fluid {
@@ -161,7 +161,7 @@ hr {
 }
 
 .modal-fillwidth {
-    width: 1200px;
+    width: 100%;
     min-width:80%;
 }
 
@@ -213,7 +213,7 @@ pre {
 }
 
 .dataTables_filter input {
-    width: 40% 
+    width: 75% 
 }
 
 #unconfigured-indexers-template {
@@ -232,6 +232,7 @@ pre {
 }
 
 table td.fit{
+
     width: 50%;
 }
 
@@ -264,4 +265,12 @@ table td.fit{
     float: right;
     text-align: right;
     margin-right: 1em;
+}
+div#jackett-search-results-datatable_wrapper {
+    width: 100%;
+    overflow-x: scroll;
+}
+div#unconfigured-indexer-datatable_wrapper {
+    width: 100%;
+    overflow-x: scroll;
 }
