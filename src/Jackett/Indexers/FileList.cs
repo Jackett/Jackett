@@ -133,7 +133,7 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
-                    release.Title = qRow.Find(".torrenttable:eq(1) a").Attr("title");
+                    release.Title = qRow.Find(".torrenttable:eq(1) b").Text();
 
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
                         continue;
