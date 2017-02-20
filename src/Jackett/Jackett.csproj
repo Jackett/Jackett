@@ -193,7 +193,7 @@
     <Compile Include="Indexers\Torrentech.cs" />
     <Compile Include="Indexers\nostream.cs" />
     <Compile Include="Indexers\notwhatcd.cs" />
-    <Compile Include="Indexers\PassTheHeadphones.cs" />
+    <Compile Include="Indexers\Redacted.cs" />
     <Compile Include="Indexers\Norbits.cs" />
     <Compile Include="Indexers\TVVault.cs" />
     <Compile Include="Indexers\BJShare.cs" />
@@ -650,7 +650,7 @@
     <Content Include="Definitions\arabafenice.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Definitions\passtheheadphones-scrape.yml" />
+    <None Include="Definitions\redacted-scrape.yml" />
     <Content Include="Definitions\torrentz2.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

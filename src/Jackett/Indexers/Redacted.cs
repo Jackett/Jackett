@@ -9,9 +9,9 @@ namespace Jackett.Indexers
     public class PassTheHeadphones : GazelleTracker, IIndexer
     {
         public PassTheHeadphones(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "PassTheHeadphones",
+            : base(name: "Redacted",
                 desc: "A music tracker",
-                link: "https://passtheheadphones.me/",
+                link: "https://redacted.ch/",
                 indexerManager: indexerManager,
                 logger: logger,
                 protectionService: protectionService,
