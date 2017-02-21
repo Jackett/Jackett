@@ -43,7 +43,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArabaFenice
  * AsianDVDClub
  * Avistaz
- * BakaBT
+ * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
  * Best Friends
  * BeyondHD
@@ -52,10 +52,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitHQ
  * BitHUmen
  * BitMeTV
- * BitSoup
+ * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
  * Blu-bits
  * BlueBird
+ * BroadcastTheNet  [![(invite needed)][inviteneeded]](#)
  * BTN
  * BTNext
  * CHDBits
@@ -79,8 +80,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Fuzer
  * GFXPeers
  * Ghost City
- * GimmePeers
- * GODS
+ * GimmePeers <!-- maintained by jamesb2147 -->
+ * GODS  [![(invite needed)][inviteneeded]](#)
  * Gormogon
  * Hardbay
  * HD4Free
@@ -119,10 +120,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NetHD
  * New Real World
  * NextGen
- * Norbits
+ * Norbits  [![(invite needed)][inviteneeded]](#) <!-- added by DiseaseNO but no longer maintained? -->
  * nostream
  * notwhat.cd
- * PassThePopcorn
+ * PassThePopcorn  [![(invite needed)][inviteneeded]](#)
  * PirateTheNet
  * PiXELHD
  * PolishSource
@@ -131,7 +132,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * QcTorrent
  * RapideTracker
  * Redacted (PassTheHeadphones)
- * RevolutionTT
+ * RevolutionTT  [![(invite needed)][inviteneeded]](#)
  * Rockhard Lossless
  * RoDVD
  * RuTracker
@@ -142,9 +143,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Secret Cinema
  * Shareisland
  * ShareSpaceDB
- * Shazbat
+ * Shazbat  [![(invite needed)][inviteneeded]](#)
  * Shellife
- * SpeedCD
+ * SpeedCD  [![(invite needed)][inviteneeded]](#)
  * Superbits
  * The Horror Charnel
  * The New Retro
@@ -173,13 +174,15 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * u-Torrent
  * UHDBits
  * ULTRAHDCLUB
- * World-In-HD
+ * World-In-HD  [![(invite needed)][inviteneeded]](#)
  * WorldOfP2P
  * x264
  * XSpeeds
  * Xthor
- * Xtreme Zone
+ * Xtreme Zone 
 
+Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
+ 
 ## Installation on Windows
 
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
@@ -241,3 +244,5 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 ## Screenshots
 
 ![screenshot](https://i.imgur.com/0d1nl7g.png "screenshot")
+
+[inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
