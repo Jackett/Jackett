@@ -15,11 +15,13 @@ using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using static Jackett.Utils.ParseUtil;
+using static Jackett.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Indexers
 {
     public class XSpeeds : BaseIndexer, IIndexer
     {
+        string LandingUrl => SiteLink + "login.php";
         string LoginUrl => SiteLink + "takelogin.php";
         string GetRSSKeyUrl => SiteLink + "getrss.php";
         string SearchUrl => SiteLink + "browse.php";
@@ -125,17 +127,51 @@ namespace Jackett.Indexers
             AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXbox);
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var loginPage = await RequestStringWithCookies(LandingUrl);
+            CQ dom = loginPage.Content;
+            CQ qCaptchaImg = dom.Find("img#regimage").First();
+            if (qCaptchaImg.Length > 0)
+            { 
+
+                var CaptchaUrl = qCaptchaImg.Attr("src");
+                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+
+                var CaptchaImage = new ImageItem { Name = "Captcha Image" };
+                var CaptchaText = new StringItem { Name = "Captcha Text" };
+
+                CaptchaImage.Value = captchaImage.Content;
+
+                configData.AddDynamic("CaptchaImage", CaptchaImage);
+                configData.AddDynamic("CaptchaText", CaptchaText);
+            }
+            else
+            {
+                logger.Debug(string.Format("{0}: No captcha image found", ID));
+            }
+
+            return configData;
+        }
+
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+
             var pairs = new Dictionary<string, string>
                         {
                             {"username", configData.Username.Value},
                             {"password", configData.Password.Value}
                         };
 
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
-            result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result.Cookies, true, SearchUrl, SiteLink, true);
+            var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
+            if (CaptchaText != null)
+            {
+                pairs.Add("imagestring", CaptchaText.Value);
+            }
+
+            //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"),
                 () =>
                 {
