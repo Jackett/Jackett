@@ -33,7 +33,7 @@ namespace Jackett.Indexers
         public PirateTheNet(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "PirateTheNet",
                 description: "A movie tracker",
-                link: "http://piratethe.net/",
+                link: "http://piratethenet.org/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,

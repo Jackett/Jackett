@@ -1,12 +1,12 @@
 ---
-  site: passtheheadphones-scrape
-  name: PassTheHeadphones (scrape)
+  site: redacted-scrape
+  name: Redacted (scrape)
   description: "A music tracker"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://passtheheadphones.me
+    - https://redacted.ch/
 
   caps:
     categories:

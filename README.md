@@ -122,7 +122,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Norbits
  * nostream
  * notwhat.cd
- * PassTheHeadphones
  * PassThePopcorn
  * PirateTheNet
  * PiXELHD
@@ -131,6 +130,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD
  * QcTorrent
  * RapideTracker
+ * Redacted (PassTheHeadphones)
  * RevolutionTT
  * Rockhard Lossless
  * RoDVD
