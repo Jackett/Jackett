@@ -318,6 +318,9 @@ namespace Jackett.Indexers
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                         release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
 
+                        var qBanner = qRow.Find("td:eq(1) .tooltip-content img").First();
+                        if (qBanner.Length > 0)
+                            release.BannerUrl = new Uri(qBanner.Attr("src"));
 
                         var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
                         var catSplit = cat.LastIndexOf('=');
