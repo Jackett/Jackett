@@ -56,12 +56,12 @@ namespace Jackett.Indexers
             Language = "nb-no";
             Type = "private";
 
-            // Clean capabilities
-            TorznabCaps.Categories.Clear();
+            TorznabCaps.SupportsImdbSearch = true;
 
             // TV Series
-            AddCategoryMapping("main_cat[]=2&sub2_cat[]=22", TorznabCatType.TVSD);
+            AddCategoryMapping("main_cat[]=2&sub2_cat[]=19", TorznabCatType.TVHD);
             AddCategoryMapping("main_cat[]=2&sub2_cat[]=20", TorznabCatType.TVHD);
+            AddCategoryMapping("main_cat[]=2&sub2_cat[]=22", TorznabCatType.TVSD);
 
         }
 
@@ -262,7 +262,7 @@ namespace Jackett.Indexers
                     else
                     {
                         // Check if no result
-                        if(torrentRowList.First().Find("td").Length == 1)
+                        if(torrentRowList.Count == 0)
                         {
                             // No results found
                             Output("\nNo result found for your query, please try another search term ...\n", "info");
@@ -311,35 +311,17 @@ namespace Jackett.Indexers
                     Output("Category: " + testcat + " - " + categoryName);
 
                     // Seeders
-                    var seeders = 1;
-                    if (tRow.Find("td:eq(10) > a").Length > 0)
-                    {
-                        seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9) > a").Text(), @"\d+").Value);
-                        Output("Seeders: " + seeders);
-                    }
-                    else
-                    {
-                        seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(9)").Text(), @"\d+").Value);
-                        Output("Seeders: " + seeders);
-                    }
+                    var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
+                    Output("Seeders: " + seeders);
                     
                     // Leechers
-                    var leechers = 1;
-                    if (tRow.Find("td:eq(10) > a").Length > 0)
-                    {
-                        leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10) > a").Text(), @"\d+").Value);
-                        Output("Leechers: " + leechers);
-                    }
-                    else
-                    {
-                        leechers = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(10)").Text(), @"\d+").Value);
-                        Output("Leechers: " + leechers);
-                    }
+                    var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(10)").Text());
+                    Output("Leechers: " + leechers);
 
                     // Completed
                     Regex regexObj = new Regex(@"[^\d]");
                     var completed2 = tRow.Find("td:eq(7)").Text();
-                    var completed = regexObj.Replace(completed2, "");
+                    var completed = ParseUtil.CoerceLong(regexObj.Replace(completed2, ""));
                     Output("Completed: " + completed);
 
                     // Files
@@ -390,10 +372,32 @@ namespace Jackett.Indexers
                         MinimumSeedTime = 172800,
                         PublishDate = date,
                         Size = size,
+                        Files = files,
+                        Grabs = completed,
                         Guid = detailsLink,
                         Comments = commentsLink,
                         Link = downloadLink
                     };
+
+                    var genres = tRow.Find("span.genres").Text();
+                    if (!string.IsNullOrEmpty(genres))
+                        release.Description = genres;
+
+                    // IMDB
+                    var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
+                    release.Imdb = ParseUtil.GetLongFromString(imdbLink);
+
+                    if (tRow.Find("img[title=\"100% freeleech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0;
+                    else if (tRow.Find("img[title=\"Halfleech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.5;
+                    else if (tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1)
+                        release.DownloadVolumeFactor = 0.1;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
+
                     releases.Add(release);
                 }
 
@@ -422,12 +426,16 @@ namespace Jackett.Indexers
             string searchterm = term;
 
             // Building our tracker query
-            parameters.Add("incldead", "0");
+            parameters.Add("incldead", "1");
             parameters.Add("fullsearch", "0");
             parameters.Add("scenerelease", "0");
 
             // If search term provided
-            if (!string.IsNullOrWhiteSpace(term))
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            {
+                searchterm = "imdbsearch=" + query.ImdbID;
+            }
+            else if (!string.IsNullOrWhiteSpace(term))
             {
                 searchterm = "search=" + System.Web.HttpUtility.UrlEncode(term, Encoding.GetEncoding(28591));
             }
@@ -438,18 +446,12 @@ namespace Jackett.Indexers
                 term = "all";
             }
 
-            var CatAll = "main_cat[]=2";
-
-        var CatTest = categoriesList.Count > 0 ? string.Join(",", categoriesList) : "";
-            Output(CatTest);
-            if (CatTest == "" || CatTest == "main_cat[]=2&sub2_cat[]=22,main_cat[]=2&sub2_cat[]=20")
-            {
-                CatTest = Uri.EscapeUriString(CatAll);
-            }
-
+            var CatQryStr = "";
+            foreach (var cat in categoriesList)
+                CatQryStr += "&" + cat;
 
             // Building our query
-            url += "?" + searchterm + "&" + parameters.GetQueryString() + "&" + CatTest;
+            url += "?" + searchterm + "&" + parameters.GetQueryString() + "&" + CatQryStr;
 
             Output("\nBuilded query for \"" + term + "\"... " + url);
 
