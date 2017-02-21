@@ -232,8 +232,8 @@ pre {
 }
 
 table td.fit{
-
-    width: 50%;
+    white-space: nowrap;
+    width: 1%;
 }
 
 .label-imdb {
@@ -246,7 +246,7 @@ table td.fit{
 
 .tooltip-inner img {
     max-width: 250px;
-    height: auto;      
+    height: auto;     
 }
 
 .type-public {
@@ -273,4 +273,7 @@ div#jackett-search-results-datatable_wrapper {
 div#unconfigured-indexer-datatable_wrapper {
     width: 100%;
     overflow-x: scroll;
+}
+table td.actions {
+    width: 50%;
 }
