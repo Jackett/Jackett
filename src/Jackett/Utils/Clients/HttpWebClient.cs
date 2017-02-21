@@ -183,7 +183,7 @@ namespace Jackett.Utils.Clients
                                         var nameSplit = value.IndexOf('=');
                                         if (nameSplit > -1)
                                         {
-                                            responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';') + 1))));
+                                            responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';'))) + ";"));
                                         }
                                     }
 
