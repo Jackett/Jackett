@@ -56,6 +56,12 @@ namespace Jackett.Controllers
                 var torrentDictionary = BEncodedDictionary.DecodeTorrent(downloadBytes);
                 downloadBytes = torrentDictionary.Encode();
 
+				char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
+				for(int i=0;i<file.Count();i++)
+					if(invalidChars.Contains(file[i])) {
+						file = file.Remove(i, 1).Insert(i, " ");
+					}
+				
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
