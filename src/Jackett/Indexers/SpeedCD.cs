@@ -18,7 +18,7 @@ namespace Jackett.Indexers
 {
     public class SpeedCD : BaseIndexer, IIndexer
     {
-        private string LoginUrl { get { return SiteLink + "takeElogin.php"; } }
+        private string LoginUrl { get { return SiteLink + "take_login.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         new ConfigurationDataBasicLogin configData
