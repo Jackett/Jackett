@@ -138,7 +138,7 @@ namespace Jackett.Indexers
                                                 SearchUrl, HttpUtility.UrlEncode((string)torrent["Id"]), HttpUtility.UrlEncode(AuthKey), HttpUtility.UrlEncode(configData.Passkey.Value)));
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
-                        release.Category = 2000;
+                        release.Category = new List<int> { 2000 };
 
                         bool golden, scene, check;
                         bool.TryParse((string)torrent["GoldenPopcorn"], out golden);

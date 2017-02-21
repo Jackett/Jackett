@@ -71,7 +71,7 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var isTv = TorznabCatType.QueryContainsParentCategory(query.Categories, TorznabCatType.TV.ID);
+            var isTv = TorznabCatType.QueryContainsParentCategory(query.Categories, new List<int> { TorznabCatType.TV.ID });
             var releases = new List<ReleaseInfo>();
             var searchQuery = query.GetQueryString();
 
@@ -229,7 +229,7 @@ namespace Jackett.Indexers
             {
                 Title = title,
                 Description = title,
-                Category = category, // Who seasons movies right
+                Category = new List<int> { category }, // Who seasons movies right
                 Link = new Uri(DownloadUrl + torrentId),
                 PublishDate = publishDate,
                 Seeders = seeders,

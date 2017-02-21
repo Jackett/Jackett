@@ -99,7 +99,7 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 0.5;
                     release.MinimumSeedTime = 0;
                     release.Title = row.name;
-                    release.Category = TorznabCatType.Audio.ID;
+                    release.Category = new List<int> { TorznabCatType.Audio.ID };
                     release.Size = row.size;
                     release.Seeders = row.seeders;
                     release.Peers = row.leechers + release.Seeders;
@@ -125,7 +125,7 @@ namespace Jackett.Indexers
                     if ((int)row.flac != 0)
                     {
                         tags.Add("FLAC");
-                        release.Category = TorznabCatType.AudioLossless.ID;
+                        release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
                     }
 
                     if (tags.Count > 0)

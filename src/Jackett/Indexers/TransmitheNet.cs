@@ -133,7 +133,7 @@ namespace Jackett.Indexers
                     release.Guid = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
                     release.Comments = release.Guid;
                     release.Link = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
-                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
+                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
 
                     var timeAnchor = row.QuerySelector("span[class='time']");
                     release.PublishDate = DateTime.ParseExact(timeAnchor.GetAttribute("title"), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);

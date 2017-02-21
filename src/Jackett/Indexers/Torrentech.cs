@@ -169,13 +169,13 @@ namespace Jackett.Indexers
                         release.Description = release.Description.Replace("\n", "<br>");
 
                         if (format.Contains("MP3"))
-                            release.Category = TorznabCatType.AudioMP3.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioMP3.ID };
                         else if (format.Contains("AAC"))
-                            release.Category = TorznabCatType.AudioOther.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioOther.ID };
                         else if (format.Contains("Lossless"))
-                            release.Category = TorznabCatType.AudioLossless.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
                         else
-                            release.Category = TorznabCatType.AudioOther.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioOther.ID };
 
                         var lastAction = Row.QuerySelector("td:nth-child(9) > span").FirstChild.NodeValue;
                         release.PublishDate = DateTimeUtil.FromUnknown(lastAction, "UK");

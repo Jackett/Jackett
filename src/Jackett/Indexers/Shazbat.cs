@@ -209,11 +209,11 @@ namespace Jackett.Indexers
             {
                 if (release.Title.Contains("1080p") || release.Title.Contains("720p"))
                 {
-                    release.Category = TorznabCatType.TVHD.ID;
+                    release.Category = new List<int> { TorznabCatType.TVHD.ID };
                 }
                 else
                 {
-                    release.Category = TorznabCatType.TVSD.ID;
+                    release.Category = new List<int> { TorznabCatType.TVSD.ID };
                 }
             }
 

@@ -44,5 +44,18 @@ namespace Jackett.Models
             t["Name"] = Name;
             return t;
         }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            return ID == ((TorznabCategory)obj).ID;
+        }
+
+        public override int GetHashCode()
+        {
+            return ID;
+        }
     }
 }

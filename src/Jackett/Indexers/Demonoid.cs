@@ -131,14 +131,14 @@ namespace Jackett.Indexers
                     release.Title = qLink.Text().Trim();
                     release.Description = rowB.ChildElements.ElementAt(0).Cq().Text();
 
-                    if (release.Category == TorznabCatType.Audio.ID)
+                    if (release.Category != null && release.Category.Contains(TorznabCatType.Audio.ID))
                     {
                         if (release.Description.Contains("Lossless"))
-                            release.Category = TorznabCatType.AudioLossless.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
                         else if (release.Description.Contains("MP3"))
-                            release.Category = TorznabCatType.AudioMP3.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioMP3.ID };
                         else
-                            release.Category = TorznabCatType.AudioOther.ID;
+                            release.Category = new List<int> { TorznabCatType.AudioOther.ID };
                     }
 
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));

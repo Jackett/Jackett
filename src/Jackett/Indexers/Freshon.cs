@@ -114,7 +114,7 @@ namespace Jackett.Indexers
                     release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
                     release.Comments = release.Guid;
                     release.Link = new Uri(SiteLink + qRow.Find("td.table_links > a").First().Attr("href").TrimStart('/'));
-                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Title);
+                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
 
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find("td.table_seeders").Text().Trim());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find("td.table_leechers").Text().Trim()) + release.Seeders;

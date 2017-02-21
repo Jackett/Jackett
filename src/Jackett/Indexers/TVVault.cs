@@ -121,7 +121,7 @@ namespace Jackett.Indexers
                     release.Description = DescStr.TextContent.Trim();
                     release.Title = qDetailsLink.TextContent + " " + release.Description;
                     release.PublishDate = DateTimeUtil.FromTimeAgo(Added.TextContent);
-                    release.Category = TvCategoryParser.ParseTvShowQuality(release.Description);
+                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Description) };
 
                     release.Link = new Uri(SiteLink + DLLink);
                     release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));

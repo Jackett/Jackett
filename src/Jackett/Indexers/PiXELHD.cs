@@ -181,7 +181,7 @@ namespace Jackett.Indexers
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
 
                         release.Title = GroupTitle + " " + title.TextContent;
-                        release.Category = TorznabCatType.MoviesHD.ID;
+                        release.Category = new List<int> { TorznabCatType.MoviesHD.ID };
                         release.Link = new Uri(SiteLink + link.GetAttribute("href"));
                         release.Comments = new Uri(SiteLink + title.GetAttribute("href"));
                         release.Guid = release.Link;

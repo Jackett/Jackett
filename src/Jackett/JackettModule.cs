@@ -104,7 +104,15 @@ namespace Jackett
 
             Mapper.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
             {
-                t.CategoryDesc = TorznabCatType.GetCatDesc(r.Category);
+                if (r.Category != null)
+                {
+                    var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
+                    t.CategoryDesc = CategoryDesc;
+                }
+                else
+                {
+                    t.CategoryDesc = "";
+                }
             });
         }
     }

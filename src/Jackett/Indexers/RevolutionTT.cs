@@ -285,8 +285,8 @@ namespace Jackett.Indexers
                     };
 
                     //  if unknown category, set to "other"
-                    if (release.Category == 0)
-                        release.Category = 7000;
+                    if (release.Category.Count() == 0)
+                        release.Category.Add(7000);
 
                     release.Peers += release.Seeders;
                     releases.Add(release);
