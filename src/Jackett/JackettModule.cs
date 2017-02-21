@@ -30,6 +30,9 @@ namespace Jackett
                 case "httpclient":
                     builder.RegisterType<HttpWebClient>().As<IWebClient>();
                     break;
+                case "httpclient2":
+                    builder.RegisterType<HttpWebClient2>().As<IWebClient>();
+                    break;
                 case "safecurl":
                     builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
                     break;

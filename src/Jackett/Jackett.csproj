@@ -312,6 +312,7 @@
     <Compile Include="Services\TrayLockService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Utils\Clients\BaseWebResult.cs" />
+    <Compile Include="Utils\Clients\HttpWebClient2.cs" />
     <Compile Include="Utils\Clients\UnixLibCurlWebClient.cs" />
     <Compile Include="Utils\Clients\WebByteResult.cs" />
     <Compile Include="Utils\Clients\WebClientResult.cs" />

@@ -24,7 +24,7 @@ namespace Jackett.Console
         [Option('t', "Tracing", HelpText = "Enable tracing")]
         public bool Tracing { get; set; }
 
-        [Option('c', "UseClient",  HelpText = "Override web client selection. [automatic(Default)/libcurl/safecurl/httpclient]")]
+        [Option('c', "UseClient",  HelpText = "Override web client selection. [automatic(Default)/libcurl/safecurl/httpclient/httpclient2]")]
         public string Client { get; set; }
 
         [Option('j', "ProxyConnection", HelpText = "use proxy - e.g. 127.0.0.1:8888")]

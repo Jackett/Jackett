@@ -39,6 +39,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      authcode: ""
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
