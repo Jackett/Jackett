@@ -312,7 +312,7 @@ namespace Jackett.Indexers
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(10).InnerText) + release.Seeders;
 
                     var cat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).GetAttribute("href").Replace("browse.php?", string.Empty);
-                    release.Category = MapTrackerResultCatToNewznab(cat);
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     var files = qRow.Find("td:nth-child(4)").Text();
                     release.Files = ParseUtil.CoerceInt(files);
@@ -331,20 +331,6 @@ namespace Jackett.Indexers
                 OnParseError(response.Content, ex);
             }
             return releases;
-        }
-
-        protected int MapTrackerResultCatToNewznab(string input)
-        {
-            if (null != input)
-            {
-                input = input.ToLowerInvariant();
-                var mapping = resultMapping.Where(m => m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
-                if (mapping != null)
-                {
-                    return mapping.NewzNabCategory;
-                }
-            }
-            return 0;
         }
     }
 }

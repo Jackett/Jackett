@@ -69,7 +69,7 @@ namespace Jackett.Models
         public JArray CapsToJson()
         {
             var jArray = new JArray();
-            foreach (var cat in Categories.GroupBy(p => p.ID).Select(g => g.First()).OrderBy(c=>c.ID))
+            foreach (var cat in Categories.GroupBy(p => p.ID).Select(g => g.First()).OrderBy(c=> c.ID < 100000 ? "z"+c.ID.ToString() : c.Name))
             {
                 jArray.Add(cat.ToJson());
             }
@@ -96,7 +96,7 @@ namespace Jackett.Models
                         )
                     ),
                     new XElement("categories",
-                        from c in Categories
+                        from c in Categories.OrderBy(x => x.ID < 100000 ? "z" + x.ID.ToString() : x.Name)
                         select new XElement("category",
                             new XAttribute("id", c.ID),
                             new XAttribute("name", c.Name),

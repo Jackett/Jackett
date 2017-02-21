@@ -219,7 +219,7 @@ namespace Jackett.Indexers
                     var SearchResultDocument = SearchResultParser.Parse(results.Content);
                     var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
 
-                    int GroupCategory = 0;
+                    ICollection<int> GroupCategory = null;
                     string GroupTitle = null;
                     string GroupYearStr = null;
                     Nullable<DateTime> GroupPublishDate = null;
@@ -230,7 +230,7 @@ namespace Jackett.Indexers
                         {
                             var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                             string Title = qDetailsLink.TextContent;
-                            int Category = 0;
+                            ICollection<int> Category = null;
                             string YearStr = null;
                             Nullable<DateTime> YearPublishDate = null;
 

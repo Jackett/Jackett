@@ -290,8 +290,8 @@ namespace Jackett.Indexers
                         release.Category = MapTrackerCatToNewznab(cat);
 
                         // If its not apps or audio we can only mark as general TV
-                        if (release.Category == 0)
-                            release.Category = 5030;
+                        if (release.Category != null)
+                            release.Category = new List<int> { 5030 };
 
                         var grabs = qRow.Find("td:nth-child(6)").Text();
                         release.Grabs = ParseUtil.CoerceInt(grabs);

@@ -336,31 +336,31 @@ namespace Jackett.Indexers
                                 {
                                     category = seriesCq.Find("a[title=\"View Torrent\"]").Text().Trim();
                                     if (category == "TV Series")
-                                        release.Category = TorznabCatType.TVAnime.ID;
+                                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
 
                                     // Ignore these categories as they'll cause hell with the matcher
                                     // TV Special, OVA, ONA, DVD Special, BD Special
 
                                     if (category == "Movie")
-                                        release.Category = TorznabCatType.Movies.ID;
+                                        release.Category = new List<int> { TorznabCatType.Movies.ID };
 
                                     if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
-                                        release.Category = TorznabCatType.BooksComics.ID;
+                                        release.Category = new List<int> { TorznabCatType.BooksComics.ID };
 
                                     if (category == "Novel" || category == "Artbook")
-                                        release.Category = TorznabCatType.BooksComics.ID;
+                                        release.Category = new List<int> { TorznabCatType.BooksComics.ID };
 
                                     if (category == "Game" || category == "Visual Novel")
                                     {
                                         var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
                                         if (description.Contains(" PSP "))
-                                            release.Category = TorznabCatType.ConsolePSP.ID;
+                                            release.Category = new List<int> { TorznabCatType.ConsolePSP.ID };
                                         if (description.Contains("PSX"))
-                                            release.Category = TorznabCatType.ConsoleOther.ID;
+                                            release.Category = new List<int> { TorznabCatType.ConsoleOther.ID };
                                         if (description.Contains(" NES "))
-                                            release.Category = TorznabCatType.ConsoleOther.ID;
+                                            release.Category = new List<int> { TorznabCatType.ConsoleOther.ID };
                                         if (description.Contains(" PC "))
-                                            release.Category = TorznabCatType.PCGames.ID;
+                                            release.Category = new List<int> { TorznabCatType.PCGames.ID };
                                     }
                                 }
 
@@ -371,11 +371,11 @@ namespace Jackett.Indexers
                                     {
                                         var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
                                         if (description.Contains(" Lossless "))
-                                            release.Category = TorznabCatType.AudioLossless.ID;
+                                            release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
                                         else if (description.Contains("MP3"))
-                                            release.Category = TorznabCatType.AudioMP3.ID;
+                                            release.Category = new List<int> { TorznabCatType.AudioMP3.ID };
                                         else
-                                            release.Category = TorznabCatType.AudioOther.ID;
+                                            release.Category = new List<int> { TorznabCatType.AudioOther.ID };
                                     }
                                 }
 
@@ -450,7 +450,7 @@ namespace Jackett.Indexers
                                     release.DownloadVolumeFactor = 1;
                                 release.UploadVolumeFactor = 1;
 
-                                if (release.Category != 0)
+                                if (release.Category != null)
                                     releases.Add(release);
                             }
                         }

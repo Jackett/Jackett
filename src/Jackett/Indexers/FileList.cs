@@ -169,7 +169,7 @@ namespace Jackett.Indexers
                     release.UploadVolumeFactor = 1;
 
                     // Skip Romanian releases
-                    if (release.Category == TorznabCatType.MoviesForeign.ID && !configData.IncludeRomanianReleases.Value)
+                    if (release.Category.Contains(TorznabCatType.MoviesForeign.ID) && !configData.IncludeRomanianReleases.Value)
                         continue;
 
                     releases.Add(release);

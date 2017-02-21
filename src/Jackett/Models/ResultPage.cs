@@ -74,7 +74,7 @@ namespace Jackett.Models
                             r.Grabs == null ? null : new XElement("grabs", r.Grabs),
                             new XElement("description", r.Description),
                             new XElement("link", r.Link ?? r.MagnetUri),
-                            r.Category == 0 ? null : new XElement("category", r.Category),
+                            r.Category == null ? null : from c in r.Category select new XElement("category", c),
                             new XElement(
                                 "enclosure",
                                 new XAttribute("url", r.Link ?? r.MagnetUri),

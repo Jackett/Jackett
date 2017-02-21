@@ -106,7 +106,7 @@ namespace Jackett.Indexers
                         var item = new ReleaseInfo();
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
                             item.BannerUrl = new Uri(btnResult.SeriesBanner);
-                        item.Category = TorznabCatType.TV.ID;
+                        item.Category = new List<int> { TorznabCatType.TV.ID };
                         item.Comments = new Uri($"https://broadcasthe.net/torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         item.Description = btnResult.ReleaseName;
                         item.Guid = new Uri(btnResult.DownloadURL);

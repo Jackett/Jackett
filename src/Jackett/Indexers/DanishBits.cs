@@ -223,13 +223,13 @@ namespace Jackett.Indexers
                         ? seriesCatsDanish
                         : seriesCatsDanish.Concat(seriesCatsIntl);
                     if (moviesCats.Contains(catNo))
-                        release.Category = TorznabCatType.Movies.ID;
+                        release.Category = new List<int> { TorznabCatType.Movies.ID };
                     else if (seriesCats.Contains(catNo))
-                        release.Category = TorznabCatType.TV.ID;
+                        release.Category = new List<int> { TorznabCatType.TV.ID };
                     else if (catNo == 12)
-                        release.Category = TorznabCatType.BooksEbook.ID;
+                        release.Category = new List<int> { TorznabCatType.BooksEbook.ID };
                     else if (catNo == 6)
-                        release.Category = TorznabCatType.AudioAudiobook.ID;
+                        release.Category = new List<int> { TorznabCatType.AudioAudiobook.ID };
                     else
                         continue;
 

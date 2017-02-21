@@ -120,30 +120,55 @@ namespace Jackett.Indexers
             return new Uri(downloadUrlBase + link.ToString(), UriKind.RelativeOrAbsolute);
         }
 
-        protected int MapTrackerCatToNewznab(string input)
+        protected ICollection<int> MapTrackerCatToNewznab(string input)
         {
+            var cats = new List<int>();
             if (null != input)
             {
                 var mapping = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
                 if (mapping != null)
                 {
-                    return mapping.NewzNabCategory;
+                    cats.Add(mapping.NewzNabCategory);
+                }
+
+                // 1:1 category mapping
+                try
+                {
+                    var trackerCategoryInt = int.Parse(input);
+                    cats.Add(trackerCategoryInt + 100000);
+                }
+                catch (FormatException)
+                {
+                    // input is not an integer, continue
                 }
             }
-            return 0;
+            return cats;
         }
 
-        protected int MapTrackerCatDescToNewznab(string input)
+        protected ICollection<int> MapTrackerCatDescToNewznab(string input)
         {
+            var cats = new List<int>();
             if (null != input)
             {
                 var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc != null && m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
                 if (mapping != null)
                 {
-                    return mapping.NewzNabCategory;
+                    cats.Add(mapping.NewzNabCategory);
+                    
+                    // 1:1 category mapping
+                    try
+                    {
+                        var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
+                        cats.Add(trackerCategoryInt + 100000);
+                    }
+                    catch (FormatException)
+                    {
+                        // mapping.TrackerCategory is not an integer, continue
+                    }
+
                 }
             }
-            return 0;
+            return cats;
         }
 
         public static string GetIndexerID(Type type)
@@ -525,7 +550,7 @@ namespace Jackett.Indexers
         {
             foreach (var result in results)
             {
-                if (query.Categories.Length == 0 || query.Categories.Contains(result.Category) || result.Category == 0 || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category))
+                if (query.Categories.Length == 0 || result.Category == null || result.Category.Count() == 0 || query.Categories.Intersect(result.Category).Any() || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category))
                 {
                     yield return result;
                 }
@@ -545,6 +570,22 @@ namespace Jackett.Indexers
                 TorznabCaps.Categories.Add(newznabCategory);
                 if (TorznabCatType.Movies.Contains(newznabCategory))
                     TorznabCaps.MovieSearchAvailable = true;
+            }
+
+            // add 1:1 categories
+            if (trackerCategoryDesc != null && trackerCategory != null)
+            {
+                try
+                {
+                    var trackerCategoryInt = int.Parse(trackerCategory);
+                    var CustomCat = new TorznabCategory(trackerCategoryInt + 100000, trackerCategoryDesc);
+                    if (!TorznabCaps.Categories.Contains(CustomCat))
+                        TorznabCaps.Categories.Add(CustomCat);
+                }
+                catch (FormatException)
+                {
+                    // trackerCategory is not an integer, continue
+                }
             }
         }
 
@@ -566,6 +607,13 @@ namespace Jackett.Indexers
             var result = new List<string>();
             foreach (var cat in query.Categories)
             {
+                // use 1:1 mapping to tracker categories for newznab categories >= 100000
+                if (cat >= 100000)
+                {
+                    result.Add((cat - 100000).ToString());
+                    continue;
+                }
+
                 var queryCats = new List<int> { cat };
                 var newznabCat = TorznabCatType.AllCats.FirstOrDefault(c => c.ID == cat);
                 if (newznabCat != null)
