@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 {
     public class BroadcastTheNet : BaseIndexer, IIndexer
     {
-        string APIBASE = "http://api.btnapps.net/";
+        string APIBASE = "https://api.broadcasthe.net";
 
         new ConfigurationDataAPIKey configData
         {
