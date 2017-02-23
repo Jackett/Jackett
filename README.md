@@ -132,7 +132,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * QcTorrent
  * RapideTracker
  * Redacted (PassTheHeadphones)
- * RevolutionTT  [![(invite needed)][inviteneeded]](#)
+ * RevolutionTT
  * Rockhard Lossless
  * RoDVD
  * RuTracker
@@ -145,7 +145,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShareSpaceDB
  * Shazbat  [![(invite needed)][inviteneeded]](#)
  * Shellife
- * SpeedCD  [![(invite needed)][inviteneeded]](#)
+ * SpeedCD
  * Superbits
  * The Horror Charnel
  * The New Retro
