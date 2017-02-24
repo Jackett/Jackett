@@ -169,13 +169,19 @@ namespace Jackett.Indexers
                     release.Link = link;
                     release.PublishDate = publishDate;
                     release.Size = size;
-                    release.Description = release.Title;
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Category = MapTrackerCatToNewznab(category.ToString());
                     release.Comments = guid;
+
+                    if (torrentData.Find("span:contains(\"[Freeleech]\")").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
