@@ -131,7 +131,7 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find("td:eq(1) a:eq(0)").First();
-                    release.Title = qTitleLink.Find("strong").Text().Trim();
+                    release.Title = qTitleLink.Text().Trim();
 
                     // If we search an get no results, we still get a table just with no info.
                     if (string.IsNullOrWhiteSpace(release.Title))
@@ -139,7 +139,6 @@ namespace Jackett.Indexers
                         break;
                     }
 
-                    release.Description = release.Title;
                     release.Guid = new Uri(qTitleLink.Attr("href"));
                     release.Comments = release.Guid;
 
@@ -193,7 +192,10 @@ namespace Jackett.Indexers
                     {
                         release.UploadVolumeFactor = 1;
                     }
-                    
+
+                    qTitleLink.Remove();
+                    release.Description = qRow.Find("td:eq(1)").Text();
+
                     releases.Add(release);
                 }
             }

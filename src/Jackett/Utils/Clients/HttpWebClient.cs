@@ -40,11 +40,12 @@ namespace Jackett.Utils.Clients
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
                 var uri = new Uri(webRequest.Url);
+                var cookieUrl = new Uri("//" + uri.Host); // don't include the path
                 foreach (var c in webRequest.Cookies.Split(';'))
                 {
                     try
                     {
-                        cookies.SetCookies(uri, c);
+                        cookies.SetCookies(cookieUrl, c.Trim());
                     }
                     catch (CookieException ex)
                     {

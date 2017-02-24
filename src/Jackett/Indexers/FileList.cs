@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
 using Jackett.Models.IndexerConfig.Bespoke;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -138,6 +139,15 @@ namespace Jackett.Indexers
                         continue;
 
                     release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
+
+                    var tooltip = qTitleLink.Attr("title");
+                    if (!string.IsNullOrEmpty(tooltip))
+                    {
+                        var ImgRegexp = new Regex("src='(.*?)'");
+                        var ImgRegexpMatch = ImgRegexp.Match(tooltip);
+                        if (ImgRegexpMatch.Success)
+                            release.BannerUrl = new Uri(ImgRegexpMatch.Groups[1].Value);
+                    }
 
                     release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                     release.Comments = release.Guid;

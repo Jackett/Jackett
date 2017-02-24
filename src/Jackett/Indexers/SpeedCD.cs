@@ -43,6 +43,8 @@ namespace Jackett.Indexers
             Language = "en-us";
             Type = "private";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping("1", TorznabCatType.MoviesOther);
             AddCategoryMapping("42", TorznabCatType.Movies);
             AddCategoryMapping("32", TorznabCatType.Movies);
@@ -101,19 +103,16 @@ namespace Jackett.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("/logout.php"))
-            {
-                //Cookie appears to expire after a period of time or logging in to the site via browser
-                await DoLogin();
-            }
-
-
             var releases = new List<ReleaseInfo>();
 
             NameValueCollection qParams = new NameValueCollection();
 
-            if (!string.IsNullOrEmpty(query.GetQueryString()))
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            {
+                qParams.Add("search", query.ImdbID);
+                qParams.Add("d", "on");
+            }
+            else if (!string.IsNullOrEmpty(query.GetQueryString()))
             {
                 qParams.Add("search", query.GetQueryString());
             }
@@ -131,6 +130,12 @@ namespace Jackett.Indexers
             }
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
+            if (!response.Content.Contains("/logout.php"))
+            {
+                //Cookie appears to expire after a period of time or logging in to the site via browser
+                await DoLogin();
+                response = await RequestStringWithCookiesAndRetry(urlSearch);
+            }
 
             try
             {
@@ -164,13 +169,19 @@ namespace Jackett.Indexers
                     release.Link = link;
                     release.PublishDate = publishDate;
                     release.Size = size;
-                    release.Description = release.Title;
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Category = MapTrackerCatToNewznab(category.ToString());
                     release.Comments = guid;
+
+                    if (torrentData.Find("span:contains(\"[Freeleech]\")").Any())
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

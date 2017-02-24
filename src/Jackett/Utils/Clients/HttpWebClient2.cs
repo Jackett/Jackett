@@ -86,6 +86,7 @@ namespace Jackett.Utils.Clients
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
                 // add cookies to cookiecontainer
+                var cookieUrl = new Uri("//" + request.RequestUri.Host); // don't include the path
                 foreach (var ccookiestr in webRequest.Cookies.Split(';'))
                 {
                     var cookiestrparts = ccookiestr.Split('=');
@@ -96,7 +97,7 @@ namespace Jackett.Utils.Clients
                     if (cookiestrparts.Length >= 2)
                         value = cookiestrparts[1].Trim();
                     var cookie = new Cookie(name, value);
-                    cookies.Add(request.RequestUri, cookie);
+                    cookies.Add(cookieUrl, cookie);
                 }
             }
 
