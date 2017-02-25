@@ -274,8 +274,6 @@ div#unconfigured-indexer-datatable_wrapper {
     width: 100%;
     overflow-x: scroll;
 }
-@media only screen and (max-width: 500px) {
-    [class*="fit"]{
-        width: 50%;
-    }
+table td.actions
+    width: 40%;
 }
