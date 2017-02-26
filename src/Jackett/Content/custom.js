@@ -99,6 +99,8 @@ function reloadIndexers() {
 
             var main_cats_list = [];
             for (var catID in item.caps) {
+                if (catID >= 100000)
+                    continue; // skip custom cats
                 var cat = item.caps[catID];
                 var mainCat = cat.split("/")[0];
                 main_cats_list.push(mainCat);
