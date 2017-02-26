@@ -61,9 +61,17 @@ namespace Jackett.Indexers
             public string Label { get; set; }
         }
 
+        public class CategorymappingBlock
+        {
+            public string id { get; set; }
+            public string cat { get; set; }
+            public string desc { get; set; }
+        }
+
         public class capabilitiesBlock
         {
             public Dictionary<string, string> Categories  { get; set; }
+            public List<CategorymappingBlock> Categorymappings { get; set; }
             public Dictionary<string, List<string>> Modes { get; set; }
         }
 
@@ -253,15 +261,37 @@ namespace Jackett.Indexers
                 configData.AddDynamic(Setting.Name, item);
             }
 
-            foreach (var Category in Definition.Caps.Categories)
-            {
-                var cat = TorznabCatType.GetCatByName(Category.Value);
-                if (cat == null)
+            if (Definition.Caps.Categories != null)
+            { 
+                foreach (var Category in Definition.Caps.Categories)
                 {
-                    logger.Error(string.Format("CardigannIndexer ({0}): Can't find a category for {1}", ID, Category.Value));
-                    continue;
+                    var cat = TorznabCatType.GetCatByName(Category.Value);
+                    if (cat == null)
+                    {
+                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Category.Key, Category.Value));
+                        continue;
+                    }
+                    AddCategoryMapping(Category.Key, cat);
                 }
-                AddCategoryMapping(Category.Key, TorznabCatType.GetCatByName(Category.Value));
+            }
+
+            if (Definition.Caps.Categorymappings != null)
+            {
+                foreach (var Categorymapping in Definition.Caps.Categorymappings)
+                {
+                    TorznabCategory TorznabCat = null;
+
+                    if (Categorymapping.cat != null)
+                    {
+                        TorznabCat = TorznabCatType.GetCatByName(Categorymapping.cat);
+                        if (TorznabCat == null)
+                        {
+                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Categorymapping.id, Categorymapping.cat));
+                            continue;
+                        }
+                    }
+                    AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
+                }
             }
             LoadValuesFromJson(null);
         }
