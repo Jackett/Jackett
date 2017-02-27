@@ -776,10 +776,10 @@ namespace Jackett.Indexers
             if (Login == null || Login.Method != "form")
                 return configData;
 
-            var LoginUrl = resolvePath(Login.Path).ToString();
+            var LoginUrl = resolvePath(Login.Path);
 
             configData.CookieHeader.Value = null;
-            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+            landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.Parse(landingResult.Content);
@@ -809,8 +809,8 @@ namespace Jackett.Indexers
                     if (captchaElement != null) {
                         hasCaptcha = true;
 
-                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"));
-                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.ToString());
+                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
+                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.AbsoluteUri);
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                         var CaptchaText = new StringItem { Name = "Captcha Text" };
 
@@ -1022,25 +1022,28 @@ namespace Jackett.Indexers
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
-        protected Uri resolvePath(string path)
+        protected Uri resolvePath(string path, Uri currentUrl = null)
         {
-            if(path.StartsWith("http"))
+            if (currentUrl == null)
+                currentUrl = new Uri(SiteLink);
+            if (path.StartsWith("http"))
             {
                 return new Uri(path);
             }
             else if (path.StartsWith("//"))
             {
-                var basepath = new Uri(SiteLink);
+                var basepath = currentUrl;
                 return new Uri(basepath.Scheme + ":" + path);
             }
             else if(path.StartsWith("/"))
             {
-                var basepath = new Uri(SiteLink);
+                var basepath = currentUrl;
                 return new Uri(basepath.Scheme+"://"+ basepath.Host + path);
             }
             else
             {
-                return new Uri(SiteLink + path);
+                var baseUrl = currentUrl.GetLeftPart(UriPartial.Path);
+                return new Uri(baseUrl + path);
             }
         }
 
