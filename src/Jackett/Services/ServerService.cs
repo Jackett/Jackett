@@ -279,10 +279,6 @@ namespace Jackett.Services
             {
                 logger.Error("Error while getting environment details: " + e);
             }
-            var notice1 = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
-            _notices.Add(notice1);
-            var notice2 = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it2.";
-            _notices.Add(notice2);
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
