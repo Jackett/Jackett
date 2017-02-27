@@ -319,6 +319,7 @@ namespace Jackett.Controllers
             try
             {
                 var cfg = new JObject();
+                cfg["notices"] = JToken.FromObject(serverService.notices);
                 cfg["port"] = serverService.Config.Port;
                 cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;

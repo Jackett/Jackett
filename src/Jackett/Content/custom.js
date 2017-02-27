@@ -63,6 +63,11 @@ function loadJackettSettings() {
             $("#logoutBtn").show();
         }
 
+        $.each(data.config.notices, function (index, value) {
+            console.log(value);
+            doNotify(value, "danger", "glyphicon glyphicon-alert", false);
+        })
+
         reloadIndexers();
     });
 }
@@ -570,12 +575,21 @@ function resolveUrl(url) {
     return url;
 }
 
-function doNotify(message, type, icon) {
+function doNotify(message, type, icon, autoHide) {
+    if (typeof autoHide === "undefined" || autoHide === null)
+        autoHide = true;
+
+    var delay = 5000;
+    if (!autoHide)
+        delay = -1;
+
     $.notify({
         message: message,
         icon: icon
     }, {
         element: 'body',
+        autoHide: autoHide,
+        delay: delay,
         type: type,
         allow_dismiss: true,
         z_index: 9000,

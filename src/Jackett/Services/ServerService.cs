@@ -39,6 +39,7 @@ namespace Jackett.Services
         void SaveConfig();
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
         string BasePath();
+        List<string> notices { get; }
     }
 
     public class ServerService : IServerService
@@ -54,6 +55,7 @@ namespace Jackett.Services
         private Logger logger;
         private IWebClient client;
         private IUpdateService updater;
+        private List<string> _notices = new List<string>();
 
         public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u)
         {
@@ -71,6 +73,14 @@ namespace Jackett.Services
         public ServerConfig Config
         {
             get { return config; }
+        }
+
+        public List<string> notices
+        {
+            get
+            {
+                return _notices;
+            }
         }
 
         public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent")
@@ -207,7 +217,9 @@ namespace Jackett.Services
                     }
                     else if (monoVersionO.Major == 4 && monoVersionO.Minor == 2)
                     {
-                        logger.Error("mono version 4.2.* is known to cause problems with Jackett. If you experience any problems please try updating to the latest mono version from http://www.mono-project.com/download/ first.");
+                        var notice = "mono version 4.2.* is known to cause problems with Jackett. If you experience any problems please try updating to the latest mono version from http://www.mono-project.com/download/ first.";
+                        _notices.Add(notice);
+                        logger.Error(notice);
                     }
 
                     try
@@ -217,7 +229,9 @@ namespace Jackett.Services
                         var mono_devel_file = Path.Combine(runtimedir, "mono-api-info.exe"); 
                         if (!File.Exists(mono_devel_file))
                         {
-                            logger.Error("It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.");
+                            var notice = "It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.";
+                            _notices.Add(notice);
+                            logger.Error(notice);
                         }
                     }
                     catch (Exception e)
@@ -233,7 +247,9 @@ namespace Jackett.Services
                         {
                             if (monoVersionO.Major >= 4 && monoVersionO.Minor >= 8)
                             {
-                                logger.Error("The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.");
+                                var notice = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
+                                _notices.Add(notice);
+                                logger.Error(notice);
                             } 
                             else
                             {
@@ -263,6 +279,10 @@ namespace Jackett.Services
             {
                 logger.Error("Error while getting environment details: " + e);
             }
+            var notice1 = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
+            _notices.Add(notice1);
+            var notice2 = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it2.";
+            _notices.Add(notice2);
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
