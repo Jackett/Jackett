@@ -34,6 +34,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * 2 Fast 4 You
  * 7tor
  * Abnormal
+ * Acid-Lounge
  * AlphaRatio
  * AlphaReign
  * Andraste
