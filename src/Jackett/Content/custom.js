@@ -24,8 +24,7 @@ $.fn.focusWithoutScrolling = function () {
 
 $(document).ready(function () {
     $.ajaxSetup({ cache: false });
-    window.jackettIsLocal = window.location.hostname === 'localhost' ||
-                    window.location.hostname === '127.0.0.1';
+    window.jackettIsLocal = window.location.hostname === '127.0.0.1';
 
     bindUIButtons();
     loadJackettSettings();
