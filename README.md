@@ -61,6 +61,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BroadcastTheNet  [![(invite needed)][inviteneeded]](#)
  * BTN
  * BTNext
+ * Carpathians
  * CHDBits
  * CinemaZ
  * DanishBits
