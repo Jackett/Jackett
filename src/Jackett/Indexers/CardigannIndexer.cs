@@ -1042,7 +1042,7 @@ namespace Jackett.Indexers
             }
             else
             {
-                var baseUrl = currentUrl.GetLeftPart(UriPartial.Path);
+                var baseUrl = new Uri(currentUrl, ".").AbsoluteUri;
                 return new Uri(baseUrl + path);
             }
         }
