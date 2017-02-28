@@ -131,7 +131,7 @@ function displayConfiguredIndexersList(indexers) {
     prepareSetupButtons(indexersTable);
     prepareDeleteButtons(indexersTable);
     prepareCopyButtons(indexersTable);
-    indexersTable.find("table").DataTable(
+    indexersTable.find("table").dataTable(
          {
              "stateSave": true,
              "pageLength": -1,
@@ -147,8 +147,8 @@ function displayConfiguredIndexersList(indexers) {
                 {
                     "targets": 1,
                     "visible": true,
-                    "searchable": false,
-                    "orderable": false
+                    "searchable": true,
+                    "orderable": true
                 }
              ]
          });
@@ -339,9 +339,20 @@ function prepareSetupButtons(element) {
 function updateTestState(id, state, message, parent)
 {
     var btn = parent.find(".indexer-button-test[data-id=" +id + "]");
+
+    var sortmsg = message;
+    if (!sortmsg || state == "success")
+        sortmsg = "";
+
+    var td = btn.closest("td");
+    td.attr("data-sort", sortmsg);
+    td.attr("data-filter", sortmsg);
+
     if (message) {
         btn.tooltip("hide");
+        btn.attr("title", message);
         btn.data('bs.tooltip', false).tooltip({ title: message });
+
     }
     var icon = btn.find("span");
     icon.removeClass("glyphicon-ok test-success glyphicon-alert test-error glyphicon-refresh spinner test-inprogres");
@@ -353,6 +364,9 @@ function updateTestState(id, state, message, parent)
     } else if (state == "inprogres") {
         icon.addClass("glyphicon-refresh test-inprogres spinner");
     }
+    var dt = $.fn.dataTable.tables({ visible: true, api: true}).rows().invalidate('dom');
+    if (state != "inprogres")
+        dt.draw();
 }
 
 function testIndexer(id, notifyResult) {
@@ -382,8 +396,9 @@ function prepareTestButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         var state = $btn.data("state");
+        var title = $btn.attr("title");
         $btn.tooltip();
-        updateTestState(id, state, null, element);
+        updateTestState(id, state, title, element);
         $btn.click(function () {
             testIndexer(id, true);
         });
