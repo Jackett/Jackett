@@ -55,6 +55,7 @@
     rows:
       selector: table#torrent_table > tbody > tr.torrent
     fields:
+      # note: there are optinal extra colums
       download:
         selector: a[title="Download"]
         attribute: href
@@ -117,15 +118,15 @@
           - name: regexp
             args: (.*)#torrent\d+$
       size:
-        selector: td:nth-child(5)
+        selector: td[class="number_column nobr"]
       grabs:
-        selector: td:nth-child(6)
+        selector: td[class="number_column nobr"] ~ td
       files:
         selector: td:nth-child(3)
       seeders:
-        selector: td:nth-child(7)
+        selector: td[class="number_column nobr"] ~ td ~ td
       leechers:
-        selector: td:nth-child(8)
+        selector: td[class="number_column nobr"] ~ td ~ td ~ td
       date:
         selector: td:nth-child(4)
         filters:
