@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +18,8 @@ namespace Jackett.Utils.Clients
 {
     public class HttpWebClient : IWebClient
     {
+        static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
+
         public HttpWebClient(IProcessService p, Logger l, IConfigurationService c)
             : base(p: p,
                    l: l,
@@ -30,6 +34,26 @@ namespace Jackett.Utils.Clients
                 logger.Info(string.Format("HttpWebClient: Disabling certificate validation"));
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
             }
+
+            // custom handler for our own internal certificates
+            ServicePointManager.ServerCertificateValidationCallback += delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            {
+                if (sender.GetType() != typeof(HttpWebRequest))
+                    return sslPolicyErrors == SslPolicyErrors.None;
+
+                var request = (HttpWebRequest)sender;
+                var hash = certificate.GetCertHashString();
+
+                ICollection<string> hosts;
+                
+                trustedCertificates.TryGetValue(hash, out hosts);
+                if (hosts != null)
+                {
+                    if (hosts.Contains(request.Host))
+                        return true;
+                }
+                return sslPolicyErrors == SslPolicyErrors.None;
+            };
         }
 
         override protected async Task<WebClientByteResult> Run(WebRequest webRequest)
@@ -202,6 +226,19 @@ namespace Jackett.Utils.Clients
                     }
                 }
             }
+        }
+
+        override public void AddTrustedCertificate(string host, string hash)
+        {
+            hash = hash.ToUpper();
+            ICollection<string> hosts;
+            trustedCertificates.TryGetValue(hash.ToUpper(), out hosts);
+            if (hosts == null)
+            {
+                hosts = new HashSet<string>();
+                trustedCertificates[hash] = hosts;
+            }
+            hosts.Add(host);
         }
     }
 }

@@ -9,6 +9,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -23,6 +25,8 @@ namespace Jackett.Utils.Clients
         ClearanceHandler clearanceHandlr;
         HttpClientHandler clientHandlr;
         HttpClient client;
+
+        static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
 
         public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c)
             : base(p: p,
@@ -62,6 +66,26 @@ namespace Jackett.Utils.Clients
             }
 
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+
+            // custom handler for our own internal certificates
+            ServicePointManager.ServerCertificateValidationCallback += delegate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            {
+                if (sender.GetType() != typeof(HttpWebRequest))
+                    return sslPolicyErrors == SslPolicyErrors.None;
+
+                var request = (HttpWebRequest)sender;
+                var hash = certificate.GetCertHashString();
+
+                ICollection<string> hosts;
+
+                trustedCertificates.TryGetValue(hash, out hosts);
+                if (hosts != null)
+                {
+                    if (hosts.Contains(request.Host))
+                        return true;
+                }
+                return sslPolicyErrors == SslPolicyErrors.None;
+            };
         }
 
         override protected async Task<WebClientByteResult> Run(WebRequest webRequest)
