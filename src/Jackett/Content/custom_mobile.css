@@ -273,3 +273,7 @@ div#unconfigured-indexer-datatable_wrapper {
     width: 100%;
     overflow-x: scroll;
 }
+div#jackett-releases-datatable_wrapper {
+    width: 100%;
+    overflow-x: scroll;
+}
