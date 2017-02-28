@@ -91,7 +91,7 @@
     path: "/new/torrents-search.php"
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "\"{{ .Query.Keywords }}\""
     rows:
       selector: table.ttable_headinner > tbody > tr[class^="t-row"]
       filters:

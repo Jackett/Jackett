@@ -86,7 +86,7 @@ namespace Jackett.Utils.Clients
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
                 // add cookies to cookiecontainer
-                var cookieUrl = new Uri("//" + request.RequestUri.Host); // don't include the path
+                var cookieUrl = new Uri(request.RequestUri.Scheme + "://" + request.RequestUri.Host); // don't include the path, Scheme is needed for mono compatibility
                 foreach (var ccookiestr in webRequest.Cookies.Split(';'))
                 {
                     var cookiestrparts = ccookiestr.Split('=');

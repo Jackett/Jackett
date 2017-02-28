@@ -67,7 +67,9 @@ namespace Jackett.Indexers
                 var parser = new HtmlParser();
                 var document = parser.Parse(response.Content);
                 var messageEl = document.QuerySelector("form > span[class='warning']");
-                var errorMessage = messageEl.TextContent.Trim();
+                var errorMessage = response.Content;
+                if (messageEl != null)
+                    errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }

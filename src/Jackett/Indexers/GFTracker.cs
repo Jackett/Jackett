@@ -157,83 +157,88 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
 
-            queryCollection.Add("view", "0");
-            queryCollection.Add("searchtype", "1");
-            queryCollection.Add("incldead", "1");
-            if (!string.IsNullOrWhiteSpace(searchString))
+            // search in normal + gems view
+            foreach (var view in new string[] {"0", "1"})
             {
-                queryCollection.Add("search", searchString);
-            }
+                var queryCollection = new NameValueCollection();
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                queryCollection.Add(string.Format("c{0}", cat), "1");
-            }
-
-            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
-            if (results.IsRedirect)
-            {
-                // re-login
-                await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
-            }
-
-            try
-            {
-                CQ dom = results.Content;
-                var rows = dom["#torrentBrowse > table > tbody > tr"];
-                foreach (var row in rows.Skip(1))
+                queryCollection.Add("view", view);
+                queryCollection.Add("searchtype", "1");
+                queryCollection.Add("incldead", "1");
+                if (!string.IsNullOrWhiteSpace(searchString))
                 {
-                    var release = new ReleaseInfo();
-                    CQ qRow = row.Cq();
-
-                    release.MinimumRatio = 0;
-                    release.MinimumSeedTime = 2 * 24 * 60 * 60;
-
-                    var qLink = qRow.Find("a[title][href^=\"details.php?id=\"]");
-                    release.Title = qLink.Attr("title");
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
-                    release.Comments = release.Guid;
-
-                    qLink = qRow.Children().ElementAt(3).Cq().Children("a").First();
-                    release.Link = new Uri(string.Format("{0}{1}", SiteLink, qLink.Attr("href")));
-
-                    var catUrl = qRow.Children().ElementAt(0).FirstElementChild.Cq().Attr("href");
-                    var catNum = catUrl.Split(new char[] { '=', '&' })[2].Replace("c", "");
-                    release.Category = MapTrackerCatToNewznab(catNum);
-
-                    var dateString = qRow.Children().ElementAt(6).Cq().Text().Trim();
-                    if (dateString.Contains("ago"))
-                        release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
-                    else
-                        release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
-
-                    var sizeStr = qRow.Children().ElementAt(7).Cq().Text().Split(new char[] { '/' })[0];
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Split(new char[] { '/' })[0].Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Split(new char[] { '/' })[1].Trim()) + release.Seeders;
-                    release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text());
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("a[href^=\"snatches.php?id=\"]").Text().Split(' ')[0]);
-
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
-
-                    var desc = qRow.Find("td:nth-child(2)");
-                    desc.Find("a").Remove();
-                    desc.Find("small").Remove(); // Remove release name (if enabled in the user cp)
-                    release.Description = desc.Text().Trim(new char[] {'-', ' '});
-
-                    releases.Add(release);
+                    queryCollection.Add("search", searchString);
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results.Content, ex);
+
+                foreach (var cat in MapTorznabCapsToTrackers(query))
+                {
+                    queryCollection.Add(string.Format("c{0}", cat), "1");
+                }
+
+                var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
+
+                var results = await RequestStringWithCookiesAndRetry(searchUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookiesAndRetry(searchUrl);
+                }
+
+                try
+                {
+                    CQ dom = results.Content;
+                    var rows = dom["#torrentBrowse > table > tbody > tr"];
+                    foreach (var row in rows.Skip(1))
+                    {
+                        var release = new ReleaseInfo();
+                        CQ qRow = row.Cq();
+
+                        release.MinimumRatio = 0;
+                        release.MinimumSeedTime = 2 * 24 * 60 * 60;
+
+                        var qLink = qRow.Find("a[title][href^=\"details.php?id=\"]");
+                        release.Title = qLink.Attr("title");
+                        release.Guid = new Uri(SiteLink + qLink.Attr("href").TrimStart('/'));
+                        release.Comments = release.Guid;
+
+                        qLink = qRow.Children().ElementAt(3).Cq().Children("a").First();
+                        release.Link = new Uri(string.Format("{0}{1}", SiteLink, qLink.Attr("href")));
+
+                        var catUrl = qRow.Children().ElementAt(0).FirstElementChild.Cq().Attr("href");
+                        var catNum = catUrl.Split(new char[] { '=', '&' })[2].Replace("c", "");
+                        release.Category = MapTrackerCatToNewznab(catNum);
+
+                        var dateString = qRow.Children().ElementAt(6).Cq().Text().Trim();
+                        if (dateString.Contains("ago"))
+                            release.PublishDate = DateTimeUtil.FromTimeAgo(dateString);
+                        else
+                            release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
+
+                        var sizeStr = qRow.Children().ElementAt(7).Cq().Text().Split(new char[] { '/' })[0];
+                        release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Split(new char[] { '/' })[0].Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Split(new char[] { '/' })[1].Trim()) + release.Seeders;
+                        release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text());
+                        release.Grabs = ParseUtil.CoerceLong(qRow.Find("a[href^=\"snatches.php?id=\"]").Text().Split(' ')[0]);
+
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
+
+                        var desc = qRow.Find("td:nth-child(2)");
+                        desc.Find("a").Remove();
+                        desc.Find("small").Remove(); // Remove release name (if enabled in the user cp)
+                        release.Description = desc.Text().Trim(new char[] {'-', ' '});
+
+                        releases.Add(release);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnParseError(results.Content, ex);
+                }
             }
 
             return releases;

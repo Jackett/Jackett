@@ -61,9 +61,17 @@ namespace Jackett.Indexers
             public string Label { get; set; }
         }
 
+        public class CategorymappingBlock
+        {
+            public string id { get; set; }
+            public string cat { get; set; }
+            public string desc { get; set; }
+        }
+
         public class capabilitiesBlock
         {
             public Dictionary<string, string> Categories  { get; set; }
+            public List<CategorymappingBlock> Categorymappings { get; set; }
             public Dictionary<string, List<string>> Modes { get; set; }
         }
 
@@ -253,15 +261,37 @@ namespace Jackett.Indexers
                 configData.AddDynamic(Setting.Name, item);
             }
 
-            foreach (var Category in Definition.Caps.Categories)
-            {
-                var cat = TorznabCatType.GetCatByName(Category.Value);
-                if (cat == null)
+            if (Definition.Caps.Categories != null)
+            { 
+                foreach (var Category in Definition.Caps.Categories)
                 {
-                    logger.Error(string.Format("CardigannIndexer ({0}): Can't find a category for {1}", ID, Category.Value));
-                    continue;
+                    var cat = TorznabCatType.GetCatByName(Category.Value);
+                    if (cat == null)
+                    {
+                        logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Category.Key, Category.Value));
+                        continue;
+                    }
+                    AddCategoryMapping(Category.Key, cat);
                 }
-                AddCategoryMapping(Category.Key, TorznabCatType.GetCatByName(Category.Value));
+            }
+
+            if (Definition.Caps.Categorymappings != null)
+            {
+                foreach (var Categorymapping in Definition.Caps.Categorymappings)
+                {
+                    TorznabCategory TorznabCat = null;
+
+                    if (Categorymapping.cat != null)
+                    {
+                        TorznabCat = TorznabCatType.GetCatByName(Categorymapping.cat);
+                        if (TorznabCat == null)
+                        {
+                            logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", ID, Categorymapping.id, Categorymapping.cat));
+                            continue;
+                        }
+                    }
+                    AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
+                }
             }
             LoadValuesFromJson(null);
         }
@@ -746,10 +776,10 @@ namespace Jackett.Indexers
             if (Login == null || Login.Method != "form")
                 return configData;
 
-            var LoginUrl = resolvePath(Login.Path).ToString();
+            var LoginUrl = resolvePath(Login.Path);
 
             configData.CookieHeader.Value = null;
-            landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
+            landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
             landingResultDocument = htmlParser.Parse(landingResult.Content);
@@ -779,8 +809,8 @@ namespace Jackett.Indexers
                     if (captchaElement != null) {
                         hasCaptcha = true;
 
-                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"));
-                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.ToString());
+                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
+                        var captchaImageData = await RequestBytesWithCookies(CaptchaUrl.ToString(), landingResult.Cookies, RequestType.GET, LoginUrl.AbsoluteUri);
                         var CaptchaImage = new ImageItem { Name = "Captcha Image" };
                         var CaptchaText = new StringItem { Name = "Captcha Text" };
 
@@ -992,26 +1022,12 @@ namespace Jackett.Indexers
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
-        protected Uri resolvePath(string path)
+        protected Uri resolvePath(string path, Uri currentUrl = null)
         {
-            if(path.StartsWith("http"))
-            {
-                return new Uri(path);
-            }
-            else if (path.StartsWith("//"))
-            {
-                var basepath = new Uri(SiteLink);
-                return new Uri(basepath.Scheme + ":" + path);
-            }
-            else if(path.StartsWith("/"))
-            {
-                var basepath = new Uri(SiteLink);
-                return new Uri(basepath.Scheme+"://"+ basepath.Host + path);
-            }
-            else
-            {
-                return new Uri(SiteLink + path);
-            }
+            if (currentUrl == null)
+                currentUrl = new Uri(SiteLink);
+
+            return new Uri(currentUrl, path);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

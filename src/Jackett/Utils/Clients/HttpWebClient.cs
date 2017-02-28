@@ -40,7 +40,7 @@ namespace Jackett.Utils.Clients
             if (!string.IsNullOrEmpty(webRequest.Cookies))
             {
                 var uri = new Uri(webRequest.Url);
-                var cookieUrl = new Uri("//" + uri.Host); // don't include the path
+                var cookieUrl = new Uri(uri.Scheme + "://" + uri.Host); // don't include the path, Scheme is needed for mono compatibility
                 foreach (var c in webRequest.Cookies.Split(';'))
                 {
                     try

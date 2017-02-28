@@ -273,11 +273,14 @@ namespace Jackett.Controllers
             }
             catch (Exception ex)
             {
+                var msg = ex.Message;
+                if (ex.InnerException != null)
+                    msg += ": " + ex.InnerException.Message;
                 logger.Error(ex, "Exception in test_indexer");
                 jsonReply["result"] = "error";
-                jsonReply["error"] = ex.Message;
+                jsonReply["error"] = msg;
                 if (indexer != null)
-                    indexer.LastError = ex.Message;
+                    indexer.LastError = msg;
             }
             return Json(jsonReply);
         }
@@ -319,6 +322,7 @@ namespace Jackett.Controllers
             try
             {
                 var cfg = new JObject();
+                cfg["notices"] = JToken.FromObject(serverService.notices);
                 cfg["port"] = serverService.Config.Port;
                 cfg["external"] = serverService.Config.AllowExternal;
                 cfg["api_key"] = serverService.Config.APIKey;

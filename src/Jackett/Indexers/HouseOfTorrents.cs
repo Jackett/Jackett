@@ -32,7 +32,7 @@ namespace Jackett.Indexers
         public HouseOfTorrents(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "House-of-Torrents",
                 description: "A general tracker",
-                link: "https://houseoftorrents.me/",
+                link: "https://houseoftorrents.club/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
