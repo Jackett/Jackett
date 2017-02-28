@@ -111,6 +111,8 @@
           - name: replace
             args: ["Feltöltve: ", ""]
           - name: replace
+            args: ["Feltöltve : ", ""]
+          - name: replace
             args: ["perce", "minute"]
           - name: replace
             args: ["órája", "hour"]
@@ -118,6 +120,7 @@
             args: ["napja", "day"]
           - name: replace
             args: ["hete", "week"]
+          - name: timeago
       downloadvolumefactor:
         case:
           "*": "1"
