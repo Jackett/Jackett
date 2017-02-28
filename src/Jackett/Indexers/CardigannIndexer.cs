@@ -1026,25 +1026,8 @@ namespace Jackett.Indexers
         {
             if (currentUrl == null)
                 currentUrl = new Uri(SiteLink);
-            if (path.StartsWith("http"))
-            {
-                return new Uri(path);
-            }
-            else if (path.StartsWith("//"))
-            {
-                var basepath = currentUrl;
-                return new Uri(basepath.Scheme + ":" + path);
-            }
-            else if(path.StartsWith("/"))
-            {
-                var basepath = currentUrl;
-                return new Uri(basepath.Scheme+"://"+ basepath.Host + path);
-            }
-            else
-            {
-                var baseUrl = new Uri(currentUrl, ".").AbsoluteUri;
-                return new Uri(baseUrl + path);
-            }
+
+            return new Uri(currentUrl, path);
         }
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
