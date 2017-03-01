@@ -630,7 +630,7 @@ namespace Jackett.Indexers
                 }
                 if (queryCollection.Count > 0)
                     submitUrlstr += "?" + queryCollection.GetQueryString();
-                var submitUrl = resolvePath(submitUrlstr);
+                var submitUrl = resolvePath(submitUrlstr, new Uri(LoginUrl));
 
                 // automatically solve simpleCaptchas, if used
                 var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
@@ -692,7 +692,7 @@ namespace Jackett.Indexers
                     var body = string.Join("\r\n",  bodyParts);
                     loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
                 } else {
-                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, SiteLink, true);
+                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, LoginUrl, true);
                 }
 
                 configData.CookieHeader.Value = loginResult.Cookies;
