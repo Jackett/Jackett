@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta charset="utf-8" />
@@ -32,7 +32,9 @@
 
     <link href="../bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../animate.css" rel="stylesheet">
-    <link href="../custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="../custom.css" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" href="../custom_mobile.css" media="only screen and (max-device-width: 480px)">
+
     <link href="../css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/font-awesome.min.css">
     <title>Jackett</title>
@@ -392,7 +394,7 @@
                     <div class="modal-body">
                         <p>You can search all configured indexers from this screen.</p>
                         <label>Query</label>
-                        <input type="text" name="query" id="searchquery" style="width:400px" />
+                        <input type="text" name="query" id="searchquery"/>
                         <label>Category</label>
                         <select name="category" id="searchCategory"></select>
                         <label>Tracker</label>

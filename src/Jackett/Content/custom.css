@@ -1,4 +1,4 @@
-﻿body {
+body {
     background-image: url("binding_dark.png");
     background-repeat: repeat;
 }
@@ -265,4 +265,7 @@ table td.fit{
     float: right;
     text-align: right;
     margin-right: 1em;
+}
+input#searchquery{
+	width:400px;
 }
