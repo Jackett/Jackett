@@ -6,6 +6,8 @@
   encoding: UTF-8
   links:
     - https://rapidetracker.net
+  certificates:
+    - B0238C547A905BFA119C4E8BACCAEACF36491FF6
 
   caps:
     categories:

@@ -13,7 +13,6 @@ using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text;
 using System.Linq;
-using System.Threading;
 using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
@@ -22,6 +21,7 @@ namespace Jackett.Indexers
     {
         string IndexUrl { get { return SiteLink + "index.php"; } }
         string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
+        static readonly string certificateHash = "6F5CE30D578C2A7AECFB919D0D013976D395055F";
 
         new ConfigurationDataCaptchaLogin configData
         {
@@ -90,6 +90,14 @@ namespace Jackett.Indexers
             AddCategoryMapping(30,  TorznabCatType.PC); // APPLICATIONS/Sonstige
             AddCategoryMapping(70,  TorznabCatType.PC); // APPLICATIONS/Linux
             AddCategoryMapping(71,  TorznabCatType.PCMac); // APPLICATIONS/Mac
+        }
+
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            // add self signed cert to trusted certs
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

@@ -17,6 +17,11 @@ namespace Jackett.Utils.Clients
         protected IConfigurationService configService;
         protected IProcessService processService;
 
+        virtual public void AddTrustedCertificate(string host, string hash)
+        {
+            // not implemented by default
+        }
+
         public IWebClient(IProcessService p, Logger l, IConfigurationService c)
         {
             processService = p;

@@ -321,7 +321,7 @@ namespace Jackett.Indexers
             }
         }
 
-        public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        virtual public void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             IProtectionService ps = null;
             if (useProtectionService)

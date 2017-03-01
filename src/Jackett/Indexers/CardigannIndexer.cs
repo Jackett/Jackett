@@ -47,6 +47,7 @@ namespace Jackett.Indexers
             public string Language { get; set; }
             public string Encoding { get; set; }
             public List<string> Links { get; set; }
+            public List<string> Certificates { get; set; }
             public capabilitiesBlock Caps { get; set; }
             public loginBlock Login { get; set; }
             public ratioBlock Ratio { get; set; }
@@ -294,6 +295,18 @@ namespace Jackett.Indexers
                 }
             }
             LoadValuesFromJson(null);
+        }
+
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            // add self signed cert to trusted certs
+            if (Definition.Certificates != null)
+            {
+                foreach (var certificateHash in Definition.Certificates)
+                    webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
+            }
         }
 
         protected Dictionary<string, object> getTemplateVariablesFromConfigData()
