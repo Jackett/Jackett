@@ -266,3 +266,6 @@ table td.fit{
     text-align: right;
     margin-right: 1em;
 }
+input#searchquery{
+	width:400px;
+}
