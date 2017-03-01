@@ -1,0 +1,94 @@
+---
+  site: czteam
+  name: CZTeam
+  language: cs-cz
+  type: private
+  encoding: UTF-8
+  links:
+    - https://czteam.club/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: TV, desc: "TV-Eps"}
+      - {id: 3, cat: Audio, desc: "Music"}
+      - {id: 4, cat: PC/Games, desc: "Games"}
+      - {id: 5, cat: PC/ISO, desc: "Software"}
+      - {id: 6, cat: XXX, desc: "XxX"}
+      - {id: 7, cat: Other, desc: "Other"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      keeplogged: 1
+      login: "Log in"
+    error:
+      - selector: form#loginform > span.warning
+    test:
+      path: torrents.php
+
+  search:
+    path: torrents.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      searchstr: "{{ .Query.Keywords }}"
+      order_by: time
+      order_way: desc
+      action: basic
+      searchsubmit: 1
+    rows:
+      selector: table#torrent_table > tbody > tr.torrent
+    fields:
+      download:
+        selector: a[href^="torrents.php?action=download&id="]
+        attribute: href
+      title:
+        selector: a.torrent_name
+      category:
+        selector: td.cats_col
+        case:
+          div.cats_movies: 1
+          div.cats_tveps: 2
+          div.cats_music: 3
+          div.cats_games: 4
+          div.cats_software: 5
+          div.cats_xxx: 6
+          div.cats_other: 7
+      details:
+        selector: a.torrent_name
+        attribute: href
+      banner:
+        selector: a.torrent_name
+        optional: true
+        attribute: cover
+      files:
+        selector: td:nth-child(3)
+      date:
+        selector: td:nth-child(4)
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          "strong.tl_free": "0"
+          "strong.tl_neutral": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "strong.tl_neutral": "0"
+          "*": "1"
+      description:
+        selector: div.torrent_info
+        remove: strong

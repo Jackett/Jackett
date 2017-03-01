@@ -64,6 +64,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Carpathians
  * CHDBits
  * CinemaZ
+ * CZTeam
  * DanishBits
  * DataScene
  * Demonoid
