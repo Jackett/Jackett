@@ -277,3 +277,6 @@ div#jackett-releases-datatable_wrapper {
     width: 100%;
     overflow-x: scroll;
 }
+input#searchquery{
+	width:50%;
+}
