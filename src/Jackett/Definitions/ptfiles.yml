@@ -76,6 +76,8 @@
         filters:
           - name: querystring
             args: cat
+          - name: trim
+            args: "'"
       details:
         selector: a.torrentlink
         attribute: href
@@ -115,4 +117,7 @@
           "*": "1"
       description:
         selector: td:nth-child(2) > span:has(span > small)
-        remove: span:nth-child(1), span.tool, a[title^="Search all"], b > small
+        remove: span:nth-child(1), span.tool, a[title^="Search all"], br ~ b > small
+        filters:
+          - name: trim
+            args: "/"
