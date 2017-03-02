@@ -210,7 +210,7 @@ Jackett can also be run from the command line if you would like to see log messa
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:
-       * Debian/Ubunutu: `apt-get install libcurl-dev`
+       * Debian/Ubunutu: `apt-get install libcurl4-openssl-dev`
        * Redhat/Fedora: `yum install libcurl-devel`
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
  3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
