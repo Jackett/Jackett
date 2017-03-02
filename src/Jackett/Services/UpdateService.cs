@@ -100,6 +100,7 @@ namespace Jackett.Services
                 var response = await client.GetString(new WebRequest()
                 {
                     Url = "https://api.github.com/repos/Jackett/Jackett/releases",
+                    Encoding = Encoding.UTF8,
                     EmulateBrowser = false
                 });
 
