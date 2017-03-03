@@ -109,6 +109,12 @@ namespace Jackett.Indexers
         {
             var searchUrl = GetTorrentSearchUrl(query.Categories, searchQuery);
             var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            if (response.IsRedirect)
+            {
+                // re login
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
 
             try
             {
@@ -228,7 +234,6 @@ namespace Jackett.Indexers
             return new ReleaseInfo
             {
                 Title = title,
-                Description = title,
                 Category = new List<int> { category }, // Who seasons movies right
                 Link = new Uri(DownloadUrl + torrentId),
                 PublishDate = publishDate,
