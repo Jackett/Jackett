@@ -179,7 +179,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\HDOnly.cs" />
-    <Compile Include="Indexers\CGPeers.cs" />
+    <Compile Include="Indexers\cgpeers.cs" />
     <Compile Include="Indexers\PiXELHD.cs" />
     <Compile Include="Indexers\Hardbay.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
