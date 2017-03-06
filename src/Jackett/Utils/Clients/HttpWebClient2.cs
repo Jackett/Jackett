@@ -155,7 +155,8 @@ namespace Jackett.Utils.Clients
             }
             else if (webRequest.Type == RequestType.POST)
             {
-                request.Content = new FormUrlEncodedContent(webRequest.PostData);
+                if (webRequest.PostData != null)
+                    request.Content = new FormUrlEncodedContent(webRequest.PostData);
                 request.Method = HttpMethod.Post;
             }
             else
