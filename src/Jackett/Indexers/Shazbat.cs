@@ -38,7 +38,7 @@ namespace Jackett.Indexers
         public Shazbat(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "Shazbat",
                 description: "Modern indexer",
-                link: "http://www.shazbat.tv/",
+                link: "https://www.shazbat.tv/",
                 caps: new TorznabCapabilities(TorznabCatType.TV,
                                               TorznabCatType.TVHD,
                                               TorznabCatType.TVSD),
@@ -118,6 +118,8 @@ namespace Jackett.Indexers
                     rows = dom["table tr"];
                 }
 
+                var globalFreeleech = dom.Find("span:contains(\"Freeleech until:\"):has(span.datetime)").Any();
+
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
@@ -127,7 +129,14 @@ namespace Jackett.Indexers
                     release.Title = titleRow.Text().Trim();
                     if (string.IsNullOrWhiteSpace(release.Title))
                         continue;
-                    release.Description = release.Title;
+
+                    var qBanner = qRow.Find("div[style^=\"cursor: pointer; background-image:url\"]");
+                    var qBannerStyle = qBanner.Attr("style");
+                    if (!string.IsNullOrEmpty(qBannerStyle))
+                    {
+                        var bannerImg = Regex.Match(qBannerStyle, @"url\('(.*?)'\);").Groups[1].Value;
+                        release.BannerUrl = new Uri(SiteLink + bannerImg);
+                    }
 
                     var qLink = row.Cq().Find("td:eq(4) a:eq(0)");
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
@@ -144,6 +153,13 @@ namespace Jackett.Indexers
                     var infosplit = infoString.Replace("/", string.Empty).Split(":".ToCharArray());
                     release.Seeders = ParseUtil.CoerceInt(infosplit[1]);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
+
+                    if (globalFreeleech)
+                        release.DownloadVolumeFactor = 0;
+                    else
+                        release.DownloadVolumeFactor = 1;
+
+                    release.UploadVolumeFactor = 1;
 
                     // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
 
