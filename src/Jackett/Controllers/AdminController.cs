@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -486,11 +487,30 @@ namespace Jackett.Controllers
         public ManualSearchResult Search([FromBody]AdminSearch value)
         {
             var results = new List<TrackerCacheResult>();
-            var stringQuery = new TorznabQuery()
-            {
-                SearchTerm = value.Query,
-                Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category }
-            };
+            var stringQuery = new TorznabQuery();
+
+            var queryStr = value.Query;
+            if (queryStr != null)
+            { 
+                var seasonMatch = Regex.Match(queryStr, @"S(\d{2,4})");
+                if (seasonMatch.Success)
+                {
+                    stringQuery.Season = int.Parse(seasonMatch.Groups[1].Value);
+                    queryStr = queryStr.Remove(seasonMatch.Index, seasonMatch.Length);
+                }
+
+                var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4})");
+                if (episodeMatch.Success)
+                {
+                    stringQuery.Episode = episodeMatch.Groups[1].Value;
+                    queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length);
+                }
+                queryStr = queryStr.Trim();
+            }
+        
+
+            stringQuery.SearchTerm = queryStr;
+            stringQuery.Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category };
             stringQuery.ExpandCatsToSubCats();
 
             // try to build an IMDB Query
@@ -501,7 +521,9 @@ namespace Jackett.Controllers
                 imdbQuery = new TorznabQuery()
                 {
                     ImdbID = imdbID,
-                    Categories = stringQuery.Categories
+                    Categories = stringQuery.Categories,
+                    Season = stringQuery.Season,
+                    Episode = stringQuery.Episode,
                 };
                 imdbQuery.ExpandCatsToSubCats();
             }
