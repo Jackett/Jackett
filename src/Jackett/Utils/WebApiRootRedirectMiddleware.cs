@@ -23,7 +23,7 @@ namespace Jackett.Utils
                 context.Request.Path = new PathString(context.Request.Path.Value.Substring(Startup.BasePath.Length-1));
             }
 
-            if (string.IsNullOrWhiteSpace(url.AbsolutePath) || url.AbsolutePath == "/")
+            if (context.Request.Path == null || string.IsNullOrWhiteSpace(context.Request.Path.ToString()) || context.Request.Path.ToString() == "/")
             {
                 // 301 is the status code of permanent redirect
                 context.Response.StatusCode = 302;
