@@ -27,6 +27,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string SearchUrl { get { return SiteLink + "search"; } }
         private string TorrentsUrl { get { return SiteLink + "torrents"; } }
+        private string ShowUrl { get { return SiteLink + "show?id="; } }
         private string RSSProfile { get { return SiteLink + "rss_feeds"; } }
 
         new ConfigurationDataBasicLoginWithRSS configData
@@ -94,76 +95,88 @@ namespace Jackett.Indexers
 
             WebClientStringResult results = null;
 
-
-            var pairs = new Dictionary<string, string> {
-                { "portlet", "true"}
-            };
-
-            if (!string.IsNullOrWhiteSpace(queryString))
+            var searchUrls = new List<string>();
+            if (!string.IsNullOrWhiteSpace(query.SanitizedSearchTerm))
             {
-                pairs.Add("search", queryString);
+                var pairs = new Dictionary<string, string>();
+                pairs.Add("search", query.SanitizedSearchTerm);
+
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
-            } else
+                CQ dom = results.Content;
+                var shows = dom.Find("div.show[data-id]");
+                foreach (var show in shows)
+                {
+                    var showUrl = ShowUrl + show.GetAttribute("data-id");
+                    searchUrls.Add(showUrl);
+                }
+            }
+            else
             {
-                results = await PostDataWithCookiesAndRetry(TorrentsUrl, pairs, null, TorrentsUrl);
+                searchUrls.Add(TorrentsUrl);
             }
 
             try
             {
-                CQ dom = results.Content;
-                var rows = dom["#torrent-table tr"];
-
-                if (!string.IsNullOrWhiteSpace(queryString))
+                foreach (var searchUrl in searchUrls)
                 {
-                    rows = dom["table tr"];
-                }
+                    results = await RequestStringWithCookies(searchUrl);
+                
+                    CQ dom = results.Content;
+                    var rows = dom["#torrent-table tr"];
 
-                var globalFreeleech = dom.Find("span:contains(\"Freeleech until:\"):has(span.datetime)").Any();
-
-                foreach (var row in rows.Skip(1))
-                {
-                    var release = new ReleaseInfo();
-                    var qRow = row.Cq();
-                    var titleRow = qRow.Find("td:eq(2)").First();
-                    titleRow.Children().Remove();
-                    release.Title = titleRow.Text().Trim();
-                    if (string.IsNullOrWhiteSpace(release.Title))
-                        continue;
-
-                    var qBanner = qRow.Find("div[style^=\"cursor: pointer; background-image:url\"]");
-                    var qBannerStyle = qBanner.Attr("style");
-                    if (!string.IsNullOrEmpty(qBannerStyle))
+                    if (!string.IsNullOrWhiteSpace(queryString))
                     {
-                        var bannerImg = Regex.Match(qBannerStyle, @"url\('(.*?)'\);").Groups[1].Value;
-                        release.BannerUrl = new Uri(SiteLink + bannerImg);
+                        rows = dom["table tr"];
                     }
 
-                    var qLink = row.Cq().Find("td:eq(4) a:eq(0)");
-                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
-                    release.Guid = release.Link;
-                    var qLinkComm = row.Cq().Find("td:eq(4) a:eq(1)");
-                    release.Comments = new Uri(SiteLink + qLinkComm.Attr("href"));
+                    var globalFreeleech = dom.Find("span:contains(\"Freeleech until:\"):has(span.datetime)").Any();
 
-                    var dateString = qRow.Find(".datetime").Attr("data-timestamp");
-                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString));
-                    var infoString = row.Cq().Find("td:eq(3)").Text();
+                    foreach (var row in rows.Skip(1))
+                    {
+                        var release = new ReleaseInfo();
+                        var qRow = row.Cq();
+                        var titleRow = qRow.Find("td:eq(2)").First();
+                        titleRow.Children().Remove();
+                        release.Title = titleRow.Text().Trim();
+                        if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                            continue;
 
-                    release.Size = ParseUtil.CoerceLong(Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
+                        var qBanner = qRow.Find("div[style^=\"cursor: pointer; background-image:url\"]");
+                        var qBannerStyle = qBanner.Attr("style");
+                        if (!string.IsNullOrEmpty(qBannerStyle))
+                        {
+                            var bannerImg = Regex.Match(qBannerStyle, @"url\('(.*?)'\);").Groups[1].Value;
+                            release.BannerUrl = new Uri(SiteLink + bannerImg);
+                        }
 
-                    var infosplit = infoString.Replace("/", string.Empty).Split(":".ToCharArray());
-                    release.Seeders = ParseUtil.CoerceInt(infosplit[1]);
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
+                        var qLink = row.Cq().Find("td:eq(4) a:eq(0)");
+                        release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                        release.Guid = release.Link;
+                        var qLinkComm = row.Cq().Find("td:eq(4) a:eq(1)");
+                        release.Comments = new Uri(SiteLink + qLinkComm.Attr("href"));
 
-                    if (globalFreeleech)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+                        var dateString = qRow.Find(".datetime").Attr("data-timestamp");
+                        if (dateString != null)
+                            release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceDouble(dateString)).ToLocalTime();
+                        var infoString = row.Cq().Find("td:eq(3)").Text();
 
-                    release.UploadVolumeFactor = 1;
+                        release.Size = ParseUtil.CoerceLong(Regex.Match(infoString, "\\((\\d+)\\)").Value.Replace("(", "").Replace(")", ""));
 
-                    // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
+                        var infosplit = infoString.Replace("/", string.Empty).Split(":".ToCharArray());
+                        release.Seeders = ParseUtil.CoerceInt(infosplit[1]);
+                        release.Peers = release.Seeders + ParseUtil.CoerceInt(infosplit[2]);
 
-                    releases.Add(release);
+                        if (globalFreeleech)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
+
+                        // var tags = row.Cq().Find(".label-tag").Text(); These don't see to parse - bad tags?
+
+                        releases.Add(release);
+                    }
                 }
             }
             catch (Exception ex)
