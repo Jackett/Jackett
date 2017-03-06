@@ -394,7 +394,7 @@ namespace Jackett.Indexers
                 }
                 catch (Exception e)
                 {
-                    logger.Error(string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
+                    logger.Error(e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
                     lastException = e;
                 }
                 await Task.Delay(500);
