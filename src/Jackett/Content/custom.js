@@ -692,7 +692,8 @@ function showSearch(selectedIndexer) {
             if (items[i].configured === true && (items[i].id === tracker || tracker === '')) {
                 indexers["'" + items[i].id + "'"] = items[i].name;
                 for (var prop in items[i].caps) {
-                    cats[prop] = items[i].caps[prop];
+                    if (prop < 100000 || tracker)
+                        cats[prop] = items[i].caps[prop];
                 }
             }
         }
