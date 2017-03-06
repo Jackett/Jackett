@@ -730,6 +730,7 @@ function showSearch(selectedIndexer) {
         };
 
         $('#jackett-search-perform').html($('#spinner').html());
+        $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
         var jqxhr = $.post("search", queryObj, function (data) {
             $('#jackett-search-perform').html('Search trackers');
