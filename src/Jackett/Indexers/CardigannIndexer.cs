@@ -37,6 +37,59 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
+        // A Dictionary allowing the same key multiple times
+        public class KeyValuePairList : List<KeyValuePair<string, selectorBlock>>, IDictionary<string, selectorBlock>
+        {
+            public selectorBlock this[string key]
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+
+                set
+                {
+                    base.Add(new KeyValuePair<string, selectorBlock>(key, value));
+                }
+            }
+
+            public ICollection<string> Keys
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public ICollection<selectorBlock> Values
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public void Add(string key, selectorBlock value)
+            {
+                base.Add(new KeyValuePair<string, selectorBlock>(key, value));
+            }
+
+            public bool ContainsKey(string key)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool Remove(string key)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool TryGetValue(string key, out selectorBlock value)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         // Cardigann yaml classes
         public class IndexerDefinition {
             public string Site { get; set; }
@@ -140,7 +193,7 @@ namespace Jackett.Indexers
             public List<filterBlock> Keywordsfilters { get; set; }
             public Dictionary<string, string> Inputs { get; set; }
             public rowsBlock Rows { get; set; }
-            public Dictionary<string, selectorBlock> Fields { get; set; }
+            public KeyValuePairList Fields { get; set; }
         }
 
         public class rowsBlock : selectorBlock
