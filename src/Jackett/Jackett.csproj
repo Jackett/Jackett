@@ -274,7 +274,6 @@
     <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
     <Compile Include="Indexers\TorrentLeech.cs" />
-    <Compile Include="Indexers\TorrentShack.cs" />
     <Compile Include="JackettProtectedAttribute.cs" />
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
