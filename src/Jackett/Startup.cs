@@ -92,7 +92,7 @@ namespace Jackett
                 {
                     // HttpListener should not return exceptions that occur when sending the response to the client
                     ((HttpListener)httpListener).IgnoreWriteExceptions = true;
-                    Engine.Logger.Info("set HttpListener.IgnoreWriteExceptions = true");
+                    //Engine.Logger.Info("set HttpListener.IgnoreWriteExceptions = true");
                 }
             }
             catch (Exception e)
