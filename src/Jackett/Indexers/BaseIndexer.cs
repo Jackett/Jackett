@@ -198,6 +198,7 @@ namespace Jackett.Indexers
             var spacing = string.Join("", Enumerable.Repeat(Environment.NewLine, 5));
             var fileContents = string.Format("{0}{1}{2}", ex, spacing, results);
             logger.Error(fileName + fileContents);
+            throw ex;
         }
 
         protected void CleanCache()
