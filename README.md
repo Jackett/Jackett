@@ -36,7 +36,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Abnormal
  * Acid-Lounge
  * AlphaRatio
- * AlphaReign
  * Andraste
  * AnimeBytes
  * AnimeTorrents
@@ -126,7 +125,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * New Real World
  * NextGen
  * Norbits  [![(invite needed)][inviteneeded]](#) <!-- added by DiseaseNO but no longer maintained? -->
- * nostream
  * notwhat.cd
  * PassThePopcorn  [![(invite needed)][inviteneeded]](#)
  * PirateTheNet
@@ -136,14 +134,12 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD
  * PTFiles
  * QcTorrent
- * RapideTracker
  * Redacted (PassTheHeadphones)
  * RevolutionTT
  * Rockhard Lossless
  * RoDVD
  * RuTracker
  * SceneAccess
- * SceneFZ
  * SceneTime
  * SDBits
  * Secret Cinema
@@ -170,7 +166,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrenting
  * TorrentLeech
  * Torrents.Md
- * TorrentShack
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
