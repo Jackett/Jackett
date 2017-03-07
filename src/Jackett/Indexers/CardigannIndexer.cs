@@ -192,6 +192,7 @@ namespace Jackett.Indexers
             public List<searchPathBlock> Paths { get; set; }
             public List<filterBlock> Keywordsfilters { get; set; }
             public Dictionary<string, string> Inputs { get; set; }
+            public List<errorBlock> Error { get; set; }
             public rowsBlock Rows { get; set; }
             public KeyValuePairList Fields { get; set; }
         }
@@ -494,26 +495,24 @@ namespace Jackett.Indexers
             return template;
         }
 
-        protected bool checkForLoginError(WebClientStringResult loginResult)
+        protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
-            var ErrorBlocks = Definition.Login.Error;
-
-            if (ErrorBlocks == null)
+            if (errorBlocks == null)
                 return true; // no error
 
-                var loginResultParser = new HtmlParser();
-            var loginResultDocument = loginResultParser.Parse(loginResult.Content);
-            foreach (errorBlock error in ErrorBlocks)
+            var ResultParser = new HtmlParser();
+            var ResultDocument = ResultParser.Parse(loginResult.Content);
+            foreach (errorBlock error in errorBlocks)
             {
-                var selection = loginResultDocument.QuerySelector(error.Selector);
+                var selection = ResultDocument.QuerySelector(error.Selector);
                 if (selection != null)
                 {
                     string errorMessage = selection.TextContent;
                     if (error.Message != null)
                     {
-                        errorMessage = handleSelector(error.Message, loginResultDocument.FirstElementChild);
+                        errorMessage = handleSelector(error.Message, ResultDocument.FirstElementChild);
                     }
-                    throw new ExceptionWithConfigData(string.Format("Login failed: {0}", errorMessage.Trim()), configData);
+                    throw new ExceptionWithConfigData(string.Format("Error: {0}", errorMessage.Trim()), configData);
                 }
             }
             return true; // no error
@@ -540,7 +539,7 @@ namespace Jackett.Indexers
                 var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                checkForLoginError(loginResult);
+                checkForError(loginResult, Definition.Login.Error);
             }
             else if (Login.Method == "form")
             {
@@ -750,7 +749,7 @@ namespace Jackett.Indexers
 
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                checkForLoginError(loginResult);
+                checkForError(loginResult, Definition.Login.Error);
             }
             else if (Login.Method == "cookie")
             {
@@ -770,7 +769,7 @@ namespace Jackett.Indexers
                 var loginResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                checkForLoginError(loginResult);
+                checkForError(loginResult, Definition.Login.Error);
             }
             else
             {
@@ -1205,9 +1204,11 @@ namespace Jackett.Indexers
                             throw new Exception(string.Format("Relogin failed"));
                         await TestLogin();
                         response = await RequestStringWithCookies(searchUrl);
-                        results = results = response.Content;
+                        results = response.Content;
                         SearchResultDocument = SearchResultParser.Parse(results);
                     }
+
+                    checkForError(response, Definition.Search.Error);
 
                     var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
                     List<IElement> Rows = new List<IElement>();
