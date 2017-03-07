@@ -65,6 +65,7 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
+      searchin: "title"
       incldead: "1"
     rows:
       selector: tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
