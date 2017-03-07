@@ -8,58 +8,58 @@
     - https://nwtracker.com/
 
   caps:
-    categories:
-      75: Movies/3D # Filme - 3D
-      34: Movies # Filme - Xvid / x264
-      55: Movies/BluRay # Filme - Blu-Ray
-      20: Movies/DVD # Filme - DVD-R
-      71: Movies/HD # Filme - HD 1080p
-      70: Movies/HD # Filme - HD 720p
-      35: Movies/Foreign # Filme - Inter
-      104: Movies/HD # Filme - UHD
-      107: Movies/Other # Filme - Remux
-      7: TV/SD # Serien - Xvid / x264
-      72: TV/HD # Serien - HD
-      82: TV/Foreign # Serien - Inter
-      69: TV # Serien - Pack's
-      42: TV # Serien - TV Show
-      105: TV/HD # Serien - UHD
-      51: XXX # XXX - Xvid / x264
-      73: XXX # XXX - HD
-      84: XXX # XXX - Pack's
-      85: XXX # XXX - Sonstiges
-      102: XXX # XXX - Hentai
-      103: XXX # XXX - UHD
-      6: Audio/MP3 # Audio - MP3
-      74: Audio/Lossless # Audio - Flac
-      86: Audio/Video # Audio - Videos
-      24: Audio/Audiobook # Audio - Hörspiel/Hörbuch
-      93: PC/Mac # Appz - Mac
-      67: PC/0day # Appz - Windows
-      31: PC/Phone-Other # Appz - Handy
-      81: PC # Appz - Sonstiges
-      25: TV/Documentary # Dokus - Xvid / x264
-      76: TV/Documentary # Dokus - HD
-      99: TV/Documentary # Dokus - Pack's
-      100: TV/Documentary # Dokus - 3D
-      106: TV/Documentary # Dokus - UHD
-      90: Console/PS3 # Games - PSX
-      56: Console/Wii # Games - WII
-      43: Console/Xbox # Games - XboX
-      4: PC/Games # Games - PC
-      88: Console/NDS # Games - xDS
-      91: PC/Mac # Games - Mac
-      92: Console # Games - Sonstiges
-      23: TV/Anime # Anime - Xvid / x264
-      80: TV/Anime # Anime - HD
-      98: TV/Anime # Anime - Serien
-      94: Books/Magazines # eBooks - Magazine/Zeitungen
-      95: Books/Comics # eBooks - Comics
-      30: Books # eBooks - Bücher
-      96: TV/Sport # Sport - Wrestling
-      97: TV/Sport # Sport - Fussball
-      45: TV/Sport # Sport - Sonstiges
-      9: Other # Diverses - Sonstiges
+    categorymappings:
+      - {id: 75, cat: Movies/3D, desc: "Filme - 3D"}
+      - {id: 34, cat: Movies, desc: "Filme - Xvid / x264"}
+      - {id: 55, cat: Movies/BluRay, desc: "Filme - Blu-Ray"}
+      - {id: 20, cat: Movies/DVD, desc: "Filme - DVD-R"}
+      - {id: 71, cat: Movies/HD, desc: "Filme - HD 1080p"}
+      - {id: 70, cat: Movies/HD, desc: "Filme - HD 720p"}
+      - {id: 35, cat: Movies/Foreign, desc: "Filme - Inter"}
+      - {id: 104, cat: Movies/HD, desc: "Filme - UHD"}
+      - {id: 107, cat: Movies/Other, desc: "Filme - Remux"}
+      - {id: 7, cat: TV/SD, desc: "Serien - Xvid / x264"}
+      - {id: 72, cat: TV/HD, desc: "Serien - HD"}
+      - {id: 82, cat: TV/Foreign, desc: "Serien - Inter"}
+      - {id: 69, cat: TV, desc: "Serien - Pack's"}
+      - {id: 42, cat: TV, desc: "Serien - TV Show"}
+      - {id: 105, cat: TV/HD, desc: "Serien - UHD"}
+      - {id: 51, cat: XXX, desc: "XXX - Xvid / x264"}
+      - {id: 73, cat: XXX, desc: "XXX - HD"}
+      - {id: 84, cat: XXX, desc: "XXX - Pack's"}
+      - {id: 85, cat: XXX, desc: "XXX - Sonstiges"}
+      - {id: 102, cat: XXX, desc: "XXX - Hentai"}
+      - {id: 103, cat: XXX, desc: "XXX - UHD"}
+      - {id: 6, cat: Audio/MP3, desc: "Audio - MP3"}
+      - {id: 74, cat: Audio/Lossless, desc: "Audio - Flac"}
+      - {id: 86, cat: Audio/Video, desc: "Audio - Videos"}
+      - {id: 24, cat: Audio/Audiobook, desc: "Audio - Hörspiel/Hörbuch"}
+      - {id: 93, cat: PC/Mac, desc: "Appz - Mac"}
+      - {id: 67, cat: PC/0day, desc: "Appz - Windows"}
+      - {id: 31, cat: PC/Phone-Other, desc: "Appz - Handy"}
+      - {id: 81, cat: PC, desc: "Appz - Sonstiges"}
+      - {id: 25, cat: TV/Documentary, desc: "Dokus - Xvid / x264"}
+      - {id: 76, cat: TV/Documentary, desc: "Dokus - HD"}
+      - {id: 99, cat: TV/Documentary, desc: "Dokus - Pack's"}
+      - {id: 100, cat: TV/Documentary, desc: "Dokus - 3D"}
+      - {id: 106, cat: TV/Documentary, desc: "Dokus - UHD"}
+      - {id: 90, cat: Console/PS3, desc: "Games - PSX"}
+      - {id: 56, cat: Console/Wii, desc: "Games - WII"}
+      - {id: 43, cat: Console/Xbox, desc: "Games - XboX"}
+      - {id: 4, cat: PC/Games, desc: "Games - PC"}
+      - {id: 88, cat: Console/NDS, desc: "Games - xDS"}
+      - {id: 91, cat: PC/Mac, desc: "Games - Mac"}
+      - {id: 92, cat: Console, desc: "Games - Sonstiges"}
+      - {id: 23, cat: TV/Anime, desc: "Anime - Xvid / x264"}
+      - {id: 80, cat: TV/Anime, desc: "Anime - HD"}
+      - {id: 98, cat: TV/Anime, desc: "Anime - Serien"}
+      - {id: 94, cat: Books/Magazines, desc: "eBooks - Magazine/Zeitungen"}
+      - {id: 95, cat: Books/Comics, desc: "eBooks - Comics"}
+      - {id: 30, cat: Books, desc: "eBooks - Bücher"}
+      - {id: 96, cat: TV/Sport, desc: "Sport - Wrestling"}
+      - {id: 97, cat: TV/Sport, desc: "Sport - Fussball"}
+      - {id: 45, cat: TV/Sport, desc: "Sport - Sonstiges"}
+      - {id: 9, cat: Other, desc: "Diverses - Sonstiges"}
 
     modes:
       search: [q]

@@ -9,50 +9,50 @@
     - https://blu-bits.com/
 
   caps:
-    categories:
+    categorymappings:
       # Movies
-      14: Movies/BluRay # Full Blu-ray
-      54: Movies/HD # HD-DVD
-      16: Movies/HD # Remux
-      55: Movies/HD # 2160p
-      15: Movies/HD # 1080p
-      19: Movies/HD # 1080i
-      18: Movies/HD # 720p
+      - {id: 14, cat: Movies/BluRay, desc: "Full Blu-ray"}
+      - {id: 54, cat: Movies/HD, desc: "HD-DVD"}
+      - {id: 16, cat: Movies/HD, desc: "Remux"}
+      - {id: 55, cat: Movies/HD, desc: "2160p"}
+      - {id: 15, cat: Movies/HD, desc: "1080p"}
+      - {id: 19, cat: Movies/HD, desc: "1080i"}
+      - {id: 18, cat: Movies/HD, desc: "720p"}
 
       # Documentaries
-      21: Movies/BluRay # Full Blu-ray
-      39: Movies/HD # Remux
-      56: Movies/HD # 2160p
-      23: Movies/HD # 1080p
-      24: Movies/HD # 1080i
-      25: Movies/HD # 720p
+      - {id: 21, cat: Movies/BluRay, desc: "Full Blu-ray"}
+      - {id: 39, cat: Movies/HD, desc: "Remux"}
+      - {id: 56, cat: Movies/HD, desc: "2160p"}
+      - {id: 23, cat: Movies/HD, desc: "1080p"}
+      - {id: 24, cat: Movies/HD, desc: "1080i"}
+      - {id: 25, cat: Movies/HD, desc: "720p"}
 
       # TV Series
-      27: TV/HD # Full Blu-ray
-      40: TV/HD # Remux
-      28: TV/HD # 1080p
-      29: TV/HD # 1080i
-      30: TV/HD # 720p
+      - {id: 27, cat: TV/HD, desc: "Full Blu-ray"}
+      - {id: 40, cat: TV/HD, desc: "Remux"}
+      - {id: 28, cat: TV/HD, desc: "1080p"}
+      - {id: 29, cat: TV/HD, desc: "1080i"}
+      - {id: 30, cat: TV/HD, desc: "720p"}
 
       # HDTV
-      35: TV/HD # 1080i
-      36: TV/HD # 720p
+      - {id: 35, cat: TV/HD, desc: "1080i"}
+      - {id: 36, cat: TV/HD, desc: "720p"}
 
       # XXX
-      59: XXX # Full Blu-ray
-      46: XXX # 1080p
-      51: XXX # 720p
+      - {id: 59, cat: XXX, desc: "Full Blu-ray"}
+      - {id: 46, cat: XXX, desc: "1080p"}
+      - {id: 51, cat: XXX, desc: "720p"}
 
       # Music
-      53: Audio/Video # Full Blu-ray
-      57: Audio/Video # Remux
-      45: Audio/Video # 1080p
-      58: Audio/Video # 720p
-      38: Audio/Lossless # Flac
+      - {id: 53, cat: Audio/Video, desc: "Full Blu-ray"}
+      - {id: 57, cat: Audio/Video, desc: "Remux"}
+      - {id: 45, cat: Audio/Video, desc: "1080p"}
+      - {id: 58, cat: Audio/Video, desc: "720p"}
+      - {id: 38, cat: Audio/Lossless, desc: "Flac"}
 
-      41: TV/Sport # Sports
-      42: TV/Anime # Anime
-      44: PC # Windows Apps
+      - {id: 41, cat: TV/Sport, desc: "Sports"}
+      - {id: 42, cat: TV/Anime, desc: "Anime"}
+      - {id: 44, cat: PC, desc: "Windows Apps"}
 
     modes:
       search: [q]

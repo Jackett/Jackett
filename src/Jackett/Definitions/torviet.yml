@@ -8,39 +8,39 @@
     - http://torviet.com
 
   caps:
-    categories:
-      1: Console # Game
-      7: PC/Games # PC
-      133: PC/Phone-Other # Handheld
-      132: Console # Console
+    categorymappings:
+      - {id: 1, cat: Console, desc: "Game"}
+      - {id: 7, cat: PC/Games, desc: "PC"}
+      - {id: 133, cat: PC/Phone-Other, desc: "Handheld"}
+      - {id: 132, cat: Console, desc: "Console"}
 
-      2: Movies # Movie
-      23: Movies/HD # mHD
-      24: Movies/SD # SD
-      124: Movies/HD # 720p
-      125: Movies/HD # 1080p
-      127: Movies/BluRay # Blu-ray
+      - {id: 2, cat: Movies, desc: "Movie"}
+      - {id: 23, cat: Movies/HD, desc: "mHD"}
+      - {id: 24, cat: Movies/SD, desc: "SD"}
+      - {id: 124, cat: Movies/HD, desc: "720p"}
+      - {id: 125, cat: Movies/HD, desc: "1080p"}
+      - {id: 127, cat: Movies/BluRay, desc: "Blu-ray"}
 
-      3: TV # TV
-      128: TV/HD # HD
-      129: TV/SD # SD
+      - {id: 3, cat: TV, desc: "TV"}
+      - {id: 128, cat: TV/HD, desc: "HD"}
+      - {id: 129, cat: TV/SD, desc: "SD"}
 
-      4: PC # Software
-      76: PC/0day # Windows
-      77: PC/Mac # MAC
-      78: PC # Linux
-      79: PC/Phone-Other # Handheld
+      - {id: 4, cat: PC, desc: "Software"}
+      - {id: 76, cat: PC/0day, desc: "Windows"}
+      - {id: 77, cat: PC/Mac, desc: "MAC"}
+      - {id: 78, cat: PC, desc: "Linux"}
+      - {id: 79, cat: PC/Phone-Other, desc: "Handheld"}
 
-      5: Audio # Music
-      92: Audio/Video # Music Video
-      126: Audio/Lossless # Lossless
-      130: Audio/MP3 # Lossy
-      131: Audio # Surround
+      - {id: 5, cat: Audio, desc: "Music"}
+      - {id: 92, cat: Audio/Video, desc: "Music Video"}
+      - {id: 126, cat: Audio/Lossless, desc: "Lossless"}
+      - {id: 130, cat: Audio/MP3, desc: "Lossy"}
+      - {id: 131, cat: Audio, desc: "Surround"}
 
-      6: Other # Misc
-      112: Books # Ebook
-      113: Other # Training Video
-      117: Audio/Audiobook # Audio book
+      - {id: 6, cat: Other, desc: "Misc"}
+      - {id: 112, cat: Books, desc: "Ebook"}
+      - {id: 113, cat: Other, desc: "Training Video"}
+      - {id: 117, cat: Audio/Audiobook, desc: "Audio book"}
 
     modes:
       search: [q]

@@ -8,29 +8,29 @@
     - http://estone.cc/
 
   caps:
-    categories:
-      24: Movies/SD # Film/XviD/Hun
-      38: Movies/SD # Film/XviD/Eng
-      51: Movies/SD # Film/SD/Hun
-      52: Movies/SD # Film/SD/Eng
-      25: Movies/DVD # Film/DVD/Hun
-      26: Movies/DVD # Film/DVD/Eng
-      42: Movies/HD # Film/HD/Hun
-      50: Movies/HD # Film/HD/Eng
-      36: TV # Sorozat/Hun
-      47: TV # Sorozat/Eng
-      41: Audio/MP3 # Mp3/Hun
-      40: Audio/MP3 # Mp3/Eng
-      35: PC/0day # Program
-      28: PC/Games # Játék/ISO
-      30: PC/Games # Játék/Rip
-      32: Console # Konzol
-      34: PC/Phone-Other # Mobil
-      44: Books # Könyv/Hun
-      33: Books # Könyv/Eng
-      31: Other # Képek
-      39: XXX # XXX/Film
-      49: XXX/Imageset # XXX/Kép
+    categorymappings:
+      - {id: 24, cat: Movies/SD, desc: "Film/XviD/Hun"}
+      - {id: 38, cat: Movies/SD, desc: "Film/XviD/Eng"}
+      - {id: 51, cat: Movies/SD, desc: "Film/SD/Hun"}
+      - {id: 52, cat: Movies/SD, desc: "Film/SD/Eng"}
+      - {id: 25, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+      - {id: 26, cat: Movies/DVD, desc: "Film/DVD/Eng"}
+      - {id: 42, cat: Movies/HD, desc: "Film/HD/Hun"}
+      - {id: 50, cat: Movies/HD, desc: "Film/HD/Eng"}
+      - {id: 36, cat: TV, desc: "Sorozat/Hun"}
+      - {id: 47, cat: TV, desc: "Sorozat/Eng"}
+      - {id: 41, cat: Audio/MP3, desc: "Mp3/Hun"}
+      - {id: 40, cat: Audio/MP3, desc: "Mp3/Eng"}
+      - {id: 35, cat: PC/0day, desc: "Program"}
+      - {id: 28, cat: PC/Games, desc: "Játék/ISO"}
+      - {id: 30, cat: PC/Games, desc: "Játék/Rip"}
+      - {id: 32, cat: Console, desc: "Konzol"}
+      - {id: 34, cat: PC/Phone-Other, desc: "Mobil"}
+      - {id: 44, cat: Books, desc: "Könyv/Hun"}
+      - {id: 33, cat: Books, desc: "Könyv/Eng"}
+      - {id: 31, cat: Other, desc: "Képek"}
+      - {id: 39, cat: XXX, desc: "XXX/Film"}
+      - {id: 49, cat: XXX/Imageset, desc: "XXX/Kép"}
 
     modes:
       search: [q]

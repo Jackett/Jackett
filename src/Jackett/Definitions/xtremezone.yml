@@ -8,39 +8,39 @@
     - https://www.myxz.org/
 
   caps:
-    categories:
-      3: TV/Anime # Anime/Hentai
-      1: PC/0day # Appz
-      9: TV/Documentary # Documentary
-      6: Books # eBooks
-      52: Console # Games-Console
-      11: PC/Games # Games-PC
-      18: Other # Images
-      14: PC # Linux
-      37: PC/Mac # Mac
-      19: PC/Phone-Other # Mobile
-      17: Movies/BluRay # Movies-BluRay
-      24: Movies/BluRay # Movies-BluRayRO
-      7: Movies/DVD # Movies-DVD
-      2: Movies/DVD # Movies-DVD-RO
-      8: Movies/HD # Movies-HD
-      29: Movies/HD # Movies-HD-RO
-      38: Movies # Movies-Packs
-      10: Movies/SD # Movies-SD
-      35: Movies/SD # Movies-SD-RO
-      5: Audio # Music
-      22: TV/Sport # Sport
-      43: TV/HD # TV-HD
-      44: TV/HD # TV-HD-RO
-      41: TV # TV-Packs
-      45: TV/SD # TV-SD
-      46: TV/SD # TV-SD-RO
-      15: XXX # XXX
-      47: XXX # XXX-DVD
-      48: XXX # XXX-HD
-      49: XXX/Imageset # XXX-IMGSet
-      50: XXX # XXX-Packs
-      51: XXX # XXX-SD
+    categorymappings:
+      - {id: 3, cat: TV/Anime, desc: "Anime/Hentai"}
+      - {id: 1, cat: PC/0day, desc: "Appz"}
+      - {id: 9, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 6, cat: Books, desc: "eBooks"}
+      - {id: 52, cat: Console, desc: "Games-Console"}
+      - {id: 11, cat: PC/Games, desc: "Games-PC"}
+      - {id: 18, cat: Other, desc: "Images"}
+      - {id: 14, cat: PC, desc: "Linux"}
+      - {id: 37, cat: PC/Mac, desc: "Mac"}
+      - {id: 19, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 17, cat: Movies/BluRay, desc: "Movies-BluRay"}
+      - {id: 24, cat: Movies/BluRay, desc: "Movies-BluRayRO"}
+      - {id: 7, cat: Movies/DVD, desc: "Movies-DVD"}
+      - {id: 2, cat: Movies/DVD, desc: "Movies-DVD-RO"}
+      - {id: 8, cat: Movies/HD, desc: "Movies-HD"}
+      - {id: 29, cat: Movies/HD, desc: "Movies-HD-RO"}
+      - {id: 38, cat: Movies, desc: "Movies-Packs"}
+      - {id: 10, cat: Movies/SD, desc: "Movies-SD"}
+      - {id: 35, cat: Movies/SD, desc: "Movies-SD-RO"}
+      - {id: 5, cat: Audio, desc: "Music"}
+      - {id: 22, cat: TV/Sport, desc: "Sport"}
+      - {id: 43, cat: TV/HD, desc: "TV-HD"}
+      - {id: 44, cat: TV/HD, desc: "TV-HD-RO"}
+      - {id: 41, cat: TV, desc: "TV-Packs"}
+      - {id: 45, cat: TV/SD, desc: "TV-SD"}
+      - {id: 46, cat: TV/SD, desc: "TV-SD-RO"}
+      - {id: 15, cat: XXX, desc: "XXX"}
+      - {id: 47, cat: XXX, desc: "XXX-DVD"}
+      - {id: 48, cat: XXX, desc: "XXX-HD"}
+      - {id: 49, cat: XXX/Imageset, desc: "XXX-IMGSet"}
+      - {id: 50, cat: XXX, desc: "XXX-Packs"}
+      - {id: 51, cat: XXX, desc: "XXX-SD"}
 
     modes:
       search: [q]

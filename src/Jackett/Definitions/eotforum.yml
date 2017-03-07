@@ -9,70 +9,70 @@
     - http://eot-forum.net
 
   caps:
-    categories:
+    categorymappings:
       # Filme
-      14: Movies/SD # SD XviD
-      15: Movies/SD # SD x264
-      16: Movies/HD # HD
-      68: Movies/HD # UHD
-      17: Movies/3D # 3D
-      18: Movies/DVD # DVD-R
-      19: Movies # Pack
-      20: Movies # International
-      21: XXX # XXX
+      - {id: 14, cat: Movies/SD, desc: "SD XviD"}
+      - {id: 15, cat: Movies/SD, desc: "SD x264"}
+      - {id: 16, cat: Movies/HD, desc: "HD"}
+      - {id: 68, cat: Movies/HD, desc: "UHD"}
+      - {id: 17, cat: Movies/3D, desc: "3D"}
+      - {id: 18, cat: Movies/DVD, desc: "DVD-R"}
+      - {id: 19, cat: Movies, desc: "Pack"}
+      - {id: 20, cat: Movies, desc: "International"}
+      - {id: 21, cat: XXX, desc: "XXX"}
 
       # Serien/TV
-      23: TV/SD # SD XviD
-      24: TV/SD # SD x264
-      25: TV/HD # HD
-      26: TV/SD # DVD-R
-      27: TV # Pack
-      28: TV # International
-      29: TV/Sport # Sport
+      - {id: 23, cat: TV/SD, desc: "SD XviD"}
+      - {id: 24, cat: TV/SD, desc: "SD x264"}
+      - {id: 25, cat: TV/HD, desc: "HD"}
+      - {id: 26, cat: TV/SD, desc: "DVD-R"}
+      - {id: 27, cat: TV, desc: "Pack"}
+      - {id: 28, cat: TV, desc: "International"}
+      - {id: 29, cat: TV/Sport, desc: "Sport"}
 
       # Dokus
-      31: TV/Documentary # SD XviD
-      32: TV/Documentary # SD x264
-      33: TV/Documentary # HD
-      34: TV/Documentary # 3D
-      35: TV/Documentary # Pack
-      67: TV/Documentary # DVD-R
-      36: TV/Documentary # International
+      - {id: 31, cat: TV/Documentary, desc: "SD XviD"}
+      - {id: 32, cat: TV/Documentary, desc: "SD x264"}
+      - {id: 33, cat: TV/Documentary, desc: "HD"}
+      - {id: 34, cat: TV/Documentary, desc: "3D"}
+      - {id: 35, cat: TV/Documentary, desc: "Pack"}
+      - {id: 67, cat: TV/Documentary, desc: "DVD-R"}
+      - {id: 36, cat: TV/Documentary, desc: "International"}
 
       # Audio
-      38: Audio # Charts
-      39: Audio/MP3 # MP3
-      40: Audio/Lossless # Flac
-      41: Audio # Pack
-      42: Audio/Video # MusikVideo
-      43: Audio/Audiobook # Hörbücher
+      - {id: 38, cat: Audio, desc: "Charts"}
+      - {id: 39, cat: Audio/MP3, desc: "MP3"}
+      - {id: 40, cat: Audio/Lossless, desc: "Flac"}
+      - {id: 41, cat: Audio, desc: "Pack"}
+      - {id: 42, cat: Audio/Video, desc: "MusikVideo"}
+      - {id: 43, cat: Audio/Audiobook, desc: "Hörbücher"}
 
       # Spiele
-      45: PC/Games # Windows
-      46: PC/Mac # MacOS
-      47: Console/PS4 # Sony PS
-      48: Console/Xbox  # Microsoft XBox
-      49: Console/NDS # Nintendo
-      50: PC/Games # Linux
-      51: Console # Andere
+      - {id: 45, cat: PC/Games, desc: "Windows"}
+      - {id: 46, cat: PC/Mac, desc: "MacOS"}
+      - {id: 47, cat: Console/PS4, desc: "Sony PS"}
+      - {id: 48, cat: Console/Xbox , desc: "Microsoft XBox"}
+      - {id: 49, cat: Console/NDS, desc: "Nintendo"}
+      - {id: 50, cat: PC/Games, desc: "Linux"}
+      - {id: 51, cat: Console, desc: "Andere"}
 
       # Software
-      53: PC # Windows
-      54: PC/Mac # MacOS
-      55: PC # Linux
-      56: PC/Phone-Android # Android
-      57: PC/Phone-IOS # Apple IOS
-      58: PC/Phone-Other # Andere
+      - {id: 53, cat: PC, desc: "Windows"}
+      - {id: 54, cat: PC/Mac, desc: "MacOS"}
+      - {id: 55, cat: PC, desc: "Linux"}
+      - {id: 56, cat: PC/Phone-Android, desc: "Android"}
+      - {id: 57, cat: PC/Phone-IOS, desc: "Apple IOS"}
+      - {id: 58, cat: PC/Phone-Other, desc: "Andere"}
 
       # Sonstiges
-      60: Books # EBooks
-      61: Other # Bilder
-      62: TV/Anime # Anime
-      63: Other # MISC
-      64: XXX # XXX-Bilder/EBooks/Audio
+      - {id: 60, cat: Books, desc: "EBooks"}
+      - {id: 61, cat: Other, desc: "Bilder"}
+      - {id: 62, cat: TV/Anime, desc: "Anime"}
+      - {id: 63, cat: Other, desc: "MISC"}
+      - {id: 64, cat: XXX, desc: "XXX-Bilder/EBooks/Audio"}
 
       # EOT-Specials
-      66: Other # Special
+      - {id: 66, cat: Other, desc: "Special"}
 
     modes:
       search: [q]

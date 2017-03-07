@@ -9,71 +9,71 @@
     - https://theshinning.org
 
   caps:
-    categories:
+    categorymappings:
       # Filme
-      28: Movies/SD # HORROR
-      25: Movies/DVD # SD|DVD
-      99: Movies/SD # SD|SPORT
-      24: Movies/SD # SD|x264
-      22: Movies/SD # SD|XVID
-      26: XXX # SD|XxX
+      - {id: 28, cat: Movies/SD, desc: "HORROR"}
+      - {id: 25, cat: Movies/DVD, desc: "SD|DVD"}
+      - {id: 99, cat: Movies/SD, desc: "SD|SPORT"}
+      - {id: 24, cat: Movies/SD, desc: "SD|x264"}
+      - {id: 22, cat: Movies/SD, desc: "SD|XVID"}
+      - {id: 26, cat: XXX, desc: "SD|XxX"}
 
       # High Definition
-      29: Movies/BluRay # BLURAY
-      19: Movies/HD # HD|1080p
-      21: Movies/3D # HD|3D
-      107: Movies/HD # HD|4K
-      20: Movies/HD # HD|720p
-      101: Movies/HD # HD|REMUX
-      100: Movies/HD # HD|SPORT
-      27: XXX # HD|XxX
-      102: Movies/HD # SMALL|HD
+      - {id: 29, cat: Movies/BluRay, desc: "BLURAY"}
+      - {id: 19, cat: Movies/HD, desc: "HD|1080p"}
+      - {id: 21, cat: Movies/3D, desc: "HD|3D"}
+      - {id: 107, cat: Movies/HD, desc: "HD|4K"}
+      - {id: 20, cat: Movies/HD, desc: "HD|720p"}
+      - {id: 101, cat: Movies/HD, desc: "HD|REMUX"}
+      - {id: 100, cat: Movies/HD, desc: "HD|SPORT"}
+      - {id: 27, cat: XXX, desc: "HD|XxX"}
+      - {id: 102, cat: Movies/HD, desc: "SMALL|HD"}
 
       # Musik
-      13: Audio # CHARTS
-      31: Audio/Lossless # FLAC
-      97: Audio/Audiobook # HOERSPIELE
-      30: Audio/MP3 # MP3
-      106: Audio # SAMPLER
+      - {id: 13, cat: Audio, desc: "CHARTS"}
+      - {id: 31, cat: Audio/Lossless, desc: "FLAC"}
+      - {id: 97, cat: Audio/Audiobook, desc: "HOERSPIELE"}
+      - {id: 30, cat: Audio/MP3, desc: "MP3"}
+      - {id: 106, cat: Audio, desc: "SAMPLER"}
 
       # Releaser
-      18: Movies # CR3WHD
-      16: Movies # ONKEL JENS
-      17: Movies # xTM|XviD
+      - {id: 18, cat: Movies, desc: "CR3WHD"}
+      - {id: 16, cat: Movies, desc: "ONKEL JENS"}
+      - {id: 17, cat: Movies, desc: "xTM|XviD"}
 
       # Serie
-      11: TV/SD # DVD|SERIEN
-      9: TV/HD # HD|SERIEN
-      32: TV # MIXED|SERIEN
-      10: TV # PACK|SERIEN
-      8: TV/SD # SD|SERIEN
-      105: TV # SMALL|SERIE
-      12: TV # US|SERIEN
+      - {id: 11, cat: TV/SD, desc: "DVD|SERIEN"}
+      - {id: 9, cat: TV/HD, desc: "HD|SERIEN"}
+      - {id: 32, cat: TV, desc: "MIXED|SERIEN"}
+      - {id: 10, cat: TV, desc: "PACK|SERIEN"}
+      - {id: 8, cat: TV/SD, desc: "SD|SERIEN"}
+      - {id: 105, cat: TV, desc: "SMALL|SERIE"}
+      - {id: 12, cat: TV, desc: "US|SERIEN"}
 
       # Sonstige
-      98: PC # APPS
-      90: TV/Documentary # DOKUS
-      91: Books # EBOOKS
-      14: Movies # KINOHITS
-      15: Other # REQUEST
-      23: Other  # SONSTIGES
-      104: XXX/Imageset # XXX|IMAGE
+      - {id: 98, cat: PC, desc: "APPS"}
+      - {id: 90, cat: TV/Documentary, desc: "DOKUS"}
+      - {id: 91, cat: Books, desc: "EBOOKS"}
+      - {id: 14, cat: Movies, desc: "KINOHITS"}
+      - {id: 15, cat: Other, desc: "REQUEST"}
+      - {id: 23, cat: Other , desc: "SONSTIGES"}
+      - {id: 104, cat: XXX/Imageset, desc: "XXX|IMAGE"}
 
       # Spiele
-      96: Console/NDS # GAMES|NDS
-      92: PC/Games # GAMES|PC
-      94: Console/PS4 # GAMES|PS
-      95: Console/Wii # GAMES|WII
-      93: Console/Xbox # GAMES|XBOX
+      - {id: 96, cat: Console/NDS, desc: "GAMES|NDS"}
+      - {id: 92, cat: PC/Games, desc: "GAMES|PC"}
+      - {id: 94, cat: Console/PS4, desc: "GAMES|PS"}
+      - {id: 95, cat: Console/Wii, desc: "GAMES|WII"}
+      - {id: 93, cat: Console/Xbox, desc: "GAMES|XBOX"}
 
       # Wrestling
-      3: TV/Sport # HD|RAW
-      1: TV/Sport # HD|SMACKD
-      6: TV/Sport # NXT
-      7: TV/Sport # PPV
-      4: TV/Sport # SD|RAW
-      2: TV/Sport # SD|SMACKD
-      5: TV/Sport # TNA
+      - {id: 3, cat: TV/Sport, desc: "HD|RAW"}
+      - {id: 1, cat: TV/Sport, desc: "HD|SMACKD"}
+      - {id: 6, cat: TV/Sport, desc: "NXT"}
+      - {id: 7, cat: TV/Sport, desc: "PPV"}
+      - {id: 4, cat: TV/Sport, desc: "SD|RAW"}
+      - {id: 2, cat: TV/Sport, desc: "SD|SMACKD"}
+      - {id: 5, cat: TV/Sport, desc: "TNA"}
 
 
     modes:

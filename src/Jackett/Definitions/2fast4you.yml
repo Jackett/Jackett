@@ -8,73 +8,73 @@
     - http://www.2f4y.me/
 
   caps:
-    categories:
-      10: TV/Anime # Animation: HD720P
-      11: TV/Anime # Animation: HD1080P
-      56: TV/Anime # Animation: DVDRip
-      13: TV/Anime # Animation: DVD
-      18: PC/0day # Applications: PC
-      16: PC/Games # Applications: Jeux
-      19: PC/Phone-Android # Applications: Android
-      38: PC/Phone-IOS # Applications: Mobile Phone
-      17: PC/0day # Applications: Autres
-      67: TV # Autres: Emission TV
-      68: TV/Sport # Autres: Sport
-      40: Other # Autres: Autres
-      14: TV/Documentary # Documentaires: DivX
-      15: TV/Documentary # Documentaires: HD
-      76: TV/Documentary # Documentaires: TVRip
-      62: Audio/Audiobook # E-Books: E-Books Audio
-      50: Books # E-Books: Manuel Français
-      49: Books # E-Books: Manuel Anglais
-      36: Books # E-Books: Livres Français
-      53: Books # E-Books: Livre Anglais
-      52: Books # E-Books: Revue - Journaux
-      51: Books # E-Books: BD
-      66: Movies # Films: VOSTFR
-      71: Movies/WEBDL # Films: WEB-DL
-      65: Movies # Films: VO
-      72: Movies/SD # Films: TVRip/HDTV
-      70: Movies/HD # Films: MHD X265
-      57: Movies/SD # Films: TS/CAM
-      59: Movies # Films: Spectacle
-      55: Movies/HD # Films: MHD 720P
-      54: Movies/HD # Films: MHD 1080P
-      1: Movies/HD # Films: HD720P
-      2: Movies/HD # Films: HD1080P
-      90: Movies/HD # Films: HD X265
-      92: Movies/HD # Films: 4K
-      69: Movies/3D # Films: Film 3D
-      3: Movies/DVD # Films: DVDRIP
-      4: Movies/DVD # Films: DVD5
-      5: Movies/DVD # Films: DVD9
-      91: Movies/HD # Films: RemuX
-      89: Movies/HD # Films: BD/BR Rip
-      88: Movies/BluRay # Films: Full BD/BR
-      77: Other # GPS: Cartes
-      78: Other # GPS: Radars
-      79: TV/Anime # Mangas: HD
-      80: TV/Anime # Mangas: HD VO
-      81: TV/Anime # Mangas: HD VOSTFR
-      82: TV/Anime # Mangas: DVDRIP
-      83: TV/Anime # Mangas: DVDRIP VO
-      84: TV/Anime # Mangas: DVDRIP VOSTFR
-      85: TV/Anime # Mangas: Web-DL
-      86: TV/Anime # Mangas: TV-RIP
-      75: Audio # Musique: Concert TVRip
-      25: Audio/MP3 # Musique: Single MP3
-      24: Audio/Lossless # Musique: Single Flac
-      22: Audio/MP3 # Musique: Album MP3
-      23: Audio/Lossless # Musique: Album Flac
-      64: Audio # Musique: Mégamix Maison
-      58: Audio # Musique: Concert
-      61: TV # Serie TV: Episode VOSTFR
-      63: TV # Serie TV: Episode VO
-      12: TV/Anime # Serie TV: Animation
-      74: TV # Serie TV: TVRip
-      73: TV/WEB-DL # Serie TV: WEB-DL
-      7: TV # Serie TV: Episode FR
-      6: TV # Serie TV: Saison FR
+    categorymappings:
+      - {id: 10, cat: TV/Anime, desc: "Animation: HD720P"}
+      - {id: 11, cat: TV/Anime, desc: "Animation: HD1080P"}
+      - {id: 56, cat: TV/Anime, desc: "Animation: DVDRip"}
+      - {id: 13, cat: TV/Anime, desc: "Animation: DVD"}
+      - {id: 18, cat: PC/0day, desc: "Applications: PC"}
+      - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
+      - {id: 19, cat: PC/Phone-Android, desc: "Applications: Android"}
+      - {id: 38, cat: PC/Phone-IOS, desc: "Applications: Mobile Phone"}
+      - {id: 17, cat: PC/0day, desc: "Applications: Autres"}
+      - {id: 67, cat: TV, desc: "Autres: Emission TV"}
+      - {id: 68, cat: TV/Sport, desc: "Autres: Sport"}
+      - {id: 40, cat: Other, desc: "Autres: Autres"}
+      - {id: 14, cat: TV/Documentary, desc: "Documentaires: DivX"}
+      - {id: 15, cat: TV/Documentary, desc: "Documentaires: HD"}
+      - {id: 76, cat: TV/Documentary, desc: "Documentaires: TVRip"}
+      - {id: 62, cat: Audio/Audiobook, desc: "E-Books: E-Books Audio"}
+      - {id: 50, cat: Books, desc: "E-Books: Manuel Français"}
+      - {id: 49, cat: Books, desc: "E-Books: Manuel Anglais"}
+      - {id: 36, cat: Books, desc: "E-Books: Livres Français"}
+      - {id: 53, cat: Books, desc: "E-Books: Livre Anglais"}
+      - {id: 52, cat: Books, desc: "E-Books: Revue - Journaux"}
+      - {id: 51, cat: Books, desc: "E-Books: BD"}
+      - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
+      - {id: 71, cat: Movies/WEBDL, desc: "Films: WEB-DL"}
+      - {id: 65, cat: Movies, desc: "Films: VO"}
+      - {id: 72, cat: Movies/SD, desc: "Films: TVRip/HDTV"}
+      - {id: 70, cat: Movies/HD, desc: "Films: MHD X265"}
+      - {id: 57, cat: Movies/SD, desc: "Films: TS/CAM"}
+      - {id: 59, cat: Movies, desc: "Films: Spectacle"}
+      - {id: 55, cat: Movies/HD, desc: "Films: MHD 720P"}
+      - {id: 54, cat: Movies/HD, desc: "Films: MHD 1080P"}
+      - {id: 1, cat: Movies/HD, desc: "Films: HD720P"}
+      - {id: 2, cat: Movies/HD, desc: "Films: HD1080P"}
+      - {id: 90, cat: Movies/HD, desc: "Films: HD X265"}
+      - {id: 92, cat: Movies/HD, desc: "Films: 4K"}
+      - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
+      - {id: 3, cat: Movies/DVD, desc: "Films: DVDRIP"}
+      - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
+      - {id: 5, cat: Movies/DVD, desc: "Films: DVD9"}
+      - {id: 91, cat: Movies/HD, desc: "Films: RemuX"}
+      - {id: 89, cat: Movies/HD, desc: "Films: BD/BR Rip"}
+      - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
+      - {id: 77, cat: Other, desc: "GPS: Cartes"}
+      - {id: 78, cat: Other, desc: "GPS: Radars"}
+      - {id: 79, cat: TV/Anime, desc: "Mangas: HD"}
+      - {id: 80, cat: TV/Anime, desc: "Mangas: HD VO"}
+      - {id: 81, cat: TV/Anime, desc: "Mangas: HD VOSTFR"}
+      - {id: 82, cat: TV/Anime, desc: "Mangas: DVDRIP"}
+      - {id: 83, cat: TV/Anime, desc: "Mangas: DVDRIP VO"}
+      - {id: 84, cat: TV/Anime, desc: "Mangas: DVDRIP VOSTFR"}
+      - {id: 85, cat: TV/Anime, desc: "Mangas: Web-DL"}
+      - {id: 86, cat: TV/Anime, desc: "Mangas: TV-RIP"}
+      - {id: 75, cat: Audio, desc: "Musique: Concert TVRip"}
+      - {id: 25, cat: Audio/MP3, desc: "Musique: Single MP3"}
+      - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
+      - {id: 22, cat: Audio/MP3, desc: "Musique: Album MP3"}
+      - {id: 23, cat: Audio/Lossless, desc: "Musique: Album Flac"}
+      - {id: 64, cat: Audio, desc: "Musique: Mégamix Maison"}
+      - {id: 58, cat: Audio, desc: "Musique: Concert"}
+      - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
+      - {id: 63, cat: TV, desc: "Serie TV: Episode VO"}
+      - {id: 12, cat: TV/Anime, desc: "Serie TV: Animation"}
+      - {id: 74, cat: TV, desc: "Serie TV: TVRip"}
+      - {id: 73, cat: TV/WEB-DL, desc: "Serie TV: WEB-DL"}
+      - {id: 7, cat: TV, desc: "Serie TV: Episode FR"}
+      - {id: 6, cat: TV, desc: "Serie TV: Saison FR"}
 
     modes:
       search: [q]

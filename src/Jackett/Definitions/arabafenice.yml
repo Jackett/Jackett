@@ -8,58 +8,58 @@
     - http://www.arabafenice.me/
 
   caps:
-    categories:
+    categorymappings:
       # HRS
-      34: Movies/HD # 1080p HRS x264
-      47: Movies/HD # 2160p 4k UltraHD HRS
-      35: TV # Serie TV HRS
-      36: Movies/SD # DVDRip HRS
-      41: Movies/SD # BDRip 576p HRS
-      39: Movies/HD # 1080p HRS x265 HEVC
+      - {id: 34, cat: Movies/HD, desc: "1080p HRS x264"}
+      - {id: 47, cat: Movies/HD, desc: "2160p 4k UltraHD HRS"}
+      - {id: 35, cat: TV, desc: "Serie TV HRS"}
+      - {id: 36, cat: Movies/SD, desc: "DVDRip HRS"}
+      - {id: 41, cat: Movies/SD, desc: "BDRip 576p HRS"}
+      - {id: 39, cat: Movies/HD, desc: "1080p HRS x265 HEVC"}
 
       # VIDEO
-      1: Movies # News Cinema
-      2: Movies/SD # BD-DVDRip
-      3: Movies/DVD # DVD 5
-      5: Movies/DVD # DVD 9
-      6: Movies/BluRay # BluRay Full
-      4: Movies/HD # 1080p 3D x264
-      7: Movies/HD # 1080p x264
-      46: Movies/HD # 1080p Video Untouch
-      44: Movies/HD # 1080p x265
-      9: TV/Anime # Cartoons
-      8: TV/Anime # 720p x264
-      12: TV # He concluded seasons
-      13: TV # Seasons in Onda
-      14: TV # TV Show
-      42: TV # Serie Tv Sub Ita
-      15: TV/Documentary # documentaries
-      33: TV # mp4
-      40: TV/HD # 2160p 4K UltraHD
-      38: XXX # xXx
-      43: Other # Arabic for social
+      - {id: 1, cat: Movies, desc: "News Cinema"}
+      - {id: 2, cat: Movies/SD, desc: "BD-DVDRip"}
+      - {id: 3, cat: Movies/DVD, desc: "DVD 5"}
+      - {id: 5, cat: Movies/DVD, desc: "DVD 9"}
+      - {id: 6, cat: Movies/BluRay, desc: "BluRay Full"}
+      - {id: 4, cat: Movies/HD, desc: "1080p 3D x264"}
+      - {id: 7, cat: Movies/HD, desc: "1080p x264"}
+      - {id: 46, cat: Movies/HD, desc: "1080p Video Untouch"}
+      - {id: 44, cat: Movies/HD, desc: "1080p x265"}
+      - {id: 9, cat: TV/Anime, desc: "Cartoons"}
+      - {id: 8, cat: TV/Anime, desc: "720p x264"}
+      - {id: 12, cat: TV, desc: "He concluded seasons"}
+      - {id: 13, cat: TV, desc: "Seasons in Onda"}
+      - {id: 14, cat: TV, desc: "TV Show"}
+      - {id: 42, cat: TV, desc: "Serie Tv Sub Ita"}
+      - {id: 15, cat: TV/Documentary, desc: "documentaries"}
+      - {id: 33, cat: TV, desc: "mp4"}
+      - {id: 40, cat: TV/HD, desc: "2160p 4K UltraHD"}
+      - {id: 38, cat: XXX, desc: "xXx"}
+      - {id: 43, cat: Other, desc: "Arabic for social"}
 
       # MUSICA
-      17: Audio # Italian music
-      45: Audio # Discography
-      18: Audio # MusicaInternazionale
-      19: Audio # Compilation
+      - {id: 17, cat: Audio, desc: "Italian music"}
+      - {id: 45, cat: Audio, desc: "Discography"}
+      - {id: 18, cat: Audio, desc: "MusicaInternazionale"}
+      - {id: 19, cat: Audio, desc: "Compilation"}
 
       # PDF
-      21: Books # Ebook
-      22: Books/Comics # Comics
-      23: Books # Newsstand
+      - {id: 21, cat: Books, desc: "Ebook"}
+      - {id: 22, cat: Books/Comics, desc: "Comics"}
+      - {id: 23, cat: Books, desc: "Newsstand"}
 
       # GAMES
-      25: Console/PS4 # Sony Games
-      26: Console/Xbox # XboX Games
-      27: Console/Other # Nintendo Games
-      28: PC/Games # PC Games
+      - {id: 25, cat: Console/PS4, desc: "Sony Games"}
+      - {id: 26, cat: Console/Xbox, desc: "XboX Games"}
+      - {id: 27, cat: Console/Other, desc: "Nintendo Games"}
+      - {id: 28, cat: PC/Games, desc: "PC Games"}
 
       # SOFTWARE
-      30: PC/ISO # Windows APP
-      31: PC/Phone-IOS # Apple APP
-      32: PC/Phone-Android # Android APP
+      - {id: 30, cat: PC/ISO, desc: "Windows APP"}
+      - {id: 31, cat: PC/Phone-IOS, desc: "Apple APP"}
+      - {id: 32, cat: PC/Phone-Android, desc: "Android APP"}
 
     modes:
       search: [q]

@@ -9,63 +9,63 @@
     - https://worldofp2p.net
 
   caps:
-    categories:
-      9: TV/Anime # Anime
-      15: PC/0day # Apps-Linux
-      16: PC/Mac # Apps-Macintosh
-      17: PC/Phone-Other # Apps-Mobile
-      1:  PC/0day # Apps-Windows
-      49: Audio # Audio Tracks
-      51: Audio/Audiobook # AudioBook
-      50: Books # Ebooks
-      23: Console/Other # Games-Mixed
-      32: Console # Games-Packs
-      2: PC/Games # Games-PC
-      12: PC/Games # Games-PC Rips
-      20: Console/Other # Games-PS1
-      8: Console/Other # Games-PS2
-      21: Console/PS3 # Games-PS3
-      22: Console/PS4 # Games-PS4
-      7: Console/PSP # Games-PSP
-      14: Console/Wii # Games-Wii
-      44: Console/Xbox360 # Games-Xbox 360
-      45: Console/Xbox # Games-Xbox One
-      43: Console/Xbox # Gamex-Xbox
-      30: Movies/HD # Movies-1080p
-      56: Movies/HD # Movies-2160p
-      24: Movies/3D # Movies-3D
-      53: Movies/SD # Movies-480p
-      52: Movies/SD # Movies-576p
-      25: Movies/HD # Movies-720p
-      11: Movies/BluRay # Movies-Bluray
-      26: Movies/HD # Movies-BRRip
-      27: Movies/SD # Movies-Camera
-      10: Movies/DVD # Movies-DVDR
-      28: Movies/Other # Movies-Oldies
-      31: Movies/Other # Movies-Packs
-      57: Movies/HD # Movies-Remux
-      33: Movies/Other # Movies-Sport
-      29: Movies/WEBDL # Movies-Web/DL
-      3: Movies/SD # Movies-XviD
-      13: Audio/Lossless # Music-Flac
-      4: Audio/MP3 # Music-MP3
-      18: Audio # Music-Packs
-      19: Audio/Video # Music-Videos
-      37: TV/HD # TV-1080p
-      54: TV/HD # TV-2160p
-      55: TV/SD # TV-480p
-      39: TV/HD # TV-720p
-      38: TV/HD # TV-Bluray
-      35: TV/SD # TV-DVDR
-      36: TV/SD # TV-DVDRip
-      41: TV # TV-Packs
-      42: TV/WEB-DL # TV-Web/DL
-      58: TV/HD # TV-x264
-      5:  TV/SD # TV-XviD
-      46: XXX # xXx-HD
-      47: XXX/Imageset # xXx-Images
-      48: XXX/Packs # xXx-Packs
-      6: XXX/XviD # xXx-XviD
+    categorymappings:
+      - {id: 9, cat: TV/Anime, desc: "Anime"}
+      - {id: 15, cat: PC/0day, desc: "Apps-Linux"}
+      - {id: 16, cat: PC/Mac, desc: "Apps-Macintosh"}
+      - {id: 17, cat: PC/Phone-Other, desc: "Apps-Mobile"}
+      - {id: 1, cat:  PC/0day, desc: "Apps-Windows"}
+      - {id: 49, cat: Audio, desc: "Audio Tracks"}
+      - {id: 51, cat: Audio/Audiobook, desc: "AudioBook"}
+      - {id: 50, cat: Books, desc: "Ebooks"}
+      - {id: 23, cat: Console/Other, desc: "Games-Mixed"}
+      - {id: 32, cat: Console, desc: "Games-Packs"}
+      - {id: 2, cat: PC/Games, desc: "Games-PC"}
+      - {id: 12, cat: PC/Games, desc: "Games-PC Rips"}
+      - {id: 20, cat: Console/Other, desc: "Games-PS1"}
+      - {id: 8, cat: Console/Other, desc: "Games-PS2"}
+      - {id: 21, cat: Console/PS3, desc: "Games-PS3"}
+      - {id: 22, cat: Console/PS4, desc: "Games-PS4"}
+      - {id: 7, cat: Console/PSP, desc: "Games-PSP"}
+      - {id: 14, cat: Console/Wii, desc: "Games-Wii"}
+      - {id: 44, cat: Console/Xbox360, desc: "Games-Xbox 360"}
+      - {id: 45, cat: Console/Xbox, desc: "Games-Xbox One"}
+      - {id: 43, cat: Console/Xbox, desc: "Gamex-Xbox"}
+      - {id: 30, cat: Movies/HD, desc: "Movies-1080p"}
+      - {id: 56, cat: Movies/HD, desc: "Movies-2160p"}
+      - {id: 24, cat: Movies/3D, desc: "Movies-3D"}
+      - {id: 53, cat: Movies/SD, desc: "Movies-480p"}
+      - {id: 52, cat: Movies/SD, desc: "Movies-576p"}
+      - {id: 25, cat: Movies/HD, desc: "Movies-720p"}
+      - {id: 11, cat: Movies/BluRay, desc: "Movies-Bluray"}
+      - {id: 26, cat: Movies/HD, desc: "Movies-BRRip"}
+      - {id: 27, cat: Movies/SD, desc: "Movies-Camera"}
+      - {id: 10, cat: Movies/DVD, desc: "Movies-DVDR"}
+      - {id: 28, cat: Movies/Other, desc: "Movies-Oldies"}
+      - {id: 31, cat: Movies/Other, desc: "Movies-Packs"}
+      - {id: 57, cat: Movies/HD, desc: "Movies-Remux"}
+      - {id: 33, cat: Movies/Other, desc: "Movies-Sport"}
+      - {id: 29, cat: Movies/WEBDL, desc: "Movies-Web/DL"}
+      - {id: 3, cat: Movies/SD, desc: "Movies-XviD"}
+      - {id: 13, cat: Audio/Lossless, desc: "Music-Flac"}
+      - {id: 4, cat: Audio/MP3, desc: "Music-MP3"}
+      - {id: 18, cat: Audio, desc: "Music-Packs"}
+      - {id: 19, cat: Audio/Video, desc: "Music-Videos"}
+      - {id: 37, cat: TV/HD, desc: "TV-1080p"}
+      - {id: 54, cat: TV/HD, desc: "TV-2160p"}
+      - {id: 55, cat: TV/SD, desc: "TV-480p"}
+      - {id: 39, cat: TV/HD, desc: "TV-720p"}
+      - {id: 38, cat: TV/HD, desc: "TV-Bluray"}
+      - {id: 35, cat: TV/SD, desc: "TV-DVDR"}
+      - {id: 36, cat: TV/SD, desc: "TV-DVDRip"}
+      - {id: 41, cat: TV, desc: "TV-Packs"}
+      - {id: 42, cat: TV/WEB-DL, desc: "TV-Web/DL"}
+      - {id: 58, cat: TV/HD, desc: "TV-x264"}
+      - {id: 5, cat:  TV/SD, desc: "TV-XviD"}
+      - {id: 46, cat: XXX, desc: "xXx-HD"}
+      - {id: 47, cat: XXX/Imageset, desc: "xXx-Images"}
+      - {id: 48, cat: XXX/Packs, desc: "xXx-Packs"}
+      - {id: 6, cat: XXX/XviD, desc: "xXx-XviD"}
 
     modes:
       search: [q]

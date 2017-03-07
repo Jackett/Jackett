@@ -8,17 +8,17 @@
     - https://www.myspleen.org
 
   caps:
-    categories:
-      31: TV # Adult Swim
-      30: TV # Animation
-      25: TV # Cartoon Network
-      3: TV # Comedy
-      26: TV # Comedy Central
-      24: TV # MST3K
-      28: TV # MTV
-      29: TV # Nick
-      20: Other # Other
-      32: TV # Star Wars
+    categorymappings:
+      - {id: 31, cat: TV, desc: "Adult Swim"}
+      - {id: 30, cat: TV, desc: "Animation"}
+      - {id: 25, cat: TV, desc: "Cartoon Network"}
+      - {id: 3, cat: TV, desc: "Comedy"}
+      - {id: 26, cat: TV, desc: "Comedy Central"}
+      - {id: 24, cat: TV, desc: "MST3K"}
+      - {id: 28, cat: TV, desc: "MTV"}
+      - {id: 29, cat: TV, desc: "Nick"}
+      - {id: 20, cat: Other, desc: "Other"}
+      - {id: 32, cat: TV, desc: "Star Wars"}
 
     modes:
       search: [q]

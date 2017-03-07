@@ -10,92 +10,92 @@
     - B0238C547A905BFA119C4E8BACCAEACF36491FF6
 
   caps:
-    categories:
-      218: PC/0day # APPLICATION
-      219: PC/Phone-Android # ANDROID
-      221: PC/Phone-IOS # APPLE
-      220: PC/0day # WINDOWS
+    categorymappings:
+      - {id: 218, cat: PC/0day, desc: "APPLICATION"}
+      - {id: 219, cat: PC/Phone-Android, desc: "ANDROID"}
+      - {id: 221, cat: PC/Phone-IOS, desc: "APPLE"}
+      - {id: 220, cat: PC/0day, desc: "WINDOWS"}
 
-      233: Movies/SD # CAM/SCREENER
-      234: Movies/SD # CAM-TS
-      235: Movies/SD # DVD-SCREENER
+      - {id: 233, cat: Movies/SD, desc: "CAM/SCREENER"}
+      - {id: 234, cat: Movies/SD, desc: "CAM-TS"}
+      - {id: 235, cat: Movies/SD, desc: "DVD-SCREENER"}
 
-      222: TV/Anime # DESSINS ANIMES
-      260: TV/Anime # ANIMATION
-      225: TV/Anime # JAP-ANIM
-      226: TV/Anime # SERIE-ANIME
+      - {id: 222, cat: TV/Anime, desc: "DESSINS ANIMES"}
+      - {id: 260, cat: TV/Anime, desc: "ANIMATION"}
+      - {id: 225, cat: TV/Anime, desc: "JAP-ANIM"}
+      - {id: 226, cat: TV/Anime, desc: "SERIE-ANIME"}
 
-      206: Books # E-BOOK
-      240: Books # AUDIO
-      239: Books # BD
-      241: Books # LIVRE
-      208: Books # MANGA
-      209: Books # PRESSE
-      207: XXX # XXX
+      - {id: 206, cat: Books, desc: "E-BOOK"}
+      - {id: 240, cat: Books, desc: "AUDIO"}
+      - {id: 239, cat: Books, desc: "BD"}
+      - {id: 241, cat: Books, desc: "LIVRE"}
+      - {id: 208, cat: Books, desc: "MANGA"}
+      - {id: 209, cat: Books, desc: "PRESSE"}
+      - {id: 207, cat: XXX, desc: "XXX"}
 
-      213: TV # EMISSIONS TV
-      215: TV/Documentary # DOC
-      214: TV # EMISSIONS
-      216: TV # SPECTACLE
-      217: TV/Sport # SPORT
+      - {id: 213, cat: TV, desc: "EMISSIONS TV"}
+      - {id: 215, cat: TV/Documentary, desc: "DOC"}
+      - {id: 214, cat: TV, desc: "EMISSIONS"}
+      - {id: 216, cat: TV, desc: "SPECTACLE"}
+      - {id: 217, cat: TV/Sport, desc: "SPORT"}
 
-      176: Movies/SD # FILMS
-      178: Movies/SD # BDRIP
-      179: Movies/SD # BRRIP
-      245: Movies/SD # COFFRET FILMS
-      183: Movies/DVD # DVD-R
-      182: Movies/DVD # DVDRIP
-      252: Movies/SD # FILMS-VO
-      246: Movies/SD # FILMS-X265
-      184: Movies/SD # HORREUR
-      199: Movies/SD # RETRO
-      186: Movies/SD # VOSTFR
-      198: Movies/SD # WEB-RiP
+      - {id: 176, cat: Movies/SD, desc: "FILMS"}
+      - {id: 178, cat: Movies/SD, desc: "BDRIP"}
+      - {id: 179, cat: Movies/SD, desc: "BRRIP"}
+      - {id: 245, cat: Movies/SD, desc: "COFFRET FILMS"}
+      - {id: 183, cat: Movies/DVD, desc: "DVD-R"}
+      - {id: 182, cat: Movies/DVD, desc: "DVDRIP"}
+      - {id: 252, cat: Movies/SD, desc: "FILMS-VO"}
+      - {id: 246, cat: Movies/SD, desc: "FILMS-X265"}
+      - {id: 184, cat: Movies/SD, desc: "HORREUR"}
+      - {id: 199, cat: Movies/SD, desc: "RETRO"}
+      - {id: 186, cat: Movies/SD, desc: "VOSTFR"}
+      - {id: 198, cat: Movies/SD, desc: "WEB-RiP"}
 
-      210: XXX # FILMS ADULTE
-      212: XXX #  HENTAI
-      211: XXX # FILMS XXX
+      - {id: 210, cat: XXX, desc: "FILMS ADULTE"}
+      - {id: 212, cat: XXX, desc: " HENTAI"}
+      - {id: 211, cat: XXX, desc: "FILMS XXX"}
 
-      200: Movies/HD # FILMS HD
-      201: Movies/HD # 1080p
-      202: Movies/3D # 3D
-      203: Movies/HD # 720p
-      242: Movies/BluRay # BLURAY
-      204: Movies/HD # HD-RIP
-      238: Movies/HD # M-HD 1080P
-      237: Movies/HD # M-HD 720P
-      255: Movies/HD # REMUX
+      - {id: 200, cat: Movies/HD, desc: "FILMS HD"}
+      - {id: 201, cat: Movies/HD, desc: "1080p"}
+      - {id: 202, cat: Movies/3D, desc: "3D"}
+      - {id: 203, cat: Movies/HD, desc: "720p"}
+      - {id: 242, cat: Movies/BluRay, desc: "BLURAY"}
+      - {id: 204, cat: Movies/HD, desc: "HD-RIP"}
+      - {id: 238, cat: Movies/HD, desc: "M-HD 1080P"}
+      - {id: 237, cat: Movies/HD, desc: "M-HD 720P"}
+      - {id: 255, cat: Movies/HD, desc: "REMUX"}
 
-      191: Console # JEUX
-      192: Console/NDS # DS-3DS
-      193: PC/Games # PC
-      194: Console/PS3 # PS3
-      195: Console/Wii # WII
-      196: Console/Wii # WIIU
-      197: Console/XBox360 # XBox360
+      - {id: 191, cat: Console, desc: "JEUX"}
+      - {id: 192, cat: Console/NDS, desc: "DS-3DS"}
+      - {id: 193, cat: PC/Games, desc: "PC"}
+      - {id: 194, cat: Console/PS3, desc: "PS3"}
+      - {id: 195, cat: Console/Wii, desc: "WII"}
+      - {id: 196, cat: Console/Wii, desc: "WIIU"}
+      - {id: 197, cat: Console/XBox360, desc: "XBox360"}
 
-      187: Audio # MUSIQUE
-      189: Audio # CONCERT
-      190: Audio/Lossless # FLAC
-      188: Audio/MP3 # MP3
+      - {id: 187, cat: Audio, desc: "MUSIQUE"}
+      - {id: 189, cat: Audio, desc: "CONCERT"}
+      - {id: 190, cat: Audio/Lossless, desc: "FLAC"}
+      - {id: 188, cat: Audio/MP3, desc: "MP3"}
 
-      227: TV # SERIE
-      254: TV # SERIE-VO
-      229: TV/HD # TV HD FR
-      230: TV/HD # TV HD VOSTFR
-      249: TV/HD # TV HD VOSTFR X265
-      243: TV # TV PACK FR
-      244: TV # TV PACK VOSTFR
-      231: TV/SD # TV VF
-      232: TV/SD # TV VOSTFR
+      - {id: 227, cat: TV, desc: "SERIE"}
+      - {id: 254, cat: TV, desc: "SERIE-VO"}
+      - {id: 229, cat: TV/HD, desc: "TV HD FR"}
+      - {id: 230, cat: TV/HD, desc: "TV HD VOSTFR"}
+      - {id: 249, cat: TV/HD, desc: "TV HD VOSTFR X265"}
+      - {id: 243, cat: TV, desc: "TV PACK FR"}
+      - {id: 244, cat: TV, desc: "TV PACK VOSTFR"}
+      - {id: 231, cat: TV/SD, desc: "TV VF"}
+      - {id: 232, cat: TV/SD, desc: "TV VOSTFR"}
 
-      236: Other # SOURD & MALENTENDANT
+      - {id: 236, cat: Other, desc: "SOURD & MALENTENDANT"}
 
-      253: Other # TEAM-RDT
-      258: TV/Documentary # DOC RDT
-      257: Movies # FILMS RDT
-      256: TV # SERIE RDT
-      259: XXX # XXX RDT
+      - {id: 253, cat: Other, desc: "TEAM-RDT"}
+      - {id: 258, cat: TV/Documentary, desc: "DOC RDT"}
+      - {id: 257, cat: Movies, desc: "FILMS RDT"}
+      - {id: 256, cat: TV, desc: "SERIE RDT"}
+      - {id: 259, cat: XXX, desc: "XXX RDT"}
 
     modes:
       search: [q]

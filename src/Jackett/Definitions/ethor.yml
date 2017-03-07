@@ -9,31 +9,31 @@
     - https://ethor.net/
 
   caps:
-    categories:
-      22: PC # Applications/Divers
-      1: PC # Applications/PC ISO
-      44: PC # Applications/Portable
-      47: Movies/BluRay # Films/Bluray
-      20: Movies/DVD # Films/DVDr
-      42: Movies/HD # Films/HD Rip
-      19: Movies/SD # Films/SD Rip
-      5: Movies/SD # Films/VCD
-      4: PC/Games # Jeux/PC
-      41: Console # Jeux/Portable
-      34: Console/PS4 # Jeux/PS2-PS3
-      38: Console/Wii # Jeux/Wii-GC
-      40: Console/Xbox # Jeux/Xbox360
-      6: Audio # Musique
-      37: Audio/Video # Musique/Video
-      48: TV/HD # Série-Télé/Bluray
-      45: TV/SD # Série-Télé/DVDr
-      43: TV/HD # Série-Télé/HD Rip
-      7: TV/SD # Série-Télé/SD Rip
-      23: Books # E-Books
-      46: Other # Évé. sportif
-      36: Other # Kidz
-      25: Other # Misc
-      9: XXX # XXX
+    categorymappings:
+      - {id: 22, cat: PC, desc: "Applications/Divers"}
+      - {id: 1, cat: PC, desc: "Applications/PC ISO"}
+      - {id: 44, cat: PC, desc: "Applications/Portable"}
+      - {id: 47, cat: Movies/BluRay, desc: "Films/Bluray"}
+      - {id: 20, cat: Movies/DVD, desc: "Films/DVDr"}
+      - {id: 42, cat: Movies/HD, desc: "Films/HD Rip"}
+      - {id: 19, cat: Movies/SD, desc: "Films/SD Rip"}
+      - {id: 5, cat: Movies/SD, desc: "Films/VCD"}
+      - {id: 4, cat: PC/Games, desc: "Jeux/PC"}
+      - {id: 41, cat: Console, desc: "Jeux/Portable"}
+      - {id: 34, cat: Console/PS4, desc: "Jeux/PS2-PS3"}
+      - {id: 38, cat: Console/Wii, desc: "Jeux/Wii-GC"}
+      - {id: 40, cat: Console/Xbox, desc: "Jeux/Xbox360"}
+      - {id: 6, cat: Audio, desc: "Musique"}
+      - {id: 37, cat: Audio/Video, desc: "Musique/Video"}
+      - {id: 48, cat: TV/HD, desc: "Série-Télé/Bluray"}
+      - {id: 45, cat: TV/SD, desc: "Série-Télé/DVDr"}
+      - {id: 43, cat: TV/HD, desc: "Série-Télé/HD Rip"}
+      - {id: 7, cat: TV/SD, desc: "Série-Télé/SD Rip"}
+      - {id: 23, cat: Books, desc: "E-Books"}
+      - {id: 46, cat: Other, desc: "Évé. sportif"}
+      - {id: 36, cat: Other, desc: "Kidz"}
+      - {id: 25, cat: Other, desc: "Misc"}
+      - {id: 9, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]

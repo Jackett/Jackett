@@ -8,24 +8,24 @@
     - https://torrenting.com
 
   caps:
-    categories:
-      1: Movies # Movies
-      2: Movies/DVD # Movies/DVD-R
-      3: Movies/BluRay # BluRay Movies
-      4: TV/SD # TV/SD-x264
-      5: TV/HD # TV/X264 HD
-      11: Movies/HD # Movies/HD
-      18: TV # TV/Packs
-      21: Console # Games/Consoles
-      26: Audio/Video # Music/Videos
-      27: Audio # Music/Audio
-      29: TV/Anime # Anime/Toons
-      30: Books # Books
-      34: PC/0day # Applications/0-day
-      35: PC/Games # Games/PC
-      40: XXX # XXX
-      47: Movies # Movies/Packs
-      49: Movies/HD # x265 (HEVC)
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: Movies/DVD, desc: "Movies/DVD-R"}
+      - {id: 3, cat: Movies/BluRay, desc: "BluRay Movies"}
+      - {id: 4, cat: TV/SD, desc: "TV/SD-x264"}
+      - {id: 5, cat: TV/HD, desc: "TV/X264 HD"}
+      - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
+      - {id: 18, cat: TV, desc: "TV/Packs"}
+      - {id: 21, cat: Console, desc: "Games/Consoles"}
+      - {id: 26, cat: Audio/Video, desc: "Music/Videos"}
+      - {id: 27, cat: Audio, desc: "Music/Audio"}
+      - {id: 29, cat: TV/Anime, desc: "Anime/Toons"}
+      - {id: 30, cat: Books, desc: "Books"}
+      - {id: 34, cat: PC/0day, desc: "Applications/0-day"}
+      - {id: 35, cat: PC/Games, desc: "Games/PC"}
+      - {id: 40, cat: XXX, desc: "XXX"}
+      - {id: 47, cat: Movies, desc: "Movies/Packs"}
+      - {id: 49, cat: Movies/HD, desc: "x265 (HEVC)"}
 
     modes:
       search: [q]

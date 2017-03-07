@@ -8,15 +8,15 @@
     - https://bluebird-hd.org/
 
   caps:
-    categories:
-      1: Movies # Films
-      2: TV/Anime # Cartoons
-      3: TV/Documentary # documentary
-      4: Audio # Show / Music
-      5: TV/Sport # Sport
-      6: TV # TV series
-      7: XXX # erotica
-      8: Other # Demo / Misc
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Films"}
+      - {id: 2, cat: TV/Anime, desc: "Cartoons"}
+      - {id: 3, cat: TV/Documentary, desc: "documentary"}
+      - {id: 4, cat: Audio, desc: "Show / Music"}
+      - {id: 5, cat: TV/Sport, desc: "Sport"}
+      - {id: 6, cat: TV, desc: "TV series"}
+      - {id: 7, cat: XXX, desc: "erotica"}
+      - {id: 8, cat: Other, desc: "Demo / Misc"}
 
     modes:
       search: [q]

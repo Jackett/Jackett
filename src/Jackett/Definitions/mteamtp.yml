@@ -9,26 +9,26 @@
     - https://tp.m-team.cc
 
   caps:
-    categories:
-      401: Movies/SD # Movie(電影)/SD
-      419: Movies/HD # Movie(電影)/HD
-      420: Movies/DVD # Movie(電影)/DVDiSo
-      421: Movies/BluRay # Movie(電影)/Blu-Ray
-      439: Movies/Other # Movie(電影)/Remux
-      403: TV/SD # TV Series(影劇/綜藝)/SD
-      402: TV/HD # TV Series(影劇/綜藝)/HD
-      435: TV/SD # TV Series(影劇/綜藝)/DVDiSo
-      438: TV/HD # TV Series(影劇/綜藝)/BD
-      404: TV/Documentary # 紀錄教育
-      405: TV/Anime # Anime(動畫)
-      406: Audio/Video # MV(演唱)
-      408: Audio/Other # Music(AAC/ALAC)
-      434: Audio # Music(無損)
-      407: TV/Sport # Sports(運動)
-      422: PC/0day # Software(軟體)
-      423: PC/Games # PCGame(PC遊戲)
-      427: Books # eBook(電子書)
-      409: Other # Misc(其他)
+    categorymappings:
+      - {id: 401, cat: Movies/SD, desc: "Movie(電影)/SD"}
+      - {id: 419, cat: Movies/HD, desc: "Movie(電影)/HD"}
+      - {id: 420, cat: Movies/DVD, desc: "Movie(電影)/DVDiSo"}
+      - {id: 421, cat: Movies/BluRay, desc: "Movie(電影)/Blu-Ray"}
+      - {id: 439, cat: Movies/Other, desc: "Movie(電影)/Remux"}
+      - {id: 403, cat: TV/SD, desc: "TV Series(影劇/綜藝)/SD"}
+      - {id: 402, cat: TV/HD, desc: "TV Series(影劇/綜藝)/HD"}
+      - {id: 435, cat: TV/SD, desc: "TV Series(影劇/綜藝)/DVDiSo"}
+      - {id: 438, cat: TV/HD, desc: "TV Series(影劇/綜藝)/BD"}
+      - {id: 404, cat: TV/Documentary, desc: "紀錄教育"}
+      - {id: 405, cat: TV/Anime, desc: "Anime(動畫)"}
+      - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
+      - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)"}
+      - {id: 434, cat: Audio, desc: "Music(無損)"}
+      - {id: 407, cat: TV/Sport, desc: "Sports(運動)"}
+      - {id: 422, cat: PC/0day, desc: "Software(軟體)"}
+      - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)"}
+      - {id: 427, cat: Books, desc: "eBook(電子書)"}
+      - {id: 409, cat: Other, desc: "Misc(其他)"}
 
     modes:
       search: [q]

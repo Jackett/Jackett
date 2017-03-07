@@ -8,24 +8,24 @@
     - https://www.hdpter.net/
 
   caps:
-    categories:
-      401: Movies/BluRay # Movies Blu-ray
-      402: Movies/HD # Movies REMUX
-      419: Movies/HD # Movies 1080p
-      404: Movies/HD # Movies 720p
-      405: Movies/3D # Movies 3D
-      406: Movies/DVD # Movies DVD
-      407: Movies/WEBDL # Movies WEB-DL
-      408: Movies/SD # Movies HDTV
-      409: Movies/Other # Movies iPad
-      410: TV/Documentary # Documentaries
-      411: TV/Anime # Animations
-      412: TV # TV Series
-      413: TV # TV Shows
-      414: Audio/Video # Music Videos
-      415: TV/Sport # Sports
-      416: Audio # Music
-      420: Other # Other
+    categorymappings:
+      - {id: 401, cat: Movies/BluRay, desc: "Movies Blu-ray"}
+      - {id: 402, cat: Movies/HD, desc: "Movies REMUX"}
+      - {id: 419, cat: Movies/HD, desc: "Movies 1080p"}
+      - {id: 404, cat: Movies/HD, desc: "Movies 720p"}
+      - {id: 405, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 406, cat: Movies/DVD, desc: "Movies DVD"}
+      - {id: 407, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+      - {id: 408, cat: Movies/SD, desc: "Movies HDTV"}
+      - {id: 409, cat: Movies/Other, desc: "Movies iPad"}
+      - {id: 410, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 411, cat: TV/Anime, desc: "Animations"}
+      - {id: 412, cat: TV, desc: "TV Series"}
+      - {id: 413, cat: TV, desc: "TV Shows"}
+      - {id: 414, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 415, cat: TV/Sport, desc: "Sports"}
+      - {id: 416, cat: Audio, desc: "Music"}
+      - {id: 420, cat: Other, desc: "Other"}
 
     modes:
       search: [q]

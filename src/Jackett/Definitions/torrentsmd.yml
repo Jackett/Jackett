@@ -8,24 +8,24 @@
     - https://torrentsmd.com/
 
   caps:
-    categories:
-      1: Movies # Filme
-      2: Audio # Muzică
-      3: PC # Software
-      4: Console # Jocuri
-      5: TV # Tv
-      7: Other # Alte
-      8: Books # Cărţi
-      9: Audio/Video # Muzică video
-      10: TV/Anime # Anime
-      11: Movies # Filme animate
-      12: Movies/DVD # DVD
-      13: Movies # Filme documentare
-      14: Audio/Audiobook # Cărţi audio
-      15: Other # Lecţii video
-      16: Other # Fotografii
-      17: TV/Sport # Sport
-      18: TV/HD # HDTV
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Filme"}
+      - {id: 2, cat: Audio, desc: "Muzică"}
+      - {id: 3, cat: PC, desc: "Software"}
+      - {id: 4, cat: Console, desc: "Jocuri"}
+      - {id: 5, cat: TV, desc: "Tv"}
+      - {id: 7, cat: Other, desc: "Alte"}
+      - {id: 8, cat: Books, desc: "Cărţi"}
+      - {id: 9, cat: Audio/Video, desc: "Muzică video"}
+      - {id: 10, cat: TV/Anime, desc: "Anime"}
+      - {id: 11, cat: Movies, desc: "Filme animate"}
+      - {id: 12, cat: Movies/DVD, desc: "DVD"}
+      - {id: 13, cat: Movies, desc: "Filme documentare"}
+      - {id: 14, cat: Audio/Audiobook, desc: "Cărţi audio"}
+      - {id: 15, cat: Other, desc: "Lecţii video"}
+      - {id: 16, cat: Other, desc: "Fotografii"}
+      - {id: 17, cat: TV/Sport, desc: "Sport"}
+      - {id: 18, cat: TV/HD, desc: "HDTV"}
 
     modes:
       search: [q]

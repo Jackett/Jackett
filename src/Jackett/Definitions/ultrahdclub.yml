@@ -8,15 +8,15 @@
     - http://ultrahdclub.org
 
   caps:
-    categories:
-      1: TV/Anime # Animation
-      2: Movies/HD # Movie
-      3: TV/HD # TV Show
-      4: TV/Documentary # Documentary
-      5: Audio # UHD Audio
-      6: Audio/Video # Music Video
-      7: TV/Sport # Sport
-      8: Other # Demo
+    categorymappings:
+      - {id: 1, cat: TV/Anime, desc: "Animation"}
+      - {id: 2, cat: Movies/HD, desc: "Movie"}
+      - {id: 3, cat: TV/HD, desc: "TV Show"}
+      - {id: 4, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 5, cat: Audio, desc: "UHD Audio"}
+      - {id: 6, cat: Audio/Video, desc: "Music Video"}
+      - {id: 7, cat: TV/Sport, desc: "Sport"}
+      - {id: 8, cat: Other, desc: "Demo"}
 
     modes:
       search: [q]

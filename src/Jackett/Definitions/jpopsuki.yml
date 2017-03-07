@@ -8,17 +8,17 @@
     - https://jpopsuki.eu/
 
   caps:
-    categories:
-      1: Audio # Album
-      2: Audio # Single
-      3: Movies # PV
-      4: Movies/DVD # DVD
-      5: TV # TV-Music
-      6: TV # TV-Variety
-      7: TV # TV-Drama
-      8: Other # Fansubs
-      9: Other # Pictures
-      10: Other/Misc # Misc
+    categorymappings:
+      - {id: 1, cat: Audio, desc: "Album"}
+      - {id: 2, cat: Audio, desc: "Single"}
+      - {id: 3, cat: Movies, desc: "PV"}
+      - {id: 4, cat: Movies/DVD, desc: "DVD"}
+      - {id: 5, cat: TV, desc: "TV-Music"}
+      - {id: 6, cat: TV, desc: "TV-Variety"}
+      - {id: 7, cat: TV, desc: "TV-Drama"}
+      - {id: 8, cat: Other, desc: "Fansubs"}
+      - {id: 9, cat: Other, desc: "Pictures"}
+      - {id: 10, cat: Other/Misc, desc: "Misc"}
 
     modes:
       search: [q]

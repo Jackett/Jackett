@@ -9,14 +9,14 @@
     - https://redacted.ch/
 
   caps:
-    categories:
-      1: Audio # Music
-      2: PC # Applications
-      3: Books # E-Books
-      4: Audio/Audiobook # Audiobooks
-      5: Movies # E-Learning Videos
-      6: TV # Comedy
-      7: Books/Comics # Comics
+    categorymappings:
+      - {id: 1, cat: Audio, desc: "Music"}
+      - {id: 2, cat: PC, desc: "Applications"}
+      - {id: 3, cat: Books, desc: "E-Books"}
+      - {id: 4, cat: Audio/Audiobook, desc: "Audiobooks"}
+      - {id: 5, cat: Movies, desc: "E-Learning Videos"}
+      - {id: 6, cat: TV, desc: "Comedy"}
+      - {id: 7, cat: Books/Comics, desc: "Comics"}
 
     modes:
       search: [q]

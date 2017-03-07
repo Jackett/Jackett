@@ -9,43 +9,43 @@
     - http://shareisland.org
 
   caps:
-    categories:
-       32: Other # Vip
-       45: XXX # Vip XXX
-       33: Other # ex Vip
-       1: Movies # Movies
-       49: Movies/HD # H-264
-       51: Movies/HD # H-265
-       41: Movies/Other # Cartoons
-       14: Movies/SD # DivX
-       16: Movies/Other # Cine News
-       39: Movies/HD # 720p
-       40: Movies/HD # 1080p
-       46: Movies/BluRay # Blu Ray Disk
-       31: Movies/HD # BDRip
-       17: Movies/DVD # DVD
-       43: Movies/SD # DVDRip
-       6: PC # Applications
-       18: PC/0day # PC Applications
-       19: PC/Mac # Macintosh Applications
-       44: PC/Phone-Android # Android applications
-       7: Audio # Music
-       20: Audio/Video # Video
-       21: Audio/MP3 # Mp3
-       2: Console # Games
-       3: Console/PS4 # Sony PS
-       4: Console/Wii # Wii
-       26: Console/Xbox # XboX
-       27: PC/Games # PC
-       28: Console/NDS # Nintendo
-       34: Books # Edicola
-       52: Books # Quotidiani
-       53: Books # Libreria
-       35: TV # SerieTV
-       55: TV/HD # Serie Tv HD
-       36: Other # Rip By ShareIsland
-       47: Other # Disclaimer
-       48: Other # P2P network 
+    categorymappings:
+       - {id: 32, cat: Other, desc: "Vip"}
+       - {id: 45, cat: XXX, desc: "Vip XXX"}
+       - {id: 33, cat: Other, desc: "ex Vip"}
+       - {id: 1, cat: Movies, desc: "Movies"}
+       - {id: 49, cat: Movies/HD, desc: "H-264"}
+       - {id: 51, cat: Movies/HD, desc: "H-265"}
+       - {id: 41, cat: Movies/Other, desc: "Cartoons"}
+       - {id: 14, cat: Movies/SD, desc: "DivX"}
+       - {id: 16, cat: Movies/Other, desc: "Cine News"}
+       - {id: 39, cat: Movies/HD, desc: "720p"}
+       - {id: 40, cat: Movies/HD, desc: "1080p"}
+       - {id: 46, cat: Movies/BluRay, desc: "Blu Ray Disk"}
+       - {id: 31, cat: Movies/HD, desc: "BDRip"}
+       - {id: 17, cat: Movies/DVD, desc: "DVD"}
+       - {id: 43, cat: Movies/SD, desc: "DVDRip"}
+       - {id: 6, cat: PC, desc: "Applications"}
+       - {id: 18, cat: PC/0day, desc: "PC Applications"}
+       - {id: 19, cat: PC/Mac, desc: "Macintosh Applications"}
+       - {id: 44, cat: PC/Phone-Android, desc: "Android applications"}
+       - {id: 7, cat: Audio, desc: "Music"}
+       - {id: 20, cat: Audio/Video, desc: "Video"}
+       - {id: 21, cat: Audio/MP3, desc: "Mp3"}
+       - {id: 2, cat: Console, desc: "Games"}
+       - {id: 3, cat: Console/PS4, desc: "Sony PS"}
+       - {id: 4, cat: Console/Wii, desc: "Wii"}
+       - {id: 26, cat: Console/Xbox, desc: "XboX"}
+       - {id: 27, cat: PC/Games, desc: "PC"}
+       - {id: 28, cat: Console/NDS, desc: "Nintendo"}
+       - {id: 34, cat: Books, desc: "Edicola"}
+       - {id: 52, cat: Books, desc: "Quotidiani"}
+       - {id: 53, cat: Books, desc: "Libreria"}
+       - {id: 35, cat: TV, desc: "SerieTV"}
+       - {id: 55, cat: TV/HD, desc: "Serie Tv HD"}
+       - {id: 36, cat: Other, desc: "Rip By ShareIsland"}
+       - {id: 47, cat: Other, desc: "Disclaimer"}
+       - {id: 48, cat: Other, desc: "P2P network "}
 
     modes:
       search: [q]

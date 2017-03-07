@@ -8,37 +8,37 @@
     - https://bithumen.be/
 
   caps:
-    categories:
-      23: Movies/SD # Film/Hun/SD
-      24: Movies/DVD # Film/Hun/DVD-R
-      25: Movies/HD # Film/Hun/720p
-      37: Movies/HD # Film/Hun/1080p
-      33: Movies/BluRay # Film/Hun/Blu-ray
-      30: XXX # XXX/SD
-      19: Movies/SD # Film/Eng/SD
-      20: Movies/DVD # Film/Eng/DVD-R
-      5: Movies/HD # Film/Eng/720p
-      39: Movies/HD # Film/Eng/1080p
-      40: Movies/BluRay # Film/Eng/Blu-ray
-      34: XXX # XXX/HD
-      7: TV/SD # Sorozat/Hun/SD
-      41: TV/HD # Sorozat/Hun/HD
-      26: TV/SD # Sorozat/Eng/SD
-      42: TV/HD # Sorozat/Eng/HD
-      28: Books # eBook/Hun
-      29: Books # eBook/Eng
-      9: Audio/MP3 # Mp3/Hun
-      35: Audio/Lossless # Lossless/Hun
-      1: PC/0day # Programok/ISO
-      4: PC/Games # Játékok/ISO
-      31: Console/PS4 # Játékok/PS
-      36: Console/Wii # Játékok/Wii
-      6: Audio/MP3 # Mp3/Eng
-      38: Audio/Lossless # Lossless/Eng
-      22: PC # Programok/egyéb
-      21: PC # Játékok/Rip/Dox
-      32: Console/Xbox360 # Játékok/Xbox360
-      27: Other # Klipek
+    categorymappings:
+      - {id: 23, cat: Movies/SD, desc: "Film/Hun/SD"}
+      - {id: 24, cat: Movies/DVD, desc: "Film/Hun/DVD-R"}
+      - {id: 25, cat: Movies/HD, desc: "Film/Hun/720p"}
+      - {id: 37, cat: Movies/HD, desc: "Film/Hun/1080p"}
+      - {id: 33, cat: Movies/BluRay, desc: "Film/Hun/Blu-ray"}
+      - {id: 30, cat: XXX, desc: "XXX/SD"}
+      - {id: 19, cat: Movies/SD, desc: "Film/Eng/SD"}
+      - {id: 20, cat: Movies/DVD, desc: "Film/Eng/DVD-R"}
+      - {id: 5, cat: Movies/HD, desc: "Film/Eng/720p"}
+      - {id: 39, cat: Movies/HD, desc: "Film/Eng/1080p"}
+      - {id: 40, cat: Movies/BluRay, desc: "Film/Eng/Blu-ray"}
+      - {id: 34, cat: XXX, desc: "XXX/HD"}
+      - {id: 7, cat: TV/SD, desc: "Sorozat/Hun/SD"}
+      - {id: 41, cat: TV/HD, desc: "Sorozat/Hun/HD"}
+      - {id: 26, cat: TV/SD, desc: "Sorozat/Eng/SD"}
+      - {id: 42, cat: TV/HD, desc: "Sorozat/Eng/HD"}
+      - {id: 28, cat: Books, desc: "eBook/Hun"}
+      - {id: 29, cat: Books, desc: "eBook/Eng"}
+      - {id: 9, cat: Audio/MP3, desc: "Mp3/Hun"}
+      - {id: 35, cat: Audio/Lossless, desc: "Lossless/Hun"}
+      - {id: 1, cat: PC/0day, desc: "Programok/ISO"}
+      - {id: 4, cat: PC/Games, desc: "Játékok/ISO"}
+      - {id: 31, cat: Console/PS4, desc: "Játékok/PS"}
+      - {id: 36, cat: Console/Wii, desc: "Játékok/Wii"}
+      - {id: 6, cat: Audio/MP3, desc: "Mp3/Eng"}
+      - {id: 38, cat: Audio/Lossless, desc: "Lossless/Eng"}
+      - {id: 22, cat: PC, desc: "Programok/egyéb"}
+      - {id: 21, cat: PC, desc: "Játékok/Rip/Dox"}
+      - {id: 32, cat: Console/Xbox360, desc: "Játékok/Xbox360"}
+      - {id: 27, cat: Other, desc: "Klipek"}
 
     modes:
       search: [q]

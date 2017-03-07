@@ -8,42 +8,42 @@
     - http://www.u-torrents.ro/
 
   caps:
-    categories:
-      48: Movies/3D # 3D
-      1: PC/0day # Appz
-      3: Other # Cartoons
-      42: TV/Documentary # Documentaries
-      6: Books # eBooks
-      11: PC/Games # Games | PC
-      12: Console/PS3 # Games | PS2
-      36: Console/PS3 # Games | PS3
-      40: Console/PSP # Games | PSP
-      25: Console/Wii # Games | Wii
-      16: Console/Xbox # Games | XBOX
-      19: PC/Phone-Other # Mobile
-      43: Movies/BluRay # Movies | Blu-Ray
-      49: Movies/BluRay # Movies | Blu-Ray-RO
-      7: Movies/DVD # Movies | DVD-R
-      2: Movies/DVD # Movies | DVD-RO
-      17: Movies/HD # Movies | HD
-      45: Movies/HD # Movies | HD-RO
-      21: Movies # Movies | Oldies
-      38: Movies # Movies | Packs
-      8: Movies/SD # Movies | x264
-      4: Movies/SD # Movies | x264-RO
-      10: Movies/SD # Movies | XviD
-      44: Movies/SD # Movies | XviD-RO
-      5: Audio/MP3 # Music | Mp3
-      39: Audio # Music | Packs
-      23: Audio/Video # Music | Videos
-      18: Other # Pictures
-      46: XXX/Imageset # Pictures | xxx
-      22: TV/Sport # Sport
-      50: TV # STAR
-      20: TV/SD # TV | Episodes
-      47: TV/HD # TV | Episodes HD
-      41: TV # TV | Packs
-      15: XXX # xXx
+    categorymappings:
+      - {id: 48, cat: Movies/3D, desc: "3D"}
+      - {id: 1, cat: PC/0day, desc: "Appz"}
+      - {id: 3, cat: Other, desc: "Cartoons"}
+      - {id: 42, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 6, cat: Books, desc: "eBooks"}
+      - {id: 11, cat: PC/Games, desc: "Games | PC"}
+      - {id: 12, cat: Console/PS3, desc: "Games | PS2"}
+      - {id: 36, cat: Console/PS3, desc: "Games | PS3"}
+      - {id: 40, cat: Console/PSP, desc: "Games | PSP"}
+      - {id: 25, cat: Console/Wii, desc: "Games | Wii"}
+      - {id: 16, cat: Console/Xbox, desc: "Games | XBOX"}
+      - {id: 19, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 43, cat: Movies/BluRay, desc: "Movies | Blu-Ray"}
+      - {id: 49, cat: Movies/BluRay, desc: "Movies | Blu-Ray-RO"}
+      - {id: 7, cat: Movies/DVD, desc: "Movies | DVD-R"}
+      - {id: 2, cat: Movies/DVD, desc: "Movies | DVD-RO"}
+      - {id: 17, cat: Movies/HD, desc: "Movies | HD"}
+      - {id: 45, cat: Movies/HD, desc: "Movies | HD-RO"}
+      - {id: 21, cat: Movies, desc: "Movies | Oldies"}
+      - {id: 38, cat: Movies, desc: "Movies | Packs"}
+      - {id: 8, cat: Movies/SD, desc: "Movies | x264"}
+      - {id: 4, cat: Movies/SD, desc: "Movies | x264-RO"}
+      - {id: 10, cat: Movies/SD, desc: "Movies | XviD"}
+      - {id: 44, cat: Movies/SD, desc: "Movies | XviD-RO"}
+      - {id: 5, cat: Audio/MP3, desc: "Music | Mp3"}
+      - {id: 39, cat: Audio, desc: "Music | Packs"}
+      - {id: 23, cat: Audio/Video, desc: "Music | Videos"}
+      - {id: 18, cat: Other, desc: "Pictures"}
+      - {id: 46, cat: XXX/Imageset, desc: "Pictures | xxx"}
+      - {id: 22, cat: TV/Sport, desc: "Sport"}
+      - {id: 50, cat: TV, desc: "STAR"}
+      - {id: 20, cat: TV/SD, desc: "TV | Episodes"}
+      - {id: 47, cat: TV/HD, desc: "TV | Episodes HD"}
+      - {id: 41, cat: TV, desc: "TV | Packs"}
+      - {id: 15, cat: XXX, desc: "xXx"}
 
     modes:
       search: [q]

@@ -8,38 +8,38 @@
     - http://datascene.net/
 
   caps:
-    categories:
-      3: TV/Anime # Anime | Cartoon
-      15: PC/0day # Appz | Win
-      4: PC/0day # Appz | Linux
-      6: Books # E-Book
-      10: PC/Games # Games | PC Iso
-      9: PC/Games # Games | PC Rips
-      11: Console # Games | Pack
-      43: Console # Games | Console
-      29: Other # Images
-      2: Other # MiSC
-      5: PC/Phone-Other # Mobile
-      27: Movies # Movies | Pack
-      46: Movies/3D # Movies | 3D
-      26: Movies/SD # Movies | Cam
-      25: Movies # Movies | Documentary
-      24: Movies/DVD # Movies | DVD-R
-      32: Movies/DVD # Movies | DVD-RO
-      23: Movies/HD # Movies | HD
-      31: Movies/HD # Movies | HD-Ro
-      34: Movies/Foreign # Movies | Hindi
-      30: Movies/SD # Movies | Xvid
-      36: Movies/SD # Movies | Xvid-Ro
-      21: Audio/Video # Music | Video
-      19: Audio  # Music | Mp3/Flac
-      18: Other # Other
-      42: Other # Premiera | DsT
-      14: TV/Sport # Sport
-      47: TV/SD # Tv | Episodes
-      28: TV/HD # Tv-HD | Episodes
-      13: Other # Tutoriale
-      12: XXX # XxX
+    categorymappings:
+      - {id: 3, cat: TV/Anime, desc: "Anime | Cartoon"}
+      - {id: 15, cat: PC/0day, desc: "Appz | Win"}
+      - {id: 4, cat: PC/0day, desc: "Appz | Linux"}
+      - {id: 6, cat: Books, desc: "E-Book"}
+      - {id: 10, cat: PC/Games, desc: "Games | PC Iso"}
+      - {id: 9, cat: PC/Games, desc: "Games | PC Rips"}
+      - {id: 11, cat: Console, desc: "Games | Pack"}
+      - {id: 43, cat: Console, desc: "Games | Console"}
+      - {id: 29, cat: Other, desc: "Images"}
+      - {id: 2, cat: Other, desc: "MiSC"}
+      - {id: 5, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 27, cat: Movies, desc: "Movies | Pack"}
+      - {id: 46, cat: Movies/3D, desc: "Movies | 3D"}
+      - {id: 26, cat: Movies/SD, desc: "Movies | Cam"}
+      - {id: 25, cat: Movies, desc: "Movies | Documentary"}
+      - {id: 24, cat: Movies/DVD, desc: "Movies | DVD-R"}
+      - {id: 32, cat: Movies/DVD, desc: "Movies | DVD-RO"}
+      - {id: 23, cat: Movies/HD, desc: "Movies | HD"}
+      - {id: 31, cat: Movies/HD, desc: "Movies | HD-Ro"}
+      - {id: 34, cat: Movies/Foreign, desc: "Movies | Hindi"}
+      - {id: 30, cat: Movies/SD, desc: "Movies | Xvid"}
+      - {id: 36, cat: Movies/SD, desc: "Movies | Xvid-Ro"}
+      - {id: 21, cat: Audio/Video, desc: "Music | Video"}
+      - {id: 19, cat: Audio , desc: "Music | Mp3/Flac"}
+      - {id: 18, cat: Other, desc: "Other"}
+      - {id: 42, cat: Other, desc: "Premiera | DsT"}
+      - {id: 14, cat: TV/Sport, desc: "Sport"}
+      - {id: 47, cat: TV/SD, desc: "Tv | Episodes"}
+      - {id: 28, cat: TV/HD, desc: "Tv-HD | Episodes"}
+      - {id: 13, cat: Other, desc: "Tutoriale"}
+      - {id: 12, cat: XXX, desc: "XxX"}
 
     modes:
       search: [q]

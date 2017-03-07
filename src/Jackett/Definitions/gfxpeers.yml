@@ -8,14 +8,14 @@
     - https://gfxpeers.net/
 
   caps:
-    categories:
-      1: PC/0day # Applications
-      2: PC/0day # Plug-ins
-      3: Other # Tutorials
-      4: Other # Textures
-      5: Other # 3D Models
-      6: Other # Game-Dev
-      7: Other # Miscellaneous
+    categorymappings:
+      - {id: 1, cat: PC/0day, desc: "Applications"}
+      - {id: 2, cat: PC/0day, desc: "Plug-ins"}
+      - {id: 3, cat: Other, desc: "Tutorials"}
+      - {id: 4, cat: Other, desc: "Textures"}
+      - {id: 5, cat: Other, desc: "3D Models"}
+      - {id: 6, cat: Other, desc: "Game-Dev"}
+      - {id: 7, cat: Other, desc: "Miscellaneous"}
 
     modes:
       search: [q]

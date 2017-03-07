@@ -9,16 +9,16 @@
     - https://chdbits.co
 
   caps:
-    categories:
-      401: Movies # Movies
-      404: TV/Documentary # Documentaries
-      405: TV/Anime # Animations
-      402: TV # TV Series
-      403: TV # TV Shows
-      406: Audio/Video # Music Videos
-      407: TV/Sport # Sports
-      409: Other # Misc
-      408: Audio # HQ Audio
+    categorymappings:
+      - {id: 401, cat: Movies, desc: "Movies"}
+      - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 405, cat: TV/Anime, desc: "Animations"}
+      - {id: 402, cat: TV, desc: "TV Series"}
+      - {id: 403, cat: TV, desc: "TV Shows"}
+      - {id: 406, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 407, cat: TV/Sport, desc: "Sports"}
+      - {id: 409, cat: Other, desc: "Misc"}
+      - {id: 408, cat: Audio, desc: "HQ Audio"}
 
     modes:
       search: [q]

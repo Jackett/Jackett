@@ -8,34 +8,34 @@
     - https://hdme.eu
 
   caps:
-    categories:
-      24: TV/Anime       # Anime
-      25: PC/0day        # Appz
-      47: Movies/HD      # AVCHD
-      26: Movies/BluRay  # Bluray
-      54: Movies/HD      # dbREMUX
-      41: Movies/HD      # Documentaries
-      50: Movies/HD      # FourGHD
-      44: Movies/HD      # HDME
-      28: Audio/Lossless # HQ Music
-      48: Movies/HD      # iCandy
-      45: Movies/HD      # INtL
-      29: Other          # Misc
-      49: PC/Phone-Other # Mobile
-      30: Movies/HD      # Movie 1080i
-      31: Movies/HD      # Movie 1080p
-      32: Movies/HD      # Movie 720p
-      33: Audio/Video    # Music Videos
-      34: TV             # Packs
-      53: Movies/HD      # Remux
-      56: Movies/HD      # RUXi
-      55: Movies/HD      # SiNiSteR
-      36: TV/Sport       # Sports
-      37: TV/HD          # TV Series 1080i
-      38: TV/HD          # TV Series 1080p
-      39: TV/HD          # TV Series 720p
-      57: Movies         # UHD 2160p
-      40: XXX            # XXX
+    categorymappings:
+      - {id: 24, cat: TV/Anime      , desc: "Anime"}
+      - {id: 25, cat: PC/0day       , desc: "Appz"}
+      - {id: 47, cat: Movies/HD     , desc: "AVCHD"}
+      - {id: 26, cat: Movies/BluRay , desc: "Bluray"}
+      - {id: 54, cat: Movies/HD     , desc: "dbREMUX"}
+      - {id: 41, cat: Movies/HD     , desc: "Documentaries"}
+      - {id: 50, cat: Movies/HD     , desc: "FourGHD"}
+      - {id: 44, cat: Movies/HD     , desc: "HDME"}
+      - {id: 28, cat: Audio/Lossless, desc: "HQ Music"}
+      - {id: 48, cat: Movies/HD     , desc: "iCandy"}
+      - {id: 45, cat: Movies/HD     , desc: "INtL"}
+      - {id: 29, cat: Other         , desc: "Misc"}
+      - {id: 49, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 30, cat: Movies/HD     , desc: "Movie 1080i"}
+      - {id: 31, cat: Movies/HD     , desc: "Movie 1080p"}
+      - {id: 32, cat: Movies/HD     , desc: "Movie 720p"}
+      - {id: 33, cat: Audio/Video   , desc: "Music Videos"}
+      - {id: 34, cat: TV            , desc: "Packs"}
+      - {id: 53, cat: Movies/HD     , desc: "Remux"}
+      - {id: 56, cat: Movies/HD     , desc: "RUXi"}
+      - {id: 55, cat: Movies/HD     , desc: "SiNiSteR"}
+      - {id: 36, cat: TV/Sport      , desc: "Sports"}
+      - {id: 37, cat: TV/HD         , desc: "TV Series 1080i"}
+      - {id: 38, cat: TV/HD         , desc: "TV Series 1080p"}
+      - {id: 39, cat: TV/HD         , desc: "TV Series 720p"}
+      - {id: 57, cat: Movies        , desc: "UHD 2160p"}
+      - {id: 40, cat: XXX           , desc: "XXX"}
 
     modes:
       search: [q]

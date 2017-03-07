@@ -8,38 +8,38 @@
     - https://www.linkomanija.net
 
   caps:
-    categories:
-      29: Movies/SD # movies
-      52: Movies/HD # movies HD
-      30: TV/SD # TV
-      60: TV/HD # HD TV
-      45: PC/Games # PC Games
-      37: Audio # Music
-      56: Books # Books
-      40: Other/Misc # misc
-      53: Movies/SD # movies E
-      61: Movies/HD # E HD Movies
-      28: TV/SD # TV E
-      62: TV/HD # E HD TV
-      63: PC/Games # PC Games Misc
-      33: Audio # Music E
-      57: Books # Books E
-      43: Other/Misc # misc E
-      51: Movies/SD # movies RU
-      64: Movies/HD # RU Movies HD
-      65: TV # TV RU
-      25: Movies/DVD # DVD
-      42: Console/Xbox # XBOX
-      66: Audio/Lossless # Music Lossless
-      41: PC/Mac # MAC
-      69: PC/Phone-Android # Android
-      46: TV/Sport # Sports
-      58: TV/Documentary # Documentaries
-      38: TV/Anime # Anime
-      26: Movies/DVD # DVD E
-      44: Console/Other # Consoles
-      31: Audio/Video # Music Videos
-      32: PC/0day # Appz
+    categorymappings:
+      - {id: 29, cat: Movies/SD, desc: "movies"}
+      - {id: 52, cat: Movies/HD, desc: "movies HD"}
+      - {id: 30, cat: TV/SD, desc: "TV"}
+      - {id: 60, cat: TV/HD, desc: "HD TV"}
+      - {id: 45, cat: PC/Games, desc: "PC Games"}
+      - {id: 37, cat: Audio, desc: "Music"}
+      - {id: 56, cat: Books, desc: "Books"}
+      - {id: 40, cat: Other/Misc, desc: "misc"}
+      - {id: 53, cat: Movies/SD, desc: "movies E"}
+      - {id: 61, cat: Movies/HD, desc: "E HD Movies"}
+      - {id: 28, cat: TV/SD, desc: "TV E"}
+      - {id: 62, cat: TV/HD, desc: "E HD TV"}
+      - {id: 63, cat: PC/Games, desc: "PC Games Misc"}
+      - {id: 33, cat: Audio, desc: "Music E"}
+      - {id: 57, cat: Books, desc: "Books E"}
+      - {id: 43, cat: Other/Misc, desc: "misc E"}
+      - {id: 51, cat: Movies/SD, desc: "movies RU"}
+      - {id: 64, cat: Movies/HD, desc: "RU Movies HD"}
+      - {id: 65, cat: TV, desc: "TV RU"}
+      - {id: 25, cat: Movies/DVD, desc: "DVD"}
+      - {id: 42, cat: Console/Xbox, desc: "XBOX"}
+      - {id: 66, cat: Audio/Lossless, desc: "Music Lossless"}
+      - {id: 41, cat: PC/Mac, desc: "MAC"}
+      - {id: 69, cat: PC/Phone-Android, desc: "Android"}
+      - {id: 46, cat: TV/Sport, desc: "Sports"}
+      - {id: 58, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 38, cat: TV/Anime, desc: "Anime"}
+      - {id: 26, cat: Movies/DVD, desc: "DVD E"}
+      - {id: 44, cat: Console/Other, desc: "Consoles"}
+      - {id: 31, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 32, cat: PC/0day, desc: "Appz"}
 
     modes:
       search: [q]

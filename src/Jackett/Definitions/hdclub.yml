@@ -8,15 +8,15 @@
     - http://hdclub.org
 
   caps:
-    categories:
-      70: Movies # Animation
-      71: Movies # Movie
-      81: Audio # HD Audio
-      78: TV/Documentary # Documentary
-      68: Audio/Video # Music Video
-      64: TV # TV Show
-      62: TV/Sport # Sport
-      82: Other # Demo
+    categorymappings:
+      - {id: 70, cat: Movies, desc: "Animation"}
+      - {id: 71, cat: Movies, desc: "Movie"}
+      - {id: 81, cat: Audio, desc: "HD Audio"}
+      - {id: 78, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 68, cat: Audio/Video, desc: "Music Video"}
+      - {id: 64, cat: TV, desc: "TV Show"}
+      - {id: 62, cat: TV/Sport, desc: "Sport"}
+      - {id: 82, cat: Other, desc: "Demo"}
 
     modes:
       search: [q]

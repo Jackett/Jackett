@@ -8,57 +8,57 @@
     - http://the-torrents.org/
 
   caps:
-    categories:
-      1: TV/Anime # Anime Movies
-      2: TV/Anime # Anime Movies-Ro
-      3: Movies/SD # BDRip Movies
-      4: Movies/SD # BDRip Movies Ro
-      5: Movies/BluRay # BluRay Movies
-      6: Movies/BluRay # BluRay Movies Ro
-      7: Movies/SD # Cam/TS Movies
-      8: Movies/SD # Cam/TS Movies Ro
-      9: Movies/DVD # DVD Movies
-      10: Movies/DVD # DVD Movies Ro
-      11: Movies/HD # HD Movies
-      12: Movies/HD # HD Movies Ro
-      24: Movies/SD # XVID Movies
-      25: Movies/SD # XVID Movies Ro
-      16: Movies # Old Movies
-      17: Movies # Old Movies Ro
-      18: Movies # Movie Packs
-      19: Movies # Movie Packs Ro
-      15: PC/Phone-Other # Mobile
-      20: TV/SD # TV Episodes
-      21: TV/SD # TV Episodes Ro
-      22: TV/SD # TV Series
-      23: TV/SD # TV Series Ro
-      13: TV/HD # HDTV Episodes
-      14: TV/HD # HDTV Episodes Ro
-      46: TV/HD # HDTV Series
-      47: TV/HD # HDTV Series Ro
-      27: XXX # Adult Movies
-      30: PC/Games # PC-ISO Games
-      31: PC/Games # PC-RIP Games
-      32: PC/Games # GOG Games
-      33: PC/Games # Game Packs
-      34: Console/Xbox # XBOX Games
-      35: Console/Xbox360 # XBOX-360 Games
-      36: Console/PS3 # Sony PS2 Games
-      37: Console/PS3 # Sony PS3 Games
-      38: Console/PSP # Sony PSP Games
-      39: Console/PS3 # Sony PSX Games
-      40: Console/Other # Nintendo Games
-      41: Console/Wii # WII Games
-      42: PC/Games # Game Updates
-      48: PC/Games # Game Cheats
-      28: Audio # Music
-      29: Audio/Video # Music Videos
-      26: PC/0day # Software
-      43: Other # Documents
-      44: Other # Images
-      49: Other # Diverse
-      45: PC/0day # Linux
-      50: TV/Sport # Sport
+    categorymappings:
+      - {id: 1, cat: TV/Anime, desc: "Anime Movies"}
+      - {id: 2, cat: TV/Anime, desc: "Anime Movies-Ro"}
+      - {id: 3, cat: Movies/SD, desc: "BDRip Movies"}
+      - {id: 4, cat: Movies/SD, desc: "BDRip Movies Ro"}
+      - {id: 5, cat: Movies/BluRay, desc: "BluRay Movies"}
+      - {id: 6, cat: Movies/BluRay, desc: "BluRay Movies Ro"}
+      - {id: 7, cat: Movies/SD, desc: "Cam/TS Movies"}
+      - {id: 8, cat: Movies/SD, desc: "Cam/TS Movies Ro"}
+      - {id: 9, cat: Movies/DVD, desc: "DVD Movies"}
+      - {id: 10, cat: Movies/DVD, desc: "DVD Movies Ro"}
+      - {id: 11, cat: Movies/HD, desc: "HD Movies"}
+      - {id: 12, cat: Movies/HD, desc: "HD Movies Ro"}
+      - {id: 24, cat: Movies/SD, desc: "XVID Movies"}
+      - {id: 25, cat: Movies/SD, desc: "XVID Movies Ro"}
+      - {id: 16, cat: Movies, desc: "Old Movies"}
+      - {id: 17, cat: Movies, desc: "Old Movies Ro"}
+      - {id: 18, cat: Movies, desc: "Movie Packs"}
+      - {id: 19, cat: Movies, desc: "Movie Packs Ro"}
+      - {id: 15, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 20, cat: TV/SD, desc: "TV Episodes"}
+      - {id: 21, cat: TV/SD, desc: "TV Episodes Ro"}
+      - {id: 22, cat: TV/SD, desc: "TV Series"}
+      - {id: 23, cat: TV/SD, desc: "TV Series Ro"}
+      - {id: 13, cat: TV/HD, desc: "HDTV Episodes"}
+      - {id: 14, cat: TV/HD, desc: "HDTV Episodes Ro"}
+      - {id: 46, cat: TV/HD, desc: "HDTV Series"}
+      - {id: 47, cat: TV/HD, desc: "HDTV Series Ro"}
+      - {id: 27, cat: XXX, desc: "Adult Movies"}
+      - {id: 30, cat: PC/Games, desc: "PC-ISO Games"}
+      - {id: 31, cat: PC/Games, desc: "PC-RIP Games"}
+      - {id: 32, cat: PC/Games, desc: "GOG Games"}
+      - {id: 33, cat: PC/Games, desc: "Game Packs"}
+      - {id: 34, cat: Console/Xbox, desc: "XBOX Games"}
+      - {id: 35, cat: Console/Xbox360, desc: "XBOX-360 Games"}
+      - {id: 36, cat: Console/PS3, desc: "Sony PS2 Games"}
+      - {id: 37, cat: Console/PS3, desc: "Sony PS3 Games"}
+      - {id: 38, cat: Console/PSP, desc: "Sony PSP Games"}
+      - {id: 39, cat: Console/PS3, desc: "Sony PSX Games"}
+      - {id: 40, cat: Console/Other, desc: "Nintendo Games"}
+      - {id: 41, cat: Console/Wii, desc: "WII Games"}
+      - {id: 42, cat: PC/Games, desc: "Game Updates"}
+      - {id: 48, cat: PC/Games, desc: "Game Cheats"}
+      - {id: 28, cat: Audio, desc: "Music"}
+      - {id: 29, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 26, cat: PC/0day, desc: "Software"}
+      - {id: 43, cat: Other, desc: "Documents"}
+      - {id: 44, cat: Other, desc: "Images"}
+      - {id: 49, cat: Other, desc: "Diverse"}
+      - {id: 45, cat: PC/0day, desc: "Linux"}
+      - {id: 50, cat: TV/Sport, desc: "Sport"}
 
     modes:
       search: [q]

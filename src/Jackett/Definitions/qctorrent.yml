@@ -9,33 +9,33 @@
     - http://www.qctorrent.net/
 
   caps:
-    categories:
-      30: PC # ++ Applications
-      1: PC # Applications/Divers
-      2: PC # Applications/PC ISO
-      3: PC # Applications/Portable
-      31: Movies # ++ Films
-      4: Movies/BluRay # Films/Bluray
-      5: Movies/DVD # Films/DVDr
-      6: Movies/HD # Films/HD Rip
-      7: Movies/SD # Films/SD Rip
-      8: Movies/SD # Films/VCD
-      32: Console # ++ Jeux
-      9: PC/Games # Jeux/PC
-      10: Console # Jeux/Portable
-      11: Console/PS4 # Jeux/PS
-      12: Console/Wii # Jeux/Wii
-      13: Console/Xbox # Jeux/Xbox
-      33: Audio # ++ Musique
-      14: Audio # Musique
-      15: Audio/Video # Musique/Video
-      34: TV # ++ Série-Télé
-      16: TV/HD # Série-Télé/Bluray
-      17: TV/SD # Série-Télé/DVDr
-      18: TV/HD # Série-Télé/HD Rip
-      19: TV/SD # Série-Télé/SD Rip
-      20: Books # E-Books
-      21: XXX # XXX
+    categorymappings:
+      - {id: 30, cat: PC, desc: "++ Applications"}
+      - {id: 1, cat: PC, desc: "Applications/Divers"}
+      - {id: 2, cat: PC, desc: "Applications/PC ISO"}
+      - {id: 3, cat: PC, desc: "Applications/Portable"}
+      - {id: 31, cat: Movies, desc: "++ Films"}
+      - {id: 4, cat: Movies/BluRay, desc: "Films/Bluray"}
+      - {id: 5, cat: Movies/DVD, desc: "Films/DVDr"}
+      - {id: 6, cat: Movies/HD, desc: "Films/HD Rip"}
+      - {id: 7, cat: Movies/SD, desc: "Films/SD Rip"}
+      - {id: 8, cat: Movies/SD, desc: "Films/VCD"}
+      - {id: 32, cat: Console, desc: "++ Jeux"}
+      - {id: 9, cat: PC/Games, desc: "Jeux/PC"}
+      - {id: 10, cat: Console, desc: "Jeux/Portable"}
+      - {id: 11, cat: Console/PS4, desc: "Jeux/PS"}
+      - {id: 12, cat: Console/Wii, desc: "Jeux/Wii"}
+      - {id: 13, cat: Console/Xbox, desc: "Jeux/Xbox"}
+      - {id: 33, cat: Audio, desc: "++ Musique"}
+      - {id: 14, cat: Audio, desc: "Musique"}
+      - {id: 15, cat: Audio/Video, desc: "Musique/Video"}
+      - {id: 34, cat: TV, desc: "++ Série-Télé"}
+      - {id: 16, cat: TV/HD, desc: "Série-Télé/Bluray"}
+      - {id: 17, cat: TV/SD, desc: "Série-Télé/DVDr"}
+      - {id: 18, cat: TV/HD, desc: "Série-Télé/HD Rip"}
+      - {id: 19, cat: TV/SD, desc: "Série-Télé/SD Rip"}
+      - {id: 20, cat: Books, desc: "E-Books"}
+      - {id: 21, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]

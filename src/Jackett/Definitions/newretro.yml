@@ -9,37 +9,37 @@
     - http://new-retro.eu/
 
   caps:
-    categories:
-      101: TV/Anime # Filme - Animie
-      102: Movies/BluRay # Filme - Bluray
-      131: Movies/Other # Filme - Bollywood
-      103: Movies/DVD # Filme - DVD
-      104: Movies/DVD # Filme - DVD-R
-      132: Movies/DVD # Filme - HD2DVD
-      130: Movies # Filme - Klassiker
-      105: Movies # Filme - x264
-      106: Movies # Filme - XviD / DivX
-      69: XXX #  XXX
-      124: Audio # Musik - Alben
-      122: Audio/Audiobook # Musik - Hörbuch
-      123: Audio # Musik - Mixe
-      133: Audio/MP3 # Musik - MP3
-      125: Audio/Video # Musik - Video
-      113: PC # Programme - Linux
-      114: PC/Mac # Programme - Mac
-      115: PC # Programme - Windows
-      117: TV # Allgemein - Serien
-      116: TV/Documentary # Serien - Dokus
-      118: TV/Sport # Serien - Sport
-      119: Other # Bilder
-      120: Books # Ebook
-      127: Other # Für Unsere kleinsten
-      121: Other # Handy Stuff
-      129: Other # Sonstiges
-      109: Other # Spiele - Handy
-      112: Console # Spiele - Konsolen
-      111: PC/Games # Spiele - Mac / Linux
-      110: PC/Games # Spiele - PC
+    categorymappings:
+      - {id: 101, cat: TV/Anime, desc: "Filme - Animie"}
+      - {id: 102, cat: Movies/BluRay, desc: "Filme - Bluray"}
+      - {id: 131, cat: Movies/Other, desc: "Filme - Bollywood"}
+      - {id: 103, cat: Movies/DVD, desc: "Filme - DVD"}
+      - {id: 104, cat: Movies/DVD, desc: "Filme - DVD-R"}
+      - {id: 132, cat: Movies/DVD, desc: "Filme - HD2DVD"}
+      - {id: 130, cat: Movies, desc: "Filme - Klassiker"}
+      - {id: 105, cat: Movies, desc: "Filme - x264"}
+      - {id: 106, cat: Movies, desc: "Filme - XviD / DivX"}
+      - {id: 69, cat: XXX, desc: " XXX"}
+      - {id: 124, cat: Audio, desc: "Musik - Alben"}
+      - {id: 122, cat: Audio/Audiobook, desc: "Musik - Hörbuch"}
+      - {id: 123, cat: Audio, desc: "Musik - Mixe"}
+      - {id: 133, cat: Audio/MP3, desc: "Musik - MP3"}
+      - {id: 125, cat: Audio/Video, desc: "Musik - Video"}
+      - {id: 113, cat: PC, desc: "Programme - Linux"}
+      - {id: 114, cat: PC/Mac, desc: "Programme - Mac"}
+      - {id: 115, cat: PC, desc: "Programme - Windows"}
+      - {id: 117, cat: TV, desc: "Allgemein - Serien"}
+      - {id: 116, cat: TV/Documentary, desc: "Serien - Dokus"}
+      - {id: 118, cat: TV/Sport, desc: "Serien - Sport"}
+      - {id: 119, cat: Other, desc: "Bilder"}
+      - {id: 120, cat: Books, desc: "Ebook"}
+      - {id: 127, cat: Other, desc: "Für Unsere kleinsten"}
+      - {id: 121, cat: Other, desc: "Handy Stuff"}
+      - {id: 129, cat: Other, desc: "Sonstiges"}
+      - {id: 109, cat: Other, desc: "Spiele - Handy"}
+      - {id: 112, cat: Console, desc: "Spiele - Konsolen"}
+      - {id: 111, cat: PC/Games, desc: "Spiele - Mac / Linux"}
+      - {id: 110, cat: PC/Games, desc: "Spiele - PC"}
 
     modes:
       search: [q]

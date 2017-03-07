@@ -8,69 +8,69 @@
     - https://gods.lu/
 
   caps:
-    categories:
+    categorymappings:
       # Movie
-      132: Movies/BluRay # BluRay
-      146: Movies/HD # Remux
-      186: Movies/HD # UHD
-      189: Movies/HD # HD
-      190: Movies/SD # SD
-      20: Movies/DVD # DVD
-      131: Movies/3D # 3D
-      16: Movies # Packs
+      - {id: 132, cat: Movies/BluRay, desc: "BluRay"}
+      - {id: 146, cat: Movies/HD, desc: "Remux"}
+      - {id: 186, cat: Movies/HD, desc: "UHD"}
+      - {id: 189, cat: Movies/HD, desc: "HD"}
+      - {id: 190, cat: Movies/SD, desc: "SD"}
+      - {id: 20, cat: Movies/DVD, desc: "DVD"}
+      - {id: 131, cat: Movies/3D, desc: "3D"}
+      - {id: 16, cat: Movies, desc: "Packs"}
 
       # Serien
-      187: TV/HD # Staffeln UHD
-      173: TV/HD # Staffeln HD
-      133: TV/SD # Staffeln SD
-      188: TV/HD # Folgen UHD
-      174: TV/HD # Folgen HD
-      7: TV/SD # Folgen SD
+      - {id: 187, cat: TV/HD, desc: "Staffeln UHD"}
+      - {id: 173, cat: TV/HD, desc: "Staffeln HD"}
+      - {id: 133, cat: TV/SD, desc: "Staffeln SD"}
+      - {id: 188, cat: TV/HD, desc: "Folgen UHD"}
+      - {id: 174, cat: TV/HD, desc: "Folgen HD"}
+      - {id: 7, cat: TV/SD, desc: "Folgen SD"}
 
       # Doku
-      152: TV/Documentary # HD
-      153: TV/Documentary # SD
+      - {id: 152, cat: TV/Documentary, desc: "HD"}
+      - {id: 153, cat: TV/Documentary, desc: "SD"}
 
       # Spiele
-      4: PC/Games # Windows
-      29: Console/XBox360 # XBOX 360
-      126: Console/Wii # Wii
-      183: Console/Wii # Wii U
-      128: Console/PS3 # PS3
-      154: Console/Other # Andere
+      - {id: 4, cat: PC/Games, desc: "Windows"}
+      - {id: 29, cat: Console/XBox360, desc: "XBOX 360"}
+      - {id: 126, cat: Console/Wii, desc: "Wii"}
+      - {id: 183, cat: Console/Wii, desc: "Wii U"}
+      - {id: 128, cat: Console/PS3, desc: "PS3"}
+      - {id: 154, cat: Console/Other, desc: "Andere"}
 
       # Musik
-      6: Audio # Alben
-      139: Audio/Lossless # Lossless
-      177: Audio # Singles
-      157: Audio # Charts
-      192: Audio # Packs
-      161: Audio/Video # Video
+      - {id: 6, cat: Audio, desc: "Alben"}
+      - {id: 139, cat: Audio/Lossless, desc: "Lossless"}
+      - {id: 177, cat: Audio, desc: "Singles"}
+      - {id: 157, cat: Audio, desc: "Charts"}
+      - {id: 192, cat: Audio, desc: "Packs"}
+      - {id: 161, cat: Audio/Video, desc: "Video"}
 
-      22: PC/0day # Windows
-      129: PC/Mac # Mac OS
-      164: PC/0day # Linux
-      124: PC/Phone-Android # Android
-      165: PC/Phone-IOS # Apple iOS
-      167: PC/Phone-Other # Andere
+      - {id: 22, cat: PC/0day, desc: "Windows"}
+      - {id: 129, cat: PC/Mac, desc: "Mac OS"}
+      - {id: 164, cat: PC/0day, desc: "Linux"}
+      - {id: 124, cat: PC/Phone-Android, desc: "Android"}
+      - {id: 165, cat: PC/Phone-IOS, desc: "Apple iOS"}
+      - {id: 167, cat: PC/Phone-Other, desc: "Andere"}
 
       # Sport
-      130: TV/Sport # HD
-      135: TV/Sport # SD
+      - {id: 130, cat: TV/Sport, desc: "HD"}
+      - {id: 135, cat: TV/Sport, desc: "SD"}
 
       #  International
-      170: Movies/Foreign # Filme HD
-      134: Movies/Foreign # Filme SD
-      171: TV/Foreign # Folgen HD
-      172: TV/Foreign # Folgen SD
+      - {id: 170, cat: Movies/Foreign, desc: "Filme HD"}
+      - {id: 134, cat: Movies/Foreign, desc: "Filme SD"}
+      - {id: 171, cat: TV/Foreign, desc: "Folgen HD"}
+      - {id: 172, cat: TV/Foreign, desc: "Folgen SD"}
 
       # Sonstiges
-      28: TV/Anime # Anime
-      13: Books # e-Book
-      11: Audio/Audiobook # Hören
-      136: Other # Bilder
-      9: Other # Tutorial
-      178: Other # Anderes
+      - {id: 28, cat: TV/Anime, desc: "Anime"}
+      - {id: 13, cat: Books, desc: "e-Book"}
+      - {id: 11, cat: Audio/Audiobook, desc: "Hören"}
+      - {id: 136, cat: Other, desc: "Bilder"}
+      - {id: 9, cat: Other, desc: "Tutorial"}
+      - {id: 178, cat: Other, desc: "Anderes"}
 
     modes:
       search: [q]

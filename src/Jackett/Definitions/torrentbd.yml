@@ -9,71 +9,71 @@
     - http://www.torrentbd.com/torrent
 
   caps:
-    categories:
-      28: TV/Anime # Anime - All
-      65: PC/Phone-Android # Apps - Android
-      20: PC # Apps - Linux
-      19: PC/Mac # Apps - Mac
-      18: PC # Apps - PC
-      21: Audio # Bangla - Audio
-      7: Movies # Bangla - Movies | Natok
-      49: TV # Cartoons - All
-      9: TV/Documentary # Documentaries - All
-      73: Books/Comics # E-Books - Comics
-      77: Books # E-Books - Manga
-      60: PC/Games # Games - Cracks | Patches
-      17: Console # Games - Other
-      10: PC # Games - PC
-      11: Console/PS3 # Games - PS2
-      43: Console/PS3 # Games - PS3
-      12: Console/PSP # Games - PSP
-      52: PC/Games # Games - Updates | DLC
-      13: Console/Xbox # Games - Xbox
-      14: Console/Xbox360 # Games - Xbox360
-      23: Movies/BluRay # Hindi - Blu-ray
-      51: Movies/SD # Hindi - CAM | TS | TC
-      27: Movies/DVD # Hindi - DVDRip
-      58: Movies/SD # Hindi - DVDScr | Pre-DVD
-      68: Movies/SD # Hindi - HD-Rip
-      59: Movies # Hindi - Web-Rip
-      47: Movies/HD # Movies - 1080p BluRay
-      67: Movies/3D # Movies - 3D
-      42: Movies/BluRay # Movies - 720p BluRay
-      57: Movies # Movies - Animation
-      4: Movies/SD # Movies - CAM | TS | TC
-      69: Movies # Movies - Dual Audio
-      1: Movies/SD # Movies - DVDRip
-      56: Movies/SD # Movies - DVDSCR | R5 | R6
-      46: Movies/SD # Movies - HD-Rip
-      76: Movies/BluRay # Movies - Lossless BluRay
-      2: Movies # Movies - Packs
-      24: Movies/SD # Movies - SD BluRay
-      34: Movies # Movies - Tamil
-      3: Movies # Movies - Unrated
-      72: Movies # Movies - WEB Rip
-      55: Movies # Movies - WEB-DL
-      22: Audio # Music - Audio
-      64: Audio # Music - Concerts | Live Shows
-      71: Audio/Lossless # Music - FLAC
-      50: Audio # Music - OST
-      26: Audio # Music - Radio
-      25: Audio # Music - Video
-      78: Audio # Music - Video 4K
-      36: Books # Other - E-Books
-      37: Other # Other - Images
-      38: PC/Phone-Other # Other - Mobile Phone
-      40: Other # Other - Other | Misc
-      39: Other # Other - Tutorial
-      44: Other # Religious  - Islam
-      48: TV/Sport # Sports - All
-      70: TV/Sport # Sports - Football
-      6: TV/Sport # Sports - Pro Wrestling
-      33: Other # Trailers - Movie | Games
-      66: TV # TV - Awards | Ceremonies
-      5: TV/SD # TV - Episodes
-      61: TV/HD # TV - Episodes - 720p | 1080p
-      41: TV/SD # TV - Packs
-      62: TV/HD # TV - Packs - HD | BRRip
+    categorymappings:
+      - {id: 28, cat: TV/Anime, desc: "Anime - All"}
+      - {id: 65, cat: PC/Phone-Android, desc: "Apps - Android"}
+      - {id: 20, cat: PC, desc: "Apps - Linux"}
+      - {id: 19, cat: PC/Mac, desc: "Apps - Mac"}
+      - {id: 18, cat: PC, desc: "Apps - PC"}
+      - {id: 21, cat: Audio, desc: "Bangla - Audio"}
+      - {id: 7, cat: Movies, desc: "Bangla - Movies | Natok"}
+      - {id: 49, cat: TV, desc: "Cartoons - All"}
+      - {id: 9, cat: TV/Documentary, desc: "Documentaries - All"}
+      - {id: 73, cat: Books/Comics, desc: "E-Books - Comics"}
+      - {id: 77, cat: Books, desc: "E-Books - Manga"}
+      - {id: 60, cat: PC/Games, desc: "Games - Cracks | Patches"}
+      - {id: 17, cat: Console, desc: "Games - Other"}
+      - {id: 10, cat: PC, desc: "Games - PC"}
+      - {id: 11, cat: Console/PS3, desc: "Games - PS2"}
+      - {id: 43, cat: Console/PS3, desc: "Games - PS3"}
+      - {id: 12, cat: Console/PSP, desc: "Games - PSP"}
+      - {id: 52, cat: PC/Games, desc: "Games - Updates | DLC"}
+      - {id: 13, cat: Console/Xbox, desc: "Games - Xbox"}
+      - {id: 14, cat: Console/Xbox360, desc: "Games - Xbox360"}
+      - {id: 23, cat: Movies/BluRay, desc: "Hindi - Blu-ray"}
+      - {id: 51, cat: Movies/SD, desc: "Hindi - CAM | TS | TC"}
+      - {id: 27, cat: Movies/DVD, desc: "Hindi - DVDRip"}
+      - {id: 58, cat: Movies/SD, desc: "Hindi - DVDScr | Pre-DVD"}
+      - {id: 68, cat: Movies/SD, desc: "Hindi - HD-Rip"}
+      - {id: 59, cat: Movies, desc: "Hindi - Web-Rip"}
+      - {id: 47, cat: Movies/HD, desc: "Movies - 1080p BluRay"}
+      - {id: 67, cat: Movies/3D, desc: "Movies - 3D"}
+      - {id: 42, cat: Movies/BluRay, desc: "Movies - 720p BluRay"}
+      - {id: 57, cat: Movies, desc: "Movies - Animation"}
+      - {id: 4, cat: Movies/SD, desc: "Movies - CAM | TS | TC"}
+      - {id: 69, cat: Movies, desc: "Movies - Dual Audio"}
+      - {id: 1, cat: Movies/SD, desc: "Movies - DVDRip"}
+      - {id: 56, cat: Movies/SD, desc: "Movies - DVDSCR | R5 | R6"}
+      - {id: 46, cat: Movies/SD, desc: "Movies - HD-Rip"}
+      - {id: 76, cat: Movies/BluRay, desc: "Movies - Lossless BluRay"}
+      - {id: 2, cat: Movies, desc: "Movies - Packs"}
+      - {id: 24, cat: Movies/SD, desc: "Movies - SD BluRay"}
+      - {id: 34, cat: Movies, desc: "Movies - Tamil"}
+      - {id: 3, cat: Movies, desc: "Movies - Unrated"}
+      - {id: 72, cat: Movies, desc: "Movies - WEB Rip"}
+      - {id: 55, cat: Movies, desc: "Movies - WEB-DL"}
+      - {id: 22, cat: Audio, desc: "Music - Audio"}
+      - {id: 64, cat: Audio, desc: "Music - Concerts | Live Shows"}
+      - {id: 71, cat: Audio/Lossless, desc: "Music - FLAC"}
+      - {id: 50, cat: Audio, desc: "Music - OST"}
+      - {id: 26, cat: Audio, desc: "Music - Radio"}
+      - {id: 25, cat: Audio, desc: "Music - Video"}
+      - {id: 78, cat: Audio, desc: "Music - Video 4K"}
+      - {id: 36, cat: Books, desc: "Other - E-Books"}
+      - {id: 37, cat: Other, desc: "Other - Images"}
+      - {id: 38, cat: PC/Phone-Other, desc: "Other - Mobile Phone"}
+      - {id: 40, cat: Other, desc: "Other - Other | Misc"}
+      - {id: 39, cat: Other, desc: "Other - Tutorial"}
+      - {id: 44, cat: Other, desc: "Religious  - Islam"}
+      - {id: 48, cat: TV/Sport, desc: "Sports - All"}
+      - {id: 70, cat: TV/Sport, desc: "Sports - Football"}
+      - {id: 6, cat: TV/Sport, desc: "Sports - Pro Wrestling"}
+      - {id: 33, cat: Other, desc: "Trailers - Movie | Games"}
+      - {id: 66, cat: TV, desc: "TV - Awards | Ceremonies"}
+      - {id: 5, cat: TV/SD, desc: "TV - Episodes"}
+      - {id: 61, cat: TV/HD, desc: "TV - Episodes - 720p | 1080p"}
+      - {id: 41, cat: TV/SD, desc: "TV - Packs"}
+      - {id: 62, cat: TV/HD, desc: "TV - Packs - HD | BRRip"}
 
     modes:
       search: [q]

@@ -8,27 +8,27 @@
     - http://www.bithq.org
 
   caps:
-    categories:
-      7: Movies # Approved Film Series
-      81: TV/HD # BD-MKV
-      62: Audio # CD-R/OST
-      51: Movies/DVD # DVD-R/Animation
-      48: Movies/DVD # DVD-R/Asian Cinema
-      50: Movies/DVD # DVD-R/Documentaries
-      64: Movies/DVD # DVD-R/Foreign Films
-      55: Movies/DVD # DVD-R/Kids
-      49: Movies/DVD # DVD-R/Movies
-      52: Audio/Video # DVD-R/Music
-      53: TV # DVD-R/TV
-      70: Movies # Empire's 500
-      80: Movies # Global Lens | trigon-film
-      65: Other # Hi-Res Covers
-      66: Movies/HD # High Quality
-      57: Movies/SD # Low Quality
-      54: PC/0day # Software/DVD/BD
-      61: PC/0day # Software/System Utilities
-      69: TV/Sport # Sporting Events
-      68: Movies # The Criterion Collection
+    categorymappings:
+      - {id: 7, cat: Movies, desc: "Approved Film Series"}
+      - {id: 81, cat: TV/HD, desc: "BD-MKV"}
+      - {id: 62, cat: Audio, desc: "CD-R/OST"}
+      - {id: 51, cat: Movies/DVD, desc: "DVD-R/Animation"}
+      - {id: 48, cat: Movies/DVD, desc: "DVD-R/Asian Cinema"}
+      - {id: 50, cat: Movies/DVD, desc: "DVD-R/Documentaries"}
+      - {id: 64, cat: Movies/DVD, desc: "DVD-R/Foreign Films"}
+      - {id: 55, cat: Movies/DVD, desc: "DVD-R/Kids"}
+      - {id: 49, cat: Movies/DVD, desc: "DVD-R/Movies"}
+      - {id: 52, cat: Audio/Video, desc: "DVD-R/Music"}
+      - {id: 53, cat: TV, desc: "DVD-R/TV"}
+      - {id: 70, cat: Movies, desc: "Empire's 500"}
+      - {id: 80, cat: Movies, desc: "Global Lens | trigon-film"}
+      - {id: 65, cat: Other, desc: "Hi-Res Covers"}
+      - {id: 66, cat: Movies/HD, desc: "High Quality"}
+      - {id: 57, cat: Movies/SD, desc: "Low Quality"}
+      - {id: 54, cat: PC/0day, desc: "Software/DVD/BD"}
+      - {id: 61, cat: PC/0day, desc: "Software/System Utilities"}
+      - {id: 69, cat: TV/Sport, desc: "Sporting Events"}
+      - {id: 68, cat: Movies, desc: "The Criterion Collection"}
 
     modes:
       search: [q]

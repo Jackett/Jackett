@@ -8,25 +8,25 @@
     - https://www.hyperay.cc
 
   caps:
-    categories:
-      410: Movies/HD # Movies 1080p
-      411: Movies/HD # Movies 720p
-      401: Movies/BluRay # Movies Blu-ray
-      415: Movies # Movies REMUX
-      416: Movies/3D # Movies 3D
-      414: Movies/DVD # Movies DVD
-      412: Movies/WEBDL # Movies WEB-DL
-      413: Movies/SD # Movies HDTV
-      417: Movies/Other # Movies iPad
-      402: TV # TV Series
-      403: TV # TV Shows
-      404: TV/Documentary # Documentaries
-      405: TV/Anime # Animations
-      406: Audio/Video # Music Videos
-      407: TV/Sport # Sports
-      408: Audio # HQ Audio
-      418: Books # Book
-      409: Other # Misc
+    categorymappings:
+      - {id: 410, cat: Movies/HD, desc: "Movies 1080p"}
+      - {id: 411, cat: Movies/HD, desc: "Movies 720p"}
+      - {id: 401, cat: Movies/BluRay, desc: "Movies Blu-ray"}
+      - {id: 415, cat: Movies, desc: "Movies REMUX"}
+      - {id: 416, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
+      - {id: 412, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
+      - {id: 413, cat: Movies/SD, desc: "Movies HDTV"}
+      - {id: 417, cat: Movies/Other, desc: "Movies iPad"}
+      - {id: 402, cat: TV, desc: "TV Series"}
+      - {id: 403, cat: TV, desc: "TV Shows"}
+      - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 405, cat: TV/Anime, desc: "Animations"}
+      - {id: 406, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 407, cat: TV/Sport, desc: "Sports"}
+      - {id: 408, cat: Audio, desc: "HQ Audio"}
+      - {id: 418, cat: Books, desc: "Book"}
+      - {id: 409, cat: Other, desc: "Misc"}
 
     modes:
       search: [q]

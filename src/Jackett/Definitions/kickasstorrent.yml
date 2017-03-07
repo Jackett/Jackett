@@ -8,78 +8,78 @@
     - https://katcr.co/
 
   caps:
-    categories:
-      118: TV/Anime # Anime - English Translated
-      133: TV/Anime # Anime - Other
-      144: PC/Phone-Other # Applications - Handheld
-      142: PC/0day # Applications - Linux
-      140: PC/Mac # Applications - Mac
-      131: PC/0day # Applications - Other
-      139: PC/0day # Applications - Windows
-      109: Audio/Audiobook # Books - Audio books
-      110: Books # Books - Biography
-      102: Books # Books - Children
-      103: Books/Comics # Books - Comics
-      113: Books # Books - Computers & Technology
-      115: Books # Books - Cooking
-      114: Books # Books - Educational
-      107: Books # Books - Fiction
-      112: Books # Books - History
-      105: Books # Books - Magazines
-      104: Books # Books - Manga
-      108: Books # Books - Non-fiction
-      132: Books # Books - Other
-      111: Books # Books - Religion
-      116: Books # Books - Sport
-      106: Books # Books - Textbooks
-      92: Console/Other # Games - Handheld
-      87: PC/Games # Games - Linux
-      130: Console/Other # Games - Other
-      97: Console/PS4 # Games - Playstation
-      91: Console/Wii # Games - Wii
-      85: PC/Games # Games - Windows
-      90: Console/Xbox # Games - Xbox
-      69: Movies/3D # Movies - 3D Movies
-      80: Movies # Movies - Animation
-      79: Movies # Movies - Asian/Bollywood
-      148: Movies/BluRay # Movies - Blu-Ray Disc
-      149: Movies/SD # Movies - Cam
-      81: Movies # Movies - Documentary
-      78: Movies # Movies - Dubbed Movies
-      150: Movies/DVD # Movies - DVD ISO
-      71: Movies/HD # Movies - HD
-      128: Movies/Other # Movies - Other
-      74: Movies/SD # Movies - Screener
-      75: Movies/HD # Movies - UltraHD
-      64: Audio/Other # Music - AAC
-      67: Audio/Other # Music - Karaoke
-      23: Audio/Lossless # Music - Lossless
-      22: Audio/MP3 # Music - MP3
-      129: Audio/Other # Music - Other
-      26: Audio/Other # Music - Radio Shows
-      66: Audio/Other # Music - Soundtrack
-      65: Audio/Other # Music - Transcode
-      68: Audio/Video # Music - Videos/Concerts
-      154: Other # Other - DazPoser
-      138: Other # Other - Other
-      136: Other # Other - Pictures
-      134: Other # Other - Subtitles
-      145: Other # Other - Tutorials
-      153: Other # Other - Wordpress
-      6: TV/HD # TV - Blu-Ray Disc
-      7: TV/Documentary # TV - Documentary
-      5: TV/SD # TV - DVD Disc
-      41: TV/HD # TV - HD
-      151: TV/Other # TV - Other
-      146: TV/Sport # TV - Sport
-      152: TV/HD # TV - Ultra HD
-      124: XXX # XXX - Books
-      125: XXX # XXX - Hentai
-      123: XXX # XXX - Magazines
-      122: XXX/Imageset # XXX - Pictures
-      121: XXX # XXX - UltraHD
-      119: XXX # XXX - Videos
-      126: XXX # XXX - XXX Games
+    categorymappings:
+      - {id: 118, cat: TV/Anime, desc: "Anime - English Translated"}
+      - {id: 133, cat: TV/Anime, desc: "Anime - Other"}
+      - {id: 144, cat: PC/Phone-Other, desc: "Applications - Handheld"}
+      - {id: 142, cat: PC/0day, desc: "Applications - Linux"}
+      - {id: 140, cat: PC/Mac, desc: "Applications - Mac"}
+      - {id: 131, cat: PC/0day, desc: "Applications - Other"}
+      - {id: 139, cat: PC/0day, desc: "Applications - Windows"}
+      - {id: 109, cat: Audio/Audiobook, desc: "Books - Audio books"}
+      - {id: 110, cat: Books, desc: "Books - Biography"}
+      - {id: 102, cat: Books, desc: "Books - Children"}
+      - {id: 103, cat: Books/Comics, desc: "Books - Comics"}
+      - {id: 113, cat: Books, desc: "Books - Computers & Technology"}
+      - {id: 115, cat: Books, desc: "Books - Cooking"}
+      - {id: 114, cat: Books, desc: "Books - Educational"}
+      - {id: 107, cat: Books, desc: "Books - Fiction"}
+      - {id: 112, cat: Books, desc: "Books - History"}
+      - {id: 105, cat: Books, desc: "Books - Magazines"}
+      - {id: 104, cat: Books, desc: "Books - Manga"}
+      - {id: 108, cat: Books, desc: "Books - Non-fiction"}
+      - {id: 132, cat: Books, desc: "Books - Other"}
+      - {id: 111, cat: Books, desc: "Books - Religion"}
+      - {id: 116, cat: Books, desc: "Books - Sport"}
+      - {id: 106, cat: Books, desc: "Books - Textbooks"}
+      - {id: 92, cat: Console/Other, desc: "Games - Handheld"}
+      - {id: 87, cat: PC/Games, desc: "Games - Linux"}
+      - {id: 130, cat: Console/Other, desc: "Games - Other"}
+      - {id: 97, cat: Console/PS4, desc: "Games - Playstation"}
+      - {id: 91, cat: Console/Wii, desc: "Games - Wii"}
+      - {id: 85, cat: PC/Games, desc: "Games - Windows"}
+      - {id: 90, cat: Console/Xbox, desc: "Games - Xbox"}
+      - {id: 69, cat: Movies/3D, desc: "Movies - 3D Movies"}
+      - {id: 80, cat: Movies, desc: "Movies - Animation"}
+      - {id: 79, cat: Movies, desc: "Movies - Asian/Bollywood"}
+      - {id: 148, cat: Movies/BluRay, desc: "Movies - Blu-Ray Disc"}
+      - {id: 149, cat: Movies/SD, desc: "Movies - Cam"}
+      - {id: 81, cat: Movies, desc: "Movies - Documentary"}
+      - {id: 78, cat: Movies, desc: "Movies - Dubbed Movies"}
+      - {id: 150, cat: Movies/DVD, desc: "Movies - DVD ISO"}
+      - {id: 71, cat: Movies/HD, desc: "Movies - HD"}
+      - {id: 128, cat: Movies/Other, desc: "Movies - Other"}
+      - {id: 74, cat: Movies/SD, desc: "Movies - Screener"}
+      - {id: 75, cat: Movies/HD, desc: "Movies - UltraHD"}
+      - {id: 64, cat: Audio/Other, desc: "Music - AAC"}
+      - {id: 67, cat: Audio/Other, desc: "Music - Karaoke"}
+      - {id: 23, cat: Audio/Lossless, desc: "Music - Lossless"}
+      - {id: 22, cat: Audio/MP3, desc: "Music - MP3"}
+      - {id: 129, cat: Audio/Other, desc: "Music - Other"}
+      - {id: 26, cat: Audio/Other, desc: "Music - Radio Shows"}
+      - {id: 66, cat: Audio/Other, desc: "Music - Soundtrack"}
+      - {id: 65, cat: Audio/Other, desc: "Music - Transcode"}
+      - {id: 68, cat: Audio/Video, desc: "Music - Videos/Concerts"}
+      - {id: 154, cat: Other, desc: "Other - DazPoser"}
+      - {id: 138, cat: Other, desc: "Other - Other"}
+      - {id: 136, cat: Other, desc: "Other - Pictures"}
+      - {id: 134, cat: Other, desc: "Other - Subtitles"}
+      - {id: 145, cat: Other, desc: "Other - Tutorials"}
+      - {id: 153, cat: Other, desc: "Other - Wordpress"}
+      - {id: 6, cat: TV/HD, desc: "TV - Blu-Ray Disc"}
+      - {id: 7, cat: TV/Documentary, desc: "TV - Documentary"}
+      - {id: 5, cat: TV/SD, desc: "TV - DVD Disc"}
+      - {id: 41, cat: TV/HD, desc: "TV - HD"}
+      - {id: 151, cat: TV/Other, desc: "TV - Other"}
+      - {id: 146, cat: TV/Sport, desc: "TV - Sport"}
+      - {id: 152, cat: TV/HD, desc: "TV - Ultra HD"}
+      - {id: 124, cat: XXX, desc: "XXX - Books"}
+      - {id: 125, cat: XXX, desc: "XXX - Hentai"}
+      - {id: 123, cat: XXX, desc: "XXX - Magazines"}
+      - {id: 122, cat: XXX/Imageset, desc: "XXX - Pictures"}
+      - {id: 121, cat: XXX, desc: "XXX - UltraHD"}
+      - {id: 119, cat: XXX, desc: "XXX - Videos"}
+      - {id: 126, cat: XXX, desc: "XXX - XXX Games"}
 
     modes:
       search: [q]

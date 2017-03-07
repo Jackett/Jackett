@@ -9,13 +9,13 @@
     - http://sdbits.org
 
   caps:
-    categories:
-      6: Audio # Audio
-      3: TV/Documentary # Documentary
-      1: Movies # Movies
-      4: Audio # Music
-      5: TV/Sport # Sports
-      2: TV # TV
+    categorymappings:
+      - {id: 6, cat: Audio, desc: "Audio"}
+      - {id: 3, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 4, cat: Audio, desc: "Music"}
+      - {id: 5, cat: TV/Sport, desc: "Sports"}
+      - {id: 2, cat: TV, desc: "TV"}
 
     modes:
       search: [q]
