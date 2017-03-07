@@ -90,6 +90,12 @@ namespace Jackett.Indexers
             var episodeSearchUrl = string.Format(SearchUrl, category, HttpUtility.UrlEncode(query.GetQueryString()));
 
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            if (response.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            }
 
             try
             {
