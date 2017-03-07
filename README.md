@@ -87,6 +87,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GimmePeers <!-- maintained by jamesb2147 -->
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Gormogon
+ * Greek Team
  * Hardbay
  * HD4Free
  * HD-Space
