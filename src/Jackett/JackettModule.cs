@@ -55,7 +55,27 @@ namespace Jackett
                                     var monoVersionO = new Version(monoVersion.Split(' ')[0]);
                                     if (monoVersionO.Major >= 4 && monoVersionO.Minor >= 8)
                                     {
-                                        usehttpclient = true;
+                                        // check if btls is supported
+                                        var monoSecurity = Assembly.Load("Mono.Security");
+                                        Type monoTlsProviderFactory = monoSecurity.GetType("Mono.Security.Interface.MonoTlsProviderFactory");
+                                        if (monoTlsProviderFactory != null)
+                                        {
+                                            MethodInfo isProviderSupported = monoTlsProviderFactory.GetMethod("IsProviderSupported");
+                                            if(isProviderSupported != null)
+                                            {
+                                                var btlsSupported = (bool)isProviderSupported.Invoke(null, new string[] { "btls" });
+                                                if (btlsSupported)
+                                                {
+                                                    // initialize btls
+                                                    MethodInfo initialize = monoTlsProviderFactory.GetMethod("Initialize", new[] { typeof(string) });
+                                                    if (initialize != null)
+                                                    {
+                                                        initialize.Invoke(null, new string[] { "btls" });
+                                                        usehttpclient = true;
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
