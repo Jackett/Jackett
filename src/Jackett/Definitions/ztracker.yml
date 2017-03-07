@@ -1,0 +1,125 @@
+﻿---
+  site: ztracker
+  name: Ztracker
+  language: hu-hu
+  type: semi-private
+  encoding: ISO-8859-2
+  links:
+    - http://ztracker.org
+
+  caps:
+    categorymappings:
+      - {id: 30, cat: Movies/SD, desc: "CAM/HUN"}
+      - {id: 29, cat: Movies/SD, desc: "CAM/Külf."}
+      - {id: 3, cat: Books, desc: "Ebook"}
+      - {id: 9, cat: Movies/HD, desc: "Film/HD-DVD/Hun"}
+      - {id: 10, cat: Movies/HD, desc: "Film/HD-DVD/Külf"}
+      - {id: 7, cat: Movies/SD, desc: "Film/Xvid/Hun"}
+      - {id: 8, cat: Movies/SD, desc: "Film/Xvid/Külf."}
+      - {id: 15, cat: XXX, desc: "Film/Xvid/XXX"}
+      - {id: 16, cat: XXX, desc: "Filmek/HD-DVD/XXX"}
+      - {id: 4, cat: PC/Games, desc: "Játék"}
+      - {id: 18, cat: Other, desc: "Képek"}
+      - {id: 17, cat: XXX, desc: "Képek/XXX"}
+      - {id: 27, cat: Books, desc: "Mese/Hun"}
+      - {id: 28, cat: Books, desc: "Mese/Külf."}
+      - {id: 24, cat: PC/Phone-Other, desc: "Program/Mobil"}
+      - {id: 1, cat: PC/0day, desc: "Program/Win"}
+      - {id: 25, cat: TV, desc: "Sorozat/Hun"}
+      - {id: 26, cat: TV, desc: "Sorozat/Külf."}
+      - {id: 11, cat: Audio, desc: "Zene/Hun"}
+      - {id: 12, cat: Audio, desc: "Zene/Külf."}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: belepes.php
+    method: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.error
+      - selector: table:has(img[src="/pic/ts_error/error.jpg"])
+        message:
+          selector: table:has(img[src="/pic/ts_error/error.jpg"])
+          remove: style
+    test:
+      path: browse_old.php
+
+  search:
+    path: browse_old.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      keywords: "{{ .Query.Keywords }}"
+      search_type: "t_name"
+    rows:
+      selector: table[border="1"] > tbody > tr:has(a[href*="details.php?id="])
+    fields:
+      title:
+        selector: a[href*="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: <font class=\\'smalltext\\'>(.*?)</font>
+      banner:
+        selector: a[href*="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: img src=\\'(.*?)\\'
+      details:
+        selector: a[href*="details.php?id="][onmouseover]
+        attribute: href
+      category:
+        selector: a[href^="/browse_old.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href*="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php", "download.php"]
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      files:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(11) > b
+        filters:
+          - name: trim
+            args: "x"
+      size:
+        selector: td:nth-child(11)
+        remove: b
+        filters:
+          - name: replace
+            args: ["time", ""]
+      downloadvolumefactor:
+        case:
+          img[src="./pic/freedownload.gif"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[src="./pic/x2.gif"]: "2"
+          "*": "1"
+      date:
+        selector: td:nth-child(2)
+        remove: a, img
+        filters:
+          - name: replace
+            args: ["\xA0", " "]
+          - name: replace
+            args: ["Ma", "Today"]
+          - name: replace
+            args: ["Tegnap", "Yesterday"]
+          - name: re_replace
+            args: ["12:(\\d\\d) PM", "00:$1 PM"]
