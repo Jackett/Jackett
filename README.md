@@ -162,7 +162,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent411
  * TorrentBD
  * TorrentBytes
- * TorrentCCF
+ * TorrentCCF  [![(invite needed)][inviteneeded]](#)
  * TorrentDay
  * TorrentHeaven
  * TorrentHR
