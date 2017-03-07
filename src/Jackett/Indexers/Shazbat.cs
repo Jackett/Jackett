@@ -86,6 +86,17 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
+        protected async Task<WebClientStringResult> ReloginIfNecessary(WebClientStringResult response)
+        {
+            if (!response.Content.Contains("onclick=\"document.location='logout'\""))
+            {
+                await ApplyConfiguration(null);
+                response.Request.Cookies = CookieHeader;
+                return await webclient.GetString(response.Request);
+            }
+            return response;
+        }
+
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
@@ -102,6 +113,7 @@ namespace Jackett.Indexers
                 pairs.Add("search", query.SanitizedSearchTerm);
 
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs, null, TorrentsUrl);
+                results = await ReloginIfNecessary(results);
                 CQ dom = results.Content;
                 var shows = dom.Find("div.show[data-id]");
                 foreach (var show in shows)
@@ -120,7 +132,8 @@ namespace Jackett.Indexers
                 foreach (var searchUrl in searchUrls)
                 {
                     results = await RequestStringWithCookies(searchUrl);
-                
+                    results = await ReloginIfNecessary(results);
+
                     CQ dom = results.Content;
                     var rows = dom["#torrent-table tr"];
 
