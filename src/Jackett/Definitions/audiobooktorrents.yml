@@ -1,0 +1,135 @@
+﻿---
+  site: audiobooktorrents
+  name: Audiobook Torrents
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://abtorrents.me
+
+  caps:
+    categorymappings:
+      - {id: 10, cat: Audio/Audiobook, desc: "Adventure"}
+      - {id: 20, cat: Audio/Audiobook, desc: "Biographies & Memoirs"}
+      - {id: 30, cat: Audio/Audiobook, desc: "Business "}
+      - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
+      - {id: 50, cat: Audio/Audiobook, desc: "Comedy"}
+      - {id: 60, cat: Audio/Audiobook, desc: "Comics"}
+      - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
+      - {id: 80, cat: Audio/Audiobook, desc: "Erotica"}
+      - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
+      - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}
+      - {id: 110, cat: Audio/Audiobook, desc: "Files"}
+      - {id: 120, cat: Audio/Audiobook, desc: "Foreign Language"}
+      - {id: 130, cat: Audio/Audiobook, desc: "General Fiction"}
+      - {id: 140, cat: Audio/Audiobook, desc: "Historical Fiction"}
+      - {id: 150, cat: Audio/Audiobook, desc: "History"}
+      - {id: 160, cat: Audio/Audiobook, desc: "Horror"}
+      - {id: 170, cat: Audio/Audiobook, desc: "Literature "}
+      - {id: 180, cat: Audio/Audiobook, desc: "Mystery "}
+      - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
+      - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
+      - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
+      - {id: 235, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
+      - {id: 220, cat: Audio/Audiobook, desc: "Science"}
+      - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction "}
+      - {id: 240, cat: Audio/Audiobook, desc: "Self Improvement"}
+      - {id: 250, cat: Audio/Audiobook, desc: "Suspense"}
+      - {id: 260, cat: Audio/Audiobook, desc: "Talk Radio"}
+      - {id: 245, cat: Audio/Audiobook, desc: "Thriller"}
+      - {id: 270, cat: Audio/Audiobook, desc: "Urban Fantasy"}
+      - {id: 280, cat: Audio/Audiobook, desc: "Western"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      use_ssl: "1"
+      perm_ssl: "1"
+      submitme: "X"
+    error:
+      - selector: td.embedded:has(h2:contains("Oops"))
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /browse.php
+
+  search:
+    path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: "1"
+    rows:
+      selector: tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
+      after: 1
+    fields:
+      banner:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=\'(.*?)\'
+      title:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: Tip\('<b>(.*?)</b>
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: href
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(4)
+      size:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
+        filters:
+          - name: regexp
+            args: ([\d,]+)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(6)
+      downloadvolumefactor:
+        case:
+          "a.info > b:contains(\"[FREE]\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
+      description:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: <br /><b>(.*?)</b><br />
+      description:
+        selector: td:nth-child(2) > i
+        optional: true
+        filters:
+          - name: prepend
+            args: "{{ .Result.description }}<br>\n"
+      description:
+        selector: td[colspan=13]
+        filters:
+          - name: prepend
+            args: "{{ .Result.description }}<br>\n"

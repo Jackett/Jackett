@@ -44,6 +44,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Apollo (XANAX)
  * ArabaFenice
  * AsianDVDClub
+ * Audiobook Torrents
  * Avistaz
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
