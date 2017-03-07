@@ -116,7 +116,7 @@
           - name: replace
             args: ["Februar", "February"]
           - name: replace
-            args: ["March", "März"]
+            args: ["März", "March"]
           - name: replace
             args: ["Mai", "May"]
           - name: replace
@@ -151,14 +151,16 @@
       size:
         selector: td:nth-child(3)
       grabs:
-        selector: td:nth-child(5) > font:nth-child(3)
+        selector: td:nth-child(5)
         filters:
+          - name: split
+            args: ["♦", 2]
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-child(5) > font:nth-child(1)
+        selector: td:nth-child(5) > a:nth-child(1)
       leechers:
-        selector: td:nth-child(5) > font:nth-child(2)
+        selector: td:nth-child(5) > a:nth-child(2)
       downloadvolumefactor:
         case:
           img[alt="gold"]: "0"
