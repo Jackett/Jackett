@@ -8,78 +8,78 @@
     - http://tracker.btnext.com/
 
   caps:
-    categories:
-      86: Other # Freeleech
-      88: Movies # Movies
-      89: Console # Games
-      87: TV # Series
-      93: Audio # Musica
-      1: Movies # Movies
-      70: Movies/3D # 3D
-      71: Movies/Sd # 480p
-      72: Movies/BluRay # BD-R
-      31: Movies/HD # BDRIP/BRRip
-      16: Movies/SD # CAM
-      74: Movies/DVD # DvD-R
-      17: Movies/HD # HD
-      91: Movies/Other # Kids
-      76: Movies # Packs
-      77: Movies/WEBDL # WEB-DL
-      14: Movies/SD # DVDRip/XViD
-      85: Movies/DVD # Custom-DVDR
-      96: Movies/HD # 4K
-      6: PC # Applications
-      18: PC/ISO # PC Applications
-      19: PC/Mac # Macintosh Applications
-      34: PC/ISO # Linux Applications
-      7: Audio # Music
-      20: Audio/Video # MVideo
-      21: Audio/MP3 # Mp3
-      33: Audio/Other # Mp4
-      32: Audio/Lossless # FLAC
-      2: Console # Games
-      78: PC/Games # Linux
-      79: PC/Mac # MacOSX
-      28: Console/NDS # Nintendo DS
-      27: PC/Games # PC/Windows
-      80: Console/PS3 # PS2
-      81: Console/PS3 # PS3
-      82: Console/PS4 # PS4
-      83: Console/PSP # PSP
-      95: Console/PSVita # PSVITA
-      4: Console/Wii # Wii
-      26: Console/Xbox360 # XBOX360
-      84: Console/Xbox # XONE
-      42: TV # TV Series
-      45: TV/Documentary # Documentaries
-      46: TV/Sport # Sports
-      47: TV/HD # TV-Bluray
-      48: TV/SD # TV-Dvd-R
-      49: TV/SD # TV-DVDRiP
-      50: TV # TV-Packs
-      92: TV/Anime # TV-Kids
-      52: TV/SD # TV-SDx264
-      53: TV/WEB-DL # TV-WEB-DL
-      55: TV/HD # TV-X264
-      56: TV/SD # TV-XViD
-      44: TV # Miscellaneous
-      51: TV/Anime # Anime
-      54: Audio/Audiobook # Audiobook
-      57: Books # E-Books
-      58: Books/Comics # Comics
-      59: Books # Educational
-      60: Books # Magazines/Journals
-      61: Other # Pics/Wallpapers
-      62: PC/Phone-Android # Android
-      63: PC/Phone-IOS # iOS
-      66: PC/Phone-Other # WindowsPhone
-      90: Other # GPS
-      68: Other # Others
-      41: XXX # XXX
-      64: XXX # XXX-Magazines
-      65: XXX # XXX-Movies
-      67: XXX/Packs # XXX-Packs
-      69: XXX/Imageset # XXX-Pics/Wallpapers
+    categorymappings:
+      - {id: 86, cat: Other, desc: "Freeleech"}
+      - {id: 88, cat: Movies, desc: "Movies"}
+      - {id: 89, cat: Console, desc: "Games"}
+      - {id: 87, cat: TV, desc: "Series"}
+      - {id: 93, cat: Audio, desc: "Musica"}
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 70, cat: Movies/3D, desc: "3D"}
+      - {id: 71, cat: Movies/Sd, desc: "480p"}
+      - {id: 72, cat: Movies/BluRay, desc: "BD-R"}
+      - {id: 31, cat: Movies/HD, desc: "BDRIP/BRRip"}
+      - {id: 16, cat: Movies/SD, desc: "CAM"}
+      - {id: 74, cat: Movies/DVD, desc: "DvD-R"}
+      - {id: 17, cat: Movies/HD, desc: "HD"}
+      - {id: 91, cat: Movies/Other, desc: "Kids"}
+      - {id: 76, cat: Movies, desc: "Packs"}
+      - {id: 77, cat: Movies/WEBDL, desc: "WEB-DL"}
+      - {id: 14, cat: Movies/SD, desc: "DVDRip/XViD"}
+      - {id: 85, cat: Movies/DVD, desc: "Custom-DVDR"}
+      - {id: 96, cat: Movies/HD, desc: "4K"}
+      - {id: 6, cat: PC, desc: "Applications"}
+      - {id: 18, cat: PC/ISO, desc: "PC Applications"}
+      - {id: 19, cat: PC/Mac, desc: "Macintosh Applications"}
+      - {id: 34, cat: PC/ISO, desc: "Linux Applications"}
+      - {id: 7, cat: Audio, desc: "Music"}
+      - {id: 20, cat: Audio/Video, desc: "MVideo"}
+      - {id: 21, cat: Audio/MP3, desc: "Mp3"}
+      - {id: 33, cat: Audio/Other, desc: "Mp4"}
+      - {id: 32, cat: Audio/Lossless, desc: "FLAC"}
+      - {id: 2, cat: Console, desc: "Games"}
+      - {id: 78, cat: PC/Games, desc: "Linux"}
+      - {id: 79, cat: PC/Mac, desc: "MacOSX"}
+      - {id: 28, cat: Console/NDS, desc: "Nintendo DS"}
+      - {id: 27, cat: PC/Games, desc: "PC/Windows"}
+      - {id: 80, cat: Console/PS3, desc: "PS2"}
+      - {id: 81, cat: Console/PS3, desc: "PS3"}
+      - {id: 82, cat: Console/PS4, desc: "PS4"}
+      - {id: 83, cat: Console/PSP, desc: "PSP"}
+      - {id: 95, cat: Console/PSVita, desc: "PSVITA"}
+      - {id: 4, cat: Console/Wii, desc: "Wii"}
+      - {id: 26, cat: Console/Xbox360, desc: "XBOX360"}
+      - {id: 84, cat: Console/Xbox, desc: "XONE"}
+      - {id: 42, cat: TV, desc: "TV Series"}
+      - {id: 45, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 46, cat: TV/Sport, desc: "Sports"}
+      - {id: 47, cat: TV/HD, desc: "TV-Bluray"}
+      - {id: 48, cat: TV/SD, desc: "TV-Dvd-R"}
+      - {id: 49, cat: TV/SD, desc: "TV-DVDRiP"}
+      - {id: 50, cat: TV, desc: "TV-Packs"}
+      - {id: 92, cat: TV/Anime, desc: "TV-Kids"}
+      - {id: 52, cat: TV/SD, desc: "TV-SDx264"}
+      - {id: 53, cat: TV/WEB-DL, desc: "TV-WEB-DL"}
+      - {id: 55, cat: TV/HD, desc: "TV-X264"}
+      - {id: 56, cat: TV/SD, desc: "TV-XViD"}
+      - {id: 44, cat: TV, desc: "Miscellaneous"}
+      - {id: 51, cat: TV/Anime, desc: "Anime"}
+      - {id: 54, cat: Audio/Audiobook, desc: "Audiobook"}
+      - {id: 57, cat: Books, desc: "E-Books"}
+      - {id: 58, cat: Books/Comics, desc: "Comics"}
+      - {id: 59, cat: Books, desc: "Educational"}
+      - {id: 60, cat: Books, desc: "Magazines/Journals"}
+      - {id: 61, cat: Other, desc: "Pics/Wallpapers"}
+      - {id: 62, cat: PC/Phone-Android, desc: "Android"}
+      - {id: 63, cat: PC/Phone-IOS, desc: "iOS"}
+      - {id: 66, cat: PC/Phone-Other, desc: "WindowsPhone"}
+      - {id: 90, cat: Other, desc: "GPS"}
+      - {id: 68, cat: Other, desc: "Others"}
+      - {id: 41, cat: XXX, desc: "XXX"}
+      - {id: 64, cat: XXX, desc: "XXX-Magazines"}
+      - {id: 65, cat: XXX, desc: "XXX-Movies"}
+      - {id: 67, cat: XXX/Packs, desc: "XXX-Packs"}
+      - {id: 69, cat: XXX/Imageset, desc: "XXX-Pics/Wallpapers"}
 
     modes:
       search: [q]
@@ -119,7 +119,8 @@
       keywords: "{{ .Keywords }}"
       search_type: "name"
       searchin: "title"
-
+    error:
+      - selector: div.error
     rows:
       selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
     fields:
@@ -145,8 +146,9 @@
         selector: a[rel="torrent_leechers"]
       grabs:
         selector: a[rel="times_completed"]
-      banner|optional:
+      banner:
         selector: a[rel="fancybox"]
+        optional: true
         attribute: href
       downloadvolumefactor:
         case:
@@ -155,12 +157,14 @@
       uploadvolumefactor:
         case:
           "*": "1"
-      date|optional|1:
-        selector: div.torrentOwner > abbr.timeago
+      date:
+        selector: td.torrent_name > abbr.timeago
+        optional: true
         attribute: data-time
-      date|optional|2:
-        selector: div.torrentOwner:not(:has(abbr.timeago))
-        remove: span
+      date:
+        selector: td.torrent_name:not(:has(abbr.timeago))
+        optional: true
+        remove: span, a, br
         filters:
           - name: replace
             args: ["Enviado ", ""] # Uploaded
@@ -185,8 +189,7 @@
           - name: replace
             args: ["Sábado", "Saturday"]
           - name: replace
-            args: ["Domigo", "Sunday"]
+            args: ["Domingo", "Sunday"]
           - name: dateparse
             args: "02-01-2006 15:04"
-
-        
+          - name: hexdump
