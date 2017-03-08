@@ -110,6 +110,7 @@ namespace Jackett.Indexers
             {
                 Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
                 searchString = "%" + ReplaceRegex.Replace(searchString, "%") + "%";
+                searchString = Regex.Replace(searchString, @"(%\d{3,4})[ip](%)", "$1$2"); // remove i/p from resolution tags (see #835)
                 queryCollection.Add("search", searchString);
             }
 
@@ -144,7 +145,6 @@ namespace Jackett.Indexers
                     var descCol = row.ChildElements.ElementAt(3);
                     var qCommentLink = descCol.FirstChild.Cq();
                     release.Title = qCommentLink.Text();
-                    release.Description = release.Title;
                     release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href"));
                     release.Guid = release.Comments;
                     release.Link = new Uri($"{SiteLink}download.php?torrent={torrentId}");
