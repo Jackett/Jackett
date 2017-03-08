@@ -140,6 +140,7 @@ namespace Jackett.Indexers
         {
             public string Path { get; set; }
             public string Submitpath { get; set; }
+            public List<string> Cookies { get; set; }
             public string Method { get; set; }
             public string Form { get; set; }
             public bool Selectors { get; set; } = false;
@@ -844,6 +845,8 @@ namespace Jackett.Indexers
             var LoginUrl = resolvePath(Login.Path);
 
             configData.CookieHeader.Value = null;
+            if (Login.Cookies != null)
+                configData.CookieHeader.Value = String.Join("; ", Login.Cookies);
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
