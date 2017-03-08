@@ -71,6 +71,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Demonoid
  * Diablo Torrent
  * DigitalHive
+ * Dragon World (DTW)
  * Dream Team
  * EoT-Forum
  * eStone
