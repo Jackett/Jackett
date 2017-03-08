@@ -719,7 +719,7 @@ function showSearch(selectedIndexer) {
     });
 
     $('#jackett-search-perform').click(function () {
-        if ($('#jackett-search-perform').text().trim() !== 'Search trackers') {
+        if ($('#jackett-search-perform span').hasClass("spinner")) {
             // We are searchin already
             return;
         }
@@ -733,13 +733,13 @@ function showSearch(selectedIndexer) {
         $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
         var jqxhr = $.post("search", queryObj, function (data) {
-            $('#jackett-search-perform').html('Search trackers');
+            $('#jackett-search-perform').html($('#search-button-ready').html());
             var searchResults = $('#searchResults');
             searchResults.empty();
             var datatable = updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
             searchResults.find('div.dataTables_filter input').focusWithoutScrolling();
         }).fail(function () {
-            $('#jackett-search-perform').html('Search trackers');
+            $('#jackett-search-perform').html($('#search-button-ready').html());
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
