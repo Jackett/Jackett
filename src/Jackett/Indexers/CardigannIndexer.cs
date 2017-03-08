@@ -994,6 +994,9 @@ namespace Jackett.Indexers
                     case "toupper":
                         Data = Data.ToUpper();
                         break;
+                    case "urldecode":
+                        Data = HttpUtility.UrlDecode(Data, Encoding);
+                        break;
                     case "timeago":
                     case "reltime":
                         Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
