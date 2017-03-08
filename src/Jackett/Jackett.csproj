@@ -667,6 +667,9 @@
     <Content Include="Definitions\gigatorrents.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Definitions\ilcorsaronero.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Definitions\redacted-scrape.yml" />
     <Content Include="Definitions\torrentz2.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
