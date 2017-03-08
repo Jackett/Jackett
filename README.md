@@ -178,6 +178,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TV-Vault
  * u-Torrent
  * UHDBits
+ * Ultimate Gamer Club
  * ULTRAHDCLUB
  * World-In-HD  [![(invite needed)][inviteneeded]](#)
  * WorldOfP2P
