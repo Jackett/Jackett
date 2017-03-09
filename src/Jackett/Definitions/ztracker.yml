@@ -52,9 +52,12 @@
 
   search:
     path: browse_old.php
+    keywordsfilters:
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      keywords: "{{ .Query.Keywords }}"
+      keywords: "{{ .Keywords }}"
       search_type: "t_name"
     rows:
       selector: table[border="1"] > tbody > tr:has(a[href*="details.php?id="])
