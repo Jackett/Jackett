@@ -58,6 +58,8 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
+            webclient.requestDelay = 2; // 0.5 requests per second
+
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
             AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
@@ -173,7 +175,10 @@ namespace Jackett.Indexers
 
                 if (errorCode > 0) // too many requests per second
                 {
-                    if (attempts < 3)
+                    // we use the IwebClient rate limiter now, this shouldn't happen 
+                    throw new Exception(jsonContent.Value<string>("error"));
+
+                    /*if (attempts < 3)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(2));
                         return await PerformQuery(query, ++attempts);
@@ -181,7 +186,7 @@ namespace Jackett.Indexers
                     else
                     {
                         throw new Exception(jsonContent.Value<string>("error"));
-                    }
+                    }*/
                 }
 
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
