@@ -3,6 +3,7 @@ using AngleSharp.Html;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -26,6 +27,22 @@ namespace Jackett.Utils
             Regex rgx = new Regex(regex);
             str = rgx.Replace(str, replacement);
             return str;
+        }
+
+        // replaces culture specific characters with the corresponding base characters (e.g. è becomes e).
+        public static String RemoveDiacritics(String s)
+        {
+            String normalizedString = s.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < normalizedString.Length; i++)
+            {
+                Char c = normalizedString[i];
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                    stringBuilder.Append(c);
+            }
+
+            return stringBuilder.ToString();
         }
 
         public static string FromBase64(string str)

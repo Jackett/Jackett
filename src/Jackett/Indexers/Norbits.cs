@@ -226,14 +226,14 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();
-            var searchTerm = query.GetQueryString();
+            var exactSearchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
 
             // Check login before performing a query
            await CheckLogin();
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
-            if (!DevMode && !string.IsNullOrEmpty(searchTerm))
+            if (!DevMode && !string.IsNullOrEmpty(exactSearchTerm))
             {
                 lock (cache)
                 {
@@ -241,31 +241,40 @@ namespace Jackett.Indexers
                     CleanCache();
 
                     // Search in cache
-                    var cachedResult = cache.FirstOrDefault(i => i.Query == searchTerm);
+                    var cachedResult = cache.FirstOrDefault(i => i.Query == exactSearchTerm);
                     if (cachedResult != null)
                         return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
                 }
             }
 
-            // Build our query
-            var request = BuildQuery(searchTerm, query, searchUrl);
+            var SearchTerms = new List<string> { exactSearchTerm };
 
-            // Getting results & Store content
-            var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
-            _fDom = response.Content;
+            // duplicate search without diacritics
+            var baseSearchTerm = StringUtil.RemoveDiacritics(exactSearchTerm);
+            if (baseSearchTerm != exactSearchTerm)
+                SearchTerms.Add(baseSearchTerm);
 
-            try
+            foreach (var searchTerm in SearchTerms)
             {
-                var firstPageRows = FindTorrentRows();
+                // Build our query
+                var request = BuildQuery(searchTerm, query, searchUrl);
+
+                // Getting results & Store content
+                var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
+                _fDom = response.Content;
+
+                try
+                {
+                    var firstPageRows = FindTorrentRows();
 
                     // Add them to torrents list
                     torrentRowList.AddRange(firstPageRows.Select(fRow => fRow.Cq()));
 
-                // If pagination available
-                int nbResults;
-                int pageLinkCount;
-                nbResults = 1;
-                pageLinkCount = 1;
+                    // If pagination available
+                    int nbResults;
+                    int pageLinkCount;
+                    nbResults = 1;
+                    pageLinkCount = 1;
 
                     // Check if we have a minimum of one result
                     if (firstPageRows.Length > 1)
@@ -282,145 +291,145 @@ namespace Jackett.Indexers
                             Output("\nNo result found for your query, please try another search term ...\n", "info");
 
                             // No result found for this query
-                            return releases;
+                            break;
                         }
                     }
 
-                Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
-                Output("\nThere are " + firstPageRows.Length + " results on the first page !");
+                    Output("\nFound " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
+                    Output("\nThere are " + firstPageRows.Length + " results on the first page !");
 
-                // Loop on results
+                    // Loop on results
 
-                foreach (var tRow in torrentRowList)
-                {
-                    Output("Torrent #" + (releases.Count + 1));
+                    foreach (var tRow in torrentRowList)
+                    {
+                        Output("Torrent #" + (releases.Count + 1));
 
-                    // ID               
-                    var id = tRow.Find("td:eq(1) > a:eq(0)").Attr("href").Split('=').Last();
-                    Output("ID: " + id);
+                        // ID               
+                        var id = tRow.Find("td:eq(1) > a:eq(0)").Attr("href").Split('=').Last();
+                        Output("ID: " + id);
 
-                    // Release Name
-                    var name = tRow.Find("td:eq(1) > a:eq(0)").Attr("title");
+                        // Release Name
+                        var name = tRow.Find("td:eq(1) > a:eq(0)").Attr("title");
 
-                    // Category
-                    var categoryId = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
-                    var categoryName = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("title");
+                        // Category
+                        var categoryId = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
+                        var categoryName = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("title");
           
-                    var MainCat = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
-                    var SubCat1 = "none";
-                    var SubCat2 = "none";
+                        var MainCat = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
+                        var SubCat1 = "none";
+                        var SubCat2 = "none";
 
-                    var testcat = MainCat;
+                        var testcat = MainCat;
 
-                    if (tRow.Find("td:eq(0) > div > a:eq(1)").Length == 1)
-                    {
-                        SubCat1 = tRow.Find("td:eq(0) > div > a:eq(1)").Attr("href").Split('?').Last();
-                    }
-                    if (tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Length == 1)
-                    {
-                        SubCat2 = tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Attr("href").Split('?').Last();
-                        testcat = MainCat + '&' + SubCat2;
-                    }
+                        if (tRow.Find("td:eq(0) > div > a:eq(1)").Length == 1)
+                        {
+                            SubCat1 = tRow.Find("td:eq(0) > div > a:eq(1)").Attr("href").Split('?').Last();
+                        }
+                        if (tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Length == 1)
+                        {
+                            SubCat2 = tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Attr("href").Split('?').Last();
+                            testcat = MainCat + '&' + SubCat2;
+                        }
 
-                    Output("Category: " + testcat + " - " + categoryName);
+                        Output("Category: " + testcat + " - " + categoryName);
 
-                    // Seeders
-                    var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
-                    Output("Seeders: " + seeders);
+                        // Seeders
+                        var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
+                        Output("Seeders: " + seeders);
                     
-                    // Leechers
-                    var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(10)").Text());
-                    Output("Leechers: " + leechers);
+                        // Leechers
+                        var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(10)").Text());
+                        Output("Leechers: " + leechers);
 
-                    // Completed
-                    Regex regexObj = new Regex(@"[^\d]");
-                    var completed2 = tRow.Find("td:eq(7)").Text();
-                    var completed = ParseUtil.CoerceLong(regexObj.Replace(completed2, ""));
-                    Output("Completed: " + completed);
+                        // Completed
+                        Regex regexObj = new Regex(@"[^\d]");
+                        var completed2 = tRow.Find("td:eq(7)").Text();
+                        var completed = ParseUtil.CoerceLong(regexObj.Replace(completed2, ""));
+                        Output("Completed: " + completed);
 
-                    // Files
-                    var files = 1;
-                    if (tRow.Find("td:eq(2) > a").Length == 1)
-                    {
-                        files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(2) > a").Text(), @"\d+").Value);
+                        // Files
+                        var files = 1;
+                        if (tRow.Find("td:eq(2) > a").Length == 1)
+                        {
+                            files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(2) > a").Text(), @"\d+").Value);
+                        }
+                        Output("Files: " + files);
+
+                        // Health
+                        var percent = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value.Trim());
+                        Output("Health: " + percent + "%");
+
+                        // Size
+                        var humanSize = tRow.Find("td:eq(6)").Text().ToLowerInvariant();
+                        var size = ReleaseInfo.GetBytes(humanSize);
+                        Output("Size: " + humanSize + " (" + size + " bytes)");
+
+                        // --> Date
+                        var dateTimeOrig = tRow.Find("td:eq(4)").Text();
+                        var dateTime = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
+                        var date = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                        Output("Released on: " + date);
+
+                        // Torrent Details URL
+                        var detailsLink = new Uri(TorrentDescriptionUrl.Replace("{id}", id.ToString()));
+                        Output("Details: " + detailsLink.AbsoluteUri);
+
+                        // Torrent Comments URL
+                        var commentsLink = new Uri(TorrentCommentUrl.Replace("{id}", id.ToString()));
+                        Output("Comments Link: " + commentsLink.AbsoluteUri);
+
+                        // Torrent Download URL
+                        var passkey = tRow.Find("td:eq(1) > a:eq(1)").Attr("href");
+                        var key = Regex.Match(passkey, "(?<=passkey\\=)([a-zA-z0-9]*)");
+                        Uri downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
+                        Output("Download Link: " + downloadLink.AbsoluteUri);
+
+                        // Building release infos
+                        var release = new ReleaseInfo
+                        {
+                            Category = MapTrackerCatToNewznab(testcat.ToString()),
+                            Title = name,
+                            Seeders = seeders,
+                            Peers = seeders + leechers,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800,
+                            PublishDate = date,
+                            Size = size,
+                            Files = files,
+                            Grabs = completed,
+                            Guid = detailsLink,
+                            Comments = commentsLink,
+                            Link = downloadLink
+                        };
+
+                        var genres = tRow.Find("span.genres").Text();
+                        if (!string.IsNullOrEmpty(genres))
+                            release.Description = genres;
+
+                        // IMDB
+                        var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
+                        release.Imdb = ParseUtil.GetLongFromString(imdbLink);
+
+                        if (tRow.Find("img[title=\"100% freeleech\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0;
+                        else if (tRow.Find("img[title=\"Halfleech\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0.5;
+                        else if (tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1)
+                            release.DownloadVolumeFactor = 0.1;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
+
+                        releases.Add(release);
                     }
-                    Output("Files: " + files);
 
-                    // Health
-                    var percent = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value.Trim());
-                    Output("Health: " + percent + "%");
-
-                    // Size
-                    var humanSize = tRow.Find("td:eq(6)").Text().ToLowerInvariant();
-                    var size = ReleaseInfo.GetBytes(humanSize);
-                    Output("Size: " + humanSize + " (" + size + " bytes)");
-
-                    // --> Date
-                    var dateTimeOrig = tRow.Find("td:eq(4)").Text();
-                    var dateTime = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
-                    var date = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-                    Output("Released on: " + date);
-
-                    // Torrent Details URL
-                    var detailsLink = new Uri(TorrentDescriptionUrl.Replace("{id}", id.ToString()));
-                    Output("Details: " + detailsLink.AbsoluteUri);
-
-                    // Torrent Comments URL
-                    var commentsLink = new Uri(TorrentCommentUrl.Replace("{id}", id.ToString()));
-                    Output("Comments Link: " + commentsLink.AbsoluteUri);
-
-                    // Torrent Download URL
-                    var passkey = tRow.Find("td:eq(1) > a:eq(1)").Attr("href");
-                    var key = Regex.Match(passkey, "(?<=passkey\\=)([a-zA-z0-9]*)");
-                    Uri downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{passkey}", key.ToString()));
-                    Output("Download Link: " + downloadLink.AbsoluteUri);
-
-                    // Building release infos
-                    var release = new ReleaseInfo
-                    {
-                        Category = MapTrackerCatToNewznab(testcat.ToString()),
-                        Title = name,
-                        Seeders = seeders,
-                        Peers = seeders + leechers,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800,
-                        PublishDate = date,
-                        Size = size,
-                        Files = files,
-                        Grabs = completed,
-                        Guid = detailsLink,
-                        Comments = commentsLink,
-                        Link = downloadLink
-                    };
-
-                    var genres = tRow.Find("span.genres").Text();
-                    if (!string.IsNullOrEmpty(genres))
-                        release.Description = genres;
-
-                    // IMDB
-                    var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
-                    release.Imdb = ParseUtil.GetLongFromString(imdbLink);
-
-                    if (tRow.Find("img[title=\"100% freeleech\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else if (tRow.Find("img[title=\"Halfleech\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0.5;
-                    else if (tRow.Find("img[title=\"90% Freeleech\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0.1;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
                 }
-
+                catch (Exception ex)
+                {
+                    OnParseError("Error, unable to parse result \n" + ex.StackTrace, ex);
+                }
             }
-            catch (Exception ex)
-            {
-                OnParseError("Error, unable to parse result \n" + ex.StackTrace, ex);
-            }
-
             // Return found releases
             return releases;
         }
