@@ -16,6 +16,16 @@ namespace Jackett.Utils.Clients
         protected Logger logger;
         protected IConfigurationService configService;
         protected IProcessService processService;
+        protected DateTime lastRequest = DateTime.MinValue;
+        protected TimeSpan requestDelayTimeSpan;
+        public double requestDelay
+        {
+            get { return requestDelayTimeSpan.TotalSeconds; }
+            set
+            {
+                requestDelayTimeSpan = TimeSpan.FromSeconds(value);
+            }
+        }
 
         virtual public void AddTrustedCertificate(string host, string hash)
         {
@@ -27,6 +37,21 @@ namespace Jackett.Utils.Clients
             processService = p;
             logger = l;
             configService = c;
+        }
+
+        async protected void DelayRequest(WebRequest request)
+        {
+            if (requestDelay != 0)
+            {
+                var timeElapsed = DateTime.Now - lastRequest;
+                if (timeElapsed < requestDelayTimeSpan)
+                {
+                    var delay = requestDelayTimeSpan - timeElapsed;
+                    logger.Debug(string.Format("IWebClient: delaying request for {0} by {1} seconds", request.Url, delay.TotalSeconds.ToString()));
+                    await Task.Delay(delay);
+                }
+                lastRequest = DateTime.Now;
+            }
         }
 
         virtual protected void PrepareRequest(WebRequest request)
@@ -52,6 +77,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("IWebClient.GetBytes(Url:{0})", request.Url));
             PrepareRequest(request);
+            DelayRequest(request);
             var result = await Run(request);
             result.Request = request;
             logger.Debug(string.Format("IWebClient: Returning {0} => {1} bytes", result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
@@ -62,6 +88,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("IWebClient.GetString(Url:{0})", request.Url));
             PrepareRequest(request);
+            DelayRequest(request);
             var result = await Run(request);
             result.Request = request;
             WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
