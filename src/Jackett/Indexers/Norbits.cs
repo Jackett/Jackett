@@ -58,11 +58,25 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            // TV Series
-            AddCategoryMapping("main_cat[]=2&sub2_cat[]=19", TorznabCatType.TVHD);
-            AddCategoryMapping("main_cat[]=2&sub2_cat[]=20", TorznabCatType.TVHD);
-            AddCategoryMapping("main_cat[]=2&sub2_cat[]=22", TorznabCatType.TVSD);
-
+            AddCategoryMapping("main_cat[]=1&sub2_cat[]=19", TorznabCatType.MoviesHD, "Filmer - HD-1080p/i");
+            AddCategoryMapping("main_cat[]=1&sub2_cat[]=20", TorznabCatType.MoviesHD, "Filmer - HD-720p");
+            AddCategoryMapping("main_cat[]=1&sub2_cat[]=22", TorznabCatType.MoviesSD, "Filmer - SD");
+            AddCategoryMapping("main_cat[]=2&sub2_cat[]=19", TorznabCatType.TVHD, "TV - HD-1080p/i");
+            AddCategoryMapping("main_cat[]=2&sub2_cat[]=20", TorznabCatType.TVHD, "TV - HD-720p");
+            AddCategoryMapping("main_cat[]=2&sub2_cat[]=22", TorznabCatType.TVSD, "TV - SD");
+            AddCategoryMapping("main_cat[]=3", TorznabCatType.PC, "Programmer");
+            AddCategoryMapping("main_cat[]=4", TorznabCatType.Console, "Spill");
+            AddCategoryMapping("main_cat[]=5&sub2_cat[]=42", TorznabCatType.AudioMP3, "Musikk - 192");
+            AddCategoryMapping("main_cat[]=5&sub2_cat[]=43", TorznabCatType.AudioMP3, "Musikk - 256");
+            AddCategoryMapping("main_cat[]=5&sub2_cat[]=44", TorznabCatType.AudioMP3, "Musikk - 320");
+            AddCategoryMapping("main_cat[]=5&sub2_cat[]=45", TorznabCatType.AudioMP3, "Musikk - VBR");
+            AddCategoryMapping("main_cat[]=5&sub2_cat[]=46", TorznabCatType.AudioLossless, "Musikk - Lossless");
+            AddCategoryMapping("main_cat[]=6", TorznabCatType.Books, "Tidsskrift");
+            AddCategoryMapping("main_cat[]=7", TorznabCatType.AudioAudiobook, "Lydbøker");
+            AddCategoryMapping("main_cat[]=8&sub2_cat[]=19", TorznabCatType.AudioVideo, "Musikkvideoer - HD-1080p/i");
+            AddCategoryMapping("main_cat[]=8&sub2_cat[]=20", TorznabCatType.AudioVideo, "Musikkvideoer - HD-720p");
+            AddCategoryMapping("main_cat[]=8&sub2_cat[]=22", TorznabCatType.AudioVideo, "Musikkvideoer - SD");
+            AddCategoryMapping("main_cat[]=40", TorznabCatType.AudioOther, "Podcasts");
         }
 
         /// <summary>
@@ -302,9 +316,9 @@ namespace Jackett.Indexers
                     {
                         SubCat1 = tRow.Find("td:eq(0) > div > a:eq(1)").Attr("href").Split('?').Last();
                     }
-                    if (tRow.Find("td:eq(0) > div > a:eq(2)").Length == 1)
+                    if (tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Length == 1)
                     {
-                        SubCat2 = tRow.Find("td:eq(0) > div > a:eq(2)").Attr("href").Split('?').Last();
+                        SubCat2 = tRow.Find("td:eq(0) > div > a[href^=\"/browse.php?sub2_cat[]=\"]").Attr("href").Split('?').Last();
                         testcat = MainCat + '&' + SubCat2;
                     }
 
