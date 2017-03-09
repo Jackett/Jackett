@@ -48,6 +48,8 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
+            webclient.requestDelay = 2; // 0.5 requests per second
+
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
