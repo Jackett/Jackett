@@ -28,7 +28,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShowRSS
  * Sky torrents
  * The Pirate Bay
- * TNTVillage
+ * TNTVillage <!-- maintained by bonny1992 -->
  * TorrentProject
  * Torrentz2
  
