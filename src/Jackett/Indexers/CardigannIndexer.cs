@@ -1165,8 +1165,14 @@ namespace Jackett.Indexers
 
                 // build search URL
                 // HttpUtility.UrlPathEncode seems to only encode spaces, we use UrlEncode and replace + with %20 as a workaround
-                var searchUrl = resolvePath(applyGoTemplateText(SearchPath.Path, variables, HttpUtility.UrlEncode).Replace("+", "%20") + "?").AbsoluteUri;
-                var queryCollection = new NameValueCollection();
+                var searchUrl = resolvePath(applyGoTemplateText(SearchPath.Path, variables, HttpUtility.UrlEncode).Replace("+", "%20")).AbsoluteUri;
+                var queryCollection = new List<KeyValuePair<string, string>>();
+                RequestType method = RequestType.GET;
+
+                if (String.Equals(SearchPath.Method, "post", StringComparison.OrdinalIgnoreCase))
+                {
+                    method = RequestType.POST;
+                }
 
                 var InputsList = new List<Dictionary<string, string>>();
                 if (SearchPath.Inheritinputs)
@@ -1176,24 +1182,42 @@ namespace Jackett.Indexers
                 foreach (var Inputs in InputsList)
                 { 
                     if (Inputs != null)
-                    { 
+                    {
                         foreach (var Input in Inputs)
                         {
                             if (Input.Key == "$raw")
-                                searchUrl += applyGoTemplateText(Input.Value, variables, HttpUtility.UrlEncode);
+                            {
+                                var rawStr = applyGoTemplateText(Input.Value, variables, HttpUtility.UrlEncode);
+                                foreach (string part in rawStr.Split('&'))
+                                {
+                                    var parts = part.Split(new char[] { '=' }, 2);
+                                    var key = parts[0];
+                                    if (key.Length == 0)
+                                        continue;
+                                    var value = "";
+                                    if (parts.Count() == 2)
+                                        value = parts[1];
+                                    queryCollection.Add(key, value);
+                                }
+                            }
                             else
                                 queryCollection.Add(Input.Key, applyGoTemplateText(Input.Value, variables));
                         }
                     }
                 }
-                if (queryCollection.Count > 0)
-                    searchUrl += "&" + queryCollection.GetQueryString(Encoding);
 
-                // in case no args are added remove ? again (needed for KAT)
-                searchUrl = searchUrl.TrimEnd('?');
+                if (method == RequestType.GET)
+                {
+                    if (queryCollection.Count > 0)
+                        searchUrl += "?" + queryCollection.GetQueryString(Encoding);
+                }
 
                 // send HTTP request
-                var response = await RequestStringWithCookies(searchUrl);
+                WebClientStringResult response = null;
+                if (method == RequestType.POST)
+                    response = await PostDataWithCookies(searchUrl, queryCollection);
+                else
+                    response = await RequestStringWithCookies(searchUrl);
                 var results = response.Content;
                 try
                 {
@@ -1209,12 +1233,16 @@ namespace Jackett.Indexers
                         if (!LoginResult)
                             throw new Exception(string.Format("Relogin failed"));
                         await TestLogin();
-                        response = await RequestStringWithCookies(searchUrl);
+                        if (method == RequestType.POST)
+                            response = await PostDataWithCookies(searchUrl, queryCollection);
+                        else
+                            response = await RequestStringWithCookies(searchUrl);
                         results = response.Content;
                         SearchResultDocument = SearchResultParser.Parse(results);
                     }
 
                     checkForError(response, Definition.Search.Error);
+
 
                     var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
                     List<IElement> Rows = new List<IElement>();
