@@ -8,42 +8,43 @@
     - http://www.passionetorrent.info/
 
   caps:
-    categories:
+    categorymappings:
       # VIDEO
-      1: Movies # News Cinema
-      2: Movies/SD # BDRip
-      17: Movies/SD # DVDRip
-      21: TV
-      22: Movies/HD # 720p/1080p
-      23: Movies/HD # 1080p HRS x265 HEVC
-      42: Movies/HD # 2160p 4k UltraHD HRS
-      30: TV/Anime # Cartoons
-      38: Movies/SD # BD-BR-DvdRip sub ita
-      39: Movies/SD # Introvabili
-      40: TV/Documentary # documentaries
-      24: Movies/SD # Filmografie
+      - {id: 1, cat: Movies, desc: "News Cinema"}
+      - {id: 2, cat: Movies/SD, desc: "BDRip"}
+      - {id: 17, cat: Movies/SD, desc: "DVDRip"}
+      - {id: 21, cat: TV, desc: "TV"}
+      - {id: 22, cat: Movies/HD, desc: "720p/1080p"}
+      - {id: 23, cat: Movies/HD, desc: "1080p HRS x265 HEVC"}
+      - {id: 42, cat: Movies/HD, desc: "2160p 4k UltraHD HRS"}
+      - {id: 30, cat: TV/Anime, desc: "Cartoons"}
+      - {id: 38, cat: Movies/SD, desc: "BD-BR-DvdRip sub ita"}
+      - {id: 39, cat: Movies/SD, desc: "Introvabili"}
+      - {id: 40, cat: TV/Documentary, desc: "documentaries"}
+      - {id: 24, cat: Movies/SD, desc: "Filmografie"}
 
       # MUSICA
-      32: Audio # Italian music
-      41: Audio # Discography
-      33: Audio # MusicaInternazionale
-      34: Audio # Compilation
+      - {id: 32, cat: Audio, desc: "Italian music"}
+      - {id: 41, cat: Audio, desc: "Discography"}
+      - {id: 33, cat: Audio, desc: "MusicaInternazionale"}
+      - {id: 34, cat: Audio, desc: "Compilation"}
 
       # PDF
-      28: Books # Ebook
+      - {id: 28, cat: Books, desc: "Ebook"}
 
       # GAMES
-      14: PC/Games # PC Games
+      - {id: 14, cat: PC/Games, desc: "PC Games"}
 
       # SOFTWARE
-      7: PC/ISO # Sistemi operativi
-      36: PC/ISO # Windows APP
-      9: PC/Phone-IOS # Apple APP
-      37: PC/Phone-Android # Android APP
+      - {id: 7, cat: PC/ISO, desc: "Sistemi operativi"}
+      - {id: 36, cat: PC/ISO, desc: "Windows APP"}
+      - {id: 9, cat: PC/Phone-IOS, desc: "Apple APP"}
+      - {id: 37, cat: PC/Phone-Android, desc: "Android APP"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: index.php?page=login
