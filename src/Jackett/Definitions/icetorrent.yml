@@ -44,10 +44,12 @@
       - {id: 87, cat: Other, desc: "TUTS"}
       - {id: 33, cat: TV/SD, desc: "TV Episodes"}
       - {id: 34, cat: TV/HD, desc: "TVHD Episodes"}
+      - {id: 9, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: /login.php
@@ -65,14 +67,18 @@
     text: -1
 
   search:
-    path: /browse.php
+    paths:
+    - path: browse.php
+      categorymappings: ["!", 9]
+    - path: browseadult.php
+      categorymappings: [9]
     inputs:
-      cat: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
-      search_by: "name"
+      search_by: "{{ if .Query.IMDBID }}imdb{{else}}name{{end}}"
     rows:
-      selector: td.torrenttable > table > tbody > tr:has(a[title][href^="details.php?id="])
+      selector: .torrenttable table[class!="ice"] > tbody > tr:has(a[title][href^="details.php?id="])
     fields:
       title:
         selector: a[title][href^="details.php?id="]
@@ -81,7 +87,7 @@
         selector: a[title][href^="details.php?id="]
         attribute: href
       category:
-        selector: a[href^="browse.php?cat="]
+        selector: a[href*=".php?cat="]
         attribute: href
         filters:
           - name: querystring
@@ -91,6 +97,10 @@
         attribute: href
       banner:
         attribute: rel
+      imdb:
+        selector: a[href^="http://www.imdb.com/title/"]
+        optional: true
+        attribute: href
       download:
         selector: a[href^="download.php"]
         attribute: href
@@ -104,15 +114,26 @@
         remove: a
       date:
         selector: td:nth-child(2) > div
+        remove: b
         filters:
           - name: replace
-            args: ["Added on: ", ""]
-          - name: trim
-            args: "\xA0"
+            args: ["\xA0", " "]
+          - name: replace
+            args: ["Added on ", ""]
+          - name: replace
+            args: ["st ", " "]
+          - name: replace
+            args: ["nd ", " "]
+          - name: replace
+            args: ["rd ", " "]  
+          - name: replace
+            args: ["th ", " "]
+          - name: replace
+            args: [" by", ""]
           - name: append
-            args: " +03:00"
+            args: " +02:00"
           - name: dateparse
-            args: "2006-01-02 15:04:05 -07:00"
+            args: "2 Jan 2006 15:04:05 -07:00"
       grabs:
         selector: td:nth-child(6)
       downloadvolumefactor:
