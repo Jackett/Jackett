@@ -1,0 +1,157 @@
+---
+  site: passionetorrent
+  name: Passione Torrent
+  language: it-it
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.passionetorrent.info/
+
+  caps:
+    categories:
+      # VIDEO
+      1: Movies # News Cinema
+      2: Movies/SD # BDRip
+      17: Movies/SD # DVDRip
+      21: TV
+      22: Movies/HD # 720p/1080p
+      23: Movies/HD # 1080p HRS x265 HEVC
+      42: Movies/HD # 2160p 4k UltraHD HRS
+      30: TV/Anime # Cartoons
+      38: Movies/SD # BD-BR-DvdRip sub ita
+      39: Movies/SD # Introvabili
+      40: TV/Documentary # documentaries
+      24: Movies/SD # Filmografie
+
+      # MUSICA
+      32: Audio # Italian music
+      41: Audio # Discography
+      33: Audio # MusicaInternazionale
+      34: Audio # Compilation
+
+      # PDF
+      28: Books # Ebook
+
+      # GAMES
+      14: PC/Games # PC Games
+
+      # SOFTWARE
+      7: PC/ISO # Sistemi operativi
+      36: PC/ISO # Windows APP
+      9: PC/Phone-IOS # Apple APP
+      37: PC/Phone-Android # Android APP
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: body[onLoad^="makeAlert('"]
+        message:
+          selector: body[onLoad^="makeAlert('"]
+          attribute: onLoad
+          filters:
+            - name: replace
+              args: ["makeAlert('Error' , '", ""]
+            - name: replace
+              args: ["');", ""]
+    test:
+      path: index.php
+
+  download:
+    before:
+      path: "thanks.php"
+      method: "post"
+      inputs:
+        infohash: "{{ .DownloadUri.Query.id }}"
+        thanks: "1"
+        rndval: "1487013827343"
+    selector: a[href^="download.php?id="]
+
+  search:
+    path: index.php
+    keywordsfilters:
+      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
+      - name: re_replace
+        args: ["S0?(\\d{1,2})", " $1 "]
+      - name: re_replace
+        args: ["E(\\d{2,3})", " $1 "]
+      - name: replace
+        args: ["-", ""]
+    inputs:
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+      page: "torrents"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      active: "0"
+    rows:
+      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+    fields:
+      download:
+        selector: a[href^="index.php?page=downloadcheck&id="]
+        attribute: href
+      title:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        filters:
+          # normalize to SXXEYY format
+          - name: re_replace
+            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
+          - name: re_replace
+            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
+      banner:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.*?) "
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: href
+      size:
+        selector: td:nth-last-child(4)
+      date:
+        selector: td:nth-last-child(8)
+        filters:
+          - name: append
+            args: " +01:00"
+          - name: dateparse
+            args: "02/01/2006 -07:00"
+      grabs:
+        selector: td:nth-last-child(7)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-last-child(5)
+      leechers:
+        selector: td:nth-last-child(6)
+      downloadvolumefactor:
+        case:
+          img[alt="Gold 100% Free"]: "0"
+          img[alt="Silver 50% Free"]: "0.5"
+          img[alt="Bronze 25% Free"]: "0.75"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt="2x Upload Multiplier"]: "2"
+          img[alt="3x Upload Multiplier"]: "3"
+          img[alt="4x Upload Multiplier"]: "4"
+          img[alt="5x Upload Multiplier"]: "5"
+          img[alt="6x Upload Multiplier"]: "6"
+          img[alt="7x Upload Multiplier"]: "7"
+          img[alt="8x Upload Multiplier"]: "8"
+          img[alt="9x Upload Multiplier"]: "9"
+          img[alt="10x Upload Multiplier"]: "10"
+          "*": "1"
