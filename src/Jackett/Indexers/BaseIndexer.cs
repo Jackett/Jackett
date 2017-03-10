@@ -154,18 +154,20 @@ namespace Jackett.Indexers
                 if (mapping != null)
                 {
                     cats.Add(mapping.NewzNabCategory);
-                    
-                    // 1:1 category mapping
-                    try
-                    {
-                        var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
-                        cats.Add(trackerCategoryInt + 100000);
-                    }
-                    catch (FormatException)
-                    {
-                        // mapping.TrackerCategory is not an integer, continue
-                    }
 
+                    if (mapping.TrackerCategory != null)
+                    {
+                        // 1:1 category mapping
+                        try
+                        {
+                            var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
+                            cats.Add(trackerCategoryInt + 100000);
+                        }
+                        catch (FormatException)
+                        {
+                            // mapping.TrackerCategory is not an integer, continue
+                        }
+                    }
                 }
             }
             return cats;
