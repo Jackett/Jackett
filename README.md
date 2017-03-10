@@ -19,7 +19,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 ### Supported Public Trackers
  * EZTV
- * Il Corsaro Nero
+ * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
@@ -28,6 +28,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShowRSS
  * Sky torrents
  * The Pirate Bay
+ * TNTVillage
  * TorrentProject
  * Torrentz2
  
