@@ -69,12 +69,17 @@
 
   search:
     path: torrents-search.php
+    keywordsfilters: 
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "+"]
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
       incldead: "1"
     rows:
       selector: table.ttable_headinner > tbody > tr[class^="t-row"]
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="download.php?id="]
@@ -112,6 +117,7 @@
         selector: td:nth-child(10)
       downloadvolumefactor:
         case:
+          ":root:has(globnfo:contains(\"sitewide freeleech\"))": "0"
           img[title="freeleech"]: "0"
           "*": "1"
       uploadvolumefactor:
