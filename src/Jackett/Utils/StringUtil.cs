@@ -96,6 +96,18 @@ namespace Jackett.Utils
             return string.Join("&", collection.AllKeys.Select(a => a + "=" + HttpUtility.UrlEncode(collection[a], encoding)));
         }
 
+        public static string GetQueryString(this ICollection<KeyValuePair<string, string>> collection, Encoding encoding = null)
+        {
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+            return string.Join("&", collection.Select(a => a.Key + "=" + HttpUtility.UrlEncode(a.Value, encoding)));
+        }
+
+        public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value)
+        {
+            collection.Add(new KeyValuePair<string, string>(key, value));
+        }
+
         public static string ToHtmlPretty(this IElement element)
         {
             if (element == null)
