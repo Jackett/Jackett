@@ -109,12 +109,12 @@ namespace Jackett.Indexers
             queryCollection.Add("bookmarks", "showall");
             queryCollection.Add("subscriptions", "showall");
             queryCollection.Add("skw", "showall");
-            queryCollection.Add("advancedsearchparameters", "");
+            //queryCollection.Add("advancedsearchparameters", "");
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                // search keywords use OR by default and it seems like there's no way to change it, expect unwanted results
-                queryCollection.Add("searchstring", searchString);
+                // perform AND search on movie name using 'advancedsearchparameters' instead of 'searchstring'
+                queryCollection.Add("advancedsearchparameters", "[name=" + searchString + "]");
             }
 
             var cats = MapTorznabCapsToTrackers(query);
