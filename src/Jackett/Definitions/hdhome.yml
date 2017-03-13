@@ -9,16 +9,51 @@
 
   caps:
     categorymappings:
-      - {id: 401, cat: Movies, desc: "Movies/电影"}
-      - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
-      - {id: 410, cat: Movies, desc: "iPad/iPad影视"}
-      - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
-      - {id: 402, cat: TV, desc: "TV Series/剧集"}
-      - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-      - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐MV"}
-      - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-      - {id: 408, cat: Audio, desc: "HQ Audio/无损音乐"}
-      - {id: 409, cat: Other, desc: "Misc/其他"}
+      - {id: 411, cat: Movies/SD, desc: "Movies SD"}
+      - {id: 412, cat: Movies/SD, desc: "Movies IPad"}
+      - {id: 413, cat: Movies/HD, desc: "Movies 720p"}
+      - {id: 414, cat: Movies/HD, desc: "Movies 1080p"}
+      - {id: 415, cat: Movies/HD, desc: "Movies REMUX"}
+      - {id: 450, cat: Movies/BluRay, desc: "Movies Bluray"}
+      - {id: 416, cat: Movies/HD, desc: "Movies 2160p"}
+      - {id: 417, cat: TV/Documentary, desc: "Doc SD"}
+      - {id: 418, cat: TV/Documentary, desc: "Doc IPad"}
+      - {id: 419, cat: TV/Documentary, desc: "Doc 720p"}
+      - {id: 420, cat: TV/Documentary, desc: "Doc 1080p"}
+      - {id: 421, cat: TV/Documentary, desc: "Doc REMUX"}
+      - {id: 451, cat: TV/Documentary, desc: "Doc Bluray"}
+      - {id: 422, cat: TV/Documentary, desc: "Doc 2160p"}
+      - {id: 423, cat: TV/HD, desc: "TVMusic 720p"}
+      - {id: 424, cat: TV/HD, desc: "TVMusic 1080i"}
+      - {id: 425, cat: TV/SD, desc: "TVShow SD"}
+      - {id: 426, cat: TV/SD, desc: "TVShow IPad"}
+      - {id: 427, cat: TV/HD, desc: "TVShow 720p"}
+      - {id: 428, cat: TV/HD, desc: "TVShow 1080i"}
+      - {id: 429, cat: TV/HD, desc: "TVShow 1080p"}
+      - {id: 430, cat: TV/HD, desc: "TVShow REMUX"}
+      - {id: 452, cat: TV/HD, desc: "TVShows Bluray"}
+      - {id: 431, cat: TV/HD, desc: "TVShow 2160p"}
+      - {id: 432, cat: TV/SD, desc: "TVSeries SD"}
+      - {id: 433, cat: TV/SD, desc: "TVSeries IPad"}
+      - {id: 434, cat: TV/HD, desc: "TVSeries 720p"}
+      - {id: 435, cat: TV/HD, desc: "TVSeries 1080i"}
+      - {id: 436, cat: TV/HD, desc: "TVSeries 1080p"}
+      - {id: 437, cat: TV/HD, desc: "TVSeries REMUX"}
+      - {id: 453, cat: TV/HD, desc: "TVSereis Bluray"}
+      - {id: 438, cat: TV/HD, desc: "TVSeries 2160p"}
+      - {id: 439, cat: Audio/Other, desc: "Musics APE"}
+      - {id: 440, cat: Audio/Lossless, desc: "Musics FLAC"}
+      - {id: 441, cat: Audio/Video, desc: "Musics MV"}
+      - {id: 442, cat: TV/Sport, desc: "Sports 720p"}
+      - {id: 443, cat: TV/Sport, desc: "Sports 1080i"}
+      - {id: 444, cat: TV/Anime, desc: "Anime SD"}
+      - {id: 445, cat: TV/Anime, desc: "Anime IPad"}
+      - {id: 446, cat: TV/Anime, desc: "Anime 720p"}
+      - {id: 447, cat: TV/Anime, desc: "Anime 1080p"}
+      - {id: 448, cat: TV/Anime, desc: "Anime REMUX"}
+      - {id: 454, cat: TV/Anime, desc: "Anime Bluray"}
+      - {id: 409, cat: Other, desc: "Misc"}
+      - {id: 449, cat: TV/Anime, desc: "Anime 2160p"}
 
     modes:
       search: [q]
@@ -34,10 +69,11 @@
       image: img[alt="CAPTCHA"]
       input: imagestring
     inputs:
+      logintype: "username"
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: td.embedded:has(h2:contains("失败"))
+      - selector: td.embedded:has(h2:contains("姿势不正确"))
     test:
       path: /torrents.php
         
@@ -50,10 +86,11 @@
       incldead: "1"
       spstate: "0"
       inclbookmarked: "0"
-      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      search_area: "{{ if .Query.IMDBID }}5{{else}}0{{end}}"
       search_mode: "0"
     rows:
-      selector: table.torrents > tbody > tr:has(table.torrentname)
+      selector: table.torrents > tbody > tr:has(td.rowfollow)
+      after: "1"
     fields:
       title:
         selector: a[title][href^="details.php?id="]
@@ -71,15 +108,15 @@
         selector: a[href^="download.php?id="]
         attribute: href
       size:
-        selector: td.rowfollow:nth-child(5)
+        selector: td.rowfollow:nth-child(10)
       grabs:
-        selector: td.rowfollow:nth-child(8)
+        selector: td.rowfollow:nth-child(5)
       seeders:
-        selector: td.rowfollow:nth-child(6)
+        selector: td.rowfollow:nth-child(3)
       leechers:
-        selector: td.rowfollow:nth-child(7)
+        selector: td.rowfollow:nth-child(4)
       date:
-        selector: td.rowfollow:nth-child(4) > span[title]
+        selector: td.rowfollow:nth-child(9) > span[title]
         attribute: title
         filters:
           - name: append
