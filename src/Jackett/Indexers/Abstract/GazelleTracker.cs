@@ -109,7 +109,7 @@ namespace Jackett.Indexers.Abstract
                 {
                     var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
                     var groupName = HttpUtility.HtmlDecode((string)r["groupName"]);
-                    var artist = (string)r["artist"];
+                    var artist = HttpUtility.HtmlDecode((string)r["artist"]);
                     var cover = (string)r["cover"];
                     var tags = r["tags"].ToList();
                     var groupYear = (string)r["groupYear"];
