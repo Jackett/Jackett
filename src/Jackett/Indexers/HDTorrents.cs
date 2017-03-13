@@ -183,8 +183,8 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + qRow.Find("td.mainblockcontent b a").Attr("href"));
 
                     string[] dateSplit = qRow.Find("td.mainblockcontent").Get(5).InnerHTML.Split(',');
-                    string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>'));
-                    release.PublishDate = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
+                    string dateString = dateSplit[1].Substring(0, dateSplit[1].IndexOf('>')).Trim();
+                    release.PublishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
 
                     string category = qRow.Find("td:eq(0) a").Attr("href").Replace("torrents.php?category=", "");
                     release.Category = MapTrackerCatToNewznab(category);
