@@ -66,10 +66,9 @@ namespace Jackett.Controllers
         {
             var result = new HttpResponseMessage(HttpStatusCode.OK);
             var mappedPath = Path.Combine(config.GetContentFolder(), path);
-            var stream = new FileStream(mappedPath, FileMode.Open);
+            var stream = new FileStream(mappedPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentType =
-                new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(mappedPath));
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(mappedPath));
 
             return result;
         }
