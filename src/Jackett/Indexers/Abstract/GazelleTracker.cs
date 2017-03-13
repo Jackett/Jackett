@@ -34,7 +34,7 @@ namespace Jackett.Indexers.Abstract
             : base(name: name,
                 description: desc,
                 link: link,
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 manager: indexerManager,
                 client: webClient,
                 logger: logger,
