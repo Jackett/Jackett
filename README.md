@@ -139,6 +139,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PolishSource
  * Pretome
  * PrivateHD
+ * Psytorrents
  * PTFiles
  * QcTorrent
  * Redacted (PassTheHeadphones)
