@@ -6,6 +6,8 @@
   encoding: UTF-8
   links:
     - https://www.trancetraffic.com
+  certificates:
+    - D40789207A75EA36B02E255BF7162C8DF9637750 # expired 13.03.2017
 
   caps:
     categories:
@@ -31,7 +33,7 @@
     inputs:
       search: "{{ .Query.Keywords }}"
     rows:
-      selector: table > tbody > tr:has(a[href^="details.php?id="])
+      selector: table.mainouter table > tbody > tr:has(a[href^="details.php?id="])
     fields:
       download:
         selector: a[href^="download.php/"]
