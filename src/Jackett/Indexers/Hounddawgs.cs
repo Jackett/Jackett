@@ -19,6 +19,7 @@ using System.Web;
 using System.Web.UI.WebControls;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -140,7 +141,8 @@ namespace Jackett.Indexers
 
 				foreach (var row in rows.Skip(1))
 				{
-					var release = new ReleaseInfo();
+                    var qRow = row.Cq();
+                    var release = new ReleaseInfo();
 					release.MinimumRatio = 1;
 					release.MinimumSeedTime = 172800;
 
@@ -153,11 +155,28 @@ namespace Jackett.Indexers
 					var addedStr = qAdded.Attr("title");
 					release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
 
-					var qLink = row.ChildElements.ElementAt(1).ChildElements.ElementAt(2).Cq();
-					release.Title = qLink.Text().Trim();
-					release.Description = release.Title;
+                    var overlayScript = qRow.Find("script:contains(\"var overlay\")").Text();
+                    var overlayHtmlEscaped = overlayScript.Substring(overlayScript.IndexOf('=')+1).Trim().Trim('"');
+                    var overlayHtml = Regex.Unescape(overlayHtmlEscaped);
+                    CQ qOverlay = overlayHtml;
+                    var title = qOverlay.Find("td.overlay > strong");
+                    var banner = qOverlay.Find("td.leftOverlay > img").Attr("src");
+                    var description = qOverlay.Find("td.rightOverlay");
 
-					release.Comments = new Uri(SiteLink + qLink.Attr("href"));
+                    foreach (var img in description.Find("img")) // convert relativ flag paths to full uri
+                        img.SetAttribute("src", SiteLink + img.GetAttribute("src"));
+
+                    var descriptionDom = description.Get(0);
+                    for (var i = 14; i > 0; i--) // remove size/seeders/leechers
+                        descriptionDom.ChildNodes.RemoveAt(0);
+
+                    release.Description = descriptionDom.OuterHTML;
+                    release.Title = title.Text();
+                    if (!string.IsNullOrEmpty(banner))
+                        release.BannerUrl = new Uri(banner);
+
+                    var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
+                    release.Comments = new Uri(SiteLink + qLink.Attr("href"));
 					release.Guid = release.Comments;
 
 					var qDownload = row.ChildElements.ElementAt(1).ChildElements.ElementAt(1).ChildElements.ElementAt(0).Cq();
