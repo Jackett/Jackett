@@ -137,6 +137,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PirateTheNet
  * PiXELHD
  * PolishSource
+ * PolishTracker
  * Pretome
  * PrivateHD
  * Psytorrents

@@ -1,0 +1,114 @@
+﻿---
+  site: polishtracker
+  name: PolishTracker
+  language: pl-pl
+  type: private
+  encoding: UTF-8
+  links:
+    - https://polishtracker.net/
+
+  caps:
+    categorymappings:
+      - {id: 32, cat: PC/0day, desc: "0day"}
+      - {id: 21, cat: TV/Anime, desc: "Anime"}
+      - {id: 1, cat: PC/ISO, desc: "Apps"}
+      - {id: 17, cat: Console, desc: "Consoles"}
+      - {id: 33, cat: Movies/DVD, desc: "DVDR Custom"}
+      - {id: 3, cat: Books, desc: "E-Books"}
+      - {id: 28, cat: Movies/BluRay, desc: "Movies BDiSC"}
+      - {id: 20, cat: Movies/DVD, desc: "Movies DVD"}
+      - {id: 26, cat: Movies/HD, desc: "Movies HD"}
+      - {id: 19, cat: Movies/SD, desc: "Movies SD"}
+      - {id: 6, cat: Audio, desc: "Music"}
+      - {id: 24, cat: Audio/Other, desc: "Music DVD"}
+      - {id: 8, cat: Audio/Video, desc: "Music Video"}
+      - {id: 4, cat: PC/Games, desc: "PC Games"}
+      - {id: 29, cat: TV/SD, desc: "TV DVDRip"}
+      - {id: 31, cat: TV/HD, desc: "TV HD"}
+      - {id: 7, cat: TV/SD, desc: "TV SD"}
+      - {id: 9, cat: XXX, desc: "XXX"}
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login.php
+    method: form
+    cookies: ["language=1", "eid=123", "dabg=yes", "dasc=yes", "dafx=yes", "dabo=yes", "dapi=yes"]
+    captcha:
+      type: image
+      image: img[src^="/login.php?rand="]
+      input: kodzik
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("FAILED"))
+    test:
+      path: browse.php
+      selector: a[href^="logout.php?"]
+
+  search:
+    path: browse.php
+    inputs:
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: div#bro1 > table.shad1 > tbody > tr[class^="rowfx"]
+    fields:
+      download:
+        selector: a[href^="/download.php/"]
+        attribute: href
+      title:
+        selector: a[href^="/details.php?id="]
+      title:
+        selector: a[href^="/details.php?id="][onmouseover]
+        optional: true
+        attribute: title
+        filters:
+          - name: strdump
+          - name: regexp
+            args: "<td class=nobotol>(.*?)</td>"
+      details:
+        selector: a[href^="/details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      imdb:
+        selector: a[href^="http://www.imdb.com/title/tt"]
+        optional: true
+        attribute: href
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6) > b
+      size:
+        selector: td:nth-child(5)
+        remove: font
+      downloadvolumefactor:
+        case:
+          img[alt^="Freebie torrent."]: "0"
+          img[alt*="-50% download"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt*="+50% upload"]: "1.5"
+          "*": "1"
+      description:
+        selector: td:nth-child(2)
+        remove: a
