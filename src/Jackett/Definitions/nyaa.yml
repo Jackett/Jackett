@@ -1,0 +1,69 @@
+---
+  site: nyaa
+  name: Nyaa
+  language: en-en
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.nyaa.se/
+
+  caps:
+    categorymappings:
+      # Anime
+      - {id: 1_32, cat: TV/Anime, desc: "Anime music videos"}
+      - {id: 1_37, cat: TV/Anime, desc: "English subtitled animes"}
+      - {id: 1_38, cat: TV/Anime, desc: "Non-english subtitled animes"}
+      - {id: 1_11, cat: TV/Anime, desc: "Raw animes"}
+      # Audio
+      - {id: 3_14, cat: Audio, desc: "Lossless audio"}
+      - {id: 3_15, cat: Audio, desc: "Lossy audio"}
+      # Literature
+      - {id: 2_12, cat: Books, desc: "Literature english translated"}
+      - {id: 2_39, cat: Books, desc: "Literature non-english translated"}
+      - {id: 2_13, cat: Books, desc: "Raw literature"}
+      # Software
+      - {id: 6_23, cat: PC/ISO, desc: "Applications"}
+      - {id: 6_24, cat: PC/Games, desc: "Games"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+
+
+  search:
+    path: /
+    inputs:
+      page: "search"
+      term: "{{ .Query.Keywords}}"
+    rows:
+      selector: tr.tlistrow
+    fields:
+      title:
+        selector: td.tlistname a
+      category:
+        selector: td.tlisticon a
+        attribute: href
+        filters:
+          - name: split
+            args: [ "=", -1 ]
+      details:
+        selector: td.tlistname a
+        attribute: href
+      size:
+        selector: td.tlistsize
+      seeders:
+        text: 0
+      seeders:
+        selector: td.tlistsn
+        optional: true
+      leechers:
+        text: 0
+      leechers:
+        selector: td.tlistln
+        optional: true
+      grabs:
+        selector: td.tlistdn
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
