@@ -8,12 +8,12 @@
     - https://ilcorsaronero.info/
 
   caps:
-    categories:
-      1: Movies/HD
-      5: TV/Anime
-      15: TV
-      19: Movies/SD
-      20: Movies/SD
+    categorymappings:
+      - {id: 1, cat: Movies/HD, desc: "BDRiP"}
+      - {id: 5, cat: TV/Anime, desc: "Anime"}
+      - {id: 15, cat: TV, desc: "TV Series"}
+      - {id: 19, cat: Movies/SD, desc: "Screener"}
+      - {id: 20, cat: Movies/SD, desc: "Full DVD"}
 
     modes:
       search: [q]
@@ -24,9 +24,19 @@
     - name: itorrents-links
       type: checkbox
       label: Add download links via itorrents.org
+    - name: advanced-search
+      type: checkbox
+      label: Use the advanced search of IlCorsaroNero (experimental)
 
   search:
-    path: "{{if .Query.Keywords}}adv/{{ .Query.Keywords}}.html{{else}}/recenti{{end}}"
+    ##### Are the "not" and "and" functions implemented? Or am I doing it wrong?
+    # path: "{{if and .Query.Keywords .advanced-search}}adv/{{ .Query.Keywords}}.html
+    #        {{else if and .Query.Keywords (not .advanced-search)}}argh.php?search={{ .Query.Keywords}}
+    #        {{else}}/recenti
+    #        {{end}}"
+    path: "{{if .Query.Keywords}}argh.php?search={{ .Query.Keywords}}
+           {{else}}/recenti
+           {{end}}"
     rows:
       selector: "tr.odd,tr.odd2"
     fields:
