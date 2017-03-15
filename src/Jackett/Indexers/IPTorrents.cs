@@ -63,6 +63,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(68, TorznabCatType.Movies, "Movie/Packs");
             AddCategoryMapping(20, TorznabCatType.MoviesHD, "Movie/Web-DL");
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "Movie/Xvid");
+            AddCategoryMapping(100, TorznabCatType.Movies, "Movie/x265");
 
             AddCategoryMapping(73, TorznabCatType.TV, "TV");
             AddCategoryMapping(26, TorznabCatType.TVDocumentary, "Documentaries");
@@ -146,7 +147,7 @@ namespace Jackett.Indexers
             }
         }
 
-        
+
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -271,7 +272,7 @@ namespace Jackett.Indexers
                         release.Category = MapTrackerCatToNewznab(catIcon.First().Attr("href").Substring(1));
                     else // Torrents - Category column == Text (Code is not supported)
                         release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text());
-                    
+
                     var filesElement = row.Cq().Find("a[href*=\"/files\"]"); // optional
                     if (filesElement.Length == 1)
                         release.Files = ParseUtil.CoerceLong(filesElement.Text());
