@@ -125,7 +125,10 @@ namespace Jackett.Indexers
                 foreach (var movie in js_results["Movies"])
                 {
                     string movie_title = (string) movie["Title"];
-                    long movie_imdbid = long.Parse((string)movie["ImdbId"]);
+                    var movie_imdbid_str = (string)movie["ImdbId"];
+                    long? movie_imdbid = null;
+                    if(!string.IsNullOrEmpty(movie_imdbid_str))
+                        movie_imdbid = long.Parse(movie_imdbid_str);
                     string movie_groupid = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
                     {
