@@ -50,7 +50,7 @@ namespace Jackett.Indexers
 
             webclient.requestDelay = 2; // 0.5 requests per second
 
-            AddCategoryMapping(1, TorznabCatType.Movies);
+            AddCategoryMapping(1, TorznabCatType.Movies, "Feature Film");
             AddCategoryMapping(1, TorznabCatType.MoviesForeign);
             AddCategoryMapping(1, TorznabCatType.MoviesOther);
             AddCategoryMapping(1, TorznabCatType.MoviesSD);
@@ -59,6 +59,10 @@ namespace Jackett.Indexers
             AddCategoryMapping(1, TorznabCatType.MoviesBluRay);
             AddCategoryMapping(1, TorznabCatType.MoviesDVD);
             AddCategoryMapping(1, TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping(2, TorznabCatType.Movies, "Short Film");
+            AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
+            AddCategoryMapping(4, TorznabCatType.TV, "Stand-up Comedy");
+            AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
         }
 
         public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
