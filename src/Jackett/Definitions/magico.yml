@@ -5,7 +5,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://magico.info/
+    - https://magico.info/
 
   caps:
     categorymappings:
@@ -130,7 +130,8 @@
       keywords: "{{ .Keywords }}"
       search_type: "name"
       searchin: "title"
-
+    error:
+      - selector: div#show_error font
     rows:
       selector: div#content > div.torrent-box[id^="torrent_"]
       filters:
