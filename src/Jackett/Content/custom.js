@@ -789,12 +789,6 @@ $.fn.dataTable.ext.search = [
 ]
 
 function updateSearchResultTable(element, results) {
-    for (var i = 0; i < results.length; i++) {
-        var item = results[i];
-        item.Title = insertWordWrap(item.Title);
-        item.CategoryDesc = insertWordWrap(item.CategoryDesc);
-    }
-
     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
     element.html($(resultsTemplate(results)));
     element.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
