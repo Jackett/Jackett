@@ -552,14 +552,14 @@ namespace Jackett.Controllers
                     cacheService.CacheRssResults(indexer, searchResults);
                     searchResults = indexer.FilterResults(query, searchResults);
 
-                    lock (results)
+                    foreach (var result in searchResults)
                     {
-                        foreach (var result in searchResults)
+                        var item = Mapper.Map<TrackerCacheResult>(result);
+                        item.Tracker = indexer.DisplayName;
+                        item.TrackerId = indexer.ID;
+                        item.Peers = item.Peers - item.Seeders; // Use peers as leechers
+                        lock (results)
                         {
-                            var item = Mapper.Map<TrackerCacheResult>(result);
-                            item.Tracker = indexer.DisplayName;
-                            item.TrackerId = indexer.ID;
-                            item.Peers = item.Peers - item.Seeders; // Use peers as leechers
                             results.Add(item);
                         }
                     }
