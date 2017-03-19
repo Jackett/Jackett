@@ -124,8 +124,13 @@ namespace Jackett.Indexers
                 JObject js_results = JObject.Parse(results.Content);
                 foreach (var movie in js_results["Movies"])
                 {
-                    string movie_title = (string) movie["Title"];
+                    string movie_title = (string)movie["Title"];
+                    string Year = (string)movie["Year"];
                     var movie_imdbid_str = (string)movie["ImdbId"];
+                    var coverStr = (string)movie["Cover"];
+                    Uri coverUri = null;
+                    if (!string.IsNullOrEmpty(coverStr))
+                        coverUri = new Uri(coverStr);
                     long? movie_imdbid = null;
                     if(!string.IsNullOrEmpty(movie_imdbid_str))
                         movie_imdbid = long.Parse(movie_imdbid_str);
@@ -133,12 +138,15 @@ namespace Jackett.Indexers
                     foreach (var torrent in movie["Torrents"])
                     {
                         var release = new ReleaseInfo();
-                        release.Title = movie_title;
-                        release.Description = release.Title;
+                        string release_name = (string)torrent["ReleaseName"];
+                        release.Title = release_name;
+                        release.Description = string.Format("Title: {0}", movie_title);
+                        release.BannerUrl = coverUri;
                         release.Imdb = movie_imdbid;
                         release.Comments = new Uri(string.Format("{0}?id={1}", SearchUrl, HttpUtility.UrlEncode(movie_groupid)));
                         release.Guid = release.Comments;
                         release.Size = long.Parse((string)torrent["Size"]);
+                        release.Grabs = long.Parse((string)torrent["Snatched"]);
                         release.Seeders = int.Parse((string)torrent["Seeders"]);
                         release.Peers = int.Parse((string)torrent["Leechers"]);
                         release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", 
@@ -167,6 +175,61 @@ namespace Jackett.Indexers
                         {
                             continue; //Skip release if user only wants Checked
                         }
+
+                        var titletags = new List<string>();
+                        string Quality = (string)torrent["Quality"];
+                        string Container = (string)torrent["Container"];
+                        string Codec = (string)torrent["Codec"];
+                        string Resolution = (string)torrent["Resolution"];
+                        string Source = (string)torrent["Source"];
+
+                        if (Year != null)
+                        {
+                            release.Description += string.Format("<br>\nYear: {0}", Year);
+                        }
+                        if (Quality != null)
+                        {
+                            release.Description += string.Format("<br>\nQuality: {0}", Quality);
+                        }
+                        if (Resolution != null)
+                        {
+                            titletags.Add(Resolution);
+                            release.Description += string.Format("<br>\nResolution: {0}", Resolution);
+                        }
+                        if (Source != null)
+                        {
+                            titletags.Add(Source);
+                            release.Description += string.Format("<br>\nSource: {0}", Source);
+                        }
+                        if (Codec != null)
+                        {
+                            titletags.Add(Codec);
+                            release.Description += string.Format("<br>\nCodec: {0}", Codec);
+                        }
+                        if (Container != null)
+                        {
+                            titletags.Add(Container);
+                            release.Description += string.Format("<br>\nContainer: {0}", Container);
+                        }
+                        if (scene)
+                        {
+                            titletags.Add("Scene");
+                            release.Description += "<br>\nScene";
+                        }
+                        if (check)
+                        {
+                            titletags.Add("Checked");
+                            release.Description += "<br>\nChecked";
+                        }
+                        if (golden)
+                        {
+                            titletags.Add("Golden Popcorn");
+                            release.Description += "<br>\nGolden Popcorn";
+                        }
+
+                        if (titletags.Count() > 0)
+                            release.Title += " [" + string.Join(" / ", titletags) + "]";
+
                         releases.Add(release);
                     }
                 }
