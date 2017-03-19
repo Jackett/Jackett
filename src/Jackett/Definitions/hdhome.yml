@@ -74,6 +74,7 @@
       password: "{{ .Config.password }}"
     error:
       - selector: td.embedded:has(h2:contains("姿势不正确"))
+      - selector: td.embedded:has(h2:contains("失败"))
     test:
       path: /torrents.php
         
@@ -86,11 +87,10 @@
       incldead: "1"
       spstate: "0"
       inclbookmarked: "0"
-      search_area: "{{ if .Query.IMDBID }}5{{else}}0{{end}}"
+      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       search_mode: "0"
     rows:
-      selector: table.torrents > tbody > tr:has(td.rowfollow)
-      after: "1"
+      selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
       title:
         selector: a[title][href^="details.php?id="]
@@ -108,15 +108,15 @@
         selector: a[href^="download.php?id="]
         attribute: href
       size:
-        selector: td.rowfollow:nth-child(10)
-      grabs:
         selector: td.rowfollow:nth-child(5)
+      grabs:
+        selector: td.rowfollow:nth-child(8)
       seeders:
-        selector: td.rowfollow:nth-child(3)
+        selector: td.rowfollow:nth-child(6)
       leechers:
-        selector: td.rowfollow:nth-child(4)
+        selector: td.rowfollow:nth-child(7)
       date:
-        selector: td.rowfollow:nth-child(9) > span[title]
+        selector: td.rowfollow:nth-child(4) > span[title]
         attribute: title
         filters:
           - name: append
