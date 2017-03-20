@@ -29,6 +29,8 @@ namespace Jackett.Utils.Clients
 
         override public void Init()
         {
+            ServicePointManager.DefaultConnectionLimit = 1000;
+
             if (Startup.IgnoreSslErrors == true)
             {
                 logger.Info(string.Format("HttpWebClient: Disabling certificate validation"));
