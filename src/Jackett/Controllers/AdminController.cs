@@ -538,7 +538,7 @@ namespace Jackett.Controllers
                 trackers = trackers.Where(t => t.TorznabCaps.Categories.Select(c => c.ID).Contains(value.Category)).ToList();
             }
 
-            Parallel.ForEach(trackers.ToList(), indexer =>
+            Parallel.ForEach(trackers.ToList(), new ParallelOptions { MaxDegreeOfParallelism = 1000 }, indexer =>
             {
                 try
                 {
