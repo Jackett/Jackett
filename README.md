@@ -150,6 +150,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RoDVD
  * RuTracker
  * SceneAccess
+ * SceneFZ
  * SceneTime
  * SDBits
  * Secret Cinema
