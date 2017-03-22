@@ -117,6 +117,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IPTorrents
  * JPopsuki
  * Kapaki
+ * Karagarga
  * Le Paradis Du Net
  * LinkoManija
  * LosslessClub
