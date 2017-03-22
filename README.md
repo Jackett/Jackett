@@ -67,6 +67,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Carpathians
  * CHDBits
  * Cinematik
+ * Cinemageddon
  * CinemaZ
  * CZTeam
  * DanishBits
