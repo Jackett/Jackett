@@ -101,6 +101,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD4Free
  * HD-Space
  * HD-Torrents
+ * HDBC
  * HDClub
  * HDHome
  * HDPter
