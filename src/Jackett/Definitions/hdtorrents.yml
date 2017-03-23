@@ -1,0 +1,98 @@
+---
+  site: hdtorrents-ita
+  name: HDTorrents.it
+  language: it-it
+  type: private
+  encoding: UTF-8
+  links:
+    - http://hdtorrents.it/
+
+  caps:
+    categorymappings:
+      - {id: 2040, cat: Movies/HD}
+      - {id: 5040, cat: TV/HD}
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+       - selector: div.error
+    test:
+      path: browse.php
+
+  search:
+    paths:
+      - path: browse.php
+        method: post
+    inputs:
+      ajax: false
+      search: "{{ .Query.Keywords }}"
+      incldead: 0
+    rows:
+      selector: tbody#highlighted tr
+    fields:
+      title-no-filters:
+        selector: td:nth-child(2) a:nth-child(1)
+      title:
+        selector: td:nth-child(2) a:nth-child(1)
+        filters:
+          - name: re_replace
+            args: ["Stagione (\\d{0,1})", "S0$1"]
+          - name: re_replace
+            args: ["Stagione (\\d{2})", "S$1"]
+          - name: re_replace
+            args: ["Episodio{0,1} \\[(\\d{0,1})", "E0$1"]
+          - name: re_replace
+            args: ["Episodio{0,1} \\[(\\d{2})", "E$1"]
+          - name: re_replace
+            args: ["-(\\d{0,1}) ", "-0$1 "]
+          - name: re_replace
+            args: ["-(\\d{2}) ", "-$1 "]
+          - name: re_replace
+            args: ["(\\d) *\\/ *(E)", "$1$2"]
+          - name: replace
+            args: ["]", ""]
+      details:
+        selector: td:nth-child(2) a:nth-child(1)
+        attribute: href
+      banner:
+        selector: td:nth-child(2)[onmousemove]
+        attribute: onmousemove
+        filters:
+          - name: regexp
+            args: ".*\\(.*,.*,.*,'(.*?)'\\)"
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td:nth-child(4)
+        filters:
+          - name: re_replace
+            args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$1"]
+      leechers:
+        selector: td:nth-child(4)
+        filters:
+          - name: re_replace
+            args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$2"]
+      date:
+        selector: td:nth-child(2) i
+        filters:
+          - name: dateparse
+            args: "2006-02-01 15:04:05"
+      category:
+        case:
+          "a[href^=\"details.php\"]:contains(\"Stagione\")": 5040 # TV/HD
+          "*": 2040 # default to Movies/HD
+      downloadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        text: "1"
