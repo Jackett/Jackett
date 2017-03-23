@@ -408,7 +408,7 @@
     <Content Include="Content\custom_mobile.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Definitions\hdtorrents.yml">
+    <Content Include="Definitions\hdtorrentsit.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\hdme.yml">
