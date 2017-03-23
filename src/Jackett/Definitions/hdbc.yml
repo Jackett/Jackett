@@ -57,6 +57,7 @@
         remove: span
       title:
         selector: div.group_info a
+        selector: div.group_info
         remove: span, div.tags
       category:
         selector: td.cats_col
