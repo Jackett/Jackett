@@ -462,7 +462,7 @@
     <Content Include="Definitions\tenyardtracker.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Definitions\hdbc.yml">
+    <Content Include="Definitions\hdbitscom.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\nethd.yml">
