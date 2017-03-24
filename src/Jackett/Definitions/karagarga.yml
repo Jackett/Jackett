@@ -44,7 +44,7 @@
       category:
         text: 1
       title:
-        selector: td:nth-child(2)
+        selector: td:nth-child(2) span
       download:
         selector: a[href^="details.php?id="]
         attribute: href
@@ -73,7 +73,7 @@
           - name: replace
             args: ["'", ""]
           - name: dateparse
-            args: "Dec 1 09"
+            args: "Jan 02 06"
       downloadvolumefactor:
         case:
           "*": "1"

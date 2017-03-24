@@ -1,6 +1,6 @@
 ---
-  site: hdbc
-  name: HDBC (HD-Bits.com)
+  site: hdbitscom
+  name: HD-Bits.com
   description: "HD tracker"
   language: en-us
   encoding: UTF-8
@@ -56,6 +56,7 @@
         selector: div.group_info
         remove: span
       title:
+        selector: div.group_info a
         selector: div.group_info
         remove: span, div.tags
       category:
