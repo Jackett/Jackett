@@ -9,16 +9,17 @@
     - https://www.hd-bits.com
 
   caps:
-    categories:
-      1: Audio # Music
-      2: Movies # Movies
-      3: TV # TV-Series
-      4: PC # Applications
-      5: XXX # Adult
+    categorymappings:
+      - {id: 1, cat: Audio, desc: "Music"}
+      - {id: 2, cat: Movies, desc: "Movies"}
+      - {id: 3, cat: TV, desc: "TV-Series"}
+      - {id: 4, cat: PC, desc: "Applications"}
+      - {id: 5, cat: XXX, desc: "Adult"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: login.php
@@ -53,12 +54,9 @@
         selector: a[href^="torrents.php?action=download&id="]
         attribute: href
       description:
-        selector: div.group_info
-        remove: span
+        selector: div.group_info div.tags
       title:
-        selector: div.group_info a
-        selector: div.group_info
-        remove: span, div.tags
+        selector: div.group_info a[href^="torrents.php?id="]
       category:
         selector: td.cats_col
         case:
@@ -70,6 +68,14 @@
       comments:
         selector: a[href^="torrents.php?id="]
         attribute: href
+      imdb:
+        selector: a[href*="http://www.imdb.com/title/"]
+        optional: true
+        attribute: href
+      banner:
+        selector: img[alt="Cover"]
+        optional: true
+        attribute: src
       files:
         selector: td:nth-child(3)
       date:
