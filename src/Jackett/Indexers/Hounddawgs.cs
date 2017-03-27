@@ -172,7 +172,7 @@ namespace Jackett.Indexers
 
                     release.Description = descriptionDom.OuterHTML;
                     release.Title = title.Text();
-                    if (!string.IsNullOrEmpty(banner))
+                    if (!string.IsNullOrEmpty(banner) && banner != "/static/common/noartwork/noimage.png")
                         release.BannerUrl = new Uri(banner);
 
                     var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
