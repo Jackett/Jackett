@@ -69,11 +69,11 @@
       date:
         selector: div.uploaded
       seeders:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(2)
       leechers:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(1)
       size:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(3)
       downloadvolumefactor:
         text: "1"
       downloadvolumefactor:
