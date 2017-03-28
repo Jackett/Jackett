@@ -78,7 +78,7 @@
       incldead: 1
       search_by: "{{ if .Query.IMDBID }}imdb{{else}}name{{end}}"
     rows:
-      selector: .torrenttable table[class!="ice"] > tbody > tr:has(a[title][href^="details.php?id="])
+      selector: table[class!="ice"] > tbody > tr:has(a[title][href^="details.php?id="])
     fields:
       title:
         selector: a[title][href^="details.php?id="]
