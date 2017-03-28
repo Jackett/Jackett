@@ -195,6 +195,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UHDBits
  * Ultimate Gamer Club
  * ULTRAHDCLUB
+ * Waffles
  * World-In-HD  [![(invite needed)][inviteneeded]](#)
  * WorldOfP2P
  * x264
