@@ -1,0 +1,71 @@
+---
+  site: bigtorrent
+  name: BIGTorrent
+  description: "ratio-free Hungarian tracker"
+  language: hu
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.bigtorrent.eu/
+
+  caps:
+    categorymappings:
+
+    modes:
+      search: [q]
+
+  login:
+    path: /login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      sent: "yes"
+      returnto: "/"
+    error:
+      - selector: table:contains("Login failed!")
+    test:
+      path: index.php
+
+  download:
+    selector: a[href^="download.php?id="]
+        
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: table#torrent_table > tbody > tr:has(a[href^="browse.php?cat="])
+    fields:
+      category:
+        selector: td:nth-child(1)
+      title:
+        selector: td:nth-child(2)
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      grabs:
+        selector: td:nth-child(8)
+      files:
+        selector: td:nth-child(5)
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(4)
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
