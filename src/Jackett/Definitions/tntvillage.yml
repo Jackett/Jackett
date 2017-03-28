@@ -61,4 +61,9 @@
       uploadvolumefactor:
         text: "1"
       size:
-        text: "5G"
+        selector: td:nth-child(3) a
+        case:
+          a[href*="&cat=4"]: "5GB"
+          a[href*="&cat=2"]: "100MB"
+          a[href*="&cat=30"]: "100MB"
+          "*": "2GB"
