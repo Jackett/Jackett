@@ -178,17 +178,15 @@ namespace Jackett.Indexers
                 if (query.Episode != null)
                 {
                     int episodeInt;
+                    int episodeCategoryOffset = 936;
                     ParseUtil.TryCoerceInt(query.Episode, out episodeInt);
-                    if (episodeInt >= 1 && episodeInt <= 30)
-                    {
-                        var episodeTermValue = 937 + episodeInt;
-                        searchUrl += "&term[46][]=" + episodeTermValue;
-                    }
-                    else if (episodeInt >= 31 && episodeInt <= 60)
-                    {
-                        var episodeTermValue = 1087 + episodeInt - 30;
-                        searchUrl += "&term[46][]=" + episodeTermValue;
-                    }
+                    if (episodeInt >= 1 && episodeInt <= 8)
+                        episodeCategoryOffset = 936;
+                    else if (episodeInt >= 9 && episodeInt <= 30)
+                        episodeCategoryOffset = 937;
+                    else if (episodeInt >= 31)
+                        episodeCategoryOffset = 1057;
+                    searchUrl += "&term[46][]=" + (episodeCategoryOffset + episodeInt);
                     queryStringOverride += " " + query.Episode;
                 }
             }
