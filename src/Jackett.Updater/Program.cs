@@ -184,6 +184,7 @@ namespace Jackett.Updater
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/rarbg.yml",
                 "Definitions/t411.yml",
+                "Definitions/hdbc.yml", // renamed to hdbitscom
             };
 
             foreach (var oldFIle in oldFiles)

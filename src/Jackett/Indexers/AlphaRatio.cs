@@ -44,8 +44,13 @@ namespace Jackett.Indexers
 
             AddCategoryMapping(1, TorznabCatType.TVSD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(3, TorznabCatType.TVSD);
+            AddCategoryMapping(4, TorznabCatType.TVSD);
+            AddCategoryMapping(5, TorznabCatType.TVHD);
             AddCategoryMapping(6, TorznabCatType.MoviesSD);
             AddCategoryMapping(7, TorznabCatType.MoviesHD);
+            AddCategoryMapping(8, TorznabCatType.MoviesSD);
+            AddCategoryMapping(9, TorznabCatType.MoviesHD);
             AddCategoryMapping(10, TorznabCatType.XXX);
             AddCategoryMapping(20, TorznabCatType.XXX);
             AddCategoryMapping(12, TorznabCatType.PCGames);
