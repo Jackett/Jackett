@@ -116,7 +116,7 @@ namespace Jackett.Indexers
             }
             catch (Exception)
             {
-                return new KeyValuePair<int, List<int>>(0, new List<int>(0)); //If the provided category does not exist, we return 0 (ALL)
+                return new KeyValuePair<int, List<int>>(0, new List<int>(0) { 0 }); //If the provided category does not exist, we return 0 (ALL)
             }
         }
 
