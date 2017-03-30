@@ -1,4 +1,4 @@
-﻿using Jackett.Models;
+using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -7,6 +7,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -29,6 +30,8 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
+        private Dictionary<int, List<int>> _mediaCategoryMapping = new Dictionary<int, List<int>>();
+
         public T411(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "T411",
                 description: "French Torrent Tracker",
@@ -45,68 +48,76 @@ namespace Jackett.Indexers
             Language = "fr-fr";
 
             // 210, FilmVidéo
-            AddCategoryMapping(402, TorznabCatType.Movies, "Vidéoclips");
-            AddCategoryMapping(433, TorznabCatType.TV, "Série TV");
-            AddCategoryMapping(455, TorznabCatType.TVAnime, "Animation");
-            AddCategoryMapping(631, TorznabCatType.Movies, "Film");
-            AddCategoryMapping(633, TorznabCatType.Movies, "Concert");
-            AddCategoryMapping(634, TorznabCatType.TVDocumentary, "Documentaire");
-            AddCategoryMapping(635, TorznabCatType.TV, "Spectacle");
-            AddCategoryMapping(636, TorznabCatType.TVSport, "Sport");
-            AddCategoryMapping(637, TorznabCatType.TVAnime, "Animation Série");
-            AddCategoryMapping(639, TorznabCatType.TV, "Emission TV");
+            AddCategoryMapping(210, 402, TorznabCatType.Movies, "Vidéoclips");
+            AddCategoryMapping(210, 433, TorznabCatType.TV, "Série TV");
+            AddCategoryMapping(210, 455, TorznabCatType.TVAnime, "Animation");
+            AddCategoryMapping(210, 631, TorznabCatType.Movies, "Film");
+            AddCategoryMapping(210, 633, TorznabCatType.Movies, "Concert");
+            AddCategoryMapping(210, 634, TorznabCatType.TVDocumentary, "Documentaire");
+            AddCategoryMapping(210, 635, TorznabCatType.TV, "Spectacle");
+            AddCategoryMapping(210, 636, TorznabCatType.TVSport, "Sport");
+            AddCategoryMapping(210, 637, TorznabCatType.TVAnime, "Animation Série");
+            AddCategoryMapping(210, 639, TorznabCatType.TV, "Emission TV");
 
             // 233, Application
-            AddCategoryMapping(234, TorznabCatType.PC0day, "Linux");
-            AddCategoryMapping(235, TorznabCatType.PCMac, "MacOS");
-            AddCategoryMapping(236, TorznabCatType.PC0day, "Windows");
-            AddCategoryMapping(625, TorznabCatType.PCPhoneOther, "Smartphone");
-            AddCategoryMapping(627, TorznabCatType.PCPhoneOther, "Tablette");
-            AddCategoryMapping(629, TorznabCatType.PC, "Autre");
-            AddCategoryMapping(638, TorznabCatType.PC, "Formation");
-
-            // 340, Emulation
-            AddCategoryMapping(342, TorznabCatType.ConsoleOther, "Emulateurs");
-            AddCategoryMapping(344, TorznabCatType.ConsoleOther, "Roms");
-
-            // undefined
-            AddCategoryMapping(389, TorznabCatType.ConsoleOther, "Jeux vidéo");
-
-            // 392, GPS
-            AddCategoryMapping(391, TorznabCatType.PC0day, "Applications");
-            AddCategoryMapping(393, TorznabCatType.PC0day, "Cartes");
-            AddCategoryMapping(394, TorznabCatType.PC0day, "Divers");
+            AddCategoryMapping(233, 234, TorznabCatType.PC, "Linux");
+            AddCategoryMapping(233, 235, TorznabCatType.PCMac, "MacOS");
+            AddCategoryMapping(233, 236, TorznabCatType.PC, "Windows");
+            AddCategoryMapping(233, 625, TorznabCatType.PCPhoneOther, "Smartphone");
+            AddCategoryMapping(233, 627, TorznabCatType.PCPhoneOther, "Tablette");
+            AddCategoryMapping(233, 629, TorznabCatType.PC, "Autre");
+            AddCategoryMapping(233, 638, TorznabCatType.PC, "Formation");
 
             // 395, Audio
-            AddCategoryMapping(400, TorznabCatType.Audio, "Karaoke");
-            AddCategoryMapping(403, TorznabCatType.Audio, "Samples");
-            AddCategoryMapping(623, TorznabCatType.Audio, "Musique");
-            AddCategoryMapping(642, TorznabCatType.Audio, "Podcast Radio");
+            AddCategoryMapping(395, 400, TorznabCatType.Audio, "Karaoke");
+            AddCategoryMapping(395, 403, TorznabCatType.Audio, "Samples");
+            AddCategoryMapping(395, 623, TorznabCatType.Audio, "Musique");
+            AddCategoryMapping(395, 642, TorznabCatType.Audio, "Podcast Radio");
 
             // 404, eBook
-            AddCategoryMapping(405, TorznabCatType.Books, "Audio");
-            AddCategoryMapping(406, TorznabCatType.Books, "Bds");
-            AddCategoryMapping(407, TorznabCatType.Books, "Comics");
-            AddCategoryMapping(408, TorznabCatType.Books, "Livres");
-            AddCategoryMapping(409, TorznabCatType.Books, "Mangas");
-            AddCategoryMapping(410, TorznabCatType.Books, "Presse");
+            AddCategoryMapping(404, 405, TorznabCatType.Books, "Audio");
+            AddCategoryMapping(404, 406, TorznabCatType.Books, "Bds");
+            AddCategoryMapping(404, 407, TorznabCatType.Books, "Comics");
+            AddCategoryMapping(404, 408, TorznabCatType.Books, "Livres");
+            AddCategoryMapping(404, 409, TorznabCatType.Books, "Mangas");
+            AddCategoryMapping(404, 410, TorznabCatType.Books, "Presse");
 
             // 456, xXx
-            AddCategoryMapping(461, TorznabCatType.XXX, "eBooks");
-            AddCategoryMapping(462, TorznabCatType.XXX, "Jeux vidéo");
-            AddCategoryMapping(632, TorznabCatType.XXX, "Video");
-            AddCategoryMapping(641, TorznabCatType.XXX, "Animation");
+            AddCategoryMapping(456, 461, TorznabCatType.XXX, "eBooks");
+            AddCategoryMapping(456, 462, TorznabCatType.XXX, "Jeux vidéo");
+            AddCategoryMapping(456, 632, TorznabCatType.XXX, "Video");
+            AddCategoryMapping(456, 641, TorznabCatType.XXX, "Animation");
 
             // 624, Jeu vidéo
-            AddCategoryMapping(239, TorznabCatType.PCGames, "Linux");
-            AddCategoryMapping(245, TorznabCatType.PCMac, "MacOS");
-            AddCategoryMapping(246, TorznabCatType.PCGames, "Windows");
-            AddCategoryMapping(307, TorznabCatType.ConsoleNDS, "Nintendo");
-            AddCategoryMapping(308, TorznabCatType.ConsolePS4, "Sony");
-            AddCategoryMapping(309, TorznabCatType.ConsoleXbox, "Microsoft");
-            AddCategoryMapping(626, TorznabCatType.PCPhoneOther, "Smartphone");
-            AddCategoryMapping(628, TorznabCatType.PCPhoneOther, "Tablette");
-            AddCategoryMapping(630, TorznabCatType.ConsoleOther, "Autre");
+            AddCategoryMapping(624, 239, TorznabCatType.PCGames, "Linux");
+            AddCategoryMapping(624, 245, TorznabCatType.PCMac, "MacOS");
+            AddCategoryMapping(624, 246, TorznabCatType.PCGames, "Windows");
+            AddCategoryMapping(624, 307, TorznabCatType.ConsoleNDS, "Nintendo");
+            AddCategoryMapping(624, 308, TorznabCatType.ConsolePS4, "Sony");
+            AddCategoryMapping(624, 309, TorznabCatType.ConsoleXbox, "Microsoft");
+            AddCategoryMapping(624, 626, TorznabCatType.PCPhoneOther, "Smartphone");
+            AddCategoryMapping(624, 628, TorznabCatType.PCPhoneOther, "Tablette");
+            AddCategoryMapping(624, 630, TorznabCatType.ConsoleOther, "Autre");
+        }
+
+        private void AddCategoryMapping(int trackerMediaCategory, int trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null)
+        {
+            AddCategoryMapping(trackerCategory, newznabCategory, trackerCategoryDesc);
+            if (!_mediaCategoryMapping.ContainsKey(trackerMediaCategory))
+                _mediaCategoryMapping.Add(trackerMediaCategory, new List<int>());
+            _mediaCategoryMapping[trackerMediaCategory].Add(trackerCategory);
+        }
+
+        private KeyValuePair<int, List<int>> GetCategoryFromSubCat(int subCategory)
+        {
+            try
+            {
+                return _mediaCategoryMapping.First(pair => pair.Value.Contains(subCategory));
+            }
+            catch (Exception)
+            {
+                return new KeyValuePair<int, List<int>>(0, new List<int>() { 0 }); //If the provided category does not exist, we return 0 (ALL)
+            }
         }
 
         async Task<string> GetAuthToken(bool forceFetch = false)
@@ -160,35 +171,43 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             // API doesn't support getting the latest torrents, searching for the empty string will cause an error and all torrents returned
             var searchUrl = SearchUrl + HttpUtility.UrlEncode(query.SanitizedSearchTerm).Replace("+", "%20");
-            searchUrl += "?offset=0&limit=200";
+            searchUrl += "?offset=0&limit=200&cat=" + GetCategoryFromSubCat(query.Categories.FirstOrDefault()).Key;
 
             // handle special term search for tvsearch
             var queryStringOverride = query.SanitizedSearchTerm;
-            if (query.QueryType == "tvsearch")
+            switch (query.QueryType)
             {
-                searchUrl += "&cat=210&subcat=433";
+                case "tvsearch":
+                    // T411 make the difference beetween Animation Movies and TV Animation Series, while Torznab does not.
+                    // So here we take LastOrDefault from the category ids, so if the query specify an animation tv serie, we select the correct id.
+                    searchUrl += "&subcat=" + GetCategoryFromSubCat(query.Categories.FirstOrDefault()).Value.LastOrDefault();
+                    if (query.Season >= 1 && query.Season <= 30)
+                    {
+                        var seasonTermValue = 967 + query.Season;
+                        searchUrl += "&term[45][]=" + seasonTermValue;
+                        queryStringOverride += " " + query.Season;
+                    }
 
-                if (query.Season >= 1 && query.Season <= 30)
-                {
-                    var seasonTermValue = 967 + query.Season;
-                    searchUrl += "&term[45][]=" + seasonTermValue;
-                    queryStringOverride += " " + query.Season;
-                }
-
-                if (query.Episode != null)
-                {
-                    int episodeInt;
-                    int episodeCategoryOffset = 936;
-                    ParseUtil.TryCoerceInt(query.Episode, out episodeInt);
-                    if (episodeInt >= 1 && episodeInt <= 8)
-                        episodeCategoryOffset = 936;
-                    else if (episodeInt >= 9 && episodeInt <= 30)
-                        episodeCategoryOffset = 937;
-                    else if (episodeInt >= 31)
-                        episodeCategoryOffset = 1057;
-                    searchUrl += "&term[46][]=" + (episodeCategoryOffset + episodeInt);
-                    queryStringOverride += " " + query.Episode;
-                }
+                    if (query.Episode != null)
+                    {
+                        int episodeInt;
+                        int episodeCategoryOffset = 936;
+                        ParseUtil.TryCoerceInt(query.Episode, out episodeInt);
+                        if (episodeInt >= 1 && episodeInt <= 8)
+                            episodeCategoryOffset = 936;
+                        else if (episodeInt >= 9 && episodeInt <= 30)
+                            episodeCategoryOffset = 937;
+                        else if (episodeInt >= 31)
+                            episodeCategoryOffset = 1057;
+                        searchUrl += "&term[46][]=" + (episodeCategoryOffset + episodeInt);
+                        queryStringOverride += " " + query.Episode;
+                    }
+                    break;
+                case "movie":
+                    // T411 make the difference beetween Animation Movies and TV Animation Series, while Torznab does not.
+                    // So here we take FirstOrDefault from the category ids, so if the query specify an animation movie, we select the correct id.
+                    searchUrl += "&subcat=" + GetCategoryFromSubCat(query.Categories.FirstOrDefault()).Value.FirstOrDefault();
+                    break;
             }
 
             var headers = new Dictionary<string, string>();
