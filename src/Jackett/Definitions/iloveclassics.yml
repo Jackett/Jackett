@@ -58,6 +58,8 @@
       search: "{{ .Query.Keywords }}"
     rows:
       selector: table#hover-over > tbody > tr.table_col1
+      filters:
+        - name: andmatch
     fields:
       category:
         selector: a[href^="browse.php?cat="]
