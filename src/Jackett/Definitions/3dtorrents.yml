@@ -1,0 +1,100 @@
+---
+  site: 3dtorrents
+  name: 3D Torrents
+  description: "3D Movie tracker"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.3dtorrents.org/
+
+  caps:
+    categorymappings:
+      - {id: 14, cat: Movies, desc: "Movies XviD"}
+      - {id: 34, cat: Movies, desc: "Movies UltraHD"}
+      - {id: 15, cat: Movies, desc: "Movies DVD-R"}
+      - {id: 11, cat: Movies, desc: "Movies 720p"}
+      - {id: 13, cat: Movies, desc: "Movies 1080p"}
+      - {id: 16, cat: Movies, desc: "Movies 3DTV"}
+      - {id: 17, cat: Movies, desc: "Movies Blu-ray"}
+      - {id: 27, cat: Movies, desc: "Movies BD25 Encode"}
+      - {id: 33, cat: Movies, desc: "Movies BD9 AVCHD"}
+      - {id: 22, cat: Movies, desc: "Movies 2D to 3D Conv"}
+      - {id: 32, cat: Movies, desc: "Bluray MKV Remux"}
+      - {id: 23, cat: Movies, desc: "Movies Evo 3D"}
+      - {id: 21, cat: PC, desc: "3D Software"}
+      - {id: 2, cat: Audio, desc: "Music"}
+      - {id: 28, cat: XXX, desc: "Adult 720p"}
+      - {id: 29, cat: XXX, desc: "Adult 1080p"}
+      - {id: 30, cat: XXX, desc: "Adult Blu-ray"}
+      - {id: 31, cat: Other, desc: "Misc"}
+      - {id: 19, cat: Audio, desc: "Audio Packs"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: index.php?page=login&amp;returnto=index.php
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+      #public_key: 4bef50
+    captcha:
+      type: image
+      image: img.captcha
+      input: private_key
+    error:
+      - selector: span.errormsg
+    test:
+      path: index.php
+
+  download:
+    selector: a[href^="download.php?id="]
+        
+  search:
+    path: /index.php?page=torrents
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+    fields:
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: td:nth-child(2)
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      grabs:
+        selector: td:nth-child(6)
+      files:
+        selector: td:nth-child(5)
+        filters:
+          - name: regexp
+            args: (\d+)\s+file
+      size:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      date:
+        selector: td:nth-child(4)
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
