@@ -10,17 +10,62 @@
     - https://tproxy.pro/
 
   caps:
-    categories:
-      201: Movies
-      202: Movies/DVD
-      203: Audio/Video  # Music videos
-      204: Movies/Other # Movie clips
-      205: TV
-      206: TV/Other     # Handheld
-      207: Movies/HD
-      208: TV/HD
-      209: Movies/3D
-      299: Movies/Other
+    categorymappings:
+      #Audio
+      - {id: 101, cat: Audio, desc: "Music"}
+      - {id: 102, cat: Audio/Audiobook, desc: "Audio books"}
+      - {id: 103, cat: Audio, desc: "Sound clips"}
+      - {id: 104, cat: Audio/Lossless, desc: "FLAC"}
+      - {id: 199, cat: Audio/Other, desc: "Audio Other"}
+
+      #Video
+      - {id: 201, cat: Movies, desc: "Movies"}
+      - {id: 202, cat: Movies/DVD, desc: "Movies DVDR"}
+      - {id: 203, cat: Audio/Video, desc: "Music videos"}
+      - {id: 204, cat: Movies/Other, desc: "Movie clips"}
+      - {id: 205, cat: TV, desc: "TV shows"}
+      - {id: 206, cat: TV/Other, desc: "Handheld"}
+      - {id: 207, cat: Movies/HD, desc: "HD - Movies"}
+      - {id: 208, cat: TV/HD, desc: "HD - TV shows"}
+      - {id: 209, cat: Movies/3D, desc: "3D"}
+      - {id: 299, cat: Movies/Other, desc: "Video Other"}
+
+      #Applications
+      - {id: 301, cat: PC, desc: "Windows"}
+      - {id: 302, cat: PC/Mac, desc: "Mac"}
+      - {id: 303, cat: PC, desc: "UNIX"}
+      - {id: 304, cat: PC/Phone-Other, desc: "Handheld"}
+      - {id: 305, cat: PC/Phone-IOS, desc: "IOS (iPad/iPhone)"}
+      - {id: 306, cat: PC/Phone-Android, desc: "Android"}
+      - {id: 399, cat: PC, desc: "Other OS"}
+
+      #Games
+      - {id: 401, cat: PC/Games, desc: "PC"}
+      - {id: 402, cat: PC/Mac, desc: "Mac"}
+      - {id: 403, cat: Console/PS4, desc: "PSx"}
+      - {id: 404, cat: Console/Xbox, desc: "XBOX360"}
+      - {id: 405, cat: Console/Wii, desc: "Wii"}
+      - {id: 406, cat: Console/Other, desc: "Handheld"}
+      - {id: 407, cat: Console/Other, desc: "IOS (iPad/iPhone)"}
+      - {id: 408, cat: Console/Other, desc: "Android"}
+      - {id: 499, cat: Console/Other, desc: "Games Other"}
+
+      #Porn
+      - {id: 501, cat: XXX, desc: "Movies"}
+      - {id: 502, cat: XXX/DVD, desc: "Movies DVDR"}
+      - {id: 503, cat: XXX/Imageset, desc: "Pictures"}
+      - {id: 504, cat: XXX, desc: "Games"}
+      - {id: 505, cat: XXX, desc: "HD - Movies"}
+      - {id: 506, cat: XXX, desc: "Movie clips"}
+      - {id: 599, cat: XXX/Other, desc: "Porn Other"}
+
+      #Other
+      - {id: 601, cat: Books, desc: "E-books"}
+      - {id: 602, cat: Books/Comics, desc: "Comics"}
+      - {id: 603, cat: Books, desc: "Pictures"}
+      - {id: 604, cat: Books, desc: "Covers"}
+      - {id: 605, cat: Books, desc: "Physibles"}
+      - {id: 699, cat: Books/Other, desc: "Other Other"}
 
     modes:
       tv-search: [q, season, ep]
