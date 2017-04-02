@@ -94,10 +94,10 @@
       files:
         selector: a[href*="&filelist=1"]
       grabs:
-        selector: td.rowcol:nth-child(7):contains("times"), font:contains("Snatches:")
+        selector: td.rowcol:nth-child(7):has(br)
         filters:
           - name: regexp
-            args: ([\d\,]+)
+            args: ([\d,]+)
       seeders:
         selector: td.rowcol:nth-last-child(3)
       leechers:

@@ -62,7 +62,7 @@
       3dformat: 0
       active: 1
     rows:
-      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      selector: table[cellspacing!="1"].lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
     fields:
       category:
         selector: a[href^="index.php?page=torrents&category="]
@@ -86,8 +86,8 @@
         selector: td:nth-last-child(4)
       seeders:
         selector: td:nth-last-child(3)
-      leechers:
-        selector: td:nth-last-child(2)
+      # leechers:
+      #   selector: td:nth-last-child(2)
       date:
         selector: td:nth-last-child(5)
         filters:
