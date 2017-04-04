@@ -119,7 +119,7 @@
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
       q: "{{ .Query.Keywords }}"
     rows:
-      selector: table#browsetable > tbody > tr:has(a)
+      selector: table#browsetable > tbody > tr:has(a[href^="/details.php?id="])
     fields:
       category:
         selector: a[href^="/browse.php?q="]
@@ -155,7 +155,7 @@
         selector: td:nth-child(5)
         filters:
           - name: dateparse
-            args: "27 March 2017"
+            args: "2 April 2017 +05:50"
       downloadvolumefactor:
         case:
           "img[title=\"Free Torrent!\"]": "0"
