@@ -35,7 +35,7 @@
       path: my.php
 
   download:
-    selector: a[href^="download.php?id="]
+    selector: a[href^="/download.php"]
         
   search:
     path: browse.php
@@ -46,36 +46,37 @@
       selector: table#torrent-list > tbody > tr:has(a[href^="/details.php?id="])
     fields:
       category:
-        selector: td:nth-child(1)
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
       title:
         selector: td:nth-child(3) a
-      # download:
-      #   selector: a[href^="download.php"]
-      #   attribute: href
-      # details:
-      #   selector: a[href^="details.php?id="]
-      #   attribute: href
-      # grabs:
-      #   selector: td:nth-child(7)
-      #   filters:
-      #     - name: regexp
-      #       args: [(\d+)]
+      download:
+        selector: a[href^="/download.php"]
+        attribute: href
+      details:
+        selector: a[href^="/details.php?id="]
+        attribute: href
+      grabs:
+        selector: td:nth-child(7) a
       size:
         selector: td:nth-child(6)
       seeders:
         selector: td:nth-child(8)
       leechers:
         selector: td:nth-child(9)
-      # date:
-      #   selector: td:nth-child(5)
-      #   filters:
-      #     - name: append
-      #       args: " ago"
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: append
+            args: " ago"
       downloadvolumefactor:
         case:
-          # a[title^="25% Free Leech: only 75% of the download is counted."]: "0.25"
-          # a[title^="50% Free Leech: only half the download is counted."]: "0.5"
-          # a[title^="100% FL: no download is counted."]: "0"
+          "a[title=\"25% Free Leech: only 75% of the download is counted.\"]": "0.25"
+          "a[title=\"50% Free Leech: only half the download is counted.\"]": "0.5"
+          "a[title=\"100% FL: no download is counted.\"]": "0"
           "*": "1"
       uploadvolumefactor:
         case:
