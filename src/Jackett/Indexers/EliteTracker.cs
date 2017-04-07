@@ -179,6 +179,8 @@ namespace Jackett.Indexers
                     var category = Row.QuerySelector("td:nth-child(1) > a");
                     var title = Row.QuerySelector("td:nth-child(2) a");
                     var added = Row.QuerySelector("td:nth-child(2) > div:has(span[style=\"float: right;\"])");
+                    if (added == null) // not a torrent line
+                        continue;
                     var pretime = added.QuerySelector("font.mkprettytime");
                     var tooltip = Row.QuerySelector("td:nth-child(2) > div.tooltip-content");
 

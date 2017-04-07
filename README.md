@@ -53,6 +53,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * bB
  * Best Friends
  * BeyondHD
+ * BIGTorrent
  * Bit-City Reloaded
  * BIT-HDTV
  * BitHQ
@@ -67,7 +68,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTNext
  * Carpathians
  * CHDBits
+ * Cinematik
+ * Cinemageddon
  * CinemaZ
+ * Classix
  * CZTeam
  * DanishBits
  * DataScene
@@ -99,16 +103,20 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD4Free
  * HD-Space
  * HD-Torrents
+ * HD-Bits.com
+ * HDBits
  * HDClub
  * HDHome
  * HDPter
  * HDSky
+ * HDTorrents.it
  * Hebits
  * Hon3y HD
  * Hounddawgs
  * House-of-Torrents
  * Hyperay
  * ICE Torrent
+ * I Love Classics
  * Immortalseed
  * Infinity-T
  * inPeril
@@ -116,6 +124,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * IPTorrents
  * JPopsuki
  * Kapaki
+ * Karagarga
  * Le Paradis Du Net
  * LinkoManija
  * LosslessClub
@@ -161,6 +170,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shellife
  * SpeedCD
  * Superbits
+ * The Empire
  * The Horror Charnel
  * The New Retro
  * The Shinning
@@ -189,6 +199,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UHDBits
  * Ultimate Gamer Club
  * ULTRAHDCLUB
+ * Waffles
  * World-In-HD  [![(invite needed)][inviteneeded]](#)
  * WorldOfP2P
  * x264

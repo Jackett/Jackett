@@ -102,66 +102,69 @@ namespace Jackett.Indexers
             {
                 CQ dom = results.Content;
                 dom["#needseed"].Remove();
-                var rows = dom["table[width='750'] > tbody"].Children();
-                foreach (var row in rows.Skip(1))
+                foreach (var table in dom["table[width='785'] > tbody"])
                 {
-
-                    var release = new ReleaseInfo();
-
-                    var qRow = row.Cq();
-                    var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Title = qLink.Attr("title");
-                    if (!query.MatchQueryStringAND(release.Title))
-                        continue;
-                    release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(4)").Text());
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(8)").Text());
-                    release.Guid = new Uri(qLink.Attr("href"));
-                    release.Comments = release.Guid;
-                    release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
-
-                    var catUrl = qRow.Children().ElementAt(1).FirstElementChild.Cq().Attr("href");
-                    var catNum = catUrl.Split(new char[] { '=', '&' })[1];
-                    release.Category = MapTrackerCatToNewznab(catNum);
-
-                    // This tracker cannot search multiple cats at a time, so search all cats then filter out results from different cats
-                    if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
-                        continue;
-
-                    var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
-                    var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
-
-                    var sizeStr = qRow.Children().ElementAt(6).Cq().Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
-
-                    var bgcolor = qRow.Attr("bgcolor");
-                    if (bgcolor == "#DDDDDD")
+                    var rows = table.Cq().Children();
+                    foreach (var row in rows.Skip(1))
                     {
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 2;
+
+                        var release = new ReleaseInfo();
+
+                        var qRow = row.Cq();
+                        var qLink = qRow.Children().ElementAt(2).Cq().Children("a").First();
+
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
+                        release.Title = qLink.Attr("title");
+                        if (!query.MatchQueryStringAND(release.Title))
+                            continue;
+                        release.Files = ParseUtil.CoerceLong(qRow.Find("td:nth-child(4)").Text());
+                        release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(8)").Text());
+                        release.Guid = new Uri(qLink.Attr("href"));
+                        release.Comments = release.Guid;
+                        release.Link = new Uri(string.Format(DownloadUrl, qLink.Attr("href").Split('=')[1]));
+
+                        var catUrl = qRow.Children().ElementAt(1).FirstElementChild.Cq().Attr("href");
+                        var catNum = catUrl.Split(new char[] { '=', '&' })[1];
+                        release.Category = MapTrackerCatToNewznab(catNum);
+
+                        // This tracker cannot search multiple cats at a time, so search all cats then filter out results from different cats
+                        if (trackerCats.Count > 0 && !trackerCats.Contains(catNum))
+                            continue;
+
+                        var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
+                        var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
+
+                        var sizeStr = qRow.Children().ElementAt(6).Cq().Text();
+                        release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                        release.Seeders = ParseUtil.CoerceInt(qRow.Children().ElementAt(8).Cq().Text().Trim());
+                        release.Peers = ParseUtil.CoerceInt(qRow.Children().ElementAt(9).Cq().Text().Trim()) + release.Seeders;
+
+                        var bgcolor = qRow.Attr("bgcolor");
+                        if (bgcolor == "#DDDDDD")
+                        {
+                            release.DownloadVolumeFactor = 1;
+                            release.UploadVolumeFactor = 2;
+                        }
+                        else if (bgcolor == "#FFFF99")
+                        {
+                            release.DownloadVolumeFactor = 0;
+                            release.UploadVolumeFactor = 1;
+                        }
+                        else if (bgcolor == "#CCFF99")
+                        {
+                            release.DownloadVolumeFactor = 0;
+                            release.UploadVolumeFactor = 2;
+                        }
+                        else
+                        {
+                            release.DownloadVolumeFactor = 1;
+                            release.UploadVolumeFactor = 1;
+                        }
+                        releases.Add(release);
                     }
-                    else if (bgcolor == "#FFFF99")
-                    {
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 1;
-                    }
-                    else if (bgcolor == "#CCFF99")
-                    {
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 2;
-                    }
-                    else
-                    {
-                        release.DownloadVolumeFactor = 1;
-                        release.UploadVolumeFactor = 1;
-                    }
-                    releases.Add(release);
                 }
             }
             catch (Exception ex)
