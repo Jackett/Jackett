@@ -1,11 +1,11 @@
 ﻿---
-  site: hdpter
-  name: HDPter
+  site: ourbits
+  name: Ourbits
   language: zh-cn
   type: private
   encoding: UTF-8
   links:
-    - https://www.hdpter.net/
+    - https://ourbits.club/
 
   caps:
     categorymappings:
