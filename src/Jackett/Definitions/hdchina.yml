@@ -1,0 +1,111 @@
+﻿---
+  site: hdchina
+  name: HDChina
+  description: "A chinese tracker"
+  language: zh-cn
+  type: private
+  encoding: UTF-8
+  links:
+    - https://hdchina.club/
+
+  caps:
+    categorymappings:
+      - {id: 20, cat: Movies/BluRay, desc: "Movie Full BD"}
+      - {id: 17, cat: Movies/HD, desc: "Movie 1080p"}
+      - {id: 16, cat: Movies/HD, desc: "Movie 1080i"}
+      - {id: 9, cat: Movies/HD, desc: "Movie 720p"}
+      - {id: 13, cat: TV, desc: "EU/US TV series"}
+      - {id: 25, cat: TV, desc: "Chinese TV series"}
+      - {id: 26, cat: TV, desc: "Kor Drama"}
+      - {id: 24, cat: TV, desc: "Jpn Drama"}
+      - {id: 21, cat: TV, desc: "EU/US TV series pack"}
+      - {id: 22, cat: TV, desc: "Chinese TV series pack"}
+      - {id: 23, cat: TV, desc: "JPN/KOR drama pack"}
+      - {id: 27, cat: Movies/SD, desc: "iPad Video"}
+      - {id: 5, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 15, cat: TV/Sport, desc: "Sports"}
+      - {id: 14, cat: TV/Anime, desc: "Animation"}
+      - {id: 401, cat: TV, desc: "TV Shows"}
+      - {id: 402, cat: Audio, desc: "Vocal Concert"}
+      - {id: 406, cat: Audio, desc: "Music Video"}
+      - {id: 408, cat: Audio, desc: "Music"}
+      - {id: 19, cat: Audio, desc: "Audio Track"}
+      - {id: 405, cat: Audio, desc: "Drama"}
+      - {id: 404, cat: Books, desc: "Book"}
+      - {id: 409, cat: Other, desc: "Other"}
+      - {id: 410, cat: Movies/HD, desc: "4K UltraHD"}
+      - {id: 411, cat: TV, desc: "Travel"}
+      - {id: 412, cat: TV, desc: "Food"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    captcha:
+      type: image
+      image: img[alt="CAPTCHA"]
+      input: imagestring
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: /torrents.php
+
+  search:
+    path: /torrents.php
+    method: post
+    inputs:
+      $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+      incldead: "0"
+      spstate: "0"
+      inclbookmarked: "0"
+      search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      search_mode: "0"
+    rows:
+      selector: table.torrent_list > tbody > tr:has(a[href^="?cat="])
+    fields:
+      title:
+        selector: td:nth-child(2) a
+      category:
+        selector: a[href^="?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href    
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php", "download.php"]
+      size:
+        selector: td.t_size
+      grabs:
+        selector: td.t_completed
+      seeders:
+        selector: td.t_torrents
+      leechers:
+        selector: td.t_leech
+      date:
+        selector: td.t_time
+        filters:
+          - name: append
+            args: " ago"
+      downloadvolumefactor:
+        case:
+          img.pro_50pctdown: ".5"
+          img.pro_30pctdown: ".3"
+          img.pro_free: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
