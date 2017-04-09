@@ -73,11 +73,7 @@
   settings: []
   
   search:
-    path: "{{if .Query.Keywords}}
-             search/{{ .Query.Keywords}}/0/99/
-           {{else}}
-             /recent
-           {{end}}"
+    path: "{{if .Query.Keywords}}/search/{{ .Query.Keywords}}/0/99/{{range .Categories }}{{.}}{{end}}{{else}}/recent{{end}}"
     rows:
       selector: "#searchResult tbody tr:has(td.vertTh)"
     fields:
