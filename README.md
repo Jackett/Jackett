@@ -105,6 +105,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Torrents
  * HD-Bits.com
  * HDBits
+ * HDChina
  * HDClub
  * HDHome
  * HDSky
@@ -180,6 +181,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Network
  * Torrent Sector Crew
  * Torrent411
+ * Torrent9
  * TorrentBD
  * TorrentBytes
  * TorrentCCF  [![(invite needed)][inviteneeded]](#)

@@ -37,7 +37,8 @@
     path: browse.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "\"{{ .Query.Keywords }}\""
+      search_type: "title"
     rows:
       selector: table#browse > tbody > tr:has(a[href^="browse.php?genre="])
     fields:
