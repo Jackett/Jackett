@@ -107,7 +107,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDBits
  * HDClub
  * HDHome
- * HDPter
  * HDSky
  * HDTorrents.it
  * Hebits
@@ -143,6 +142,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NextGen
  * Norbits  [![(invite needed)][inviteneeded]](#) <!-- added by DiseaseNO but no longer maintained? -->
  * notwhat.cd
+ * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn  [![(invite needed)][inviteneeded]](#)
  * PirateTheNet
