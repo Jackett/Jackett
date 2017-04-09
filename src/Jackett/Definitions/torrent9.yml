@@ -1,0 +1,76 @@
+﻿---
+  site: torrent9
+  name: Torrent9
+  language: fr-fr
+  type: public
+  encoding: UTF-8
+  links:
+    - http://www.torrent9.biz/
+
+  caps:
+    categorymappings:
+      - {id: films, cat: Movies, desc: "Movies"}
+      - {id: series, cat: TV, desc: "TV"}
+      - {id: musique, cat: Audio, desc: "Music"}
+      - {id: ebook, cat: Books, desc: "Books"}
+      - {id: logiciels, cat: PC, desc: "Software"}
+      - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
+      - {id: jeux-consoles, cat: Console/Xbox360, desc: "Console Games"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  search:
+    path: "{{if .Query.Keywords}}/search_torrent/{{range .Categories }}{{.}}/{{end}}{{ .Query.Keywords }}/page-0,trie-seeds-d{{else}}/top_torrent.php{{end}}"
+    rows:
+      selector: div.table-responsive > table tbody tr
+    fields:
+      title:
+        selector: td:nth-child(1) a
+      details:
+        selector: td:nth-child(1) a
+        attribute: href
+      download:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: replace
+            args: [ "/torrent", "/get_torrent"]
+          - name: append
+            args: ".torrent"
+      size:
+        selector: td:nth-child(2)
+        filters:
+          - name: re_replace
+            args: [ "\\.(\\d) Ko", "$1X00"]
+          - name: re_replace
+            args: [ " Ko", "000"]
+          - name: re_replace
+            args: [ "\\.(\\d) Mo", "$1X00000"]
+          - name: re_replace
+            args: [ " Mo", "000000"]
+          - name: re_replace
+            args: [ "\\.(\\d) Go", "$1X00000000"]
+          - name: re_replace
+            args: [ " Go", "000000000"]
+          - name: re_replace
+            args: [ "\\.(\\d) To", "$1X00000000000"]
+          - name: re_replace
+            args: [ " To", "000000000000"]
+          - name: replace
+            args: [ "X", "" ]
+      seeders:
+        text: 0
+      seeders:
+        selector: td:nth-child(3) span.seed_ok
+        optional: true
+      leechers:
+        text: 0
+      leechers:
+        selector: td:nth-child(4)
+        optional: true
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
