@@ -81,10 +81,7 @@
       leechers:
         selector: td:nth-child(10)
       date:
-        selector: td:nth-child(11)
-        filters:
-          - name: append
-            args: " ago"
+        selector: td:nth-child(11) div.addedtor
       downloadvolumefactor:
         case:
           "img[title=\"Golden Torrent: No Download Stats are Recorded\"]": "0"
