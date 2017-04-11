@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Jackett.Indexers
 {
