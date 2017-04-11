@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 using Jackett.Models.IndexerConfig;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -134,8 +135,15 @@ namespace Jackett.Indexers
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(pubDateRomania, romaniaTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
-                    var grabs = row.Cq().Find("td.table_snatch").Get(0).FirstChild.ToString();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
+                    try
+                    {
+                        var grabs = Regex.Match(row.Cq().Find("td.table_snatch").Text().Trim(), @"(^\d*).*").Value[0].ToString();
+                        release.Grabs = ParseUtil.CoerceInt(grabs);
+                    }
+                    catch
+                    {
+                        release.Grabs = 1;
+                    }
 
                     if (row.Cq().Find("img[alt=\"100% Free\"]").Any())
                         release.DownloadVolumeFactor = 0;
