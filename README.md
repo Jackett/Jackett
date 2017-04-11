@@ -171,6 +171,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shellife
  * SpeedCD
  * Superbits
+ * Tasmanit
  * The Empire
  * The Horror Charnel
  * The New Retro

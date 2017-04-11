@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Jackett.Indexers
 {
@@ -204,7 +205,7 @@ namespace Jackett.Indexers
                 release.Guid = new Uri(SiteLink + qRow.Find("td:nth-child(2) > a").First().Attr("href"));
                 release.Comments = release.Guid;
                 release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").First().Attr("href"));
-                var pubDate = qRow.Find("td:nth-child(2) > span").First().Text().Trim().Replace("Added: ", "");
+                var pubDate = new StringReader(qRow.Find("td:nth-child(2) > span").First().Text()).ReadLine().Trim().Replace("Added: ", "");
                 release.PublishDate = DateTime.Parse(pubDate).ToLocalTime();
                 release.Category = MapTrackerCatToNewznab(qRow.Find("td:nth-child(1) > a").First().Attr("href").Split('=')[1]);
                 release.Size = ReleaseInfo.GetBytes(qRow.Find("td:nth-child(7)").First().Text());
