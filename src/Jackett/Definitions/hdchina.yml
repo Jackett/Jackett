@@ -98,6 +98,16 @@
       date:
         selector: td.t_time
         filters:
+          - name: replace
+            args: ["时", " hours"]
+          - name: replace
+            args: ["分", " minutes"]
+          - name: replace
+            args: ["天", " days"]
+          - name: replace
+            args: ["年", " year"]
+          - name: replace
+            args: ["月", " months"]
           - name: append
             args: " ago"
       downloadvolumefactor:
