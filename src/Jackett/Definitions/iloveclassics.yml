@@ -95,7 +95,7 @@
       leechers:
         selector: td:nth-child(7)
       date:
-        selector: td:nth-child(2) div
+        selector: td:nth-child(2)
       downloadvolumefactor:
         case:
           "img[title=\"This Torrent is on Free Leech. Download amounts do not count to your ratio\"]": "0"

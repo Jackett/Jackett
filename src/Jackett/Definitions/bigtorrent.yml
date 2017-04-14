@@ -81,16 +81,12 @@
       details:
         selector: a[href^="details.php?id="]
         attribute: href
-      grabs:
-        selector: td:nth-child(8)
-      files:
-        selector: td:nth-child(5)
       size:
         selector: td:nth-child(7)
       seeders:
-        selector: td:nth-child(9)
+        selector: td:nth-child(8)
       leechers:
-        selector: td:nth-child(10)
+        selector: td:nth-child(9)
       date:
         selector: td:nth-child(4)
       downloadvolumefactor:
