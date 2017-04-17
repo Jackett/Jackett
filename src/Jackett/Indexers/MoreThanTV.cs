@@ -195,6 +195,10 @@ namespace Jackett.Indexers
                     {
                         category = TorznabCatType.Movies.ID;
                     }
+                    else if (categories.Contains("cats_other"))
+                    {
+                        category = TorznabCatType.Other.ID;
+                    }
                     else
                     {
                         throw new Exception("Couldn't find category.");
