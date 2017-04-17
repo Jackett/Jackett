@@ -102,7 +102,7 @@ namespace Jackett.Indexers
             {
                 CQ dom = results.Content;
                 dom["#needseed"].Remove();
-                foreach (var table in dom["table[width='785'] > tbody"])
+                foreach (var table in dom["table[align=center] + br + table > tbody"])
                 {
                     var rows = table.Cq().Children();
                     foreach (var row in rows.Skip(1))
