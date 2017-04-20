@@ -81,6 +81,8 @@ namespace Jackett.Indexers
             // Anime
             AddCategoryMapping(31, TorznabCatType.TVAnime);             // MOVIES ANIME
             AddCategoryMapping(32, TorznabCatType.TVAnime);             // SERIES ANIME
+            AddCategoryMapping(110, TorznabCatType.TVAnime);            // ANIME VOSTFR
+            AddCategoryMapping(101, TorznabCatType.TVAnime);            // PACK ANIME
 
             // Documentaries
             AddCategoryMapping(12, TorznabCatType.TVDocumentary);       // DOCS
