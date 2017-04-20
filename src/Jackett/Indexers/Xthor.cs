@@ -301,32 +301,9 @@ namespace Jackett.Indexers
             }
 
             // Loop on Categories needed
-            switch (categoriesList.Count)
+            if (categoriesList.Count > 0)
             {
-                case 0:
-                    // No category
-                    parameters.Add("category", string.Empty);
-                    break;
-                case 1:
-                    // One category
-                    parameters.Add("category", categoriesList[0]);
-                    break;
-                default:
-                    // Multiple Categories
-                    string categories = null;
-                    foreach (var category in categoriesList)
-                    {
-                        // Initiate our categories parameter
-                        if (categoriesList.First() == category)
-                        {
-                            categories = categoriesList[0];
-                        }
-                        // Adding next categories
-                        categories += "+" + category;
-                    }
-                    // Add categories
-                    if (categories != null) parameters.Add("category", categories);
-                    break;
+                parameters.Add("category", string.Join("+", categoriesList));
             }
 
             // If Only Freeleech Enabled
