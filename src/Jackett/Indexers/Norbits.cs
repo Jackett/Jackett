@@ -176,7 +176,7 @@ namespace Jackett.Indexers
             var response = await webclient.GetString(request);
 
             // Test if we are logged in
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Cookies.Contains("uid="), () =>
+            await ConfigureIfOK(response.Cookies, response.Cookies != null && response.Cookies.Contains("uid="), () =>
             {
                 // Default error message
                 var message = "Error during attempt !";
