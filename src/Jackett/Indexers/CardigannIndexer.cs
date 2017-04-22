@@ -1211,6 +1211,7 @@ namespace Jackett.Indexers
                     if (queryCollection.Count > 0)
                         searchUrl += "?" + queryCollection.GetQueryString(Encoding);
                 }
+                var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
                 WebClientStringResult response = null;
@@ -1312,7 +1313,7 @@ namespace Jackett.Indexers
                                             }
                                             else
                                             {
-                                                release.Link = resolvePath(value);
+                                                release.Link = resolvePath(value, searchUrlUri);
                                                 value = release.Link.ToString();
                                             }
                                             break;
@@ -1321,7 +1322,7 @@ namespace Jackett.Indexers
                                             value = release.MagnetUri.ToString();
                                             break;
                                         case "details":
-                                            var url = resolvePath(value);
+                                            var url = resolvePath(value, searchUrlUri);
                                             release.Guid = url;
                                             release.Comments = url;
                                             if (release.Guid == null)
@@ -1329,7 +1330,7 @@ namespace Jackett.Indexers
                                             value = url.ToString();
                                             break;
                                         case "comments":
-                                            var CommentsUrl = resolvePath(value);
+                                            var CommentsUrl = resolvePath(value, searchUrlUri);
                                             if (release.Comments == null)
                                                 release.Comments = CommentsUrl;
                                             if (release.Guid == null)
@@ -1422,7 +1423,7 @@ namespace Jackett.Indexers
                                             break;
                                         case "banner":
                                             if(!string.IsNullOrWhiteSpace(value)) { 
-                                                var bannerurl = resolvePath(value);
+                                                var bannerurl = resolvePath(value, searchUrlUri);
                                                 release.BannerUrl = bannerurl;
                                             }
                                             value = release.BannerUrl.ToString();

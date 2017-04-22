@@ -83,7 +83,7 @@ namespace Jackett.Indexers
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             CQ resultDom = response.Content;
 
-            await ConfigureIfOK(response.Cookies, response.Content.Contains("/logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.Content.Contains("You have successfully logged in"), () =>
             {
                 var errorMessage = response.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);

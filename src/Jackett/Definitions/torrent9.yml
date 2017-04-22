@@ -21,6 +21,8 @@
       search: [q]
       tv-search: [q, season, ep]
 
+  settings: []
+
   search:
     path: "{{if .Query.Keywords}}/search_torrent/{{range .Categories }}{{.}}/{{end}}{{ .Query.Keywords }}/page-0,trie-seeds-d{{else}}/top_torrent.php{{end}}"
     rows:

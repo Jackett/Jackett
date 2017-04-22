@@ -205,7 +205,9 @@ namespace Jackett.Indexers
                 release.Guid = new Uri(SiteLink + qRow.Find("td:nth-child(2) > a").First().Attr("href"));
                 release.Comments = release.Guid;
                 release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").First().Attr("href"));
-                var pubDate = new StringReader(qRow.Find("td:nth-child(2) > span").First().Text()).ReadLine().Trim().Replace("Added: ", "");
+                var pubDateElement = qRow.Find("td:nth-child(2) > span").First();
+                pubDateElement.Find("a").Remove(); // remove snatchinfo links (added after completing a torrent)
+                var pubDate = pubDateElement.Text().Trim().Replace("Added: ", "");
                 release.PublishDate = DateTime.Parse(pubDate).ToLocalTime();
                 release.Category = MapTrackerCatToNewznab(qRow.Find("td:nth-child(1) > a").First().Attr("href").Split('=')[1]);
                 release.Size = ReleaseInfo.GetBytes(qRow.Find("td:nth-child(7)").First().Text());

@@ -81,6 +81,8 @@ namespace Jackett.Indexers
             // Anime
             AddCategoryMapping(31, TorznabCatType.TVAnime);             // MOVIES ANIME
             AddCategoryMapping(32, TorznabCatType.TVAnime);             // SERIES ANIME
+            AddCategoryMapping(110, TorznabCatType.TVAnime);            // ANIME VOSTFR
+            AddCategoryMapping(101, TorznabCatType.TVAnime);            // PACK ANIME
 
             // Documentaries
             AddCategoryMapping(12, TorznabCatType.TVDocumentary);       // DOCS
@@ -301,32 +303,9 @@ namespace Jackett.Indexers
             }
 
             // Loop on Categories needed
-            switch (categoriesList.Count)
+            if (categoriesList.Count > 0)
             {
-                case 0:
-                    // No category
-                    parameters.Add("category", string.Empty);
-                    break;
-                case 1:
-                    // One category
-                    parameters.Add("category", categoriesList[0]);
-                    break;
-                default:
-                    // Multiple Categories
-                    string categories = null;
-                    foreach (var category in categoriesList)
-                    {
-                        // Initiate our categories parameter
-                        if (categoriesList.First() == category)
-                        {
-                            categories = categoriesList[0];
-                        }
-                        // Adding next categories
-                        categories += "+" + category;
-                    }
-                    // Add categories
-                    if (categories != null) parameters.Add("category", categories);
-                    break;
+                parameters.Add("category", string.Join("+", categoriesList));
             }
 
             // If Only Freeleech Enabled
