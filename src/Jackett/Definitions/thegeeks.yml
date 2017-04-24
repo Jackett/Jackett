@@ -1,0 +1,157 @@
+---
+  site: thegeeks
+  name: The Geeks
+  description: "Technology E-Learning"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - http://thegeeks.click/
+
+  caps:
+    categorymappings:
+      - {id: 71, cat: Other, desc: "Antiques / Collecting"}
+      - {id: 46, cat: Other, desc: "Comp: Security/Encryption"}
+      - {id: 37, cat: Other, desc: "Game Shows / Quiz Shows"}
+      - {id: 16, cat: Other, desc: "Magic &amp; Illusion"}
+      - {id: 79, cat: Other, desc: "Reality: Competitions"}
+      - {id: 68, cat: Other, desc: "Arts &amp; Crafts / Jewelry"}
+      - {id: 52, cat: Other, desc: "Comp: Software Training"}
+      - {id: 2, cat: Other, desc: "Games: Cards / Gambling"}
+      - {id: 12, cat: Other, desc: "Math &amp; Statistics"}
+      - {id: 53, cat: Other, desc: "Reality: Social Experiment"}
+      - {id: 72, cat: Other, desc: "Astronomy / Space"}
+      - {id: 41, cat: Other, desc: "Comp: Theory/Ref/Mags"}
+      - {id: 63, cat: Other, desc: "Games: Tabletop / Roleplay"}
+      - {id: 10, cat: Other, desc: "Medicine &amp; Health"}
+      - {id: 61, cat: Other, desc: "Sci: Biology"}
+      - {id: 28, cat: Other, desc: "Business / Finance"}
+      - {id: 47, cat: Other, desc: "Comp: Web Development"}
+      - {id: 36, cat: Other, desc: "Gardening / Agriculture"}
+      - {id: 26, cat: Other, desc: "Music: History / Theory"}
+      - {id: 77, cat: Other, desc: "Sci: Chemistry"}
+      - {id: 38, cat: Other, desc: "Crime &amp; Investigation"}
+      - {id: 21, cat: Other, desc: "DIY / Workshop"}
+      - {id: 55, cat: Other, desc: "History of Civilization"}
+      - {id: 15, cat: Other, desc: "Music: Learning / Courses"}
+      - {id: 76, cat: Other, desc: "Sci: Physics"}
+      - {id: 45, cat: Other, desc: "Photography"}
+      - {id: 82, cat: Other, desc: "Docu: Architecture / Building"}
+      - {id: 56, cat: Other, desc: "History of War &amp; Politics"}
+      - {id: 75, cat: Other, desc: "Nature"}
+      - {id: 80, cat: Other, desc: "Sports - Live/Highlights"}
+      - {id: 85, cat: Other, desc: "Childrens Educational"}
+      - {id: 39, cat: Other, desc: "Docu: Fly on The Wall"}
+      - {id: 58, cat: Other, desc: "History: Biographies"}
+      - {id: 54, cat: Other, desc: "News / World Reports"}
+      - {id: 22, cat: Other, desc: "Sports/Exercise/Outdoors"}
+      - {id: 40, cat: Other, desc: "Comp: Certification Courses"}
+      - {id: 69, cat: Other, desc: "Documentaries: Misc"}
+      - {id: 31, cat: Other, desc: "History: Misc"}
+      - {id: 83, cat: Other, desc: "Nova"}
+      - {id: 24, cat: Other, desc: "Stock Media"}
+      - {id: 44, cat: Other, desc: "Comp: Digital Audio/Video"}
+      - {id: 59, cat: Other, desc: "Earth / Environment"}
+      - {id: 23, cat: Other, desc: "Hobbies: Misc"}
+      - {id: 27, cat: Other, desc: "Paleontology"}
+      - {id: 33, cat: Other, desc: "Style &amp; Fashion"}
+      - {id: 48, cat: Other, desc: "Comp: Games Dev/Guides"}
+      - {id: 18, cat: Other, desc: "Engineering"}
+      - {id: 35, cat: Other, desc: "Home / Property"}
+      - {id: 60, cat: Other, desc: "Performing Arts"}
+      - {id: 73, cat: Other, desc: "Survivalism"}
+      - {id: 3, cat: Other, desc: "Comp: Graphics "}
+      - {id: 25, cat: Other, desc: "Exam Prep / Education"}
+      - {id: 78, cat: Other, desc: "Horizon"}
+      - {id: 67, cat: Other, desc: "Pets / Animal Keeping"}
+      - {id: 86, cat: Other, desc: "Tattoos/Body Art"}
+      - {id: 42, cat: Other, desc: "Comp: Lang/DBs"}
+      - {id: 4, cat: Other, desc: "Fine &amp; Visual Arts"}
+      - {id: 1, cat: Other, desc: "Languages / Linguistics"}
+      - {id: 29, cat: Other, desc: "Philosophy"}
+      - {id: 32, cat: Other, desc: "Travel / Culture"}
+      - {id: 49, cat: Other, desc: "Comp: Network/Hardware"}
+      - {id: 9, cat: Other, desc: "Food / Cooking / Nutrition"}
+      - {id: 20, cat: Other, desc: "Law &amp; Justice"}
+      - {id: 11, cat: Other, desc: "Political Studies"}
+      - {id: 34, cat: Other, desc: "Vehicles &amp; Transport"}
+      - {id: 43, cat: Other, desc: "Comp: Operating Systems"}
+      - {id: 84, cat: Other, desc: "FrontLine"}
+      - {id: 30, cat: Other, desc: "Literature"}
+      - {id: 14, cat: Other, desc: "Psychology/Sociology"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: /login.php
+    method: form
+    form: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    captcha:
+      type: image
+      image: img#freecap
+      input: word
+    error:
+      - selector: table:contains("Login failed!")
+    test:
+      path: main.php
+
+  download:
+    selector: a[href^="download.php"]
+        
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+    fields:
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        filters:
+        selector: td:nth-child(2) b
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      grabs:
+        selector: td:nth-child(8)
+        filters:
+          - name: regexp
+            args: ([\d,]+)
+      files:
+        selector: td:nth-child(4)
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      date:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: (\d{4}-\d{2}-\d{2})
+      downloadvolumefactor:
+        case:
+          "font[color=\"green\"]": "0"
+          "font[color=\"blue\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "font[color=\"green\"]": "0"
+          "*": "1"
