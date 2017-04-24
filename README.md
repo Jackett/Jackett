@@ -173,9 +173,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * Tasmanit
  * The Empire
+ * The Geeks
  * The Horror Charnel
+ * The Occult
  * The New Retro
+ * The Place
  * The Shinning
+ * The Show
+ * The Vault
  * The-Torrents
  * TehConnection
  * TenYardTracker
