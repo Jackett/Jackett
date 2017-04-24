@@ -30,7 +30,7 @@ namespace Jackett.Indexers
         public SceneFZ(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "SceneFZ",
                    description: "Torrent tracker. Tracking over 50.000 torrent files.",
-                   link: "http://scenefz.net/",
+                   link: "http://scenefz.me/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    manager: i,
                    client: wc,
