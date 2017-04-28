@@ -23,6 +23,7 @@ namespace Jackett.Services
         void SaveConfig(IIndexer indexer, JToken obj);
         void InitIndexers();
         void InitCardigannIndexers(string path);
+        void InitAggregateIndexer();
         void SortIndexers();
     }
 
@@ -35,6 +36,7 @@ namespace Jackett.Services
         private Logger logger;
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private ICacheService cacheService;
+        private IIndexer aggregateIndexer;
 
         public IndexerManagerService(IContainer c, IConfigurationService config, Logger l, ICacheService cache)
         {
@@ -86,7 +88,7 @@ namespace Jackett.Services
         {
             logger.Info("Using HTTP Client: " + container.Resolve<IWebClient>().GetType().Name);
 
-            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().Where(p => p.ID != "cardigannindexer").OrderBy(_ => _.DisplayName))
+            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().Where(p => p.ID != "cardigannindexer" && p.ID != "aggregateindexer").OrderBy(_ => _.DisplayName))
             {
                 indexers.Add(idx.ID, idx);
                 LoadIndexerConfig(idx);
@@ -126,11 +128,24 @@ namespace Jackett.Services
             }
         }
 
+        public void InitAggregateIndexer()
+        {
+            logger.Info("Adding aggregate indexer");
+            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
+            aggregateIndexer.SetIndexers(indexers.Values);
+
+            this.aggregateIndexer = aggregateIndexer;
+        }
+
         public IIndexer GetIndexer(string name)
         {
             if (indexers.ContainsKey(name))
             {
                 return indexers[name];
+            }
+            else if (name == "all")
+            {
+                return aggregateIndexer;
             }
             else
             {
