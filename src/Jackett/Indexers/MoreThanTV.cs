@@ -74,8 +74,9 @@ namespace Jackett.Indexers
             var isTv = TorznabCatType.QueryContainsParentCategory(query.Categories, new List<int> { TorznabCatType.TV.ID });
             var releases = new List<ReleaseInfo>();
             var searchQuery = query.GetQueryString();
+            var searchQuerySingleEpisodes = Regex.Replace(searchQuery, @"(S\d{2})$", "$1*"); // If we're just seaching for a season (no episode) append an * to include all episodes of that season.
 
-            await GetReleases(releases, query, searchQuery);
+            await GetReleases(releases, query, searchQuerySingleEpisodes);
 
             // Search for torrent groups
             if (isTv)
