@@ -287,6 +287,7 @@ namespace Jackett.Services
             {
                 indexerService.InitCardigannIndexers(dir);
             }
+            indexerService.InitAggregateIndexer();
             indexerService.SortIndexers();
             client.Init();
             updater.CleanupTempDir();

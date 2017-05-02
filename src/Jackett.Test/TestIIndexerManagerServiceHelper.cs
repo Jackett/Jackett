@@ -52,5 +52,10 @@ namespace JackettTest
         {
             throw new NotImplementedException();
         }
+
+        public void InitAggregateIndexer()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
