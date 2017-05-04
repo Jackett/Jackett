@@ -17,7 +17,7 @@ namespace Jackett.Indexers
 {
     public class ShowRSS : BaseIndexer, IIndexer
     {
-        private string SearchAllUrl { get { return SiteLink + "feeds/all.rss"; } }
+        private string SearchAllUrl { get { return SiteLink + "other/all.rss"; } }
 
         new ConfigurationData configData
         {
@@ -79,7 +79,7 @@ namespace Jackett.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
 
-                    serie_title = node.SelectSingleNode(".//*[local-name()='rawtitle']").InnerText;
+                    serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
                     release.Title = serie_title;
 
                     if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
