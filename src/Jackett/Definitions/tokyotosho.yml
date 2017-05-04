@@ -1,0 +1,70 @@
+---
+  site: tokyotosho
+  name: Tokyo Toshokan
+  description: "A BitTorrent Library for Japanese Media"
+  language: en-us
+  links:
+    - https://www.tokyotosho.info/
+
+  caps:
+    categories:
+      1:  TV/Anime # Anime
+      10: TV/Anime # Non-English Anime
+      3:  Books    # Manga
+      8:  TV/Anime # Drama
+      2:  Audio    # Anime Music
+      9:  TV/Anime # Anime Music Videos
+      7:  TV/Anime # Raw Anime
+      4:  XXX      # Hentai
+      12: XXX      # Hentai (Anime)
+      13: XXX      # Hentai (Manga)
+      14: XXX      # Hentai (Games)
+      11: TV/Anime # Batch
+      15: XXX      # JAV
+      5:  Other    # Other
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  search:
+    path: "{{if .Query.Keywords }}search.php{{end}}"
+    inputs:
+      terms: "{{ .Query.Keywords }}"
+    rows:
+      selector: "table.listing tr.category_0"
+      after: 1
+    fields:
+      category:
+        selector: td:nth-child(1) > a
+        attribute: href
+        filters:
+          - name: regexp
+            args: "(\\d+)"
+      title:
+        selector: td:nth-child(2) > a:nth-child(2)
+      details:
+        selector: td:nth-child(3) > a
+        attribute: href
+      download:
+        selector: td:nth-child(2) > a:nth-child(2)
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+        filters:
+          - name: split
+            args: [ "|", 1 ]
+          - name: regexp
+            args: "Size: (.+?) ?$"
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: split
+            args: [ "|", 2 ]
+          - name: regexp
+            args: "Date: (.+?) ?$"
+          - name: dateparse
+            args: "2006-01-02 15:04 MST"
+      seeders:
+        selector: td:nth-child(5) > span:nth-child(1)
+      leechers:
+        selector: td:nth-child(5) > span:nth-child(2)

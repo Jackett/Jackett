@@ -105,7 +105,7 @@ namespace Jackett.Indexers
             return releases;
         }
 
-        public Uri UncleanLink(Uri link)
+        public virtual Uri UncleanLink(Uri link)
         {
             if (string.IsNullOrWhiteSpace(downloadUrlBase))
             {

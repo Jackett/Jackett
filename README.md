@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Sky torrents
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
+ * Tokyo Toshokan
  * TorrentProject
  * Torrentz2
  
@@ -64,7 +65,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Blu-bits
  * BlueBird
  * BroadcastTheNet  [![(invite needed)][inviteneeded]](#)
- * BTN
  * BTNext
  * Carpathians
  * CHDBits
@@ -138,6 +138,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MySpleen
  * Nachtwerk
  * NCore
+ * Nebulance
  * NetHD
  * New Real World
  * NextGen
@@ -170,6 +171,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shazbat
  * Shellife
  * SpeedCD
+ * SportsCult
  * Superbits
  * Tasmanit
  * The Empire
@@ -200,7 +202,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
- * TransmitheNet
  * TV Chaos UK
  * TV-Vault
  * u-Torrent
