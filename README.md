@@ -137,6 +137,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MySpleen
  * Nachtwerk
  * NCore
+ * Nebulance
  * NetHD
  * New Real World
  * NextGen
@@ -199,7 +200,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
- * TransmitheNet
  * TV Chaos UK
  * TV-Vault
  * u-Torrent
