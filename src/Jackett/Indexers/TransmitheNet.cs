@@ -30,7 +30,7 @@ namespace Jackett.Indexers
         public TransmitheNet(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "Nebulance",
                 description: " At Nebulance we will change the way you think about TV",
-                link: "https://nebulance.io/index.php",
+                link: "https://nebulance.io/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 manager: i,
                 client: c,
