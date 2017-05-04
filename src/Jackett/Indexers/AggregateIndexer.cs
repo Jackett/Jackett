@@ -21,7 +21,20 @@ namespace Jackett.Indexers
 
         public void SetIndexers(IEnumerable<IIndexer> indexers)
         {
-            Indexers = indexers;
+            Indexers = indexers.Where(i => i.IsConfigured);
+
+            var caps = new TorznabCapabilities();
+            foreach (var indexer in indexers) {
+                var indexerCaps = indexer.TorznabCaps;
+                caps.SearchAvailable = caps.SearchAvailable || indexerCaps.SearchAvailable;
+                caps.TVSearchAvailable = caps.TVSearchAvailable || indexerCaps.TVSearchAvailable;
+                caps.MovieSearchAvailable = caps.MovieSearchAvailable || indexerCaps.MovieSearchAvailable;
+                caps.SupportsTVRageSearch = caps.SupportsTVRageSearch || indexerCaps.SupportsTVRageSearch;
+                caps.SupportsImdbSearch = caps.SupportsImdbSearch || indexerCaps.SupportsImdbSearch;
+                caps.Categories.AddRange(indexerCaps.Categories.Except (caps.Categories));
+            }
+
+            base.TorznabCaps = caps;
             base.IsConfigured = true;
         }
 
@@ -33,7 +46,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var tasks = new List<Task<IEnumerable<ReleaseInfo>>>();
-            foreach (var indexer in Indexers.Where(i => i.IsConfigured))
+            foreach (var indexer in Indexers)
                 tasks.Add(indexer.PerformQuery(query));
 
             var t = Task.WhenAll<IEnumerable<ReleaseInfo>>(tasks);
@@ -64,7 +77,7 @@ namespace Jackett.Indexers
             return base.UncleanLink(link);
         }
 
-        public Task<byte[]> Download(Uri link)
+        public override Task<byte[]> Download(Uri link)
         {
             var indexer = GetOriginalIndexerForLink(link);
             if (indexer != null)
@@ -76,7 +89,7 @@ namespace Jackett.Indexers
         private IIndexer GetOriginalIndexerForLink(Uri link)
         {
             var prefix = string.Format("{0}://{1}", link.Scheme, link.Host);
-            var validIndexers = Indexers.Where(i => i.IsConfigured && i.SiteLink.StartsWith(prefix));
+            var validIndexers = Indexers.Where(i => i.SiteLink.StartsWith(prefix));
             if (validIndexers.Count() > 0)
                 return validIndexers.First();
 
