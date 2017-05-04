@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Sky torrents
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
+ * Tokyo Toshokan
  * TorrentProject
  * Torrentz2
  
