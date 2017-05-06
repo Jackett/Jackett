@@ -18,7 +18,7 @@ namespace Jackett.Models.IndexerConfig.Bespoke
         {
             IncludeRaw = new BoolItem() { Name = "IncludeRaw", Value = false };
             DateWarning = new DisplayItem("This tracker does not supply upload dates so they are based off year of release.") { Name = "DateWarning" };
-            InsertSeason = new BoolItem() { Name = "Prefix episode number with S01 for Sonarr Compatability", Value = false };
+            InsertSeason = new BoolItem() { Name = "Prefix episode number with E0 for Sonarr Compatability", Value = false };
         }
     }
 }

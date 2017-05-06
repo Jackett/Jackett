@@ -24,7 +24,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
- * Nyaa <!-- maintained by bonny1992 -->
+ * Nyaa-Pantsu
  * RARBG
  * ShowRSS
  * Sky torrents
@@ -47,6 +47,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AOX
  * Apollo (XANAX)
  * ArabaFenice
+ * Arche Torrent
  * AsianDVDClub
  * Audiobook Torrents
  * Avistaz
