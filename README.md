@@ -47,6 +47,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AOX
  * Apollo (XANAX)
  * ArabaFenice
+ * Arche Torrent
  * AsianDVDClub
  * Audiobook Torrents
  * Avistaz
