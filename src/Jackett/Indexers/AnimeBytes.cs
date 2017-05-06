@@ -135,8 +135,8 @@ namespace Jackett.Indexers
             {
                 configData.CookieHeader.Value = jsonConfig.Value<string>("cookies");
                 configData.IncludeRaw.Value = jsonConfig.Value<bool>("raws");
-                SaveConfig();
                 IsConfigured = true;
+                SaveConfig();
                 return;
             }
 

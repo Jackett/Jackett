@@ -915,8 +915,8 @@ namespace Jackett.Indexers
             await DoLogin();
             await TestLogin();
 
-            SaveConfig();
             IsConfigured = true;
+            SaveConfig();
             return IndexerConfigurationStatus.Completed;
         }
 
