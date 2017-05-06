@@ -748,7 +748,9 @@
     <Content Include="Definitions\polishtracker.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Definitions\nyaa-pantsu.yml" />
+    <Content Include="Definitions\nyaa-pantsu.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Definitions\redacted-scrape.yml" />
     <Content Include="Definitions\torrentz2.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
