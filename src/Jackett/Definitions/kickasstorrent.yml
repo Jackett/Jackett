@@ -68,7 +68,7 @@
       - {id: 153, cat: Other, desc: "Other - Wordpress"}
       - {id: 6, cat: TV/HD, desc: "TV - Blu-Ray Disc"}
       - {id: 7, cat: TV/Documentary, desc: "TV - Documentary"}
-      - {id: 5, cat: TV/SD, desc: "TV - DVD Disc"}
+      - {id: 5, cat: TV/SD, desc: "TV - DVD ISO"}
       - {id: 41, cat: TV/HD, desc: "TV - HD"}
       - {id: 151, cat: TV/Other, desc: "TV - Other"}
       - {id: 146, cat: TV/Sport, desc: "TV - Sport"}
@@ -164,7 +164,7 @@
           ":has(a:contains(\"Other\")):contains(\"Wordpress\")": 153
           ":has(a:contains(\"TV\")):contains(\"Blu-Ray Disc\")": 6
           ":has(a:contains(\"TV\")):contains(\"Documentary\")": 7
-          ":has(a:contains(\"TV\")):contains(\"DVD Disc\")": 5
+          ":has(a:contains(\"TV\")):contains(\"DVD ISO\")": 5
           ":has(a:contains(\"TV\")):contains(\"HD\")": 41
           ":has(a:contains(\"TV\")):contains(\"Other\")": 151
           ":has(a:contains(\"TV\")):contains(\"Sport\")": 146
@@ -176,6 +176,7 @@
           ":has(a:contains(\"XXX\")):contains(\"UltraHD\")": 121
           ":has(a:contains(\"XXX\")):contains(\"Videos\")": 119
           ":has(a:contains(\"XXX\")):contains(\"XXX Games\")": 126
+          "*": 0 # some older torrents's don't have a category
       details:
         selector: a.cellMainLink
         attribute: href
