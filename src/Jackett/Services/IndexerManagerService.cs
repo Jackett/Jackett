@@ -194,7 +194,6 @@ namespace Jackett.Services
 
         public void SaveConfig(IIndexer indexer, JToken obj)
         {
-            indexer.LoadFromSavedConfiguration(obj); // This seems crazy, but without this call the indexer will represent itself as unconfigured (which is misleading).
             UpdateAggregateIndexer();
             lock (configWriteLock)
             { 
