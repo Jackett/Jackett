@@ -302,9 +302,9 @@ namespace Jackett.Indexers
                                 releaseInfo = releaseInfo.Replace("Season ", "S");
                                 releaseInfo = releaseInfo.Trim();
                                 int test = 0;
-                                if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length==1)
+                                if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length<=3)
                                 {
-                                    releaseInfo = "S01E0" + releaseInfo;
+                                    releaseInfo = "E0" + releaseInfo;
                                 }
 
                             }
