@@ -128,8 +128,8 @@ namespace Jackett.Indexers
                         throw new Exception("Your cookie did not work");
                     }
 
-                    SaveConfig();
                     IsConfigured = true;
+                    SaveConfig();
                     return IndexerConfigurationStatus.Completed;
                 }
                 catch (Exception e)

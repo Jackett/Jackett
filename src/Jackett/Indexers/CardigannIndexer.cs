@@ -191,6 +191,7 @@ namespace Jackett.Indexers
         {
             public string Path { get; set; }
             public List<searchPathBlock> Paths { get; set; }
+            public Dictionary<string, List<string>> Headers { get; set; }
             public List<filterBlock> Keywordsfilters { get; set; }
             public Dictionary<string, string> Inputs { get; set; }
             public List<errorBlock> Error { get; set; }
@@ -915,8 +916,8 @@ namespace Jackett.Indexers
             await DoLogin();
             await TestLogin();
 
-            SaveConfig();
             IsConfigured = true;
+            SaveConfig();
             return IndexerConfigurationStatus.Completed;
         }
 
@@ -1005,8 +1006,7 @@ namespace Jackett.Indexers
                         Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
                     case "fuzzytime":
-                        var timestr = (string)Filter.Args;
-                        Data = DateTimeUtil.FromUnknown(timestr).ToString(DateTimeUtil.RFC1123ZPattern);
+                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
@@ -1051,7 +1051,10 @@ namespace Jackett.Indexers
 
             if (Selector.Selector != null)
             {
-                selection = QuerySelector(Dom, Selector.Selector);
+                if (Dom.Matches(Selector.Selector))
+                    selection = Dom;
+                else
+                    selection = QuerySelector(Dom, Selector.Selector);
                 if (selection == null)
                 {
                     throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.ToHtmlPretty()));
@@ -1215,10 +1218,18 @@ namespace Jackett.Indexers
 
                 // send HTTP request
                 WebClientStringResult response = null;
+                Dictionary<string, string> headers = null;
+                if (Search.Headers != null)
+                {
+                    // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
+                    headers = new Dictionary<string, string>();
+                    foreach (var header in Search.Headers)
+                        headers.Add(header.Key, header.Value[0]);
+                }
                 if (method == RequestType.POST)
-                    response = await PostDataWithCookies(searchUrl, queryCollection);
+                    response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
                 else
-                    response = await RequestStringWithCookies(searchUrl);
+                    response = await RequestStringWithCookies(searchUrl, null, null, headers);
                 var results = response.Content;
                 try
                 {
@@ -1485,18 +1496,32 @@ namespace Jackett.Indexers
                             {
                                 var PrevRow = Row.PreviousElementSibling;
                                 string value = null;
+                                if (PrevRow == null) // continue with parent
+                                { 
+                                    var Parent = Row.ParentElement;
+                                    if (Parent != null)
+                                        PrevRow = Parent.PreviousElementSibling;
+                                }
                                 while (PrevRow != null)
                                 {
+                                    var CurRow = PrevRow;
+                                    logger.Info(PrevRow.OuterHtml);
                                     try
                                     {
-                                        value = handleSelector(DateHeaders, PrevRow);
+                                        value = handleSelector(DateHeaders, CurRow);
                                         break;
                                     }
                                     catch (Exception)
                                     {
                                         // do nothing
                                     }
-                                    PrevRow = PrevRow.PreviousElementSibling;
+                                    PrevRow = CurRow.PreviousElementSibling;
+                                    if (PrevRow == null) // continue with parent
+                                    {
+                                        var Parent = CurRow.ParentElement;
+                                        if (Parent != null)
+                                            PrevRow = Parent.PreviousElementSibling;
+                                    }
                                 }
                             
                                 if (value == null && DateHeaders.Optional == false)

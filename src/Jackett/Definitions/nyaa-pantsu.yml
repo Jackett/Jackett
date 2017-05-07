@@ -1,0 +1,82 @@
+#,==========,
+#|   |  |   |
+#`-./    \.-'   -Config'd by Quatroking, 05-05-2017-
+#   `.__.'
+
+---
+  site: nyaa-pantsu
+  name: Nyaa-pantsu
+  language: en-en
+  type: public
+  encoding: UTF-8
+  links:
+    - https://nyaa.pantsu.cat/
+    
+  settings: []
+
+  caps:
+    categorymappings:
+      # Anime
+#      - {id: 3_,   cat: TV/Anime, desc: "Anime"}
+      - {id: 3_12, cat: TV/Anime, desc: "Anime music videos"}
+      - {id: 3_5,  cat: TV/Anime, desc: "English subtitled animes"}
+      - {id: 3_13, cat: TV/Anime, desc: "Non-english subtitled animes"}
+      - {id: 3_6,  cat: TV/Anime, desc: "Raw animes"}
+      # Audio
+#      - {id: 2_,   cat: Audio, desc: "Audio"}
+      - {id: 2_3,  cat: Audio, desc: "Lossless audio"}
+      - {id: 2_4,  cat: Audio, desc: "Lossy audio"}
+      # Literature
+#      - {id: 4_,   cat: Books, desc: "Literature"}
+      - {id: 4_7,  cat: Books, desc: "Literature english translated"}
+      - {id: 4_14,  cat: Books, desc: "Literature non-english translated"}
+      - {id: 4_8, cat: Books, desc: "Raw literature"}
+      # Software
+      - {id: 1_1,  cat: PC/ISO, desc: "Applications"}
+      - {id: 1_2,  cat: PC/Games, desc: "Games"}
+
+    modes:
+      search: [q]
+      tv-search: [q]
+
+
+  search:
+    path: /search
+    inputs:
+     # page: "search"
+      q: "{{ .Query.Keywords}}"
+    rows:
+      selector: tr.torrent-info
+    fields:
+      title:
+        selector: td.name a
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: split
+            args: [ "=", -1 ]
+      details:
+        selector: td.name a
+        attribute: href
+      download:
+        selector: a[title="Magnet link"]
+        attribute: href
+      size:
+        selector: td.filesize
+      seeders:
+        text: 0
+   #   seeders:
+   #     selector: td.tlistsn
+   #     optional: true
+   #   leechers:
+   #     text: 0
+   #   leechers:
+   #     selector: td.tlistln
+   #     optional: true
+   #   grabs:
+   #     selector: td.tlistdn
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
