@@ -18,6 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Linux and OSX using Mono 4 (mono 3 is no longer supported).
 
 ### Supported Public Trackers
+ * Anidex
  * EZTV
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
