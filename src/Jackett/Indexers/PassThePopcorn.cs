@@ -148,7 +148,7 @@ namespace Jackett.Indexers
                         release.Size = long.Parse((string)torrent["Size"]);
                         release.Grabs = long.Parse((string)torrent["Snatched"]);
                         release.Seeders = int.Parse((string)torrent["Seeders"]);
-                        release.Peers = int.Parse((string)torrent["Leechers"]);
+                        release.Peers = release.Seeders + int.Parse((string)torrent["Leechers"]);
                         release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", 
                                                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         release.Link = new Uri(string.Format("{0}?action=download&id={1}&authkey={2}&torrent_pass={3}", 
