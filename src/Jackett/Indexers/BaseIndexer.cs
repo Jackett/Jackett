@@ -540,8 +540,8 @@ namespace Jackett.Indexers
             if (isLoggedin)
             {
                 CookieHeader = cookies;
-                SaveConfig();
                 IsConfigured = true;
+                SaveConfig();
             }
             else
             {
