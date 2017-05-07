@@ -191,6 +191,7 @@ namespace Jackett.Indexers
         {
             public string Path { get; set; }
             public List<searchPathBlock> Paths { get; set; }
+            public Dictionary<string, List<string>> Headers { get; set; }
             public List<filterBlock> Keywordsfilters { get; set; }
             public Dictionary<string, string> Inputs { get; set; }
             public List<errorBlock> Error { get; set; }
@@ -1215,10 +1216,18 @@ namespace Jackett.Indexers
 
                 // send HTTP request
                 WebClientStringResult response = null;
+                Dictionary<string, string> headers = null;
+                if (Search.Headers != null)
+                {
+                    // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
+                    headers = new Dictionary<string, string>();
+                    foreach (var header in Search.Headers)
+                        headers.Add(header.Key, header.Value[0]);
+                }
                 if (method == RequestType.POST)
-                    response = await PostDataWithCookies(searchUrl, queryCollection);
+                    response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
                 else
-                    response = await RequestStringWithCookies(searchUrl);
+                    response = await RequestStringWithCookies(searchUrl, null, null, headers);
                 var results = response.Content;
                 try
                 {
