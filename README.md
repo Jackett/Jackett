@@ -4,6 +4,7 @@
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
+[![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp?svg=true)](https://ci.appveyor.com/project/camjac251/jackett)
 
 This project is a new fork and is recruiting development help.  If you are able to help out please contact us.
 
