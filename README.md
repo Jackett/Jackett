@@ -248,6 +248,8 @@ Jackett can also be run from the command line if you would like to see log messa
        * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
  3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
 
+Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
+
 ## Installation on OSX
  1. Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended)
        * Setup ssl support by running
@@ -256,8 +258,6 @@ Jackett can also be run from the command line if you would like to see log messa
        cert-sync --user ~/Downloads/cacert.pem
        ```
  1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
-
-Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
 
 ## Installation using Docker
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
