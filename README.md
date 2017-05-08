@@ -27,6 +27,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
  * Nyaa-Pantsu
+ * Nyoo
  * RARBG
  * ShowRSS
  * Sky torrents
