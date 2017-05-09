@@ -75,7 +75,7 @@ namespace Jackett.Models
         {
             get
             {
-                return (Categories != null && Categories.Length > 0)
+                return (Categories != null && Categories.Length > 0);
             }
         }
 
