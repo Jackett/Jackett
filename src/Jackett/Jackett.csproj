@@ -370,6 +370,7 @@
     <Compile Include="WebAPIExceptionHandler.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
+    <Compile Include="Indexers\Abstract\BaseMetaIndexer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
