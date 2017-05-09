@@ -2,7 +2,8 @@
   site: tokyotosho
   name: Tokyo Toshokan
   description: "A BitTorrent Library for Japanese Media"
-  language: en-us
+  language: UTF-8
+  type: public
   links:
     - https://www.tokyotosho.info/
 
@@ -27,7 +28,7 @@
       tv-search: [q, season, ep]
 
   search:
-    path: "{{if .Query.Keywords }}search.php{{end}}"
+    path: "{{if .Query.Keywords }}search.php{{else}}index.php{{end}}"
     inputs:
       terms: "{{ .Query.Keywords }}"
     rows:
