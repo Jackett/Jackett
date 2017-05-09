@@ -66,6 +66,11 @@ namespace Jackett.Models
             }
         }
 
+        public bool SupportsCategories (int[] categories)
+        {
+            return Categories.Count(i => categories.Any(c => c == i.ID)) > 0;
+        }
+
         public JArray CapsToJson()
         {
             var jArray = new JArray();

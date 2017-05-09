@@ -46,7 +46,7 @@ namespace Jackett.Indexers
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var tasks = new List<Task<IEnumerable<ReleaseInfo>>>();
-            foreach (var indexer in Indexers)
+            foreach (var indexer in Indexers.Where(i => i.CanHandleQuery(query)))
                 tasks.Add(indexer.PerformQuery(query));
 
             var t = Task.WhenAll<IEnumerable<ReleaseInfo>>(tasks);
