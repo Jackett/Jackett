@@ -2,7 +2,7 @@
   site: tokyotosho
   name: Tokyo Toshokan
   description: "A BitTorrent Library for Japanese Media"
-  language: UTF-8
+  language: en-us
   type: public
   links:
     - https://www.tokyotosho.info/
