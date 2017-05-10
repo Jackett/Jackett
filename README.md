@@ -54,6 +54,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Arche Torrent
  * AsianDVDClub
  * Audiobook Torrents
+ * Awesome-HD
  * Avistaz
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
