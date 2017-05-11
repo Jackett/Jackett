@@ -48,3 +48,5 @@
       download:
         selector: table.release-table > tbody > tr > td.hs-magnet-link > span > a
         attribute: href
+      size:
+        text: "500 MB"
