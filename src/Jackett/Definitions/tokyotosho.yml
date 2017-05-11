@@ -65,7 +65,7 @@
           - name: regexp
             args: "Date: (.+?) ?$"
           - name: dateparse
-            args: "2006-01-02 15:04 MST"
+            args: "2006-01-02 15:04 UTC"
       seeders:
         selector: td:nth-child(5) > span:nth-child(1)
       leechers:
