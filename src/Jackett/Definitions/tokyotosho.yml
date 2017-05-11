@@ -4,6 +4,7 @@
   description: "A BitTorrent Library for Japanese Media"
   language: en-us
   type: public
+  encoding: UTF-8
   links:
     - https://www.tokyotosho.info/
 
