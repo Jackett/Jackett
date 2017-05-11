@@ -3,6 +3,8 @@
   name: Tokyo Toshokan
   description: "A BitTorrent Library for Japanese Media"
   language: en-us
+  type: public
+  encoding: UTF-8
   links:
     - https://www.tokyotosho.info/
 
@@ -27,7 +29,7 @@
       tv-search: [q, season, ep]
 
   search:
-    path: "{{if .Query.Keywords }}search.php{{end}}"
+    path: "{{if .Query.Keywords }}search.php{{else}}index.php{{end}}"
     inputs:
       terms: "{{ .Query.Keywords }}"
     rows:
@@ -63,7 +65,7 @@
           - name: regexp
             args: "Date: (.+?) ?$"
           - name: dateparse
-            args: "2006-01-02 15:04 MST"
+            args: "2006-01-02 15:04 UTC"
       seeders:
         selector: td:nth-child(5) > span:nth-child(1)
       leechers:
