@@ -36,7 +36,7 @@
         selector: td:nth-child(3) > a.torrent
         attribute: href
       download:
-        selector: td:nth-child(6) > a
+        selector: td:nth-child(5) > a
         attribute: href
       size:
         selector: td:nth-child(7)
