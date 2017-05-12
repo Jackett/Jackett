@@ -21,6 +21,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Public Trackers
  * Anidex
  * EZTV
+ * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
  * KickAssTorrent
@@ -53,6 +54,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Arche Torrent
  * AsianDVDClub
  * Audiobook Torrents
+ * Awesome-HD
  * Avistaz
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB

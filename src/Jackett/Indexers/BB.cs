@@ -36,7 +36,7 @@ namespace Jackett.Indexers
         public BB(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "bB",
                 description: "bB",
-                link: "http://www.reddit.com/r/baconbits/",
+                link: "https://baconbits.org/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: w,
