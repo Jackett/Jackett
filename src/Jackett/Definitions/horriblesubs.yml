@@ -38,6 +38,9 @@
         text: "1"
       title:
         selector: table.release-table > tbody > tr > td.dl-label
+        filters:
+          - name: prepend
+            args: "[Horriblesubs] "
       details:
         attribute: class
         filters:
