@@ -9,12 +9,12 @@ using Jackett.Services;
 using Jackett.Utils.Clients;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Indexers.Meta
 {
     class AggregateIndexer : BaseMetaIndexer, IIndexer
     {
-        public AggregateIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
-            : base("AggregateSearch", "http://127.0.0.1/", "This feed includes all configured trackers", i, wc, l, new Models.IndexerConfig.ConfigurationData(), ps)
+        public AggregateIndexer(IIndexerManagerService i, Logger l, IProtectionService ps)
+            : base("AggregateSearch", "This feed includes all configured trackers", i, l, new Models.IndexerConfig.ConfigurationData(), ps, x => true)
         {
         }
     }
