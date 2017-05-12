@@ -72,7 +72,9 @@ namespace Jackett.Indexers.Meta
         private Func<IIndexer, bool> filterFunc;
         private IEnumerable<IIndexer> indexers;
         public IEnumerable<IIndexer> Indexers {
-            get => indexers;
+            get {
+                return indexers;
+            }
             set {
                 indexers = value.Where(i => i.IsConfigured && filterFunc(i));
                 TorznabCaps = value.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat); ;
