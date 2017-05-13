@@ -32,7 +32,8 @@
             args: [")", ""]
           - name: replace
             args: ["/", "-"]
-          - name: fuzzytime
+          - name: dateparse 
+            args: "01-02-06"
     fields:
       category:
         text: "1"
