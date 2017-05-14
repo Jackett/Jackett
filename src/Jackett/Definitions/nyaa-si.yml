@@ -1,0 +1,72 @@
+---
+  site: nyaa-si
+  name: Nyaa.si
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://nyaa.si
+    
+  settings: []
+
+  caps:
+    categorymappings:
+      # Anime
+      - {id: 1_0,   cat: TV/Anime, desc: "Anime"}
+      - {id: 1_1, cat: TV/Anime, desc: "Anime music videos"}
+      - {id: 1_2,  cat: TV/Anime, desc: "English subtitled animes"}
+      - {id: 1_3, cat: TV/Anime, desc: "Non-english subtitled animes"}
+      - {id: 1_4,  cat: TV/Anime, desc: "Raw animes"}
+      # Audio
+      - {id: 2_0,   cat: Audio, desc: "Audio"}
+      - {id: 2_1,  cat: Audio, desc: "Lossless audio"}
+      - {id: 2_2,  cat: Audio, desc: "Lossy audio"}
+      # Literature
+      - {id: 3_0,   cat: Books, desc: "Literature"}
+      - {id: 3_1,  cat: Books, desc: "Literature english translated"}
+      - {id: 3_2,  cat: Books, desc: "Literature non-english translated"}
+      - {id: 3_3, cat: Books, desc: "Raw literature"}
+      # Software
+      - {id: 6_0,  cat: PC, desc: "Software"}
+      - {id: 6_1,  cat: PC/ISO, desc: "Applications"}
+      - {id: 6_2,  cat: PC/Games, desc: "Games"}
+
+    modes:
+      search: [q]
+      tv-search: [q]
+
+
+  search:
+    path: /
+    inputs:
+      q: "{{ .Query.Keywords}}"
+    rows:
+      selector: tr.default,tr.danger,tr.success
+    fields:
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: split
+            args: [ "=", -1 ]
+      title:
+        selector: td:nth-child(2) a
+      details:
+        selector: td:nth-child(2) a
+        attribute: href
+      download:
+        selector: td:nth-child(3) a
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: dateparse
+            args: "2006-01-02 15:04 UTC"
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
