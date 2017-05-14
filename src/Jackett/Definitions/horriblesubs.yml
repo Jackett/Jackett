@@ -4,7 +4,7 @@
   description: "Anime Sub Group - \"So bad yet so good\""
   language: en-us
   links:
-    - https://horriblesubs.info/
+    - http://horriblesubs.info/
 
   caps:
     categories:
@@ -32,7 +32,8 @@
             args: [")", ""]
           - name: replace
             args: ["/", "-"]
-          - name: fuzzytime
+          - name: dateparse 
+            args: "01-02-06"
     fields:
       category:
         text: "1"
