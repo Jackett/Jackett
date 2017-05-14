@@ -45,5 +45,7 @@ namespace Jackett.Indexers
 
         IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases);
         Uri UncleanLink(Uri link);
+
+        bool CanHandleQuery(TorznabQuery query);
     }
 }
