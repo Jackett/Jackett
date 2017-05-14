@@ -13,7 +13,10 @@
       search: [q]
       tv-search: [q, season, ep]
   
-  settings: []
+  settings:
+    - name: prepend-horriblesubs
+      type: checkbox
+      label: Prepend [Horriblesubs] to torrent title
 
   search:
     path: "lib/{{if .Query.Keywords }}search.php{{else}}latest.php{{end}}"
@@ -39,6 +42,9 @@
         text: "1"
       title:
         selector: table.release-table > tbody > tr > td.dl-label
+        filters:
+          - name: prepend
+            args: "{{if .Config.prepend-horriblesubs}}[Horriblesubs] {{else}}{{end}}"
       details:
         attribute: class
         filters:
