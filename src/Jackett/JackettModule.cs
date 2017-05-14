@@ -98,9 +98,8 @@ namespace Jackett
             }
 
             // Register indexers
-            foreach (var indexer in thisAssembly.GetTypes()
-                .Where(p => typeof(IIndexer).IsAssignableFrom(p) && !p.IsInterface)
-                .ToArray())
+            var indexerTypes = thisAssembly.GetTypes().Where(p => typeof (IIndexer).IsAssignableFrom (p) && !p.IsInterface && !p.IsInNamespace("Jackett.Indexers.Meta"));
+            foreach (var indexer in indexerTypes)
             {
                 builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
             }

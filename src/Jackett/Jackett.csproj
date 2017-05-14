@@ -178,7 +178,6 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Indexers\AggregateIndexer.cs" />
     <Compile Include="Indexers\ArcheTorrent.cs" />
     <Compile Include="Indexers\HDOnly.cs" />
     <Compile Include="Indexers\cgpeers.cs" />
@@ -198,6 +197,7 @@
     <Compile Include="Indexers\notwhatcd.cs" />
     <Compile Include="Indexers\Redacted.cs" />
     <Compile Include="Indexers\Norbits.cs" />
+    <Compile Include="Indexers\Trezzor.cs" />
     <Compile Include="Indexers\TVVault.cs" />
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
@@ -370,6 +370,8 @@
     <Compile Include="WebAPIExceptionHandler.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
+    <Compile Include="Indexers\Meta\MetaIndexers.cs" />
+    <Compile Include="Indexers\Meta\BaseMetaIndexer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -764,7 +766,10 @@
     <Content Include="Definitions\horriblesubs.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Definitions\nyoo.yml" />
+    <Content Include="Definitions\nyoo.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Definitions\nyaasi.yml" />
     <None Include="Definitions\redacted-scrape.yml" />
     <Content Include="Definitions\torrentz2.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -927,6 +932,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

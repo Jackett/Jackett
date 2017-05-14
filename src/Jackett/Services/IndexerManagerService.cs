@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Indexers.Meta;
 
 namespace Jackett.Services
 {
@@ -131,7 +132,7 @@ namespace Jackett.Services
         public void InitAggregateIndexer()
         {
             logger.Info("Adding aggregate indexer");
-            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
+            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, logger, container.Resolve<IProtectionService>());
             this.aggregateIndexer = aggregateIndexer;
             UpdateAggregateIndexer();
         }
@@ -266,7 +267,7 @@ namespace Jackett.Services
 
         private void UpdateAggregateIndexer()
         {
-            aggregateIndexer.SetIndexers(indexers.Where (p => p.Value.IsConfigured).Select(p => p.Value));
+            aggregateIndexer.Indexers = indexers.Where(p => p.Value.IsConfigured).Select(p => p.Value);
         }
     }
 }

@@ -27,6 +27,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
+ * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
  * RARBG
@@ -209,6 +210,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
+ * Trezzor
  * TV Chaos UK
  * TV-Vault
  * u-Torrent
