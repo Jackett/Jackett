@@ -66,6 +66,11 @@ namespace Jackett.Models
             }
         }
 
+        public bool SupportsCategories (int[] categories)
+        {
+            return Categories.Count(i => categories.Any(c => c == i.ID)) > 0;
+        }
+
         public JArray CapsToJson()
         {
             var jArray = new JArray();
@@ -111,6 +116,17 @@ namespace Jackett.Models
             );
 
             return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
+        }
+        public static TorznabCapabilities Concat (TorznabCapabilities lhs, TorznabCapabilities rhs)
+        {
+            lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
+            lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
+            lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
+            lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
+            lhs.SupportsImdbSearch = lhs.SupportsImdbSearch || rhs.SupportsImdbSearch;
+            lhs.Categories.AddRange (rhs.Categories.Except (lhs.Categories));
+
+            return lhs;
         }
     }
 }

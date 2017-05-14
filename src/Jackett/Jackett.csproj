@@ -178,7 +178,6 @@
     <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Indexers\AggregateIndexer.cs" />
     <Compile Include="Indexers\ArcheTorrent.cs" />
     <Compile Include="Indexers\HDOnly.cs" />
     <Compile Include="Indexers\cgpeers.cs" />
@@ -371,6 +370,8 @@
     <Compile Include="WebAPIExceptionHandler.cs" />
     <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
+    <Compile Include="Indexers\Meta\MetaIndexers.cs" />
+    <Compile Include="Indexers\Meta\BaseMetaIndexer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -932,6 +933,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Indexers\Meta\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

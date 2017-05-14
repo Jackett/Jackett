@@ -31,6 +31,54 @@ namespace Jackett.Models
 
         protected string[] QueryStringParts = null;
 
+        public bool IsSearch
+        {
+            get
+            {
+                return (QueryStringParts != null && QueryStringParts.Length > 0);
+            }
+        }
+
+        public bool IsTVSearch
+        {
+            get
+            {
+                return QueryType == "tvsearch";
+            }
+        }
+
+        public bool IsMovieSearch
+        {
+            get
+            {
+                return QueryType == "movie";
+            }
+        }
+
+        public bool IsTVRageSearch
+        {
+            get
+            {
+                return RageID != null;
+            }
+        }
+
+        public bool IsImdbQuery
+        {
+            get
+            {
+                return ImdbID != null;
+            }
+        }
+
+        public bool HasSpecifiedCategories
+        {
+            get
+            {
+                return (Categories != null && Categories.Length > 0);
+            }
+        }
+
         public string SanitizedSearchTerm
         {
             get
