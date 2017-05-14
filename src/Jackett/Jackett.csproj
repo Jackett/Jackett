@@ -758,7 +758,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\nyaa-pantsu.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Definitions\anidex.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -769,8 +769,12 @@
     <Content Include="Definitions\nyoo.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Definitions\nyaasi.yml" />
-    <None Include="Definitions\redacted-scrape.yml" />
+    <Content Include="Definitions\nyaasi.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Definitions\redacted-scrape.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Definitions\torrentz2.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
