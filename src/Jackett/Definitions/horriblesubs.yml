@@ -3,6 +3,8 @@
   name: Horrible Subs
   description: "Anime Sub Group - \"So bad yet so good\""
   language: en-us
+  type: public
+  encoding: UTF-8
   links:
     - http://horriblesubs.info/
 
