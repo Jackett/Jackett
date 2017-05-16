@@ -62,21 +62,22 @@
       download:
         selector: a[title="Magnet link"]
         attribute: href
+      seeders:
+        selector: td:nth-child(3) b
+        optional: true
+      leechers:
+        selector: td:nth-child(4) b
+        optional: true
+      grabs:
+        selector: td:nth-child(5)
+        optional: true
+      date:
+        selector: td.date
+        filters:
+          - name: dateparse
+            args: "2006-01-02T15:04:05Z"
       size:
         selector: td.filesize
-      seeders:
-        text: 0
-   #   seeders:
-   #     selector: td.tlistsn
-   #     optional: true
-   #   leechers:
-   #     text: 0
-   #   leechers:
-   #     selector: td.tlistln
-   #     optional: true
-   #   grabs:
-   #     selector: td.tlistdn
-      downloadvolumefactor:
-        text: "0"
-      uploadvolumefactor:
-        text: "1"
+        filters:
+          - name: replace
+            args: ["Unknown", "0"]
