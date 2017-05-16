@@ -85,7 +85,22 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: passkey
+      type: text
+      label: Passkey
+
+  login:
+    method: post
+    path: "new/account-login.php"
+    inputs:
+      username: "{{ .Config.username }}"
+      passkey: "{{ .Config.passkey }}"
+    test:
+      path: index.php
 
   search:
     path: "/new/torrents-search.php"
