@@ -64,8 +64,10 @@
             args: [ "|", 2 ]
           - name: regexp
             args: "Date: (.+?) ?$"
+          - name: replace
+            args: ["UTC","-00"]
           - name: dateparse
-            args: "2006-01-02 15:04 UTC"
+            args: "2006-01-02 15:04 -07"
       seeders:
         selector: td:nth-child(5) > span:nth-child(1)
       leechers:
