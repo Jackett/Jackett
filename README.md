@@ -283,7 +283,9 @@ Jackett is available as beta package from [SynoCommuniy](https://synocommunity.c
 
   If you're using mono this is often caused by missing ca-certificates.
   Try reimporting the certificates in this case:
+
   `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
+
   As a option of last resort you can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
 
 *  __Enable logging__
