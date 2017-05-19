@@ -126,9 +126,9 @@ namespace Jackett.Indexers.Abstract
                     if (!string.IsNullOrEmpty(artist))
                         release.Title += artist + " - ";
                     release.Title += groupName;
-                    if (!string.IsNullOrEmpty(groupYear))
+                    if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
                         release.Title += " [" + groupYear + "]";
-                    if (!string.IsNullOrEmpty(releaseType))
+                    if (!string.IsNullOrEmpty(releaseType) && releaseType != "Unknown")
                         release.Title += " [" + releaseType + "]";
 
                     release.Description = "";
@@ -180,7 +180,7 @@ namespace Jackett.Indexers.Abstract
 
             var format = (string)torrent["format"];
             if (!string.IsNullOrEmpty(format))
-                flags.Add(format);
+                flags.Add(HttpUtility.HtmlDecode(format));
 
             var encoding = (string)torrent["encoding"];
             if (!string.IsNullOrEmpty(encoding))

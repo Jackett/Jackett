@@ -185,6 +185,7 @@
     <Compile Include="Indexers\Hardbay.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\Psytorrents.cs" />
+    <Compile Include="Indexers\BrokenStones.cs" />
     <Compile Include="Indexers\ShowRSS.cs" />
     <Compile Include="Indexers\Superbits.cs" />
     <Compile Include="Indexers\rutracker.cs" />
