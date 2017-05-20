@@ -160,6 +160,7 @@ namespace Jackett.Indexers
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var added = row.Cq().Find("td:eq(6)").First().Text().Trim(); //column changed from 7 to 6
+                    var date = added.Substring(0, 10);
                     var time = added.Substring(11, 8); //date layout wasn't quite right
                     var dateTime = date + time;
                     release.PublishDate = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
