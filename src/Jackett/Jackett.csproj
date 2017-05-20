@@ -241,7 +241,6 @@
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
-    <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDSpace.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IIndexer.cs" />

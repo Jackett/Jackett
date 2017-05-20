@@ -72,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Blu-bits
  * BlueBird
  * BroadcastTheNet  [![(invite needed)][inviteneeded]](#)
+ * BrokenStones
  * BTNext
  * Carpathians
  * CHDBits
@@ -95,7 +96,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FANO.IN
  * FileList
  * Freedom-HD
- * Freshon
  * FullMixMusic
  * FunFile
  * FunkyTorrents
