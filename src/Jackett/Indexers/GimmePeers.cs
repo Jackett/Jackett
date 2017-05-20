@@ -161,7 +161,6 @@ namespace Jackett.Indexers
 
                     var added = row.Cq().Find("td:eq(6)").First().Text().Trim(); //column changed from 7 to 6
                     var time = added.Substring(11, 8); //date layout wasn't quite right
-                    var time = added.Substring(12, 8);
                     var dateTime = date + time;
                     release.PublishDate = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
