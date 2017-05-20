@@ -108,10 +108,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gormogon
  * Greek Team
  * Hardbay
- * HD4Free
+ * HD-Forever
  * HD-Space
  * HD-Torrents
  * HD-Bits.com
+ * HD4Free
  * HDBits
  * HDChina
  * HDClub
