@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Indexers.Meta;
 
 namespace Jackett.Services
 {
@@ -36,7 +37,7 @@ namespace Jackett.Services
         private Logger logger;
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private ICacheService cacheService;
-        private IIndexer aggregateIndexer;
+        private AggregateIndexer aggregateIndexer;
 
         public IndexerManagerService(IContainer c, IConfigurationService config, Logger l, ICacheService cache)
         {
@@ -131,10 +132,9 @@ namespace Jackett.Services
         public void InitAggregateIndexer()
         {
             logger.Info("Adding aggregate indexer");
-            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
-            aggregateIndexer.SetIndexers(indexers.Where(p => p.Value.IsConfigured).Select(p => p.Value));
-
+            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, logger, container.Resolve<IProtectionService>());
             this.aggregateIndexer = aggregateIndexer;
+            UpdateAggregateIndexer();
         }
 
         public IIndexer GetIndexer(string name)
@@ -185,6 +185,7 @@ namespace Jackett.Services
             {
                 indexers[name] = container.ResolveNamed<IIndexer>(indexer.ID);
             }
+            UpdateAggregateIndexer();
         }
 
         private string GetIndexerConfigFilePath(IIndexer indexer)
@@ -194,6 +195,7 @@ namespace Jackett.Services
 
         public void SaveConfig(IIndexer indexer, JToken obj)
         {
+            UpdateAggregateIndexer();
             lock (configWriteLock)
             { 
                 var uID = Guid.NewGuid().ToString("N");
@@ -261,6 +263,11 @@ namespace Jackett.Services
             foreach (var indexer in indexers.OrderBy(_ => _.Value.DisplayName))
                 newIndexers.Add(indexer.Key, indexer.Value);
             indexers = newIndexers;
+        }
+
+        private void UpdateAggregateIndexer()
+        {
+            aggregateIndexer.Indexers = indexers.Where(p => p.Value.IsConfigured).Select(p => p.Value);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
+[![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp?svg=true)](https://ci.appveyor.com/project/camjac251/jackett)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 
@@ -18,13 +19,17 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Linux and OSX using Mono 4 (mono 3 is no longer supported).
 
 ### Supported Public Trackers
+ * Anidex
  * EZTV
+ * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
- * Nyaa <!-- maintained by bonny1992 -->
+ * Nyaa.si
+ * Nyaa-Pantsu
+ * Nyoo
  * RARBG
  * ShowRSS
  * Sky torrents
@@ -47,8 +52,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AOX
  * Apollo (XANAX)
  * ArabaFenice
+ * Arche Torrent
  * AsianDVDClub
  * Audiobook Torrents
+ * Awesome-HD
  * Avistaz
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
@@ -65,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Blu-bits
  * BlueBird
  * BroadcastTheNet  [![(invite needed)][inviteneeded]](#)
+ * BrokenStones
  * BTNext
  * Carpathians
  * CHDBits
@@ -75,6 +83,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CZTeam
  * DanishBits
  * DataScene
+ * Deildu
  * Demonoid
  * Diablo Torrent
  * DigitalHive
@@ -87,7 +96,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FANO.IN
  * FileList
  * Freedom-HD
- * Freshon
  * FullMixMusic
  * FunFile
  * FunkyTorrents
@@ -100,10 +108,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gormogon
  * Greek Team
  * Hardbay
- * HD4Free
+ * HD-Forever
  * HD-Space
  * HD-Torrents
  * HD-Bits.com
+ * HD4Free
  * HDBits
  * HDChina
  * HDClub
@@ -172,6 +181,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shellife
  * SpeedCD
  * SportsCult
+ * SportHD
  * Superbits
  * Tasmanit
  * The Empire
@@ -202,6 +212,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent-Syndikat
  * ToTheGlory
  * TranceTraffic
+ * Trezzor
  * TV Chaos UK
  * TV-Vault
  * u-Torrent
@@ -236,7 +247,7 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett". 
 
-## Installation on Linux/OSX
+## Installation on Linux
  1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (version 4.8 is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
@@ -247,6 +258,15 @@ Jackett can also be run from the command line if you would like to see log messa
  3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
 
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
+
+## Installation on OSX
+ 1. Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended)
+       * Setup ssl support by running
+       ```
+       https://curl.haxx.se/ca/cacert.pem
+       cert-sync --user ~/Downloads/cacert.pem
+       ```
+ 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
 
 ## Installation using Docker
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
@@ -262,7 +282,12 @@ Jackett is available as beta package from [SynoCommuniy](https://synocommunity.c
 
 * __Unable to  connect to trackers with invalid SSL certificates__
 
-  You can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
+  If you're using mono this is often caused by missing ca-certificates.
+  Try reimporting the certificates in this case:
+
+  `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
+
+  As a option of last resort you can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
 
 *  __Enable logging__
 

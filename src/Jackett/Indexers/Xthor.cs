@@ -305,7 +305,8 @@ namespace Jackett.Indexers
             // Loop on Categories needed
             if (categoriesList.Count > 0)
             {
-                parameters.Add("category", string.Join("+", categoriesList));
+                // ignore categories for now, something changed or is buggy, needs investigation
+                //parameters.Add("category", string.Join("+", categoriesList));
             }
 
             // If Only Freeleech Enabled

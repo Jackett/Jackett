@@ -1,0 +1,100 @@
+version: 0.7.{build}
+skip_tags: true
+image: Visual Studio 2015
+configuration: Release
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+install:
+- cmd: choco install InnoSetup
+before_build:
+- cmd: nuget restore src\Jackett.sln
+build:
+  verbosity: minimal
+after_build:
+- cmd: >-
+    xcopy src\Jackett.Console\bin\Release build.windows\  /e /y
+
+    copy /Y src\Jackett.Service\bin\Release\JackettService.exe* %APPVEYOR_BUILD_FOLDER%\build.windows\
+
+    copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe* %APPVEYOR_BUILD_FOLDER%\build.windows\
+
+    copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe* %APPVEYOR_BUILD_FOLDER%\build.windows\
+
+    copy /Y LICENSE build.windows\LICENSE
+
+    copy /Y README.md build.windows\README.md
+
+
+    xcopy build.windows WindowsBuild\Jackett\ /e /y
+
+
+    msbuild src\Jackett.sln /t:Clean /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+    "C:\Program Files (x86)\Mono\bin\xbuild.bat" src\Jackett.sln /t:Build /p:Configuration=Release /verbosity:minimal /tv:12.0
+
+
+    xcopy src\Jackett.Console\bin\Release build.mono\  /e /y
+
+    copy /Y src\Jackett.Service\bin\Release\JackettService.exe* %APPVEYOR_BUILD_FOLDER%\build.mono\
+
+    copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe* %APPVEYOR_BUILD_FOLDER%\build.mono\
+
+    copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe* %APPVEYOR_BUILD_FOLDER%\build.mono\
+
+    copy /Y LICENSE build.mono\LICENSE
+
+    copy /Y README.md build.mono\README.md
+
+    copy /Y Upstart.config build.mono\Upstart.config
+
+
+    xcopy build.mono MonoBuild\Jackett\ /e /y
+
+
+    "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Installer.iss
+
+    RENAME Output\setup.exe Jackett.Installer.Windows.exe
+
+    MOVE Output\Jackett.Installer.Windows.exe %APPVEYOR_BUILD_FOLDER%
+
+
+    cd WindowsBuild
+
+    7z a -tzip -r "%APPVEYOR_BUILD_FOLDER%\Jackett.Binaries.Windows.zip" "Jackett\"
+
+
+    cd %APPVEYOR_BUILD_FOLDER%
+
+    cd MonoBuild
+
+    7z a -ttar "%APPVEYOR_BUILD_FOLDER%\Jackett.Binaries.Mono.tar" "Jackett\"
+
+    cd %APPVEYOR_BUILD_FOLDER%
+
+    7z a -tgzip "Jackett.Binaries.Mono.tar.gz" "Jackett.Binaries.Mono.tar"
+
+
+    appveyor PushArtifact Jackett.Installer.Windows.exe
+
+    appveyor PushArtifact Jackett.Binaries.Windows.zip
+
+    appveyor PushArtifact Jackett.Binaries.Mono.tar.gz
+deploy:
+- provider: GitHub
+  tag: v$(appveyor_build_version)
+  auth_token:
+    secure: hOg+16YTIbq4kO9u4D1YVOTbWDqgCX6mAQYMbnmBBSw2CiUsZh7OKbupoUb3FtWa
+  draft: true
+  on:
+    branch: master
+notifications:
+- provider: GitHubPullRequest
+  auth_token:
+    secure: k6ZZACPbKcvAFiXe/uOmY6Ofs4aw2rgKEWMNA8EilQpdJ6o7ef31we4DPn3SXZzx
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true

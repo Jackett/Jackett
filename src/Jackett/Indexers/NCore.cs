@@ -157,6 +157,8 @@ namespace Jackett.Indexers
                 {
                     CQ qRow = row.Cq();
 
+                    var key = dom ["link[rel=alternate]"].First().Attr("href").Split('=').Last();
+
                     release = new ReleaseInfo();
                     var torrentTxt = qRow.Find(".torrent_txt, .torrent_txt2").Find("a").Get(0);
                     //if (torrentTxt == null) continue;
@@ -170,7 +172,7 @@ namespace Jackett.Indexers
                     string downloadLink = SiteLink + torrentTxt.GetAttribute("href");
                     string downloadId = downloadLink.Substring(downloadLink.IndexOf("&id=") + 4);
 
-                    release.Link = new Uri(SiteLink.ToString() + "torrents.php?action=download&id=" + downloadId);
+                    release.Link = new Uri(SiteLink.ToString() + "torrents.php?action=download&id=" + downloadId + "&key=" + key);
                     release.Comments = new Uri(SiteLink.ToString() + "torrents.php?action=details&id=" + downloadId);
                     release.Guid = new Uri(release.Comments.ToString() + "#comments"); ;
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".box_s2").Find("a").First().Text());
