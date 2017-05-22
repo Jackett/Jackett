@@ -124,11 +124,19 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
+            var arraySearchString = searchString.Split(' ');
+            searchString = "";
+            foreach (var subSearchString in arraySearchString) 
+            {
+                searchString += "+" + subSearchString + " ";
+            }
+            searchString = searchString.Trim ();
+
             var queryCollection = new Dictionary<string, string>();
             queryCollection.Add ("search", searchString);
             queryCollection.Add ("cat", "0");
-            queryCollection.Add("incldead", "0");
-            queryCollection.Add("freeleech", "0");
+            queryCollection.Add ("incldead", "0");
+            queryCollection.Add ("freeleech", "0");
             queryCollection.Add ("lang", "0");
 
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString ();
