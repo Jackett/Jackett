@@ -39,6 +39,8 @@
             args: ["/", "-"]
           - name: dateparse 
             args: "01-02-06"
+          - name: dateparse 
+            args: "01-02"
     fields:
       category:
         text: "1"
