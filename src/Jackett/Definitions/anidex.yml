@@ -16,7 +16,10 @@
       tv-search: [q, season, ep]
 
   settings:
-    - name: language-id
+    - name: cat-id
+      type: text
+      label: Category Id
+    - name: lang-id
       type: text
       label: Language Id
       
@@ -27,8 +30,8 @@
     inputs:
       page: "torrents"
       filename: "{{ .Query.Keywords }}"
-      category: "0"
-      lang_id: "{{ .Config.language-id }}"
+      category: "{{ .Config.cat-id }}"
+      lang_id: "{{ .Config.lang-id }}"
     rows:
       selector: div.table-responsive > table > tbody > tr
     fields:
