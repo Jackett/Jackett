@@ -15,7 +15,10 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: language-id
+      type: text
+      label: Language Id
       
   search:
     path: "ajax/page.ajax.php"
@@ -25,6 +28,7 @@
       page: "torrents"
       filename: "{{ .Query.Keywords }}"
       category: "0"
+      lang_id: "{{ .Config.language-id }}"
     rows:
       selector: div.table-responsive > table > tbody > tr
     fields:
