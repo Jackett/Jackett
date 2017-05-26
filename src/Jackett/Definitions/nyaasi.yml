@@ -7,7 +7,13 @@
   links:
     - https://nyaa.si
     
-  settings: []
+  settings:
+    - name: filter-id
+      type: text
+      label: Filter Id
+    - name: cat-id
+      type: text
+      label: Category Id
 
   caps:
     categorymappings:
@@ -35,11 +41,12 @@
       search: [q]
       tv-search: [q]
 
-
   search:
     path: /
     inputs:
-      q: "{{ .Query.Keywords}}"
+      q: "{{ .Query.Keywords }}"
+      f: "{{ .Config.filter-id }}"
+      c: "{{ .Config.cat-id }}"
     rows:
       selector: tr.default,tr.danger,tr.success
     fields:
