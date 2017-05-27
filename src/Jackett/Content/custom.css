@@ -62,6 +62,10 @@ body {
     height: 20px;
 }
 
+.setup-item-inputselect {
+    max-width: 255px;
+}
+
 [data-type=hiddendata]{
     display: none;
 }

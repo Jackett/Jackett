@@ -19,6 +19,7 @@ namespace Jackett.Models.IndexerConfig
         {
             InputString,
             InputBool,
+            InputSelect,
             DisplayImage,
             DisplayInfo,
             HiddenData,
@@ -85,6 +86,9 @@ namespace Jackett.Models.IndexerConfig
                     case ItemType.InputBool:
                         ((BoolItem)item).Value = arrItem.Value<bool>("value");
                         break;
+                    case ItemType.InputSelect:
+                        ((SelectItem)item).Value = arrItem.Value<string>("value");
+                        break;
                     case ItemType.Recaptcha:
                         ((RecaptchaItem)item).Value = arrItem.Value<string>("value");
                         ((RecaptchaItem)item).Cookie = arrItem.Value<string>("cookie");
@@ -129,6 +133,15 @@ namespace Jackett.Models.IndexerConfig
                     case ItemType.InputBool:
                         jObject["value"] = ((BoolItem)item).Value;
                         break;
+                    case ItemType.InputSelect:
+                        jObject["value"] = ((SelectItem)item).Value;
+                        jObject["options"] = new JObject();
+
+                        foreach (var option in ((SelectItem)item).Options)
+                        {
+                            jObject["options"][option.Key] = option.Value;
+                        }
+                        break;
                     case ItemType.DisplayImage:
                         string dataUri = DataUrlUtils.BytesToDataUrl(((ImageItem)item).Value, "image/jpeg");
                         jObject["value"] = dataUri;
@@ -156,7 +169,7 @@ namespace Jackett.Models.IndexerConfig
             if (!forDisplay)
             {
                 properties = properties
-                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
+                    .Where(p => p.ItemType == ItemType.HiddenData || p.ItemType == ItemType.InputBool || p.ItemType == ItemType.InputString || p.ItemType == ItemType.InputSelect || p.ItemType == ItemType.Recaptcha || p.ItemType == ItemType.DisplayInfo)
                     .ToList();
             }
 
@@ -242,6 +255,20 @@ namespace Jackett.Models.IndexerConfig
             public ImageItem()
             {
                 ItemType = ConfigurationData.ItemType.DisplayImage;
+            }
+        }
+
+        public class SelectItem : Item
+        {
+            // "_" is reserved as empty.
+            public string Value { get; set; }
+
+            public Dictionary<string, string> Options { get; }
+
+            public SelectItem(Dictionary<string, string> options)
+            {
+                ItemType = ItemType.InputSelect;
+                Options = options;
             }
         }
 

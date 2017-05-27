@@ -113,6 +113,7 @@ namespace Jackett.Indexers
             public string Name { get; set; }
             public string Type { get; set; }
             public string Label { get; set; }
+            public Dictionary<string, string> Options { get; set; }
         }
 
         public class CategorymappingBlock
@@ -302,18 +303,35 @@ namespace Jackett.Indexers
             foreach (var Setting in Definition.Settings)
             {
                 Item item;
-                if (Setting.Type != null && Setting.Type == "checkbox")
+
+                if (Setting.Type != null)
                 {
-                    item = new BoolItem() { Value = false };
-                }
-                else if(Setting.Type != null && Setting.Type == "password")
-                {
-                    item = new StringItem();
+                    switch (Setting.Type)
+                    {
+                        case "checkbox":
+                            item = new BoolItem {Value = false};
+                            break;
+                        case "password":
+                        case "text":
+                            item = new StringItem();
+                            break;
+                        case "select":
+                            if (Setting.Options == null)
+                            {
+                                throw new Exception("Options must be given for the 'select' type.");
+                            }
+
+                            item = new SelectItem(Setting.Options) { Value = "_" };
+                            break;
+                        default:
+                            throw new Exception($"Invalid setting type '{Setting.Type}' specified.");
+                    }
                 }
                 else
                 {
-                    item = new StringItem(); 
+                    item = new StringItem();
                 }
+                
                 item.Name = Setting.Label;
                 configData.AddDynamic(Setting.Name, item);
             }
@@ -376,6 +394,13 @@ namespace Jackett.Indexers
                 if (item.GetType() == typeof(BoolItem))
                 {
                     value = (((BoolItem)item).Value == true ? "true" : "");
+                }
+                else if (item.GetType() == typeof(SelectItem))
+                {
+                    value = ((SelectItem)item).Value;
+
+                    if (value == "_")
+                        value = string.Empty;
                 }
                 else
                 { 
