@@ -11,6 +11,7 @@
     - name: filter-id
       type: select
       label: Filter
+      default: "0"
       options:
         0: No filter
         1: No remakes
@@ -18,6 +19,7 @@
     - name: cat-id
       type: select
       label: Category
+      default: "0_0"
       options:
         0_0: "All categories"
         1_0: "Anime"

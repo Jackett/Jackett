@@ -4,9 +4,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jackett.Models.IndexerConfig
 {
@@ -260,7 +257,6 @@ namespace Jackett.Models.IndexerConfig
 
         public class SelectItem : Item
         {
-            // "_" is reserved as empty.
             public string Value { get; set; }
 
             public Dictionary<string, string> Options { get; }

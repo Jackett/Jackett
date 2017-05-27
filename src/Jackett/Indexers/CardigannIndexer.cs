@@ -113,6 +113,7 @@ namespace Jackett.Indexers
             public string Name { get; set; }
             public string Type { get; set; }
             public string Label { get; set; }
+            public string Default { get; set; }
             public Dictionary<string, string> Options { get; set; }
         }
 
@@ -310,10 +311,15 @@ namespace Jackett.Indexers
                     {
                         case "checkbox":
                             item = new BoolItem {Value = false};
+
+                            if (Setting.Default != null && Setting.Default == "true")
+                            {
+                                ((BoolItem) item).Value = true;
+                            }
                             break;
                         case "password":
                         case "text":
-                            item = new StringItem();
+                            item = new StringItem { Value = Setting.Default };
                             break;
                         case "select":
                             if (Setting.Options == null)
@@ -321,7 +327,7 @@ namespace Jackett.Indexers
                                 throw new Exception("Options must be given for the 'select' type.");
                             }
 
-                            item = new SelectItem(Setting.Options) { Value = "_" };
+                            item = new SelectItem(Setting.Options) { Value = Setting.Default };
                             break;
                         default:
                             throw new Exception($"Invalid setting type '{Setting.Type}' specified.");
@@ -329,7 +335,7 @@ namespace Jackett.Indexers
                 }
                 else
                 {
-                    item = new StringItem();
+                    item = new StringItem { Value = Setting.Default }; ;
                 }
                 
                 item.Name = Setting.Label;
@@ -398,9 +404,6 @@ namespace Jackett.Indexers
                 else if (item.GetType() == typeof(SelectItem))
                 {
                     value = ((SelectItem)item).Value;
-
-                    if (value == "_")
-                        value = string.Empty;
                 }
                 else
                 { 
