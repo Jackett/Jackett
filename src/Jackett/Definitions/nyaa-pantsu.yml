@@ -1,6 +1,6 @@
 #,==========,
 #|   |  |   |
-#`-./    \.-'   -Config'd by Quatroking, 05-05-2017-
+#`-./    \.-'   - Config'd by Quatroking (05-05-2017), updated by AeonLucid (26-05-2017) -
 #   `.__.'
 
 ---
@@ -12,7 +12,10 @@
   links:
     - https://nyaa.pantsu.cat/
     
-  settings: []
+  settings:
+    - name: cat-id
+      type: text
+      label: Category Id
 
   caps:
     categorymappings:
@@ -34,17 +37,15 @@
       # Software
       - {id: 1_1,  cat: PC/ISO, desc: "Applications"}
       - {id: 1_2,  cat: PC/Games, desc: "Games"}
-
     modes:
       search: [q]
       tv-search: [q]
 
-
   search:
     path: /search
     inputs:
-     # page: "search"
-      q: "{{ .Query.Keywords}}"
+      q: "{{ .Query.Keywords }}"
+      c: "{{ .Config.cat-id }}"
     rows:
       selector: tr.torrent-info
     fields:
@@ -63,21 +64,24 @@
         selector: a[title="Magnet link"]
         attribute: href
       seeders:
-        selector: td:nth-child(3) b
+        selector: td:nth-child(3) b.text-success
         optional: true
       leechers:
-        selector: td:nth-child(4) b
+        selector: td:nth-child(3) b.text-danger
         optional: true
       grabs:
-        selector: td:nth-child(5)
+        selector: td:nth-child(3)
         optional: true
+        filters:
+          - name: split
+            args: [ "/", -1 ]
       date:
         selector: td.date-short
         filters:
           - name: dateparse
             args: "2006-01-02T15:04:05Z"
       size:
-        selector: td.filesize
+        selector: td:nth-child(5)
         filters:
           - name: replace
             args: ["Unknown", "0"]
