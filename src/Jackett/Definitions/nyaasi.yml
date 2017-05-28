@@ -23,38 +23,38 @@
       options:
         0_0: "All categories"
         1_0: "Anime"
-        1_1: "- Anime Music Video"
-        1_2: "- English-translated"
-        1_3: "- Non-English-translated"
-        1_4: "- Raw"
+        1_1: "Anime - Anime Music Video"
+        1_2: "Anime - English-translated"
+        1_3: "Anime - Non-English-translated"
+        1_4: "Anime - Raw"
         2_0: "Audio"
-        2_1: "- Lossless"
-        2_2: "- Lossy"
+        2_1: "Audio - Lossless"
+        2_2: "Audio - Lossy"
         3_0: "Literature"
-        3_1: "- English-translated"
-        3_2: "- Non-English-translated"
-        3_3: "- Lossy"
+        3_1: "Literature - English-translated"
+        3_2: "Literature - Non-English-translated"
+        3_3: "Literature - Lossy"
         6_0: "Software"
-        6_1: "- Applications"
-        6_2: "- Games"
+        6_1: "Software - Applications"
+        6_2: "Software - Games"
 
   caps:
     categorymappings:
       # Anime
-      - {id: 1_0,   cat: TV/Anime, desc: "Anime"}
-      - {id: 1_1, cat: TV/Anime, desc: "Anime music videos"}
+      - {id: 1_0,  cat: TV/Anime, desc: "Anime"}
+      - {id: 1_1,  cat: TV/Anime, desc: "Anime music videos"}
       - {id: 1_2,  cat: TV/Anime, desc: "English subtitled animes"}
-      - {id: 1_3, cat: TV/Anime, desc: "Non-english subtitled animes"}
+      - {id: 1_3,  cat: TV/Anime, desc: "Non-english subtitled animes"}
       - {id: 1_4,  cat: TV/Anime, desc: "Raw animes"}
       # Audio
-      - {id: 2_0,   cat: Audio, desc: "Audio"}
+      - {id: 2_0,  cat: Audio, desc: "Audio"}
       - {id: 2_1,  cat: Audio, desc: "Lossless audio"}
       - {id: 2_2,  cat: Audio, desc: "Lossy audio"}
       # Literature
-      - {id: 3_0,   cat: Books, desc: "Literature"}
+      - {id: 3_0,  cat: Books, desc: "Literature"}
       - {id: 3_1,  cat: Books, desc: "Literature english translated"}
       - {id: 3_2,  cat: Books, desc: "Literature non-english translated"}
-      - {id: 3_3, cat: Books, desc: "Raw literature"}
+      - {id: 3_3,  cat: Books, desc: "Raw literature"}
       # Software
       - {id: 6_0,  cat: PC, desc: "Software"}
       - {id: 6_1,  cat: PC/ISO, desc: "Applications"}
