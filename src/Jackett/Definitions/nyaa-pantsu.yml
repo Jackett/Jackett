@@ -50,7 +50,7 @@
       selector: tr.torrent-info
     fields:
       title:
-        selector: td.name a
+        selector: td.tr-name a
       category:
         selector: td:nth-child(1) a
         attribute: href
@@ -58,10 +58,10 @@
           - name: split
             args: [ "=", -1 ]
       details:
-        selector: td.name a
+        selector: td.tr-name a
         attribute: href
       download:
-        selector: a[title="Magnet link"]
+        selector: a[title="Magnet Link"]
         attribute: href
       seeders:
         selector: td:nth-child(3) b.text-success
