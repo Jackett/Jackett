@@ -7,7 +7,36 @@
   links:
     - https://nyaa.si
     
-  settings: []
+  settings:
+    - name: filter-id
+      type: select
+      label: Filter
+      default: "0"
+      options:
+        0: No filter
+        1: No remakes
+        2: Trusted only
+    - name: cat-id
+      type: select
+      label: Category
+      default: "0_0"
+      options:
+        0_0: "All categories"
+        1_0: "Anime"
+        1_1: "- Anime Music Video"
+        1_2: "- English-translated"
+        1_3: "- Non-English-translated"
+        1_4: "- Raw"
+        2_0: "Audio"
+        2_1: "- Lossless"
+        2_2: "- Lossy"
+        3_0: "Literature"
+        3_1: "- English-translated"
+        3_2: "- Non-English-translated"
+        3_3: "- Lossy"
+        6_0: "Software"
+        6_1: "- Applications"
+        6_2: "- Games"
 
   caps:
     categorymappings:
@@ -30,16 +59,16 @@
       - {id: 6_0,  cat: PC, desc: "Software"}
       - {id: 6_1,  cat: PC/ISO, desc: "Applications"}
       - {id: 6_2,  cat: PC/Games, desc: "Games"}
-
     modes:
       search: [q]
       tv-search: [q]
-
 
   search:
     path: /
     inputs:
       q: "{{ .Query.Keywords}}"
+      f: "{{ .Config.filter-id }}"
+      c: "{{ .Config.cat-id }}"
     rows:
       selector: tr.default,tr.danger,tr.success
     fields:

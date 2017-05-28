@@ -419,6 +419,9 @@
     <None Include="Resources\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\libs\handlebarsextend.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Definitions\**\*.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
