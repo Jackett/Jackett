@@ -36,6 +36,13 @@ namespace Jackett.Models
         public double? DownloadVolumeFactor { get; set; }
         public double? UploadVolumeFactor { get; set; }
 
+        public double? Gain {
+            get {
+                var sizeInGB = Size / 1024.0 / 1024.0 / 1024.0;
+                return Seeders * sizeInGB;
+            }
+        }
+
         public object Clone()
         {
             return new ReleaseInfo()

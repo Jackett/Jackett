@@ -1,7 +1,9 @@
-using System;
+﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
+using CsQuery;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
@@ -11,10 +13,40 @@ using NLog;
 
 namespace Jackett.Indexers.Meta
 {
+    public class ImdbResolver {
+        public ImdbResolver(IWebClient webClient) {
+            WebClient = webClient;
+        }
+
+        public async Task<IEnumerable<string>> GetAllTitles(string imdbId) {
+            if (!imdbId.StartsWith("tt"))
+                imdbId = "tt" + imdbId;
+            var request = new WebRequest("http://www.imdb.com/title/" + imdbId + "/releaseinfo");
+            var result = await WebClient.GetString(request);
+
+            CQ dom = result.Content;
+
+            var mainTitle = dom["h3[itemprop=name]"].Find("a")[0].InnerHTML.Replace("\"", "");
+
+            var akas = dom["table#akas"].Find("tbody").Find("tr");
+            var titleList = new List<string>();
+            titleList.Add(mainTitle);
+            foreach (var row in akas) {
+                string title = row.FirstElementChild.InnerHTML;
+                if (title == "(original title)" || title == "")
+                    titleList.Add(HttpUtility.HtmlDecode(row.FirstElementChild.NextElementSibling.InnerHTML));
+            }
+
+            return titleList;
+        }
+
+        private IWebClient WebClient;
+    }
+
     public abstract class BaseMetaIndexer : BaseIndexer, IIndexer
     {
-        protected BaseMetaIndexer(string name, string description, IIndexerManagerService manager, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
-            : base(name, "http://127.0.0.1/", description, manager, null, logger, configData, p, null, null)
+        protected BaseMetaIndexer(string name, string description, IIndexerManagerService manager, IWebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
+            : base(name, "http://127.0.0.1/", description, manager, webClient, logger, configData, p, null, null)
         {
             filterFunc = filter;
         }
@@ -26,16 +58,50 @@ namespace Jackett.Indexers.Meta
 
         public virtual async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var tasks = Indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.PerformQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
-            var aggregateTask = Task.WhenAll<IEnumerable<ReleaseInfo>>(tasks);
-            await aggregateTask;
-            if (aggregateTask.Exception != null)
-                logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
+            IEnumerable<Task<IEnumerable<ReleaseInfo>>> tasks = Indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.PerformQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
 
-            IEnumerable<ReleaseInfo> result = tasks.Where(x => x.Status == TaskStatus.RanToCompletion).SelectMany(x => x.Result).OrderByDescending(r => r.PublishDate); // Ordering by the number of seeders might be useful as well.
+            bool needFallback = query.IsImdbQuery;
+            IEnumerable<string> fallbackTitles = null;
+            if (needFallback) {
+                var imdb = new ImdbResolver(webclient);
+                fallbackTitles = await imdb.GetAllTitles(query.ImdbID);
+                var fallbackQueries = fallbackTitles.Select(t => query.CreateFallback(t));
+                var backupTasks = fallbackQueries.SelectMany(q => Indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.PerformQuery(q.Clone())));
+                tasks = tasks.Concat(backupTasks.ToList()); // explicit conversion to List to execute LINQ query
+            }
+
+            var aggregateTask = Task.WhenAll<IEnumerable<ReleaseInfo>>(tasks);
+            try {
+                await aggregateTask;
+            } catch {
+                logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
+            }
+
+            var unorderedResult = tasks.Where(x => x.Status == TaskStatus.RanToCompletion).SelectMany(x => x.Result);
+            var orderedResult = unorderedResult.Where(r => {
+                var normalizedTitles = fallbackTitles.Concat(fallbackTitles.Select(t => t.Replace(' ', '.').Replace(":", ""))).Select(t => t.ToLowerInvariant());
+                foreach (var title in normalizedTitles) {
+                    if (r.Title.ToLowerInvariant().Contains(title))
+                        return true;
+                }
+                return false;
+            }).OrderByDescending(r => r.Gain);
+
+            var filteredResult = orderedResult.Where(r => {
+                if (r.Imdb != null) {
+                    try {
+                        return Int64.Parse(query.ImdbID.Select(c => char.IsDigit(c)).ToString()) == r.Imdb;
+                    } catch {
+                        // Cannot safely determine whether result is what we
+                        // wanted, so let's just leave it alone...
+                    }
+                }
+                return true;
+            });
             // Limiting the response size might be interesting for use-cases where there are
             // tons of trackers configured in Jackett. For now just use the limit param if
             // someone wants to do that.
+            IEnumerable<ReleaseInfo> result = filteredResult;
             if (query.Limit > 0)
                 result = result.Take(query.Limit);
             return result;

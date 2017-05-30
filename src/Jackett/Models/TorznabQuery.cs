@@ -111,6 +111,48 @@ namespace Jackett.Models
             IsTest = false;
         }
 
+        public TorznabQuery CreateFallback(string search) {
+            var ret = Clone();
+            if (Categories == null || Categories.Length == 0) {
+                ret.Categories = new int[]{ TorznabCatType.Movies.ID,
+                                            TorznabCatType.MoviesForeign.ID,
+                                            TorznabCatType.MoviesOther.ID,
+                                            TorznabCatType.MoviesSD.ID,
+                                            TorznabCatType.MoviesHD.ID,
+                                            TorznabCatType.Movies3D.ID,
+                                            TorznabCatType.MoviesBluRay.ID,
+						                    TorznabCatType.MoviesDVD.ID,
+						                    TorznabCatType.MoviesWEBDL.ID,
+                };
+            }
+            ret.SearchTerm = search;
+
+            return ret;
+        }
+
+        public TorznabQuery Clone() {
+            var ret = new TorznabQuery();
+            ret.QueryType = QueryType;
+            if (Categories != null && Categories.Length > 0) {
+                ret.Categories = new int [Categories.Length];
+                Array.Copy (Categories, ret.Categories, Categories.Length);
+            }
+            ret.Extended = Extended;
+            ret.ApiKey = ApiKey;
+            ret.Limit = Limit;
+            ret.Offset = Offset;
+            ret.Season = Season;
+            ret.Episode = Episode;
+            ret.SearchTerm = SearchTerm;
+            ret.IsTest = IsTest;
+            if (QueryStringParts != null && QueryStringParts.Length > 0) {
+                ret.QueryStringParts = new string [QueryStringParts.Length];
+                Array.Copy (QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
+            }
+
+            return ret;
+        }
+
         public string GetQueryString()
         {
             return (SanitizedSearchTerm + " " + GetEpisodeSearchString()).Trim();
