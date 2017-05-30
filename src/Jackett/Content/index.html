@@ -26,6 +26,7 @@
     <script src="../libs/handlebars.min.js"></script>
     <script src="../libs/moment.min.js"></script>
     <script src="../libs/handlebarsmoment.js"></script>
+    <script src="../libs/handlebarsextend.js"></script>
     <script src="../bootstrap/bootstrap.min.js"></script>
     <script src="../libs/bootstrap-notify.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
@@ -176,6 +177,19 @@
             {{else}}
             <input type="checkbox" data-id="{{id}}" class="form-control" />
             {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputselect" type="text/x-handlebars-template">
+        <div class="setup-item-inputselect">
+            <select class="form-control" data-id="{{id}}">
+                {{#each options}}
+                    {{#ifCond ../value @key}}
+                    <option value="{{@key}}" selected>{{this}}</option>
+                    {{else}}
+                    <option value="{{@key}}">{{this}}</option>
+                    {{/ifCond}}
+                {{/each}}
+            </select>
         </div>
     </script>
     <script id="setup-item-recaptcha" type="text/x-handlebars-template">

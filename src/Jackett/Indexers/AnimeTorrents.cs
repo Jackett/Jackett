@@ -35,7 +35,7 @@ namespace Jackett.Indexers
         public AnimeTorrents(IIndexerManagerService i, HttpWebClient c, Logger l, IProtectionService ps)
             : base(name: "AnimeTorrents",
                 description: "Definitive source for anime and manga",
-                link: "http://animetorrents.me/",
+                link: "https://animetorrents.me/",
                 caps: new TorznabCapabilities(),
                 manager: i,
                 client: c, // Forced HTTP client for custom headers
@@ -78,7 +78,7 @@ namespace Jackett.Indexers
                 { "rememberme[]", "1" }
             };
 
-            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, null, null);
+            var loginPage = await RequestStringWithCookiesAndRetry(LoginUrl, "", LoginUrl);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>

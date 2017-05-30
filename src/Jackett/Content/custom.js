@@ -527,6 +527,9 @@ function getConfigModalJson(configForm) {
             case "inputbool":
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;
+            case "inputselect":
+                itemEntry.value = $el.find(".setup-item-inputselect select").val();
+                break;
             case "recaptcha":
                 if (window.jackettIsLocal) {
                     var version = $el.find('.jackettrecaptcha').data("version");

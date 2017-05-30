@@ -15,7 +15,13 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: cat-id
+      type: text
+      label: Category Id
+    - name: lang-id
+      type: text
+      label: Language Id
       
   search:
     path: "ajax/page.ajax.php"
@@ -24,7 +30,8 @@
     inputs:
       page: "torrents"
       filename: "{{ .Query.Keywords }}"
-      category: "0"
+      category: "{{ .Config.cat-id }}"
+      lang_id: "{{ .Config.lang-id }}"
     rows:
       selector: div.table-responsive > table > tbody > tr
     fields:

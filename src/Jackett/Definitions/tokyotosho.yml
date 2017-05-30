@@ -8,6 +8,11 @@
   links:
     - https://www.tokyotosho.info/
 
+  settings:
+    - name: type-id
+      type: text
+      label: Type Id
+
   caps:
     categories:
       1:  TV/Anime # Anime
@@ -32,6 +37,8 @@
     path: "{{if .Query.Keywords }}search.php{{else}}index.php{{end}}"
     inputs:
       terms: "{{ .Query.Keywords }}"
+      type: "{{ .Config.type-id }}"
+      cat: "{{ .Config.type-id }}"
     rows:
       selector: "table.listing tr.category_0"
       after: 1
@@ -64,8 +71,10 @@
             args: [ "|", 2 ]
           - name: regexp
             args: "Date: (.+?) ?$"
+          - name: replace
+            args: ["UTC","-00"]
           - name: dateparse
-            args: "2006-01-02 15:04 UTC"
+            args: "2006-01-02 15:04 -07"
       seeders:
         selector: td:nth-child(5) > span:nth-child(1)
       leechers:

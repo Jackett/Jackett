@@ -132,7 +132,7 @@ namespace Jackett.Indexers
             {
                 CQ dom = results;
 
-                var rows = dom[".koptekst tr"];
+                var rows = dom[".browsetable tr"]; //the class for the table changed
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
@@ -159,13 +159,13 @@ namespace Jackett.Indexers
                     var qLink = row.Cq().Find("td:eq(2) a").First();
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
-                    var added = row.Cq().Find("td:eq(7)").First().Text().Trim();
+                    var added = row.Cq().Find("td:eq(6)").First().Text().Trim(); //column changed from 7 to 6
                     var date = added.Substring(0, 10);
-                    var time = added.Substring(12, 8);
+                    var time = added.Substring(11, 8); //date layout wasn't quite right
                     var dateTime = date + time;
                     release.PublishDate = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                    var sizeStr = row.Cq().Find("td:eq(8)").First().Text().Trim();
+                    var sizeStr = row.Cq().Find("td:eq(5)").First().Text().Trim(); //size column moved from 8 to 5
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(row.Cq().Find("td:eq(10)").First().Text().Trim());
