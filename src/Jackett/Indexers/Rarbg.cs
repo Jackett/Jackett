@@ -146,6 +146,7 @@ namespace Jackett.Indexers
             }*/
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
+                //searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
                 queryCollection.Add("mode", "search");
                 queryCollection.Add("search_string", searchString);
             }
