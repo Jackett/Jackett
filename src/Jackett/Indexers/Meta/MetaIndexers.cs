@@ -8,13 +8,14 @@ using Newtonsoft.Json.Linq;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using NLog;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers.Meta
 {
-    class AggregateIndexer : BaseMetaIndexer, IIndexer
+    class AggregateIndexer : BaseMetaIndexer
     {
-        public AggregateIndexer(IIndexerManagerService i, Logger l, IProtectionService ps)
-            : base("AggregateSearch", "This feed includes all configured trackers", i, l, new Models.IndexerConfig.ConfigurationData(), ps, x => true)
+        public AggregateIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+            : base("AggregateSearch", "This feed includes all configured trackers", i, wc, l, new ConfigurationData(), ps, x => true)
         {
         }
     }

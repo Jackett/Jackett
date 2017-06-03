@@ -132,7 +132,7 @@ namespace Jackett.Services
         public void InitAggregateIndexer()
         {
             logger.Info("Adding aggregate indexer");
-            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, logger, container.Resolve<IProtectionService>());
+            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
             this.aggregateIndexer = aggregateIndexer;
             UpdateAggregateIndexer();
         }

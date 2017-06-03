@@ -117,7 +117,7 @@ namespace Jackett.Models
 
             return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
         }
-        public static TorznabCapabilities Concat (TorznabCapabilities lhs, TorznabCapabilities rhs)
+        public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
             lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
