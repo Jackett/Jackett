@@ -84,7 +84,10 @@
         selector: td:nth-child(2) a
         attribute: href
       download:
-        selector: td:nth-child(3) a
+        selector: td:nth-child(3) a[href$=".torrent"]
+        attribute: href
+      magnet:
+        selector: td:nth-child(3) a[href^="magnet:?"]
         attribute: href
       size:
         selector: td:nth-child(4)
