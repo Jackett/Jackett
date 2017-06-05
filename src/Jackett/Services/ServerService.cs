@@ -245,7 +245,7 @@ namespace Jackett.Services
                         var mono_cert_file = Path.Combine(runtimedir, "cert-sync.exe");
                         if (!File.Exists(mono_cert_file))
                         {
-                            if (monoVersionO.Major >= 4 && monoVersionO.Minor >= 8)
+                            if ((monoVersionO.Major >= 4 && monoVersionO.Minor >= 8) || monoVersionO.Major >= 5)
                             {
                                 var notice = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
                                 _notices.Add(notice);

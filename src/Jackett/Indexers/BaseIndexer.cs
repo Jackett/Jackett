@@ -644,6 +644,8 @@ namespace Jackett.Indexers
 
         public bool CanHandleQuery(TorznabQuery query)
         {
+            if (query == null)
+                return false;
             var caps = TorznabCaps;
             if (!caps.SearchAvailable && query.IsSearch)
                 return false;

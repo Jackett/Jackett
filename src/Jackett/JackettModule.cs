@@ -53,7 +53,7 @@ namespace Jackett
                                 { 
                                     var monoVersion = displayName.Invoke(null, null).ToString();
                                     var monoVersionO = new Version(monoVersion.Split(' ')[0]);
-                                    if (monoVersionO.Major >= 4 && monoVersionO.Minor >= 8)
+                                    if ((monoVersionO.Major >= 4 && monoVersionO.Minor >= 8) || monoVersionO.Major >= 5)
                                     {
                                         // check if btls is supported
                                         var monoSecurity = Assembly.Load("Mono.Security");

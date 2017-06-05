@@ -76,7 +76,8 @@
       keywords: "{{ .Keywords }}"
       search_type: "name"
       searchin: "title"
-
+    error:
+      - selector: div#show_error
     rows:
       selector: div#content > div.torrent-box[id^="torrent_"]
       filters:
