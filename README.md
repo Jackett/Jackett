@@ -145,7 +145,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MyAnonamouse
  * myAmity
  * MySpleen
- * Nachtwerk
  * NCore
  * Nebulance
  * NetHD
