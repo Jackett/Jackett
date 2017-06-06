@@ -7,7 +7,10 @@
   links:
     - https://www.anirena.com/
     
-  settings: []
+  settings:
+    - name: download-torrent-files
+      type: checkbox
+      label: Use torrent files instead of Magnet links
 
   caps:
     categorymappings:
@@ -37,9 +40,14 @@
     fields:
       title:
         selector: .torrents_small_info_data1 div
-      download:
+      download-torrent:
+        selector: .torrents_small_info_data2 a[title="Download Torrent"]
+        attribute: href
+      download-magnet:
         selector: .torrents_small_info_data2 a[title="Magnet Link"]
         attribute: href
+      download:
+        text: "{{if .Config.download-torrent-files }}{{ .Result.download-torrent }}{{else}}{{ .Result.download-magnet }}{{end}}"
       size:
         selector: .torrents_small_size_data1
       seeders:
