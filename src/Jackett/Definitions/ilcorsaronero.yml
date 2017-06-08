@@ -6,6 +6,8 @@
   encoding: UTF-8
   links:
     - https://ilcorsaronero.info/
+  certificates:
+    - FFB230323B987B07C24DCC13BC892CF30536F015 # incomplete CA chain
 
   caps:
     categorymappings:
