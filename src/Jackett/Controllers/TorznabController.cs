@@ -116,10 +116,9 @@ namespace Jackett.Controllers
             releases = indexer.CleanLinks(releases);
 
             // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
-            foreach (var release in releases)
+            foreach (var release in releases.Where(r => r.PublishDate > DateTime.Now))
             {
-                if (release.PublishDate > DateTime.Now)
-                    release.PublishDate = DateTime.Now;
+                release.PublishDate = DateTime.Now;
             }
 
             // Some trackers do not support multiple category filtering so filter the releases that match manually.

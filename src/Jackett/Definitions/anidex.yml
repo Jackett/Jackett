@@ -9,13 +9,34 @@
     - https://anidex.info/
 
   caps:
-    categories:
-      1:  TV/Anime # Anime
+    categorymappings:
+      - {id: 1, cat: TV/Anime, desc: "Anime - Sub"}
+      - {id: 2, cat: TV/Anime, desc: "Anime - Raw"}
+      - {id: 3, cat: TV/Anime, desc: "Anime - Dub"}
+      - {id: 4, cat: TV/Anime, desc: "LA - Sub"}
+      - {id: 5, cat: TV/Anime, desc: "LA - Raw"}
+      - {id: 6, cat: TV/Anime, desc: "Light Novel"}
+      - {id: 7, cat: TV/Anime, desc: "Manga - TLed"}
+      - {id: 8, cat: TV/Anime, desc: "Manga - Raw"}
+      - {id: 9, cat: TV/Anime, desc: "♫ - Lossy"}
+      - {id: 10, cat: TV/Anime, desc: "♫ - Lossless"}
+      - {id: 11, cat: TV/Anime, desc: "♫ - Video"}
+      - {id: 12, cat: TV/Anime, desc: "Games"}
+      - {id: 13, cat: TV/Anime, desc: "Applications"}
+      - {id: 14, cat: TV/Anime, desc: "Pictures"}
+      - {id: 15, cat: TV/Anime, desc: "Adult Video"}
+      - {id: 16, cat: TV/Anime, desc: "Other"}
     modes:
       search: [q]
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: cat-id
+      type: text
+      label: Category Id
+    - name: lang-id
+      type: text
+      label: Language Id
       
   search:
     path: "ajax/page.ajax.php"
@@ -24,12 +45,31 @@
     inputs:
       page: "torrents"
       filename: "{{ .Query.Keywords }}"
-      category: "0"
+      category: "{{ .Config.cat-id }}"
+      lang_id: "{{ .Config.lang-id }}"
     rows:
       selector: div.table-responsive > table > tbody > tr
     fields:
       category:
-        text: "1"
+        selector: td:nth-child(1) > div
+        case:
+          ":contains(\"Anime - Sub\")": 1
+          ":contains(\"Anime - Raw\")": 2
+          ":contains(\"Anime - Dub\")": 3
+          ":contains(\"LA - Sub\")": 4
+          ":contains(\"LA - Raw\")": 5
+          ":contains(\"Light Novel\")": 6
+          ":contains(\"Manga - TLed\")": 7
+          ":contains(\"Manga - Raw\")": 8
+          ":contains(\"♫ - Lossy\")": 9
+          ":contains(\"♫ - Lossless\")": 10
+          ":contains(\"♫ - Video\")": 11
+          ":contains(\"Games\")": 12
+          ":contains(\"Applications\")": 13
+          ":contains(\"Pictures\")": 14
+          ":contains(\"Adult Video\")": 15
+          ":contains(\"Other\")": 16
+          "*": 0 # some old torrents don't have a category
       title:
         selector: td:nth-child(3) > a.torrent > span.span-1440
       details:

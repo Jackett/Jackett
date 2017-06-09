@@ -185,6 +185,8 @@
     <Compile Include="Indexers\Hardbay.cs" />
     <Compile Include="Indexers\Rarbg.cs" />
     <Compile Include="Indexers\Psytorrents.cs" />
+    <Compile Include="Indexers\BrokenStones.cs" />
+    <Compile Include="Indexers\HDForever.cs" />
     <Compile Include="Indexers\ShowRSS.cs" />
     <Compile Include="Indexers\Superbits.cs" />
     <Compile Include="Indexers\rutracker.cs" />
@@ -240,7 +242,6 @@
     <Compile Include="Indexers\TehConnection.cs" />
     <Compile Include="Indexers\Hounddawgs.cs" />
     <Compile Include="Indexers\Shazbat.cs" />
-    <Compile Include="Indexers\Freshon.cs" />
     <Compile Include="Indexers\HDSpace.cs" />
     <Compile Include="Indexers\HDTorrents.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
@@ -418,6 +419,9 @@
     <None Include="Resources\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\libs\handlebarsextend.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Definitions\**\*.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

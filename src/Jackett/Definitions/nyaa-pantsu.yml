@@ -1,6 +1,6 @@
 #,==========,
 #|   |  |   |
-#`-./    \.-'   -Config'd by Quatroking, 05-05-2017-
+#`-./    \.-'   - Config'd by Quatroking (05-05-2017), updated by AeonLucid (26-05-2017) -
 #   `.__.'
 
 ---
@@ -12,44 +12,74 @@
   links:
     - https://nyaa.pantsu.cat/
     
-  settings: []
+  settings:
+    - name: cat-id
+      type: select
+      label: Category
+      default: "_"
+      options:
+        _: "All categories"
+        3_: "Anime"
+        3_12: "Anime - Anime Music Video"
+        3_5: "Anime - English-translated"
+        3_13: "Anime - Non-English-translated"
+        3_6: "Anime - Raw"
+        2_: "Audio"
+        2_3: "Audio - Lossless"
+        2_4: "Audio - Lossy"
+        4_: "Literature"
+        4_7: "Literature - English-translated"
+        4_14: "Literature - Non-English-translated"
+        4_14: "Literature - Raw"
+        1_: "Software"
+        1_1: "Software - Applications"
+        1_2: "Software - Games"
+    - name: filter-id
+      type: select
+      label: Filter
+      default: "0"
+      options:
+        0: "Show all"
+        1: "Filter Remakes"
+        2: "Trusted"
+        3: "A+"
 
   caps:
     categorymappings:
       # Anime
-#      - {id: 3_,   cat: TV/Anime, desc: "Anime"}
+      - {id: 3_,   cat: TV/Anime, desc: "Anime"}
       - {id: 3_12, cat: TV/Anime, desc: "Anime music videos"}
       - {id: 3_5,  cat: TV/Anime, desc: "English subtitled animes"}
       - {id: 3_13, cat: TV/Anime, desc: "Non-english subtitled animes"}
       - {id: 3_6,  cat: TV/Anime, desc: "Raw animes"}
       # Audio
-#      - {id: 2_,   cat: Audio, desc: "Audio"}
+      - {id: 2_,   cat: Audio, desc: "Audio"}
       - {id: 2_3,  cat: Audio, desc: "Lossless audio"}
       - {id: 2_4,  cat: Audio, desc: "Lossy audio"}
       # Literature
-#      - {id: 4_,   cat: Books, desc: "Literature"}
+      - {id: 4_,   cat: Books, desc: "Literature"}
       - {id: 4_7,  cat: Books, desc: "Literature english translated"}
-      - {id: 4_14,  cat: Books, desc: "Literature non-english translated"}
-      - {id: 4_8, cat: Books, desc: "Raw literature"}
+      - {id: 4_14, cat: Books, desc: "Literature non-english translated"}
+      - {id: 4_8,  cat: Books, desc: "Raw literature"}
       # Software
+      - {id: 1_,   cat: PC, desc: "Software"}
       - {id: 1_1,  cat: PC/ISO, desc: "Applications"}
       - {id: 1_2,  cat: PC/Games, desc: "Games"}
-
     modes:
       search: [q]
       tv-search: [q]
 
-
   search:
     path: /search
     inputs:
-     # page: "search"
-      q: "{{ .Query.Keywords}}"
+      q: "{{ .Query.Keywords }}"
+      c: "{{ .Config.cat-id }}"
+      s: "{{ .Config.filter-id }}"
     rows:
       selector: tr.torrent-info
     fields:
       title:
-        selector: td.name a
+        selector: td.tr-name a
       category:
         selector: td:nth-child(1) a
         attribute: href
@@ -57,26 +87,27 @@
           - name: split
             args: [ "=", -1 ]
       details:
-        selector: td.name a
+        selector: td.tr-name a
         attribute: href
       download:
-        selector: a[title="Magnet link"]
+        selector: a[title="Magnet Link"]
         attribute: href
-      size:
-        selector: td.filesize
       seeders:
-        text: 0
-   #   seeders:
-   #     selector: td.tlistsn
-   #     optional: true
-   #   leechers:
-   #     text: 0
-   #   leechers:
-   #     selector: td.tlistln
-   #     optional: true
-   #   grabs:
-   #     selector: td.tlistdn
-      downloadvolumefactor:
-        text: "0"
-      uploadvolumefactor:
-        text: "1"
+        selector: td.tr-se
+        optional: true
+      leechers:
+        selector: td.tr-le
+        optional: true
+      grabs:
+        selector: td.tr-dl
+        optional: true
+      date:
+        selector: td.date-short
+        filters:
+          - name: dateparse
+            args: "2006-01-02T15:04:05Z"
+      size:
+        selector: td.tr-size
+        filters:
+          - name: replace
+            args: ["Unknown", "0"]

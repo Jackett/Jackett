@@ -1,0 +1,53 @@
+---
+  site: aniRena
+  name: AniRena
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.anirena.com/
+    
+  settings: []
+
+  caps:
+    categorymappings:
+      # Anime
+      - {id: 2,   cat: TV/Anime, desc: "Anime"}
+      - {id: 9,   cat: TV/Anime, desc: "Anime Music Videos"}
+      - {id: 10,  cat: TV/Anime, desc: "Non-English"}
+      - {id: 1,   cat: TV/Anime, desc: "Raw Animes"}
+      # Audio
+      - {id: 8,   cat: Audio, desc: "Audio"}
+      # Literature
+      - {id: 7,   cat: Books, desc: "Manga"}
+      # Software
+      - {id: 5,   cat: PC/ISO, desc: "DVD/ISO"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+
+  search:
+    path: "/"
+    inputs:
+      s: "{{ .Query.Keywords }}"
+    rows:
+      selector: table tbody tr
+    fields:
+      title:
+        selector: .torrents_small_info_data1 div
+      download:
+        selector: .torrents_small_info_data2 a[title="Download Torrent"]
+        attribute: href
+      magnet:
+        selector: .torrents_small_info_data2 a[title="Magnet Link"]
+        attribute: href
+      size:
+        selector: .torrents_small_size_data1
+      seeders:
+        selector: .torrents_small_seeders_data1 b big
+      leechers:
+        selector: .torrents_small_leechers_data1 b big
+      grabs:
+        selector: .torrents_small_downloads_data1

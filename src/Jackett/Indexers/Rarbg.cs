@@ -58,7 +58,7 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            webclient.requestDelay = 2; // 0.5 requests per second
+            webclient.requestDelay = 2.5; // 0.5 requests per second (2 causes problems)
 
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
@@ -146,6 +146,7 @@ namespace Jackett.Indexers
             }*/
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
+                searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
                 queryCollection.Add("mode", "search");
                 queryCollection.Add("search_string", searchString);
             }

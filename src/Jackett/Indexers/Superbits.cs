@@ -109,10 +109,9 @@ namespace Jackett.Indexers
             queryCollection.Add("swesub", "false");
             queryCollection.Add("watchview", "false");
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                queryCollection.Add("categories[]", cat);
-
             searchUrl += "?" + queryCollection.GetQueryString();
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                searchUrl += "&categories[]=" + cat;
             var results = await RequestStringWithCookies(searchUrl, null, SiteLink);
 
             try
