@@ -99,6 +99,11 @@ namespace Jackett.Indexers
                 { "submit", "Access!" }
             };
 
+            if (!string.IsNullOrEmpty(configData.TwoFactor.Value))
+            {
+                pairs.Add("2factor", configData.TwoFactor.Value);
+            }
+
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("profile.php"), () =>
             {
