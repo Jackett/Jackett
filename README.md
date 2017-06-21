@@ -71,6 +71,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Bitspyder
  * Blu-bits
  * BlueBird
+ * Blutopia
  * BroadcastTheNet  [![(invite needed)][inviteneeded]](#)
  * BrokenStones
  * BTNext
