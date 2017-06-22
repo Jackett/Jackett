@@ -333,23 +333,24 @@ namespace Jackett.Indexers
                         release.Title = qLink.Find("b").Text();
                         release.Description = release.Title;
 
-                        release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(4) > a").Attr("href"));
+                        var releaseLinkURI = qRow.Find("td:nth-child(4) > a").Attr("href");
+                        release.Link = new Uri(SiteLink + releaseLinkURI);
+                        if (releaseLinkURI != null){
+                            var dateString = qRow.Find("td:nth-child(6) nobr")[0].TextContent.Trim();
+                            //"2015-04-25 23:38:12"
+                            //"yyyy-MMM-dd hh:mm:ss"
+                            release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
-                        var dateString = qRow.Find("td:nth-child(6) nobr")[0].TextContent.Trim();
-                        //"2015-04-25 23:38:12"
-                        //"yyyy-MMM-dd hh:mm:ss"
-                        release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
+                            var sizeStr = qRow.Children().ElementAt(6).InnerHTML.Trim();
+                            sizeStr = sizeStr.Substring(0, sizeStr.IndexOf('<'));
+                            release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        var sizeStr = qRow.Children().ElementAt(6).InnerHTML.Trim();
-                        sizeStr = sizeStr.Substring(0, sizeStr.IndexOf('<'));
-                        release.Size = ReleaseInfo.GetBytes(sizeStr);
+                            release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").Text());
+                            release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").Text());
 
-                        release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").Text());
-                        release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").Text());
-
-                        var category = qRow.Find(".br_type > a").Attr("href").Replace("browse.php?cat=", string.Empty);
-                        release.Category = MapTrackerCatToNewznab(category);
-
+                            var category = qRow.Find(".br_type > a").Attr("href").Replace("browse.php?cat=", string.Empty);
+                            release.Category = MapTrackerCatToNewznab(category);
+                        }
                         releases.Add(release);
                     }
                 }
