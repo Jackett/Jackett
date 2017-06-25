@@ -54,20 +54,20 @@
         selector: td:nth-child(2) > img
         attribute: src
       size:
-        selector: td:nth-child(8)
-      files:
-        selector: td:nth-child(5)
-      grabs:
         selector: td:nth-child(9)
+      files:
+        selector: td:nth-child(6)
+      grabs:
+        selector: td:nth-child(10)
         filters:
           - name: regexp
             args: ([\d\.]+)
       seeders:
-        selector: td:nth-child(10)
-      leechers:
         selector: td:nth-child(11)
+      leechers:
+        selector: td:nth-child(12)
       date:
-        selector: td:nth-child(7)
+        selector: td:nth-child(8)
       downloadvolumefactor:
         case:
           "a.info > b:contains(\"Free\")": "0"
