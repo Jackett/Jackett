@@ -498,7 +498,7 @@ namespace Jackett.Controllers
                     queryStr = queryStr.Remove(seasonMatch.Index, seasonMatch.Length);
                 }
 
-                var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4})");
+                var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4}[A-Za-z]?)");
                 if (episodeMatch.Success)
                 {
                     stringQuery.Episode = episodeMatch.Groups[1].Value;
