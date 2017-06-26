@@ -77,15 +77,18 @@ namespace Jackett.Indexers.Meta
                 logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
             }
 
-            var unorderedResult = tasks.Where(x => x.Status == TaskStatus.RanToCompletion).SelectMany(x => x.Result);
-            var orderedResult = unorderedResult.Where(r => {
-                var normalizedTitles = fallbackTitles.Concat(fallbackTitles.Select(t => t.Replace(' ', '.').Replace(":", ""))).Select(t => t.ToLowerInvariant());
-                foreach (var title in normalizedTitles) {
-                    if (r.Title.ToLowerInvariant().Contains(title))
-                        return true;
-                }
-                return false;
-            }).OrderByDescending(r => r.Gain);
+            var unorderedResult = tasks.Where(x => x.Status == TaskStatus.RanToCompletion).SelectMany(x => x.Result);;
+            if (needFallback) {
+                unorderedResult = unorderedResult.Where (r => {
+                    var normalizedTitles = fallbackTitles.Concat (fallbackTitles.Select (t => t.Replace (' ', '.').Replace (":", ""))).Select (t => t.ToLowerInvariant ());
+                    foreach (var title in normalizedTitles) {
+                        if (r.Title.ToLowerInvariant ().Contains (title))
+                            return true;
+                    }
+                    return false;
+                });
+            }
+            var orderedResult = unorderedResult.OrderByDescending(r => r.Gain);
 
             var filteredResult = orderedResult.Where(r => {
                 if (r.Imdb != null) {
