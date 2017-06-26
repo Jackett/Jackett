@@ -5,7 +5,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.torrent9.biz/
+    - http://www.torrent9.cc/
 
   caps:
     categorymappings:
@@ -28,8 +28,25 @@
     rows:
       selector: div.table-responsive > table tbody tr
     fields:
+      site_date:
+        selector: td:nth-child(1) a
+        filters:
+          # date is at the end of the title, so we get it and name it site_date
+          - name: regexp
+            args: "(\\w+)$"
       title:
         selector: td:nth-child(1) a
+        filters:
+          # now we put the date at the right place according scene naming rules using .Result.site_date
+          - name: replace
+            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
+          - name: replace
+            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"] 
+          # and we delete it at the end
+          - name: re_replace
+            args: ["(\\w+)$", ""]
       details:
         selector: td:nth-child(1) a
         attribute: href

@@ -13,6 +13,7 @@ namespace Jackett.Models.IndexerConfig.Bespoke
     {
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }
+        public StringItem TwoFactor { get; private set; }
         public BoolItem Hungarian { get; set; }
         public BoolItem English { get; set; }
 
@@ -20,6 +21,7 @@ namespace Jackett.Models.IndexerConfig.Bespoke
         {
             Username = new StringItem { Name = "Username", Value = "" };
             Password = new StringItem { Name = "Password", Value = "" };
+            TwoFactor = new StringItem { Name = "Twofactor", Value = "" };
             Hungarian = new BoolItem { Name = "Hungarian", Value = true };
             English = new BoolItem { Name = "English", Value = true };
         }
@@ -39,6 +41,9 @@ namespace Jackett.Models.IndexerConfig.Bespoke
                         break;
                     case "Password":
                         Password = new StringItem { Name = propertyName, Value = config.value };
+                        break;
+                    case "Twofactor":
+                        TwoFactor = new StringItem { Name = propertyName, Value = config.value };
                         break;
                     case "Hungarian":
                         Hungarian = new BoolItem { Name = propertyName, Value = config.value };

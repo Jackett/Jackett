@@ -45,7 +45,7 @@
     inputs:
       page: "torrents"
       filename: "{{ .Query.Keywords }}"
-      category: "{{if .Config.cat-id }}{{ .Config.cat-id }}{{ else }}999{{ range .Categories }},{{.}}{{end}}{{end}}" # add a leading 999 to avoid leading commas (will break search)
+      category: "{{ .Config.cat-id }}"
       lang_id: "{{ .Config.lang-id }}"
     rows:
       selector: div.table-responsive > table > tbody > tr

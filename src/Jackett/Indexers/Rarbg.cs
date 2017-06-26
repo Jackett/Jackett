@@ -174,6 +174,10 @@ namespace Jackett.Indexers
                     return releases.ToArray();
                 }
 
+                // return empty results in case of invalid imdb ID, see issue #1486
+                if (errorCode == 10) // Cant find imdb in database. Are you sure this imdb exists?
+                    return releases;
+
                 if (errorCode > 0) // too many requests per second
                 {
                     // we use the IwebClient rate limiter now, this shouldn't happen 

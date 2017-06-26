@@ -86,23 +86,23 @@
         selector: a[href^="dwn.php"]
         attribute: href
       size:
-        selector: td:nth-child(6)
+        selector: td:nth-child(7)
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-child(6)
         filters:
           - name: append
             args: " +00:00"
           - name: dateparse
             args: "02-01-200615:04:05 -07:00"
       grabs:
-        selector: td:nth-child(7)
+        selector: td:nth-child(8)
         filters:
           - name: regexp
             args: ([\d\.]+)
       seeders:
-        selector: td:nth-child(8)
-      leechers:
         selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
       banner:
         selector: a[onmouseover][href^="details.php?id="]
         attribute: onmouseover

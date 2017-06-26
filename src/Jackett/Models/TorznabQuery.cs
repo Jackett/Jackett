@@ -202,8 +202,16 @@ namespace Jackett.Models
             else if (string.IsNullOrEmpty(Episode))
                 episodeString = string.Format("S{0:00}", Season);
             else
-                episodeString = string.Format("S{0:00}E{1:00}", Season, ParseUtil.CoerceInt(Episode));
-
+            {
+                try
+                {
+                    episodeString = string.Format("S{0:00}E{1:00}", Season, ParseUtil.CoerceInt(Episode));
+                } catch (FormatException) // e.g. seaching for S01E01A
+                {
+                    episodeString = string.Format("S{0:00}E{1}", Season, Episode);
+                }
+                
+            }
             return episodeString;
         }
 

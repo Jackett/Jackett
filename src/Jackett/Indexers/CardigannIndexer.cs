@@ -1029,12 +1029,18 @@ namespace Jackett.Indexers
                     case "urldecode":
                         Data = HttpUtility.UrlDecode(Data, Encoding);
                         break;
+                    case "urlencode":
+                        Data = HttpUtility.UrlEncode(Data, Encoding);
+                        break;
                     case "timeago":
                     case "reltime":
                         Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.RFC1123ZPattern);
                         break;
                     case "fuzzytime":
                         Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.RFC1123ZPattern);
+                        break;
+                    case "validfilename":
+                        Data = StringUtil.MakeValidFileName(Data, '_', false);
                         break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues

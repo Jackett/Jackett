@@ -170,7 +170,7 @@ namespace Jackett.Indexers
                             continue;
 
                         var dateString = qRow.Children().ElementAt(5).Cq().Text().Trim();
-                        var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
 
                         var sizeStr = qRow.Children().ElementAt(6).Cq().Text();

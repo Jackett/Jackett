@@ -1,0 +1,83 @@
+---
+  site: blutopia
+  name: Blutopia
+  description: "HD Movie tracker"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://blutopia.xyz/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: TV, desc: "TV"}
+      - {id: 3, cat: Movies, desc: "FANRES"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: /login
+    method: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table.main:contains("Login Failed!")
+    test:
+      path: /torrents
+
+  download:
+    selector: a[href^="/download.php/"]
+        
+  search:
+    path: /torrents/search
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      name: "{{ .Query.Keywords }}"
+      category_id: 1
+      type: BD50
+      order: created_at:desc
+    rows:
+      selector: table.table > tbody > tr
+    fields:
+      # category:
+      #   selector: a[href^="categories"]
+      #   attribute: href
+      title:
+        remove: ul
+        selector: td:nth-child(2)
+      download:
+        selector: a.view-torrent
+        attribute: href
+        filters:
+          - name: replace
+            args: ["/torrents/", "/download/"]
+      details:
+        selector: a.view-torrent
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(5)
+        filters:
+          - name: regexp
+            args: (\d+)
+      date:
+        selector: td:nth-child(3)
+        filters:
+          - name: append
+            args: " ago"
+      downloadvolumefactor:
+        case:
+          #"i[data-original-title=\"100% Free\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          #"i[data-original-title=\"Double upload\"]": "2"
+          "*": "1"

@@ -69,9 +69,13 @@
     rows:
       selector: tr:has(a.tname)
     fields:
-      title:
+      title-attribute:
         selector: a.tname
         attribute: title
+      title-text:
+        selector: a.tname
+      title:
+        text: "{{if .Result.title-attribute }}{{ .Result.title-attribute }}{{else}}{{ .Result.title-text }}{{end}}"
       details:
         selector: a.tname
         attribute: href
@@ -85,12 +89,12 @@
         selector: a[href^="/download.php/"]
         attribute: href
       grabs:
-        selector: td:nth-child(7)
+        selector: td:nth-child(8)
         filters:
           - name: regexp
             args: (\d+)
       size:
-        selector: td:nth-child(6)
+        selector: td:nth-child(7)
       date:
         selector: td:nth-child(2) > right > div:has(font:contains("Uploaded"))
         remove: div > font
@@ -98,15 +102,19 @@
           - name: trim
             args: ":"
       seeders:
-        selector: td:nth-child(8)
-      leechers:
         selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
       banner:
         selector: a.tname
         attribute: onmouseover
         filters:
           - name: regexp
             args: src=([^\s]+)
+      imdb:
+        selector: a[href^="http://www.imdb.com/title/"]
+        optional: true
+        attribute: href
       downloadvolumefactor:
         case:
           "img[src=\"pic/free.gif\"]": "0"

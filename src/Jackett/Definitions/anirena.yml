@@ -38,6 +38,9 @@
       title:
         selector: .torrents_small_info_data1 div
       download:
+        selector: .torrents_small_info_data2 a[title="Download Torrent"]
+        attribute: href
+      magnet:
         selector: .torrents_small_info_data2 a[title="Magnet Link"]
         attribute: href
       size:
