@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class TorrentNetwork : BaseIndexer, IIndexer
+    public class TorrentNetwork : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -83,7 +83,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(32, TorznabCatType.XXX); // XXX|SD
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -104,7 +104,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
             TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);

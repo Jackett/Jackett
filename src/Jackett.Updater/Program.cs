@@ -76,7 +76,7 @@ namespace Jackett.Updater
 #endif
 */
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     Engine.Logger.Info("Process " + pid.ToString() + " is already dead");
                 }

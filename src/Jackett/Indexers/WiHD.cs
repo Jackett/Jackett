@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     /// <summary>
     /// Provider for WiHD Private French Tracker
     /// </summary>
-    public class WiHD : BaseIndexer, IIndexer
+    public class WiHD : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string LoginCheckUrl { get { return SiteLink + "login_check"; } }
@@ -97,7 +97,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             // Retrieve config values set by Jackett's user
             LoadValuesFromJson(configJson);
@@ -182,7 +182,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="query">Query</param>
         /// <returns>Releases</returns>
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();

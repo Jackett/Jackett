@@ -17,7 +17,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    class PiXELHD : BaseIndexer, IIndexer
+    class PiXELHD : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string BrowseUrl { get { return SiteLink + "torrents.php"; } }
@@ -86,7 +86,7 @@ namespace Jackett.Indexers
             return configData;
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -113,7 +113,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

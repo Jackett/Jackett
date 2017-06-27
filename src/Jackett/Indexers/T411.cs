@@ -15,7 +15,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class T411 : BaseIndexer, IIndexer
+    public class T411 : BaseIndexer
     {
         const string ApiUrl = "https://api.t411.al";
         const string AuthUrl = ApiUrl + "/auth";
@@ -144,7 +144,7 @@ namespace Jackett.Indexers
             return configData.ApiToken.Value;
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -166,7 +166,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             // API doesn't support getting the latest torrents, searching for the empty string will cause an error and all torrents returned

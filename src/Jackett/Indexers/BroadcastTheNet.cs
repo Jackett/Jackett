@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 
 namespace Jackett.Indexers
 {
-    public class BroadcastTheNet : BaseIndexer, IIndexer
+    public class BroadcastTheNet : BaseIndexer
     {
         string APIBASE = "https://api.broadcasthe.net";
 
@@ -46,7 +46,7 @@ namespace Jackett.Indexers
             Type = "private";
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -78,7 +78,7 @@ namespace Jackett.Indexers
             return request.ToString();
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var searchString = query.GetQueryString();
             var releases = new List<ReleaseInfo>();

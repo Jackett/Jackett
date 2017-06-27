@@ -16,7 +16,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class BeyondHD : BaseIndexer, IIndexer
+    public class BeyondHD : BaseIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
 
@@ -85,7 +85,7 @@ namespace Jackett.Indexers
 
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             
@@ -98,7 +98,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 

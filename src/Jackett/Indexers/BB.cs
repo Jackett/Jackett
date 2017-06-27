@@ -20,7 +20,7 @@ namespace Jackett.Indexers
 {
     // To comply with the rules for this tracker, only the acronym is used and no publicly displayed URLs to the site. 
 
-    public class BB : BaseIndexer, IIndexer
+    public class BB : BaseIndexer
     {
         private string BaseUrl { get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
         private Uri BaseUri { get { return new Uri(BaseUrl); } }
@@ -61,7 +61,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(11, TorznabCatType.PCGames);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -89,7 +89,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 

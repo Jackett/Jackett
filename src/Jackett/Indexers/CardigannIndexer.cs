@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace Jackett.Indexers
 {
-    public class CardigannIndexer : BaseIndexer, IIndexer
+    public class CardigannIndexer : BaseIndexer
     {
         public string DefinitionString { get; protected set; }
         protected IndexerDefinition Definition;
@@ -937,7 +937,7 @@ namespace Jackett.Indexers
             return configData;
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -1138,7 +1138,7 @@ namespace Jackett.Indexers
             return new Uri(currentUrl, path);
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 

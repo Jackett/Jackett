@@ -131,8 +131,12 @@ namespace Jackett.Services
 
         public void InitAggregateIndexer()
         {
+            var imdbResolver = new ImdbResolver(container.Resolve<IWebClient>());
+            var imdbFallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
+            var imdbTitleResultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
+
             logger.Info("Adding aggregate indexer");
-            AggregateIndexer aggregateIndexer = new AggregateIndexer(this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
+            AggregateIndexer aggregateIndexer = new AggregateIndexer(imdbFallbackStrategyProvider, imdbTitleResultFilterProvider, this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
             this.aggregateIndexer = aggregateIndexer;
             UpdateAggregateIndexer();
         }

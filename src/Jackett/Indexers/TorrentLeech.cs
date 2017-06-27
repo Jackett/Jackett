@@ -18,7 +18,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class TorrentLeech : BaseIndexer, IIndexer
+    public class TorrentLeech : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
         private string SearchUrl { get { return SiteLink + "torrents/browse/index/"; } }
@@ -94,7 +94,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(38, TorznabCatType.Other, "Education");
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             await DoLogin();
@@ -117,7 +117,7 @@ namespace Jackett.Indexers
             });
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

@@ -15,7 +15,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class SceneFZ : BaseIndexer, IIndexer
+    public class SceneFZ : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
 
@@ -92,7 +92,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("scat34", TorznabCatType.Other); // Video
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string>
@@ -111,7 +111,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchUrl = BrowseUrl;

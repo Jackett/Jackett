@@ -22,7 +22,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class AnimeBytes : BaseIndexer, IIndexer
+    public class AnimeBytes : BaseIndexer
     {
         enum SearchType
         {
@@ -73,7 +73,7 @@ namespace Jackett.Indexers
             return input;
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -151,7 +151,7 @@ namespace Jackett.Indexers
             return term;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             // The result list
             var releases = new List<ReleaseInfo>();
