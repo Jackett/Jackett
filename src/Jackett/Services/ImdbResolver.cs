@@ -29,6 +29,9 @@ namespace Jackett.Services
 
         public async Task<IEnumerable<string>> GetAllTitles(string imdbId)
         {
+            if (apiKey == null)
+                return new string[] { };
+
             if (!imdbId.StartsWith("tt", StringComparison.Ordinal))
                 imdbId = "tt" + imdbId;
             var request = new WebRequest("http://omdbapi.com/?apikey=" + apiKey + "&i=" + imdbId);
