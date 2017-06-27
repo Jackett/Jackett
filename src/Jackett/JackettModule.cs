@@ -11,6 +11,7 @@ using Jackett.Utils.Clients;
 using AutoMapper;
 using Jackett.Models;
 using System.Reflection;
+using Jackett.Services;
 
 namespace Jackett
 {
@@ -20,13 +21,12 @@ namespace Jackett
         {
             // Just register everything!
             var thisAssembly = typeof(JackettModule).Assembly;
-            builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().Except<OmdbResolver>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
             builder.RegisterType<HttpWebClient>();
 
             // Register the best web client for the platform or the override
-            switch (Startup.ClientOverride)
-            {
+            switch (Startup.ClientOverride) {
                 case "httpclient":
                     builder.RegisterType<HttpWebClient>().As<IWebClient>();
                     break;

@@ -332,7 +332,7 @@ namespace Jackett.Controllers
                 cfg["password"] = string.IsNullOrEmpty(serverService.Config.AdminPassword) ? string.Empty : serverService.Config.AdminPassword.Substring(0, 10);
                 cfg["logging"] = Startup.TracingEnabled;
                 cfg["basepathoverride"] = serverService.Config.BasePathOverride;
-               
+                cfg["omdbkey"] = serverService.Config.OmdbApiKey;
 
                 jsonReply["config"] = cfg;
                 jsonReply["app_version"] = config.GetVersion();
@@ -364,10 +364,12 @@ namespace Jackett.Controllers
                 bool preRelease = (bool)postData["prerelease"];
                 bool logging = (bool)postData["logging"];
                 string basePathOverride = (string)postData["basepathoverride"];
+                string omdbApiKey = (string)postData["omdbkey"];
 
                 Engine.Server.Config.UpdateDisabled = updateDisabled;
                 Engine.Server.Config.UpdatePrerelease = preRelease;
                 Engine.Server.Config.BasePathOverride = basePathOverride;
+                Engine.Server.Config.OmdbApiKey = omdbApiKey;
                 Startup.BasePath = Engine.Server.BasePath();
                 Engine.Server.SaveConfig();
 
