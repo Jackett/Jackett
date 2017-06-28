@@ -14,7 +14,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class FunFile : BaseIndexer, IIndexer
+    public class FunFile : BaseIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -52,7 +52,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(7,  TorznabCatType.TV); // TV
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -72,7 +72,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 

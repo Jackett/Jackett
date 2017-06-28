@@ -14,8 +14,8 @@ namespace Jackett.Indexers.Meta
 {
     class AggregateIndexer : BaseMetaIndexer
     {
-        public AggregateIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
-            : base("AggregateSearch", "This feed includes all configured trackers", i, wc, l, new ConfigurationData(), ps, x => true)
+        public AggregateIndexer(IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+            : base("AggregateSearch", "This feed includes all configured trackers", fallbackStrategyProvider, resultFilterProvider, i, wc, l, new ConfigurationData(), ps, x => true)
         {
         }
     }

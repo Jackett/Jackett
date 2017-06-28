@@ -16,7 +16,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Rarbg : BaseIndexer, IIndexer
+    public class Rarbg : BaseIndexer
     {
         readonly static string defaultSiteLink = "https://torrentapi.org/";
 
@@ -98,7 +98,7 @@ namespace Jackett.Indexers
             }
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
@@ -111,12 +111,12 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        public Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            return PerformQuery(query, 0);
+            return await PerformQuery(query, 0);
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts = 0)
+        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
             await CheckToken();
             var releases = new List<ReleaseInfo>();

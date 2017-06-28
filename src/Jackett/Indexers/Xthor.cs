@@ -20,7 +20,7 @@ namespace Jackett.Indexers
     /// <summary>
     /// Provider for Xthor Private French Tracker
     /// </summary>
-    public class Xthor : BaseIndexer, IIndexer
+    public class Xthor : BaseIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.bz/";
         private string TorrentCommentUrl => TorrentDescriptionUrl;
@@ -116,7 +116,7 @@ namespace Jackett.Indexers
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
         #pragma warning disable 1998
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         #pragma warning restore 1998
         {
             // Provider not yet configured
@@ -153,7 +153,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="query">Query</param>
         /// <returns>Releases</returns>
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = query.GetQueryString();

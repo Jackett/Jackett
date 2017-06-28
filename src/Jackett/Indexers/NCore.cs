@@ -16,7 +16,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public class NCore : BaseIndexer, IIndexer
+    public class NCore : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
@@ -82,7 +82,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("ebook", TorznabCatType.Books , "Könyv eBook/EN");
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -117,7 +117,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

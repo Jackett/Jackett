@@ -19,7 +19,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class AlphaRatio : BaseIndexer, IIndexer
+    public class AlphaRatio : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&order_by=time&order_way=desc&"; } }
@@ -71,7 +71,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -123,7 +123,7 @@ namespace Jackett.Indexers
 
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

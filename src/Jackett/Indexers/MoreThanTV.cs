@@ -19,7 +19,7 @@ using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
-    public class MoreThanTV : BaseIndexer, IIndexer
+    public class MoreThanTV : BaseIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax.php?action=browse&searchstr=";
@@ -45,7 +45,7 @@ namespace Jackett.Indexers
             Type = "private";
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -69,7 +69,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var isTv = TorznabCatType.QueryContainsParentCategory(query.Categories, new List<int> { TorznabCatType.TV.ID });
             var releases = new List<ReleaseInfo>();

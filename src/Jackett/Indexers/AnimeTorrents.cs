@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class AnimeTorrents : BaseIndexer, IIndexer
+    public class AnimeTorrents : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "ajax/torrents_data.php"; } }
@@ -68,7 +68,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(19, TorznabCatType.Audio); // OST
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -91,7 +91,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

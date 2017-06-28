@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public class BJShare : BaseIndexer, IIndexer
+    public class BJShare : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string BrowseUrl { get { return SiteLink + "torrents.php"; } }
@@ -68,7 +68,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(201, TorznabCatType.XXXImageset); // Fotos Adultas
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -96,7 +96,7 @@ namespace Jackett.Indexers
             return term.Trim();
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             

@@ -18,7 +18,7 @@ using Jackett.Utils.Clients;
 
 namespace Jackett.Indexers
 {
-    class ArcheTorrent : BaseIndexer, IIndexer
+    class ArcheTorrent : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "account-login.php"; } }
         string BrowseUrl { get { return SiteLink + "torrents-search.php"; } }
@@ -98,7 +98,7 @@ namespace Jackett.Indexers
             AddCategoryMapping (61, TorznabCatType.TVSD, "Tv: DVDRip");
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -119,7 +119,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

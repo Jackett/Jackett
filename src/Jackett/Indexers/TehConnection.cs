@@ -16,7 +16,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class TehConnection : BaseIndexer, IIndexer
+    public class TehConnection : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string indexUrl { get { return SiteLink + "index.php"; } }
@@ -58,7 +58,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(1, TorznabCatType.MoviesWEBDL);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -86,7 +86,7 @@ namespace Jackett.Indexers
             });
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var loggedInCheck = await RequestStringWithCookies(SearchUrl);
             if (!loggedInCheck.Content.Contains("/logout.php"))
