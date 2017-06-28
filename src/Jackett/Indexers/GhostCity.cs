@@ -16,7 +16,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class GhostCity : BaseIndexer, IIndexer
+    public class GhostCity : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowsePage { get { return SiteLink + "browse.php"; } }
@@ -82,7 +82,7 @@ namespace Jackett.Indexers
             AddMultiCategoryMapping(TorznabCatType.Other, 3, 93, 24);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -105,7 +105,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

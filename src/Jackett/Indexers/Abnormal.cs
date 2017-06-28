@@ -22,7 +22,7 @@ namespace Jackett.Indexers
     /// <summary>
     /// Provider for Abnormal Private French Tracker
     /// </summary>
-    public class Abnormal : BaseIndexer, IIndexer
+    public class Abnormal : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
@@ -104,7 +104,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             // Retrieve config values set by Jackett's user
             LoadValuesFromJson(configJson);
@@ -187,7 +187,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="query">Query</param>
         /// <returns>Releases</returns>
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();

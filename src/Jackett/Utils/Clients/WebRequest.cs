@@ -15,7 +15,6 @@ namespace Jackett.Utils.Clients
             Type = RequestType.GET;
             Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             EmulateBrowser = true;
-            Encoding Encoding;
         }
 
         public WebRequest(string url)
@@ -25,7 +24,6 @@ namespace Jackett.Utils.Clients
             Url = url;
             Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             EmulateBrowser = true;
-            Encoding Encoding;
         }
 
         public string Url { get; set; }

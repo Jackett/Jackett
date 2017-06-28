@@ -19,7 +19,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class BitMeTV : BaseIndexer, IIndexer
+    public class BitMeTV : BaseIndexer
     {
         //https is poorly implemented on BitMeTV. Site uses http to login, but then redirects to https for search
         private string LoginUrl { get { return SiteLink + "login.php"; } }
@@ -62,7 +62,7 @@ namespace Jackett.Indexers
             return configData;
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -87,7 +87,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format("{0}?search={1}&cat=0&incldead=1", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));

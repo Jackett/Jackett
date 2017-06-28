@@ -16,7 +16,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class PassThePopcorn : BaseIndexer, IIndexer
+    public class PassThePopcorn : BaseIndexer
     {
         private string LoginUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
         private string indexUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
@@ -65,7 +65,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -94,7 +94,7 @@ namespace Jackett.Indexers
             });   
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             await DoLogin();
 

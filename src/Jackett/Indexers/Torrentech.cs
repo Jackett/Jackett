@@ -18,7 +18,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Torrentech : BaseIndexer, IIndexer
+    public class Torrentech : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "index.php?act=Login&CODE=01&CookieDate=1"; } }
         string IndexUrl { get { return SiteLink + "index.php"; } }
@@ -49,7 +49,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(3, TorznabCatType.AudioOther);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -68,7 +68,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

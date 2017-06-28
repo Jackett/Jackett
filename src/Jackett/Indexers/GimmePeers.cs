@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Indexers
 {
     // ReSharper disable once InconsistentNaming
-    public class GimmePeers : BaseIndexer, IIndexer
+    public class GimmePeers : BaseIndexer
     {
         private string BrowseUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
@@ -71,7 +71,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(19, TorznabCatType.Movies);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -94,7 +94,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

@@ -21,7 +21,7 @@ using System.Xml.Linq;
 
 namespace Jackett.Indexers
 {
-    public class TVChaosUK : BaseIndexer, IIndexer
+    public class TVChaosUK : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
@@ -107,7 +107,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("HD Factual/Reality", TorznabCatType.TVHD);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -146,7 +146,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

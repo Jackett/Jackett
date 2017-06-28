@@ -18,7 +18,7 @@ using Jackett.Utils.Clients;
 
 namespace Jackett.Indexers
 {
-    class EliteTracker : BaseIndexer, IIndexer
+    class EliteTracker : BaseIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -122,7 +122,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(37, TorznabCatType.XXX, "XXX");
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
 
@@ -143,7 +143,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();

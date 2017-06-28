@@ -11,6 +11,8 @@ using Jackett.Utils.Clients;
 using AutoMapper;
 using Jackett.Models;
 using System.Reflection;
+using Jackett.Services;
+using Jackett.Indexers.Meta;
 
 namespace Jackett
 {
@@ -20,7 +22,20 @@ namespace Jackett
         {
             // Just register everything!
             var thisAssembly = typeof(JackettModule).Assembly;
-            builder.RegisterAssemblyTypes(thisAssembly).Except<IIndexer>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterAssemblyTypes(thisAssembly)
+                   .Except<IIndexer>()
+                   .Except<IImdbResolver>()
+                   .Except<IFallbackStrategyProvider>()
+                   .Except<ImdbFallbackStrategyProvider>()
+                   .Except<IFallbackStrategy>()
+                   .Except<ImdbFallbackStrategy>()
+                   .Except<IResultFilterProvider>()
+                   .Except<ImdbTitleResultFilterProvider>()
+                   .Except<IResultFilter>()
+                   .Except<ImdbTitleResultFilterProvider>()
+                   .Except<BaseMetaIndexer>()
+                   .Except<AggregateIndexer>()
+                   .AsImplementedInterfaces().SingleInstance();
             builder.RegisterApiControllers(thisAssembly).InstancePerRequest();
             builder.RegisterType<HttpWebClient>();
 

@@ -16,7 +16,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class PirateTheNet : BaseIndexer, IIndexer
+    public class PirateTheNet : BaseIndexer
     {
         private string SearchUrl { get { return SiteLink + "torrentsutils.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -65,7 +65,7 @@ namespace Jackett.Indexers
             AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL);
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -89,7 +89,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
 

@@ -22,7 +22,7 @@ using System.Xml.XPath;
 
 namespace Jackett.Indexers
 {
-    public class Shazbat : BaseIndexer, IIndexer
+    public class Shazbat : BaseIndexer
     {
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string SearchUrl { get { return SiteLink + "search"; } }
@@ -54,7 +54,7 @@ namespace Jackett.Indexers
             Type = "private";
         }
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
             var pairs = new Dictionary<string, string> {
@@ -97,7 +97,7 @@ namespace Jackett.Indexers
             return response;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 

@@ -17,7 +17,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class BakaBT : BaseIndexer, IIndexer
+    public class BakaBT : BaseIndexer
     {
         public string SearchUrl { get { return SiteLink + "browse.php?only=0&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
         public string LoginUrl { get { return SiteLink + "login.php"; } }
@@ -46,7 +46,7 @@ namespace Jackett.Indexers
         }
 
 
-        public async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
@@ -75,7 +75,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
 
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:

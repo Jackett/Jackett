@@ -373,6 +373,9 @@
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\Meta\MetaIndexers.cs" />
     <Compile Include="Indexers\Meta\BaseMetaIndexer.cs" />
+    <Compile Include="Indexers\Meta\Fallbacks.cs" />
+    <Compile Include="Indexers\Meta\ResultFilters.cs" />
+    <Compile Include="Services\ImdbResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

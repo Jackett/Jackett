@@ -16,7 +16,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public abstract class BaseIndexer
+    public abstract class BaseIndexer : IIndexer
     {
         public string SiteLink { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
@@ -64,7 +64,7 @@ namespace Jackett.Indexers
         public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
             : this(manager, client, logger, p)
         {
-            if (!link.EndsWith("/"))
+            if (!link.EndsWith("/", StringComparison.Ordinal))
                 throw new Exception("Site link must end with a slash.");
 
             DisplayName = name;
@@ -96,7 +96,7 @@ namespace Jackett.Indexers
                 return releases;
             foreach (var release in releases)
             {
-                if (release.Link.ToString().StartsWith(downloadUrlBase))
+                if (release.Link.ToString().StartsWith(downloadUrlBase, StringComparison.Ordinal))
                 {
                     release.Link = new Uri(release.Link.ToString().Substring(downloadUrlBase.Length), UriKind.Relative);
                 }
@@ -112,7 +112,7 @@ namespace Jackett.Indexers
                 return link;
             }
 
-            if (link.ToString().StartsWith(downloadUrlBase))
+            if (link.ToString().StartsWith(downloadUrlBase, StringComparison.Ordinal))
             {
                 return link;
             }
@@ -334,7 +334,7 @@ namespace Jackett.Indexers
             {
                 configData.SiteLink.Value = DefaultSiteLink;
             }
-            if (!configData.SiteLink.Value.EndsWith("/"))
+            if (!configData.SiteLink.Value.EndsWith("/", StringComparison.Ordinal))
                 configData.SiteLink.Value += "/";
 
             var match = Regex.Match(configData.SiteLink.Value, "^https?:\\/\\/[\\w\\-\\/\\.]+$");
@@ -362,12 +362,11 @@ namespace Jackett.Indexers
             }
         }
 
-        public async virtual Task<byte[]> Download(Uri link)
-        {
+        public async virtual Task<byte[]> Download(Uri link) {
             return await Download(link, RequestType.GET);
         }
 
-        public async virtual Task<byte[]> Download(Uri link, RequestType method = RequestType.GET)
+        protected async Task<byte[]> Download(Uri link, RequestType method)
         {
             // do some extra escaping, needed for HD-Torrents
             var requestLink = link.ToString()
@@ -663,5 +662,8 @@ namespace Jackett.Indexers
                     return false;
             return true;
         }
+
+        public abstract Task<IndexerConfigurationStatus> ApplyConfiguration (JToken configJson);
+        public abstract Task<IEnumerable<ReleaseInfo>> PerformQuery (TorznabQuery query);
     }
 }
