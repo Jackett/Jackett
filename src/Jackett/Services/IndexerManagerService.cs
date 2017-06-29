@@ -131,7 +131,7 @@ namespace Jackett.Services
 
         public void InitAggregateIndexer()
         {
-            var imdbResolver = new ImdbResolver(container.Resolve<IWebClient>());
+            var imdbResolver = new OmdbResolver(container.Resolve<IWebClient>(), container.Resolve<IServerService>().Config.OmdbApiKey);
             var imdbFallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
             var imdbTitleResultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
 
