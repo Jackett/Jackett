@@ -24,6 +24,7 @@ namespace Jackett.Models.Config
         public bool UpdateDisabled { get; set; }
         public bool UpdatePrerelease { get; set; }
         public string BasePathOverride { get; set; }
+        public string OmdbApiKey { get; set; }
 
         public string[] GetListenAddresses(bool? external = null)
         {
