@@ -14,7 +14,10 @@ namespace Jackett.Utils
     {
         public NonNull(T val)
         {
-            Value = val ?? throw new NonNullException();
+            if (val == null)
+                new NonNullException();
+
+            Value = val;
         }
 
         public static implicit operator T(NonNull<T> n)
