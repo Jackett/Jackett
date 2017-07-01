@@ -26,7 +26,7 @@ namespace Jackett.Indexers
         public string Language { get; protected set; }
         public Encoding Encoding { get; protected set; }
         public string Type { get; protected set; }
-        public string ID { get { return GetIndexerID(GetType()); } }
+        public virtual string ID { get { return GetIndexerID (GetType ()); } }
 
         public bool IsConfigured { get; protected set; }
         public TorznabCapabilities TorznabCaps { get; protected set; }

@@ -26,7 +26,7 @@ namespace Jackett.Indexers
     {
         public string DefinitionString { get; protected set; }
         protected IndexerDefinition Definition;
-        public new string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
+        public override string ID { get { return (Definition != null ? Definition.Site : GetIndexerID (GetType ())); } }
 
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
