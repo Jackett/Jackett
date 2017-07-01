@@ -369,12 +369,18 @@ namespace Jackett.Controllers
                 Engine.Server.Config.UpdateDisabled = updateDisabled;
                 Engine.Server.Config.UpdatePrerelease = preRelease;
                 Engine.Server.Config.BasePathOverride = basePathOverride;
-                Engine.Server.Config.OmdbApiKey = omdbApiKey;
                 Startup.BasePath = Engine.Server.BasePath();
                 Engine.Server.SaveConfig();
 
                 Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
                 Startup.TracingEnabled = logging;
+
+                if (omdbApiKey != Engine.Server.Config.OmdbApiKey)
+                {
+                    Engine.Server.Config.OmdbApiKey = omdbApiKey;
+                    // HACK
+                    indexerService.InitAggregateIndexer();
+                }
 
                 if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
                 {
