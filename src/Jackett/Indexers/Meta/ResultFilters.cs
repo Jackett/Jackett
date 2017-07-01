@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Utils;
 
 namespace Jackett.Indexers.Meta
 {
@@ -48,7 +49,7 @@ namespace Jackett.Indexers.Meta
 
             var remainingResults = results.Except(wrongResults).Except(perfectResults);
 
-            var titles = await resolver.GetAllTitles(query.ImdbID);
+            var titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title.ToEnumerable();
             var strippedTitles = titles.Select(t => RemoveSpecialChars(t));
             var normalizedTitles = strippedTitles.SelectMany(t => GenerateTitleVariants(t));
 
@@ -93,6 +94,14 @@ namespace Jackett.Indexers.Meta
         }
     }
 
+    public class NoResultFilterProvider : IResultFilterProvider
+    {
+        public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query)
+        {
+            return (new NoFilter()).ToEnumerable();
+        }
+    }
+
     public class ImdbTitleResultFilterProvider : IResultFilterProvider
     {
         public ImdbTitleResultFilterProvider(IImdbResolver resolver)
@@ -102,12 +111,12 @@ namespace Jackett.Indexers.Meta
 
         public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query)
         {
-            var result = new List<IResultFilter>();
+            IResultFilter filter = null;
             if (!query.IsImdbQuery)
-                result.Add(new NoFilter());
+                filter = new NoFilter();
             else
-                result.Add(new ImdbTitleResultFilter(resolver, query));
-            return result;
+                filter = new ImdbTitleResultFilter(resolver, query);
+            return filter.ToEnumerable();
         }
 
         private IImdbResolver resolver;

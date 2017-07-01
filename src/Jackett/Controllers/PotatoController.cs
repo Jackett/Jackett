@@ -80,21 +80,14 @@ namespace Jackett.Controllers
 
             var year = 0;
 
-            if (string.IsNullOrWhiteSpace(request.search))
+            var omdbApiKey = serverService.Config.OmdbApiKey;
+            if (!request.imdbid.IsNullOrEmptyOrWhitespace() && !omdbApiKey.IsNullOrEmptyOrWhitespace())
             {
                 // We are searching by IMDB id so look up the name
-                var omdbapiRequest = new Utils.Clients.WebRequest("http://www.omdbapi.com/?type=movie&i=" + request.imdbid);
-                omdbapiRequest.Encoding = Encoding.UTF8;
-                var response = await webClient.GetString(omdbapiRequest);
-                if (response.Status == HttpStatusCode.OK)
-                {
-                    JObject result = JObject.Parse(response.Content);
-                    if (result["Title"] != null)
-                    {
-                        request.search = result["Title"].ToString();
-                        year = ParseUtil.CoerceInt(result["Year"].ToString());
-                    }
-                }
+                var resolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull());
+                var movie = await resolver.MovieForId(request.imdbid.ToNonNull());
+                request.search = movie.Title;
+                year = ParseUtil.CoerceInt(movie.Year);
             }
 
             var torznabQuery = new TorznabQuery()

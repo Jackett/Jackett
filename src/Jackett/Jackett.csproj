@@ -376,6 +376,7 @@
     <Compile Include="Indexers\Meta\Fallbacks.cs" />
     <Compile Include="Indexers\Meta\ResultFilters.cs" />
     <Compile Include="Services\ImdbResolver.cs" />
+    <Compile Include="Utils\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
