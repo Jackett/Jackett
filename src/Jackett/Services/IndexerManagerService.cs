@@ -179,7 +179,7 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
             browseQuery.IsTest = true;
-            var results = await indexer.PerformQuery(browseQuery);
+            var results = await indexer.ResultsForQuery(browseQuery);
             results = indexer.CleanLinks(results);
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
             if (results.Count() == 0)

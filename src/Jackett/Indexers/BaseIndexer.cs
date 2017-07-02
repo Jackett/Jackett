@@ -663,7 +663,18 @@ namespace Jackett.Indexers
             return true;
         }
 
-        public abstract Task<IndexerConfigurationStatus> ApplyConfiguration (JToken configJson);
-        public abstract Task<IEnumerable<ReleaseInfo>> PerformQuery (TorznabQuery query);
+        public abstract Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);
+
+        public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        {
+            var results = await PerformQuery(query);
+            foreach (var result in results)
+            {
+                result.Origin = this;
+            }
+
+            return results;
+        }
+        protected abstract Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
     }
 }

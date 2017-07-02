@@ -2,15 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
+using Jackett.Indexers;
 
 namespace Jackett.Models
 {
 
-    public class ReleaseInfo: ICloneable
+    public class ReleaseInfo : ICloneable
     {
         public string Title { get; set; }
         public Uri Guid { get; set; }
@@ -35,9 +32,12 @@ namespace Jackett.Models
         public long? MinimumSeedTime { get; set; }
         public double? DownloadVolumeFactor { get; set; }
         public double? UploadVolumeFactor { get; set; }
+        public IIndexer Origin;
 
-        public double? Gain {
-            get {
+        public double? Gain
+        {
+            get
+            {
                 var sizeInGB = Size / 1024.0 / 1024.0 / 1024.0;
                 return Seeders * sizeInGB;
             }

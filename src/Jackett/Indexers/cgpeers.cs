@@ -6,7 +6,7 @@ using Jackett.Indexers.Abstract;
 
 namespace Jackett.Indexers
 {
-    public class CGPeers : GazelleTracker, IIndexer
+    public class CGPeers : GazelleTracker
     {
         public CGPeers(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "CGPeers",

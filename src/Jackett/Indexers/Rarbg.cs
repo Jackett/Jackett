@@ -111,7 +111,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return await PerformQuery(query, 0);
         }

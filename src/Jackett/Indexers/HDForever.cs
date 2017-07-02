@@ -6,7 +6,7 @@ using Jackett.Indexers.Abstract;
 
 namespace Jackett.Indexers
 {
-    public class HDForever : GazelleTracker, IIndexer
+    public class HDForever : GazelleTracker
     {
         public HDForever(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "HD-Forever",

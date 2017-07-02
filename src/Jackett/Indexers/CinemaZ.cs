@@ -18,7 +18,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class CinemaZ : AvistazTracker, IIndexer
+    public class CinemaZ : AvistazTracker
     {
         public CinemaZ(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "CinemaZ",

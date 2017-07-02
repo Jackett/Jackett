@@ -103,7 +103,7 @@ namespace Jackett.Controllers
 
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
-                releases = await indexer.PerformQuery(torznabQuery);
+                releases = await indexer.ResultsForQuery(torznabQuery);
                 releases = indexer.CleanLinks(releases);
             }
 

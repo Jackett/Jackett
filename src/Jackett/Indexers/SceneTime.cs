@@ -151,7 +151,7 @@ namespace Jackett.Indexers
         }
 
 
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             Dictionary<string, string> qParams = new Dictionary<string, string>();
             qParams.Add("cata", "yes");

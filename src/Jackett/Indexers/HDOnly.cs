@@ -9,7 +9,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class HDOnly : GazelleTracker, IIndexer
+    public class HDOnly : GazelleTracker
     {
         public HDOnly(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "HD-Only",
