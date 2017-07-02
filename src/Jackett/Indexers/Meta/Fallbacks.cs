@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Utils;
 
 namespace Jackett.Indexers.Meta
 {
@@ -25,6 +26,14 @@ namespace Jackett.Indexers.Meta
         }
     }
 
+    public class NoFallbackStrategyProvider : IFallbackStrategyProvider
+    {
+        public IEnumerable<IFallbackStrategy> FallbackStrategiesForQuery(TorznabQuery query)
+        {
+            return (new NoFallbackStrategy()).ToEnumerable();
+        }
+    }
+
     public class ImdbFallbackStrategy : IFallbackStrategy
     {
         public ImdbFallbackStrategy(IImdbResolver resolver, TorznabQuery query)
@@ -36,9 +45,8 @@ namespace Jackett.Indexers.Meta
 
         public async Task<IEnumerable<TorznabQuery>> FallbackQueries()
         {
-            if (titles == null) {
-                titles = await resolver.GetAllTitles(query.ImdbID);
-            }
+            if (titles == null)
+                titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title.ToEnumerable();
             return titles.Select(t => query.CreateFallback(t));
         }
 

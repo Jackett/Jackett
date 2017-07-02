@@ -131,12 +131,23 @@ namespace Jackett.Services
 
         public void InitAggregateIndexer()
         {
-            var imdbResolver = new OmdbResolver(container.Resolve<IWebClient>(), container.Resolve<IServerService>().Config.OmdbApiKey);
-            var imdbFallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
-            var imdbTitleResultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
+            var omdbApiKey = container.Resolve<IServerService>().Config.OmdbApiKey;
+            IFallbackStrategyProvider fallbackStrategyProvider = null;
+            IResultFilterProvider resultFilterProvider = null;
+            if (omdbApiKey != null)
+            {
+                var imdbResolver = new OmdbResolver(container.Resolve<IWebClient>(), omdbApiKey.ToNonNull());
+                fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
+                resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
+            }
+            else
+            {
+                fallbackStrategyProvider = new NoFallbackStrategyProvider();
+                resultFilterProvider = new NoResultFilterProvider();
+            }
 
             logger.Info("Adding aggregate indexer");
-            AggregateIndexer aggregateIndexer = new AggregateIndexer(imdbFallbackStrategyProvider, imdbTitleResultFilterProvider, this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
+            AggregateIndexer aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, this, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
             this.aggregateIndexer = aggregateIndexer;
             UpdateAggregateIndexer();
         }
