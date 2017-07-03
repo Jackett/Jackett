@@ -112,7 +112,7 @@ namespace Jackett.Controllers
                 }
             }
 
-            var releases = await indexer.PerformQuery(torznabQuery);
+            var releases = await indexer.ResultsForQuery(torznabQuery);
             releases = indexer.CleanLinks(releases);
 
             // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
@@ -160,10 +160,10 @@ namespace Jackett.Controllers
             });
 
 
-            foreach(var result in releases)
+            foreach (var result in releases)
             {
                 var clone = Mapper.Map<ReleaseInfo>(result);
-                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, indexerID, "dl", result.Title + ".torrent");
+                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, result.Origin.ID, "dl", result.Title + ".torrent");
                 resultPage.Releases.Add(clone);
             }
 

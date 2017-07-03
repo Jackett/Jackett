@@ -151,7 +151,7 @@ namespace Jackett.Indexers
             return term;
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             // The result list
             var releases = new List<ReleaseInfo>();

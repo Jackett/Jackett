@@ -37,7 +37,7 @@ namespace Jackett.Indexers
         void LoadFromSavedConfiguration(JToken jsonConfig);
         void SaveConfig();
 
-        Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+        Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query);
 
         IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input);
 

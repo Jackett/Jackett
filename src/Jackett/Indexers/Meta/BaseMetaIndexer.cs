@@ -28,19 +28,27 @@ namespace Jackett.Indexers.Meta
             return Task.FromResult(IndexerConfigurationStatus.Completed);
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        public override async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
         {
-            IEnumerable<Task<IEnumerable<ReleaseInfo>>> supportedTasks = Indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.PerformQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
+            return await PerformQuery(query);
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            IEnumerable<Task<IEnumerable<ReleaseInfo>>> supportedTasks = Indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
 
             var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
-            var fallbackTasks = fallbackQueries.SelectMany(q => Indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.PerformQuery(q.Clone())));
+            var fallbackTasks = fallbackQueries.SelectMany(q => Indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone())));
             var tasks = supportedTasks.Concat(fallbackTasks.ToList()); // explicit conversion to List to execute LINQ query
             var aggregateTask = Task.WhenAll(tasks);
 
-            try {
+            try
+            {
                 await aggregateTask;
-            } catch {
+            }
+            catch
+            {
                 logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
             }
 
