@@ -18,7 +18,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class Avistaz : AvistazTracker, IIndexer
+    public class Avistaz : AvistazTracker
     {
         public Avistaz(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Avistaz",

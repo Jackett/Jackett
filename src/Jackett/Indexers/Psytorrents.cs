@@ -6,7 +6,7 @@ using Jackett.Indexers.Abstract;
 
 namespace Jackett.Indexers
 {
-    public class Psytorrents : GazelleTracker, IIndexer
+    public class Psytorrents : GazelleTracker
     {
         public Psytorrents(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Psytorrents",

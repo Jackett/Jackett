@@ -555,7 +555,7 @@ namespace Jackett.Controllers
                     if (imdbQuery != null && indexer.TorznabCaps.SupportsImdbSearch)
                         query = imdbQuery;
 
-                    var searchResults = indexer.PerformQuery(query).Result;
+                    var searchResults = indexer.ResultsForQuery(query).Result;
                     searchResults = indexer.CleanLinks(searchResults);
                     cacheService.CacheRssResults(indexer, searchResults);
                     searchResults = indexer.FilterResults(query, searchResults);

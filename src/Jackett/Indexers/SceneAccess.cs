@@ -113,7 +113,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var results = await RequestStringWithCookiesAndRetry(string.Format(SearchUrl, HttpUtility.UrlEncode(query.GetQueryString())));

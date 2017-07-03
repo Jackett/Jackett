@@ -87,7 +87,7 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format("{0}?search={1}&cat=0&incldead=1", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));

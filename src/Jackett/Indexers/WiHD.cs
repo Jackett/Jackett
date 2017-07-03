@@ -182,7 +182,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="query">Query</param>
         /// <returns>Releases</returns>
-        public override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();

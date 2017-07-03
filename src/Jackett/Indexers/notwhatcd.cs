@@ -6,7 +6,7 @@ using Jackett.Indexers.Abstract;
 
 namespace Jackett.Indexers
 {
-    public class notwhatcd : GazelleTracker, IIndexer
+    public class notwhatcd : GazelleTracker
     {
         public notwhatcd(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "notwhat.cd",
