@@ -38,6 +38,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tokyo Toshokan
  * TorrentProject
  * Torrentz2
+ * NextTorrent
  
 ### Supported Private Trackers
  * 2 Fast 4 You
