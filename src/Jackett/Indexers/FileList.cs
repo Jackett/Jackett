@@ -122,6 +122,14 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            
+            // Occasionally the cookies become invalid, login again if that happens
+            if (response.IsRedirect)
+            {
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            }
+
             var results = response.Content;
             try
             {
