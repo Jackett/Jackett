@@ -226,6 +226,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * XSpeeds
  * Xthor
  * Xtreme Zone 
+ * Zamunda.net
+ * Zelka.org
  * Ztracker
 
 Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
