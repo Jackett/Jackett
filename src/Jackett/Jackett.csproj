@@ -417,6 +417,7 @@
     <Content Include="Content\custom_mobile.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Definitions\cpabien.yml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
