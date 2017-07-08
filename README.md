@@ -20,6 +20,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 ### Supported Public Trackers
  * Anidex
+ * cpasbien
  * EZTV
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
@@ -27,6 +28,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
+ * NextTorrent
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
