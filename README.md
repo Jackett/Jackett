@@ -28,6 +28,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
+ * Mania-Torrent
  * NextTorrent
  * Nyaa.si
  * Nyaa-Pantsu
@@ -40,6 +41,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tokyo Toshokan
  * TorrentProject
  * Torrentz2
+ * yggtorrent
  
 ### Supported Private Trackers
  * 2 Fast 4 You
