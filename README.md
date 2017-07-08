@@ -20,6 +20,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 ### Supported Public Trackers
  * Anidex
+ * cpasbien
  * EZTV
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
