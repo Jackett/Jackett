@@ -40,7 +40,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tokyo Toshokan
  * TorrentProject
  * Torrentz2
- 
+
 ### Supported Private Trackers
  * 2 Fast 4 You
  * 3D Torrents
@@ -142,7 +142,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LosslessClub
  * M-Team - TP
  * Magico
- * Majomparádé 
+ * Majomparádé
  * Mononoké-BT
  * MoreThanTV
  * MyAnonamouse
@@ -200,7 +200,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
- * Torrent411
  * Torrent9
  * TorrentBD
  * TorrentBytes
@@ -227,13 +226,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * x264
  * XSpeeds
  * Xthor
- * Xtreme Zone 
+ * Xtreme Zone
+ * YggTorrent
  * Zamunda.net
  * Zelka.org
  * Ztracker
 
 Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
- 
+
 ## Installation on Windows
 
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
@@ -249,7 +249,7 @@ To get started with using the installer for Jackett, follow the steps below:
 
 When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
 
-Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett". 
+Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
 
 ## Installation on Linux
  1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (version 4.8 is recommended)
