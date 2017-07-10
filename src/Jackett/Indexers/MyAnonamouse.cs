@@ -21,7 +21,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class Myanonamouse : BaseIndexer
+    public class Myanonamouse : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "tor/js/loadSearch2.php"; } }
@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Myanonamouse(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
+        public Myanonamouse(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "MyAnonamouse",
                 description: "Friendliness, Warmth and Sharing",
                 link: "https://www.myanonamouse.net/",
@@ -42,7 +42,7 @@ namespace Jackett.Indexers
                                               TorznabCatType.BooksEbook,
                                               TorznabCatType.BooksMagazines,
                                               TorznabCatType.BooksTechnical),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

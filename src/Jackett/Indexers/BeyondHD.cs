@@ -16,7 +16,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class BeyondHD : BaseIndexer
+    public class BeyondHD : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
 
@@ -26,12 +26,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BeyondHD(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public BeyondHD(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
                 link: "https://beyond-hd.me/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

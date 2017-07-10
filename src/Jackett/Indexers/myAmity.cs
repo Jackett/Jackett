@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class myAmity : BaseIndexer
+    public class myAmity : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "account-login.php"; } }
         string BrowseUrl { get { return SiteLink + "torrents-search.php"; } }
@@ -26,12 +26,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public myAmity(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public myAmity(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "myAmity",
                    description: "A German general tracker.",
                    link: "https://ttv2.myamity.info/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

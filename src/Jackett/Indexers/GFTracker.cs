@@ -22,7 +22,7 @@ namespace Jackett.Indexers
     //
     //     Quick and dirty indexer for GFTracker.  
     // 
-    public class GFTracker : BaseIndexer
+    public class GFTracker : BaseWebIndexer
     {
         private string StartPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
         private string LoginUrl { get { return SiteLink + "loginsite.php"; } }
@@ -34,12 +34,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public GFTracker(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public GFTracker(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "GFTracker",
                 description: "Home of user happiness",
                 link: "https://www.thegft.org/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

@@ -15,7 +15,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class Superbits : BaseIndexer
+    public class Superbits : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
         private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
@@ -26,12 +26,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Superbits(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public Superbits(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "Superbits",
                 description: null,
                 link: "https://superbits.org/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

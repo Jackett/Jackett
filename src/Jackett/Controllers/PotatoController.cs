@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Jackett.Indexers;
 
 namespace Jackett.Controllers
 {
@@ -38,7 +39,7 @@ namespace Jackett.Controllers
                 };
 
                 torznabQuery.ExpandCatsToSubCats();
-                    return torznabQuery.Categories;
+                return torznabQuery.Categories;
             }
         }
 
@@ -55,7 +56,7 @@ namespace Jackett.Controllers
         public async Task<HttpResponseMessage> Call(string indexerID, [FromUri]TorrentPotatoRequest request)
         {
             var indexer = indexerService.GetIndexer(indexerID);
-          
+
             var allowBadApiDueToDebug = false;
 #if DEBUG
             allowBadApiDueToDebug = Debugger.IsAttached;
@@ -73,7 +74,8 @@ namespace Jackett.Controllers
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
             }
 
-            if (!indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => MOVIE_CATS.Contains(i))){
+            if (!indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => MOVIE_CATS.Contains(i)))
+            {
                 logger.Warn(string.Format("Rejected a request to {0} which does not support searching for movies.", indexer.DisplayName));
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer does not support movies.");
             }
@@ -92,7 +94,7 @@ namespace Jackett.Controllers
 
             var torznabQuery = new TorznabQuery()
             {
-                ApiKey =  request.passkey,
+                ApiKey = request.passkey,
                 Categories = MOVIE_CATS,
                 SearchTerm = request.search,
                 ImdbID = request.imdbid,
@@ -102,10 +104,7 @@ namespace Jackett.Controllers
             IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
 
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
-            {
                 releases = await indexer.ResultsForQuery(torznabQuery);
-                releases = indexer.CleanLinks(releases);
-            }
 
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
@@ -113,7 +112,6 @@ namespace Jackett.Controllers
                 cacheService.CacheRssResults(indexer, releases);
             }
 
-            releases = indexer.FilterResults(torznabQuery, releases);
             var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
             var potatoResponse = new TorrentPotatoResponse();
 

@@ -19,7 +19,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class BitMeTV : BaseIndexer
+    public class BitMeTV : BaseWebIndexer
     {
         //https is poorly implemented on BitMeTV. Site uses http to login, but then redirects to https for search
         private string LoginUrl { get { return SiteLink + "login.php"; } }
@@ -33,12 +33,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BitMeTV(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
+        public BitMeTV(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "BitMeTV",
                 description: "TV Episode specialty tracker",
                 link: "http://www.bitmetv.org/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

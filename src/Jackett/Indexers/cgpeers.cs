@@ -8,11 +8,11 @@ namespace Jackett.Indexers
 {
     public class CGPeers : GazelleTracker
     {
-        public CGPeers(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public CGPeers(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "CGPeers",
                 desc: null,
                 link: "https://www.cgpeers.com/",
-                indexerManager: indexerManager,
+                configService: configService,
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient

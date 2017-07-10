@@ -18,7 +18,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class SevenTor : BaseIndexer
+    public class SevenTor : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "ucp.php?mode=login"; } }
         string SearchUrl { get { return SiteLink + "search.php"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SevenTor(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public SevenTor(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "7tor",
                    description: null,
                    link: "https://7tor.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

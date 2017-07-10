@@ -1,4 +1,4 @@
-using CsQuery;
+﻿using CsQuery;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
@@ -16,7 +16,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class SpeedCD : BaseIndexer
+    public class SpeedCD : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
@@ -27,12 +27,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SpeedCD(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public SpeedCD(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Speed.cd",
                 description: "Your home now!",
                 link: "https://speed.cd/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,
