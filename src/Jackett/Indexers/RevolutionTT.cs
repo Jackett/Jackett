@@ -245,6 +245,8 @@ namespace Jackett.Indexers
                 foreach (var item in rssDoc.Descendants("item"))
                 {
                     var title = item.Descendants("title").First().Value;
+                    if (title.StartsWith("Support YOUR site!"))
+                        continue;
                     var description = item.Descendants("description").First().Value;
                     var link = item.Descendants("link").First().Value;
                     var date = item.Descendants("pubDate").First().Value;

@@ -79,9 +79,9 @@
           - name: split
             args: [ "=", -1 ]
       title:
-        selector: td:nth-child(2) a
+        selector: td:nth-child(2) a:last-of-type
       details:
-        selector: td:nth-child(2) a
+        selector: td:nth-child(2) a:last-of-type
         attribute: href
       download:
         selector: td:nth-child(3) a[href$=".torrent"]

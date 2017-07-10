@@ -6,7 +6,7 @@
   type: private
   encoding: windows-1252
   links:
-    - http://new-retro.eu/
+    - https://new-retro.eu/
 
   caps:
     categorymappings:
@@ -46,8 +46,9 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
-    method: post
+    path: /login.php
+    method: form
+    cookies: ["JAVA=OK"] # avoid jscheck redirect
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"

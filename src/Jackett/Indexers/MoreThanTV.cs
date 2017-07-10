@@ -78,16 +78,13 @@ namespace Jackett.Indexers
 
             await GetReleases(releases, query, searchQuerySingleEpisodes);
 
-            // Search for torrent groups
-            if (isTv)
+            // Search for torrent groups (complete seasons)
+            var seasonMatch = new Regex(@".*\s[Ss]{1}\d{2}$").Match(query.GetQueryString());
+            if (seasonMatch.Success)
             {
-                var seasonMatch = new Regex(@".*\s[Ss]{1}\d{2}").Match(query.GetQueryString());
-                if (seasonMatch.Success)
-                {
-                    var newSearchQuery = Regex.Replace(searchQuery, @"[Ss]{1}\d{2}", $"Season {query.Season}");
+                var newSearchQuery = Regex.Replace(searchQuery, @"[Ss]{1}\d{2}", $"Season {query.Season}");
 
-                    await GetReleases(releases, query, newSearchQuery);
-                }
+                await GetReleases(releases, query, newSearchQuery);
             }
 
             return releases;

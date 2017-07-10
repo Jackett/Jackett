@@ -1,0 +1,118 @@
+﻿---
+  site: yggtorrent
+  name: YGGtorrent
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - http://yggtorrent.com
+
+  caps:
+    categorymappings:
+      - {id: films, cat: Movies, desc: "Movies"}
+      #- {id: series, cat: TV, desc: "TV"}
+
+    modes:
+      search: [q]
+      #tv-search: [q, season, ep]
+  settings:
+    - name: username
+      type: text
+      label: Username (email or username)
+    - name: password
+      type: password
+      label: Password
+    - name: special_path
+      type: checkbox
+      label: Use an alternative path
+      default: true
+    - name: path
+      type: text
+      label: Alternative path (as seen in url)
+      default: "alpha"
+  login:
+    path: "{{if .Config.special_path }}/{{ .Config.path }}{{else}}{{end}}/user/login"
+    method: post
+    inputs:
+      id: "{{ .Config.username }}"
+      pass: "{{ .Config.password }}"
+      submit: ""
+    error:
+      - selector: "body > div.page-content > div > div.col-md-10 > div > div > div > div > div.content-box-large.box-with-header > form > center > table > tbody > tr:nth-child(3) > td:nth-child(2) > button.text:contains('Se connecter')"
+    test:
+      path: "{{if .Config.special_path }}/{{ .Config.path }}{{else}}{{end}}/"
+  search:
+    path: "{{if .Config.special_path }}/{{ .Config.path }}{{else}}{{end}}{{if .Keywords}}/engine/search?q={{ .Keywords}}/{{else}}/torrents/2145-filmvideo{{end}}"
+    rows:
+      selector: "table.table.table-striped > tbody > tr"
+    fields:
+      site_date:
+        selector: "td:nth-child(2)"
+        filters:
+          - name: replace
+            args: ["il y a ", ""]
+          - name: replace
+            args: [ " jours", " days"]
+          - name: replace
+            args: [ " jour", " day"]
+          - name: replace
+            args: [ " heures", " hours"]
+          - name: replace
+            args: [ " heure", " hour"]
+          - name: replace
+            args: [ " semaines", " weeks"]
+          - name: replace
+            args: [ " semaine", " week"]
+          - name: replace
+            args: [ " mois", " month"]
+          - name: replace
+            args: [ " ans", " years"]
+          - name: replace
+            args: [ " an", " year"]
+          - name: append
+            args: " ago"
+      title:
+        selector: "a.torrent-name"
+      details:
+        selector: "a.torrent-name"
+        attribute: href
+      download:
+        selector: "td:nth-child(1) > a:not(.torrent-name)"
+        attribute: href
+      size:
+        selector: "td:nth-child(3)"
+        filters:
+          - name: re_replace
+            args: [ "\\.(\\d) KB", "$1X00"]
+          - name: re_replace
+            args: [ " KB", "000"]
+          - name: re_replace
+            args: [ "\\.(\\d) MB", "$1X00000"]
+          - name: re_replace
+            args: [ " MB", "000000"]
+          - name: re_replace
+            args: [ "\\.(\\d) GB", "$1X00000000"]
+          - name: re_replace
+            args: [ " GB", "000000000"]
+          - name: re_replace
+            args: [ "\\.(\\d) TB", "$1X00000000000"]
+          - name: re_replace
+            args: [ " TB", "000000000000"]
+          - name: replace
+            args: [ "X", "" ]
+      seeders:
+        text: 0
+      seeders:
+        selector: "td[style^='color:#058c05;']"
+        optional: true
+      leechers:
+        text: 0
+      leechers:
+        selector: "td[style^='color:#ff5252;']"
+        optional: true
+      date:
+        text: "{{ .Result.site_date }}"
+      downloadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        text: "1"
