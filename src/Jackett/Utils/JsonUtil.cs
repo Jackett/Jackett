@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Jackett.Utils
 {
-    public class ToStringJsonConverter : JsonConverter
+    public class EncodingJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
