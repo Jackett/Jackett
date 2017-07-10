@@ -16,7 +16,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Demonoid : BaseIndexer
+    public class Demonoid : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "account_handler.php"; } }
         private string SearchUrl { get { return SiteLink + "files/?category={0}&subcategory=All&quality=All&seeded=2&to=1&query={1}&external=2"; } }
@@ -27,12 +27,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Demonoid(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public Demonoid(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Demonoid",
                 description: "Demonoid",
                 link: "https://www.demonoid.pw/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

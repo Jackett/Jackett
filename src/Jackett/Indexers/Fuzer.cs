@@ -20,7 +20,7 @@ using System.Threading;
 
 namespace Jackett.Indexers
 {
-    public class Fuzer : BaseIndexer
+    public class Fuzer : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "index.php?name=torrents&"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
@@ -32,11 +32,11 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Fuzer(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public Fuzer(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "Fuzer",
                 description: "Fuzer is a private torrent website with israeli torrents.",
                 link: "https://fuzer.me/",
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

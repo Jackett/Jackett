@@ -17,7 +17,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    class PiXELHD : BaseIndexer
+    class PiXELHD : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string BrowseUrl { get { return SiteLink + "torrents.php"; } }
@@ -32,12 +32,12 @@ namespace Jackett.Indexers
         string input_username = null;
         string input_password = null;
 
-        public PiXELHD(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public PiXELHD(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "PiXELHD",
                 description: null,
                 link: "https://pixelhd.me/",
                 caps: new TorznabCapabilities(),
-                manager: indexerManager,
+                configService: configService,
                 logger: logger,
                 p: protectionService,
                 client: webClient,

@@ -17,7 +17,7 @@ namespace Jackett.Utils
 {
     public static class StringUtil
     {
-        public static string StripNonAlphaNumeric(string str, string replacement = "")
+        public static string StripNonAlphaNumeric(this string str, string replacement = "")
         {
             return StripRegex(str, "[^a-zA-Z0-9 -]", replacement);
         }
@@ -157,7 +157,7 @@ namespace Jackett.Utils
             return sb.ToString();
         }
 
-        
+
 
         public static string GenerateRandom(int length)
         {

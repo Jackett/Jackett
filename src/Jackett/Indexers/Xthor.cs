@@ -20,7 +20,7 @@ namespace Jackett.Indexers
     /// <summary>
     /// Provider for Xthor Private French Tracker
     /// </summary>
-    public class Xthor : BaseIndexer
+    public class Xthor : BaseCachingWebIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.bz/";
         private string TorrentCommentUrl => TorrentDescriptionUrl;
@@ -31,13 +31,13 @@ namespace Jackett.Indexers
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
-        public Xthor(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
+        public Xthor(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(
                 name: "Xthor",
                 description: "General French Private Tracker",
                 link: "https://xthor.bz/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
@@ -115,9 +115,9 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
-        #pragma warning disable 1998
+#pragma warning disable 1998
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-        #pragma warning restore 1998
+#pragma warning restore 1998
         {
             // Provider not yet configured
             IsConfigured = false;
@@ -159,7 +159,7 @@ namespace Jackett.Indexers
             var searchTerm = query.GetQueryString();
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
-            if(!DevMode && !string.IsNullOrEmpty(searchTerm))
+            if (!DevMode && !string.IsNullOrEmpty(searchTerm))
             {
                 lock (cache)
                 {
@@ -195,7 +195,8 @@ namespace Jackett.Indexers
                     {
                         // Mapping data
                         Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                        Title = torrent.name, Seeders = torrent.seeders,
+                        Title = torrent.name,
+                        Seeders = torrent.seeders,
                         Peers = torrent.seeders + torrent.leechers,
                         MinimumRatio = 1,
                         MinimumSeedTime = 345600,
@@ -453,13 +454,13 @@ namespace Jackett.Indexers
         private void CleanCacheStorage(bool force = false)
         {
             // Check cleaning method
-            if(force)
+            if (force)
             {
                 // Deleting Provider Storage folder and all files recursively
                 Output("\nDeleting Provider Storage folder and all files recursively ...");
-                
+
                 // Check if directory exist
-                if(System.IO.Directory.Exists(Directory))
+                if (System.IO.Directory.Exists(Directory))
                 {
                     // Delete storage directory of provider
                     System.IO.Directory.Delete(Directory, true);
@@ -480,17 +481,20 @@ namespace Jackett.Indexers
                 .Select(f => new System.IO.FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
-                .ForEach(f => {
+                .ForEach(f =>
+                {
                     Output("Deleting cached file << " + f.Name + " >> ... done.");
                     f.Delete();
                     i++;
-                    });
+                });
 
                 // Inform on what was cleaned during process
-                if(i > 0) {
+                if (i > 0)
+                {
                     Output("-> Deleted " + i + " cached files during cleaning.");
                 }
-                else {
+                else
+                {
                     Output("-> Nothing deleted during cleaning.");
                 }
             }
@@ -504,7 +508,7 @@ namespace Jackett.Indexers
         private void Output(string message, string level = "debug")
         {
             // Check if we are in dev mode
-            if(DevMode)
+            if (DevMode)
             {
                 // Output message to console
                 Console.WriteLine(message);

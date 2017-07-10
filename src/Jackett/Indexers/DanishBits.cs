@@ -1,4 +1,4 @@
-using CsQuery;
+﻿using CsQuery;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils.Clients;
@@ -18,7 +18,7 @@ using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
-    public class DanishBits : BaseIndexer
+    public class DanishBits : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public DanishBits(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
+        public DanishBits(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "DanishBits",
                 description: "A danish closed torrent tracker",
                 link: "https://danishbits.org/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

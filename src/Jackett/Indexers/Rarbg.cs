@@ -16,7 +16,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Rarbg : BaseIndexer
+    public class Rarbg : BaseWebIndexer
     {
         readonly static string defaultSiteLink = "https://torrentapi.org/";
 
@@ -41,12 +41,12 @@ namespace Jackett.Indexers
 
         private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
 
-        public Rarbg(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public Rarbg(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
                 description: null,
                 link: "https://rarbg.to/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

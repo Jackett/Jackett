@@ -1,4 +1,4 @@
-using Jackett.Models;
+﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -15,7 +15,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class T411 : BaseIndexer
+    public class T411 : BaseWebIndexer
     {
         const string ApiUrl = "https://api.t411.al";
         const string AuthUrl = ApiUrl + "/auth";
@@ -32,12 +32,12 @@ namespace Jackett.Indexers
 
         private Dictionary<int, List<int>> _mediaCategoryMapping = new Dictionary<int, List<int>>();
 
-        public T411(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public T411(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "T411",
                 description: "French Torrent Tracker",
                 link: "https://t411.al/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,
