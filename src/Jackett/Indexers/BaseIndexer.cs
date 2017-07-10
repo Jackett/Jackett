@@ -13,6 +13,7 @@ using AutoMapper;
 using System.Threading;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Jackett.Indexers
 {
@@ -24,9 +25,11 @@ namespace Jackett.Indexers
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
+
+        [JsonConverter(typeof(EncodingJsonConverter))]
         public Encoding Encoding { get; protected set; }
         public string Type { get; protected set; }
-        public virtual string ID { get { return GetIndexerID (GetType ()); } }
+        public virtual string ID { get { return GetIndexerID(GetType()); } }
 
         public bool IsConfigured { get; protected set; }
         public TorznabCapabilities TorznabCaps { get; protected set; }
@@ -231,7 +234,7 @@ namespace Jackett.Indexers
                 await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
                 if (accumulateCookies)
                 {
-                    CookieHeader = ResolveCookies((CookieHeader != null && CookieHeader != ""? CookieHeader + " " : "") + (overrideCookies != null && overrideCookies != "" ? overrideCookies + " " : "") + response.Cookies);
+                    CookieHeader = ResolveCookies((CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null && overrideCookies != "" ? overrideCookies + " " : "") + response.Cookies);
                     overrideCookies = response.Cookies = CookieHeader;
                 }
                 if (overrideCookies != null && response.Cookies == null)
@@ -253,7 +256,7 @@ namespace Jackett.Indexers
                 matches = matches.NextMatch();
             }
             return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
-            
+
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
@@ -277,7 +280,8 @@ namespace Jackett.Indexers
                 if (accumulateCookies)
                 {
                     redirRequestCookies = ResolveCookies((CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null ? overrideCookies : ""));
-                } else
+                }
+                else
                 {
                     redirRequestCookies = (overrideCookies != null ? overrideCookies : "");
                 }
@@ -362,7 +366,8 @@ namespace Jackett.Indexers
             }
         }
 
-        public async virtual Task<byte[]> Download(Uri link) {
+        public async virtual Task<byte[]> Download(Uri link)
+        {
             return await Download(link, RequestType.GET);
         }
 
@@ -379,7 +384,7 @@ namespace Jackett.Indexers
                 logger.Error("Failed download cookies: " + this.CookieHeader);
                 if (response.Content != null)
                     logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
-                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => "+response.RedirectingTo : ""));
+                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             }
 
             return response.Content;
@@ -530,7 +535,7 @@ namespace Jackett.Indexers
             {
                 response.Cookies = ResolveCookies(firstCallCookies + (accumulateCookies ? " " + response.Cookies : ""));
             }
-            
+
             return response;
         }
 
