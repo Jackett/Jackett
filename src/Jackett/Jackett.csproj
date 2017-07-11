@@ -378,6 +378,8 @@
     <Compile Include="Services\ImdbResolver.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\JsonUtil.cs" />
+    <Compile Include="Services\IndexerConfigurationService.cs" />
+    <Compile Include="Models\IndexerDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -570,6 +572,18 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabsToSpaces="True" scope="text/plain">
+            <inheritsSet />
+            <inheritsScope />
+          </TextStylePolicy>
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

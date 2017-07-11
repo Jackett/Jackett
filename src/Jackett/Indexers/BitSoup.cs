@@ -20,7 +20,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public class BitSoup : BaseIndexer
+    public class BitSoup : BaseWebIndexer
     {
         private string BrowseUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -33,12 +33,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BitSoup(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public BitSoup(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BitSoup",
                 description: "SoupieBits",
                 link: "https://www.bitsoup.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

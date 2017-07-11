@@ -18,7 +18,7 @@ using Jackett.Utils.Clients;
 
 namespace Jackett.Indexers
 {
-    class ArcheTorrent : BaseIndexer
+    class ArcheTorrent : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "account-login.php"; } }
         string BrowseUrl { get { return SiteLink + "torrents-search.php"; } }
@@ -30,11 +30,11 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ArcheTorrent(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public ArcheTorrent(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Arche Torrent",
                 description: "French Torrent Tracker",
                 link: "https://www.archetorrent.com/",
-                manager: indexerManager,
+                configService: configService,
                 logger: logger,
                 p: protectionService,
                 client: webClient,

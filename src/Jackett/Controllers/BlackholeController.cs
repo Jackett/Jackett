@@ -37,7 +37,7 @@ namespace Jackett.Controllers
             var jsonReply = new JObject();
             try
             {
-                var indexer = indexerService.GetIndexer(indexerID);
+                var indexer = indexerService.GetWebIndexer(indexerID);
                 if (!indexer.IsConfigured)
                 {
                     logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
@@ -48,8 +48,6 @@ namespace Jackett.Controllers
                     throw new Exception("Incorrect API key");
 
                 var remoteFile = new Uri(Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path)), UriKind.RelativeOrAbsolute);
-                remoteFile = indexer.UncleanLink(remoteFile);
-
                 var downloadBytes = await indexer.Download(remoteFile);
 
                 if (string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))

@@ -19,7 +19,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class IPTorrents : BaseIndexer
+    public class IPTorrents : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string TakeLoginUrl { get { return SiteLink + "take_login.php"; } }
@@ -32,12 +32,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public IPTorrents(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public IPTorrents(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "IPTorrents",
                 description: "Always a step ahead.",
                 link: "https://iptorrents.com/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

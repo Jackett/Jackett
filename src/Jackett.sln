@@ -67,8 +67,8 @@ Global
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.scope = text/x-csharp
-		$1.FileWidth = 80
 		$1.TabsToSpaces = True
+		$1.EolMarker = Unix
 		$0.CSharpFormattingPolicy = $2
 		$2.IndentSwitchBody = True
 		$2.IndentBlocksInsideExpressions = True

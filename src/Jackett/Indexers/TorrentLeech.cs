@@ -18,7 +18,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class TorrentLeech : BaseIndexer
+    public class TorrentLeech : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
         private string SearchUrl { get { return SiteLink + "torrents/browse/index/"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentLeech(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public TorrentLeech(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentLeech",
                 description: "This is what happens when you seed",
                 link: "https://www.torrentleech.org/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

@@ -1,4 +1,4 @@
-using CsQuery;
+﻿using CsQuery;
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
@@ -23,7 +23,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-	public class Hounddawgs : BaseIndexer
+	public class Hounddawgs : BaseWebIndexer
 	{
 		private string LoginUrl { get { return SiteLink + "login.php"; } }
 		private string SearchUrl { get { return SiteLink + "torrents.php"; } }
@@ -34,12 +34,12 @@ namespace Jackett.Indexers
 			set { base.configData = value; }
 		}
 
-		public Hounddawgs(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
+		public Hounddawgs(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
 			: base(name: "Hounddawgs",
 				description: "A danish closed torrent tracker",
 				link: "https://hounddawgs.org/",
 				caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-				manager: i,
+				configService: configService,
 				client: c,
 				logger: l,
 				p: ps,

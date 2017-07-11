@@ -14,7 +14,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class FunFile : BaseIndexer
+    public class FunFile : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -25,12 +25,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public FunFile(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public FunFile(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "FunFile",
                 description: "A general tracker",
                 link: "https://www.funfile.org/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
