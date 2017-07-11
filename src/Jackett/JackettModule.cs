@@ -36,6 +36,7 @@ namespace Jackett
                    .Except<ImdbTitleResultFilterProvider> ()
                    .Except<BaseMetaIndexer> ()
                    .Except<AggregateIndexer> ()
+                   .Except<CardigannIndexer>()
                    .AsImplementedInterfaces ().SingleInstance ();
             builder.RegisterApiControllers (thisAssembly).InstancePerRequest ();
             builder.RegisterType<HttpWebClient> ();
