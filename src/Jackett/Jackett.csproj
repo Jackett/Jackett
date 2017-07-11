@@ -377,6 +377,7 @@
     <Compile Include="Indexers\Meta\ResultFilters.cs" />
     <Compile Include="Services\ImdbResolver.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\JsonUtil.cs" />
     <Compile Include="Services\IndexerConfigurationService.cs" />
     <Compile Include="Models\IndexerDefinition.cs" />
   </ItemGroup>
