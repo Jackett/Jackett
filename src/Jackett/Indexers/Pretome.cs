@@ -16,7 +16,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class Pretome : BaseIndexer
+    public class Pretome : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string LoginReferer { get { return SiteLink + "index.php?cat=1"; } }
@@ -30,13 +30,13 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Pretome(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public Pretome(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "PreToMe",
                 description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
                 link: "https://pretome.info/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 client: wc,
-                manager: i,
+                configService: configService,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataPinNumber())

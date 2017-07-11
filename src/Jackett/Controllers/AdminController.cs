@@ -205,7 +205,7 @@ namespace Jackett.Controllers
                     baseIndexer.ResetBaseConfig();
                 if (ex is ExceptionWithConfigData)
                 {
-                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null,false);
+                    jsonReply["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null, false);
                 }
                 else
                 {
@@ -431,7 +431,7 @@ namespace Jackett.Controllers
                     Engine.Server.Start();
                 })).Start();
                 }
-                
+
                 if (saveDir != Engine.Server.Config.BlackholeDir)
                 {
                     if (!string.IsNullOrEmpty(saveDir))
@@ -498,7 +498,7 @@ namespace Jackett.Controllers
 
             var queryStr = value.Query;
             if (queryStr != null)
-            { 
+            {
                 var seasonMatch = Regex.Match(queryStr, @"S(\d{2,4})");
                 if (seasonMatch.Success)
                 {
@@ -514,7 +514,7 @@ namespace Jackett.Controllers
                 }
                 queryStr = queryStr.Trim();
             }
-        
+
 
             stringQuery.SearchTerm = queryStr;
             stringQuery.Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category };
@@ -556,9 +556,7 @@ namespace Jackett.Controllers
                         query = imdbQuery;
 
                     var searchResults = indexer.ResultsForQuery(query).Result;
-                    searchResults = indexer.CleanLinks(searchResults);
                     cacheService.CacheRssResults(indexer, searchResults);
-                    searchResults = indexer.FilterResults(query, searchResults);
 
                     foreach (var result in searchResults)
                     {

@@ -8,11 +8,11 @@ namespace Jackett.Indexers
 {
     public class BrokenStones : GazelleTracker
     {
-        public BrokenStones(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public BrokenStones(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "BrokenStones",
                 desc: null,
                 link: "https://brokenstones.club/",
-                indexerManager: indexerManager,
+                configService: configService,
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient

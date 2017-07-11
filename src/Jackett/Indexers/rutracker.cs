@@ -14,7 +14,7 @@ using AngleSharp.Parser.Html;
 
 namespace Jackett.Indexers
 {
-    public class RuTracker : BaseIndexer
+    public class RuTracker : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "forum/login.php"; } }
         string SearchUrl { get { return SiteLink + "forum/tracker.php"; } }
@@ -28,12 +28,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public RuTracker(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public RuTracker(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "RuTracker",
                    description: null,
                    link: "https://rutracker.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

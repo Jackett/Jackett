@@ -19,7 +19,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class Trezzor : BaseIndexer
+    public class Trezzor : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "prihlasenie.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
@@ -31,12 +31,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Trezzor(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public Trezzor(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Trezzor",
                 description: "SK/CZ Tracker.",
                 link: "https://tracker.czech-server.com/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

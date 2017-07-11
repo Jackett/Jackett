@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Jackett.Indexers
 {
-    public class DigitalHive : BaseIndexer
+    public class DigitalHive : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public DigitalHive(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public DigitalHive(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "DigitalHive",
                 description: "DigitalHive is one of the oldest general trackers",
                 link: "https://www.digitalhive.org/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

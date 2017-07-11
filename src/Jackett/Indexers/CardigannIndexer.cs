@@ -10,8 +10,6 @@ using System;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 using static Jackett.Models.IndexerConfig.ConfigurationData;
 using AngleSharp.Parser.Html;
 using System.Text.RegularExpressions;
@@ -22,11 +20,10 @@ using System.Linq;
 
 namespace Jackett.Indexers
 {
-    public class CardigannIndexer : BaseIndexer
+    public class CardigannIndexer : BaseWebIndexer
     {
-        public string DefinitionString { get; protected set; }
         protected IndexerDefinition Definition;
-        public override string ID { get { return (Definition != null ? Definition.Site : GetIndexerID (GetType ())); } }
+        public override string ID { get { return (Definition != null ? Definition.Site : GetIndexerID(GetType())); } }
 
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
@@ -37,228 +34,19 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        // A Dictionary allowing the same key multiple times
-        public class KeyValuePairList : List<KeyValuePair<string, selectorBlock>>, IDictionary<string, selectorBlock>
-        {
-            public selectorBlock this[string key]
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-
-                set
-                {
-                    base.Add(new KeyValuePair<string, selectorBlock>(key, value));
-                }
-            }
-
-            public ICollection<string> Keys
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            public ICollection<selectorBlock> Values
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            public void Add(string key, selectorBlock value)
-            {
-                base.Add(new KeyValuePair<string, selectorBlock>(key, value));
-            }
-
-            public bool ContainsKey(string key)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool Remove(string key)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool TryGetValue(string key, out selectorBlock value)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        // Cardigann yaml classes
-        public class IndexerDefinition {
-            public string Site { get; set; }
-            public List<settingsField> Settings { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string Type { get; set; }
-            public string Language { get; set; }
-            public string Encoding { get; set; }
-            public List<string> Links { get; set; }
-            public List<string> Certificates { get; set; }
-            public capabilitiesBlock Caps { get; set; }
-            public loginBlock Login { get; set; }
-            public ratioBlock Ratio { get; set; }
-            public searchBlock Search { get; set; }
-            public downloadBlock Download { get; set; }
-            // IndexerDefinitionStats not needed/implemented
-        }
-        public class settingsField
-        {
-            public string Name { get; set; }
-            public string Type { get; set; }
-            public string Label { get; set; }
-            public string Default { get; set; }
-            public Dictionary<string, string> Options { get; set; }
-        }
-
-        public class CategorymappingBlock
-        {
-            public string id { get; set; }
-            public string cat { get; set; }
-            public string desc { get; set; }
-        }
-
-        public class capabilitiesBlock
-        {
-            public Dictionary<string, string> Categories  { get; set; }
-            public List<CategorymappingBlock> Categorymappings { get; set; }
-            public Dictionary<string, List<string>> Modes { get; set; }
-        }
-
-        public class captchaBlock
-        {
-            public string Type { get; set; }
-            public string Image { get; set; }
-            public string Input { get; set; }
-        }
-
-        public class loginBlock
-        {
-            public string Path { get; set; }
-            public string Submitpath { get; set; }
-            public List<string> Cookies { get; set; }
-            public string Method { get; set; }
-            public string Form { get; set; }
-            public bool Selectors { get; set; } = false;
-            public Dictionary<string, string> Inputs { get; set; }
-            public Dictionary<string, selectorBlock> Selectorinputs { get; set; }
-            public Dictionary<string, selectorBlock> Getselectorinputs { get; set; }
-            public List<errorBlock> Error { get; set; }
-            public pageTestBlock Test { get; set; }
-            public captchaBlock Captcha { get; set; }
-        }
-
-        public class errorBlock
-        {
-            public string Path { get; set; }
-            public string Selector { get; set; }
-            public selectorBlock Message { get; set; }
-        }
-
-        public class selectorBlock
-        {
-            public string Selector { get; set; }
-            public bool Optional { get; set; } = false;
-            public string Text { get; set; }
-            public string Attribute { get; set; }
-            public string Remove { get; set; }
-            public List<filterBlock> Filters { get; set; }
-            public Dictionary<string, string> Case { get; set; }
-        }
-
-        public class filterBlock
-        {
-            public string Name { get; set; }
-            public dynamic Args { get; set; }
-        }
-
-        public class pageTestBlock
-        {
-            public string Path { get; set; }
-            public string Selector { get; set; }
-        }
-
-        public class ratioBlock : selectorBlock
-        {
-            public string Path { get; set; }
-        }
-
-        public class searchBlock
-        {
-            public string Path { get; set; }
-            public List<searchPathBlock> Paths { get; set; }
-            public Dictionary<string, List<string>> Headers { get; set; }
-            public List<filterBlock> Keywordsfilters { get; set; }
-            public Dictionary<string, string> Inputs { get; set; }
-            public List<errorBlock> Error { get; set; }
-            public rowsBlock Rows { get; set; }
-            public KeyValuePairList Fields { get; set; }
-        }
-
-        public class rowsBlock : selectorBlock
-        {
-            public int After { get; set; }
-            //public string Remove { get; set; } // already inherited
-            public selectorBlock Dateheaders { get; set; }
-        }
-
-        public class searchPathBlock : requestBlock
-        {
-            public List<string> Categories { get; set; }
-            public bool Inheritinputs { get; set; } = true;
-        }
-
-        public class requestBlock
-        {
-            public string Path { get; set; }
-            public string Method { get; set; }
-            public Dictionary<string, string> Inputs { get; set; }
-        }
-
-        public class downloadBlock
-        {
-            public string Selector { get; set; }
-            public string Method { get; set; }
-            public requestBlock Before { get; set; }
-        }
-
         protected readonly string[] OptionalFileds = new string[] { "imdb", "rageid", "tvdbid", "banner" };
 
-        public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
-            : base(manager: i,
+        public CardigannIndexer(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps, IndexerDefinition Definition)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps)
         {
-        }
-
-        public CardigannIndexer(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps, string DefinitionString)
-            : base(manager: i,
-                   client: wc,
-                   logger: l,
-                   p: ps)
-        {
-            Init(DefinitionString);
-        }
-
-        protected void Init(string DefinitionString)
-        {
-            this.DefinitionString = DefinitionString;
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(new CamelCaseNamingConvention())
-                .IgnoreUnmatchedProperties()
-                .Build();
-            Definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
+            this.Definition = Definition;
 
             // Add default data if necessary
             if (Definition.Settings == null)
-            { 
+            {
                 Definition.Settings = new List<settingsField>();
                 Definition.Settings.Add(new settingsField { Name = "username", Label = "Username", Type = "text" });
                 Definition.Settings.Add(new settingsField { Name = "password", Label = "Password", Type = "password" });
@@ -310,11 +98,11 @@ namespace Jackett.Indexers
                     switch (Setting.Type)
                     {
                         case "checkbox":
-                            item = new BoolItem {Value = false};
+                            item = new BoolItem { Value = false };
 
                             if (Setting.Default != null && Setting.Default == "true")
                             {
-                                ((BoolItem) item).Value = true;
+                                ((BoolItem)item).Value = true;
                             }
                             break;
                         case "password":
@@ -337,13 +125,13 @@ namespace Jackett.Indexers
                 {
                     item = new StringItem { Value = Setting.Default }; ;
                 }
-                
+
                 item.Name = Setting.Label;
                 configData.AddDynamic(Setting.Name, item);
             }
 
             if (Definition.Caps.Categories != null)
-            { 
+            {
                 foreach (var Category in Definition.Caps.Categories)
                 {
                     var cat = TorznabCatType.GetCatByName(Category.Value);
@@ -406,10 +194,10 @@ namespace Jackett.Indexers
                     value = ((SelectItem)item).Value;
                 }
                 else
-                { 
+                {
                     value = ((StringItem)item).Value;
                 }
-                variables[".Config."+Setting.Name] = value;
+                variables[".Config." + Setting.Name] = value;
             }
             return variables;
         }
@@ -547,7 +335,7 @@ namespace Jackett.Indexers
             }
             return true; // no error
         }
-        
+
         protected async Task<bool> DoLogin()
         {
             var Login = Definition.Login;
@@ -581,7 +369,7 @@ namespace Jackett.Indexers
                 var CaptchaConfigItem = (RecaptchaItem)configData.GetDynamic("Captcha");
 
                 if (CaptchaConfigItem != null)
-                { 
+                {
                     if (!string.IsNullOrWhiteSpace(CaptchaConfigItem.Cookie))
                     {
                         // for remote users just set the cookie and return
@@ -594,7 +382,7 @@ namespace Jackett.Indexers
                     {
                         var CloudFlareQueryCollection = new NameValueCollection();
                         CloudFlareQueryCollection["id"] = CloudFlareCaptchaChallenge.GetAttribute("data-ray");
-                    
+
                         CloudFlareQueryCollection["g-recaptcha-response"] = CaptchaConfigItem.Value;
                         var ClearanceUrl = resolvePath("/cdn-cgi/l/chk_captcha?" + CloudFlareQueryCollection.GetQueryString());
 
@@ -660,13 +448,13 @@ namespace Jackett.Indexers
 
                     pairs[name] = value;
                 }
-   
+
                 foreach (var Input in Definition.Login.Inputs)
                 {
                     var value = applyGoTemplateText(Input.Value);
                     var input = Input.Key;
                     if (Login.Selectors)
-                    { 
+                    {
                         var inputElement = landingResultDocument.QuerySelector(Input.Key);
                         if (inputElement == null)
                             throw new ExceptionWithConfigData(string.Format("Login failed: No input found using selector {0}", Input.Key), configData);
@@ -716,7 +504,7 @@ namespace Jackett.Indexers
 
                 // automatically solve simpleCaptchas, if used
                 var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
-                if(simpleCaptchaPresent != null)
+                if (simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
                     var simpleCaptchaResult = await RequestStringWithCookies(captchaUrl.ToString(), null, LoginUrl);
@@ -736,7 +524,7 @@ namespace Jackett.Indexers
                         {
                             var input = Captcha.Input;
                             if (Login.Selectors)
-                            { 
+                            {
                                 var inputElement = landingResultDocument.QuerySelector(Captcha.Input);
                                 if (inputElement == null)
                                     throw new ExceptionWithConfigData(string.Format("Login failed: No captcha input found using {0}", Captcha.Input), configData);
@@ -771,9 +559,11 @@ namespace Jackett.Indexers
                     bodyParts.Add("--" + boundary + "--");
 
                     headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
-                    var body = string.Join("\r\n",  bodyParts);
+                    var body = string.Join("\r\n", bodyParts);
                     loginResult = await PostDataWithCookies(submitUrl.ToString(), pairs, configData.CookieHeader.Value, SiteLink, headers, body);
-                } else {
+                }
+                else
+                {
                     loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, LoginUrl, true);
                 }
 
@@ -903,7 +693,8 @@ namespace Jackett.Indexers
                 if (Captcha.Type == "image")
                 {
                     var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
-                    if (captchaElement != null) {
+                    if (captchaElement != null)
+                    {
                         hasCaptcha = true;
 
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
@@ -954,7 +745,7 @@ namespace Jackett.Indexers
             if (Filters == null)
                 return Data;
 
-            foreach(filterBlock Filter in Filters)
+            foreach (filterBlock Filter in Filters)
             {
                 switch (Filter.Name)
                 {
@@ -974,7 +765,7 @@ namespace Jackett.Indexers
                         {
                             logger.Debug(ex.Message);
                         }
-                    break;
+                        break;
                     case "regexp":
                         var pattern = (string)Filter.Args;
                         var Regexp = new Regex(pattern);
@@ -987,7 +778,7 @@ namespace Jackett.Indexers
                         regexpreplace_replacement = applyGoTemplateText(regexpreplace_replacement, variables);
                         Regex regexpreplace_regex = new Regex(regexpreplace_pattern);
                         Data = regexpreplace_regex.Replace(Data, regexpreplace_replacement);
-                        break;                        
+                        break;
                     case "split":
                         var sep = (string)Filter.Args[0];
                         var pos = (string)Filter.Args[1];
@@ -1097,7 +888,7 @@ namespace Jackett.Indexers
 
             if (Selector.Remove != null)
             {
-                foreach(var i in selection.QuerySelectorAll(Selector.Remove))
+                foreach (var i in selection.QuerySelectorAll(Selector.Remove))
                 {
                     i.Remove();
                 }
@@ -1105,7 +896,7 @@ namespace Jackett.Indexers
 
             if (Selector.Case != null)
             {
-                foreach(var Case in Selector.Case)
+                foreach (var Case in Selector.Case)
                 {
                     if (selection.Matches(Case.Key) || QuerySelector(selection, Case.Key) != null)
                     {
@@ -1113,7 +904,7 @@ namespace Jackett.Indexers
                         break;
                     }
                 }
-                if(value == null)
+                if (value == null)
                     throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.ToHtmlPretty()));
             }
             else if (Selector.Attribute != null)
@@ -1217,7 +1008,7 @@ namespace Jackett.Indexers
                 InputsList.Add(SearchPath.Inputs);
 
                 foreach (var Inputs in InputsList)
-                { 
+                {
                     if (Inputs != null)
                     {
                         foreach (var Input in Inputs)
@@ -1467,7 +1258,8 @@ namespace Jackett.Indexers
                                             value = release.TVDBId.ToString();
                                             break;
                                         case "banner":
-                                            if(!string.IsNullOrWhiteSpace(value)) { 
+                                            if (!string.IsNullOrWhiteSpace(value))
+                                            {
                                                 var bannerurl = resolvePath(value, searchUrlUri);
                                                 release.BannerUrl = bannerurl;
                                             }
@@ -1531,7 +1323,7 @@ namespace Jackett.Indexers
                                 var PrevRow = Row.PreviousElementSibling;
                                 string value = null;
                                 if (PrevRow == null) // continue with parent
-                                { 
+                                {
                                     var Parent = Row.ParentElement;
                                     if (Parent != null)
                                         PrevRow = Parent.PreviousElementSibling;
@@ -1557,7 +1349,7 @@ namespace Jackett.Indexers
                                             PrevRow = Parent.PreviousElementSibling;
                                     }
                                 }
-                            
+
                                 if (value == null && DateHeaders.Optional == false)
                                     throw new Exception(string.Format("No date header row found for {0}", release.ToString()));
                                 if (value != null)

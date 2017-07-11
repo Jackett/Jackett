@@ -18,7 +18,7 @@ using Jackett.Utils.Clients;
 
 namespace Jackett.Indexers
 {
-    class EliteTracker : BaseIndexer
+    class EliteTracker : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -29,11 +29,11 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public EliteTracker(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public EliteTracker(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Elite-Tracker",
                 description: "French Torrent Tracker",
                 link: "https://elite-tracker.net/",
-                manager: indexerManager,
+                configService: configService,
                 logger: logger,
                 p: protectionService,
                 client: webClient,
