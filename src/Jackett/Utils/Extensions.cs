@@ -51,4 +51,17 @@ namespace Jackett.Utils
             return string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
         }
     }
+
+    public static class CollectionExtension
+    {
+        public static bool IsEmpty<T>(this ICollection<T> obj)
+        {
+            return obj.Count == 0;
+        }
+
+        public static bool IsEmptyOrNull<T>(this ICollection<T> obj)
+        {
+            return obj == null || obj.IsEmpty();
+        }
+    }
 }

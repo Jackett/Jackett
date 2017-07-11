@@ -15,7 +15,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class x264 : BaseIndexer
+    public class x264 : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
@@ -27,12 +27,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public x264(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public x264(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "x264",
                 description: "A movie/TV tracker",
                 link: "https://x264.me/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

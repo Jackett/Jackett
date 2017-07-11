@@ -15,7 +15,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class ShowRSS : BaseIndexer
+    public class ShowRSS : BaseWebIndexer
     {
         private string SearchAllUrl { get { return SiteLink + "other/all.rss"; } }
 
@@ -25,12 +25,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ShowRSS(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public ShowRSS(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                 link: "http://showrss.info/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

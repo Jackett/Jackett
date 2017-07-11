@@ -8,11 +8,11 @@ namespace Jackett.Indexers
 {
     public class HDForever : GazelleTracker
     {
-        public HDForever(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public HDForever(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "HD-Forever",
                 desc: null,
                 link: "https://hdf.world/",
-                indexerManager: indexerManager,
+                configService: configService,
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient

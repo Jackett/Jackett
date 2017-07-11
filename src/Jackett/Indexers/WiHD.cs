@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     /// <summary>
     /// Provider for WiHD Private French Tracker
     /// </summary>
-    public class WiHD : BaseIndexer
+    public class WiHD : BaseCachingWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string LoginCheckUrl { get { return SiteLink + "login_check"; } }
@@ -40,13 +40,13 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public WiHD(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
+        public WiHD(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(
                 name: "WiHD",
                 description: "Your World in High Definition",
                 link: "http://world-in-hd.net/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
@@ -110,7 +110,8 @@ namespace Jackett.Indexers
             // emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
 
             // If we want to simulate a browser
-            if (ConfigData.Browser.Value) {
+            if (ConfigData.Browser.Value)
+            {
 
                 // Clean headers
                 emulatedBrowserHeaders.Clear();
@@ -150,7 +151,8 @@ namespace Jackett.Indexers
             };
 
             // Do the login
-            var request = new Utils.Clients.WebRequest(){
+            var request = new Utils.Clients.WebRequest()
+            {
                 Cookies = loginPage.Cookies,
                 PostData = pairs,
                 Referer = LoginUrl,
@@ -165,7 +167,7 @@ namespace Jackett.Indexers
             var response = await RequestLoginAndFollowRedirect(LoginCheckUrl, pairs, loginPage.Cookies, true, null, null);
 
             // Test if we are logged in
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout"), () => 
+            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/logout"), () =>
             {
                 // Oops, unable to login
                 output("-> Login failed", "error");
@@ -236,7 +238,8 @@ namespace Jackett.Indexers
                     // Calculate numbers of pages available for this search query (Based on number results and number of torrents on first page)
                     pageLinkCount = (int)Math.Ceiling((double)nbResults / firstPageRows.Length);
                 }
-                else {
+                else
+                {
                     // Check if we have a minimum of one result
                     if (firstPageRows.Length >= 1)
                     {
@@ -416,7 +419,7 @@ namespace Jackett.Indexers
             foreach (string category in categoriesList)
             {
                 // If last, build !
-                if(categoriesList.Last() == category)
+                if (categoriesList.Last() == category)
                 {
                     // Adding previous categories to URL with latest category
                     parameters.Add(Uri.EscapeDataString("subcat[]"), category + categories);
@@ -557,7 +560,8 @@ namespace Jackett.Indexers
                 .Select(f => new System.IO.FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
-                .ForEach(f => {
+                .ForEach(f =>
+                {
                     output("Deleting cached file << " + f.Name + " >> ... done.");
                     f.Delete();
                     i++;
@@ -568,7 +572,8 @@ namespace Jackett.Indexers
                 {
                     output("-> Deleted " + i + " cached files during cleaning.");
                 }
-                else {
+                else
+                {
                     output("-> Nothing deleted during cleaning.");
                 }
             }
@@ -580,7 +585,7 @@ namespace Jackett.Indexers
         private void latencyNow()
         {
             // Need latency ?
-            if(Latency)
+            if (Latency)
             {
                 // Generate a random value in our range
                 var random = new Random(DateTime.Now.Millisecond);
@@ -620,10 +625,10 @@ namespace Jackett.Indexers
         private DateTime agoToDate(IList<string> clockList)
         {
             DateTime release = DateTime.Now;
-            foreach(var ago in clockList)
+            foreach (var ago in clockList)
             {
                 // Check for years
-                if(ago.Contains("Années") || ago.Contains("Année"))
+                if (ago.Contains("Années") || ago.Contains("Année"))
                 {
                     // Number of years to remove
                     int years = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
@@ -737,7 +742,7 @@ namespace Jackett.Indexers
             if (dictionary.ContainsKey(media))
             {
                 // Due to a bug on tracker side, check for a specific id/name as image is same for TV/Anime BR 3D
-                if(media == "565af82d1fd35761568b4592" && name == "Animations - Bluray 3D")
+                if (media == "565af82d1fd35761568b4592" && name == "Animations - Bluray 3D")
                 {
                     // If it's an Anime BR 3D
                     return "565af82d1fd35761568b45a6";
@@ -763,7 +768,7 @@ namespace Jackett.Indexers
         private void output(string message, string level = "debug")
         {
             // Check if we are in dev mode
-            if(DevMode)
+            if (DevMode)
             {
                 // Output message to console
                 Console.WriteLine(message);
@@ -777,7 +782,7 @@ namespace Jackett.Indexers
                         goto case "debug";
                     case "debug":
                         // Only if Debug Level Enabled on Jackett
-                        if(Engine.Logger.IsDebugEnabled)
+                        if (Engine.Logger.IsDebugEnabled)
                         {
                             logger.Debug(message);
                         }

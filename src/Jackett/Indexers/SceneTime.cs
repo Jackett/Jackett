@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public class SceneTime : BaseIndexer
+    public class SceneTime : BaseWebIndexer
     {
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -28,12 +28,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SceneTime(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public SceneTime(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "SceneTime",
                 description: "Always on time",
                 link: "https://www.scenetime.com/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

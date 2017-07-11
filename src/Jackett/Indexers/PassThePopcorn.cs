@@ -16,7 +16,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class PassThePopcorn : BaseIndexer
+    public class PassThePopcorn : BaseWebIndexer
     {
         private string LoginUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
         private string indexUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public PassThePopcorn(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
+        public PassThePopcorn(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "PassThePopcorn",
                 description: "PassThePopcorn",
                 link: "https://passthepopcorn.me/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

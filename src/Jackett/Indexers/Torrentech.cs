@@ -18,7 +18,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class Torrentech : BaseIndexer
+    public class Torrentech : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "index.php?act=Login&CODE=01&CookieDate=1"; } }
         string IndexUrl { get { return SiteLink + "index.php"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Torrentech(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public Torrentech(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Torrentech",
                    description: null,
                    link: "https://www.torrentech.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public class HouseOfTorrents : BaseIndexer
+    public class HouseOfTorrents : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public HouseOfTorrents(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public HouseOfTorrents(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "House-of-Torrents",
                 description: "A general tracker",
                 link: "https://houseoftorrents.club/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

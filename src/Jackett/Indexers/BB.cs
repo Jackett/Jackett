@@ -20,7 +20,7 @@ namespace Jackett.Indexers
 {
     // To comply with the rules for this tracker, only the acronym is used and no publicly displayed URLs to the site. 
 
-    public class BB : BaseIndexer
+    public class BB : BaseWebIndexer
     {
         private string BaseUrl { get { return StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="); } }
         private Uri BaseUri { get { return new Uri(BaseUrl); } }
@@ -33,12 +33,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BB(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public BB(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "bB",
                 description: "bB",
                 link: "https://baconbits.org/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

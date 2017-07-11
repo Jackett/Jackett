@@ -17,7 +17,7 @@ using System.Web;
 
 namespace Jackett.Indexers.Abstract
 {
-    public abstract class GazelleTracker : BaseIndexer
+    public abstract class GazelleTracker : BaseWebIndexer
     {
         protected string LoginUrl { get { return SiteLink + "login.php"; } }
         protected string APIUrl { get { return SiteLink + "ajax.php"; } }
@@ -30,12 +30,12 @@ namespace Jackett.Indexers.Abstract
             set { base.configData = value; }
         }
 
-        public GazelleTracker(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
+        public GazelleTracker(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
             : base(name: name,
                 description: desc,
                 link: link,
                 caps: new TorznabCapabilities(),
-                manager: indexerManager,
+                configService: configService,
                 client: webClient,
                 logger: logger,
                 p: protectionService,

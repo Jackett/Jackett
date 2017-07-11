@@ -19,7 +19,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class TorrentDay : BaseIndexer
+    public class TorrentDay : BaseWebIndexer
     {
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
@@ -44,12 +44,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentDay(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public TorrentDay(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay",
                 link: "https://torrentday.it/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

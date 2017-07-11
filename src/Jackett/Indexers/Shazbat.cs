@@ -22,7 +22,7 @@ using System.Xml.XPath;
 
 namespace Jackett.Indexers
 {
-    public class Shazbat : BaseIndexer
+    public class Shazbat : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login"; } }
         private string SearchUrl { get { return SiteLink + "search"; } }
@@ -36,14 +36,14 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Shazbat(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
+        public Shazbat(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "Shazbat",
                 description: "Modern indexer",
                 link: "https://www.shazbat.tv/",
                 caps: new TorznabCapabilities(TorznabCatType.TV,
                                               TorznabCatType.TVHD,
                                               TorznabCatType.TVSD),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

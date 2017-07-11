@@ -18,7 +18,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class ImmortalSeed : BaseIndexer
+    public class ImmortalSeed : BaseWebIndexer
     {
         private string BrowsePage { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -30,12 +30,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ImmortalSeed(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public ImmortalSeed(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "ImmortalSeed",
                 description: "ImmortalSeed",
                 link: "http://immortalseed.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

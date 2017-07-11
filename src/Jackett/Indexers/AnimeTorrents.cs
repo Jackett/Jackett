@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class AnimeTorrents : BaseIndexer
+    public class AnimeTorrents : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "ajax/torrents_data.php"; } }
@@ -32,12 +32,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public AnimeTorrents(IIndexerManagerService i, HttpWebClient c, Logger l, IProtectionService ps)
+        public AnimeTorrents(IIndexerConfigurationService configService, HttpWebClient c, Logger l, IProtectionService ps)
             : base(name: "AnimeTorrents",
                 description: "Definitive source for anime and manga",
                 link: "https://animetorrents.me/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: c, // Forced HTTP client for custom headers
                 logger: l,
                 p: ps,

@@ -22,7 +22,7 @@ using System.Web;
 
 namespace Jackett.Indexers
 {
-    public class AnimeBytes : BaseIndexer
+    public class AnimeBytes : BaseCachingWebIndexer
     {
         enum SearchType
         {
@@ -34,7 +34,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         private string MusicSearchUrl { get { return SiteLink + "torrents2.php?"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
-        public bool InsertSeason { get { return configData.InsertSeason!=null && configData.InsertSeason.Value; } }
+        public bool InsertSeason { get { return configData.InsertSeason != null && configData.InsertSeason.Value; } }
 
         new ConfigurationDataAnimeBytes configData
         {
@@ -42,11 +42,11 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public AnimeBytes(IIndexerManagerService i, IWebClient client, Logger l, IProtectionService ps)
+        public AnimeBytes(IIndexerConfigurationService configService, IWebClient client, Logger l, IProtectionService ps)
             : base(name: "AnimeBytes",
                 link: "https://animebytes.tv/",
                 description: "Powered by Tentacles",
-                manager: i,
+                configService: configService,
                 client: client,
                 caps: new TorznabCapabilities(TorznabCatType.TVAnime,
                                               TorznabCatType.Movies,
@@ -67,7 +67,7 @@ namespace Jackett.Indexers
         }
 
 
-        public override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
+        protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
         {
             // Prevent filtering
             return input;
@@ -128,21 +128,6 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        // Override to load legacy config format
-        public override void LoadFromSavedConfiguration(JToken jsonConfig)
-        {
-            if (jsonConfig is JObject)
-            {
-                configData.CookieHeader.Value = jsonConfig.Value<string>("cookies");
-                configData.IncludeRaw.Value = jsonConfig.Value<bool>("raws");
-                IsConfigured = true;
-                SaveConfig();
-                return;
-            }
-
-            base.LoadFromSavedConfiguration(jsonConfig);
-        }
-
         private string StripEpisodeNumber(string term)
         {
             // Tracer does not support searching with episode number so strip it if we have one
@@ -155,7 +140,7 @@ namespace Jackett.Indexers
         {
             // The result list
             var releases = new List<ReleaseInfo>();
-            
+
             if (ContainsMusicCategories(query.Categories))
             {
                 foreach (var result in await GetResults(SearchType.Audio, query.SanitizedSearchTerm))
@@ -210,7 +195,7 @@ namespace Jackett.Indexers
                 if (cachedResult != null)
                     return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
             }
-            
+
             // Get the content from the tracker
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
             if (response.IsRedirect)
@@ -302,7 +287,7 @@ namespace Jackett.Indexers
                                 releaseInfo = releaseInfo.Replace("Season ", "S");
                                 releaseInfo = releaseInfo.Trim();
                                 int test = 0;
-                                if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length<=3)
+                                if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length <= 3)
                                 {
                                     releaseInfo = "E0" + releaseInfo;
                                 }
