@@ -19,7 +19,7 @@ using Jackett.Utils;
 
 namespace Jackett.Indexers
 {
-    public class MoreThanTV : BaseIndexer
+    public class MoreThanTV : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax.php?action=browse&searchstr=";
@@ -28,13 +28,13 @@ namespace Jackett.Indexers
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin) configData;
 
-        public MoreThanTV(IIndexerManagerService i, IWebClient c, Logger l, IProtectionService ps)
+        public MoreThanTV(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "MoreThanTV",
                 description: "ROMANIAN Private Torrent Tracker for TV / MOVIES, and the internal tracker for the release group DRACULA.",
                 link: "https://www.morethan.tv/",
                 caps: new TorznabCapabilities(TorznabCatType.TV,
                                               TorznabCatType.Movies),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

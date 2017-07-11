@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace Jackett.Indexers
 {
-    public class Andraste : BaseIndexer
+    public class Andraste : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -27,12 +27,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Andraste(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public Andraste(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Andraste",
                    description: "A German general tracker.",
                    link: "https://andraste.io/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

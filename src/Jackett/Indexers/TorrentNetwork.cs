@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class TorrentNetwork : BaseIndexer
+    public class TorrentNetwork : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -26,12 +26,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentNetwork(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public TorrentNetwork(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Torrent Network",
                    description: "A German general tracker.",
                    link: "https://tntracker.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

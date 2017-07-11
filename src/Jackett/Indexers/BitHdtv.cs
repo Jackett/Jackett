@@ -19,7 +19,7 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class BitHdtv : BaseIndexer
+    public class BitHdtv : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string TakeLoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -32,12 +32,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BitHdtv(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public BitHdtv(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "BIT-HDTV",
                 description: "Home of high definition invites",
                 link: "https://www.bit-hdtv.com/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

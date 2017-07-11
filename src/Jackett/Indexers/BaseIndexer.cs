@@ -10,7 +10,6 @@ using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using AutoMapper;
-using System.Threading;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
 
@@ -18,25 +17,26 @@ namespace Jackett.Indexers
 {
     public abstract class BaseIndexer : IIndexer
     {
+        public static string GetIndexerID(Type type)
+        {
+            return type.Name.ToLowerInvariant().StripNonAlphaNumeric();
+        }
+
         public string SiteLink { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
         public string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }
-        public Encoding Encoding { get; protected set; }
         public string Type { get; protected set; }
-        public virtual string ID { get { return GetIndexerID (GetType ()); } }
+        public virtual string ID { get { return GetIndexerID(GetType()); } }
 
-        public bool IsConfigured { get; protected set; }
-        public TorznabCapabilities TorznabCaps { get; protected set; }
+        public virtual bool IsConfigured { get; protected set; }
         protected Logger logger;
-        protected IIndexerManagerService indexerService;
-        protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
-        protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
-        protected IWebClient webclient;
+        protected IIndexerConfigurationService configurationService;
         protected IProtectionService protectionService;
-        protected readonly string downloadUrlBase = "";
+
+        protected ConfigurationData configData;
 
         protected string CookieHeader
         {
@@ -56,14 +56,15 @@ namespace Jackett.Indexers
             }
         }
 
-        protected ConfigurationData configData;
-
-        private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
+        public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
         // standard constructor used by most indexers
-        public BaseIndexer(string name, string link, string description, IIndexerManagerService manager, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
-            : this(manager, client, logger, p)
+        public BaseIndexer(string name, string link, string description, IIndexerConfigurationService configService, Logger logger, ConfigurationData configData, IProtectionService p)
         {
+            this.logger = logger;
+            configurationService = configService;
+            protectionService = p;
+
             if (!link.EndsWith("/", StringComparison.Ordinal))
                 throw new Exception("Site link must end with a slash.");
 
@@ -71,111 +72,9 @@ namespace Jackett.Indexers
             DisplayDescription = description;
             SiteLink = link;
             DefaultSiteLink = link;
-            this.downloadUrlBase = downloadBase;
             this.configData = configData;
-            LoadValuesFromJson(null);
-
-            if (caps == null)
-                caps = TorznabUtil.CreateDefaultTorznabTVCaps();
-            TorznabCaps = caps;
-
-        }
-
-        // minimal constructor used by e.g. cardigann generic indexer
-        public BaseIndexer(IIndexerManagerService manager, IWebClient client, Logger logger, IProtectionService p)
-        {
-            this.logger = logger;
-            indexerService = manager;
-            webclient = client;
-            protectionService = p;
-        }
-
-        public IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases)
-        {
-            if (string.IsNullOrEmpty(downloadUrlBase))
-                return releases;
-            foreach (var release in releases)
-            {
-                if (release.Link.ToString().StartsWith(downloadUrlBase, StringComparison.Ordinal))
-                {
-                    release.Link = new Uri(release.Link.ToString().Substring(downloadUrlBase.Length), UriKind.Relative);
-                }
-            }
-
-            return releases;
-        }
-
-        public virtual Uri UncleanLink(Uri link)
-        {
-            if (string.IsNullOrWhiteSpace(downloadUrlBase))
-            {
-                return link;
-            }
-
-            if (link.ToString().StartsWith(downloadUrlBase, StringComparison.Ordinal))
-            {
-                return link;
-            }
-
-            return new Uri(downloadUrlBase + link.ToString(), UriKind.RelativeOrAbsolute);
-        }
-
-        protected ICollection<int> MapTrackerCatToNewznab(string input)
-        {
-            var cats = new List<int>();
-            if (null != input)
-            {
-                var mapping = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
-                if (mapping != null)
-                {
-                    cats.Add(mapping.NewzNabCategory);
-                }
-
-                // 1:1 category mapping
-                try
-                {
-                    var trackerCategoryInt = int.Parse(input);
-                    cats.Add(trackerCategoryInt + 100000);
-                }
-                catch (FormatException)
-                {
-                    // input is not an integer, continue
-                }
-            }
-            return cats;
-        }
-
-        protected ICollection<int> MapTrackerCatDescToNewznab(string input)
-        {
-            var cats = new List<int>();
-            if (null != input)
-            {
-                var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc != null && m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
-                if (mapping != null)
-                {
-                    cats.Add(mapping.NewzNabCategory);
-
-                    if (mapping.TrackerCategory != null)
-                    {
-                        // 1:1 category mapping
-                        try
-                        {
-                            var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
-                            cats.Add(trackerCategoryInt + 100000);
-                        }
-                        catch (FormatException)
-                        {
-                            // mapping.TrackerCategory is not an integer, continue
-                        }
-                    }
-                }
-            }
-            return cats;
-        }
-
-        public static string GetIndexerID(Type type)
-        {
-            return StringUtil.StripNonAlphaNumeric(type.Name.ToLowerInvariant());
+            if (configData != null)
+                LoadValuesFromJson(null);
         }
 
         public virtual Task<ConfigurationData> GetConfigurationForSetup()
@@ -191,108 +90,8 @@ namespace Jackett.Indexers
 
         public virtual void SaveConfig()
         {
-            indexerService.SaveConfig(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
+            configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
         }
-
-        protected void OnParseError(string results, Exception ex)
-        {
-            var fileName = string.Format("Error on {0} for {1}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"), DisplayName);
-            var spacing = string.Join("", Enumerable.Repeat(Environment.NewLine, 5));
-            var fileContents = string.Format("{0}{1}{2}", ex, spacing, results);
-            logger.Error(fileName + fileContents);
-            throw ex;
-        }
-
-        protected void CleanCache()
-        {
-            foreach (var expired in cache.Where(i => DateTime.Now - i.Created > cacheTime).ToList())
-            {
-                cache.Remove(expired);
-            }
-        }
-
-        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
-        {
-            var byteResult = new WebClientByteResult();
-            // Map to byte
-            Mapper.Map(response, byteResult);
-            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
-            // Map to string
-            Mapper.Map(byteResult, response);
-        }
-
-        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
-        {
-            // Follow up  to 5 redirects
-            for (int i = 0; i < 5; i++)
-            {
-                if (!response.IsRedirect)
-                    break;
-                await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
-                if (accumulateCookies)
-                {
-                    CookieHeader = ResolveCookies((CookieHeader != null && CookieHeader != ""? CookieHeader + " " : "") + (overrideCookies != null && overrideCookies != "" ? overrideCookies + " " : "") + response.Cookies);
-                    overrideCookies = response.Cookies = CookieHeader;
-                }
-                if (overrideCookies != null && response.Cookies == null)
-                {
-                    response.Cookies = overrideCookies;
-                }
-            }
-        }
-
-        private String ResolveCookies(String incomingCookies = "")
-        {
-            var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
-            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
-            Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
-            var matches = expression.Match(redirRequestCookies);
-            while (matches.Success)
-            {
-                if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
-                matches = matches.NextMatch();
-            }
-            return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
-            
-        }
-
-        // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
-        protected void UpdateCookieHeader(string newCookies, string cookieOverride = null)
-        {
-            string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
-            if (CookieHeader != newCookieHeader)
-            {
-                logger.Debug(string.Format("updating Cookies {0} => {1}", CookieHeader, newCookieHeader));
-                CookieHeader = newCookieHeader;
-                if (IsConfigured)
-                    SaveConfig();
-            }
-        }
-
-        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
-        {
-            if (incomingResponse.IsRedirect)
-            {
-                var redirRequestCookies = "";
-                if (accumulateCookies)
-                {
-                    redirRequestCookies = ResolveCookies((CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null ? overrideCookies : ""));
-                } else
-                {
-                    redirRequestCookies = (overrideCookies != null ? overrideCookies : "");
-                }
-                // Do redirect
-                var redirectedResponse = await webclient.GetBytes(new WebRequest()
-                {
-                    Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
-                    Referer = referrer,
-                    Cookies = redirRequestCookies,
-                    Encoding = Encoding
-                });
-                Mapper.Map(redirectedResponse, incomingResponse);
-            }
-        }
-
 
         protected void LoadLegacyCookieConfig(JToken jsonConfig)
         {
@@ -346,7 +145,7 @@ namespace Jackett.Indexers
             SiteLink = configData.SiteLink.Value;
         }
 
-        public virtual void LoadFromSavedConfiguration(JToken jsonConfig)
+        public void LoadFromSavedConfiguration(JToken jsonConfig)
         {
             if (jsonConfig is JArray)
             {
@@ -362,8 +161,100 @@ namespace Jackett.Indexers
             }
         }
 
-        public async virtual Task<byte[]> Download(Uri link) {
-            return await Download(link, RequestType.GET);
+        protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
+        {
+            if (isLoggedin)
+            {
+                CookieHeader = cookies;
+                IsConfigured = true;
+                SaveConfig();
+            }
+            else
+            {
+                await onError();
+            }
+        }
+
+        protected virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
+        {
+            if (query.Categories.Length == 0)
+                return results;
+
+            var filteredResults = results.Where(result =>
+            {
+                return result.Category.IsEmptyOrNull() || query.Categories.Intersect(result.Category).Any() || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category);
+            });
+
+            return filteredResults;
+        }
+
+        public bool CanHandleQuery(TorznabQuery query)
+        {
+            if (query == null)
+                return false;
+            var caps = TorznabCaps;
+            if (!caps.SearchAvailable && query.IsSearch)
+                return false;
+            if (!caps.TVSearchAvailable && query.IsTVSearch)
+                return false;
+            if (!caps.MovieSearchAvailable && query.IsMovieSearch)
+                return false;
+            if (!caps.SupportsTVRageSearch && query.IsTVRageSearch)
+                return false;
+            if (!caps.SupportsImdbSearch && query.IsImdbQuery)
+                return false;
+
+            if (query.HasSpecifiedCategories)
+                if (!caps.SupportsCategories(query.Categories))
+                    return false;
+            return true;
+        }
+
+        public void Unconfigure()
+        {
+            IsConfigured = false;
+        }
+
+        public abstract Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);
+
+        public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        {
+            var results = await PerformQuery(query);
+            results = FilterResults(query, results);
+            foreach (var result in results)
+            {
+                result.Origin = this;
+            }
+
+            return results;
+        }
+        protected abstract Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+    }
+
+    public abstract class BaseWebIndexer : BaseIndexer, IWebIndexer
+    {
+        protected BaseWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
+            : base(name, link, description, configService, logger, configData, p)
+        {
+            this.webclient = client;
+            this.downloadUrlBase = downloadBase;
+
+            if (caps == null)
+                caps = TorznabUtil.CreateDefaultTorznabTVCaps();
+            TorznabCaps = caps;
+        }
+
+        // minimal constructor used by e.g. cardigann generic indexer
+        protected BaseWebIndexer(IIndexerConfigurationService configService, IWebClient client, Logger logger, IProtectionService p)
+            : base("", "/", "", configService, logger, null, p)
+        {
+            this.webclient = client;
+        }
+
+        public async virtual Task<byte[]> Download(Uri link)
+        {
+            var uncleanLink = UncleanLink(link);
+            return await Download(uncleanLink, RequestType.GET);
         }
 
         protected async Task<byte[]> Download(Uri link, RequestType method)
@@ -379,7 +270,7 @@ namespace Jackett.Indexers
                 logger.Error("Failed download cookies: " + this.CookieHeader);
                 if (response.Content != null)
                     logger.Error("Failed download response:\n" + Encoding.UTF8.GetString(response.Content));
-                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => "+response.RedirectingTo : ""));
+                throw new Exception($"Remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
             }
 
             return response.Content;
@@ -530,32 +421,90 @@ namespace Jackett.Indexers
             {
                 response.Cookies = ResolveCookies(firstCallCookies + (accumulateCookies ? " " + response.Cookies : ""));
             }
-            
+
             return response;
         }
 
-        protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
+        protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
-            if (isLoggedin)
+            var byteResult = new WebClientByteResult();
+            // Map to byte
+            Mapper.Map(response, byteResult);
+            await FollowIfRedirect(byteResult, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
+            // Map to string
+            Mapper.Map(byteResult, response);
+        }
+
+        protected async Task FollowIfRedirect(WebClientByteResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        {
+            // Follow up  to 5 redirects
+            for (int i = 0; i < 5; i++)
             {
-                CookieHeader = cookies;
-                IsConfigured = true;
-                SaveConfig();
-            }
-            else
-            {
-                await onError();
+                if (!response.IsRedirect)
+                    break;
+                await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
+                if (accumulateCookies)
+                {
+                    CookieHeader = ResolveCookies((CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null && overrideCookies != "" ? overrideCookies + " " : "") + response.Cookies);
+                    overrideCookies = response.Cookies = CookieHeader;
+                }
+                if (overrideCookies != null && response.Cookies == null)
+                {
+                    response.Cookies = overrideCookies;
+                }
             }
         }
 
-        public virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
+        private String ResolveCookies(String incomingCookies = "")
         {
-            foreach (var result in results)
+            var redirRequestCookies = (CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + incomingCookies;
+            System.Text.RegularExpressions.Regex expression = new System.Text.RegularExpressions.Regex(@"([^\\,;\s]+)=([^=\\,;\s]*)");
+            Dictionary<string, string> cookieDIctionary = new Dictionary<string, string>();
+            var matches = expression.Match(redirRequestCookies);
+            while (matches.Success)
             {
-                if (query.Categories.Length == 0 || result.Category == null || result.Category.Count() == 0 || query.Categories.Intersect(result.Category).Any() || TorznabCatType.QueryContainsParentCategory(query.Categories, result.Category))
+                if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
+                matches = matches.NextMatch();
+            }
+            return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+
+        }
+
+        // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
+        protected void UpdateCookieHeader(string newCookies, string cookieOverride = null)
+        {
+            string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
+            if (CookieHeader != newCookieHeader)
+            {
+                logger.Debug(string.Format("updating Cookies {0} => {1}", CookieHeader, newCookieHeader));
+                CookieHeader = newCookieHeader;
+                if (IsConfigured)
+                    SaveConfig();
+            }
+        }
+
+        private async Task DoFollowIfRedirect(WebClientByteResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        {
+            if (incomingResponse.IsRedirect)
+            {
+                var redirRequestCookies = "";
+                if (accumulateCookies)
                 {
-                    yield return result;
+                    redirRequestCookies = ResolveCookies((CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null ? overrideCookies : ""));
                 }
+                else
+                {
+                    redirRequestCookies = (overrideCookies != null ? overrideCookies : "");
+                }
+                // Do redirect
+                var redirectedResponse = await webclient.GetBytes(new WebRequest()
+                {
+                    Url = overrideRedirectUrl ?? incomingResponse.RedirectingTo,
+                    Referer = referrer,
+                    Cookies = redirRequestCookies,
+                    Encoding = Encoding
+                });
+                Mapper.Map(redirectedResponse, incomingResponse);
             }
         }
 
@@ -641,40 +590,130 @@ namespace Jackett.Indexers
             return result.Distinct().ToList();
         }
 
-        public bool CanHandleQuery(TorznabQuery query)
+        protected ICollection<int> MapTrackerCatToNewznab(string input)
         {
-            if (query == null)
-                return false;
-            var caps = TorznabCaps;
-            if (!caps.SearchAvailable && query.IsSearch)
-                return false;
-            if (!caps.TVSearchAvailable && query.IsTVSearch)
-                return false;
-            if (!caps.MovieSearchAvailable && query.IsMovieSearch)
-                return false;
-            if (!caps.SupportsTVRageSearch && query.IsTVRageSearch)
-                return false;
-            if (!caps.SupportsImdbSearch && query.IsImdbQuery)
-                return false;
+            var cats = new List<int>();
+            if (null != input)
+            {
+                var mapping = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
+                if (mapping != null)
+                {
+                    cats.Add(mapping.NewzNabCategory);
+                }
 
-            if (query.HasSpecifiedCategories)
-                if (!caps.SupportsCategories(query.Categories))
-                    return false;
-            return true;
+                // 1:1 category mapping
+                try
+                {
+                    var trackerCategoryInt = int.Parse(input);
+                    cats.Add(trackerCategoryInt + 100000);
+                }
+                catch (FormatException)
+                {
+                    // input is not an integer, continue
+                }
+            }
+            return cats;
         }
 
-        public abstract Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);
-
-        public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        protected ICollection<int> MapTrackerCatDescToNewznab(string input)
         {
-            var results = await PerformQuery(query);
-            foreach (var result in results)
+            var cats = new List<int>();
+            if (null != input)
             {
-                result.Origin = this;
+                var mapping = categoryMapping.Where(m => m.TrackerCategoryDesc != null && m.TrackerCategoryDesc.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
+                if (mapping != null)
+                {
+                    cats.Add(mapping.NewzNabCategory);
+
+                    if (mapping.TrackerCategory != null)
+                    {
+                        // 1:1 category mapping
+                        try
+                        {
+                            var trackerCategoryInt = int.Parse(mapping.TrackerCategory);
+                            cats.Add(trackerCategoryInt + 100000);
+                        }
+                        catch (FormatException)
+                        {
+                            // mapping.TrackerCategory is not an integer, continue
+                        }
+                    }
+                }
             }
+            return cats;
+        }
+
+        private IEnumerable<ReleaseInfo> CleanLinks(IEnumerable<ReleaseInfo> releases)
+        {
+            if (string.IsNullOrEmpty(downloadUrlBase))
+                return releases;
+            foreach (var release in releases)
+            {
+                if (release.Link.ToString().StartsWith(downloadUrlBase, StringComparison.Ordinal))
+                {
+                    release.Link = new Uri(release.Link.ToString().Substring(downloadUrlBase.Length), UriKind.Relative);
+                }
+            }
+
+            return releases;
+        }
+
+        public override async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        {
+            var results = await base.ResultsForQuery(query);
+            results = CleanLinks(results);
 
             return results;
         }
-        protected abstract Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+
+        protected virtual Uri UncleanLink(Uri link)
+        {
+            if (string.IsNullOrWhiteSpace(downloadUrlBase))
+            {
+                return link;
+            }
+
+            if (link.ToString().StartsWith(downloadUrlBase, StringComparison.Ordinal))
+            {
+                return link;
+            }
+
+            return new Uri(downloadUrlBase + link.ToString(), UriKind.RelativeOrAbsolute);
+        }
+
+        protected void OnParseError(string results, Exception ex)
+        {
+            var fileName = string.Format("Error on {0} for {1}.txt", DateTime.Now.ToString("yyyyMMddHHmmss"), DisplayName);
+            var spacing = string.Join("", Enumerable.Repeat(Environment.NewLine, 5));
+            var fileContents = string.Format("{0}{1}{2}", ex, spacing, results);
+            logger.Error(fileName + fileContents);
+            throw ex;
+        }
+
+        public override TorznabCapabilities TorznabCaps { get; protected set; }
+        public Encoding Encoding { get; protected set; }
+
+        private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
+        protected IWebClient webclient;
+        protected readonly string downloadUrlBase = "";
+    }
+
+    public abstract class BaseCachingWebIndexer : BaseWebIndexer
+    {
+        protected BaseCachingWebIndexer(string name, string link, string description, IIndexerConfigurationService configService, IWebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null)
+            : base(name, link, description, configService, client, logger, configData, p, caps, downloadBase)
+        {
+        }
+
+        protected void CleanCache()
+        {
+            foreach (var expired in cache.Where(i => DateTime.Now - i.Created > cacheTime).ToList())
+            {
+                cache.Remove(expired);
+            }
+        }
+
+        protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
+        protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
     }
 }

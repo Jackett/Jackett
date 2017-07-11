@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class BestFriends : BaseIndexer
+    public class BestFriends : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string TakeLoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -27,12 +27,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BestFriends(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public BestFriends(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Best Friends",
                    description: "A German general tracker.",
                    link: "http://bf.mine.nu/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

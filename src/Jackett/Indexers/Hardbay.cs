@@ -1,4 +1,4 @@
-﻿using Jackett.Models;
+﻿﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -15,7 +15,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class Hardbay : BaseIndexer
+    public class Hardbay : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
         private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
@@ -26,12 +26,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Hardbay(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public Hardbay(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "Hardbay",
                 description: null,
                 link: "https://hardbay.club/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

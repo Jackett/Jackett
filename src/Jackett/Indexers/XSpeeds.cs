@@ -19,7 +19,7 @@ using static Jackett.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Indexers
 {
-    public class XSpeeds : BaseIndexer
+    public class XSpeeds : BaseWebIndexer
     {
         string LandingUrl => SiteLink + "login.php";
         string LoginUrl => SiteLink + "takelogin.php";
@@ -35,12 +35,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public XSpeeds(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public XSpeeds(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "XSpeeds",
                 description: "XSpeeds",
                 link: "https://www.xspeeds.eu/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

@@ -16,7 +16,7 @@ using System.Globalization;
 
 namespace Jackett.Indexers
 {
-    public class PirateTheNet : BaseIndexer
+    public class PirateTheNet : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "torrentsutils.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -30,12 +30,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public PirateTheNet(IIndexerManagerService i, Logger l, IWebClient w, IProtectionService ps)
+        public PirateTheNet(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
             : base(name: "PirateTheNet",
                 description: "A movie tracker",
                 link: "http://piratethenet.org/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

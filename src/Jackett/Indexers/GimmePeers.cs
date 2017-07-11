@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -18,7 +18,7 @@ using NLog;
 namespace Jackett.Indexers
 {
     // ReSharper disable once InconsistentNaming
-    public class GimmePeers : BaseIndexer
+    public class GimmePeers : BaseWebIndexer
     {
         private string BrowseUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public GimmePeers(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public GimmePeers(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "GimmePeers",
                 description: "Formerly ILT",
                 link: "https://www.gimmepeers.com/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

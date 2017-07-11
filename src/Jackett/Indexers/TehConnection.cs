@@ -16,7 +16,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class TehConnection : BaseIndexer
+    public class TehConnection : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string indexUrl { get { return SiteLink + "index.php"; } }
@@ -28,12 +28,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TehConnection(IIndexerManagerService i, Logger l, IWebClient c, IProtectionService ps)
+        public TehConnection(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
             : base(name: "TehConnection",
                 description: "Working towards providing a well-seeded archive of all available digital forms of cinema and film in their highest possible quality",
                 link: "https://tehconnection.eu/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: c,
                 logger: l,
                 p: ps,

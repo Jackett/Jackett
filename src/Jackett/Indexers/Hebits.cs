@@ -16,7 +16,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class Hebits : BaseIndexer
+    public class Hebits : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string LoginPostUrl { get { return SiteLink + "takeloginAjax.php"; } }
@@ -28,12 +28,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Hebits(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public Hebits(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
             : base(name: "Hebits",
                 description: "The Israeli Tracker",
                 link: "https://hebits.net/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

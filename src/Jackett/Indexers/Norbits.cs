@@ -22,7 +22,7 @@ namespace Jackett.Indexers
     /// <summary>s
     /// Provider for Norbits Private Tracker
     /// </summary>
-    public class Norbits : BaseIndexer
+    public class Norbits : BaseCachingWebIndexer
     {
         private string LoginUrl => SiteLink + "login.php";
         private string LoginCheckUrl => SiteLink + "takelogin.php";
@@ -39,13 +39,13 @@ namespace Jackett.Indexers
         private CQ _fDom;
         private ConfigurationDataNorbits ConfigData => (ConfigurationDataNorbits)configData;
 
-        public Norbits(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
+        public Norbits(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(
                 name: "Norbits",
                 description: "Norbits",
                 link: "https://norbits.net/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
@@ -182,7 +182,7 @@ namespace Jackett.Indexers
                 var message = "Error during attempt !";
                 // Parse redirect header
                 var redirectTo = response.RedirectingTo;
-                
+
                 // Oops, unable to login
                 Output("-> Login failed: " + message, "error");
                 throw new ExceptionWithConfigData("Login failed: " + message, configData);
@@ -230,7 +230,7 @@ namespace Jackett.Indexers
             var searchUrl = SearchUrl;
 
             // Check login before performing a query
-           await CheckLogin();
+            await CheckLogin();
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
             if (!DevMode && !string.IsNullOrEmpty(exactSearchTerm))
@@ -285,7 +285,7 @@ namespace Jackett.Indexers
                     else
                     {
                         // Check if no result
-                        if(torrentRowList.Count == 0)
+                        if (torrentRowList.Count == 0)
                         {
                             // No results found
                             Output("\nNo result found for your query, please try another search term ...\n", "info");
@@ -314,7 +314,7 @@ namespace Jackett.Indexers
                         // Category
                         var categoryId = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
                         var categoryName = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("title");
-          
+
                         var MainCat = tRow.Find("td:eq(0) > div > a:eq(0)").Attr("href").Split('?').Last();
                         var SubCat1 = "none";
                         var SubCat2 = "none";
@@ -336,7 +336,7 @@ namespace Jackett.Indexers
                         // Seeders
                         var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
                         Output("Seeders: " + seeders);
-                    
+
                         // Leechers
                         var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(10)").Text());
                         Output("Leechers: " + leechers);
@@ -594,7 +594,8 @@ namespace Jackett.Indexers
                 .Select(f => new System.IO.FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
-                .ForEach(f => {
+                .ForEach(f =>
+                {
                     Output("Deleting cached file << " + f.Name + " >> ... done.");
                     f.Delete();
                     i++;
@@ -605,7 +606,8 @@ namespace Jackett.Indexers
                 {
                     Output("-> Deleted " + i + " cached files during cleaning.");
                 }
-                else {
+                else
+                {
                     Output("-> Nothing deleted during cleaning.");
                 }
             }

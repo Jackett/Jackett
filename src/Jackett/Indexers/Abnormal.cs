@@ -22,7 +22,7 @@ namespace Jackett.Indexers
     /// <summary>
     /// Provider for Abnormal Private French Tracker
     /// </summary>
-    public class Abnormal : BaseIndexer
+    public class Abnormal : BaseCachingWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
@@ -43,13 +43,13 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Abnormal(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
+        public Abnormal(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(
                 name: "Abnormal",
                 description: "General French Private Tracker",
                 link: "https://abnormal.ws/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
@@ -117,7 +117,8 @@ namespace Jackett.Indexers
             // emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
 
             // If we want to simulate a browser
-            if (ConfigData.Browser.Value) {
+            if (ConfigData.Browser.Value)
+            {
 
                 // Clean headers
                 emulatedBrowserHeaders.Clear();
@@ -149,7 +150,8 @@ namespace Jackett.Indexers
             };
 
             // Do the login
-            var request = new Utils.Clients.WebRequest(){
+            var request = new Utils.Clients.WebRequest()
+            {
                 PostData = pairs,
                 Referer = LoginUrl,
                 Type = RequestType.POST,
@@ -197,7 +199,7 @@ namespace Jackett.Indexers
             int pageLinkCount = 0;
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
-            if(!DevMode && !string.IsNullOrEmpty(searchTerm))
+            if (!DevMode && !string.IsNullOrEmpty(searchTerm))
             {
                 lock (cache)
                 {
@@ -230,14 +232,16 @@ namespace Jackett.Indexers
                 Boolean pagination = (fDom[".linkbox > a"].Length != 0);
 
                 // If pagination available
-                if (pagination) {
+                if (pagination)
+                {
                     // Calculate numbers of pages available for this search query (Based on number results and number of torrents on first page)
                     pageLinkCount = ParseUtil.CoerceInt(Regex.Match(fDom[".linkbox > a"].Last().Attr("href").ToString(), @"\d+").Value);
 
                     // Calculate average number of results (based on torrents rows lenght on first page)
                     nbResults = firstPageRows.Count() * pageLinkCount;
                 }
-                else {
+                else
+                {
                     // Check if we have a minimum of one result
                     if (firstPageRows.Length >= 1)
                     {
@@ -528,13 +532,13 @@ namespace Jackett.Indexers
         private void cleanCacheStorage(Boolean force = false)
         {
             // Check cleaning method
-            if(force)
+            if (force)
             {
                 // Deleting Provider Storage folder and all files recursively
                 output("\nDeleting Provider Storage folder and all files recursively ...");
-                
+
                 // Check if directory exist
-                if(System.IO.Directory.Exists(directory))
+                if (System.IO.Directory.Exists(directory))
                 {
                     // Delete storage directory of provider
                     System.IO.Directory.Delete(directory, true);
@@ -555,17 +559,20 @@ namespace Jackett.Indexers
                 .Select(f => new System.IO.FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
-                .ForEach(f => {
+                .ForEach(f =>
+                {
                     output("Deleting cached file << " + f.Name + " >> ... done.");
                     f.Delete();
                     i++;
-                    });
+                });
 
                 // Inform on what was cleaned during process
-                if(i > 0) {
+                if (i > 0)
+                {
                     output("-> Deleted " + i + " cached files during cleaning.");
                 }
-                else {
+                else
+                {
                     output("-> Nothing deleted during cleaning.");
                 }
             }
@@ -577,7 +584,7 @@ namespace Jackett.Indexers
         private void latencyNow()
         {
             // Need latency ?
-            if(Latency)
+            if (Latency)
             {
                 // Generate a random value in our range
                 var random = new Random(DateTime.Now.Millisecond);
@@ -696,7 +703,7 @@ namespace Jackett.Indexers
         private void output(string message, string level = "debug")
         {
             // Check if we are in dev mode
-            if(DevMode)
+            if (DevMode)
             {
                 // Output message to console
                 Console.WriteLine(message);

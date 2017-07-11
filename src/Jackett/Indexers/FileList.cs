@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
-    public class FileList : BaseIndexer
+    public class FileList : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -32,12 +32,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public FileList(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public FileList(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "FileList",
                 description: "The best Romanian site.",
                 link: "http://filelist.ro/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,
