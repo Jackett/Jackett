@@ -282,6 +282,7 @@ namespace Jackett.Indexers
                             release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
                             
                             release.Description = release.Description.Replace("Full HD", "1080p");
+                            release.Description = release.Description.Replace("/ HD / ", "/ 720p /");
                             release.Description = release.Description.Replace(" / HD]", " / 720p]");
                             release.Description = release.Description.Replace("4K", "2160p");
 
