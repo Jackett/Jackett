@@ -51,7 +51,7 @@ namespace Jackett.Services
         {
             logger.Info("Using HTTP Client: " + container.Resolve<IWebClient>().GetType().Name);
 
-            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().Where(p => p.ID != "cardigannindexer" && p.ID != "aggregateindexer").OrderBy(_ => _.DisplayName))
+            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
             {
                 indexers.Add(idx.ID, idx);
                 configService.Load(idx);
