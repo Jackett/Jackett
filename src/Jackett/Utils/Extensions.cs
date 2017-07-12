@@ -64,12 +64,4 @@ namespace Jackett.Utils
             return obj == null || obj.IsEmpty();
         }
     }
-
-    public static class PairExtension
-    {
-        public static KeyValuePair<Key, Value> ToPair<Key, Value>(this Value obj, Func<Value, Key> keyMaker)
-        {
-            return new KeyValuePair<Key, Value>(keyMaker(obj), obj);
-        }
-    }
 }
