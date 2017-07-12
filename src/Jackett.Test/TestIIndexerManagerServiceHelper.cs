@@ -48,12 +48,7 @@ namespace JackettTest
             throw new NotImplementedException();
         }
 
-        public void InitCardigannIndexers(string path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SortIndexers()
+        public void InitCardigannIndexers(IEnumerable<string> path)
         {
             throw new NotImplementedException();
         }
