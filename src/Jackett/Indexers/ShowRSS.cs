@@ -25,7 +25,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public ShowRSS(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public ShowRSS(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                 link: "http://showrss.info/",

@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public HouseOfTorrents(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public HouseOfTorrents(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "House-of-Torrents",
                 description: "A general tracker",
                 link: "https://houseoftorrents.club/",

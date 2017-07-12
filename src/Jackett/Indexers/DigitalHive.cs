@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public DigitalHive(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public DigitalHive(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "DigitalHive",
                 description: "DigitalHive is one of the oldest general trackers",
                 link: "https://www.digitalhive.org/",

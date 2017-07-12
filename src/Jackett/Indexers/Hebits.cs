@@ -28,7 +28,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Hebits(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public Hebits(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Hebits",
                 description: "The Israeli Tracker",
                 link: "https://hebits.net/",

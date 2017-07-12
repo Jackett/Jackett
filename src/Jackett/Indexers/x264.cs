@@ -27,7 +27,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public x264(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public x264(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "x264",
                 description: "A movie/TV tracker",
                 link: "https://x264.me/",

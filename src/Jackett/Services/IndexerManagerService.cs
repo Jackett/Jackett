@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Jackett.Indexers;
+﻿using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -25,70 +24,152 @@ namespace Jackett.Services
         IEnumerable<IIndexer> GetAllIndexers();
 
         void InitIndexers();
-        void InitCardigannIndexers(string path);
+        void InitCardigannIndexers(IEnumerable<string> path);
         void InitAggregateIndexer();
-        void SortIndexers();
     }
 
     public class IndexerManagerService : IIndexerManagerService
     {
-        private IContainer container;
-        private Logger logger;
-        private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private ICacheService cacheService;
         private IIndexerConfigurationService configService;
+        private IProtectionService protectionService;
+        private IWebClient webClient;
+
+        private Logger logger;
+
+        private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
-        public IndexerManagerService(IContainer c, IIndexerConfigurationService config, Logger l, ICacheService cache)
+        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, IWebClient webClient, Logger l, ICacheService cache)
         {
-            container = c;
             configService = config;
+            this.protectionService = protectionService;
+            this.webClient = webClient;
             logger = l;
             cacheService = cache;
         }
 
         public void InitIndexers()
         {
-            logger.Info("Using HTTP Client: " + container.Resolve<IWebClient>().GetType().Name);
+            logger.Info("Using HTTP Client: " + webClient.GetType().Name);
 
-            foreach (var idx in container.Resolve<IEnumerable<IIndexer>>().OrderBy(_ => _.DisplayName))
+            var ixs = new IIndexer[]{
+                new AlphaRatio(configService, webClient, logger, protectionService),
+                new Andraste(configService, webClient, logger, protectionService),
+                new AnimeTorrents(configService, (HttpWebClient)webClient, logger, protectionService),
+                new ArcheTorrent(configService, webClient, logger, protectionService),
+                new BB(configService, webClient, logger, protectionService),
+                new BJShare(configService, webClient, logger, protectionService),
+                new BakaBT(configService, webClient, logger, protectionService),
+                new BestFriends(configService, webClient, logger, protectionService),
+                new BeyondHD(configService, webClient, logger, protectionService),
+                new BitCityReloaded(configService, webClient, logger, protectionService),
+                new BitHdtv(configService, webClient, logger, protectionService),
+                new BitMeTV(configService, webClient, logger, protectionService),
+                new BitSoup(configService, webClient, logger, protectionService),
+                new BroadcastTheNet(configService, webClient, logger, protectionService),
+                new DanishBits(configService, webClient, logger, protectionService),
+                new Demonoid(configService, webClient, logger, protectionService),
+                new DigitalHive(configService, webClient, logger, protectionService),
+                new EliteTracker(configService, webClient, logger, protectionService),
+                new FileList(configService, webClient, logger, protectionService),
+                new FunFile(configService, webClient, logger, protectionService),
+                new Fuzer(configService, webClient, logger, protectionService),
+                new GFTracker(configService, webClient, logger, protectionService),
+                new GhostCity(configService, webClient, logger, protectionService),
+                new GimmePeers(configService, webClient, logger, protectionService),
+                new HD4Free(configService, webClient, logger, protectionService),
+                new HDSpace(configService, webClient, logger, protectionService),
+                new HDTorrents(configService, webClient, logger, protectionService),
+                new Hardbay(configService, webClient, logger, protectionService),
+                new Hebits(configService, webClient, logger, protectionService),
+                new Hounddawgs(configService, webClient, logger, protectionService),
+                new HouseOfTorrents(configService, webClient, logger, protectionService),
+                new IPTorrents(configService, webClient, logger, protectionService),
+                new ImmortalSeed(configService, webClient, logger, protectionService),
+                new MoreThanTV(configService, webClient, logger, protectionService),
+                new Myanonamouse(configService, webClient, logger, protectionService),
+                new NCore(configService, webClient, logger, protectionService),
+                new NewRealWorld(configService, webClient, logger, protectionService),
+                new PassThePopcorn(configService, webClient, logger, protectionService),
+                new PiXELHD(configService, webClient, logger, protectionService),
+                new PirateTheNet(configService, webClient, logger, protectionService),
+                new Pretome(configService, webClient, logger, protectionService),
+                new Rarbg(configService, webClient, logger, protectionService),
+                new RevolutionTT(configService, webClient, logger, protectionService),
+                new RuTracker(configService, webClient, logger, protectionService),
+                new SceneAccess(configService, webClient, logger, protectionService),
+                new SceneFZ(configService, webClient, logger, protectionService),
+                new SceneTime(configService, webClient, logger, protectionService),
+                new SevenTor(configService, webClient, logger, protectionService),
+                new Shazbat(configService, webClient, logger, protectionService),
+                new ShowRSS(configService, webClient, logger, protectionService),
+                new SpeedCD(configService, webClient, logger, protectionService),
+                new Superbits(configService, webClient, logger, protectionService),
+                new T411(configService, webClient, logger, protectionService),
+                new TVChaosUK(configService, webClient, logger, protectionService),
+                new TVVault(configService, webClient, logger, protectionService),
+                new TehConnection(configService, webClient, logger, protectionService),
+                new TorrentBytes(configService, webClient, logger, protectionService),
+                new TorrentDay(configService, webClient, logger, protectionService),
+                new TorrentHeaven(configService, webClient, logger, protectionService),
+                new TorrentLeech(configService, webClient, logger, protectionService),
+                new TorrentNetwork(configService, webClient, logger, protectionService),
+                new TorrentSyndikat(configService, webClient, logger, protectionService),
+                new Torrentech(configService, webClient, logger, protectionService),
+                new TransmitheNet(configService, webClient, logger, protectionService),
+                new Trezzor(configService, webClient, logger, protectionService),
+                new XSpeeds(configService, webClient, logger, protectionService),
+                new myAmity(configService, webClient, logger, protectionService),
+                new x264(configService, webClient, logger, protectionService)
+            };
+
+            foreach (var idx in ixs)
             {
                 indexers.Add(idx.ID, idx);
                 configService.Load(idx);
             }
         }
 
-        public void InitCardigannIndexers(string path)
+        public void InitCardigannIndexers(IEnumerable<string> path)
         {
-            logger.Info("Loading Cardigann definitions from: " + path);
+            logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
 
-            try
-            {
-                if (!Directory.Exists(path))
-                    return;
-
-                DirectoryInfo d = new DirectoryInfo(path);
-
-                foreach (var file in d.GetFiles("*.yml"))
-                {
-                    logger.Info("Loading Cardigann definition " + file.FullName);
-                    string DefinitionString = File.ReadAllText(file.FullName);
-                    var deserializer = new DeserializerBuilder()
+            var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(new CamelCaseNamingConvention())
                         .IgnoreUnmatchedProperties()
                         .Build();
+
+            try
+            {
+                var directoryInfos = path.Select(p => new DirectoryInfo(p));
+                var existingDirectories = directoryInfos.Where(d => d.Exists);
+                var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
+                var definitions = files.Select(file =>
+                {
+                    logger.Info("Loading Cardigann definition " + file.FullName);
+
+                    string DefinitionString = File.ReadAllText(file.FullName);
                     var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
 
-                    CardigannIndexer idx = new CardigannIndexer(configService, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>(), definition);
-                    if (indexers.ContainsKey(idx.ID))
+                    return definition;
+                });
+                var cardigannIndexers = definitions.Select(definition =>
+                {
+                    IIndexer indexer = new CardigannIndexer(configService, webClient, logger, protectionService, definition);
+                    configService.Load(indexer);
+                    return indexer;
+                }).ToList(); // Explicit conversion to list to avoid repeated resource loading
+
+                foreach (var indexer in cardigannIndexers)
+                {
+                    if (indexers.ContainsKey(indexer.ID))
                     {
-                        logger.Debug(string.Format("Ignoring definition ID={0}, file={1}: Indexer already exists", idx.ID, file.FullName));
+                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.ID));
+                        continue;
                     }
-                    else
-                    {
-                        indexers.Add(idx.ID, idx);
-                        configService.Load(idx);
-                    }
+
+                    indexers.Add(indexer.ID, indexer);
                 }
             }
             catch (Exception ex)
@@ -99,12 +180,12 @@ namespace Jackett.Services
 
         public void InitAggregateIndexer()
         {
-            var omdbApiKey = container.Resolve<IServerService>().Config.OmdbApiKey;
+            var omdbApiKey = Engine.Server.Config.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
             if (omdbApiKey != null)
             {
-                var imdbResolver = new OmdbResolver(container.Resolve<IWebClient>(), omdbApiKey.ToNonNull());
+                var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull());
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
                 resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
             }
@@ -115,7 +196,7 @@ namespace Jackett.Services
             }
 
             logger.Info("Adding aggregate indexer");
-            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, container.Resolve<IWebClient>(), logger, container.Resolve<IProtectionService>());
+            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService);
             aggregateIndexer.Indexers = indexers.Values;
         }
 
@@ -147,7 +228,7 @@ namespace Jackett.Services
 
         public IEnumerable<IIndexer> GetAllIndexers()
         {
-            return indexers.Values;
+            return indexers.Values.OrderBy(_ => _.DisplayName);
         }
 
         public async Task TestIndexer(string name)
@@ -167,16 +248,6 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             configService.Delete(indexer);
             indexer.Unconfigure();
-        }
-
-        public void SortIndexers()
-        {
-            // Apparently Dictionary are ordered but can't be sorted again
-            // This will recreate the indexers Dictionary to workaround this limitation
-            Dictionary<string, IIndexer> newIndexers = new Dictionary<string, IIndexer>();
-            foreach (var indexer in indexers.OrderBy(_ => _.Value.DisplayName))
-                newIndexers.Add(indexer.Key, indexer.Value);
-            indexers = newIndexers;
         }
     }
 }

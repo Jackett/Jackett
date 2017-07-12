@@ -26,7 +26,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BeyondHD(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public BeyondHD(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "BeyondHD",
                 description: "Without BeyondHD, your HDTV is just a TV",
                 link: "https://beyond-hd.me/",

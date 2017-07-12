@@ -22,14 +22,14 @@ namespace Jackett.Indexers
         private string indexUrl { get { return "https://passthepopcorn.me/ajax.php?action=login"; } }
         private string SearchUrl { get { return "https://passthepopcorn.me/torrents.php"; } }
         private string DetailURL { get { return "https://passthepopcorn.me/torrents.php?torrentid="; } }
-        private string AuthKey { get; set; } 
+        private string AuthKey { get; set; }
         new ConfigurationDataBasicLoginWithFilterAndPasskey configData
         {
             get { return (ConfigurationDataBasicLoginWithFilterAndPasskey)base.configData; }
             set { base.configData = value; }
         }
 
-        public PassThePopcorn(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
+        public PassThePopcorn(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "PassThePopcorn",
                 description: "PassThePopcorn",
                 link: "https://passthepopcorn.me/",
@@ -91,7 +91,7 @@ namespace Jackett.Indexers
                 // Landing page wil have "Result":"Error" if log in fails
                 string errorMessage = (string)js_response["Message"];
                 throw new ExceptionWithConfigData(errorMessage, configData);
-            });   
+            });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -108,7 +108,7 @@ namespace Jackett.Indexers
             {
                 movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
             }
-            else if(!string.IsNullOrEmpty(query.GetQueryString()))
+            else if (!string.IsNullOrEmpty(query.GetQueryString()))
             {
                 movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             }
@@ -132,7 +132,7 @@ namespace Jackett.Indexers
                     if (!string.IsNullOrEmpty(coverStr))
                         coverUri = new Uri(coverStr);
                     long? movie_imdbid = null;
-                    if(!string.IsNullOrEmpty(movie_imdbid_str))
+                    if (!string.IsNullOrEmpty(movie_imdbid_str))
                         movie_imdbid = long.Parse(movie_imdbid_str);
                     string movie_groupid = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
@@ -149,9 +149,9 @@ namespace Jackett.Indexers
                         release.Grabs = long.Parse((string)torrent["Snatched"]);
                         release.Seeders = int.Parse((string)torrent["Seeders"]);
                         release.Peers = release.Seeders + int.Parse((string)torrent["Leechers"]);
-                        release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", 
+                        release.PublishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss",
                                                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-                        release.Link = new Uri(string.Format("{0}?action=download&id={1}&authkey={2}&torrent_pass={3}", 
+                        release.Link = new Uri(string.Format("{0}?action=download&id={1}&authkey={2}&torrent_pass={3}",
                                                 SearchUrl, HttpUtility.UrlEncode((string)torrent["Id"]), HttpUtility.UrlEncode(AuthKey), HttpUtility.UrlEncode(configData.Passkey.Value)));
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;

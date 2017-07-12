@@ -27,7 +27,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TransmitheNet(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
+        public TransmitheNet(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "Nebulance",
                 description: " At Nebulance we will change the way you think about TV",
                 link: "https://nebulance.io/",

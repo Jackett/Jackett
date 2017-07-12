@@ -1,4 +1,4 @@
-﻿﻿using Jackett.Models;
+﻿using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
@@ -26,7 +26,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Hardbay(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public Hardbay(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "Hardbay",
                 description: null,
                 link: "https://hardbay.club/",

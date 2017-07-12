@@ -27,7 +27,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Demonoid(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public Demonoid(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Demonoid",
                 description: "Demonoid",
                 link: "https://www.demonoid.pw/",
