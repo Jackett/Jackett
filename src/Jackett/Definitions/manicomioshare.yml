@@ -214,7 +214,6 @@
   search:
     path: pesquisa.php
     inputs:
-      $raw: "{{range .Categories}}cat={{.}}&{{end}}"
       busca: "{{ .Query.Keywords }}"
     rows:
       selector: table#tbltorrent > tbody > tr[data-id]
