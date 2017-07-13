@@ -28,6 +28,11 @@ namespace JackettTest
             throw new NotImplementedException();
         }
 
+        public IWebIndexer GetWebIndexer(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public void InitIndexers()
         {
             throw new NotImplementedException();

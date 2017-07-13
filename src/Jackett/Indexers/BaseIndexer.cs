@@ -12,6 +12,7 @@ using Jackett.Utils.Clients;
 using AutoMapper;
 using Jackett.Models.IndexerConfig;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Jackett.Indexers
 {
@@ -691,6 +692,8 @@ namespace Jackett.Indexers
         }
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
+
+        [JsonConverter(typeof(EncodingJsonConverter))]
         public Encoding Encoding { get; protected set; }
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
