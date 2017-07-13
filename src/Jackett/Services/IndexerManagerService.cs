@@ -53,79 +53,32 @@ namespace Jackett.Services
         {
             logger.Info("Using HTTP Client: " + webClient.GetType().Name);
 
-            var ixs = new IIndexer[]{
-                new AlphaRatio(configService, webClient, logger, protectionService),
-                new Andraste(configService, webClient, logger, protectionService),
-                new AnimeTorrents(configService, (HttpWebClient)webClient, logger, protectionService),
-                new ArcheTorrent(configService, webClient, logger, protectionService),
-                new BB(configService, webClient, logger, protectionService),
-                new BJShare(configService, webClient, logger, protectionService),
-                new BakaBT(configService, webClient, logger, protectionService),
-                new BestFriends(configService, webClient, logger, protectionService),
-                new BeyondHD(configService, webClient, logger, protectionService),
-                new BitCityReloaded(configService, webClient, logger, protectionService),
-                new BitHdtv(configService, webClient, logger, protectionService),
-                new BitMeTV(configService, webClient, logger, protectionService),
-                new BitSoup(configService, webClient, logger, protectionService),
-                new BroadcastTheNet(configService, webClient, logger, protectionService),
-                new DanishBits(configService, webClient, logger, protectionService),
-                new Demonoid(configService, webClient, logger, protectionService),
-                new DigitalHive(configService, webClient, logger, protectionService),
-                new EliteTracker(configService, webClient, logger, protectionService),
-                new FileList(configService, webClient, logger, protectionService),
-                new FunFile(configService, webClient, logger, protectionService),
-                new Fuzer(configService, webClient, logger, protectionService),
-                new GFTracker(configService, webClient, logger, protectionService),
-                new GhostCity(configService, webClient, logger, protectionService),
-                new GimmePeers(configService, webClient, logger, protectionService),
-                new HD4Free(configService, webClient, logger, protectionService),
-                new HDSpace(configService, webClient, logger, protectionService),
-                new HDTorrents(configService, webClient, logger, protectionService),
-                new Hardbay(configService, webClient, logger, protectionService),
-                new Hebits(configService, webClient, logger, protectionService),
-                new Hounddawgs(configService, webClient, logger, protectionService),
-                new HouseOfTorrents(configService, webClient, logger, protectionService),
-                new IPTorrents(configService, webClient, logger, protectionService),
-                new ImmortalSeed(configService, webClient, logger, protectionService),
-                new MoreThanTV(configService, webClient, logger, protectionService),
-                new Myanonamouse(configService, webClient, logger, protectionService),
-                new NCore(configService, webClient, logger, protectionService),
-                new NewRealWorld(configService, webClient, logger, protectionService),
-                new PassThePopcorn(configService, webClient, logger, protectionService),
-                new PiXELHD(configService, webClient, logger, protectionService),
-                new PirateTheNet(configService, webClient, logger, protectionService),
-                new Pretome(configService, webClient, logger, protectionService),
-                new Rarbg(configService, webClient, logger, protectionService),
-                new RevolutionTT(configService, webClient, logger, protectionService),
-                new RuTracker(configService, webClient, logger, protectionService),
-                new SceneAccess(configService, webClient, logger, protectionService),
-                new SceneFZ(configService, webClient, logger, protectionService),
-                new SceneTime(configService, webClient, logger, protectionService),
-                new SevenTor(configService, webClient, logger, protectionService),
-                new Shazbat(configService, webClient, logger, protectionService),
-                new ShowRSS(configService, webClient, logger, protectionService),
-                new SpeedCD(configService, webClient, logger, protectionService),
-                new Superbits(configService, webClient, logger, protectionService),
-                new T411(configService, webClient, logger, protectionService),
-                new TVChaosUK(configService, webClient, logger, protectionService),
-                new TVVault(configService, webClient, logger, protectionService),
-                new TehConnection(configService, webClient, logger, protectionService),
-                new TorrentBytes(configService, webClient, logger, protectionService),
-                new TorrentDay(configService, webClient, logger, protectionService),
-                new TorrentHeaven(configService, webClient, logger, protectionService),
-                new TorrentLeech(configService, webClient, logger, protectionService),
-                new TorrentNetwork(configService, webClient, logger, protectionService),
-                new TorrentSyndikat(configService, webClient, logger, protectionService),
-                new Torrentech(configService, webClient, logger, protectionService),
-                new TransmitheNet(configService, webClient, logger, protectionService),
-                new Trezzor(configService, webClient, logger, protectionService),
-                new XSpeeds(configService, webClient, logger, protectionService),
-                new myAmity(configService, webClient, logger, protectionService),
-                new x264(configService, webClient, logger, protectionService)
-            };
+            var allTypes = GetType().Assembly.GetTypes();
+            var allIndexerTypes = allTypes.Where(p => typeof(IIndexer).IsAssignableFrom(p));
+            var allInstantiatableIndexerTypes = allIndexerTypes.Where(p => !p.IsInterface && !p.IsAbstract);
+            var allNonMetaInstantiatableIndexerTypes = allInstantiatableIndexerTypes.Where(p => !typeof(BaseMetaIndexer).IsAssignableFrom(p));
+            var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
+            var ixs = indexerTypes.Select(type =>
+            {
+                var constructorArgumentTypes = new Type[] { typeof(IIndexerConfigurationService), typeof(IWebClient), typeof(Logger), typeof(IProtectionService) };
+                var constructor = type.GetConstructor(constructorArgumentTypes);
+                if (constructor != null)
+                {
+                    var arguments = new object[] { configService, webClient, logger, protectionService };
+                    var indexer = (IIndexer)constructor.Invoke(arguments);
+                    return indexer;
+                }
+                else
+                {
+                    logger.Error("Cannot instantiate " + type.Name);
+                }
+                return null;
+            });
 
             foreach (var idx in ixs)
             {
+                if (idx == null)
+                    continue;
                 indexers.Add(idx.ID, idx);
                 configService.Load(idx);
             }
