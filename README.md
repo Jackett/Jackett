@@ -144,6 +144,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * M-Team - TP
  * Magico
  * Majomparádé
+ * Manicomio Share
  * Mononoké-BT
  * MoreThanTV
  * MyAnonamouse
