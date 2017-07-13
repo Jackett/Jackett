@@ -2,10 +2,10 @@
   site: yggtorrent
   name: YGGtorrent
   language: fr-fr
-  type: private
+  type: semi-private
   encoding: UTF-8
   links:
-    - http://yggtorrent.com
+    - https://yggtorrent.com
 
   caps:
     categorymappings:
@@ -22,27 +22,24 @@
     - name: password
       type: password
       label: Password
-    - name: special_path
-      type: checkbox
-      label: Use an alternative path
-      default: true
-    - name: path
-      type: text
-      label: Alternative path (as seen in url)
-      default: "alpha"
   login:
-    path: "{{if .Config.special_path }}/{{ .Config.path }}{{else}}{{end}}/user/login"
+    path: "/user/login"
     method: post
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
       submit: ""
+    headers:
+      "[:authority]": "yggtorrent.com"
+      "[:method]": "post"
+      "[:path]": "/"
+      "[:scheme]": "https"
     error:
       - selector: "body > div.page-content > div > div.col-md-10 > div > div > div > div > div.content-box-large.box-with-header > form > center > table > tbody > tr:nth-child(3) > td:nth-child(2) > button.text:contains('Se connecter')"
     test:
-      path: "{{if .Config.special_path }}/{{ .Config.path }}{{else}}{{end}}/"
+      path: "/"
   search:
-    path: "{{if .Config.special_path }}/{{ .Config.path }}{{else}}{{end}}{{if .Keywords}}/engine/search?q={{ .Keywords}}/{{else}}/torrents/2145-filmvideo{{end}}"
+    path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}{{else}}/torrents/2145-filmvideo{{end}}"
     rows:
       selector: "table.table.table-striped > tbody > tr"
     fields:
