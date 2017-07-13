@@ -60,6 +60,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Audiobook Torrents
  * Awesome-HD
  * Avistaz
+ * B2S-Share
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
  * Best Friends
