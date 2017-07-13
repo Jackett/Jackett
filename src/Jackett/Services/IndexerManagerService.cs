@@ -23,8 +23,7 @@ namespace Jackett.Services
         IWebIndexer GetWebIndexer(string name);
         IEnumerable<IIndexer> GetAllIndexers();
 
-        void InitIndexers();
-        void InitCardigannIndexers(IEnumerable<string> path);
+        void InitIndexers(IEnumerable<string> path);
         void InitAggregateIndexer();
     }
 
@@ -49,7 +48,14 @@ namespace Jackett.Services
             cacheService = cache;
         }
 
-        public void InitIndexers()
+        public void InitIndexers(IEnumerable<string> path)
+        {
+            InitIndexers();
+            InitCardigannIndexers(path);
+            InitAggregateIndexer();
+        }
+
+        private void InitIndexers()
         {
             logger.Info("Using HTTP Client: " + webClient.GetType().Name);
 
@@ -84,7 +90,7 @@ namespace Jackett.Services
             }
         }
 
-        public void InitCardigannIndexers(IEnumerable<string> path)
+        private void InitCardigannIndexers(IEnumerable<string> path)
         {
             logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
 
