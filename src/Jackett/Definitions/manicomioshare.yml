@@ -226,7 +226,7 @@
         selector: a[href*="/item/"]
         attribute: href
       category:
-        selector: td:nth-child(1) > a
+        selector: a[href*="/torrents.php?cat="]
         attribute: href
         filters:
           - name: querystring
