@@ -32,13 +32,13 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public AnimeTorrents(IIndexerConfigurationService configService, HttpWebClient c, Logger l, IProtectionService ps)
+        public AnimeTorrents(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "AnimeTorrents",
                 description: "Definitive source for anime and manga",
                 link: "https://animetorrents.me/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
-                client: c, // Forced HTTP client for custom headers
+                client: c,
                 logger: l,
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
