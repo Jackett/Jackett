@@ -34,11 +34,9 @@
       details:
         selector: p:nth-child(1) > a[href^="/torrent/"]
         attribute: href
-        optional: true
       download:
         selector: p:nth-child(1) > a[href^="/torrent/"]
         attribute: href
-        optional: true
         filters:
         - name: replace
           args: ["/torrent/", "/download/"]
