@@ -1,4 +1,5 @@
 ﻿using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -31,7 +32,7 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Blackhole(string indexerID, string path, string apikey)
+        public async Task<IHttpActionResult> Blackhole(string indexerID, string path, string apikey, string file)
         {
 
             var jsonReply = new JObject();
@@ -60,7 +61,12 @@ namespace Jackett.Controllers
                     throw new Exception("Blackhole directory does not exist: " + Engine.Server.Config.BlackholeDir);
                 }
 
-                var fileName = DateTime.Now.Ticks + ".torrent";
+                var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
+                if (string.IsNullOrWhiteSpace(file))
+                    fileName += ".torrent";
+                else
+                    fileName += "-"+StringUtil.MakeValidFileName(file, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks 
+
                 File.WriteAllBytes(Path.Combine(Engine.Server.Config.BlackholeDir, fileName), downloadBytes);
                 jsonReply["result"] = "success";
             }
