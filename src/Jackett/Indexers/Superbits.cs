@@ -26,7 +26,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public Superbits(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public Superbits(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "Superbits",
                 description: null,
                 link: "https://superbits.org/",

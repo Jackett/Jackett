@@ -32,7 +32,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public HDTorrents(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public HDTorrents(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "HD-Torrents",
                 description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
                 link: "https://hdts.ru/",// Of the accessible domains the .ru seems the most reliable.  https://hdts.ru | https://hd-torrents.org | https://hd-torrents.net | https://hd-torrents.me

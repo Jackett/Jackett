@@ -115,17 +115,6 @@ namespace Jackett
                     break;
             }
 
-            // Register indexers
-            var allTypes = thisAssembly.GetTypes();
-            var allIndexerTypes = allTypes.Where(p => typeof(IIndexer).IsAssignableFrom(p));
-            var allInstantiatableIndexerTypes = allIndexerTypes.Where(p => !p.IsInterface && !p.IsAbstract);
-            var allNonMetaInstantiatableIndexerTypes = allInstantiatableIndexerTypes.Where(p => !typeof(BaseMetaIndexer).IsAssignableFrom(p));
-            var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
-            foreach (var indexer in indexerTypes)
-            {
-                builder.RegisterType(indexer).Named<IIndexer>(BaseIndexer.GetIndexerID(indexer));
-            }
-
             Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
             {
                 str.Content = Encoding.UTF8.GetString(be.Content);

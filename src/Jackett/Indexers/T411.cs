@@ -32,7 +32,7 @@ namespace Jackett.Indexers
 
         private Dictionary<int, List<int>> _mediaCategoryMapping = new Dictionary<int, List<int>>();
 
-        public T411(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public T411(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "T411",
                 description: "French Torrent Tracker",
                 link: "https://t411.al/",

@@ -29,7 +29,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public DanishBits(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
+        public DanishBits(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "DanishBits",
                 description: "A danish closed torrent tracker",
                 link: "https://danishbits.org/",
@@ -160,7 +160,7 @@ namespace Jackett.Indexers
             var releasesPerPage = 100;
             var releases = new List<ReleaseInfo>();
 
-            var page = (query.Offset/releasesPerPage) + 1;
+            var page = (query.Offset / releasesPerPage) + 1;
 
             string episodeSearchUrl;
             if (string.IsNullOrEmpty(query.GetQueryString()))
@@ -212,13 +212,13 @@ namespace Jackett.Indexers
                     var catUrl = catAnchor.GetAttribute("href");
                     var catStr = Regex.Match(catUrl, "filter_(?<catNo>[0-9]+)=on").Groups["catNo"].Value;
                     var catNo = int.Parse(catStr);
-                    var moviesCatsDanish = new[] { 2,3,10,28,29,31 };
-                    var moviesCatsIntl = new[] { 8,9,11,22,24 };
+                    var moviesCatsDanish = new[] { 2, 3, 10, 28, 29, 31 };
+                    var moviesCatsIntl = new[] { 8, 9, 11, 22, 24 };
                     var moviesCats = configData.OnlyDanishCategories.Value
                         ? moviesCatsDanish
                         : moviesCatsDanish.Concat(moviesCatsIntl);
-                    var seriesCatsDanish = new[] { 1,4,30 };
-                    var seriesCatsIntl = new[] { 20,21 };
+                    var seriesCatsDanish = new[] { 1, 4, 30 };
+                    var seriesCatsIntl = new[] { 20, 21 };
                     var seriesCats = configData.OnlyDanishCategories.Value
                         ? seriesCatsDanish
                         : seriesCatsDanish.Concat(seriesCatsIntl);
@@ -248,7 +248,7 @@ namespace Jackett.Indexers
                     var addedElement = qRow.Find("span.time").FirstElement();
                     var addedStr = addedElement.GetAttribute("title");
                     release.PublishDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), denmarkTz).ToLocalTime();
-                    
+
                     var columns = qRow.Children();
                     var seedersElement = columns.Reverse().Skip(1).First();
                     release.Seeders = int.Parse(seedersElement.InnerText);

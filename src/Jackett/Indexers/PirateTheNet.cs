@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public PirateTheNet(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public PirateTheNet(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "PirateTheNet",
                 description: "A movie tracker",
                 link: "http://piratethenet.org/",

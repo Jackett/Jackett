@@ -25,7 +25,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public FunFile(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public FunFile(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "FunFile",
                 description: "A general tracker",
                 link: "https://www.funfile.org/",

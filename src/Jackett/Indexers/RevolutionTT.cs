@@ -36,7 +36,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public RevolutionTT(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public RevolutionTT(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "RevolutionTT",
                 description: "The Revolution has begun",
                 link: "https://revolutiontt.me/",

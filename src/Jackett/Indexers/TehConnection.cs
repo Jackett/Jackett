@@ -21,14 +21,14 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string indexUrl { get { return SiteLink + "index.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
-        
+
         new ConfigurationDataBasicLoginWithFilter configData
         {
             get { return (ConfigurationDataBasicLoginWithFilter)base.configData; }
             set { base.configData = value; }
         }
 
-        public TehConnection(IIndexerConfigurationService configService, Logger l, IWebClient c, IProtectionService ps)
+        public TehConnection(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "TehConnection",
                 description: "Working towards providing a well-seeded archive of all available digital forms of cinema and film in their highest possible quality",
                 link: "https://tehconnection.eu/",
@@ -111,7 +111,7 @@ namespace Jackett.Indexers
             {
                 movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.ImdbID));
             }
-            else if(!string.IsNullOrEmpty(query.GetQueryString()))
+            else if (!string.IsNullOrEmpty(query.GetQueryString()))
             {
                 movieListSearchUrl = string.Format("{0}?action=basic&searchstr={1}", SearchUrl, HttpUtility.UrlEncode(query.GetQueryString()));
             }
@@ -155,7 +155,7 @@ namespace Jackett.Indexers
                     {
                         var release = new ReleaseInfo();
                         var qRow = row.Cq();
-                        
+
                         string title = qRow.Find("[id^=desc_] > h2 > strong").First().Text().Trim();
                         Uri link = new Uri(SiteLink.TrimEnd('/') + qRow.Find("a[title='Download']").First().Attr("href").Trim());
                         Uri guid = new Uri(SiteLink.TrimEnd('/') + qRow.Find("a[title='Permalink']").First().Attr("href").Trim());
@@ -170,7 +170,7 @@ namespace Jackett.Indexers
                             Uri CoverUrl = new Uri(dom.Find("div[id='poster'] > a > img").First().Attr("src").Trim());
                             release.BannerUrl = CoverUrl;
                         }
-                        
+
                         bool freeleech = qRow.Find("span[class='freeleech']").Length == 1 ? true : false;
                         bool qualityEncode = qRow.Find("img[class='approved']").Length == 1 ? true : false;
                         string grabs = qRow.Find("img[title='Snatches']").First().Parent().Text().Trim();
@@ -181,11 +181,11 @@ namespace Jackett.Indexers
                             { sizeStr = secondSizeStr.Replace("(", "").Replace(")", "").Trim(); }
                         }
 
-                        if(string.IsNullOrWhiteSpace(title))
+                        if (string.IsNullOrWhiteSpace(title))
                         {
                             title = dom.Find("div.title_text").Text() + " - " + qRow.Find("div.details_title > a").Text();
                         }
-                        
+
 
                         release.Title = title;
                         release.Guid = guid;
@@ -199,11 +199,12 @@ namespace Jackett.Indexers
                         release.MinimumSeedTime = 345600;
                         release.Category = new List<int> { 2000 };
                         release.Comments = movieReleasesLink;
-                        if (imdb_id > 0) {
+                        if (imdb_id > 0)
+                        {
                             release.Imdb = imdb_id;
                         }
 
-                        var files = qRow.Find("div[id^=\"filelist\"] tr").Count()-1;
+                        var files = qRow.Find("div[id^=\"filelist\"] tr").Count() - 1;
                         release.Files = files;
                         release.Grabs = ParseUtil.CoerceLong(grabs);
 

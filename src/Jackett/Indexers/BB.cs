@@ -33,7 +33,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BB(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public BB(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "bB",
                 description: "bB",
                 link: "https://baconbits.org/",

@@ -57,7 +57,7 @@ namespace Jackett.Services
         private IUpdateService updater;
         private List<string> _notices = new List<string>();
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u, IProtectionService protectionService)
         {
             indexerService = i;
             processService = p;
@@ -68,6 +68,8 @@ namespace Jackett.Services
             updater = u;
 
             LoadConfig();
+            // "TEMPORARY" HACK
+            protectionService.InstanceKey = Encoding.UTF8.GetBytes(Config.InstanceId);
         }
 
         public ServerConfig Config
@@ -283,13 +285,7 @@ namespace Jackett.Services
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
-            indexerService.InitIndexers();
-            foreach (string dir in configService.GetCardigannDefinitionsFolders())
-            {
-                indexerService.InitCardigannIndexers(dir);
-            }
-            indexerService.InitAggregateIndexer();
-            indexerService.SortIndexers();
+            indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
             client.Init();
             updater.CleanupTempDir();
         }

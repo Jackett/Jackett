@@ -27,7 +27,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public SpeedCD(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public SpeedCD(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Speed.cd",
                 description: "Your home now!",
                 link: "https://speed.cd/",

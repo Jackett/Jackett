@@ -34,7 +34,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public GFTracker(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public GFTracker(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "GFTracker",
                 description: "Home of user happiness",
                 link: "https://www.thegft.org/",

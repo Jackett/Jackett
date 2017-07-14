@@ -30,7 +30,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentSyndikat(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public TorrentSyndikat(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "Torrent-Syndikat",
                 description: "A German general tracker",
                 link: "https://torrent-syndikat.org/",

@@ -28,7 +28,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public HD4Free(IIndexerConfigurationService configService, Logger l, IWebClient w, IProtectionService ps)
+        public HD4Free(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "HD4Free",
                 description: "A HD trackers",
                 link: "https://hd4free.xyz/",

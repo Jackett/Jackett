@@ -44,7 +44,7 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public TorrentDay(IIndexerConfigurationService configService, Logger l, IWebClient wc, IProtectionService ps)
+        public TorrentDay(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay",
                 link: "https://torrentday.it/",
