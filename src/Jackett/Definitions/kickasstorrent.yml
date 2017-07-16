@@ -99,6 +99,8 @@
     inputs:
       username: "{{ .Config.username }}"
       passkey: "{{ .Config.passkey }}"
+    error:
+      - selector: div#main:has(font.error:contains("Access Denied"))
     test:
       path: "/new/index.php"
       selector: a[href="account-logout.php"]
