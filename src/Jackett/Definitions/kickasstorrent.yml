@@ -95,12 +95,13 @@
 
   login:
     method: post
-    path: "new/account-login.php"
+    path: "/new/account-login.php"
     inputs:
       username: "{{ .Config.username }}"
       passkey: "{{ .Config.passkey }}"
     test:
-      path: index.php
+      path: "/new/index.php"
+      selector: a[href="account-logout.php"]
 
   search:
     path: "/new/torrents-search.php"
