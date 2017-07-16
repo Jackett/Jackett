@@ -86,7 +86,8 @@ namespace Jackett.Indexers
             var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
             {
                 Url = LoginUrl,
-                Encoding = Encoding
+                Encoding = Encoding,
+                EmulateBrowser = true
             });
 
             CQ loginPageDom = loginPage.Content;
@@ -112,7 +113,8 @@ namespace Jackett.Indexers
                 Referer = LoginUrl,
                 Type = RequestType.POST,
                 Encoding = Encoding,
-                Url = LoginUrl
+                Url = LoginUrl,
+                EmulateBrowser = true
             };
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
 
