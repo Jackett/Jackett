@@ -106,7 +106,7 @@
       selector: a[href="account-logout.php"]
 
   search:
-    path: "/new/torrents-search.php"
+    path: "/new/{{if .Query.Keywords}}torrents-search.php{{else}}torrents.php{{end}}"
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "\"{{ .Query.Keywords }}\""
