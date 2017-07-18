@@ -1,9 +1,7 @@
-﻿﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using CsQuery;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
@@ -13,10 +11,10 @@ using NLog;
 
 namespace Jackett.Indexers.Meta
 {
-    public abstract class BaseMetaIndexer : BaseIndexer
+    public abstract class BaseMetaIndexer : BaseWebIndexer
     {
-        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerManagerService manager, IWebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
-            : base(name, "http://127.0.0.1/", description, manager, webClient, logger, configData, p, null, null)
+        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService, IWebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
+            : base(name, "http://127.0.0.1/", description, configService, webClient, logger, configData, p, null, null)
         {
             filterFunc = filter;
             this.fallbackStrategyProvider = fallbackStrategyProvider;
@@ -35,11 +33,12 @@ namespace Jackett.Indexers.Meta
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            IEnumerable<Task<IEnumerable<ReleaseInfo>>> supportedTasks = Indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
+            var indexers = validIndexers;
+            IEnumerable<Task<IEnumerable<ReleaseInfo>>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
 
             var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
-            var fallbackTasks = fallbackQueries.SelectMany(q => Indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone())));
+            var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone())));
             var tasks = supportedTasks.Concat(fallbackTasks.ToList()); // explicit conversion to List to execute LINQ query
             var aggregateTask = Task.WhenAll(tasks);
 
@@ -66,47 +65,36 @@ namespace Jackett.Indexers.Meta
             return result;
         }
 
-        public override Uri UncleanLink(Uri link)
+        public override TorznabCapabilities TorznabCaps
         {
-            var indexer = GetOriginalIndexerForLink(link);
-            if (indexer != null)
-                return indexer.UncleanLink(link);
-
-            return base.UncleanLink(link);
+            get
+            {
+                return validIndexers.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat);
+            }
         }
 
-        public override Task<byte[]> Download(Uri link)
+        public override bool IsConfigured
         {
-            var indexer = GetOriginalIndexerForLink(link);
-            if (indexer != null)
-                return indexer.Download(link);
-
-            return base.Download(link);
+            get
+            {
+                return Indexers != null;
+            }
         }
 
-        private IIndexer GetOriginalIndexerForLink(Uri link)
+        private IEnumerable<IIndexer> validIndexers
         {
-            var prefix = string.Format("{0}://{1}", link.Scheme, link.Host);
-            var validIndexers = Indexers.Where(i => i.SiteLink.StartsWith(prefix, StringComparison.CurrentCulture));
-            if (validIndexers.Count() > 0)
-                return validIndexers.First();
+            get
+            {
+                if (Indexers == null)
+                    return null;
 
-            return null;
+                return Indexers.Where(i => i.IsConfigured && filterFunc(i));
+            }
         }
+
+        public IEnumerable<IIndexer> Indexers;
 
         private Func<IIndexer, bool> filterFunc;
-        private IEnumerable<IIndexer> indexers;
-        public IEnumerable<IIndexer> Indexers {
-            get {
-                return indexers;
-            }
-            set {
-                indexers = value.Where(i => i.IsConfigured && filterFunc(i));
-                TorznabCaps = value.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat); ;
-                IsConfigured = true;
-            }
-        }
-
         private IFallbackStrategyProvider fallbackStrategyProvider;
         private IResultFilterProvider resultFilterProvider;
     }

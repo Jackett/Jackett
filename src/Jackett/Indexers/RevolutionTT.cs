@@ -20,7 +20,7 @@ using System.Xml.Linq;
 
 namespace Jackett.Indexers
 {
-    public class RevolutionTT : BaseIndexer
+    public class RevolutionTT : BaseWebIndexer
     {        
         private string LandingPageURL { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
@@ -36,12 +36,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public RevolutionTT(IIndexerManagerService i, Logger l, IWebClient wc, IProtectionService ps)
+        public RevolutionTT(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "RevolutionTT",
                 description: "The Revolution has begun",
                 link: "https://revolutiontt.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,
@@ -245,6 +245,8 @@ namespace Jackett.Indexers
                 foreach (var item in rssDoc.Descendants("item"))
                 {
                     var title = item.Descendants("title").First().Value;
+                    if (title.StartsWith("Support YOUR site!"))
+                        continue;
                     var description = item.Descendants("description").First().Value;
                     var link = item.Descendants("link").First().Value;
                     var date = item.Descendants("pubDate").First().Value;

@@ -20,7 +20,7 @@ using Newtonsoft.Json;
 
 namespace Jackett.Indexers
 {
-    public class BroadcastTheNet : BaseIndexer
+    public class BroadcastTheNet : BaseWebIndexer
     {
         string APIBASE = "https://api.broadcasthe.net";
 
@@ -30,12 +30,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BroadcastTheNet(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public BroadcastTheNet(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BroadcastTheNet",
                 description: "Needs no description..",
                 link: "https://broadcasthe.net/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

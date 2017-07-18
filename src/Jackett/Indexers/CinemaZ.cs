@@ -20,11 +20,11 @@ namespace Jackett.Indexers
 {
     public class CinemaZ : AvistazTracker
     {
-        public CinemaZ(IIndexerManagerService indexerManager, IWebClient webClient, Logger logger, IProtectionService protectionService)
+        public CinemaZ(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "CinemaZ",
                 desc: "Part of the Avistaz network.",
                 link: "https://cinemaz.to/",
-                indexerManager: indexerManager,
+                configService: configService,
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient

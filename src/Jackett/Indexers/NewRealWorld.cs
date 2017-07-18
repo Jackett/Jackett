@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Jackett.Indexers
 {
-    public class NewRealWorld : BaseIndexer
+    public class NewRealWorld : BaseWebIndexer
     {
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string BrowseUrl { get { return SiteLink + "browse.php"; } }
@@ -26,12 +26,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public NewRealWorld(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public NewRealWorld(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "New Real World",
                    description: "A German general tracker.",
                    link: "http://nrw-tracker.eu/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                   manager: i,
+                   configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,

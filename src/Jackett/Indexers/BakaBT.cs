@@ -17,7 +17,7 @@ using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
-    public class BakaBT : BaseIndexer
+    public class BakaBT : BaseWebIndexer
     {
         public string SearchUrl { get { return SiteLink + "browse.php?only=0&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
         public string LoginUrl { get { return SiteLink + "login.php"; } }
@@ -29,12 +29,12 @@ namespace Jackett.Indexers
             set { base.configData = value; }
         }
 
-        public BakaBT(IIndexerManagerService i, IWebClient wc, Logger l, IProtectionService ps)
+        public BakaBT(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BakaBT",
                 description: "Anime Comunity",
                 link: "https://bakabt.me/",
                 caps: new TorznabCapabilities(TorznabCatType.TVAnime),
-                manager: i,
+                configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,

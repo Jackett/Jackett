@@ -19,19 +19,19 @@ using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    public class AlphaRatio : BaseIndexer
+    public class AlphaRatio : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "ajax.php?action=browse&order_by=time&order_way=desc&"; } }
         private string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
         private string GuidUrl { get { return SiteLink + "torrents.php?torrentid="; } }
 
-        public AlphaRatio(IIndexerManagerService i, IWebClient w, Logger l, IProtectionService ps)
+        public AlphaRatio(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "AlphaRatio",
                 description: "Legendary",
                 link: "https://alpharatio.cc/",
                 caps: new TorznabCapabilities(),
-                manager: i,
+                configService: configService,
                 client: w,
                 logger: l,
                 p: ps,

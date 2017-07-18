@@ -39,24 +39,24 @@
       page: "search"
       q: "{{ .Query.Keywords}}"
     rows:
-      selector: tr.tlistrow
+      selector: tr.torrent-info
     fields:
       title:
-        selector: td.tlistname a
+        selector: td.tr-name a
       category:
-        selector: td.tlisticon a
+        selector: td.tr-cat div.nyaa-cat a
         attribute: href
         filters:
           - name: split
             args: [ "=", -1 ]
       details:
-        selector: td.tlistname a
+        selector: td.tr-name a
         attribute: href
       download:
-        selector: a[title="Magnet Download"]
+        selector: a[title="Magnet Link"]
         attribute: href
       size:
-        selector: td.tlistsize
+        selector: td.tr-size
      # seeders:
      #   text: 0
      # seeders:

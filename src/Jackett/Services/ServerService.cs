@@ -57,7 +57,7 @@ namespace Jackett.Services
         private IUpdateService updater;
         private List<string> _notices = new List<string>();
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u, IProtectionService protectionService)
         {
             indexerService = i;
             processService = p;
@@ -68,6 +68,8 @@ namespace Jackett.Services
             updater = u;
 
             LoadConfig();
+            // "TEMPORARY" HACK
+            protectionService.InstanceKey = Encoding.UTF8.GetBytes(Config.InstanceId);
         }
 
         public ServerConfig Config
@@ -87,7 +89,7 @@ namespace Jackett.Services
         {
             if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
                 return link;
-         
+
             var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString()));
             string urlEncodedFile = WebUtility.UrlEncode(file);
             var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
@@ -96,7 +98,8 @@ namespace Jackett.Services
 
         public string BasePath()
         {
-            if (config.BasePathOverride == null || config.BasePathOverride == "") {
+            if (config.BasePathOverride == null || config.BasePathOverride == "")
+            {
                 return "/";
             }
             var path = config.BasePathOverride;
@@ -226,7 +229,7 @@ namespace Jackett.Services
                     {
                         // Check for mono-devel
                         // Is there any better way which doesn't involve a hard cashes?
-                        var mono_devel_file = Path.Combine(runtimedir, "mono-api-info.exe"); 
+                        var mono_devel_file = Path.Combine(runtimedir, "mono-api-info.exe");
                         if (!File.Exists(mono_devel_file))
                         {
                             var notice = "It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.";
@@ -250,12 +253,12 @@ namespace Jackett.Services
                                 var notice = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
                                 _notices.Add(notice);
                                 logger.Error(notice);
-                            } 
+                            }
                             else
                             {
                                 logger.Info("The ca-certificates-mono package is not installed, it will become mandatory once mono >= 4.8 is used.");
                             }
-                            
+
                         }
                     }
                     catch (Exception e)
@@ -282,13 +285,7 @@ namespace Jackett.Services
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
-            indexerService.InitIndexers();
-            foreach(string dir in configService.GetCardigannDefinitionsFolders())
-            {
-                indexerService.InitCardigannIndexers(dir);
-            }
-            indexerService.InitAggregateIndexer();
-            indexerService.SortIndexers();
+            indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
             client.Init();
             updater.CleanupTempDir();
         }

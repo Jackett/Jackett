@@ -1,88 +1,115 @@
 ---
   site: yggtorrent
-  name: YGGTorrent
+  name: YGGtorrent
   language: fr-fr
-  type: public
+  type: semi-private
   encoding: UTF-8
   links:
-    - http://yggtorrent.com/dev
+    - https://yggtorrent.com
 
   caps:
     categorymappings:
       - {id: films, cat: Movies, desc: "Movies"}
-      - {id: series, cat: TV, desc: "TV"}
+      #- {id: series, cat: TV, desc: "TV"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
-
-  settings: []
-
-  download:
-    selector: a[href^="/files/torrents/"]
-
+      #tv-search: [q, season, ep]
+  settings:
+    - name: username
+      type: text
+      label: Username (email or username)
+    - name: password
+      type: password
+      label: Password
+  login:
+    path: "/user/login"
+    method: post
+    inputs:
+      id: "{{ .Config.username }}"
+      pass: "{{ .Config.password }}"
+      submit: ""
+    headers:
+      "[:authority]": "yggtorrent.com"
+      "[:method]": "post"
+      "[:path]": "/"
+      "[:scheme]": "https"
+    error:
+      - selector: "body > div.page-content > div > div.col-md-10 > div > div > div > div > div.content-box-large.box-with-header > form > center > table > tbody > tr:nth-child(3) > td:nth-child(2) > button.text:contains('Se connecter')"
+    test:
+      path: "/"
   search:
-    path: "/engine/search?q={{ .Query.Keywords }}"
+    path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}{{else}}/torrents/2145-filmvideo{{end}}"
     rows:
-      selector: div.content-box-large box-with-header > table tbody tr
+      selector: "table.table.table-striped > tbody > tr"
     fields:
       site_date:
-        selector: td:nth-child(1) a
+        selector: "td:nth-child(2)"
         filters:
-          # date is at the end of the title, so we get it and name it site_date
-          - name: regexp
-            args: "(\\w+)$"
+          - name: replace
+            args: ["il y a ", ""]
+          - name: replace
+            args: [ " jours", " days"]
+          - name: replace
+            args: [ " jour", " day"]
+          - name: replace
+            args: [ " heures", " hours"]
+          - name: replace
+            args: [ " heure", " hour"]
+          - name: replace
+            args: [ " semaines", " weeks"]
+          - name: replace
+            args: [ " semaine", " week"]
+          - name: replace
+            args: [ " mois", " month"]
+          - name: replace
+            args: [ " ans", " years"]
+          - name: replace
+            args: [ " an", " year"]
+          - name: append
+            args: " ago"
       title:
-        selector: td:nth-child(1) a
-        filters:
-          # now we put the date at the right place according scene naming rules using .Result.site_date
-          - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
-          - name: replace
-            args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
-          - name: replace
-            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
-          # and we delete it at the end
-          - name: re_replace
-            args: ["(\\w+)$", ""]
+        selector: "a.torrent-name"
       details:
-        selector: td:nth-child(1) a
+        selector: "a.torrent-name"
         attribute: href
       download:
-        selector: td:nth-child(1) a
+        selector: "td:nth-child(1) > a:not(.torrent-name)"
         attribute: href
       size:
-        selector: td:nth-child(3)
+        selector: "td:nth-child(3)"
         filters:
           - name: re_replace
-            args: [ "\\.(\\d) Ko", "$1X00"]
+            args: [ "\\.(\\d) KB", "$1X00"]
           - name: re_replace
-            args: [ " Ko", "000"]
+            args: [ " KB", "000"]
           - name: re_replace
-            args: [ "\\.(\\d) Mo", "$1X00000"]
+            args: [ "\\.(\\d) MB", "$1X00000"]
           - name: re_replace
-            args: [ " Mo", "000000"]
+            args: [ " MB", "000000"]
           - name: re_replace
-            args: [ "\\.(\\d) Go", "$1X00000000"]
+            args: [ "\\.(\\d) GB", "$1X00000000"]
           - name: re_replace
-            args: [ " Go", "000000000"]
+            args: [ " GB", "000000000"]
           - name: re_replace
-            args: [ "\\.(\\d) To", "$1X00000000000"]
+            args: [ "\\.(\\d) TB", "$1X00000000000"]
           - name: re_replace
-            args: [ " To", "000000000000"]
+            args: [ " TB", "000000000000"]
           - name: replace
             args: [ "X", "" ]
       seeders:
         text: 0
       seeders:
-        selector: td:nth-child(4)
+        selector: "td[style^='color:#058c05;']"
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: td:nth-child(5)
+        selector: "td[style^='color:#ff5252;']"
         optional: true
+      date:
+        text: "{{ .Result.site_date }}"
       downloadvolumefactor:
-        text: "0"
+        text: "1"
       uploadvolumefactor:
         text: "1"

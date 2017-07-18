@@ -1,4 +1,5 @@
 ﻿using Jackett.Services;
+using Jackett.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -31,13 +32,13 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Blackhole(string indexerID, string path, string apikey)
+        public async Task<IHttpActionResult> Blackhole(string indexerID, string path, string apikey, string file)
         {
 
             var jsonReply = new JObject();
             try
             {
-                var indexer = indexerService.GetIndexer(indexerID);
+                var indexer = indexerService.GetWebIndexer(indexerID);
                 if (!indexer.IsConfigured)
                 {
                     logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
@@ -48,8 +49,6 @@ namespace Jackett.Controllers
                     throw new Exception("Incorrect API key");
 
                 var remoteFile = new Uri(Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path)), UriKind.RelativeOrAbsolute);
-                remoteFile = indexer.UncleanLink(remoteFile);
-
                 var downloadBytes = await indexer.Download(remoteFile);
 
                 if (string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
@@ -62,7 +61,12 @@ namespace Jackett.Controllers
                     throw new Exception("Blackhole directory does not exist: " + Engine.Server.Config.BlackholeDir);
                 }
 
-                var fileName = DateTime.Now.Ticks + ".torrent";
+                var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
+                if (string.IsNullOrWhiteSpace(file))
+                    fileName += ".torrent";
+                else
+                    fileName += "-"+StringUtil.MakeValidFileName(file, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks 
+
                 File.WriteAllBytes(Path.Combine(Engine.Server.Config.BlackholeDir, fileName), downloadBytes);
                 jsonReply["result"] = "success";
             }

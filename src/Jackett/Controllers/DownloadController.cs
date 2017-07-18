@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using MonoTorrent.BEncoding;
+using Jackett.Utils;
 
 namespace Jackett.Controllers
 {
@@ -34,7 +35,7 @@ namespace Jackett.Controllers
         {
             try
             {
-                var indexer = indexerService.GetIndexer(indexerID);
+                var indexer = indexerService.GetWebIndexer(indexerID);
 
                 if (!indexer.IsConfigured)
                 {
@@ -48,26 +49,18 @@ namespace Jackett.Controllers
                     return new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
-                target = indexer.UncleanLink(target);
-
                 var downloadBytes = await indexer.Download(target);
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
                 var torrentDictionary = BEncodedDictionary.DecodeTorrent(downloadBytes);
                 downloadBytes = torrentDictionary.Encode();
 
-				char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
-				for(int i=0;i<file.Count();i++)
-					if(invalidChars.Contains(file[i])) {
-						file = file.Remove(i, 1).Insert(i, " ");
-					}
-				
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(downloadBytes);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = file
+                    FileName = StringUtil.MakeValidFileName(file, '_', false) // call MakeValidFileName again to avoid any kind of injection attack
                 };
                 return result;
             }

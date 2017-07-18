@@ -1,0 +1,253 @@
+---
+  site: manicomioshare
+  name: Manicomio Share
+  language: pt-br
+  type: private
+  encoding: iso-8859-1
+  links:
+    - https://www.manicomio-share.com
+
+  caps:
+    categorymappings:
+      #XXX
+      - {id: 80, cat: XXX, desc: "Adulto: [XXX] - Filmes"}
+      - {id: 157, cat: XXX, desc: "Adulto: [XXX] - Blu-Ray"}
+      - {id: 159, cat: XXX, desc: "Adulto: [XXX] - DVD-R"}
+      - {id: 160, cat: XXX, desc: "Adulto: [XXX] - DVD-R 9"}
+      - {id: 161, cat: XXX, desc: "Adulto: [XXX] - Eróticos"}
+      - {id: 162, cat: XXX, desc: "Adulto: [XXX] - HD"}
+      - {id: 188, cat: XXX, desc: "Adulto: [XXX] - 4K"}
+      - {id: 112, cat: XXX/Other, desc: "Adulto: [XXX] - Fotos"}
+      - {id: 113, cat: XXX/Other, desc: "Adulto: [XXX] - Hentai"}
+      - {id: 131, cat: XXX/Other, desc: "Adulto: [XXX] - Jogos"}
+      
+      #ANIME
+      - {id: 21, cat: TV/Anime, desc: "Anime: Anime"}
+      - {id: 155, cat: TV/Anime, desc: "Anime: Anime DVD-R"}
+      - {id: 156, cat: TV/Anime, desc: "Anime: Anime HD"}
+      
+      #PC APPS
+      - {id: 22, cat: PC, desc: "Aplicativos: Linux"}
+      - {id: 23, cat: PC, desc: "Aplicativos: Mac OS"}
+      - {id: 24, cat: PC, desc: "Aplicativos: Windows"}
+      
+      #BOOKLET
+      - {id: 25, cat: Other, desc: "Apostila: Apostila e Textos"}
+      - {id: 169, cat: Other, desc: "Apostila: Cursos e Video Aula"}
+      
+      #MOBILE
+      - {id: 26, cat: Other, desc: "Celular: Aplicativos"}
+      - {id: 184, cat: Other, desc: "Celular: Jogos"}
+      
+      #TV-CHILD
+      - {id: 88, cat: TV/Other, desc: "Desenhos: Desenhos"}
+      - {id: 165, cat: TV/Other, desc: "Desenhos: Desenhos DVD-R"}
+      - {id: 166, cat: TV/Other, desc: "Desenhos: Desenhos HD"}
+      - {id: 83, cat: TV/Other, desc: "Diversos: Diversos"}
+      - {id: 84, cat: TV/Other, desc: "Educativos: Infantil"}
+      
+      #TV-SPORTS
+      - {id: 105, cat: TV/Sport, desc: "Eventos: Esportivos"}
+      - {id: 153, cat: TV/Sport, desc: "Eventos: Esportivos DVD-R"}
+      - {id: 154, cat: TV/Sport, desc: "Eventos: Esportivos HD"}
+      
+      #MOVIES
+      - {id: 189, cat: Movies, desc: "Filmes: 4K"}
+      - {id: 132, cat: Movies/BluRay, desc: "Filmes: Blu-Ray"}
+      - {id: 152, cat: Movies/BluRay, desc: "Filmes: Blu-Ray Nacionais"}
+      - {id: 141, cat: Movies/BluRay, desc: "Filmes: Blu-Ray 3D"}
+      - {id: 142, cat: Movies/BluRay, desc: "Filmes: Blu-Ray BD25"}
+      - {id: 182, cat: Movies/BluRay, desc: "Filmes: Blu-Ray BD25 Nacionais"}
+      - {id: 183, cat: Movies/BluRay, desc: "Filmes: Blu-Ray BD25 3D"}
+      - {id: 143, cat: Movies/BluRay, desc: "Filmes: Blu-Ray Remux"}
+      - {id: 34, cat: Movies/SD, desc: "Filmes: DVD-R"}
+      - {id: 134, cat: Movies/SD, desc: "Filmes: DVD-R Nacionais"}
+      - {id: 144, cat: Movies/SD, desc: "Filmes: DVD-R 9"}
+      - {id: 145, cat: Movies/Other, desc: "Filmes: Documentarios DVD-R"}
+      - {id: 151, cat: Movies/Other, desc: "Filmes: Documentarios HD"}
+      - {id: 127, cat: Movies/HD, desc: "Filmes: HD"}
+      - {id: 148, cat: Movies/Foreign, desc: "Filmes: HD Nacionais"}
+      - {id: 147, cat: Movies/3D, desc: "Filmes: HD 3D"}
+      - {id: 128, cat: Movies/Foreign, desc: "Filmes: Nacionais"}
+      - {id: 27, cat: Movies, desc: "Filmes: Ação"}
+      - {id: 95, cat: Movies, desc: "Filmes: Animação"}
+      - {id: 28, cat: Movies, desc: "Filmes: Aventura"}
+      - {id: 29, cat: Movies, desc: "Filmes: Biografia"}
+      - {id: 30, cat: Movies, desc: "Filmes: Classicos"}
+      - {id: 31, cat: Movies, desc: "Filmes: Comédia"}
+      - {id: 32, cat: Movies, desc: "Filmes: Documentarios"}
+      - {id: 33, cat: Movies, desc: "Filmes: Drama"}
+      - {id: 35, cat: Movies, desc: "Filmes: Esportes"}
+      - {id: 185, cat: Movies, desc: "Filmes: Fantasia"}
+      - {id: 36, cat: Movies, desc: "Filmes: Ficção"}
+      - {id: 85, cat: Movies, desc: "Filmes: Guerra"}
+      - {id: 37, cat: Movies, desc: "Filmes: Infantil"}
+      - {id: 118, cat: Movies, desc: "Filmes: Musicais"}
+      - {id: 104, cat: Movies, desc: "Filmes: Policial"}
+      - {id: 40, cat: Movies, desc: "Filmes: Suspense"}
+      - {id: 38, cat: Movies, desc: "Filmes: Religiosos"}
+      - {id: 39, cat: Movies, desc: "Filmes: Romance"}
+      - {id: 41, cat: Movies, desc: "Filmes: Terror"}
+      - {id: 107, cat: Movies, desc: "Filmes: Western"}
+      
+      #GAMES
+      - {id: 97, cat: Console, desc: "Jogos: Dreamcast"}
+      - {id: 44, cat: PC/Games, desc: "Jogos: Emuladores e Rom"}
+      - {id: 101, cat: Console, desc: "Jogos: Game Cube"}
+      - {id: 140, cat: PC/Mac, desc: "Jogos: Mac OS"}
+      - {id: 119, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
+      - {id: 45, cat: PC/Games, desc: "Jogos: Pc"}
+      - {id: 87, cat: Console, desc: "Jogos: PS1"}
+      - {id: 46, cat: Console, desc: "Jogos: PS2"}
+      - {id: 120, cat: Console, desc: "Jogos: PS3"}
+      - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
+      - {id: 191, cat: Console, desc: "Jogos: PSVita"}
+      - {id: 47, cat: Console/XBox, desc: "Jogos: Xbox"}
+      - {id: 48, cat: Console/XBox 360, desc: "Jogos: Xbox 360"}
+      - {id: 100, cat: Console/Wii, desc: "Jogos: Wii"}
+      - {id: 187, cat: Console/Wii, desc: "Jogos: Wii-U"}
+      
+      #EBOOKS
+      - {id: 49, cat: Books/EBook, desc: "Livros: E-books"}
+      
+      #MUSIC
+      - {id: 50, cat: Audio, desc: "Músicas: Axé"}
+      - {id: 51, cat: Audio, desc: "Músicas: Blues"}
+      - {id: 52, cat: Audio, desc: "Músicas: Classica"}
+      - {id: 53, cat: Audio, desc: "Músicas: Coletânea"}
+      - {id: 103, cat: Audio, desc: "Músicas: Country"}
+      - {id: 102, cat: Audio, desc: "Músicas: Discografia"}
+      - {id: 54, cat: Audio, desc: "Músicas: Dance"}
+      - {id: 55, cat: Audio, desc: "Músicas: Eletronica"}
+      - {id: 135, cat: Audio, desc: "Músicas: Enka e Japonesa"}
+      - {id: 56, cat: Audio, desc: "Músicas: Forró"}
+      - {id: 57, cat: Audio, desc: "Músicas: Funk"}
+      - {id: 58, cat: Audio, desc: "Músicas: Gospel"}
+      - {id: 117, cat: Audio, desc: "Músicas: Hard Core"}
+      - {id: 59, cat: Audio, desc: "Músicas: Hard Rock"}
+      - {id: 61, cat: Audio, desc: "Músicas: Hip Hop"}
+      - {id: 90, cat: Audio, desc: "Músicas: House"}
+      - {id: 62, cat: Audio, desc: "Músicas: Infantil"}
+      - {id: 175, cat: Audio, desc: "Músicas: Instrumental"}
+      - {id: 86, cat: Audio, desc: "Músicas: Jazz"}
+      - {id: 60, cat: Audio, desc: "Músicas: Metal"}
+      - {id: 63, cat: Audio, desc: "Músicas: MPB"}
+      - {id: 64, cat: Audio, desc: "Músicas: New Age"}
+      - {id: 94, cat: Audio, desc: "Músicas: Oldies"}
+      - {id: 65, cat: Audio, desc: "Músicas: Pagode"}
+      - {id: 66, cat: Audio, desc: "Músicas: Pop"}
+      - {id: 109, cat: Audio, desc: "Músicas: Psychedelic"}
+      - {id: 67, cat: Audio, desc: "Músicas: Punk Rock"}
+      - {id: 89, cat: Audio, desc: "Músicas: Raízes"}
+      - {id: 68, cat: Audio, desc: "Músicas: Rap"}
+      - {id: 69, cat: Audio, desc: "Músicas: Reggae"}
+      - {id: 70, cat: Audio, desc: "Músicas: Regionais"}
+      - {id: 71, cat: Audio, desc: "Músicas: Religiosas"}
+      - {id: 72, cat: Audio, desc: "Músicas: Rock"}
+      - {id: 73, cat: Audio, desc: "Músicas: Samba"}
+      - {id: 74, cat: Audio, desc: "Músicas: Sertanejo"}
+      - {id: 98, cat: Audio, desc: "Músicas: Soul R&amp;B"}
+      - {id: 110, cat: Audio, desc: "Músicas: Surf Music"}
+      - {id: 92, cat: Audio, desc: "Músicas: Techno"}
+      - {id: 91, cat: Audio, desc: "Músicas: Trance"}
+      - {id: 75, cat: Audio, desc: "Músicas: Trilha Sonora"}
+      - {id: 93, cat: Audio, desc: "Músicas: Vocal"}
+      - {id: 111, cat: Audio, desc: "Músicas: World Music"}
+      
+      #TV-FOREIGN
+      - {id: 170, cat: TV/Foreign, desc: "Novelas: Novela"}
+      - {id: 171, cat: TV/Foreign, desc: "Novelas: Novela DVD-R"}
+      - {id: 172, cat: TV/Foreign, desc: "Novelas: Novela HD"}
+      - {id: 179, cat: TV/Other, desc: "Religião: Religião Diversos"}
+      - {id: 178, cat: TV/Other, desc: "Religião: Religião DVD-R"}
+      
+      #BOOKS
+      - {id: 96, cat: Books, desc: "Revistas: Revistas"}
+      - {id: 99, cat: Books/Comics, desc: "Revistas: HQ"}
+      - {id: 192, cat: Books/Comics, desc: "Revistas: Mangá"}
+      
+      #TV-SERIES
+      - {id: 76, cat: TV, desc: "Séries: Seriados"}
+      - {id: 122, cat: TV/HD, desc: "Séries: HD"}
+      - {id: 190, cat: TV, desc: "Séries: 4K"}
+      - {id: 186, cat: TV, desc: "Séries: Blu-Ray"}
+      - {id: 124, cat: TV/SD, desc: "Séries: DVD-R"}
+      - {id: 181, cat: TV/SD, desc: "Séries: DVD-R 9"}
+      - {id: 125, cat: TV/SD, desc: "Séries: DVDRip"}
+      - {id: 123, cat: TV/Other, desc: "Séries: Cartoon"}
+      - {id: 164, cat: TV/Other, desc: "Séries: Cartoon DVD-R"}
+      - {id: 163, cat: TV/Other, desc: "Séries: Cartoon HD"}
+      
+      #MUSIC SHOWS
+      - {id: 77, cat: Audio/Video, desc: "Shows: Shows"}
+      - {id: 133, cat: Audio/Video, desc: "Shows: Shows Blu-Ray"}
+      - {id: 130, cat: Audio/Video, desc: "Shows: Shows DVD-R"}
+      - {id: 180, cat: Audio/Video, desc: "Shows: Shows DVD-R 9"}
+      - {id: 129, cat: Audio/Video, desc: "Shows: Shows HD"}
+      
+      #TV-OTHER
+      - {id: 78, cat: TV, desc: "Televisão: Televisão"}
+      - {id: 136, cat: TV, desc: "Televisão: Televisão HDTV"}
+      - {id: 137, cat: TV, desc: "Televisão: Televisão HD"}
+      - {id: 139, cat: TV, desc: "Televisão: Televisão SDTV"}
+      
+      #MUSIC CLIPS
+      - {id: 79, cat: Audio/Video, desc: "Video: Video Clipes"}
+      - {id: 167, cat: Audio/Video, desc: "Video: Video Clipes DVD-R"}
+      - {id: 168, cat: Audio/Video, desc: "Video: Video Clipes HD"}
+
+    modes:
+      search: [q]
+
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+          
+  login:
+    method: cookie
+    inputs:
+      cookie: "{{ .Config.cookie }}"
+    test:
+      path: index.php
+
+  search:
+    path: pesquisa.php
+    inputs:
+      busca: "{{ .Query.Keywords }}"
+    rows:
+      selector: table#tbltorrent > tbody > tr[data-id]
+    fields:
+      download:
+        selector: a[href*="/download.php?id="]
+        attribute: href
+      details:
+        selector: a[href*="/item/"]
+        attribute: href
+      category:
+        selector: a[href*="/torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: a[href*="/item/"]
+        remove: font[color^=green]
+        filters:
+          - name: replace
+            args: ["|", ""]
+      size:
+        selector: td:nth-child(4)
+      grabs:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(5) > span:nth-child(1)
+      leechers:
+        selector: td:nth-child(5) > span:nth-child(2)
+      downloadvolumefactor:
+        case:
+          "span.h3t:contains(\"[livre]\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

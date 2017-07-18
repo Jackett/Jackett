@@ -28,7 +28,12 @@ namespace JackettTest
             throw new NotImplementedException();
         }
 
-        public void InitIndexers()
+        public IWebIndexer GetWebIndexer(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitIndexers(IEnumerable<string> path)
         {
             throw new NotImplementedException();
         }
@@ -39,16 +44,6 @@ namespace JackettTest
         }
 
         public Task TestIndexer(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InitCardigannIndexers(string path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SortIndexers()
         {
             throw new NotImplementedException();
         }
