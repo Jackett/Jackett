@@ -137,12 +137,8 @@ namespace Jackett.Indexers
             if (!configData.SiteLink.Value.EndsWith("/", StringComparison.Ordinal))
                 configData.SiteLink.Value += "/";
 
-            var match = Regex.Match(configData.SiteLink.Value, "^https?:\\/\\/[\\w\\-\\/\\.]+$");
-            if (!match.Success)
-            {
-                throw new Exception(string.Format("\"{0}\" is not a valid URL.", configData.SiteLink.Value));
-            }
-
+            // check whether the site link is well-formatted
+            var siteUri = new Uri(configData.SiteLink.Value);
             SiteLink = configData.SiteLink.Value;
         }
 
