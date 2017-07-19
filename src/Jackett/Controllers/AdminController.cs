@@ -392,6 +392,13 @@ namespace Jackett.Controllers
                         return Json(jsonReply);
                     }
 
+                    if (port < 1 || port > 65535)
+                    {
+                        jsonReply["result"] = "error";
+                        jsonReply["error"] = "The port you have selected is invalid, it must be below 65535.";
+                        return Json(jsonReply);
+                    }
+
                     // Save port to the config so it can be picked up by the if needed when running as admin below.
                     Engine.Server.Config.AllowExternal = external;
                     Engine.Server.Config.Port = port;
