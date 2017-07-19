@@ -103,7 +103,7 @@ namespace Jackett.Controllers
 
             IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
 
-            if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
+            if (indexer.CanHandleQuery(torznabQuery))
                 releases = await indexer.ResultsForQuery(torznabQuery);
 
             // Cache non query results
@@ -115,8 +115,10 @@ namespace Jackett.Controllers
             var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
             var potatoResponse = new TorrentPotatoResponse();
 
-            releases = TorznabUtil.FilterResultsToTitle(releases, torznabQuery.SanitizedSearchTerm, year);
-            releases = TorznabUtil.FilterResultsToImdb(releases, request.imdbid);
+            if (!torznabQuery.SanitizedSearchTerm.IsNullOrEmptyOrWhitespace())
+                releases = TorznabUtil.FilterResultsToTitle(releases, torznabQuery.SanitizedSearchTerm, year);
+            if (!torznabQuery.ImdbID.IsNullOrEmptyOrWhitespace())
+                releases = TorznabUtil.FilterResultsToImdb(releases, request.imdbid);
 
             foreach (var r in releases)
             {
