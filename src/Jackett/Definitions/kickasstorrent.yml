@@ -95,15 +95,18 @@
 
   login:
     method: post
-    path: "new/account-login.php"
+    path: "/new/account-login.php"
     inputs:
       username: "{{ .Config.username }}"
       passkey: "{{ .Config.passkey }}"
+    error:
+      - selector: font.error:contains("Access Denied")
     test:
-      path: index.php
+      path: "/new/index.php"
+      selector: a[href="account-logout.php"]
 
   search:
-    path: "/new/torrents-search.php"
+    path: "/new/{{if .Query.Keywords}}torrents-search.php{{else}}torrents.php{{end}}"
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "\"{{ .Query.Keywords }}\""
