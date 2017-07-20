@@ -21,7 +21,7 @@ namespace Jackett.Indexers
     public class DanishBits : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php"; } }
+        private string SearchUrl { get { return SiteLink + "couchpotato.php"; } }
 
         new NxtGnConfigurationData configData
         {
