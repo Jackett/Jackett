@@ -14,7 +14,7 @@ namespace Jackett.Indexers.Newznab
         {
             // TODO
             // this might be downloaded and refreshed instead of hard-coding it
-            TorznabCaps = new TorznabCapabilities
+            TorznabCaps = new TorznabCapabilities(new TorznabCategory(5070, "Anime"))
             {
                 SearchAvailable = true,
                 TVSearchAvailable = false,
@@ -28,6 +28,6 @@ namespace Jackett.Indexers.Newznab
             Type = "public";
         }
 
-        protected override Uri FeedUri => new Uri("https://animetosho.org/feed/api");
+        protected override Uri FeedUri => new Uri(SiteLink + "/feed/api");
     }
 }

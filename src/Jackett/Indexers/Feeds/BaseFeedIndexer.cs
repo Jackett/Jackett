@@ -21,7 +21,11 @@ namespace Jackett.Indexers
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
+            LoadValuesFromJson(configJson);
+
             IsConfigured = true;
+            SaveConfig();
+
             return Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
@@ -33,7 +37,8 @@ namespace Jackett.Indexers
             var request = new WebRequest
             {
                 Url = requestUri,
-                Type = RequestType.GET
+                Type = RequestType.GET,
+                Encoding = Encoding
             };
             var result = await webclient.GetString(request);
 
