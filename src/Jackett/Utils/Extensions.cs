@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Jackett.Utils
 {
@@ -50,6 +52,16 @@ namespace Jackett.Utils
         {
             return string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
         }
+
+        public static DateTime ToDateTime(this string str)
+        {
+            return DateTime.Parse(str);
+        }
+
+        public static Uri ToUri(this string str)
+        {
+            return new Uri(str);
+        }
     }
 
     public static class CollectionExtension
@@ -62,6 +74,19 @@ namespace Jackett.Utils
         public static bool IsEmptyOrNull<T>(this ICollection<T> obj)
         {
             return obj == null || obj.IsEmpty();
+        }
+    }
+
+    public static class XElementExtension
+    {
+        public static XElement First(this XElement element, string name)
+        {
+            return element.Descendants(name).First();
+        }
+
+        public static string FirstValue(this XElement element, string name)
+        {
+            return element.First(name).Value;
         }
     }
 }
