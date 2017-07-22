@@ -28,7 +28,13 @@ namespace Jackett
 {
     class ApiExceptionHandler : System.Web.Http.Filters.IExceptionFilter
     {
-        public bool AllowMultiple => throw new NotImplementedException();
+        public bool AllowMultiple
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public Task ExecuteExceptionFilterAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
         {
