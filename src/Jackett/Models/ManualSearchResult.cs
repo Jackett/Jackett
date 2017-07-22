@@ -9,7 +9,7 @@ namespace Jackett
 {
     public class ManualSearchResult
     {
-        public List<TrackerCacheResult> Results { get; set; }
-        public List<string> Indexers { get; set; }
+        public IEnumerable<TrackerCacheResult> Results { get; set; }
+        public IEnumerable<string> Indexers { get; set; }
     }
 }

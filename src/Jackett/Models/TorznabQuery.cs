@@ -83,12 +83,7 @@ namespace Jackett.Models
         {
             get
             {
-                if (SearchTerm == null)
-                    return string.Empty;
-
-                char[] arr = SearchTerm.ToCharArray();
-
-                arr = Array.FindAll<char>(arr, c => (char.IsLetterOrDigit(c)
+                var safetitle = SearchTerm.Where(c => (char.IsLetterOrDigit(c)
                                                   || char.IsWhiteSpace(c)
                                                   || c == '-'
                                                   || c == '.'
@@ -99,8 +94,7 @@ namespace Jackett.Models
                                                   || c == '\''
                                                   || c == '['
                                                   || c == ']'
-                                                  ));
-                var safetitle = new string(arr);
+                                      )).AsString();
                 return safetitle;
             }
         }
@@ -111,9 +105,11 @@ namespace Jackett.Models
             IsTest = false;
         }
 
-        public TorznabQuery CreateFallback(string search) {
+        public TorznabQuery CreateFallback(string search)
+        {
             var ret = Clone();
-            if (Categories == null || Categories.Length == 0) {
+            if (Categories == null || Categories.Length == 0)
+            {
                 ret.Categories = new int[]{ TorznabCatType.Movies.ID,
                                             TorznabCatType.MoviesForeign.ID,
                                             TorznabCatType.MoviesOther.ID,
@@ -121,8 +117,8 @@ namespace Jackett.Models
                                             TorznabCatType.MoviesHD.ID,
                                             TorznabCatType.Movies3D.ID,
                                             TorznabCatType.MoviesBluRay.ID,
-						                    TorznabCatType.MoviesDVD.ID,
-						                    TorznabCatType.MoviesWEBDL.ID,
+                                            TorznabCatType.MoviesDVD.ID,
+                                            TorznabCatType.MoviesWEBDL.ID,
                 };
             }
             ret.SearchTerm = search;
@@ -130,12 +126,14 @@ namespace Jackett.Models
             return ret;
         }
 
-        public TorznabQuery Clone() {
+        public TorznabQuery Clone()
+        {
             var ret = new TorznabQuery();
             ret.QueryType = QueryType;
-            if (Categories != null && Categories.Length > 0) {
-                ret.Categories = new int [Categories.Length];
-                Array.Copy (Categories, ret.Categories, Categories.Length);
+            if (Categories != null && Categories.Length > 0)
+            {
+                ret.Categories = new int[Categories.Length];
+                Array.Copy(Categories, ret.Categories, Categories.Length);
             }
             ret.Extended = Extended;
             ret.ApiKey = ApiKey;
@@ -145,9 +143,10 @@ namespace Jackett.Models
             ret.Episode = Episode;
             ret.SearchTerm = SearchTerm;
             ret.IsTest = IsTest;
-            if (QueryStringParts != null && QueryStringParts.Length > 0) {
-                ret.QueryStringParts = new string [QueryStringParts.Length];
-                Array.Copy (QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
+            if (QueryStringParts != null && QueryStringParts.Length > 0)
+            {
+                ret.QueryStringParts = new string[QueryStringParts.Length];
+                Array.Copy(QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
             }
 
             return ret;
@@ -206,11 +205,12 @@ namespace Jackett.Models
                 try
                 {
                     episodeString = string.Format("S{0:00}E{1:00}", Season, ParseUtil.CoerceInt(Episode));
-                } catch (FormatException) // e.g. seaching for S01E01A
+                }
+                catch (FormatException) // e.g. seaching for S01E01A
                 {
                     episodeString = string.Format("S{0:00}E{1}", Season, Episode);
                 }
-                
+
             }
             return episodeString;
         }
@@ -234,7 +234,8 @@ namespace Jackett.Models
             if (query["cat"] != null)
             {
                 q.Categories = query["cat"].Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s)).ToArray();
-            }else
+            }
+            else
             {
                 if (q.QueryType == "movie" && string.IsNullOrWhiteSpace(query["imdbid"]))
                     q.Categories = new int[] { TorznabCatType.Movies.ID };

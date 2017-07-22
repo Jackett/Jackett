@@ -18,10 +18,45 @@ using Jackett.Utils;
 using Microsoft.AspNet.Identity;
 using System.Web.Http.ExceptionHandling;
 using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Web.Http.Filters;
+using Newtonsoft.Json.Linq;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
 {
+    class ApiExceptionHandler : System.Web.Http.Filters.IExceptionFilter
+    {
+        public bool AllowMultiple => throw new NotImplementedException();
+
+        public Task ExecuteExceptionFilterAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
+        {
+            string msg = "";
+            var json = new JObject();
+            var exception = actionExecutedContext.Exception;
+
+            var message = exception.Message;
+            if (exception.InnerException != null)
+                message += ": " + exception.InnerException.Message;
+            msg = message;
+
+            if (exception is ExceptionWithConfigData)
+                json["config"] = ((ExceptionWithConfigData)exception).ConfigData.ToJson(null, false);
+
+            json["result"] = "error";
+            json["error"] = msg;
+
+            var response = actionExecutedContext.Request.CreateResponse();
+            response.Content = new JsonContent(json);
+            response.StatusCode = HttpStatusCode.InternalServerError;
+
+            actionExecutedContext.Response = response;
+
+            return Task.FromResult(0);
+        }
+    }
+
     public class Startup
     {
         public static bool TracingEnabled
@@ -103,7 +138,7 @@ namespace Jackett
             appBuilder.Use<WebApiRootRedirectMiddleware>();
 
             // register exception handler
-            config.Services.Replace(typeof(IExceptionHandler), new WebAPIExceptionHandler());
+            config.Filters.Add(new ApiExceptionHandler());
 
             // Setup tracing if enabled
             if (TracingEnabled)
@@ -113,16 +148,35 @@ namespace Jackett
             }
             // Add request logging if enabled
             if (LogRequests)
-            {
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
-            }
+
             config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "Admin",
-                routeTemplate: "admin/{action}",
-                defaults: new { controller = "Admin" }
+                name: "IndexerAPI",
+                routeTemplate: "Api/Indexers/{indexerId}/{action}",
+                defaults: new
+                {
+                    controller = "IndexerApi",
+                    action = "Indexers",
+                    indexerId = ""
+                }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "ServerConfiguration",
+                routeTemplate: "Api/Server/{action}",
+                defaults: new
+                {
+                    controller = "ServerConfiguration"
+                }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "WebUI",
+                routeTemplate: "UI/{action}",
+                defaults: new { controller = "WebUI" }
             );
 
             config.Routes.MapHttpRoute(
@@ -135,31 +189,31 @@ namespace Jackett
                name: "api",
                routeTemplate: "api/{indexerID}/api",
                defaults: new { controller = "Torznab", action = "Call" }
-           );
+            );
 
             config.Routes.MapHttpRoute(
                name: "torznabDefault",
                routeTemplate: "torznab/{indexerID}",
                defaults: new { controller = "Torznab", action = "Call" }
-           );
+            );
 
             config.Routes.MapHttpRoute(
                name: "torznab",
                routeTemplate: "torznab/{indexerID}/api",
                defaults: new { controller = "Torznab", action = "Call" }
-           );
+            );
 
             config.Routes.MapHttpRoute(
               name: "potatoDefault",
               routeTemplate: "potato/{indexerID}",
               defaults: new { controller = "Potato", action = "Call" }
-          );
+            );
 
             config.Routes.MapHttpRoute(
                name: "potato",
                routeTemplate: "potato/{indexerID}/api",
                defaults: new { controller = "Potato", action = "Call" }
-           );
+            );
 
             config.Routes.MapHttpRoute(
                 name: "download",
@@ -171,7 +225,7 @@ namespace Jackett
               name: "blackhole",
               routeTemplate: "bh/{indexerID}/{apikey}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
-          );
+            );
 
             appBuilder.UseWebApi(config);
 
@@ -183,7 +237,6 @@ namespace Jackett
                 EnableDirectoryBrowsing = false,
 
             });
-
         }
     }
 }

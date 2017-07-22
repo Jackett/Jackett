@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
@@ -19,7 +18,7 @@
 
             var urlParams = getUrlParams();
 
-            var jqxhr = $.post("get_config_form", JSON.stringify({ indexer: urlParams.indexer }), function (data) {
+            var jqxhr = $.get("/Api/Indexers/" + urlParams.indexer + "/Config", JSON.stringify({ indexer: urlParams.indexer }), function (data) {
                 populateForm(data.config);
             })
             .fail(function () {
@@ -46,7 +45,7 @@
                     }
                 });
 
-                var jqxhr = $.post("configure_indexer", JSON.stringify(data), function (data) {
+                var jqxhr = $.post("/Api/Indexers/" + urlParams.indexer + "/Config", JSON.stringify(data), function (data) {
                     if (data.result == "error") {
                         if (data.config) {
                             populateForm(data.config);
@@ -102,19 +101,14 @@
 
 
     </script>
-
     <div id="formItems">
-
     </div>
-
     <button id="loginButton">Login</button>
-
     <div id="formItemTemplateContainer">
         <div id="formItemTemplate">
             <div class="formItemName"></div>
             <div class="formItemValue"></div>
         </div>
     </div>
-
 </body>
 </html>

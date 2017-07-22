@@ -137,7 +137,7 @@ namespace Jackett
             var logConsole = new ColoredConsoleTarget();
             logConfig.AddTarget("console", logConsole);
 
-            logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
+            logConsole.Layout = "${simpledatetime} ${level} ${callsite:fileName=true} ${message} ${exception:format=ToString}";
             var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
             logConfig.LoggingRules.Add(logConsoleRule);
 

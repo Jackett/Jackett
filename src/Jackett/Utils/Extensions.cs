@@ -30,19 +30,24 @@ namespace Jackett.Utils
         private T Value;
     }
 
-    public static class ToEnumerableExtension
+    public static class GenericConversionExtensions
     {
         public static IEnumerable<T> ToEnumerable<T>(this T obj)
         {
             return new T[] { obj };
         }
-    }
 
-    public static class ToNonNullExtension
-    {
         public static NonNull<T> ToNonNull<T>(this T obj) where T : class
         {
             return new NonNull<T>(obj);
+        }
+    }
+
+    public static class EnumerableExtension
+    {
+        public static string AsString(this IEnumerable<char> chars)
+        {
+            return String.Concat(chars);
         }
     }
 

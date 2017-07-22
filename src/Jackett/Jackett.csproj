@@ -331,7 +331,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCookie.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataRuTor.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="Utils\Clients\WebRequest.cs" />
     <Compile Include="Utils\DataUrl.cs" />
@@ -368,8 +367,6 @@
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\HttpWebClient.cs" />
-    <Compile Include="WebAPIExceptionHandler.cs" />
-    <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\Meta\MetaIndexers.cs" />
     <Compile Include="Indexers\Meta\BaseMetaIndexer.cs" />
@@ -383,6 +380,12 @@
     <Compile Include="Indexers\Feeds\BaseNewznabIndexer.cs" />
     <Compile Include="Indexers\Feeds\AnimeTosho.cs" />
     <Compile Include="Indexers\Feeds\BaseFeedIndexer.cs" />
+    <Compile Include="DTO\Indexer.cs" />
+    <Compile Include="Controllers\IndexerApiController.cs" />
+    <Compile Include="Controllers\UIController.cs" />
+    <Compile Include="Controllers\ServerConfigurationController.cs" />
+    <Compile Include="DTO\Config.cs" />
+    <Compile Include="DTO\ServerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -569,6 +572,7 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Indexers\Feeds\" />
+    <Folder Include="DTO\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
