@@ -378,6 +378,7 @@ namespace Jackett.Controllers
                 if (omdbApiKey != Engine.Server.Config.OmdbApiKey)
                 {
                     Engine.Server.Config.OmdbApiKey = omdbApiKey;
+                    Engine.Server.SaveConfig();
                     // HACK
                     indexerService.InitAggregateIndexer();
                 }
