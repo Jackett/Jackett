@@ -26,6 +26,13 @@ $(document).ready(function () {
     $.ajaxSetup({ cache: false });
     window.jackettIsLocal = window.location.hostname === '127.0.0.1';
 
+    Handlebars.registerHelper('if_eq', function(a, b, opts) {
+	    if (a == b)
+	        return opts.fn(this);
+	    else
+	        return opts.inverse(this);
+	});
+
     bindUIButtons();
     loadJackettSettings();
    
@@ -171,6 +178,40 @@ function displayUnconfiguredIndexersList() {
         $(btn).click(function () {
             $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
                 displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks);
+            });
+        });
+    });
+    indexersTable.find('.indexer-add').each(function (i, btn) {
+        var indexer = unconfiguredIndexers[i];
+        $(btn).click(function () {
+            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
+                var jqxhr = $.get("/Api/Indexers/" + indexer.id + "/Config", function (data) {
+			        if (data.result !== undefined && data.result == "error") {
+			            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+			            return;
+			        }
+	                var jqxhr = $.ajax({
+			            url: "/Api/Indexers/" + indexer.id + "/Config",
+			            type: 'POST',
+			            data: JSON.stringify(data),
+			            dataType: 'json',
+			            contentType: 'application/json',
+			            cache: false,
+			            success: function (data) {
+			                if (data == undefined) {
+			                    reloadIndexers();
+			                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
+			                } else if (data.result == "error") {
+			                    if (data.config) {
+			                        populateConfigItems(configForm, data.config);
+			                    }
+			                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+			                }
+			            }
+			        }).fail(function () {
+			            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+			        });
+                });
             });
         });
     });
