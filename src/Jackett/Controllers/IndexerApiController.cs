@@ -104,6 +104,7 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
+        [Route("")]
         public IEnumerable<DTO.Indexer> Indexers()
         {
             var dto = IndexerService.GetAllIndexers().Select(i => new DTO.Indexer(i));
@@ -133,8 +134,9 @@ namespace Jackett.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         [RequiresIndexer]
+        [Route("{indexerId}")]
         public void Delete()
         {
             IndexerService.DeleteIndexer(CurrentIndexer.ID);

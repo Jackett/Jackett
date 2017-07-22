@@ -300,11 +300,16 @@ function prepareDeleteButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            var jqxhr = $.post("/Api/Indexers/" + id + "/Delete", function (data) {
-                if (data == undefined) {
-                    doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
-                } else if (data.result == "error") {
-                    doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
+            var jqxhr = $.ajax({
+	            url: "/Api/Indexers/" + id,
+	            type: 'DELETE',
+	            cache: false,
+	            success: function (data) {
+	                if (data == undefined) {
+	                    doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
+	                } else if (data.result == "error") {
+	                    doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
+	                }
                 }
             }).fail(function () {
                 doNotify("Error deleting indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");

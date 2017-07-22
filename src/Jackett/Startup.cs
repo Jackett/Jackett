@@ -159,7 +159,6 @@ namespace Jackett
                 defaults: new
                 {
                     controller = "IndexerApi",
-                    action = "Indexers",
                     indexerId = ""
                 }
             );
