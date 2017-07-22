@@ -83,7 +83,10 @@ namespace Jackett.Models
         {
             get
             {
-                var safetitle = SearchTerm.Where(c => (char.IsLetterOrDigit(c)
+                var term = SearchTerm;
+                if (SearchTerm == null)
+                    term = "";
+                var safetitle = term.Where(c => (char.IsLetterOrDigit(c)
                                                   || char.IsWhiteSpace(c)
                                                   || c == '-'
                                                   || c == '.'
