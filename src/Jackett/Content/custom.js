@@ -28,8 +28,18 @@ $(document).ready(function () {
 
     bindUIButtons();
     loadJackettSettings();
-   
+    openSearchIfNecessary();
 });
+
+function openSearchIfNecessary() {
+    var parser = document.createElement('a');
+    parser.href = window.location.href;
+
+    if (parser.hash.startsWith("#search")) {
+        var query = parser.hash.split('=')[1];
+        showSearch(null, query);
+    }
+}
 
 function insertWordWrap(str) {
     // insert optional word wrap after punctuation to avoid overflows on long scene titles
@@ -678,7 +688,7 @@ function updateReleasesRow(row)
     }
 }
 
-function showSearch(selectedIndexer) {
+function showSearch(selectedIndexer, query) {
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
@@ -719,15 +729,16 @@ function showSearch(selectedIndexer) {
         setCategories(trackerId, this.items);
     }, { items: configuredIndexers }));
 
-    document.getElementById("searchquery")
-    .addEventListener("keyup", function (event) {
+    var queryField = document.getElementById("searchquery");
+    queryField.addEventListener("keyup", function (event) {
         event.preventDefault();
         if (event.keyCode == 13) {
             document.getElementById("jackett-search-perform").click();
         }
     });
 
-    $('#jackett-search-perform').click(function () {
+    var searchButton = $('#jackett-search-perform');
+    searchButton.click(function () {
         if ($('#jackett-search-perform span').hasClass("spinner")) {
             // We are searchin already
             return;
@@ -767,6 +778,11 @@ function showSearch(selectedIndexer) {
     updateSearchResultTable($('#searchResults'), []);
     clearSearchResultTable($('#searchResults'));
     releaseDialog.modal("show");
+
+    if (query !== undefined) {
+        queryField.value = decodeURIComponent(query);
+        searchButton.click();
+    }
 }
 
 function clearSearchResultTable(element) {
