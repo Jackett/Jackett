@@ -54,10 +54,7 @@ function insertWordWrap(str) {
 }
 
 function getJackettConfig(callback) {
-    var jqxhr = $.get("/Api/Server/Config", function (data) {
-
-        callback(data);
-    }).fail(function () {
+    getServerConfig(callback).fail(function () {
         doNotify("Error loading Jackett settings, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
 }
@@ -73,7 +70,7 @@ function loadJackettSettings() {
         if (basePath === null || basePath === undefined) {
             basePath = '';
         }
-       
+
         $("#jackett-savedir").val(data.blackholedir);
         $("#jackett-allowext").attr('checked', data.external);
         $("#jackett-allowupdate").attr('checked', data.updatedisabled);
@@ -97,7 +94,7 @@ function loadJackettSettings() {
 
 function reloadIndexers() {
     $('#indexers').hide();
-    var jqxhr = $.get("/Api/Indexers/", function (data) {
+    getAllIndexers(function (data) {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
@@ -105,7 +102,7 @@ function reloadIndexers() {
             var item = data[i];
             item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
             item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
-            
+
             if (item.last_error)
                 item.state = "error";
             else
@@ -130,7 +127,7 @@ function reloadIndexers() {
                 return c.Name.split("/")[0];
             });
             item.mains_cats = $.unique(main_cats_list).join(", ");
-           
+
             if (item.configured)
                 configuredIndexers.push(item);
             else
@@ -180,7 +177,7 @@ function displayConfiguredIndexersList(indexers) {
 
 function displayUnconfiguredIndexersList() {
     var UnconfiguredIndexersDialog = $($("#select-indexer").html());
-       
+
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
     var indexersTable = $(indexersTemplate({ indexers: unconfiguredIndexers, total_unconfigured_indexers: unconfiguredIndexers.length  }));
     indexersTable.find('.indexer-setup').each(function (i, btn) {
@@ -195,29 +192,21 @@ function displayUnconfiguredIndexersList() {
         var indexer = unconfiguredIndexers[i];
         $(btn).click(function () {
             $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                var jqxhr = $.get("/Api/Indexers/" + indexer.id + "/Config", function (data) {
+                getIndexerConfig(indexer.id, function (data) {
 			        if (data.result !== undefined && data.result == "error") {
 			            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
 			            return;
 			        }
-	                var jqxhr = $.ajax({
-			            url: "/Api/Indexers/" + indexer.id + "/Config",
-			            type: 'POST',
-			            data: JSON.stringify(data),
-			            dataType: 'json',
-			            contentType: 'application/json',
-			            cache: false,
-			            success: function (data) {
-			                if (data == undefined) {
-			                    reloadIndexers();
-			                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
-			                } else if (data.result == "error") {
-			                    if (data.config) {
-			                        populateConfigItems(configForm, data.config);
-			                    }
-			                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
-			                }
-			            }
+	                updateIndexerConfig(indexer.id, data, function (data) {
+		                if (data == undefined) {
+		                    reloadIndexers();
+		                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
+		                } else if (data.result == "error") {
+		                    if (data.config) {
+		                        populateConfigItems(configForm, data.config);
+		                    }
+		                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+		                }
 			        }).fail(function () {
 			            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
 			        });
@@ -284,7 +273,7 @@ function displayUnconfiguredIndexersList() {
 
     var undefindexers = UnconfiguredIndexersDialog.find('#unconfigured-indexers');
     undefindexers.append(indexersTable);
-    
+
     UnconfiguredIndexersDialog.on('shown.bs.modal', function() {
         $(this).find('div.dataTables_filter input').focusWithoutScrolling();
     });
@@ -294,7 +283,7 @@ function displayUnconfiguredIndexersList() {
     });
 
     $("#modals").append(UnconfiguredIndexersDialog);
-    
+
     UnconfiguredIndexersDialog.modal("show");
 }
 
@@ -351,16 +340,11 @@ function prepareDeleteButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            var jqxhr = $.ajax({
-	            url: "/Api/Indexers/" + id,
-	            type: 'DELETE',
-	            cache: false,
-	            success: function (data) {
-	                if (data == undefined) {
-	                    doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
-	                } else if (data.result == "error") {
-	                    doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
-	                }
+            deleteIndexer(id, function (data) {
+                if (data == undefined) {
+                    doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
+                } else if (data.result == "error") {
+                    doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
                 }
             }).fail(function () {
                 doNotify("Error deleting indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
@@ -426,10 +410,10 @@ function updateTestState(id, state, message, parent)
 function testIndexer(id, notifyResult) {
     var indexers = $('#indexers');
     updateTestState(id, "inprogres", null, indexers);
-    
+
     if (notifyResult)
         doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-    var jqxhr = $.post("/Api/Indexers/" + id + "/Test", function (data) {
+    testIndexer(function (data) {
         if (data == undefined) {
             updateTestState(id, "success", "Test successful", indexers);
             if (notifyResult)
@@ -459,14 +443,13 @@ function prepareTestButtons(element) {
 }
 
 function displayIndexerSetup(id, name, caps, link, alternativesitelinks) {
-    var jqxhr = $.get("/Api/Indexers/" + id + "/Config", function (data) {
+    getIndexerConfig(function (data) {
         if (data.result !== undefined && data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         }
 
         populateSetupForm(id, name, data, caps, link, alternativesitelinks);
-
     }).fail(function () {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -611,24 +594,16 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
         $goButton.prop('disabled', true);
         $goButton.html($('#spinner').html());
 
-        var jqxhr = $.ajax({
-            url: "/Api/Indexers/" + indexerId + "/Config",
-            type: 'POST',
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: 'application/json',
-            cache: false,
-            success: function (data) {
-                if (data == undefined) {
-                    configForm.modal("hide");
-                    reloadIndexers();
-                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
-                } else if (data.result == "error") {
-                    if (data.config) {
-                        populateConfigItems(configForm, data.config);
-                    }
-                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+        var jqxhr = updateIndexerConfig(indexerId, data, function (data) {
+            if (data == undefined) {
+                configForm.modal("hide");
+                reloadIndexers();
+                doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
+            } else if (data.result == "error") {
+                if (data.config) {
+                    populateConfigItems(configForm, data.config);
                 }
+                doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -682,7 +657,7 @@ function clearNotifications() {
 }
 
 function updateReleasesRow(row)
-{    
+{
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
@@ -798,13 +773,13 @@ function showSearch(selectedIndexer, query) {
         var trackerId = queryObj.Tracker;
         if (trackerId == null || trackerId == "")
             trackerId = "all";
-        var jqxhr = $.get("/Api/Indexers/" + trackerId + "/Results", queryObj, function (data) {
+        var jqxhr = resultsForIndexer(trackerId, queryObj, function (data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
                 item.Title = insertWordWrap(item.Title);
                 item.CategoryDesc = insertWordWrap(item.CategoryDesc);
             }
-            
+
             $('#jackett-search-perform').html($('#search-button-ready').html());
             var searchResults = $('#searchResults');
             searchResults.empty();
@@ -870,7 +845,7 @@ function updateSearchResultTable(element, results) {
                 if ("deadfilter" in sValue)
                     settings.deadfilter = sValue.deadfilter;
             },
-            
+
             "dom": "lfr<\"dataTables_deadfilter\">tip",
             "stateSave": true,
             "bAutoWidth": false,
@@ -982,7 +957,7 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-releases").click(function () {
-        var jqxhr = $.get("/Api/Indexers/Cache", function (data) {
+        var jqxhr = getServerCache(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
                 item.Title = insertWordWrap(item.Title);
@@ -996,7 +971,7 @@ function bindUIButtons() {
             releaseDialog.on('hidden.bs.modal', function (e) {
                 $('#indexers div.dataTables_filter input').focusWithoutScrolling();
             });
-            
+
             table.DataTable(
                  {
                      "stateSave": true,
@@ -1079,13 +1054,12 @@ function bindUIButtons() {
     });
 
     $("#view-jackett-logs").click(function () {
-        var jqxhr = $.get("/Api/Server/Logs", function (data) {
+        var jqxhr = getServerLogs(function (data) {
             var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
             var item = { logs: data };
             var releaseDialog = $(releaseTemplate(item));
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
-
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
@@ -1109,23 +1083,15 @@ function bindUIButtons() {
             basepathoverride: jackett_basepathoverride,
             omdbkey: jackett_omdb_key
         };
-        var jqxhr = $.ajax({
-            url: "/Api/Server/Config",
-            type: 'POST',
-            data: JSON.stringify(jsonObject),
-            dataType: 'json',
-            contentType: 'application/json',
-            cache: false,
-            success: function (data) {
-	            if (data !== undefined && data.result == "error") {
-	                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
-	                return;
-	            } else {
-	                doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
-	                window.setTimeout(function () {
-	                    window.location.reload(true);
-	                }, 3000);
-	            }
+        var jqxhr = updateServerConfig(function (data) {
+            if (data !== undefined && data.result == "error") {
+                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                return;
+            } else {
+                doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
+                window.setTimeout(function () {
+                    window.location.reload(true);
+                }, 3000);
             }
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -1133,7 +1099,7 @@ function bindUIButtons() {
     });
 
     $("#trigger-updater").click(function () {
-        var jqxhr = $.post("/Api/Server/Update", function (data) {
+        var jqxhr = updateServer(function (data) {
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
@@ -1148,24 +1114,16 @@ function bindUIButtons() {
     $("#change-jackett-password").click(function () {
         var password = $("#jackett-adminpwd").val();
 
-        var jqxhr = $.ajax({
-            url: "/Api/Server/AdminPassword",
-            type: 'POST',
-            data: JSON.stringify(password),
-            dataType: 'json',
-            contentType: 'application/json',
-            cache: false,
-            success: function (data) {
-                if (data == undefined) {
-                    doNotify("Admin password has been set.", "success", "glyphicon glyphicon-ok");
+        updateAdminPassword(password, function (data) {
+            if (data == undefined) {
+                doNotify("Admin password has been set.", "success", "glyphicon glyphicon-ok");
 
-                    window.setTimeout(function () {
-                        window.location = window.location.pathname;
-                    }, 1000);
-                } else if (data.result == "error") {
-                    doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
-                    return;
-                }
+                window.setTimeout(function () {
+                    window.location = window.location.pathname;
+                }, 1000);
+            } else if (data.result == "error") {
+                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                return;
             }
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
