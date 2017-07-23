@@ -9,9 +9,9 @@ using Jackett.Services;
 using Jackett.Utils;
 using NLog;
 
-namespace Jackett.Controllers
+namespace Jackett.Controllers.V20
 {
-    [RoutePrefix("Api/Server")]
+    [RoutePrefix("api/v2.0/server")]
     [JackettAuthorized]
     [JackettAPINoCache]
     public class ServerConfigurationController : ApiController

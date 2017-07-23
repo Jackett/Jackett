@@ -1,76 +1,88 @@
-function getAllIndexers(callback) {
-    return $.get("/Api/Indexers/", callback);
-}
+var api = {
+	version: "2.0",
+	root: "/api",
 
-function getServerConfig(callback) {
-    return $.get("/Api/Server/Config", callback);
-}
+	getApiPath: function(category, action) {
+	    var path = this.root + "/v" + this.version + "/" + category;
+	    if (action !== undefined)
+	        path = path + "/" + action
+	    return path;
+	},
 
-function getIndexerConfig(indexerId, callback) {
-    return $.get("/Api/Indexers/" + indexerId + "/Config", calback);
-}
+	getAllIndexers: function(callback) {
+	    return $.get(this.getApiPath("indexers"), callback);
+	},
 
-function updateIndexerConfig(indexerId, config, callback) {
-    return $.ajax({
-        url: "/Api/Indexers/" + indexerId + "/Config",
-        type: 'POST',
-        data: JSON.stringify(config),
-        dataType: 'json',
-        contentType: 'application/json',
-        cache: false,
-        success: callback
-    });
-}
+	getServerConfig: function(callback) {
+	    return $.get(this.getApiPath("server", "config"), callback);
+	},
 
-function deleteIndexer(indexerId, callback) {
-    return $.ajax({
-        url: "/Api/Indexers/" + indexerId,
-        type: 'DELETE',
-        cache: false,
-        success: callback
-    });
-}
+	getIndexerConfig: function(indexerId, callback) {
+	    return $.get(this.getApiPath("indexers", indexerId + "/config"), callback);
+	},
 
-function testIndexer(indexerId, callback) {
-    return $.post("/Api/Indexers/" + indexerId + "/Test", callback);
-}
+	updateIndexerConfig: function(indexerId, config, callback) {
+	    return $.ajax({
+	        url: this.getApiPath("indexers", indexerId + "/config"),
+	        type: 'POST',
+	        data: JSON.stringify(config),
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        cache: false,
+	        success: callback
+	    });
+	},
 
-function resultsForIndexer(indexerId, query, callback) {
-    return $.get("/Api/Indexers/" + trackerId + "/Results", query, callback);
-}
+	deleteIndexer: function(indexerId, callback) {
+	    return $.ajax({
+	        url: this.getApiPath("indexers", indexerId),
+	        type: 'DELETE',
+	        cache: false,
+	        success: callback
+	    });
+	},
 
-function getServerCache(callback) {
-    return $.get("/Api/Indexers/Cache", callback);
-}
+	testIndexer: function(indexerId, callback) {
+	    return $.post(this.getApiPath("indexers", indexerId + "/test"), callback);
+	},
 
-function getServerLogs(callback) {
-    return $.get("/Api/Server/Logs", callback);
-}
+	resultsForIndexer: function(indexerId, query, callback) {
+	    return $.get(this.getApiPath("indexers", indexerId + "/results"), query, callback);
+	},
 
-function updateServerConfig(serverConfig, callback) {
-    return $.ajax({
-        url: "/Api/Server/Config",
-        type: 'POST',
-        data: JSON.stringify(serverConfig),
-        dataType: 'json',
-        contentType: 'application/json',
-        cache: false,
-        success: callback
-    });
-}
+	getServerCache: function(callback) {
+	    return $.get(this.getApiPath("indexers", "cache"), callback);
+	},
 
-function updateServer(callback) {
-    return $.post("/Api/Server/Update", callback);
-}
+	getServerLogs: function(callback) {
+	    return $.get(this.getApiPath("server", "logs"), callback);
+	},
 
-function updateAdminPassword(password, callback) {
-    return $.ajax({
-        url: "/Api/Server/AdminPassword",
-        type: 'POST',
-        data: JSON.stringify(password),
-        dataType: 'json',
-        contentType: 'application/json',
-        cache: false,
-        success: callback
-    });
+	updateServerConfig: function(serverConfig, callback) {
+	    return $.ajax({
+	        url: this.getApiPath("server", "config"),
+	        type: 'POST',
+	        data: JSON.stringify(serverConfig),
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        cache: false,
+	        success: callback
+	    });
+	},
+
+	updateServer: function(callback) {
+	    return $.post(this.getApiPath("server", "update"), callback);
+	},
+
+	updateAdminPassword: function(password, callback) {
+	    return $.ajax({
+	        url: this.getApiPath("server", "adminpassword"),
+	        type: 'POST',
+	        data: JSON.stringify(password),
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        cache: false,
+	        success: callback
+	    });
+	}
 }

@@ -54,7 +54,7 @@ function insertWordWrap(str) {
 }
 
 function getJackettConfig(callback) {
-    getServerConfig(callback).fail(function () {
+    api.getServerConfig(callback).fail(function () {
         doNotify("Error loading Jackett settings, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
 }
@@ -94,7 +94,7 @@ function loadJackettSettings() {
 
 function reloadIndexers() {
     $('#indexers').hide();
-    getAllIndexers(function (data) {
+    api.getAllIndexers(function (data) {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
@@ -189,15 +189,15 @@ function displayUnconfiguredIndexersList() {
         });
     });
     indexersTable.find('.indexer-add').each(function (i, btn) {
-        var indexer = unconfiguredIndexers[i];
         $(btn).click(function () {
             $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                getIndexerConfig(indexer.id, function (data) {
+                var indexerId = $(btn).attr("data-id");
+                api.getIndexerConfig(indexerId, function (data) {
 			        if (data.result !== undefined && data.result == "error") {
 			            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
 			            return;
 			        }
-	                updateIndexerConfig(indexer.id, data, function (data) {
+	                api.updateIndexerConfig(indexerId, data, function (data) {
 		                if (data == undefined) {
 		                    reloadIndexers();
 		                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
@@ -340,7 +340,7 @@ function prepareDeleteButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            deleteIndexer(id, function (data) {
+            api.deleteIndexer(id, function (data) {
                 if (data == undefined) {
                     doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
                 } else if (data.result == "error") {
@@ -413,7 +413,7 @@ function testIndexer(id, notifyResult) {
 
     if (notifyResult)
         doNotify("Test started for " + id, "info", "glyphicon glyphicon-transfer");
-    testIndexer(function (data) {
+    api.testIndexer(id, function (data) {
         if (data == undefined) {
             updateTestState(id, "success", "Test successful", indexers);
             if (notifyResult)
@@ -443,7 +443,7 @@ function prepareTestButtons(element) {
 }
 
 function displayIndexerSetup(id, name, caps, link, alternativesitelinks) {
-    getIndexerConfig(function (data) {
+    api.getIndexerConfig(id, function (data) {
         if (data.result !== undefined && data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
@@ -594,7 +594,7 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
         $goButton.prop('disabled', true);
         $goButton.html($('#spinner').html());
 
-        var jqxhr = updateIndexerConfig(indexerId, data, function (data) {
+        api.updateIndexerConfig(indexerId, data, function (data) {
             if (data == undefined) {
                 configForm.modal("hide");
                 reloadIndexers();
@@ -773,7 +773,7 @@ function showSearch(selectedIndexer, query) {
         var trackerId = queryObj.Tracker;
         if (trackerId == null || trackerId == "")
             trackerId = "all";
-        var jqxhr = resultsForIndexer(trackerId, queryObj, function (data) {
+        api.resultsForIndexer(trackerId, queryObj, function (data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
                 item.Title = insertWordWrap(item.Title);
@@ -957,7 +957,7 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-releases").click(function () {
-        var jqxhr = getServerCache(function (data) {
+        api.getServerCache(function (data) {
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
                 item.Title = insertWordWrap(item.Title);
@@ -1054,7 +1054,7 @@ function bindUIButtons() {
     });
 
     $("#view-jackett-logs").click(function () {
-        var jqxhr = getServerLogs(function (data) {
+        api.getServerLogs(function (data) {
             var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
             var item = { logs: data };
             var releaseDialog = $(releaseTemplate(item));
@@ -1083,7 +1083,7 @@ function bindUIButtons() {
             basepathoverride: jackett_basepathoverride,
             omdbkey: jackett_omdb_key
         };
-        var jqxhr = updateServerConfig(function (data) {
+        api.updateServerConfig(function (data) {
             if (data !== undefined && data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
@@ -1099,7 +1099,7 @@ function bindUIButtons() {
     });
 
     $("#trigger-updater").click(function () {
-        var jqxhr = updateServer(function (data) {
+        api.updateServer(function (data) {
             if (data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
@@ -1114,7 +1114,7 @@ function bindUIButtons() {
     $("#change-jackett-password").click(function () {
         var password = $("#jackett-adminpwd").val();
 
-        updateAdminPassword(password, function (data) {
+        api.updateAdminPassword(password, function (data) {
             if (data == undefined) {
                 doNotify("Admin password has been set.", "success", "glyphicon glyphicon-ok");
 

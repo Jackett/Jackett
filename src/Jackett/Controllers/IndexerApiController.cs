@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Controllers
+namespace Jackett.Controllers.V20
 {
     public interface IIndexerController
     {
@@ -54,7 +54,7 @@ namespace Jackett.Controllers
         }
     }
 
-    [RoutePrefix("Api/Indexers")]
+    [RoutePrefix("api/v2.0/indexers")]
     [JackettAuthorized]
     [JackettAPINoCache]
     public class IndexerApiController : ApiController, IIndexerController

@@ -161,7 +161,7 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "IndexerAPI",
-                routeTemplate: "Api/Indexers/{indexerId}/{action}",
+                routeTemplate: "api/v2.0/indexers/{indexerId}/{action}",
                 defaults: new
                 {
                     controller = "IndexerApi",
@@ -171,7 +171,7 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "ServerConfiguration",
-                routeTemplate: "Api/Server/{action}",
+                routeTemplate: "api/v2.0/server/{action}",
                 defaults: new
                 {
                     controller = "ServerConfiguration"
