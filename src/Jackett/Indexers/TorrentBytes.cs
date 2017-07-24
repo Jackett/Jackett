@@ -173,7 +173,7 @@ namespace Jackett.Indexers
                     release.Link = new Uri(SiteLink + qLink.Attr("href"));
 
                     var added = row.Cq().Find("td:eq(4)").First().Text().Trim();
-                    release.PublishDate = DateTime.ParseExact(added, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    release.PublishDate = DateTime.ParseExact(added, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
                     var sizeStr = row.Cq().Find("td:eq(6)").First().Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
