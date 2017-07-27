@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 30 or greater (100 recommended) in your profile on the TorrentBytes webpage."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -126,9 +126,7 @@ namespace Jackett.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            // 15 results per page - really don't want to call the server twice but only 15 results per page is a bit crap!
             await ProcessPage(releases, searchUrl);
-            await ProcessPage(releases, searchUrl + "&page=1");
             return releases;
         }
 
