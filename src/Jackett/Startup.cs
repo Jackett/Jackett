@@ -1,22 +1,13 @@
 using Owin;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Autofac.Integration.WebApi;
 using Microsoft.Owin;
 using Jackett;
 using Microsoft.Owin.StaticFiles;
 using Microsoft.Owin.FileSystems;
-using Autofac;
-using Jackett.Services;
 using System.Web.Http.Tracing;
 using Jackett.Utils;
-using Microsoft.AspNet.Identity;
-using System.Web.Http.ExceptionHandling;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -156,7 +147,7 @@ namespace Jackett
             if (LogRequests)
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
 
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
+            config.DependencyResolver = Engine.DependencyResolver();
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
