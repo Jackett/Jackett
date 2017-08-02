@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Models
+namespace Jackett.Models.DTO
 {
-    public class AdminSearch
+    public class ApiSearch
     {
         public string Query { get; set; }
         public int Category { get; set; }

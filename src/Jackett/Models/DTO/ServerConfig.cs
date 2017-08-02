@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Jackett.Services;
 
-namespace Jackett.DTO
+namespace Jackett.Models.DTO
 {
     public class ServerConfig
     {

@@ -133,6 +133,7 @@ namespace Jackett
             }
 
             appBuilder.Use<WebApiRootRedirectMiddleware>();
+            appBuilder.Use<LegacyApiRedirectMiddleware>();
 
             // register exception handler
             config.Filters.Add(new ApiExceptionHandler());
@@ -149,6 +150,16 @@ namespace Jackett
 
             config.DependencyResolver = Engine.DependencyResolver();
             config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: "IndexerResultsAPI",
+                routeTemplate: "api/v2.0/indexers/{indexerId}/results/{action}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Results"
+                }
+            );
 
             config.Routes.MapHttpRoute(
                 name: "IndexerAPI",
@@ -169,46 +180,32 @@ namespace Jackett
                 }
             );
 
+            // Legacy fallback for Torznab results
+            config.Routes.MapHttpRoute(
+                name: "LegacyTorznab",
+                routeTemplate: "torznab/{indexerId}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Torznab"
+                }
+            );
+
+            // Legacy fallback for Potato results
+            config.Routes.MapHttpRoute(
+                name: "LegacyPotato",
+                routeTemplate: "potato/{indexerId}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Potato"
+                }
+            );
+
             config.Routes.MapHttpRoute(
                 name: "WebUI",
                 routeTemplate: "UI/{action}",
                 defaults: new { controller = "WebUI" }
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "apiDefault",
-                routeTemplate: "api/{indexerID}",
-                defaults: new { controller = "Torznab", action = "Call" }
-            );
-
-            config.Routes.MapHttpRoute(
-               name: "api",
-               routeTemplate: "api/{indexerID}/api",
-               defaults: new { controller = "Torznab", action = "Call" }
-            );
-
-            config.Routes.MapHttpRoute(
-               name: "torznabDefault",
-               routeTemplate: "torznab/{indexerID}",
-               defaults: new { controller = "Torznab", action = "Call" }
-            );
-
-            config.Routes.MapHttpRoute(
-               name: "torznab",
-               routeTemplate: "torznab/{indexerID}/api",
-               defaults: new { controller = "Torznab", action = "Call" }
-            );
-
-            config.Routes.MapHttpRoute(
-              name: "potatoDefault",
-              routeTemplate: "potato/{indexerID}",
-              defaults: new { controller = "Potato", action = "Call" }
-            );
-
-            config.Routes.MapHttpRoute(
-               name: "potato",
-               routeTemplate: "potato/{indexerID}/api",
-               defaults: new { controller = "Potato", action = "Call" }
             );
 
             config.Routes.MapHttpRoute(

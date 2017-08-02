@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Jackett.DTO
+namespace Jackett.Models.DTO
 {
     public class ConfigItem
     {

@@ -7,7 +7,6 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using AutoMapper;
-using Jackett.DTO;
 using Jackett.Indexers;
 using Jackett.Models;
 using Jackett.Services;
@@ -81,7 +80,7 @@ namespace Jackett.Controllers.V20
         [HttpPost]
         [ActionName("Config")]
         [RequiresIndexer]
-        public async Task UpdateConfig([FromBody]ConfigItem[] config)
+        public async Task UpdateConfig([FromBody]Models.DTO.ConfigItem[] config)
         {
             try
             {
@@ -105,9 +104,9 @@ namespace Jackett.Controllers.V20
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<DTO.Indexer> Indexers()
+        public IEnumerable<Models.DTO.Indexer> Indexers()
         {
-            var dto = IndexerService.GetAllIndexers().Select(i => new DTO.Indexer(i));
+            var dto = IndexerService.GetAllIndexers().Select(i => new Models.DTO.Indexer(i));
             return dto;
         }
 
@@ -140,101 +139,6 @@ namespace Jackett.Controllers.V20
         public void Delete()
         {
             IndexerService.DeleteIndexer(CurrentIndexer.ID);
-        }
-
-        [HttpGet]
-        [RequiresIndexer]
-        public ManualSearchResult Results([FromUri]AdminSearch value)
-        {
-            //var results = new List<TrackerCacheResult>();
-            var stringQuery = new TorznabQuery();
-
-            var queryStr = value.Query;
-            if (queryStr != null)
-            {
-                var seasonMatch = Regex.Match(queryStr, @"S(\d{2,4})");
-                if (seasonMatch.Success)
-                {
-                    stringQuery.Season = int.Parse(seasonMatch.Groups[1].Value);
-                    queryStr = queryStr.Remove(seasonMatch.Index, seasonMatch.Length);
-                }
-
-                var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4}[A-Za-z]?)");
-                if (episodeMatch.Success)
-                {
-                    stringQuery.Episode = episodeMatch.Groups[1].Value;
-                    queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length);
-                }
-                queryStr = queryStr.Trim();
-            }
-
-
-            stringQuery.SearchTerm = queryStr;
-            stringQuery.Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category };
-            stringQuery.ExpandCatsToSubCats();
-
-            // try to build an IMDB Query
-            var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
-            TorznabQuery imdbQuery = null;
-            if (imdbID != null)
-            {
-                imdbQuery = new TorznabQuery()
-                {
-                    ImdbID = imdbID,
-                    Categories = stringQuery.Categories,
-                    Season = stringQuery.Season,
-                    Episode = stringQuery.Episode,
-                };
-                imdbQuery.ExpandCatsToSubCats();
-            }
-
-            var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured).ToList();
-            var indexerId = CurrentIndexer.ID;
-            if (!string.IsNullOrWhiteSpace(indexerId) && indexerId != "all")
-            {
-                trackers = trackers.Where(t => t.ID == indexerId).ToList();
-            }
-
-            if (value.Category != 0)
-            {
-                trackers = trackers.Where(t => t.TorznabCaps.Categories.Select(c => c.ID).Contains(value.Category)).ToList();
-            }
-
-            var results = trackers.ToList().AsParallel().SelectMany(indexer =>
-            {
-                var query = stringQuery;
-                // use imdb Query for trackers which support it
-                if (imdbQuery != null && indexer.TorznabCaps.SupportsImdbSearch)
-                    query = imdbQuery;
-
-                var searchResults = indexer.ResultsForQuery(query).Result;
-                cacheService.CacheRssResults(indexer, searchResults);
-
-                return searchResults.AsParallel().Select(result =>
-                {
-                    var item = Mapper.Map<TrackerCacheResult>(result);
-                    item.Tracker = indexer.DisplayName;
-                    item.TrackerId = indexer.ID;
-                    item.Peers = item.Peers - item.Seeders; // Use peers as leechers
-
-                    return item;
-                });
-            }).AsSequential().OrderByDescending(d => d.PublishDate).ToList();
-
-            ConfigureCacheResults(results);
-
-            var manualResult = new ManualSearchResult()
-            {
-                Results = results,
-                Indexers = trackers.Select(t => t.DisplayName).ToList()
-            };
-
-
-            if (manualResult.Indexers.Count() == 0)
-                manualResult.Indexers = new List<string>() { "None" };
-
-            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", stringQuery.GetQueryString(), string.Join(", ", manualResult.Indexers), manualResult.Results.Count()));
-            return manualResult;
         }
 
         // TODO

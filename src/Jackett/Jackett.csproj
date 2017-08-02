@@ -174,8 +174,6 @@
     <Compile Include="AuthenticationException.cs" />
     <Compile Include="CacheControlAttribute.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
-    <Compile Include="Controllers\PotatoController.cs" />
-    <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\ArcheTorrent.cs" />
@@ -265,7 +263,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginLink.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
-    <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
@@ -283,7 +280,6 @@
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
-    <Compile Include="Models\AdminSearch.cs" />
     <Compile Include="Models\IndexerConfigurationStatus.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFileList.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
@@ -364,7 +360,7 @@
     <Compile Include="Utils\TorznabCapsUtil.cs" />
     <Compile Include="Utils\Clients\UnixSafeCurlWebClient.cs" />
     <Compile Include="Utils\TvCategoryParser.cs" />
-    <Compile Include="Utils\WebApiRootRedirectMiddleware.cs" />
+    <Compile Include="Utils\RedirectMiddleware.cs" />
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\HttpWebClient.cs" />
@@ -381,12 +377,15 @@
     <Compile Include="Indexers\Feeds\BaseNewznabIndexer.cs" />
     <Compile Include="Indexers\Feeds\AnimeTosho.cs" />
     <Compile Include="Indexers\Feeds\BaseFeedIndexer.cs" />
-    <Compile Include="DTO\Indexer.cs" />
     <Compile Include="Controllers\IndexerApiController.cs" />
     <Compile Include="Controllers\UIController.cs" />
     <Compile Include="Controllers\ServerConfigurationController.cs" />
-    <Compile Include="DTO\Config.cs" />
-    <Compile Include="DTO\ServerConfig.cs" />
+    <Compile Include="Controllers\ResultsController.cs" />
+    <Compile Include="Models\DTO\Config.cs" />
+    <Compile Include="Models\DTO\Indexer.cs" />
+    <Compile Include="Models\DTO\ServerConfig.cs" />
+    <Compile Include="Models\DTO\ApiSearch.cs" />
+    <Compile Include="Models\DTO\ManualSearchResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -573,7 +572,7 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Indexers\Feeds\" />
-    <Folder Include="DTO\" />
+    <Folder Include="Models\DTO\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

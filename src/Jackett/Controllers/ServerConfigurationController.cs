@@ -49,16 +49,16 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public DTO.ServerConfig Config()
+        public Models.DTO.ServerConfig Config()
         {
 
-            var dto = new DTO.ServerConfig(serverService.notices, serverService.Config, config.GetVersion());
+            var dto = new Models.DTO.ServerConfig(serverService.notices, serverService.Config, config.GetVersion());
             return dto;
         }
 
         [ActionName("Config")]
         [HttpPost]
-        public void UpdateConfig([FromBody]DTO.ServerConfig config)
+        public void UpdateConfig([FromBody]Models.DTO.ServerConfig config)
         {
             var originalPort = Engine.Server.Config.Port;
             var originalAllowExternal = Engine.Server.Config.AllowExternal;

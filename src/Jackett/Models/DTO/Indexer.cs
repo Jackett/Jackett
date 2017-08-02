@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Jackett.Controllers;
+using Jackett.Controllers.V20;
 using Jackett.Indexers;
 
-namespace Jackett.DTO
+namespace Jackett.Models.DTO
 {
     public class Capability
     {
@@ -35,7 +35,7 @@ namespace Jackett.DTO
             site_link = indexer.SiteLink;
             language = indexer.Language;
             last_error = indexer.LastError;
-            potatoenabled = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => PotatoController.MOVIE_CATS.Contains(i));
+            potatoenabled = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => ResultsController.MOVIE_CATS.Contains(i));
 
             alternativesitelinks = indexer.AlternativeSiteLinks;
 
