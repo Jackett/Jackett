@@ -370,10 +370,7 @@ namespace Jackett.Controllers.V20
                 QueryType = "TorrentPotato"
             };
 
-            IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-            if (CurrentIndexer.CanHandleQuery(torznabQuery))
-                releases = await CurrentIndexer.ResultsForQuery(torznabQuery);
+            var releases = await CurrentIndexer.ResultsForQuery(torznabQuery);
 
             // Cache non query results
             if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))

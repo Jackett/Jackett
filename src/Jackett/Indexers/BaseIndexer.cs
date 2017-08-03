@@ -216,6 +216,8 @@ namespace Jackett.Indexers
 
         public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
         {
+            if (!CanHandleQuery(query))
+                return new ReleaseInfo[0];
             var results = await PerformQuery(query);
             results = FilterResults(query, results);
             foreach (var result in results)
