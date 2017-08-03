@@ -341,7 +341,7 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Potato([FromUri]TorrentPotatoRequest request)
+        public async Task<HttpResponseMessage> Potato([FromUri]Models.DTO.TorrentPotatoRequest request)
         {
             if (!CurrentIndexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => MOVIE_CATS.Contains(i)))
             {
