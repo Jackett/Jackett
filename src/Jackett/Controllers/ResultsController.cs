@@ -98,12 +98,11 @@ namespace Jackett.Controllers.V20
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
 
-        public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, IWebClient w, Logger logger)
+        public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {
             IndexerService = indexerManagerService;
             serverService = ss;
             cacheService = c;
-            webClient = w;
             this.logger = logger;
         }
 
@@ -349,24 +348,11 @@ namespace Jackett.Controllers.V20
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer does not support movies.");
             }
 
-            var year = 0;
-
-            var omdbApiKey = serverService.Config.OmdbApiKey;
-            if (!request.imdbid.IsNullOrEmptyOrWhitespace() && !omdbApiKey.IsNullOrEmptyOrWhitespace())
-            {
-                // We are searching by IMDB id so look up the name
-                var resolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull());
-                var movie = await resolver.MovieForId(request.imdbid.ToNonNull());
-                request.search = movie.Title;
-                year = ParseUtil.CoerceInt(movie.Year);
-            }
-
             var torznabQuery = new TorznabQuery()
             {
-                ApiKey = request.passkey,
                 Categories = MOVIE_CATS,
-                SearchTerm = request.search,
-                ImdbID = request.imdbid,
+                SearchTerm = request.Search,
+                ImdbID = request.Imdbid,
                 QueryType = "TorrentPotato"
             };
 
@@ -423,6 +409,5 @@ namespace Jackett.Controllers.V20
         private Logger logger;
         private IServerService serverService;
         private ICacheService cacheService;
-        private IWebClient webClient;
     }
 }
