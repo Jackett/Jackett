@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using System.Xml.Linq;
 using Jackett.Indexers;
 using Jackett.Models;
@@ -19,9 +21,78 @@ using NLog;
 
 namespace Jackett.Controllers.V20
 {
+    public static class KeyValuePairsExtension
+    {
+        public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
+        {
+            return pairs.ToDictionary(x => x.Key, x => x.Value);
+        }
+    }
+
+    public class RequiresApiKeyAttribute : AuthorizationFilterAttribute
+    {
+        public override void OnAuthorization(HttpActionContext actionContext)
+        {
+            var validApiKey = Engine.Server.Config.APIKey;
+            var queryParams = actionContext.Request.GetQueryNameValuePairs().ToDictionary();
+            var queryApiKey = queryParams.ContainsKey("apikey") ? queryParams["apikey"] : null;
+            queryApiKey = queryParams.ContainsKey("passkey") ? queryParams["passkey"] : queryApiKey;
+
+#if DEBUG
+            if (Debugger.IsAttached)
+                return;
+#endif
+            if (queryApiKey != validApiKey)
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+        }
+    }
+
+    public class RequiresConfiguredIndexerAttribute : AuthorizationFilterAttribute
+    {
+        public override void OnAuthorization(HttpActionContext actionContext)
+        {
+            var controller = actionContext.ControllerContext.Controller;
+            if (!(controller is IIndexerController))
+                return;
+
+            var indexerController = controller as IIndexerController;
+
+            var parameters = actionContext.RequestContext.RouteData.Values;
+
+            if (!parameters.ContainsKey("indexerId"))
+            {
+                indexerController.CurrentIndexer = null;
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid parameter");
+                return;
+            }
+
+            var indexerId = parameters["indexerId"] as string;
+            if (indexerId.IsNullOrEmptyOrWhitespace())
+            {
+                indexerController.CurrentIndexer = null;
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid parameter");
+                return;
+            }
+
+            var indexerService = indexerController.IndexerService;
+            var indexer = indexerService.GetIndexer(indexerId);
+
+            if (!indexer.IsConfigured)
+            {
+                indexerController.CurrentIndexer = null;
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Indexer is not configured");
+                return;
+            }
+
+            indexerController.CurrentIndexer = indexer;
+        }
+    }
+
     [JackettAuthorized]
     [JackettAPINoCache]
     [RoutePrefix("api/v2.0/indexers")]
+    [RequiresApiKey]
+    [RequiresConfiguredIndexer]
     public class ResultsController : ApiController, IIndexerController
     {
         public IIndexerManagerService IndexerService { get; private set; }
@@ -37,7 +108,6 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        [RequiresIndexer]
         public Models.DTO.ManualSearchResult Results([FromUri]Models.DTO.ApiSearch value)
         {
             var stringQuery = new TorznabQuery();
@@ -131,7 +201,6 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        [RequiresIndexer]
         public async Task<HttpResponseMessage> Torznab()
         {
             var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
@@ -145,22 +214,6 @@ namespace Jackett.Controllers.V20
             }
 
             torznabQuery.ExpandCatsToSubCats();
-            var allowBadApiDueToDebug = false;
-#if DEBUG
-            allowBadApiDueToDebug = Debugger.IsAttached;
-#endif
-
-            if (!allowBadApiDueToDebug && !string.Equals(torznabQuery.ApiKey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
-            {
-                logger.Warn(string.Format("A request from {0} was made with an incorrect API key.", Request.GetOwinContext().Request.RemoteIpAddress));
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
-            }
-
-            if (!CurrentIndexer.IsConfigured)
-            {
-                logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", CurrentIndexer.DisplayName));
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
-            }
 
             if (torznabQuery.ImdbID != null)
             {
@@ -212,11 +265,11 @@ namespace Jackett.Controllers.V20
             var logBuilder = new StringBuilder();
             if (newItemCount != null)
             {
-                logBuilder.AppendFormat(string.Format("Found {0} ({1} new) releases from {2}", releases.Count(), newItemCount, CurrentIndexer.DisplayName));
+                logBuilder.AppendFormat("Found {0} ({1} new) releases from {2}", releases.Count(), newItemCount, CurrentIndexer.DisplayName);
             }
             else
             {
-                logBuilder.AppendFormat(string.Format("Found {0} releases from {1}", releases.Count(), CurrentIndexer.DisplayName));
+                logBuilder.AppendFormat("Found {0} releases from {1}", releases.Count(), CurrentIndexer.DisplayName);
             }
 
             if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
@@ -238,13 +291,13 @@ namespace Jackett.Controllers.V20
                 ImageDescription = CurrentIndexer.DisplayName
             });
 
-
-            foreach (var result in releases)
+            var proxiedReleases = releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
             {
-                var clone = AutoMapper.Mapper.Map<ReleaseInfo>(result);
-                clone.Link = serverService.ConvertToProxyLink(clone.Link, serverUrl, result.Origin.ID, "dl", result.Title + ".torrent");
-                resultPage.Releases.Add(clone);
-            }
+                r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.ID, "dl", r.Title + ".torrent");
+                return r;
+            });
+
+            resultPage.Releases = proxiedReleases.ToList();
 
             var xml = resultPage.ToXml(new Uri(serverUrl));
             // Force the return as XML
@@ -288,26 +341,8 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        [RequiresIndexer]
         public async Task<HttpResponseMessage> Potato([FromUri]TorrentPotatoRequest request)
         {
-            var allowBadApiDueToDebug = false;
-#if DEBUG
-            allowBadApiDueToDebug = Debugger.IsAttached;
-#endif
-
-            if (!allowBadApiDueToDebug && !string.Equals(request.passkey, serverService.Config.APIKey, StringComparison.InvariantCultureIgnoreCase))
-            {
-                logger.Warn(string.Format("A request from {0} was made with an incorrect API key.", Request.GetOwinContext().Request.RemoteIpAddress));
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "Incorrect API key");
-            }
-
-            if (!CurrentIndexer.IsConfigured)
-            {
-                logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", CurrentIndexer.DisplayName));
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
-            }
-
             if (!CurrentIndexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => MOVIE_CATS.Contains(i)))
             {
                 logger.Warn(string.Format("Rejected a request to {0} which does not support searching for movies.", CurrentIndexer.DisplayName));
@@ -354,31 +389,28 @@ namespace Jackett.Controllers.V20
             if (!torznabQuery.ImdbID.IsNullOrEmptyOrWhitespace())
                 releases = TorznabUtil.FilterResultsToImdb(releases, request.imdbid);
 
-            foreach (var r in releases)
+            var potatoReleases = releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.ID, "dl", release.Title + ".torrent");
-
-                // Only accept torrent links, magnet is not supported
-                // This seems to be no longer the case, allowing magnet URIs for now
-                if (release.Link != null || release.MagnetUri != null)
+                var item = new TorrentPotatoResponseItem()
                 {
-                    potatoResponse.results.Add(new TorrentPotatoResponseItem()
-                    {
-                        release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
-                        torrent_id = release.Guid.ToString(),
-                        details_url = release.Comments.ToString(),
-                        download_url = (release.Link != null ? release.Link.ToString() : release.MagnetUri.ToString()),
-                        imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
-                        freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
-                        type = "movie",
-                        size = (long)release.Size / (1024 * 1024), // This is in MB
-                        leechers = (int)release.Peers - (int)release.Seeders,
-                        seeders = (int)release.Seeders,
-                        publish_date = r.PublishDate == DateTime.MinValue ? null : release.PublishDate.ToUniversalTime().ToString("s")
-                    });
-                }
-            }
+                    release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
+                    torrent_id = release.Guid.ToString(),
+                    details_url = release.Comments.ToString(),
+                    download_url = (release.Link != null ? release.Link.ToString() : release.MagnetUri.ToString()),
+                    imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
+                    freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
+                    type = "movie",
+                    size = (long)release.Size / (1024 * 1024), // This is in MB
+                    leechers = (int)release.Peers - (int)release.Seeders,
+                    seeders = (int)release.Seeders,
+                    publish_date = r.PublishDate == DateTime.MinValue ? null : release.PublishDate.ToUniversalTime().ToString("s")
+                };
+                return item;
+            });
+
+            potatoResponse.results = potatoReleases.ToList();
 
             // Log info
             if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))

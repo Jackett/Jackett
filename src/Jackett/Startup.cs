@@ -228,7 +228,6 @@ namespace Jackett
                 RequestPath = new PathString(string.Empty),
                 FileSystem = new PhysicalFileSystem(Engine.ConfigService.GetContentFolder()),
                 EnableDirectoryBrowsing = false,
-
             });
         }
     }

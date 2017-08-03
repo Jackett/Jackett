@@ -23,7 +23,7 @@ namespace Jackett.Controllers.V20
         IIndexer CurrentIndexer { get; set; }
     }
 
-    public class RequiresIndexer : ActionFilterAttribute
+    public class RequiresIndexerAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
