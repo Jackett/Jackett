@@ -219,26 +219,26 @@ namespace Jackett.Controllers.V20
             {
                 if (torznabQuery.QueryType != "movie")
                 {
-                    logger.Warn(string.Format("A non movie request with an imdbid was made from {0}.", Request.GetOwinContext().Request.RemoteIpAddress));
+                    logger.Warn($"A non movie request with an imdbid was made from {Request.GetOwinContext().Request.RemoteIpAddress}.");
                     return GetErrorXML(201, "Incorrect parameter: only movie-search supports the imdbid parameter");
                 }
 
                 if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
                 {
-                    logger.Warn(string.Format("A movie-search request from {0} was made contining q and imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
+                    logger.Warn($"A movie-search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made contining q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
 
                 torznabQuery.ImdbID = ParseUtil.GetFullImdbID(torznabQuery.ImdbID); // normalize ImdbID
                 if (torznabQuery.ImdbID == null)
                 {
-                    logger.Warn(string.Format("A movie-search request from {0} was made with an invalid imdbid.", Request.GetOwinContext().Request.RemoteIpAddress));
+                    logger.Warn($"A movie-search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made with an invalid imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
                 if (!CurrentIndexer.TorznabCaps.SupportsImdbSearch)
                 {
-                    logger.Warn(string.Format("A movie-search request with imdbid from {0} was made but the indexer {1} doesn't support it.", Request.GetOwinContext().Request.RemoteIpAddress, CurrentIndexer.DisplayName));
+                    logger.Warn($"A movie-search request with imdbid from {Request.GetOwinContext().Request.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");
                 }
             }
@@ -345,7 +345,7 @@ namespace Jackett.Controllers.V20
         {
             if (!CurrentIndexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => MOVIE_CATS.Contains(i)))
             {
-                logger.Warn(string.Format("Rejected a request to {0} which does not support searching for movies.", CurrentIndexer.DisplayName));
+                logger.Warn($"Rejected a request to {CurrentIndexer.DisplayName} which does not support searching for movies.");
                 return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer does not support movies.");
             }
 
@@ -406,11 +406,11 @@ namespace Jackett.Controllers.V20
             // Log info
             if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
             {
-                logger.Info(string.Format("Found {0} torrentpotato releases from {1}", releases.Count(), CurrentIndexer.DisplayName));
+                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName}");
             }
             else
             {
-                logger.Info(string.Format("Found {0} torrentpotato releases from {1} for: {2}", releases.Count(), CurrentIndexer.DisplayName, torznabQuery.GetQueryString()));
+                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {torznabQuery.GetQueryString()}");
             }
 
             // Force the return as Json
