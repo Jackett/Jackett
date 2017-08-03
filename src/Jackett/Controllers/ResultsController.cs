@@ -383,12 +383,6 @@ namespace Jackett.Controllers.V20
 
             var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
             var potatoResponse = new TorrentPotatoResponse();
-
-            if (!torznabQuery.SanitizedSearchTerm.IsNullOrEmptyOrWhitespace())
-                releases = TorznabUtil.FilterResultsToTitle(releases, torznabQuery.SanitizedSearchTerm, year);
-            if (!torznabQuery.ImdbID.IsNullOrEmptyOrWhitespace())
-                releases = TorznabUtil.FilterResultsToImdb(releases, request.imdbid);
-
             var potatoReleases = releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
