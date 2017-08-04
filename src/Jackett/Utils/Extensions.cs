@@ -49,6 +49,11 @@ namespace Jackett.Utils
         {
             return String.Concat(chars);
         }
+
+        public static bool IsEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection.Count() > 0;
+        }
     }
 
     public static class StringExtension
@@ -100,6 +105,34 @@ namespace Jackett.Utils
         public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
         {
             return pairs.ToDictionary(x => x.Key, x => x.Value);
+        }
+    }
+
+    public static class ParseExtension
+    {
+        public static T? TryParse<T>(this string value) where T : struct
+        {
+            var type = typeof(T);
+            var parseMethods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).Where(m => m.Name == "Parse");
+            var parseMethod = parseMethods.Where(m =>
+            {
+                var parameters = m.GetParameters();
+                var hasOnlyOneParameter = parameters.Count() == 1;
+                var firstParameterIsString = parameters.First().ParameterType == typeof(string);
+
+                return hasOnlyOneParameter && firstParameterIsString;
+            }).First();
+            if (parseMethod == null)
+                return null;
+            try
+            {
+                var val = parseMethod.Invoke(null, new object[] { value });
+                return (T)val;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

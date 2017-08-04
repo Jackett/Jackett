@@ -23,12 +23,15 @@ namespace Jackett.Models.DTO
             {
                 QueryType = request.t,
                 SearchTerm = request.q,
-                Extended = ParseUtil.CoerceInt(request.extended),
-                Limit = ParseUtil.CoerceInt(request.limit),
-                Offset = ParseUtil.CoerceInt(request.offset),
                 ImdbID = request.imdbid,
                 Episode = request.ep,
             };
+            if (!request.extended.IsNullOrEmptyOrWhitespace())
+                query.Extended = ParseUtil.CoerceInt(request.extended);
+            if (!request.limit.IsNullOrEmptyOrWhitespace())
+                query.Limit = ParseUtil.CoerceInt(request.limit);
+            if (!request.offset.IsNullOrEmptyOrWhitespace())
+                query.Offset = ParseUtil.CoerceInt(request.offset);
 
             if (request.cat != null)
             {

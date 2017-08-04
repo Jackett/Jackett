@@ -100,8 +100,8 @@ function reloadIndexers() {
         unconfiguredIndexers = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
-            item.torznab_host = resolveUrl(basePath + "/torznab/" + item.id);
-            item.potato_host = resolveUrl(basePath + "/potato/" + item.id);
+            item.torznab_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/");
+            item.potato_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/potato/");
 
             if (item.last_error)
                 item.state = "error";
@@ -760,11 +760,14 @@ function showSearch(selectedIndexer, query) {
             // We are searchin already
             return;
         }
+        var searchString = releaseDialog.find('#searchquery').val();
         var queryObj = {
-            Query: releaseDialog.find('#searchquery').val(),
+            Query: searchString,
             Category: releaseDialog.find('#searchCategory').val(),
             Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
         };
+
+        window.location.hash = "search=" + searchString;
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
@@ -1051,6 +1054,7 @@ function bindUIButtons() {
 
     $("#jackett-show-search").click(function () {
         showSearch(null);
+        window.location.hash = "search";
     });
 
     $("#view-jackett-logs").click(function () {

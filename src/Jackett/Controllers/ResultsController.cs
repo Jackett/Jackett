@@ -70,6 +70,13 @@ namespace Jackett.Controllers.V20
             var indexerService = indexerController.IndexerService;
             var indexer = indexerService.GetIndexer(indexerId);
 
+            if (indexer == null)
+            {
+                indexerController.CurrentIndexer = null;
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid parameter");
+                return;
+            }
+
             if (!indexer.IsConfigured)
             {
                 indexerController.CurrentIndexer = null;
@@ -98,6 +105,8 @@ namespace Jackett.Controllers.V20
             var query = actionContext.ActionArguments.First().Value;
             var queryType = query.GetType();
             var converter = queryType.GetMethod("ToTorznabQuery", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+            if (converter == null)
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "");
             var converted = converter.Invoke(null, new object[] { query });
             var torznabQuery = converted as TorznabQuery;
             resultController.CurrentQuery = torznabQuery;
@@ -143,22 +152,25 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public Models.DTO.ManualSearchResult Results([FromUri]Models.DTO.ApiSearch request)
+        public async Task<Models.DTO.ManualSearchResult> Results([FromUri]Models.DTO.ApiSearch request)
         {
             var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured);
-            var indexerId = CurrentIndexer.ID;
-            if (!string.IsNullOrWhiteSpace(indexerId) && indexerId != "all")
-            {
-                trackers = trackers.Where(t => t.ID == indexerId).ToList();
-            }
-            trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
+            if (CurrentIndexer.ID != "all")
+                trackers = trackers.Where(t => t.ID == CurrentIndexer.ID).ToList();
+            trackers = trackers.Where(t => t.IsConfigured && t.CanHandleQuery(CurrentQuery));
 
-            var results = trackers.ToList().AsParallel().SelectMany(indexer =>
+            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
+            var aggregateTask = Task.WhenAll(tasks);
+
+            await aggregateTask;
+
+            var results = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Where(t => t.Result.Count() > 0).SelectMany(t =>
             {
-                var searchResults = indexer.ResultsForQuery(CurrentQuery).Result;
+                var searchResults = t.Result;
+                var indexer = searchResults.First().Origin;
                 cacheService.CacheRssResults(indexer, searchResults);
 
-                return searchResults.AsParallel().Select(result =>
+                return searchResults.Select(result =>
                 {
                     var item = AutoMapper.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
@@ -167,7 +179,7 @@ namespace Jackett.Controllers.V20
 
                     return item;
                 });
-            }).AsSequential().OrderByDescending(d => d.PublishDate).ToList();
+            }).OrderByDescending(d => d.PublishDate).ToList();
 
             //ConfigureCacheResults(results);
 
@@ -186,14 +198,14 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Torznab([FromUri]Models.DTO.TorznabRequest request)
+        public async Task<IHttpActionResult> Torznab([FromUri]Models.DTO.TorznabRequest request)
         {
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
-                return new HttpResponseMessage()
+                return ResponseMessage(new HttpResponseMessage()
                 {
                     Content = new StringContent(CurrentIndexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/xml")
-                };
+                });
             }
 
             if (CurrentQuery.ImdbID != null)
@@ -276,13 +288,13 @@ namespace Jackett.Controllers.V20
 
             var xml = resultPage.ToXml(new Uri(serverUrl));
             // Force the return as XML
-            return new HttpResponseMessage()
+            return ResponseMessage(new HttpResponseMessage()
             {
                 Content = new StringContent(xml, Encoding.UTF8, "application/rss+xml")
-            };
+            });
         }
 
-        public HttpResponseMessage GetErrorXML(int code, string description)
+        public IHttpActionResult GetErrorXML(int code, string description)
         {
             var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
@@ -294,10 +306,10 @@ namespace Jackett.Controllers.V20
 
             var xml = xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
 
-            return new HttpResponseMessage()
+            return ResponseMessage(new HttpResponseMessage()
             {
                 Content = new StringContent(xml, Encoding.UTF8, "application/xml")
-            };
+            });
         }
 
         [HttpGet]
