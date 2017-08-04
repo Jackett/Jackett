@@ -220,10 +220,11 @@ namespace Jackett.Indexers
                 return new ReleaseInfo[0];
             var results = await PerformQuery(query);
             results = FilterResults(query, results);
-            foreach (var result in results)
+            results = results.Select(r =>
             {
-                result.Origin = this;
-            }
+                r.Origin = this;
+                return r;
+            });
 
             return results;
         }
