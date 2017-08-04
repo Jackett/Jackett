@@ -17,18 +17,11 @@ using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using NLog;
 
 namespace Jackett.Controllers.V20
 {
-    public static class KeyValuePairsExtension
-    {
-        public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
-        {
-            return pairs.ToDictionary(x => x.Key, x => x.Value);
-        }
-    }
-
     public class RequiresApiKeyAttribute : AuthorizationFilterAttribute
     {
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -47,9 +40,9 @@ namespace Jackett.Controllers.V20
         }
     }
 
-    public class RequiresConfiguredIndexerAttribute : AuthorizationFilterAttribute
+    public class RequiresConfiguredIndexerAttribute : ActionFilterAttribute
     {
-        public override void OnAuthorization(HttpActionContext actionContext)
+        public override void OnActionExecuting(HttpActionContext actionContext)
         {
             var controller = actionContext.ControllerContext.Controller;
             if (!(controller is IIndexerController))
@@ -88,15 +81,58 @@ namespace Jackett.Controllers.V20
         }
     }
 
+    public class RequiresValidQueryAttribute : RequiresConfiguredIndexerAttribute
+    {
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            base.OnActionExecuting(actionContext);
+            if (actionContext.Response != null)
+                return;
+
+            var controller = actionContext.ControllerContext.Controller;
+            if (!(controller is IResultController))
+                return;
+
+            var resultController = controller as IResultController;
+
+            var query = actionContext.ActionArguments.First().Value;
+            var queryType = query.GetType();
+            var converter = queryType.GetMethod("ToTorznabQuery", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+            var converted = converter.Invoke(null, new object[] { query });
+            var torznabQuery = converted as TorznabQuery;
+            resultController.CurrentQuery = torznabQuery;
+
+            if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"{resultController.CurrentIndexer.ID} does not support the requested query.");
+        }
+    }
+
+    public class JsonResponseAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        {
+            base.OnActionExecuted(actionExecutedContext);
+
+            var content = actionExecutedContext.Response.Content as ObjectContent;
+            actionExecutedContext.Response.Content = new JsonContent(content.Value);
+        }
+    }
+
+    public interface IResultController : IIndexerController
+    {
+        TorznabQuery CurrentQuery { get; set; }
+    }
+
     [JackettAuthorized]
     [JackettAPINoCache]
     [RoutePrefix("api/v2.0/indexers")]
     [RequiresApiKey]
-    [RequiresConfiguredIndexer]
-    public class ResultsController : ApiController, IIndexerController
+    [RequiresValidQuery]
+    public class ResultsController : ApiController, IResultController
     {
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
+        public TorznabQuery CurrentQuery { get; set; }
 
         public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {
@@ -107,69 +143,19 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public Models.DTO.ManualSearchResult Results([FromUri]Models.DTO.ApiSearch value)
+        public Models.DTO.ManualSearchResult Results([FromUri]Models.DTO.ApiSearch request)
         {
-            var stringQuery = new TorznabQuery();
-
-            var queryStr = value.Query;
-            if (queryStr != null)
-            {
-                var seasonMatch = Regex.Match(queryStr, @"S(\d{2,4})");
-                if (seasonMatch.Success)
-                {
-                    stringQuery.Season = int.Parse(seasonMatch.Groups[1].Value);
-                    queryStr = queryStr.Remove(seasonMatch.Index, seasonMatch.Length);
-                }
-
-                var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4}[A-Za-z]?)");
-                if (episodeMatch.Success)
-                {
-                    stringQuery.Episode = episodeMatch.Groups[1].Value;
-                    queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length);
-                }
-                queryStr = queryStr.Trim();
-            }
-
-
-            stringQuery.SearchTerm = queryStr;
-            stringQuery.Categories = value.Category == 0 ? new int[0] : new int[1] { value.Category };
-            stringQuery.ExpandCatsToSubCats();
-
-            // try to build an IMDB Query
-            var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
-            TorznabQuery imdbQuery = null;
-            if (imdbID != null)
-            {
-                imdbQuery = new TorznabQuery()
-                {
-                    ImdbID = imdbID,
-                    Categories = stringQuery.Categories,
-                    Season = stringQuery.Season,
-                    Episode = stringQuery.Episode,
-                };
-                imdbQuery.ExpandCatsToSubCats();
-            }
-
-            var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured).ToList();
+            var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured);
             var indexerId = CurrentIndexer.ID;
             if (!string.IsNullOrWhiteSpace(indexerId) && indexerId != "all")
             {
                 trackers = trackers.Where(t => t.ID == indexerId).ToList();
             }
-
-            if (value.Category != 0)
-            {
-                trackers = trackers.Where(t => t.TorznabCaps.Categories.Select(c => c.ID).Contains(value.Category)).ToList();
-            }
+            trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
             var results = trackers.ToList().AsParallel().SelectMany(indexer =>
             {
-                var query = stringQuery;
-                // use imdb Query for trackers which support it
-                if (imdbQuery != null && indexer.TorznabCaps.SupportsImdbSearch)
-                    query = imdbQuery;
-
-                var searchResults = indexer.ResultsForQuery(query).Result;
+                var searchResults = indexer.ResultsForQuery(CurrentQuery).Result;
                 cacheService.CacheRssResults(indexer, searchResults);
 
                 return searchResults.AsParallel().Select(result =>
@@ -195,16 +181,14 @@ namespace Jackett.Controllers.V20
             if (manualResult.Indexers.Count() == 0)
                 manualResult.Indexers = new List<string>() { "None" };
 
-            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", stringQuery.GetQueryString(), string.Join(", ", manualResult.Indexers), manualResult.Results.Count()));
+            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", CurrentQuery.SanitizedSearchTerm, string.Join(", ", manualResult.Indexers), manualResult.Results.Count()));
             return manualResult;
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Torznab()
+        public async Task<HttpResponseMessage> Torznab([FromUri]Models.DTO.TorznabRequest request)
         {
-            var torznabQuery = TorznabQuery.FromHttpQuery(HttpUtility.ParseQueryString(Request.RequestUri.Query));
-
-            if (string.Equals(torznabQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return new HttpResponseMessage()
                 {
@@ -212,24 +196,22 @@ namespace Jackett.Controllers.V20
                 };
             }
 
-            torznabQuery.ExpandCatsToSubCats();
-
-            if (torznabQuery.ImdbID != null)
+            if (CurrentQuery.ImdbID != null)
             {
-                if (torznabQuery.QueryType != "movie")
+                if (CurrentQuery.QueryType != "movie")
                 {
                     logger.Warn($"A non movie request with an imdbid was made from {Request.GetOwinContext().Request.RemoteIpAddress}.");
                     return GetErrorXML(201, "Incorrect parameter: only movie-search supports the imdbid parameter");
                 }
 
-                if (!string.IsNullOrEmpty(torznabQuery.SearchTerm))
+                if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
                     logger.Warn($"A movie-search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made contining q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
 
-                torznabQuery.ImdbID = ParseUtil.GetFullImdbID(torznabQuery.ImdbID); // normalize ImdbID
-                if (torznabQuery.ImdbID == null)
+                CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
+                if (CurrentQuery.ImdbID == null)
                 {
                     logger.Warn($"A movie-search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made with an invalid imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
@@ -242,19 +224,13 @@ namespace Jackett.Controllers.V20
                 }
             }
 
-            var releases = await CurrentIndexer.ResultsForQuery(torznabQuery);
-
-            // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
-            foreach (var release in releases.Where(r => r.PublishDate > DateTime.Now))
-            {
-                release.PublishDate = DateTime.Now;
-            }
+            var releases = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
             // Some trackers do not support multiple category filtering so filter the releases that match manually.
             int? newItemCount = null;
 
             // Cache non query results
-            if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
+            if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))
             {
                 newItemCount = cacheService.GetNewItemCount(CurrentIndexer, releases);
                 cacheService.CacheRssResults(CurrentIndexer, releases);
@@ -271,9 +247,9 @@ namespace Jackett.Controllers.V20
                 logBuilder.AppendFormat("Found {0} releases from {1}", releases.Count(), CurrentIndexer.DisplayName);
             }
 
-            if (!string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
+            if (!string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
             {
-                logBuilder.AppendFormat(" for: {0}", torznabQuery.GetQueryString());
+                logBuilder.AppendFormat(" for: {0}", CurrentQuery.GetQueryString());
             }
 
             logger.Info(logBuilder.ToString());
@@ -324,53 +300,28 @@ namespace Jackett.Controllers.V20
             };
         }
 
-
-        public static int[] MOVIE_CATS
-        {
-            get
-            {
-                var torznabQuery = new TorznabQuery()
-                {
-                    Categories = new int[1] { TorznabCatType.Movies.ID },
-                };
-
-                torznabQuery.ExpandCatsToSubCats();
-                return torznabQuery.Categories;
-            }
-        }
-
         [HttpGet]
-        public async Task<HttpResponseMessage> Potato([FromUri]Models.DTO.TorrentPotatoRequest request)
+        [JsonResponse]
+        public async Task<Models.DTO.TorrentPotatoResponse> Potato([FromUri]Models.DTO.TorrentPotatoRequest request)
         {
-            if (!CurrentIndexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => MOVIE_CATS.Contains(i)))
-            {
-                logger.Warn($"Rejected a request to {CurrentIndexer.DisplayName} which does not support searching for movies.");
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer does not support movies.");
-            }
-
-            var torznabQuery = new TorznabQuery()
-            {
-                Categories = MOVIE_CATS,
-                SearchTerm = request.Search,
-                ImdbID = request.Imdbid,
-                QueryType = "TorrentPotato"
-            };
-
-            var releases = await CurrentIndexer.ResultsForQuery(torznabQuery);
+            var releases = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
             // Cache non query results
-            if (string.IsNullOrEmpty(torznabQuery.SanitizedSearchTerm))
-            {
+            if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))
                 cacheService.CacheRssResults(CurrentIndexer, releases);
-            }
+
+            // Log info
+            if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
+                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName}");
+            else
+                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {CurrentQuery.GetQueryString()}");
 
             var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
-            var potatoResponse = new TorrentPotatoResponse();
             var potatoReleases = releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.ID, "dl", release.Title + ".torrent");
-                var item = new TorrentPotatoResponseItem()
+                var item = new Models.DTO.TorrentPotatoResponseItem()
                 {
                     release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                     torrent_id = release.Guid.ToString(),
@@ -387,23 +338,12 @@ namespace Jackett.Controllers.V20
                 return item;
             });
 
-            potatoResponse.results = potatoReleases.ToList();
-
-            // Log info
-            if (string.IsNullOrWhiteSpace(torznabQuery.SanitizedSearchTerm))
+            var potatoResponse = new Models.DTO.TorrentPotatoResponse()
             {
-                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName}");
-            }
-            else
-            {
-                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {torznabQuery.GetQueryString()}");
-            }
-
-            // Force the return as Json
-            return new HttpResponseMessage()
-            {
-                Content = new JsonContent(potatoResponse)
+                results = potatoReleases.ToList()
             };
+
+            return potatoResponse;
         }
 
         private Logger logger;

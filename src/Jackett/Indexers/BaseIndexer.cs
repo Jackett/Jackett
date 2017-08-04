@@ -223,6 +223,10 @@ namespace Jackett.Indexers
             results = results.Select(r =>
             {
                 r.Origin = this;
+
+                // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
+                if (r.PublishDate > DateTime.Now)
+                    r.PublishDate = DateTime.Now;
                 return r;
             });
 

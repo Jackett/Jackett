@@ -218,67 +218,6 @@ namespace Jackett.Models
             return episodeString;
         }
 
-        public static TorznabQuery FromHttpQuery(NameValueCollection query)
-        {
-
-            //{t=tvsearch&cat=5030%2c5040&extended=1&apikey=test&offset=0&limit=100&rid=24493&season=5&ep=1}
-            var q = new TorznabQuery();
-            q.QueryType = query["t"];
-
-            if (query["q"] == null)
-            {
-                q.SearchTerm = string.Empty;
-            }
-            else
-            {
-                q.SearchTerm = query["q"];
-            }
-
-            if (query["cat"] != null)
-            {
-                q.Categories = query["cat"].Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s)).ToArray();
-            }
-            else
-            {
-                if (q.QueryType == "movie" && string.IsNullOrWhiteSpace(query["imdbid"]))
-                    q.Categories = new int[] { TorznabCatType.Movies.ID };
-                else
-                    q.Categories = new int[0];
-            }
-
-            if (query["extended"] != null)
-            {
-                q.Extended = ParseUtil.CoerceInt(query["extended"]);
-            }
-            q.ApiKey = query["apikey"];
-            if (query["limit"] != null)
-            {
-                q.Limit = ParseUtil.CoerceInt(query["limit"]);
-            }
-            if (query["offset"] != null)
-            {
-                q.Offset = ParseUtil.CoerceInt(query["offset"]);
-            }
-
-            q.ImdbID = query["imdbid"];
-
-            int rageId;
-            if (int.TryParse(query["rid"], out rageId))
-            {
-                q.RageID = rageId;
-            }
-
-            int season;
-            if (int.TryParse(query["season"], out season))
-            {
-                q.Season = season;
-            }
-
-            q.Episode = query["ep"];
-
-            return q;
-        }
-
         public void ExpandCatsToSubCats()
         {
             if (Categories.Count() == 0)

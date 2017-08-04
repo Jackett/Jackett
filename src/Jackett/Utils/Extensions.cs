@@ -94,4 +94,12 @@ namespace Jackett.Utils
             return element.First(name).Value;
         }
     }
+
+    public static class KeyValuePairsExtension
+    {
+        public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
+        {
+            return pairs.ToDictionary(x => x.Key, x => x.Value);
+        }
+    }
 }
