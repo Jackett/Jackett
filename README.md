@@ -43,6 +43,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Downloads
  * TorrentProject
  * Torrentz2
+ * zetorrents
 
 ### Supported Private Trackers
  * 2 Fast 4 You
