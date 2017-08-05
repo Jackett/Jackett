@@ -281,7 +281,7 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
 
 ## Installation on Synology
-Jackett is available as beta package from [SynoCommuniy](https://synocommunity.com/)
+Jackett is available as beta package from [SynoCommunity](https://synocommunity.com/)
 
 ## Troubleshooting
 
