@@ -181,7 +181,7 @@ namespace Jackett.Controllers.V20
                 });
             }).OrderByDescending(d => d.PublishDate).ToList();
 
-            //ConfigureCacheResults(results);
+            ConfigureCacheResults(results);
 
             var manualResult = new Models.DTO.ManualSearchResult()
             {
@@ -356,6 +356,20 @@ namespace Jackett.Controllers.V20
             };
 
             return potatoResponse;
+        }
+
+        private void ConfigureCacheResults(IEnumerable<TrackerCacheResult> results)
+        {
+            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
+            foreach (var result in results)
+            {
+                var link = result.Link;
+                var file = StringUtil.MakeValidFileName(result.Title, '_', false) + ".torrent";
+                result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
+                    result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
+
+            }
         }
 
         private Logger logger;
