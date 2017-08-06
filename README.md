@@ -29,7 +29,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent
  * KickAssTorrent (kat.how clone)
  * LimeTorrents
- * Mania-Torrent
  * NextTorrent
  * Nyaa.si
  * Nyaa-Pantsu
@@ -222,6 +221,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Trezzor
  * TV Chaos UK
  * TV-Vault
+ * T411_v2
  * u-Torrent
  * UHDBits
  * Ultimate Gamer Club
