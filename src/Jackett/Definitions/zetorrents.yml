@@ -1,11 +1,11 @@
-﻿---
-  site: cpasbien
-  name: cpasbien
+---
+  site: zetorrents
+  name: zetorrents
   language: fr-fr
   type: public
   encoding: UTF-8
   links:
-    - http://cpabien.cc/
+    - http://www.zetorrents.cc/
 
   caps:
     categorymappings:
@@ -19,21 +19,21 @@
   settings: []
 
   download:
-    selector: "#telecharger"
+    selector: a[href^="/get_torrent/"]
 
   search:
-    path: "/search.php?t={{ .Query.Keywords }}"
+    path: "/recherche/{{ .Query.Keywords }}"
     rows:
-      selector: div[class^='ligne']
+      selector: div.content-list-torrent > table tbody tr
     fields:
       site_date:
-        selector: a
+        selector: td:nth-child(1) a
         filters:
           # date is at the end of the title, so we get it and name it site_date
           - name: regexp
             args: "(\\w+)$"
       title:
-        selector: a
+        selector: td:nth-child(1) a
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
@@ -46,13 +46,13 @@
           - name: re_replace
             args: ["(\\w+)$", ""]
       details:
-        selector: a
+        selector: td:nth-child(1) a
         attribute: href
       download:
-        selector: a
+        selector: td:nth-child(1) a
         attribute: href
       size:
-        selector: div.poid
+        selector: td:nth-child(2)
         filters:
           - name: re_replace
             args: [ "\\.(\\d) Ko", "$1X00"]
@@ -75,12 +75,12 @@
       seeders:
         text: 0
       seeders:
-        selector: div.up
+        selector: td:nth-child(3)
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: div.down
+        selector: td:nth-child(4)
         optional: true
       downloadvolumefactor:
         text: "0"
