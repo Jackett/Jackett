@@ -5,7 +5,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.nextorrent.biz/
+    - http://www.nextorrent.cx/
 
   caps:
     categorymappings:
@@ -22,7 +22,7 @@
     selector: a[href^="/get_torrent/"]
 
   search:
-    path: "/torrents/recherche/{{ .Query.Keywords }}"
+    path: "recherche/{{ .Query.Keywords }}"
     rows:
       selector: div.listing-torrent > table tbody tr
     fields:
