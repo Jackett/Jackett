@@ -24,8 +24,6 @@ namespace Jackett.Indexers
             var results = doc.Descendants("item").Select((XElement item) =>
             {
                 var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
-                var a = attributes.Count();
-                var almafa = attributes.Where(e => e.Attribute("peers") != null);
                 var release = new ReleaseInfo
                 {
                     Title = item.FirstValue("title"),
