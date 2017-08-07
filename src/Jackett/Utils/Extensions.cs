@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Jackett.Utils
@@ -30,11 +31,16 @@ namespace Jackett.Utils
         private T Value;
     }
 
-    public static class ToEnumerableExtension
+    public static class IEnumerableExtension
     {
         public static IEnumerable<T> ToEnumerable<T>(this T obj)
         {
             return new T[] { obj };
+        }
+
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list)
+        {
+            return list.SelectMany(x => x);
         }
     }
 
@@ -115,6 +121,24 @@ namespace Jackett.Utils
             {
                 return null;
             }
+        }
+    }
+
+    public static class TaskExtensions
+    {
+        public static Task<IEnumerable<TResult>> Until<TResult>(this IEnumerable<Task<TResult>> tasks, TimeSpan timeout)
+        {
+            var timeoutTask = Task.Delay(timeout);
+            var aggregateTask = Task.WhenAll(tasks);
+            var anyTask = Task.WhenAny(timeoutTask, aggregateTask);
+            var continuation = anyTask.ContinueWith((_) =>
+            {
+                var completedTasks = tasks.Where(t => t.Status == TaskStatus.RanToCompletion);
+                var results = completedTasks.Select(t => t.Result);
+                return results;
+            });
+
+            return continuation;
         }
     }
 }
