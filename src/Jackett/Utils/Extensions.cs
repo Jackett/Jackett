@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Jackett.Utils
@@ -54,6 +55,11 @@ namespace Jackett.Utils
         {
             return collection.Count() > 0;
         }
+
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list)
+        {
+            return list.SelectMany(x => x);
+        }
     }
 
     public static class StringExtension
@@ -100,6 +106,7 @@ namespace Jackett.Utils
         }
     }
 
+<<<<<<< HEAD
     public static class KeyValuePairsExtension
     {
         public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
@@ -108,6 +115,8 @@ namespace Jackett.Utils
         }
     }
 
+=======
+>>>>>>> b05ee653d38427ee0512caca4c25c6026523b67e
     public static class ParseExtension
     {
         public static T? TryParse<T>(this string value) where T : struct
@@ -135,4 +144,25 @@ namespace Jackett.Utils
             }
         }
     }
+<<<<<<< HEAD
+=======
+
+    public static class TaskExtensions
+    {
+        public static Task<IEnumerable<TResult>> Until<TResult>(this IEnumerable<Task<TResult>> tasks, TimeSpan timeout)
+        {
+            var timeoutTask = Task.Delay(timeout);
+            var aggregateTask = Task.WhenAll(tasks);
+            var anyTask = Task.WhenAny(timeoutTask, aggregateTask);
+            var continuation = anyTask.ContinueWith((_) =>
+            {
+                var completedTasks = tasks.Where(t => t.Status == TaskStatus.RanToCompletion);
+                var results = completedTasks.Select(t => t.Result);
+                return results;
+            });
+
+            return continuation;
+        }
+    }
+>>>>>>> b05ee653d38427ee0512caca4c25c6026523b67e
 }
