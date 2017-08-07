@@ -50,7 +50,7 @@
           - name: dateparse
             args: "01-02-2006"
       download:
-        selector: td > a[href^="/file"]
+        selector: td > a[href^="magnet"]
         attribute: href
       downloadvolumefactor:
         text: "0"
