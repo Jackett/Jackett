@@ -106,7 +106,6 @@ namespace Jackett.Utils
         }
     }
 
-<<<<<<< HEAD
     public static class KeyValuePairsExtension
     {
         public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
@@ -115,8 +114,6 @@ namespace Jackett.Utils
         }
     }
 
-=======
->>>>>>> b05ee653d38427ee0512caca4c25c6026523b67e
     public static class ParseExtension
     {
         public static T? TryParse<T>(this string value) where T : struct
@@ -144,8 +141,6 @@ namespace Jackett.Utils
             }
         }
     }
-<<<<<<< HEAD
-=======
 
     public static class TaskExtensions
     {
@@ -164,5 +159,4 @@ namespace Jackett.Utils
             return continuation;
         }
     }
->>>>>>> b05ee653d38427ee0512caca4c25c6026523b67e
 }
