@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
+using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -40,7 +41,17 @@ namespace Jackett.Indexers.Meta
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
             var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone())));
             var tasks = supportedTasks.Concat(fallbackTasks.ToList()); // explicit conversion to List to execute LINQ query
-            var aggregateTask = Task.WhenAll(tasks);
+
+            // When there are many indexers used by a metaindexer querying each and every one of them can take very very
+            // long. This may result in a problem especially with Sonarr, which does consecutive searches when searching
+            // for a season. Also, there might be indexers that do not support fast consecutive searches.
+            // Therefore doing a season search in Sonarr might take for more than 90 seconds (approx. timeout in Sonarr)
+            // which will mark Jackett as unresponsive (and therefore deactivated).
+            // Although that 40 second is just an arbitrary number, doing a 40 second timeout is acceptable since an API
+            // not responding for 40 second.. well, no one should really use that.
+            // I hope in the future these queries will speed up (using caching or some other magic), however until then
+            // just stick with a timeout.
+            var aggregateTask = tasks.Until(TimeSpan.FromSeconds(40));
 
             try
             {
@@ -51,7 +62,7 @@ namespace Jackett.Indexers.Meta
                 logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
             }
 
-            var unorderedResult = tasks.Where(x => x.Status == TaskStatus.RanToCompletion).SelectMany(x => x.Result);
+            var unorderedResult = aggregateTask.Result.Flatten();
             var resultFilters = resultFilterProvider.FiltersForQuery(query);
             var filteredResults = resultFilters.Select(async f => await f.FilterResults(unorderedResult)).SelectMany(t => t.Result);
             var uniqueFilteredResults = filteredResults.Distinct();
