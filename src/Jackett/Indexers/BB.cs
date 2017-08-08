@@ -36,7 +36,7 @@ namespace Jackett.Indexers
         public BB(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "bB",
                 description: "bB",
-                link: "https://baconbits.org/",
+                link: StringUtil.FromBase64("aHR0cHM6Ly9iYWNvbmJpdHMub3JnLw=="),
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: w,
@@ -92,8 +92,12 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
-
-            var searchString = query.GetQueryString();
+            string searchString;
+            if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
+                // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
+                searchString = query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season);
+            else
+                searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
