@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
+using Jackett.Utils;
 using Jackett.Utils.Clients;
 using NLog;
 
@@ -26,6 +29,18 @@ namespace Jackett.Indexers.Newznab
             Encoding = Encoding.UTF8;
             Language = "en-en";
             Type = "public";
+        }
+
+        protected override ReleaseInfo ResultFromFeedItem(XElement item)
+        {
+            var release = base.ResultFromFeedItem(item);
+            var enclosures = item.Descendants("enclosure").Where(e => e.Attribute("type").Value == "application/x-bittorrent");
+            if (enclosures.Any())
+            {
+                var enclosure = enclosures.First().Attribute("url").Value;
+                release.Link = enclosure.ToUri();
+            }
+            return release;
         }
 
         protected override Uri FeedUri => new Uri(SiteLink + "/feed/api");
