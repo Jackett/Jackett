@@ -216,11 +216,17 @@ namespace Jackett.Indexers
 
         public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
         {
+            if (!CanHandleQuery(query))
+                return new ReleaseInfo[0];
             var results = await PerformQuery(query);
             results = FilterResults(query, results);
             results = results.Select(r =>
             {
                 r.Origin = this;
+
+                // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
+                if (r.PublishDate > DateTime.Now)
+                    r.PublishDate = DateTime.Now;
                 return r;
             });
 

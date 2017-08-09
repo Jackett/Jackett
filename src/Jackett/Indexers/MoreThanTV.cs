@@ -228,8 +228,9 @@ namespace Jackett.Indexers
                 torrentId = torrentId.Split('#')[0];
 
             var size = ReleaseInfo.GetBytes(torrentData[0].TextContent);
-            var grabs = int.Parse(torrentData[1].TextContent);
-            var seeders = int.Parse(torrentData[2].TextContent);
+            var grabs = int.Parse(torrentData[1].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
+            var seeders = int.Parse(torrentData[2].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
+            var leechers = int.Parse(torrentData[3].TextContent, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var guid = new Uri(GuidUrl + torrentId);
 
             // Build releaseinfo
@@ -240,7 +241,7 @@ namespace Jackett.Indexers
                 Link = new Uri(DownloadUrl + torrentId),
                 PublishDate = publishDate,
                 Seeders = seeders,
-                Peers = seeders,
+                Peers = seeders + leechers,
                 Files = files,
                 Size = size,
                 Grabs = grabs,
