@@ -2,7 +2,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
-[![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp?svg=true)](https://ci.appveyor.com/project/camjac251/jackett)
+[![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp/branch/master?svg=true)](https://ci.appveyor.com/project/camjac251/jackett)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 
@@ -20,6 +20,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 ### Supported Public Trackers
  * Anidex
+ * Anime Tosho
  * cpasbien
  * EZTV
  * Horrible Subs
@@ -42,6 +43,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Downloads
  * TorrentProject
  * Torrentz2
+ * zetorrents
 
 ### Supported Private Trackers
  * 2 Fast 4 You
@@ -280,7 +282,7 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
 
 ## Installation on Synology
-Jackett is available as beta package from [SynoCommuniy](https://synocommunity.com/)
+Jackett is available as beta package from [SynoCommunity](https://synocommunity.com/)
 
 ## Troubleshooting
 

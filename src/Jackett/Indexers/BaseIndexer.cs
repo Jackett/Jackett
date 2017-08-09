@@ -137,12 +137,8 @@ namespace Jackett.Indexers
             if (!configData.SiteLink.Value.EndsWith("/", StringComparison.Ordinal))
                 configData.SiteLink.Value += "/";
 
-            var match = Regex.Match(configData.SiteLink.Value, "^https?:\\/\\/[\\w\\-\\/\\.]+$");
-            if (!match.Success)
-            {
-                throw new Exception(string.Format("\"{0}\" is not a valid URL.", configData.SiteLink.Value));
-            }
-
+            // check whether the site link is well-formatted
+            var siteUri = new Uri(configData.SiteLink.Value);
             SiteLink = configData.SiteLink.Value;
         }
 
@@ -220,12 +216,19 @@ namespace Jackett.Indexers
 
         public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
         {
+            if (!CanHandleQuery(query))
+                return new ReleaseInfo[0];
             var results = await PerformQuery(query);
             results = FilterResults(query, results);
-            foreach (var result in results)
+            results = results.Select(r =>
             {
-                result.Origin = this;
-            }
+                r.Origin = this;
+
+                // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
+                if (r.PublishDate > DateTime.Now)
+                    r.PublishDate = DateTime.Now;
+                return r;
+            });
 
             return results;
         }

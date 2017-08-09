@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Dependencies;
+using Autofac.Integration.WebApi;
 
 namespace Jackett
 {
@@ -37,9 +39,9 @@ namespace Jackett
 
         }
 
-        public static IContainer GetContainer()
+        public static IDependencyResolver DependencyResolver()
         {
-            return container;
+            return new AutofacWebApiDependencyResolver(container);
         }
 
         public static bool IsWindows
