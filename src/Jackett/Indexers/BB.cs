@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models.IndexerConfig;
@@ -180,6 +181,8 @@ namespace Jackett.Indexers
                         var title = qRow.Find("td:nth-child(2)");
                         title.Find("span, strong, div, br").Remove();
                         release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
+                        Regex rgx = new Regex(@"Season \d+");
+                        release.Title = rgx.Replace(release.Title, string.Format("S{0:00}", query.Season));
 
                         releases.Add(release);
                     }
