@@ -50,6 +50,8 @@ namespace Jackett.Indexers
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Audio);
+            AddCategoryMapping(1, TorznabCatType.AudioMP3);
+            AddCategoryMapping(1, TorznabCatType.AudioLossless);
             AddCategoryMapping(2, TorznabCatType.PC);
             AddCategoryMapping(3, TorznabCatType.BooksEbook);
             AddCategoryMapping(4, TorznabCatType.AudioAudiobook);
