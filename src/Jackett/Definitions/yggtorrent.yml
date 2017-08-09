@@ -44,7 +44,7 @@
       selector: "table.table.table-striped > tbody > tr"
     fields:
       site_date:
-        selector: "td:nth-child(2)"
+        selector: "td:nth-child(3)"
         filters:
           - name: replace
             args: ["il y a ", ""]
@@ -77,7 +77,7 @@
         selector: "td:nth-child(1) > a:not(.torrent-name)"
         attribute: href
       size:
-        selector: "td:nth-child(3)"
+        selector: "td:nth-child(4)"
         filters:
           - name: re_replace
             args: [ "\\.(\\d) KB", "$1X00"]
@@ -100,12 +100,12 @@
       seeders:
         text: 0
       seeders:
-        selector: "td[style^='color:#058c05;']"
+        selector: "td:nth-child(5)"
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: "td[style^='color:#ff5252;']"
+        selector: "td:nth-child(6)"
         optional: true
       date:
         text: "{{ .Result.site_date }}"
