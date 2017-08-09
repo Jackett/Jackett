@@ -92,93 +92,103 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
-            string searchString;
+			List<string> searchStrings = new List<string>(new string[] { query.GetQueryString() });
+			
             if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
                 // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
-                searchString = query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season);
-            else
-                searchString = query.GetQueryString();
-            var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
+                searchStrings.Add((query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season)).Trim());
 
-            queryCollection.Add("action", "basic");
+			List<string> categories = MapTorznabCapsToTrackers(query);
+			List<string> request_urls = new List<string>();
+			
+			foreach (var searchString in searchStrings)
+			{
+				var queryCollection = new NameValueCollection();
+				queryCollection.Add("action", "basic");
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                queryCollection.Add("searchstr", searchString);
-            }
+				if (!string.IsNullOrWhiteSpace(searchString))
+				{
+					queryCollection.Add("searchstr", searchString);
+				}
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
-            }
+				foreach (var cat in categories)
+				{
+					
+					queryCollection.Add("filter_cat[" + cat + "]", "1");
+				}
 
-            searchUrl += queryCollection.GetQueryString();
+				request_urls.Add(SearchUrl + queryCollection.GetQueryString());
+			}
+            IEnumerable<Task<WebClientStringResult>> downloadTasksQuery =
+            	from url in request_urls select RequestStringWithCookiesAndRetry(url); 
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            WebClientStringResult[] responses = await Task.WhenAll(downloadTasksQuery.ToArray());  
 
-            // Occasionally the cookies become invalid, login again if that happens
-            if (results.IsRedirect)
-            {
-                await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
-            }
+			for (int i = 0; i < searchStrings.Count(); i++)
+			{
+				var results = responses[i];
+				// Occasionally the cookies become invalid, login again if that happens
+				if (results.IsRedirect)
+				{
+					await ApplyConfiguration(null);
+					results = await RequestStringWithCookiesAndRetry(request_urls[i]);
+				}
+				try
+				{
+					CQ dom = results.Content;
+					var rows = dom["#torrent_table > tbody > tr.torrent"];
+					foreach (var row in rows)
+					{
+						CQ qRow = row.Cq();
+						var release = new ReleaseInfo();
 
-            try
-            {
-                CQ dom = results.Content;
-                var rows = dom["#torrent_table > tbody > tr.torrent"];
-                foreach (var row in rows)
-                {
-                    CQ qRow = row.Cq();
-                    var release = new ReleaseInfo();
+						release.MinimumRatio = 1;
+						release.MinimumSeedTime = 172800;
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+						var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
+						release.Category = MapTrackerCatToNewznab(catStr);
 
-                    var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split(new char[] { '[', ']' })[1];
-                    release.Category = MapTrackerCatToNewznab(catStr);
+						var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
+						var linkStr = qLink.Attr("href");
+						release.Comments = new Uri(BaseUrl + "/" + linkStr);
+						release.Guid = release.Comments;
 
-                    var qLink = row.ChildElements.ElementAt(1).Cq().Children("a")[0].Cq();
-                    var linkStr = qLink.Attr("href");
-                    release.Comments = new Uri(BaseUrl + "/" + linkStr);
-                    release.Guid = release.Comments;
+						var qDownload = row.ChildElements.ElementAt(1).Cq().Find("a[title='Download']")[0].Cq();
+						release.Link = new Uri(BaseUrl + "/" + qDownload.Attr("href"));
 
-                    var qDownload = row.ChildElements.ElementAt(1).Cq().Find("a[title='Download']")[0].Cq();
-                    release.Link = new Uri(BaseUrl + "/" + qDownload.Attr("href"));
+						var dateStr = row.ChildElements.ElementAt(3).Cq().Text().Trim().Replace(" and", "");
+						release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
-                    var dateStr = row.ChildElements.ElementAt(3).Cq().Text().Trim().Replace(" and", "");
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
+						var sizeStr = row.ChildElements.ElementAt(4).Cq().Text();
+						release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    var sizeStr = row.ChildElements.ElementAt(4).Cq().Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+						release.Files = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text().Trim());
+						release.Grabs = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
+						release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim());
+						release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text().Trim()) + release.Seeders;
 
-                    release.Files = ParseUtil.CoerceInt(row.ChildElements.ElementAt(2).Cq().Text().Trim());
-                    release.Grabs = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text().Trim());
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text().Trim()) + release.Seeders;
+						var grabs = qRow.Find("td:nth-child(6)").Text();
+						release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
+						if (qRow.Find("strong:contains(\"Freeleech!\")").Length >= 1)
+							release.DownloadVolumeFactor = 0;
+						else
+							release.DownloadVolumeFactor = 1;
 
-                    if (qRow.Find("strong:contains(\"Freeleech!\")").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
+						release.UploadVolumeFactor = 1;
 
-                    release.UploadVolumeFactor = 1;
+						var title = qRow.Find("td:nth-child(2)");
+						title.Find("span, strong, div, br").Remove();
+						release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
 
-                    var title = qRow.Find("td:nth-child(2)");
-                    title.Find("span, strong, div, br").Remove();
-                    release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
-
-                    releases.Add(release);
-                }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results.Content, ex);
-            }
+						releases.Add(release);
+					}
+				}
+				catch (Exception ex)
+				{
+					OnParseError(results.Content, ex);
+				}
+			}
             return releases;
         }
     }
