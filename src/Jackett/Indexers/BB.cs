@@ -180,10 +180,13 @@ namespace Jackett.Indexers
 
                         var title = qRow.Find("td:nth-child(2)");
                         title.Find("span, strong, div, br").Remove();
-                        release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
-                        Regex rgx = new Regex(@"Season \d+");
-                        release.Title = rgx.Replace(release.Title, string.Format("S{0:00}", query.Season));
 
+                        release.Title = ParseUtil.NormalizeMultiSpaces(title.Text().Replace(" - ]", "]"));
+
+                        if (catStr == "10") //change "Season #" to "S##" for TV shows
+                            release.Title = Regex.Replace(release.Title, @"Season (\d+)",
+                                                          m => string.Format("S{0:00}", Int32.Parse(m.Groups[1].Value)));
+                        
                         releases.Add(release);
                     }
                 }
