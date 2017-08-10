@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
 using AngleSharp.Parser.Html;
 using Newtonsoft.Json.Linq;
 using NLog;
-
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
@@ -81,10 +79,7 @@ namespace Jackett.Indexers
             AddCategoryMapping (14, TorznabCatType.ConsoleXbox360, "Jeux: Xbox360");
             AddCategoryMapping (44, TorznabCatType.ConsoleWii, "Jeux: Wii");
             AddCategoryMapping (45, TorznabCatType.ConsoleNDS, "Jeux: DS");
-            AddCategoryMapping (71, TorznabCatType.AudioMP3, "Musique: TAT Music Release");
-            AddCategoryMapping (26, TorznabCatType.AudioMP3, "Musique: Mp3");
             AddCategoryMapping (27, TorznabCatType.AudioVideo, "Musique: Clip Video");
-            AddCategoryMapping (58, TorznabCatType.AudioLossless, "Musique: Flac");
             AddCategoryMapping (62, TorznabCatType.TVSD, "Serie tv: TV BDRip");
             AddCategoryMapping (5, TorznabCatType.TVSD, "Serie tv: Dvdrip");
             AddCategoryMapping (41, TorznabCatType.TVHD, "Serie tv: Hd");
