@@ -9,9 +9,30 @@
 
   caps:
     categorymappings:
-      - {id: films, cat: Movies, desc: "Movies"}
-      #- {id: series, cat: TV, desc: "TV"}
-
+      # Film/Video for search results
+      - {id: 2145, cat: Other, desc: "Movies & TV"}
+      - {id: 2178, cat: Movies, desc: "Anim Movies"}
+      - {id: 2179, cat: TV/Anime, desc: "Anim TV"}
+      - {id: 2180, cat: Other, desc: "Concerts"}
+      - {id: 2181, cat: TV/Documentary, desc: "Documentary"}
+      - {id: 2182, cat: TV, desc: "TV Shows"}
+      - {id: 2183, cat: Movies, desc: "Movies"}
+      - {id: 2184, cat: TV, desc: "TV"}
+      - {id: 2185, cat: TV/Other, desc: "Shows"}
+      - {id: 2186, cat: TV/Sport, desc: "Sport"}
+      - {id: 2187, cat: TV/Other, desc: "Clips"}
+      # Film/Video for blank search
+      - {id: "Tous les torrents", cat: Other, desc: "Movies & TV"}
+      - {id: "Animation", cat: Movies, desc: "Anim Movies"}
+      - {id: "Animation Série", cat: TV/Anime, desc: "Anim TV"}
+      - {id: "Concert", cat: Other, desc: "Concerts"}
+      - {id: "Documentaire", cat: TV/Documentary, desc: "Documentary"}
+      - {id: "Emission TV", cat: TV, desc: "TV Shows"}
+      - {id: "Film", cat: Movies, desc: "Movies"}
+      - {id: "Série TV", cat: TV, desc: "TV"}
+      - {id: "Spectacle", cat: TV/Other, desc: "Shows"}
+      - {id: "Sport", cat: TV/Sport, desc: "Sport"}
+      - {id: "Vidéo-clips", cat: TV/Other, desc: "Clips"}
     modes:
       search: [q]
       #tv-search: [q, season, ep]
@@ -38,13 +59,17 @@
       - selector: "body > div.page-content > div > div.col-md-10 > div > div > div > div > div.content-box-large.box-with-header > form > center > table > tbody > tr:nth-child(3) > td:nth-child(2) > button.text:contains('Se connecter')"
     test:
       path: "/"
+      selector: "a[href=\"https://yggtorrent.com/user/logout\"]"
   search:
-    path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}{{else}}/torrents/2145-filmvideo{{end}}"
+    paths:
+      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}{{else}}/torrents/2145-filmvideo{{end}}"
+      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}&page=15{{else}}/torrents/2145-filmvideo?page=25{{end}}"
+      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}&page=30{{else}}/torrents/2145-filmvideo?page=50{{end}}"
     rows:
       selector: "table.table.table-striped > tbody > tr"
     fields:
       site_date:
-        selector: "td:nth-child(2)"
+        selector: "td:nth-child(3)"
         filters:
           - name: replace
             args: ["il y a ", ""]
@@ -73,11 +98,17 @@
       details:
         selector: "a.torrent-name"
         attribute: href
+      category:
+        selector: "td:nth-child(1) > span > i:last-child > a"
+      comments:
+        optional: true
+        selector: "td:nth-child(1) > a[href$=\"#comments\"]"
+        attribute: href
       download:
-        selector: "td:nth-child(1) > a:not(.torrent-name)"
+        selector: "td:nth-child(1) > a[href^=\"https://yggtorrent.com/engine/download_torrent?id=\"]"
         attribute: href
       size:
-        selector: "td:nth-child(3)"
+        selector: "td:nth-child(4)"
         filters:
           - name: re_replace
             args: [ "\\.(\\d) KB", "$1X00"]
@@ -100,12 +131,12 @@
       seeders:
         text: 0
       seeders:
-        selector: "td[style^='color:#058c05;']"
+        selector: "td:nth-child(5)"
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: "td[style^='color:#ff5252;']"
+        selector: "td:nth-child(6)"
         optional: true
       date:
         text: "{{ .Result.site_date }}"

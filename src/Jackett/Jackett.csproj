@@ -174,8 +174,6 @@
     <Compile Include="AuthenticationException.cs" />
     <Compile Include="CacheControlAttribute.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
-    <Compile Include="Controllers\PotatoController.cs" />
-    <Compile Include="Controllers\TorznabController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\ArcheTorrent.cs" />
@@ -265,7 +263,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataLoginLink.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
-    <Compile Include="Models\ManualSearchResult.cs" />
     <Compile Include="Indexers\TVChaosUK.cs" />
     <Compile Include="Indexers\NCore.cs" />
     <Compile Include="Indexers\TorrentBytes.cs" />
@@ -283,7 +280,6 @@
     <Compile Include="Models\CachedLog.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\CategoryMapping.cs" />
-    <Compile Include="Models\AdminSearch.cs" />
     <Compile Include="Models\IndexerConfigurationStatus.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFileList.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
@@ -296,9 +292,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
-    <Compile Include="Models\TorrentPotatoRequest.cs" />
-    <Compile Include="Models\TorrentPotatoResponse.cs" />
-    <Compile Include="Models\TorrentPotatoResponseItem.cs" />
     <Compile Include="Models\TorznabCapabilities.cs" />
     <Compile Include="Models\Config\ServerConfig.cs" />
     <Compile Include="Models\TorznabCategory.cs" />
@@ -332,7 +325,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCookie.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataRuTor.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="Utils\Clients\WebRequest.cs" />
     <Compile Include="Utils\DataUrl.cs" />
@@ -365,12 +357,10 @@
     <Compile Include="Utils\TorznabCapsUtil.cs" />
     <Compile Include="Utils\Clients\UnixSafeCurlWebClient.cs" />
     <Compile Include="Utils\TvCategoryParser.cs" />
-    <Compile Include="Utils\WebApiRootRedirectMiddleware.cs" />
+    <Compile Include="Utils\RedirectMiddleware.cs" />
     <Compile Include="Utils\WebAPIRequestLogger.cs" />
     <Compile Include="Utils\WebAPIToNLogTracer.cs" />
     <Compile Include="Utils\Clients\HttpWebClient.cs" />
-    <Compile Include="WebAPIExceptionHandler.cs" />
-    <Compile Include="WebAPIExceptionLogger.cs" />
     <Compile Include="Indexers\BakaBT.cs" />
     <Compile Include="Indexers\Meta\MetaIndexers.cs" />
     <Compile Include="Indexers\Meta\BaseMetaIndexer.cs" />
@@ -384,6 +374,19 @@
     <Compile Include="Indexers\Feeds\BaseNewznabIndexer.cs" />
     <Compile Include="Indexers\Feeds\AnimeTosho.cs" />
     <Compile Include="Indexers\Feeds\BaseFeedIndexer.cs" />
+    <Compile Include="Controllers\IndexerApiController.cs" />
+    <Compile Include="Controllers\UIController.cs" />
+    <Compile Include="Controllers\ServerConfigurationController.cs" />
+    <Compile Include="Controllers\ResultsController.cs" />
+    <Compile Include="Models\DTO\Config.cs" />
+    <Compile Include="Models\DTO\Indexer.cs" />
+    <Compile Include="Models\DTO\ServerConfig.cs" />
+    <Compile Include="Models\DTO\ApiSearch.cs" />
+    <Compile Include="Models\DTO\ManualSearchResult.cs" />
+    <Compile Include="Models\DTO\TorrentPotatoRequest.cs" />
+    <Compile Include="Models\DTO\TorrentPotatoResponse.cs" />
+    <Compile Include="Models\DTO\TorrentPotatoResponseItem.cs" />
+    <Compile Include="Models\DTO\TorznabRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -428,6 +431,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Resources\test.xml" />
+    <Content Include="Content\libs\api.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\libs\handlebarsextend.js">
@@ -531,9 +537,6 @@
     <Content Include="Content\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\setup_indexer.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Models\TorznabCatType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TorznabCatType.generated.cs</LastGenOutput>
@@ -570,6 +573,7 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Indexers\Feeds\" />
+    <Folder Include="Models\DTO\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

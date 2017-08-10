@@ -27,9 +27,9 @@ namespace Jackett.Indexers.Meta
             return Task.FromResult(IndexerConfigurationStatus.Completed);
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
         {
-            return await PerformQuery(query);
+            return results;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

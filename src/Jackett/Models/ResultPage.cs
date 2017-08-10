@@ -17,7 +17,7 @@ namespace Jackett.Models
         static XNamespace torznabNs = "http://torznab.com/schemas/2015/feed";
 
         public ChannelInfo ChannelInfo { get; private set; }
-        public List<ReleaseInfo> Releases { get; private set; }
+        public IEnumerable<ReleaseInfo> Releases { get; set; }
 
         public ResultPage(ChannelInfo channelInfo)
         {
@@ -90,8 +90,8 @@ namespace Jackett.Models
                             getTorznabElement("infohash", r.InfoHash),
                             getTorznabElement("minimumratio", r.MinimumRatio),
                             getTorznabElement("minimumseedtime", r.MinimumSeedTime),
-							getTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
-							getTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
+                            getTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
+                            getTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
                         )
                     )
                 )

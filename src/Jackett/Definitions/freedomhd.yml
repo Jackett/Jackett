@@ -7,6 +7,16 @@
   links:
     - http://freedom-paradise.eu/
 
+  download:
+    before:
+      path: "list_thanks.php"
+      method: "get"
+      inputs:
+        id: "{{ .DownloadUri.Query.id }}"
+        to: "give"
+        torrent: "{{ .DownloadUri.Query.id }}"
+    
+
   caps:
     categorymappings:
       # ANIMES

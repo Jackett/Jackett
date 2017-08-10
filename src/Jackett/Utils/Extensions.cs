@@ -31,24 +31,34 @@ namespace Jackett.Utils
         private T Value;
     }
 
-    public static class IEnumerableExtension
+    public static class GenericConversionExtensions
     {
         public static IEnumerable<T> ToEnumerable<T>(this T obj)
         {
             return new T[] { obj };
         }
 
-        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list)
-        {
-            return list.SelectMany(x => x);
-        }
-    }
-
-    public static class ToNonNullExtension
-    {
         public static NonNull<T> ToNonNull<T>(this T obj) where T : class
         {
             return new NonNull<T>(obj);
+        }
+    }
+
+    public static class EnumerableExtension
+    {
+        public static string AsString(this IEnumerable<char> chars)
+        {
+            return String.Concat(chars);
+        }
+
+        public static bool IsEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection.Count() > 0;
+        }
+
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list)
+        {
+            return list.SelectMany(x => x);
         }
     }
 
@@ -93,6 +103,14 @@ namespace Jackett.Utils
         public static string FirstValue(this XElement element, string name)
         {
             return element.First(name).Value;
+        }
+    }
+
+    public static class KeyValuePairsExtension
+    {
+        public static IDictionary<Key, Value> ToDictionary<Key, Value>(this IEnumerable<KeyValuePair<Key, Value>> pairs)
+        {
+            return pairs.ToDictionary(x => x.Key, x => x.Value);
         }
     }
 
