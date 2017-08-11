@@ -191,10 +191,30 @@ namespace Jackett
                 }
             );
 
+            config.Routes.MapHttpRoute(
+                name: "LegacyTorznab",
+                routeTemplate: "torznab/{indexerId}/api",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Torznab"
+                }
+            );
+
             // Legacy fallback for Potato results
             config.Routes.MapHttpRoute(
                 name: "LegacyPotato",
                 routeTemplate: "potato/{indexerId}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Potato"
+                }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "LegacyPotato",
+                routeTemplate: "potato/{indexerId}/api",
                 defaults: new
                 {
                     controller = "Results",
