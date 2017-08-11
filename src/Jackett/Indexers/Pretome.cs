@@ -13,6 +13,7 @@ using CsQuery;
 using System.Web;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -302,7 +303,7 @@ namespace Jackett.Indexers
                     var qDownload = row.ChildElements.ElementAt(2).Cq().Find("a").First();
                     release.Link = new Uri(SiteLink + qDownload.Attr("href"));
 
-                    var dateStr = row.ChildElements.ElementAt(5).InnerHTML.Replace("<br>", " ").Replace("<br/>", " ");
+                    var dateStr = Regex.Replace(row.ChildElements.ElementAt(5).InnerHTML, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
                     release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
 
                     var sizeStr = row.ChildElements.ElementAt(7).Cq().Text();
