@@ -210,13 +210,13 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "download",
-                routeTemplate: "dl/{indexerID}/{apiKey}",
+                routeTemplate: "dl/{indexerID}",
                 defaults: new { controller = "Download", action = "Download" }
             );
 
             config.Routes.MapHttpRoute(
               name: "blackhole",
-              routeTemplate: "bh/{indexerID}/{apikey}",
+              routeTemplate: "bh/{indexerID}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
             );
 
