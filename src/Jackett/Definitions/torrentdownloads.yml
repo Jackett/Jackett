@@ -20,9 +20,11 @@
 
     modes:
       search: [q]
-      
+  
+  settings: []
+  
   search:
-    path: /search/
+    path: "{{if .Keywords}}/search/{{else}}/today/{{end}}"
     inputs:
       $raw: "new=1&{{range .Categories}}s_cat={{.}}&{{end}}"
       search: "{{ .Query.Keywords }}"
