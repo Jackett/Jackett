@@ -836,12 +836,12 @@ namespace Jackett.Indexers
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
                         var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
-                        logger.Info(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, HexData));
                         break;
                     case "strdump":
                         // for debugging
                         var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
-                        logger.Info(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", ID, DebugData));
                         break;
                     default:
                         break;
@@ -1304,7 +1304,7 @@ namespace Jackett.Indexers
                                             break;
                                         case "strdump":
                                             // for debugging
-                                            logger.Info(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
+                                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", ID, Row.ToHtmlPretty()));
                                             break;
                                         default:
                                             logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", ID, Filter.Name));
