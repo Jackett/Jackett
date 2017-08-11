@@ -189,6 +189,9 @@ namespace Jackett.Indexers
         {
             if (query == null)
                 return false;
+            if (query.QueryType == "caps")
+                return true;
+
             var caps = TorznabCaps;
 
             if (query.HasSpecifiedCategories)
