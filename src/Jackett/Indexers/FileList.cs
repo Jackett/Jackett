@@ -165,7 +165,7 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
                     var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
-                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href").Replace("&usetoken=1",""));
 
                     var sizeStr = qRow.Find(".torrenttable:eq(6)").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
