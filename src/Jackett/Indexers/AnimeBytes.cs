@@ -64,6 +64,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
             Type = "private";
+
+            webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)
         }
 
 
@@ -87,7 +89,6 @@ namespace Jackett.Indexers
             {
                 Url = LoginUrl,
                 Encoding = Encoding,
-                EmulateBrowser = true
             });
 
             CQ loginPageDom = loginPage.Content;
@@ -114,7 +115,6 @@ namespace Jackett.Indexers
                 Type = RequestType.POST,
                 Encoding = Encoding,
                 Url = LoginUrl,
-                EmulateBrowser = true
             };
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
 
