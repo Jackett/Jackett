@@ -95,7 +95,7 @@ namespace Jackett.Utils.Clients
             request.Headers.ExpectContinue = false;
             request.RequestUri = new Uri(webRequest.Url);
 
-            if (webRequest.EmulateBrowser)
+            if (webRequest.EmulateBrowser == true)
                 request.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
             else
                 request.Headers.UserAgent.ParseAdd("Jackett/" + configService.GetVersion());

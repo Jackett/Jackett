@@ -37,7 +37,7 @@ namespace Jackett.Utils.Clients
             
             args.AppendFormat("--url \"{0}\" ", request.Url);
            
-            if (request.EmulateBrowser)
+            if (request.EmulateBrowser == true)
                 args.AppendFormat("-i  -sS --user-agent \"{0}\" ", BrowserUtil.ChromeUserAgent);
             else
                 args.AppendFormat("-i  -sS --user-agent \"{0}\" ", "Jackett/" + configService.GetVersion());

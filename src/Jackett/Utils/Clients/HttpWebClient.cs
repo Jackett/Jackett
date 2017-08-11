@@ -103,7 +103,7 @@ namespace Jackett.Utils.Clients
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {
-                        if (webRequest.EmulateBrowser)
+                        if (webRequest.EmulateBrowser == true)
                             client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
                         else
                             client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
