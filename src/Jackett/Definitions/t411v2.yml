@@ -1,0 +1,104 @@
+---
+  site: t411v2
+  name: t411 v2
+  language: fr-fr
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://t411.si
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies}
+      - {id: 2, cat: TV}
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+  settings: []
+
+  download:
+    selector: a[href^="/telecharger-torrent/"]
+
+  search:
+    path: /torrents/search/?search={{ .Keywords}}
+    rows:
+      selector: div.isItem
+    fields:
+     site_date:
+        selector: div.gname a
+        filters:
+          # date is at the end of the title, so we get it and name it 
+          # site_date
+          - name: regexp
+            args: "(\\w+)$"
+     title:
+        selector: div.gname a
+        filters:
+          # now we put the date at the right place according scene 
+          # naming rules using .Result.site_date
+          - name: replace
+            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
+          - name: replace
+            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
+          # and we delete it at the end
+          - name: re_replace
+            args: ["(\\w+)$", ""]
+     details:
+        selector: div.gname a
+        attribute: href
+     download:
+        selector: div.gname a
+        attribute: href
+     size:
+        selector: div.gsmall:nth-child(5) span
+        filters:
+          - name: re_replace
+            args: [ "\\.(\\w+) K", "$1X00"]
+          - name: re_replace
+            args: [ " K", "000"]
+          - name: re_replace
+            args: [ "\\.(\\w+) M", "$1X0000"]
+          - name: re_replace
+            args: [ " M", "000000"]
+          - name: re_replace
+            args: [ "\\.(\\w+) G", "$1X0000000"]
+          - name: re_replace
+            args: [ " G", "000000000"]
+     seeders:
+        text: 0
+     seeders:
+        selector: div.gsmall:nth-child(6)
+        optional: true
+     leechers:
+        text: 0
+     leechers:
+        selector: div.gsmall:nth-child(7)
+        optional: true
+     downloadvolumefactor:
+        text: "0"
+     uploadvolumefactor:
+        text: "1"
+     date:
+        selector: div.gsmall:nth-child(4) span
+        filters:
+          - name: replace
+            args: [ " jours", " days"]
+          - name: replace
+            args: [ " jour", " day"]
+          - name: replace
+            args: [ " heures", " hours"]
+          - name: replace
+            args: [ " heure", " hour"]
+          - name: replace
+            args: [ " semaines", " weeks"]
+          - name: replace
+            args: [ " semaine", " week"]
+          - name: replace
+            args: [ " mois", " month"]
+          - name: replace
+            args: [ " ans", " years"]
+          - name: replace
+            args: [ " an", " year"]
+          - name: append
+            args: " ago"
