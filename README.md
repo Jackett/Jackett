@@ -221,7 +221,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Trezzor
  * TV Chaos UK
  * TV-Vault
- * T411_v2
+ * T411 v2
  * u-Torrent
  * UHDBits
  * Ultimate Gamer Club
