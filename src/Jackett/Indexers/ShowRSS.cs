@@ -86,8 +86,11 @@ namespace Jackett.Indexers
                         continue;
 
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);
-                    int category = 0;
-                    int.TryParse(node.SelectSingleNode("title").InnerText, out category);
+
+                    // Try to guess the category... I'm not proud of myself...
+                    int category = 5030;
+                    if (serie_title.Contains("720p"))
+                        category = 5040;
                     release.Category = new List<int> { category };
                     var test = node.SelectSingleNode("enclosure");
                     release.Guid = new Uri(test.Attributes["url"].Value);
