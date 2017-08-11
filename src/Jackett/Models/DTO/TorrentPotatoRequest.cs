@@ -13,7 +13,7 @@
                 Categories = new int[1] { TorznabCatType.Movies.ID },
                 SearchTerm = request.Search,
                 ImdbID = request.Imdbid,
-                QueryType = "movie"
+                QueryType = "TorrentPotato"
             };
             torznabQuery.ExpandCatsToSubCats();
 
