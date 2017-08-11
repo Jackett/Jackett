@@ -192,7 +192,7 @@ namespace Jackett
             );
 
             config.Routes.MapHttpRoute(
-                name: "LegacyTorznab",
+                name: "LegacyTorznabApi",
                 routeTemplate: "torznab/{indexerId}/api",
                 defaults: new
                 {
@@ -213,7 +213,7 @@ namespace Jackett
             );
 
             config.Routes.MapHttpRoute(
-                name: "LegacyPotato",
+                name: "LegacyPotatoApi",
                 routeTemplate: "potato/{indexerId}/api",
                 defaults: new
                 {
