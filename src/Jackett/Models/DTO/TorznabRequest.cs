@@ -21,11 +21,13 @@ namespace Jackett.Models.DTO
         {
             var query = new TorznabQuery()
             {
-                QueryType = request.t,
+                QueryType = "search",
                 SearchTerm = request.q,
                 ImdbID = request.imdbid,
                 Episode = request.ep,
             };
+            if (request.t != null)
+                query.QueryType = request.t;
             if (!request.extended.IsNullOrEmptyOrWhitespace())
                 query.Extended = ParseUtil.CoerceInt(request.extended);
             if (!request.limit.IsNullOrEmptyOrWhitespace())
