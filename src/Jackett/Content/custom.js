@@ -735,9 +735,9 @@ function showSearch(selectedIndexer, query) {
         }
         var select = $('#searchCategory');
         select.html("<option value=''>-- All --</option>");
-        $.each(cats, function (value, key) {
+        $.each(cats, function (index, value) {
             select.append($("<option></option>")
-                .attr("value", value).text(key + ' (' + value + ')'));
+                .attr("value", value["ID"]).text(value["ID"] + ' (' + value["Name"] + ')'));
         });
     };
 
