@@ -35,7 +35,6 @@ $(document).ready(function () {
 
     bindUIButtons();
     loadJackettSettings();
-    openSearchIfNecessary();
 });
 
 function openSearchIfNecessary() {
@@ -135,6 +134,7 @@ function reloadIndexers() {
         }
         displayConfiguredIndexersList(configuredIndexers);
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
+        openSearchIfNecessary();
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -720,6 +720,7 @@ function showSearch(selectedIndexer, query) {
 
     releaseDialog.on('hidden.bs.modal', function (e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
+        window.location.hash = '';
     }) ;
 
     var setCategories = function (tracker, items) {
