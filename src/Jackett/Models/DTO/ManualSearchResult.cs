@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett
+namespace Jackett.Models.DTO
 {
     public class ManualSearchResult
     {
-        public List<TrackerCacheResult> Results { get; set; }
-        public List<string> Indexers { get; set; }
+        public IEnumerable<TrackerCacheResult> Results { get; set; }
+        public IEnumerable<string> Indexers { get; set; }
     }
 }
