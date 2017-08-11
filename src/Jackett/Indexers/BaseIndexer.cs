@@ -189,29 +189,22 @@ namespace Jackett.Indexers
         {
             if (query == null)
                 return false;
-
             var caps = TorznabCaps;
+            if (!caps.SearchAvailable && query.IsSearch)
+                return false;
+            if (!caps.TVSearchAvailable && query.IsTVSearch)
+                return false;
+            if (!caps.MovieSearchAvailable && query.IsMovieSearch)
+                return false;
+            if (!caps.SupportsTVRageSearch && query.IsTVRageSearch)
+                return false;
+            if (!caps.SupportsImdbSearch && query.IsImdbQuery)
+                return false;
 
-            // If a category is specified but the indexer does not support it, we do not hnadle the query 
-            // to avoid returning unexpected releases (tv shows instead of movies etc)
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-
-            // If at least one search is possible, the indexer is able to handle this query 
-            if (caps.SearchAvailable && query.IsSearch)
-                return true;
-            if (caps.TVSearchAvailable && query.IsTVSearch)
-                return true;
-            if (caps.MovieSearchAvailable && query.IsMovieSearch)
-                return true;
-            if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
-                return true;
-            if (caps.SupportsImdbSearch && query.IsImdbQuery)
-                return true;
-
-            
-            return false;
+            return true;
         }
 
         public void Unconfigure()
