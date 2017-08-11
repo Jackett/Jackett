@@ -70,6 +70,8 @@ function loadJackettSettings() {
             basePath = '';
         }
 
+        api.key = data.api_key;
+
         $("#jackett-savedir").val(data.blackholedir);
         $("#jackett-allowext").attr('checked', data.external);
         $("#jackett-allowupdate").attr('checked', data.updatedisabled);
