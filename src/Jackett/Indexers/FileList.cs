@@ -142,9 +142,12 @@ namespace Jackett.Indexers
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
                     release.Title = qRow.Find(".torrenttable:eq(1) b").Text();
+                    var longtitle = qRow.Find(".torrenttable:eq(1) a[title]").Attr("title");
+                    if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
+                        release.Title = longtitle;
 
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
-                        continue;
+                    continue;
 
                     release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
 
