@@ -13,6 +13,7 @@ using CsQuery;
 using System.Web;
 using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
