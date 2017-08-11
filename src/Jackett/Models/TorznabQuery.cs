@@ -35,7 +35,7 @@ namespace Jackett.Models
         {
             get
             {
-                return (QueryStringParts != null && QueryStringParts.Length > 0);
+                return QueryType == "search";
             }
         }
 
@@ -51,7 +51,7 @@ namespace Jackett.Models
         {
             get
             {
-                return QueryType == "movie";
+                return QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
             }
         }
 

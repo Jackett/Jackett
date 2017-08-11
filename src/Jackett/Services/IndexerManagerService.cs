@@ -204,6 +204,8 @@ namespace Jackett.Services
         {
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
+            browseQuery.QueryType = "search";
+            browseQuery.SearchTerm = "";
             browseQuery.IsTest = true;
             var results = await indexer.ResultsForQuery(browseQuery);
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
