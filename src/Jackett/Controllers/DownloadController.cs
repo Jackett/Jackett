@@ -22,16 +22,18 @@ namespace Jackett.Controllers
         Logger logger;
         IIndexerManagerService indexerService;
         IServerService serverService;
+        IProtectionService protectionService;
 
-        public DownloadController(IIndexerManagerService i, Logger l, IServerService s)
+        public DownloadController(IIndexerManagerService i, Logger l, IServerService s, IProtectionService ps)
         {
             logger = l;
             indexerService = i;
             serverService = s;
+            protectionService = ps;
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Download(string indexerID, string path, string apikey, string file)
+        public async Task<HttpResponseMessage> Download(string indexerID, string path, string jackett_apikey, string file)
         {
             try
             {
@@ -44,8 +46,9 @@ namespace Jackett.Controllers
                 }
 
                 path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
+                path = protectionService.UnProtect(path);
 
-                if (serverService.Config.APIKey != apikey)
+                if (serverService.Config.APIKey != jackett_apikey)
                     return new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);

@@ -11,6 +11,7 @@ namespace Jackett.Models.DTO
         public static TorznabQuery ToTorznabQuery(ApiSearch request)
         {
             var stringQuery = new TorznabQuery();
+            stringQuery.QueryType = "search";
 
             var queryStr = request.Query;
             if (queryStr != null)
@@ -30,7 +31,10 @@ namespace Jackett.Models.DTO
                 }
                 queryStr = queryStr.Trim();
             }
-
+            else
+            {
+                queryStr = ""; // empty string search is interpreted as null 
+            }
 
             stringQuery.SearchTerm = queryStr;
             stringQuery.Categories = request.Category == 0 ? new int[0] : new int[1] { request.Category };

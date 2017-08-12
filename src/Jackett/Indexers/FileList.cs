@@ -142,9 +142,12 @@ namespace Jackett.Indexers
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find(".torrenttable:eq(1) a").First();
                     release.Title = qRow.Find(".torrenttable:eq(1) b").Text();
+                    var longtitle = qRow.Find(".torrenttable:eq(1) a[title]").Attr("title");
+                    if (!string.IsNullOrEmpty(longtitle) && !longtitle.Contains("<")) // releases with cover image have no full title
+                        release.Title = longtitle;
 
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
-                        continue;
+                    continue;
 
                     release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
 
@@ -165,7 +168,7 @@ namespace Jackett.Indexers
                     release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
                     var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
-                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href").Replace("&usetoken=1",""));
 
                     var sizeStr = qRow.Find(".torrenttable:eq(6)").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

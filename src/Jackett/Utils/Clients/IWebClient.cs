@@ -18,6 +18,7 @@ namespace Jackett.Utils.Clients
         protected IProcessService processService;
         protected DateTime lastRequest = DateTime.MinValue;
         protected TimeSpan requestDelayTimeSpan;
+        public bool EmulateBrowser = true;
         public double requestDelay
         {
             get { return requestDelayTimeSpan.TotalSeconds; }
@@ -41,6 +42,9 @@ namespace Jackett.Utils.Clients
 
         async protected void DelayRequest(WebRequest request)
         {
+            if (request.EmulateBrowser == null)
+                request.EmulateBrowser = EmulateBrowser;
+
             if (requestDelay != 0)
             {
                 var timeElapsed = DateTime.Now - lastRequest;

@@ -14,7 +14,6 @@ namespace Jackett.Utils.Clients
             PostData = new List<KeyValuePair<string, string>>();
             Type = RequestType.GET;
             Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            EmulateBrowser = true;
         }
 
         public WebRequest(string url)
@@ -23,7 +22,6 @@ namespace Jackett.Utils.Clients
             Type = RequestType.GET;
             Url = url;
             Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            EmulateBrowser = true;
         }
 
         public string Url { get; set; }
@@ -32,7 +30,7 @@ namespace Jackett.Utils.Clients
         public string Referer { get; set; }
         public RequestType Type { get; set; }
         public string RawBody { get; set; }
-        public bool EmulateBrowser { get; set; }
+        public bool? EmulateBrowser { get; set; }
         public Encoding Encoding { get; set; }
 
         /// <summary>

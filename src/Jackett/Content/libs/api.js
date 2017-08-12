@@ -1,6 +1,7 @@
 var api = {
 	version: "2.0",
 	root: "/api",
+    key: "",
 
 	getApiPath: function(category, action) {
 	    var path = this.root + "/v" + this.version + "/" + category;
@@ -47,7 +48,7 @@ var api = {
 	},
 
 	resultsForIndexer: function(indexerId, query, callback) {
-	    return $.get(this.getApiPath("indexers", indexerId + "/results"), query, callback);
+	    return $.get(this.getApiPath("indexers", indexerId + "/results?apikey=" + this.key), query, callback);
 	},
 
 	getServerCache: function(callback) {

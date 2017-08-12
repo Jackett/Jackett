@@ -33,17 +33,21 @@ namespace Jackett.Services
         private IIndexerConfigurationService configService;
         private IProtectionService protectionService;
         private IWebClient webClient;
+        private IProcessService processService;
+        private IConfigurationService globalConfigService;
 
         private Logger logger;
 
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
-        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, IWebClient webClient, Logger l, ICacheService cache)
+        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, IWebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService)
         {
             configService = config;
             this.protectionService = protectionService;
             this.webClient = webClient;
+            this.processService = processService;
+            this.globalConfigService = globalConfigService;
             logger = l;
             cacheService = cache;
         }
@@ -70,7 +74,10 @@ namespace Jackett.Services
                 var constructor = type.GetConstructor(constructorArgumentTypes);
                 if (constructor != null)
                 {
-                    var arguments = new object[] { configService, webClient, logger, protectionService };
+                    // create own webClient instance for each indexer (seperate cookies stores, etc.)
+                    var indexerWebClientInstance = (IWebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
+
+                    var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService };
                     var indexer = (IIndexer)constructor.Invoke(arguments);
                     return indexer;
                 }
@@ -115,7 +122,10 @@ namespace Jackett.Services
                 });
                 var cardigannIndexers = definitions.Select(definition =>
                 {
-                    IIndexer indexer = new CardigannIndexer(configService, webClient, logger, protectionService, definition);
+                    // create own webClient instance for each indexer (seperate cookies stores, etc.)
+                    var indexerWebClientInstance = (IWebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
+
+                    IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, definition);
                     configService.Load(indexer);
                     return indexer;
                 }).ToList(); // Explicit conversion to list to avoid repeated resource loading
@@ -194,6 +204,8 @@ namespace Jackett.Services
         {
             var indexer = GetIndexer(name);
             var browseQuery = new TorznabQuery();
+            browseQuery.QueryType = "search";
+            browseQuery.SearchTerm = "";
             browseQuery.IsTest = true;
             var results = await indexer.ResultsForQuery(browseQuery);
             logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));

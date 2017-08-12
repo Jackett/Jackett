@@ -5,7 +5,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.nextorrent.cx/
+    - https://www.nextorrent.org/
 
   caps:
     categorymappings:

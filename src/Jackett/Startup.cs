@@ -191,10 +191,30 @@ namespace Jackett
                 }
             );
 
+            config.Routes.MapHttpRoute(
+                name: "LegacyTorznabApi",
+                routeTemplate: "torznab/{indexerId}/api",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Torznab"
+                }
+            );
+
             // Legacy fallback for Potato results
             config.Routes.MapHttpRoute(
                 name: "LegacyPotato",
                 routeTemplate: "potato/{indexerId}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Potato"
+                }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "LegacyPotatoApi",
+                routeTemplate: "potato/{indexerId}/api",
                 defaults: new
                 {
                     controller = "Results",
@@ -210,13 +230,13 @@ namespace Jackett
 
             config.Routes.MapHttpRoute(
                 name: "download",
-                routeTemplate: "dl/{indexerID}/{apiKey}",
+                routeTemplate: "dl/{indexerID}",
                 defaults: new { controller = "Download", action = "Download" }
             );
 
             config.Routes.MapHttpRoute(
               name: "blackhole",
-              routeTemplate: "bh/{indexerID}/{apikey}",
+              routeTemplate: "bh/{indexerID}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
             );
 

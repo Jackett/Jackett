@@ -35,7 +35,6 @@ $(document).ready(function () {
 
     bindUIButtons();
     loadJackettSettings();
-    openSearchIfNecessary();
 });
 
 function openSearchIfNecessary() {
@@ -70,6 +69,8 @@ function loadJackettSettings() {
         if (basePath === null || basePath === undefined) {
             basePath = '';
         }
+
+        api.key = data.api_key;
 
         $("#jackett-savedir").val(data.blackholedir);
         $("#jackett-allowext").attr('checked', data.external);
@@ -135,6 +136,7 @@ function reloadIndexers() {
         }
         displayConfiguredIndexersList(configuredIndexers);
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
+        openSearchIfNecessary();
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -720,6 +722,7 @@ function showSearch(selectedIndexer, query) {
 
     releaseDialog.on('hidden.bs.modal', function (e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
+        window.location.hash = '';
     }) ;
 
     var setCategories = function (tracker, items) {
@@ -735,9 +738,9 @@ function showSearch(selectedIndexer, query) {
         }
         var select = $('#searchCategory');
         select.html("<option value=''>-- All --</option>");
-        $.each(cats, function (value, key) {
+        $.each(cats, function (index, value) {
             select.append($("<option></option>")
-                .attr("value", value).text(key + ' (' + value + ')'));
+                .attr("value", value["ID"]).text(value["ID"] + ' (' + value["Name"] + ')'));
         });
     };
 
@@ -1087,7 +1090,7 @@ function bindUIButtons() {
             basepathoverride: jackett_basepathoverride,
             omdbkey: jackett_omdb_key
         };
-        api.updateServerConfig(function (data) {
+        api.updateServerConfig(jsonObject, function (data) {
             if (data !== undefined && data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;

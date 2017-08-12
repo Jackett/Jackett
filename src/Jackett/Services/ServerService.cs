@@ -46,6 +46,7 @@ namespace Jackett.Services
         private IWebClient client;
         private IUpdateService updater;
         private List<string> _notices = new List<string>();
+        IProtectionService protectionService;
 
         public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u, IProtectionService protectionService)
         {
@@ -56,6 +57,7 @@ namespace Jackett.Services
             logger = l;
             client = w;
             updater = u;
+            this.protectionService = protectionService;
 
             LoadConfig();
             // "TEMPORARY" HACK
@@ -80,9 +82,10 @@ namespace Jackett.Services
             if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
                 return link;
 
-            var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(link.ToString()));
+            var encryptedLink = protectionService.Protect(link.ToString());
+            var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(encryptedLink));
             string urlEncodedFile = WebUtility.UrlEncode(file);
-            var proxyLink = string.Format("{0}{1}/{2}/{3}?path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
+            var proxyLink = string.Format("{0}{1}/{2}/?jackett_apikey={3}&path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
             return new Uri(proxyLink);
         }
 

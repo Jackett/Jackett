@@ -189,22 +189,27 @@ namespace Jackett.Indexers
         {
             if (query == null)
                 return false;
+            if (query.QueryType == "caps")
+                return true;
+
             var caps = TorznabCaps;
-            if (!caps.SearchAvailable && query.IsSearch)
-                return false;
-            if (!caps.TVSearchAvailable && query.IsTVSearch)
-                return false;
-            if (!caps.MovieSearchAvailable && query.IsMovieSearch)
-                return false;
-            if (!caps.SupportsTVRageSearch && query.IsTVRageSearch)
-                return false;
-            if (!caps.SupportsImdbSearch && query.IsImdbQuery)
-                return false;
 
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-            return true;
+
+            if (caps.SearchAvailable && query.IsSearch)
+                return true;
+            if (caps.TVSearchAvailable && query.IsTVSearch)
+                return true;
+            if (caps.MovieSearchAvailable && query.IsMovieSearch)
+                return true;
+            if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
+                return true;
+            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+                return true;
+
+            return false;
         }
 
         public void Unconfigure()

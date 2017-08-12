@@ -185,6 +185,7 @@ namespace Jackett.Updater
                 "Definitions/rarbg.yml",
                 "Definitions/t411.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
+                "Definitions/maniatorrent.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nachtwerk.yml",
             };
