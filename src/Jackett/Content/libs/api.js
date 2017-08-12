@@ -14,6 +14,10 @@ var api = {
 	    return $.get(this.getApiPath("indexers"), callback);
 	},
 
+    getAllGroups : function(callback) {
+        return $.get(this.getApiPath("groups"), callback);
+    },
+
 	getServerConfig: function(callback) {
 	    return $.get(this.getApiPath("server", "config"), callback);
 	},
@@ -34,6 +38,18 @@ var api = {
 	    });
 	},
 
+    createGroup: function(groupId, indexers, callback) {
+        return $.ajax({
+            url: this.getApiPath("groups", groupId),
+            type: 'POST',
+            data: JSON.stringify(indexers),
+            dataType: 'json',
+            contentType: 'application/json',
+            cache: false,
+            success: callback
+        });
+    },
+
 	deleteIndexer: function(indexerId, callback) {
 	    return $.ajax({
 	        url: this.getApiPath("indexers", indexerId),
@@ -42,6 +58,15 @@ var api = {
 	        success: callback
 	    });
 	},
+
+    deleteGroup: function(groupId, callback) {
+        return $.ajax({
+            url: this.getApiPath("groups", groupId),
+            type: 'DELETE',
+            cache: false,
+            success: callback
+        });
+    },
 
 	testIndexer: function(indexerId, callback) {
 	    return $.post(this.getApiPath("indexers", indexerId + "/test"), callback);

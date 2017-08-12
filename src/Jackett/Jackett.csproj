@@ -387,6 +387,8 @@
     <Compile Include="Models\DTO\TorrentPotatoResponse.cs" />
     <Compile Include="Models\DTO\TorrentPotatoResponseItem.cs" />
     <Compile Include="Models\DTO\TorznabRequest.cs" />
+    <Compile Include="Controllers\GroupApiController.cs" />
+    <Compile Include="Models\DTO\IndexerGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

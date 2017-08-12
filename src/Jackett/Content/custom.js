@@ -140,6 +140,34 @@ function reloadIndexers() {
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
+
+    api.getAllGroups(function (data) {
+        groups = data;
+        var template = Handlebars.compile($("#group-table").html());
+        var groupTable = $(template({ groups: groups }));
+
+        groupTable.find(".group-button-delete").each(function (i, btn) {
+	        var $btn = $(btn);
+	        var id = $btn.data("id");
+	        $btn.click(function () {
+	            api.deleteGroup(id, function (data) {
+	                if (data == undefined) {
+	                    doNotify("Deleted " + id, "success", "glyphicon glyphicon-ok");
+	                } else if (data.result == "error") {
+	                    doNotify("Delete error for " + id + "\n" + data.error, "danger", "glyphicon glyphicon-alert");
+	                }
+	            }).fail(function () {
+	                doNotify("Error deleting indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
+	            }).always(function () {
+	                reloadIndexers();
+	            });
+	        });
+	    });
+
+        $('#groups').empty();
+        $('#groups').append(groupTable);
+        $('#groups').fadeIn();
+    });
 }
 
 function displayConfiguredIndexersList(indexers) {
@@ -951,7 +979,52 @@ function bindUIButtons() {
 
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
-        displayUnconfiguredIndexersList();
+    });
+
+    $('#jackett-create-group').click(function () {
+        $("#modals").empty();
+        var selectedIndexers = $('#configured-indexer-datatable input:checkbox:checked').map(function () { return $(this).attr('data-id'); }).toArray();
+        if (selectedIndexers.length == 0) {
+            doNotify("Select an indexer first", "info", "glyphicon glyphicon-alert");
+            return;
+        }
+        var configTemplate = Handlebars.compile($("#jackett-create-group-modal").html());
+        var configForm = $(configTemplate({}));
+        $("#modals").append(configForm);
+
+        var nameField = document.getElementById('group-name');
+        nameField.addEventListener("keyup", function (event) {
+	        event.preventDefault();
+	        if (event.keyCode == 13)
+	            document.getElementById("jackett-create-group-name").click();
+        });
+
+        var goButton = configForm.find(".setup-indexer-go");
+        goButton.click(function () {
+            var originalBtnText = goButton.html();
+            goButton.prop('disabled', true);
+            goButton.html($('#spinner').html());
+
+            var name = nameField.value;
+            console.log(name);
+            api.createGroup(name, selectedIndexers, function (data) {
+                if (data == undefined) {
+                    configForm.modal("hide");
+                    reloadIndexers();
+                    doNotify("Successfully created group " + name, "success", "glyphicon glyphicon-ok");
+                }
+            }).fail(function () {
+	            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+	        }).always(function () {
+	            goButton.html(originalBtnText);
+	            goButton.prop('disabled', false);
+	        });
+	    });
+
+        configForm.on('shown.bs.modal', function() {
+	        nameField.focus();
+	    });
+        configForm.modal('show');
     });
 
     $("#jackett-test-all").click(function () {

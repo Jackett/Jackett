@@ -209,6 +209,16 @@ namespace Jackett
             );
 
             config.Routes.MapHttpRoute(
+                name: "GroupAPI",
+                routeTemplate: "api/v2.0/groups/{groupId}/{action}",
+                defaults: new
+                {
+                    controller = "GroupApi",
+                    groupId = ""
+                }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "ServerConfiguration",
                 routeTemplate: "api/v2.0/server/{action}",
                 defaults: new
