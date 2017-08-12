@@ -27,9 +27,19 @@ namespace Jackett.Indexers.Meta
             return Task.FromResult(IndexerConfigurationStatus.Completed);
         }
 
-        protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
+        public override async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
         {
-            return results;
+            if (!CanHandleQuery(query))
+                return new ReleaseInfo[0];
+            var results = await PerformQuery(query);
+            var correctedResults = results.Select(r =>
+            {
+                if (r.PublishDate > DateTime.Now)
+                    r.PublishDate = DateTime.Now;
+                return r;
+            });
+
+            return correctedResults;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
