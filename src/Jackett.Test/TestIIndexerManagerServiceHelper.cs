@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Indexers;
+using Jackett.Indexers.Meta;
 using Newtonsoft.Json.Linq;
 
 namespace JackettTest
