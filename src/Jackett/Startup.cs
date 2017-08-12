@@ -54,6 +54,39 @@ namespace Jackett
         }
     }
 
+    static class JackettRouteExtensions
+    {
+        public static void ConfigureLegacyRoutes(this HttpRouteCollection routeCollection)
+        {
+            // Sonarr appends /api by default to all Torznab indexers, so we need that "ignored"
+            // parameter to catch these as well.
+
+            // Legacy fallback for Torznab results
+            routeCollection.MapHttpRoute(
+                name: "LegacyTorznab",
+                routeTemplate: "torznab/{indexerId}/{ignored}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Torznab",
+                    ignored = RouteParameter.Optional,
+                }
+            );
+
+            // Legacy fallback for Potato results
+            routeCollection.MapHttpRoute(
+                name: "LegacyPotato",
+                routeTemplate: "potato/{indexerId}/{ignored}",
+                defaults: new
+                {
+                    controller = "Results",
+                    action = "Potato",
+                    ignored = RouteParameter.Optional,
+                }
+            );
+        }
+    }
+
     public class Startup
     {
         public static bool TracingEnabled
@@ -151,13 +184,17 @@ namespace Jackett
             config.DependencyResolver = Engine.DependencyResolver();
             config.MapHttpAttributeRoutes();
 
+            // Sonarr appends /api by default to all Torznab indexers, so we need that "ignored"
+            // parameter to catch these as well.
+            // (I'd rather not duplicate the whole route.)
             config.Routes.MapHttpRoute(
                 name: "IndexerResultsAPI",
-                routeTemplate: "api/v2.0/indexers/{indexerId}/results/{action}",
+                routeTemplate: "api/v2.0/indexers/{indexerId}/results/{action}/{ignored}",
                 defaults: new
                 {
                     controller = "Results",
-                    action = "Results"
+                    action = "Results",
+                    ignored = RouteParameter.Optional,
                 }
             );
 
@@ -180,48 +217,6 @@ namespace Jackett
                 }
             );
 
-            // Legacy fallback for Torznab results
-            config.Routes.MapHttpRoute(
-                name: "LegacyTorznab",
-                routeTemplate: "torznab/{indexerId}",
-                defaults: new
-                {
-                    controller = "Results",
-                    action = "Torznab"
-                }
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "LegacyTorznabApi",
-                routeTemplate: "torznab/{indexerId}/api",
-                defaults: new
-                {
-                    controller = "Results",
-                    action = "Torznab"
-                }
-            );
-
-            // Legacy fallback for Potato results
-            config.Routes.MapHttpRoute(
-                name: "LegacyPotato",
-                routeTemplate: "potato/{indexerId}",
-                defaults: new
-                {
-                    controller = "Results",
-                    action = "Potato"
-                }
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "LegacyPotatoApi",
-                routeTemplate: "potato/{indexerId}/api",
-                defaults: new
-                {
-                    controller = "Results",
-                    action = "Potato"
-                }
-            );
-
             config.Routes.MapHttpRoute(
                 name: "WebUI",
                 routeTemplate: "UI/{action}",
@@ -239,6 +234,8 @@ namespace Jackett
               routeTemplate: "bh/{indexerID}",
               defaults: new { controller = "Blackhole", action = "Blackhole" }
             );
+
+            config.Routes.ConfigureLegacyRoutes();
 
             appBuilder.UseWebApi(config);
 
