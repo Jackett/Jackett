@@ -1090,7 +1090,7 @@ function bindUIButtons() {
             basepathoverride: jackett_basepathoverride,
             omdbkey: jackett_omdb_key
         };
-        api.updateServerConfig(function (data) {
+        api.updateServerConfig(jsonObject, function (data) {
             if (data !== undefined && data.result == "error") {
                 doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
                 return;
