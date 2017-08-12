@@ -12,6 +12,7 @@ namespace JackettTest
     class TestIndexerManagerServiceHelper : IIndexerManagerService
     {
         public JToken LastSavedConfig { get; set; }
+        public IEnumerable<IndexerCollectionMetaIndexer> Groups { get; }
 
         public void DeleteIndexer(string name)
         {
@@ -49,6 +50,16 @@ namespace JackettTest
         }
 
         public void InitAggregateIndexer()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateGroup(string name, IEnumerable<string> indexers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteGroup(string name)
         {
             throw new NotImplementedException();
         }
