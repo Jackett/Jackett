@@ -212,7 +212,8 @@ namespace Jackett.Indexers
                             DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
                             Guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
                             Comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
-                            Link = new Uri(torrent.download_link)
+                            Link = new Uri(torrent.download_link),
+                            TMDb = torrent.tmdb_id
                         };
 
                         if (DevMode)
@@ -284,10 +285,11 @@ namespace Jackett.Indexers
             public int numfiles { get; set; }
             public string release_group { get; set; }
             public string download_link { get; set; }
+            public int tmdb_id { get; set; }
 
             public override string ToString()
             {
-                return string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link);
+                return string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link, tmdb_id);
             }
         }
 
