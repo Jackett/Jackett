@@ -132,7 +132,7 @@ namespace Jackett.Controllers.V20
         TorznabQuery CurrentQuery { get; set; }
     }
 
-    [JackettAuthorized]
+    [AllowAnonymous]
     [JackettAPINoCache]
     [RoutePrefix("api/v2.0/indexers")]
     [RequiresApiKey]

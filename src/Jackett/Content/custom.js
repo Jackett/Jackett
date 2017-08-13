@@ -33,6 +33,10 @@ $(document).ready(function () {
 	        return opts.inverse(this);
 	});
 
+    var index = window.location.pathname.indexOf("/UI");
+    var pathPrefix = window.location.pathname.substr(0, index);
+    api.root = pathPrefix + api.root;
+
     bindUIButtons();
     loadJackettSettings();
 });
