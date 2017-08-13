@@ -27,7 +27,7 @@ namespace Jackett.Indexers
         private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
-        private static string Directory => System.IO.Path.GetTempPath() + "Jackett\\" + MethodBase.GetCurrentMethod().DeclaringType?.Name + "\\";
+        private static string Directory => System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
@@ -365,7 +365,7 @@ namespace Jackett.Indexers
             CleanCacheStorage();
 
             // Create fingerprint for request
-            string file = Directory + request.GetHashCode() + ".json";
+            string file = System.IO.Path.Combine(Directory, StringUtil.HashSHA1(request) + ".json");
 
             // Checking modes states
             if (System.IO.File.Exists(file))
