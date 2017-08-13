@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Jackett.Models;
@@ -14,8 +15,6 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.IO;
-using System.Web.Configuration;
 
 namespace Jackett.Indexers
 {
@@ -29,7 +28,7 @@ namespace Jackett.Indexers
         private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
-        private static string Directory => System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
+        private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
@@ -132,7 +131,7 @@ namespace Jackett.Indexers
 
             // Setting our data for a better emulated browser (maximum security)
             // TODO: Encoded Content not supported by Jackett at this time
-            // emulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
+            // EmulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
 
             // Clean headers
             EmulatedBrowserHeaders.Clear();
@@ -385,10 +384,10 @@ namespace Jackett.Indexers
             string fileName = StringUtil.HashSHA1(request) + ".json";
 
             // Create fingerprint for request
-            string file = System.IO.Path.Combine(Directory, fileName);
+            string file = Path.Combine(Directory, fileName);
 
             // Checking modes states
-            if (System.IO.File.Exists(file))
+            if (File.Exists(file))
             {
                 // File exist... loading it right now !
                 Output("Loading results from hard drive cache ..." + fileName);
@@ -443,7 +442,6 @@ namespace Jackett.Indexers
 
             // Request our first page
             var results = await webclient.GetString(myIndexRequest);
-            //results = results.Content;
 
             // Return results from tracker
             return results.Content;
@@ -516,7 +514,7 @@ namespace Jackett.Indexers
                 // Check if there is file older than ... and delete them
                 Output("\nCleaning Provider Storage folder... in progress.");
                 System.IO.Directory.GetFiles(Directory)
-                .Select(f => new System.IO.FileInfo(f))
+                .Select(f => new FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
                 .ForEach(f =>
