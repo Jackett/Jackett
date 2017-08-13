@@ -60,6 +60,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(4, TorznabCatType.MoviesHD);             // HD 1080P X264
             AddCategoryMapping(100, TorznabCatType.MoviesHD);           // HD 1080P X265
             AddCategoryMapping(94, TorznabCatType.MoviesHD);            // WEBDL
+            AddCategoryMapping(107, TorznabCatType.MoviesHD);           // 4K
             AddCategoryMapping(1, TorznabCatType.MoviesBluRay);         // FULL BLURAY
             AddCategoryMapping(2, TorznabCatType.MoviesBluRay);         // BLURAY REMUX
             AddCategoryMapping(3, TorznabCatType.MoviesBluRay);         // FULL BLURAY 3D
