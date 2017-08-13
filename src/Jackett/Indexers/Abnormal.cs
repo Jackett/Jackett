@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -32,7 +33,7 @@ namespace Jackett.Indexers
         private bool Latency { get { return ConfigData.Latency.Value; } }
         private bool DevMode { get { return ConfigData.DevMode.Value; } }
         private bool CacheMode { get { return ConfigData.HardDriveCache.Value; } }
-        private string directory { get { return System.IO.Path.GetTempPath() + "Jackett\\" + MethodBase.GetCurrentMethod().DeclaringType.Name + "\\"; } }
+        private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
 
         private Dictionary<string, string> emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ fDom = null;
@@ -217,8 +218,7 @@ namespace Jackett.Indexers
             var request = buildQuery(searchTerm, query, searchUrl);
 
             // Getting results & Store content
-            WebClientStringResult results = await queryExec(request);
-            fDom = results.Content;
+            fDom = await queryExec(request);
 
             try
             {
@@ -274,10 +274,7 @@ namespace Jackett.Indexers
                         var pageRequest = buildQuery(searchTerm, query, searchUrl, i);
 
                         // Getting results & Store content
-                        WebClientStringResult pageResults = await queryExec(pageRequest);
-
-                        // Assign response
-                        fDom = pageResults.Content;
+                        fDom = await queryExec(pageRequest);
 
                         // Process page results
                         var additionalPageRows = findTorrentRows();
@@ -285,20 +282,6 @@ namespace Jackett.Indexers
                         // Add them to torrents list
                         torrentRowList.AddRange(additionalPageRows.Select(fRow => fRow.Cq()));
                     }
-                }
-                else
-                {
-                    // No search term, maybe testing... so registring autkey and torrentpass for future uses
-                    string infosData = firstPageRows.First().Find("td:eq(3) > a").Attr("href");
-                    IList<string> infosList = infosData.Split('&').Select(s => s.Trim()).Where(s => s != String.Empty).ToList();
-                    IList<string> infosTracker = infosList.Select(s => s.Split(new[] { '=' }, 2)[1].Trim()).ToList();
-
-                    output("\nStoring Authkey for future uses...");
-                    ConfigData.AuthKey.Value = infosTracker[2];
-
-                    output("\nStoring TorrentPass for future uses...");
-                    ConfigData.TorrentPass.Value = infosTracker[3];
-
                 }
 
                 // Loop on results
@@ -311,12 +294,13 @@ namespace Jackett.Indexers
                     output("ID: " + id);
 
                     // Release Name
-                    string name = tRow.Find("td:eq(1) > a").Text().ToString();
+                    string name = tRow.Find("td:eq(1) > a").Text();
                     output("Release: " + name);
 
                     // Category
                     string categoryID = tRow.Find("td:eq(0) > a").Attr("href").Replace("torrents.php?cat[]=", String.Empty);
-                    output("Category: " + MapTrackerCatToNewznab(categoryID) + " (" + categoryID + ")");
+                    var newznab = MapTrackerCatToNewznab(categoryID);
+                    output("Category: " + MapTrackerCatToNewznab(categoryID).First().ToString() + " (" + categoryID + ")");
 
                     // Seeders
                     int seeders = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(5)").Text(), @"\d+").Value);
@@ -349,30 +333,46 @@ namespace Jackett.Indexers
                     output("Comments Link: " + commentsLink.AbsoluteUri);
 
                     // Torrent Download URL
-                    Uri downloadLink = new Uri(TorrentDownloadUrl.Replace("{id}", id.ToString()).Replace("{auth_key}", ConfigData.AuthKey.Value).Replace("{torrent_pass}", ConfigData.TorrentPass.Value));
-                    output("Download Link: " + downloadLink.AbsoluteUri);
+                    Uri downloadLink = null;
+                    string link = tRow.Find("td:eq(3) > a").Attr("href");
+                    if (!String.IsNullOrEmpty(link))
+                    {
+                        // Download link available
+                        downloadLink = new Uri(SiteLink + link);
+                        output("Download Link: " + downloadLink.AbsoluteUri);
+                    }
+                    else
+                    {
+                        // No download link available -- Must be on pending ( can't be downloaded now...)
+                        output("Download Link: Not available, torrent pending ? Skipping ...");
+                        continue;
+                    }
+
+                    // Freeleech
+                    int downloadVolumeFactor = 1;
+                    if (tRow.Find("img[alt=\"Freeleech\"]").Length >= 1)
+                    {
+                        downloadVolumeFactor = 0;
+                        output("FreeLeech =)");
+                    }
 
                     // Building release infos
-                    var release = new ReleaseInfo();
-                    release.Category = MapTrackerCatToNewznab(categoryID.ToString());
-                    release.Title = name;
-                    release.Seeders = seeders;
-                    release.Peers = seeders + leechers;
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.PublishDate = date;
-                    release.Size = size;
-                    release.Guid = detailsLink;
-                    release.Comments = commentsLink;
-                    release.Link = downloadLink;
-
-                    // freeleech
-                    if (tRow.Find("img[alt=\"Freeleech\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-                    release.UploadVolumeFactor = 1;
-
+                    var release = new ReleaseInfo()
+                    {
+                        Category = MapTrackerCatToNewznab(categoryID.ToString()),
+                        Title = name,
+                        Seeders = seeders,
+                        Peers = seeders + leechers,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800,
+                        PublishDate = date,
+                        Size = size,
+                        Guid = detailsLink,
+                        Comments = commentsLink,
+                        Link = downloadLink,
+                        UploadVolumeFactor = 1,
+                        DownloadVolumeFactor = downloadVolumeFactor
+                    };
                     releases.Add(release);
                 }
 
@@ -450,9 +450,9 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> queryExec(string request)
+        private async Task<String> queryExec(string request)
         {
-            WebClientStringResult results = null;
+            String results = null;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
@@ -473,25 +473,40 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> queryCache(string request)
+        private async Task<String> queryCache(string request)
         {
-            WebClientStringResult results = null;
+            String results;
 
             // Create Directory if not exist
-            System.IO.Directory.CreateDirectory(directory);
+            System.IO.Directory.CreateDirectory(Directory);
 
             // Clean Storage Provider Directory from outdated cached queries
             cleanCacheStorage();
 
+            // File Name
+            string fileName = StringUtil.HashSHA1(request) + ".json";
+
             // Create fingerprint for request
-            string file = directory + request.GetHashCode() + ".json";
+            string file = Path.Combine(Directory, fileName);
 
             // Checking modes states
-            if (System.IO.File.Exists(file))
+            if (File.Exists(file))
             {
                 // File exist... loading it right now !
-                output("Loading results from hard drive cache ..." + request.GetHashCode() + ".json");
-                results = JsonConvert.DeserializeObject<WebClientStringResult>(System.IO.File.ReadAllText(file));
+                output("Loading results from hard drive cache ..." + fileName);
+                try
+                {
+                    using (StreamReader fileReader = File.OpenText(file))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        results = (String)serializer.Deserialize(fileReader, typeof(String));
+                    }
+                }
+                catch (Exception e)
+                {
+                    output("Error loading cached results ! " + e.Message, "error");
+                    results = null;
+                }
             }
             else
             {
@@ -499,8 +514,12 @@ namespace Jackett.Indexers
                 results = await queryTracker(request);
 
                 // Cached file didn't exist for our query, writing it right now !
-                output("Writing results to hard drive cache ..." + request.GetHashCode() + ".json");
-                System.IO.File.WriteAllText(file, JsonConvert.SerializeObject(results));
+                output("Writing results to hard drive cache ..." + fileName);
+                using (StreamWriter fileWriter = File.CreateText(file))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(fileWriter, results);
+                }
             }
             return results;
         }
@@ -510,7 +529,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> queryTracker(string request)
+        private async Task<String> queryTracker(string request)
         {
             WebClientStringResult results = null;
 
@@ -522,14 +541,14 @@ namespace Jackett.Indexers
             results = await RequestStringWithCookiesAndRetry(request, null, null, emulatedBrowserHeaders);
 
             // Return results from tracker
-            return results;
+            return results.Content;
         }
 
         /// <summary>
         /// Clean Hard Drive Cache Storage
         /// </summary>
         /// <param name="force">Force Provider Folder deletion</param>
-        private void cleanCacheStorage(Boolean force = false)
+        private void cleanCacheStorage(bool force = false)
         {
             // Check cleaning method
             if (force)
@@ -538,10 +557,10 @@ namespace Jackett.Indexers
                 output("\nDeleting Provider Storage folder and all files recursively ...");
 
                 // Check if directory exist
-                if (System.IO.Directory.Exists(directory))
+                if (System.IO.Directory.Exists(Directory))
                 {
                     // Delete storage directory of provider
-                    System.IO.Directory.Delete(directory, true);
+                    System.IO.Directory.Delete(Directory, true);
                     output("-> Storage folder deleted successfully.");
                 }
                 else
@@ -552,11 +571,11 @@ namespace Jackett.Indexers
             }
             else
             {
-                int i = 0;
+                var i = 0;
                 // Check if there is file older than ... and delete them
                 output("\nCleaning Provider Storage folder... in progress.");
-                System.IO.Directory.GetFiles(directory)
-                .Select(f => new System.IO.FileInfo(f))
+                System.IO.Directory.GetFiles(Directory)
+                .Select(f => new FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
                 .ForEach(f =>
