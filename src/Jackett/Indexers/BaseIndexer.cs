@@ -198,8 +198,6 @@ namespace Jackett.Indexers
                 return false;
             if (!caps.SupportsTVRageSearch && query.IsTVRageSearch)
                 return false;
-            if (!caps.SupportsImdbSearch && query.IsImdbQuery)
-                return false;
 
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
