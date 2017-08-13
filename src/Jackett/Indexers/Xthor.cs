@@ -371,7 +371,7 @@ namespace Jackett.Indexers
             if (System.IO.File.Exists(file))
             {
                 // File exist... loading it right now !
-                Output("Loading results from hard drive cache ..." + request.GetHashCode() + ".json");
+                Output("Loading results from hard drive cache ..." + StringUtil.HashSHA1(request) + ".json");
                 results = JsonConvert.DeserializeObject<WebClientStringResult>(System.IO.File.ReadAllText(file));
             }
             else
