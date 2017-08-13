@@ -193,7 +193,6 @@
     <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Indexers\7tor.cs" />
     <Compile Include="Indexers\EliteTracker.cs" />
-    <Compile Include="Indexers\T411.cs" />
     <Compile Include="Indexers\Torrentech.cs" />
     <Compile Include="Indexers\notwhatcd.cs" />
     <Compile Include="Indexers\Redacted.cs" />
