@@ -14,6 +14,8 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System.IO;
+using System.Web.Configuration;
 
 namespace Jackett.Indexers
 {
@@ -183,7 +185,7 @@ namespace Jackett.Indexers
             try
             {
                 // Deserialize our Json Response
-                var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results.Content);
+                var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
 
                 // Check Tracker's State
                 CheckApiState(xthorResponse.error);
@@ -192,24 +194,34 @@ namespace Jackett.Indexers
                 if (xthorResponse.torrents != null)
                 {
                     // Adding each torrent row to releases
-                    releases.AddRange(xthorResponse.torrents.Select(torrent => new ReleaseInfo
+                    releases.AddRange(xthorResponse.torrents.Select(torrent =>
                     {
-                        // Mapping data
-                        Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                        Title = torrent.name,
-                        Seeders = torrent.seeders,
-                        Peers = torrent.seeders + torrent.leechers,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 345600,
-                        PublishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added),
-                        Size = torrent.size,
-                        Grabs = torrent.times_completed,
-                        Files = torrent.numfiles,
-                        UploadVolumeFactor = 1,
-                        DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
-                        Guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
-                        Comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
-                        Link = new Uri(torrent.download_link)
+                        var release = new ReleaseInfo
+                        {
+                            // Mapping data
+                            Category = MapTrackerCatToNewznab(torrent.category.ToString()),
+                            Title = torrent.name,
+                            Seeders = torrent.seeders,
+                            Peers = torrent.seeders + torrent.leechers,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 345600,
+                            PublishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added),
+                            Size = torrent.size,
+                            Grabs = torrent.times_completed,
+                            Files = torrent.numfiles,
+                            UploadVolumeFactor = 1,
+                            DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
+                            Guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString())),
+                            Comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString())),
+                            Link = new Uri(torrent.download_link)
+                        };
+
+                        if (DevMode)
+                        {
+                            Output(release.ToString());
+                        }
+
+                        return release;
                     }));
                 }
             }
@@ -273,6 +285,11 @@ namespace Jackett.Indexers
             public int numfiles { get; set; }
             public string release_group { get; set; }
             public string download_link { get; set; }
+
+            public override string ToString()
+            {
+                return string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link);
+            }
         }
 
         /// <summary>
@@ -331,9 +348,9 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryExec(string request)
+        private async Task<String> QueryExec(string request)
         {
-            WebClientStringResult results;
+            String results;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
@@ -354,9 +371,9 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryCache(string request)
+        private async Task<String> QueryCache(string request)
         {
-            WebClientStringResult results;
+            String results;
 
             // Create Directory if not exist
             System.IO.Directory.CreateDirectory(Directory);
@@ -364,15 +381,30 @@ namespace Jackett.Indexers
             // Clean Storage Provider Directory from outdated cached queries
             CleanCacheStorage();
 
+            // File Name
+            string fileName = StringUtil.HashSHA1(request) + ".json";
+
             // Create fingerprint for request
-            string file = System.IO.Path.Combine(Directory, StringUtil.HashSHA1(request) + ".json");
+            string file = System.IO.Path.Combine(Directory, fileName);
 
             // Checking modes states
             if (System.IO.File.Exists(file))
             {
                 // File exist... loading it right now !
-                Output("Loading results from hard drive cache ..." + StringUtil.HashSHA1(request) + ".json");
-                results = JsonConvert.DeserializeObject<WebClientStringResult>(System.IO.File.ReadAllText(file));
+                Output("Loading results from hard drive cache ..." + fileName);
+                try
+                {
+                    using (StreamReader fileReader = File.OpenText(file))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        results = (String)serializer.Deserialize(fileReader, typeof(String));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Output("Error loading cached results ! " + e.Message, "error");
+                    results = null;
+                }
             }
             else
             {
@@ -380,8 +412,12 @@ namespace Jackett.Indexers
                 results = await QueryTracker(request);
 
                 // Cached file didn't exist for our query, writing it right now !
-                Output("Writing results to hard drive cache ..." + request.GetHashCode() + ".json");
-                System.IO.File.WriteAllText(file, JsonConvert.SerializeObject(results));
+                Output("Writing results to hard drive cache ..." + fileName);
+                using (StreamWriter fileWriter = File.CreateText(file))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(fileWriter, results);
+                }
             }
             return results;
         }
@@ -391,7 +427,7 @@ namespace Jackett.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryTracker(string request)
+        private async Task<String> QueryTracker(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             Output("\nQuerying tracker for results....");
@@ -407,9 +443,10 @@ namespace Jackett.Indexers
 
             // Request our first page
             var results = await webclient.GetString(myIndexRequest);
+            //results = results.Content;
 
             // Return results from tracker
-            return results;
+            return results.Content;
         }
 
         /// <summary>
