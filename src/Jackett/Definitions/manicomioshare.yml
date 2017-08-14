@@ -215,7 +215,7 @@
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
-      search: "{{ .Keywords }}"
+      busca: "{{ .Keywords }}"
     rows:
       selector: table#tbltorrent > tbody > tr[data-id]
     fields:
