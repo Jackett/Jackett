@@ -211,13 +211,11 @@
 
   search:
     path: pesquisa.php
-    keywordsfilters:
-        # the tracker uses the pattern "name - s??e??" instead of "name s??e??"
-        # so we have to manually add a "-" in the query
+    keywordsfilters: 
       - name: re_replace
-        args: ["S(\\d{2,3})E(\\d{2,3})", "- $0"]
+        args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
-      busca: "{{ .Keywords }}"
+      search: "{{ .Keywords }}"
     rows:
       selector: table#tbltorrent > tbody > tr[data-id]
     fields:
