@@ -193,7 +193,6 @@
     <Compile Include="Indexers\AnimeTorrents.cs" />
     <Compile Include="Indexers\7tor.cs" />
     <Compile Include="Indexers\EliteTracker.cs" />
-    <Compile Include="Indexers\T411.cs" />
     <Compile Include="Indexers\Torrentech.cs" />
     <Compile Include="Indexers\notwhatcd.cs" />
     <Compile Include="Indexers\Redacted.cs" />
@@ -254,8 +253,6 @@
     <Compile Include="Models\GitHub\Release.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNorbits.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataXthor.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataPhxBit.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataBlueTigers.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilterAndPasskey.cs" />
@@ -288,7 +285,6 @@
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNCore.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAnimeBytes.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataStrike.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
     <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
@@ -324,7 +320,6 @@
     <Compile Include="Models\IndexerConfig\ConfigurationData.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLogin.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataCookie.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataRuTor.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
     <Compile Include="Utils\Clients\WebRequest.cs" />
     <Compile Include="Utils\DataUrl.cs" />
