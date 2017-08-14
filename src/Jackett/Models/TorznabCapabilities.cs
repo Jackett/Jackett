@@ -66,15 +66,18 @@ namespace Jackett.Models
             }
         }
 
-        public bool SupportsCategories (int[] categories)
+        public bool SupportsCategories(int[] categories)
         {
-            return Categories.Count(i => categories.Any(c => c == i.ID)) > 0;
+            var subCategories = Categories.SelectMany(c => c.SubCategories);
+            var allCategories = Categories.Concat(subCategories);
+            var supportsCategory = allCategories.Any(i => categories.Any(c => c == i.ID));
+            return supportsCategory;
         }
 
         public JArray CapsToJson()
         {
             var jArray = new JArray();
-            foreach (var cat in Categories.GroupBy(p => p.ID).Select(g => g.First()).OrderBy(c=> c.ID < 100000 ? "z"+c.ID.ToString() : c.Name))
+            foreach (var cat in Categories.GroupBy(p => p.ID).Select(g => g.First()).OrderBy(c => c.ID < 100000 ? "z" + c.ID.ToString() : c.Name))
             {
                 jArray.Add(cat.ToJson());
             }
@@ -124,7 +127,7 @@ namespace Jackett.Models
             lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
             lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
             lhs.SupportsImdbSearch = lhs.SupportsImdbSearch || rhs.SupportsImdbSearch;
-            lhs.Categories.AddRange (rhs.Categories.Except (lhs.Categories));
+            lhs.Categories.AddRange(rhs.Categories.Except(lhs.Categories));
 
             return lhs;
         }
