@@ -214,6 +214,9 @@
     keywordsfilters: 
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%"]
+      # workaroud to remove year in search keywords
+      - name: re_replace
+        args: ["([1-2]\\d{3})", ""]
     inputs:
       busca: "{{ .Keywords }}"
     rows:
