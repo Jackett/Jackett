@@ -211,8 +211,14 @@
 
   search:
     path: pesquisa.php
+    keywordsfilters: 
+      # workaroud to remove year in search keywords
+      - name: re_replace
+        args: ["([1-2]\\d{3})", ""]    
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
-      busca: "{{ .Query.Keywords }}"
+      busca: "{{ .Keywords }}"
     rows:
       selector: table#tbltorrent > tbody > tr[data-id]
     fields:
