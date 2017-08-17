@@ -10,6 +10,8 @@ namespace Jackett.Models
 {
     public class TorznabCapabilities
     {
+        public int? LimitsMax { get; set; } = null;
+        public int? LimitsDefault { get; set; } = null;
 
         public bool SearchAvailable { get; set; }
 
@@ -92,6 +94,12 @@ namespace Jackett.Models
                     new XElement("server",
                         new XAttribute("title", "Jackett")
                     ),
+                    LimitsMax != null || LimitsDefault != null ?
+                        new XElement("limits",
+                            LimitsMax != null ? new XAttribute("max", LimitsMax) : null,
+                            LimitsDefault != null ? new XAttribute("default", LimitsDefault) : null
+                        )
+                    : null,
                     new XElement("searching",
                         new XElement("search",
                             new XAttribute("available", SearchAvailable ? "yes" : "no"),
