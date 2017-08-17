@@ -50,6 +50,8 @@
           args: (^/tor/\d*)
         - name: append
           args: ".torrent"
+      date:
+        selector: td:nth-child(2)
       size:
         selector: td:nth-child(3)
       seeders:
