@@ -89,6 +89,9 @@ namespace Jackett.Models
             var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
                 new XElement("caps",
+                    new XElement("server",
+                        new XAttribute("title", "Jackett")
+                    ),
                     new XElement("searching",
                         new XElement("search",
                             new XAttribute("available", SearchAvailable ? "yes" : "no"),
