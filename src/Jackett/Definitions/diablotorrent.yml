@@ -58,32 +58,25 @@
       movie-search: [q]
 
   login:
-    path: login.php
-    submitpath: login.php
+    path: login
+    submitpath: login/run
     method: form
     inputs:
       referer: ""
       nev: "{{ .Config.username }}"
       jelszo: "{{ .Config.password }}"
-      fsv: "-1"
-      ssl: "1"
+      fsv: "0"
+      login: "1"
       belepes: "1"
-    getselectorinputs:
-      c:
-        selector: "script:contains(\"login.php\")"
-        filters:
-          - name: regexp
-            args: "login.php\\?c=(.*?)&rhash="
-      rhash:
-        text: "123"
+      rhash: "123"
     test:
-      path: browse.php
+      path: browse
 
   search:
-    path: browse.php
+    path: browse
     inputs:
       $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
-      cim: "{{ .Keywords }}"
+      search: "{{ .Keywords }}"
       s_alapjan: "7"
       s_sorrend: "desc"
     rows:
@@ -93,10 +86,8 @@
       download:
         selector: div.box_download > a
         attribute: href
-      #title: # shortened
-      #  selector: a.box_name_a
       title:
-        selector: div.torrent_details_po + h2
+        selector: a.box_name_a > span
       details:
         selector: a.box_name_a
         attribute: href
