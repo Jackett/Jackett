@@ -205,6 +205,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The-Torrents
  * TehConnection
  * TenYardTracker
+ * Torlock
  * Torrent Network
  * Torrent Sector Crew
  * Torrent9
