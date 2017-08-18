@@ -90,6 +90,9 @@
             args: [ "/", -1 ]
       title:
         selector: .detLink
+        filters:
+          - name: replace
+            args: ["\u000f", ""] # get rid of unwanted character (Example: at the end of https://thepiratebay.org/torrent/18316540/Game.of.Thrones.S07E04.iNTERNAL.1080p.WEBRip.x264-MOROSE_)
       details:
         selector: .detLink
         attribute: href
