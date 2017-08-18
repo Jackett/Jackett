@@ -268,7 +268,6 @@
     <Compile Include="Indexers\Pretome.cs" />
     <Compile Include="Indexers\PrivateHD.cs" />
     <Compile Include="Indexers\SceneAccess.cs" />
-    <Compile Include="Indexers\SceneFZ.cs" />
     <Compile Include="Indexers\SceneTime.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
@@ -382,6 +381,8 @@
     <Compile Include="Models\DTO\TorrentPotatoResponse.cs" />
     <Compile Include="Models\DTO\TorrentPotatoResponseItem.cs" />
     <Compile Include="Models\DTO\TorznabRequest.cs" />
+    <Compile Include="Indexers\SceneFZ.cs" />
+    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataSceneFZ.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
