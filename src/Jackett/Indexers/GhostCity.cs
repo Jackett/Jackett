@@ -134,6 +134,12 @@ namespace Jackett.Indexers
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
+            if (results.Content.Contains("<meta http-equiv=\"refresh\"")) // relogin needed?
+            {
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;
