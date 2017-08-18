@@ -81,7 +81,7 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
-      incldead: "0"
+      incldead: "1"
     rows:
       selector: table > tbody > tr:has(a[href^="details.php?id="])
       dateheaders:
