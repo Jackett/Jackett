@@ -6,6 +6,8 @@
   encoding: UTF-8
   links:
     - https://polishtracker.net/
+  certificates:
+    - 95EAB2795D8E35A14A9B35619C2568F974AE4D95 # expired
 
   caps:
     categorymappings:
@@ -57,6 +59,8 @@
       search: "{{ .Query.Keywords }}"
     rows:
       selector: div#bro1 > table.shad1 > tbody > tr[class^="rowfx"]
+    error:
+      - selector: table.textfx2 td:contains("In order to use PolishTracker we require users to familiarize with FAQ, Rules and any News from Home Page.")
     fields:
       download:
         selector: a[href^="/download.php/"]
