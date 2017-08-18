@@ -164,7 +164,7 @@ namespace Jackett.Indexers
                 // Get login page
                 var response = await webclient.GetString(request);
                 output("\nTesting if we are logged...");
-                await ConfigureIfOK(response.Cookies, response.Cookies.Contains("uid="), () =>
+                await ConfigureIfOK(response.Cookies, response.Cookies != null && response.Cookies.Contains("uid="), () =>
                 {
                     output("-> Login Failed: Wrong username or Password");
                     throw new ExceptionWithConfigData("Wrong username or Password", configData);
