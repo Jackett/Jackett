@@ -188,6 +188,7 @@ namespace Jackett.Updater
                 "Definitions/maniatorrent.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nachtwerk.yml",
+                "Definitions/leparadisdunet.yml",
             };
 
             foreach (var oldFIle in oldFiles)
