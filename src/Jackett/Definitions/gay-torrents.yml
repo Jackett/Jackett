@@ -71,12 +71,12 @@
       selector: ul.isuser
 
   search:
-    path: search.php
+    path: "{{if .Query.Keywords}}search.php{{else}}torrentslist.php{{end}}"
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{range .Categories}}type={{.}}&{{end}}"
       textsearch: "{{ .Query.Keywords }}"
     rows:
-      selector: div#display
+      selector: ul.TorrentList
     fields:
       category:
         selector: .TorrentList1 > a
@@ -107,6 +107,8 @@
           - name: dateparse
             args: "02 Jan 06, 15:04"
       downloadvolumefactor:
-        text: "0"
+        case:
+          ".TorrentList2 > a:contains(\"[FFL]\")": "0"
+          "*": "1"
       uploadvolumefactor:
         text: "1"
