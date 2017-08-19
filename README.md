@@ -25,6 +25,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anime Tosho
  * cpasbien
  * EZTV
+ * Gay-Torrents.net
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
