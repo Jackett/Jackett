@@ -65,8 +65,9 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
-    method: post
+    path: /login.php
+    method: form
+    form: form[action="takelogin.php"]
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -102,7 +103,7 @@
           - name: querystring
             args: cat
       download:
-        selector: a[href^="/download.php/"]
+        selector: a[href^="/download.php"]
         attribute: href
       description:
         selector: td:nth-child(2) > small

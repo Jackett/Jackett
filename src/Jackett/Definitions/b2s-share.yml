@@ -214,8 +214,11 @@
 
   search:
     path: torrents-search.php
+    keywordsfilters: 
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
     rows:
       selector: table[class^="ttable_headinner"] > tbody > tr:has(a[href^="torrents-details.php?id="])
     fields:

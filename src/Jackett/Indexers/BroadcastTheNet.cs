@@ -1,27 +1,22 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Dynamic;
-using Newtonsoft.Json;
 
 namespace Jackett.Indexers
 {
     public class BroadcastTheNet : BaseWebIndexer
     {
+        // Docs at http://apidocs.broadcasthe.net/docs.php
         string APIBASE = "https://api.broadcasthe.net";
 
         new ConfigurationDataAPIKey configData
@@ -59,7 +54,7 @@ namespace Jackett.Indexers
                 IsConfigured = true;
                 SaveConfig();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new ExceptionWithConfigData(e.Message, configData);
             }
@@ -92,7 +87,7 @@ namespace Jackett.Indexers
             {
                 { "Accept", "application/json-rpc, application/json"},
                 {"Content-Type", "application/json-rpc"}
-            }, JsonRPCRequest("getTorrents", parameters),false);
+            }, JsonRPCRequest("getTorrents", parameters), false);
 
             try
             {

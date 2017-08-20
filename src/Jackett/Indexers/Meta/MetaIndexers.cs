@@ -19,6 +19,17 @@ namespace Jackett.Indexers.Meta
             : base("AggregateSearch", "This feed includes all configured trackers", fallbackStrategyProvider, resultFilterProvider, configService, wc, l, new ConfigurationData(), ps, MetaIndexerOptimization.None)
         {
         }
+
+        public override TorznabCapabilities TorznabCaps
+        {
+            get
+            {
+                // increase the limits (workaround until proper paging is supported, issue #1661)
+                var caps = base.TorznabCaps;
+                caps.LimitsMax = caps.LimitsDefault = 1000;
+                return caps;
+            }
+        }
     }
 
     public struct IndexerCollectionSettings

@@ -2,9 +2,11 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
+[![Bountysource](https://img.shields.io/bountysource/team/jackett/activity.svg?style=flat-square)](https://www.bountysource.com/teams/jackett)
 [![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp/branch/master?svg=true)](https://ci.appveyor.com/project/camjac251/jackett)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
+[![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
 
 This project is a new fork and is recruiting development help.  If you are able to help out please contact us.
 
@@ -39,6 +41,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
+ * Torlock
  * Torrent Downloads
  * TorrentProject
  * Torrentz2
@@ -141,7 +144,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
- * Le Paradis Du Net
  * LinkoManija
  * LosslessClub
  * M-Team - TP
@@ -171,7 +173,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD
  * Psytorrents
  * PTFiles
- * QcTorrent
  * Redacted (PassTheHeadphones)
  * RevolutionTT
  * Rockhard Lossless
@@ -227,7 +228,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ultimate Gamer Club
  * ULTRAHDCLUB
  * Waffles
- * World-In-HD  [![(invite needed)][inviteneeded]](#)
+ * World-In-HD
  * WorldOfP2P
  * x264
  * XSpeeds

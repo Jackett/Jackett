@@ -29,7 +29,7 @@ namespace Jackett.Indexers
         public NewRealWorld(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "New Real World",
                    description: "A German general tracker.",
-                   link: "http://nrw-tracker.eu/",
+                   link: "https://nrw-tracker.eu/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
@@ -151,6 +151,13 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookies(searchUrl);
+            if (response.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookies(searchUrl);
+            }
+
             var results = response.Content;
             try
             {

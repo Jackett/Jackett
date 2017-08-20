@@ -2,7 +2,7 @@
   site: kickasstorrent
   name: KickAssTorrent
   language: en-us
-  type: semi-private
+  type: public
   encoding: UTF-8
   links:
     - https://katcr.co/
@@ -85,25 +85,7 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: passkey
-      type: text
-      label: Passkey
-
-  login:
-    method: post
-    path: "/new/account-login.php"
-    inputs:
-      username: "{{ .Config.username }}"
-      passkey: "{{ .Config.passkey }}"
-    error:
-      - selector: font.error:contains("Access Denied")
-    test:
-      path: "/new/index.php"
-      selector: a[href="account-logout.php"]
+  settings: []
 
   search:
     path: "/new/{{if .Query.Keywords}}search-torrents.php{{else}}torrents.php{{end}}"

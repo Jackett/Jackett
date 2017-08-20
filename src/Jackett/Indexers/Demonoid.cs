@@ -145,7 +145,7 @@ namespace Jackett.Indexers
                     release.Guid = release.Comments;
 
                     var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(0).Cq();
-                    release.Link = new Uri(SiteLink + qDownload.Attr("href"));
+                    release.Link = new Uri(qDownload.Attr("href"));
 
                     var sizeStr = rowB.ChildElements.ElementAt(3).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

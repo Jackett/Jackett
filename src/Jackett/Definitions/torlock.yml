@@ -1,0 +1,79 @@
+---
+  site: torlock
+  name: Torlock
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.torlock.com/
+
+  caps:
+    categorymappings:
+      - {id: TELEVISION, cat: TV, desc: "TV Shows"}
+      - {id: MOVIES, cat: Movies, desc: "Movies"}
+      - {id: MUSIC, cat: Audio, desc: "Music"}
+      - {id: GAMES, cat: PC/Games, desc: "Games"}
+      - {id: SOFTWARE, cat: PC, desc: "Software"}
+      - {id: ANIME, cat: TV/Anime, desc: "Anime"}
+      - {id: EBOOKS, cat: Books/Ebook, desc: "Books"}
+      - {id: OTHER, cat: Other, desc: "Other"}
+      - {id: ADULT, cat: XXX, desc: "Adult"}
+      - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}
+      - {id: IMAGES, cat: Other/Misc, desc: "Images"}
+      
+    modes:
+      search: [q]
+  
+  settings: []
+  
+  search:
+    path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html{{else}}/fresh.html{{end}}"
+    keywordsfilters:
+      - name: tolower
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "-"]
+    rows:
+      selector: table > tbody > tr:has(td:has(div:has(a[href^="/torrent/"])))
+    fields:
+      title:
+        selector: td:nth-child(1) > div > a
+      details:
+        selector: td:nth-child(1) > div > a[href^="/torrent/"]
+        attribute: href
+      download:
+        selector: td:nth-child(1) > div > a[href^="/torrent/"]
+        attribute: href
+        filters:
+        - name: replace
+          args: ["/torrent/", "/tor/"]
+        - name: regexp
+          args: (^/tor/\d*)
+        - name: append
+          args: ".torrent"
+      date:
+        selector: td:nth-child(2)
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        selector: td:nth-child(4)
+      leechers:
+        selector: td:nth-child(5)
+      category:
+        selector: span[class^="tv"]
+        attribute: class
+        case:
+          span.tv0: OTHER
+          span.tv1: MOVIES
+          span.tv2: MUSIC
+          span.tv3: TELEVISION
+          span.tv4: GAMES
+          span.tv5: SOFTWARE
+          span.tv6: ANIME
+          span.tv7: ADULT
+          span.tv8: EBOOKS
+          span.tv9: IMAGES
+          span.tv12: AUDIOBOOK
+      downloadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        text: "1"
