@@ -8,8 +8,15 @@
     - https://t411.si
   caps:
     categorymappings:
-      - {id: 1, cat: Movies}
-      - {id: 2, cat: TV}
+      - {id: 1, cat: Movies, desc: Films}
+      - {id: 2, cat: TV, desc: Séries}
+      - {id: 3, cat: TV/Anime, desc: Animes}
+      - {id: 4, cat: Audio, desc: Musique}
+      - {id: 5, cat: Books, desc: Ebooks}
+      - {id: 6, cat: PC/0day, desc: Logiciels}
+      - {id: 7, cat: PC/Games, desc: Jeux}
+      - {id: 8, cat: TV/Documentary, desc: Documentaires}
+      - {id: 9, cat: XXX, desc: XXX}
     modes:
       search: [q]
       tv-search: [q, season, ep]
@@ -21,17 +28,23 @@
   search:
     path: /torrents/search/?search={{ .Keywords}}
     rows:
-      selector: div.isItem
+      selector: tr.isItemDesk
     fields:
+     category:
+        selector: td.m-cat > a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
      site_date:
-        selector: div.gname a
+        selector: td.m-name > a
         filters:
           # date is at the end of the title, so we get it and name it 
           # site_date
           - name: regexp
             args: "(\\w+)$"
      title:
-        selector: div.gname a
+        selector: td.m-name > a
         filters:
           # now we put the date at the right place according scene 
           # naming rules using .Result.site_date
@@ -45,13 +58,13 @@
           - name: re_replace
             args: ["(\\w+)$", ""]
      details:
-        selector: div.gname a
+        selector: td.m-name > a
         attribute: href
      download:
-        selector: div.gname a
+        selector: td.m-name > a
         attribute: href
      size:
-        selector: div.gsmall:nth-child(5) span
+        selector: td.m-taille > span
         filters:
           - name: re_replace
             args: [ "\\.(\\w+) K", "$1X00"]
@@ -68,19 +81,19 @@
      seeders:
         text: 0
      seeders:
-        selector: div.gsmall:nth-child(6)
+        selector: td.m-seeders > span
         optional: true
      leechers:
         text: 0
      leechers:
-        selector: div.gsmall:nth-child(7)
+        selector: td.m-leechers > span
         optional: true
      downloadvolumefactor:
         text: "0"
      uploadvolumefactor:
         text: "1"
      date:
-        selector: div.gsmall:nth-child(4) span
+        selector: td.m-age > span
         filters:
           - name: replace
             args: [ " jours", " days"]
