@@ -58,7 +58,7 @@ function insertWordWrap(str) {
 
 function getJackettConfig(callback) {
     api.getServerConfig(callback).fail(function () {
-        doNotify("Error loading Jackett settings, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+        doNotify("Error loading Jackett settings, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
     });
 }
 
@@ -213,8 +213,13 @@ function displayUnconfiguredIndexersList() {
 		                    }
 		                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
 		                }
-			        }).fail(function () {
-			            doNotify("Request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
+			        }).fail(function (data) {
+			            if(data.responseJSON.error !== undefined) {
+                doNotify("An error occured while configuring this indexer<br /><b>" + data.responseJSON.error + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error + " (Config)\" target=\"_blank\">Click here to open an issue on Github for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+            } else {
+                doNotify("An error occured while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
+            }
+                        
 			        });
                 });
             });
@@ -429,8 +434,13 @@ function testIndexer(id, notifyResult) {
             if (notifyResult)
                 doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
         }
-    }).fail(function () {
-        doNotify("Error testing indexer, request to Jackett server error", "danger", "glyphicon glyphicon-alert");
+    }).fail(function (data) {
+        updateTestState(id, "error", data.error, indexers);
+        if(data.responseJSON.error !== undefined && notifyResult) {
+                doNotify("An error occured while testing this indexer<br /><b>" + data.responseJSON.error + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + id + "] " + data.responseJSON.error + " (Test)\" target=\"_blank\">Click here to open an issue on Github for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+            } else {
+                doNotify("An error occured while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
+            }
     });
 }
 
@@ -613,9 +623,9 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
             }
         }).fail(function (data) {
             if(data.responseJSON.error !== undefined) {
-                doNotify("An error occured while updating this indexer: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
+                doNotify("An error occured while updating this indexer<br /><b>" + data.responseJSON.error + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error + " (Config)\" target=\"_blank\">Click here to open an issue on Github for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
             } else {
-                doNotify("An error occured while updating this index, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
+                doNotify("An error occured while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
             }
         }).always(function () {
             $goButton.html(originalBtnText);
