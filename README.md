@@ -111,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile
  * FunkyTorrents
  * Fuzer
+ * GayTorrent.ru
  * GFXPeers
  * Ghost City
  * GigaTorrents  [![(invite needed)][inviteneeded]](#)
