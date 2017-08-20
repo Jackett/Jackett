@@ -612,7 +612,11 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-            doNotify("An error occured while updating this indexer: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
+            if(data.responseJSON.error !== undefined) {
+                doNotify("An error occured while updating this indexer: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
+            } else {
+                doNotify("An error occured while updating this index, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
+            }
         }).always(function () {
             $goButton.html(originalBtnText);
             $goButton.prop('disabled', false);
