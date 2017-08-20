@@ -228,7 +228,7 @@ namespace Jackett.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError("Error, unable to parse result \n" + ex.StackTrace, ex);
+                OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
             }
 
             // Return found releases
@@ -466,7 +466,7 @@ namespace Jackett.Indexers
                 case 1:
                     // Passkey not found
                     Output("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.descr);
-                    throw new Exception("API State : Error, Passkey not found in tracker's database, aborting... -> " + state.descr);
+                    throw new Exception("Passkey not found in tracker's database");
                 case 2:
                     // No results
                     Output("\nAPI State : No results for query ... -> " + state.descr);
@@ -478,11 +478,11 @@ namespace Jackett.Indexers
                 case 4:
                     // DDOS Attack, API disabled
                     Output("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
-                    throw new Exception("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
+                    throw new Exception("Tracker is under DDOS attack, API disabled");
                 default:
                     // Unknown state
                     Output("\nAPI State : Unknown state, aborting querying ... -> " + state.descr);
-                    throw new Exception("API State : Unknown state, aborting querying ... -> " + state.descr);
+                    throw new Exception("Unknown state, aborting querying");
             }
         }
 

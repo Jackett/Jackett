@@ -25,6 +25,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anime Tosho
  * cpasbien
  * EZTV
+ * Gay-Torrents.net
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
@@ -41,6 +42,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
+ * Torlock
  * Torrent Downloads
  * TorrentProject
  * Torrentz2
@@ -109,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile
  * FunkyTorrents
  * Fuzer
+ * GayTorrent.ru
  * GFXPeers
  * Ghost City
  * GigaTorrents  [![(invite needed)][inviteneeded]](#)
@@ -203,7 +206,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The-Torrents
  * TehConnection
  * TenYardTracker
- * Torlock
  * Torrent Network
  * Torrent Sector Crew
  * Torrent9
