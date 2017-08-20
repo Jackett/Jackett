@@ -142,7 +142,7 @@ function reloadIndexers() {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
     }).fail(function () {
-        doNotify("Error loading indexers, request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+        doNotify("Error loading indexers, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
     });
 }
 
@@ -214,7 +214,7 @@ function displayUnconfiguredIndexersList() {
 		                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
 		                }
 			        }).fail(function () {
-			            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+			            doNotify("Request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
 			        });
                 });
             });
@@ -611,8 +611,8 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 }
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
-        }).fail(function () {
-            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+        }).fail(function (data) {
+            doNotify("An error occured while updating this indexer: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
         }).always(function () {
             $goButton.html(originalBtnText);
             $goButton.prop('disabled', false);
