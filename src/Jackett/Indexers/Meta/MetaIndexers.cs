@@ -3,6 +3,7 @@ using Jackett.Services;
 using Jackett.Utils.Clients;
 using NLog;
 using Jackett.Models.IndexerConfig;
+using Jackett.Models;
 
 namespace Jackett.Indexers.Meta
 {
