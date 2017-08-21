@@ -27,9 +27,9 @@ namespace Jackett.Indexers
 
         public BroadcastTheNet(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BroadcastTheNet",
-                description: "Needs no description..",
+                description: null,
                 link: "https://broadcasthe.net/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                caps: new TorznabCapabilities(),
                 configService: configService,
                 client: wc,
                 logger: l,
@@ -39,6 +39,16 @@ namespace Jackett.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            TorznabCaps.LimitsDefault = 100;
+            TorznabCaps.LimitsMax = 1000;
+
+            AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
+            AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
+            AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
+            AddCategoryMapping("1080i", TorznabCatType.TVHD, "1080i");
+            AddCategoryMapping("2160p", TorznabCatType.TVHD, "2160p");
+            AddCategoryMapping("Portable Device", TorznabCatType.TVSD, "Portable Device");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -76,13 +86,17 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var searchString = query.GetQueryString();
+            var btnResults = query.Limit;
+            if (btnResults == 0)
+                btnResults = (int)TorznabCaps.LimitsDefault;
+            var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
 
             var parameters = new JArray();
             parameters.Add(new JValue(configData.Key.Value));
             parameters.Add(new JValue(searchString.Trim()));
-            parameters.Add(new JValue(100));
-            parameters.Add(new JValue(0));
+            parameters.Add(new JValue(btnResults));
+            parameters.Add(new JValue(btnOffset));
             var response = await PostDataWithCookiesAndRetry(APIBASE, null, null, null, new Dictionary<string, string>()
             {
                 { "Accept", "application/json-rpc, application/json"},
@@ -97,13 +111,15 @@ namespace Jackett.Indexers
                 {
                     foreach (var itemKey in btnResponse.Result.Torrents)
                     {
+                        var descriptions = new List<string>();
                         var btnResult = itemKey.Value;
                         var item = new ReleaseInfo();
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
                             item.BannerUrl = new Uri(btnResult.SeriesBanner);
-                        item.Category = new List<int> { TorznabCatType.TV.ID };
-                        item.Comments = new Uri($"https://broadcasthe.net/torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
-                        item.Description = btnResult.ReleaseName;
+                        item.Category = MapTrackerCatToNewznab(btnResult.Resolution);
+                        if (item.Category.Count == 0) // default to TV
+                            item.Category.Add(TorznabCatType.TV.ID);
+                        item.Comments = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         item.Guid = new Uri(btnResult.DownloadURL);
                         if (!string.IsNullOrWhiteSpace(btnResult.ImdbID))
                             item.Imdb = ParseUtil.CoerceLong(btnResult.ImdbID);
@@ -116,6 +132,29 @@ namespace Jackett.Indexers
                         item.Size = btnResult.Size;
                         item.TVDBId = btnResult.TvdbID;
                         item.Title = btnResult.ReleaseName;
+                        item.UploadVolumeFactor = 1;
+                        item.DownloadVolumeFactor = 0; // ratioless
+                        item.Grabs = btnResult.Snatched;
+
+                        if (!string.IsNullOrWhiteSpace(btnResult.Series))
+                            descriptions.Add("Series: " + btnResult.Series);
+                        if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
+                            descriptions.Add("Group Name: " + btnResult.GroupName);
+                        if (!string.IsNullOrWhiteSpace(btnResult.Source))
+                            descriptions.Add("Source: " + btnResult.Source);
+                        if (!string.IsNullOrWhiteSpace(btnResult.Container))
+                            descriptions.Add("Container: " + btnResult.Container);
+                        if (!string.IsNullOrWhiteSpace(btnResult.Codec))
+                            descriptions.Add("Codec: " + btnResult.Codec);
+                        if (!string.IsNullOrWhiteSpace(btnResult.Resolution))
+                            descriptions.Add("Resolution: " + btnResult.Resolution);
+                        if (!string.IsNullOrWhiteSpace(btnResult.Origin))
+                            descriptions.Add("Origin: " + btnResult.Origin);
+                        if (!string.IsNullOrWhiteSpace(btnResult.Series))
+                            descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
+
+                        item.Description = string.Join("<br />\n", descriptions);
+
                         releases.Add(item);
                     }
                 }
