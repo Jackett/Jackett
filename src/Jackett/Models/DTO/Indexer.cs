@@ -35,7 +35,7 @@ namespace Jackett.Models.DTO
             site_link = indexer.SiteLink;
             language = indexer.Language;
             last_error = indexer.LastError;
-            potatoenabled = indexer.TorznabCaps.Categories.Select(c => c.ID).Any(i => i == TorznabCatType.Movies.ID);
+            potatoenabled = indexer.TorznabCaps.Categories.Any(i => TorznabCatType.Movies.Contains(i));
 
             alternativesitelinks = indexer.AlternativeSiteLinks;
 
