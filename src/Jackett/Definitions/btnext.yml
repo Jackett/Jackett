@@ -120,7 +120,7 @@
       search_type: "name"
       searchin: "title"
     error:
-      - selector: div.error
+      - selector: div.error:not(:contains("Não existem resultados encontrados."))
     rows:
       selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
     fields:
