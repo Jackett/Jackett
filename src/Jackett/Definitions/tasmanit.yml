@@ -71,6 +71,9 @@
       keywords: "{{ .Keywords }}"
       search_type: "t_name"
       include_dead_torrents: "yes"
+    keywordsfilters: 
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
     rows:
       selector: table#sortabletable > tbody > tr:has(a[href])
     fields:

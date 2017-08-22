@@ -151,8 +151,11 @@ namespace Jackett.Indexers
                     var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1).Trim(']');
                     release.Category = MapTrackerCatToNewznab(cat);
 
+                    // support both date format (profile settings)
                     var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
                     var addedStr = qAdded.Attr("title");
+                    if (!addedStr.Contains(","))
+                        addedStr = qAdded.Text();
                     release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
 
                     var overlayScript = qRow.Find("script:contains(\"var overlay\")").Text();

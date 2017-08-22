@@ -113,7 +113,7 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookies(searchUrl);
-            if (response.IsRedirect || response.Cookies.Contains("pass=deleted;"))
+            if (response.IsRedirect || response.Cookies != null && response.Cookies.Contains("pass=deleted;"))
             {
                 // re-login
                 await ApplyConfiguration(null);
