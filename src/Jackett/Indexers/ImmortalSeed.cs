@@ -115,7 +115,7 @@ namespace Jackett.Indexers
             {
                 CQ dom = results.Content;
 
-                var rows = dom["#sortabletable tr"];
+                var rows = dom["#sortabletable tr:has(a[href*=\"details.php?id=\"])"];
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
