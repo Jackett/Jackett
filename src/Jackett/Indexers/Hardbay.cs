@@ -90,50 +90,53 @@ namespace Jackett.Indexers
             {
                 //var json = JArray.Parse(results.Content);
                 dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
-                foreach (var row in json)
-                {
-                    var release = new ReleaseInfo();
-                    var descriptions = new List<string>();
-                    var tags = new List<string>();
-
-                    release.MinimumRatio = 0.5;
-                    release.MinimumSeedTime = 0;
-                    release.Title = row.name;
-                    release.Category = new List<int> { TorznabCatType.Audio.ID };
-                    release.Size = row.size;
-                    release.Seeders = row.seeders;
-                    release.Peers = row.leechers + release.Seeders;
-                    release.PublishDate = DateTime.ParseExact(row.added.ToString() + " +01:00", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
-                    release.Files = row.numfiles;
-                    release.Grabs = row.times_completed;
-
-                    release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
-                    release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
-
-                    if (row.frileech == 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 0.33;
-                    release.UploadVolumeFactor = 1;
-
-                    if ((int)row.p2p == 1)
-                        tags.Add("P2P");
-                    if ((int)row.pack == 1)
-                        tags.Add("Pack");
-                    if ((int)row.reqid != 0)
-                        tags.Add("Archive");
-                    if ((int)row.flac != 0)
+                if (json != null) // no results
+                { 
+                    foreach (var row in json)
                     {
-                        tags.Add("FLAC");
-                        release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
+                        var release = new ReleaseInfo();
+                        var descriptions = new List<string>();
+                        var tags = new List<string>();
+
+                        release.MinimumRatio = 0.5;
+                        release.MinimumSeedTime = 0;
+                        release.Title = row.name;
+                        release.Category = new List<int> { TorznabCatType.Audio.ID };
+                        release.Size = row.size;
+                        release.Seeders = row.seeders;
+                        release.Peers = row.leechers + release.Seeders;
+                        release.PublishDate = DateTime.ParseExact(row.added.ToString() + " +01:00", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
+                        release.Files = row.numfiles;
+                        release.Grabs = row.times_completed;
+
+                        release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
+                        release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
+
+                        if (row.frileech == 1)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 0.33;
+                        release.UploadVolumeFactor = 1;
+
+                        if ((int)row.p2p == 1)
+                            tags.Add("P2P");
+                        if ((int)row.pack == 1)
+                            tags.Add("Pack");
+                        if ((int)row.reqid != 0)
+                            tags.Add("Archive");
+                        if ((int)row.flac != 0)
+                        {
+                            tags.Add("FLAC");
+                            release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
+                        }
+
+                        if (tags.Count > 0)
+                            descriptions.Add("Tags: " + string.Join(", ", tags));
+
+                        release.Description = string.Join("<br>\n", descriptions);
+
+                        releases.Add(release);
                     }
-
-                    if (tags.Count > 0)
-                        descriptions.Add("Tags: " + string.Join(", ", tags));
-
-                    release.Description = string.Join("<br>\n", descriptions);
-
-                    releases.Add(release);
                 }
             }
             catch (Exception ex)
