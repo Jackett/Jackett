@@ -109,7 +109,7 @@ namespace Jackett.Indexers
             {
                 var token = tokenItem.Value;
                 if (!string.IsNullOrWhiteSpace(token))
-                    APIHeaders["Authorizationn"] = token;
+                    APIHeaders["Authorization"] = token;
             }
 
             var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
