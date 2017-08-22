@@ -107,7 +107,7 @@ namespace Jackett.Indexers
             {
                 var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.Content);
 
-                if (btnResponse != null && btnResponse.Result != null)
+                if (btnResponse != null && btnResponse.Result != null && btnResponse.Result.Torrents != null)
                 {
                     foreach (var itemKey in btnResponse.Result.Torrents)
                     {
