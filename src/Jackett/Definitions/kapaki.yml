@@ -77,7 +77,7 @@
       search_type: "name"
       searchin: "title"
     error:
-      - selector: div#show_error
+      - selector: div#show_error:not(:contains("Ουπς! Λάθος!Δεν βρέθηκαν αποτελέσματα."))
     rows:
       selector: div#content > div.torrent-box[id^="torrent_"]
       filters:
