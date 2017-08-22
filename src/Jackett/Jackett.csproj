@@ -173,6 +173,7 @@
   <ItemGroup>
     <Compile Include="AuthenticationException.cs" />
     <Compile Include="CacheControlAttribute.cs" />
+    <Compile Include="IndexerException.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />

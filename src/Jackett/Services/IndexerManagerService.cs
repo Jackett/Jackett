@@ -207,11 +207,11 @@ namespace Jackett.Services
             browseQuery.QueryType = "search";
             browseQuery.SearchTerm = "";
             browseQuery.IsTest = true;
-            var results = await indexer.ResultsForQuery(browseQuery);
-            logger.Info(string.Format("Found {0} releases from {1}", results.Count(), indexer.DisplayName));
-            if (results.Count() == 0)
+            var result = await indexer.ResultsForQuery(browseQuery);
+            logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
+            if (result.Releases.Count() == 0)
                 throw new Exception("Found no results while trying to browse this tracker");
-            cacheService.CacheRssResults(indexer, results);
+            cacheService.CacheRssResults(indexer, result.Releases);
         }
 
         public void DeleteIndexer(string name)
