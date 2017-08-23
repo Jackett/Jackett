@@ -11,6 +11,15 @@ jackettdir="$(pwd)"
 command -v mono >/dev/null 2>&1 || { echo >&2 "Jackett requires Mono but it's not installed. Aborting."; exit 1; }
 monodir="$(dirname $(command -v mono))"
 
+# Stop and unload the service if it's running
+launchctl remove org.user.Jackett
+
+# Check that no other service called Jackett is already running
+if [[ $(launchctl list | grep org.user.Jackett) ]]; then
+    echo "Jackett already seems to be running as a service. Please stop it before running this script again."
+    exit 1
+fi
+
 # Write the plist to LaunchAgents
 cat >~/Library/LaunchAgents/org.user.Jackett.plist <<EOL
 <?xml version="1.0" encoding="UTF-8"?>

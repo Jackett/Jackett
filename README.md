@@ -273,20 +273,22 @@ Jackett can also be run from the command line if you would like to see log messa
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
 
 ## Installation on macOS
- 1. Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended)
+### Prerequisites
+Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended)
        * Setup ssl support by running
        ```
        https://curl.haxx.se/ca/cacert.pem
        cert-sync --user ~/Downloads/cacert.pem
        ```
- 2. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
- 
- ### Install as service (advanced users)
- 1. Follow the steps above to install Jackett as you normally would.
- 2. Edit the file `org.Jackett.plist` accordingly with the correct paths.
- 3. Move it to `~/Library/LaunchAgents/`
- 
- The service will start on each startup. You can immediately start it by running `launchctl load ~/Library/LaunchAgents/org.Jackett.plist` from Terminal. You can stop it using `launchctl stop org.user.Jackett`. Logs are stored as usual under `~/.config/Jackett/log.txt`.
+### Install as service
+1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
+2. In Terminal, run the install script from the extracted directory using `./InstallService.sh`
+       
+The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
+Logs are stored as usual under `~/.config/Jackett/log.txt`.
+
+### Run without installing as a service
+Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
 
 ## Installation using Docker
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
