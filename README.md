@@ -275,11 +275,11 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 ## Installation on macOS
 ### Prerequisites
 Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended)
-       * Setup ssl support by running
-       ```
-       https://curl.haxx.se/ca/cacert.pem
-       cert-sync --user ~/Downloads/cacert.pem
-       ```
+* Setup ssl support by running
+```
+https://curl.haxx.se/ca/cacert.pem
+cert-sync --user ~/Downloads/cacert.pem
+```
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
 2. In Terminal, run the install script from the extracted directory using `./InstallService.sh`
