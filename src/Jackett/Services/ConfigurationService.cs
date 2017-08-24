@@ -17,16 +17,16 @@ namespace Jackett.Services
 {
     public interface IConfigurationService
     {
+        string IndexerGroupsFolder { get; }
+
         string GetContentFolder();
         string GetVersion();
         string GetIndexerConfigDir();
         string GetAppDataFolder();
-        string GetSonarrConfigFile();
         T GetConfig<T>();
         void SaveConfig<T>(T config);
         string ApplicationFolder();
         List<string> GetCardigannDefinitionsFolders();
-        void CreateOrMigrateSettings();
         void PerformMigration();
     }
 
@@ -44,7 +44,15 @@ namespace Jackett.Services
             CreateOrMigrateSettings();
         }
 
-        public void CreateOrMigrateSettings()
+        public string IndexerGroupsFolder
+        {
+            get
+            {
+                return Path.Combine(GetIndexerConfigDir(), "Groups");
+            }
+        }
+
+        private void CreateOrMigrateSettings()
         {
             try
             {
@@ -262,16 +270,6 @@ namespace Jackett.Services
         public string GetIndexerConfigDir()
         {
             return Path.Combine(GetAppDataFolder(), "Indexers");
-        }
-
-        public string GetConfigFile()
-        {
-            return Path.Combine(GetAppDataFolder(), "config.json");
-        }
-
-        public string GetSonarrConfigFile()
-        {
-            return Path.Combine(GetAppDataFolder(), "sonarr_api.json");
         }
     }
 }

@@ -12,14 +12,21 @@ using NLog;
 
 namespace Jackett.Indexers.Meta
 {
+    public enum MetaIndexerOptimization
+    {
+        None,
+        Speed,
+        Quality
+    }
+
     public abstract class BaseMetaIndexer : BaseWebIndexer
     {
-        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService, IWebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, Func<IIndexer, bool> filter)
+        protected BaseMetaIndexer(string name, string description, IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService, IWebClient webClient, Logger logger, ConfigurationData configData, IProtectionService p, MetaIndexerOptimization optimization)
             : base(name, "http://127.0.0.1/", description, configService, webClient, logger, configData, p, null, null)
         {
-            filterFunc = filter;
             this.fallbackStrategyProvider = fallbackStrategyProvider;
             this.resultFilterProvider = resultFilterProvider;
+            this.optimization = optimization;
         }
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -76,6 +83,7 @@ namespace Jackett.Indexers.Meta
             var resultFilters = resultFilterProvider.FiltersForQuery(query);
             var filteredResults = resultFilters.Select(async f => await f.FilterResults(unorderedResult)).SelectMany(t => t.Result);
             var uniqueFilteredResults = filteredResults.Distinct();
+            var optimizedResults = OptimizeResults(uniqueFilteredResults);
             var orderedResults = uniqueFilteredResults.OrderByDescending(r => r.Gain);
             // Limiting the response size might be interesting for use-cases where there are
             // tons of trackers configured in Jackett. For now just use the limit param if
@@ -84,6 +92,20 @@ namespace Jackett.Indexers.Meta
             if (query.Limit > 0)
                 result = result.Take(query.Limit);
             return result;
+        }
+
+        private IEnumerable<ReleaseInfo> OptimizeResults(IEnumerable<ReleaseInfo> results)
+        {
+            switch (optimization)
+            {
+                case MetaIndexerOptimization.None:
+                    return results.OrderByDescending(r => r.PublishDate);
+                case MetaIndexerOptimization.Speed:
+                    return results.OrderByDescending(r => r.Gain);
+                case MetaIndexerOptimization.Quality:
+                    break;
+            }
+            return results;
         }
 
         public override TorznabCapabilities TorznabCaps
@@ -109,14 +131,19 @@ namespace Jackett.Indexers.Meta
                 if (Indexers == null)
                     return null;
 
-                return Indexers.Where(i => i.IsConfigured && filterFunc(i));
+                return FilterIndexers(Indexers.Where(i => i.IsConfigured));
             }
+        }
+
+        protected IEnumerable<IIndexer> FilterIndexers(IEnumerable<IIndexer> indexers)
+        {
+            return indexers;
         }
 
         public IEnumerable<IIndexer> Indexers;
 
-        private Func<IIndexer, bool> filterFunc;
         private IFallbackStrategyProvider fallbackStrategyProvider;
         private IResultFilterProvider resultFilterProvider;
+        private MetaIndexerOptimization optimization;
     }
 }

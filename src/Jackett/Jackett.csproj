@@ -380,6 +380,8 @@
     <Compile Include="Models\DTO\TorrentPotatoResponse.cs" />
     <Compile Include="Models\DTO\TorrentPotatoResponseItem.cs" />
     <Compile Include="Models\DTO\TorznabRequest.cs" />
+    <Compile Include="Controllers\GroupApiController.cs" />
+    <Compile Include="Models\DTO\IndexerGroup.cs" />
     <Compile Include="Indexers\SceneFZ.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataSceneFZ.cs" />
   </ItemGroup>

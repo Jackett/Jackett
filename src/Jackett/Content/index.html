@@ -51,6 +51,9 @@
         </div>
         <hr />
         <div class="pull-right">
+            <button id="jackett-create-group" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create group
+            </button>
             <button id="jackett-add-indexer" class="btn btn-success btn-sm">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
             </button>
@@ -66,6 +69,9 @@
         </div>
         <h3>Configured Indexers</h3>
         <div id="indexers"> </div>
+        <hr />
+        <h3>Indexer Groups</h3>
+        <div id="groups"> </div>
         <hr />
 
         <div class="input-area">
@@ -228,6 +234,7 @@
             <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Indexer</th>
                         <th>Actions</th>
                     </tr>
@@ -235,6 +242,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
+                        <td><input type="checkbox" data-id="{{id}}" /></td>
                         <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
                         <td class="fit">
                             <div class="indexer-buttons">
@@ -253,6 +261,40 @@
                                 <button title="{{last_error}}" class="btn btn-warning btn-xs indexer-button-test" data-toggle="tooltip" data-id="{{id}}" data-state="{{state}}">
                                     Test
                                     <span class="glyphicon" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </script>
+
+    <script id="group-table" type="text/x-handlebars-template">
+        <div class="group-div">
+            <table id="group-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Indexers</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each groups}}
+                    <tr class="configured-indexer-row">
+                        <td>{{id}}</td>
+                        <td>{{indexers}}</td>
+                        <td class="fit">
+                            <div class="indexer-buttons">
+                                <button title="Delete" class="btn btn-danger btn-xs group-button-delete" data-id="{{id}}">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </td>
@@ -599,6 +641,28 @@
                                 {{/each}}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="jackett-create-group-modal" type="text/x-handlebars-template">
+        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Create group</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="config-setup-form">
+                            Name of the group: <input class="form-control" type="text" value="" id="group-name" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="jackett-create-group-name" class="btn btn-primary setup-indexer-go">Create</button>
                     </div>
                 </div>
             </div>

@@ -12,16 +12,22 @@ using System.Threading.Tasks;
 using Jackett.Indexers.Meta;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Newtonsoft.Json;
 
 namespace Jackett.Services
 {
     public interface IIndexerManagerService
     {
+        IEnumerable<IndexerCollectionMetaIndexer> Groups { get; }
+
         Task TestIndexer(string name);
         void DeleteIndexer(string name);
         IIndexer GetIndexer(string name);
         IWebIndexer GetWebIndexer(string name);
         IEnumerable<IIndexer> GetAllIndexers();
+
+        void CreateGroup(string name, IEnumerable<string> indexers);
+        void DeleteGroup(string name);
 
         void InitIndexers(IEnumerable<string> path);
         void InitAggregateIndexer();
@@ -40,6 +46,15 @@ namespace Jackett.Services
 
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
+        private IDictionary<string, IndexerCollectionMetaIndexer> groupIndexers = new Dictionary<string, IndexerCollectionMetaIndexer>();
+
+        public IEnumerable<IndexerCollectionMetaIndexer> Groups
+        {
+            get
+            {
+                return groupIndexers.Values;
+            }
+        }
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, IWebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService)
         {
@@ -57,6 +72,7 @@ namespace Jackett.Services
             InitIndexers();
             InitCardigannIndexers(path);
             InitAggregateIndexer();
+            InitIndexerCollections();
         }
 
         private void InitIndexers()
@@ -70,20 +86,16 @@ namespace Jackett.Services
             var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
             var ixs = indexerTypes.Select(type =>
             {
-                var constructorArgumentTypes = new Type[] { typeof(IIndexerConfigurationService), typeof(IWebClient), typeof(Logger), typeof(IProtectionService) };
-                var constructor = type.GetConstructor(constructorArgumentTypes);
-                if (constructor != null)
+                // create own webClient instance for each indexer (seperate cookies stores, etc.)
+                var indexerWebClientInstance = (IWebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
+                try
                 {
-                    // create own webClient instance for each indexer (seperate cookies stores, etc.)
-                    var indexerWebClientInstance = (IWebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
-
-                    var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService };
-                    var indexer = (IIndexer)constructor.Invoke(arguments);
+                    var indexer = (IIndexer)Activator.CreateInstance(type, configService, indexerWebClientInstance, logger, protectionService);
                     return indexer;
                 }
-                else
+                catch (Exception e)
                 {
-                    logger.Error("Cannot instantiate " + type.Name);
+                    logger.Error(e, "Cannot instantiate " + type.Name);
                 }
                 return null;
             });
@@ -113,7 +125,7 @@ namespace Jackett.Services
                 var files = existingDirectories.SelectMany(d => d.GetFiles("*.yml"));
                 var definitions = files.Select(file =>
                 {
-                    logger.Info("Loading Cardigann definition " + file.FullName);
+                    logger.Debug("Loading Cardigann definition " + file.FullName);
 
                     string DefinitionString = File.ReadAllText(file.FullName);
                     var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
@@ -169,6 +181,31 @@ namespace Jackett.Services
             aggregateIndexer.Indexers = indexers.Values;
         }
 
+        private void InitIndexerCollections()
+        {
+            var paths = globalConfigService.IndexerGroupsFolder.ToEnumerable();
+            var directoryInfos = paths.Select(p => new DirectoryInfo(p));
+            var existingDirectories = directoryInfos.Where(d => d.Exists);
+            var configFiles = existingDirectories.SelectMany(d => d.GetFiles("*.json"));
+            var collectionSettings = configFiles.Select(file =>
+            {
+                var content = File.ReadAllText(file.FullName);
+                var settings = JsonConvert.DeserializeObject<IndexerCollectionSettings>(content);
+                settings.Id = file.Name.Replace(file.Extension, "");
+                return settings;
+            }).ToList();
+            var indexerCollections = collectionSettings.Select(settings =>
+            {
+                var groupIndexers = settings.Indexers.Select(id => indexers[id]);
+                var indexerCollection = new IndexerCollectionMetaIndexer(settings.Id, groupIndexers, new NoFallbackStrategyProvider(), new NoResultFilterProvider(), configService, webClient, logger, protectionService);
+                return indexerCollection;
+            }).ToList();
+            foreach (var group in indexerCollections)
+            {
+                groupIndexers.Add(group.ID, group);
+            }
+        }
+
         public IIndexer GetIndexer(string name)
         {
             if (indexers.ContainsKey(name))
@@ -178,6 +215,10 @@ namespace Jackett.Services
             else if (name == "all")
             {
                 return aggregateIndexer;
+            }
+            else if (groupIndexers.ContainsKey(name))
+            {
+                return groupIndexers[name];
             }
             else
             {
@@ -219,6 +260,30 @@ namespace Jackett.Services
             var indexer = GetIndexer(name);
             configService.Delete(indexer);
             indexer.Unconfigure();
+        }
+
+        public void DeleteGroup(string name)
+        {
+            var path = Path.Combine(globalConfigService.IndexerGroupsFolder, name + ".json");
+            File.Delete(path);
+            groupIndexers.Remove(name);
+        }
+
+        public void CreateGroup(string name, IEnumerable<string> indexers)
+        {
+            var settings = new IndexerCollectionSettings
+            {
+                Id = name,
+                Indexers = indexers,
+            };
+
+            var group = indexers.Select(i => GetIndexer(i));
+            var indexerCollection = new IndexerCollectionMetaIndexer(settings.Id, group, new NoFallbackStrategyProvider(), new NoResultFilterProvider(), configService, webClient, logger, protectionService);
+            groupIndexers.Add(name, indexerCollection);
+
+            var jsonString = JsonConvert.SerializeObject(settings);
+            var path = Path.Combine(globalConfigService.IndexerGroupsFolder, name + ".json");
+            File.WriteAllText(path, jsonString);
         }
     }
 }

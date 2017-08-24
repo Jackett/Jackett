@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Indexers;
+using Jackett.Indexers.Meta;
 using Newtonsoft.Json.Linq;
 
 namespace JackettTest
@@ -12,6 +13,7 @@ namespace JackettTest
     class TestIndexerManagerServiceHelper : IIndexerManagerService
     {
         public JToken LastSavedConfig { get; set; }
+        public IEnumerable<IndexerCollectionMetaIndexer> Groups { get; }
 
         public void DeleteIndexer(string name)
         {
@@ -49,6 +51,16 @@ namespace JackettTest
         }
 
         public void InitAggregateIndexer()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateGroup(string name, IEnumerable<string> indexers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteGroup(string name)
         {
             throw new NotImplementedException();
         }
