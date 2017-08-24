@@ -207,7 +207,6 @@
     <Compile Include="Indexers\Andraste.cs" />
     <Compile Include="Indexers\TorrentHeaven.cs" />
     <Compile Include="Indexers\NewRealWorld.cs" />
-    <Compile Include="Indexers\BestFriends.cs" />
     <Compile Include="Indexers\BitCityReloaded.cs" />
     <Compile Include="Indexers\FunFile.cs" />
     <Compile Include="Indexers\GhostCity.cs" />
