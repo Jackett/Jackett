@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Stop and unload the service if it's running
+launchctl remove org.user.Jackett
+
 # Check if we're running from Jackett's directory
 if [ ! -f ./JackettConsole.exe ]; then
     echo "Couldn't locate JackettConsole.exe. Are you running from the right directory?"
@@ -10,9 +13,6 @@ jackettdir="$(pwd)"
 # Check if mono is installed
 command -v mono >/dev/null 2>&1 || { echo >&2 "Jackett requires Mono but it's not installed. Aborting."; exit 1; }
 monodir="$(dirname $(command -v mono))"
-
-# Stop and unload the service if it's running
-launchctl remove org.user.Jackett
 
 # Check that no other service called Jackett is already running
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
@@ -58,5 +58,10 @@ launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
     echo "Agent successfully installed and launched!"
 else
-echo "Agent installation failed. Please open an issue on https://github.com/Jackett/Jackett/issues"
+    cat << EOL
+Could not launch agent. The installation might have failed.
+Please open an issue on https://github.com/Jackett/Jackett/issues and paste following information:
+Mono directory: \`${monodir}\`
+Jackett directory: \`${jackettdir}\`
+EOL
 fi
