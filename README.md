@@ -69,7 +69,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * B2S-Share
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
- * Best Friends
  * BeyondHD
  * BIGTorrent
  * Bit-City Reloaded
