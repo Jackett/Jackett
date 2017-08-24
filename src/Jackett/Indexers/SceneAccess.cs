@@ -129,8 +129,7 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 129600;
-                    release.Title = qRow.Find(".ttr_name > a").Text();
-                    release.Description = release.Title;
+                    release.Title = qRow.Find(".ttr_name > a").Attr("title");
                     release.Guid = new Uri(SiteLink  + qRow.Find(".ttr_name > a").Attr("href"));
                     release.Comments = release.Guid;
                     release.Link = new Uri(SiteLink + qRow.Find(".td_dl > a").Attr("href"));
