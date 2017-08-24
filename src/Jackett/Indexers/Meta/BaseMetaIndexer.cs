@@ -27,25 +27,32 @@ namespace Jackett.Indexers.Meta
             return Task.FromResult(IndexerConfigurationStatus.Completed);
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
-            if (!CanHandleQuery(query))
-                return new ReleaseInfo[0];
-            var results = await PerformQuery(query);
-            var correctedResults = results.Select(r =>
+            try
             {
-                if (r.PublishDate > DateTime.Now)
-                    r.PublishDate = DateTime.Now;
-                return r;
-            });
+                if (!CanHandleQuery(query))
+                    return new IndexerResult(this, new ReleaseInfo[0]);
+                var results = await PerformQuery(query);
+                var correctedResults = results.Select(r =>
+                {
+                    if (r.PublishDate > DateTime.Now)
+                        r.PublishDate = DateTime.Now;
+                    return r;
+                });
 
-            return correctedResults;
+                return new IndexerResult(this, correctedResults);
+            }
+            catch (Exception ex)
+            {
+                throw new IndexerException(this, ex);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var indexers = validIndexers;
-            IEnumerable<Task<IEnumerable<ReleaseInfo>>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
+            IEnumerable<Task<IndexerResult>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query)).ToList(); // explicit conversion to List to execute LINQ query
 
             var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
@@ -72,7 +79,7 @@ namespace Jackett.Indexers.Meta
                 logger.Error(aggregateTask.Exception, "Error during request in metaindexer " + ID);
             }
 
-            var unorderedResult = aggregateTask.Result.Flatten();
+            var unorderedResult = aggregateTask.Result.Select(r => r.Releases).Flatten();
             var resultFilters = resultFilterProvider.FiltersForQuery(query);
             var filteredResults = resultFilters.Select(async f => await f.FilterResults(unorderedResult)).SelectMany(t => t.Result);
             var uniqueFilteredResults = filteredResults.Distinct();

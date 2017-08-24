@@ -19,6 +19,7 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using NLog;
+using Jackett.Models.DTO;
 
 namespace Jackett.Controllers.V20
 {
@@ -154,20 +155,67 @@ namespace Jackett.Controllers.V20
         [HttpGet]
         public async Task<Models.DTO.ManualSearchResult> Results([FromUri]Models.DTO.ApiSearch request)
         {
+            var manualResult = new ManualSearchResult();
             var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured);
             if (CurrentIndexer.ID != "all")
                 trackers = trackers.Where(t => t.ID == CurrentIndexer.ID).ToList();
-            trackers = trackers.Where(t => t.IsConfigured && t.CanHandleQuery(CurrentQuery));
+            trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
             var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
-            var aggregateTask = Task.WhenAll(tasks);
-
-            await aggregateTask;
-
-            var results = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Where(t => t.Result.Count() > 0).SelectMany(t =>
+            try
             {
-                var searchResults = t.Result;
-                var indexer = searchResults.First().Origin;
+                var aggregateTask = Task.WhenAll(tasks);
+                await aggregateTask;
+            }
+            catch (AggregateException aex)
+            {
+                foreach (var ex in aex.InnerExceptions)
+                {
+                    logger.Error(ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
+
+            manualResult.Indexers = tasks.Select(t =>
+            {
+                var resultIndexer = new ManualSearchResultIndexer();
+                IIndexer indexer = null;
+                if (t.Status == TaskStatus.RanToCompletion)
+                {
+                    resultIndexer.Status = ManualSearchResultIndexerStatus.OK;
+                    resultIndexer.Results = t.Result.Releases.Count();
+                    resultIndexer.Error = null;
+                    indexer = t.Result.Indexer;
+                }
+                else if (t.Exception.InnerException is IndexerException)
+                {
+                    resultIndexer.Status = ManualSearchResultIndexerStatus.Error;
+                    resultIndexer.Results = 0;
+                    resultIndexer.Error = ((IndexerException)t.Exception.InnerException).ToString();
+                    indexer = ((IndexerException)t.Exception.InnerException).Indexer;
+                }
+                else
+                {
+                    resultIndexer.Status = ManualSearchResultIndexerStatus.Unknown;
+                    resultIndexer.Results = 0;
+                    resultIndexer.Error = null;
+                }
+
+                if (indexer != null)
+                {
+                    resultIndexer.ID = indexer.ID;
+                    resultIndexer.Name = indexer.DisplayName;
+                }
+                return resultIndexer;
+            }).ToList();
+
+            manualResult.Results = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Where(t => t.Result.Releases.Count() > 0).SelectMany(t =>
+            {
+                var searchResults = t.Result.Releases;
+                var indexer = t.Result.Indexer;
                 cacheService.CacheRssResults(indexer, searchResults);
 
                 return searchResults.Select(result =>
@@ -181,17 +229,7 @@ namespace Jackett.Controllers.V20
                 });
             }).OrderByDescending(d => d.PublishDate).ToList();
 
-            ConfigureCacheResults(results);
-
-            var manualResult = new Models.DTO.ManualSearchResult()
-            {
-                Results = results,
-                Indexers = trackers.Select(t => t.DisplayName).ToList()
-            };
-
-
-            if (manualResult.Indexers.Count() == 0)
-                manualResult.Indexers = new List<string>() { "None" };
+            ConfigureCacheResults(manualResult.Results);
 
             logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", CurrentQuery.SanitizedSearchTerm, string.Join(", ", manualResult.Indexers), manualResult.Results.Count()));
             return manualResult;
@@ -236,7 +274,7 @@ namespace Jackett.Controllers.V20
                 }
             }
 
-            var releases = await CurrentIndexer.ResultsForQuery(CurrentQuery);
+            var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
             // Some trackers do not support multiple category filtering so filter the releases that match manually.
             int? newItemCount = null;
@@ -244,19 +282,19 @@ namespace Jackett.Controllers.V20
             // Cache non query results
             if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))
             {
-                newItemCount = cacheService.GetNewItemCount(CurrentIndexer, releases);
-                cacheService.CacheRssResults(CurrentIndexer, releases);
+                newItemCount = cacheService.GetNewItemCount(CurrentIndexer, result.Releases);
+                cacheService.CacheRssResults(CurrentIndexer, result.Releases);
             }
 
             // Log info
             var logBuilder = new StringBuilder();
             if (newItemCount != null)
             {
-                logBuilder.AppendFormat("Found {0} ({1} new) releases from {2}", releases.Count(), newItemCount, CurrentIndexer.DisplayName);
+                logBuilder.AppendFormat("Found {0} ({1} new) releases from {2}", result.Releases.Count(), newItemCount, CurrentIndexer.DisplayName);
             }
             else
             {
-                logBuilder.AppendFormat("Found {0} releases from {1}", releases.Count(), CurrentIndexer.DisplayName);
+                logBuilder.AppendFormat("Found {0} releases from {1}", result.Releases.Count(), CurrentIndexer.DisplayName);
             }
 
             if (!string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
@@ -278,7 +316,7 @@ namespace Jackett.Controllers.V20
                 ImageDescription = CurrentIndexer.DisplayName
             });
 
-            var proxiedReleases = releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
+            var proxiedReleases = result.Releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
             {
                 r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.ID, "dl", r.Title + ".torrent");
                 return r;
@@ -316,20 +354,20 @@ namespace Jackett.Controllers.V20
         [JsonResponse]
         public async Task<Models.DTO.TorrentPotatoResponse> Potato([FromUri]Models.DTO.TorrentPotatoRequest request)
         {
-            var releases = await CurrentIndexer.ResultsForQuery(CurrentQuery);
+            var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
             // Cache non query results
             if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))
-                cacheService.CacheRssResults(CurrentIndexer, releases);
+                cacheService.CacheRssResults(CurrentIndexer, result.Releases);
 
             // Log info
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName}");
+                logger.Info($"Found {result.Releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName}");
             else
-                logger.Info($"Found {releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {CurrentQuery.GetQueryString()}");
+                logger.Info($"Found {result.Releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {CurrentQuery.GetQueryString()}");
 
             var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
-            var potatoReleases = releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
+            var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.ID, "dl", release.Title + ".torrent");
