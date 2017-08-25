@@ -440,7 +440,15 @@
 
     <script id="jackett-search-results" type="text/x-handlebars-template">
         <hr />
-        <p>Your search was done using: {{#each Indexers}}{{this}}, {{/each}}</p>
+        <p>Your search was done using: 
+        {{#each Indexers}}{{Name}}
+        {{#if Error}}
+            (<span title="{{Error}}"><b>Error</b></span>)
+        {{else}}
+        ({{Results}})
+        {{/if}}
+        , {{/each}}
+        </p>
         <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
             <thead>
                 <tr>

@@ -228,7 +228,8 @@ namespace Jackett.Indexers.Abstract
             {
                 release.DownloadVolumeFactor = 0;
             }
-            if ((bool)torrent["isPersonalFreeleech"])
+            var isPersonalFreeleech = (bool?)torrent["isPersonalFreeleech"];
+            if (isPersonalFreeleech != null && isPersonalFreeleech == true)
             {
                 release.DownloadVolumeFactor = 0;
             }

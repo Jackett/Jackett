@@ -43,6 +43,7 @@ namespace Jackett
 
             json["result"] = "error";
             json["error"] = msg;
+            json["stacktrace"] = exception.StackTrace;
 
             var response = actionExecutedContext.Request.CreateResponse();
             response.Content = new JsonContent(json);
