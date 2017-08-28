@@ -24,7 +24,7 @@
   search:
     path: "/recherche/{{ .Query.Keywords }}"
     rows:
-      selector: div.content-list-torrent > table tbody tr
+      selector: div.content-list-torrent > table tbody tr:has(a)
     fields:
       site_date:
         selector: td:nth-child(1) a
