@@ -275,11 +275,7 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 
 ### Prerequisites
 Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended).
- * Setup ssl support by running
-   ```
-   curl -o ~/Downloads/cacert.pem -O https://curl.haxx.se/ca/cacert.pem
-   cert-sync --user ~/Downloads/cacert.pem
-   ```
+ * Setup ssl support by running `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
@@ -307,15 +303,8 @@ Jackett is available as beta package from [SynoCommunity](https://synocommunity.
 
   If you're using mono this is often caused by missing ca-certificates.
   Try reimporting the certificates in this case:
-  
-   - On Linux:
-     `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
-  
-   - On macOS:
-     ```
-     curl -o ~/Downloads/cacert.pem -O https://curl.haxx.se/ca/cacert.pem
-     cert-sync --user ~/Downloads/cacert.pem
-     ```
+   - On Linux: `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
+   - On macOS: `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
   As a option of last resort you can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
 
