@@ -91,6 +91,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CinemaZ
  * Classix
  * CZTeam
+ * CzTorrent
  * DanishBits
  * DataScene
  * Deildu
