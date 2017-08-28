@@ -18,7 +18,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows using .NET 4.5
-* Linux and OSX using Mono 4 (mono 3 is no longer supported).
+* Linux and macOS using Mono 4 (mono 3 is no longer supported).
 
 ### Supported Public Trackers
  * Anidex
@@ -275,11 +275,7 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 
 ### Prerequisites
 Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended).
- * Setup ssl support by running
-   ```
-   https://curl.haxx.se/ca/cacert.pem
-   cert-sync --user ~/Downloads/cacert.pem
-   ```
+ * Setup ssl support by running `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
@@ -307,16 +303,16 @@ Jackett is available as beta package from [SynoCommunity](https://synocommunity.
 
   If you're using mono this is often caused by missing ca-certificates.
   Try reimporting the certificates in this case:
-
-  `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
+   - On Linux: `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
+   - On macOS: `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
   As a option of last resort you can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
 
 *  __Enable logging__
 
-  You can get additional logging with the command line switches `-t -l` or by enabeling `Enhanced logging` via the web interface.
+  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface.
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
-  The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/OSX.
+  The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
 
 ## Creating an issue
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
