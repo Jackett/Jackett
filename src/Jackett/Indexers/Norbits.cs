@@ -50,7 +50,6 @@ namespace Jackett.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "https://norbits.net/download.php?id=",
                 configData: new ConfigurationDataNorbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
