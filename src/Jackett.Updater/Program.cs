@@ -190,6 +190,7 @@ namespace Jackett.Updater
                 "Definitions/nachtwerk.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/qctorrent.yml",
+                "Definitions/dragonworld.yml",
             };
 
             foreach (var oldFIle in oldFiles)
