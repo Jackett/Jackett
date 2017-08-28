@@ -277,7 +277,7 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended).
  * Setup ssl support by running
    ```
-   https://curl.haxx.se/ca/cacert.pem
+   curl  -o ~/Downloads/cacert.pem -O https://curl.haxx.se/ca/cacert.pem
    cert-sync --user ~/Downloads/cacert.pem
    ```
 
