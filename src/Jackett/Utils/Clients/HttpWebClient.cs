@@ -196,6 +196,15 @@ namespace Jackett.Utils.Clients
                                 {
                                     result.RedirectingTo = response.Headers.Location.ToString();
                                 }
+                                // Mono won't add the baseurl to relative redirects.
+                                // e.g. a "Location: /index.php" header will result in the Uri "file:///index.php"
+                                // See issue #1200
+                                if (result.RedirectingTo != null && result.RedirectingTo.StartsWith("file://"))
+                                {
+                                    var newRedirectingTo = result.RedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
+                                    logger.Debug("[MONO relative redirect bug] Rewriting relative redirect URL from " + result.RedirectingTo + " to " + newRedirectingTo);
+                                    result.RedirectingTo = newRedirectingTo;
+                                }
                                 result.Status = response.StatusCode;
 
                                 // Compatiblity issue between the cookie format and httpclient

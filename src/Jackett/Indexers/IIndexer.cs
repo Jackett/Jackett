@@ -10,6 +10,18 @@ using System.Web.UI.WebControls;
 
 namespace Jackett.Indexers
 {
+    public class IndexerResult
+    {
+        public IIndexer Indexer { get; set; }
+        public IEnumerable<ReleaseInfo> Releases { get; set; }
+
+        public IndexerResult(IIndexer Indexer, IEnumerable<ReleaseInfo> Releases)
+        {
+            this.Indexer = Indexer;
+            this.Releases = Releases;
+        }
+    }
+
     public interface IIndexer
     {
         string SiteLink { get; }
@@ -39,7 +51,7 @@ namespace Jackett.Indexers
 
         void Unconfigure();
 
-        Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query);
+        Task<IndexerResult> ResultsForQuery(TorznabQuery query);
 
         bool CanHandleQuery(TorznabQuery query);
     }

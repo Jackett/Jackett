@@ -219,23 +219,30 @@ namespace Jackett.Indexers
 
         public abstract Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);
 
-        public virtual async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        public virtual async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
-            if (!CanHandleQuery(query))
-                return new ReleaseInfo[0];
-            var results = await PerformQuery(query);
-            results = FilterResults(query, results);
-            results = results.Select(r =>
+            try
             {
-                r.Origin = this;
+                if (!CanHandleQuery(query))
+                    return new IndexerResult(this, new ReleaseInfo[0]);
+                var results = await PerformQuery(query);
+                results = FilterResults(query, results);
+                results = results.Select(r =>
+                {
+                    r.Origin = this;
 
-                // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
-                if (r.PublishDate > DateTime.Now)
-                    r.PublishDate = DateTime.Now;
-                return r;
-            });
+                    // Some trackers do not keep their clocks up to date and can be ~20 minutes out!
+                    if (r.PublishDate > DateTime.Now)
+                        r.PublishDate = DateTime.Now;
+                    return r;
+                });
 
-            return results;
+                return new IndexerResult(this, results);
+            }
+            catch (Exception ex)
+            {
+                throw new IndexerException(this, ex);
+            }
         }
         protected abstract Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
     }
@@ -667,12 +674,12 @@ namespace Jackett.Indexers
             return releases;
         }
 
-        public override async Task<IEnumerable<ReleaseInfo>> ResultsForQuery(TorznabQuery query)
+        public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query)
         {
-            var results = await base.ResultsForQuery(query);
-            results = CleanLinks(results);
+            var result = await base.ResultsForQuery(query);
+            result.Releases = CleanLinks(result.Releases);
 
-            return results;
+            return result;
         }
 
         protected virtual Uri UncleanLink(Uri link)

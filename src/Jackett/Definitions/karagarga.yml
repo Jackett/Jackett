@@ -30,9 +30,6 @@
     test:
       path: index.php
 
-  download:
-    selector: a[href^="download.php?id="]
-        
   search:
     path: browse.php
     inputs:
@@ -47,11 +44,8 @@
       title:
         selector: td:nth-child(2) span
       download:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="down.php"]
         attribute: href
-        filters:
-          - name: replace
-            args: ["details.php?id=", "download.php?id="]
       details:
         selector: a[href^="details.php?id="]
         attribute: href
