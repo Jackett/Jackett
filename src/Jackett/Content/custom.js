@@ -42,12 +42,9 @@ $(document).ready(function () {
 });
 
 function openSearchIfNecessary() {
-    var parser = document.createElement('a');
-    parser.href = window.location.href;
-
-    if (parser.hash.startsWith("#search")) {
-        var query = parser.hash.split('=')[1];
-        showSearch(null, query);
+    const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) => Object.assign({ [item.split('=')[0]]: (item.split('=').length < 2 ? undefined : decodeURIComponent(item.split('=')[1])) }, prev), {});
+    if ("search" in hashArgs) {
+        showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
 }
 
@@ -371,6 +368,7 @@ function prepareSearchButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function() {
+            window.location.hash = "search&tracker=" +  id;
             showSearch(id);
         });
     });
@@ -725,7 +723,7 @@ function updateReleasesRow(row)
     }
 }
 
-function showSearch(selectedIndexer, query) {
+function showSearch(selectedIndexer, query, category) {
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
@@ -788,7 +786,7 @@ function showSearch(selectedIndexer, query) {
             Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
         };
 
-        window.location.hash = "search=" + searchString;
+        window.location.hash = $.param({ search: queryObj.Query, tracker: queryObj.Tracker, category: queryObj.Category});
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
@@ -824,8 +822,12 @@ function showSearch(selectedIndexer, query) {
     clearSearchResultTable($('#searchResults'));
     releaseDialog.modal("show");
 
+    if (category !== undefined) {
+        $('#searchCategory').val(category);
+    }
+
     if (query !== undefined) {
-        queryField.value = decodeURIComponent(query);
+        queryField.value = query;
         searchButton.click();
     }
 }
