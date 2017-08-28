@@ -28,7 +28,7 @@
   search:
     path: /torrents/search/?search={{ .Keywords}}
     rows:
-      selector: tr.isItemDesk
+      selector: tr.isItem.isItemDesk
     fields:
      category:
         selector: td.m-cat > a
