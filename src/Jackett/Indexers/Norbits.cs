@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System.Text;
+using System.IO;
 
 namespace Jackett.Indexers
 {
@@ -33,7 +34,7 @@ namespace Jackett.Indexers
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
-        private static string Directory => System.IO.Path.GetTempPath() + "Jackett\\" + MethodBase.GetCurrentMethod().DeclaringType?.Name + "\\";
+        private static string Directory => Path.Combine(Path.GetTempPath(), "Jackett", MethodBase.GetCurrentMethod().DeclaringType?.Name);
 
         private readonly Dictionary<string, string> _emulatedBrowserHeaders = new Dictionary<string, string>();
         private CQ _fDom;
