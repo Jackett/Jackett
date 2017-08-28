@@ -1,0 +1,122 @@
+﻿---
+  site: speedtorrentreloaded
+  name: SpeedTorrent Reloaded
+  language: de-de
+  type: private
+  encoding: UTF-8
+  links:
+    - https://speedtorrent-tracker.mine.nu/
+
+  caps:
+    categorymappings:
+      - {id: 201, cat: Movies/HD, desc: "Filme: HD 720P / 1080P"}
+      - {id: 103, cat: Movies/DVD, desc: "Filme: DVD"}
+      - {id: 104, cat: Movies/DVD, desc: "Filme: HD2DVD"}
+      - {id: 137, cat: Audio/Video, desc: "Musik: Video"}
+      - {id: 106, cat: Movies/SD, desc: "Filme: DVDRip"}
+      - {id: 107, cat: Movies/SD, desc: "Filme: BDRip "}
+      - {id: 108, cat: Movies/3D, desc: "Filme: 3D"}
+      - {id: 109, cat: Movies/BluRay, desc: "Filme: Blue Ray"}
+      - {id: 111, cat: Movies/SD, desc: "Filme:  SD"}
+      - {id: 112, cat: Movies/Other, desc: "Filme: TV/HDTV"}
+      - {id: 203, cat: XXX, desc: "Erotik: XXX PDF"}
+      - {id: 116, cat: Console, desc: "Spiele: Konsolen"}
+      - {id: 117, cat: PC/Games, desc: "Spiele: Windows / Mac"}
+      - {id: 126, cat: PC/0day, desc: "Software: Mac / Linux"}
+      - {id: 120, cat: Audio/Other, desc: "Musik: Alben/Sampler "}
+      - {id: 121, cat: TV/SD, desc: "Serien: SD"}
+      - {id: 123, cat: TV/Documentary, desc: "Doku: sonstige"}
+      - {id: 124, cat: Console/Other, desc: "Spiele: sonstige"}
+      - {id: 125, cat: PC/0day, desc: "Software: Windows"}
+      - {id: 129, cat: PC/Phone-Other, desc: "Software: Handy / Navi / Sonst"}
+      - {id: 131, cat: TV/HD, desc: "Serien: HD"}
+      - {id: 132, cat: TV, desc: "Serien: Packs"}
+      - {id: 135, cat: Audio, desc: "Musik: Discographie"}
+      - {id: 138, cat: TV/Documentary, desc: "Doku: HD"}
+      - {id: 139, cat: TV/Documentary, desc: "Doku: x264"}
+      - {id: 141, cat: Audio/Audiobook, desc: "A/Ebook: Hoerbook"}
+      - {id: 142, cat: Books, desc: "A/Ebook: EBooks"}
+      - {id: 143, cat: Books, desc: "sonstige:PDF"}
+      - {id: 144, cat: XXX, desc: "Erotik: XXX Pics"}
+      - {id: 202, cat: TV/Sport, desc: "Sport"}
+      - {id: 204, cat: XXX, desc: "XXX-Games"}
+      - {id: 205, cat: Movies/SD, desc: "International-SD"}
+      - {id: 206, cat: movies/HD, desc: "International-HD"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      orderby: "added"
+      sort: desc
+    rows:
+      selector: table.tableinborder > tbody > tr > td > table.tableinborder > tbody > tr:has(a[href^="details.php"])
+    fields:
+      title:
+        selector: a[href^="details.php"]
+      banner:
+        selector: a[href^="details.php"][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "<img src=(.*)>')"
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php"]
+        attribute: href
+      comments:
+        selector: a[href*="&tocomm="]
+        attribute: href
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+      grabs:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1)
+      size:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      seeders:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+      leechers:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+      date:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5)
+        filters:
+          - name: append
+            args: " +2:00"
+          - name: dateparse
+            args: "02.01.2006 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          img[title="OnlyUp"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

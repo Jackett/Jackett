@@ -188,6 +188,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shazbat
  * Shellife
  * SpeedCD
+ * SpeedTorrent Reloaded
  * SportsCult
  * SportHD
  * Superbits
