@@ -97,6 +97,7 @@ namespace Jackett.Models
                                                   || c == '\''
                                                   || c == '['
                                                   || c == ']'
+                                                  || c == '+'
                                       )).AsString();
                 return safetitle;
             }
