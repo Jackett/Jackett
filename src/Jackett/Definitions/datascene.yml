@@ -67,7 +67,7 @@
       search: "{{ .Query.Keywords }}"
       incldead: 1
     rows:
-      selector: tr:has(a.tname)
+      selector: div.ncls > table > tbody > tr:has(a.tname)
     fields:
       title-attribute:
         selector: a.tname
@@ -86,7 +86,7 @@
           - name: querystring
             args: cat
       download:
-        selector: a[href^="/download.php/"]
+        selector: a[href^="/download.php/"], a[href^="/downloadd.php/"] # some releases use a download link with two d's
         attribute: href
       grabs:
         selector: td:nth-child(8)
@@ -97,10 +97,9 @@
         selector: td:nth-child(7)
       date:
         selector: td:nth-child(2) > right > div:has(font:contains("Uploaded"))
-        remove: div > font
         filters:
-          - name: trim
-            args: ":"
+          - name: replace
+            args: ["Uploaded: ", ""]
       seeders:
         selector: td:nth-child(9)
       leechers:
