@@ -39,6 +39,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * ShowRSS
  * Sky torrents
+ * T411 v2
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
@@ -224,7 +225,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Trezzor
  * TV Chaos UK
  * TV-Vault
- * T411 v2
  * u-Torrent
  * UHDBits
  * Ultimate Gamer Club
