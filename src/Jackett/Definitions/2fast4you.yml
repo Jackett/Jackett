@@ -112,6 +112,9 @@
             args: ["torrents-details.php", "download.php"]
       title:
         selector: a[href^="torrents-details.php?id="]
+        filters:
+          - name: replace
+            args: [" -​ (Nouveau!)", ""]
       category:
         selector: a[href^="torrents.php?cat="]
         attribute: href
