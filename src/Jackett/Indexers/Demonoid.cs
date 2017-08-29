@@ -106,7 +106,7 @@ namespace Jackett.Indexers
                     {
                         // ex: "Monday, Jun 01, 2015", "Monday, Aug 03, 2015"
                         var dateStr = rowA.Cq().Text().Trim().Replace("Added on ", "");
-                        if (string.IsNullOrWhiteSpace(dateStr) || dateStr == "Sponsored links") // ignore ads
+                        if (string.IsNullOrWhiteSpace(dateStr) || dateStr == "Sponsored links" || dateStr.StartsWith("!function")) // ignore ads
                         { 
                             continue;
                         }
