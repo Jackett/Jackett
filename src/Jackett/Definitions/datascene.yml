@@ -116,7 +116,7 @@
         attribute: href
       downloadvolumefactor:
         case:
-          "img[src=\"pic/free.gif\"]": "0"
+          "img[src=\"pic/free.png\"]": "0"
           "*": "1"
       uploadvolumefactor:
         case:
