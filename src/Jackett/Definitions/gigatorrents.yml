@@ -70,6 +70,8 @@
       blah: "0"
     rows:
       selector: table#torrenttable > tbody > tr:has()
+    error:
+      - selector: div.content:contains("Meg van vonva a letöltési jogod")
     fields:
       download:
         selector: a[href^="/details.php?id="]
