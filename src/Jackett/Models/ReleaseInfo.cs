@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Indexers;
+using Newtonsoft.Json;
 
 namespace Jackett.Models
 {
@@ -32,6 +33,7 @@ namespace Jackett.Models
         public long? MinimumSeedTime { get; set; }
         public double? DownloadVolumeFactor { get; set; }
         public double? UploadVolumeFactor { get; set; }
+        [JsonIgnore] // don't export the Origin to the manul search API, otherwise each result line contains a full recursive indexer JSON structure
         public IIndexer Origin;
 
         public double? Gain
