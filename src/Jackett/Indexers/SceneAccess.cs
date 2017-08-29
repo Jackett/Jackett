@@ -157,7 +157,7 @@ namespace Jackett.Indexers
                     var grabs = qRow.Find("td.ttr_snatched").Get(0).FirstChild.ToString();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = 1;
+                    release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
