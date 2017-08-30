@@ -78,6 +78,8 @@ namespace Jackett.Indexers
             if (Definition.Links.Count > 1)
                 AlternativeSiteLinks = Definition.Links.ToArray();
             DefaultSiteLink = Definition.Links[0];
+            if (Definition.Legacylinks != null)
+                LegacySiteLinks = Definition.Legacylinks.ToArray();
             Encoding = Encoding.GetEncoding(Definition.Encoding);
             if (!DefaultSiteLink.EndsWith("/"))
                 DefaultSiteLink += "/";

@@ -24,6 +24,7 @@ namespace Jackett.Indexers
         }
 
         public string SiteLink { get; protected set; }
+        public string[] LegacySiteLinks { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
         public string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
         public string DisplayDescription { get; protected set; }
@@ -134,8 +135,16 @@ namespace Jackett.Indexers
             {
                 configData.SiteLink.Value = DefaultSiteLink;
             }
+
             if (!configData.SiteLink.Value.EndsWith("/", StringComparison.Ordinal))
                 configData.SiteLink.Value += "/";
+
+            // reset site link to default if it's a legacy (defunc link)
+            if (LegacySiteLinks != null && LegacySiteLinks.Contains(configData.SiteLink.Value))
+            {
+                logger.Debug(string.Format("changing legacy site link from {0} to {1}", configData.SiteLink.Value, DefaultSiteLink));
+                configData.SiteLink.Value = DefaultSiteLink;
+            }
 
             // check whether the site link is well-formatted
             var siteUri = new Uri(configData.SiteLink.Value);

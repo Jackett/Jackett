@@ -67,6 +67,7 @@ namespace Jackett.Models
         public string Language { get; set; }
         public string Encoding { get; set; }
         public List<string> Links { get; set; }
+        public List<string> Legacylinks { get; set; }
         public List<string> Certificates { get; set; }
         public capabilitiesBlock Caps { get; set; }
         public loginBlock Login { get; set; }
