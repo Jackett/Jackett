@@ -23,9 +23,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Public Trackers
  * Anidex
  * Anime Tosho
+ * AniRena
  * cpasbien
  * EZTV
- * Gay-Torrents.net
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
@@ -45,14 +45,27 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tokyo Toshokan
  * Torlock
  * Torrent Downloads
+ * Torrent9
  * TorrentProject
  * Torrentz2
+ * YTS.ag
  * zetorrents
+ 
+### Supported Semi-Private Trackers
+ * 7tor
+ * CzTorrent
+ * Deildu
+ * Gay-Torrents.net
+ * NetHD
+ * RuTracker
+ * TorrentBytes
+ * Xtreme Zone
+ * YggTorrent
+ * Ztracker
 
 ### Supported Private Trackers
  * 2 Fast 4 You
  * 3D Torrents
- * 7tor
  * Abnormal
  * Acid-Lounge
  * AlphaRatio
@@ -79,6 +92,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitMeTV
  * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
+ * BJ-Share
  * Blu-bits
  * BlueBird
  * Blutopia
@@ -86,21 +100,21 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BrokenStones
  * BTNext
  * Carpathians
+ * CGPeers
  * CHDBits
  * Cinematik
  * Cinemageddon
  * CinemaZ
  * Classix
  * CZTeam
- * CzTorrent
  * DanishBits
  * DataScene
- * Deildu
  * Demonoid
  * Diablo Torrent
  * DigitalHive
  * Dragonworld Reloaded
  * Dream Team
+ * Elite-Tracker
  * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
@@ -112,6 +126,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunkyTorrents
  * Fuzer
  * GayTorrent.ru
+ * GFTracker
  * GFXPeers
  * Ghost City
  * GigaTorrents  [![(invite needed)][inviteneeded]](#)
@@ -121,6 +136,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Greek Team
  * Hardbay
  * HD-Forever
+ * HD-Only
  * HD-Space
  * HD-Torrents
  * HD-Bits.com
@@ -129,6 +145,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDChina
  * HDClub
  * HDHome
+ * HDME
  * HDSky
  * HDTorrents.it
  * Hebits
@@ -159,9 +176,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MySpleen
  * NCore
  * Nebulance
- * NetHD
  * New Real World
- * NextGen
  * Norbits  [![(invite needed)][inviteneeded]](#) <!-- added by DiseaseNO but no longer maintained? -->
  * notwhat.cd
  * Ourbits
@@ -179,7 +194,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RevolutionTT
  * Rockhard Lossless
  * RoDVD
- * RuTracker
  * SceneAccess
  * SceneFZ
  * SceneTime
@@ -209,17 +223,17 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
- * Torrent9
  * TorrentBD
- * TorrentBytes
  * TorrentCCF  [![(invite needed)][inviteneeded]](#)
  * TorrentDay
+ * Torrentech
  * TorrentHeaven
  * TorrentHR
  * Torrenting
  * TorrentLeech
  * Torrents.Md
  * Torrent-Syndikat
+ * TorViet
  * ToTheGlory
  * TranceTraffic
  * Trezzor
@@ -235,11 +249,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * x264
  * XSpeeds
  * Xthor
- * Xtreme Zone
- * YggTorrent
  * Zamunda.net
  * Zelka.org
- * Ztracker
 
 Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
 
