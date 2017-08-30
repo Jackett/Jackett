@@ -69,6 +69,13 @@ namespace Jackett.Controllers.V20
             bool preRelease = config.prerelease;
             bool logging = config.logging;
             string basePathOverride = config.basepathoverride;
+            if (basePathOverride != null)
+            {
+                basePathOverride = basePathOverride.TrimEnd('/');
+                if (!string.IsNullOrWhiteSpace(basePathOverride) && !basePathOverride.StartsWith("/"))
+                    throw new Exception("The Base Path Override must start with a /");
+            }
+
             string omdbApiKey = config.omdbkey;
 
             Engine.Server.Config.UpdateDisabled = updateDisabled;
