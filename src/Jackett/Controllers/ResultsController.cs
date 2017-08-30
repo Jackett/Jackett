@@ -231,7 +231,7 @@ namespace Jackett.Controllers.V20
 
             ConfigureCacheResults(manualResult.Results);
 
-            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", CurrentQuery.SanitizedSearchTerm, string.Join(", ", manualResult.Indexers), manualResult.Results.Count()));
+            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", CurrentQuery.SanitizedSearchTerm, string.Join(", ", manualResult.Indexers.Select(i => i.ID)), manualResult.Results.Count()));
             return manualResult;
         }
 
