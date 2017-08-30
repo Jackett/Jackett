@@ -1111,17 +1111,17 @@ function bindUIButtons() {
             omdbkey: jackett_omdb_key
         };
         api.updateServerConfig(jsonObject, function (data) {
-            if (data !== undefined && data.result == "error") {
-                doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+            doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
+            window.setTimeout(function () {
+                window.location.reload(true);
+            }, 3000);
+        }).fail(function (data) {
+            if (data.responseJSON !== undefined && data.responseJSON.result == "error") {
+                doNotify("Error: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
                 return;
             } else {
-                doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
-                window.setTimeout(function () {
-                    window.location.reload(true);
-                }, 3000);
+                doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
             }
-        }).fail(function () {
-            doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
 
