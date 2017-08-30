@@ -724,6 +724,9 @@ function updateReleasesRow(row)
 }
 
 function showSearch(selectedIndexer, query, category) {
+    var selectedIndexers = []
+    if (selectedIndexer)
+        selectedIndexers = selectedIndexer.split(",");
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
@@ -741,28 +744,30 @@ function showSearch(selectedIndexer, query, category) {
         window.location.hash = '';
     }) ;
 
-    var setCategories = function (tracker, items) {
+    var setCategories = function (trackers, items) {
         var cats = {};
         for (var i = 0; i < items.length; i++) {
-            if (items[i].configured === true && (items[i].id === tracker || tracker === '')) {
-                indexers["'" + items[i].id + "'"] = items[i].name;
-                for (var prop in items[i].caps) {
-                    if (prop < 100000 || tracker)
-                        cats[prop] = items[i].caps[prop];
+            if (trackers.length == 0 || $.inArray(items[i].id, trackers) !== -1) {
+                for (var j in items[i].caps) {
+                    var cat = items[i].caps[j]
+                    if (cat.ID < 100000 || trackers.length == 1)
+                        cats[cat.ID] = cat.Name;
                 }
             }
         }
         var select = $('#searchCategory');
-        select.html("<option value=''>-- All --</option>");
-        $.each(cats, function (index, value) {
-            select.append($("<option></option>")
-                .attr("value", value["ID"]).text(value["ID"] + ' (' + value["Name"] + ')'));
+        var selected = select.val();
+        var options = []
+        $.each(cats, function (ID, Name) {
+            options.push({ label: ID + ' (' + Name + ')', value: ID });
         });
+        select.multiselect('dataprovider', options);
+        select.val(selected).multiselect("refresh");
     };
 
     $('#searchTracker').change(jQuery.proxy(function () {
-        var trackerId = $('#searchTracker').val();
-        setCategories(trackerId, this.items);
+        var trackerIds = $('#searchTracker').val();
+        setCategories(trackerIds, this.items);
     }, { items: configuredIndexers }));
 
     var queryField = document.getElementById("searchquery");
@@ -783,18 +788,16 @@ function showSearch(selectedIndexer, query, category) {
         var queryObj = {
             Query: searchString,
             Category: releaseDialog.find('#searchCategory').val(),
-            Tracker: releaseDialog.find('#searchTracker').val().replace("'", "").replace("'", ""),
+            Tracker: releaseDialog.find('#searchTracker').val()
         };
 
-        window.location.hash = $.param({ search: queryObj.Query, tracker: queryObj.Tracker, category: queryObj.Category});
+        window.location.hash = $.param({ search: queryObj.Query, tracker: queryObj.Tracker.join(","), category: queryObj.Category.join(",") });
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
 
-        var trackerId = queryObj.Tracker;
-        if (trackerId == null || trackerId == "")
-            trackerId = "all";
+        var trackerId = "all";
         api.resultsForIndexer(trackerId, queryObj, function (data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
@@ -814,18 +817,36 @@ function showSearch(selectedIndexer, query, category) {
     });
 
     var searchTracker = releaseDialog.find("#searchTracker");
-    if (selectedIndexer)
-        searchTracker.val(selectedIndexer);
+    var searchCategory = releaseDialog.find('#searchCategory')
+    searchCategory.multiselect({
+        maxHeight: 400,
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        enableCaseInsensitiveFiltering: true,
+        nonSelectedText: 'Any'
+    });
+    if (selectedIndexers)
+        searchTracker.val(selectedIndexers);
     searchTracker.trigger("change");
 
     updateSearchResultTable($('#searchResults'), []);
     clearSearchResultTable($('#searchResults'));
-    releaseDialog.modal("show");
+
+    searchTracker.multiselect({
+        maxHeight: 400,
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        enableCaseInsensitiveFiltering: true,
+        nonSelectedText: 'All'
+    });
+    
 
     if (category !== undefined) {
-        $('#searchCategory').val(category);
+        searchCategory.val(category.split(","));
+        searchCategory.multiselect("refresh");
     }
 
+    releaseDialog.modal("show");
     if (query !== undefined) {
         queryField.value = query;
         searchButton.click();

@@ -6,7 +6,8 @@ namespace Jackett.Models.DTO
     public class ApiSearch
     {
         public string Query { get; set; }
-        public int Category { get; set; }
+        public int[] Category { get; set; }
+        public string[] Tracker { get; set; }
 
         public static TorznabQuery ToTorznabQuery(ApiSearch request)
         {
@@ -37,7 +38,9 @@ namespace Jackett.Models.DTO
             }
 
             stringQuery.SearchTerm = queryStr;
-            stringQuery.Categories = request.Category == 0 ? new int[0] : new int[1] { request.Category };
+            stringQuery.Categories = request.Category;
+            if (stringQuery.Categories == null)
+                stringQuery.Categories = new int[0];
             stringQuery.ExpandCatsToSubCats();
 
             // try to build an IMDB Query

@@ -28,9 +28,8 @@ namespace Jackett.Controllers.V20
         public override void OnAuthorization(HttpActionContext actionContext)
         {
             var validApiKey = Engine.Server.Config.APIKey;
-            var queryParams = actionContext.Request.GetQueryNameValuePairs().ToDictionary();
-            var queryApiKey = queryParams.ContainsKey("apikey") ? queryParams["apikey"] : null;
-            queryApiKey = queryParams.ContainsKey("passkey") ? queryParams["passkey"] : queryApiKey;
+            var queryParams = actionContext.Request.GetQueryNameValuePairs();
+            var queryApiKey = queryParams.Where(x => x.Key == "apikey" || x.Key == "passkey").Select(x => x.Value).FirstOrDefault();
 
 #if DEBUG
             if (Debugger.IsAttached)
@@ -112,6 +111,9 @@ namespace Jackett.Controllers.V20
             var torznabQuery = converted as TorznabQuery;
             resultController.CurrentQuery = torznabQuery;
 
+            if (queryType == typeof(ApiSearch)) // Skip CanHandleQuery() check for manual search (CurrentIndexer isn't used during manul search)
+                return;
+
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
                 actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"{resultController.CurrentIndexer.ID} does not support the requested query.");
         }
@@ -157,8 +159,8 @@ namespace Jackett.Controllers.V20
         {
             var manualResult = new ManualSearchResult();
             var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured);
-            if (CurrentIndexer.ID != "all")
-                trackers = trackers.Where(t => t.ID == CurrentIndexer.ID).ToList();
+            if (request.Tracker != null)
+                trackers = trackers.Where(t => request.Tracker.Contains(t.ID));
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
             var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
