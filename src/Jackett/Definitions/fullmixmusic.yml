@@ -5,6 +5,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://fullmixmusic.org/
+  legacylinks:
     - http://fullmixmusic.org/
 
   caps:
