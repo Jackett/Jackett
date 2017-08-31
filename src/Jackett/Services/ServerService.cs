@@ -276,6 +276,20 @@ namespace Jackett.Services
                 logger.Error("Error while getting environment details: " + e);
             }
 
+            try
+            {
+                if (Environment.UserName == "root")
+                { 
+                    var notice = "Jackett is running with root privileges. You should run Jackett as an unprivileged user.";
+                    _notices.Add(notice);
+                    logger.Error(notice);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Error while checking the username");
+            }
+
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
