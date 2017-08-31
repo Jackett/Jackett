@@ -215,12 +215,13 @@
     </script>
     <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
         <div class="setup-item-alternativesitelinks alert alert-info" role="alert">
-            This indexer has multiple known URLs which you can change above:
+            This indexer has multiple known URLs:
             <ul>
                 {{#each alternativesitelinks}}
-                <li>{{this}}</li>
+                <li><a target="_blank" href="{{this}}" class="alternativesitelink">{{this}}</a></li>
                 {{/each}}
             </ul>
+            Click on an URL to copy it to the Site Link field.
         </div>
     </script>
 

@@ -549,6 +549,10 @@ function newConfigModal(title, config, caps, link, alternativesitelinks) {
         var AlternativeSiteLinksTemplate = Handlebars.compile($("#setup-item-alternativesitelinks").html());
         var template = $(AlternativeSiteLinksTemplate({ "alternativesitelinks": alternativesitelinks }));
         configForm.find("div[data-id='sitelink']").after(template);
+        template.find("a.alternativesitelink").click(function (a) {
+            $("div[data-id='sitelink'] input").val(this.href);
+            return false;
+        });
     }
 
     return configForm;
