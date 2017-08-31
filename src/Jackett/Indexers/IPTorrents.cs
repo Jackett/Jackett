@@ -30,12 +30,12 @@ namespace Jackett.Indexers
             "https://iptorrents.eu/",
             "https://nemo.iptorrents.com/",
             "https://ipt.rocks/",
-            "http://ipt.read-books.org",
-            "http://alien.eating-organic.net",
-            "http://kong.net-freaks.com",
-            "http://ghost.cable-modem.org",
-            "http://logan.unusualperson.com",
-            "http://baywatch.workisboring.com",
+            "http://ipt.read-books.org/",
+            "http://alien.eating-organic.net/",
+            "http://kong.net-freaks.com/",
+            "http://ghost.cable-modem.org/",
+            "http://logan.unusualperson.com/",
+            "http://baywatch.workisboring.com/",
         };
 
         new ConfigurationDataRecaptchaLogin configData
