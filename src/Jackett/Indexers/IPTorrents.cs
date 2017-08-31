@@ -24,7 +24,19 @@ namespace Jackett.Indexers
         string LoginUrl { get { return SiteLink + "login.php"; } }
         string TakeLoginUrl { get { return SiteLink + "take_login.php"; } }
         private string BrowseUrl { get { return SiteLink + "t"; } }
-        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://ipt-update.com/", "https://iptorrents.com/", "https://iptorrents.eu/", "https://nemo.iptorrents.com/", "https://ipt.rocks/" };
+        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+            "https://iptorrents.com/",
+            "https://ipt-update.com/",
+            "https://iptorrents.eu/",
+            "https://nemo.iptorrents.com/",
+            "https://ipt.rocks/",
+            "http://ipt.read-books.org",
+            "http://alien.eating-organic.net",
+            "http://kong.net-freaks.com",
+            "http://ghost.cable-modem.org",
+            "http://logan.unusualperson.com",
+            "http://baywatch.workisboring.com",
+        };
 
         new ConfigurationDataRecaptchaLogin configData
         {
