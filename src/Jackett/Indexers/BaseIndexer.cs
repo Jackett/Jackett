@@ -26,7 +26,7 @@ namespace Jackett.Indexers
         public string SiteLink { get; protected set; }
         public string[] LegacySiteLinks { get; protected set; }
         public string DefaultSiteLink { get; protected set; }
-        public string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
+        public virtual string[] AlternativeSiteLinks { get; protected set; } = new string[] { };
         public string DisplayDescription { get; protected set; }
         public string DisplayName { get; protected set; }
         public string Language { get; protected set; }

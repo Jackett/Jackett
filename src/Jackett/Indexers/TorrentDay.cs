@@ -24,7 +24,7 @@ namespace Jackett.Indexers
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
             "https://torrentday.eu/",

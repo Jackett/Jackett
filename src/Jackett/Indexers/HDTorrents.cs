@@ -24,7 +24,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
-        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
+        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
 
         new ConfigurationDataBasicLogin configData
         {

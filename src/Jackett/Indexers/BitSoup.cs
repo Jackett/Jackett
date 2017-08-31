@@ -25,7 +25,7 @@ namespace Jackett.Indexers
         private string BrowseUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string LoginReferer { get { return SiteLink + "login.php"; } }
-        public new string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://www.bitsoup.me/", "https://www.bitsoup.org/" };
+        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://www.bitsoup.me/", "https://www.bitsoup.org/" };
 
         new ConfigurationDataBasicLogin configData
         {
