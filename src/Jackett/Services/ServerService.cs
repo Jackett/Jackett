@@ -31,7 +31,7 @@ namespace Jackett.Services
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
         string BasePath();
         string GetServerUrl(HttpRequestMessage Request);
-        List<string> notices { get; }  
+        List<string> notices { get; } 
     }
 
     public class ServerService : IServerService
@@ -366,7 +366,6 @@ namespace Jackett.Services
             if (X_Forwarded_Proto != null)
             {
                 scheme = X_Forwarded_Proto.First();
-
             }
             // Front-End-Https: Non-standard header field used by Microsoft applications and load-balancers
             else if (Request.Headers.Where(x => x.Key == "Front-End-Https" && x.Value.FirstOrDefault() == "on").Any())
