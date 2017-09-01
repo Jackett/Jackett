@@ -1641,6 +1641,11 @@ namespace Jackett.Indexers
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             results = await RequestStringWithCookies(searchUrl);
+            if (!results.Content.Contains("ucp.php?mode=logout"))
+            {
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookies(searchUrl);
+            }
             try
             {
                 string RowsSelector = "ul.topics > li";
