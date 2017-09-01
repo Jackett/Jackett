@@ -198,8 +198,11 @@ namespace Jackett.Indexers
 
                     var categoryCol = row.ChildElements.ElementAt(categoryIndex);
                     string catLink = categoryCol.Cq().Find("a").Attr("href");
-                    string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
-                    release.Category = MapTrackerCatToNewznab(catId);
+                    if(catLink != null)
+                    { 
+                        string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
+                        release.Category = MapTrackerCatToNewznab(catId);
+                    }
 
                     var descCol = row.ChildElements.ElementAt(nameIndex);
                     var qDescCol = descCol.Cq();
