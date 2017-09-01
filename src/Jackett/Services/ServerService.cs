@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -29,7 +30,8 @@ namespace Jackett.Services
         void SaveConfig();
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
         string BasePath();
-        List<string> notices { get; }
+        string GetServerUrl(HttpRequestMessage Request);
+        List<string> notices { get; }  
     }
 
     public class ServerService : IServerService
@@ -351,6 +353,33 @@ namespace Jackett.Services
             {
                 _server.Dispose();
             }
+        }
+
+        public string GetServerUrl(HttpRequestMessage Request)
+        {
+            var scheme = Request.RequestUri.Scheme;
+            var port = Request.RequestUri.Port;
+
+            // Check for protocol headers added by reverse proxys
+            // X-Forwarded-Proto: A de facto standard for identifying the originating protocol of an HTTP request
+            var X_Forwarded_Proto = Request.Headers.Where(x => x.Key == "X-Forwarded-Proto").Select(x => x.Value).FirstOrDefault();
+            if (X_Forwarded_Proto != null)
+            {
+                scheme = X_Forwarded_Proto.First();
+
+            }
+            // Front-End-Https: Non-standard header field used by Microsoft applications and load-balancers
+            else if (Request.Headers.Where(x => x.Key == "Front-End-Https" && x.Value.FirstOrDefault() == "on").Any())
+            {
+                scheme = "https";
+            }
+
+            // default to 443 if the Host header doesn't contain the port (needed for reverse proxy setups)
+            if (scheme == "https" && !Request.RequestUri.Host.Contains(":"))
+                port = 443;
+
+            var serverUrl = string.Format("{0}://{1}:{2}{3}", scheme, Request.RequestUri.Host, port, BasePath());
+            return serverUrl;
         }
     }
 }

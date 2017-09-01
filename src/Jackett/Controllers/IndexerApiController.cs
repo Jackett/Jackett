@@ -154,7 +154,7 @@ namespace Jackett.Controllers.V20
 
         private void ConfigureCacheResults(IEnumerable<TrackerCacheResult> results)
         {
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
+            var serverUrl = serverService.GetServerUrl(Request);
             foreach (var result in results)
             {
                 var link = result.Link;

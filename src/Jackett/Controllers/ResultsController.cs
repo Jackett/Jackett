@@ -306,7 +306,7 @@ namespace Jackett.Controllers.V20
 
             logger.Info(logBuilder.ToString());
 
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
+            var serverUrl = serverService.GetServerUrl(Request);
             var resultPage = new ResultPage(new ChannelInfo
             {
                 Title = CurrentIndexer.DisplayName,
@@ -368,7 +368,7 @@ namespace Jackett.Controllers.V20
             else
                 logger.Info($"Found {result.Releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {CurrentQuery.GetQueryString()}");
 
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
+            var serverUrl = serverService.GetServerUrl(Request);
             var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
@@ -400,7 +400,7 @@ namespace Jackett.Controllers.V20
 
         private void ConfigureCacheResults(IEnumerable<TrackerCacheResult> results)
         {
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", Request.RequestUri.Scheme, Request.RequestUri.Host, Request.RequestUri.Port, serverService.BasePath());
+            var serverUrl = serverService.GetServerUrl(Request);
             foreach (var result in results)
             {
                 var link = result.Link;
