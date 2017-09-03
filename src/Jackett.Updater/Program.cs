@@ -191,6 +191,7 @@ namespace Jackett.Updater
                 "Definitions/leparadisdunet.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/dragonworld.yml",
+                "Definitions/hdclub.yml",
             };
 
             foreach (var oldFIle in oldFiles)

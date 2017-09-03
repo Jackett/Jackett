@@ -144,7 +144,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD4Free
  * HDBits
  * HDChina
- * HDClub
  * HDHome
  * HDME
  * HDSky
