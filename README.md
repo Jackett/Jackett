@@ -77,6 +77,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ArabaFenice
  * Arche Torrent
  * AsianDVDClub
+ * AST4u
  * Audiobook Torrents
  * Awesome-HD
  * Avistaz
