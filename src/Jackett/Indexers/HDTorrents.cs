@@ -162,18 +162,18 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
 
 
-
+                    // Sometimes the uploader column is missing
                     int seeders, peers;
-                    if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(9).FirstChild.FirstChild.InnerText, out seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-last-child(3)").Text(), out seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td").Get(10).FirstChild.FirstChild.InnerText, out peers))
+                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-last-child(2)").Text(), out peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(12)").Text());
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-last-child(1)").Text());
 
                     string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
