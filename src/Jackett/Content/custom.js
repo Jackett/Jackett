@@ -109,7 +109,7 @@ function reloadIndexers() {
                 item.state = "error";
             else
                 item.state = "success";
-                       
+
             if (item.type == "public") {
                 item.type_label = "success";
             }
@@ -122,7 +122,7 @@ function reloadIndexers() {
             else {
                 item.type_label = "default";
             }
-                       
+
             var main_cats_list = item.caps.filter(function(c) {
                 return c.ID < 100000;
             }).map(function(c) {
