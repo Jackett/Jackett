@@ -312,14 +312,12 @@ Jackett is available as beta package from [SynoCommunity](https://synocommunity.
 
   You can pass various options when running via the command line, see --help for details.
 
-* __Unable to  connect to trackers with invalid SSL certificates__
+* __Error "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel."__
 
-  If you're using mono this is often caused by missing ca-certificates.
+  This is often caused by missing CA certificates.
   Try reimporting the certificates in this case:
-   - On Linux: `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
+   - On Linux (as user root): `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
    - On macOS: `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
-
-  As a option of last resort you can disable certificate validation using the `--IgnoreSslErrors true` option but it's not recommended to use it as it enables Man-in-the-middle attacks on your connections.
 
 *  __Enable logging__
 
