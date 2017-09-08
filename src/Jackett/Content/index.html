@@ -236,7 +236,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{torznab_host}}" title="{{torznab_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy Torznab Feed</a>
@@ -287,7 +287,7 @@
                     <tr class="unconfigured-indexer-row">
                         <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
                         <td>{{mains_cats}}</td>
-                        <td class="fit"><span title="{{type}}" class="type-{{type}}">{{type_icon_content}}</span></td>
+                        <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
                         <td>{{type}}</td>
                         <td class="fit">{{language}}</td>
                         <td class="fit">
@@ -622,6 +622,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2017083001"></script>
+    <script type="text/javascript" src="../custom.js?changed=2017090501"></script>
 </body>
 </html>

@@ -111,16 +111,16 @@ function reloadIndexers() {
                 item.state = "success";
 
             if (item.type == "public") {
-                item.type_icon_content = "🔓\uFE0E";
+                item.type_label = "success";
             }
             else if (item.type == "private") {
-                item.type_icon_content = "🔐\uFE0E";
+                item.type_label = "danger";
             }
             else if (item.type == "semi-private") {
-                item.type_icon_content = "🔒\uFE0E";
+                item.type_label = "warning";
             }
             else {
-                item.type_icon_content = "";
+                item.type_label = "default";
             }
 
             var main_cats_list = item.caps.filter(function(c) {
