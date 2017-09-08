@@ -72,8 +72,10 @@ namespace Jackett.Indexers
             AddCategoryMapping(51, TorznabCatType.MoviesHD, "1080P");
             AddCategoryMapping(70, TorznabCatType.Movies3D, "3D");
             AddCategoryMapping(50, TorznabCatType.MoviesHD, "720P");
+            AddCategoryMapping(84, TorznabCatType.MoviesHD, "4K");
             AddCategoryMapping(49, TorznabCatType.MoviesBluRay, "BluRay");
             AddCategoryMapping(78, TorznabCatType.MoviesHD, "M - HD");
+            AddCategoryMapping(85, TorznabCatType.MoviesHD, "x265");
 
             AddCategoryMapping(15, TorznabCatType.Console, "JEUX VIDEO");
             AddCategoryMapping(76, TorznabCatType.Console3DS, "3DS");
