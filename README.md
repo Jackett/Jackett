@@ -291,7 +291,8 @@ Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
-2. In Terminal, run the install script from the extracted directory using `./install_service_macos.sh`
+2. Open the extracted folder and double-click on `install_service_macos`.
+3. If the installation was a success, you can close the Terminal window.
        
 The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
 Logs are stored as usual under `~/.config/Jackett/log.txt`.
