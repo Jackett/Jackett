@@ -855,7 +855,7 @@ namespace Jackett.Indexers
                             Data = (sb.ToString().Normalize(NormalizationForm.FormC));
                         }
                         else
-                            throw new Exception("");
+                            throw new Exception("unsupported diacritics filter argument");
                         break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
