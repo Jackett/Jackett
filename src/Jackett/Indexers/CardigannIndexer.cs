@@ -835,6 +835,28 @@ namespace Jackett.Indexers
                     case "validfilename":
                         Data = StringUtil.MakeValidFileName(Data, '_', false);
                         break;
+                    case "diacritics":
+                        var diacriticsOp = (string)Filter.Args;
+                        if (diacriticsOp == "replace")
+                        {
+                            // Should replace diacritics charcaters with their base character
+                            // It's not perfect, e.g. "ŠĐĆŽ - šđčćž" becomes "SĐCZ-sđccz"
+                            string stFormD = Data.Normalize(NormalizationForm.FormD);
+                            int len = stFormD.Length;
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < len; i++)
+                            {
+                                System.Globalization.UnicodeCategory uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(stFormD[i]);
+                                if (uc != System.Globalization.UnicodeCategory.NonSpacingMark)
+                                {
+                                    sb.Append(stFormD[i]);
+                                }
+                            }
+                            Data = (sb.ToString().Normalize(NormalizationForm.FormC));
+                        }
+                        else
+                            throw new Exception("");
+                        break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
                         var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
