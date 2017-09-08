@@ -3,9 +3,12 @@
 # Stop and unload the service if it's running
 launchctl remove org.user.Jackett
 
+# Move working directory to Jackett's
+cd "$(dirname "$0")"
+
 # Check if we're running from Jackett's directory
 if [ ! -f ./JackettConsole.exe ]; then
-    echo "Couldn't locate JackettConsole.exe. Are you running from the right directory?"
+    echo "Couldn't locate JackettConsole.exe. Is the script in the right directory?"
     exit 1
 fi
 jackettdir="$(pwd)"
