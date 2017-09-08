@@ -32,6 +32,9 @@
       cat: 0
       page: 1
       srcrel: "{{ .Keywords }}"
+    keywordsfilters:
+      - name: diacritics
+        args: replace
     rows:
       selector: div.showrelease_tb table tbody tr:not(tr:nth-child(1))
     fields:
