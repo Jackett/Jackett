@@ -241,7 +241,7 @@
           - name: replace
             args: ["|", ""]
           - name: replace
-            args: ["Ep. "," "]
+            args: ["Ep. ","E"]
       size:
         selector: td:nth-child(4)
       grabs:
