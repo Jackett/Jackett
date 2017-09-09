@@ -192,6 +192,7 @@ namespace Jackett.Updater
                 "Definitions/qctorrent.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/hdclub.yml",
+                "Definitions/dreamteam.yml",
             };
 
             foreach (var oldFIle in oldFiles)

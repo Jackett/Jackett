@@ -114,7 +114,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Diablo Torrent
  * DigitalHive
  * Dragonworld Reloaded
- * Dream Team
  * Elite-Tracker
  * EoT-Forum
  * eStone
