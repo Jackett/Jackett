@@ -140,7 +140,7 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = response.Content;
-                var rows = dom["div[id='torrentTable'] > div[class='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
+                var rows = dom["div[id='torrentTable'] > div[class^='box torrentBox'] > div[class='boxContent'] > table > tbody > tr"];
 
                 foreach (IDomObject row in rows)
                 {
