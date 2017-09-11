@@ -29,7 +29,7 @@
       - selector: table:contains("Login failed!")
     test:
       path: index.php
-
+        
   search:
     path: browse.php
     inputs:
@@ -44,8 +44,11 @@
       title:
         selector: td:nth-child(2) span
       download:
-        selector: a[href^="down.php"]
+        selector: a[href^="details.php?id="]
         attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php?id="]
       details:
         selector: a[href^="details.php?id="]
         attribute: href
