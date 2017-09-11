@@ -5,6 +5,8 @@
   type: private
   encoding: UTF-8
   links:
+    - http://dream-team.ga/
+  legacylinks:
     - http://dream-team.ml/
 
   caps:
@@ -249,7 +251,7 @@
       - selector: td:contains("remaining tries")
     test:
       path: browse.php
-      selector: a[href^="http://dream-team.ml/logout.php"]
+      selector: a[href*="/logout.php"]
 
   download:
     before:
@@ -271,29 +273,32 @@
       category: "0" # multi cat search not supported
       include_dead_torrents: "yes"
     rows:
-      selector: table#sortabletable > tbody > tr:has(a[href^="http://dream-team.ml/details.php?id="])
+      selector: table#sortabletable > tbody > tr:has(a[href*="/details.php?id="])
       filters:
         - name: andmatch
           args: 66
     fields:
       download:
-        selector: a[href^="http://dream-team.ml/download.php?id="]
+        selector: a[href*="/download.php?id="]
         attribute: href
       title:
-        selector: a[href^="http://dream-team.ml/details.php?id="]
-      title|optional:
+        selector: a[href*="/details.php?id="]
+      title:
+        optional: true
         selector: div.tooltip-content > div
       details:
-        selector: a[href^="http://dream-team.ml/details.php?id="]
+        selector: a[href*="/details.php?id="]
         attribute: href
       category:
-        selector: a[href^="http://dream-team.ml/browse.php?category="]
+        selector: a[href*="/browse.php?category="]
         attribute: href
         filters:
           - name: querystring
             args: category
-      banner|optional:
+      banner:
+        optional: true
         selector: div.tooltip-content > img
+        attribute: src
       size:
         selector: td:nth-child(5)
       grabs:
