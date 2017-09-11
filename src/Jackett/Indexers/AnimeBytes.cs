@@ -107,19 +107,10 @@ namespace Jackett.Indexers
             };
 
             // Do the login
-            var request = new Utils.Clients.WebRequest()
-            {
-                Cookies = loginPage.Cookies,
-                PostData = pairs,
-                Referer = LoginUrl,
-                Type = RequestType.POST,
-                Encoding = Encoding,
-                Url = LoginUrl,
-            };
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
 
             // Follow the redirect
-            await FollowIfRedirect(response, request.Url, SearchUrl);
+            await FollowIfRedirect(response, LoginUrl, SearchUrl);
 
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/user/logout"), () =>
             {
