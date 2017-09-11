@@ -240,6 +240,8 @@
         filters:
           - name: replace
             args: ["|", ""]
+          - name: replace
+            args: ["Ep. ","E"]
       size:
         selector: td:nth-child(4)
       grabs:
