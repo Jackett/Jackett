@@ -178,17 +178,20 @@ namespace Jackett.Indexers
                         release.Description = descriptionDom.OuterHTML;
                         release.Title = title.Text();
 
-                        if (Uri.TryCreate(banner, UriKind.Absolute, out Uri bannerUri))
+                        Uri bannerUri;
+                        if (Uri.TryCreate(banner, UriKind.Absolute, out bannerUri))
                             release.BannerUrl = new Uri(banner);
 
                         var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
-                        if (Uri.TryCreate(SiteLink + qLink.Attr("href"), UriKind.Absolute, out Uri commentUri))
+                        Uri commentUri;
+                        if (Uri.TryCreate(SiteLink + qLink.Attr("href"), UriKind.Absolute, out commentUri))
                             release.Comments = commentUri;
 
                         release.Guid = release.Comments;
 
                         var qDownload = row.ChildElements.ElementAt(1).ChildElements.ElementAt(1).ChildElements.ElementAt(0).Cq();
-                        if (Uri.TryCreate(SiteLink + qDownload.Attr("href"), UriKind.Absolute, out Uri linkUri))
+                        Uri linkUri;
+                        if (Uri.TryCreate(SiteLink + qDownload.Attr("href"), UriKind.Absolute, out linkUri))
                             release.Link = linkUri;
 
                         var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
