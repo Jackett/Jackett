@@ -65,6 +65,54 @@
         filters:
           - name: re_replace
             args: [".*? / ", ""]
+          - name: replace
+            args: ["10.", "S10"] 
+          - name: replace
+            args: ["11.", "S11"] 
+          - name: replace
+            args: ["12.", "S12"] 
+          - name: replace
+            args: ["13.", "S13"] 
+          - name: replace
+            args: ["14.", "S14"] 
+          - name: replace
+            args: ["15.", "S15"] 
+          - name: replace
+            args: ["16.", "S16"] 
+          - name: replace
+            args: ["17.", "S17"] 
+          - name: replace
+            args: ["18.", "S18"] 
+          - name: replace
+            args: ["19.", "S19"] 
+          - name: replace
+            args: ["20.", "S20"] 
+          - name: replace
+            args: ["21.", "S21"] 
+          - name: replace
+            args: ["1.", "S01"] 
+          - name: replace
+            args: ["2.", "S02"] 
+          - name: replace
+            args: ["3.", "S03"] 
+          - name: replace
+            args: ["4.", "S04"] 
+          - name: replace
+            args: ["5.", "S05"] 
+          - name: replace
+            args: ["6.", "S06"] 
+          - name: replace
+            args: ["7.", "S07"] 
+          - name: replace
+            args: ["8.", "S08"] 
+          - name: replace
+            args: ["9.", "S09"]
+          - name: replace
+            args: ["série ", "Seasson"] 
+#          - name: re_replace
+#            args: ["(\\d{2}). série", "S$1"]
+#          - name: re_replace
+#            args: ["(\\d{1}). série", "S0$1"]
       category:
         selector: td:nth-child(2)
         case:
@@ -113,6 +161,8 @@
             args: "Přidán: (.+?) ?$"
           - name: append
             args: " +02:00"
+          - name: dateparse 
+            args: "2.1.2006 15:04 -07:00"
       seeders:
         selector: td:nth-child(7) span
       leechers:
