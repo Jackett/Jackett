@@ -193,6 +193,7 @@ namespace Jackett.Updater
                 "Definitions/dragonworld.yml",
                 "Definitions/hdclub.yml",
                 "Definitions/polishtracker.yml",
+                "Indexers/SceneAccess.cs",
             };
 
             foreach (var oldFIle in oldFiles)
