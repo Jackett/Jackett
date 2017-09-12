@@ -269,7 +269,6 @@
     <Compile Include="Indexers\MoreThanTV.cs" />
     <Compile Include="Indexers\Pretome.cs" />
     <Compile Include="Indexers\PrivateHD.cs" />
-    <Compile Include="Indexers\SceneAccess.cs" />
     <Compile Include="Indexers\SceneTime.cs" />
     <Compile Include="Indexers\SpeedCD.cs" />
     <Compile Include="Indexers\TorrentDay.cs" />
