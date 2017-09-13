@@ -52,6 +52,9 @@
           args: ".torrent"
       date:
         selector: td:nth-child(2)
+        filters: 
+          - name: re_replace
+            args: ["(day|hour)s?$", "$0s ago"] # add ago to relative dates (fresh torrents page)
       size:
         selector: td:nth-child(3)
       seeders:

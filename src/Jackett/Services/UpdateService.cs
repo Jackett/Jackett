@@ -140,7 +140,7 @@ namespace Jackett.Services
                     }
                     else
                     {
-                        logger.Info($"Checked for a updated release but none was found.");
+                        logger.Info($"Checked for a updated release but none was found. Current: {currentVersion} Latest: {latestRelease.Name}");
                     }
                 }
             }
