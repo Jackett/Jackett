@@ -137,9 +137,12 @@ namespace Jackett.Indexers
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString ();
 
             var results = await RequestStringWithCookies (searchUrl);
-
+            
             try
             {
+                var bannerRe = new Regex("src=(.*?)>");
+                var dateRe = new Regex("Poster le: </b>(.*?)<br /><b>Heure: </b>(.*?)<br>");
+
                 var RowsSelector = "table.ttable_headinner tr.t-row";
                 var SearchResultParser = new HtmlParser();
                 var SearchResultDocument = SearchResultParser.Parse(results.Content);
@@ -156,6 +159,7 @@ namespace Jackett.Indexers
                     var title = Row.QuerySelector("td:nth-child(2) a b");
 
                     var link = Row.QuerySelector("td:nth-child(2) a");
+                    var mouseover = link.GetAttribute("onMouseover");
                     var Size = Row.QuerySelector("td:nth-child(5)");
                     var Grabs = Row.QuerySelector("td:nth-child(8) font b");
                     var Seeders = Row.QuerySelector("td:nth-child(6) font b");
@@ -165,12 +169,25 @@ namespace Jackett.Indexers
 
                     release.Title = title.TextContent;
                     release.Category = MapTrackerCatToNewznab(categoryId);
+                    release.Comments = new Uri(SiteLink + link.GetAttribute("href"));
                     release.Link = new Uri(DownloadUrl + "?id=" + torrentId);
                     release.Guid = release.Link;
                     release.Size = ReleaseInfo.GetBytes(Size.TextContent);
                     release.Seeders = ParseUtil.CoerceInt(Seeders.TextContent);
                     release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
                     release.Grabs = ParseUtil.CoerceLong(Grabs.TextContent);
+
+                    var bannerReMatch = bannerRe.Match(mouseover);
+                    if (bannerReMatch.Success)
+                        release.BannerUrl = new Uri(bannerReMatch.Groups[1].Value);
+
+                    var dateReMatch = dateRe.Match(mouseover);
+                    if (dateReMatch.Success)
+                    {
+                        var dateStr = dateReMatch.Groups[1].Value + " " + dateReMatch.Groups[2].Value;
+                        var dateTime = DateTime.ParseExact(dateStr, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
+                        release.PublishDate = dateTime.ToLocalTime();
+                    }
 
                     releases.Add(release);
                 }
