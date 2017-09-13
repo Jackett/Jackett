@@ -141,75 +141,81 @@ namespace Jackett.Indexers
 
                 foreach (var row in rows.Skip(1))
                 {
-                    var qRow = row.Cq();
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    try
+                    {
+                        var qRow = row.Cq();
+                        var release = new ReleaseInfo();
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 172800;
 
-                    var qCat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).Cq();
-                    var catUrl = qCat.Attr("href");
-                    var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1).Trim(']');
-                    release.Category = MapTrackerCatToNewznab(cat);
+                        var qCat = row.ChildElements.ElementAt(0).ChildElements.ElementAt(0).Cq();
+                        var catUrl = qCat.Attr("href");
+                        var cat = catUrl.Substring(catUrl.LastIndexOf('[') + 1).Trim(']');
+                        release.Category = MapTrackerCatToNewznab(cat);
 
-                    // support both date format (profile settings)
-                    var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
-                    var addedStr = qAdded.Attr("title");
-                    if (!addedStr.Contains(","))
-                        addedStr = qAdded.Text();
-                    release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
+                        // support both date format (profile settings)
+                        var qAdded = row.ChildElements.ElementAt(4).ChildElements.ElementAt(0).Cq();
+                        var addedStr = qAdded.Attr("title");
+                        if (!addedStr.Contains(","))
+                            addedStr = qAdded.Text();
+                        release.PublishDate = DateTime.ParseExact(addedStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture);
 
-                    var overlayScript = qRow.Find("script:contains(\"var overlay\")").Text();
-                    var overlayHtmlEscaped = overlayScript.Substring(overlayScript.IndexOf('=') + 1).Trim().Trim('"');
-                    var overlayHtml = Regex.Unescape(overlayHtmlEscaped);
-                    CQ qOverlay = overlayHtml;
-                    var title = qOverlay.Find("td.overlay > strong");
-                    var banner = qOverlay.Find("td.leftOverlay > img").Attr("src");
-                    var description = qOverlay.Find("td.rightOverlay");
+                        var overlayScript = qRow.Find("script:contains(\"var overlay\")").Text();
+                        var overlayHtmlEscaped = overlayScript.Substring(overlayScript.IndexOf('=') + 1).Trim().Trim('"');
+                        var overlayHtml = Regex.Unescape(overlayHtmlEscaped);
+                        CQ qOverlay = overlayHtml;
+                        var title = qOverlay.Find("td.overlay > strong");
+                        var banner = qOverlay.Find("td.leftOverlay > img").Attr("src");
+                        var description = qOverlay.Find("td.rightOverlay");
 
-                    foreach (var img in description.Find("img")) // convert relativ flag paths to full uri
-                        img.SetAttribute("src", SiteLink + img.GetAttribute("src"));
+                        foreach (var img in description.Find("img")) // convert relativ flag paths to full uri
+                            img.SetAttribute("src", SiteLink + img.GetAttribute("src"));
 
-                    var descriptionDom = description.Get(0);
-                    for (var i = 14; i > 0; i--) // remove size/seeders/leechers
-                        descriptionDom.ChildNodes.RemoveAt(0);
+                        var descriptionDom = description.Get(0);
+                        for (var i = 14; i > 0; i--) // remove size/seeders/leechers
+                            descriptionDom.ChildNodes.RemoveAt(0);
 
-                    release.Description = descriptionDom.OuterHTML;
-                    release.Title = title.Text();
-                    if (!string.IsNullOrEmpty(banner) && banner != "/static/common/noartwork/noimage.png")
-                    { 
-                        try { 
+                        release.Description = descriptionDom.OuterHTML;
+                        release.Title = title.Text();
+
+                        Uri bannerUri;
+                        if (Uri.TryCreate(banner, UriKind.Absolute, out bannerUri))
                             release.BannerUrl = new Uri(banner);
-                        }
-                        catch (UriFormatException ex)
-                        {
-                            logger.Warn(ID + ": Skipping invalid BannerUrl (" + banner + ") for " + release.Title);
-                        }
+
+                        var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
+                        Uri commentUri;
+                        if (Uri.TryCreate(SiteLink + qLink.Attr("href"), UriKind.Absolute, out commentUri))
+                            release.Comments = commentUri;
+
+                        release.Guid = release.Comments;
+
+                        var qDownload = row.ChildElements.ElementAt(1).ChildElements.ElementAt(1).ChildElements.ElementAt(0).Cq();
+                        Uri linkUri;
+                        if (Uri.TryCreate(SiteLink + qDownload.Attr("href"), UriKind.Absolute, out linkUri))
+                            release.Link = linkUri;
+
+                        var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
+                        release.Size = ReleaseInfo.GetBytes(sizeStr);
+
+                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text());
+                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text()) + release.Seeders;
+
+                        var files = row.Cq().Find("td:nth-child(4)").Text();
+                        release.Files = ParseUtil.CoerceInt(files);
+
+                        if (row.Cq().Find("img[src=\"/static//common/browse/freeleech.png\"]").Any())
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
+
+                        releases.Add(release);
                     }
-
-                    var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
-                    release.Comments = new Uri(SiteLink + qLink.Attr("href"));
-                    release.Guid = release.Comments;
-
-                    var qDownload = row.ChildElements.ElementAt(1).ChildElements.ElementAt(1).ChildElements.ElementAt(0).Cq();
-                    release.Link = new Uri(SiteLink + qDownload.Attr("href"));
-
-                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text()) + release.Seeders;
-
-                    var files = row.Cq().Find("td:nth-child(4)").Text();
-                    release.Files = ParseUtil.CoerceInt(files);
-
-                    if (row.Cq().Find("img[src=\"/static//common/browse/freeleech.png\"]").Any())
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = 1;
-
-                    releases.Add(release);
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex, "Error parsing item");
+                    }
                 }
             }
             catch (Exception ex)
