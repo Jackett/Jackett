@@ -111,4 +111,4 @@
           - name: append
             args: " +00:00"
           - name: dateparse 
-            args: "06-01-02 03:04 pm -07:00"
+            args: "06-01-02 3:04 pm -07:00"
