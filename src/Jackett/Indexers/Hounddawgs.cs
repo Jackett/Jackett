@@ -176,7 +176,15 @@ namespace Jackett.Indexers
                     release.Description = descriptionDom.OuterHTML;
                     release.Title = title.Text();
                     if (!string.IsNullOrEmpty(banner) && banner != "/static/common/noartwork/noimage.png")
-                        release.BannerUrl = new Uri(banner);
+                    { 
+                        try { 
+                            release.BannerUrl = new Uri(banner);
+                        }
+                        catch (UriFormatException ex)
+                        {
+                            logger.Warn(ID + ": Skipping invalid BannerUrl (" + banner + ") for " + release.Title);
+                        }
+                    }
 
                     var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
                     release.Comments = new Uri(SiteLink + qLink.Attr("href"));
