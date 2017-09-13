@@ -336,6 +336,7 @@ namespace Jackett.Indexers
             if (cookieOverride != null)
                 request.Cookies = cookieOverride;
             WebClientStringResult result = await webclient.GetString(request);
+            CheckTrackerDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
         }
@@ -395,6 +396,7 @@ namespace Jackett.Indexers
             if (emulateBrowser.HasValue)
                 request.EmulateBrowser = emulateBrowser.Value;
             WebClientStringResult result = await webclient.GetString(request);
+            CheckTrackerDown(result);
             UpdateCookieHeader(result.Cookies, cookieOverride);
             return result;
         }
@@ -431,6 +433,7 @@ namespace Jackett.Indexers
                 Encoding = Encoding
             };
             var response = await webclient.GetString(request);
+            CheckTrackerDown(response);
             if (accumulateCookies)
             {
                 response.Cookies = ResolveCookies((request.Cookies == null ? "" : request.Cookies + " ") + response.Cookies);
@@ -448,6 +451,18 @@ namespace Jackett.Indexers
             }
 
             return response;
+        }
+
+        protected void CheckTrackerDown(WebClientStringResult response)
+        {
+            if (response.Status == System.Net.HttpStatusCode.BadGateway
+                || response.Status == System.Net.HttpStatusCode.GatewayTimeout
+                || (int)response.Status == 521 // used by cloudflare to signal the original webserver is refusing the connection
+                || (int)response.Status == 522 // used by cloudflare to signal the original webserver is not reachable at all (timeout)
+                ) 
+            {
+                throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The tracker seems to be down.");
+            }
         }
 
         protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
