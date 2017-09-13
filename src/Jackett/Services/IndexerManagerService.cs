@@ -115,20 +115,35 @@ namespace Jackett.Services
                 {
                     logger.Info("Loading Cardigann definition " + file.FullName);
 
-                    string DefinitionString = File.ReadAllText(file.FullName);
-                    var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
+                    try { 
+                        string DefinitionString = File.ReadAllText(file.FullName);
+                        var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
+                        return definition;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex, "Error while parsing Cardigann definition " + file.FullName + ": " + ex.Message);
+                        return null;
+                    }
+                }).Where(definition => definition != null);
 
-                    return definition;
-                });
-                var cardigannIndexers = definitions.Select(definition =>
+                List<IIndexer> cardigannIndexers = definitions.Select(definition =>
                 {
-                    // create own webClient instance for each indexer (seperate cookies stores, etc.)
-                    var indexerWebClientInstance = (IWebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
+                    try
+                    {
+                        // create own webClient instance for each indexer (seperate cookies stores, etc.)
+                        var indexerWebClientInstance = (IWebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
 
-                    IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, definition);
-                    configService.Load(indexer);
-                    return indexer;
-                }).ToList(); // Explicit conversion to list to avoid repeated resource loading
+                        IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, definition);
+                        configService.Load(indexer);
+                        return indexer;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex, "Error while creating Cardigann instance from Definition: " + ex.Message);
+                        return null;
+                    }
+                }).Where(cardigannIndexer => cardigannIndexer != null).ToList(); // Explicit conversion to list to avoid repeated resource loading
 
                 foreach (var indexer in cardigannIndexers)
                 {
