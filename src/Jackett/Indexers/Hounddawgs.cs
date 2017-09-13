@@ -180,7 +180,7 @@ namespace Jackett.Indexers
 
                         Uri bannerUri;
                         if (Uri.TryCreate(banner, UriKind.Absolute, out bannerUri))
-                            release.BannerUrl = new Uri(banner);
+                            release.BannerUrl = bannerUri;
 
                         var qLink = row.Cq().Find("a[href^=\"torrents.php?id=\"][onmouseover]");
                         Uri commentUri;
