@@ -6,6 +6,8 @@
   encoding: UTF-8
   links:
     - https://www.torrentvault.org/
+  certificates:
+    - CD6EAEB0A64A8E07E03987CA13FE172B2E408690
 
   caps:
     categorymappings:
