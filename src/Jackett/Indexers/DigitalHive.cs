@@ -94,11 +94,24 @@ namespace Jackett.Indexers
             var loginPage = await RequestStringWithCookies(LoginUrl, configData.CookieHeader.Value);
             CQ cq = loginPage.Content;
             string recaptchaSiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            var result = this.configData;
-            result.CookieHeader.Value = loginPage.Cookies;
-            result.Captcha.SiteKey = recaptchaSiteKey;
-            result.Captcha.Version = "2";
-            return result;
+            if (recaptchaSiteKey != null)
+            {
+                var result = this.configData;
+                result.CookieHeader.Value = loginPage.Cookies;
+                result.Captcha.SiteKey = recaptchaSiteKey;
+                result.Captcha.Version = "2";
+                return result;
+            }
+            else
+            {
+                var result = new ConfigurationDataBasicLogin();
+                result.SiteLink.Value = configData.SiteLink.Value;
+                result.Instructions.Value = configData.Instructions.Value;
+                result.Username.Value = configData.Username.Value;
+                result.Password.Value = configData.Password.Value;
+                result.CookieHeader.Value = loginPage.Cookies;
+                return result;
+            }
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

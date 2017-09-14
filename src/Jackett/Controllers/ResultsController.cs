@@ -125,6 +125,9 @@ namespace Jackett.Controllers.V20
         {
             base.OnActionExecuted(actionExecutedContext);
 
+            if (actionExecutedContext.Exception != null)
+                throw new Exception("Error while executing request", actionExecutedContext.Exception);
+
             var content = actionExecutedContext.Response.Content as ObjectContent;
             actionExecutedContext.Response.Content = new JsonContent(content.Value);
         }
