@@ -1,4 +1,4 @@
-﻿---
+---
   site: losslessclub
   name: LosslessClub
   language: ru-ru
@@ -45,12 +45,14 @@
       download:
         selector: a[href^="download.php?id="]
         attribute: href
-      banner|optional:
+      banner:
+        optional: true
         selector: img.thumbnail
         attribute: src
       size:
         selector: td:nth-child(5)
-      grabs|optional:
+      grabs:
+        optional: true
         selector: td:nth-child(6) br + span
       seeders:
         selector: td:nth-child(6)
