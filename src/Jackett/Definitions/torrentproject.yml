@@ -69,7 +69,8 @@
             args: "&dn={{ .Result.magfile }}.torrent"
           - name: append
             args: "&tr=http://182.176.139.129:6969/announce&tr=http://explodie.org:6969/announce&tr=http://tracker.mgtracker.org:2710/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://tracker.sktorrent.net:6969/announce&tr=udp://tracker.zer0day.to:1337/announce"
-      category|optional:
+      category:
+        optional: true
         selector: div > span:nth-child(1) > span
       date:
         selector: div > span:nth-child(4)
