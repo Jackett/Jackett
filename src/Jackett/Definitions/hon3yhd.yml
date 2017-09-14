@@ -1,4 +1,4 @@
-﻿---
+---
   site: hon3yhd
   name: Hon3y HD
   language: en-us
@@ -88,7 +88,8 @@
       download:
         selector: a[href^="download.php?torrent="]
         attribute: href
-      banner|optional:
+      banner:
+        optional: true
         selector: a[href^="details.php?id="]
         attribute: onmouseover
         filters:
