@@ -57,7 +57,8 @@
       download:
         selector: div.tt-name > a[href^="/"]
         attribute: href
-      category|optional:
+      category:
+        optional: true
         selector: td:nth-child(2)
         filters:
           - name: split
