@@ -134,4 +134,3 @@
       
       description:
         selector: td:nth-child(2) > div
-        bithume
