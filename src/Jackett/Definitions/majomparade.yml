@@ -1,4 +1,4 @@
-﻿---
+---
   site: majomparade
   name: Majomparádé
   language: hu-hu
@@ -115,10 +115,12 @@
       details:
         selector: a[href^="details.php?id="]
         attribute: href
-      imdb|optional:
+      imdb:
+        optional: true
         selector: a[href^="https://www.imdb.com/title/"]
         attribute: href
-      banner|optional:
+      banner:
+        optional: true
         selector: img[src="pic/borito.png"]
         attribute: title
         filters:
