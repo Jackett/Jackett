@@ -64,11 +64,11 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
-      title|1:
+      title:
         optional: true
         selector: a[href^="details.php?id="][title]
         attribute: title
-      title|2:
+      title:
         optional: true
         selector: a[href^="details.php?id="][onmousemove]
         attribute: onmousemove
