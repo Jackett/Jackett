@@ -72,21 +72,21 @@
           args: 66
     fields:
       title:
-        selector: a[href*="https://back-ups.me/details.php?id="]
+        selector: a[href*="/details.php?id="]
       title:
         optional: true
         selector: div.tooltip-content > div
       details:
-        selector: a[href*="https://back-ups.me/details.php?id="]
+        selector: a[href*="/details.php?id="]
         attribute: href
       download:
-        selector: a[href^="https://back-ups.me/download.php?id="]
+        selector: a[href*="/download.php?id="]
         attribute: href
       magnet:
         selector: a[href^="magnet:?xt="]
         attribute: href
       category:
-        selector: a[href*="https://back-ups.me/browse.php?category="]
+        selector: a[href*="/browse.php?category="]
         attribute: href
         filters:
           - name: querystring
