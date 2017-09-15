@@ -178,11 +178,11 @@
       uploadvolumefactor:
         case:
           "*": "1"
-      date|1:
+      date:
         optional: true
         selector: div.torrentOwner > abbr.timeago
         attribute: data-time
-      date|2:
+      date:
         optional: true
         selector: div.torrentOwner:not(:has(abbr.timeago))
         remove: span
