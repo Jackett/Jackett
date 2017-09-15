@@ -26,6 +26,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniRena
  * cpasbien
  * EZTV
+ * GkTorrent
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
@@ -49,7 +50,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentProject
  * Torrentz2
  * YTS.ag
- * zetorrents
  * Zooqle
  
 ### Supported Semi-Private Trackers
