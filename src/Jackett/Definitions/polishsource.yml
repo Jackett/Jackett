@@ -80,18 +80,22 @@
             args: "Genre: "
           - name: append
             args: "\n<br>"
-      description|append:
+      description:
         optional: true
         selector: img[src="pic/pl.png"]
         filters:
           - name: append
             args: "Language: polish\n<br>"
-      description|append:
+          - name: prepend
+            args: {{ .Result.description }}
+      description:
         optional: true
         selector: img[src="pic/napisy.png"]
         filters:
           - name: append
             args: "Subbed\n<br>"
+          - name: prepend
+            args: {{ .Result.description }}
       imdb:
         optional: true
         selector: a[href^="http://www.imdb.com/title/tt"]
