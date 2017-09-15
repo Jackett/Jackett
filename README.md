@@ -59,6 +59,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gay-Torrents.net
  * NetHD
  * RuTracker
+ * SkTorrent
  * TorrentBytes
  * Xtreme Zone
  * YggTorrent
@@ -83,6 +84,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Awesome-HD
  * Avistaz
  * B2S-Share
+ * Back-ups
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
  * BeyondHD

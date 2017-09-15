@@ -1,0 +1,131 @@
+﻿---
+  site: sktorrent
+  name: SkTorrent
+  language: cs-cz
+  type: semi-private
+  encoding: windows-1250
+  links:
+    - http://sktorrent.eu/torrent/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Filmy CZ/SK dabing"}
+      - {id: 16, cat: TV, desc: "Seriály"}
+      - {id: 17, cat: TV, desc: "Dokument"}
+      - {id: 42, cat: TV, desc: "TV Pořad"}
+      - {id: 44, cat: TV, desc: "Sport"}
+      - {id: 22, cat: Audio, desc: "Autorska Hudba"}
+      - {id: 21, cat: PC, desc: "Programy"}
+      - {id: 3, cat: Movies/3D, desc: "3D Filmy"}
+      - {id: 14, cat: Movies/Other, desc: "Filmy Kamera"}
+      - {id: 15, cat: Movies, desc: "Filmy s titulkama"}
+      - {id: 20, cat: Movies/DVD, desc: "DVD Filmy"}
+      - {id: 31, cat: Movies, desc: "Filmy bez titulků"}
+      - {id: 5, cat: Movies, desc: "Filmy Kreslené"}
+      - {id: 19, cat: Movies/HD, desc: "HD Filmy"}
+      - {id: 29, cat: Movies/3D, desc: "3D Blu-ray"}
+      - {id: 43, cat: Movies/HD, desc: "UHD Filmy"}
+      - {id: 28, cat: Movies/BluRay, desc: "Blu-ray"}
+      - {id: 18, cat: PC/Games, desc: "Hry na Windows"}
+      - {id: 30, cat: PC/Games, desc: "Hry na Konzole"}
+      - {id: 37, cat: PC/Games, desc: "Hry na Linux"}
+      - {id: 2, cat: Audio, desc: "Hudba"}
+      - {id: 55, cat:  Other, desc: "Neschválené"}
+      - {id: 23, cat: Books, desc: "Knihy a Časopisy"}
+      - {id: 24, cat: Audio, desc: "Mluvené slovo"}
+      - {id: 27, cat: PC/Phone-Other, desc: "Mobil, PDA"}
+      - {id: 25, cat: Other, desc: "Ostatní"}
+      - {id: 45, cat: Audio, desc: "Soundtrack"}
+      - {id: 26, cat:  Audio/Video, desc: "Hudební videa"}
+      - {id: 9, cat: XXX, desc: "xXx"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: /torrent/login.php
+    method: form
+    form: form[action^="login.php?returnto=index.php"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: font:contains("Incorrect")
+    test:
+      path: /torrent/index.php
+
+  search:
+    path: /torrent/torrents.php
+    inputs:
+      search: "{{ .Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      active: "1"
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+    rows:
+      selector: table.lista > tbody > tr > td > table.lista > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: td.lista a[href^="details.php?id="]
+        attribute: title
+        filters:
+          - name: re_replace
+            args: [".*? / ", ""]
+          - name: diacritics
+            args: replace
+          - name: replace
+            args: ["serie", ""] 
+          - name: replace
+            args: ["Serie", ""] 
+          - name: re_replace
+            args: ["(\\d{2})\\.", "S$1"]
+          - name: re_replace
+            args: ["(\\d{1})\\.", "S0$1"]
+      category:
+        selector: td:nth-child(1) a[href^="torrents.php?category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: td.lista a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: td.lista a[href^="download.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(3)
+        filters:
+          - name: split
+            args: [ "|", 0 ]
+          - name: regexp
+            args: "Velkost (.+?) ?$"
+      date:
+        selector: td:nth-child(3)
+        filters:
+          - name: split
+            args: [ "|", 1 ]
+          - name: replace
+            args: ["Pridany ", ""]
+          - name: replace
+            args: ["o ", ""]
+          - name: dateparse
+            args: "02/01/2006 15:04"
+      seeders:
+        selector: td:nth-child(5) > a
+      leechers:
+        selector: td:nth-child(6) > a
+      grabs:
+        selector: td:nth-child(7)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

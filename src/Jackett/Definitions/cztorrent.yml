@@ -64,8 +64,12 @@
         filters:
           - name: re_replace
             args: [".*? / ", ""]
+          - name: diacritics
+            args: replace
           - name: replace
-            args: ["série", "Season"] 
+            args: ["serie", ""] 
+          - name: replace
+            args: ["Serie", ""] 
           - name: re_replace
             args: ["(\\d{2})\\.", "S$1"]
           - name: re_replace
