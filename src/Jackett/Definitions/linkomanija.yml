@@ -1,4 +1,4 @@
-﻿---
+---
   site: linkomanija
   name: LinkoManija
   language: lt-lt
@@ -72,7 +72,8 @@
         attribute: href
       title:
         selector: a[href^="details?"]
-      description|optional:
+      description:
+        optional: true
         selector: td:nth-child(2) > span
       details:
         selector: a[href^="details?"]

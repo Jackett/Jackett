@@ -1,4 +1,4 @@
-﻿---
+---
   site: funkytorrents
   name: FunkyTorrents
   language: en-us
@@ -72,7 +72,8 @@
     rows:
       selector: table.mainouter > tbody > tr > td.outer > table > tbody > tr.mouse_out
     fields:
-      description|optional:
+      description:
+        optional: true
         selector: td:nth-child(2) > font
       title:
         selector: td:nth-child(2)
@@ -83,7 +84,8 @@
         filters:
           - name: querystring
             args: cat
-      category|optional:
+      category:
+        optional: true
         case:
           a[href="/browse.php?ext=1&bitrate=Lossless"]: "3040"
           a[href="/browse.php?ext=1&format=MP3"]: "3010"

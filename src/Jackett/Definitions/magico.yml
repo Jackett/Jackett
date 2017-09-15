@@ -1,4 +1,4 @@
-﻿---
+---
   site: magico
   name: Magico
   language: el-gr
@@ -165,7 +165,8 @@
         selector: a[rel="torrent_leechers"]
       grabs:
         selector: a[rel="times_completed"]
-      banner|optional:
+      banner:
+        optional: true
         selector: a[rel="fancybox"]
         attribute: href
       description:
@@ -177,10 +178,12 @@
       uploadvolumefactor:
         case:
           "*": "1"
-      date|optional|1:
+      date:
+        optional: true
         selector: div.torrentOwner > abbr.timeago
         attribute: data-time
-      date|optional|2:
+      date:
+        optional: true
         selector: div.torrentOwner:not(:has(abbr.timeago))
         remove: span
         filters:

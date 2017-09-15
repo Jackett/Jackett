@@ -1,4 +1,4 @@
-﻿---
+---
   site: polishsource
   name: PolishSource
   language: pl-pl
@@ -72,24 +72,32 @@
       download:
         selector: a[href^="downloadssl.php?id="]
         attribute: href
-      description|optional:
+      description:
+        optional: true
         selector: td:nth-child(2) > small
         filters:
           - name: prepend
             args: "Genre: "
           - name: append
             args: "\n<br>"
-      description|optional|append|1:
+      description:
+        optional: true
         selector: img[src="pic/pl.png"]
         filters:
           - name: append
             args: "Language: polish\n<br>"
-      description|optional|append|2:
+          - name: prepend
+            args: {{ .Result.description }}
+      description:
+        optional: true
         selector: img[src="pic/napisy.png"]
         filters:
           - name: append
             args: "Subbed\n<br>"
-      imdb|optional:
+          - name: prepend
+            args: {{ .Result.description }}
+      imdb:
+        optional: true
         selector: a[href^="http://www.imdb.com/title/tt"]
       grabs:
         selector: td:nth-child(6)

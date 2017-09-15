@@ -1,4 +1,4 @@
-﻿---
+---
   site: insanetracker
   name: Insane Tracker
   language: hu-hu
@@ -80,13 +80,16 @@
       download:
         selector: a[href^="download.php/"]
         attribute: href
-      imdb|optional:
+      imdb:
+        optional: true
         selector: a[title="IMDb link"]
         attribute: href
-      banner|optional|1:
+      banner:
+        optional: true
         selector: img[alt="offer"]
         attribute: src
-      banner|optional|2:
+      banner:
+        optional: true
         selector: a.cover
         attribute: href
       files:

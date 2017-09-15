@@ -1,4 +1,4 @@
-﻿---
+---
   site: diablotorrent
   name: Diablo Torrent
   language: hu-hu
@@ -114,13 +114,15 @@
             args: "2006-01-0215:04:05 -07:00"
       size:
         selector: div.box_size
-      banner|optional:
+      banner:
+        optional: true
         selector: a.cover_a
         attribute: title
         filters:
           - name: regexp
             args: src='(.*?)' 
-      imdb|optional:
+      imdb:
+        optional: true
         selector: a[href^="http://www.imdb.com/title/"]
         attribute: href
       description:

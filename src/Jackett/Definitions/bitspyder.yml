@@ -1,4 +1,4 @@
-﻿---
+---
   site: bitspyder
   name: Bitspyder
   language: en-us
@@ -102,7 +102,8 @@
         selector: td.rowcol:nth-last-child(3)
       leechers:
         selector: td.rowcol:nth-last-child(2)
-      date|optional|1:
+      date:
+        optional: true
         selector: font[color="5F5F5F"]
         filters:
           - name: split
@@ -113,7 +114,8 @@
             args: " +00:00"
           - name: dateparse 
             args: "2006-01-02 15:04:05 -07:00"
-      date|optional|2:
+      date:
+        optional: true
         selector: a[title^="Upploaded at"]
         attribute: title
         filters:
@@ -129,5 +131,6 @@
       uploadvolumefactor:
         case:
           "*": "1"
-      description|optional:
+      description:
+        optional: true
         selector: font[color="#990000"]

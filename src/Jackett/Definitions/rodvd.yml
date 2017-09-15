@@ -1,4 +1,4 @@
-﻿---
+---
   site: rodvd
   name: RoDVD
   language: ro-ro
@@ -98,7 +98,8 @@
       download:
         selector: a[href^="download.php"]
         attribute: href
-      imdb|optional:
+      imdb:
+        optional: true
         selector: a[href*="http://www.imdb.com/title/tt"]
         attribute: href
       size:

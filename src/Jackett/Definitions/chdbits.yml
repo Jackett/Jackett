@@ -1,4 +1,4 @@
-﻿---
+---
   site: chdbits
   name: CHDBits
   description: "A general tracker"
@@ -54,7 +54,8 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
-      title|optional:
+      title:
+        optional: true
         selector: a[title][href^="details.php?id="]
         attribute: title
       category:

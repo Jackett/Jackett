@@ -78,7 +78,8 @@
             args: "magnet:?xt=urn:btih:"
           - name: append
             args: "&dn={{ .Result.title }}.torrent"
-      category|optional:
+      category:
+        optional: true
         selector: dt
         remove: a
         filters:

@@ -1,4 +1,4 @@
-﻿---
+---
   site: ourbits
   name: Ourbits
   language: zh-cn
@@ -56,7 +56,8 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
-      title|optional:
+      title:
+        optional: true
         selector: a[title][href^="details.php?id="]
         attribute: title
       category:
@@ -71,7 +72,8 @@
       download:
         selector: a[href^="download.php?id="]
         attribute: href
-      imdb|optional:
+      imdb:
+        optional: true
         selector: div.imdb_100 > a
         attribute: href
       size:

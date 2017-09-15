@@ -43,7 +43,8 @@
       download:
         selector: td:nth-child(3) a.magnet, td:nth-child(3) a
         attribute: href
-      size|optional:
+      size:
+        optional: true
         selector: td:nth-child(4)
       date:
         selector: td:nth-child(5)

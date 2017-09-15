@@ -1,4 +1,4 @@
-﻿---
+---
   site: bithumen
   name: BitHUmen
   language: hu-hu
@@ -72,7 +72,8 @@
         attribute: href
       title:
         selector: a[href^="details.php?id="]
-      title|optional:
+      title:
+        optional: true
         selector: a[href^="details.php?id="]
         attribute: title
       details:
@@ -108,14 +109,16 @@
         selector: td:nth-child(6) > u
       downloadvolumefactor:
         text: "1"
-      downloadvolumefactor|optional:
+      downloadvolumefactor:
+        optional: true
         selector: td:nth-child(6) > nobr > font:contains(" × ")
         filters:
           - name: replace
             args: ["×", ""]
       uploadvolumefactor:
         text: "1"
-      uploadvolumefactor|optional:
+      uploadvolumefactor:
+        optional: true
         selector: td:nth-child(5) > nobr > font:contains(" × ")
         filters:
           - name: replace
@@ -131,4 +134,3 @@
       
       description:
         selector: td:nth-child(2) > div
-        

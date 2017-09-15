@@ -1,4 +1,4 @@
-﻿---
+---
   site: torrenthr
   name: TorrentHR
   language: hr-hr
@@ -64,10 +64,12 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
-      title|optional|1:
+      title:
+        optional: true
         selector: a[href^="details.php?id="][title]
         attribute: title
-      title|optional|2:
+      title:
+        optional: true
         selector: a[href^="details.php?id="][onmousemove]
         attribute: onmousemove
         filters:
@@ -105,7 +107,8 @@
         selector: td:nth-child(9)
       leechers:
         selector: td:nth-child(10)
-      banner|optional:
+      banner:
+        optional: true
         selector: a[href^="details.php?id="][onmousemove]
         attribute: onmousemove
         filters:
@@ -124,6 +127,7 @@
             args: " +00:00"
           - name: dateparse
             args: "02.01.2006 15:04:05 -07:00"
-      description|optional:
+      description:
+        optional: true
         selector: td:nth-child(2)
         remove: a, br, small
