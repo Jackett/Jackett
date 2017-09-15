@@ -84,11 +84,11 @@
         optional: true
         selector: a[title="IMDb link"]
         attribute: href
-      banner|1:
+      banner:
         optional: true
         selector: img[alt="offer"]
         attribute: src
-      banner|2:
+      banner:
         optional: true
         selector: a.cover
         attribute: href
