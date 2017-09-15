@@ -50,6 +50,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentz2
  * YTS.ag
  * zetorrents
+ * Zooqle
  
 ### Supported Semi-Private Trackers
  * 7tor

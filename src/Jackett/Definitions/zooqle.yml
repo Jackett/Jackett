@@ -1,0 +1,62 @@
+---
+  site: zooqle
+  name: Zooqle
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://zooqle.com
+
+  caps:
+    modes:
+      search: [q]
+
+  settings: []
+
+  search:
+    # sorted by descending seeders and includes only verified torrents
+    # the movie+test+torrent search is for the TEST button, since Jackett does not pass any keywords which causes zooqle to choke
+    path: "/search?q={{if .Keywords}}{{ .Keywords}}&s=ns&v=t&sd=d{{else}}movie+test+torrent+category%3AMovies{{end}}"
+    rows:
+      selector: tr:has(td[class^="text-muted3"])
+    fields:
+      title:
+        selector: td:nth-child(2) a
+      details:
+        selector: td:nth-child(2) a
+        attribute: href
+      download:
+        # .torrent urls can be missing 
+        optional: true
+        selector: a[title^="Generate .torrent"]
+        attribute: href
+      magnet:
+        # magnets urls can be missing
+        optional: true
+        selector: a[title^="Magnet link"]
+        attribute: href
+      date:
+        selector: td:nth-child(5)
+        filters:
+            # a date of 'long ago' causes the timeago filter to return '0m ago' which is contra
+          - name: replace
+            args: ["long ago", "99 years"]
+          - name: timeago
+      size:
+        selector: td:nth-child(4)
+        filters:
+            # a size of '– N/A –' causes Jackett to reject the row with an error
+          - name: replace
+            args: ["– N/A –", "0 Bytes"]
+      seeders:
+        # seeders can be missing
+        optional: true
+        selector: td:nth-child(6) div div:first-child
+      leechers:
+        # leechers can be missing
+        optional: true
+        selector: td:nth-child(6) div div:nth-child(2)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
