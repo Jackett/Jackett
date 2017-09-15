@@ -177,6 +177,7 @@
     <Compile Include="Controllers\BlackholeController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Indexers\Abstract\CouchPotatoTracker.cs" />
     <Compile Include="Indexers\ArcheTorrent.cs" />
     <Compile Include="Indexers\HDOnly.cs" />
     <Compile Include="Indexers\cgpeers.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataXthor.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
     <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
+    <Compile Include="Models\IndexerConfig\ConfigurationDataUserPasskey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilterAndPasskey.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
     <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
