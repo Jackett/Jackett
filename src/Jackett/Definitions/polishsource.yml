@@ -80,13 +80,13 @@
             args: "Genre: "
           - name: append
             args: "\n<br>"
-      description|append|1:
+      description|append:
         optional: true
         selector: img[src="pic/pl.png"]
         filters:
           - name: append
             args: "Language: polish\n<br>"
-      description|append|2:
+      description|append:
         optional: true
         selector: img[src="pic/napisy.png"]
         filters:
