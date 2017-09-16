@@ -8,8 +8,20 @@
     - https://zooqle.com
 
   caps:
+    categories:
+      "zqf-anime": TV/Anime
+      "zqf-app": PC
+      "zqf-book": Books
+      "zqf-game": PC/Games
+      "zqf-movies": Movies
+      "zqf-music": Audio
+      "zqf-other": Other/Misc
+      "zqf-tv": TV
+
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings: []
 
@@ -22,6 +34,13 @@
     fields:
       title:
         selector: td:nth-child(2) a
+      category:
+        selector: td:nth-child(2) > i
+        attribute: class
+        filters:
+          # extract the second class
+          - name: split
+            args: [" ", 1]
       details:
         selector: td:nth-child(2) a
         attribute: href
@@ -38,14 +57,17 @@
       date:
         selector: td:nth-child(5)
         filters:
-            # a date of 'long ago' causes the timeago filter to return '0m ago' which is contra
+          # a date of 'long ago' causes the timeago filter to return '0m ago' which is contra
           - name: replace
             args: ["long ago", "99 years"]
+          # a date of 'yesterday' causes the timeago filter to return '0m ago' which is contra
+          - name: replace
+            args: ["yesterday", "1 day"]
           - name: timeago
       size:
         selector: td:nth-child(4)
         filters:
-            # a size of '– N/A –' causes Jackett to reject the row with an error
+          # a size of '– N/A –' causes Jackett to reject the row with an error
           - name: replace
             args: ["– N/A –", "0 Bytes"]
       seeders:
