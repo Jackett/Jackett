@@ -21,6 +21,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Linux and macOS using Mono 4 (mono 3 is no longer supported).
 
 ### Supported Public Trackers
+ * 1337x
  * Anidex
  * Anime Tosho
  * AniRena
