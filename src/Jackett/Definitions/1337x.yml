@@ -111,6 +111,7 @@
       title:
         selector: td[class^="coll-1"] a[href^="/torrent/"]
       category:
+        optional: true
         selector:  td[class^="coll-1"] a[href^="/sub/"]
         attribute: href
         filters:
@@ -128,18 +129,12 @@
         # magnet URI is on the details page
 #        selector: td[class^="coll-1"] a[href^="/torrent/"]
 #        attribute: href
+      # dates come in three flavours:
       date:
-        selector: td[class^="coll-date"]
+        # (within this year) 7am Sep. 14th
+        optional: true
+        selector: td[class^="coll-date"]:not(:contains(":")):not(:contains("'"))
         filters:
-            # dates come in three flavours:
-            # (more than a year ago) Apr. 18th '11
-            # (within this year) 7am Sep. 14th
-            # (today) 12:25am
-            # this code will generate 2 silent errors for each row (visible in enhanced logs). is there a better way? Corrections welcome.
-          - name: replace
-            args: ["'", ""]
-          - name: replace
-            args: [".", ""]
           - name: replace
             args: ["st", ""]
           - name: replace
@@ -148,16 +143,32 @@
             args: ["rd", ""]
           - name: replace
             args: ["th", ""]
+          - name: dateparse
+            args: "3pm Jan. 2"
+      date:
+        # (more than a year ago) Apr. 18th '11
+        optional: true
+        selector: td[class^="coll-date"]:contains("'")
+        filters:
           - name: replace
-            args: ["am", ""]
+            args: ["'", ""]
           - name: replace
-            args: ["pm", ""]
+            args: ["st", ""]
+          - name: replace
+            args: ["nd", ""]
+          - name: replace
+            args: ["rd", ""]
+          - name: replace
+            args: ["th", ""]
           - name: dateparse
-            args: "MMM d y"
+            args: "Jan. 2 06"
+      date:
+        # # (today) 12:25am
+        optional: true
+        selector: td[class^="coll-date"]:contains(":")
+        filters:
           - name: dateparse
-            args: "h MMM d"
-          - name: dateparse
-            args: "h:mm"
+            args: "3:04pm"
       size:
         selector: td[class^="coll-4"]
       seeders:
