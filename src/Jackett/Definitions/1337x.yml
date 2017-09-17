@@ -1,0 +1,170 @@
+---
+  site: 1337x
+  name: 1337x
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://1337x.to
+
+  caps:
+    categorymappings:
+      #Audio
+      - {id: 22, cat: Audio/MP3, desc: "Music/MP3"}
+      - {id: 23, cat: Audio/Lossless, desc: "Music/Lossless"}
+      - {id: 24, cat: Audio, desc: "Music/DVD"}
+      - {id: 25, cat: Audio/Video, desc: "Music/Video"}
+      - {id: 26, cat: Audio, desc: "Music/Radio"}
+      - {id: 27, cat: Audio/Other, desc: "Music/Other"}
+      - {id: 52, cat: Audio/Audiobook, desc: "Other/Audiobook"}
+      - {id: 53, cat: Audio, desc: "Music/Album"}
+      - {id: 58, cat: Audio, desc: "Music/Box set"}
+      - {id: 59, cat: Audio, desc: "Music/Discography"}
+      - {id: 60, cat: Audio, desc: "Music/Single"}
+      - {id: 68, cat: Audio, desc: "Music/Concerts"}
+      - {id: 69, cat: Audio, desc: "Music/AAC"}
+
+      #Movies
+      - {id: 1, cat: Movies/DVD, desc: "Movies/DVD"}
+      - {id: 2, cat: Movies/SD, desc: "Movies/Divx/Xvid"}
+      - {id: 3, cat: Movies, desc: "Movies/SVCD/VCD"}
+      - {id: 4, cat: Movies/Foreign, desc: "Movies/Dubs/Dual Audio"}
+      - {id: 9, cat: Movies, desc: "Documentaries/Documentary"}
+      - {id: 42, cat: Movies/HD, desc: "Movies/HD"}
+      - {id: 54, cat: Movies, desc: "Movies/h.264/x264"}
+      - {id: 55, cat: Movies, desc: "Movies/Mp4"}
+      - {id: 66, cat: Movies/3D, desc: "Movies/3D"}
+      - {id: 70, cat: Movies, desc: "Movies/HEVC/x265"}
+      - {id: 73, cat: Movies, desc: "Movies/Bollywood"}
+
+      #TV
+      - {id: 5, cat: TV, desc: "TV/DVD"}
+      - {id: 6, cat: TV/SD, desc: "TV/Divx/Xvid"}
+      - {id: 7, cat: TV, desc: "TV/SVCD/VCD"}
+      - {id: 28, cat: TV/Anime, desc: "Anime/Anime"}
+      - {id: 41, cat: TV/HD, desc: "TV/HD"}
+      - {id: 71, cat: TV, desc: "TV/HEVC/x265"}
+
+      #Apps
+      - {id: 18, cat: PC, desc: "Apps/PC Software"}
+      - {id: 19, cat: PC/Mac, desc: "Apps/Mac"}
+      - {id: 20, cat: PC, desc: "Apps/Linux"}
+      - {id: 21, cat: PC, desc: "Apps/Other"}
+      - {id: 56, cat: PC/Phone-Android, desc: "Apps/Android"}
+      - {id: 57, cat: PC/Phone-IOS, desc: "Apps/iOS"}
+
+      #Games
+      - {id: 10, cat: PC/Games, desc: "Games/PC Game"}
+      - {id: 11, cat: Console, desc: "Games/PS2"}
+      - {id: 12, cat: Console/PSP, desc: "Games/PSP"}
+      - {id: 13, cat: Console/Xbox, desc: "Games/Xbox"}
+      - {id: 14, cat: Console/Xbox 360, desc: "Games/Xbox360"}
+      - {id: 15, cat: Console, desc: "Games/PS1"}
+      - {id: 16, cat: Console/Other, desc: "Games/Dreamcast"}
+      - {id: 17, cat: PC/Phone-Other, desc: "Games/Other"}
+      - {id: 43, cat: Console/PS3, desc: "Games/PS3"}
+      - {id: 44, cat: Console/Wii, desc: "Games/Wii"}
+      - {id: 45, cat: Console/NDS, desc: "Games/DS"}
+      - {id: 46, cat: Console, desc: "Games/GameCube"}
+      - {id: 72, cat: Console/3DS, desc: "Games/3DS"}
+
+      #XXX
+      - {id: 48, cat: XXX/DVD, desc: "XXX/Video"}
+      - {id: 49, cat: XXX/Imageset, desc: "XXX/Picture"}
+      - {id: 50, cat: XXX, desc: "XXX/Magazine"}
+      - {id: 51, cat: XXX, desc: "XXX/Hentai"}
+      - {id: 67, cat: XXX, desc: "XXX/Games"}
+
+      #Other
+      - {id: 33, cat: Other, desc: "Other/Emulation"}
+      - {id: 34, cat: Books, desc: "Other/Tutorial"}
+      - {id: 35, cat: Other, desc: "Other/Sounds"}
+      - {id: 36, cat: Books/Ebook, desc: "Other/E-books"}
+      - {id: 37, cat: Other, desc: "Other/Images"}
+      - {id: 38, cat: Other, desc: "Other/Mobile Phone"}
+      - {id: 39, cat: Books/Comics, desc: "Other/Comics"}
+      - {id: 40, cat: Other/Misc, desc: "Other/Other"}
+      - {id: 47, cat: Other, desc: "Other/Nulled Script"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    # the .torrent url is on the on the details page 
+    selector: ul li a[href^="http://itorrents.org/"]
+
+# it appears that Jackett Definitions do not currently support fetching magnets from the details page :-(
+#  magnet:
+    # the magnet url is on the on the details page 
+#    selector: ul li a[href^="magnet:?"]
+
+  search:
+    # present trending results if there are no search parms supplied
+    path: "{{if .Keywords}}/search/{{ .Keywords}}/1/{{else}}/trending{{end}}"
+    rows:
+      selector: tr:has(a[href^="/torrent/"])
+    fields:
+      title:
+        selector: td[class^="coll-1"] a[href^="/torrent/"]
+      category:
+        selector:  td[class^="coll-1"] a[href^="/sub/"]
+        attribute: href
+        filters:
+          # extract the third part
+          - name: split
+            args: ["/", 2]
+      details:
+        selector: td[class^="coll-1"] a[href^="/torrent/"]
+        attribute: href
+      download:
+        # .torrent link is on the details page
+        selector: td[class^="coll-1"] a[href^="/torrent/"]
+        attribute: href
+#      magnet:
+        # magnet URI is on the details page
+#        selector: td[class^="coll-1"] a[href^="/torrent/"]
+#        attribute: href
+      date:
+        selector: td[class^="coll-date"]
+        filters:
+            # dates come in three flavours:
+            # (more than a year ago) Apr. 18th '11
+            # (within this year) 7am Sep. 14th
+            # (today) 12:25am
+            # this code will generate 2 silent errors for each row (visible in enhanced logs). is there a better way? Corrections welcome.
+          - name: replace
+            args: ["'", ""]
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: ["st", ""]
+          - name: replace
+            args: ["nd", ""]
+          - name: replace
+            args: ["rd", ""]
+          - name: replace
+            args: ["th", ""]
+          - name: replace
+            args: ["am", ""]
+          - name: replace
+            args: ["pm", ""]
+          - name: dateparse
+            args: "MMM d y"
+          - name: dateparse
+            args: "h MMM d"
+          - name: dateparse
+            args: "h:mm"
+      size:
+        selector: td[class^="coll-4"]
+      seeders:
+        selector: td[class^="coll-2"]
+      leechers:
+        selector: td[class^="coll-3"]
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
