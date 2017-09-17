@@ -21,6 +21,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 * Linux and macOS using Mono 4 (mono 3 is no longer supported).
 
 ### Supported Public Trackers
+ * 1337x
  * Anidex
  * Anime Tosho
  * AniRena
@@ -133,7 +134,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GFTracker
  * GFXPeers
  * Ghost City
- * GigaTorrents  [![(invite needed)][inviteneeded]](#)
+ * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Gormogon
@@ -286,6 +287,8 @@ Jackett can also be run from the command line if you would like to see log messa
  3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
 
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
+
+If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
 
 ## Installation on macOS
 
