@@ -52,6 +52,8 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       secure_cookie: "0"
+    error:
+      - selector: :contains("\"status\":\"error\"")
     test:
       path: browse.php
 
