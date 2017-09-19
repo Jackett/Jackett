@@ -81,6 +81,7 @@ namespace Jackett.Models
                                 r.Size == null ? null : new XAttribute("length", r.Size),
                                 new XAttribute("type", "application/x-bittorrent")
                             ),
+                            r.Category == null ? null : from c in r.Category select getTorznabElement("category", c),
                             getTorznabElement("magneturl", r.MagnetUri),
                             getTorznabElement("rageid", r.RageID),
                             getTorznabElement("thetvdb", r.TVDBId),
