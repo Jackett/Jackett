@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://tenyardtracker.com/
+  legacylinks:
     - http://tenyardtracker.com/
 
   caps:
