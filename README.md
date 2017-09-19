@@ -29,6 +29,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EZTV
  * GkTorrent
  * Horrible Subs
+ * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Isohunt
  * KickAssTorrent
