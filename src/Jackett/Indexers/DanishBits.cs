@@ -6,6 +6,7 @@ using System.Text;
 using Jackett.Indexers.Abstract;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -28,6 +29,18 @@ namespace Jackett.Indexers
 
             AddCategoryMapping("movie", TorznabCatType.Movies);
             AddCategoryMapping("tv", TorznabCatType.TV);
+        }
+
+        protected override string GetSearchString(TorznabQuery query)
+        {
+            if (string.IsNullOrEmpty(query.SearchTerm) && string.IsNullOrEmpty(query.ImdbID))
+            {
+                return "%";
+            }
+            var searchString = query.GetQueryString();
+            Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+            searchString = ReplaceRegex.Replace(searchString, "%");
+            return searchString;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

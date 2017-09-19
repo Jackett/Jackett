@@ -46,10 +46,16 @@ namespace Jackett.Indexers.Abstract
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
+        protected virtual string GetSearchString(TorznabQuery query)
+        {
+            // can be overriden to alter the search string
+            return query.GetQueryString();
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
+            var searchString = GetSearchString(query);
 
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
@@ -81,6 +87,9 @@ namespace Jackett.Indexers.Abstract
             var error = (string)json["error"];
             if (error != null)
                 throw new Exception(error);
+
+            if ((int)json["total_results"] == 0)
+                return releases;
 
             try
             {
