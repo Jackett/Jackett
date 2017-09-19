@@ -201,7 +201,6 @@
     <Compile Include="Indexers\notwhatcd.cs" />
     <Compile Include="Indexers\Redacted.cs" />
     <Compile Include="Indexers\Norbits.cs" />
-    <Compile Include="Indexers\Trezzor.cs" />
     <Compile Include="Indexers\TVVault.cs" />
     <Compile Include="Indexers\BJShare.cs" />
     <Compile Include="Indexers\CardigannIndexer.cs" />
