@@ -87,7 +87,7 @@
         case:
           "*": "1"
       category:
-        selector: a[href*="torrents.php?order_by=s3&order_way=DESC&filter_cat"]
+        selector: a[href*="&filter_cat"]
         attribute: href
         filters:
           - name: regexp
