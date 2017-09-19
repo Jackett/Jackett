@@ -33,6 +33,8 @@ namespace Jackett
             var json = new JObject();
             var exception = actionExecutedContext.Exception;
 
+            Engine.Logger.Error(exception);
+
             var message = exception.Message;
             if (exception.InnerException != null)
                 message += ": " + exception.InnerException.Message;
