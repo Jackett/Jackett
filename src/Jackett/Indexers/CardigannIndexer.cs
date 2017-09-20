@@ -119,6 +119,9 @@ namespace Jackett.Indexers
 
                             item = new SelectItem(Setting.Options) { Value = Setting.Default };
                             break;
+                        case "info":
+                            item = new DisplayItem(Setting.Default);
+                            break;
                         default:
                             throw new Exception($"Invalid setting type '{Setting.Type}' specified.");
                     }
@@ -129,6 +132,8 @@ namespace Jackett.Indexers
                 }
 
                 item.Name = Setting.Label;
+                if (item.Name == null)
+                    item.Name = Setting.Name;
                 configData.AddDynamic(Setting.Name, item);
             }
 
