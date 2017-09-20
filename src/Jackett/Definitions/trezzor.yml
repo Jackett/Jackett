@@ -2,7 +2,7 @@
   name: Trezzor
   language: cs-cz
   type: private
-  encoding: UTF-8
+  encoding: windows-1250
   links:
     - https://tracker.czech-server.com/
 
@@ -69,7 +69,7 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
-        attribute: title
+#        attribute: title
         filters:
           - name: re_replace
             args: [".*? / ", ""]
