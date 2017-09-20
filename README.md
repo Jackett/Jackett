@@ -51,6 +51,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent9
  * TorrentProject
  * Torrentz2
+ * World Wide Torrents
  * YTS.ag
  * Zooqle
  
@@ -63,7 +64,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RuTracker
  * SkTorrent
  * TorrentBytes
- * World Wide Torrents
  * Xtreme Zone
  * YggTorrent
  * Ztracker
