@@ -160,7 +160,7 @@
     # https://worldwidetorrents.me/torrents-search.php
     path: "{{if .Query.Keywords}}torrents-search.php?{{range .Categories }}c{{.}}=1&{{end}}search={{ .Query.Keywords}}&cat=0&incldead=0&lang=0{{else}}torrents-search.php{{end}}"
     rows:
-      selector: tr:has(a[title][href^="torrents-details.php?id="])
+      selector: tr:not(:has(script)):has(a[title][href^="torrents-details.php?id="])
     fields:
       category:
         optional: true
