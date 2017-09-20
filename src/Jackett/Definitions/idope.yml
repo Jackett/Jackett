@@ -29,7 +29,10 @@
     - name: itorrents-links
       type: checkbox
       label: Add download links via itorrents.org
-      default: false
+    - name: info
+      type: info
+      label: ITorrents Note
+      default: Without the itorrents option only magnet links will be provided.
 
   search:
     # present trending results if there are no search parms supplied
