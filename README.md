@@ -35,11 +35,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
+ * MagnetDL
  * NextTorrent
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
- * MagnetDL
  * RARBG
  * ShowRSS
  * Sky torrents
