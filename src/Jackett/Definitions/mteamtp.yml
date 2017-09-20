@@ -35,6 +35,18 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: ""
+      default: For best results disable the torrent name tooltip (User CP/Tracker Settings/Torrents Page). Otherwise long release names will be cut off.
+
   login:
     path: takelogin.php
     method: post
@@ -67,7 +79,10 @@
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
+      title: # shortened for long release names
+        selector: a[href^="details.php?id="] > b
       title:
+        optional: true # not available if IMDB tooltips are turned on
         selector: a[title][href^="details.php?id="]
         attribute: title
       category:
@@ -77,7 +92,7 @@
           - name: querystring
             args: cat
       details:
-        selector: a[title][href^="details.php?id="]
+        selector: a[href^="details.php?id="]
         attribute: href    
       download:
         selector: a[href^="download.php?id="]
