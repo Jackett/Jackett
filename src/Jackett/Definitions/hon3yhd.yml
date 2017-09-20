@@ -68,9 +68,15 @@
     path: /browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
       searchin: "title"
       incldead: "1"
+    keywordsfilters:
+      # by default the search returns unordered resuts of an OR query making the results useless in many cases, adding + to the keywords improves the situration (Issue #1859)
+      - name: re_replace # replace special characters with " +"
+        args: ["[^\\w\\d]+", " +"]
+      - name: prepend
+        args: "+"
     rows:
       selector: table > tbody > tr.tt
     fields:
