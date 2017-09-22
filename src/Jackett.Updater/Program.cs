@@ -194,6 +194,7 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/zetorrents.yml",
+                "Definitions/rapidetracker.yml",
             };
 
             foreach (var oldFIle in oldFiles)
