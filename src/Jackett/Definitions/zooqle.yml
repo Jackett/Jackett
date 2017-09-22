@@ -8,15 +8,15 @@
     - https://zooqle.com
 
   caps:
-    categories:
-      "zqf-anime": TV/Anime
-      "zqf-app": PC
-      "zqf-book": Books
-      "zqf-game": PC/Games
-      "zqf-movies": Movies
-      "zqf-music": Audio
-      "zqf-other": Other/Misc
-      "zqf-tv": TV
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: TV, desc: "TV"}
+      - {id: 3, cat: TV/Anime, desc: "Anime"}
+      - {id: 4, cat: Audio, desc: "Music"}
+      - {id: 5, cat: PC/Games, desc: "Games"}
+      - {id: 6, cat: PC, desc: "Apps"}
+      - {id: 7, cat: Books, desc: "Books"}
+      - {id: 8, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
@@ -41,6 +41,23 @@
           # extract the second class
           - name: split
             args: [" ", 1]
+          # convert to Catalog Id
+          - name: replace
+            args: ["zqf-movies", 1]
+          - name: replace
+            args: ["zqf-tv", 2]
+          - name: replace
+            args: ["zqf-anime", 3]
+          - name: replace
+            args: ["zqf-music", 4]
+          - name: replace
+            args: ["zqf-game", 5]
+          - name: replace
+            args: ["zqf-app", 6]
+          - name: replace
+            args: ["zqf-book", 7]
+          - name: replace
+            args: ["zqf-other", 8]
       details:
         selector: td:nth-child(2) a
         attribute: href
@@ -71,6 +88,8 @@
           - name: replace
             args: ["– N/A –", "0 Bytes"]
       seeders:
+        # seeders can be missing
+        optional: true
         selector: td:nth-child(6) div
         attribute: title
         filters:
@@ -79,6 +98,8 @@
           - name: replace
             args: [",", ""]
       leechers:
+        # leechers can be missing
+        optional: true
         selector: td:nth-child(6) div 
         attribute: title
         filters:
