@@ -43,6 +43,7 @@
         selector: td[class="n"] a
         attribute: title
       category:
+        optional: true
         selector:  td[class^="t"]
         filters:
           # convert to Catalog Id
@@ -60,7 +61,6 @@
             args: ["Software", 6]
           - name: replace
             args: ["Other", 7]
-          - name: strdump
       details:
         selector: td[class="n"] a
         attribute: href
