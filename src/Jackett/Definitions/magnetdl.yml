@@ -8,14 +8,14 @@
     - http://www.magnetdl.com/
 
   caps:
-    categories:
-      "TV": TV
-      "Movie": Movies
-      "Music": Audio
-      "E-Book": Books/Ebook
-      "Game": PC/Games
-      "Software": PC
-      "Other": Other
+    categorymappings:
+      - {id: 1, cat: TV, desc: "TV"}
+      - {id: 2, cat: Movies, desc: "Movies"}
+      - {id: 3, cat: Audio, desc: "Music"}
+      - {id: 4, cat: Books, desc: "Books"}
+      - {id: 5, cat: PC/Games, desc: "Games"}
+      - {id: 6, cat: PC, desc: "Apps"}
+      - {id: 7, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
@@ -43,8 +43,24 @@
         selector: td[class="n"] a
         attribute: title
       category:
-        optional: true
         selector:  td[class^="t"]
+        filters:
+          # convert to Catalog Id
+          - name: replace
+            args: ["TV", 1]
+          - name: replace
+            args: ["Movie", 2]
+          - name: replace
+            args: ["Music", 3]
+          - name: replace
+            args: ["E-Book", 4]
+          - name: replace
+            args: ["Game", 5]
+          - name: replace
+            args: ["Software", 6]
+          - name: replace
+            args: ["Other", 7]
+          - name: strdump
       details:
         selector: td[class="n"] a
         attribute: href
