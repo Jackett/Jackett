@@ -8,14 +8,14 @@
     - https://www.limetorrents.cc/
 
   caps:
-    categories:
-      "TV shows": TV
-      "Movies": Movies
-      "Music": Audio
-      "Games": Console
-      "Applications": PC/0day
-      "Other": Other/Misc
-      "Anime": TV/Anime
+    categorymappings:
+      - {id: 1, cat: TV, desc: "TV shows"}
+      - {id: 2, cat: TV/Anime, desc: "Anime"}
+      - {id: 3, cat: Movies, desc: "Movies"}
+      - {id: 4, cat: Audio, desc: "Music"}
+      - {id: 5, cat: Console, desc: "Games"}
+      - {id: 6, cat: PC/0day, desc: "Applications"}
+      - {id: 7, cat: Other/Misc, desc: "Other"}
 
     modes:
       search: [q]
@@ -65,6 +65,20 @@
             args: ["-", 1]
           - name: replace
             args: [" in ", ""]
+          - name: replace
+            args: ["TV shows", 1]
+          - name: replace
+            args: ["Anime", 2]
+          - name: replace
+            args: ["Movies", 3]
+          - name: replace
+            args: ["Music", 4]
+          - name: replace
+            args: ["Games", 5]
+          - name: replace
+            args: ["Applications", 6]
+          - name: replace
+            args: ["Other", 7]
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
