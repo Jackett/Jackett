@@ -55,6 +55,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(15, TorznabCatType.Movies); // Boxsets
             AddCategoryMapping(29, TorznabCatType.TVDocumentary);
             AddCategoryMapping(41, TorznabCatType.MoviesHD, "Movies/4K");
+            AddCategoryMapping(47, TorznabCatType.MoviesHD, "Movies/4K");
             AddCategoryMapping(36, TorznabCatType.MoviesForeign);
             AddCategoryMapping(37, TorznabCatType.MoviesWEBDL);
             AddCategoryMapping(43, TorznabCatType.MoviesSD, "Movies/HDRip");
