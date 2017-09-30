@@ -1,6 +1,7 @@
 ﻿---
   site: torrentvault
   name: TorrentVault
+  description: "TorrentVault is a Private Torrent Tracker for TV / MOVIES / GENERAL"
   language: en-us
   type: private
   encoding: UTF-8
