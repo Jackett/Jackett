@@ -1,6 +1,7 @@
 ﻿---
   site: bluebirdhd
   name: BlueBird
+  description: "BlueBird is a RUSSIAN Private Torrent Tracker for HD MOVIES"
   language: ru-ru
   type: private
   encoding: windows-1251
