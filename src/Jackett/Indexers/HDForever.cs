@@ -10,7 +10,7 @@ namespace Jackett.Indexers
     {
         public HDForever(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "HD-Forever",
-                desc: null,
+                desc: "HD-Forever (HD-F) is a FRENCH Private Torrent Tracker for HD MOVIES",
                 link: "https://hdf.world/",
                 configService: configService,
                 logger: logger,
