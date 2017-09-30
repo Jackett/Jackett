@@ -1,6 +1,7 @@
 ---
   site: elitehd
   name: EliteHD
+  description: "EliteHD (HDClub) is a RUSSIAN Private Torrent Tracker for HD MOVIES / TV / GENERAL"
   language: ru-ru
   type: private
   encoding: windows-1251
