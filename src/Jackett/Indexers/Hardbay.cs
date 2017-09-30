@@ -28,7 +28,7 @@ namespace Jackett.Indexers
 
         public Hardbay(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "Hardbay",
-                description: null,
+                description: "Hardbay is a Private Torrent Tracker for HARDSTYLE / HARDCORE ELECTRONIC MUSIC",
                 link: "https://hardbay.club/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
