@@ -1,6 +1,7 @@
 ---
   site: jpopsuki
   name: JPopsuki
+  description: "JPopSuki is a Private Torrent Tracker for ASIAN MUSIC"
   language: en-us
   type: private
   encoding: UTF-8

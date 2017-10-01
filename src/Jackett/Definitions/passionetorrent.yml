@@ -1,6 +1,7 @@
 ---
   site: passionetorrent
   name: Passione Torrent
+  description: "PassioneTorrent is an ITALIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: it-it
   type: private
   encoding: UTF-8

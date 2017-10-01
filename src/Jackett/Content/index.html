@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -581,6 +581,9 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">{{title}} - <a target="_blank" href="{{link}}">{{link}}</a></h4>
+                        {{#if description}}
+                        <div class="alert alert-info">{{description}}</div>
+                        {{/if}}
                     </div>
                     <div class="modal-body">
                         <form class="config-setup-form"></form>
@@ -622,6 +625,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2017090501"></script>
+    <script type="text/javascript" src="../custom.js?changed=2017090502></script>
 </body>
 </html>

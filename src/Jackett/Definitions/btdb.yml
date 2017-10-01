@@ -8,6 +8,10 @@
     -  https://btdb.to/
 
   caps:
+    categorymappings:
+      - {id: 1, cat: TV, desc: "TV"}
+      - {id: 2, cat: Movies, desc: "Movies"}
+
     modes:
       search: [q]
       tv-search: [q, season, ep]

@@ -37,7 +37,7 @@ namespace Jackett.Indexers
 
         public XSpeeds(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "XSpeeds",
-                description: "XSpeeds",
+                description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://www.xspeeds.eu/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,

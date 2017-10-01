@@ -10,7 +10,7 @@ namespace Jackett.Indexers
     {
         public CGPeers(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "CGPeers",
-                desc: null,
+                desc: "CGPeers is a Private Torrent Tracker for GRAPHICS SOFTWARE / TUTORIALS / ETC",
                 link: "https://www.cgpeers.com/",
                 configService: configService,
                 logger: logger,

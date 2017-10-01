@@ -10,7 +10,7 @@ namespace Jackett.Indexers
     {
         public Synthesiz3r(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Synthesiz3r",
-                desc: null,
+                desc: "Synthesiz3r (ST3) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                 link: "https://synthesiz3r.com/",
                 configService: configService,
                 logger: logger,

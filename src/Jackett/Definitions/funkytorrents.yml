@@ -1,6 +1,7 @@
 ---
   site: funkytorrents
   name: FunkyTorrents
+  description: "FunkyTorrents (FT) is a Private Torrent Tracker for MUSIC"
   language: en-us
   type: private
   encoding: UTF-8

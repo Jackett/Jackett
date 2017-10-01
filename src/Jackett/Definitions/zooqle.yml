@@ -71,6 +71,8 @@
           - name: replace
             args: ["– N/A –", "0 Bytes"]
       seeders:
+        # seeders can be missing
+        optional: true
         selector: td:nth-child(6) div
         attribute: title
         filters:
@@ -79,6 +81,8 @@
           - name: replace
             args: [",", ""]
       leechers:
+        # leechers can be missing
+        optional: true
         selector: td:nth-child(6) div 
         attribute: title
         filters:

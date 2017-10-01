@@ -1,6 +1,7 @@
 ---
   site: myspleen
   name: MySpleen
+  description: "MySpleen is a Private Torrent Tracker for TV / COMEDY / ANIMATION / 80-90’S VHS NOSTALGIA"
   language: en-us
   type: private
   encoding: UTF-8

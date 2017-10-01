@@ -31,7 +31,7 @@ namespace Jackett.Indexers
 
         public Torrentech(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Torrentech",
-                   description: null,
+                   description: "TorrenTech (TTH) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://www.torrentech.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,

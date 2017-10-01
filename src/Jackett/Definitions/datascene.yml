@@ -1,6 +1,7 @@
 ﻿---
   site: datascene
   name: DataScene
+  description: "DataScene (DS) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: ro-ro
   type: private
   encoding: windows-1252
