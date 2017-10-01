@@ -1,6 +1,7 @@
 ﻿---
   site: carpathians
   name: Carpathians
+  description: "Carpathians is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
   language: hu-hu
   type: private
   encoding: UTF-8
