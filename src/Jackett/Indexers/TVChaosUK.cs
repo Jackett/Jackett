@@ -51,60 +51,104 @@ namespace Jackett.Indexers
             Language = "en-uk";
             Type = "private";
 
-            AddCategoryMapping(72, TorznabCatType.PC);
-            AddCategoryMapping(86, TorznabCatType.Audio);
-            AddCategoryMapping(87, TorznabCatType.AudioAudiobook);
-            AddCategoryMapping(88, TorznabCatType.Audio);
+            AddCategoryMapping(72, TorznabCatType.PC, "Appz");
 
-            AddCategoryMapping(83, TorznabCatType.Movies);
-            AddCategoryMapping(171, TorznabCatType.Movies);
-            AddCategoryMapping(178, TorznabCatType.MoviesHD);
-            AddCategoryMapping(181, TorznabCatType.Movies);
-            AddCategoryMapping(182, TorznabCatType.Movies);
+            AddCategoryMapping(115, TorznabCatType.TV, "Classic TV");
+            AddCategoryMapping(139, TorznabCatType.TV, "Classic Comedy");
+            AddCategoryMapping(141, TorznabCatType.TV, "Classic Comedy Drama");
+            AddCategoryMapping(140, TorznabCatType.TV, "Classic Crime Drama");
+            AddCategoryMapping(118, TorznabCatType.TV, "Classic Documentary");
+            AddCategoryMapping(138, TorznabCatType.TV, "Classic Drama");
+            AddCategoryMapping(149, TorznabCatType.TV, "Classic Kids/Family");
+            AddCategoryMapping(142, TorznabCatType.TV, "Classic Sci-fi");
+            AddCategoryMapping(148, TorznabCatType.TV, "Classic Soap");
 
-            AddCategoryMapping(75, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(189, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(224, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(174, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(113, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(100, TorznabCatType.TVDocumentary);
-            AddCategoryMapping(98, TorznabCatType.TVDocumentary);
+            AddCategoryMapping(78, TorznabCatType.TV, "Comedy");
+            AddCategoryMapping(187, TorznabCatType.TV, "Comedy Panel/Talk show");
+            AddCategoryMapping(172, TorznabCatType.TVHD, "HD Comedy");
+            AddCategoryMapping(107, TorznabCatType.TV, "Stand-up Comedy");
 
-            AddCategoryMapping(176, TorznabCatType.TVHD);
-            AddCategoryMapping(175, TorznabCatType.TVHD);
-            AddCategoryMapping(177, TorznabCatType.TVHD);
-            AddCategoryMapping(223, TorznabCatType.TVHD);
-            AddCategoryMapping(222, TorznabCatType.TVHD);
-            AddCategoryMapping(172, TorznabCatType.TVHD);
-            AddCategoryMapping(221, TorznabCatType.TVHD);
+            AddCategoryMapping(75, TorznabCatType.TVDocumentary, "Documentary & News");
+            AddCategoryMapping(189, TorznabCatType.TVDocumentary, "Docudrama");
+            AddCategoryMapping(224, TorznabCatType.TVDocumentary, "Documentary");
+            AddCategoryMapping(174, TorznabCatType.TVDocumentary, "HD Documentary");
+            AddCategoryMapping(113, TorznabCatType.TVDocumentary, "Historical");
+            AddCategoryMapping(218, TorznabCatType.TVDocumentary, "News and Current Affairs");
+            AddCategoryMapping(100, TorznabCatType.TVDocumentary, "True Crime");
+            AddCategoryMapping(98, TorznabCatType.TVDocumentary, "Wildlife/Nature");
 
-            // RSS Textual categories
-            AddCategoryMapping("Appz", TorznabCatType.PC);
-            AddCategoryMapping("Radio/Audio", TorznabCatType.Audio);
-            AddCategoryMapping("Audio Books", TorznabCatType.AudioAudiobook);
-            AddCategoryMapping("Radio Comedy", TorznabCatType.AudioAudiobook);
+            AddCategoryMapping(74, TorznabCatType.TV, "Drama");
+            AddCategoryMapping(180, TorznabCatType.TV, "Comedy-Drama");
+            AddCategoryMapping(76, TorznabCatType.TV, "Crime Drama");
+            AddCategoryMapping(99, TorznabCatType.TV, "Cult Drama");
+            AddCategoryMapping(175, TorznabCatType.TVHD, "HD Drama");
 
-            AddCategoryMapping("TV Aired Movies", TorznabCatType.Movies);
-            AddCategoryMapping("Classic Movies", TorznabCatType.Movies);
-            AddCategoryMapping("HD TV Aired Movies", TorznabCatType.MoviesHD);
-            AddCategoryMapping("Made for TV", TorznabCatType.Movies);
-            AddCategoryMapping("TV Aired Movies", TorznabCatType.Movies);
+            AddCategoryMapping(91, TorznabCatType.TV, "Entertainment");
+            AddCategoryMapping(212, TorznabCatType.TV, "Chat Shows");
+            AddCategoryMapping(223, TorznabCatType.TVHD, "HD Entertainment");
+            AddCategoryMapping(188, TorznabCatType.TV, "Musical TV");
+            AddCategoryMapping(217, TorznabCatType.TV, "Quiz, Panel & Game Shows");
+            AddCategoryMapping(101, TorznabCatType.TV, "Special Interest");
 
-            AddCategoryMapping("Documentary & News", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("Docudrama", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("Documentary", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("HD Documentary", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("Historical", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("True Crime", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("Wildlife/Nature", TorznabCatType.TVDocumentary);
+            AddCategoryMapping(106, TorznabCatType.TV, "Factual & Reality");
+            AddCategoryMapping(103, TorznabCatType.TV, "Cookery, Food and Drink");
+            AddCategoryMapping(114, TorznabCatType.TV, "Factual TV");
+            AddCategoryMapping(221, TorznabCatType.TVHD, "HD Factual/Reality");
+            AddCategoryMapping(215, TorznabCatType.TV, "Home and Garden");
+            AddCategoryMapping(219, TorznabCatType.TV, "Motoring");
+            AddCategoryMapping(216, TorznabCatType.TV, "Reality TV");
 
-            AddCategoryMapping("HD Sci-Fi", TorznabCatType.TVHD);
-            AddCategoryMapping("HD Drama", TorznabCatType.TVHD);
-            AddCategoryMapping("HD Soaps", TorznabCatType.TVHD);
-            AddCategoryMapping("HD Entertainment", TorznabCatType.TVHD);
-            AddCategoryMapping("HD Sport", TorznabCatType.TVHD);
-            AddCategoryMapping("HD Comedy", TorznabCatType.TVHD);
-            AddCategoryMapping("HD Factual/Reality", TorznabCatType.TVHD);
+            AddCategoryMapping(184, TorznabCatType.TV, "Full Series Packs");
+            AddCategoryMapping(194, TorznabCatType.TV, "Classic Comedy");
+            AddCategoryMapping(193, TorznabCatType.TV, "Classic Drama");
+            AddCategoryMapping(196, TorznabCatType.TV, "Classic Kids/Family");
+            AddCategoryMapping(170, TorznabCatType.TV, "Comedy");
+            AddCategoryMapping(168, TorznabCatType.TV, "Comedy Drama");
+            AddCategoryMapping(228, TorznabCatType.TV, "Commonwealth");
+            AddCategoryMapping(190, TorznabCatType.TV, "Crime Drama");
+            AddCategoryMapping(166, TorznabCatType.TV, "Documentary");
+            AddCategoryMapping(185, TorznabCatType.TV, "Drama");
+            AddCategoryMapping(191, TorznabCatType.TV, "Entertainment");
+            AddCategoryMapping(210, TorznabCatType.TV, "Factual");
+            AddCategoryMapping(226, TorznabCatType.TV, "Foreign");
+            AddCategoryMapping(167, TorznabCatType.TV, "Kids/Family");
+            AddCategoryMapping(186, TorznabCatType.TV, "Sci-fi");
+
+            AddCategoryMapping(82, TorznabCatType.TV, "Kids/Family");
+
+            AddCategoryMapping(198, TorznabCatType.TVFOREIGN, "Non-UK");
+            AddCategoryMapping(201, TorznabCatType.TVFOREIGN, "Comedy");
+            AddCategoryMapping(208, TorznabCatType.TVFOREIGN, "Documentary");
+            AddCategoryMapping(200, TorznabCatType.TVFOREIGN, "Drama");
+            AddCategoryMapping(209, TorznabCatType.TVFOREIGN, "Entertainment");
+            AddCategoryMapping(203, TorznabCatType.TVFOREIGN, "Factual/Reality");
+            AddCategoryMapping(227, TorznabCatType.TVFOREIGN, "Foreign");
+            AddCategoryMapping(202, TorznabCatType.TVFOREIGN, "Sci-fi");
+            AddCategoryMapping(199, TorznabCatType.TVFOREIGN, "Soaps");
+            AddCategoryMapping(204, TorznabCatType.TVFOREIGN, "Special Interest");
+
+            AddCategoryMapping(86, TorznabCatType.Audio, "Radio/Audio");
+            AddCategoryMapping(87, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(88, TorznabCatType.Audio, "Radio Comedy");
+
+            AddCategoryMapping(90, TorznabCatType.TVSD, "Sci-Fi");
+            AddCategoryMapping(183, TorznabCatType.TVSD, "Fantasy");
+            AddCategoryMapping(176, TorznabCatType.TVHD, "HD Sci-Fi");
+            AddCategoryMapping(173, TorznabCatType.TV, "Supernatural/fantasy");
+
+            AddCategoryMapping(220, TorznabCatType.TV, "Soaps");
+            AddCategoryMapping(229, TorznabCatType.TV, "Monthly Archives");
+            AddCategoryMapping(177, TorznabCatType.TVHD, "Soap HD");
+            AddCategoryMapping(230, TorznabCatType.TVSD, "Soap SD");
+
+            AddCategoryMapping(92, TorznabCatType.TVSport, "Sport");
+            AddCategoryMapping(222, TorznabCatType.TVSport, "HD Sport");
+
+            AddCategoryMapping(83, TorznabCatType.Movies, "TV Aired Movies");
+            AddCategoryMapping(171, TorznabCatType.Movies, "Classic Movies");
+            AddCategoryMapping(178, TorznabCatType.MoviesHD, "HD TV Aired Movies");
+            AddCategoryMapping(181, TorznabCatType.Movies, "Made for TV");
+            AddCategoryMapping(182, TorznabCatType.Movies, "TV Aired Movies");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -186,12 +230,9 @@ namespace Jackett.Indexers
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
                         Grabs = ParseUtil.CoerceInt(infoMatch.Groups["snatched"].Value),
                         Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
-                        Category = MapTrackerCatToNewznab(infoMatch.Groups["cat"].Value)
+                        Category = MapTrackerCatDescToNewznab(infoMatch.Groups["cat"].Value)
                     };
 
-                    // If its not apps or audio we can only mark as general TV
-                    if (release.Category.Count() == 0)
-                        release.Category.Add(5030);
 
                     release.Peers += release.Seeders;
                     releases.Add(release);
@@ -255,9 +296,6 @@ namespace Jackett.Indexers
                             cat = cat.Substring(catSplit + 1);
                         release.Category = MapTrackerCatToNewznab(cat);
 
-                        // If its not apps or audio we can only mark as general TV
-                        if (release.Category.Count() == 0)
-                            release.Category.Add(5030);
 
                         var grabs = qRow.Find("td:nth-child(6)").Text();
                         release.Grabs = ParseUtil.CoerceInt(grabs);
