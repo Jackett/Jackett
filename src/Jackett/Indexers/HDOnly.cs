@@ -13,7 +13,7 @@ namespace Jackett.Indexers
     {
         public HDOnly(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "HD-Only",
-                desc: null,
+                desc: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV",
                 link: "https://hd-only.org/",
                 configService: configService,
                 logger: logger,
