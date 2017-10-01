@@ -1,10 +1,13 @@
 ﻿---
   site: hyperay
   name: Hyperay
+  description: "Hyperay is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
   language: zh-cn
   type: private
   encoding: UTF-8
   links:
+    - https://www.hyperay.org
+  legacylinks:
     - https://www.hyperay.cc
 
   caps:
