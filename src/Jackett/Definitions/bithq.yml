@@ -1,6 +1,7 @@
 ﻿---
   site: bithq
   name: BitHQ
+  description: "BitHQ is a Private Torrent Tracker for DVD-R / BLURAY MOVIES / TV"
   language: en-us
   type: private
   encoding: windows-1252

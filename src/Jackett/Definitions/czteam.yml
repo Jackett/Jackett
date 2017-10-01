@@ -1,6 +1,7 @@
 ---
   site: czteam
   name: CZTeam
+  description: "CZTeam (CZT) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: cs-cz
   type: private
   encoding: UTF-8

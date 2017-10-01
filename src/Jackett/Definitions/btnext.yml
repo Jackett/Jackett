@@ -1,6 +1,7 @@
 ﻿---
   site: btnext
   name: BTNext
+  description: "BTNext (BTNT) is a PORTUGUESE Private Torrent Tracker for 0DAY / GENERAL"
   language: pt-pt
   type: private
   encoding: UTF-8

@@ -28,7 +28,7 @@ namespace Jackett.Indexers
 
         public Superbits(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(name: "Superbits",
-                description: null,
+                description: "SuperBits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://superbits.org/",
                 caps: new TorznabCapabilities(),
                 configService: configService,

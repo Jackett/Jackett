@@ -1,6 +1,7 @@
 ﻿---
   site: rockhardlossless
   name: Rockhard Lossless
+  description: "RockHard Lossless is a Private Torrent Tracker for LOSSLESS ROCK MUSIC"
   language: en-us
   type: private
   encoding: UTF-8

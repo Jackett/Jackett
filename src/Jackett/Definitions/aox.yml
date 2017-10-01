@@ -1,6 +1,7 @@
 ﻿---
   site: aox
   name: AOX
+  description: "AOX (Chippu) is a Private Torrent Tracker for ASIAN MOVIES / TV"
   language: en-us
   type: private
   encoding: UTF-8

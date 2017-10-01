@@ -32,7 +32,7 @@ namespace Jackett.Indexers
 
         public ImmortalSeed(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "ImmortalSeed",
-                description: "ImmortalSeed",
+                description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "http://immortalseed.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,

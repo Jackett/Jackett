@@ -10,7 +10,7 @@ namespace Jackett.Indexers
     {
         public Psytorrents(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Psytorrents",
-                desc: null,
+                desc: "Psytorrents (PSY) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                 link: "https://psytorrents.info/",
                 configService: configService,
                 logger: logger,

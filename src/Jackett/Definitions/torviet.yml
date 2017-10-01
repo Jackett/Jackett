@@ -1,6 +1,7 @@
 ﻿---
   site: torviet
   name: TorViet
+  description: "Tor Viet (HDVNBits) is a VIETNAMESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
   language: vi-vn
   type: private
   encoding: UTF-8

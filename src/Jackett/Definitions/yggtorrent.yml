@@ -1,6 +1,7 @@
 ﻿---
   site: yggtorrent
   name: YGGtorrent
+  description: "YGGTorrent is a FRENCH Private Torrent Tracker for 0DAY / GENERAL"
   language: fr-fr
   type: semi-private
   encoding: UTF-8

@@ -1,6 +1,7 @@
 ---
   site: ourbits
   name: Ourbits
+  description: "Ourbits (HDPter) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
   language: zh-cn
   type: private
   encoding: UTF-8

@@ -1,6 +1,7 @@
 ﻿---
   site: infinityt
   name: Infinity-T
+  description: "Infinity-T is a DANISH Private Torrent Tracker for 0DAY / GENERAL"
   language: da-dk
   type: private
   encoding: UTF-8
