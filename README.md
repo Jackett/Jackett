@@ -123,6 +123,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DigitalHive
  * Dragonworld Reloaded
  * Dream Team
+ * EliteHD  [![(invite needed)][inviteneeded]](#)
  * Elite-Tracker
  * EoT-Forum
  * eStone
