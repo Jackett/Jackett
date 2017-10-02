@@ -1,6 +1,7 @@
 ﻿---
   site: skytorrents
   name: Sky torrents
+  description: "SkyTorrents is a Public privacy-focused torrent search engine with no adverts or tracking"
   language: en-us
   type: public
   encoding: UTF-8
