@@ -36,7 +36,7 @@ namespace Jackett.Indexers
 
         public Yts(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
-                description: null,
+                description: "YTS is a Public torrent site specialising in HD movies of small size",
                 link: "https://yts.ag/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
