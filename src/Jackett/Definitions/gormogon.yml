@@ -1,6 +1,7 @@
 ---
   site: gormogon
   name: Gormogon
+  description: "Gormogon is a Private Torrent Tracker for CLASSIC MOVIES / TV / GENERAL"
   language: en-us
   type: private
   encoding: UTF-8
