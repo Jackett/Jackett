@@ -1,6 +1,7 @@
 ---
   site: majomparade
   name: Majomparádé
+  description: "Majomparádé (TurkDepo) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
   language: hu-hu
   type: private
   encoding: UTF-8
