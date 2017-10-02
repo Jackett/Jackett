@@ -36,7 +36,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TTN webpage."))
+                configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
