@@ -27,7 +27,7 @@ namespace Jackett.Indexers
 
         public BroadcastTheNet(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "BroadcastTheNet",
-                description: null,
+                description: "Broadcasthe.net (BTN) is an invite-only torrent tracker focused on TV shows",
                 link: "https://broadcasthe.net/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
