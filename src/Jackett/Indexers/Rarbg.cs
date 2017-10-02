@@ -43,7 +43,7 @@ namespace Jackett.Indexers
 
         public Rarbg(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
-                description: null,
+                description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                 link: "https://rarbg.to/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
