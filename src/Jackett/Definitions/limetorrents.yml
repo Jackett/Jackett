@@ -1,6 +1,7 @@
 ---
   site: limetorrents
   name: LimeTorrents
+  description: "LimeTorrents is a Public general torrent index with mostly verified torrents"
   language: en-us
   type: public
   encoding: UTF-8
