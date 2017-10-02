@@ -1,6 +1,7 @@
 ---
   site: torrentz2
   name: Torrentz2
+  description: "Torrentz2 is a Public torrent meta-search engine combining results from dozens of torrent sites"
   language: en-us
   type: public
   encoding: UTF-8
