@@ -34,7 +34,7 @@ namespace Jackett.Indexers
 
         public PiXELHD(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "PiXELHD",
-                description: null,
+                description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
                 link: "https://pixelhd.me/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
