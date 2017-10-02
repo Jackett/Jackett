@@ -1,6 +1,7 @@
 ---
   site: thetorrents
   name: The-Torrents
+  description: "The-Torrents is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: ro-ro
   type: private
   encoding: UTF-8
