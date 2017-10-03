@@ -1,6 +1,7 @@
 ---
   site: kickasstorrent
   name: KickAssTorrent
+  description: "Kickass Torrents (KATcr) is a well-know Public torrent site indexing thousands of torrents verified and commented by a large file-sharing community"
   language: en-us
   type: public
   encoding: UTF-8
@@ -84,14 +85,12 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings: []
 
   search:
-    path: "/new/{{if .Query.Keywords}}search-torrents.php{{else}}index.php{{end}}"
-    inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "\"{{ .Query.Keywords }}\""
+    path: "/new/{{if .Keywords}}search-torrents.php?{{range .Categories }}c{{.}}=1&{{end}}search={{.Keywords}}{{else}}{{end}}"
     rows:
       selector: table.ttable_headinner > tbody > tr[class^="t-row"]
       filters:
