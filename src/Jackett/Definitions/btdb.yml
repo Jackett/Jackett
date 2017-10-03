@@ -10,15 +10,20 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: TV, desc: "TV"}
-      - {id: 2, cat: Movies, desc: "Movies"}
+      - {id: 1, cat: Other, desc: "Other"}
+      - {id: 2, cat: TV, desc: "TV"}
+      - {id: 3, cat: Movies, desc: ""}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: info
+      type: info
+      label: Category for Sonarr and Radarr
+      default: BTDB does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
 
   search:
     path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
@@ -28,6 +33,8 @@
       title:
         selector: h2[class$="title"] a[href^="/torrent/"]
         attribute: title
+      category:
+        text: "1"
       details:
         selector: h2[class$="title"] a[href^="/torrent/"]
         attribute: href
