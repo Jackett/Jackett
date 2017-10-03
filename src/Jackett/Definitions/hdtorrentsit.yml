@@ -31,34 +31,71 @@
     paths:
       - path: browse.php
         method: post
+    keywordsfilters:
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", "%"]
+      - name: diacritics
+        args: replace
+      - name: re_replace #remove SXXEYY from research
+        args: ["(S\\d{1,2}E\\d{1,2})", ""]
+      - name: re_replace #remove SXX from research
+        args: ["(S\\d{1,2})", ""]
     inputs:
       ajax: false
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
       incldead: 0
     rows:
       selector: tbody#highlighted tr
     fields:
-      title-no-filters:
-        selector: td:nth-child(2) a:nth-child(1)
       title:
         selector: td:nth-child(2) a:nth-child(1)
         filters:
+          - name: re_replace #separate title
+            args: ["(\\s+\\/\\s+|\\/\\s+|\\s+\\/|\\/)(.*)\\s\\(", " ("]
+          - name: re_replace #remove (yyyy) from the title
+            args: ["(\\(\\d{4}\\))|(\\(\\d{4})", ""]
+          - name: re_replace #remove |
+            args: ["(\\s\\|\\s)", " "]
+          - name: re_replace #Stagione X --> S0X
+            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
+          - name: re_replace #Stagione XX --> SXX
+            args: ["Stagione (\\d{2}\\s)", "S$1"]
+          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
+            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
+          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
+            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
+          - name: re_replace #remove  di YY] | remove /YY]
+            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
+          - name: re_replace #remove various
+            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
+      title|append: #start year
+        text: "("
+      title|append: #add year
+        selector: td:nth-child(2) a:nth-child(1)
+        filters:
+          - name: regexp #find torrent year
+            args: (\d{4})
+      title|append: #end year
+        text: ") "
+      title|append: #start quality TAG
+        text: "["
+      title|append: #quality TAG (BDRip 1080, BDRip 720p etc)
+        selector: td:nth-child(1) a:nth-child(1) img
+        attribute: alt
+      title|append: #separator
+        text: " - "
+      title|append: #ita audio TAG
+        selector: a[href^="download.php?id="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: name
+          - name: regexp
+            args: (DTS AC3 ITA|DTS ITA|AC3 ITA)
           - name: re_replace
-            args: ["Stagione (\\d{0,1})", "S0$1"]
-          - name: re_replace
-            args: ["Stagione (\\d{2})", "S$1"]
-          - name: re_replace
-            args: ["Episodio{0,1} \\[(\\d{0,1})", "E0$1"]
-          - name: re_replace
-            args: ["Episodio{0,1} \\[(\\d{2})", "E$1"]
-          - name: re_replace
-            args: ["-(\\d{0,1}) ", "-0$1 "]
-          - name: re_replace
-            args: ["-(\\d{2}) ", "-$1 "]
-          - name: re_replace
-            args: ["(\\d) *\\/ *(E)", "$1$2"]
-          - name: replace
-            args: ["]", ""]
+            args: ["ITA", ""]
+      title|append: #end TAG
+        text: "ITA]"
       details:
         selector: td:nth-child(2) a:nth-child(1)
         attribute: href
@@ -86,8 +123,10 @@
       date:
         selector: td:nth-child(2) i
         filters:
+          - name: append
+            args: " +02:00"
           - name: dateparse
-            args: "2006-02-01 15:04:05"
+            args: "2006-01-02 15:04:05 -07:00"
       category:
         case:
           "a[href^=\"details.php\"]:contains(\"Stagione\")": 5040 # TV/HD
