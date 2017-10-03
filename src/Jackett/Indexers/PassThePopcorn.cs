@@ -31,7 +31,7 @@ namespace Jackett.Indexers
 
         public PassThePopcorn(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "PassThePopcorn",
-                description: "PassThePopcorn",
+                description: "PassThePopcorn is a Private site for MOVIES / TV",
                 link: "https://passthepopcorn.me/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
