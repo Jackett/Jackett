@@ -1,6 +1,7 @@
 ---
   site: torlock
   name: Torlock
+  description: "Torlock is a torrent search site that lists verified torrents only for TV series and movies"
   language: en-us
   type: public
   encoding: UTF-8

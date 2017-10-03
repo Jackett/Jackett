@@ -1,6 +1,7 @@
 ﻿---
   site: utorrents
   name: u-Torrent
+  description: "U-Torrents.ro (UTT) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
   language: ro-ro
   type: private
   encoding: windows-1252

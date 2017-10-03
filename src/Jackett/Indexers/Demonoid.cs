@@ -29,7 +29,7 @@ namespace Jackett.Indexers
 
         public Demonoid(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Demonoid",
-                description: "Demonoid",
+                description: "Demonoid is a Private torrent tracker for 0DAY / TV / MOVIES / GENERAL",
                 link: "https://www.demonoid.pw/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,

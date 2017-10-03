@@ -1,6 +1,7 @@
 ---
   site: tasmanit
   name: Tasmanit
+  description: "Tasmanit.es is a AUSTRALIAN / NEW ZEALAND Private Torrent Tracker for AUS / NZ TV"
   language: en-us
   type: private
   encoding: UTF-8

@@ -1,6 +1,7 @@
 ﻿---
   site: ztracker
   name: Ztracker
+  description: "Ztracker is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
   language: hu-hu
   type: semi-private
   encoding: ISO-8859-2

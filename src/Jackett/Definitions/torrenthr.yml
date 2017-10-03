@@ -1,6 +1,7 @@
 ---
   site: torrenthr
   name: TorrentHR
+  description: "TorrentHR is a ratioless CROATIAN Private Torrent Tracker for 0DAY / GENERAL"
   language: hr-hr
   type: private
   encoding: windows-1250

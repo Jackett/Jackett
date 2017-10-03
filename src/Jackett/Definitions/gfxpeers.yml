@@ -1,6 +1,7 @@
 ﻿---
   site: gfxpeers
   name: GFXPeers
+  description: "GFXPeers is a ratio-based torrent tracker for all things graphic design and visual effects"
   language: en-us
   type: private
   encoding: UTF-8

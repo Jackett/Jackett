@@ -1,7 +1,7 @@
 ---
   site: anidex
   name:  Anidex
-  description: "Anidex is a torrent tracker and indexer, primarily for English fansub groups of anime"
+  description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime"
   language: en-us
   encoding: UTF-8
   type: public

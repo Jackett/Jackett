@@ -1,6 +1,7 @@
 ---
   site: btdb
   name: BTDB
+  description: "BTDB is a Public BitTorrent DHT search engine. Torrents can be downloaded via magnet links"
   language: en-us
   type: public
   encoding: UTF-8

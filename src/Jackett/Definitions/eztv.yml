@@ -1,6 +1,7 @@
 ---
   site: eztv
   name: EZTV
+  description: "EZTV is a Public torrent site for TV shows"
   language: en-us
   type: public
   encoding: UTF-8
