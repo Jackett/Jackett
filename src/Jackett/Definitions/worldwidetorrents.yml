@@ -1,6 +1,7 @@
 ---
   site: worldwidetorrents
   name: World Wide Torrents
+  description: "World Wide Torrents is a Public site for TV / MOVIES / GENERAL"
   language: en-us
   type: public
   encoding: UTF-8
