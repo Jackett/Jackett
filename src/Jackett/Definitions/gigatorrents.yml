@@ -1,6 +1,7 @@
 ﻿---
   site: gigatorrents
   name: GigaTorrents
+  description: "Giga Torrents is a Hungarian Private site for TV / MOVIES / GENERAL"
   language: hu-hu
   type: private
   encoding: UTF-8
