@@ -40,7 +40,7 @@ namespace Jackett.Utils.Clients
             configService = c;
         }
 
-        async protected void DelayRequest(WebRequest request)
+        async protected Task DelayRequest(WebRequest request)
         {
             if (request.EmulateBrowser == null)
                 request.EmulateBrowser = EmulateBrowser;
@@ -81,7 +81,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("IWebClient.GetBytes(Url:{0})", request.Url));
             PrepareRequest(request);
-            DelayRequest(request);
+            await DelayRequest(request);
             var result = await Run(request);
             result.Request = request;
             logger.Debug(string.Format("IWebClient: Returning {0} => {1} bytes", result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
@@ -92,7 +92,7 @@ namespace Jackett.Utils.Clients
         {
             logger.Debug(string.Format("IWebClient.GetString(Url:{0})", request.Url));
             PrepareRequest(request);
-            DelayRequest(request);
+            await DelayRequest(request);
             var result = await Run(request);
             result.Request = request;
             WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
