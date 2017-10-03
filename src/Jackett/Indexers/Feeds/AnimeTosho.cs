@@ -13,7 +13,16 @@ namespace Jackett.Indexers.Newznab
 {
     public class AnimeTosho : BaseNewznabIndexer
     {
-        public AnimeTosho(IIndexerConfigurationService configService, IWebClient client, Logger logger, IProtectionService p) : base("Anime Tosho", "https://animetosho.org/", "", configService, client, logger, new ConfigurationData(), p)
+        public AnimeTosho(IIndexerConfigurationService configService, IWebClient client, Logger logger, IProtectionService p)
+            : base(
+                "Anime Tosho",
+                "https://animetosho.org/",
+                "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases",
+                configService,
+                client,
+                logger,
+                new ConfigurationData(),
+                p)
         {
             // TODO
             // this might be downloaded and refreshed instead of hard-coding it
