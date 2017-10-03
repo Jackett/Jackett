@@ -1,6 +1,7 @@
 ---
   site: bitspyder
   name: Bitspyder
+  description: "Bitspyder is a Private site for Educational BOOKS / AUDIO"
   language: en-us
   type: private
   encoding: windows-1252
