@@ -361,7 +361,7 @@ namespace Jackett.Indexers
             throw lastException;
         }
 
-        protected async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
+        protected virtual async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
         {
             var request = new Utils.Clients.WebRequest()
             {
@@ -511,7 +511,7 @@ namespace Jackett.Indexers
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
-        protected void UpdateCookieHeader(string newCookies, string cookieOverride = null)
+        protected virtual void UpdateCookieHeader(string newCookies, string cookieOverride = null)
         {
             string newCookieHeader = ResolveCookies((cookieOverride != null && cookieOverride != "" ? cookieOverride + " " : "") + newCookies);
             if (CookieHeader != newCookieHeader)

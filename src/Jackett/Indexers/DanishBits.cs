@@ -43,15 +43,10 @@ namespace Jackett.Indexers
             return searchString;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected override async Task<WebClientByteResult> RequestBytesWithCookies(string url, string cookieOverride = null, RequestType method = RequestType.GET, string referer = null, IEnumerable<KeyValuePair<string, string>> data = null, Dictionary<string, string> headers = null)
         {
-            var newQuery = query;
-            if (string.IsNullOrEmpty(query.SearchTerm) && string.IsNullOrEmpty(query.ImdbID))
-            { 
-                newQuery = query.Clone();
-                newQuery.SearchTerm = "%";
-            }
-            return await base.PerformQuery(newQuery);
+            CookieHeader = null; // Download fill fail with cookies set
+            return await base.RequestBytesWithCookies(url, cookieOverride, method, referer, data, headers);
         }
     }
 }
