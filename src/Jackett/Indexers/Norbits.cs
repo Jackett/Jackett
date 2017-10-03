@@ -43,7 +43,7 @@ namespace Jackett.Indexers
         public Norbits(IIndexerConfigurationService configService, IWebClient w, Logger l, IProtectionService ps)
             : base(
                 name: "Norbits",
-                description: "Norbits",
+                description: "Norbits is a Norwegian Private site for MOVIES / TV / GENERAL",
                 link: "https://norbits.net/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
