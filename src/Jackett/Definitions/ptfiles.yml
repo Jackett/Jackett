@@ -1,6 +1,7 @@
 ﻿---
   site: ptfiles
   name: PTFiles
+  description: "PTFiles (PTF) is a Private site for TV / MOVIES / GENERAL"
   language: en-us
   type: private
   encoding: windows-1252
