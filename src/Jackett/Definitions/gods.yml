@@ -1,6 +1,7 @@
 ﻿---
   site: gods
   name: GODS
+  description: "GODS is a German Private site for TV / MOVIES / GENERAL"
   language: de-de
   type: private
   encoding: windows-1252
