@@ -10,7 +10,7 @@ namespace Jackett.Indexers
     {
         public BrokenStones(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "BrokenStones",
-                desc: null,
+                desc: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
                 link: "https://brokenstones.club/",
                 configService: configService,
                 logger: logger,
