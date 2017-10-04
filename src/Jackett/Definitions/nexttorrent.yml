@@ -1,6 +1,7 @@
 ---
   site: nexttorrent
   name: NextTorrent
+  description: "NextTorrent is a FRENCH Public site for TV / MOVIES / GENERAL"
   language: fr-fr
   type: public
   encoding: UTF-8

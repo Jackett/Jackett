@@ -1,6 +1,7 @@
 ---
   site: hdtorrentsit
   name: HDTorrents.it
+  description: "HDTorrents.it is an ITALIAN Private site for TV / MOVIES"
   language: it-it
   type: private
   encoding: UTF-8

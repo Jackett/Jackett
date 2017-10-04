@@ -34,7 +34,7 @@ namespace Jackett.Indexers
 
         public PolishTracker(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "PolishTracker",
-                   description: null,
+                   description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL",
                    link: "https://pte.nu/",
                    caps: new TorznabCapabilities(),
                    configService: configService,

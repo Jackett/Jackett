@@ -1,6 +1,7 @@
 ---
   site: manicomioshare
   name: Manicomio Share
+  description: "Manicomio Share is a Brazilian Private site for TV / MOVIES / GENERAL"
   language: pt-br
   type: private
   encoding: iso-8859-1

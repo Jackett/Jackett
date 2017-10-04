@@ -46,7 +46,7 @@ namespace Jackett.Indexers
 
         public TorrentDay(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
-                description: "TorrentDay",
+                description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
                 link: "https://torrentday.it/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,

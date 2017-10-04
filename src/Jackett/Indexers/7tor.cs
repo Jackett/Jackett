@@ -31,7 +31,7 @@ namespace Jackett.Indexers
 
         public SevenTor(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "7tor",
-                   description: null,
+                   description: "7Tor is a RUSSIAN Semi-Private site for MOVIES / TV / GENERAL",
                    link: "https://7tor.org/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,

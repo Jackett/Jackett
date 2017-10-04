@@ -1,6 +1,7 @@
 ---
   site: t411v2
   name: t411 v2
+  description: "t411 v2 is a FRENCH Public site for TV / MOVIES / GENERAL"
   language: fr-fr
   type: public
   encoding: UTF-8

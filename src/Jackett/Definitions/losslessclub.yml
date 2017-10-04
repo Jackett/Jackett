@@ -1,6 +1,7 @@
 ---
   site: losslessclub
   name: LosslessClub
+  description: "LosslessClub is a Romanian Private site for High Quality Music"
   language: ru-ru
   type: private
   encoding: windows-1251

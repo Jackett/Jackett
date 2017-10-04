@@ -1,6 +1,7 @@
 ---
   site: kickasstorrent-kathow
   name: KickAssTorrent (thekat.se)
+  description: "thekat.se is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
   language: en-us
   type: public
   encoding: UTF-8

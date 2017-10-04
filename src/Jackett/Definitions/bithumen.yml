@@ -1,6 +1,7 @@
 ---
   site: bithumen
   name: BitHUmen
+  description: "BitHUmen is a Hungarian Private site for TV / MOVIES / GENERAL"
   language: hu-hu
   type: private
   encoding: ISO-8859-2

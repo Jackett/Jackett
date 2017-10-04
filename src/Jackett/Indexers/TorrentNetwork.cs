@@ -33,7 +33,7 @@ namespace Jackett.Indexers
 
         public TorrentNetwork(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "Torrent Network",
-                   description: null,
+                   description: "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL",
                    link: "https://tntracker.org/",
                    caps: new TorznabCapabilities(),
                    configService: configService,

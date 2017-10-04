@@ -1,6 +1,7 @@
 ---
   site: tntvillage
   name: TNTVillage
+  description: "TNTVillage is an ITALIAN Public site for TV / MOVIES / GENERAL"
   language: it-it
   type: public
   encoding: UTF-8
