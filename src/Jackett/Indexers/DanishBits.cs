@@ -8,9 +8,12 @@ using System;
 using System.Text;
 using Jackett.Indexers.Abstract;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Web;
 using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
