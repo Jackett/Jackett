@@ -1,3 +1,4 @@
+using CsQuery;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils;
@@ -11,6 +12,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Web;
