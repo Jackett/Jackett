@@ -1,5 +1,6 @@
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Utils;
 using Jackett.Utils.Clients;
 using NLog;
 using System.Text;
