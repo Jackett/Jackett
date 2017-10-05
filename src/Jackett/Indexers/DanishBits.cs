@@ -1,31 +1,21 @@
-using CsQuery;
 using Jackett.Models;
 using Jackett.Services;
-using Jackett.Utils;
 using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
 using NLog;
-using System;
 using System.Text;
 using Jackett.Indexers.Abstract;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using System.Web;
 using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class DanishBits : CouchPotatoTracker
     {
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataUserPasskey)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,7 +28,8 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin("Note about Passkey: This is not your login Password. Find the Passkey by logging into DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal' section on the left side."))
+                configData: new ConfigurationDataUserPasskey("Note about Passkey: This is not your login Password. Find the Passkey by logging into DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal' section on the left side.")
+            )
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "da-dk";
