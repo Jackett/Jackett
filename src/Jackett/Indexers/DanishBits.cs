@@ -7,11 +7,18 @@ using Jackett.Indexers.Abstract;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class DanishBits : CouchPotatoTracker
     {
+        new ConfigurationDataBasicLogin configData
+        {
+            get { return (ConfigurationDataBasicLogin)base.configData; }
+            set { base.configData = value; }
+        }
+
         public DanishBits(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "DanishBits",
                 description: "A danish closed torrent tracker",
@@ -20,7 +27,8 @@ namespace Jackett.Indexers
                 configService: configService,
                 client: c,
                 logger: l,
-                p: ps
+                p: ps,
+                configData: new ConfigurationDataBasicLogin("Note about Passkey: This is not your login Password. Find the Passkey by logging into DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal' section on the left side.")
                 )
         {
             Encoding = Encoding.GetEncoding("UTF-8");
