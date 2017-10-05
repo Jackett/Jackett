@@ -28,8 +28,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin("Note about Passkey: This is not your login Password. Find the Passkey by logging into DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal' section on the left side.")
-                )
+                configData: new ConfigurationDataBasicLogin("Note about Passkey: This is not your login Password. Find the Passkey by logging into DanishBits with your Browser, and under your account page you'll see your passkey under the 'Personal' section on the left side."))
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "da-dk";
