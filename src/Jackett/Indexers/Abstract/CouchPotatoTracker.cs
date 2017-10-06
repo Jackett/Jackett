@@ -15,7 +15,6 @@ namespace Jackett.Indexers.Abstract
     public abstract class CouchPotatoTracker : BaseWebIndexer
     {
         protected string endpoint;
-        private ConfigurationDataUserPasskey configData1;
 
         protected string APIUrl { get { return SiteLink + endpoint; } }
 
@@ -34,7 +33,8 @@ namespace Jackett.Indexers.Abstract
                 client: client,
                 logger: logger,
                 p: p,
-                configData: new ConfigurationDataUserPasskey())
+                configData: new ConfigurationDataUserPasskey()
+            )
         {
             this.endpoint = endpoint;
             TorznabCaps.SupportsImdbSearch = true;
@@ -42,7 +42,7 @@ namespace Jackett.Indexers.Abstract
 
         public CouchPotatoTracker(IIndexerConfigurationService configService, IWebClient client, Logger logger, IProtectionService p, string name, string description, string link, string endpoint, ConfigurationDataUserPasskey configData) : this(configService, client, logger, p, name, description, link, endpoint)
         {
-            configData1 = configData;
+            this.configData = configData;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
