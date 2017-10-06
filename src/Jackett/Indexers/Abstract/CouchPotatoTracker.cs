@@ -1,4 +1,4 @@
-﻿using Jackett.Models;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
@@ -23,7 +23,7 @@ namespace Jackett.Indexers.Abstract
             set { base.configData = value; }
         }
 
-        public CouchPotatoTracker(IIndexerConfigurationService configService, IWebClient client, Logger logger, IProtectionService p, string name, string description, string link, string endpoint)
+        public CouchPotatoTracker(IIndexerConfigurationService configService, IWebClient client, Logger logger, IProtectionService p, ConfigurationDataUserPasskey configData, string name, string description, string link, string endpoint)
             : base(name: name,
                 description: description,
                 link: link,
@@ -32,7 +32,8 @@ namespace Jackett.Indexers.Abstract
                 client: client,
                 logger: logger,
                 p: p,
-                configData: new ConfigurationDataUserPasskey())
+                configData: configData
+            )
         {
             this.endpoint = endpoint;
             TorznabCaps.SupportsImdbSearch = true;
