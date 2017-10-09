@@ -28,7 +28,7 @@
     selector: a[href^="/get_torrent/"]
 
   search:
-    path: "/search/{{ .Query.Keywords }}"
+    path: "{{if .Keywords}}/recherche/{{.Keywords}}{{else}}{{end}}"
     rows:
       selector: div.listing-torrent > table > tbody > tr:has(a)
     fields:
@@ -70,9 +70,11 @@
       category:
         selector: td:nth-child(1) > i
         case:
-          .Movies: "movies"
-          .TV: "tvshows"
-          .Softwares: "softwares"
-          .Music: "music"
-          .Games: "games"
-          .Books: "books"
+          .Films: "movies"
+          .Séries: "tvshows"
+          .Logiciels: "softwares"
+          .Musiques: "music"
+          .Jeux: "games"
+          .Ebooks: "books"
+      date:
+        text: "now"
