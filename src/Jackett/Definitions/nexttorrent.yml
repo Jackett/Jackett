@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.nextorrent.cc/
+  legacylinks:
     - https://www.nextorrent.org/
 
   caps:
