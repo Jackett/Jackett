@@ -27,7 +27,12 @@
     selector: a[href^="/telecharger-torrent/"]
 
   search:
-    path: /torrents/search/?search={{ .Keywords}}
+    path: /torrents/search/?search=
+    keywordsfilters:
+      - name: replace # use this as a workaround till #893 is implemented
+        args: ["Greys Anatomy", "Grey's Anatomy"]
+    inputs:
+      keywords: "{{ .Keywords }}"
     rows:
       selector: tr.isItem.isItemDesk
     fields:
@@ -48,7 +53,7 @@
         selector: td.m-name > a
         filters:
           - name: replace # Fix Grey's Anatomy results
-            args: ["Greys Anatomy", "Grey's Anatomy"]
+            args: ["Grey's Anatomy", "Greys Anatomy"]
           # now we put the date at the right place according scene 
           # naming rules using .Result.site_date
           - name: replace
