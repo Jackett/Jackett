@@ -28,7 +28,7 @@
 
   search:
     path: /torrents/search/?search=
-    keywordsfilters:
+    keywordsfilters: #1963
       - name: replace # Add Keywords
         args: ["Greys Anatomy", "Grey's Anatomy"]
     inputs:
@@ -52,7 +52,7 @@
      title:
         selector: td.m-name > a
         filters:
-          - name: replace # Fix Grey's Anatomy results V2
+          - name: replace #1963 Fix Grey's Anatomy results V2 
             args: ["Grey's Anatomy", "Greys Anatomy"]
           # now we put the date at the right place according scene 
           # naming rules using .Result.site_date
