@@ -204,7 +204,13 @@ namespace Jackett.Services
         public IWebIndexer GetWebIndexer(string name)
         {
             if (indexers.ContainsKey(name))
+            {
                 return indexers[name] as IWebIndexer;
+            }
+            else if (name == "all")
+            {
+                return aggregateIndexer as IWebIndexer;
+            }
 
             logger.Error("Request for unknown indexer: " + name);
             throw new Exception("Unknown indexer: " + name);
