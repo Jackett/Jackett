@@ -49,28 +49,32 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            AddCategoryMapping(24, TorznabCatType.TVAnime); //Anime
-            AddCategoryMapping(11, TorznabCatType.Audio); //Audio
-            AddCategoryMapping(18, TorznabCatType.Other); //Misc
-            AddCategoryMapping(16, TorznabCatType.Books); //Docs
-            AddCategoryMapping(25, TorznabCatType.Movies3D); //Movies 3D
-            AddCategoryMapping(20, TorznabCatType.MoviesBluRay); // Movies Blu-Ray
-            AddCategoryMapping(2, TorznabCatType.MoviesDVD); //Movies DVD
-            AddCategoryMapping(3, TorznabCatType.MoviesForeign); //Movies DVD-RO
-            AddCategoryMapping(4, TorznabCatType.MoviesHD); //Movies HD
-            AddCategoryMapping(19, TorznabCatType.MoviesForeign); //Movies HD-RO
-            AddCategoryMapping(1, TorznabCatType.MoviesSD); //Movies SD
-            AddCategoryMapping(10, TorznabCatType.Console); //Console Games
-            AddCategoryMapping(9, TorznabCatType.PCGames); //PC Games
-            AddCategoryMapping(17, TorznabCatType.PC); //Linux
-            AddCategoryMapping(22, TorznabCatType.PCPhoneOther); //Apps/mobile
-            AddCategoryMapping(8, TorznabCatType.PC); //Software
-            AddCategoryMapping(21, TorznabCatType.TVHD); //TV HD
-            AddCategoryMapping(23, TorznabCatType.TVSD); //TV SD
-            AddCategoryMapping(13, TorznabCatType.TVSport); //Sport
-            AddCategoryMapping(14, TorznabCatType.TV); //TV
-            AddCategoryMapping(12, TorznabCatType.AudioVideo); //Music Video
-            AddCategoryMapping(7, TorznabCatType.XXX); //XXX
+            AddCategoryMapping(24, TorznabCatType.TVAnime , "Anime");
+            AddCategoryMapping(11, TorznabCatType.Audio , "Audio");
+            AddCategoryMapping(15, TorznabCatType.TV , "Desene");
+            AddCategoryMapping(18, TorznabCatType.Other , "Diverse");
+            AddCategoryMapping(16, TorznabCatType.Books , "Docs");
+            AddCategoryMapping(25, TorznabCatType.Movies3D , "Filme 3D");
+            AddCategoryMapping(6, TorznabCatType.MoviesHD , "Filme 4K");
+            AddCategoryMapping(26, TorznabCatType.MoviesBluRay , "Filme 4K Blu-Ray");
+            AddCategoryMapping(20, TorznabCatType.MoviesBluRay , "Filme Blu-Ray");
+            AddCategoryMapping(2, TorznabCatType.MoviesDVD , "Filme DVD");
+            AddCategoryMapping(3, TorznabCatType.MoviesForeign , "Filme DVD-RO");
+            AddCategoryMapping(4, TorznabCatType.MoviesHD , "Filme HD");
+            AddCategoryMapping(19, TorznabCatType.MoviesForeign, "Filme HD-RO");
+            AddCategoryMapping(1, TorznabCatType.MoviesSD , "Filme SD");
+            AddCategoryMapping(5, TorznabCatType.AudioLossless , "FLAC");
+            AddCategoryMapping(10, TorznabCatType.Console , "Jocuri Console");
+            AddCategoryMapping(9, TorznabCatType.PCGames , "Jocuri PC");
+            AddCategoryMapping(17, TorznabCatType.PC , "Linux");
+            AddCategoryMapping(22, TorznabCatType.PCPhoneOther , "Mobile");
+            AddCategoryMapping(8, TorznabCatType.PC , "Programe");
+            AddCategoryMapping(27, TorznabCatType.TVHD , "Seriale 4K");
+            AddCategoryMapping(21, TorznabCatType.TVHD , "Seriale HD");
+            AddCategoryMapping(23, TorznabCatType.TVSD , "Seriale SD");
+            AddCategoryMapping(13, TorznabCatType.TVSport , "Sport");
+            AddCategoryMapping(12, TorznabCatType.AudioVideo , "Videoclip");
+            AddCategoryMapping(7, TorznabCatType.XXX , "XXX");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
