@@ -862,6 +862,14 @@ namespace Jackett.Indexers
                         else
                             throw new Exception("unsupported diacritics filter argument");
                         break;
+                    case "jsonjoinarray":
+                        var jsonjoinarrayJSONPath = (string)Filter.Args[0];
+                        var jsonjoinarraySeparator = (string)Filter.Args[1];
+                        var jsonjoinarrayO = JObject.Parse(Data);
+                        var jsonjoinarrayOResult = jsonjoinarrayO.SelectToken(jsonjoinarrayJSONPath);
+                        var jsonjoinarrayOResultStrings = jsonjoinarrayOResult.Select(j => j.ToString());
+                        Data = string.Join(jsonjoinarraySeparator, jsonjoinarrayOResultStrings);
+                        break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
                         var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
@@ -1085,6 +1093,13 @@ namespace Jackett.Indexers
                 else
                     response = await RequestStringWithCookies(searchUrl, null, null, headers);
                 var results = response.Content;
+
+                if (Search.Preprocessingfilters != null)
+                { 
+                    results = applyFilters(results, Search.Preprocessingfilters, variables);
+                    logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
+                }
+
                 try
                 {
                     var SearchResultParser = new HtmlParser();
