@@ -27,7 +27,7 @@ namespace Jackett.Models.DTO
                 var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4}[A-Za-z]?)");
                 if (episodeMatch.Success)
                 {
-                    stringQuery.Episode = episodeMatch.Groups[1].Value;
+                    stringQuery.Episode = episodeMatch.Groups[1].Value.TrimStart(new char[] { '0' });
                     queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length);
                 }
                 queryStr = queryStr.Trim();
