@@ -35,6 +35,8 @@ namespace Jackett.Indexers
         private string MusicSearchUrl { get { return SiteLink + "torrents2.php?"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
         public bool InsertSeason { get { return configData.InsertSeason != null && configData.InsertSeason.Value; } }
+        public bool AddSynonyms { get { return configData.AddSynonyms.Value; } }
+        public bool FilterSeasonEpisode { get { return configData.FilterSeasonEpisode.Value; } }
 
         new ConfigurationDataAnimeBytes configData
         {
@@ -136,13 +138,13 @@ namespace Jackett.Indexers
 
             if (ContainsMusicCategories(query.Categories))
             {
-                foreach (var result in await GetResults(SearchType.Audio, query.SanitizedSearchTerm))
+                foreach (var result in await GetResults(query, SearchType.Audio, query.SanitizedSearchTerm))
                 {
                     releases.Add(result);
                 }
             }
 
-            foreach (var result in await GetResults(SearchType.Video, StripEpisodeNumber(query.SanitizedSearchTerm)))
+            foreach (var result in await GetResults(query, SearchType.Video, StripEpisodeNumber(query.SanitizedSearchTerm)))
             {
                 releases.Add(result);
             }
@@ -164,7 +166,7 @@ namespace Jackett.Indexers
             return categories.Length == 0 || music.Any(categories.Contains);
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> GetResults(SearchType searchType, string searchTerm)
+        private async Task<IEnumerable<ReleaseInfo>> GetResults(TorznabQuery query, SearchType searchType, string searchTerm)
         {
             var cleanSearchTerm = HttpUtility.UrlEncode(searchTerm);
 
@@ -232,7 +234,7 @@ namespace Jackett.Indexers
                     synonyms.Add(mainTitle);
 
                     // If the title contains a comma then we can't use the synonyms as they are comma seperated
-                    if (!mainTitle.Contains(","))
+                    if (!mainTitle.Contains(",") && AddSynonyms)
                     {
                         var symnomnNames = string.Empty;
                         foreach (var e in seriesCq.Find(".group_statbox li"))
@@ -259,22 +261,36 @@ namespace Jackett.Indexers
                     foreach (var title in synonyms)
                     {
                         var releaseRows = seriesCq.Find(".torrent_group tr");
+                        string episode = null;
+                        int? season = null;
 
                         // Skip the first two info rows
                         for (int r = 1; r < releaseRows.Count(); r++)
                         {
+                            
                             var row = releaseRows.Get(r);
                             var rowCq = row.Cq();
                             if (rowCq.HasClass("edition_info"))
                             {
+                                episode = null;
+                                season = null;
                                 releaseInfo = rowCq.Find("td").Text();
-
                                 if (string.IsNullOrWhiteSpace(releaseInfo))
                                 {
                                     // Single episodes alpha - Reported that this info is missing.
                                     // It should self correct when availible
                                     break;
                                 }
+
+                                Regex SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                                var SeasonRegExMatch = SeasonRegEx.Match(releaseInfo);
+                                if (SeasonRegExMatch.Success)
+                                    season = ParseUtil.CoerceInt(SeasonRegExMatch.Groups[1].Value);
+
+                                Regex EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                                var EpisodeRegExMatch = EpisodeRegEx.Match(releaseInfo);
+                                if (EpisodeRegExMatch.Success)
+                                    episode = EpisodeRegExMatch.Groups[1].Value;
 
                                 releaseInfo = releaseInfo.Replace("Episode ", "");
                                 releaseInfo = releaseInfo.Replace("Season ", "S");
@@ -293,6 +309,14 @@ namespace Jackett.Indexers
                                 if (links.Count() != 2)
                                 {
                                     continue;
+                                }
+
+                                if (FilterSeasonEpisode)
+                                {
+                                    if (query.Season != 0 && season != null && season != query.Season) // skip if season doesn't match
+                                        continue;
+                                    if (query.Episode != null && episode != null && episode != query.Episode) // skip if episode doesn't match
+                                        continue;
                                 }
 
                                 var release = new ReleaseInfo();
