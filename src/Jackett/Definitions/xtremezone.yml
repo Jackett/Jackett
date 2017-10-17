@@ -48,7 +48,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: /login
     method: form
     form: form
     inputs:
@@ -57,14 +57,14 @@
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
-      path: /browse.php
+      path: /browse
       
   ratio:
-    path: /browse.php
+    path: /browse
     selector: font:contains("Ratio:")+font
 
   search:
-    path: /browse.php
+    path: /browse
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
@@ -86,6 +86,9 @@
       download:
         selector: a[href^="dwn.php"]
         attribute: href
+        filters:
+          - name: replace
+            args: ["dwn.php", "dwn"]
       size:
         selector: td:nth-child(7)
       date:
