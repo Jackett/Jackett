@@ -127,6 +127,10 @@ namespace Jackett.Indexers
                 {
                     var showName = group.QuerySelector(".tp-showname a").InnerHtml.Replace("(", "").Replace(")", "").Replace(' ', '.');
                     var season = group.QuerySelector(".big_info a").InnerHtml;
+                    var seasonNumber = SeasonToNumber(season);
+                    if (seasonNumber != null && query.Season > 0 && seasonNumber != query.Season) // filter unwanted seasons
+                        continue;
+                    var seasonTag = SeasonNumberToShortSeason(seasonNumber) ?? season;
 
                     // Loop through all group items
                     var previousElement = group;
@@ -160,7 +164,7 @@ namespace Jackett.Indexers
                             var title = string.Join(".", new List<string>
                             {
                                 showName,
-                                SeasonToShortSeason(season),
+                                seasonTag,
                                 qualityData[1].Trim(),
                                 qualityEdition, // Audio quality should be after this one. Unobtainable at the moment.
                                 $"{qualityData[0].Trim()}-MTV"
@@ -253,16 +257,24 @@ namespace Jackett.Indexers
             };
         }
 
-        // Changes "Season 1" to "S01"
-        private static string SeasonToShortSeason(string season)
+        // Changes "Season 1" to "1"
+        private static int? SeasonToNumber(string season)
         {
             var seasonMatch = new Regex(@"Season (?<seasonNumber>\d{1,2})").Match(season);
             if (seasonMatch.Success)
             {
-                season = $"S{int.Parse(seasonMatch.Groups["seasonNumber"].Value):00}";
+                return int.Parse(seasonMatch.Groups["seasonNumber"].Value);
             }
 
-            return season;
+            return null;
+        }
+
+        // Changes "1" to "S01"
+        private static string SeasonNumberToShortSeason(int? season)
+        {
+            if (season == null)
+                return null;
+            return $"S{season:00}";
         }
     }
 }
