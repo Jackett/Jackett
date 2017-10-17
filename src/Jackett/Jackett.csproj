@@ -181,6 +181,7 @@
     <Compile Include="Indexers\ArcheTorrent.cs" />
     <Compile Include="Indexers\HDOnly.cs" />
     <Compile Include="Indexers\cgpeers.cs" />
+    <Compile Include="Indexers\LostFilm.cs" />
     <Compile Include="Indexers\PiXELHD.cs" />
     <Compile Include="Indexers\Hardbay.cs" />
     <Compile Include="Indexers\Synthesiz3r.cs" />
