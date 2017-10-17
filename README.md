@@ -62,6 +62,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CzTorrent
  * Deildu
  * Gay-Torrents.net
+ * LostFilm.tv
  * NetHD
  * RuTracker
  * SkTorrent
