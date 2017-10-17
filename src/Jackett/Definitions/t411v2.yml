@@ -47,6 +47,8 @@
      title:
         selector: td.m-name > a
         filters:
+          - name: replace # Fix Grey's Anatomy results
+            args: ["Greys Anatomy", "Grey's Anatomy"]
           # now we put the date at the right place according scene 
           # naming rules using .Result.site_date
           - name: replace

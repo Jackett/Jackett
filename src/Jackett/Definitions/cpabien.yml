@@ -6,7 +6,10 @@
   type: public
   encoding: UTF-8
   links:
+    - http://cpabien.org/
+  legacylinks:
     - http://cpabien.cc/
+    - http://cpabien.co/
 
   caps:
     categorymappings:

@@ -1,0 +1,58 @@
+---
+  site: btbit
+  name: btbit
+  description: "btbit is a public magnet search engine for MOVIES / GENERAL. This definition is for the English site."
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - http://en.btbit.org/
+
+  caps:
+    categories:
+      "Movie": Movies
+      "Package": PC/0day
+      "Other": Other
+      "Software": PC
+      "Mirror": PC/ISO
+      "Music": Audio
+      "Picture": Other/Misc
+      "Document": Books
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    path: "list/{{if .Keywords}}{{.Keywords}}{{else}}movie{{end}}.html"
+    rows:
+      selector: .rs
+    fields:
+      title:
+        selector: .title
+      category:
+        selector: .sbar span[class^="cpill"]
+      details:
+        selector: .title h3 a
+        attribute: href
+      download:
+        selector: .sbar a[href^="magnet:?xt"]
+        attribute: href
+      date:
+        selector: .sbar span:nth-of-type(3) b
+        filters:
+          - name: dateparse 
+            args: "2006-01-02"
+      size:
+        selector: .sbar span:nth-of-type(4) b
+      files:
+        selector: .sbar span:nth-of-type(5) b
+      grabs:
+        selector: .sbar span:nth-of-type(6) b
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
