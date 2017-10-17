@@ -27,12 +27,12 @@
     selector: a[href^="/telecharger-torrent/"]
 
   search:
-    path: /torrents/search/?search=
+    path: /torrents/search/
     keywordsfilters: #1963
       - name: replace # Add Keywords
         args: ["Greys Anatomy", "Grey's Anatomy"]
     inputs:
-      keywords: "{{ .Keywords }}"
+      search: "{{ .Keywords }}"
     rows:
       selector: tr.isItem.isItemDesk
     fields:
