@@ -29,6 +29,22 @@
       - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)"}
       - {id: 427, cat: Books, desc: "eBook(電子書)"}
       - {id: 409, cat: Other, desc: "Misc(其他)"}
+      # adult
+      - {id: 410, cat: XXX, desc: "AV(有碼)/HD Censored"}
+      - {id: 429, cat: XXX, desc: "AV(無碼)/HD Uncensored"}
+      - {id: 424, cat: XXX, desc: "AV(有碼)/SD Censored"}
+      - {id: 430, cat: XXX, desc: "AV(無碼)/SD Uncensored"}
+      - {id: 426, cat: XXX, desc: "AV(無碼)/DVDiSo Uncensored"}
+      - {id: 437, cat: XXX, desc: "AV(有碼)/DVDiSo Censored"}
+      - {id: 431, cat: XXX, desc: "AV(有碼)/Blu-Ray Censored"}
+      - {id: 432, cat: XXX, desc: "AV(無碼)/Blu-Ray Uncensored"}
+      - {id: 436, cat: XXX, desc: "AV(網站)/0Day"}
+      - {id: 425, cat: XXX, desc: "IV(寫真影集)/Video Collection"}
+      - {id: 433, cat: XXX, desc: "IV(寫真圖集)/Picture Collection"}
+      - {id: 411, cat: XXX, desc: "H-Game(遊戲)"}
+      - {id: 412, cat: XXX, desc: "H-Anime(動畫)"}
+      - {id: 413, cat: XXX, desc: "H-Comic(漫畫)"}
+
 
     modes:
       search: [q]
@@ -66,7 +82,11 @@
         args: "Ratio:\\s(.*?)\\s\\s"
 
   search:
-    path: /torrents.php
+    paths:
+      - path: torrents.php
+        categorymappings: ["!", 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
+      - path: adult.php
+        categorymappings: [410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
     method: post
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
