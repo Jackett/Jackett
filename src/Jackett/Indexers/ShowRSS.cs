@@ -28,7 +28,7 @@ namespace Jackett.Indexers
         public ShowRSS(IIndexerConfigurationService configService, IWebClient wc, Logger l, IProtectionService ps)
             : base(name: "ShowRSS",
                 description: "showRSS is a service that allows you to keep track of your favorite TV shows",
-                link: "http://showrss.info/",
+                link: "https://showrss.info/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
