@@ -6,7 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.gktorrent.com
+    - http://www.gktorrent.com
+  legacylinks:
+    - https://www.gktorrent.com # they're forcing http
 
   caps:
     categorymappings:
