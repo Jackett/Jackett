@@ -54,8 +54,6 @@ namespace Jackett.Utils.Clients
                     if (hosts.Contains(request.Host))
                         return true;
                 }
-                if (trustedCertificates.Count > 0)
-                    logger.Warn("Certificate hash {0} for {1} isn't whitelisted (whitelist cleanup needed?)", hash, request.Host);
                 return sslPolicyErrors == SslPolicyErrors.None;
             };
         }
