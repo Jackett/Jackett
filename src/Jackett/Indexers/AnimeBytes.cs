@@ -392,8 +392,8 @@ namespace Jackett.Indexers
                                         releaseTags.RemoveAt(i);
                                 }
 
-                                var group = releaseTags.Last();
-                                if (group.Contains("(") && group.Contains(")"))
+                                var group = releaseTags.LastOrDefault();
+                                if (group != null && group.Contains("(") && group.Contains(")"))
                                 {
                                     // Skip raws if set
                                     if (group.ToLowerInvariant().StartsWith("raw") && !AllowRaws)
@@ -452,8 +452,8 @@ namespace Jackett.Indexers
                                     release.DownloadVolumeFactor = 1;
                                 release.UploadVolumeFactor = 1;
 
-                                if (release.Category != null)
-                                    releases.Add(release);
+                                //if (release.Category != null)
+                                releases.Add(release);
                             }
                         }
                     }
