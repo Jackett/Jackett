@@ -16,6 +16,8 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: /login
@@ -28,56 +30,72 @@
     test:
       path: /torrents
 
-  download:
-    selector: a[href^="/download.php/"]
-        
   search:
-    path: /torrents/search
+    path: /filter
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      name: "{{ .Query.Keywords }}"
-      category_id: 1
-      type: BD50
-      order: created_at:desc
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      imdb: "{{ .Query.IMDBIDShort }}"
+      tvdb: ""
+      tmdb: ""
+      sorting: created_at
+      direction: desc
+      qty: 100
+    preprocessingfilters:
+      - name: jsonjoinarray
+        args: ["$.result", ""]
+      - name: prepend
+        args: "<table>"
+      - name: append
+        args: "</table>"
     rows:
-      selector: table.table > tbody > tr
+      selector: tr
     fields:
-      # category:
-      #   selector: a[href^="categories"]
-      #   attribute: href
+      category:
+        selector: a[href*="/categories/"]
+        attribute: href
+        filters:
+          - name: strdump
+          - name: regexp
+            args: "/categories/.*?\\.(\\d+)"
+          - name: strdump
       title:
-        remove: ul
-        selector: td:nth-child(2)
-      download:
         selector: a.view-torrent
+      download:
+        selector: a[href*="/download_check/"]
         attribute: href
         filters:
           - name: replace
-            args: ["/torrents/", "/download/"]
+            args: ["/download_check/", "/download/"]
       details:
         selector: a.view-torrent
         attribute: href
+      imdb:
+        optional: true
+        selector: a[href*="://www.imdb.com/title/"]
+        attribute: href
       size:
-        selector: td:nth-child(4)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
-      grabs:
         selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
         filters:
           - name: regexp
-            args: (\d+)
+            args: ([\d\.]+)
       date:
-        selector: td:nth-child(3)
+        selector: time
+        attribute: datetime
         filters:
           - name: append
-            args: " ago"
+            args: " +00:00"
       downloadvolumefactor:
         case:
-          #"i[data-original-title=\"100% Free\"]": "0"
+          "i[data-original-title=\"100% Free\"]": "0"
           "*": "1"
       uploadvolumefactor:
         case:
-          #"i[data-original-title=\"Double upload\"]": "2"
+          "i[data-original-title=\"Double upload\"]": "2"
           "*": "1"
