@@ -372,7 +372,7 @@ namespace Jackett.Indexers
                                 if (searchType == SearchType.Audio)
                                 {
                                     category = seriesCq.Find(".group_img .cat a").Text();
-                                    if (category == "Single" || category == "Album" || category == "Compilation" || category == "Soundtrack" || category == "Remix CD")
+                                    if (category == "Single" || category == "EP" || category == "Album" || category == "Compilation" || category == "Soundtrack" || category == "Remix CD" || category == "PV" || category == "Live Album" || category == "Image CD" || category == "Drama CD" || category == "Vocal CD")
                                     {
                                         var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
                                         if (description.Contains(" Lossless "))
