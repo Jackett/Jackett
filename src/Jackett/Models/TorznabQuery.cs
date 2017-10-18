@@ -25,6 +25,13 @@ namespace Jackett.Models
         public string Episode { get; set; }
         public string SearchTerm { get; set; }
 
+        public string Album { get; set; }
+        public string Artist { get; set; }
+        public string Label { get; set; }
+        public string Track { get; set; }
+        public int? Year { get; set; }
+        public ICollection<string> Genre { get; set; }
+
         public bool IsTest { get; set; }
 
         public string ImdbIDShort { get { return (ImdbID != null ? ImdbID.TrimStart('t') : null); } }
@@ -52,6 +59,14 @@ namespace Jackett.Models
             get
             {
                 return QueryType == "movie" || (QueryType == "TorrentPotato" && !string.IsNullOrWhiteSpace(SearchTerm));
+            }
+        }
+
+        public bool IsMusicSearch
+        {
+            get
+            {
+                return QueryType == "music";
             }
         }
 
@@ -148,6 +163,15 @@ namespace Jackett.Models
             ret.Episode = Episode;
             ret.SearchTerm = SearchTerm;
             ret.IsTest = IsTest;
+            ret.Album = Album;
+            ret.Artist = Artist;
+            ret.Label = Label;
+            ret.Track = Track;
+            ret.Year = Year;
+            if (Genre != null)
+            {
+                Genre.Select(item => item.Clone()).ToList();
+            }
             if (QueryStringParts != null && QueryStringParts.Length > 0)
             {
                 ret.QueryStringParts = new string[QueryStringParts.Length];

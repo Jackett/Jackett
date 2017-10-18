@@ -86,6 +86,18 @@ namespace Jackett.Indexers.Abstract
                 queryCollection.Add("searchstr", searchString);
             }
 
+            if (query.Artist != null)
+                queryCollection.Add("artistname", query.Artist);
+
+            if (query.Label != null)
+                queryCollection.Add("recordlabel", query.Label);
+
+            if (query.Year != null)
+                queryCollection.Add("year", query.Year.ToString());
+
+            if (query.Album != null)
+                queryCollection.Add("groupname", query.Album);
+
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 queryCollection.Add("filter_cat[" + cat + "]", "1");

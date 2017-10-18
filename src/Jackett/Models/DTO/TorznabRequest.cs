@@ -16,6 +16,12 @@ namespace Jackett.Models.DTO
         public string rid { get; set; }
         public string season { get; set; }
         public string ep { get; set; }
+        public string album { get; set; }
+        public string artist { get; set; }
+        public string label { get; set; }
+        public string track { get; set; }
+        public string year { get; set; }
+        public string genre { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
         {
@@ -52,6 +58,19 @@ namespace Jackett.Models.DTO
 
             if (!request.season.IsNullOrEmptyOrWhitespace())
                 query.Season = int.Parse(request.season);
+
+            if (!request.album.IsNullOrEmptyOrWhitespace())
+                query.Album = request.album;
+            if (!request.artist.IsNullOrEmptyOrWhitespace())
+                query.Artist = request.artist;
+            if (!request.label.IsNullOrEmptyOrWhitespace())
+                query.Label = request.label;
+            if (!request.track.IsNullOrEmptyOrWhitespace())
+                query.Track = request.track;
+            if (!request.year.IsNullOrEmptyOrWhitespace())
+                query.Year = int.Parse(request.year);
+            if (!request.genre.IsNullOrEmptyOrWhitespace())
+                query.Genre = request.genre.Split(',');
 
             query.ExpandCatsToSubCats();
 

@@ -23,6 +23,16 @@ namespace Jackett.Models
 
         public bool SupportsImdbSearch { get; set; }
 
+        public bool MusicSearchAvailable
+        {
+            get
+            {
+                return (SupportedMusicSearchParamsList.Count > 0);
+            }
+        }
+
+        public List<string> SupportedMusicSearchParamsList;
+
         public List<TorznabCategory> Categories { get; private set; }
 
         public TorznabCapabilities()
@@ -33,6 +43,7 @@ namespace Jackett.Models
             MovieSearchAvailable = false;
             SupportsTVRageSearch = false;
             SupportsImdbSearch = false;
+            SupportedMusicSearchParamsList = new List<string>();
         }
 
         public TorznabCapabilities(params TorznabCategory[] cats)
@@ -41,6 +52,7 @@ namespace Jackett.Models
             TVSearchAvailable = true;
             SupportsTVRageSearch = false;
             SupportsImdbSearch = false;
+            SupportedMusicSearchParamsList = new List<string>();
             Categories = new List<TorznabCategory>();
             Categories.AddRange(cats);
             MovieSearchAvailable = Categories.Any(i => TorznabCatType.Movies.Contains(i));
@@ -65,6 +77,14 @@ namespace Jackett.Models
                 if (SupportsImdbSearch)
                     parameters.Add("imdbid");
                 return string.Join(",", parameters);
+            }
+        }
+
+        string SupportedMusicSearchParams
+        {
+            get
+            {
+                return string.Join(",", SupportedMusicSearchParamsList);
             }
         }
 
@@ -111,6 +131,10 @@ namespace Jackett.Models
                         ),
                         new XElement("movie-search",
                             new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedMovieSearchParams)
+                        ),
+                        new XElement("music-search",
+                            new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
                             new XAttribute("supportedParams", SupportedMovieSearchParams)
                         )
                     ),

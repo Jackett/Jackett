@@ -213,6 +213,8 @@ namespace Jackett.Indexers
                 return true;
             if (caps.MovieSearchAvailable && query.IsMovieSearch)
                 return true;
+            if (caps.MusicSearchAvailable && query.IsMusicSearch)
+                return true;
             if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
                 return true;
             if (caps.SupportsImdbSearch && query.IsImdbQuery)
