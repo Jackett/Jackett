@@ -3,6 +3,7 @@ using NLog;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using Jackett.Indexers.Abstract;
+using System.Collections.Generic;
 
 namespace Jackett.Indexers
 {
@@ -20,6 +21,7 @@ namespace Jackett.Indexers
         {
             Language = "en-us";
             Type = "private";
+            TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "artist", "label", "year" };
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
