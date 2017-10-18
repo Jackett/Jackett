@@ -114,6 +114,9 @@ namespace Jackett.Indexers
             // Follow the redirect
             await FollowIfRedirect(response, LoginUrl, SearchUrl);
 
+            if (response.Status == HttpStatusCode.Forbidden)
+                throw new ExceptionWithConfigData("Failed to login, your IP seems to be blacklisted (shared VPN/seedbox?). Contact the staff to resolve this.", configData);
+
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/user/logout"), () =>
             {
                 // Their login page appears to be broken and just gives a 500 error.
