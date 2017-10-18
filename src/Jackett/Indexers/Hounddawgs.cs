@@ -60,8 +60,8 @@ namespace Jackett.Indexers
             AddCategoryMapping(78, TorznabCatType.Books, "Books");
             AddCategoryMapping(87, TorznabCatType.Other, "Cover");
             AddCategoryMapping(90, TorznabCatType.MoviesDVD, "DK DVDr");
-            AddCategoryMapping(89, TorznabCatType.TVHD, "DK HD");
-            AddCategoryMapping(91, TorznabCatType.TVSD, "DK SD");
+            AddCategoryMapping(89, TorznabCatType.MoviesHD, "DK HD");
+            AddCategoryMapping(91, TorznabCatType.MoviesSD, "DK SD");
             AddCategoryMapping(92, TorznabCatType.TVHD, "DK TV HD");
             AddCategoryMapping(93, TorznabCatType.TVSD, "DK TV SD");
             AddCategoryMapping(83, TorznabCatType.Other, "ELearning");
