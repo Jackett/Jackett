@@ -135,7 +135,7 @@ namespace Jackett.Models
                         ),
                         new XElement("music-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMovieSearchParams)
+                            new XAttribute("supportedParams", SupportedMusicSearchParams)
                         )
                     ),
                     new XElement("categories",
