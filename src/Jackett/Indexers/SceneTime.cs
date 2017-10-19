@@ -43,45 +43,57 @@ namespace Jackett.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(3, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(47, TorznabCatType.MoviesSD);
-            AddCategoryMapping(57, TorznabCatType.MoviesSD);
-            AddCategoryMapping(59, TorznabCatType.MoviesHD);
-            AddCategoryMapping(61, TorznabCatType.MoviesSD);
-            AddCategoryMapping(64, TorznabCatType.Movies3D);
-            AddCategoryMapping(80, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(81, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(82, TorznabCatType.MoviesOther);
-            AddCategoryMapping(102, TorznabCatType.MoviesOther);
-            AddCategoryMapping(103, TorznabCatType.MoviesWEBDL);
-            AddCategoryMapping(105, TorznabCatType.Movies);
+            //Movies
+            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
+            AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
+            AddCategoryMapping(10, TorznabCatType.XXX, "Movies/XxX");
+            AddCategoryMapping(47, TorznabCatType.Movies, "Movie/Packs");
+            AddCategoryMapping(56, TorznabCatType.Movies, "Movies/Anime");
+            AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies/SD");
+            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies/HD");
+            AddCategoryMapping(61, TorznabCatType.Movies, "Movies/Classic");
+            AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies/3D");
+            AddCategoryMapping(78, TorznabCatType.XXX, "0day/XxX");
+            AddCategoryMapping(80, TorznabCatType.MoviesForeign, "Movies/Non-English");
+            AddCategoryMapping(81, TorznabCatType.MoviesBluRay, "Movies/BluRay");
+            AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies/CAM-TS");
+            AddCategoryMapping(102, TorznabCatType.MoviesOther, "Movies/Remux");
+            AddCategoryMapping(103, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip");
+            AddCategoryMapping(105, TorznabCatType.Movies, "Movies/Kids");
+            
+            //TV
+            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
+            AddCategoryMapping(43, TorznabCatType.TV, "TV/Packs");
+            AddCategoryMapping(9, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(63, TorznabCatType.TV, "TV/Classic");
+            AddCategoryMapping(77, TorznabCatType.TVSD, "TV/SD");
+            AddCategoryMapping(79, TorznabCatType.TVSport, "Sports");
+            AddCategoryMapping(100, TorznabCatType.TVFOREIGN, "TV/Non-English");
+            AddCategoryMapping(83, TorznabCatType.TVWEBDL, "TV/Web-Rip");
+            AddCategoryMapping(8, TorznabCatType.TVOTHER, "TV-Mobile");
 
-            AddCategoryMapping(6, TorznabCatType.PCGames);
-            AddCategoryMapping(48, TorznabCatType.ConsoleXbox);
-            AddCategoryMapping(49, TorznabCatType.ConsolePSP);
-            AddCategoryMapping(50, TorznabCatType.ConsolePS3);
-            AddCategoryMapping(51, TorznabCatType.ConsoleWii);
-            AddCategoryMapping(55, TorznabCatType.ConsoleNDS);
-            AddCategoryMapping(107, TorznabCatType.ConsolePS4);
+            // Games
+            AddCategoryMapping(6, TorznabCatType.PCGames, "Games/PC ISO");
+            AddCategoryMapping(48, TorznabCatType.ConsoleXbox, "Games/XBOX");
+            AddCategoryMapping(49, TorznabCatType.ConsolePSP, "Games/PSP");
+            AddCategoryMapping(50, TorznabCatType.ConsolePS3, "Games/PS3");
+            AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games/Wii");
+            AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games/Nintendo DS");
+            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/Ps4");
+            AddCategoryMapping(13, TorznabCatType.ConsoleOther, "Games/PS1");
+            AddCategoryMapping(14, TorznabCatType.ConsoleOther, "Games/PS2");
+            AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games/Dreamcast");
 
-            AddCategoryMapping(2, TorznabCatType.TVSD);
-            AddCategoryMapping(43, TorznabCatType.TV);
-            AddCategoryMapping(9, TorznabCatType.TVHD);
-            AddCategoryMapping(63, TorznabCatType.TV);
-            AddCategoryMapping(77, TorznabCatType.TVSD);
-            AddCategoryMapping(79, TorznabCatType.TVSport);
-            AddCategoryMapping(100, TorznabCatType.TVFOREIGN);
-            AddCategoryMapping(83, TorznabCatType.TVWEBDL);
+            // Miscellaneous
+            AddCategoryMapping(5, TorznabCatType.PC0day, "Apps/0DAY");
+            AddCategoryMapping(7, TorznabCatType.Books, "Books-Mags");
+            AddCategoryMapping(52, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(65, TorznabCatType.BooksComics, "Books/Comic");
+            AddCategoryMapping(53, TorznabCatType.PC, "Appz");
 
-            AddCategoryMapping(5, TorznabCatType.PC0day);
-            AddCategoryMapping(7, TorznabCatType.Books);
-            AddCategoryMapping(52, TorznabCatType.PCMac);
-            AddCategoryMapping(65, TorznabCatType.BooksComics);
-            AddCategoryMapping(53, TorznabCatType.PC);
-
-            AddCategoryMapping(4, TorznabCatType.Audio);
-            AddCategoryMapping(11, TorznabCatType.AudioVideo);
+            // Music
+            AddCategoryMapping(4, TorznabCatType.Audio, "Music/Audio");
+            AddCategoryMapping(11, TorznabCatType.AudioVideo, "Music/Videos");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -211,7 +223,6 @@ namespace Jackett.Indexers
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Description = release.Title;
                     release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     release.Guid = release.Comments;
                     var torrentId = qLink.Attr("href").Split('=')[1];
