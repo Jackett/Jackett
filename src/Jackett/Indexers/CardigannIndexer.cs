@@ -88,6 +88,8 @@ namespace Jackett.Indexers
             TorznabCaps = new TorznabCapabilities();
 
             TorznabCaps.SupportsImdbSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+            if (Definition.Caps.Modes.ContainsKey("music-search"))
+                TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
             // init config Data
             configData = new ConfigurationData();
@@ -288,7 +290,7 @@ namespace Jackett.Indexers
                 string prefix = RangeRegexMatches.Groups[2].Value;
                 string postfix = RangeRegexMatches.Groups[3].Value;
 
-                foreach (string value in (List<string>)variables[variable])
+                foreach (string value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
@@ -981,7 +983,7 @@ namespace Jackett.Indexers
             variables[".Query.Ep"] = query.Episode;
             variables[".Query.Season"] = query.Season;
             variables[".Query.Movie"] = null;
-            variables[".Query.Year"] = null;
+            variables[".Query.Year"] = query.Year.ToString();
             variables[".Query.Limit"] = query.Limit;
             variables[".Query.Offset"] = query.Offset;
             variables[".Query.Extended"] = query.Extended;
@@ -993,7 +995,11 @@ namespace Jackett.Indexers
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
             variables[".Query.TVMazeID"] = null;
             variables[".Query.TraktID"] = null;
-
+            variables[".Query.Album"] = query.Album;
+            variables[".Query.Artist"] = query.Artist;
+            variables[".Query.Label"] = query.Label;
+            variables[".Query.Track"] = query.Track;
+            //variables[".Query.Genre"] = query.Genre ?? new List<string>();
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
