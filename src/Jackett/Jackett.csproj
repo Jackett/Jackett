@@ -178,7 +178,6 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Indexers\Abstract\CouchPotatoTracker.cs" />
-    <Compile Include="Indexers\ArcheTorrent.cs" />
     <Compile Include="Indexers\HDOnly.cs" />
     <Compile Include="Indexers\cgpeers.cs" />
     <Compile Include="Indexers\LostFilm.cs" />
@@ -589,10 +588,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabsToSpaces="True" scope="text/plain">
-            <inheritsSet />
-            <inheritsScope />
-          </TextStylePolicy>
+          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabsToSpaces="True" scope="text/plain" />
         </Policies>
       </Properties>
     </MonoDevelop>
