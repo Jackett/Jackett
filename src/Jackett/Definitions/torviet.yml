@@ -73,7 +73,7 @@
       sltCategory: 0
       sltSubCategory: 0 # can't sepcify multiple categorys so we're useing all always
       sltGenre: 0
-      incldead: 1
+      incldead: 0
       spstate: 0
       inclbookmarked: 0
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
