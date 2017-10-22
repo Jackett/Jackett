@@ -77,6 +77,8 @@
             args: [ " To", "000000000000"]
           - name: replace
             args: [ "X", "" ]
+      date:
+        text: "now"
       seeders:
         text: 0
       seeders:
