@@ -6,8 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.nextorrent.cc/
+    - https://www.nextorrent.tv/
   legacylinks:
+    - https://www.nextorrent.cc/
     - https://www.nextorrent.org/
 
   caps:
@@ -75,6 +76,8 @@
             args: [ " To", "000000000000"]
           - name: replace
             args: [ "X", "" ]
+      date:
+        text: "now"
       seeders:
         text: 0
       seeders:
