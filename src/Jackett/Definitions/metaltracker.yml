@@ -55,15 +55,15 @@
         selector: .center a[href^="/torrents/download/id/"]
         attribute: href
       date:
-          text: "now"
+        text: "now"
       seeders:
         selector: .center font:nth-of-type(1)
       leechers:
         selector: .center font:nth-of-type(2)
       downloadvolumefactor:
-          text: "0"
+        text: "0"
       uploadvolumefactor:
-          text: "1"
+        text: "1"
       category:
         selector: .smallalbum
         remove: div.thumb, div.center, a
