@@ -57,7 +57,8 @@
     selector: a[href^="download.php?id="]
         
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
       search: "{{ .Query.Keywords }}"

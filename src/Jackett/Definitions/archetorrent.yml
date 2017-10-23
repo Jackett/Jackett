@@ -78,7 +78,8 @@
       path: torrents-search.php
 
   search:
-    path: torrents-search.php
+    paths:
+      - path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

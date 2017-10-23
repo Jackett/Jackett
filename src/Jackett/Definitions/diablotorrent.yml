@@ -74,7 +74,8 @@
       path: browse
 
   search:
-    path: browse
+    paths:
+      - path: browse
     inputs:
       $raw: "{{range .Categories}}category[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"

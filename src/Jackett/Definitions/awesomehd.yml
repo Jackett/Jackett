@@ -29,7 +29,8 @@
       path: index.php
 
   search:
-    path: torrents.php
+    paths:
+      - path: torrents.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
       searchstr: "{{ .Query.Keywords }}"

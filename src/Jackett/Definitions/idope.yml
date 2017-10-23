@@ -36,9 +36,10 @@
       default: Without the itorrents option only magnet links will be provided.
 
   search:
-    # present trending results if there are no search parms supplied
-    # sort torrent-list by age in descending order
-    path: "{{if .Keywords}}torrent-list/{{ .Keywords}}?&o=-3&c={{range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
+    paths:
+      # present trending results if there are no search parms supplied
+      # sort torrent-list by age in descending order
+      - path: "{{if .Keywords}}torrent-list/{{ .Keywords}}?&o=-3&c={{range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
     rows:
       selector: div[class="resultdiv"]
     fields:

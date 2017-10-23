@@ -63,7 +63,8 @@
       path: /torrentek.php
 
   search:
-    path: /torrentek.php
+    paths:
+      - path: /torrentek.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

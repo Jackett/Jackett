@@ -28,7 +28,8 @@
     selector: a.csprite_dltorrent
 
   search:
-    path: "{{if .Keywords}}search/all/{{ .Keywords}}/{{else}}/index.php?page=latest100{{end}}"
+    paths:
+      - path: "{{if .Keywords}}search/all/{{ .Keywords}}/{{else}}/index.php?page=latest100{{end}}"
     keywordsfilters:
       - name: re_replace
         args: ["S[0-9]{2}([^E]|$)", ""] #remove season tag without episode

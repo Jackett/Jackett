@@ -26,7 +26,8 @@
   settings: []
 
   search:
-    path: "search.php"
+    paths:
+      - path: "search.php"
     inputs:
       q: "{{ .Query.Keywords }}"
     rows:

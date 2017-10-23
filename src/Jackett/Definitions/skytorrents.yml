@@ -20,7 +20,8 @@
   settings: []
   
   search:
-    path: "search/all/{{if .Query.Keywords}}ed{{else}}ad{{end}}/1/{{ .Query.Keywords}}"
+    paths:
+      - path: "search/all/{{if .Query.Keywords}}ed{{else}}ad{{end}}/1/{{ .Query.Keywords}}"
     rows:
       selector: "table > tbody > tr"
       filters:

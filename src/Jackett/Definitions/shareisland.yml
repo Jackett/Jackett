@@ -71,7 +71,8 @@
     selector: img[title="Ratio"] + span
 
   search:
-    path: /
+    paths:
+      - path: /
     keywordsfilters:
       # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
       - name: re_replace

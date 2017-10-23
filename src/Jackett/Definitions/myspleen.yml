@@ -43,8 +43,9 @@
     selector: span.key:contains("Ratio") + span.value
 
   search:
-    path: /browse.php
-    method: post
+    paths:
+      - path: /browse.php
+        method: post
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

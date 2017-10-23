@@ -68,7 +68,8 @@
     selector: a#link14
 
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"

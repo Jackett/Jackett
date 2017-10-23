@@ -28,7 +28,8 @@
   settings: []
   
   search:
-    path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html{{else}}/fresh.html{{end}}"
+    paths:
+      - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html{{else}}/fresh.html{{end}}"
     keywordsfilters:
       - name: tolower
       - name: re_replace

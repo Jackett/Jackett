@@ -28,7 +28,8 @@
       path: browse2.php
 
   search:
-    path: browse2.php
+    paths:
+      - path: browse2.php
     inputs:
       search: "%{{ re_replace .Query.Keywords \"[^a-zA-Z0-9]+\" \"%\" }}%"
       incldead: 1

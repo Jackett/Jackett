@@ -77,7 +77,8 @@
     selector: a[href^="download.php?id="]
 
   search:
-    path: index.php
+    paths:
+      - path: index.php
     keywordsfilters:
       # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
       - name: re_replace

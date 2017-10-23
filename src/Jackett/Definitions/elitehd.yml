@@ -41,7 +41,8 @@
       selector: td.main_bottom
       
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

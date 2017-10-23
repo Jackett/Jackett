@@ -118,7 +118,8 @@
       selector: a#logout
 
   search:
-    path: /
+    paths:
+      - path: /
     keywordsfilters: 
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]

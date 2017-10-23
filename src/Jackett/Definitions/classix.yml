@@ -30,7 +30,8 @@
     selector: a[href^="download.php?id="]
         
   search:
-    path: torrents-search.php
+    paths:
+      - path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
       search: "{{ .Query.Keywords }}"

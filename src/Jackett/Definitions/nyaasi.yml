@@ -65,7 +65,8 @@
       tv-search: [q]
 
   search:
-    path: /
+    paths:
+      - path: /
     inputs:
       q: "{{ .Query.Keywords}}"
       f: "{{ .Config.filter-id }}"

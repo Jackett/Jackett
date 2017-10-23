@@ -30,8 +30,9 @@
       path: /browse.php
 
   search:
-    path: /browse.php
-    method: post
+    paths:
+      - path: /browse.php
+        method: post
     inputs:
       search: "{{ .Query.Keywords }}"
       incldead: "1"

@@ -211,7 +211,8 @@
       path: torrents.php
 
   search:
-    path: pesquisa.php
+    paths:
+      - path: pesquisa.php
     keywordsfilters: 
       # workaroud to remove year in search keywords
       - name: re_replace

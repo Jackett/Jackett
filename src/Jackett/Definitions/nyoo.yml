@@ -35,7 +35,8 @@
 
 
   search:
-    path: /search
+    paths:
+      - path: /search
     inputs:
       page: "search"
       q: "{{ .Query.Keywords}}"

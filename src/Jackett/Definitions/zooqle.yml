@@ -29,7 +29,8 @@
   search:
     # sorted by descending seeders and includes only verified torrents
     # the movie+test+torrent search is for the TEST button, since Jackett does not pass any keywords which causes zooqle to choke
-    path: "/search?q={{if .Keywords}}{{ .Keywords}}&s=ns&v=t&sd=d{{else}}movie+test+torrent+category%3AMovies{{end}}"
+    paths:
+      - path: "/search?q={{if .Keywords}}{{ .Keywords}}&s=ns&v=t&sd=d{{else}}movie+test+torrent+category%3AMovies{{end}}"
     rows:
       selector: tr:has(td[class^="text-muted3"])
     fields:

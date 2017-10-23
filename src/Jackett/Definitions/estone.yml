@@ -56,8 +56,9 @@
       path: /letoltes.php
 
   search:
-    path: /letoltes.php
-    method: get
+    paths:
+      - path: /letoltes.php
+        method: get
     inputs:
       $raw: "{{range .Categories}}kat[]={{.}}&{{end}}"
       kereses_nev: "{{ .Query.Keywords }}"

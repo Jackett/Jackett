@@ -80,7 +80,8 @@
         args: ["---", "0"]
 
   search:
-    path: index.php
+    paths:
+      - path: index.php
     inputs:
       search: "{{ .Query.Keywords }}"
       page: torrents

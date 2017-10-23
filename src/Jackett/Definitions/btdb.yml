@@ -26,7 +26,8 @@
       default: BTDB does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
 
   search:
-    path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
+    paths:
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
     rows:
       selector: li[class$="item"]
     fields:

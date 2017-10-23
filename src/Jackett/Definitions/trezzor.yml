@@ -60,7 +60,8 @@
       path: torrents.php
 
   search:
-    path: torrents.php
+    paths:
+      - path: torrents.php
     inputs:
       search: "{{ .Keywords }}"
       category: "0"

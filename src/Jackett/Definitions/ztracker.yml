@@ -52,7 +52,8 @@
       path: browse_old.php
 
   search:
-    path: browse_old.php
+    paths:
+      - path: browse_old.php
     keywordsfilters:
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%"]

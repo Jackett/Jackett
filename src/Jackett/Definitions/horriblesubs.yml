@@ -21,7 +21,8 @@
       label: Prepend [Horriblesubs] to torrent title
 
   search:
-    path: "lib/{{if .Query.Keywords }}search.php{{else}}latest.php{{end}}"
+    paths:
+      - path: "lib/{{if .Query.Keywords }}search.php{{else}}latest.php{{end}}"
     inputs:
       value: "{{ .Query.Keywords }}"
     rows:

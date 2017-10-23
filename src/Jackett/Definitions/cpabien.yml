@@ -27,7 +27,8 @@
     selector: "#telecharger"
 
   search:
-    path: "/search.php?t={{ .Query.Keywords }}"
+    paths:
+      - path: "/search.php?t={{ .Query.Keywords }}"
     rows:
       selector: div[class^='ligne']
     fields:

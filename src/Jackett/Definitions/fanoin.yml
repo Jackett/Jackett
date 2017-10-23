@@ -70,7 +70,8 @@
     selector: img[title="Reitings:"]+font
 
   search:
-    path: browse_old.php
+    paths:
+      - path: browse_old.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

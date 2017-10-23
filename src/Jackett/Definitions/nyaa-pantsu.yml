@@ -71,7 +71,8 @@
       tv-search: [q]
 
   search:
-    path: /search
+    paths:
+      - path: /search
     inputs:
       q: "{{ .Query.Keywords }}"
       c: "{{ .Config.cat-id }}"

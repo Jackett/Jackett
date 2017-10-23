@@ -97,7 +97,8 @@
     selector: img[alt="Ratio"] + font
 
   search:
-    path: index.php
+    paths:
+      - path: index.php
     inputs:
       page: "torrents"
       search: "{{ .Query.Keywords }}"

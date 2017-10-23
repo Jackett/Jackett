@@ -26,7 +26,8 @@
     selector: a[href^="/get_torrent/"]
 
   search:
-    path: "recherche/{{ .Query.Keywords }}"
+    paths:
+      - path: "recherche/{{ .Query.Keywords }}"
     rows:
       selector: div.listing-torrent > table tbody tr:has(a)
     fields:

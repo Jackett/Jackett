@@ -27,7 +27,8 @@
     selector: a[href^="/telecharger-torrent/"]
 
   search:
-    path: /torrents/search/
+    paths:
+      - path: /torrents/search/
     keywordsfilters: #1963
       - name: replace # Add Keywords
         args: ["Greys Anatomy", "Grey's Anatomy"]

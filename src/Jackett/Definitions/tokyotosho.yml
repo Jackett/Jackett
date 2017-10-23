@@ -34,7 +34,8 @@
       tv-search: [q, season, ep]
 
   search:
-    path: "{{if .Query.Keywords }}search.php{{else}}index.php{{end}}"
+    paths:
+      - path: "{{if .Query.Keywords }}search.php{{else}}index.php{{end}}"
     inputs:
       terms: "{{ .Query.Keywords }}"
       type: "{{ .Config.type-id }}"

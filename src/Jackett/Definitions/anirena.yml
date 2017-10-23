@@ -34,7 +34,8 @@
       tv-search: [q, season, ep]
 
   search:
-    path: "/{{if .Keywords}}?s={{ .Keywords}}{{else}}{{end}}"
+    paths:
+      - path: "/{{if .Keywords}}?s={{ .Keywords}}{{else}}{{end}}"
     rows:
       selector: table tbody tr:has(td.torrents_small_type_data1)
     fields:

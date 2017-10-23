@@ -45,7 +45,8 @@
       path: browse.php
       
   search:
-    path: "{{if .Query.Keywords}}search.php{{else}}browse.php{{end}}"
+    paths:
+      - path: "{{if .Query.Keywords}}search.php{{else}}browse.php{{end}}"
     inputs:
       search_str: "{{ .Query.Keywords }}"
     rows:

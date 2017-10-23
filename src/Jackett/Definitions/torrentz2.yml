@@ -43,7 +43,8 @@
       label: Add download links via itorrents.org
 
   search:
-    path: searchA
+    paths:
+      - path: searchA
     inputs:
        f: "{{ .Query.Keywords }}"
     rows:

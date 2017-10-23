@@ -67,7 +67,8 @@
         args: "Ratio:\\s(.*?)\\s\\s"
 
   search:
-    path: /torrents.php
+    paths:
+      - path: /torrents.php
     inputs:
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       sltCategory: 0

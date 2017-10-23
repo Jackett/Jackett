@@ -31,7 +31,8 @@
       path: /torrents
 
   search:
-    path: /filter
+    paths:
+      - path: /filter
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"

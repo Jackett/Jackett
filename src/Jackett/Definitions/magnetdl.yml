@@ -34,9 +34,10 @@
       - name: re_replace
         args: [" ", "-"]
       - name: tolower
-    # return movie results if there are no search parms supplied (for use with the TEST button)
-    # http://www.magnetdl.com/m/midnight-texas-s01e10/
-    path: "{{if .Keywords}}/{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/movies/{{end}}"
+    paths:
+      # return movie results if there are no search parms supplied (for use with the TEST button)
+      # http://www.magnetdl.com/m/midnight-texas-s01e10/
+      - path: "{{if .Keywords}}/{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/movies/{{end}}"
     rows:
       selector: tr:has(td[class="m"])
     fields:

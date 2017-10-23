@@ -64,7 +64,8 @@
     selector: font:contains("Ratio:")+font
 
   search:
-    path: /browse
+    paths:
+      - path: /browse
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

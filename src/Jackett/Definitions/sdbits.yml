@@ -42,7 +42,8 @@
         args: "Ratio:[ \u00a0](.*?)\u00a0"
 
   search:
-    path: /browse.php
+    paths:
+      - path: /browse.php
     method: post
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"

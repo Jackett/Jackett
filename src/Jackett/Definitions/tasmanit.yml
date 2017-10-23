@@ -65,8 +65,9 @@
       path: browse.php
 
   search:
-    path: browse.php
-    method: post
+    paths:
+      - path: browse.php
+        method: post
     inputs:
       do: "search"
       keywords: "{{ .Keywords }}"

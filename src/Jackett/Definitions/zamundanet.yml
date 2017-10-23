@@ -38,7 +38,8 @@
       path: /bananas
 
   search:
-    path: /bananas
+    paths:
+      - path: /bananas
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

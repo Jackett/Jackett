@@ -28,7 +28,8 @@
       path: browse.php
 
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     inputs:
       search: "{{ .Query.Keywords }}"
       incldead: 1

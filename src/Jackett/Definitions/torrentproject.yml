@@ -43,7 +43,8 @@
     attribute: href
 
   search:
-    path: "{{if .Query.Keywords}}?t={{ .Query.Keywords}}{{else}}?orderby=latest&t={{end}}"
+    paths:
+      - path: "{{if .Query.Keywords}}?t={{ .Query.Keywords}}{{else}}?orderby=latest&t={{end}}"
     rows:
       selector: "#similarfiles > div:not(:first-child)"
     fields:

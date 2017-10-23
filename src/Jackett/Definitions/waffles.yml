@@ -111,7 +111,8 @@
       path: index.php
 
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
       q: "{{ .Query.Keywords }}"

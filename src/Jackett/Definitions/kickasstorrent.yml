@@ -90,7 +90,8 @@
   settings: []
 
   search:
-    path: "/new/{{if .Keywords}}search-torrents.php?{{range .Categories }}c{{.}}=1&{{end}}search={{.Keywords}}{{else}}{{end}}"
+    paths:
+      - path: "/new/{{if .Keywords}}search-torrents.php?{{range .Categories }}c{{.}}=1&{{end}}search={{.Keywords}}{{else}}{{end}}"
     rows:
       selector: table.ttable_headinner > tbody > tr[class^="t-row"]
       filters:

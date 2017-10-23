@@ -28,7 +28,8 @@
   settings: []
 
   search:
-    path: "{{if .Query.Keywords}}/search_torrent/{{range .Categories }}{{.}}/{{end}}{{ .Query.Keywords }}/page-0,trie-seeds-d{{else}}/top_torrent.php{{end}}"
+    paths:
+      - path: "{{if .Query.Keywords}}/search_torrent/{{range .Categories }}{{.}}/{{end}}{{ .Query.Keywords }}/page-0,trie-seeds-d{{else}}/top_torrent.php{{end}}"
     rows:
       selector: div.table-responsive > table tbody tr
     fields:

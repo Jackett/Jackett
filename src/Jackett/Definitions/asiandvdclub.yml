@@ -45,7 +45,8 @@
       path: browse.php
 
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     keywordsfilters:
       - name: replace
         args: ["-", " "]

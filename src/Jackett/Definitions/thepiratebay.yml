@@ -74,7 +74,8 @@
   settings: []
   
   search:
-    path: "{{if .Query.Keywords}}/search/{{ .Keywords}}/0/99/{{range .Categories }}{{.}}{{end}}{{else}}/recent{{end}}"
+    paths:
+      - path: "{{if .Query.Keywords}}/search/{{ .Keywords}}/0/99/{{range .Categories }}{{.}}{{end}}{{else}}/recent{{end}}"
     keywordsfilters:
         # currently, the only uploader for General Hospital puts a space between season and episode
         # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"

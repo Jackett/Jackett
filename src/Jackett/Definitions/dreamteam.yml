@@ -262,7 +262,8 @@
         torrentid: "{{ .DownloadUri.Query.id }}"
       
   search:
-    path: browse.php
+    paths:
+      - path: browse.php
     keywordsfilters:
       # remove words <= 3 characters and surrounding special characters
       - name: re_replace

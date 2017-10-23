@@ -94,7 +94,8 @@
     selector: div#infobar0 > ul > li:nth-child(1) > font:last-child
 
   search:
-    path: torrents-search.php
+    paths:
+      - path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

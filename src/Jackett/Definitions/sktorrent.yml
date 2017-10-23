@@ -58,7 +58,8 @@
       path: /torrent/index.php
 
   search:
-    path: /torrent/torrents.php
+    paths:
+      - path: /torrent/torrents.php
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"
