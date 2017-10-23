@@ -110,7 +110,8 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
                     release.Guid = release.Comments;
                     release.Title = qLink.Attr("title");
-                    release.Description = release.Title;
+                    if (!query.MatchQueryStringAND(release.Title))
+                        continue;
 
                     //"Tuesday, June 11th 2013 at 03:52:53 AM" to...
                     //"Tuesday June 11 2013 03:52:53 AM"
