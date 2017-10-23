@@ -1,6 +1,7 @@
 ---
   site: speed-share
   name: Speed-Share
+  description: "Speed-Share is a Brazilian Private site for TV / MOVIES / GENERAL"
   language: pt-br
   type: private
   encoding: utf-8
