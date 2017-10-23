@@ -136,6 +136,11 @@ namespace Jackett.Models
                         new XElement("music-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
                             new XAttribute("supportedParams", SupportedMusicSearchParams)
+                        ),
+                        // inconsistend but apparently already used by various newznab indexers (see #1896)
+                        new XElement("audio-search",
+                            new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
+                            new XAttribute("supportedParams", SupportedMusicSearchParams)
                         )
                     ),
                     new XElement("categories",
