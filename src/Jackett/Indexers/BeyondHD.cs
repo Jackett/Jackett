@@ -57,6 +57,7 @@ namespace Jackett.Indexers
                 50, // Internal / FraMeSToR 1080p
                 75, // Internal / FraMeSToR 720p
                 49, // Internal / FraMeSToR REMUX
+                101, // Internal / FraMeSToR 4K REMUX
                 61, // Internal / HDX REMUX
                 86, // Internal / SC4R
                 95, // Nightripper 1080p
