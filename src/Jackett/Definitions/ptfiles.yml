@@ -63,7 +63,8 @@
       onlyname: 1
       onlyname2: true
     rows:
-      selector: table#tortable > tbody > tr.rowhead
+      # for some users (don't know why) the table is called tablethree instead of tortable
+      selector: table#tortable > tbody > tr.rowhead, table#tablethree > tbody > tr.rowhead
     fields:
       download:
         selector: a[href^="dl.php/"]
