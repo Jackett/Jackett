@@ -10,7 +10,7 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: Other, desc: "Other"}
+      - {id: 1, cat: TV, desc: "TV"}
 
     modes:
       search: [q]
@@ -33,7 +33,7 @@
       label: Subtitles
       default: "_"
       options:
-        "_" : "none"
+        "_" : "-OFF-"
         "alb": "Albanian"
         "ara": "Arabic"
         "arm": "Armenian"
