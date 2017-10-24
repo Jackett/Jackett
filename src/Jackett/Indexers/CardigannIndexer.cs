@@ -1100,12 +1100,6 @@ namespace Jackett.Indexers
                     response = await RequestStringWithCookies(searchUrl, null, null, headers);
                 var results = response.Content;
 
-                if (Search.Preprocessingfilters != null)
-                { 
-                    results = applyFilters(results, Search.Preprocessingfilters, variables);
-                    logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
-                }
-
                 try
                 {
                     var SearchResultParser = new HtmlParser();
@@ -1130,6 +1124,12 @@ namespace Jackett.Indexers
 
                     checkForError(response, Definition.Search.Error);
 
+                    if (Search.Preprocessingfilters != null)
+                    {
+                        results = applyFilters(results, Search.Preprocessingfilters, variables);
+                        SearchResultDocument = SearchResultParser.Parse(results);
+                        logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
+                    }
 
                     var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
                     List<IElement> Rows = new List<IElement>();
