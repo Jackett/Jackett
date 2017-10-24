@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 {
     public class Fuzer : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "index.php?name=torrents&"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
@@ -47,47 +47,55 @@ namespace Jackett.Indexers
             Type = "private";
             TorznabCaps.Categories.Clear();
 
-            AddMultiCategoryMapping(TorznabCatType.Movies, 7, 9, 58, 59, 60, 61, 83);
-            AddMultiCategoryMapping(TorznabCatType.MoviesSD, 7, 58);
-            AddMultiCategoryMapping(TorznabCatType.MoviesHD, 9, 59, 61);
-            AddMultiCategoryMapping(TorznabCatType.MoviesBluRay, 59);
-            AddMultiCategoryMapping(TorznabCatType.MoviesForeign, 83);
-            AddMultiCategoryMapping(TorznabCatType.MoviesDVD, 58);
-            AddMultiCategoryMapping(TorznabCatType.Movies3D, 9);
-            AddMultiCategoryMapping(TorznabCatType.MoviesWEBDL, 9);
-            AddMultiCategoryMapping(TorznabCatType.TV, 8, 10, 62, 63, 84);
-            AddMultiCategoryMapping(TorznabCatType.TVHD, 10, 63);
-            AddMultiCategoryMapping(TorznabCatType.TVFOREIGN, 62, 84);
-            AddMultiCategoryMapping(TorznabCatType.TVSport, 64);
-            AddMultiCategoryMapping(TorznabCatType.TVAnime, 65);
-            AddMultiCategoryMapping(TorznabCatType.TVWEBDL, 10, 63);
-            AddMultiCategoryMapping(TorznabCatType.TVSD, 8, 62, 84);
-            AddMultiCategoryMapping(TorznabCatType.TVDocumentary, 8, 10, 62, 63);
-            AddMultiCategoryMapping(TorznabCatType.Console, 12, 55, 56, 57);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleXbox, 55);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleXbox360, 55);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleXBOX360DLC, 55);
-            AddMultiCategoryMapping(TorznabCatType.ConsolePS3, 12);
-            AddMultiCategoryMapping(TorznabCatType.ConsolePS4, 12);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleXboxOne, 55);
-            AddMultiCategoryMapping(TorznabCatType.ConsolePS4, 12);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleWii, 56);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleWiiwareVC, 56);
-            AddMultiCategoryMapping(TorznabCatType.ConsolePSP, 57);
-            AddMultiCategoryMapping(TorznabCatType.ConsoleNDS, 57);
-            AddMultiCategoryMapping(TorznabCatType.MoviesOther, 57);
-            AddMultiCategoryMapping(TorznabCatType.PC, 11, 15);
-            AddMultiCategoryMapping(TorznabCatType.PCGames, 11);
-            AddMultiCategoryMapping(TorznabCatType.PCMac, 71);
-            AddMultiCategoryMapping(TorznabCatType.PCPhoneAndroid, 13);
-            AddMultiCategoryMapping(TorznabCatType.PCPhoneIOS, 70);
-            AddMultiCategoryMapping(TorznabCatType.Audio, 14, 66, 67, 68);
-            AddMultiCategoryMapping(TorznabCatType.AudioForeign, 14);
-            AddMultiCategoryMapping(TorznabCatType.AudioLossless, 67);
-            AddMultiCategoryMapping(TorznabCatType.AudioAudiobook, 69);
-            AddMultiCategoryMapping(TorznabCatType.AudioOther, 68);
-            AddMultiCategoryMapping(TorznabCatType.Other, 17);
-            AddMultiCategoryMapping(TorznabCatType.XXX, 16);
+            // סרטים
+            AddCategoryMapping(7, TorznabCatType.MoviesSD, "סרטים");
+            AddCategoryMapping(9, TorznabCatType.MoviesHD, "סרטים HD");
+            AddCategoryMapping(58, TorznabCatType.MoviesDVD, "סרטים DVD-R");
+            AddCategoryMapping(59, TorznabCatType.MoviesSD, "סרטי BDRIP-BRRip");
+            AddCategoryMapping(60, TorznabCatType.MoviesSD, "סרטים ישראליים");
+            AddCategoryMapping(61, TorznabCatType.MoviesHD, "סרטים ישראליים HD");
+            AddCategoryMapping(83, TorznabCatType.MoviesOther, "סרטים מדובבים");
+
+            // סדרות
+            AddCategoryMapping(8, TorznabCatType.TVSD, "סדרות");
+            AddCategoryMapping(10, TorznabCatType.TVHD, "סדרות HD");
+            AddCategoryMapping(62, TorznabCatType.TVSD, "סדרות ישראליות");
+            AddCategoryMapping(63, TorznabCatType.TVHD, "סדרות ישראליות HD");
+            AddCategoryMapping(84, TorznabCatType.TVOTHER, "סדרות מדובבות");
+
+            // מוזיקה
+            AddCategoryMapping(14, TorznabCatType.Audio, "מוזיקה עולמית");
+            AddCategoryMapping(66, TorznabCatType.Audio, "מוזיקה ישראלית");
+            AddCategoryMapping(67, TorznabCatType.AudioMP3, "FLAC");
+            AddCategoryMapping(68, TorznabCatType.Audio, "פסקולים");
+
+            // משחקים
+            AddCategoryMapping(11, TorznabCatType.PCGames, "משחקים PC");
+            AddCategoryMapping(12, TorznabCatType.ConsoleOther, "משחקים PS");
+            AddCategoryMapping(55, TorznabCatType.ConsoleXbox, "משחקים XBOX");
+            AddCategoryMapping(56, TorznabCatType.ConsoleWii, "משחקים WII");
+            AddCategoryMapping(57, TorznabCatType.PCPhoneOther, "משחקי קונסולות ניידות");
+
+            // תוכנה
+            AddCategoryMapping(13, TorznabCatType.PCPhoneAndroid, "אפליקציות לאנדרואיד");
+            AddCategoryMapping(15, TorznabCatType.PC0day, "תוכנות PC");
+            AddCategoryMapping(70, TorznabCatType.PCPhoneIOS, "אפליקציות לאייפון");
+            AddCategoryMapping(71, TorznabCatType.PCMac, "תוכנות MAC");
+
+            // שונות
+            AddCategoryMapping(16, TorznabCatType.XXX, "למבוגרים בלבד");
+            AddCategoryMapping(17, TorznabCatType.Other, "שונות");
+            AddCategoryMapping(64, TorznabCatType.Other, "ספורט");
+            AddCategoryMapping(65, TorznabCatType.Other, "אנימה");
+            AddCategoryMapping(69, TorznabCatType.Books, "Ebooks");
+
+            // FuzePacks
+            AddCategoryMapping(72, TorznabCatType.Console, "משחקים");
+            AddCategoryMapping(73, TorznabCatType.Movies, "סרטים");
+            AddCategoryMapping(74, TorznabCatType.PC, "תוכנות");
+            AddCategoryMapping(75, TorznabCatType.Audio, "שירים");
+            AddCategoryMapping(76, TorznabCatType.TV, "סדרות");
+
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -153,54 +161,32 @@ namespace Jackett.Indexers
             {
                 searchString = hebName + " - עונה " + query.Season + " פרק " + query.Episode;
             }
-
-            int categoryCounter = 1;
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                searchUrl += "c" + categoryCounter.ToString() + "=" + cat + "&";
-                categoryCounter++;
-            }
-
-
-            if (string.IsNullOrWhiteSpace(searchString))
-            {
-                searchUrl = SiteLink + "index.php?name=torrents";
-            }
-            else
+            searchUrl += "?";
+            if (!string.IsNullOrWhiteSpace(searchString))
             {
                 var strEncoded = HttpUtility.UrlEncode(searchString, Encoding.GetEncoding("Windows-1255"));
-                searchUrl += "text=" + strEncoded + "&category=0&search=1";
+                searchUrl += "&query=" + strEncoded + "&matchquery=any";
+            }
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                searchUrl += "&c[]=" + cat;
             }
 
             var data = await RequestStringWithCookiesAndRetry(searchUrl);
             try
             {
                 CQ dom = data.Content;
-                ReleaseInfo release;
-
-                int rowCount = 0;
-                var rows = dom["#collapseobj_module_17 > tr"];
+                var rows = dom["tr.box_torrent"];
                 foreach (var row in rows)
                 {
                     CQ qRow = row.Cq();
-                    if (rowCount < 1 || qRow.Children().Count() != 9) //skip 1 row because there's an empty row 
-                    {
-                        rowCount++;
-                        continue;
-                    }
-
-                    release = new ReleaseInfo();
-                    release.Description = qRow.Find("td:nth-child(2) > a").Text(); ;
-
-                    if (hebName != null)
-                    {
-                        release.Title = query.SearchTerm + " " + release.Description.Substring(release.Description.IndexOf(string.Format("S{0:D2}E{1:D2}", query.Season, int.Parse(query.Episode))));
-                    }
-                    else
-                    {
-                        const string DELIMITER = " | ";
-                        release.Title = release.Description.Substring(release.Description.IndexOf(DELIMITER) + DELIMITER.Length);
-                    }
+                    
+                    var release = new ReleaseInfo();
+                    var main_title_link = qRow.Find("div.main_title > a");
+                    release.Title = main_title_link.Attr("longtitle");
+                    if (release.Title.IsNullOrEmptyOrWhitespace())
+                        release.Title = main_title_link.Text();
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
@@ -214,45 +200,38 @@ namespace Jackett.Indexers
                             release.Peers = peers + release.Seeders;
                         }
                     }
-
-                    string fullSize = qRow.Find("td:nth-child(5) > div").Text();
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-child(5)").Text().Replace(",", ""));
+                    release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(6)").Text().Replace(",", ""));
+                    release.Peers = ParseUtil.CoerceInt(qRow.Find("td:nth-child(7)").Text().Replace(",", "")) + release.Seeders;
+                    string fullSize = qRow.Find("td:nth-child(4)").Text();
                     release.Size = ReleaseInfo.GetBytes(fullSize);
 
-                    release.Guid = new Uri(qRow.Find("td:nth-child(2) > a").Attr("href"));
-                    release.Link = new Uri(SiteLink + qRow.Find("td:nth-child(3) > a").Attr("href"));
-                    release.Comments = release.Guid;
+                    release.Comments = new Uri(SiteLink + qRow.Find("a.threadlink[href]").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("a:has(div.dlimg)").Attr("href"));
+                    release.Guid = release.Comments;
+                    release.BannerUrl = new Uri(qRow.Find("a[imgsrc]").Attr("imgsrc"));
 
-                    string[] dateSplit = qRow.Find("td:nth-child(2) > span.torrentstime").Text().Split(' ');
-                    string dateString = dateSplit[1] + " " + dateSplit[3];
-                    release.PublishDate = DateTime.ParseExact(dateString, "dd-MM-yy HH:mm", CultureInfo.InvariantCulture);
+                    var dateStringAll = qRow.Find("div.up_info2")[0].ChildNodes.Last().ToString();
+                    var dateParts = dateStringAll.Split(' ');
+                    string dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
+                    release.PublishDate = DateTime.ParseExact(dateString, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture);
 
-                    string category = qRow.Find("script:nth-child(1)").Text();
-                    int index = category.IndexOf("category=");
-                    if (index == -1)
-                    {
-                        /// Other type
-                        category = "17";
-                    }
-                    else
-                    {
-                        category = category.Substring(index + "category=".Length, 2);
-                        if (category[1] == '\\')
-                        {
-                            category = category[0].ToString();
-                        }
-                    }
+                    string categoryLink = qRow.Find("a[href^=\"/browse.php?cat=\"]").Attr("href");
+                    var catid = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
+                    release.Category = MapTrackerCatToNewznab(catid);
 
-                    release.Category = MapTrackerCatToNewznab(category);
-
-                    var grabs = qRow.Find("td:nth-child(6)").Text();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (qRow.Find("img[src=\"/images/FL.png\"]").Length >= 1)
+                    if (qRow.Find("a[href^=\"?freeleech=1\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;
 
                     release.UploadVolumeFactor = 1;
+
+                    var sub_title = qRow.Find("div.sub_title");
+                    var imdb_link = sub_title.Find("span.imdb-inline > a");
+                    release.Imdb = ParseUtil.GetLongFromString(imdb_link.Attr("href"));
+                    sub_title.Find("span.imdb-inline").Remove();
+                    release.Description = sub_title.Text();
 
                     releases.Add(release);
                 }
