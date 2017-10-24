@@ -223,7 +223,7 @@ namespace Jackett.Indexers
 
             // handle re_replace expression
             // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
-            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.+)""\s+""(.+?)""\s*}}");
+            Regex ReReplaceRegex = new Regex(@"{{\s*re_replace\s+(\..+?)\s+""(.*?)""\s+""(.*?)""\s*}}");
             var ReReplaceRegexMatches = ReReplaceRegex.Match(template);
 
             while (ReReplaceRegexMatches.Success)
