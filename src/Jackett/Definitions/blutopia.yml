@@ -56,10 +56,8 @@
         selector: a[href*="/categories/"]
         attribute: href
         filters:
-          - name: strdump
           - name: regexp
             args: "/categories/.*?\\.(\\d+)"
-          - name: strdump
       title:
         selector: a.view-torrent
       download:
@@ -97,6 +95,7 @@
       downloadvolumefactor:
         case:
           "i[data-original-title=\"100% Free\"]": "0"
+          "i[data-original-title=\"Global FreeLeech\"]": "0"
           "*": "1"
       uploadvolumefactor:
         case:
