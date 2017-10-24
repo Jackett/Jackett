@@ -28,6 +28,15 @@
   search:
     paths:
       - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/2?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/3?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/4?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/5?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/6?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/7?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/8?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/9?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/10?sort=time{{else}}{{end}}"
     rows:
       selector: li[class$="item"]
     fields:

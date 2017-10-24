@@ -28,12 +28,14 @@
 
   search:
     paths:
-      - path: /torrents/search/
+      - path: /torrents/search/?search={{ .Keywords}}
+      - path: /torrents/search/?search={{ .Keywords}}&page=2
+      - path: /torrents/search/?search={{ .Keywords}}&page=3
+      - path: /torrents/search/?search={{ .Keywords}}&page=4
+      - path: /torrents/search/?search={{ .Keywords}}&page=5
     keywordsfilters: #1963
       - name: replace # Add Keywords
         args: ["Greys Anatomy", "Grey's Anatomy"]
-    inputs:
-      search: "{{ .Keywords }}"
     rows:
       selector: tr.isItem.isItemDesk
     fields:
