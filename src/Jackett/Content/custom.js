@@ -24,7 +24,8 @@ $.fn.focusWithoutScrolling = function () {
 
 $(document).ready(function () {
     $.ajaxSetup({ cache: false });
-    window.jackettIsLocal = window.location.hostname === '127.0.0.1';
+    //window.jackettIsLocal = window.location.hostname === '127.0.0.1';
+    window.jackettIsLocal = false; // reCaptcha can't be solved via 127.0.0.1 anymore. This loophold was fixed by google around 2.10.2017
 
     Handlebars.registerHelper('if_eq', function(a, b, opts) {
 	    if (a == b)
