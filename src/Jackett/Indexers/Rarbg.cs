@@ -18,6 +18,7 @@ namespace Jackett.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
+        // API doc: https://torrentapi.org/apidocs_v2.txt
         readonly static string defaultSiteLink = "https://torrentapi.org/";
 
         private Uri BaseUri
@@ -183,20 +184,24 @@ namespace Jackett.Indexers
                 if (errorCode == 10) // Cant find imdb in database. Are you sure this imdb exists?
                     return releases;
 
-                if (errorCode > 0) // too many requests per second
+                if (errorCode == 2  // Invalid token set!
+                    || errorCode == 4) // Invalid token. Use get_token for a new one!
                 {
-                    // we use the IwebClient rate limiter now, this shouldn't happen 
-                    throw new Exception(jsonContent.Value<string>("error"));
-
-                    /*if (attempts < 3)
+                    token = null;
+                    if (attempts < 3)
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(2));
                         return await PerformQuery(query, ++attempts);
                     }
                     else
                     {
-                        throw new Exception(jsonContent.Value<string>("error"));
-                    }*/
+                        throw new Exception("error " + errorCode.ToString() + " after " + attempts.ToString() + " attempts: " + jsonContent.Value<string>("error"));
+                    }
+                }
+
+                if (errorCode > 0) // too many requests per seconds ???
+                {
+                    // we use the IwebClient rate limiter now, this shouldn't happen 
+                    throw new Exception("error " + errorCode.ToString() + ": " + jsonContent.Value<string>("error"));
                 }
 
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
