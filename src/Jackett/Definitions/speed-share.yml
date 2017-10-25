@@ -144,6 +144,10 @@
       - {id: 221, cat: TV/WEB-DL, desc: "Séries: WEB"}
       - {id: 202, cat: TV, desc: "Séries: Autorado"}
       - {id: 222, cat: TV/SD, desc: "Séries: Qualidade Inferior"}
+      
+      # TV
+      - {id: 231, cat: TV/HD, desc: "TV: HD"}
+      - {id: 142, cat: TV, desc: "TV: Rip"}
 
       #MUSIC SHOWS
       - {id: 246, cat: Audio/Video, desc: "Shows: HD 4K"}
@@ -182,7 +186,7 @@
       - name: re_replace
         args: ["([1-2]\\d{3})", ""]
     inputs:
-      number: 30
+      number: 100
       offset: 0
 
     rows:
@@ -193,6 +197,24 @@
         attribute: href
       title:
         selector: a[href^="torrents-details.php?id="]
+        filters:
+        - name: re_replace
+          args: ["^(\\[XXX]\\s)", ""]
+        - name: replace
+          args: [" - NOVO!", ""]
+      title|append:
+        selector: td.label > div:contains("Lançamento:")
+        filters:
+        - name: replace
+          args: ["Lançamento:", ""]
+      title|append:
+        optional: true
+        selector: td.label > div:contains("Qualidade:")
+        filters:
+        - name: replace
+          args: ["Qualidade:", ""]
+        - name: replace
+          args: ["Autorado", ""]
       download:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
@@ -219,7 +241,7 @@
       seeders:
         selector: font[color^=green]
       leechers:
-        selector: font[color^=red]
+        selector: td.ttable_col1 > font[color^=red]
       downloadvolumefactor:
         case:
           img[src="images/free.gif"]: "0"
