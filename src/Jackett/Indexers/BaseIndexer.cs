@@ -378,7 +378,9 @@ namespace Jackett.Indexers
 
             if (cookieOverride != null)
                 request.Cookies = cookieOverride;
-            return await webclient.GetBytes(request);
+            var result = await webclient.GetBytes(request);
+            UpdateCookieHeader(result.Cookies, cookieOverride);
+            return result;
         }
 
         protected async Task<WebClientStringResult> PostDataWithCookies(string url, IEnumerable<KeyValuePair<string, string>> data, string cookieOverride = null, string referer = null, Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
