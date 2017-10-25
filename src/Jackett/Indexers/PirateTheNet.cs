@@ -48,21 +48,21 @@ namespace Jackett.Indexers
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             this.configData.DisplayText.Name = "Notice";
 
-            AddCategoryMapping("1080P", TorznabCatType.MoviesHD);
-            AddCategoryMapping("720P", TorznabCatType.MoviesHD);
-            AddCategoryMapping("BDRip", TorznabCatType.MoviesSD);
-            AddCategoryMapping("BluRay", TorznabCatType.MoviesBluRay);
-            AddCategoryMapping("BRRip", TorznabCatType.MoviesSD);
-            AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("DVDRip", TorznabCatType.MoviesSD);
-            AddCategoryMapping("FLAC", TorznabCatType.AudioLossless);
-            AddCategoryMapping("MP3", TorznabCatType.AudioMP3);
-            AddCategoryMapping("MP4", TorznabCatType.AudioOther);
-            AddCategoryMapping("Packs", TorznabCatType.Movies);
-            AddCategoryMapping("R5", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("Remux", TorznabCatType.Movies);
-            AddCategoryMapping("TVRip", TorznabCatType.MoviesOther);
-            AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL);
+            AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
+            AddCategoryMapping("720P", TorznabCatType.MoviesHD, "720P");
+            AddCategoryMapping("BDRip", TorznabCatType.MoviesSD, "BDRip");
+            AddCategoryMapping("BluRay", TorznabCatType.MoviesBluRay, "BluRay");
+            AddCategoryMapping("BRRip", TorznabCatType.MoviesSD, "BRRip");
+            AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD, "DVDR");
+            AddCategoryMapping("DVDRip", TorznabCatType.MoviesSD, "DVDRip");
+            AddCategoryMapping("FLAC", TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping("MP3", TorznabCatType.AudioMP3, "MP3");
+            AddCategoryMapping("MP4", TorznabCatType.MoviesOther, "MP4");
+            AddCategoryMapping("Packs", TorznabCatType.MoviesOther, "Packs");
+            AddCategoryMapping("R5", TorznabCatType.MoviesDVD, "R5");
+            AddCategoryMapping("Remux", TorznabCatType.MoviesOther, "Remux");
+            AddCategoryMapping("TVRip", TorznabCatType.MoviesOther, "TVRip");
+            AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL, "WebRip");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -118,12 +118,7 @@ namespace Jackett.Indexers
             }
 
             var cats = MapTorznabCapsToTrackers(query);
-            var hiddenqualities = "";
-            if (cats.Count > 0)
-            {
-                hiddenqualities = String.Join(",", categories.Where(cat => !cats.Contains(cat)));
-            }
-            queryCollection.Add("hiddenqualities", hiddenqualities);
+            queryCollection.Add("hiddenqualities", String.Join(",", cats));
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
