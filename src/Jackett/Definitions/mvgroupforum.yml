@@ -146,6 +146,8 @@
         attribute: href
       category:
         text: "1"
+      size:
+        text: "500 MB"
       date:
         selector: td:nth-of-type(3)
         filters:
