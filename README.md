@@ -62,6 +62,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CzTorrent
  * Deildu
  * Gay-Torrents.net
+ * Kinozal
  * LostFilm.tv
  * Metal Tracker
  * MVGroup Forum
