@@ -102,6 +102,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BIT-HDTV
  * BitHQ
  * BitHUmen
+ * BitMe
  * BitMeTV
  * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
