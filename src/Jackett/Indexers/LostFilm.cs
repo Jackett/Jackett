@@ -486,10 +486,30 @@ namespace Jackett.Indexers
                             throw new FormatException("Failed to map release details string: " + detailsInfo);
                         }
 
+                        /*
+                         * For supported qualities see:
+                         *  - TvCategoryParser.cs
+                         *  - https://github.com/SickRage/SickRage/wiki/Quality-Settings#quality-names-to-recognize-the-quality-of-a-file
+                         */
+                        var quality = releaseDetails.Groups["quality"].Value.Trim();
+                        // Adapt shitty quality format for common algorythms
+                        quality = Regex.Replace(quality, "-Rip", "Rip", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
+                        // Fix forgotten p-Progressive suffix in resolution index
+                        quality = Regex.Replace(quality, "1080 ", "1080p ", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
+
+                        var techComponents = new string[] {
+                            "rus", quality
+                        };
+                        var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
+
                         // Ru title: downloadLink.TextContent.Replace("\n", "");
                         // En title should be manually constructed.
                         var titleComponents = new string[] {
-                            serieTitle, details.GetEpisodeString(), episodeName, releaseDetails.Groups["quality"].Value
+                            serieTitle, details.GetEpisodeString(), episodeName, techInfo
                         };
                         release.Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -497,7 +517,7 @@ namespace Jackett.Indexers
                         release.Link = new Uri(downloadLink.GetAttribute("href"));
                         release.Guid = release.Link;
 
-                        var sizeString = releaseDetails.Groups["size"].Value;
+                        var sizeString = releaseDetails.Groups["size"].Value.ToUpper();
                         sizeString = sizeString.Replace("ТБ", "TB"); // untested
                         sizeString = sizeString.Replace("ГБ", "GB");
                         sizeString = sizeString.Replace("МБ", "MB");
@@ -528,7 +548,7 @@ namespace Jackett.Indexers
         {
             var start = s.IndexOf(startChar);
             var end = s.LastIndexOf(endChar);
-            return s.Substring(start + 1, end - start - 1);
+            return (start != -1 && end != -1) ? s.Substring(start + 1, end - start - 1) : null;
         }
 
         #endregion
