@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -10,7 +11,7 @@ using FluentAssertions;
 using Jackett.Utils;
 using NUnit.Framework;
 
-namespace JackettTest.Util
+namespace Jackett.Test.Util
 {
     [TestFixture]
     public class ParseUtilTests
@@ -19,7 +20,7 @@ namespace JackettTest.Util
         {
             get
             {
-                var type = typeof(ParseUtilTests);
+                var type = typeof(ParseUtilTests);                
                 using (var resourceStream = type.Assembly.GetManifestResourceStream($"{type.Namespace}.Invalid-RSS.xml"))
                 using (var sr = new StreamReader(resourceStream))
                 {

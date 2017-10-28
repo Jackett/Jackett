@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 
-namespace JackettTest.Services
+namespace Jackett.Test.Services
 {
     [TestFixture]
     class ProtectionServiceTests :  TestBase
