@@ -4,7 +4,7 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett", "Jackett\Jackett.csproj", "{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurlSharp", "CurlSharp\CurlSharp.csproj", "{74420A79-CC16-442C-8B1E-7C1B913844F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurlSharp", "CurlSharp\CurlSharp.csproj", "{74420A79-CC16-442C-8B1E-7C1B913844F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE7B0C8A-6144-47CD-821E-B09BA1B7BADE}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,6 +23,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Updater", "Jackett.Updater\Jackett.Updater.csproj", "{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Test", "Jackett.Test\Jackett.Test.csproj", "{FA22C904-9F5D-4D3C-9122-3E33652E7373}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vendor", "Vendor", "{7D7FA63C-3C2C-4B56-BD93-8CD28CF44E5D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateTimeRoutines", "DateTimeRoutines\DateTimeRoutines.csproj", "{C28A79EE-EF81-4EEE-A7FE-EB636423C935}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,12 +62,20 @@ Global
 		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C28A79EE-EF81-4EEE-A7FE-EB636423C935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C28A79EE-EF81-4EEE-A7FE-EB636423C935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C28A79EE-EF81-4EEE-A7FE-EB636423C935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C28A79EE-EF81-4EEE-A7FE-EB636423C935}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{74420A79-CC16-442C-8B1E-7C1B913844F0} = {7D7FA63C-3C2C-4B56-BD93-8CD28CF44E5D}
+		{C28A79EE-EF81-4EEE-A7FE-EB636423C935} = {7D7FA63C-3C2C-4B56-BD93-8CD28CF44E5D}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EAA42E3F-ECA9-4A9C-BCD6-D730DD817B76}
+		SolutionGuid = {54BC4102-8B85-49C1-BA12-257D941D1B97}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
