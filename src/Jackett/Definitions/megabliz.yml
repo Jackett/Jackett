@@ -1,0 +1,165 @@
+﻿---
+  site: megabliz
+  name: Mega-Bliz
+  description: "Mega-Bliz is a Semi-Private site for MOVIES / TV / GENERAL"
+  language: en-us
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://mega-bliz.nl/
+
+  caps:
+    categorymappings:
+      # TV
+      - {id: 23, cat: TV, desc: "TV/HD"}
+      - {id: 47, cat: TV, desc: "TV/PACKS"}
+      - {id: 28, cat: TV, desc: "TV/eps"}
+      - {id: 25, cat: TV, desc: "TV/HDRIP"}
+      - {id: 24, cat: TV, desc: "TV/TV-packs"}
+      - {id: 26, cat: TV/HD, desc: "TV/X264-HD"}
+      - {id: 27, cat: TV/SD, desc: "TV/X264-SD"}
+      # Movies
+      - {id: 10, cat: Movies, desc: "Movies/0DAY"}
+      - {id: 56, cat: Movies/3D, desc: "Movies/3D"}
+      - {id: 16, cat: TV/Anime, desc: "Movies/ANIME"}
+      - {id: 44, cat: Movies, desc: "Movies/CAM"}
+      - {id: 18, cat: Movies/DVD, desc: "Movies/DVDR"}
+      - {id: 49, cat: Movies/HD, desc: "Movies/hd 1080p"}
+      - {id: 48, cat: Movies/HD, desc: "Movies/hd 720p"}
+      - {id: 55, cat: Movies, desc: "Movies/Box Sets"}
+      - {id: 53, cat: Movies, desc: "Movies/Sports"}
+      - {id: 17, cat: Movies, desc: "Movies/X264"}
+      - {id: 57, cat: Movies, desc: "Movies/xmas"}
+      - {id: 15, cat: Movies/SD, desc: "Movies/XVID"}
+       # Music
+      - {id: 54, cat: Audio/Audiobook, desc: "Music/Audio Book"}
+      - {id: 19, cat: Audio/Lossless, desc: "Music/FLAC"}
+      - {id: 20, cat: Audio, desc: "Music/DVDR"}
+      - {id: 21, cat: Audio/MP3, desc: "Music/MP3"}
+      - {id: 42, cat: Audio, desc: "Music/0DAY"}
+      - {id: 22, cat: Audio/Video, desc: "Music/VID"}
+       # Apps
+      - {id: 9, cat: PC/0day, desc: "Apps/APPS"}
+      - {id: 11, cat: Books/Ebook, desc: "Apps/EBOOKS"}
+      - {id: 46, cat: PC/Phone-Other, desc: "Apps/IPHONE/ANDROID"}
+      - {id: 51, cat: PC, desc: "Apps/Linux"}
+      - {id: 52, cat: PC/Mac, desc: "Apps/MAC"}
+       # Games
+      - {id: 58, cat: Console/Other, desc: "Games/Android"}
+      - {id: 45, cat: PC/Games, desc: "Games/GAMES"}
+      - {id: 59, cat: Console/NDS, desc: "Games/NDS"}
+      - {id: 50, cat: Console, desc: "Games/PS2"}
+      - {id: 14, cat: Console/PS3, desc: "Games/PS3"}
+      - {id: 12, cat: Console/Wii, desc: "Games/WII"}
+      - {id: 13, cat: Console/Xbox 360, desc: "Games/XBOX360"}
+      # XXX
+      - {id: 38, cat: XXX, desc: "XXX"}
+      - {id: 39, cat: XXX, desc: "XXX/0DAY"}
+      - {id: 40, cat: XXX/Imageset, desc: "XXX/IMAGESET"}
+      - {id: 41, cat: XXX/Other, desc: "XXX/SITERIPS"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: incldead
+      type: select
+      label: "Search Torrents that are:"
+      default: "0"
+      options:
+        "0" : "Active"
+        "1": "Including Dead"
+        "2": "Only Dead"
+    - name: onlyfree
+      type: checkbox
+      label: Show only Free torrents
+      default: false
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Mega-Blitz webpage.
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      submitme: "X"
+    error:
+      - selector: h2
+        message:
+          selector: table tr td.text
+    test:
+      path: browse.php
+      selector: li a[href^="logout.php?hash_please="]
+
+  search:
+    paths:
+      - path: browse.php      
+    inputs:
+      search: "{{ .Keywords }}"
+      searchin: "title"
+      incldead: "{{ .Config.incldead }}"
+      "only_free": "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
+
+    rows:
+      selector: tr.browse_color
+    fields:
+      category:
+        selector: td:nth-of-type(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: td:nth-of-type(2) a
+        attribute: onmouseover
+        filters:
+          - name: split
+            args: [">", "1"]
+          - name: replace
+            args: ["</b", ""]
+      details:
+        selector: td:nth-of-type(2) a
+        attribute: href
+      download:
+        selector: td:nth-of-type(3) a
+        attribute: href
+      files:
+        optional: true
+        selector: td:nth-of-type(5) a
+      files:
+        optional: true
+        selector: td:nth-of-type(5):not(:has(a))
+      date:
+        selector: td:nth-of-type(7)
+        filters:
+          - name: dateparse
+            args: "Jan 02 2006 03:04 PM"
+      size:
+        selector: td:nth-of-type(8)
+      grabs:
+        selector: td:nth-of-type(9) a
+        filters:
+          - name: regexp
+            args: "([\\d]+)"
+      seeders:
+        selector: td:nth-of-type(10) a font
+      leechers:
+        selector: td:nth-of-type(11)
+      downloadvolumefactor:
+        case:
+          "span:contains(\"Unlimited\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        text: "1"
