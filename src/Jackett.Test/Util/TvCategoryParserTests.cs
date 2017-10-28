@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Jackett.Utils;
 
-namespace JackettTest.Util
+namespace Jackett.Test.Util
 {
     [TestFixture]
     internal class ParseTvShowQualityTest : TestBase

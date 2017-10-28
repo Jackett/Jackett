@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JackettTest
+namespace Jackett.Test
 {
     public class TestWebClient : IWebClient
     {
