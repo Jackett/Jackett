@@ -228,13 +228,13 @@ namespace Jackett.Indexers
                         serieFilterKeywords = keywords.Count - searchKeywords;
 
                         do
-                    {
+                        {
                             var serieFilter = string.Join(" ", keywords.GetRange(searchKeywords, serieFilterKeywords));
                             logger.Info("> Filtering: " + serieFilter);
                             var filteredSeries = series.Where(s => s["title_orig"].Value<string>().Contains(serieFilter)).ToList();
 
                             if (filteredSeries.Count() > 0)
-                        {
+                            {
                                 logger.Info("> Series filtered: [" + string.Join(", ", filteredSeries.Select(s => s["title_orig"].Value<string>())) + "]");
                                 series = filteredSeries;
                                 break; // Serie Filter loop
@@ -243,28 +243,28 @@ namespace Jackett.Indexers
                         while (--serieFilterKeywords > 0);
                     }
 
-                            foreach (var serie in series)
-                            {
-                                var link = serie["link"].ToString();
-                                var season = query.Season == 0 ? "/seasons" : "/season_" + query.Season.ToString();
-                                var url = SiteLink + link.TrimStart('/') + season;
+                    foreach (var serie in series)
+                    {
+                        var link = serie["link"].ToString();
+                        var season = query.Season == 0 ? "/seasons" : "/season_" + query.Season.ToString();
+                        var url = SiteLink + link.TrimStart('/') + season;
 
-                                if (!string.IsNullOrEmpty(query.Episode)) // Fetch single episode releases
-                                {
+                        if (!string.IsNullOrEmpty(query.Episode)) // Fetch single episode releases
+                        {
                             // TODO: Add a togglable Quick Path via v_search.php in Indexer Settings
-                                    url += "/episode_" + query.Episode;
-                                    var taskReleases = await FetchEpisodeReleases(url);
-                                    releases.AddRange(taskReleases);
-                                }
-                                else // Fetch the whole series OR episode with filter applied
-                                {
+                            url += "/episode_" + query.Episode;
+                            var taskReleases = await FetchEpisodeReleases(url);
+                            releases.AddRange(taskReleases);
+                        }
+                        else // Fetch the whole series OR episode with filter applied
+                        {
                             var filterKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
-                                    var filter = string.Join(" ", filterKeywords);
+                            var filter = string.Join(" ", filterKeywords);
 
-                                    var taskReleases = await FetchSeriesReleases(url, query, filter);
-                                    releases.AddRange(taskReleases);
-                                }
-                            }
+                            var taskReleases = await FetchSeriesReleases(url, query, filter);
+                            releases.AddRange(taskReleases);
+                        }
+                    }
 
                     break; // Search loop
                 }
@@ -272,7 +272,7 @@ namespace Jackett.Indexers
                 {
                     OnParseError(response.Content, ex);
                 }
-                }
+            }
             while (--searchKeywords > 0);
 
             return releases;
@@ -370,7 +370,7 @@ namespace Jackett.Indexers
 
                     // Process only season we're searching for
                     if (seasonButton != null && query.Season > 0)
-                {
+                    {
                         // If seasonButton in "inactive" it will not contain "onClick" handler. Better to parse element which always exists.
                         var watchedButton = season.QuerySelector("div.movie-details-block > div.haveseen-btn");
                         var buttonCode = watchedButton.GetAttribute("data-code");
@@ -379,6 +379,13 @@ namespace Jackett.Indexers
                         if (currentSeason != query.Season.ToString())
                         {
                             continue; // Can't match season by regex OR season not matches to a searched one
+                        }
+
+                        // Stop parsing season episodes if season pack was required but it's not available yet.
+                        if (seasonButton.ClassList.Contains("inactive"))
+                        {
+                            logger.Debug("> No season pack is found for S" + query.Season.ToString());
+                            break;
                         }
                     }
 
@@ -424,50 +431,50 @@ namespace Jackett.Indexers
 
                         try
                         {
-                        if (!string.IsNullOrEmpty(filter))
-                        {
-                            var titles = row.QuerySelector("td.gamma > div");
-                            if (titles.TextContent.IndexOf(filter, StringComparison.OrdinalIgnoreCase) == -1)
+                            if (!string.IsNullOrEmpty(filter))
                             {
-                                continue;
-                            }
-                        }
-
-                        var playButton = row.QuerySelector("td.zeta > div.external-btn");
-
-                        if (!string.IsNullOrEmpty(query.Episode))
-                        {
-                            var match = parsePlayEpisodeRegex.Match(playButton.GetAttribute("onclick"));
-                            var episode = match.Groups["episode"];
-
-                            if (episode == null || episode.Value != query.Episode)
-                            {
-                                continue;
+                                var titles = row.QuerySelector("td.gamma > div");
+                                if (titles.TextContent.IndexOf(filter, StringComparison.OrdinalIgnoreCase) == -1)
+                                {
+                                    continue;
+                                }
                             }
 
-                            couldBreak = true;
-                        }
+                            var playButton = row.QuerySelector("td.zeta > div.external-btn");
 
-                        var dateColumn = row.QuerySelector("td.delta"); // Contains both Date and EpisodeURL
+                            if (!string.IsNullOrEmpty(query.Episode))
+                            {
+                                var match = parsePlayEpisodeRegex.Match(playButton.GetAttribute("onclick"));
+                                var episode = match.Groups["episode"];
+
+                                if (episode == null || episode.Value != query.Episode)
+                                {
+                                    continue;
+                                }
+
+                                couldBreak = true;
+                            }
+
+                            var dateColumn = row.QuerySelector("td.delta"); // Contains both Date and EpisodeURL
                             var date = DateFromEpisodeColumn(dateColumn);
 
-                        var link = dateColumn.GetAttribute("onclick"); // goTo('/series/Prison_Break/season_5/episode_9/',false)
-                        link = TrimString(link, '\'', '\'');
-                        var episodeUrl = SiteLink + link.TrimStart('/');
-                        var comments = new Uri(episodeUrl);
+                            var link = dateColumn.GetAttribute("onclick"); // goTo('/series/Prison_Break/season_5/episode_9/',false)
+                            link = TrimString(link, '\'', '\'');
+                            var episodeUrl = SiteLink + link.TrimStart('/');
+                            var comments = new Uri(episodeUrl);
 
-                        var urlDetails = new TrackerUrlDetails(playButton);
-                        var episodeReleases = await FetchTrackerReleases(urlDetails);
+                            var urlDetails = new TrackerUrlDetails(playButton);
+                            var episodeReleases = await FetchTrackerReleases(urlDetails);
 
-                        foreach (var release in episodeReleases)
-                        {
-                            release.Comments = comments;
-                            release.PublishDate = date;
+                            foreach (var release in episodeReleases)
+                            {
+                                release.Comments = comments;
+                                release.PublishDate = date;
+                            }
+                            releases.AddRange(episodeReleases);
                         }
-                        releases.AddRange(episodeReleases);
-                    }
                         catch (Exception ex)
-                {
+                        {
                             logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, row.OuterHtml, ex));
                         }
 
