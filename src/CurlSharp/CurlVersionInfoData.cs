@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2013 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you

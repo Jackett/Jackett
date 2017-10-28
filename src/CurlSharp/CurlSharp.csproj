@@ -7,12 +7,15 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <PackageId>CurlSharp</PackageId>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
-    <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+
+  <ItemGroup>
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
+    <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+  </ItemGroup>
 </Project>
