@@ -297,19 +297,8 @@ namespace Jackett.Indexers
                 {
                     var link = row.QuerySelector("a").GetAttribute("href");
                     var episodeUrl = SiteLink + link.TrimStart('/');
-                    var comments = new Uri(episodeUrl);
-
-                    var dateString = row.QuerySelector("div.beta:contains('Дата')").TextContent; // Release date: beta - ENG, alpha - RUS 
-                    dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Дата выхода Eng: 13.10.2017' -> '13.10.2017'
-                    var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
 
                     var episodeReleases = await FetchEpisodeReleases(episodeUrl);
-
-                    foreach (var release in episodeReleases)
-                    {
-                        release.Comments = comments;
-                        release.PublishDate = date;
-                    }
                     releases.AddRange(episodeReleases);
                 }
             }
@@ -331,11 +320,25 @@ namespace Jackett.Indexers
             {
                 var parser = new HtmlParser();
                 var document = parser.Parse(results.Content);
+
                 var playButton = document.QuerySelector("div.external-btn");
-                if (playButton != null)
+                if (playButton != null && !playButton.ClassList.Contains("inactive"))
                 {
+                    var comments = new Uri(url);
+
+                    var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
+                    dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
+                    var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+
                     var urlDetails = new TrackerUrlDetails(playButton);
-                    releases = await FetchTrackerReleases(urlDetails);
+                    var episodeReleases = await FetchTrackerReleases(urlDetails);
+
+                    foreach (var release in episodeReleases)
+                    {
+                        release.Comments = comments;
+                        release.PublishDate = date;
+                    }
+                    releases.AddRange(episodeReleases);
                 }
             }
             catch (Exception ex)
@@ -621,6 +624,13 @@ namespace Jackett.Indexers
             var start = s.IndexOf(startChar);
             var end = s.LastIndexOf(endChar);
             return (start != -1 && end != -1) ? s.Substring(start + 1, end - start - 1) : null;
+        }
+
+        private string TrimString(string s, string startString, string endString)
+        {
+            var start = s.IndexOf(startString);
+            var end = s.LastIndexOf(endString);
+            return (start != -1 && end != -1) ? s.Substring(start + startString.Length, end - start - startString.Length) : null;
         }
 
         private DateTime DateFromEpisodeColumn(IElement dateColumn)
