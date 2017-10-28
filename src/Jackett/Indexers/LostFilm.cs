@@ -102,7 +102,7 @@ namespace Jackett.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            logger.Info("Applying configuration");
+            logger.Debug("Applying configuration");
             LoadValuesFromJson(configJson);
 
             var data = new Dictionary<string, string>
@@ -126,7 +126,7 @@ namespace Jackett.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            logger.Info("PerformQuery: " + query.GetQueryString());
+            logger.Debug("PerformQuery: " + query.GetQueryString());
 
             // If the search string is empty use the latest releases
             if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm))
@@ -160,7 +160,7 @@ namespace Jackett.Indexers
 
         private async Task<List<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
-            logger.Info("PerformSearch: " + query.SanitizedSearchTerm + " [" + query.QueryType + "]");
+            logger.Debug("PerformSearch: " + query.SanitizedSearchTerm + " [" + query.QueryType + "]");
             var releases = new List<ReleaseInfo>();
 
             /*
@@ -202,7 +202,7 @@ namespace Jackett.Indexers
                     { "type", "search" },
                     { "val", searchString }
                 };
-                logger.Info("> Searching: " + searchString);
+                logger.Debug("> Searching: " + searchString);
                 var response = await PostDataWithCookies(url: ApiUrl, data: data);
 
                 try
@@ -219,7 +219,7 @@ namespace Jackett.Indexers
                         continue; // Search loop
 
                     var series = jsonSeries.ToList();
-                    logger.Info("> Found " + series.Count().ToString() + " series: [" + string.Join(", ", series.Select(s => s["title_orig"].Value<string>())) + "]");
+                    logger.Debug("> Found " + series.Count().ToString() + " series: [" + string.Join(", ", series.Select(s => s["title_orig"].Value<string>())) + "]");
 
                     // Filter found series
 
@@ -230,12 +230,12 @@ namespace Jackett.Indexers
                         do
                         {
                             var serieFilter = string.Join(" ", keywords.GetRange(searchKeywords, serieFilterKeywords));
-                            logger.Info("> Filtering: " + serieFilter);
+                            logger.Debug("> Filtering: " + serieFilter);
                             var filteredSeries = series.Where(s => s["title_orig"].Value<string>().Contains(serieFilter)).ToList();
 
                             if (filteredSeries.Count() > 0)
                             {
-                                logger.Info("> Series filtered: [" + string.Join(", ", filteredSeries.Select(s => s["title_orig"].Value<string>())) + "]");
+                                logger.Debug("> Series filtered: [" + string.Join(", ", filteredSeries.Select(s => s["title_orig"].Value<string>())) + "]");
                                 series = filteredSeries;
                                 break; // Serie Filter loop
                             }
@@ -283,7 +283,7 @@ namespace Jackett.Indexers
         private async Task<List<ReleaseInfo>> FetchNewReleases()
         {
             var url = DiscoveryUrl;
-            logger.Info("FetchNewReleases: " + url);
+            logger.Debug("FetchNewReleases: " + url);
             var results = await RequestStringAndRelogin(url);
             var releases = new List<ReleaseInfo>();
 
@@ -312,7 +312,7 @@ namespace Jackett.Indexers
 
         private async Task<List<ReleaseInfo>> FetchEpisodeReleases(string url)
         {
-            logger.Info("FetchEpisodeReleases: " + url);
+            logger.Debug("FetchEpisodeReleases: " + url);
             var results = await RequestStringAndRelogin(url);
             var releases = new List<ReleaseInfo>();
 
@@ -351,7 +351,7 @@ namespace Jackett.Indexers
 
         private async Task<List<ReleaseInfo>> FetchSeriesReleases(string url, TorznabQuery query, string filter)
         {
-            logger.Info("FetchSeriesReleases: " + url + " S: " + query.Season.ToString() + " E: " + query.Episode + " Filter: " + filter);
+            logger.Debug("FetchSeriesReleases: " + url + " S: " + query.Season.ToString() + " E: " + query.Episode + " Filter: " + filter);
 
             var releases = new List<ReleaseInfo>();
             var results = await RequestStringWithCookies(url);
@@ -504,7 +504,7 @@ namespace Jackett.Indexers
             queryCollection.Add("e", string.IsNullOrEmpty(details.episode) ? "999" : details.episode); // 999 is a synonym for the whole serie
             var url = ReleaseUrl + "?" + queryCollection.GetQueryString();
 
-            logger.Info("FetchTrackerReleases: " + url);
+            logger.Debug("FetchTrackerReleases: " + url);
 
             // Get redirection page with generated link on it. This link can't be constructed manually as it contains Hash field and hashing algo is unknown.
             var results = await RequestStringWithCookies(url);
@@ -535,7 +535,7 @@ namespace Jackett.Indexers
 
         private async Task<List<ReleaseInfo>> FollowTrackerRedirection(string url, TrackerUrlDetails details)
         {
-            logger.Info("FollowTrackerRedirection: " + url);
+            logger.Debug("FollowTrackerRedirection: " + url);
             var results = await RequestStringWithCookies(url);
             var releases = new List<ReleaseInfo>();
 
@@ -545,7 +545,7 @@ namespace Jackett.Indexers
                 var document = parser.Parse(results.Content);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
-                logger.Info("> Parsing " + rows.Count().ToString() + " releases");
+                logger.Debug("> Parsing " + rows.Count().ToString() + " releases");
 
                 var serieTitle = document.QuerySelector("div.inner-box--subtitle").TextContent;
                 serieTitle = serieTitle.Substring(0, serieTitle.LastIndexOf(','));
@@ -606,7 +606,7 @@ namespace Jackett.Indexers
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
                         release.Size = ReleaseInfo.GetBytes(sizeString);
 
-                        logger.Info("> Add: " + release.Title);
+                        logger.Debug("> Add: " + release.Title);
                         releases.Add(release);
                     }
                     catch (Exception ex)
