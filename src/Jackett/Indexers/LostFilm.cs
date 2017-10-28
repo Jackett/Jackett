@@ -163,14 +163,35 @@ namespace Jackett.Indexers
             logger.Info("PerformSearch: " + query.SanitizedSearchTerm + " [" + query.QueryType + "]");
             var releases = new List<ReleaseInfo>();
 
-            // If set to `true` search string will be reduced by word each time tracker returns zero results.
-            // It's required for "search" queries because tracker search API could only return series, not episodes.
-            // Set this variable to `false` within do/while loop when results were achieved.
-            var shouldMorphQuery = query.IsSearch;
+            /*
+            Torznab query for some series could contains sanitized title. E.g. "Star Wars: The Clone Wars" will become "Star Wars The Clone Wars".
+            Search API on LostFilm.tv doesn't return anything on such search query so the query should be "morphed" even for "tvsearch" queries.
+            The algorythm works in the following way:
+                1. Search with the full SearchTerm. Just for example, let's search for episode by it's name
+                    - {Star Wars The Clone Wars To Catch a Jedi}
+                2. [loop] If none were found, repeat search with SearchTerm reduced by 1 word from the end. Fail search if no words left and no results were obtained
+                    - {Star Wars The Clone Wars To Catch a} Jedi
+                    - {Star Wars The Clone Wars To Catch} a Jedi
+                    - ...
+                    - {Star Wars} The Clone Wars To Catch a Jedi
+                3. When we got few results, try to filter them with the words excluded before
+                    - [Star Wars: The Clone Wars, Star Wars Rebels, Star Wars: Forces of Destiny]
+                        .filterBy(The Clone Wars To Catch a Jedi)
+                4. [loop] Reduce filterTerm by 1 word from the end. Fail search if no words left and no results were obtained
+                        .filterBy(The Clone Wars To Catch a) / Jedi
+                        .filterBy(The Clone Wars To Catch) / a Jedi
+                        ...
+                        .filterBy(The Clone Wars) / To Catch a Jedi
+                5. Fetch series detail page for "Star Wars The Clone Wars" with a "To Catch a Jedi" filterTerm to find required episode
+            */
+
             // Search query words. Consists of Series keywords that will be used for series search request, and Episode keywords that will be used for episode filtering.
             var keywords = query.SanitizedSearchTerm.Split(' ').ToList();
-            // Number of first keywords that relates to Series keywords.
-            int searchKeywords = keywords.Count;
+            // Keywords count related to Series Search.
+            var searchKeywords = keywords.Count;
+            // Keywords count related to Series Filter.
+            var serieFilterKeywords = 0;
+            // Overall (keywords.count - searchKeywords - serieFilterKeywords) are related to episode filter
 
             do
             {
@@ -187,16 +208,40 @@ namespace Jackett.Indexers
                 try
                 {
                     var json = JToken.Parse(response.Content);
-                    var jsonData = json["data"];
 
                     // Protect from {"data":false,"result":"ok"}
-                    if (jsonData.Type == JTokenType.Object)
+                    var jsonData = json["data"];
+                    if (jsonData.Type != JTokenType.Object)
+                        continue; // Search loop
+
+                    var jsonSeries = jsonData["series"];
+                    if (jsonSeries == null || !jsonSeries.HasValues)
+                        continue; // Search loop
+
+                    var series = jsonSeries.ToList();
+                    logger.Info("> Found " + series.Count().ToString() + " series: [" + string.Join(", ", series.Select(s => s["title_orig"].Value<string>())) + "]");
+
+                    // Filter found series
+
+                    if (series.Count() > 1)
                     {
-                        var series = jsonData["series"];
-                        if (series != null && series.HasValues)
+                        serieFilterKeywords = keywords.Count - searchKeywords;
+
+                        do
+                    {
+                            var serieFilter = string.Join(" ", keywords.GetRange(searchKeywords, serieFilterKeywords));
+                            logger.Info("> Filtering: " + serieFilter);
+                            var filteredSeries = series.Where(s => s["title_orig"].Value<string>().Contains(serieFilter)).ToList();
+
+                            if (filteredSeries.Count() > 0)
                         {
-                            logger.Info("> Found " + series.Count().ToString() + " series -> breaking the loop");
-                            shouldMorphQuery = false;
+                                logger.Info("> Series filtered: [" + string.Join(", ", filteredSeries.Select(s => s["title_orig"].Value<string>())) + "]");
+                                series = filteredSeries;
+                                break; // Serie Filter loop
+                            }
+                        }
+                        while (--serieFilterKeywords > 0);
+                    }
 
                             foreach (var serie in series)
                             {
@@ -206,33 +251,29 @@ namespace Jackett.Indexers
 
                                 if (!string.IsNullOrEmpty(query.Episode)) // Fetch single episode releases
                                 {
-                                    // TODO: Add a Quick Path via v_search.php for "tvsearch" queries
+                            // TODO: Add a togglable Quick Path via v_search.php in Indexer Settings
                                     url += "/episode_" + query.Episode;
                                     var taskReleases = await FetchEpisodeReleases(url);
                                     releases.AddRange(taskReleases);
                                 }
                                 else // Fetch the whole series OR episode with filter applied
                                 {
-                                    var filterKeywords = keywords.Skip(searchKeywords);
+                            var filterKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
                                     var filter = string.Join(" ", filterKeywords);
 
                                     var taskReleases = await FetchSeriesReleases(url, query, filter);
                                     releases.AddRange(taskReleases);
                                 }
                             }
-                        }
-                    }
+
+                    break; // Search loop
                 }
                 catch (Exception ex)
                 {
                     OnParseError(response.Content, ex);
                 }
-
-                if (shouldMorphQuery)
-                {
-                    searchKeywords--;
                 }
-            } while (shouldMorphQuery && searchKeywords > 0);
+            while (--searchKeywords > 0);
 
             return releases;
         }
