@@ -44,7 +44,7 @@ namespace Jackett.Indexers.Abstract
             LoadValuesFromJson(configJson);
             IsConfigured = true;
             SaveConfig();
-            return IndexerConfigurationStatus.RequiresTesting;
+            return await Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
         protected virtual string GetSearchString(TorznabQuery query)
