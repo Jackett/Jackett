@@ -111,35 +111,37 @@ namespace Jackett
                     }
                     break;
             }
-
-            Mapper.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
+            Mapper.Initialize(cfg =>
             {
-                str.Content = Encoding.UTF8.GetString(be.Content);
-            });
-
-            Mapper.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
-            {
-                if (!string.IsNullOrEmpty(str.Content))
+                cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
                 {
-                    be.Content = Encoding.UTF8.GetBytes(str.Content);
-                }
-            });
+                    str.Content = Encoding.UTF8.GetString(be.Content);
+                });
 
-            Mapper.CreateMap<WebClientStringResult, WebClientStringResult>();
-            Mapper.CreateMap<WebClientByteResult, WebClientByteResult>();
-            Mapper.CreateMap<ReleaseInfo, ReleaseInfo>();
+                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
+                {
+                    if (!string.IsNullOrEmpty(str.Content))
+                    {
+                        be.Content = Encoding.UTF8.GetBytes(str.Content);
+                    }
+                });
 
-            Mapper.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
-            {
-                if (r.Category != null)
+                cfg.CreateMap<WebClientStringResult, WebClientStringResult>();
+                cfg.CreateMap<WebClientByteResult, WebClientByteResult>();
+                cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
+
+                cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
                 {
-                    var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
-                    t.CategoryDesc = CategoryDesc;
-                }
-                else
-                {
-                    t.CategoryDesc = "";
-                }
+                    if (r.Category != null)
+                    {
+                        var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
+                        t.CategoryDesc = CategoryDesc;
+                    }
+                    else
+                    {
+                        t.CategoryDesc = "";
+                    }
+                });
             });
         }
     }
