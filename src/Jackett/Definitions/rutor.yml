@@ -1,0 +1,129 @@
+﻿---
+  site: rutor
+  name: RuTor
+  description: "RuTor is a RUSSIAN Public site for MOVIES / TV / GENERAL"
+  language: ru-ru
+  type: public
+  encoding: UTF-8
+  links:
+    - http://rutor.info/
+
+  caps:
+    # unfortunately RuTor does not display categories anywhere in its search results page :-(
+    # albeit you can select a single category in its search options
+    # so I've opted not to support categories, and default all results with category=Other.
+    categorymappings:
+#      - {id: 1, cat: Movies/Foreign, desc: "Foreign films"}
+#      - {id: 2, cat: Audio, desc: "Music"}
+      - {id: 3, cat: Other, desc: "Other"}
+#      - {id: 4, cat: TV, desc: "TV Shows"}
+#      - {id: 5, cat: Movies, desc: "Russian films"}
+#      - {id: 6, cat: TV, desc: "TV"}
+#      - {id: 7, cat: Movies, desc: "Animation"}
+#      - {id: 8, cat: PC/Games, desc: "Games"}
+#      - {id: 9, cat: PC/0day, desc: "Software"}
+#      - {id: 10, cat: TV/Anime, desc: "Anime"}
+#      - {id: 11, cat: Books, desc: "Books"}
+#      - {id: 12, cat: Movies, desc: "Popular films"}
+#      - {id: 13, cat: TV/Sport, desc: "Sports and Health"}
+#      - {id: 14, cat: Books, desc: "Household"}
+#      - {id: 15, cat: TV, desc: "Humor"}
+
+    modes:
+      search: [q]
+#      tv-search: [q, season, ep]
+#      movie-search: [q]
+
+  settings:
+    - name: method
+      type: select
+      label: Search Method
+      default: "0"
+      options:
+        "0" : "Full Phrase"
+        "1" : "All Words"
+        "2" : "Any Words"
+    - name: info
+      type: info
+      label: A note about RuTor
+      default: RuTor does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
+
+  search:
+    paths:
+      # http://rutor.info/search/0/0/000/0/gotham%2004x01
+      - path: "{{ if .Keywords }}search/0/0/{{ .Config.method }}00/0/{{ .Keywords }}{{else}}top{{end}}"
+    rows:
+      selector: table > tbody > tr:has(td:has(a.downgif))
+    fields:
+      title:
+        selector: td:nth-of-type(2) a:nth-of-type(3)
+      details:
+        selector: td:nth-of-type(2) a:nth-of-type(3)
+        attribute: href
+      category:
+        # Category=Other
+        text: "3"
+      download:
+        selector: td:nth-of-type(2) a:nth-of-type(1)
+        attribute: href
+      magnet:
+        selector: td:nth-of-type(2) a:nth-of-type(2)
+        attribute: href
+      date:
+        # 27 Окт 17
+        selector: td:nth-of-type(1)
+        filters:
+            # replace white spaces
+          - name: re_replace
+            args: ["[\\s]+", " "]
+            # replace month abbreviations
+          - name: replace
+            args: ["Янв", "Jan"]
+          - name: replace
+            args: ["Фев", "Feb"]
+          - name: replace
+            args: ["Мар", "Mar"]
+          - name: replace
+            args: ["Апр", "Apr"]
+          - name: replace
+            args: ["Май", "May"]
+          - name: replace
+            args: ["Июн", "Jun"]
+          - name: replace
+            args: ["Июл", "Jul"]
+          - name: replace
+            args: ["Авг", "Aug"]
+          - name: replace
+            args: ["Сен", "Sep"]
+          - name: replace
+            args: ["Окт", "Oct"]
+          - name: replace
+            args: ["Ноя", "Nov"]
+          - name: replace
+            args: ["Дек", "Dec"]
+            # Moscow +3 UTC
+          - name: append
+            args: " 00:00:00 +03:00"
+          - name: dateparse
+            args: "02 Jan 06 15:04:15 -07:00"
+      # some results don't have comments which throws off td count. So we go fishing for the following fields
+      size:
+        optional: true
+        selector: td:contains(\00a0GB)
+      size:
+        optional: true
+        selector: td:contains(\00a0MB)
+      size:
+        optional: true
+        selector: td:contains(\00a0kB)
+      size:
+        optional: true
+        selector: td:contains(\00a0B)
+      seeders:
+        selector: td span:has(img[alt="S"])
+      leechers:
+        selector: td:has(img[alt="L"]) span
+      downloadvolumefactor:
+          text: "0"
+      uploadvolumefactor:
+          text: "1"

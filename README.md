@@ -42,6 +42,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa-Pantsu
  * Nyoo
  * RARBG
+ * RuTor
  * ShowRSS
  * Sky torrents
  * T411 v2
