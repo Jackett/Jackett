@@ -10,10 +10,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Jackett.Services
 {
-    public interface IImdbResolver
-    {
-        Task<Movie> MovieForId(NonNull<string> imdbId);
-    }
 
     public struct Movie
     {

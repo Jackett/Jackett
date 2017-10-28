@@ -10,13 +10,6 @@ using Jackett.Utils;
 
 namespace Jackett.Services
 {
-    public interface IProtectionService
-    {
-        byte[] InstanceKey { get; set; }
-
-        string Protect(string plainText);
-        string UnProtect(string plainText);
-    }
 
     public class ProtectionService : IProtectionService
     {

@@ -12,15 +12,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface IServiceConfigService
-    {
-        void Install();
-        void Uninstall();
-        bool ServiceExists();
-        bool ServiceRunning();
-        void Start();
-        void Stop();
-    }
 
     public class ServiceConfigService : IServiceConfigService
     {

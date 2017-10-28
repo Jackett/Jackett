@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface ISerializeService
-    {
-        string Serialise(object obj);
-        T DeSerialise<T>(string json);
-    }
 
     class SerializeService : ISerializeService
     {

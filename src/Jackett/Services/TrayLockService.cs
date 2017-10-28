@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface ITrayLockService
-    {
-        void WaitForSignal();
-        void Signal();
-    }
 
     public class TrayLockService : ITrayLockService
     {

@@ -9,13 +9,6 @@ using System.Web;
 
 namespace Jackett.Services
 {
-    public interface ISecuityService
-    {
-        bool CheckAuthorised(HttpRequestMessage request);
-        string HashPassword(string input);
-        void Login(HttpResponseMessage request);
-        void Logout(HttpResponseMessage request);
-    }
 
     class SecuityService : ISecuityService
     {

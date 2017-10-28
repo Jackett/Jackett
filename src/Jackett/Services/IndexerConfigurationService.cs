@@ -6,12 +6,6 @@ using NLog;
 
 namespace Jackett.Services
 {
-    public interface IIndexerConfigurationService
-    {
-        void Load(IIndexer indexer);
-        void Save(IIndexer indexer, JToken config);
-        void Delete(IIndexer indexer);
-    }
 
     public class IndexerConfigurationService : IIndexerConfigurationService
     {

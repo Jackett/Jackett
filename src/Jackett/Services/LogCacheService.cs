@@ -9,11 +9,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface ILogCacheService
-    {
-       // void AddLog(LogEventInfo l);
-        List<CachedLog> Logs { get; }
-    }
 
     [Target("LogService")]
     class LogCacheService: TargetWithLayout, ILogCacheService

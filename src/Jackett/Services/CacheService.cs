@@ -9,12 +9,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface ICacheService
-    {
-        void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
-        List<TrackerCacheResult> GetCachedResults();
-        int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
-    }
 
     public class CacheService : ICacheService
     {

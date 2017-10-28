@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface IRunTimeService
-    {
-        void Spin();
-    }
 
     class RunTimeService : IRunTimeService
     {

@@ -15,17 +15,6 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Jackett.Services
 {
-    public interface IIndexerManagerService
-    {
-        Task TestIndexer(string name);
-        void DeleteIndexer(string name);
-        IIndexer GetIndexer(string name);
-        IWebIndexer GetWebIndexer(string name);
-        IEnumerable<IIndexer> GetAllIndexers();
-
-        void InitIndexers(IEnumerable<string> path);
-        void InitAggregateIndexer();
-    }
 
     public class IndexerManagerService : IIndexerManagerService
     {

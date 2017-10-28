@@ -20,12 +20,6 @@ using System.Threading.Tasks;
 
 namespace Jackett.Services
 {
-    public interface IUpdateService
-    {
-        void StartUpdateChecker();
-        void CheckForUpdatesNow();
-        void CleanupTempDir();
-    }
 
     public class UpdateService: IUpdateService
     {
