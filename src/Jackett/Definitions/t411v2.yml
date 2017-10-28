@@ -37,7 +37,7 @@
       - name: replace # Add Keywords
         args: ["Greys Anatomy", "Grey's Anatomy"]
     rows:
-      selector: tr.isItem.isItemDesk
+      selector: tr.isItem.isItemsDesk
     fields:
      category:
         selector: td.m-cat > a
