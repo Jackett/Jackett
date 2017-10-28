@@ -491,7 +491,7 @@
     <PackageReference Include="AutoMapper">
       <Version>6.1.1</Version>
     </PackageReference>
-    <PackageReference Include="BencodeNET">
+	 <PackageReference Include="BencodeNET">
       <Version>2.2.22</Version>
     </PackageReference>
     <PackageReference Include="CloudFlareUtilities">
@@ -499,6 +499,9 @@
     </PackageReference>
     <PackageReference Include="CsQuery">
       <Version>1.3.5-beta5</Version>
+    </PackageReference>
+    <PackageReference Include="DateTimeRoutines">
+      <Version>1.0.16</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost">
       <Version>5.2.3</Version>
@@ -519,16 +522,8 @@
       <Version>4.2.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
-      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
-      <Name>CurlSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DateTimeRoutines\DateTimeRoutines.csproj">
-      <Project>{c28a79ee-ef81-4eee-a7fe-eb636423c935}</Project>
-      <Name>DateTimeRoutines</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
