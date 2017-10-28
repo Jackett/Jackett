@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Jackett.Indexers.Meta;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {

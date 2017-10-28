@@ -3,6 +3,7 @@ using System.IO;
 using Jackett.Indexers;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {

@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Utils;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {

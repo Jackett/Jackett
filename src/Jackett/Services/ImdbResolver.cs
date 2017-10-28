@@ -7,6 +7,7 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {

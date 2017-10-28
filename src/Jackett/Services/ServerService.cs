@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Web;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
