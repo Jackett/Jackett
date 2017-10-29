@@ -1,26 +1,26 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using CsQuery;
-using System;
-using System.Globalization;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class NewRealWorld : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "login.php"; } }
-        string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -126,7 +126,7 @@ namespace Jackett.Indexers
             TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
-            
+
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
             var queryCollection = new NameValueCollection();
@@ -188,7 +188,7 @@ namespace Jackett.Indexers
                     release.Category = MapTrackerCatToNewznab(catStr);
 
                     var dlLink = qDownloadLink.Attr("href");
-                    if(dlLink.Contains("javascript")) // depending on the user agent the DL link is a javascript call
+                    if (dlLink.Contains("javascript")) // depending on the user agent the DL link is a javascript call
                     {
                         var dlLinkParts = dlLink.Split(new char[] { '\'', ',' });
                         dlLink = SiteLink + "download/" + dlLinkParts[3] + "/" + dlLinkParts[5];
@@ -230,4 +230,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

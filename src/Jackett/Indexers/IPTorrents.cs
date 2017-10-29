@@ -1,29 +1,27 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class IPTorrents : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "login.php"; } }
-        string TakeLoginUrl { get { return SiteLink + "take_login.php"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string TakeLoginUrl { get { return SiteLink + "take_login.php"; } }
         private string BrowseUrl { get { return SiteLink + "t"; } }
+
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://iptorrents.com/",
             "https://ipt-update.com/",
@@ -38,7 +36,7 @@ namespace Jackett.Indexers
             "http://baywatch.workisboring.com/",
         };
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -139,7 +137,7 @@ namespace Jackett.Indexers
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             CQ cq = loginPage.Content;
             var captcha = cq.Find(".g-recaptcha");
-            if(captcha.Any())
+            if (captcha.Any())
             {
                 var result = this.configData;
                 result.CookieHeader.Value = loginPage.Cookies;
@@ -158,8 +156,6 @@ namespace Jackett.Indexers
                 return result;
             }
         }
-
-
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -292,7 +288,7 @@ namespace Jackett.Indexers
                     var grabs = row.Cq().Find("td:nth-last-child(3)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if(row.Cq().Find("span.t_tag_free_leech").Any())
+                    if (row.Cq().Find("span.t_tag_free_leech").Any())
                         release.DownloadVolumeFactor = 0;
                     else
                         release.DownloadVolumeFactor = 1;

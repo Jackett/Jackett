@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
@@ -15,8 +17,6 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Text;
-using System.IO;
 
 namespace Jackett.Indexers
 {
@@ -99,7 +99,6 @@ namespace Jackett.Indexers
             // If we want to simulate a browser
             if (ConfigData.Browser.Value)
             {
-
                 // Clean headers
                 _emulatedBrowserHeaders.Clear();
 
@@ -304,7 +303,7 @@ namespace Jackett.Indexers
                     {
                         Output("Torrent #" + (releases.Count + 1));
 
-                        // ID               
+                        // ID
                         var id = tRow.Find("td:eq(1) > a:eq(0)").Attr("href").Split('=').Last();
                         Output("ID: " + id);
 
@@ -423,7 +422,6 @@ namespace Jackett.Indexers
 
                         releases.Add(release);
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -650,7 +648,6 @@ namespace Jackett.Indexers
         /// <returns></returns>
         public override async Task<byte[]> Download(Uri link)
         {
-
             // Retrieving ID from link provided
             var id = ParseUtil.CoerceInt(Regex.Match(link.AbsoluteUri, @"\d+").Value);
             Output("Torrent Requested ID: " + id);
@@ -704,9 +701,11 @@ namespace Jackett.Indexers
                             logger.Debug(message);
                         }
                         break;
+
                     case "info":
                         logger.Info(message);
                         break;
+
                     case "error":
                         logger.Error(message);
                         break;

@@ -1,23 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Globalization;
 
 namespace Jackett.Indexers
 {
@@ -26,7 +20,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "tor/js/loadSearch2.php"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -128,7 +122,6 @@ namespace Jackett.Indexers
             AddCategoryMapping("109", TorznabCatType.BooksEbook);
             AddCategoryMapping("70", TorznabCatType.BooksEbook);
             AddCategoryMapping("112", TorznabCatType.BooksEbook);
-
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -201,9 +194,9 @@ namespace Jackett.Indexers
                     string tid = torrentData.Attr("id").Substring(4);
                     var qTitle = torrentData.Find("a[class='title']").First();
                     string title = qTitle.Text().Trim();
-                    var details = new Uri(SiteLink + qTitle.Attr("href")); 
+                    var details = new Uri(SiteLink + qTitle.Attr("href"));
                     string author = torrentData.Find("a[class='author']").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + "tor/download.php?tid="+tid); // DL Link is no long available directly, build it ourself
+                    Uri link = new Uri(SiteLink + "tor/download.php?tid=" + tid); // DL Link is no long available directly, build it ourself
                     long files = ParseUtil.CoerceLong(cells.Elements.ElementAt(4).Cq().Find("a").Text());
                     long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text().Split('[')[1].TrimEnd(']'));
                     int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Find("p").ElementAt(0).Cq().Text());
@@ -217,7 +210,6 @@ namespace Jackett.Indexers
                     long category = 0;
                     string cat = torrentData.Find("a[class='newCatLink']").First().Attr("href").Remove(0, "/tor/browse.php?tor[cat][]]=".Length);
                     long.TryParse(cat, out category);
-
 
                     var release = new ReleaseInfo();
 
