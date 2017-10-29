@@ -1,27 +1,27 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using CsQuery;
-using System;
-using System.Globalization;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text;
-using System.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class Andraste : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -105,7 +105,7 @@ namespace Jackett.Indexers
             TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
 
             var releases = new List<ReleaseInfo>();
-            
+
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
             var queryCollection = new NameValueCollection();
@@ -152,7 +152,7 @@ namespace Jackett.Indexers
                     var qSize = qRow.Find("span:contains(Volumen) > b:eq(0)").First();
                     var qOnlyUpload = qRow.Find("img[title=OnlyUpload]");
 
-                    if(qOnlyUpload.Any())
+                    if (qOnlyUpload.Any())
                     {
                         release.MinimumRatio = 2;
                         release.MinimumSeedTime = 144 * 60 * 60;
@@ -209,4 +209,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

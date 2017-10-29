@@ -1,30 +1,25 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
+using CsQuery;
 using Jackett.Models;
-using Jackett.Models.IndexerConfig;
 using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace Jackett.Indexers
 {
     public class AnimeBytes : BaseCachingWebIndexer
     {
-        enum SearchType
+        private enum SearchType
         {
             Video,
             Audio
@@ -38,7 +33,7 @@ namespace Jackett.Indexers
         public bool AddSynonyms { get { return configData.AddSynonyms.Value; } }
         public bool FilterSeasonEpisode { get { return configData.FilterSeasonEpisode.Value; } }
 
-        new ConfigurationDataAnimeBytes configData
+        private new ConfigurationDataAnimeBytes configData
         {
             get { return (ConfigurationDataAnimeBytes)base.configData; }
             set { base.configData = value; }
@@ -69,7 +64,6 @@ namespace Jackett.Indexers
 
             webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)
         }
-
 
         protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
         {
@@ -270,7 +264,6 @@ namespace Jackett.Indexers
                         // Skip the first two info rows
                         for (int r = 1; r < releaseRows.Count(); r++)
                         {
-                            
                             var row = releaseRows.Get(r);
                             var rowCq = row.Cq();
                             if (rowCq.HasClass("edition_info"))
@@ -303,7 +296,6 @@ namespace Jackett.Indexers
                                 {
                                     releaseInfo = "E0" + releaseInfo;
                                 }
-
                             }
                             else if (rowCq.HasClass("torrent"))
                             {
@@ -384,8 +376,6 @@ namespace Jackett.Indexers
                                     }
                                 }
 
-
-
                                 // We dont actually have a release name >.> so try to create one
                                 var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
                                 for (int i = releaseTags.Count - 1; i >= 0; i--)
@@ -437,7 +427,7 @@ namespace Jackett.Indexers
                                     release.Size = ReleaseInfo.GetBytes(size.First().Text());
                                 }
 
-                                //  Additional 5 hours per GB 
+                                //  Additional 5 hours per GB
                                 release.MinimumSeedTime += (release.Size / 1000000000) * 18000;
 
                                 // Peer info

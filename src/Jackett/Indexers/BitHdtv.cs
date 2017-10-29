@@ -1,21 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -26,7 +23,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
         private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -144,7 +141,6 @@ namespace Jackett.Indexers
                     var rows = table.Cq().Children();
                     foreach (var row in rows.Skip(1))
                     {
-
                         var release = new ReleaseInfo();
 
                         var qRow = row.Cq();

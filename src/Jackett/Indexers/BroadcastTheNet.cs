@@ -17,9 +17,9 @@ namespace Jackett.Indexers
     public class BroadcastTheNet : BaseWebIndexer
     {
         // Docs at http://apidocs.broadcasthe.net/docs.php
-        string APIBASE = "https://api.broadcasthe.net";
+        private string APIBASE = "https://api.broadcasthe.net";
 
-        new ConfigurationDataAPIKey configData
+        private new ConfigurationDataAPIKey configData
         {
             get { return (ConfigurationDataAPIKey)base.configData; }
             set { base.configData = value; }
@@ -71,7 +71,6 @@ namespace Jackett.Indexers
 
             return IndexerConfigurationStatus.Completed;
         }
-
 
         private string JsonRPCRequest(string method, JArray parameters)
         {
@@ -158,7 +157,6 @@ namespace Jackett.Indexers
                         releases.Add(item);
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -166,7 +164,6 @@ namespace Jackett.Indexers
             }
             return releases;
         }
-
 
         public class BTNRPCResponse
         {

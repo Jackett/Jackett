@@ -1,29 +1,29 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using AngleSharp.Parser.Html;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System;
-using System.Text;
-using System.Globalization;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using AngleSharp.Parser.Html;
-using AngleSharp.Dom;
-using System.Text.RegularExpressions;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class BJShare : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "login.php"; } }
-        string BrowseUrl { get { return SiteLink + "torrents.php"; } }
-        string TodayUrl { get { return SiteLink + "torrents.php?action=today"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string TodayUrl { get { return SiteLink + "torrents.php?action=today"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -99,9 +99,9 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            
+
             var searchString = query.GetQueryString();
-            
+
             // if the search string is empty use the "last 24h torrents" view
             if (string.IsNullOrWhiteSpace(searchString))
             {
@@ -159,7 +159,6 @@ namespace Jackett.Indexers
                                 }
                             }
 
-
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                             release.Category = MapTrackerCatToNewznab(catStr);
 
@@ -169,7 +168,6 @@ namespace Jackett.Indexers
 
                             release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                             release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-
 
                             if (qFreeLeech != null)
                                 release.DownloadVolumeFactor = 0;
@@ -205,7 +203,7 @@ namespace Jackett.Indexers
 
                 foreach (var cat in MapTorznabCapsToTrackers(query))
                 {
-                    queryCollection.Add("filter_cat["+cat+"]", "1");
+                    queryCollection.Add("filter_cat[" + cat + "]", "1");
                 }
 
                 searchUrl += "?" + queryCollection.GetQueryString();
@@ -280,7 +278,7 @@ namespace Jackett.Indexers
                             }
 
                             release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
-                            
+
                             release.Description = release.Description.Replace("Full HD", "1080p");
                             release.Description = release.Description.Replace("/ HD / ", "/ 720p /");
                             release.Description = release.Description.Replace(" / HD]", " / 720p]");
@@ -289,10 +287,10 @@ namespace Jackett.Indexers
                             int nBarra = release.Title.IndexOf("[");
                             if (nBarra != -1)
                             {
-                                release.Title = release.Title.Substring(nBarra + 1); 
-                                release.Title = release.Title.Replace("]" , "");
-                            } 
-                            
+                                release.Title = release.Title.Substring(nBarra + 1);
+                                release.Title = release.Title.Replace("]", "");
+                            }
+
                             release.Title += " " + release.Description; // add year and Description to the release Title to add some meaning to it
 
                             // check for previously stripped search terms
@@ -334,4 +332,3 @@ namespace Jackett.Indexers
         }
     }
 }
-
