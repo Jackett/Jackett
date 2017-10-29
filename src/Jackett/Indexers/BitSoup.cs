@@ -1,22 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -27,7 +23,7 @@ namespace Jackett.Indexers
         private string LoginReferer { get { return SiteLink + "login.php"; } }
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://www.bitsoup.me/", "https://www.bitsoup.org/" };
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -148,7 +144,6 @@ namespace Jackett.Indexers
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-
             };
 
             var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
@@ -171,7 +166,6 @@ namespace Jackett.Indexers
             var searchUrl = BrowseUrl;
             var trackerCats = MapTorznabCapsToTrackers(query);
             var queryCollection = new NameValueCollection();
-
 
             queryCollection.Add("search", string.IsNullOrWhiteSpace(searchString) ? "" : searchString);
             if (trackerCats.Count > 1)

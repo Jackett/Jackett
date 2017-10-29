@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsQuery;
-using CsQuery.ExtensionMethods.Internal;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
@@ -23,7 +22,7 @@ namespace Jackett.Indexers
         private string BrowseUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -140,7 +139,7 @@ namespace Jackett.Indexers
                     var link = row.Cq().Find("td:eq(1) a:eq(0)").First();
                     release.Guid = new Uri(SiteLink + link.Attr("href"));
                     release.Comments = release.Guid;
-                    release.Title = link.Text().Trim(); 
+                    release.Title = link.Text().Trim();
                     release.Description = release.Title;
 
                     // If we search an get no results, we still get a table just with no info.

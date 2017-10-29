@@ -1,19 +1,19 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -23,7 +23,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -52,7 +52,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(40, TorznabCatType.MoviesForeign); // Foreign/Spanish
             AddCategoryMapping(41, TorznabCatType.MoviesForeign); // Foreign/Swedish
             AddCategoryMapping(67, TorznabCatType.ConsoleNDS); // Games/Nintendo
-            AddCategoryMapping(9 , TorznabCatType.PCGames); // Games/PC 
+            AddCategoryMapping(9,  TorznabCatType.PCGames); // Games/PC
             AddCategoryMapping(8,  TorznabCatType.ConsolePS3); // Games/PS3
             AddCategoryMapping(30, TorznabCatType.ConsolePS4); // Games/PS4
             AddCategoryMapping(7,  TorznabCatType.ConsolePSP); // Games/PSP
@@ -220,7 +220,7 @@ namespace Jackett.Indexers
                     release.Grabs = ParseUtil.CoerceInt(grabs.Split('<')[0]);
 
                     release.DownloadVolumeFactor = 0; // ratioless
-                    
+
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);

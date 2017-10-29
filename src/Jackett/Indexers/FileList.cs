@@ -1,32 +1,28 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using Jackett.Models.IndexerConfig.Bespoke;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
     public class FileList : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string BrowseUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataFileList configData
+        private new ConfigurationDataFileList configData
         {
             get { return (ConfigurationDataFileList)base.configData; }
             set { base.configData = value; }
@@ -49,32 +45,32 @@ namespace Jackett.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            AddCategoryMapping(24, TorznabCatType.TVAnime , "Anime");
-            AddCategoryMapping(11, TorznabCatType.Audio , "Audio");
-            AddCategoryMapping(15, TorznabCatType.TV , "Desene");
-            AddCategoryMapping(18, TorznabCatType.Other , "Diverse");
-            AddCategoryMapping(16, TorznabCatType.Books , "Docs");
-            AddCategoryMapping(25, TorznabCatType.Movies3D , "Filme 3D");
-            AddCategoryMapping(6, TorznabCatType.MoviesHD , "Filme 4K");
-            AddCategoryMapping(26, TorznabCatType.MoviesBluRay , "Filme 4K Blu-Ray");
-            AddCategoryMapping(20, TorznabCatType.MoviesBluRay , "Filme Blu-Ray");
-            AddCategoryMapping(2, TorznabCatType.MoviesDVD , "Filme DVD");
-            AddCategoryMapping(3, TorznabCatType.MoviesForeign , "Filme DVD-RO");
-            AddCategoryMapping(4, TorznabCatType.MoviesHD , "Filme HD");
+            AddCategoryMapping(24, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(11, TorznabCatType.Audio, "Audio");
+            AddCategoryMapping(15, TorznabCatType.TV, "Desene");
+            AddCategoryMapping(18, TorznabCatType.Other, "Diverse");
+            AddCategoryMapping(16, TorznabCatType.Books, "Docs");
+            AddCategoryMapping(25, TorznabCatType.Movies3D, "Filme 3D");
+            AddCategoryMapping(6, TorznabCatType.MoviesHD, "Filme 4K");
+            AddCategoryMapping(26, TorznabCatType.MoviesBluRay, "Filme 4K Blu-Ray");
+            AddCategoryMapping(20, TorznabCatType.MoviesBluRay, "Filme Blu-Ray");
+            AddCategoryMapping(2, TorznabCatType.MoviesDVD, "Filme DVD");
+            AddCategoryMapping(3, TorznabCatType.MoviesForeign, "Filme DVD-RO");
+            AddCategoryMapping(4, TorznabCatType.MoviesHD, "Filme HD");
             AddCategoryMapping(19, TorznabCatType.MoviesForeign, "Filme HD-RO");
-            AddCategoryMapping(1, TorznabCatType.MoviesSD , "Filme SD");
-            AddCategoryMapping(5, TorznabCatType.AudioLossless , "FLAC");
-            AddCategoryMapping(10, TorznabCatType.Console , "Jocuri Console");
-            AddCategoryMapping(9, TorznabCatType.PCGames , "Jocuri PC");
-            AddCategoryMapping(17, TorznabCatType.PC , "Linux");
-            AddCategoryMapping(22, TorznabCatType.PCPhoneOther , "Mobile");
-            AddCategoryMapping(8, TorznabCatType.PC , "Programe");
-            AddCategoryMapping(27, TorznabCatType.TVHD , "Seriale 4K");
-            AddCategoryMapping(21, TorznabCatType.TVHD , "Seriale HD");
-            AddCategoryMapping(23, TorznabCatType.TVSD , "Seriale SD");
-            AddCategoryMapping(13, TorznabCatType.TVSport , "Sport");
-            AddCategoryMapping(12, TorznabCatType.AudioVideo , "Videoclip");
-            AddCategoryMapping(7, TorznabCatType.XXX , "XXX");
+            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Filme SD");
+            AddCategoryMapping(5, TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping(10, TorznabCatType.Console, "Jocuri Console");
+            AddCategoryMapping(9, TorznabCatType.PCGames, "Jocuri PC");
+            AddCategoryMapping(17, TorznabCatType.PC, "Linux");
+            AddCategoryMapping(22, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(8, TorznabCatType.PC, "Programe");
+            AddCategoryMapping(27, TorznabCatType.TVHD, "Seriale 4K");
+            AddCategoryMapping(21, TorznabCatType.TVHD, "Seriale HD");
+            AddCategoryMapping(23, TorznabCatType.TVSD, "Seriale SD");
+            AddCategoryMapping(13, TorznabCatType.TVSport, "Sport");
+            AddCategoryMapping(12, TorznabCatType.AudioVideo, "Videoclip");
+            AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -126,7 +122,7 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
-            
+
             // Occasionally the cookies become invalid, login again if that happens
             if (response.IsRedirect)
             {
@@ -151,7 +147,7 @@ namespace Jackett.Indexers
                         release.Title = longtitle;
 
                     if (query.ImdbID == null && !query.MatchQueryStringAND(release.Title))
-                    continue;
+                        continue;
 
                     release.Description = qRow.Find(".torrenttable:eq(1) > span > font.small").First().Text();
 
@@ -168,11 +164,11 @@ namespace Jackett.Indexers
                     release.Comments = release.Guid;
 
                     //22:05:3716/02/2013
-                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim()+" +0200";
+                    var dateStr = qRow.Find(".torrenttable:eq(5)").Text().Trim() + " +0200";
                     release.PublishDate = DateTime.ParseExact(dateStr, "H:mm:ssdd/MM/yyyy zzz", CultureInfo.InvariantCulture);
 
                     var qLink = qRow.Find("a[href^=\"download.php?id=\"]").First();
-                    release.Link = new Uri(SiteLink + qLink.Attr("href").Replace("&usetoken=1",""));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href").Replace("&usetoken=1", ""));
 
                     var sizeStr = qRow.Find(".torrenttable:eq(6)").Text().Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

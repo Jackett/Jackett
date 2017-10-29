@@ -1,19 +1,16 @@
-﻿using CsQuery;
-using Jackett.Models;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using CsQuery;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -23,7 +20,7 @@ namespace Jackett.Indexers
         public string LoginUrl { get { return SiteLink + "login.php"; } }
         public string id = "bakabt";
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -45,16 +42,15 @@ namespace Jackett.Indexers
             Type = "private";
         }
 
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
             var loginForm = await webclient.GetString(new Utils.Clients.WebRequest()
-                {
-                    Url = LoginUrl,
-                    Type = RequestType.GET
-                });
+            {
+                Url = LoginUrl,
+                Type = RequestType.GET
+            });
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -77,7 +73,6 @@ namespace Jackett.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-
             // This tracker only deals with full seasons so chop off the episode/season number if we have it D:
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
@@ -98,7 +93,6 @@ namespace Jackett.Indexers
 
                 foreach (var row in rows)
                 {
-
                     var qRow = row.Cq();
                     var qTitleLink = qRow.Find("a.title, a.alt_title").First();
                     var title = qTitleLink.Text().Trim();

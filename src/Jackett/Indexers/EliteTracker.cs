@@ -5,25 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
 using AngleSharp.Parser.Html;
-using Newtonsoft.Json.Linq;
-using NLog;
-
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
-    class EliteTracker : BaseWebIndexer
+    internal class EliteTracker : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        string BrowseUrl { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl
+        { get { return SiteLink + "takelogin.php"; } }
+        private string BrowseUrl
+        { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -194,7 +194,7 @@ namespace Jackett.Indexers
                     var Leechers = Row.QuerySelector("td:nth-child(8)").QuerySelector("a");
 
                     var categoryIdparts = category.GetAttribute("href").Split('-');
-                    var categoryId = categoryIdparts[categoryIdparts.Length-1].Replace(".ts", "");
+                    var categoryId = categoryIdparts[categoryIdparts.Length - 1].Replace(".ts", "");
 
                     release.Title = title.TextContent;
                     release.Category = MapTrackerCatToNewznab(categoryId);
@@ -270,6 +270,5 @@ namespace Jackett.Indexers
 
             return releases;
         }
-
     }
 }

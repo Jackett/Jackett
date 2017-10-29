@@ -1,25 +1,22 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
-    // To comply with the rules for this tracker, only the acronym is used and no publicly displayed URLs to the site. 
+    // To comply with the rules for this tracker, only the acronym is used and no publicly displayed URLs to the site.
 
     public class BB : BaseWebIndexer
     {
@@ -28,7 +25,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return BaseUri + "login.php"; } }
         private string SearchUrl { get { return BaseUri + "torrents.php?searchtags=&tags_type=0&order_by=s3&order_way=desc&disablegrouping=1&"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -96,14 +93,14 @@ namespace Jackett.Indexers
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
             List<string> searchStrings = new List<string>(new string[] { query.GetQueryString() });
-            
+
             if (string.IsNullOrEmpty(query.Episode) && (query.Season > 0))
                 // Tracker naming rules: If query is for a whole season, "Season #" instead of "S##".
                 searchStrings.Add((query.SanitizedSearchTerm + " " + string.Format("\"Season {0}\"", query.Season)).Trim());
 
             List<string> categories = MapTorznabCapsToTrackers(query);
             List<string> request_urls = new List<string>();
-            
+
             foreach (var searchString in searchStrings)
             {
                 var queryCollection = new NameValueCollection();
@@ -116,16 +113,15 @@ namespace Jackett.Indexers
 
                 foreach (var cat in categories)
                 {
-                    
                     queryCollection.Add("filter_cat[" + cat + "]", "1");
                 }
 
                 request_urls.Add(SearchUrl + queryCollection.GetQueryString());
             }
             IEnumerable<Task<WebClientStringResult>> downloadTasksQuery =
-            	from url in request_urls select RequestStringWithCookiesAndRetry(url); 
+                from url in request_urls select RequestStringWithCookiesAndRetry(url);
 
-            WebClientStringResult[] responses = await Task.WhenAll(downloadTasksQuery.ToArray());  
+            WebClientStringResult[] responses = await Task.WhenAll(downloadTasksQuery.ToArray());
 
             for (int i = 0; i < searchStrings.Count(); i++)
             {
@@ -188,7 +184,7 @@ namespace Jackett.Indexers
                         if (catStr == "10") //change "Season #" to "S##" for TV shows
                             release.Title = Regex.Replace(release.Title, @"Season (\d+)",
                                                           m => string.Format("S{0:00}", Int32.Parse(m.Groups[1].Value)));
-                        
+
                         releases.Add(release);
                     }
                 }

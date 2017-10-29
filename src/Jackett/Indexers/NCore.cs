@@ -1,18 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig.Bespoke;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -22,7 +22,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
         private string[] LanguageCats = new string[] { "xvidser", "dvdser", "hdser", "xvid", "dvd", "dvd9", "hd", "mp3", "lossless", "ebook" };
 
-        new ConfigurationDataNCore configData
+        private new ConfigurationDataNCore configData
         {
             get { return (ConfigurationDataNCore)base.configData; }
             set { base.configData = value; }
@@ -44,7 +44,7 @@ namespace Jackett.Indexers
             Type = "private";
 
             AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");
-            AddCategoryMapping("xvid", TorznabCatType.MoviesSD , "Film SD/EN");
+            AddCategoryMapping("xvid", TorznabCatType.MoviesSD, "Film SD/EN");
             AddCategoryMapping("dvd_hun", TorznabCatType.MoviesDVD, "Film DVDR/HU");
             AddCategoryMapping("dvd", TorznabCatType.MoviesDVD, "Film DVDR/EN");
             AddCategoryMapping("dvd9_hun", TorznabCatType.MoviesDVD, "Film DVD9/HU");
@@ -52,34 +52,34 @@ namespace Jackett.Indexers
             AddCategoryMapping("hd_hun", TorznabCatType.MoviesHD, "Film HD/HU");
             AddCategoryMapping("hd", TorznabCatType.MoviesHD, "Film HD/EN");
 
-            AddCategoryMapping("xvidser_hun", TorznabCatType.TVSD , "Sorozat SD/HU");
-            AddCategoryMapping("xvidser", TorznabCatType.TVSD , "Sorozat SD/EN");
-            AddCategoryMapping("dvdser_hun", TorznabCatType.TVSD , "Sorozat DVDR/HU");
+            AddCategoryMapping("xvidser_hun", TorznabCatType.TVSD, "Sorozat SD/HU");
+            AddCategoryMapping("xvidser", TorznabCatType.TVSD, "Sorozat SD/EN");
+            AddCategoryMapping("dvdser_hun", TorznabCatType.TVSD, "Sorozat DVDR/HU");
             AddCategoryMapping("dvdser", TorznabCatType.TVSD, "Sorozat DVDR/EN");
             AddCategoryMapping("hdser_hun", TorznabCatType.TVHD, "Sorozat HD/HU");
-            AddCategoryMapping("hdser", TorznabCatType.TVHD , "Sorozat HD/EN");
+            AddCategoryMapping("hdser", TorznabCatType.TVHD, "Sorozat HD/EN");
 
-            AddCategoryMapping("mp3_hun", TorznabCatType.AudioMP3 , "Zene MP3/HU");
+            AddCategoryMapping("mp3_hun", TorznabCatType.AudioMP3, "Zene MP3/HU");
             AddCategoryMapping("mp3", TorznabCatType.AudioMP3, "Zene MP3/EN");
             AddCategoryMapping("lossless_hun", TorznabCatType.AudioLossless, "Zene Lossless/HU");
             AddCategoryMapping("lossless", TorznabCatType.AudioLossless, "Zene Lossless/EN");
-            AddCategoryMapping("clip", TorznabCatType.AudioVideo , "Zene Klip");
+            AddCategoryMapping("clip", TorznabCatType.AudioVideo, "Zene Klip");
 
-            AddCategoryMapping("xxx_xvid", TorznabCatType.XXXXviD , "XXX SD");
+            AddCategoryMapping("xxx_xvid", TorznabCatType.XXXXviD, "XXX SD");
             AddCategoryMapping("xxx_dvd", TorznabCatType.XXXDVD, "XXX DVDR");
-            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageset , "XXX Imageset");
-            AddCategoryMapping("xxx_hd", TorznabCatType.XXX , "XXX HD");
+            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageset, "XXX Imageset");
+            AddCategoryMapping("xxx_hd", TorznabCatType.XXX, "XXX HD");
 
-            AddCategoryMapping("game_iso", TorznabCatType.PCGames , "Játék PC/ISO");
-            AddCategoryMapping("game_rip", TorznabCatType.PCGames , "Játék PC/RIP");
-            AddCategoryMapping("console", TorznabCatType.Console , "Játék Konzol");
+            AddCategoryMapping("game_iso", TorznabCatType.PCGames, "Játék PC/ISO");
+            AddCategoryMapping("game_rip", TorznabCatType.PCGames, "Játék PC/RIP");
+            AddCategoryMapping("console", TorznabCatType.Console, "Játék Konzol");
 
-            AddCategoryMapping("iso", TorznabCatType.PCISO , "Program Prog/ISO");
-            AddCategoryMapping("misc", TorznabCatType.PC0day , "Program Prog/RIP");
-            AddCategoryMapping("mobil", TorznabCatType.PCPhoneOther , "Program Prog/Mobil");
+            AddCategoryMapping("iso", TorznabCatType.PCISO, "Program Prog/ISO");
+            AddCategoryMapping("misc", TorznabCatType.PC0day, "Program Prog/RIP");
+            AddCategoryMapping("mobil", TorznabCatType.PCPhoneOther, "Program Prog/Mobil");
 
-            AddCategoryMapping("ebook_hun", TorznabCatType.Books , "Könyv eBook/HU");
-            AddCategoryMapping("ebook", TorznabCatType.Books , "Könyv eBook/EN");
+            AddCategoryMapping("ebook_hun", TorznabCatType.Books, "Könyv eBook/HU");
+            AddCategoryMapping("ebook", TorznabCatType.Books, "Könyv eBook/EN");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -143,7 +143,7 @@ namespace Jackett.Indexers
                 if (!configData.English.Value)
                     cats.Remove(lcat);
             }
-            
+
             foreach (var cat in cats)
             {
                 pairs.Add(new KeyValuePair<string, string>("kivalasztott_tipus[]", cat));
@@ -162,7 +162,7 @@ namespace Jackett.Indexers
                 {
                     CQ qRow = row.Cq();
 
-                    var key = dom ["link[rel=alternate]"].First().Attr("href").Split('=').Last();
+                    var key = dom["link[rel=alternate]"].First().Attr("href").Split('=').Last();
 
                     release = new ReleaseInfo();
                     var torrentTxt = qRow.Find(".torrent_txt, .torrent_txt2").Find("a").Get(0);
@@ -209,6 +209,5 @@ namespace Jackett.Indexers
 
             return releases;
         }
-
     }
 }

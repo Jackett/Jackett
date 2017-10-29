@@ -1,25 +1,19 @@
-﻿using CsQuery;
-using Jackett.Indexers;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI.WebControls;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -28,7 +22,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
 
-        new NxtGnConfigurationData configData
+        private new NxtGnConfigurationData configData
         {
             get { return (NxtGnConfigurationData)base.configData; }
             set { base.configData = value; }
@@ -92,7 +86,6 @@ namespace Jackett.Indexers
                 { "password", configData.Password.Value },
                 { "keeplogged", "1" },
                 { "login", "Login" }
-
             };
             // Get inital cookies
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, "https://hounddawgs.org/");
@@ -226,6 +219,7 @@ namespace Jackett.Indexers
 
             return releases;
         }
+
         public class NxtGnConfigurationData : ConfigurationData
         {
             public NxtGnConfigurationData()
@@ -233,6 +227,7 @@ namespace Jackett.Indexers
                 Username = new StringItem { Name = "Username" };
                 Password = new StringItem { Name = "Password" };
             }
+
             public StringItem Username { get; private set; }
             public StringItem Password { get; private set; }
         }

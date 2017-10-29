@@ -1,18 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AngleSharp.Parser.Html;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-
-using AngleSharp.Parser.Html;
 
 namespace Jackett.Indexers
 {
@@ -22,7 +21,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string TakeLoginUrl { get { return SiteLink + "takelogin.php"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -46,8 +45,8 @@ namespace Jackett.Indexers
             TorznabCaps.SupportsImdbSearch = true;
 
             AddCategoryMapping(42, TorznabCatType.MoviesSD); // LEGi0N 480p
-            AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p 
-            AddCategoryMapping(16, TorznabCatType.MoviesHD); // LEGi0N  1080p 
+            AddCategoryMapping(17, TorznabCatType.MoviesHD); // LEGi0N  720p
+            AddCategoryMapping(16, TorznabCatType.MoviesHD); // LEGi0N  1080p
             AddCategoryMapping(84, TorznabCatType.Movies3D); // LEGi0N 3D 1080p
             AddCategoryMapping(31, TorznabCatType.MoviesOther); // LEGi0N  REMUX
             AddCategoryMapping(70, TorznabCatType.MoviesBluRay); // LEGi0N BD BD25 & BD50
@@ -61,7 +60,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(89, TorznabCatType.MoviesBluRay); // taterzero BD25
             AddCategoryMapping(90, TorznabCatType.Movies3D); // taterzero 3D BD
             AddCategoryMapping(39, TorznabCatType.MoviesBluRay); // Bluray REMUX
-            AddCategoryMapping(38, TorznabCatType.MoviesBluRay); // Bluray 
+            AddCategoryMapping(38, TorznabCatType.MoviesBluRay); // Bluray
             AddCategoryMapping(75, TorznabCatType.MoviesBluRay); // Bluray 25
             AddCategoryMapping(36, TorznabCatType.MoviesHD); // Encodes 720p
             AddCategoryMapping(35, TorznabCatType.MoviesHD); // Encodes 1080p
@@ -150,7 +149,7 @@ namespace Jackett.Indexers
                     errorMessage = result.Content;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
-            
+
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -278,7 +277,7 @@ namespace Jackett.Indexers
             pairs.Add("visible", "1");
             pairs.Add("uid", "-1");
             pairs.Add("genre", "");
-            
+
             pairs.Add("cats", string.Join(",+", MapTorznabCapsToTrackers(query)));
 
             if (query.ImdbID != null)
@@ -325,7 +324,7 @@ namespace Jackett.Indexers
                     release.Description = row["genre"].ToString();
 
                     var poster = row["poster"].ToString();
-                    if(!string.IsNullOrWhiteSpace(poster))
+                    if (!string.IsNullOrWhiteSpace(poster))
                     {
                         var posterurl = poster;
                         if (!poster.StartsWith("http"))
@@ -353,7 +352,6 @@ namespace Jackett.Indexers
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
-                    
                 }
             }
             catch (Exception ex)

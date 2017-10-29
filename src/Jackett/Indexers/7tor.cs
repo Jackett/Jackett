@@ -1,29 +1,25 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Threading.Tasks;
+using AngleSharp.Parser.Html;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System;
-using System.Text;
-using System.Globalization;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using AngleSharp.Parser.Html;
-using AngleSharp.Dom;
-using System.Text.RegularExpressions;
-using System.Web;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class SevenTor : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "ucp.php?mode=login"; } }
-        string SearchUrl { get { return SiteLink + "search.php"; } }
+        private string LoginUrl { get { return SiteLink + "ucp.php?mode=login"; } }
+        private string SearchUrl { get { return SiteLink + "search.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -1664,7 +1660,7 @@ namespace Jackett.Indexers
 
                         var qDetailsLink = Row.QuerySelector("a.topictitle");
                         var qDownloadLink = Row.QuerySelector("a[href^=\"./download/file.php?id=\"]");
-                        
+
                         release.Title = qDetailsLink.TextContent;
                         release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
@@ -1731,4 +1727,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

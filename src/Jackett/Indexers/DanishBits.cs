@@ -1,19 +1,19 @@
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Jackett.Indexers.Abstract;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils.Clients;
 using NLog;
-using System.Text;
-using Jackett.Indexers.Abstract;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
     public class DanishBits : CouchPotatoTracker
     {
-        new ConfigurationDataUserPasskey configData
+        private new ConfigurationDataUserPasskey configData
         {
             get { return (ConfigurationDataUserPasskey)base.configData; }
             set { base.configData = value; }

@@ -1,4 +1,11 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using CsQuery;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
@@ -6,13 +13,6 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace Jackett.Indexers
 {
@@ -21,7 +21,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "account_handler.php"; } }
         private string SearchUrl { get { return SiteLink + "files/?category={0}&subcategory=All&quality=All&seeded=2&to=1&query={1}&external=2"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -135,7 +135,6 @@ namespace Jackett.Indexers
             var episodeSearchUrl = string.Format(SearchUrl, cat, HttpUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
-            
             if (results.Content.Contains("No torrents found"))
             {
                 return releases;
@@ -157,7 +156,7 @@ namespace Jackett.Indexers
                         // ex: "Monday, Jun 01, 2015", "Monday, Aug 03, 2015"
                         var dateStr = rowA.Cq().Text().Trim().Replace("Added on ", "");
                         if (string.IsNullOrWhiteSpace(dateStr) || dateStr == "Sponsored links" || dateStr.StartsWith("!function")) // ignore ads
-                        { 
+                        {
                             continue;
                         }
                         if (dateStr.ToLowerInvariant().Contains("today"))
@@ -215,7 +214,6 @@ namespace Jackett.Indexers
 
                     releases.Add(release);
                 }
-
             }
             catch (Exception ex)
             {

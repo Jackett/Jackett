@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Jackett.Models;
-using Newtonsoft.Json.Linq;
-using NLog;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
-using AutoMapper;
-using Jackett.Models.IndexerConfig;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -255,6 +254,7 @@ namespace Jackett.Indexers
                 throw new IndexerException(this, ex);
             }
         }
+
         protected abstract Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
     }
 
@@ -463,7 +463,7 @@ namespace Jackett.Indexers
                 || response.Status == System.Net.HttpStatusCode.GatewayTimeout
                 || (int)response.Status == 521 // used by cloudflare to signal the original webserver is refusing the connection
                 || (int)response.Status == 522 // used by cloudflare to signal the original webserver is not reachable at all (timeout)
-                ) 
+                )
             {
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The tracker seems to be down.");
             }
@@ -511,7 +511,6 @@ namespace Jackett.Indexers
                 matches = matches.NextMatch();
             }
             return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
-
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)

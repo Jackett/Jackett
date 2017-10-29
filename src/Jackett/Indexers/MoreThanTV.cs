@@ -1,9 +1,4 @@
-﻿using Jackett.Models;
-using Jackett.Services;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,8 +9,13 @@ using System.Web;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using CsQuery;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
+using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -26,7 +26,7 @@ namespace Jackett.Indexers
         private string DownloadUrl => SiteLink + "torrents.php?action=download&id=";
         private string GuidUrl => SiteLink + "torrents.php?torrentid=";
 
-        private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin) configData;
+        private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
         public MoreThanTV(IIndexerConfigurationService configService, IWebClient c, Logger l, IProtectionService ps)
             : base(name: "MoreThanTV",

@@ -1,8 +1,8 @@
-﻿using Jackett.Models;
-using NLog;
+﻿using Jackett.Indexers.Abstract;
+using Jackett.Models;
 using Jackett.Services;
 using Jackett.Utils.Clients;
-using Jackett.Indexers.Abstract;
+using NLog;
 
 namespace Jackett.Indexers
 {

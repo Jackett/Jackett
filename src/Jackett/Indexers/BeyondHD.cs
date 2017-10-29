@@ -1,18 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
-using System.Text;
 
 namespace Jackett.Indexers
 {
@@ -20,7 +20,7 @@ namespace Jackett.Indexers
     {
         private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
 
-        new ConfigurationDataLoginLink configData
+        private new ConfigurationDataLoginLink configData
         {
             get { return (ConfigurationDataLoginLink)base.configData; }
             set { base.configData = value; }
@@ -82,14 +82,12 @@ namespace Jackett.Indexers
                 56, // Music / 720p
                 42 // Music / Blu-ray
             );
-
-
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            
+
             var result = await RequestStringWithCookies(configData.LoginLink.Value);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Welcome Back"), () =>
             {
@@ -169,7 +167,6 @@ namespace Jackett.Indexers
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
-
                 }
             }
             catch (Exception ex)
