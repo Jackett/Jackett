@@ -1,34 +1,31 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
     //
-    //     Quick and dirty indexer for GFTracker.  
-    // 
+    //     Quick and dirty indexer for GFTracker.
+    //
     public class GFTracker : BaseWebIndexer
     {
         private string StartPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
         private string LoginUrl { get { return SiteLink + "loginsite.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -88,13 +85,14 @@ namespace Jackett.Indexers
             CQ cq = loginPage.Content;
             var result = this.configData;
             CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            if(recaptcha.Length != 0)   // recaptcha not always present in login form, perhaps based on cloudflare uid or just phase of the moon
+            if (recaptcha.Length != 0)   // recaptcha not always present in login form, perhaps based on cloudflare uid or just phase of the moon
             {
                 result.CookieHeader.Value = loginPage.Cookies;
                 result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
                 result.Captcha.Version = "2";
                 return result;
-            } else
+            }
+            else
             {
                 var stdResult = new ConfigurationDataBasicLogin();
                 stdResult.SiteLink.Value = configData.SiteLink.Value;
@@ -102,7 +100,7 @@ namespace Jackett.Indexers
                 stdResult.Password.Value = configData.Password.Value;
                 stdResult.CookieHeader.Value = loginPage.Cookies;
                 return stdResult;
-            }           
+            }
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -159,7 +157,7 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
 
             // search in normal + gems view
-            foreach (var view in new string[] {"0", "1"})
+            foreach (var view in new string[] { "0", "1" })
             {
                 var queryCollection = new NameValueCollection();
 
@@ -230,7 +228,7 @@ namespace Jackett.Indexers
                         var desc = qRow.Find("td:nth-child(2)");
                         desc.Find("a").Remove();
                         desc.Find("small").Remove(); // Remove release name (if enabled in the user cp)
-                        release.Description = desc.Text().Trim(new char[] {'-', ' '});
+                        release.Description = desc.Text().Trim(new char[] { '-', ' ' });
 
                         releases.Add(release);
                     }

@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models;
-using Newtonsoft.Json.Linq;
-using Jackett.Utils.Clients;
-using Jackett.Services;
-using NLog;
-using Jackett.Utils;
-using CsQuery;
-using System.Web;
 using System.Text.RegularExpressions;
-using System.Globalization;
+using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -23,7 +22,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
         private string SearchUrl { get { return SiteLink + "index.php?page=torrents&"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -60,20 +59,20 @@ namespace Jackett.Indexers
 
             AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / Lossless
             AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
-            
+
             AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
                 24, // TV Show / Documentary / 720p
                 25 // TV Show / Documentary / 1080p
             );
-            
+
             AddMultiCategoryMapping(TorznabCatType.XXX,
                 33, // XXX / 720p
                 34 // XXX / 1080p
             );
-            
+
             AddCategoryMapping("37", TorznabCatType.PC);
             AddCategoryMapping("38", TorznabCatType.Other);
-         }
+        }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {

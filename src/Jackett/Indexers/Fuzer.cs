@@ -1,22 +1,20 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Threading;
 
 namespace Jackett.Indexers
 {
@@ -26,7 +24,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -95,7 +93,6 @@ namespace Jackett.Indexers
             AddCategoryMapping(74, TorznabCatType.PC, "תוכנות");
             AddCategoryMapping(75, TorznabCatType.Audio, "שירים");
             AddCategoryMapping(76, TorznabCatType.TV, "סדרות");
-
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -181,7 +178,7 @@ namespace Jackett.Indexers
                 foreach (var row in rows)
                 {
                     CQ qRow = row.Cq();
-                    
+
                     var release = new ReleaseInfo();
                     var main_title_link = qRow.Find("div.main_title > a");
                     release.Title = main_title_link.Attr("longtitle");
@@ -249,7 +246,6 @@ namespace Jackett.Indexers
             const string site = "http://thetvdb.com";
             var url = site + "/index.php?searchseriesid=&tab=listseries&function=Search&";
             url += "string=" + searchTerm; // eretz + nehedert
-
 
             var results = await RequestStringWithCookies(url);
 

@@ -1,21 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -26,7 +22,7 @@ namespace Jackett.Indexers
         private const int MAXPAGES = 3;
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] { "https://hdts.ru/", "https://hd-torrents.org/", "https://hd-torrents.net/", "https://hd-torrents.me/" };
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -108,12 +104,10 @@ namespace Jackett.Indexers
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
 
-
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 searchUrl += "category%5B%5D=" + cat + "&";
             }
-
 
             if (query.ImdbID != null)
             {
@@ -124,13 +118,10 @@ namespace Jackett.Indexers
                 queryCollection.Add("search", searchString);
             }
 
-
-
             queryCollection.Add("active", "0");
             queryCollection.Add("options", "0");
 
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29"); // maually url encode brackets to prevent "hacking" detection
-
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
             try
@@ -160,7 +151,6 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
-
 
                     // Sometimes the uploader column is missing
                     int seeders, peers;
@@ -192,7 +182,7 @@ namespace Jackett.Indexers
                     release.UploadVolumeFactor = 1;
 
                     if (qRow.Find("img[alt=\"Free Torrent\"]").Length >= 1)
-                    { 
+                    {
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }

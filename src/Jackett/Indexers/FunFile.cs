@@ -1,16 +1,16 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -19,7 +19,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -115,7 +115,7 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 48 * 60 * 60;
-                    
+
                     var qRow = row.Cq();
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();
                     var qDetailsLink = qRow.Find("a[href^=details.php?id=]").First();

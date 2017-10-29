@@ -1,27 +1,27 @@
-﻿using CsQuery;
-using Jackett.Models;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class GhostCity : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        string BrowsePage { get { return SiteLink + "browse.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string BrowsePage { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }

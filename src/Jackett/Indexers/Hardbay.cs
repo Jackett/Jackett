@@ -1,17 +1,17 @@
-﻿using Jackett.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using Newtonsoft.Json;
-using System.Globalization;
 
 namespace Jackett.Indexers
 {
@@ -20,7 +20,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
         private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -91,7 +91,7 @@ namespace Jackett.Indexers
                 //var json = JArray.Parse(results.Content);
                 dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
                 if (json != null) // no results
-                { 
+                {
                     foreach (var row in json)
                     {
                         var release = new ReleaseInfo();

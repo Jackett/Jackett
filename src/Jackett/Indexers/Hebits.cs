@@ -1,18 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Text.RegularExpressions;
-using System.Text;
 
 namespace Jackett.Indexers
 {
@@ -22,7 +22,7 @@ namespace Jackett.Indexers
         private string LoginPostUrl { get { return SiteLink + "takeloginAjax.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php?sort=4&type=desc"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -117,7 +117,7 @@ namespace Jackett.Indexers
                     release.MinimumSeedTime = 172800;
 
                     var titleParts = qRow.Find(".bTitle").Text().Split('/');
-                    if (titleParts.Length >= 2) 
+                    if (titleParts.Length >= 2)
                         release.Title = titleParts[1].Trim();
                     else
                         release.Title = titleParts[0].Trim();
@@ -161,7 +161,6 @@ namespace Jackett.Indexers
                     releases.Add(release);
                 }
             }
-
             catch (Exception ex)
             {
                 OnParseError(response.Content, ex);

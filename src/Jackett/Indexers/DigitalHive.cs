@@ -1,19 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text.RegularExpressions;
-using System.IO;
 
 namespace Jackett.Indexers
 {
@@ -23,7 +21,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
         private string AjaxLoginUrl { get { return SiteLink + "takelogin.php"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -170,7 +168,7 @@ namespace Jackett.Indexers
             {
                 queryCollection.Add("c" + cat, "1");
             }
-            
+
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("search", searchString);
