@@ -1,19 +1,19 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -22,9 +22,9 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "eing2.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
+        private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -163,7 +163,7 @@ namespace Jackett.Indexers
                 {
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 96*60*60;
+                    release.MinimumSeedTime = 96 * 60 * 60;
 
                     var qRow = row.Cq();
 
@@ -184,7 +184,7 @@ namespace Jackett.Indexers
                     release.Guid = release.Comments;
 
                     var torrent_details = descCol.ChildElements.Last();
-                    var dateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length-3).Cq().Text().Replace(" von ", "").Trim();
+                    var dateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text().Replace(" von ", "").Trim();
                     DateTime dateGerman;
                     if (dateStr.StartsWith("Heute "))
                         dateGerman = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStr.Split(' ')[1]);

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models;
-using Newtonsoft.Json.Linq;
-using Jackett.Utils.Clients;
-using Jackett.Services;
-using NLog;
-using Jackett.Utils;
-using CsQuery;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -25,7 +24,7 @@ namespace Jackett.Indexers
 
         private List<CategoryMapping> resultMapping = new List<CategoryMapping>();
 
-        new ConfigurationDataPinNumber configData
+        private new ConfigurationDataPinNumber configData
         {
             get { return (ConfigurationDataPinNumber)base.configData; }
             set { base.configData = value; }
@@ -92,7 +91,6 @@ namespace Jackett.Indexers
             AddCategoryMapping("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary);
             AddCategoryMapping("cat[]=7&tags=PDTV", TorznabCatType.TVSD);
             AddCategoryMapping("cat[]=7&tags=HD-DVD", TorznabCatType.TVSD);
-
 
             AddCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXXXviD);
             AddCategoryMapping("cat[]=51&tags=DVDRiP", TorznabCatType.XXXDVD);
@@ -254,12 +252,13 @@ namespace Jackett.Indexers
             if (tags.Split(',').Length < 7)
             {
                 queryCollection.Add("tags", tags);
-                if(!string.IsNullOrWhiteSpace(tags)) {
+                if (!string.IsNullOrWhiteSpace(tags))
+                {
                     // if tags are specified match any
                     queryCollection.Add("tf", "any");
                 }
                 else
-                { 
+                {
                     // if no tags are specified match all, with any we get random results
                     queryCollection.Add("tf", "all");
                 }

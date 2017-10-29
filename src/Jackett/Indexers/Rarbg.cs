@@ -1,25 +1,24 @@
-﻿using Jackett.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text;
-using System.Web;
 
 namespace Jackett.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
         // API doc: https://torrentapi.org/apidocs_v2.txt
-        readonly static string defaultSiteLink = "https://torrentapi.org/";
+        private static readonly string defaultSiteLink = "https://torrentapi.org/";
 
         private Uri BaseUri
         {
@@ -29,7 +28,7 @@ namespace Jackett.Indexers
 
         private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php"; } }
 
-        new ConfigurationDataUrl configData
+        private new ConfigurationDataUrl configData
         {
             get { return (ConfigurationDataUrl)base.configData; }
             set { base.configData = value; }
@@ -38,7 +37,7 @@ namespace Jackett.Indexers
         private DateTime lastTokenFetch;
         private string token;
 
-        readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
+        private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
         private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
 
@@ -87,8 +86,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
         }
 
-
-        async Task CheckToken()
+        private async Task CheckToken()
         {
             if (!HasValidToken)
             {
@@ -127,7 +125,7 @@ namespace Jackett.Indexers
             await CheckToken();
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            
+
             var queryCollection = new NameValueCollection();
             queryCollection.Add("token", token);
             queryCollection.Add("format", "json_extended");
@@ -200,7 +198,7 @@ namespace Jackett.Indexers
 
                 if (errorCode > 0) // too many requests per seconds ???
                 {
-                    // we use the IwebClient rate limiter now, this shouldn't happen 
+                    // we use the IwebClient rate limiter now, this shouldn't happen
                     throw new Exception("error " + errorCode.ToString() + ": " + jsonContent.Value<string>("error"));
                 }
 
@@ -248,6 +246,5 @@ namespace Jackett.Indexers
 
             return releases;
         }
-
     }
 }

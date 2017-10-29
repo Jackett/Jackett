@@ -1,18 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Globalization;
 
 namespace Jackett.Indexers
 {
@@ -21,10 +21,10 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "torrentsutils.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
+        private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
         private readonly List<String> categories = new List<string>() { "1080P", "720P", "BDRip", "BluRay", "BRRip", "DVDR", "DVDRip", "FLAC", "MP3", "MP4", "Packs", "R5", "Remux", "TVRip", "WebRip" };
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }

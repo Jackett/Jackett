@@ -1,36 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
 using AngleSharp.Parser.Html;
-using Newtonsoft.Json.Linq;
-using NLog;
-
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
-using System.Collections.Specialized;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
-    class PiXELHD : BaseWebIndexer
+    public class PiXELHD : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "login.php"; } }
-        string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl
+        { get { return SiteLink + "login.php"; } }
+        private string BrowseUrl
+        { get { return SiteLink + "torrents.php"; } }
 
-        new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataCaptchaLogin configData
         {
             get { return (ConfigurationDataCaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
-        string input_captcha = null;
-        string input_username = null;
-        string input_password = null;
+        private string input_captcha = null;
+        private string input_username = null;
+        private string input_password = null;
 
         public PiXELHD(IIndexerConfigurationService configService, IWebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "PiXELHD",
@@ -51,7 +51,6 @@ namespace Jackett.Indexers
             TorznabCaps.SupportsImdbSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
-
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -82,7 +81,7 @@ namespace Jackett.Indexers
 
             var passwordInput = LoginDocument.QuerySelector("input[maxlength=\"40\"]");
             input_password = passwordInput.GetAttribute("name");
-            
+
             return configData;
         }
 
@@ -204,6 +203,5 @@ namespace Jackett.Indexers
 
             return releases;
         }
-
     }
 }

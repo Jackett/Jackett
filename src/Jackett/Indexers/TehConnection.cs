@@ -1,18 +1,18 @@
-﻿using CsQuery;
-using Jackett.Models;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using CsQuery;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -22,7 +22,7 @@ namespace Jackett.Indexers
         private string indexUrl { get { return SiteLink + "index.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php"; } }
 
-        new ConfigurationDataBasicLoginWithFilter configData
+        private new ConfigurationDataBasicLoginWithFilter configData
         {
             get { return (ConfigurationDataBasicLoginWithFilter)base.configData; }
             set { base.configData = value; }
@@ -37,7 +37,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithFilter(@"Enter filter options below to restrict search results. 
+                configData: new ConfigurationDataBasicLoginWithFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>QualityEncodeOnly</code><br><code>FreeLeechOnly</code>"))
         {
@@ -186,7 +186,6 @@ namespace Jackett.Indexers
                             title = dom.Find("div.title_text").Text() + " - " + qRow.Find("div.details_title > a").Text();
                         }
 
-
                         release.Title = title;
                         release.Guid = guid;
                         release.Link = link;
@@ -226,7 +225,6 @@ namespace Jackett.Indexers
 
                         releases.Add(release);
                     }
-
                 }
             }
             catch (Exception ex)

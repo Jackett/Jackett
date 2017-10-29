@@ -1,23 +1,23 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text;
+using System.Threading.Tasks;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NLog;
 using static Jackett.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Indexers
 {
     public class TorrentNetwork : BaseWebIndexer
     {
-        string APIUrl { get { return SiteLink + "api/"; } }
+        private string APIUrl { get { return SiteLink + "api/"; } }
         private string passkey;
 
         private Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
@@ -25,7 +25,7 @@ namespace Jackett.Indexers
             {"Content-Type", "application/json"},
         };
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -78,7 +78,6 @@ namespace Jackett.Indexers
             AddCategoryMapping(41, TorznabCatType.TVAnime, "Series ENG/Anime");
             AddCategoryMapping(42, TorznabCatType.TV, "Series ENG/Pack");
             AddCategoryMapping(31, TorznabCatType.TVSport, "Sport");
-
 
             AddCategoryMapping(10, TorznabCatType.PCGames, "Games/Win");
             AddCategoryMapping(12, TorznabCatType.ConsoleWii, "Games/Wii");
@@ -189,7 +188,7 @@ namespace Jackett.Indexers
                     throw new Exception(result["error"].ToString());
 
                 var data = (JArray)result.data;
-                
+
                 foreach (JArray torrent in data)
                 {
                     var release = new ReleaseInfo();
@@ -240,4 +239,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

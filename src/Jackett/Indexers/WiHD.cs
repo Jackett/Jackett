@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
@@ -15,7 +16,6 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.IO;
 
 namespace Jackett.Indexers
 {
@@ -113,7 +113,6 @@ namespace Jackett.Indexers
             // If we want to simulate a browser
             if (ConfigData.Browser.Value)
             {
-
                 // Clean headers
                 emulatedBrowserHeaders.Clear();
 
@@ -124,7 +123,6 @@ namespace Jackett.Indexers
                 emulatedBrowserHeaders.Add("Upgrade-Insecure-Requests", Convert.ToInt32(ConfigData.HeaderUpgradeInsecure.Value).ToString());
                 emulatedBrowserHeaders.Add("User-Agent", ConfigData.HeaderUserAgent.Value);
             }
-
 
             // Getting login form to retrieve CSRF token
             var myRequest = new Utils.Clients.WebRequest()
@@ -369,7 +367,6 @@ namespace Jackett.Indexers
                     };
                     releases.Add(release);
                 }
-
             }
             catch (Exception ex)
             {
@@ -812,9 +809,11 @@ namespace Jackett.Indexers
                             logger.Debug(message);
                         }
                         break;
+
                     case "info":
                         logger.Info(message);
                         break;
+
                     case "error":
                         logger.Error(message);
                         break;

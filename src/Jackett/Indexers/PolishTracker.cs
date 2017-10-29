@@ -1,32 +1,30 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
 using System.Text;
+using System.Threading.Tasks;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json;
-using static Jackett.Models.IndexerConfig.ConfigurationData;
-using System.Globalization;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class PolishTracker : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "login"; } }
-        string TorrentApiUrl { get { return SiteLink + "apitorrents"; } }
-        string CDNUrl { get { return "https://cdn.pte.nu/"; } }
+        private string LoginUrl { get { return SiteLink + "login"; } }
+        private string TorrentApiUrl { get { return SiteLink + "apitorrents"; } }
+        private string CDNUrl { get { return "https://cdn.pte.nu/"; } }
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://polishtracker.net/",
             };
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -120,7 +118,7 @@ namespace Jackett.Indexers
                 if (json["hits"] != null) // is search result
                     torrents = json.SelectTokens("$.hits[?(@._type == 'torrent')]._source");
                 /*
-                {  
+                {
                     "id":426868,
                     "name":"Realease-nameE",
                     "size":"2885494332",
@@ -138,7 +136,6 @@ namespace Jackett.Indexers
                     "language":"en"
                 },
                 */
-
 
                 foreach (var torrent in torrents)
                 {
@@ -163,7 +160,7 @@ namespace Jackett.Indexers
                         release.Imdb = ParseUtil.CoerceLong(imdbid);
 
                     if ((bool)torrent.poster == true)
-                    { 
+                    {
                         if (release.Imdb != null)
                             release.BannerUrl = new Uri(CDNUrl + "images/torrents/poster/imd/l/" + imdbid + ".jpg");
                         else if (torrent["cdu_id"] != null)
@@ -184,7 +181,7 @@ namespace Jackett.Indexers
                         descriptions.Add("Language: pl");
 
                     if (descriptions.Count > 0)
-                    release.Description = string.Join("<br />\n", descriptions);
+                        release.Description = string.Join("<br />\n", descriptions);
 
                     releases.Add(release);
                 }
@@ -198,4 +195,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

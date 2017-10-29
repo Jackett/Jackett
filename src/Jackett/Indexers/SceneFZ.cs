@@ -114,7 +114,6 @@ namespace Jackett.Indexers
                 // If we want to simulate a browser
                 if (ConfigData.Browser.Value)
                 {
-
                     // Clean headers
                     emulatedBrowserHeaders.Clear();
 
@@ -133,7 +132,6 @@ namespace Jackett.Indexers
                 { "submitme", "X" },
                 { "returnto", "%2F" }
             };
-
 
                 // Getting login form to retrieve PHPSESSID
                 var myRequest = new WebRequest()
@@ -371,7 +369,6 @@ namespace Jackett.Indexers
                     };
                     releases.Add(release);
                 }
-
             }
             catch (Exception ex)
             {
@@ -410,7 +407,7 @@ namespace Jackett.Indexers
                 queryCollection.Add("cat", "0");
                 queryCollection.Add("incldead", "0");
 
-                // Building our query 
+                // Building our query
                 url += "?" + queryCollection.GetQueryString();
             }
             else
@@ -633,9 +630,11 @@ namespace Jackett.Indexers
                             logger.Debug(message);
                         }
                         break;
+
                     case "info":
                         logger.Info(message);
                         break;
+
                     case "error":
                         logger.Error(message);
                         break;
