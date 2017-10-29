@@ -1,28 +1,30 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Threading.Tasks;
+using AngleSharp.Parser.Html;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System;
-using System.Text;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using AngleSharp.Parser.Html;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class RuTracker : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "forum/login.php"; } }
-        string SearchUrl { get { return SiteLink + "forum/tracker.php"; } }
+        private string LoginUrl
+        { get { return SiteLink + "forum/login.php"; } }
+        private string SearchUrl
+        { get { return SiteLink + "forum/tracker.php"; } }
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
-        new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataCaptchaLogin configData
         {
             get { return (ConfigurationDataCaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -1441,7 +1443,7 @@ namespace Jackett.Indexers
             var LoginResultDocument = LoginResultParser.Parse(response.Content);
             var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"//static.t-ru.org/captcha/\"]");
             if (captchaimg != null)
-            { 
+            {
                 var captchaImage = await RequestBytesWithCookies("https:" + captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.Content;
 
@@ -1582,4 +1584,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

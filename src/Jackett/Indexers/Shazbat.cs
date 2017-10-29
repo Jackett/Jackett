@@ -1,24 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using System.Xml.XPath;
 
 namespace Jackett.Indexers
 {
@@ -30,7 +23,7 @@ namespace Jackett.Indexers
         private string ShowUrl { get { return SiteLink + "show?id="; } }
         private string RSSProfile { get { return SiteLink + "rss_feeds"; } }
 
-        new ConfigurationDataBasicLoginWithRSS configData
+        private new ConfigurationDataBasicLoginWithRSS configData
         {
             get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
             set { base.configData = value; }
@@ -245,7 +238,6 @@ namespace Jackett.Indexers
                  {
                      OnParseError(results.Content, ex);
                  }*/
-
 
             foreach (var release in releases)
             {

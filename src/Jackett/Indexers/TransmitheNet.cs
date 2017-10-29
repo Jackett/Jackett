@@ -1,18 +1,18 @@
-﻿using Jackett.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
+using AngleSharp.Parser.Html;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
-using System.Web;
-using System.Text;
-using Jackett.Models.IndexerConfig;
-using AngleSharp.Parser.Html;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -21,7 +21,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SearchUrl { get { return SiteLink + "torrents.php?action=basic&order_by=time&order_way=desc&search_type=0&taglist=&tags_type=0"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -156,7 +156,6 @@ namespace Jackett.Indexers
                         release.DownloadVolumeFactor = 1;
 
                     release.UploadVolumeFactor = 1;
-
 
                     releases.Add(release);
                 }

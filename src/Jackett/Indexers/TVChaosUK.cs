@@ -1,36 +1,32 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace Jackett.Indexers
 {
     public class TVChaosUK : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
-        string SearchUrl { get { return SiteLink + "browse.php"; } }
-        string RSSUrl { get { return SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all"; } }
-        string CommentUrl { get { return SiteLink + "details.php?id={0}"; } }
-        string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
+        private string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string RSSUrl { get { return SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all"; } }
+        private string CommentUrl { get { return SiteLink + "details.php?id={0}"; } }
+        private string DownloadUrl { get { return SiteLink + "download.php?id={0}"; } }
 
-        new ConfigurationDataBasicLoginWithRSS configData
+        private new ConfigurationDataBasicLoginWithRSS configData
         {
             get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
             set { base.configData = value; }
@@ -224,7 +220,7 @@ namespace Jackett.Indexers
                         Description = description,
                         Guid = new Uri(string.Format(DownloadUrl, torrentId)),
                         Comments = new Uri(string.Format(CommentUrl, torrentId)),
-                        PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
+                        PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
                         Link = new Uri(string.Format(DownloadUrl, torrentId)),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
@@ -232,7 +228,6 @@ namespace Jackett.Indexers
                         Size = ReleaseInfo.GetBytes(infoMatch.Groups["size"].Value),
                         Category = MapTrackerCatDescToNewznab(infoMatch.Groups["cat"].Value)
                     };
-
 
                     release.Peers += release.Seeders;
                     releases.Add(release);
@@ -284,18 +279,16 @@ namespace Jackett.Indexers
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
-                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51 
+                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                         release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
-
 
                         var cat = row.Cq().Find("td:eq(0) a").First().Attr("href");
                         var catSplit = cat.LastIndexOf('=');
                         if (catSplit > -1)
                             cat = cat.Substring(catSplit + 1);
                         release.Category = MapTrackerCatToNewznab(cat);
-
 
                         var grabs = qRow.Find("td:nth-child(6)").Text();
                         release.Grabs = ParseUtil.CoerceInt(grabs);

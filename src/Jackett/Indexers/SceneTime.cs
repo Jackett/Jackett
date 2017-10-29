@@ -1,17 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -22,7 +22,7 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return SiteLink + "browse_API.php"; } }
         private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -60,7 +60,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(102, TorznabCatType.MoviesOther, "Movies/Remux");
             AddCategoryMapping(103, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip");
             AddCategoryMapping(105, TorznabCatType.Movies, "Movies/Kids");
-            
+
             //TV
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
             AddCategoryMapping(43, TorznabCatType.TV, "TV/Packs");
@@ -162,13 +162,12 @@ namespace Jackett.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             Dictionary<string, string> qParams = new Dictionary<string, string>();
             qParams.Add("cata", "yes");
             qParams.Add("sec", "jax");
-            
+
             List<string> catList = MapTorznabCapsToTrackers(query);
             foreach (string cat in catList)
             {
@@ -182,7 +181,7 @@ namespace Jackett.Indexers
 
             var results = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
             List<ReleaseInfo> releases = ParseResponse(query, results.Content);
-            
+
             return releases;
         }
 
@@ -210,8 +209,8 @@ namespace Jackett.Indexers
 
                     var categoryCol = row.ChildElements.ElementAt(categoryIndex);
                     string catLink = categoryCol.Cq().Find("a").Attr("href");
-                    if(catLink != null)
-                    { 
+                    if (catLink != null)
+                    {
                         string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
                         release.Category = MapTrackerCatToNewznab(catId);
                     }

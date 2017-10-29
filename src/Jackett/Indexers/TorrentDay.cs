@@ -1,21 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -24,6 +20,7 @@ namespace Jackett.Indexers
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
+
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
@@ -38,7 +35,7 @@ namespace Jackett.Indexers
             "https://www.td.af/",
         };
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }

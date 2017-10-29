@@ -1,36 +1,33 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
+using System.Xml.Linq;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.IndexerConfig;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace Jackett.Indexers
 {
     public class RevolutionTT : BaseWebIndexer
-    {        
+    {
         private string LandingPageURL { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string GetRSSKeyUrl { get { return SiteLink + "getrss.php"; } }
         private string RSSUrl { get { return SiteLink + "rss.php?feed=dl&passkey="; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }        
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string DetailsURL { get { return SiteLink + "details.php?id={0}&hit=1"; } }
 
-
-        new ConfigurationDataBasicLoginWithRSS configData
+        private new ConfigurationDataBasicLoginWithRSS configData
         {
             get { return (ConfigurationDataBasicLoginWithRSS)base.configData; }
             set { base.configData = value; }
@@ -53,7 +50,7 @@ namespace Jackett.Indexers
             Type = "private";
 
             /* Original RevolutionTT Categories -
-			
+
 			Anime - 23
 			Appz/Misc - 22
 			Appz/PC-ISO - 1
@@ -80,8 +77,8 @@ namespace Jackett.Indexers
 			TV/HDx264 - 42
 			TV/Packs - 45
 			TV/SDx264 - 41
-			TV/XViD - 7		
-			
+			TV/XViD - 7
+
 			*/
 
             //AddCategoryMapping("cat_id", TorznabCatType.Console);
@@ -98,7 +95,7 @@ namespace Jackett.Indexers
             //AddCategoryMapping("cat_id", TorznabCatType.ConsolePSVita);
             AddCategoryMapping("40", TorznabCatType.ConsoleWiiU);
             //AddCategoryMapping("cat_id", TorznabCatType.ConsoleXboxOne);
-            //AddCategoryMapping("cat_id", TorznabCatType.ConsolePS4);			
+            //AddCategoryMapping("cat_id", TorznabCatType.ConsolePS4);
             AddCategoryMapping("44", TorznabCatType.Movies);
             //AddCategoryMapping("cat_id", TorznabCatType.MoviesForeign);
             //AddCategoryMapping("cat_id", TorznabCatType.MoviesOther);
@@ -226,7 +223,6 @@ namespace Jackett.Indexers
                 throw e;
             }
 
-
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -262,10 +258,10 @@ namespace Jackett.Indexers
 
                     var imdbMatch = Regex.Match(description, "(?<=http://www.imdb.com/title/tt)([0-9]*)");
                     long? imdbID = null;
-                    if(imdbMatch.Success)
+                    if (imdbMatch.Success)
                     {
                         long l;
-                        if(long.TryParse(imdbMatch.Value, out l))
+                        if (long.TryParse(imdbMatch.Value, out l))
                         {
                             imdbID = l;
                         }
@@ -293,11 +289,9 @@ namespace Jackett.Indexers
                     release.Peers += release.Seeders;
                     releases.Add(release);
                 }
-
             }
             else
             {
-
                 searchUrl += "?titleonly=1&search=" + HttpUtility.UrlEncode(searchString);
                 string.Format(SearchUrl, HttpUtility.UrlEncode(searchString));
 
@@ -337,7 +331,8 @@ namespace Jackett.Indexers
 
                         var releaseLinkURI = qRow.Find("td:nth-child(4) > a").Attr("href");
                         release.Link = new Uri(SiteLink + releaseLinkURI);
-                        if (releaseLinkURI != null){
+                        if (releaseLinkURI != null)
+                        {
                             var dateString = qRow.Find("td:nth-child(6) nobr")[0].TextContent.Trim();
                             //"2015-04-25 23:38:12"
                             //"yyyy-MMM-dd hh:mm:ss"

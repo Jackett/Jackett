@@ -118,6 +118,7 @@ namespace Jackett.Indexers
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
 #pragma warning disable 1998
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
 #pragma warning restore 1998
         {
@@ -463,6 +464,7 @@ namespace Jackett.Indexers
                     // Everything OK
                     Output("\nAPI State : Everything OK ... -> " + state.descr);
                     break;
+
                 case 1:
                     // Passkey not found
                     Output("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.descr);
@@ -471,10 +473,12 @@ namespace Jackett.Indexers
                     // No results
                     Output("\nAPI State : No results for query ... -> " + state.descr);
                     break;
+
                 case 3:
                     // Power Saver
                     Output("\nAPI State : Power Saver mode, only cached query with no parameters available ... -> " + state.descr);
                     break;
+
                 case 4:
                     // DDOS Attack, API disabled
                     Output("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
@@ -566,9 +570,11 @@ namespace Jackett.Indexers
                             logger.Debug(message);
                         }
                         break;
+
                     case "info":
                         logger.Info(message);
                         break;
+
                     case "error":
                         logger.Error(message);
                         break;

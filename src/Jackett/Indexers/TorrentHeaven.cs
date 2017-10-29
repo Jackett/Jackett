@@ -1,29 +1,29 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CsQuery;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using CsQuery;
-using System;
-using System.Globalization;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using System.Text;
-using System.Linq;
-using System.Text.RegularExpressions;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
-        string IndexUrl { get { return SiteLink + "index.php"; } }
-        string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
-        static readonly string certificateHash = "6F5CE30D578C2A7AECFB919D0D013976D395055F";
+        private string IndexUrl { get { return SiteLink + "index.php"; } }
+        private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
+        private static readonly string certificateHash = "6F5CE30D578C2A7AECFB919D0D013976D395055F";
 
-        new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataCaptchaLogin configData
         {
             get { return (ConfigurationDataCaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -260,4 +260,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

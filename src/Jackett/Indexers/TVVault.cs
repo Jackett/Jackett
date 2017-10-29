@@ -1,26 +1,26 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AngleSharp.Parser.Html;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System;
-using System.Text;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using AngleSharp.Parser.Html;
-using System.Text.RegularExpressions;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class TVVault : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "login.php"; } }
-        string BrowseUrl { get { return SiteLink + "torrents.php"; } }
+        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -77,7 +77,7 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            
+
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
 
@@ -152,4 +152,3 @@ namespace Jackett.Indexers
         }
     }
 }
-

@@ -1,18 +1,16 @@
-﻿using CsQuery;
-using Jackett.Models;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Text;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
+using Jackett.Services;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -23,7 +21,8 @@ namespace Jackett.Indexers
         private string SearchUrl { get { return "https://passthepopcorn.me/torrents.php"; } }
         private string DetailURL { get { return "https://passthepopcorn.me/torrents.php?torrentid="; } }
         private string AuthKey { get; set; }
-        new ConfigurationDataBasicLoginWithFilterAndPasskey configData
+
+        private new ConfigurationDataBasicLoginWithFilterAndPasskey configData
         {
             get { return (ConfigurationDataBasicLoginWithFilterAndPasskey)base.configData; }
             set { base.configData = value; }
@@ -38,7 +37,7 @@ namespace Jackett.Indexers
                 client: c,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLoginWithFilterAndPasskey(@"Enter filter options below to restrict search results. 
+                configData: new ConfigurationDataBasicLoginWithFilterAndPasskey(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code>"))
         {
@@ -161,7 +160,6 @@ namespace Jackett.Indexers
                         bool.TryParse((string)torrent["GoldenPopcorn"], out golden);
                         bool.TryParse((string)torrent["Scene"], out scene);
                         bool.TryParse((string)torrent["Checked"], out check);
-
 
                         if (configGoldenPopcornOnly && !golden)
                         {

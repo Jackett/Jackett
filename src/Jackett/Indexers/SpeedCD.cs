@@ -1,18 +1,18 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -21,7 +21,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
-        new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
             set { base.configData = value; }
@@ -161,7 +161,6 @@ namespace Jackett.Indexers
                     string cat = torrentData.Find("a[class='cat']").First().Attr("id").Trim();
                     long.TryParse(cat, out category);
 
-
                     var release = new ReleaseInfo();
 
                     release.Title = title;
@@ -185,7 +184,6 @@ namespace Jackett.Indexers
 
                     releases.Add(release);
                 }
-
             }
             catch (Exception ex)
             {

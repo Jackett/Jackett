@@ -1,17 +1,17 @@
-﻿using Jackett.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Text;
-using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -19,7 +19,7 @@ namespace Jackett.Indexers
     {
         private string SearchAllUrl { get { return SiteLink + "other/all.rss"; } }
 
-        new ConfigurationData configData
+        private new ConfigurationData configData
         {
             get { return (ConfigurationData)base.configData; }
             set { base.configData = value; }

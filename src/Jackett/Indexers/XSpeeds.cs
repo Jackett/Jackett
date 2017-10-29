@@ -1,37 +1,37 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using static Jackett.Utils.ParseUtil;
 using static Jackett.Models.IndexerConfig.ConfigurationData;
+using static Jackett.Utils.ParseUtil;
 
 namespace Jackett.Indexers
 {
     public class XSpeeds : BaseWebIndexer
     {
-        string LandingUrl => SiteLink + "login.php";
-        string LoginUrl => SiteLink + "takelogin.php";
-        string GetRSSKeyUrl => SiteLink + "getrss.php";
-        string SearchUrl => SiteLink + "browse.php";
-        string RSSUrl => SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all";
-        string CommentUrl => SiteLink + "details.php?id={0}";
-        string DownloadUrl => SiteLink + "download.php?id={0}";
+        private string LandingUrl => SiteLink + "login.php";
+        private string LoginUrl => SiteLink + "takelogin.php";
+        private string GetRSSKeyUrl => SiteLink + "getrss.php";
+        private string SearchUrl => SiteLink + "browse.php";
+        private string RSSUrl => SiteLink + "rss.php?secret_key={0}&feedtype=download&timezone=0&showrows=50&categories=all";
+        private string CommentUrl => SiteLink + "details.php?id={0}";
+        private string DownloadUrl => SiteLink + "download.php?id={0}";
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
-            get {return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
+            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
         }
 
@@ -133,8 +133,7 @@ namespace Jackett.Indexers
             CQ dom = loginPage.Content;
             CQ qCaptchaImg = dom.Find("img#regimage").First();
             if (qCaptchaImg.Length > 0)
-            { 
-
+            {
                 var CaptchaUrl = qCaptchaImg.Attr("src");
                 var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
@@ -213,11 +212,11 @@ namespace Jackett.Indexers
             // If we have no query use the RSS Page as their server is slow enough at times!
             if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
-                
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 try
                 {
-                    if (rssPage.Content.EndsWith("\0")) {
+                    if (rssPage.Content.EndsWith("\0"))
+                    {
                         rssPage.Content = rssPage.Content.Substring(0, rssPage.Content.Length - 1);
                     }
                     rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
@@ -246,7 +245,7 @@ namespace Jackett.Indexers
                             Description = title,
                             Guid = new Uri(string.Format(DownloadUrl, torrentId)),
                             Comments = new Uri(string.Format(CommentUrl, torrentId)),
-                            PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 
+                            PublishDate = DateTime.ParseExact(date, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
                             Link = new Uri(string.Format(DownloadUrl, torrentId)),
                             Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value),
                             Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value),
@@ -264,7 +263,6 @@ namespace Jackett.Indexers
                     logger.Error(rssPage.Content);
                     throw ex;
                 }
-                
             }
             if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
             {
@@ -304,7 +302,7 @@ namespace Jackett.Indexers
 
                         var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
                         var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
-                        if(!qTitle.Any()) // fallback to Details link if there's no tooltip
+                        if (!qTitle.Any()) // fallback to Details link if there's no tooltip
                         {
                             qTitle = qDetails;
                         }
@@ -313,7 +311,7 @@ namespace Jackett.Indexers
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qDetails.Attr("href"));
-                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51 
+                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); //08-08-2015 12:51
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                         release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());

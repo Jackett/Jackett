@@ -1,17 +1,17 @@
-﻿using CsQuery;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CsQuery;
 using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
 
 namespace Jackett.Indexers
 {
@@ -21,7 +21,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string SubmitLoginUrl { get { return SiteLink + "takelogin.php"; } }
 
-        new ConfigurationDataRecaptchaLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
             get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
@@ -151,7 +151,7 @@ namespace Jackett.Indexers
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 7 * 24 * 60 * 60;
-                    
+
                     var qRow = row.Cq();
                     var qCatLink = qRow.Find("a[href^=?cat]").First();
                     var qDetailsLink = qRow.Find("a[href^=details.php]").First();
@@ -172,7 +172,8 @@ namespace Jackett.Indexers
                     var sizeStr = qSize.Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    if(qImdbLink.Length == 1) { 
+                    if (qImdbLink.Length == 1)
+                    {
                         var ImdbId = qImdbLink.Attr("href").Split('/').Last().Substring(2);
                         release.Imdb = ParseUtil.CoerceLong(ImdbId);
                     }

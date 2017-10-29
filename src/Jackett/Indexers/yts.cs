@@ -1,24 +1,23 @@
-﻿using Jackett.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text;
-using System.Web;
 
 namespace Jackett.Indexers
 {
     public class Yts : BaseWebIndexer
     {
-        readonly static string defaultSiteLink = "https://yts.ag/";
+        private static readonly string defaultSiteLink = "https://yts.ag/";
 
         private Uri BaseUri
         {
@@ -28,7 +27,7 @@ namespace Jackett.Indexers
 
         private string ApiEndpoint { get { return BaseUri + "api/v2/list_movies.json"; } }
 
-        new ConfigurationDataUrl configData
+        private new ConfigurationDataUrl configData
         {
             get { return (ConfigurationDataUrl)base.configData; }
             set { base.configData = value; }
@@ -80,7 +79,7 @@ namespace Jackett.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            
+
             var queryCollection = new NameValueCollection();
 
             if (query.ImdbID != null)

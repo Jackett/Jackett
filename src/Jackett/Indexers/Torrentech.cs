@@ -1,29 +1,27 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using AngleSharp.Dom;
+using AngleSharp.Parser.Html;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
 using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System;
-using System.Text;
-using System.Globalization;
-using Jackett.Models.IndexerConfig;
-using System.Collections.Specialized;
-using AngleSharp.Parser.Html;
-using AngleSharp.Dom;
-using System.Text.RegularExpressions;
-using System.Web;
+using NLog;
 
 namespace Jackett.Indexers
 {
     public class Torrentech : BaseWebIndexer
     {
-        string LoginUrl { get { return SiteLink + "index.php?act=Login&CODE=01&CookieDate=1"; } }
-        string IndexUrl { get { return SiteLink + "index.php"; } }
+        private string LoginUrl { get { return SiteLink + "index.php?act=Login&CODE=01&CookieDate=1"; } }
+        private string IndexUrl { get { return SiteLink + "index.php"; } }
 
-        new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
             get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
             set { base.configData = value; }
@@ -219,4 +217,3 @@ namespace Jackett.Indexers
         }
     }
 }
-
