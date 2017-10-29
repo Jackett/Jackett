@@ -1,7 +1,6 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett", "Jackett\Jackett.csproj", "{E636D5F8-68B4-4903-B4ED-CCFD9C9E899F}"
 EndProject
@@ -21,9 +20,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Service", "Jackett.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Tray", "Jackett.Tray\Jackett.Tray.csproj", "{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Test", "Jackett.Test\Jackett.Test.csproj", "{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Updater", "Jackett.Updater\Jackett.Updater.csproj", "{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Test", "Jackett.Test\Jackett.Test.csproj", "{FA22C904-9F5D-4D3C-9122-3E33652E7373}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,21 +50,24 @@ Global
 		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E75D4F15-5DA3-4332-ADB1-28FB673DAE56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA22C904-9F5D-4D3C-9122-3E33652E7373}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAA42E3F-ECA9-4A9C-BCD6-D730DD817B76}
+	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
-		$0.TextStylePolicy = $1
+		$0.TextStylePolicy = $3
 		$1.scope = text/x-csharp
 		$1.TabsToSpaces = True
 		$1.EolMarker = Unix
@@ -112,7 +114,6 @@ Global
 		$2.SpacingAfterMethodDeclarationName = False
 		$2.SpaceAfterMethodCallName = False
 		$2.SpaceBeforeOpenSquareBracket = False
-		$0.TextStylePolicy = $3
 		$3.FileWidth = 80
 		$3.TabsToSpaces = True
 		$3.scope = text/plain

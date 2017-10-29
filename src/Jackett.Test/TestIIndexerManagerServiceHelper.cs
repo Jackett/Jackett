@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Jackett.Indexers;
 using Newtonsoft.Json.Linq;
 
-namespace JackettTest
+namespace Jackett.Test
 {
     class TestIndexerManagerServiceHelper : IIndexerManagerService
     {
