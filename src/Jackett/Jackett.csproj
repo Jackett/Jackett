@@ -462,16 +462,6 @@
     <Content Include="Resources\validator_reply.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
-      <Project>{74420A79-CC16-442C-8B1E-7C1B913844F0}</Project>
-      <Name>CurlSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DateTimeRoutines\DateTimeRoutines.csproj">
-      <Project>{c28a79ee-ef81-4eee-a7fe-eb636423c935}</Project>
-      <Name>DateTimeRoutines</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
@@ -529,7 +519,16 @@
       <Version>4.2.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
+      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
+      <Name>CurlSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DateTimeRoutines\DateTimeRoutines.csproj">
+      <Project>{c28a79ee-ef81-4eee-a7fe-eb636423c935}</Project>
+      <Name>DateTimeRoutines</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

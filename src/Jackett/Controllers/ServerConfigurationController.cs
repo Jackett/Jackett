@@ -6,6 +6,7 @@ using System.Threading;
 using System.Web.Http;
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using NLog;
 

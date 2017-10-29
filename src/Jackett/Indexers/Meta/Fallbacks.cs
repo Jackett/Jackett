@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Models;
 using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils;
 
 namespace Jackett.Indexers.Meta

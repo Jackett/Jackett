@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Models;
 using Newtonsoft.Json.Linq;
-using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils.Clients;
 using NLog;
 using Jackett.Models.IndexerConfig;

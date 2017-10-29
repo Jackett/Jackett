@@ -1,4 +1,4 @@
-﻿using Jackett.Services;
+﻿using Jackett.Services.Interfaces;
 using Jackett.Utils.Clients;
 using NLog;
 

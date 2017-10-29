@@ -5,21 +5,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Xml.Linq;
 using Jackett.Indexers;
 using Jackett.Models;
-using Jackett.Services;
 using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json;
 using NLog;
 using Jackett.Models.DTO;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Controllers.V20
 {

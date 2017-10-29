@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Dependencies;
 using Autofac.Integration.WebApi;
+using Jackett.Services.Interfaces;
 
 namespace Jackett
 {
