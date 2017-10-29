@@ -17,22 +17,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Web;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface IServerService
-    {
-        void Initalize();
-        void Start();
-        void Stop();
-        void ReserveUrls(bool doInstall = true);
-        ServerConfig Config { get; }
-        void SaveConfig();
-        Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
-        string BasePath();
-        string GetServerUrl(HttpRequestMessage Request);
-        List<string> notices { get; } 
-    }
 
     public class ServerService : IServerService
     {

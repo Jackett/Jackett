@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2013 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you
@@ -26,40 +26,28 @@ namespace CurlSharp
     public sealed class CurlMultiInfo
     {
         // private members
-        private readonly CurlEasy _mCurlEasy;
-        private readonly CurlMessage _msg;
-        private readonly CurlCode _result;
 
         internal CurlMultiInfo(CurlMessage msg, CurlEasy curlEasy, CurlCode result)
         {
-            _msg = msg;
-            _mCurlEasy = curlEasy;
-            _result = result;
+            Msg = msg;
+            CurlEasyHandle = curlEasy;
+            Result = result;
         }
 
         /// <summary>
         ///     Get the status code from the <see cref="CurlMessage" /> enumeration.
         /// </summary>
-        public CurlMessage Msg
-        {
-            get { return _msg; }
-        }
+        public CurlMessage Msg { get; }
 
         /// <summary>
         ///     Get the <see cref="CurlEasy" /> object for this child.
         /// </summary>
-        public CurlEasy CurlEasyHandle
-        {
-            get { return _mCurlEasy; }
-        }
+        public CurlEasy CurlEasyHandle { get; }
 
         /// <summary>
         ///     Get the return code for the transfer, as a
         ///     <see cref="CurlCode" />.
         /// </summary>
-        public CurlCode Result
-        {
-            get { return _result; }
-        }
+        public CurlCode Result { get; }
     }
 }

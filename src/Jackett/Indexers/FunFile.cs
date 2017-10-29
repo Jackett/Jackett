@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
-using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;

@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2014 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you
@@ -39,6 +39,7 @@ namespace CurlSharp
         private NativeMethods.fd_set _fd_read, _fd_write, _fd_except;
 #endif
         private IntPtr _pMulti;
+        private CurlPipelining _pipelining;
 
         /// <summary>
         ///     Constructor
@@ -74,10 +75,7 @@ namespace CurlSharp
         /// <summary>
         ///     Max file descriptor
         /// </summary>
-        public int MaxFd
-        {
-            get { return _maxFd; }
-        }
+        public int MaxFd => _maxFd;
 
         /// <summary>
         ///     Cleanup unmanaged resources.
@@ -149,6 +147,17 @@ namespace CurlSharp
             return NativeMethods.curl_multi_add_handle(_pMulti, p);
         }
 
+        public CurlPipelining Pipelining
+        {
+            get { return _pipelining; }
+            set
+            {
+                ensureHandle();
+                _pipelining = value;
+                NativeMethods.curl_multi_setopt(_pMulti, CurlMultiOption.Pipelining, (long) value);
+            }
+        }
+
         /// <summary>
         ///     Remove an CurlEasy object.
         /// </summary>
@@ -178,10 +187,7 @@ namespace CurlSharp
         ///     string description.
         /// </param>
         /// <returns>The string description.</returns>
-        public String StrError(CurlMultiCode errorNum)
-        {
-            return Marshal.PtrToStringAnsi(NativeMethods.curl_multi_strerror(errorNum));
-        }
+        public string StrError(CurlMultiCode errorNum) => Marshal.PtrToStringAnsi(NativeMethods.curl_multi_strerror(errorNum));
 
         /// <summary>
         ///     Read/write data to/from each CurlEasy object.
@@ -269,8 +275,6 @@ namespace CurlSharp
             if (_bGotMultiInfo)
                 return _multiInfo;
 
-            _bGotMultiInfo = true;
-
 #if USE_LIBCURLSHIM
             var nMsgs = 0;
             var pInfo = NativeMethods.curl_shim_multi_info_read(_pMulti, ref nMsgs);
@@ -286,17 +290,12 @@ namespace CurlSharp
                 }
                 NativeMethods.curl_shim_multi_info_free(pInfo);
             }
-
-            return _multiInfo;
-
+            _bGotMultiInfo = true;
 #else
-
-            throw new NotImplementedException(
-                "Sorry, CurlMulti.InfoRead is not implemented on this system."
-            );
-
+            _multiInfo = null;
+            throw new NotImplementedException("CurlMulti.InfoRead()");
 #endif
-
+            return _multiInfo;
         }
     }
 }

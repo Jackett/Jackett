@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2014 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you
@@ -31,7 +31,7 @@ namespace CurlSharp
         public CurlFormOption Option;
 
         /// <summary>Value for the option.</summary>
-        public Object Value;
+        public object Value;
     }
 
     /// <summary>
@@ -77,10 +77,7 @@ namespace CurlSharp
         }
 
         // for CurlEasy.SetOpt()
-        internal IntPtr GetHandle()
-        {
-            return _pItems[0];
-        }
+        internal IntPtr GetHandle() => _pItems[0];
 
         /// <summary>
         ///     Add a multi-part form section.
@@ -186,7 +183,7 @@ namespace CurlSharp
             var formArrayPos = 0;
             var argArrayPos = 0;
             var ptrArrayPos = 0;
-            Object obj = null;
+            object obj = null;
 
             while ((retCode == CurlFormCode.Ok) &&
                    (ptrArrayPos < nRealCount))
@@ -207,14 +204,14 @@ namespace CurlSharp
                 {
                     iCode = (CurlFormOption) Convert.ToInt32(
                         args.GetValue(argArrayPos++));
-                    obj = (iCode == CurlFormOption.End)
+                    obj = iCode == CurlFormOption.End
                         ? null
                         : args.GetValue(argArrayPos++);
                 }
 
                 switch (iCode)
                 {
-                        // handle byte-array pointer-related items
+                    // handle byte-array pointer-related items
                     case CurlFormOption.PtrName:
                     case CurlFormOption.PtrContents:
                     case CurlFormOption.BufferPtr:
@@ -240,7 +237,7 @@ namespace CurlSharp
                         break;
                     }
 
-                        // length values
+                    // length values
                     case CurlFormOption.NameLength:
                     case CurlFormOption.ContentsLength:
                     case CurlFormOption.BufferLength:
@@ -249,7 +246,7 @@ namespace CurlSharp
                             Convert.ToInt32(obj);
                         break;
 
-                        // strings
+                    // strings
                     case CurlFormOption.CopyName:
                     case CurlFormOption.CopyContents:
                     case CurlFormOption.FileContent:
@@ -259,7 +256,7 @@ namespace CurlSharp
                     case CurlFormOption.Buffer:
                     {
                         aPointers[ptrArrayPos++] = (IntPtr) iCode;
-                        var s = obj as String;
+                        var s = obj as string;
                         if (s == null)
                             retCode = CurlFormCode.UnknownOption;
                         else
@@ -273,7 +270,7 @@ namespace CurlSharp
                         break;
                     }
 
-                        // array case: already handled
+                    // array case: already handled
                     case CurlFormOption.Array:
                         if (aForms != null)
                             retCode = CurlFormCode.IllegalArray;
@@ -285,7 +282,7 @@ namespace CurlSharp
                         }
                         break;
 
-                        // slist
+                    // slist
                     case CurlFormOption.ContentHeader:
                     {
                         aPointers[ptrArrayPos++] = (IntPtr) iCode;
@@ -297,12 +294,12 @@ namespace CurlSharp
                         break;
                     }
 
-                        // erroneous stuff
+                    // erroneous stuff
                     case CurlFormOption.Nothing:
                         retCode = CurlFormCode.Incomplete;
                         break;
 
-                        // end
+                    // end
                     case CurlFormOption.End:
                         if (aForms != null) // end of form
                         {
@@ -313,7 +310,7 @@ namespace CurlSharp
                             aPointers[ptrArrayPos++] = (IntPtr) iCode;
                         break;
 
-                        // default is unknown
+                    // default is unknown
                     default:
                         retCode = CurlFormCode.UnknownOption;
                         break;
@@ -331,9 +328,9 @@ namespace CurlSharp
                 retCode = (CurlFormCode) NativeMethods.curl_shim_formadd(_pItems, aPointers, nRealCount);
 #else
                 retCode = (CurlFormCode) NativeMethods.curl_formadd(ref _pItems[0], ref _pItems[1],
-                                                                    (int) aPointers[0], aPointers[1],
-                                                                    (int) aPointers[2], aPointers[3],
-                                                                    (int) aPointers[4]);
+                    (int) aPointers[0], aPointers[1],
+                    (int) aPointers[2], aPointers[3],
+                    (int) aPointers[4]);
 #endif
             }
 
@@ -350,7 +347,7 @@ namespace CurlSharp
                     case CurlFormOption.ContentType:
                     case CurlFormOption.Filename:
                     case CurlFormOption.Buffer:
-                        // byte buffer cases
+                    // byte buffer cases
                     case CurlFormOption.PtrName:
                     case CurlFormOption.PtrContents:
                     case CurlFormOption.BufferPtr:

@@ -6,14 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface ILogCacheService
-    {
-       // void AddLog(LogEventInfo l);
-        List<CachedLog> Logs { get; }
-    }
 
     [Target("LogService")]
     class LogCacheService: TargetWithLayout, ILogCacheService

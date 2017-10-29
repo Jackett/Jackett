@@ -24,8 +24,23 @@ namespace CurlSharp
         Http1_1 = 2,
 
         /// <summary>
+        ///     Enforce HTTP 2 requests.
+        /// </summary>
+        Http2_0 = 3,
+
+        /// <summary>
+        ///     Enforce version 2 for HTTPS, version 1.1 for HTTP.
+        /// </summary>
+        Http2_Tls = 4,
+
+        /// <summary>
+        ///     Enforce HTTP 2 without HTTP/1.1 upgrade.
+        /// </summary>
+        Http2_PriorKnowledge = 5,
+
+        /// <summary>
         ///     Last entry in enumeration; do not use in application code.
         /// </summary>
-        Last = 3
-    };
+        Last = 6
+    }
 }

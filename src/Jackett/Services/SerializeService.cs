@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface ISerializeService
-    {
-        string Serialise(object obj);
-        T DeSerialise<T>(string json);
-    }
 
     class SerializeService : ISerializeService
     {

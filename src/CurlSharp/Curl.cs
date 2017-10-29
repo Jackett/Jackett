@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2013 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you
@@ -72,7 +72,7 @@ namespace CurlSharp
         /// </returns>
         public static CurlCode GlobalInit(CurlInitFlag flags)
         {
-            _initCode = NativeMethods.curl_global_init((int)flags);
+            _initCode = NativeMethods.curl_global_init((int) flags);
 #if USE_LIBCURLSHIM
             if (_initCode == CurlCode.Ok)
                 NativeMethods.curl_shim_initialize();
@@ -97,48 +97,6 @@ namespace CurlSharp
                 NativeMethods.curl_global_cleanup();
                 _initCode = CurlCode.FailedInit;
             }
-        }
-
-        /// <summary>
-        ///     URL encode a String.
-        /// </summary>
-        /// <param name="url">The string to URL encode.</param>
-        /// <param name="length">
-        ///     Input string length;
-        ///     use 0 for cURL to determine.
-        /// </param>
-        /// <returns>A new URL encoded string.</returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if cURL isn't properly initialized.
-        /// </exception>
-        public static string Escape(string url, int length)
-        {
-            EnsureCurl();
-            var p = NativeMethods.curl_escape(url, length);
-            var s = Marshal.PtrToStringAnsi(p);
-            NativeMethods.curl_free(p);
-            return s;
-        }
-
-        /// <summary>
-        ///     URL decode a String.
-        /// </summary>
-        /// <param name="url">The string to URL decode.</param>
-        /// <param name="length">
-        ///     Input string length;
-        ///     use 0 for cURL to determine.
-        /// </param>
-        /// <returns>A new URL decoded string.</returns>
-        /// <exception cref="System.InvalidOperationException">
-        ///     Thrown if cURL isn't properly initialized.
-        /// </exception>
-        public static string Unescape(string url, int length)
-        {
-            EnsureCurl();
-            var p = NativeMethods.curl_unescape(url, length);
-            var s = Marshal.PtrToStringAnsi(p);
-            NativeMethods.curl_free(p);
-            return s;
         }
 
         /// <summary>

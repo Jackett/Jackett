@@ -10,6 +10,7 @@ using Jackett.Models;
 using System.Reflection;
 using Jackett.Services;
 using Jackett.Indexers.Meta;
+using Jackett.Services.Interfaces;
 
 namespace Jackett
 {

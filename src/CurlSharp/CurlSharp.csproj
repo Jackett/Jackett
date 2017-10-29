@@ -1,110 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{74420A79-CC16-442C-8B1E-7C1B913844F0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CurlSharp</RootNamespace>
-    <AssemblyName>CurlSharp</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworks>net452;netstandard1.5</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <PackageId>CurlSharp</PackageId>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>
-    </DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
+
   <ItemGroup>
-    <Reference Include="System" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Curl.cs" />
-    <Compile Include="CurlEasy.cs" />
-    <Compile Include="CurlHttpMultiPartForm.cs" />
-    <Compile Include="CurlMulti.cs" />
-    <Compile Include="CurlMultiInfo.cs" />
-    <Compile Include="CurlShare.cs" />
-    <Compile Include="CurlSlist.cs" />
-    <Compile Include="CurlSslContext.cs" />
-    <Compile Include="CurlVersionInfoData.cs" />
-    <Compile Include="NativeMethods.cs" />
-    <Compile Include="Enums\CurlClosePolicy.cs" />
-    <Compile Include="Enums\CurlCode.cs" />
-    <Compile Include="Enums\CurlFormCode.cs" />
-    <Compile Include="Enums\CurlFormOption.cs" />
-    <Compile Include="Enums\CurlFtpAuth.cs" />
-    <Compile Include="Enums\CurlFtpSsl.cs" />
-    <Compile Include="Enums\CurlHttpAuth.cs" />
-    <Compile Include="Enums\CurlHttpVersion.cs" />
-    <Compile Include="Enums\CurlInfo.cs" />
-    <Compile Include="Enums\CurlInfoType.cs" />
-    <Compile Include="Enums\CurlInitFlag.cs" />
-    <Compile Include="Enums\CurlIoCommand.cs" />
-    <Compile Include="Enums\CurlIoError.cs" />
-    <Compile Include="Enums\CurlIpResolve.cs" />
-    <Compile Include="Enums\CurlLockAccess.cs" />
-    <Compile Include="Enums\CurlLockData.cs" />
-    <Compile Include="Enums\CurlMessage.cs" />
-    <Compile Include="Enums\CurlMultiCode.cs" />
-    <Compile Include="Enums\CurlNetrcOption.cs" />
-    <Compile Include="Enums\CurlOption.cs" />
-    <Compile Include="Enums\CurlProxyType.cs" />
-    <Compile Include="Enums\CurlShareCode.cs" />
-    <Compile Include="Enums\CurlShareOption.cs" />
-    <Compile Include="Enums\CurlSslVersion.cs" />
-    <Compile Include="Enums\CurlTimeCond.cs" />
-    <Compile Include="Enums\CurlVersion.cs" />
-    <Compile Include="Enums\CurlVersionFeatureBitmask.cs" />
-    <Compile Include="Callbacks\CurlEasyCallbacks.cs" />
-    <Compile Include="Callbacks\CurlShareCallbacks.cs" />
-    <Compile Include="SSLFix.cs" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
+    <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <ItemGroup />
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabsToSpaces="True" scope="text/x-csharp">
-            <inheritsSet />
-            <inheritsScope />
-          </TextStylePolicy>
-          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="False" IndentSwitchCaseSection="True" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="False" NewLinesForBracesInAccessors="False" NewLinesForBracesInAnonymousMethods="False" NewLinesForBracesInControlBlocks="False" NewLinesForBracesInAnonymousTypes="False" NewLinesForBracesInObjectCollectionArrayInitializers="False" NewLinesForBracesInLambdaExpressionBody="False" NewLineForElse="False" NewLineForCatch="False" NewLineForFinally="False" NewLineForMembersInObjectInit="False" NewLineForMembersInAnonymousTypes="False" NewLineForClausesInQuery="False" SpacingAfterMethodDeclarationName="True" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="True" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="True" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" PlaceSystemDirectiveFirst="True" scope="text/x-csharp">
-            <inheritsSet />
-            <inheritsScope />
-          </CSharpFormattingPolicy>
-        </Policies>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
 </Project>

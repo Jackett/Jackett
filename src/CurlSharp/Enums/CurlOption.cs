@@ -1075,6 +1075,32 @@ namespace CurlSharp
         /// </summary>
         SslCipherList = 10083,
 
+        /// <summary>
+        ///     Object reference to pass to the ssl context delegate set by the option
+        ///     <c>SslCtxFunction</c>, this is the pointer you'll get as the
+        ///     second parameter, otherwise <c>null</c>. (Added in 7.11.0)
+        /// </summary>
+        SslCtxData = 10109,
+
+        /// <summary>
+        ///     Reference to an <see cref="CurlEasy.CurlSslContextCallback" /> delegate.
+        ///     This delegate gets called by libcurl just before the initialization of
+        ///     an Ssl connection after having processed all other Ssl related options
+        ///     to give a last chance to an application to modify the behaviour of
+        ///     openssl's ssl initialization. The <see cref="CurlSslContext" /> parameter
+        ///     wraps a pointer to an openssl SSL_CTX. If an error is returned no attempt
+        ///     to establish a connection is made and the perform operation will return
+        ///     the error code from this callback function. Set the parm argument with
+        ///     the <c>SslCtxData</c> option. This option was introduced
+        ///     in 7.11.0.
+        ///     <note>
+        ///         To use this properly, a non-trivial amount of knowledge of the openssl
+        ///         libraries is necessary. Using this function allows for example to use
+        ///         openssl callbacks to add additional validation code for certificates,
+        ///         and even to change the actual URI of an HTTPS request.
+        ///     </note>
+        /// </summary>
+        SslCtxFunction = 20108,
 
         /// <summary>
         ///     Pass an <c>int</c>. Set if we should verify the common name from the

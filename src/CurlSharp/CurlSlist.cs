@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2013 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you
@@ -31,19 +31,6 @@ namespace CurlSharp
     /// </summary>
     public class CurlSlist : IDisposable
     {
-#if !USE_LIBCURLSHIM
-        [StructLayout(LayoutKind.Sequential)]
-        private class curl_slist
-        {
-            /// char*
-            [MarshalAs(UnmanagedType.LPStr)] public string data;
-
-            /// curl_slist*
-            public IntPtr next;
-        }
-#endif
-        private IntPtr _handle;
-
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -54,12 +41,12 @@ namespace CurlSharp
         public CurlSlist()
         {
             Curl.EnsureCurl();
-            _handle = IntPtr.Zero;
+            Handle = IntPtr.Zero;
         }
 
         public CurlSlist(IntPtr handle)
         {
-            _handle = handle;
+            Handle = handle;
         }
 
         /// <summary>
@@ -69,13 +56,13 @@ namespace CurlSharp
         {
             get
             {
-                if (_handle == IntPtr.Zero)
+                if (Handle == IntPtr.Zero)
                     return null;
                 var strings = new List<string>();
 
 #if !USE_LIBCURLSHIM
                 var slist = new curl_slist();
-                Marshal.PtrToStructure(_handle, slist);
+                Marshal.PtrToStructure(Handle, slist);
 
                 while (true)
                 {
@@ -88,6 +75,17 @@ namespace CurlSharp
 #endif
                 return strings;
             }
+        }
+
+        internal IntPtr Handle { get; private set; }
+
+        /// <summary>
+        ///     Free all internal strings.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
         }
 
         /// <summary>
@@ -105,40 +103,38 @@ namespace CurlSharp
         public void Append(string str)
         {
 #if USE_LIBCURLSHIM
-            _handle = NativeMethods.curl_shim_add_string_to_slist(_handle, str);
+            Handle = NativeMethods.curl_shim_add_string_to_slist(Handle, str);
 #else
-            _handle = NativeMethods.curl_slist_append(_handle, str);
+            Handle = NativeMethods.curl_slist_append(Handle, str);
 #endif
-        }
-
-        /// <summary>
-        ///     Free all internal strings.
-        /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
-        }
-
-        internal IntPtr Handle
-        {
-            get { return _handle; }
         }
 
         private void Dispose(bool disposing)
         {
             lock (this)
             {
-                if (_handle != IntPtr.Zero)
+                if (Handle != IntPtr.Zero)
                 {
 #if USE_LIBCURLSHIM
-                    NativeMethods.curl_shim_free_slist(_handle);
+                    NativeMethods.curl_shim_free_slist(Handle);
 #else
-                    NativeMethods.curl_slist_free_all(_handle);
+                    NativeMethods.curl_slist_free_all(Handle);
 #endif
-                    _handle = IntPtr.Zero;
+                    Handle = IntPtr.Zero;
                 }
             }
         }
+
+#if !USE_LIBCURLSHIM
+        [StructLayout(LayoutKind.Sequential)]
+        private class curl_slist
+        {
+            /// char*
+            [MarshalAs(UnmanagedType.LPStr)] public string data;
+
+            /// curl_slist*
+            public IntPtr next;
+        }
+#endif
     }
 }

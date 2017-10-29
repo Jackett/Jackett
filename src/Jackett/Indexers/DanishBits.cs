@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Jackett.Indexers.Abstract;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
-using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils.Clients;
 using NLog;
 

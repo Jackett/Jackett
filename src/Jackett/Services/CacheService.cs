@@ -6,15 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface ICacheService
-    {
-        void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
-        List<TrackerCacheResult> GetCachedResults();
-        int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
-    }
 
     public class CacheService : ICacheService
     {

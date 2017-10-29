@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using AutoMapper;
 using Jackett.Indexers;
 using Jackett.Models;
-using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

@@ -2,7 +2,7 @@
  *
  * CurlS#arp
  *
- * Copyright (c) 2013 Dr. Masroor Ehsan (masroore@gmail.com)
+ * Copyright (c) 2013-2017 Dr. Masroor Ehsan (masroore@gmail.com)
  * Portions copyright (c) 2004, 2005 Jeff Phillips (jeff@jeffp.net)
  *
  * This software is licensed as described in the file LICENSE, which you
@@ -31,19 +31,14 @@ namespace CurlSharp
     /// </summary>
     public sealed class CurlSslContext
     {
-        private readonly IntPtr _pvContext;
-
         internal CurlSslContext(IntPtr pvContext)
         {
-            _pvContext = pvContext;
+            Context = pvContext;
         }
 
         /// <summary>
         ///     Get the underlying OpenSSL context.
         /// </summary>
-        public IntPtr Context
-        {
-            get { return _pvContext; }
-        }
+        public IntPtr Context { get; }
     }
 }

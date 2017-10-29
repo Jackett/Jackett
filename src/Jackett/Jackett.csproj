@@ -203,6 +203,21 @@
     <Compile Include="Models\TrackerCache.cs" />
     <Compile Include="Models\TrackerCacheResult.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\Interfaces\ICacheService.cs" />
+    <Compile Include="Services\Interfaces\IImdbResolver.cs" />
+    <Compile Include="Services\Interfaces\IConfigurationService.cs" />
+    <Compile Include="Services\Interfaces\IIndexerConfigurationService.cs" />
+    <Compile Include="Services\Interfaces\IIndexerManagerService.cs" />
+    <Compile Include="Services\Interfaces\ILogCacheService.cs" />
+    <Compile Include="Services\Interfaces\IProcessService.cs" />
+    <Compile Include="Services\Interfaces\IProtectionService.cs" />
+    <Compile Include="Services\Interfaces\ISecuityService.cs" />
+    <Compile Include="Services\Interfaces\ISerializeService.cs" />
+    <Compile Include="Services\Interfaces\IServerService.cs" />
+    <Compile Include="Services\Interfaces\IRunTimeService.cs" />
+    <Compile Include="Services\Interfaces\IServiceConfigService.cs" />
+    <Compile Include="Services\Interfaces\ITrayLockService.cs" />
+    <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\LogCacheService.cs" />
     <Compile Include="Services\ProtectionService.cs" />
     <Compile Include="Services\TrayLockService.cs" />
@@ -447,12 +462,6 @@
     <Content Include="Resources\validator_reply.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
-      <Project>{74420A79-CC16-442C-8B1E-7C1B913844F0}</Project>
-      <Name>CurlSharp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
@@ -488,9 +497,6 @@
     <PackageReference Include="CsQuery">
       <Version>1.3.5-beta5</Version>
     </PackageReference>
-    <PackageReference Include="DateTimeRoutines">
-      <Version>1.0.16</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost">
       <Version>5.2.3</Version>
     </PackageReference>
@@ -513,8 +519,16 @@
       <Version>4.2.2</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
+      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
+      <Name>CurlSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DateTimeRoutines\DateTimeRoutines.csproj">
+      <Project>{c28a79ee-ef81-4eee-a7fe-eb636423c935}</Project>
+      <Name>DateTimeRoutines</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

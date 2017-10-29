@@ -12,20 +12,10 @@ using System.Threading.Tasks;
 using Jackett.Indexers.Meta;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface IIndexerManagerService
-    {
-        Task TestIndexer(string name);
-        void DeleteIndexer(string name);
-        IIndexer GetIndexer(string name);
-        IWebIndexer GetWebIndexer(string name);
-        IEnumerable<IIndexer> GetAllIndexers();
-
-        void InitIndexers(IEnumerable<string> path);
-        void InitAggregateIndexer();
-    }
 
     public class IndexerManagerService : IIndexerManagerService
     {

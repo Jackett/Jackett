@@ -4,14 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface ITrayLockService
-    {
-        void WaitForSignal();
-        void Signal();
-    }
 
     public class TrayLockService : ITrayLockService
     {

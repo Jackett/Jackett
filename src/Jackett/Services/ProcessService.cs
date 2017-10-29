@@ -5,14 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface IProcessService
-    {
-        void StartProcessAndLog(string exe, string args, bool asAdmin = false);
-        string StartProcessAndGetOutput(string exe, string args, bool keepnewlines = false, bool asAdmin = false);
-    }
 
     public class ProcessService : IProcessService
     {
