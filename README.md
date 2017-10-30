@@ -17,8 +17,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Systems
-* Windows using .NET 4.5
-* Linux and macOS using Mono 4 (mono 3 is no longer supported).
+* Windows using .NET 4.5.2 [Download here](https://www.microsoft.com/net/framework/versions/net452).
+* Linux and macOS using Mono 4.6.0 and above. [Download here](http://www.mono-project.com/download/). Earlier versions of mono may work but some trackers may fail to negotiate SSL correctly, and others may cause Jackett to crash when used.
 
 ### Supported Public Trackers
  * 1337x
@@ -292,7 +292,7 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
 
 ## Installation on Linux
- 1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (version 4.8 is recommended)
+ 1. Install [Mono 4.6](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release for your distribution is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:
@@ -308,7 +308,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 ## Installation on macOS
 
 ### Prerequisites
-Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended).
+Install [Mono 4.6](http://www.mono-project.com/download/#download-mac) or better (using the latest pkg installer is recommended).
  * Setup ssl support by running `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
 ### Install as service
