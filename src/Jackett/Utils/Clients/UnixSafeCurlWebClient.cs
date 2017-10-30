@@ -31,9 +31,9 @@ namespace Jackett.Utils.Clients
         override protected async Task<WebClientByteResult> Run(WebRequest request)
         {
             var args = new StringBuilder();
-            if (Startup.ProxyConnection != null)
+            if (Engine.Server.Config.Proxy != null)
             {
-                args.AppendFormat("-x " + Startup.ProxyConnection + " ");
+                args.AppendFormat("-x '" + Engine.Server.Config.Proxy + "' ");
             }
             
             args.AppendFormat("--url \"{0}\" ", request.Url);

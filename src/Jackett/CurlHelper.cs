@@ -153,10 +153,10 @@ namespace Jackett
                         easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
-                    if (Startup.ProxyConnection != null)
+                    if (Engine.Server.Config.Proxy != null)
                     {
                         easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
-                        easy.SetOpt(CurlOption.Proxy, Startup.ProxyConnection);
+                        easy.SetOpt(CurlOption.Proxy, Engine.Server.Config.Proxy);
                     }
 
                     easy.Perform();

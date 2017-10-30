@@ -66,6 +66,12 @@ function loadJackettSettings() {
         $(".api-key-text").text(data.api_key);
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.port);
+
+        $("#jackett-proxy-url").val(data.proxy_url);
+        $("#jackett-proxy-port").val(data.proxy_port);
+        $("#jackett-proxy-username").val(data.proxy_username);
+        $("#jackett-proxy-password").val(data.proxy_password);
+
         $("#jackett-basepathoverride").val(data.basepathoverride);
         basePath = data.basepathoverride;
         if (basePath === null || basePath === undefined) {
@@ -1126,6 +1132,12 @@ function bindUIButtons() {
         var jackett_prerelease = $("#jackett-prerelease").is(':checked'); 
         var jackett_logging = $("#jackett-logging").is(':checked');
         var jackett_omdb_key = $("#jackett-omdbkey").val();
+
+        var jackett_proxy_url = $("#jackett-proxy-url").val();
+        var jackett_proxy_port = $("#jackett-proxy-port").val();
+        var jackett_proxy_username = $("#jackett-proxy-username").val();
+        var jackett_proxy_password = $("#jackett-proxy-password").val();
+
         var jsonObject = {
             port: jackett_port,
             external: jackett_external,
@@ -1134,7 +1146,11 @@ function bindUIButtons() {
             blackholedir: $("#jackett-savedir").val(),
             logging: jackett_logging,
             basepathoverride: jackett_basepathoverride,
-            omdbkey: jackett_omdb_key
+            omdbkey: jackett_omdb_key,
+            proxy_url: jackett_proxy_url,
+            proxy_port: jackett_proxy_port,
+            proxy_username: jackett_proxy_username,
+            proxy_password: jackett_proxy_password
         };
         api.updateServerConfig(jsonObject, function (data) {
             doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
