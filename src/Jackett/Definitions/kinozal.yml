@@ -107,8 +107,8 @@
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}c={{.}}&{{end}}"
-      # note: only one category at a time is supported. If there is a list then only the first one is used.
+      # multi cat is not supported. so defaulting to ALL
+      c: "0"
       s: "{{ .Keywords }}"
       g: "0"
        # g= where:

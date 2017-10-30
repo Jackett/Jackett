@@ -10,8 +10,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
-namespace JackettTest
+namespace Jackett.Test
 {
     class TestUtil
     {
@@ -60,7 +61,7 @@ namespace JackettTest
         public static string GetResource(string item)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "JackettTest." + item.Replace('/','.');
+            var resourceName = "Jackett.Test." + item.Replace('/','.');
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {

@@ -7,13 +7,10 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface IImdbResolver
-    {
-        Task<Movie> MovieForId(NonNull<string> imdbId);
-    }
 
     public struct Movie
     {

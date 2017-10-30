@@ -1,12 +1,9 @@
-﻿using Jackett.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 
 namespace Jackett.Indexers
 {
@@ -47,6 +44,7 @@ namespace Jackett.Indexers
 
         // Called on startup when initializing indexers from saved configuration
         void LoadFromSavedConfiguration(JToken jsonConfig);
+
         void SaveConfig();
 
         void Unconfigure();

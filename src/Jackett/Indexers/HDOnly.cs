@@ -1,11 +1,10 @@
-﻿using Jackett.Models;
-using NLog;
-using Jackett.Services;
-using Jackett.Utils.Clients;
+﻿using System.Collections.Generic;
 using Jackett.Indexers.Abstract;
+using Jackett.Models;
+using Jackett.Services.Interfaces;
+using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Web;
+using NLog;
 
 namespace Jackett.Indexers
 {

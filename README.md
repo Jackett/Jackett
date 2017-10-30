@@ -17,8 +17,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Systems
-* Windows using .NET 4.5
-* Linux and macOS using Mono 4 (mono 3 is no longer supported).
+* Windows using .NET 4.5.2 [Download here](https://www.microsoft.com/net/framework/versions/net452).
+* Linux and macOS using Mono 4.6.0 and above. [Download here](http://www.mono-project.com/download/). Earlier versions of mono may work but some trackers may fail to negotiate SSL correctly, and others may cause Jackett to crash when used.
 
 ### Supported Public Trackers
  * 1337x
@@ -145,6 +145,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Fuzer
  * GayTorrent.ru
  * GFTracker
+ * Gfxnews
  * GFXPeers
  * Ghost City
  * GigaTorrents
@@ -291,7 +292,7 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
 
 ## Installation on Linux
- 1. Install [Mono 4](http://www.mono-project.com/download/#download-lin) or better (version 4.8 is recommended)
+ 1. Install [Mono 4.6](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release for your distribution is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:
@@ -307,7 +308,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 ## Installation on macOS
 
 ### Prerequisites
-Install [Mono 4](http://www.mono-project.com/download/#download-mac) or better (version 4.8 is recommended).
+Install [Mono 4.6](http://www.mono-project.com/download/#download-mac) or better (using the latest pkg installer is recommended).
  * Setup ssl support by running `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
 ### Install as service
@@ -350,8 +351,7 @@ Jackett is available as beta package from [SynoCommunity](https://synocommunity.
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
 
 ## Contributing
-All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/Jackett/Jackett/issues).  It is recommended to use Visual studio 2015 when making code changes in this project.
-
+All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/Jackett/Jackett/issues).  It is recommended to use Visual Studio 2017 when making code changes in this project. You can download the community version for free [here](https://www.visualstudio.com/downloads/).
 
 ## Screenshots
 

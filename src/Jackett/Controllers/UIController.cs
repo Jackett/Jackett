@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using NLog;
 

@@ -11,7 +11,7 @@ using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
-using Jackett.Services;
+using Jackett.Services.Interfaces;
 
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;

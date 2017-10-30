@@ -12,23 +12,10 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface IConfigurationService
-    {
-        string GetContentFolder();
-        string GetVersion();
-        string GetIndexerConfigDir();
-        string GetAppDataFolder();
-        string GetSonarrConfigFile();
-        T GetConfig<T>();
-        void SaveConfig<T>(T config);
-        string ApplicationFolder();
-        List<string> GetCardigannDefinitionsFolders();
-        void CreateOrMigrateSettings();
-        void PerformMigration();
-    }
 
     public class ConfigurationService : IConfigurationService
     {

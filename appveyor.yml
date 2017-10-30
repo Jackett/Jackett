@@ -1,0 +1,79 @@
+version: 0.8.{build}
+pull_requests:
+  do_not_increment_build_number: true
+skip_tags: true
+image: Visual Studio 2017
+configuration: Release
+shallow_clone: true
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+install:
+- cmd: choco install InnoSetup
+before_build:
+- cmd: nuget restore src\Jackett.sln
+build:
+  verbosity: minimal
+after_build:
+- cmd: >-
+    xcopy src\Jackett.Console\bin\Release base\  /e /y
+
+    copy /Y src\Jackett.Service\bin\Release\JackettService.exe* %APPVEYOR_BUILD_FOLDER%\base\
+
+    copy /Y src\Jackett.Tray\bin\Release\JackettTray.exe* %APPVEYOR_BUILD_FOLDER%\base\
+
+    copy /Y src\Jackett.Updater\bin\Release\JackettUpdater.exe* %APPVEYOR_BUILD_FOLDER%\base\
+
+    copy /Y Upstart.config base\Upstart.config
+
+    copy /Y LICENSE base\LICENSE
+
+    copy /Y README.md base\README.md
+
+
+    xcopy base build.windows\ /e /y
+
+    xcopy base BaseBuild\Jackett\ /e /y
+
+
+    "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Installer.iss
+
+    RENAME Output\setup.exe Jackett.Installer.Windows.exe
+
+    MOVE Output\Jackett.Installer.Windows.exe %APPVEYOR_BUILD_FOLDER%
+
+
+    cd BaseBuild
+
+    7z a -tzip -r "%APPVEYOR_BUILD_FOLDER%\Jackett.Binaries.Windows.zip" "Jackett\"
+
+    7z a -ttar "%APPVEYOR_BUILD_FOLDER%\Jackett.Binaries.Mono.tar" "Jackett\"
+
+    cd %APPVEYOR_BUILD_FOLDER%
+
+    7z a -tgzip "Jackett.Binaries.Mono.tar.gz" "Jackett.Binaries.Mono.tar"
+
+
+    appveyor PushArtifact Jackett.Installer.Windows.exe
+
+    appveyor PushArtifact Jackett.Binaries.Windows.zip
+
+    appveyor PushArtifact Jackett.Binaries.Mono.tar.gz
+deploy:
+- provider: GitHub
+  tag: v$(appveyor_build_version)
+  auth_token:
+    secure: hOg+16YTIbq4kO9u4D1YVOTbWDqgCX6mAQYMbnmBBSw2CiUsZh7OKbupoUb3FtWa
+  draft: true
+  on:
+    branch: master
+notifications:
+- provider: Webhook
+  url: https://skyhook.glitch.me/api/webhooks/346588605843767297/_VWi5abKliaWsBmQO7AX69tD28FhqSLjKyLBwkSwwT13uyWJQHx5TSWK_iAs-0RzmyvZ/appveyor
+  method: POST
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true

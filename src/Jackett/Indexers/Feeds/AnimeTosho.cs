@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml.Linq;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
-using Jackett.Services;
+using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
 using NLog;

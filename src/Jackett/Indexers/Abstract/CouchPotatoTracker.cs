@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Indexers.Abstract
 {
@@ -44,7 +45,7 @@ namespace Jackett.Indexers.Abstract
             LoadValuesFromJson(configJson);
             IsConfigured = true;
             SaveConfig();
-            return IndexerConfigurationStatus.RequiresTesting;
+            return await Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
         protected virtual string GetSearchString(TorznabQuery query)

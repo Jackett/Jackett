@@ -1,8 +1,8 @@
 ﻿using AngleSharp.Parser.Html;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
-using Jackett.Services;
 using Jackett.Utils;
+using Jackett.Services.Interfaces;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;

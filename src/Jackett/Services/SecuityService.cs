@@ -6,16 +6,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface ISecuityService
-    {
-        bool CheckAuthorised(HttpRequestMessage request);
-        string HashPassword(string input);
-        void Login(HttpResponseMessage request);
-        void Logout(HttpResponseMessage request);
-    }
 
     class SecuityService : ISecuityService
     {

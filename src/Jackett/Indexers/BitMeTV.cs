@@ -1,21 +1,19 @@
-﻿using CsQuery;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using CsQuery;
+using Jackett.Models;
+using Jackett.Models.IndexerConfig;
+using Jackett.Services.Interfaces;
+using Jackett.Utils;
+using Jackett.Utils.Clients;
+using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Indexers
 {
@@ -23,11 +21,12 @@ namespace Jackett.Indexers
     {
         //https is poorly implemented on BitMeTV. Site uses http to login, but then redirects to https for search
         private string LoginUrl { get { return SiteLink + "login.php"; } }
+
         private string LoginPost { get { return SiteLink + "takelogin.php"; } }
         private string CaptchaUrl { get { return SiteLink + "visual.php"; } }
         private string SearchUrl { get { return "https://www.bitmetv.org/browse.php"; } }
 
-        new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataCaptchaLogin configData
         {
             get { return (ConfigurationDataCaptchaLogin)base.configData; }
             set { base.configData = value; }

@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Indexers;
 using Newtonsoft.Json.Linq;
+using Jackett.Services.Interfaces;
 
-namespace JackettTest
+namespace Jackett.Test
 {
     class TestIndexerManagerServiceHelper : IIndexerManagerService
     {

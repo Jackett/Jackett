@@ -9,18 +9,10 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Services.Interfaces;
 
 namespace Jackett.Services
 {
-    public interface IServiceConfigService
-    {
-        void Install();
-        void Uninstall();
-        bool ServiceExists();
-        bool ServiceRunning();
-        void Start();
-        void Stop();
-    }
 
     public class ServiceConfigService : IServiceConfigService
     {

@@ -1,9 +1,9 @@
-﻿using Jackett.Models;
-using NLog;
-using Jackett.Services;
-using Jackett.Utils.Clients;
+﻿using System.Collections.Generic;
 using Jackett.Indexers.Abstract;
-using System.Collections.Generic;
+using Jackett.Models;
+using Jackett.Services.Interfaces;
+using Jackett.Utils.Clients;
+using NLog;
 
 namespace Jackett.Indexers
 {

@@ -47,7 +47,11 @@
           img[title="Verified and marked"]: "Verified and marked"
           "*": ""
       date:
-        selector: td:nth-child(4)
+        selector: td:nth-child(4):contains("ago")
+        optional: true
+      date:
+        selector: td:nth-child(4):not(:contains("ago"))
+        optional: true
         filters:
           - name: dateparse
             args: "01-02-2006"
