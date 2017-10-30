@@ -102,7 +102,7 @@ namespace Jackett.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            logger.Info("Applying configuration");
+            logger.Debug("Applying configuration");
             LoadValuesFromJson(configJson);
 
             var data = new Dictionary<string, string>
@@ -126,7 +126,7 @@ namespace Jackett.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            logger.Info("PerformQuery: " + query.GetQueryString());
+            logger.Debug("PerformQuery: " + query.GetQueryString());
 
             // If the search string is empty use the latest releases
             if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm))
@@ -160,17 +160,38 @@ namespace Jackett.Indexers
 
         private async Task<List<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
-            logger.Info("PerformSearch: " + query.SanitizedSearchTerm + " [" + query.QueryType + "]");
+            logger.Debug("PerformSearch: " + query.SanitizedSearchTerm + " [" + query.QueryType + "]");
             var releases = new List<ReleaseInfo>();
 
-            // If set to `true` search string will be reduced by word each time tracker returns zero results.
-            // It's required for "search" queries because tracker search API could only return series, not episodes.
-            // Set this variable to `false` within do/while loop when results were achieved.
-            var shouldMorphQuery = query.IsSearch;
+            /*
+            Torznab query for some series could contains sanitized title. E.g. "Star Wars: The Clone Wars" will become "Star Wars The Clone Wars".
+            Search API on LostFilm.tv doesn't return anything on such search query so the query should be "morphed" even for "tvsearch" queries.
+            The algorythm works in the following way:
+                1. Search with the full SearchTerm. Just for example, let's search for episode by it's name
+                    - {Star Wars The Clone Wars To Catch a Jedi}
+                2. [loop] If none were found, repeat search with SearchTerm reduced by 1 word from the end. Fail search if no words left and no results were obtained
+                    - {Star Wars The Clone Wars To Catch a} Jedi
+                    - {Star Wars The Clone Wars To Catch} a Jedi
+                    - ...
+                    - {Star Wars} The Clone Wars To Catch a Jedi
+                3. When we got few results, try to filter them with the words excluded before
+                    - [Star Wars: The Clone Wars, Star Wars Rebels, Star Wars: Forces of Destiny]
+                        .filterBy(The Clone Wars To Catch a Jedi)
+                4. [loop] Reduce filterTerm by 1 word from the end. Fail search if no words left and no results were obtained
+                        .filterBy(The Clone Wars To Catch a) / Jedi
+                        .filterBy(The Clone Wars To Catch) / a Jedi
+                        ...
+                        .filterBy(The Clone Wars) / To Catch a Jedi
+                5. Fetch series detail page for "Star Wars The Clone Wars" with a "To Catch a Jedi" filterTerm to find required episode
+            */
+
             // Search query words. Consists of Series keywords that will be used for series search request, and Episode keywords that will be used for episode filtering.
             var keywords = query.SanitizedSearchTerm.Split(' ').ToList();
-            // Number of first keywords that relates to Series keywords.
-            int searchKeywords = keywords.Count;
+            // Keywords count related to Series Search.
+            var searchKeywords = keywords.Count;
+            // Keywords count related to Series Filter.
+            var serieFilterKeywords = 0;
+            // Overall (keywords.count - searchKeywords - serieFilterKeywords) are related to episode filter
 
             do
             {
@@ -181,58 +202,78 @@ namespace Jackett.Indexers
                     { "type", "search" },
                     { "val", searchString }
                 };
-                logger.Info("> Searching: " + searchString);
+                logger.Debug("> Searching: " + searchString);
                 var response = await PostDataWithCookies(url: ApiUrl, data: data);
 
                 try
                 {
                     var json = JToken.Parse(response.Content);
-                    var jsonData = json["data"];
 
                     // Protect from {"data":false,"result":"ok"}
-                    if (jsonData.Type == JTokenType.Object)
+                    var jsonData = json["data"];
+                    if (jsonData.Type != JTokenType.Object)
+                        continue; // Search loop
+
+                    var jsonSeries = jsonData["series"];
+                    if (jsonSeries == null || !jsonSeries.HasValues)
+                        continue; // Search loop
+
+                    var series = jsonSeries.ToList();
+                    logger.Debug("> Found " + series.Count().ToString() + " series: [" + string.Join(", ", series.Select(s => s["title_orig"].Value<string>())) + "]");
+
+                    // Filter found series
+
+                    if (series.Count() > 1)
                     {
-                        var series = jsonData["series"];
-                        if (series != null && series.HasValues)
+                        serieFilterKeywords = keywords.Count - searchKeywords;
+
+                        do
                         {
-                            logger.Info("> Found " + series.Count().ToString() + " series -> breaking the loop");
-                            shouldMorphQuery = false;
+                            var serieFilter = string.Join(" ", keywords.GetRange(searchKeywords, serieFilterKeywords));
+                            logger.Debug("> Filtering: " + serieFilter);
+                            var filteredSeries = series.Where(s => s["title_orig"].Value<string>().Contains(serieFilter)).ToList();
 
-                            foreach (var serie in series)
+                            if (filteredSeries.Count() > 0)
                             {
-                                var link = serie["link"].ToString();
-                                var season = query.Season == 0 ? "/seasons" : "/season_" + query.Season.ToString();
-                                var url = SiteLink + link.TrimStart('/') + season;
-
-                                if (!string.IsNullOrEmpty(query.Episode))
-                                {
-                                    // TODO: Add a Quick Path via v_search.php for "tvsearch" queries
-                                    url += "/episode_" + query.Episode;
-                                    var taskReleases = await FetchEpisodeReleases(url);
-                                    releases.AddRange(taskReleases);
-                                }
-                                else
-                                {
-                                    var filterKeywords = keywords.Skip(searchKeywords);
-                                    var filter = string.Join(" ", filterKeywords);
-
-                                    var taskReleases = await FetchSeriesReleases(url, query, filter);
-                                    releases.AddRange(taskReleases);
-                                }
+                                logger.Debug("> Series filtered: [" + string.Join(", ", filteredSeries.Select(s => s["title_orig"].Value<string>())) + "]");
+                                series = filteredSeries;
+                                break; // Serie Filter loop
                             }
                         }
+                        while (--serieFilterKeywords > 0);
                     }
+
+                    foreach (var serie in series)
+                    {
+                        var link = serie["link"].ToString();
+                        var season = query.Season == 0 ? "/seasons" : "/season_" + query.Season.ToString();
+                        var url = SiteLink + link.TrimStart('/') + season;
+
+                        if (!string.IsNullOrEmpty(query.Episode)) // Fetch single episode releases
+                        {
+                            // TODO: Add a togglable Quick Path via v_search.php in Indexer Settings
+                            url += "/episode_" + query.Episode;
+                            var taskReleases = await FetchEpisodeReleases(url);
+                            releases.AddRange(taskReleases);
+                        }
+                        else // Fetch the whole series OR episode with filter applied
+                        {
+                            var filterKeywords = keywords.Skip(searchKeywords + serieFilterKeywords);
+                            var filter = string.Join(" ", filterKeywords);
+
+                            var taskReleases = await FetchSeriesReleases(url, query, filter);
+                            releases.AddRange(taskReleases);
+                        }
+                    }
+
+                    break; // Search loop
                 }
                 catch (Exception ex)
                 {
                     OnParseError(response.Content, ex);
                 }
-
-                if (shouldMorphQuery)
-                {
-                    searchKeywords--;
-                }
-            } while (shouldMorphQuery && searchKeywords > 0);
+            }
+            while (--searchKeywords > 0);
 
             return releases;
         }
@@ -242,7 +283,7 @@ namespace Jackett.Indexers
         private async Task<List<ReleaseInfo>> FetchNewReleases()
         {
             var url = DiscoveryUrl;
-            logger.Info("FetchNewReleases: " + url);
+            logger.Debug("FetchNewReleases: " + url);
             var results = await RequestStringAndRelogin(url);
             var releases = new List<ReleaseInfo>();
 
@@ -256,13 +297,41 @@ namespace Jackett.Indexers
                 {
                     var link = row.QuerySelector("a").GetAttribute("href");
                     var episodeUrl = SiteLink + link.TrimStart('/');
-                    var comments = new Uri(episodeUrl);
-
-                    var dateString = row.QuerySelector("div.beta:contains('Дата')").TextContent; // Release date: beta - ENG, alpha - RUS 
-                    dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Дата выхода Eng: 13.10.2017' -> '13.10.2017'
-                    var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
 
                     var episodeReleases = await FetchEpisodeReleases(episodeUrl);
+                    releases.AddRange(episodeReleases);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.Content, ex);
+            }
+
+            return releases;
+        }
+
+        private async Task<List<ReleaseInfo>> FetchEpisodeReleases(string url)
+        {
+            logger.Debug("FetchEpisodeReleases: " + url);
+            var results = await RequestStringAndRelogin(url);
+            var releases = new List<ReleaseInfo>();
+
+            try
+            {
+                var parser = new HtmlParser();
+                var document = parser.Parse(results.Content);
+
+                var playButton = document.QuerySelector("div.external-btn");
+                if (playButton != null && !playButton.ClassList.Contains("inactive"))
+                {
+                    var comments = new Uri(url);
+
+                    var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
+                    dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
+                    var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+
+                    var urlDetails = new TrackerUrlDetails(playButton);
+                    var episodeReleases = await FetchTrackerReleases(urlDetails);
 
                     foreach (var release in episodeReleases)
                     {
@@ -280,35 +349,9 @@ namespace Jackett.Indexers
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> FetchEpisodeReleases(string url)
-        {
-            logger.Info("FetchEpisodeReleases: " + url);
-            var results = await RequestStringAndRelogin(url);
-            var releases = new List<ReleaseInfo>();
-
-            try
-            {
-                var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
-                var playButton = document.QuerySelector("div.external-btn");
-                if (playButton != null)
-                {
-                    var urlDetails = new TrackerUrlDetails(playButton);
-                    releases = await FetchTrackerReleases(urlDetails);
-                }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results.Content, ex);
-            }
-
-            return releases;
-        }
-
-        // `detailsUrl` is a series details url provided in search JSON response.
         private async Task<List<ReleaseInfo>> FetchSeriesReleases(string url, TorznabQuery query, string filter)
         {
-            logger.Info("FetchSeriesReleases: " + url + " S: " + query.Season.ToString() + " E: " + query.Episode + " Filter: " + filter);
+            logger.Debug("FetchSeriesReleases: " + url + " S: " + query.Season.ToString() + " E: " + query.Episode + " Filter: " + filter);
 
             var releases = new List<ReleaseInfo>();
             var results = await RequestStringWithCookies(url);
@@ -318,89 +361,128 @@ namespace Jackett.Indexers
                 var parser = new HtmlParser();
                 var document = parser.Parse(results.Content);
                 var seasons = document.QuerySelectorAll("div.serie-block");
+                var rowSelector = "table.movie-parts-list > tbody > tr";
 
-                if (string.IsNullOrEmpty(query.Episode) || string.IsNullOrEmpty(filter))
+                foreach (var season in seasons)
                 {
-                    var rows = seasons.SelectMany(s => s.QuerySelectorAll("table.movie-parts-list > tbody > tr"));
+                    // Could ne null if serie-block is for Extras
+                    var seasonButton = season.QuerySelector("div.movie-details-block > div.external-btn");
 
-                    foreach (var row in rows)
+                    // Process only season we're searching for
+                    if (seasonButton != null && query.Season > 0)
                     {
-                        var couldBreak = false; // Set to `true` if searched episode was found.
+                        // If seasonButton in "inactive" it will not contain "onClick" handler. Better to parse element which always exists.
+                        var watchedButton = season.QuerySelector("div.movie-details-block > div.haveseen-btn");
+                        var buttonCode = watchedButton.GetAttribute("data-code");
+                        var currentSeason = buttonCode.Substring(buttonCode.IndexOf('-') + 1);
 
-                        if (!string.IsNullOrEmpty(filter))
+                        if (currentSeason != query.Season.ToString())
                         {
-                            var titles = row.QuerySelector("td.gamma > div");
-                            if (titles.TextContent.IndexOf(filter, StringComparison.OrdinalIgnoreCase) == -1)
-                            {
-                                continue;
-                            }
+                            continue; // Can't match season by regex OR season not matches to a searched one
                         }
 
-                        var playButton = row.QuerySelector("td.zeta > div.external-btn");
-
-                        if (!string.IsNullOrEmpty(query.Episode))
+                        // Stop parsing season episodes if season pack was required but it's not available yet.
+                        if (seasonButton.ClassList.Contains("inactive"))
                         {
-                            var match = parsePlayEpisodeRegex.Match(playButton.GetAttribute("onclick"));
-                            var episode = match.Groups["episode"];
-
-                            if (episode == null || episode.Value != query.Episode)
-                            {
-                                continue;
-                            }
-
-                            couldBreak = true;
+                            logger.Debug("> No season pack is found for S" + query.Season.ToString());
+                            break;
                         }
+                    }
 
-                        var dateColumn = row.QuerySelector("td.delta"); // Contains both Date and EpisodeURL
+                    // Fetch season pack releases if no episode filtering is required.
+                    // If seasonButton implements "inactive" class there are no season pack available and each episode should be fetched separately.
+                    if (string.IsNullOrEmpty(query.Episode) && string.IsNullOrEmpty(filter) && seasonButton != null && !seasonButton.ClassList.Contains("inactive"))
+                    {
+                        var lastEpisode = season.QuerySelector(rowSelector);
+                        var dateColumn = lastEpisode.QuerySelector("td.delta");
+                        var date = DateFromEpisodeColumn(dateColumn);
 
-                        var link = dateColumn.GetAttribute("onclick"); // goTo('/series/Prison_Break/season_5/episode_9/',false)
-                        link = TrimString(link, '\'', '\'');
-                        var episodeUrl = SiteLink + link.TrimStart('/');
-                        var comments = new Uri(episodeUrl);
+                        var comments = new Uri(url); // Current season(-s) page url
 
-                        var dateString = dateColumn.QuerySelector("span").TextContent;
-                        dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Eng: 23.05.2017' -> '23.05.2017'
-                        var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
+                        var urlDetails = new TrackerUrlDetails(seasonButton);
+                        var seasonReleases = await FetchTrackerReleases(urlDetails);
 
-                        var urlDetails = new TrackerUrlDetails(playButton);
-                        var episodeReleases = await FetchTrackerReleases(urlDetails);
-
-                        foreach (var release in episodeReleases)
+                        foreach (var release in seasonReleases)
                         {
                             release.Comments = comments;
                             release.PublishDate = date;
                         }
-                        releases.AddRange(episodeReleases);
+
+                        releases.AddRange(seasonReleases);
+
+                        if (query.Season > 0)
+                        {
+                            break; // Searched season was processed
+                        }
+
+                        // Skip parsing separate episodes if season pack was added
+                        if (seasonReleases.Count() > 0)
+                        {
+                            continue;
+                        }
+                    }
+
+                    // No season filtering was applied OR season pack in not available
+                    var rows = season.QuerySelectorAll(rowSelector).Where(s => !s.ClassList.Contains("not-available"));
+
+                    foreach (var row in rows)
+                    {
+                        var couldBreak = false; // Set to `true` if searched episode was found
+
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(filter))
+                            {
+                                var titles = row.QuerySelector("td.gamma > div");
+                                if (titles.TextContent.IndexOf(filter, StringComparison.OrdinalIgnoreCase) == -1)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            var playButton = row.QuerySelector("td.zeta > div.external-btn");
+
+                            if (!string.IsNullOrEmpty(query.Episode))
+                            {
+                                var match = parsePlayEpisodeRegex.Match(playButton.GetAttribute("onclick"));
+                                var episode = match.Groups["episode"];
+
+                                if (episode == null || episode.Value != query.Episode)
+                                {
+                                    continue;
+                                }
+
+                                couldBreak = true;
+                            }
+
+                            var dateColumn = row.QuerySelector("td.delta"); // Contains both Date and EpisodeURL
+                            var date = DateFromEpisodeColumn(dateColumn);
+
+                            var link = dateColumn.GetAttribute("onclick"); // goTo('/series/Prison_Break/season_5/episode_9/',false)
+                            link = TrimString(link, '\'', '\'');
+                            var episodeUrl = SiteLink + link.TrimStart('/');
+                            var comments = new Uri(episodeUrl);
+
+                            var urlDetails = new TrackerUrlDetails(playButton);
+                            var episodeReleases = await FetchTrackerReleases(urlDetails);
+
+                            foreach (var release in episodeReleases)
+                            {
+                                release.Comments = comments;
+                                release.PublishDate = date;
+                            }
+                            releases.AddRange(episodeReleases);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, row.OuterHtml, ex));
+                        }
 
                         if (couldBreak)
                         {
                             break;
                         }
                     }
-                }
-                else if (query.Season > 0)
-                {
-                    // Query for the whole season release. Strange query in terms of typical requests but doable.
-                    var buttons = seasons.SelectMany(s => s.QuerySelectorAll("div.movie-details-block > div.external-btn"));
-
-                    foreach (var playButton in buttons)
-                    {
-                        var match = parsePlayEpisodeRegex.Match(playButton.GetAttribute("onclick"));
-                        var season = match.Groups["season"];
-                        if (season != null && season.Value == query.Season.ToString())
-                        {
-                            var urlDetails = new TrackerUrlDetails(playButton);
-                            // TODO: Set PublishDate = season.lastEpisode.publishDate for season releases.
-                            releases = await FetchTrackerReleases(urlDetails);
-
-                            // Skip other seasons
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Impossible combination of arguments");
                 }
             }
             catch (Exception ex)
@@ -422,7 +504,7 @@ namespace Jackett.Indexers
             queryCollection.Add("e", string.IsNullOrEmpty(details.episode) ? "999" : details.episode); // 999 is a synonym for the whole serie
             var url = ReleaseUrl + "?" + queryCollection.GetQueryString();
 
-            logger.Info("FetchTrackerReleases: " + url);
+            logger.Debug("FetchTrackerReleases: " + url);
 
             // Get redirection page with generated link on it. This link can't be constructed manually as it contains Hash field and hashing algo is unknown.
             var results = await RequestStringWithCookies(url);
@@ -453,7 +535,7 @@ namespace Jackett.Indexers
 
         private async Task<List<ReleaseInfo>> FollowTrackerRedirection(string url, TrackerUrlDetails details)
         {
-            logger.Info("FollowTrackerRedirection: " + url);
+            logger.Debug("FollowTrackerRedirection: " + url);
             var results = await RequestStringWithCookies(url);
             var releases = new List<ReleaseInfo>();
 
@@ -463,7 +545,7 @@ namespace Jackett.Indexers
                 var document = parser.Parse(results.Content);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
-                logger.Info("> Parsing " + rows.Count().ToString() + " releases");
+                logger.Debug("> Parsing " + rows.Count().ToString() + " releases");
 
                 var serieTitle = document.QuerySelector("div.inner-box--subtitle").TextContent;
                 serieTitle = serieTitle.Substring(0, serieTitle.LastIndexOf(','));
@@ -486,10 +568,30 @@ namespace Jackett.Indexers
                             throw new FormatException("Failed to map release details string: " + detailsInfo);
                         }
 
+                        /*
+                         * For supported qualities see:
+                         *  - TvCategoryParser.cs
+                         *  - https://github.com/SickRage/SickRage/wiki/Quality-Settings#quality-names-to-recognize-the-quality-of-a-file
+                         */
+                        var quality = releaseDetails.Groups["quality"].Value.Trim();
+                        // Adapt shitty quality format for common algorythms
+                        quality = Regex.Replace(quality, "-Rip", "Rip", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
+                        // Fix forgotten p-Progressive suffix in resolution index
+                        quality = Regex.Replace(quality, "1080 ", "1080p ", RegexOptions.IgnoreCase);
+                        quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
+
+                        var techComponents = new string[] {
+                            "rus", quality
+                        };
+                        var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
+
                         // Ru title: downloadLink.TextContent.Replace("\n", "");
                         // En title should be manually constructed.
                         var titleComponents = new string[] {
-                            serieTitle, details.GetEpisodeString(), episodeName, releaseDetails.Groups["quality"].Value
+                            serieTitle, details.GetEpisodeString(), episodeName, techInfo
                         };
                         release.Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -497,14 +599,14 @@ namespace Jackett.Indexers
                         release.Link = new Uri(downloadLink.GetAttribute("href"));
                         release.Guid = release.Link;
 
-                        var sizeString = releaseDetails.Groups["size"].Value;
+                        var sizeString = releaseDetails.Groups["size"].Value.ToUpper();
                         sizeString = sizeString.Replace("ТБ", "TB"); // untested
                         sizeString = sizeString.Replace("ГБ", "GB");
                         sizeString = sizeString.Replace("МБ", "MB");
                         sizeString = sizeString.Replace("КБ", "KB"); // untested
                         release.Size = ReleaseInfo.GetBytes(sizeString);
 
-                        logger.Info("> Add: " + release.Title);
+                        logger.Debug("> Add: " + release.Title);
                         releases.Add(release);
                     }
                     catch (Exception ex)
@@ -528,7 +630,22 @@ namespace Jackett.Indexers
         {
             var start = s.IndexOf(startChar);
             var end = s.LastIndexOf(endChar);
-            return s.Substring(start + 1, end - start - 1);
+            return (start != -1 && end != -1) ? s.Substring(start + 1, end - start - 1) : null;
+        }
+
+        private string TrimString(string s, string startString, string endString)
+        {
+            var start = s.IndexOf(startString);
+            var end = s.LastIndexOf(endString);
+            return (start != -1 && end != -1) ? s.Substring(start + startString.Length, end - start - startString.Length) : null;
+        }
+
+        private DateTime DateFromEpisodeColumn(IElement dateColumn)
+        {
+            var dateString = dateColumn.QuerySelector("span").TextContent;
+            dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Eng: 23.05.2017' -> '23.05.2017'
+            var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
+            return date;
         }
 
         #endregion
