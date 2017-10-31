@@ -18,6 +18,11 @@ namespace Jackett.Models.DTO
         public string omdbkey { get; set; }
         public string app_version { get; set; }
 
+        public string proxy_url { get; set; }
+        public int? proxy_port { get; set; }
+        public string proxy_username { get; set; }
+        public string proxy_password { get; set; }
+
         public ServerConfig()
         {
             notices = new string[0];
@@ -37,6 +42,11 @@ namespace Jackett.Models.DTO
             basepathoverride = config.BasePathOverride;
             omdbkey = config.OmdbApiKey;
             app_version = version;
+
+            proxy_url = config.ProxyUrl;
+            proxy_port = config.ProxyPort;
+            proxy_username = config.ProxyUsername;
+            proxy_password = config.ProxyPassword;
         }
     }
 }
