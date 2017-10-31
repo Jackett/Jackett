@@ -1,0 +1,8 @@
+﻿<?xml version="1.0"?><package><metadata><id>CsQuery.Mvc</id><version>1.3.0.4</version><title>CsQuery MVC Framework</title><authors>James Treworgy</authors><owners>James Treworgy</owners><licenseUrl>https://github.com/jamietre/CsQuery/blob/master/LICENSE.txt</licenseUrl><projectUrl>https://github.com/jamietre/CsQuery/</projectUrl><iconUrl>http://www.outsharked.com/csquery/images/csquery-icon-large.gif</iconUrl><requireLicenseAcceptance>false</requireLicenseAcceptance><summary>A custom view engine and controllers for using CsQuery directly in an ASP.NET MVC application</summary><description>This framework automatically passed a CQ object created from the HTML markup of a page before it's rendered to special action methods in your controllers. Additionally, provides an HtmlHelper for using CsQuery directly from Razor views.
+
+    Documentation: https://github.com/jamietre/CsQuery/tree/master/source/CsQuery.Mvc
+    </description><releaseNotes>Version 1.3 includes a script manager (beta) that automatically includes Javascript dependencies using a convention in the source files. For usage information see:
+
+https://github.com/jamietre/CsQuery/blob/master/source/CsQuery.Mvc/README.md
+https://github.com/jamietre/CsQuery/blob/master/source/CsQuery.Mvc/README-ScriptManager.md
+    </releaseNotes><copyright>Copyright 2012</copyright><tags>jquery html</tags><dependencies><group><dependency id="CsQuery" version="1.3.2" /></group></dependencies></metadata><files><file src="bin\release\CsQuery.Mvc.dll" target="lib\net40" /><file src="bin\release\CsQuery.Mvc.xml" target="lib\net40" /><file src="bin\release\CsQuery.Mvc.pdb" target="lib\net40" /><file src="**\*.cs" target="src" /></files></package>

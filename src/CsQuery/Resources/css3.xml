@@ -1,0 +1,896 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cssmd:cssmd xmlns:cssmd="http://schemas.microsoft.com/Visual-Studio-Intellisense/css" version="VS8" description="CSS3.0 validation data">
+  <cssmd:property-set>
+    <!-- http://www.w3.org/TR/CSS21 -->
+
+    <!-- missing nonstandard or common properties -->
+    <cssmd:property-def _locID="word-wrap" _locAttrData="description,syntax" type="enum"
+      description="Word wrapping format"
+      syntax="normal | break-word "
+      enum="normal break-word" />
+    
+    <!-- Font Properties -->
+    <cssmd:property-def _locID="color" _locAttrData="description,syntax" type="composite"
+            description="Color of an element's text"
+            syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="font" _locAttrData="description,syntax" type="composite"
+            description="Font used for an element's text"
+            syntax="one of the system fonts | [font-style] [font-variant] [font-weight] [font-size]/[line-height] [font-family] | inherit" />
+    <cssmd:property-def _locID="font-family" _locAttrData="description,syntax" type="font"
+            description="Name of the font used for an element's text"
+            syntax="A font face name sequence | inherit"/>
+    <cssmd:property-def _locID="font-style" _locAttrData="description,syntax" type="enum"
+            description="Style of the font used for an element's text"
+            syntax="One of the font-style values | inherit"
+            enum="inherit italic normal oblique"/>
+    <cssmd:property-def _locID="font-variant" _locAttrData="description,syntax" type="enum"
+            description="Variant of the font used for an element's text"
+            syntax="One of the font-variant values | inherit"
+            enum="inherit normal small-caps"/>
+    <cssmd:property-def _locID="font-size" _locAttrData="description,syntax" type="composite"
+            description="Size of the font used for an element's text"
+            syntax="length | percentage | standard font size value | inherit"
+            enum="inherit large larger medium small smaller x-large x-small xx-large xx-small"/>
+    <cssmd:property-def _locID="font-weight" _locAttrData="description,syntax" type="enum"
+            description="Boldness of the font used for an element's text"
+            syntax="One of the font-weight values | inherit"
+            enum="bold bolder lighter normal 100 200 300 400 500 600 700 800 900 inherit"/>
+    <cssmd:property-def _locID="text-decoration" _locAttrData="description,syntax" type="composite"
+            description="Decorations applied to font used for an element's text"
+            syntax="none | combination of 'underline', 'overline', 'line-through' and 'blink' | inherit"/>
+    <cssmd:property-def _locID="outline" _locAttrData="description,syntax" type="composite"
+            description="Dynamic outline around visual objects"
+            syntax="[outline-color] [outline-style] [outline-width] | inherit"/>
+    <cssmd:property-def _locID="outline-width" _locAttrData="description,syntax" type="composite"
+            description="Width of the outline"
+            syntax="a unit | One of the border-width values | inherit" enum="medium thick thin inherit"/>
+    <cssmd:property-def _locID="outline-style" _locAttrData="description,syntax" type="composite"
+            description="Style of the outline"
+            syntax="One of the border-style values except hidden | inherit"
+            enum="dashed dotted double groove hidden inset none outset ridge solid inherit"/>
+    <cssmd:property-def _locID="outline-color" _locAttrData="description,syntax" type="color"
+            description="The color of the outline"
+            syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+
+    <!-- Background Properties -->
+
+    <cssmd:property-def _locID="background-color" _locAttrData="description,syntax" type="color"
+            description="Color used for an element's background"
+            syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="background-image" _locAttrData="description,syntax" type="composite"
+            description="Image used for an element's background"
+            syntax="none | url([url to image]) | inherit"/>
+    <cssmd:property-def _locID="background-attachment" _locAttrData="description,syntax" type="enum"
+            description="How the background image is attached to an element within the document"
+            syntax="One of the background-attachment values | inherit"
+            enum="fixed inherit scroll"/>
+    <cssmd:property-def _locID="background-repeat" _locAttrData="description,syntax" type="enum"
+            description="How the background image is tiled within an element"
+            syntax="One of the background-repeat values | inherit"
+            enum="inherit no-repeat repeat repeat-x repeat-y"/>
+    <cssmd:property-def _locID="background-position" _locAttrData="description,syntax" type="composite"
+            description="How the background is positioned within an element"
+            syntax="[horizontal position] [vertical position] | inherit"
+            enum="bottom center left right top inherit"/>
+
+    <!-- Text Properties -->
+    <cssmd:property-def _locID="text-align" _locAttrData="description,syntax" type="enum"
+            description="The horizontal alignment of an element's text"
+            syntax="One of the text-align values | inherit"
+            enum="center justify left right inherit"/>
+    <cssmd:property-def _locID="vertical-align" _locAttrData="description,syntax" type="enum-length"
+            description="The vertical alignment of an element's text"
+            syntax="One of the vertical-align values | a unit | inherit"
+            enum="baseline bottom inherit middle sub super text-bottom text-top top"/>
+    <cssmd:property-def _locID="letter-spacing" _locAttrData="description,syntax" type="enum-length"
+            description="The spacing between characters | inherit"
+            syntax="normal | a unit | inherit"
+            enum="normal inherit"/>
+    <cssmd:property-def _locID="line-height" _locAttrData="description,syntax" type="enum-length"
+            description="The spacing between lines"
+            syntax="normal | a unit | inherit"
+            enum="normal inherit"/>
+    <cssmd:property-def _locID="text-indent" _locAttrData="description,syntax" type="composite"
+            description="The indentation of text"
+            syntax="a unit | inherit"/>
+    <cssmd:property-def _locID="text-transform" _locAttrData="description,syntax" type="enum"
+            description="Letter case of the text"
+            syntax="One of the text-transform values | inherit"
+            enum="capitalize inherit lowercase none uppercase"/>
+    <cssmd:property-def _locID="word-spacing" _locAttrData="description,syntax" type="enum-length"
+            description="The spacing between words"
+            syntax="normal | a unit | inherit"
+            enum="normal inherit"/>
+    <cssmd:property-def _locID="white-space" _locAttrData="description,syntax" type="enum"
+            description="A value that indicates whether lines are automatically broken inside the object"
+            syntax="One of the white-space values | inherit"
+            enum="inherit normal nowrap pre pre-line pre-wrap"/>
+
+    <!-- Layout Properties -->
+    <cssmd:property-def _locID="display" _locAttrData="description,syntax" type="enum"
+            description="The display mode of an element"
+            syntax="One of the display values | inherit"
+            enum="block inherit inline inline-block inline-table list-item none run-in table table-caption table-cell table-column table-column-group table-row table-row-group table-footer-group table-header-group"/>
+    <cssmd:property-def _locID="float" _locAttrData="description,syntax" type="enum"
+            description="Edge of the object on which text will flow"
+            syntax="One of the float values | inherit"
+            enum="inherit left none right"/>
+    <cssmd:property-def _locID="clear" _locAttrData="description,syntax" type="enum"
+            description="Sides on which floating objects will not be allowed"
+            syntax="One of the clear values | inherit"
+            enum="inherit both left none right"/>
+    <cssmd:property-def _locID="visibility" _locAttrData="description,syntax" type="enum"
+            description="The visibility of an element"
+            syntax="One of the visibility values | inherit"
+            enum="inherit collapse hidden visible"/>
+    <cssmd:property-def _locID="position" _locAttrData="description,syntax" type="enum"
+            description="The positioning mode of an element"
+            syntax="One of the position values | inherit"
+            enum="inherit absolute fixed relative static"/>
+    <cssmd:property-def _locID="z-index" _locAttrData="description,syntax" type="enum-length"
+            description="The stacking order of a positioned element"
+            syntax="auto | an integer | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="left" _locAttrData="description,syntax" type="enum-length"
+            description="The left edge of a positioned element"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="right" _locAttrData="description,syntax" type="enum-length"
+            description="The right edge of a positioned element"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="top" _locAttrData="description,syntax" type="enum-length"
+            description="The top edge of a positioned element"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="bottom" _locAttrData="description,syntax" type="enum-length"
+            description="The bottom edge of a positioned element"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="overflow" _locAttrData="description,syntax" type="enum"
+            description="Visibility of content extending beyond element's dimensions"
+            syntax="One of the overflow values | inherit"
+            enum="inherit auto hidden scroll visible"/>
+    <cssmd:property-def _locID="clip" _locAttrData="description,syntax" type="string"
+            description="The clipping rectangle of an element"
+            syntax="rect([top unit] [right unit] [bottom unit] [left unit]) | auto | inherit"/>
+    <cssmd:property-def _locID="width" _locAttrData="description,syntax" type="enum-length"
+            description="The width of a positioned element"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="min-width" _locAttrData="description,syntax" type="length"
+            description="Constrains box width"
+            syntax="a unit | inherit"/>
+    <cssmd:property-def _locID="max-width" _locAttrData="description,syntax" type="length"
+            description="Constrains box width"
+            syntax="a unit | inherit"/>
+    <cssmd:property-def _locID="height" _locAttrData="description,syntax" type="enum-length"
+            description="The height of a positioned element"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+    <cssmd:property-def _locID="min-height" _locAttrData="description,syntax" type="length"
+            description="Constrains box height"
+            syntax="a unit | inherit"/>
+    <cssmd:property-def _locID="max-height" _locAttrData="description,syntax" type="length"
+            description="Constrains box height"
+            syntax="a unit | inherit"/>
+    <cssmd:property-def _locID="marker-offset" _locAttrData="description,syntax" type="enum-length"
+            description="Specifies horizontal offset between a marker box and the associated principal box"
+            syntax="auto | a unit | inherit"
+            enum="auto inherit"/>
+
+    <!-- Edges Properties -->
+    <cssmd:property-def _locID="padding" _locAttrData="description,syntax" type="composite"
+            description="The padding around all four edges of an element"
+            syntax="[top unit] [right unit] [bottom unit] [left unit] | inherit"/>
+    <cssmd:property-def _locID="padding-left" _locAttrData="description,syntax" type="enum-length"
+            description="The padding on the left edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="padding-right" _locAttrData="description,syntax" type="enum-length"
+            description="The padding on the right edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="padding-top" _locAttrData="description,syntax" type="enum-length"
+            description="The padding on the top edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="padding-bottom" _locAttrData="description,syntax" type="enum-length"
+            description="The padding on the bottom edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="margin" _locAttrData="description,syntax" type="composite"
+            description="The margin around all four edges of an element"
+            syntax="[top unit] [right unit] [bottom unit] [left unit] | inherit"/>
+    <cssmd:property-def _locID="margin-left" _locAttrData="description,syntax" type="enum-length"
+            description="The margin on the left edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="margin-right" _locAttrData="description,syntax" type="enum-length"
+            description="The margin on the right edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="margin-top" _locAttrData="description,syntax" type="enum-length"
+            description="The margin on the top edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="margin-bottom" _locAttrData="description,syntax" type="enum-length"
+            description="The margin on the bottom edge of an element"
+            syntax="auto | a unit | inherit" enum="auto inherit"/>
+    <cssmd:property-def _locID="border" _locAttrData="description,syntax" type="composite"
+            description="The border around all four edges of an element"
+            syntax="[border-width] [border-style] [border-color] | inherit"/>
+    <cssmd:property-def _locID="border-left" _locAttrData="description,syntax" type="composite"
+            description="The border on the left edge of an element"
+            syntax="[border-width] [border-style] [border-color] | inherit"/>
+    <cssmd:property-def _locID="border-right" _locAttrData="description,syntax" type="composite"
+            description="The border on the right edge of an element"
+            syntax="[border-width] [border-style] [border-color] | inherit"/>
+    <cssmd:property-def _locID="border-top" _locAttrData="description,syntax" type="composite"
+            description="The border on the top edge of an element"
+            syntax="[border-width] [border-style] [border-color] | inherit"/>
+    <cssmd:property-def _locID="border-bottom" _locAttrData="description,syntax" type="composite"
+            description="The border on the bottom edge of an element"
+            syntax="[border-width] [border-style] [border-color] | inherit"/>
+    <cssmd:property-def _locID="border-color" _locAttrData="description,syntax" type="color"
+            description="The color of the border around all four edges of an element"
+            syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="border-style" _locAttrData="description,syntax" type="enum"
+            description="The style of the border around all four edges of an element"
+            syntax="One of the border-style values | inherit"
+            enum="inherit dashed dotted double groove hidden inset none outset ridge solid"/>
+    <cssmd:property-def _locID="border-width" _locAttrData="description,syntax" type="enum-length"
+            description="The width of the border around all four edges of an element"
+            syntax="a unit | One of the border-width values | inherit" enum="inherit medium thick thin"/>
+    <cssmd:property-def _locID="border-left-color" _locAttrData="description,syntax" type="color"
+            description="The color of the border on the left edge of an element | inherit"
+            syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="border-left-width" _locAttrData="description,syntax" type="enum-length"
+            description="The width of the border on the left edge of an element"
+            syntax="a unit | One of the border-width values | inherit" enum="inherit medium thick thin"/>
+    <cssmd:property-def _locID="border-left-style" _locAttrData="description,syntax" type="enum"
+            description="The style of the border on the left edge of an element"
+            syntax="One of the border-style values | inherit"
+            enum="inherit dashed dotted double groove hidden inset none outset ridge solid"/>
+    <cssmd:property-def _locID="border-right-color" _locAttrData="description,syntax" type="color"
+            description="The color of the border on the right edge of an element"
+             syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="border-right-width" _locAttrData="description,syntax" type="enum-length"
+            description="The width of the border on the right edge of an element"
+            syntax="a unit | One of the border-width values | inherit"
+            enum="inherit medium thick thin"/>
+    <cssmd:property-def _locID="border-right-style" _locAttrData="description,syntax" type="enum"
+            description="The style of the border on the right edge of an element"
+            syntax="One of the border-style values | inherit"
+            enum="inherit dashed dotted double groove hidden inset none outset ridge solid"/>
+    <cssmd:property-def _locID="border-top-color" _locAttrData="description,syntax" type="color"
+            description="The color of the border on the top edge of an element"
+            syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="border-top-width" _locAttrData="description,syntax" type="enum-length"
+            description="The width of the border on the top edge of an element"
+            syntax="a unit | One of the border-width values | inherit"
+            enum="inherit medium thick thin"/>
+    <cssmd:property-def _locID="border-top-style" _locAttrData="description,syntax" type="enum"
+            description="The style of the border on the top edge of an element"
+            syntax="One of the border-style values | inherit"
+            enum="inherit dashed dotted double groove hidden inset none outset ridge solid"/>
+    <cssmd:property-def _locID="border-bottom-color" _locAttrData="description,syntax" type="color"
+            description="The color of the border on the bottom edge of an element"
+             syntax="#RRGGBB | Named Color | rgb(r,g,b) | rgba(r,g,b,a) | hsla(h,s,l,a) | inherit"
+            enum="inherit AliceBlue AntiqueWhite Aqua Aquamarine Azure Beige Bisque Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse Chocolate Coral CornflowerBlue Cornsilk Crimson Cyan DarkBlue DarkCyan DarkGoldenRod DarkGray DarkGrey DarkGreen DarkKhaki DarkMagenta DarkOliveGreen Darkorange DarkOrchid DarkRed DarkSalmon DarkSeaGreen DarkSlateBlue DarkSlateGray DarkSlateGrey DarkTurquoise DarkViolet DeepPink DeepSkyBlue DimGray DimGrey DodgerBlue FireBrick FloralWhite ForestGreen Fuchsia Gainsboro GhostWhite Gold GoldenRod Gray Grey Green GreenYellow HoneyDew HotPink IndianRed Indigo Ivory Khaki Lavender LavenderBlush LawnGreen LemonChiffon LightBlue LightCoral LightCyan LightGoldenRodYellow LightGray LightGrey LightGreen LightPink LightSalmon LightSeaGreen LightSkyBlue LightSlateGray LightSlateGrey LightSteelBlue LightYellow Lime LimeGreen Linen Magenta Maroon MediumAquaMarine MediumBlue MediumOrchid MediumPurple MediumSeaGreen MediumSlateBlue MediumSpringGreen MediumTurquoise MediumVioletRed MidnightBlue MintCream MistyRose Moccasin NavajoWhite Navy OldLace Olive OliveDrab Orange OrangeRed Orchid PaleGoldenRod PaleGreen PaleTurquoise PaleVioletRed PapayaWhip PeachPuff Peru Pink Plum PowderBlue Purple Red RosyBrown RoyalBlue SaddleBrown Salmon SandyBrown SeaGreen SeaShell Sienna Silver SkyBlue SlateBlue SlateGray SlateGrey Snow SpringGreen SteelBlue Tan Teal Thistle Tomato Turquoise Transparent Violet Wheat White WhiteSmoke Yellow YellowGreen"/>
+    <cssmd:property-def _locID="border-bottom-width" _locAttrData="description,syntax" type="enum-length"
+            description="The width of the border on the bottom edge of an element"
+            syntax="a unit | One of the border-width values | inherit"
+            enum="inherit medium thick thin"/>
+    <cssmd:property-def _locID="border-bottom-style" _locAttrData="description,syntax" type="enum"
+            description="The style of the border on the bottom edge of an element"
+            syntax="One of the border-style values | inherit"
+            enum="inherit dashed dotted double groove hidden inset none outset ridge solid"/>
+
+    <!-- @font-face Properties -->
+    <cssmd:property-def _locID="src" _locAttrData="description,syntax" type="url"
+            description="Location of the font file"
+            syntax="url([url to font download]) | inherit"/>
+
+    <!-- Page Breaks Properties -->
+    <cssmd:property-def _locID="page-break-before" _locAttrData="description,syntax" type="enum"
+            description="Page breaks before an element"
+            syntax="One of the page-break-before values | inherit"
+            enum="inherit always auto avoid left right"/>
+    <cssmd:property-def _locID="page-break-after" _locAttrData="description,syntax" type="enum"
+            description="Page breaks after an element"
+            syntax="One of the page-break-after values | inherit"
+            enum="inherit always auto avoid left right"/>
+    <cssmd:property-def _locID="page-break-inside" _locAttrData="description,syntax" type="enum"
+            description="Page breaks inside an element"
+            syntax="One of the page-break-inside values | inherit"
+            enum="inherit auto avoid"/>
+    <cssmd:property-def _locID="orphans" _locAttrData="description,syntax" type="composite"
+            description="Minimum number of lines of a paragraph to leave at the bottom of a page"
+            syntax="Integer value | inherit"/>
+    <cssmd:property-def _locID="windows" _locAttrData="description,syntax" type="composite"
+            description="Minimum number of lines of a paragraph to leave at the top of a page"
+            syntax="Integer value | inherit"/>
+
+    <!-- Aural Properties -->
+    <cssmd:property-def _locID="volume" _locAttrData="description,syntax" type="composite"
+            description="Median volume of the waveform"
+            syntax="One of the volume values or any number between 0 and 100 or percentage of the inherited value"
+            enum="inherit loud medium silent soft x-loud x-soft"/>
+
+    <!-- Speaking Properties -->
+    <cssmd:property-def _locID="speak" _locAttrData="description,syntax" type="enum"
+            description="Specifies whether text will be rendered aurally and in what manner"
+            syntax="One of the speak values | inherit"
+            enum="inherit none normal spell-out"/>
+
+    <!-- Pause Properties -->
+    <cssmd:property-def _locID="pause-before" _locAttrData="description,syntax" type="composite"
+            description="Specifies a pause before speaking an element content"
+            syntax="Time in milliseconds or percentage of the value of the speech-rate property | inherit"/>
+    <cssmd:property-def _locID="pause-after" _locAttrData="description,syntax" type="composite"
+            description="Specifies a pause after speaking an element content"
+            syntax="Time in milliseconds or percentage of the value of the speech-rate property | inherit"/>
+    <cssmd:property-def _locID="pause" _locAttrData="description,syntax" type="composite"
+            description="Specifies a pause before and/or after speaking an element content"
+            syntax="[pause-before] [pause-after] | inherit"/>
+    <cssmd:property-def _locID="cue-before" _locAttrData="description,syntax" type="url"
+            description="Auditory icon"
+            syntax="none | url([url to cue image]) | inherit"/>
+    <cssmd:property-def _locID="cue-after" _locAttrData="description,syntax" type="url"
+            description="Auditory icon"
+            syntax="none | url([url to cue image]) | inherit"/>
+    <cssmd:property-def _locID="cue" _locAttrData="description,syntax" type="url"
+            description="Auditory icons"
+            syntax="[cue-before] [cue-after]) | inherit"/>
+
+    <!-- Mixing Properties -->
+    <cssmd:property-def _locID="play-during" _locAttrData="description,syntax" type="composite"
+            description="Sound to be played as a background while an element's content is spoken"
+            syntax="One of the play-during values or url to the sound file | inherit"
+            enum="inherit auto mix none repeat"/>
+
+    <!-- Spatial Properties -->
+    <cssmd:property-def _locID="azimuth" _locAttrData="description,syntax" type="composite"
+            description="Spatial information"
+            syntax="One of the azimuth values or angle in -360 to 360 degrees range | inherit"
+            enum="inherit behind center center-left center-right far-left far-right left left-side leftwards right right-side rightwards"/>
+    <cssmd:property-def _locID="elevation" _locAttrData="description,syntax" type="composite"
+            description="Spatial information"
+            syntax="One of the azimuth values or angle in -90 to 90 degrees range | inherit"
+            enum="inherit above below higher level lower"/>
+
+    <!-- Voice Properties -->
+    <cssmd:property-def _locID="speech-rate" _locAttrData="description,syntax" type="composite"
+            description="Speaking rate"
+            syntax="One of the speech-rate values or integer value in words per minute | inherit"
+            enum="inherit fast faster medium slow slower x-fast x-slow"/>
+    <cssmd:property-def _locID="voice-family" _locAttrData="description,syntax" type="composite"
+            description="Voice family"
+            syntax="List of comma-separated, prioritized list of voice family names | inherit"/>
+    <cssmd:property-def _locID="pitch" _locAttrData="description,syntax" type="composite"
+            description="Average pitch (a frequency) of the speaking voice"
+            syntax="One of the pitch values or frequency in hertz | inherit"
+            enum="inherit high low medium x-high x-low"/>
+    <cssmd:property-def _locID="pitch-range" _locAttrData="description,syntax" type="composite"
+            description="Variation in average pitch"
+            syntax="Value between 0 and 100 | inherit. 50 produces normal inflection."/>
+    <cssmd:property-def _locID="stress" _locAttrData="description,syntax" type="composite"
+            description="Height of local peaks in the intonation contour of a voice"
+            syntax="Value between 0 and 100 | inherit. 50 is a standard English-speaking male voice."/>
+    <cssmd:property-def _locID="richness" _locAttrData="description,syntax" type="composite"
+            description="Richness, or brightness, of the speaking voice"
+            syntax="Value between 0 and 100 | inherit. Lower values produce softer voice."/>
+
+    <!-- Speech Properties -->
+    <cssmd:property-def _locID="speak-punctuation" _locAttrData="description,syntax" type="enum"
+            description="Specifies how puctuation is spoken"
+            syntax="One of the speak-punctuation values | inherit"
+            enum="inherit code none"/>
+    <cssmd:property-def _locID="speak-numeral" _locAttrData="description,syntax" type="enum"
+            description="Specifies how numerals are spoken"
+            syntax="One of the speak-numeral values | inherit"
+            enum="inherit continuous digits"/>
+
+    <!-- Lists Properties -->
+    <cssmd:property-def _locID="list-style" _locAttrData="description,syntax" type="composite"
+            description="The bullet characteristics of a list item"
+            syntax="[list-style-type] [list-style-image] [list-style-position] | inherit"/>
+    <cssmd:property-def _locID="list-style-type" _locAttrData="description,syntax" type="enum"
+            description="The bullet style of a list item"
+            syntax="One of the list-style-type values | inherit"
+            enum="inherit armenian circle cjk-ideographic decimal decimal-leading-zero disc georgian hebrew hiragana hiragana-iroha katakana katakana-iroha lower-alpha lower-greek lower-latin lower-roman none square upper-alpha upper-latin upper-roman"/>
+    <cssmd:property-def _locID="list-style-image" _locAttrData="description,syntax" type="composite"
+            description="The bullet image of a list item"
+            syntax="none | url([url to bullet image]) | inherit"/>
+    <cssmd:property-def _locID="list-style-position" _locAttrData="description,syntax" type="enum"
+            description="The bullet position of a list item"
+            syntax="One of the list-style-position values | inherit"
+            enum="inherit inside outside"/>
+    <cssmd:property-def _locID="counter-increment" _locAttrData="description,syntax" type="composite"
+            description="Indicates how much the counter is incremented for every occurence of the element"
+            syntax="none | [indentifier integer?]+  | inherit"
+            enum="inherit none"/>
+    <cssmd:property-def _locID="counter-reset" _locAttrData="description,syntax" type="composite"
+            description="Defines the value that the counter is set to on each occurence of the element"
+            syntax="none | [indentifier integer?]+ | inherit"
+            enum="inherit none"/>
+
+    <!-- Content Properties -->
+    <cssmd:property-def _locID="content" _locAttrData="description,syntax" type="composite"
+            description="Used with the :before and :after pseudo-elements to generate content in a document"
+            syntax="Text content | counter | quote values | attr(X) | inherit"
+            enum="inherit close-quote no-close-quote no-open-quote normal open-quote"/>
+    <cssmd:property-def _locID="quotes" _locAttrData="description,syntax" type="composite"
+            description="Quotation marks for any number of embedded quotations"
+            syntax="open-quote and close-quote pairs | inherit"/>
+
+    <!-- BiDi Properties -->
+    <cssmd:property-def _locID="direction" _locAttrData="description,syntax" type="enum"
+            description="The direction that text flows in"
+            syntax="One of the direction values | inherit"
+            enum="inherit ltr rtl"/>
+    <cssmd:property-def _locID="unicode-bidi" _locAttrData="description,syntax" type="enum"
+            description="The level of embedding with respect to the bidirectional algorithm"
+            syntax="One of the unicode-bidi values | inherit"
+            enum="inherit bidi-override embed normal"/>
+
+    <!-- Table Properties -->
+    <cssmd:property-def _locID="table-layout" _locAttrData="description,syntax" type="enum"
+            description="The cell layout mode of a table"
+            syntax="One of the table-layout values | inherit"
+            enum="inherit auto fixed"/>
+    <cssmd:property-def _locID="border-collapse" _locAttrData="description,syntax" type="enum"
+            description="The table border model"
+            syntax="One of the border-collapse values | inherit"
+            enum="inherit collapse separate"/>
+    <cssmd:property-def _locID="border-spacing" _locAttrData="description,syntax" type="composite"
+            description="Distance that separates adjacent cell borders"
+            syntax="Distance value | inherit"/>
+    <cssmd:property-def _locID="caption-side" _locAttrData="description,syntax" type="enum"
+            description="Position of the caption box with respect to the table box"
+            syntax="One of the caption-side values | inherit"
+            enum="inherit bottom top"/>
+    <cssmd:property-def _locID="empty-cells" _locAttrData="description,syntax" type="enum"
+            description="Controls rendering of borders around empty cells"
+            syntax="One of the empty-cells values | inherit"
+            enum="inherit hide show"/>
+    <cssmd:property-def _locID="speak-header" _locAttrData="description,syntax" type="enum"
+            description="Specifies whether table headers are spoken and how"
+            syntax="One of the speak-header values | inherit"
+            enum="inherit always once"/>
+
+    <!-- Other Properties -->
+    <cssmd:property-def _locID="cursor" _locAttrData="description,syntax" type="composite"
+            description="The cursor over an element"
+            syntax="One of the cursor values | url([url to the cursor resource]) | inherit"
+            enum="inherit auto crosshair default e-resize help move n-resize ne-resize nw-resize pointer progress s-resize se-resize sw-resize text w-resize wait"/>
+
+    <!-- Background Properties  -->
+    <cssmd:property-def _locID="background" _locAttrData="description,syntax" type="composite"
+		  description="A shorthand property for setting all background properties in one declaration"
+		  syntax="[background-color] [background-position] [background-size]  [background-repeat] [background-origin] [background-clip] [background-attachment] [background-image] | inherit"/>
+    <cssmd:property-def _locID="background-clip" _locAttrData="description,syntax" type="enum"
+		  description="Specifies the painting area of the background images"
+		  syntax="One of the background-clip values"
+		  enum="padding-box border-box content-box"/>
+    <cssmd:property-def _locID="background-origin" _locAttrData="description,syntax" type="enum"
+		  description="Specifies the positioning area of the background images"
+		  syntax="One of the background-origin values"
+		  enum="padding-box border-box content-box"/>
+    <cssmd:property-def _locID="background-size" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the size of the background images"
+		  syntax="length | percentage | cover | contain | auto"/>
+
+    <!-- Font Properties -->
+    <cssmd:property-def _locID="font-size-adjust" _locAttrData="description,syntax" type="composite"
+		  description="Preserves the readability of text when font fallback occurs"
+		  syntax="number | none | inherit"/>
+    <cssmd:property-def _locID="font-stretch" _locAttrData="description,syntax" type="enum"
+		  description="Selects a normal, condensed, or expanded face from a font family"
+		  syntax="One of the font-stretch values | inherit"
+		  enum="none wider narrower ultra-condensed extra-condensed condensed semi-condensed normal semi-expanded expanded extra-expanded ultra-expanded inherit"/>
+
+    <!-- Color Properties  -->
+    <cssmd:property-def _locID="opacity" _locAttrData="description,syntax" type="composite"
+		 description="Sets the opacity level for an element"
+		 syntax="value|inherit"/>
+
+    <!-- Box Properties  -->
+    <cssmd:property-def _locID="overflow-x" _locAttrData="description,syntax" type="enum"
+		  description="Specifies whether or not to clip the left/right edges of the content, if it overflows the element's content area"
+		  syntax="One of the overflow-x values"
+		  enum="visible hidden scroll auto no-display no-content"/>
+    <cssmd:property-def _locID="overflow-y" _locAttrData="description,syntax" type="enum"
+		  description="Specifies whether or not to clip the top/bottom edges of the content, if it overflows the element's content area"
+		  syntax="One of the overflow-y values"
+		  enum="visible hidden scroll auto no-display no-content"/>
+    <cssmd:property-def _locID="overflow-style" _locAttrData="description,syntax" type="enum"
+		 description="Specifies the preferred scrolling method for elements that overflow"
+		 syntax="One of the overflow-style values"
+		 enum="auto scrollbar panner move marquee"/>
+    <cssmd:property-def _locID="rotation" _locAttrData="description,syntax" type="composite"
+		 description="Rotates an element around a given point defined by the rotation-point property"
+		 syntax="angle | auto"/>
+    <cssmd:property-def _locID="rotation-point" _locAttrData="description,syntax" type="composite"
+		 description="Defines a point as an offset from the top left border edge"
+		 syntax="percentage | [horizontal position] [vertical position] | auto"/>
+
+    <!-- Transition Properties  -->
+    <cssmd:property-def _locID="transition" _locAttrData="description,syntax" type="composite"
+			description="A shorthand property for setting the four transition properties"
+			syntax="property duration timing-function delay" />
+    <cssmd:property-def _locID="transition-property" _locAttrData="description,syntax" type="composite"
+		   description="Specifies the name of the CSS property the transition effect is for"
+		   syntax="none|all|property" />
+    <cssmd:property-def _locID="transition-duration" _locAttrData="description,syntax" type="composite"
+		   description="Specifies how many seconds or milliseconds a transition effect takes to complete"
+		   syntax="time" />
+    <cssmd:property-def _locID="transition-timing-function" _locAttrData="description,syntax" type="composite"
+		   description="Specifies the speed curve of the transition effect"
+		   syntax="linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier(n,n,n,n)" />
+    <cssmd:property-def _locID="transition-delay" _locAttrData="description,syntax" type="composite"
+		   description="Specifies when the transition effect will start"
+		   syntax="time" />
+
+    <!-- Safari and Chrome Transition Properties  -->
+    <cssmd:property-def _locID="-webkit-animation" _locAttrData="description,syntax" type="composite"
+			description="A shorthand property for setting the four transition properties"
+			syntax="property duration timing-function delay" />
+    <cssmd:property-def _locID="-webkit-transition-property" _locAttrData="description,syntax" type="composite"
+		   description="Specifies the name of the CSS property the transition effect is for"
+		   syntax="none|all|property" />
+    <cssmd:property-def _locID="-webkit-transition-duration" _locAttrData="description,syntax" type="composite"
+		   description="Specifies how many seconds or milliseconds a transition effect takes to complete"
+		   syntax="time" />
+    <cssmd:property-def _locID="-webkit-transition-timing-function" _locAttrData="description,syntax" type="composite"
+		   description="Specifies the speed curve of the transition effect"
+		   syntax="linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier(n,n,n,n)" />
+    <cssmd:property-def _locID="-webkit-transition-delay" _locAttrData="description,syntax" type="composite"
+		   description="Specifies when the transition effect will start"
+		   syntax="time" />
+
+    <!-- Opera Transition Properties  -->
+    <cssmd:property-def _locID="-o-animation" _locAttrData="description,syntax" type="composite"
+			description="A shorthand property for setting the four transition properties"
+			syntax="property duration timing-function delay" />
+    <cssmd:property-def _locID="-o-transition-property" _locAttrData="description,syntax" type="composite"
+		   description="Specifies the name of the CSS property the transition effect is for"
+		   syntax="none|all|property" />
+    <cssmd:property-def _locID="-o-transition-duration" _locAttrData="description,syntax" type="composite"
+		   description="Specifies how many seconds or milliseconds a transition effect takes to complete"
+		   syntax="time" />
+    <cssmd:property-def _locID="-o-transition-timing-function" _locAttrData="description,syntax" type="composite"
+		   description="Specifies the speed curve of the transition effect"
+		   syntax="linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier(n,n,n,n)" />
+    <cssmd:property-def _locID="-o-transition-delay" _locAttrData="description,syntax" type="composite"
+		   description="Specifies when the transition effect will start"
+		   syntax="time" />
+
+    <!-- Hyperlink Properties  -->
+    <cssmd:property-def _locID="target-name" _locAttrData="description,syntax" type="enum"
+		 description="Specifies where to open links (target destination)"
+		 syntax="One of the target-name values"
+		 enum="current root parent new modal name"/>
+    <cssmd:property-def _locID="target-new" _locAttrData="description,syntax" type="enum"
+		 description="Specifies whether new destination links should open in a new window or in a new tab of an existing window"
+		 syntax="One of the target-new values"
+		 enum="window tab none"/>
+    <cssmd:property-def _locID="target-position" _locAttrData="description,syntax" type="enum"
+		 description="Specifies where new destination links should be placed"
+		 syntax="One of the target-position values"
+		 enum="above behind front back"/>
+    <cssmd:property-def _locID="target" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting the target-name, target-new, and target-position properties"
+		 syntax="target-name | target-new | target-position"/>
+
+    <!-- Grid Properties  -->
+    <cssmd:property-def _locID="grid-columns" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the width of each column in a grid"
+		 syntax="length | percentage | none | inherit"/>
+    <cssmd:property-def _locID="grid-rows" _locAttrData="description,syntax" type="composite"
+		description="Specifies the height of each column in a grid"
+		syntax="length | percentage | none | inherit"/>
+
+    <!-- Multi-column Properties  -->
+    <cssmd:property-def _locID="column-count" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the number of columns an element should be divided into"
+		 syntax="number|auto"/>
+    <cssmd:property-def _locID="column-fill" _locAttrData="description,syntax" type="enum"
+		 description="Specifies how to fill columns"
+		 syntax="One of the column-fill values"
+		 enum="balance auto"/>
+    <cssmd:property-def _locID="column-gap" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the gap between the columns"
+		 syntax="length | normal"/>
+    <cssmd:property-def _locID="column-rule-color" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the color of the rule between columns"
+		 syntax="color"/>
+    <cssmd:property-def _locID="column-rule-style" _locAttrData="description,syntax" type="enum"
+		 description="Specifies the style of the rule between columns"
+		 syntax="One of the column-rule-style values"
+		 enum="none hidden dotted dashed solid double groove ridge inset outset"/>
+    <cssmd:property-def _locID="column-rule-width" _locAttrData="description,syntax" type="enum-length"
+		 description="Specifies the width of the rule between columns"
+		 syntax="length | One of the column-rule-width values"
+		 enum="thin medium thick"/>
+    <cssmd:property-def _locID="column-rule" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the column-rule-* properties"
+		 syntax="[column-rule-width] [column-rule-style] [column-rule-color]"/>
+    <cssmd:property-def _locID="column-span" _locAttrData="description,syntax" type="enum"
+		 description="Specifies how many columns an element should span across"
+		 syntax="One of the column-span values"
+		 enum="1 all"/>
+    <cssmd:property-def _locID="column-width" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the width of the columns"
+		 syntax="auto|length"/>
+    <cssmd:property-def _locID="columns" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting column-width and column-count"
+		 syntax="[column-width] [column-count]"/>
+
+    <!--User-interface Properties  -->
+    <cssmd:property-def _locID="appearance" _locAttrData="description,syntax" type="enum"
+		 description="Allows you to make an element look like a standard user interface element"
+		 syntax="One of the appearance values"
+		 enum="normal icon window button menu field"/>
+    <cssmd:property-def _locID="box-sizing" _locAttrData="description,syntax" type="enum"
+		 description="Allows you to define certain elements to fit an area in a certain way"
+		 syntax="One of the box-sizing values"
+		 enum="content-box border-box inherit"/>
+    <cssmd:property-def _locID="icon" _locAttrData="description,syntax" type="composite"
+		 description="Provides the author the ability to style an element with an iconic equivalent"
+		 syntax="auto|URL|inherit"/>
+    <cssmd:property-def _locID="nav-down" _locAttrData="description,syntax" type="composite"
+		 description="Specifies where to navigate when using the arrow-down navigation key"
+		 syntax="auto | id | [target-name] | inherit"/>
+    <cssmd:property-def _locID="nav-index" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the tabbing order for an element"
+		 syntax="auto|number|inherit"/>
+    <cssmd:property-def _locID="nav-left" _locAttrData="description,syntax" type="composite"
+		 description="Specifies where to navigate when using the arrow-left navigation key"
+		 syntax="auto | id | [target-name] | inherit"/>
+    <cssmd:property-def _locID="nav-right" _locAttrData="description,syntax" type="composite"
+		 description="Specifies where to navigate when using the arrow-right navigation key"
+		 syntax="auto | id | [target-name] | inherit"/>
+    <cssmd:property-def _locID="outline-offset" _locAttrData="description,syntax" type="composite"
+		 description="Offsets an outline, and draws it beyond the border edge"
+		 syntax="length | inherit"/>
+    <cssmd:property-def _locID="resize" _locAttrData="description,syntax" type="enum"
+		 description="Specifies whether or not an element is resizable by the user"
+		 syntax="One of the resize values"
+		 enum="none both horizontal vertical" />
+
+    <!-- Border Properties  -->
+    <cssmd:property-def _locID="border-bottom-left-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the bottom-left corner"
+		 syntax="lengths | percentage"/>
+    <cssmd:property-def _locID="border-bottom-right-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the bottom-right corner"
+		 syntax="lengths | percentage"/>
+    <cssmd:property-def _locID="border-image" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the border-image-* properties"
+		 syntax="[source] [border-image-slice] [width] [border-image-outset] [border-image-repeat]"/>
+    <cssmd:property-def _locID="border-image-outset" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the amount by which the border image area extends beyond the border box"
+		 syntax="length | number"/>
+    <cssmd:property-def _locID="border-image-repeat" _locAttrData="description,syntax" type="enum"
+		 description="Specifies whether the image-border should be repeated, rounded or stretched"
+		 syntax="One of the border-image-repeat values" enum="stretch repeat round"/>
+    <cssmd:property-def _locID="border-image-slice" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the inward offsets of the image-border"
+		 syntax="number | percentage | fill"/>
+    <cssmd:property-def _locID="border-image-source" _locAttrData="description,syntax" type="composite"
+		 description="Specifies an image to be used as a border"
+		 syntax="none | image"/>
+    <cssmd:property-def _locID="border-image-width" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the widths of the image-border"
+		 syntax="number | percentage | auto"/>
+    <cssmd:property-def _locID="border-radius" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the four border-*-radius properties"
+		 syntax="1-4 lengths| percentage / 1-4 lengths| percentage"/>
+    <cssmd:property-def _locID="border-top-left-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the top-left corner"
+		 syntax="length | percentage"/>
+    <cssmd:property-def _locID="border-top-right-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the top-right corner"
+		 syntax="length | percentage"/>
+    <cssmd:property-def _locID="box-shadow" _locAttrData="description,syntax" type="composite"
+		description="Attaches one or more drop-shadows to the box"
+		syntax="none | [h-shadow] [v-shadow] [blur] [spread] [color] [inset]"/>
+
+    <!-- Firefox Border Properties -->
+    <cssmd:property-def _locID="-moz-border-bottom-left-radius" _locAttrData="description,syntax" type="composite"
+		   description="Defines the shape of the border of the bottom-left corner"
+		   syntax="lengths | percentage"/>
+    <cssmd:property-def _locID="-moz-border-bottom-right-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the bottom-right corner"
+		 syntax="lengths | percentage"/>
+    <cssmd:property-def _locID="-moz-border-image" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the border-image-* properties"
+		 syntax="[source] [border-image-slice] [width] [border-image-outset] [border-image-repeat]"/>
+    <cssmd:property-def _locID="-moz-border-image-outset" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the amount by which the border image area extends beyond the border box"
+		 syntax="length | number"/>
+    <cssmd:property-def _locID="-moz-border-image-repeat" _locAttrData="description,syntax" type="enum"
+		 description="Specifies whether the image-border should be repeated, rounded or stretched"
+		 syntax="One of the border-image-repeat values" enum="stretch repeat round"/>
+    <cssmd:property-def _locID="-moz-border-image-slice" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the inward offsets of the image-border"
+		 syntax="number | percentage | fill"/>
+    <cssmd:property-def _locID="-moz-border-image-source" _locAttrData="description,syntax" type="composite"
+		 description="Specifies an image to be used as a border"
+		 syntax="none | image"/>
+    <cssmd:property-def _locID="-moz-border-image-width" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the widths of the image-border"
+		 syntax="number | percentage | auto"/>
+    <cssmd:property-def _locID="-moz-border-radius" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the four border-*-radius properties"
+		 syntax="1-4 lengths| percentage / 1-4 lengths| percentage"/>
+    <cssmd:property-def _locID="-moz-border-top-left-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the top-left corner"
+		 syntax="length | percentage"/>
+    <cssmd:property-def _locID="-moz-border-top-right-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the top-right corner"
+		 syntax="length | percentage"/>
+    <cssmd:property-def _locID="-moz-box-shadow" _locAttrData="description,syntax" type="composite"
+		description="Attaches one or more drop-shadows to the box"
+		syntax="none | [h-shadow] [v-shadow] [blur] [spread] [color] [inset]"/>
+
+    <!-- Safari and Chrome Border Properties -->
+    <cssmd:property-def _locID="-webkit-border-bottom-left-radius" _locAttrData="description,syntax" type="composite"
+		   description="Defines the shape of the border of the bottom-left corner"
+		   syntax="lengths | percentage"/>
+    <cssmd:property-def _locID="-webkit-border-bottom-right-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the bottom-right corner"
+		 syntax="lengths | percentage"/>
+    <cssmd:property-def _locID="-webkit-border-image" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the border-image-* properties"
+		 syntax="[source] [border-image-slice] [width] [border-image-outset] [border-image-repeat]"/>
+    <cssmd:property-def _locID="-webkit-border-image-outset" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the amount by which the border image area extends beyond the border box"
+		 syntax="length | number"/>
+    <cssmd:property-def _locID="-webkit-border-image-repeat" _locAttrData="description,syntax" type="enum"
+		 description="Specifies whether the image-border should be repeated, rounded or stretched"
+		 syntax="One of the border-image-repeat values" enum="stretch repeat round"/>
+    <cssmd:property-def _locID="-webkit-border-image-slice" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the inward offsets of the image-border"
+		 syntax="number | percentage | fill"/>
+    <cssmd:property-def _locID="-webkit-border-image-source" _locAttrData="description,syntax" type="composite"
+		 description="Specifies an image to be used as a border"
+		 syntax="none | image"/>
+    <cssmd:property-def _locID="-webkit-border-image-width" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the widths of the image-border"
+		 syntax="number | percentage | auto"/>
+    <cssmd:property-def _locID="-webkit-border-radius" _locAttrData="description,syntax" type="composite"
+		 description="A shorthand property for setting all the four border-*-radius properties"
+		 syntax="1-4 lengths| percentage / 1-4 lengths| percentage"/>
+    <cssmd:property-def _locID="-webkit-border-top-left-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the top-left corner"
+		 syntax="length | percentage"/>
+    <cssmd:property-def _locID="-webkit-border-top-right-radius" _locAttrData="description,syntax" type="composite"
+		 description="Defines the shape of the border of the top-right corner"
+		 syntax="length | percentage"/>
+    <cssmd:property-def _locID="-webkit-box-shadow" _locAttrData="description,syntax" type="composite"
+		description="Attaches one or more drop-shadows to the box"
+		syntax="none | [h-shadow] [v-shadow] [blur] [spread] [color] [inset]"/>
+    <cssmd:property-def _locID="filter" _locAttrData="description,syntax" type="composite"
+		description="Sets filter for an element. Just in Internet Explorer"
+		syntax="value | inherit"/>
+
+    <!-- 2D/3D Transform Properties Properties -->
+    <cssmd:property-def _locID="transform" _locAttrData="description,syntax" type="enum"
+			description="Applies a 2D or 3D transformation to an element"
+			syntax="One of the transform-functions values"
+			enum="inherit initial matrix() none rotate() scale() scaleX() scaleY() skew() skewX() skewY() translate() translateX() translateY()"/>
+    <cssmd:property-def _locID="transform-origin" _locAttrData="description,syntax" type="composite"
+		   description="Allows you to change the position on transformed elements"
+		   syntax="x-axis | y-axis | z-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="transform-style" _locAttrData="description,syntax" type="enum"
+		  description="Specifies how nested elements are rendered in 3D space"
+		  syntax="One of the transform-style values" enum="flat preserve-3d"/>
+    <cssmd:property-def _locID="perspective" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the perspective on how 3D elements are viewed"
+		  syntax="none | number"/>
+    <cssmd:property-def _locID="perspective-origin" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the bottom position of 3D elements"
+		  syntax="x-axis | y-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="backface-visibility" _locAttrData="description,syntax" type="enum"
+		  description="Defines whether or not an element should be visible when not facing the screen"
+		  syntax="One of the backface-visibility values" enum="visible hidden"/>
+
+    <!-- Firefox 2D/3D Transform Properties Properties -->
+    <cssmd:property-def _locID="-moz-transform" _locAttrData="description,syntax" type="enum"
+			description="Applies a 2D or 3D transformation to an element"
+			syntax="One of the transform-functions values"
+			enum="inherit initial matrix() none rotate() scale() scaleX() scaleY() skew() skewX() skewY() translate() translateX() translateY()"/>
+    <cssmd:property-def _locID="-moz-transform-origin" _locAttrData="description,syntax" type="composite"
+		   description="Allows you to change the position on transformed elements"
+		   syntax="x-axis | y-axis | z-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="-moz-transform-style" _locAttrData="description,syntax" type="enum"
+		  description="Specifies how nested elements are rendered in 3D space"
+		  syntax="One of the transform-style values" enum="flat preserve-3d"/>
+    <cssmd:property-def _locID="-moz-perspective" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the perspective on how 3D elements are viewed"
+		  syntax="none | number"/>
+    <cssmd:property-def _locID="-moz-perspective-origin" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the bottom position of 3D elements"
+		  syntax="x-axis | y-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="-moz-backface-visibility" _locAttrData="description,syntax" type="enum"
+		  description="Defines whether or not an element should be visible when not facing the screen"
+		  syntax="One of the backface-visibility values" enum="visible hidden"/>
+
+    <!-- Safari and Chrome 2D/3D Transform Properties Properties -->
+    <cssmd:property-def _locID="-webkit-transform" _locAttrData="description,syntax" type="enum"
+			description="Applies a 2D or 3D transformation to an element"
+			syntax="One of the transform-functions values"
+			enum="inherit initial matrix() none rotate() scale() scaleX() scaleY() skew() skewX() skewY() translate() translateX() translateY()"/>
+    <cssmd:property-def _locID="-webkit-transform-origin" _locAttrData="description,syntax" type="composite"
+		   description="Allows you to change the position on transformed elements"
+		   syntax="x-axis | y-axis | z-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="-webkit-transform-style" _locAttrData="description,syntax" type="enum"
+		  description="Specifies how nested elements are rendered in 3D space"
+		  syntax="One of the transform-style values" enum="flat preserve-3d"/>
+    <cssmd:property-def _locID="-webkit-perspective" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the perspective on how 3D elements are viewed"
+		  syntax="none | number"/>
+    <cssmd:property-def _locID="-webkit-perspective-origin" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the bottom position of 3D elements"
+		  syntax="x-axis | y-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="-webkit-backface-visibility" _locAttrData="description,syntax" type="enum"
+		  description="Defines whether or not an element should be visible when not facing the screen"
+		  syntax="One of the backface-visibility values" enum="visible hidden"/>
+
+    <!-- Opera 2D/3D Transform Properties Properties -->
+    <cssmd:property-def _locID="-o-transform" _locAttrData="description,syntax" type="enum"
+			description="Applies a 2D or 3D transformation to an element"
+			syntax="One of the transform-functions values"
+			enum="inherit initial matrix() none rotate() scale() scaleX() scaleY() skew() skewX() skewY() translate() translateX() translateY()"/>
+    <cssmd:property-def _locID="-o-transform-origin" _locAttrData="description,syntax" type="composite"
+		   description="Allows you to change the position on transformed elements"
+		   syntax="x-axis | y-axis | z-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="-o-transform-style" _locAttrData="description,syntax" type="enum"
+		  description="Specifies how nested elements are rendered in 3D space"
+		  syntax="One of the transform-style values" enum="flat preserve-3d"/>
+    <cssmd:property-def _locID="-o-perspective" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the perspective on how 3D elements are viewed"
+		  syntax="none | number"/>
+    <cssmd:property-def _locID="-o-perspective-origin" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the bottom position of 3D elements"
+		  syntax="x-axis | y-axis" enum="bottom center inherit initial left right top"/>
+    <cssmd:property-def _locID="-o-backface-visibility" _locAttrData="description,syntax" type="enum"
+		  description="Defines whether or not an element should be visible when not facing the screen"
+		  syntax="One of the backface-visibility values" enum="visible hidden"/>
+
+    <!-- Animation Properties -->
+    <cssmd:property-def _locID="animation" _locAttrData="description,syntax" type="composite"
+		  description="A shorthand property for all the animation properties below, except the animation-play-state property"
+		  syntax="[animation-name] [animation-duration] [animation-timing-function] [animation-delay] [animation-iteration-count] [animation-direction]"/>
+    <cssmd:property-def _locID="animation-name" _locAttrData="description,syntax" type="composite"
+		  description="Specifies a name for the @keyframes animation"
+		  syntax="none | keyframename"/>
+    <cssmd:property-def _locID="animation-duration" _locAttrData="description,syntax" type="composite"
+		  description="Specifies how many seconds or milliseconds an animation takes to complete one cycle"
+		  syntax="time"/>
+    <cssmd:property-def _locID="animation-timing-function" _locAttrData="description,syntax" type="composite"
+		 description="Specifies the speed curve of the animation" enum="linear ease ease-in ease-out ease-in-out"
+		 syntax="One of the animation-timing-function values | cubic-bezier(n,n,n,n)"/>
+    <cssmd:property-def _locID="animation-delay" _locAttrData="description,syntax" type="composite"
+		  description="Specifies when the animation will start"
+		  syntax="time"/>
+    <cssmd:property-def _locID="animation-iteration-count" _locAttrData="description,syntax" type="composite"
+		  description="Specifies the number of times an animation should be played"
+		  syntax="number"/>
+    <cssmd:property-def _locID="animation-direction" _locAttrData="description,syntax" type="enum"
+		  description="Specifies whether or not the animation should play in reverse on alternate cycles"
+		  syntax="One of the animation-direction values" enum="normal alternate"/>
+    <cssmd:property-def _locID="animation-play-state" _locAttrData="description,syntax" type="enum"
+		  description="Specifies whether the animation is running or paused"
+		  syntax="One of the animation-play-state values" enum="running paused"/>
+
+    <!-- Paged Media Module w3.org/TR/css3-page -->
+    <cssmd:property-def _locID="page" _locAttrData="description,syntax" type="string"
+                  description="Specifies a particular type of page where an element should be displayed"
+                  syntax="page identifier" />
+
+  </cssmd:property-set>
+</cssmd:cssmd>

@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A6FFA82E-37EB-4CAF-84F7-A489011E6961}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CsQuery</RootNamespace>
+    <AssemblyName>CsQuery</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\CsQuery.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <Content Include="Documentation\Architecture.md" />
+    <Content Include="Documentation\Changes.md" />
+    <Content Include="Documentation\DifferencesFromJQuery.md" />
+    <Content Include="Documentation\Todo.md" />
+    <EmbeddedResource Include="Resources\css3.xml" />
+    <Content Include="CsQuery.nuspec" />
+    <None Include="project.json" />
+    <Content Include="README-compilation.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\Attributes.cs">
+      <Link>HtmlParserSharp\Common\Attributes.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\DoctypeExpectation.cs">
+      <Link>HtmlParserSharp\Common\DoctypeExpectation.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\DocumentMode.cs">
+      <Link>HtmlParserSharp\Common\DocumentMode.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\DocumentModeEventArgs.cs">
+      <Link>HtmlParserSharp\Common\DocumentModeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\EncodingDetectedEventArgs.cs">
+      <Link>HtmlParserSharp\Common\EncodingDetectedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\ITokenHandler.cs">
+      <Link>HtmlParserSharp\Common\ITokenHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\ParserErrorEventArgs.cs">
+      <Link>HtmlParserSharp\Common\ParserErrorEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Common\XmlViolationPolicy.cs">
+      <Link>HtmlParserSharp\Common\XmlViolationPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\AttributeName.cs">
+      <Link>HtmlParserSharp\Core\AttributeName.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\CharsetState.cs">
+      <Link>HtmlParserSharp\Core\CharsetState.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\CoalescingTreeBuilder.cs">
+      <Link>HtmlParserSharp\Core\CoalescingTreeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\DispatchGroup.cs">
+      <Link>HtmlParserSharp\Core\DispatchGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\ElementName.cs">
+      <Link>HtmlParserSharp\Core\ElementName.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\HtmlAttributes.cs">
+      <Link>HtmlParserSharp\Core\HtmlAttributes.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\ILocator.cs">
+      <Link>HtmlParserSharp\Core\ILocator.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\InsertionMode.cs">
+      <Link>HtmlParserSharp\Core\InsertionMode.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\ITreeBuilderState.cs">
+      <Link>HtmlParserSharp\Core\ITreeBuilderState.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\Locator.cs">
+      <Link>HtmlParserSharp\Core\Locator.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\NamedCharacterAccel.cs">
+      <Link>HtmlParserSharp\Core\NamedCharacterAccel.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\NamedCharacters.cs">
+      <Link>HtmlParserSharp\Core\NamedCharacters.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\NCName.cs">
+      <Link>HtmlParserSharp\Core\NCName.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\Portability.cs">
+      <Link>HtmlParserSharp\Core\Portability.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\StackNode.cs">
+      <Link>HtmlParserSharp\Core\StackNode.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\StateSnapshot.cs">
+      <Link>HtmlParserSharp\Core\StateSnapshot.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\TaintableLocator.cs">
+      <Link>HtmlParserSharp\Core\TaintableLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\Tokenizer.cs">
+      <Link>HtmlParserSharp\Core\Tokenizer.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\TreeBuilder.cs">
+      <Link>HtmlParserSharp\Core\TreeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\TreeBuilderConstants.cs">
+      <Link>HtmlParserSharp\Core\TreeBuilderConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Core\UTF16Buffer.cs">
+      <Link>HtmlParserSharp\Core\UTF16Buffer.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\Parser.cs">
+      <Link>HtmlParserSharp\Parser.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\SimpleHtmlParser.cs">
+      <Link>HtmlParserSharp\SimpleHtmlParser.cs</Link>
+    </Compile>
+    <Compile Include="..\HtmlParserSharp\HtmlParserSharp\TreeBuilders\XmlTreeBuilder.cs">
+      <Link>HtmlParserSharp\TreeBuilders\XmlTreeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="Config.cs" />
+    <Compile Include="Config\enumDomRenderingOptions.cs" />
+    <Compile Include="Config\enumStartupOptions.cs" />
+    <Compile Include="CQ.cs" />
+    <Compile Include="CQ_CsQuery\AttrReplace.cs" />
+    <Compile Include="CQ_CsQuery\Create.cs" />
+    <Compile Include="CQ_CsQuery\EnsureCsQuery.cs" />
+    <Compile Include="CQ_CsQuery\FirstElement.cs" />
+    <Compile Include="CQ_CsQuery\GetTableColumn.cs" />
+    <Compile Include="CQ_CsQuery\HasAttr.cs" />
+    <Compile Include="CQ_CsQuery\IncludeWhen.cs" />
+    <Compile Include="CQ_CsQuery\KeepOne.cs" />
+    <Compile Include="CQ_CsQuery\MakeRoot.cs" />
+    <Compile Include="CQ_CsQuery\New.cs" />
+    <Compile Include="CQ_CsQuery\Render.cs" />
+    <Compile Include="CQ_CsQuery\Save.cs" />
+    <Compile Include="CQ_CsQuery\SelectionHtml.cs" />
+    <Compile Include="CQ_CsQuery\SetSelected.cs" />
+    <Compile Include="CQ_CsQuery\Version.cs" />
+    <Compile Include="CQ_CsQuery\_Constructors.cs" />
+    <Compile Include="CQ_CsQuery\_StaticMethods.cs" />
+    <Compile Include="CQ_jQuery\Add.cs" />
+    <Compile Include="CQ_jQuery\After.cs" />
+    <Compile Include="CQ_jQuery\AndSelf.cs" />
+    <Compile Include="CQ_jQuery\Append.cs" />
+    <Compile Include="CQ_jQuery\AppendTo.cs" />
+    <Compile Include="CQ_jQuery\Attr.cs" />
+    <Compile Include="CQ_jQuery\Before.cs" />
+    <Compile Include="CQ_jQuery\Children.cs" />
+    <Compile Include="CQ_jQuery\Classes.cs" />
+    <Compile Include="CQ_jQuery\Clone.cs" />
+    <Compile Include="CQ_jQuery\Closest.cs" />
+    <Compile Include="CQ_jQuery\Contents.cs" />
+    <Compile Include="CQ_jQuery\Css.cs" />
+    <Compile Include="CQ_jQuery\Data.cs" />
+    <Compile Include="CQ_jQuery\Each.cs" />
+    <Compile Include="CQ_jQuery\Empty.cs" />
+    <Compile Include="CQ_jQuery\End.cs" />
+    <Compile Include="CQ_jQuery\Eq.cs" />
+    <Compile Include="CQ_jQuery\Extend.cs" />
+    <Compile Include="CQ_jQuery\Filter.cs" />
+    <Compile Include="CQ_jQuery\Find.cs" />
+    <Compile Include="CQ_jQuery\FirstLast.cs" />
+    <Compile Include="CQ_jQuery\Get.cs" />
+    <Compile Include="CQ_jQuery\Has.cs" />
+    <Compile Include="CQ_jQuery\Html.cs" />
+    <Compile Include="CQ_jQuery\Index.cs" />
+    <Compile Include="CQ_jQuery\Insert.cs" />
+    <Compile Include="CQ_jQuery\Is.cs" />
+    <Compile Include="CQ_jQuery\Map.cs" />
+    <Compile Include="CQ_jQuery\NextPrev.cs" />
+    <Compile Include="CQ_jQuery\Not.cs" />
+    <Compile Include="CQ_jQuery\Parent.cs" />
+    <Compile Include="CQ_jQuery\Parents.cs" />
+    <Compile Include="CQ_jQuery\ParentsUntil.cs" />
+    <Compile Include="CQ_jQuery\Prepend.cs" />
+    <Compile Include="CQ_jQuery\PrependTo.cs" />
+    <Compile Include="CQ_jQuery\Prop.cs" />
+    <Compile Include="CQ_jQuery\RemoveClass.cs" />
+    <Compile Include="CQ_jQuery\RemoveDetach.cs" />
+    <Compile Include="CQ_jQuery\ReplaceAll.cs" />
+    <Compile Include="CQ_jQuery\ReplaceWith.cs" />
+    <Compile Include="CQ_jQuery\Select.cs" />
+    <Compile Include="CQ_jQuery\ShowHideToggle.cs" />
+    <Compile Include="CQ_jQuery\Siblings.cs" />
+    <Compile Include="CQ_jQuery\Slice.cs" />
+    <Compile Include="CQ_jQuery\Text.cs" />
+    <Compile Include="CQ_jQuery\Val.cs" />
+    <Compile Include="CQ_jQuery\WidthHeight.cs" />
+    <Compile Include="CQ_jQuery\Wrap.cs" />
+    <Compile Include="CsQueryConfig.cs" />
+    <Compile Include="Dom\enumCSSRuleType.cs" />
+    <Compile Include="Dom\enumCssStyleType.cs" />
+    <Compile Include="Dom\enumDocType.cs" />
+    <Compile Include="Dom\enumNodeType.cs" />
+    <Compile Include="Dom\enumRelAnchor.cs" />
+    <Compile Include="Dom\enumRelLink.cs" />
+    <Compile Include="Dom\HtmlElements\IFormAssociatedElement.cs" />
+    <Compile Include="Dom\HtmlElements\IFormReassociateableElement.cs" />
+    <Compile Include="Dom\HtmlElements\IFormSubmittableElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLAnchorElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLButtonElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLFormElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLInputElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLLabelElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLLIElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLMeterElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLOptionElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHtmlOptionsCollection.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLProgressElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLSelectElement.cs" />
+    <Compile Include="Dom\HtmlElements\IHTMLTextAreaElement.cs" />
+    <Compile Include="Dom\IAttributeCollection.cs" />
+    <Compile Include="Dom\ICSSRule.cs" />
+    <Compile Include="Dom\ICssStyle.cs" />
+    <Compile Include="Dom\ICSSStyleDeclaration.cs" />
+    <Compile Include="Dom\ICSSStyleRule.cs" />
+    <Compile Include="Dom\ICSSStyleSheet.cs" />
+    <Compile Include="Dom\IDomCData.cs" />
+    <Compile Include="Dom\IDomComment.cs" />
+    <Compile Include="Dom\IDomContainer.cs" />
+    <Compile Include="Dom\IDomDocument.cs" />
+    <Compile Include="Dom\IDomDocumentType.cs" />
+    <Compile Include="Dom\IDomElement.cs" />
+    <Compile Include="Dom\IDomElementSelect.cs" />
+    <Compile Include="Dom\IDomFragment.cs" />
+    <Compile Include="Dom\IDomInnerText.cs" />
+    <Compile Include="Dom\IDomInvalidElement.cs" />
+    <Compile Include="Dom\IDomNode.cs" />
+    <Compile Include="Dom\IDomObject.cs" />
+    <Compile Include="Dom\IDomObjectT.cs" />
+    <Compile Include="Dom\IDomSpecialElement.cs" />
+    <Compile Include="Dom\IDomText.cs" />
+    <Compile Include="Dom\IHtmlOptionsCollection.cs" />
+    <Compile Include="Dom\Implementation\AttributeCollection.cs" />
+    <Compile Include="Dom\Implementation\AttributeCollection2.cs" />
+    <Compile Include="Dom\Implementation\AttributeDictionary.cs" />
+    <Compile Include="Dom\Implementation\ChildNodeList.cs" />
+    <Compile Include="Dom\Implementation\CSSRule.cs" />
+    <Compile Include="Dom\Implementation\CssStyle.cs" />
+    <Compile Include="Dom\Implementation\CSSStyleChangedArgs.cs" />
+    <Compile Include="Dom\Implementation\CSSStyleDeclaration.cs" />
+    <Compile Include="Dom\Implementation\CSSStyleRule.cs" />
+    <Compile Include="Dom\Implementation\CSSStyleSheet.cs" />
+    <Compile Include="Dom\Implementation\DomAttribute.cs" />
+    <Compile Include="Dom\Implementation\DomCData.cs" />
+    <Compile Include="Dom\Implementation\DomComment.cs" />
+    <Compile Include="Dom\Implementation\DomContainer.cs" />
+    <Compile Include="Dom\Implementation\DomDocument.cs" />
+    <Compile Include="Dom\Implementation\DomDocumentType.cs" />
+    <Compile Include="Dom\Implementation\DomElement.cs" />
+    <Compile Include="Dom\Implementation\DomFragment.cs" />
+    <Compile Include="Dom\Implementation\DomObject.cs" />
+    <Compile Include="Dom\Implementation\DomObjectT.cs" />
+    <Compile Include="Dom\Implementation\DomText.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\FormAssociatedElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\FormReassociateableElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\FormSubmittableElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLAnchorElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLButtonElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLFormElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLInputElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLLabelElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLLIElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLMeterElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLOptionElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HtmlOptionsCollection.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLProgressElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLScriptElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLSelectElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLStyleElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlElements\HTMLTextAreaElement.cs" />
+    <Compile Include="Dom\Implementation\HtmlOptionsCollection.cs" />
+    <Compile Include="Dom\Implementation\NodeEventArgs.cs" />
+    <Compile Include="Dom\Implementation\NodeList.cs" />
+    <Compile Include="Dom\Implementation\StyleSheet.cs" />
+    <Compile Include="Dom\INodeList.cs" />
+    <Compile Include="Dom\INodeListT.cs" />
+    <Compile Include="Engine\AttributeSelectors.cs" />
+    <Compile Include="Engine\CharacterEqualityComparer.cs" />
+    <Compile Include="Engine\DomIndexNone.cs" />
+    <Compile Include="Engine\DomIndexProviders.cs" />
+    <Compile Include="Engine\DomIndexRanged.cs" />
+    <Compile Include="Engine\DomIndexSimple.cs" />
+    <Compile Include="Engine\enumDomIndexFeatures.cs" />
+    <Compile Include="Engine\Enums.cs" />
+    <Compile Include="Engine\IDomIndex.cs" />
+    <Compile Include="Engine\IDomIndexedNode.cs" />
+    <Compile Include="Engine\IDomIndexProvider.cs" />
+    <Compile Include="Engine\IDomIndexQueue.cs" />
+    <Compile Include="Engine\IDomIndexRanged.cs" />
+    <Compile Include="Engine\IDomIndexSimple.cs" />
+    <Compile Include="Engine\IndexOperation.cs" />
+    <Compile Include="Engine\MatchElement.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\Contains.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\FirstChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\FirstOfType.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\LastChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\LastOfType.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\Not.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\NthChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\NthChildMatcher.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\NthChildSelector.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\NthLastChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\NthLastOfType.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\NthOfType.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\OnlyChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Css\OnlyOfType.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\enumQuotingRule.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\IPseudoSelector.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\IPseudoSelectorChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\IPseudoSelectorFilter.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Empty.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Eq.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Even.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\First.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Gt.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Has.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Header.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Hidden.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Indexed.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Lang.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Last.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Lt.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Odd.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Parent.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\jQuery\Visible.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\Other\Regex.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\PseudoSelector.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\PseudoSelectorChild.cs" />
+    <Compile Include="Engine\PseudoClassSelectors\PseudoSelectorFilter.cs" />
+    <Compile Include="Engine\PseudoSelectors.cs" />
+    <Compile Include="Engine\Selector.cs" />
+    <Compile Include="Engine\SelectorClause.cs" />
+    <Compile Include="Engine\SelectorEngine.cs" />
+    <Compile Include="Engine\SelectorParser.cs" />
+    <Compile Include="EquationParser\enumAssociation.cs" />
+    <Compile Include="EquationParser\enumOperationType.cs" />
+    <Compile Include="EquationParser\Equations.cs" />
+    <Compile Include="EquationParser\IClause.cs" />
+    <Compile Include="EquationParser\IEquation.cs" />
+    <Compile Include="EquationParser\IEquationParser.cs" />
+    <Compile Include="EquationParser\IEquationT.cs" />
+    <Compile Include="EquationParser\IFunction.cs" />
+    <Compile Include="EquationParser\ILiteral.cs" />
+    <Compile Include="EquationParser\Implementation\Equation.cs" />
+    <Compile Include="EquationParser\Implementation\EquationParserEngine.cs" />
+    <Compile Include="EquationParser\Implementation\EquationT.cs" />
+    <Compile Include="EquationParser\Implementation\Function.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\Abs.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\Difference.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\NativeOperation.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\Power.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\Product.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\Quotient.cs" />
+    <Compile Include="EquationParser\Implementation\Functions\Sum.cs" />
+    <Compile Include="EquationParser\Implementation\IntegerValue.cs" />
+    <Compile Include="EquationParser\Implementation\Literal.cs" />
+    <Compile Include="EquationParser\Implementation\Operand.cs" />
+    <Compile Include="EquationParser\Implementation\Operator.cs" />
+    <Compile Include="EquationParser\Implementation\OrderedDictionary.cs" />
+    <Compile Include="EquationParser\Implementation\Types.cs" />
+    <Compile Include="EquationParser\Implementation\Utils.cs" />
+    <Compile Include="EquationParser\Implementation\Variable.cs" />
+    <Compile Include="EquationParser\Implementation\VariableReadEventArgs.cs" />
+    <Compile Include="EquationParser\INativeOperation.cs" />
+    <Compile Include="EquationParser\IOperand.cs" />
+    <Compile Include="EquationParser\IOperation.cs" />
+    <Compile Include="EquationParser\IOperator.cs" />
+    <Compile Include="EquationParser\IOrderedDictionary.cs" />
+    <Compile Include="EquationParser\IVariable.cs" />
+    <Compile Include="EquationParser\IVariableContainer.cs" />
+    <Compile Include="ExtensionMethods\ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Forms.cs" />
+    <Compile Include="ExtensionMethods\Internal\ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Xml\CqXmlDocument.cs" />
+    <Compile Include="ExtensionMethods\Xml\CqXmlNode.cs" />
+    <Compile Include="ExtensionMethods\Xml\CqXmlNodeList.cs" />
+    <Compile Include="ExtensionMethods\Xml\Xml.cs" />
+    <Compile Include="HtmlParser\BOMReader.cs" />
+    <Compile Include="HtmlParser\CsQueryTreeBuilder.cs" />
+    <Compile Include="HtmlParser\ElementFactory.cs" />
+    <Compile Include="HtmlParser\enumHtmlParsingMode.cs" />
+    <Compile Include="HtmlParser\enumHtmlParsingOptions.cs" />
+    <Compile Include="HtmlParser\enumTokenProperties.cs" />
+    <Compile Include="HtmlParser\HtmlData.cs" />
+    <Compile Include="HtmlParser\HtmlEncoding.cs" />
+    <Compile Include="HtmlParser\HtmlStyles.cs" />
+    <Compile Include="Implementation\CombinedStream.cs" />
+    <Compile Include="Implementation\CombinedTextReader.cs" />
+    <Compile Include="Implementation\enumSelectionSetOrder.cs" />
+    <Compile Include="Implementation\IRangeSortedDictionary.cs" />
+    <Compile Include="Implementation\IReadOnlyCollection.cs" />
+    <Compile Include="Implementation\IReadOnlyList.cs" />
+    <Compile Include="Implementation\PathKeyComparer.cs" />
+    <Compile Include="Implementation\RangeSortedDictionary.cs" />
+    <Compile Include="Implementation\RBTree.cs" />
+    <Compile Include="Implementation\SelectionSet.cs" />
+    <Compile Include="Implementation\SelectionSetComparer.cs" />
+    <Compile Include="JsObject.cs" />
+    <Compile Include="Objects.cs" />
+    <Compile Include="Output\FormatPlainText.cs" />
+    <Compile Include="Output\HtmlEncoderBase.cs" />
+    <Compile Include="Output\HtmlEncoderBasic.cs" />
+    <Compile Include="Output\HtmlEncoderFull.cs" />
+    <Compile Include="Output\HtmlEncoderMinimum.cs" />
+    <Compile Include="Output\HtmlEncoderMinimumNbsp.cs" />
+    <Compile Include="Output\HtmlEncoderNone.cs" />
+    <Compile Include="Output\HtmlEncoders.cs" />
+    <Compile Include="Output\IHtmlEncoder.cs" />
+    <Compile Include="Output\Indented.cs" />
+    <Compile Include="Output\IOutputFormatter.cs" />
+    <Compile Include="Output\OutputFormatterDefault.cs" />
+    <Compile Include="Output\OutputFormatters.cs" />
+    <Compile Include="Promises\Deferred.cs" />
+    <Compile Include="Promises\DeferredT.cs" />
+    <Compile Include="Promises\IPromise.cs" />
+    <Compile Include="Promises\IPromiseT.cs" />
+    <Compile Include="Promises\Timeout.cs" />
+    <Compile Include="Promises\TimeoutT.cs" />
+    <Compile Include="Promises\When.cs" />
+    <Compile Include="Promises\WhenAll.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StringScanner\CharacterData.cs" />
+    <Compile Include="StringScanner\enumCharacterType.cs" />
+    <Compile Include="StringScanner\ExtensionMethods.cs" />
+    <Compile Include="StringScanner\ICharacterInfo.cs" />
+    <Compile Include="StringScanner\IExpectPattern.cs" />
+    <Compile Include="StringScanner\Implementation\CharacterInfo.cs" />
+    <Compile Include="StringScanner\Implementation\ExpectPattern.cs" />
+    <Compile Include="StringScanner\Implementation\StringInfo.cs" />
+    <Compile Include="StringScanner\Implementation\StringScannerEngine.cs" />
+    <Compile Include="StringScanner\IStringInfo.cs" />
+    <Compile Include="StringScanner\IStringScanner.cs" />
+    <Compile Include="StringScanner\IValueInfo.cs" />
+    <Compile Include="StringScanner\IValueInfoT.cs" />
+    <Compile Include="StringScanner\MatchFunctions.cs" />
+    <Compile Include="StringScanner\Patterns\Bounded.cs" />
+    <Compile Include="StringScanner\Patterns\CssClassName.cs" />
+    <Compile Include="StringScanner\Patterns\EscapedString.cs" />
+    <Compile Include="StringScanner\Patterns\HTMLAttributeName.cs" />
+    <Compile Include="StringScanner\Patterns\HtmlID.cs" />
+    <Compile Include="StringScanner\Patterns\HtmlIDSelector.cs" />
+    <Compile Include="StringScanner\Patterns\HTMLTagSelectorName.cs" />
+    <Compile Include="StringScanner\Patterns\Number.cs" />
+    <Compile Include="StringScanner\Patterns\OptionallyQuoted.cs" />
+    <Compile Include="StringScanner\Patterns\Quoted.cs" />
+    <Compile Include="StringScanner\Scanner.cs" />
+    <Compile Include="Utility\JSON.cs" />
+    <Compile Include="Utility\JsonSerializer\IJsonSerializer.cs" />
+    <Compile Include="Utility\JsonSerializer\JsonSerializer.cs" />
+    <Compile Include="Utility\SelectorCache.cs" />
+    <Compile Include="Utility\Support.cs" />
+    <Compile Include="Utility\Types.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

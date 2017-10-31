@@ -1,0 +1,6 @@
+﻿<?xml version="1.0"?><package><metadata><id>CsQuery.Signed</id><version>1.3.5-beta5-signed</version><title>CsQuery.Signed</title><authors>James Treworgy</authors><owners>James Treworgy</owners><licenseUrl>https://github.com/jamietre/CsQuery/blob/master/LICENSE.txt</licenseUrl><projectUrl>https://github.com/jamietre/CsQuery/</projectUrl><iconUrl>http://www.outsharked.com/csquery/images/csquery-icon-large.gif</iconUrl><requireLicenseAcceptance>false</requireLicenseAcceptance><summary>A complete CSS selector engine and jQuery port for .NET 4 and C# (STRONG NAMED).</summary><description>CsQuery - Signed/Strong Named Edition. It's strongly advised that you use use the package 'CsQuery' unless you know why you want the signed edition.</description><releaseNotes>
+Version 1.3.5 includes significant performance improvements and bug fixes.
+
+Complete change log:
+https://github.com/jamietre/CsQuery/blob/master/source/README.md    
+    </releaseNotes><copyright>Copyright 2012</copyright><tags>jquery html</tags></metadata><files><file src="bin\release\CsQuery.dll" target="lib\net40" /><file src="bin\release\CsQuery.xml" target="lib\net40" /><file src="bin\release\CsQuery.pdb" target="lib\net40" /><file src="**\*.cs" target="src" /></files></package>

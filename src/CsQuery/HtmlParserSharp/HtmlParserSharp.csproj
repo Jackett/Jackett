@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF457A49-433C-4D47-8D6D-B66F76FF4E56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HtmlParserSharp.NetStandard</RootNamespace>
+    <AssemblyName>HtmlParserSharp.NetStandard</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="project.json" />
+    <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HtmlParserSharp\Common\Attributes.cs" />
+    <Compile Include="HtmlParserSharp\Common\DoctypeExpectation.cs" />
+    <Compile Include="HtmlParserSharp\Common\DocumentMode.cs" />
+    <Compile Include="HtmlParserSharp\Common\DocumentModeEventArgs.cs" />
+    <Compile Include="HtmlParserSharp\Common\EncodingDetectedEventArgs.cs" />
+    <Compile Include="HtmlParserSharp\Common\ITokenHandler.cs" />
+    <Compile Include="HtmlParserSharp\Common\ParserErrorEventArgs.cs" />
+    <Compile Include="HtmlParserSharp\Common\XmlViolationPolicy.cs" />
+    <Compile Include="HtmlParserSharp\Core\AttributeName.cs" />
+    <Compile Include="HtmlParserSharp\Core\CharsetState.cs" />
+    <Compile Include="HtmlParserSharp\Core\CoalescingTreeBuilder.cs" />
+    <Compile Include="HtmlParserSharp\Core\DispatchGroup.cs" />
+    <Compile Include="HtmlParserSharp\Core\ElementName.cs" />
+    <Compile Include="HtmlParserSharp\Core\HtmlAttributes.cs" />
+    <Compile Include="HtmlParserSharp\Core\ILocator.cs" />
+    <Compile Include="HtmlParserSharp\Core\InsertionMode.cs" />
+    <Compile Include="HtmlParserSharp\Core\ITreeBuilderState.cs" />
+    <Compile Include="HtmlParserSharp\Core\Locator.cs" />
+    <Compile Include="HtmlParserSharp\Core\NamedCharacterAccel.cs" />
+    <Compile Include="HtmlParserSharp\Core\NamedCharacters.cs" />
+    <Compile Include="HtmlParserSharp\Core\NCName.cs" />
+    <Compile Include="HtmlParserSharp\Core\Portability.cs" />
+    <Compile Include="HtmlParserSharp\Core\StackNode.cs" />
+    <Compile Include="HtmlParserSharp\Core\StateSnapshot.cs" />
+    <Compile Include="HtmlParserSharp\Core\TaintableLocator.cs" />
+    <Compile Include="HtmlParserSharp\Core\Tokenizer.cs" />
+    <Compile Include="HtmlParserSharp\Core\TreeBuilder.cs" />
+    <Compile Include="HtmlParserSharp\Core\TreeBuilderConstants.cs" />
+    <Compile Include="HtmlParserSharp\Core\UTF16Buffer.cs" />
+    <Compile Include="HtmlParserSharp\Parser.cs" />
+    <Compile Include="HtmlParserSharp\SimpleHtmlParser.cs" />
+    <Compile Include="HtmlParserSharp\TreeBuilders\XmlTreeBuilder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HtmlParserSharp\SampleData\test.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
