@@ -72,9 +72,14 @@ namespace CsQuery.Utility
                     cleanFileName = cleanFileName.Substring(1);
                 }
 
-                string callingAssPath = AppContext.BaseDirectory;
+                string callingAssPath = string.Empty;
+                #if NETSTANDARD1_5
+                    callingAssPath = System.AppContext.BaseDirectory;
+                #else
+                    callingAssPath = AppDomain.CurrentDomain.BaseDirectory;
+                #endif
 
-                return  TryGetFilePath(cleanFileName, callingAssPath, out filePath);
+                return TryGetFilePath(cleanFileName, callingAssPath, out filePath);
 
             }
 

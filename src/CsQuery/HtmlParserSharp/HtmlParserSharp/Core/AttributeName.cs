@@ -22,12 +22,12 @@
  */
 
 using System;
-using HtmlParserSharp.Common;
+using CsQuery.HtmlParserSharp.Common;
 
 #pragma warning disable 1591
 #pragma warning disable 1570
 
-namespace HtmlParserSharp.Core
+namespace CsQuery.HtmlParserSharp.Core
 {
 	public sealed partial class AttributeName
 	{

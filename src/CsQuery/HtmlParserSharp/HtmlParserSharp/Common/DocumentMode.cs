@@ -24,7 +24,7 @@
 
 #pragma warning disable 1591
 
-namespace HtmlParserSharp.Common
+namespace CsQuery.HtmlParserSharp.Common
 {
 	public enum DocumentMode
 	{

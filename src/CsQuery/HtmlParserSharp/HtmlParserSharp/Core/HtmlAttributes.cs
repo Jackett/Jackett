@@ -24,13 +24,13 @@
 
 using System;
 using System.Diagnostics;
-using HtmlParserSharp.Common;
+using CsQuery.HtmlParserSharp.Common;
 
 #pragma warning disable 1591 // Missing XML comment
 #pragma warning disable 1570 // XML comment on 'construct' has badly formed XML — 'reason'
 #pragma warning disable 1587 // XML comment is not placed on a valid element
 
-namespace HtmlParserSharp.Core
+namespace CsQuery.HtmlParserSharp.Core
 {
 	/// <summary>
 	/// Be careful with this class. QName is the name in from HTML tokenization.

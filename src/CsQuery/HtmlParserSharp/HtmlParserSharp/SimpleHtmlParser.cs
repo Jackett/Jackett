@@ -25,9 +25,9 @@
 using System;
 using System.IO;
 using System.Xml;
-using HtmlParserSharp.Core;
+using CsQuery.HtmlParserSharp.Core;
 
-namespace HtmlParserSharp
+namespace CsQuery.HtmlParserSharp
 {
 	/// <summary>
 	/// This is a simple API for the parsing process.

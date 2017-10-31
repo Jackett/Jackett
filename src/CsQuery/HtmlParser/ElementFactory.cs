@@ -2,20 +2,20 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using HtmlParserSharp.Core;
-using HtmlParserSharp.Common;
+using CsQuery.HtmlParserSharp.Core;
+using CsQuery.HtmlParserSharp.Common;
 using CsQuery;
 using CsQuery.Implementation;
 using CsQuery.Utility;
 using CsQuery.StringScanner;
 using CsQuery.HtmlParser;
 using CsQuery.Engine;
-using HtmlParserSharp;
+using CsQuery.HtmlParserSharp;
 
 namespace CsQuery.HtmlParser
 {
     /// <summary>
-    /// Element factory to build a CsQuery DOM using HtmlParserSharp.
+    /// Element factory to build a CsQuery DOM using CsQuery.HtmlParserSharp.
     /// </summary>
 
     public class ElementFactory

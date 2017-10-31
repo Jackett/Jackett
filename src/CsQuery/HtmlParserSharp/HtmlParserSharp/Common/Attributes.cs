@@ -24,7 +24,7 @@ using System;
 
 #pragma warning disable 1591
 
-namespace HtmlParserSharp.Common
+namespace CsQuery.HtmlParserSharp.Common
 {
 	// This file contains the attributes that correspond to the annotations
 	// @NsUri, @Prefix and @Local in the Java code. Probably we can safely remove these.

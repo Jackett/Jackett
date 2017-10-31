@@ -22,11 +22,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-using HtmlParserSharp.Core;
+using CsQuery.HtmlParserSharp.Core;
 
 #pragma warning disable 1591
 
-namespace HtmlParserSharp.Common
+namespace CsQuery.HtmlParserSharp.Common
 {
 	/// <summary>
 	/// <code>Tokenizer</code> reports tokens through this interface.

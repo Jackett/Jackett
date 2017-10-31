@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using HtmlParserSharp.Core;
-using HtmlParserSharp.Common;
+using CsQuery.HtmlParserSharp.Core;
+using CsQuery.HtmlParserSharp.Common;
 
 
-namespace HtmlParserSharp
+namespace CsQuery.HtmlParserSharp
 {
     /// <summary>
     /// Generic parser that accepts any ITokenHandler implementation. It's up to the client to poll

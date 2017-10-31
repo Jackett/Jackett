@@ -28,7 +28,7 @@ using System.Text;
 
 #pragma warning disable 1591
 
-namespace HtmlParserSharp.Common
+namespace CsQuery.HtmlParserSharp.Common
 {
 	/// <summary>
 	/// Policy for XML 1.0 violations.
