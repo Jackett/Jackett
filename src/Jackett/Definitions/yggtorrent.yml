@@ -67,9 +67,9 @@
       selector: "a[href=\"https://yggtorrent.com/user/logout\"]"
   search:
     paths:
-      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}{{else}}/torrents/2145-filmvideo{{end}}"
-      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}&page=15{{else}}/torrents/2145-filmvideo?page=25{{end}}"
-      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}&page=30{{else}}/torrents/2145-filmvideo?page=50{{end}}"
+      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}{{else}}/torrents/popular{{end}}"
+      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}&page=15{{else}}/torrents/popular?page=25{{end}}"
+      - path: "{{if .Keywords}}/engine/search?q={{ .Keywords}}&page=30{{else}}/torrents/popular?page=50{{end}}"
     rows:
       selector: "table.table.table-striped > tbody > tr"
     fields:
