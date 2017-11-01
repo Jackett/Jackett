@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
+using Jacket.Common.Helpers;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig.Bespoke;
 using Jackett.Services.Interfaces;
@@ -459,7 +460,7 @@ namespace Jackett.Indexers
             }
             else if (!string.IsNullOrWhiteSpace(term))
             {
-                searchterm = "search=" + WebUtility.UrlEncode(term, Encoding.GetEncoding(28591));
+                searchterm = "search=" + WebUtilityHelpers.UrlEncode(term, Encoding.GetEncoding(28591));
             }
             else
             {

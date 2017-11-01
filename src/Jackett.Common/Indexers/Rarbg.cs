@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jacket.Common;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services.Interfaces;
@@ -129,7 +130,7 @@ namespace Jackett.Indexers
             var queryCollection = new NameValueCollection();
             queryCollection.Add("token", token);
             queryCollection.Add("format", "json_extended");
-            queryCollection.Add("app_id", "jackett_v" + Engine.ConfigService.GetVersion());
+            queryCollection.Add("app_id", "jackett_v" + JackettStartup.JackettVersion);
             queryCollection.Add("limit", "100");
             queryCollection.Add("ranked", "0");
 

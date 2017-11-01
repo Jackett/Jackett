@@ -212,10 +212,6 @@ namespace Jackett.Services
             return dirs;
         }
 
-        public string GetVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
 
         public string GetAppDataFolder()
         {
@@ -256,6 +252,11 @@ namespace Jackett.Services
         public string GetSonarrConfigFile()
         {
             return Path.Combine(GetAppDataFolder(), "sonarr_api.json");
+        }
+
+        public string GetVersion()
+        {
+            return JackettStartup.JackettVersion;
         }
     }
 }

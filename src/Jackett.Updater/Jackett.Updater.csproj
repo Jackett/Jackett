@@ -67,6 +67,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Jackett.Common\Jacket.Common.csproj">
+      <Project>{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}</Project>
+      <Name>Jacket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jackett.Service\Jackett.Service.csproj">
+      <Project>{bf611f7b-4658-4cb8-aa9e-0736fadaa3ba}</Project>
+      <Name>Jackett.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jackett\Jackett.csproj">
       <Project>{e636d5f8-68b4-4903-b4ed-ccfd9c9e899f}</Project>
       <Name>Jackett</Name>

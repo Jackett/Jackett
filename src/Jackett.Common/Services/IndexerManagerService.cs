@@ -25,19 +25,20 @@ namespace Jackett.Services
         private WebClient webClient;
         private IProcessService processService;
         private IConfigurationService globalConfigService;
-
+        private IServerService serverService;
         private Logger logger;
 
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
-        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService)
+        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, IServerService serverService)
         {
             configService = config;
             this.protectionService = protectionService;
             this.webClient = webClient;
             this.processService = processService;
             this.globalConfigService = globalConfigService;
+            this.serverService = serverService;
             logger = l;
             cacheService = cache;
         }
@@ -154,7 +155,7 @@ namespace Jackett.Services
 
         public void InitAggregateIndexer()
         {
-            var omdbApiKey = Engine.Server.Config.OmdbApiKey;
+            var omdbApiKey = serverService.Config.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
             if (!omdbApiKey.IsNullOrEmptyOrWhitespace())

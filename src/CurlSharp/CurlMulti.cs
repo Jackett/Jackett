@@ -295,7 +295,9 @@ namespace CurlSharp
             _multiInfo = null;
             throw new NotImplementedException("CurlMulti.InfoRead()");
 #endif
+#pragma warning disable CS0162 // Unreachable code detected when not compiling with the shim
             return _multiInfo;
+#pragma warning restore CS0162 // Unreachable code detected when not compiling with the shim
         }
     }
 }

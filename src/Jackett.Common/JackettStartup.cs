@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Jacket.Common
 {
@@ -58,6 +59,13 @@ namespace Jacket.Common
             set;
         }
 
+        public static string JackettVersion
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "Unknown Version";
+            }
+        }
 
         public static bool IsWindows
         {

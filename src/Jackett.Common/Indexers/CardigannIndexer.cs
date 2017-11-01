@@ -19,6 +19,7 @@ using AngleSharp.Dom.Html;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.WebUtilities;
+using Jacket.Common.Helpers;
 
 namespace Jackett.Indexers
 {
@@ -829,10 +830,10 @@ namespace Jackett.Indexers
                         Data = Data.ToUpper();
                         break;
                     case "urldecode":
-                        Data = WebUtility.UrlDecode(Data, Encoding);
+                        Data = WebUtilityHelpers.UrlDecode(Data, Encoding);
                         break;
                     case "urlencode":
-                        Data = WebUtility.UrlEncode(Data, Encoding);
+                        Data = WebUtilityHelpers.UrlEncode(Data, Encoding);
                         break;
                     case "timeago":
                     case "reltime":
