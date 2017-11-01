@@ -21,12 +21,14 @@ namespace Jackett.Utils.Clients
     public class HttpWebClient : WebClient
     {
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
+        private IServerService _serverService;
 
-        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c)
+        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, IServerService serverService)
             : base(p: p,
                    l: l,
                    c: c)
         {
+            _serverService = serverService;
         }
 
         override public void Init()
@@ -83,19 +85,19 @@ namespace Jackett.Utils.Clients
             }
             var useProxy = false;
             WebProxy proxyServer = null;
-            var proxyUrl = Engine.Server.Config.ProxyUrl;
+            var proxyUrl = _serverService.Config.ProxyUrl;
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                if (Engine.Server.Config.ProxyPort.HasValue)
+                if (_serverService.Config.ProxyPort.HasValue)
                 {
-                    proxyServer = new WebProxy(proxyUrl, Engine.Server.Config.ProxyPort.Value);
+                    proxyServer = new WebProxy(proxyUrl, _serverService.Config.ProxyPort.Value);
                 }
                 else
                 {
                     proxyServer = new WebProxy(proxyUrl);
                 }
-                var username = Engine.Server.Config.ProxyUsername;
-                var password = Engine.Server.Config.ProxyPassword;
+                var username = _serverService.Config.ProxyUsername;
+                var password = _serverService.Config.ProxyPassword;
                 if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
                 {
                     var creds = new NetworkCredential(username, password);

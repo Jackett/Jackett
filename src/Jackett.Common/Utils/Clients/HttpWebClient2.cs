@@ -30,27 +30,28 @@ namespace Jackett.Utils.Clients
 
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
 
-        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c)
+        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, IServerService serverService)
             : base(p: p,
                    l: l,
                    c: c)
         {
+
             cookies = new CookieContainer();
             var useProxy = false;
             WebProxy proxyServer = null;
-            var proxyUrl = Engine.Server.Config.ProxyUrl;
+            var proxyUrl = serverService.Config.ProxyUrl;
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                if (Engine.Server.Config.ProxyPort.HasValue)
+                if (serverService.Config.ProxyPort.HasValue)
                 {
-                    proxyServer = new WebProxy(proxyUrl, Engine.Server.Config.ProxyPort.Value);
+                    proxyServer = new WebProxy(proxyUrl, serverService.Config.ProxyPort.Value);
                 }
                 else
                 {
                     proxyServer = new WebProxy(proxyUrl);
                 }
-                var username = Engine.Server.Config.ProxyUsername;
-                var password = Engine.Server.Config.ProxyPassword;
+                var username = serverService.Config.ProxyUsername;
+                var password = serverService.Config.ProxyPassword;
                 if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
                 {
                     var creds = new NetworkCredential(username, password);

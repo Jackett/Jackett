@@ -11,10 +11,10 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.9" />
     <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="BencodeNET" Version="2.2.22" />
     <PackageReference Include="CloudFlareUtilities" Version="0.4.0-alpha" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.10" />
-    <PackageReference Include="MonoTorrent" Version="0.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
     <PackageReference Include="YamlDotNet" Version="4.2.2" />
@@ -26,11 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="CurlSharp.dll.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CurlSharp.dll.config</DependentUpon>
-    </Compile>
     <Compile Update="Models\TorznabCatType.generated.cs">
       <DependentUpon>TorznabCatType.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -41,8 +36,6 @@
   <ItemGroup>
     <None Update="CurlSharp.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CurlSharp.dll.cs</LastGenOutput>
     </None>
     <None Update="Models\TorznabCatType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

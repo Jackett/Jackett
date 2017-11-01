@@ -9,6 +9,7 @@ using System.Web.Http;
 using Jackett.Services;
 using Jackett.Services.Interfaces;
 using Jackett.Utils;
+using MimeMapping;
 using NLog;
 
 namespace Jackett.Controllers
@@ -32,7 +33,7 @@ namespace Jackett.Controllers
             var mappedPath = Path.Combine(config.GetContentFolder(), path);
             var stream = new FileStream(mappedPath, FileMode.Open, FileAccess.Read, FileShare.Read);
             result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(mappedPath));
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeUtility.GetMimeMapping(mappedPath));
 
             return result;
         }

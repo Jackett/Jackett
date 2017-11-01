@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jackett
 {
-    class IndexerException : Exception
+    public class IndexerException : Exception
     {
         public IIndexer Indexer { get; protected set; }
 

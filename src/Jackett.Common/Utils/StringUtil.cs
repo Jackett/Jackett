@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Net;
+using Jacket.Common.Helpers;
 
 namespace Jackett.Utils
 {
@@ -157,14 +158,14 @@ namespace Jackett.Utils
         {
             if (encoding == null)
                 encoding = Encoding.UTF8;
-            return string.Join("&", collection.AllKeys.Select(a => a + "=" + WebUtility.UrlEncode(collection[a], encoding)));
+            return string.Join("&", collection.AllKeys.Select(a => a + "=" + WebUtilityHelpers.UrlEncode(collection[a], encoding)));
         }
 
         public static string GetQueryString(this ICollection<KeyValuePair<string, string>> collection, Encoding encoding = null)
         {
             if (encoding == null)
                 encoding = Encoding.UTF8;
-            return string.Join("&", collection.Select(a => a.Key + "=" + WebUtility.UrlEncode(a.Value, encoding)));
+            return string.Join("&", collection.Select(a => a.Key + "=" + WebUtilityHelpers.UrlEncode(a.Value, encoding)));
         }
 
         public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value)

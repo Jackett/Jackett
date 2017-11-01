@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using CsQuery;
+using Jacket.Common.Helpers;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services.Interfaces;
@@ -162,7 +163,7 @@ namespace Jackett.Indexers
             searchUrl += "?";
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                var strEncoded = WebUtility.UrlEncode(searchString, Encoding.GetEncoding("Windows-1255"));
+                var strEncoded = WebUtilityHelpers.UrlEncode(searchString, Encoding.GetEncoding("Windows-1255"));
                 searchUrl += "&query=" + strEncoded + "&matchquery=any";
             }
 
