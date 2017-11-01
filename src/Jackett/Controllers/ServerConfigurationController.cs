@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
+using Jacket.Common;
 using Jackett.Models;
 using Jackett.Services;
 using Jackett.Services.Interfaces;
@@ -82,11 +83,11 @@ namespace Jackett.Controllers.V20
             Engine.Server.Config.UpdateDisabled = updateDisabled;
             Engine.Server.Config.UpdatePrerelease = preRelease;
             Engine.Server.Config.BasePathOverride = basePathOverride;
-            Startup.BasePath = Engine.Server.BasePath();
+            JackettStartup.BasePath = Engine.Server.BasePath();
             Engine.Server.SaveConfig();
 
             Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
-            Startup.TracingEnabled = logging;
+            JackettStartup.TracingEnabled = logging;
 
             if (omdbApiKey != Engine.Server.Config.OmdbApiKey)
             {

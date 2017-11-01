@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Web.Http.Dependencies;
 using Autofac.Integration.WebApi;
 using Jackett.Services.Interfaces;
+using Jacket.Common;
 
 namespace Jackett
 {
@@ -34,7 +35,7 @@ namespace Jackett
 
             // Register the container in itself to allow for late resolves
             var secondaryBuilder = new ContainerBuilder();
-            secondaryBuilder.RegisterInstance<IContainer>(container).SingleInstance();
+            secondaryBuilder.RegisterInstance(container).SingleInstance();
             SetupLogging(secondaryBuilder);
             secondaryBuilder.Update(container);
 
@@ -45,13 +46,6 @@ namespace Jackett
             return new AutofacWebApiDependencyResolver(container);
         }
 
-        public static bool IsWindows
-        {
-            get
-            {
-                return Environment.OSVersion.Platform == PlatformID.Win32NT;
-            }
-        }
 
         public static IConfigurationService ConfigService
         {
@@ -120,7 +114,7 @@ namespace Jackett
 
         public static void SetupLogging(ContainerBuilder builder = null, string logfile = "log.txt")
         {
-            var logLevel = Startup.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
+            var logLevel = JackettStartup.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
             ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 

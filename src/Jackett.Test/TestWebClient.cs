@@ -10,7 +10,7 @@ using Jackett.Services.Interfaces;
 
 namespace Jackett.Test
 {
-    public class TestWebClient : IWebClient
+    public class TestWebClient : WebClient
     {
         private Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>> byteCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>>();
         private Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>> stringCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>>();

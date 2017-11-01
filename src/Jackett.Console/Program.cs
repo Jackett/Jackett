@@ -15,6 +15,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Jacket.Common;
 
 namespace JackettConsole
 {
@@ -60,25 +61,25 @@ namespace JackettConsole
                     /*  ======     Options    =====  */
 
                     // SSL Fix
-                    Startup.DoSSLFix = options.SSLFix;
+                    JackettStartup.DoSSLFix = options.SSLFix;
 
                     // Use curl
                     if (options.Client != null)
-                        Startup.ClientOverride = options.Client.ToLowerInvariant();
+                        JackettStartup.ClientOverride = options.Client.ToLowerInvariant();
 
                     // Use Proxy
                     if (options.ProxyConnection != null)
                     {
-                        Startup.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
-                        Engine.Logger.Info("Proxy enabled. " + Startup.ProxyConnection);
+                        JackettStartup.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
+                        Engine.Logger.Info("Proxy enabled. " + JackettStartup.ProxyConnection);
                     }
                     // Logging
                     if (options.Logging)
-                        Startup.LogRequests = true;
+                        JackettStartup.LogRequests = true;
 
                     // Tracing
                     if (options.Tracing)
-                        Startup.TracingEnabled = true;
+                        JackettStartup.TracingEnabled = true;
 
                     // Log after the fact as using the logger will cause the options above to be used
 
@@ -94,7 +95,7 @@ namespace JackettConsole
                         Engine.Logger.Info("SSL ECC workaround has been disabled.");
 
                     // Ignore SSL errors on Curl
-                    Startup.IgnoreSslErrors = options.IgnoreSslErrors;
+                    JackettStartup.IgnoreSslErrors = options.IgnoreSslErrors;
                     if (options.IgnoreSslErrors == true)
                     {
                         Engine.Logger.Info("Jackett will ignore SSL certificate errors.");
@@ -103,8 +104,8 @@ namespace JackettConsole
                     // Choose Data Folder
                     if (!string.IsNullOrWhiteSpace(options.DataFolder))
                     {
-                        Startup.CustomDataFolder = options.DataFolder.Replace("\"", string.Empty).Replace("'", string.Empty).Replace(@"\\", @"\");
-                        Engine.Logger.Info("Jackett Data will be stored in: " + Startup.CustomDataFolder);
+                        JackettStartup.CustomDataFolder = options.DataFolder.Replace("\"", string.Empty).Replace("'", string.Empty).Replace(@"\\", @"\");
+                        Engine.Logger.Info("Jackett Data will be stored in: " + JackettStartup.CustomDataFolder);
                     }
 
                     /*  ======     Actions    =====  */
@@ -218,7 +219,7 @@ namespace JackettConsole
                         }
                     }
 
-                    Startup.NoRestart = options.NoRestart;
+                    JackettStartup.NoRestart = options.NoRestart;
                 }
 
                 Engine.Server.Initalize();
