@@ -11,6 +11,7 @@ using System.Reflection;
 using Jackett.Services;
 using Jackett.Indexers.Meta;
 using Jackett.Services.Interfaces;
+using Jacket.Common;
 
 namespace Jackett
 {
@@ -40,19 +41,19 @@ namespace Jackett
             builder.RegisterType<HttpWebClient>();
 
             // Register the best web client for the platform or the override
-            switch (Startup.ClientOverride)
+            switch (JackettStartup.ClientOverride)
             {
                 case "httpclient":
-                    builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                    builder.RegisterType<HttpWebClient>().As<WebClient>();
                     break;
                 case "httpclient2":
-                    builder.RegisterType<HttpWebClient2>().As<IWebClient>();
+                    builder.RegisterType<HttpWebClient2>().As<WebClient>();
                     break;
                 case "safecurl":
-                    builder.RegisterType<UnixSafeCurlWebClient>().As<IWebClient>();
+                    builder.RegisterType<UnixSafeCurlWebClient>().As<WebClient>();
                     break;
                 case "libcurl":
-                    builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                    builder.RegisterType<UnixLibCurlWebClient>().As<WebClient>();
                     break;
                 case "automatic":
                 default:
@@ -102,13 +103,13 @@ namespace Jackett
                         }
 
                         if (usehttpclient)
-                            builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                            builder.RegisterType<HttpWebClient>().As<WebClient>();
                         else
-                            builder.RegisterType<UnixLibCurlWebClient>().As<IWebClient>();
+                            builder.RegisterType<UnixLibCurlWebClient>().As<WebClient>();
                     }
                     else
                     {
-                        builder.RegisterType<HttpWebClient>().As<IWebClient>();
+                        builder.RegisterType<HttpWebClient>().As<WebClient>();
                     }
                     break;
             }

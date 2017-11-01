@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading;
 using System.Web;
 using Jackett.Services.Interfaces;
+using Jacket.Common;
 
 namespace Jackett.Services
 {
@@ -33,12 +34,12 @@ namespace Jackett.Services
         private ISerializeService serializeService;
         private IConfigurationService configService;
         private Logger logger;
-        private IWebClient client;
+        private Utils.Clients.WebClient client;
         private IUpdateService updater;
         private List<string> _notices = new List<string>();
         IProtectionService protectionService;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u, IProtectionService protectionService)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, Utils.Clients.WebClient w, IUpdateService u, IProtectionService protectionService)
         {
             indexerService = i;
             processService = p;
@@ -293,7 +294,7 @@ namespace Jackett.Services
             logger.Info("Starting web server at " + config.GetListenAddresses()[0]);
             var startOptions = new StartOptions();
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
-            Startup.BasePath = BasePath();
+            JackettStartup.BasePath = BasePath();
             try
             {
                 _server = WebApp.Start<Startup>(startOptions);
