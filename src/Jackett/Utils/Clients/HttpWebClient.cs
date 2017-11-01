@@ -48,7 +48,7 @@ namespace Jackett.Utils.Clients
                 var hash = certificate.GetCertHashString();
 
                 ICollection<string> hosts;
-                
+
                 trustedCertificates.TryGetValue(hash, out hosts);
                 if (hosts != null)
                 {
@@ -82,9 +82,25 @@ namespace Jackett.Utils.Clients
             }
             var useProxy = false;
             WebProxy proxyServer = null;
-            if (Startup.ProxyConnection != null)
+            var proxyUrl = Engine.Server.Config.ProxyUrl;
+            if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                proxyServer = new WebProxy(Startup.ProxyConnection, false);
+                if (Engine.Server.Config.ProxyPort.HasValue)
+                {
+                    proxyServer = new WebProxy(proxyUrl, Engine.Server.Config.ProxyPort.Value);
+                }
+                else
+                {
+                    proxyServer = new WebProxy(proxyUrl);
+                }
+                var username = Engine.Server.Config.ProxyUsername;
+                var password = Engine.Server.Config.ProxyPassword;
+                if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+                {
+                    var creds = new NetworkCredential(username, password);
+                    proxyServer.Credentials = creds;
+                }
+                proxyServer.BypassProxyOnLocal = false;
                 useProxy = true;
             }
 

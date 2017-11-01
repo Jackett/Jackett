@@ -46,16 +46,16 @@ namespace CurlSharp
 
         static NativeMethods()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                switch (RuntimeInformation.OSArchitecture)
+                if (Environment.Is64BitOperatingSystem)
                 {
-                    case Architecture.X64:
-                        SetDllDirectory(Path.Combine(AssemblyDirectory, LIB_DIR_WIN64));
-                        break;
-                    case Architecture.X86:
-                        SetDllDirectory(Path.Combine(AssemblyDirectory, LIB_DIR_WIN32));
-                        break;
+                    SetDllDirectory(Path.Combine(AssemblyDirectory, LIB_DIR_WIN64));
+                }
+                else
+                {
+                    SetDllDirectory(Path.Combine(AssemblyDirectory, LIB_DIR_WIN32));
                 }
             }
 #if USE_LIBCURLSHIM
@@ -63,11 +63,11 @@ namespace CurlSharp
                 throw new InvalidOperationException("Can not run on other platform than Win NET");
 #endif
         }
-        
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);
-        
+
         private static string AssemblyDirectory
         {
             get
@@ -334,7 +334,7 @@ namespace CurlSharp
             {
                 var handle = Create();
                 handle.fd_count = 1;
-                handle.fd_array[0] = (uint) socket;
+                handle.fd_array[0] = (uint)socket;
                 return handle;
             }
         }
@@ -400,7 +400,7 @@ namespace CurlSharp
         {
             int result;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 result = select_win(
                     nfds, // number of sockets, (ignored in winsock)

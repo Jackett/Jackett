@@ -26,6 +26,31 @@ namespace Jackett.Models.Config
         public string BasePathOverride { get; set; }
         public string OmdbApiKey { get; set; }
 
+        public string ProxyUrl { get; set; }
+        public int? ProxyPort { get; set; }
+        public string ProxyUsername { get; set; }
+        public string ProxyPassword { get; set; }
+
+        public string Proxy
+        {
+            get
+            {
+                var proxy = ProxyUrl;
+
+                if (!string.IsNullOrWhiteSpace(ProxyUsername) && !string.IsNullOrWhiteSpace(ProxyPassword))
+                {
+                    proxy = $"{ProxyUsername}:{ProxyPassword}@{proxy}";
+                }
+
+                if (ProxyPort.HasValue)
+                {
+                    proxy = $"{proxy}:{ProxyPort}";
+                }
+
+                return proxy;
+            }
+        }
+
         public string[] GetListenAddresses(bool? external = null)
         {
             if (external == null)
@@ -38,7 +63,7 @@ namespace Jackett.Models.Config
             }
             else
             {
-                return new string[] { 
+                return new string[] {
                     "http://127.0.0.1:" + Port + "/",
                     "http://localhost:" + Port + "/",
                 };

@@ -27,6 +27,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniRena
  * btbit
  * BTDB
+ * BT-Scene
  * cpasbien
  * EZTV
  * GkTorrent
@@ -45,7 +46,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RuTor
  * ShowRSS
  * Sky torrents
- * T411 v2
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan

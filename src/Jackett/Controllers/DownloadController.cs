@@ -1,5 +1,4 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using MonoTorrent.BEncoding;
-using Jackett.Utils;
+using BencodeNET.Parsing;
 using Jackett.Services.Interfaces;
+using Jackett.Utils;
+using NLog;
 
 namespace Jackett.Controllers
 {
@@ -17,10 +17,10 @@ namespace Jackett.Controllers
     [JackettAPINoCache]
     public class DownloadController : ApiController
     {
-        Logger logger;
-        IIndexerManagerService indexerService;
-        IServerService serverService;
-        IProtectionService protectionService;
+        private Logger logger;
+        private IIndexerManagerService indexerService;
+        private IServerService serverService;
+        private IProtectionService protectionService;
 
         public DownloadController(IIndexerManagerService i, Logger l, IServerService s, IProtectionService ps)
         {
@@ -53,11 +53,12 @@ namespace Jackett.Controllers
                 var downloadBytes = await indexer.Download(target);
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
-                var torrentDictionary = BEncodedDictionary.DecodeTorrent(downloadBytes);
-                downloadBytes = torrentDictionary.Encode();
+                var parser = new BencodeParser();
+                var torrentDictionary = parser.Parse(downloadBytes);
+                byte[] sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
 
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
-                result.Content = new ByteArrayContent(downloadBytes);
+                result.Content = new ByteArrayContent(sortedDownloadBytes);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
