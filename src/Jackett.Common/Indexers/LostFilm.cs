@@ -105,6 +105,9 @@ namespace Jackett.Indexers
             logger.Debug("Applying configuration");
             LoadValuesFromJson(configJson);
 
+            // Performing Logout is required to invalidate previous session otherwise the `{"error":1,"result":"ok"}` will be returned.
+            await Logout();
+
             var data = new Dictionary<string, string>
             {
                 { "act", "users" },
@@ -123,6 +126,30 @@ namespace Jackett.Indexers
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
+
+        private async Task<Boolean> Logout()
+        {
+            logger.Info("Performing logout");
+
+            var data = new Dictionary<string, string>
+            {
+                { "act", "users" },
+                { "type", "logout" }
+            };
+
+            var response = await PostDataWithCookies(url: ApiUrl, data: data);
+            logger.Debug("Logout result: " + response.Content);
+
+            var isOK = response.Status == System.Net.HttpStatusCode.OK;
+            if (!isOK)
+            {
+                logger.Error("Logout failed with response: " + response.Content);
+            }
+
+            return isOK;
+        }
+
+        #region Query
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
@@ -278,6 +305,7 @@ namespace Jackett.Indexers
             return releases;
         }
 
+        #endregion
         #region Page parsing
 
         private async Task<List<ReleaseInfo>> FetchNewReleases()
