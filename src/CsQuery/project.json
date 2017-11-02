@@ -1,0 +1,16 @@
+﻿{
+  "supports": {},
+  "dependencies": {
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "NETStandard.Library": "1.6.0",
+    "Newtonsoft.Json": "9.0.1",
+    "System.ComponentModel.TypeConverter": "4.1.0",
+    "System.Text.Encoding.CodePages": "4.0.1",
+    "System.Xml.XDocument": "4.0.11",
+    "System.Xml.XmlDocument": "4.0.1",
+    "System.Xml.XPath.XmlDocument": "4.0.1"
+  },
+  "frameworks": {
+    "netstandard1.5": {}
+  }
+}

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>CsQuery.NETStandard</id>
+		<version>1.3.6.1</version>
+		<title>CsQuery.NETStandard</title>
+		<authors>James Treworgy, Asbjørn Clemmensen</authors>
+		<owners>James Treworgy</owners>
+		<licenseUrl>https://github.com/zone117x/CsQuery/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>https://github.com/zone117x/CsQuery/</projectUrl>
+		<iconUrl>http://www.outsharked.com/csquery/images/csquery-icon-large.gif</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>A complete CSS selector engine and jQuery port for .NET 4 and C#.</summary>
+		<description>CsQuery is an HTML parser, CSS selector engine and jQuery port for .NET 4 and C#. It implements all CSS2 and CSS3 selectors, all the DOM manipulation methods of jQuery, and some of the utility methods. </description>
+		<releaseNotes>Updated to .NET Standard 1.5</releaseNotes>
+		<copyright>Copyright 2012</copyright>
+		<tags>jquery html</tags>
+		<dependencies>
+			<dependency id="Microsoft.NETCore.Portable.Compatibility" version="1.0.1" />
+			<dependency id="NETStandard.Library" version="1.6.0" />
+			<dependency id="Newtonsoft.Json" version="9.0.1" />
+			<dependency id="System.ComponentModel.TypeConverter" version="4.1.0" />
+			<dependency id="System.Text.Encoding.CodePages" version="4.0.1" />
+			<dependency id="System.Xml.XDocument" version="4.0.11" />
+			<dependency id="System.Xml.XmlDocument" version="4.0.1" />
+			<dependency id="System.Xml.XPath.XmlDocument" version="4.0.1" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="bin\release\CsQuery.dll" target="lib\netstandard1.5" />
+		<file src="bin\release\CsQuery.xml" target="lib\netstandard1.5" />
+		<file src="bin\release\CsQuery.pdb" target="lib\netstandard1.5" />
+	</files>
+</package>
