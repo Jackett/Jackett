@@ -67,6 +67,7 @@ function loadJackettSettings() {
         $("#app-version").html(data.app_version);
         $("#jackett-port").val(data.port);
 
+        $("#jackett-proxy-type").val(data.proxy_type);
         $("#jackett-proxy-url").val(data.proxy_url);
         $("#jackett-proxy-port").val(data.proxy_port);
         $("#jackett-proxy-username").val(data.proxy_username);
@@ -1134,6 +1135,7 @@ function bindUIButtons() {
         var jackett_omdb_key = $("#jackett-omdbkey").val();
 
         var jackett_proxy_url = $("#jackett-proxy-url").val();
+        var jackett_proxy_type = $("#jackett-proxy-type").val();
         var jackett_proxy_port = $("#jackett-proxy-port").val();
         var jackett_proxy_username = $("#jackett-proxy-username").val();
         var jackett_proxy_password = $("#jackett-proxy-password").val();
@@ -1147,6 +1149,7 @@ function bindUIButtons() {
             logging: jackett_logging,
             basepathoverride: jackett_basepathoverride,
             omdbkey: jackett_omdb_key,
+            proxy_type: jackett_proxy_type,
             proxy_url: jackett_proxy_url,
             proxy_port: jackett_proxy_port,
             proxy_username: jackett_proxy_username,

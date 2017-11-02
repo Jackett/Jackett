@@ -31,13 +31,14 @@ namespace Jackett.Utils.Clients
         override protected async Task<WebClientByteResult> Run(WebRequest request)
         {
             var args = new StringBuilder();
-            if (Engine.Server.Config.Proxy != null)
+            var proxy = Engine.Server.Config.GetProxyUrl(true);
+            if (proxy != null)
             {
-                args.AppendFormat("-x '" + Engine.Server.Config.Proxy + "' ");
+                args.AppendFormat("-x '" + proxy + "' ");
             }
-            
+
             args.AppendFormat("--url \"{0}\" ", request.Url);
-           
+
             if (request.EmulateBrowser == true)
                 args.AppendFormat("-i  -sS --user-agent \"{0}\" ", BrowserUtil.ChromeUserAgent);
             else
@@ -57,7 +58,8 @@ namespace Jackett.Utils.Clients
             {
                 var postString = StringUtil.PostDataFromDict(request.PostData);
                 args.AppendFormat("--data \"{0}\" ", request.RawBody.Replace("\"", "\\\""));
-            } else if (request.PostData != null && request.PostData.Count() > 0)
+            }
+            else if (request.PostData != null && request.PostData.Count() > 0)
             {
                 var postString = StringUtil.PostDataFromDict(request.PostData);
                 args.AppendFormat("--data \"{0}\" ", postString);
@@ -81,7 +83,7 @@ namespace Jackett.Utils.Clients
             string stdout = null;
             await Task.Run(() =>
             {
-                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix ? "curl" : "curl.exe", args.ToString() , true);
+                stdout = processService.StartProcessAndGetOutput(System.Environment.OSVersion.Platform == PlatformID.Unix ? "curl" : "curl.exe", args.ToString(), true);
             });
 
             var outputData = File.ReadAllBytes(tempFile);
@@ -95,10 +97,10 @@ namespace Jackett.Utils.Clients
             if (Startup.ProxyConnection != null)
             {
                 // the proxy provided headers too so we need to split headers again
-                var headSplit1 = stdout.IndexOf("\r\n\r\n",headSplit + 4);
+                var headSplit1 = stdout.IndexOf("\r\n\r\n", headSplit + 4);
                 if (headSplit1 > 0)
                 {
-                    headers = stdout.Substring(headSplit + 4,headSplit1 - (headSplit + 4));
+                    headers = stdout.Substring(headSplit + 4, headSplit1 - (headSplit + 4));
                     headSplit = headSplit1;
                 }
             }

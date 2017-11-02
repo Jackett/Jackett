@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using CloudFlareUtilities;
-using Jackett.Models;
-using Jackett.Services;
-using NLog;
+﻿using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +7,11 @@ using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
+using CloudFlareUtilities;
+using com.LandonKey.SocksWebProxy;
+using com.LandonKey.SocksWebProxy.Proxy;
 
 namespace Jackett.Utils.Clients
 {
@@ -81,31 +79,48 @@ namespace Jackett.Utils.Clients
                 }
             }
             var useProxy = false;
-            WebProxy proxyServer = null;
-            var proxyUrl = Engine.Server.Config.ProxyUrl;
-            if (!string.IsNullOrWhiteSpace(proxyUrl))
-            {
-                if (Engine.Server.Config.ProxyPort.HasValue)
-                {
-                    proxyServer = new WebProxy(proxyUrl, Engine.Server.Config.ProxyPort.Value);
-                }
-                else
-                {
-                    proxyServer = new WebProxy(proxyUrl);
-                }
-                var username = Engine.Server.Config.ProxyUsername;
-                var password = Engine.Server.Config.ProxyPassword;
-                if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
-                {
-                    var creds = new NetworkCredential(username, password);
-                    proxyServer.Credentials = creds;
-                }
-                proxyServer.BypassProxyOnLocal = false;
-                useProxy = true;
-            }
 
             using (ClearanceHandler clearanceHandlr = new ClearanceHandler())
             {
+                IWebProxy proxyServer = null;
+                var proxyUrl = Engine.Server.Config.GetProxyUrl();
+                if (!string.IsNullOrWhiteSpace(proxyUrl))
+                {
+                    useProxy = true;
+                    NetworkCredential creds = null;
+                    if (!Engine.Server.Config.ProxyIsAnonymous)
+                    {
+                        var username = Engine.Server.Config.ProxyUsername;
+                        var password = Engine.Server.Config.ProxyPassword;
+                        creds = new NetworkCredential(username, password);
+                    }
+                    if (Engine.Server.Config.ProxyType != Models.Config.ProxyType.Http)
+                    {
+                        var addresses = await Dns.GetHostAddressesAsync(Engine.Server.Config.ProxyUrl);
+                        var socksConfig = new ProxyConfig
+                        {
+                            SocksAddress = addresses.FirstOrDefault(),
+                            Username = Engine.Server.Config.ProxyUsername,
+                            Password = Engine.Server.Config.ProxyPassword,
+                            Version = Engine.Server.Config.ProxyType == Models.Config.ProxyType.Socks4 ?
+                            ProxyConfig.SocksVersion.Four :
+                            ProxyConfig.SocksVersion.Five
+                        };
+                        if (Engine.Server.Config.ProxyPort.HasValue)
+                        {
+                            socksConfig.SocksPort = Engine.Server.Config.ProxyPort.Value;
+                        }
+                        proxyServer = new SocksWebProxy(socksConfig, false);
+                    }
+                    else
+                    {
+                        proxyServer = new WebProxy(proxyUrl)
+                        {
+                            BypassProxyOnLocal = false,
+                            Credentials = creds
+                        };
+                    }
+                }
                 using (HttpClientHandler clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
@@ -116,7 +131,6 @@ namespace Jackett.Utils.Clients
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                 })
                 {
-
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {
@@ -172,8 +186,10 @@ namespace Jackett.Utils.Clients
 
                             using (response = await client.SendAsync(request))
                             {
-                                var result = new WebClientByteResult();
-                                result.Content = await response.Content.ReadAsByteArrayAsync();
+                                var result = new WebClientByteResult
+                                {
+                                    Content = await response.Content.ReadAsByteArrayAsync()
+                                };
 
                                 foreach (var header in response.Headers)
                                 {
@@ -183,7 +199,7 @@ namespace Jackett.Utils.Clients
 
                                 // some cloudflare clients are using a refresh header
                                 // Pull it out manually 
-                                if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
+                                if (response.StatusCode == HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
                                 {
                                     var refreshHeaders = response.Headers.GetValues("Refresh");
                                     var redirval = "";

@@ -25,7 +25,7 @@ namespace Jackett
             public HttpMethod Method { get; private set; }
             public IEnumerable<KeyValuePair<string, string>> PostData { get; set; }
             public Dictionary<string, string> Headers { get; set; }
-            public string RawPOSTDdata { get; set;}
+            public string RawPOSTDdata { get; set; }
 
             public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPOSTData = null)
             {
@@ -61,7 +61,7 @@ namespace Jackett
             return result;
         }
 
-        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData =null)
+        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer, headers);
             curlRequest.PostData = formData;
@@ -87,13 +87,13 @@ namespace Jackett
 
                 using (var easy = new CurlEasy())
                 {
-                    
+
                     easy.Url = curlRequest.Url;
                     easy.BufferSize = 64 * 1024;
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
                     easy.FollowLocation = false;
                     easy.ConnectTimeout = 20;
-                    if(curlRequest.Headers != null)
+                    if (curlRequest.Headers != null)
                     {
                         CurlSlist curlHeaders = new CurlSlist();
                         foreach (var header in curlRequest.Headers)
@@ -153,10 +153,17 @@ namespace Jackett
                         easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
-                    if (Engine.Server.Config.Proxy != null)
+                    var proxy = Engine.Server.Config.GetProxyUrl();
+                    if (proxy != null)
                     {
                         easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
-                        easy.SetOpt(CurlOption.Proxy, Engine.Server.Config.Proxy);
+                        easy.SetOpt(CurlOption.Proxy, proxy);
+
+                        var authString = Engine.Server.Config.GetProxyAuthString();
+                        if (authString != null)
+                        {
+                            easy.SetOpt(CurlOption.ProxyUserPwd, authString);
+                        }
                     }
 
                     easy.Perform();
@@ -209,7 +216,8 @@ namespace Jackett
                             if (key == "set-cookie")
                             {
                                 var nameSplit = value.IndexOf('=');
-                                if (nameSplit > -1) {
+                                if (nameSplit > -1)
+                                {
                                     var cKey = value.Substring(0, nameSplit);
                                     var cVal = value.Split(';')[0] + ";";
                                     cookies.Add(new Tuple<string, string>(cKey, cVal));
@@ -241,12 +249,12 @@ namespace Jackett
                         OnErrorMessage("request.Cookies: " + curlRequest.Cookies);
                         OnErrorMessage("request.Referer: " + curlRequest.Referer);
                         OnErrorMessage("request.RawPOSTDdata: " + curlRequest.RawPOSTDdata);
-                        OnErrorMessage("cookies: "+ cookieBuilder.ToString().Trim());
+                        OnErrorMessage("cookies: " + cookieBuilder.ToString().Trim());
                         OnErrorMessage("headerString:\n" + headerString);
-                    
+
                         foreach (var headerPart in headerParts)
                         {
-                            OnErrorMessage("headerParts: "+headerPart);
+                            OnErrorMessage("headerParts: " + headerPart);
                         }
                     }
                     catch (Exception ex)
@@ -254,7 +262,7 @@ namespace Jackett
                         OnErrorMessage(string.Format("CurlHelper: error while handling NotImplemented/InternalServerError:\n{0}", ex));
                     }
                 }
-                
+
                 var contentBytes = Combine(contentBuffers.ToArray());
                 var curlResponse = new CurlResponse(headers, contentBytes, status, cookieBuilder.ToString().Trim());
                 return curlResponse;

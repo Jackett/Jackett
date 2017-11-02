@@ -15,6 +15,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
+using com.LandonKey.SocksWebProxy.Proxy;
+using com.LandonKey.SocksWebProxy;
 
 namespace Jackett.Utils.Clients
 {
@@ -36,27 +38,44 @@ namespace Jackett.Utils.Clients
         {
             cookies = new CookieContainer();
             var useProxy = false;
-            WebProxy proxyServer = null;
-            var proxyUrl = Engine.Server.Config.ProxyUrl;
+            IWebProxy proxyServer = null;
+            var proxyUrl = Engine.Server.Config.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                if (Engine.Server.Config.ProxyPort.HasValue)
+                useProxy = true;
+                NetworkCredential creds = null;
+                if (!Engine.Server.Config.ProxyIsAnonymous)
                 {
-                    proxyServer = new WebProxy(proxyUrl, Engine.Server.Config.ProxyPort.Value);
+                    var username = Engine.Server.Config.ProxyUsername;
+                    var password = Engine.Server.Config.ProxyPassword;
+                    creds = new NetworkCredential(username, password);
+                }
+                if (Engine.Server.Config.ProxyType != Models.Config.ProxyType.Http)
+                {
+                    var addresses = Dns.GetHostAddressesAsync(Engine.Server.Config.ProxyUrl).Result;
+                    var socksConfig = new ProxyConfig
+                    {
+                        SocksAddress = addresses.FirstOrDefault(),
+                        Username = Engine.Server.Config.ProxyUsername,
+                        Password = Engine.Server.Config.ProxyPassword,
+                        Version = Engine.Server.Config.ProxyType == Models.Config.ProxyType.Socks4 ?
+                        ProxyConfig.SocksVersion.Four :
+                        ProxyConfig.SocksVersion.Five
+                    };
+                    if (Engine.Server.Config.ProxyPort.HasValue)
+                    {
+                        socksConfig.SocksPort = Engine.Server.Config.ProxyPort.Value;
+                    }
+                    proxyServer = new SocksWebProxy(socksConfig, false);
                 }
                 else
                 {
-                    proxyServer = new WebProxy(proxyUrl);
+                    proxyServer = new WebProxy(proxyUrl)
+                    {
+                        BypassProxyOnLocal = false,
+                        Credentials = creds
+                    };
                 }
-                var username = Engine.Server.Config.ProxyUsername;
-                var password = Engine.Server.Config.ProxyPassword;
-                if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
-                {
-                    var creds = new NetworkCredential(username, password);
-                    proxyServer.Credentials = creds;
-                }
-                proxyServer.BypassProxyOnLocal = false;
-                useProxy = true;
             }
 
             clearanceHandlr = new ClearanceHandler();
@@ -158,7 +177,7 @@ namespace Jackett.Utils.Clients
 
             if (!string.IsNullOrEmpty(webRequest.RawBody))
             {
-                var type = webRequest.Headers.Where(h => h.Key == "Content-Type").Cast<KeyValuePair<string,string>?>().FirstOrDefault();
+                var type = webRequest.Headers.Where(h => h.Key == "Content-Type").Cast<KeyValuePair<string, string>?>().FirstOrDefault();
                 if (type.HasValue)
                 {
                     var str = new StringContent(webRequest.RawBody);
@@ -249,7 +268,7 @@ namespace Jackett.Utils.Clients
                     var nameSplit = value.IndexOf('=');
                     if (nameSplit > -1)
                     {
-                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';')))+";"));
+                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';'))) + ";"));
                     }
                 }
 
