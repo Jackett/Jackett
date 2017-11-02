@@ -34,9 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="CurlSharp.dll.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Models\TorznabCatType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TorznabCatType.generated.cs</LastGenOutput>
