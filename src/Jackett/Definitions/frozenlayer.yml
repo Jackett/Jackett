@@ -1,0 +1,95 @@
+---
+  site: frozenlayer
+  name: Frozen Layer
+  description: "Frozen Layer is a SPANISH Public torrent site focused on ANIME"
+  language: es-es
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.frozen-layer.com/
+    
+  settings:
+    - name: category
+      type: select
+      label: Category
+      default: "todos"
+      options:
+        todos: "todos"
+        anime: "anime"
+        manga: "manga"
+        dorama: "dorama"
+        videojuego: "videojuego"
+        BSO: "BSO"
+        PV: "PV"
+        otros: "otros"
+    - name: info
+      type: info
+      label: Direct Downloads
+      default: This definition filters for search results that contain .torrent and magnet only. Results for Direct Download are not supported.
+
+  caps:
+    categorymappings:
+      - {id: Anime,  cat: TV/Anime, desc: "anime"}
+      - {id: Manga,  cat: TV/Anime, desc: "manga"}
+      - {id: Dorama,  cat: TV/Anime, desc: "dorama"}
+      - {id: Videojuego,  cat: TV/Anime, desc: "videojuego"}
+      - {id: Bso,  cat: TV/Anime, desc: "BSO"}
+      - {id: Pv,  cat: TV/Anime, desc: "PV"}
+      - {id: Otros,  cat: TV/Anime, desc: "otros"}
+
+    modes:
+      search: [q]
+      tv-search: [q]
+
+  search:
+    paths:
+      - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{else}}descargas{{end}}"
+      - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{else}}descargas{{end}}"
+    rows:
+      selector: table#descargas > tbody > tr:has(td:has(a[href^="magnet:?"]))
+    fields:
+      title:
+        selector: td.tit a
+      details:
+        selector: td.tit a
+        attribute: href
+      download:
+        selector: td:nth-child(1) a[href$=".torrent"]
+        attribute: href
+      magnet:
+        selector: td:nth-child(1) a[href^="magnet:?"]
+        attribute: href
+      category:
+        text: Anime
+      category:
+        optional: true
+        selector: td.tit span
+      date:
+        # 1d
+        # 2d 
+        # 1d 3h
+        # 3 dias
+        # 3h 14m
+        optional: true
+        selector: td.fecha:not(:contains("Jan:")):not(:contains("Feb")):not(:contains("Mar:")):not(:contains("Apr")):not(:contains("May:")):not(:contains("Jun")):not(:contains("Jul:")):not(:contains("Aug")):not(:contains("Sep:")):not(:contains("Oct")):not(:contains("Nov:")):not(:contains("Dec"))
+        filters:
+          - name: replace
+            args: ["días", "days ago"]
+          - name: timeago
+      date:
+        # 29 Oct 17
+        optional: true
+        selector: td.fecha:not(:contains("d")):not(:contains("h"))
+        filters:
+          - name: dateparse
+            args: "02 Jan 06"
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector:  td:nth-child(7)
+      leechers:
+        selector:  td:nth-child(8)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
