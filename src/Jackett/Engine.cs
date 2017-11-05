@@ -14,6 +14,7 @@ using System.Web.Http.Dependencies;
 using Autofac.Integration.WebApi;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett
 {
@@ -87,6 +88,14 @@ namespace Jackett
             }
         }
 
+        public static ServerConfig ServerConfig
+        {
+            get
+            {
+                return container.Resolve<ServerConfig>();
+            }
+        }
+        
         public static IRunTimeService RunTime
         {
             get
@@ -173,6 +182,11 @@ namespace Jackett
             }
 
             LogManager.ReconfigExistingLoggers();
+        }
+
+        public static void SaveServerConfig()
+        {
+            ConfigService.SaveConfig(ServerConfig);
         }
     }
 

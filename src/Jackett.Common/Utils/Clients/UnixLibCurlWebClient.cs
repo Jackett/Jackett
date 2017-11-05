@@ -14,15 +14,17 @@ using System.Threading.Tasks;
 using CloudFlareUtilities;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
     public class UnixLibCurlWebClient : WebClient
     {
-        public UnixLibCurlWebClient(IProcessService p, Logger l, IConfigurationService c)
+        public UnixLibCurlWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
-                   c: c)
+                   c: c,
+                   sc: sc)
         {
         }
 

@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Jackett.Models.Config;
 using Jackett.Services;
 using Jackett.Services.Interfaces;
 using Jackett.Utils;
@@ -19,11 +20,16 @@ namespace Jackett.Controllers
     [JackettAPINoCache]
     public class WebUIController : ApiController
     {
-        public WebUIController(IConfigurationService config, IServerService ss, ISecuityService s, Logger l)
+        private IConfigurationService config;
+        private ServerConfig serverConfig;
+        private ISecuityService securityService;
+        private Logger logger;
+
+        public WebUIController(IConfigurationService config, ISecuityService ss, ServerConfig s, Logger l)
         {
             this.config = config;
-            serverService = ss;
-            securityService = s;
+            serverConfig = s;
+            securityService = ss;
             logger = l;
         }
 
@@ -70,7 +76,7 @@ namespace Jackett.Controllers
             {
                 var formData = await Request.Content.ReadAsFormDataAsync();
 
-                if (formData != null && securityService.HashPassword(formData["password"]) == serverService.Config.AdminPassword)
+                if (formData != null && securityService.HashPassword(formData["password"]) == serverConfig.AdminPassword)
                 {
                     var file = GetFile("index.html");
                     securityService.Login(file);
@@ -83,9 +89,6 @@ namespace Jackett.Controllers
             }
         }
 
-        private IConfigurationService config;
-        private IServerService serverService;
-        private ISecuityService securityService;
-        private Logger logger;
+      
     }
 }

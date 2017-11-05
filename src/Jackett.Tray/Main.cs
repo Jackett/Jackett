@@ -54,7 +54,7 @@ namespace JackettTray
 
         void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            Process.Start("http://127.0.0.1:" + Engine.Server.Config.Port);
+            Process.Start("http://127.0.0.1:" + Engine.ServerConfig.Port);
         }
 
         void toolStripMenuItemShutdown_Click(object sender, EventArgs e)

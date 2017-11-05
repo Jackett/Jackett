@@ -172,10 +172,10 @@ namespace JackettConsole
                     // Override listen public
                     if (options.ListenPublic || options.ListenPrivate)
                     {
-                        if (Engine.Server.Config.AllowExternal != options.ListenPublic)
+                        if (Engine.ServerConfig.AllowExternal != options.ListenPublic)
                         {
                             Engine.Logger.Info("Overriding external access to " + options.ListenPublic);
-                            Engine.Server.Config.AllowExternal = options.ListenPublic;
+                            Engine.ServerConfig.AllowExternal = options.ListenPublic;
                             if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                             {
                                 if (ServerUtil.IsUserAdministrator())
@@ -190,17 +190,17 @@ namespace JackettConsole
                                 }
                             }
 
-                            Engine.Server.SaveConfig();
+                            Engine.SaveServerConfig();
                         }
                     }
 
                     // Override port
                     if (options.Port != 0)
                     {
-                        if (Engine.Server.Config.Port != options.Port)
+                        if (Engine.ServerConfig.Port != options.Port)
                         {
                             Engine.Logger.Info("Overriding port to " + options.Port);
-                            Engine.Server.Config.Port = options.Port;
+                            Engine.ServerConfig.Port = options.Port;
                             if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                             {
                                 if (ServerUtil.IsUserAdministrator())
@@ -215,7 +215,7 @@ namespace JackettConsole
                                 }
                             }
 
-                            Engine.Server.SaveConfig();
+                            Engine.SaveServerConfig();
                         }
                     }
 

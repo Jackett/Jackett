@@ -12,7 +12,7 @@ namespace Jackett.Utils
         public override void OnAuthorization(HttpActionContext actionContext)
         {
             // Skip authorisation on blank passwords
-            if (string.IsNullOrEmpty(Engine.Server.Config.AdminPassword))
+            if (string.IsNullOrEmpty(Engine.ServerConfig.AdminPassword))
             {
                 return;
             }

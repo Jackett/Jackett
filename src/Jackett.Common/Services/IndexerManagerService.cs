@@ -13,6 +13,7 @@ using Jackett.Indexers.Meta;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Jackett.Services.Interfaces;
+using Jackett.Models.Config;
 
 namespace Jackett.Services
 {
@@ -25,20 +26,20 @@ namespace Jackett.Services
         private WebClient webClient;
         private IProcessService processService;
         private IConfigurationService globalConfigService;
-        private IServerService serverService;
+        private ServerConfig serverConfig;
         private Logger logger;
 
         private Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
 
-        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, IServerService serverService)
+        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
         {
             configService = config;
             this.protectionService = protectionService;
             this.webClient = webClient;
             this.processService = processService;
             this.globalConfigService = globalConfigService;
-            this.serverService = serverService;
+            this.serverConfig = serverConfig;
             logger = l;
             cacheService = cache;
         }
@@ -66,7 +67,7 @@ namespace Jackett.Services
                 if (constructor != null)
                 {
                     // create own webClient instance for each indexer (seperate cookies stores, etc.)
-                    var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
+                    var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService, serverConfig);
 
                     var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService };
                     var indexer = (IIndexer)constructor.Invoke(arguments);
@@ -123,7 +124,7 @@ namespace Jackett.Services
                     try
                     {
                         // create own webClient instance for each indexer (seperate cookies stores, etc.)
-                        var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService);
+                        var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService, serverConfig);
 
                         IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, definition);
                         configService.Load(indexer);
@@ -155,7 +156,7 @@ namespace Jackett.Services
 
         public void InitAggregateIndexer()
         {
-            var omdbApiKey = serverService.Config.OmdbApiKey;
+            var omdbApiKey = serverConfig.OmdbApiKey;
             IFallbackStrategyProvider fallbackStrategyProvider = null;
             IResultFilterProvider resultFilterProvider = null;
             if (!omdbApiKey.IsNullOrEmptyOrWhitespace())
