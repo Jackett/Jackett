@@ -42,7 +42,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.GetEncoding("Windows-1255");
+            Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
             TorznabCaps.Categories.Clear();
