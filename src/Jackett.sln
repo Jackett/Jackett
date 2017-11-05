@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurlSharp", "CurlSharp\Curl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE7B0C8A-6144-47CD-821E-B09BA1B7BADE}"
 	ProjectSection(SolutionItems) = preProject
-		..\Build.bat = ..\Build.bat
+		..\appveyor.yml = ..\appveyor.yml
 		..\Installer.iss = ..\Installer.iss
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateTimeRoutines", "DateTim
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2FA9B879-5882-4B39-8D34-9EBCB82B4F2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jacket.Common", "Jackett.Common\Jacket.Common.csproj", "{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Common", "Jackett.Common\Jackett.Common.csproj", "{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET", ".NET", "{FF8B9A1B-AE7E-4F14-9C37-DA861D034738}"
 EndProject

@@ -286,9 +286,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jackett.Common\Jacket.Common.csproj">
+    <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj">
       <Project>{6b854a1b-9a90-49c0-bc37-9a35c75bca73}</Project>
-      <Name>Jacket.Common</Name>
+      <Name>Jackett.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
