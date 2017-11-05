@@ -73,235 +73,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationException.cs" />
     <Compile Include="CacheControlAttribute.cs" />
-    <Compile Include="IndexerException.cs" />
     <Compile Include="Controllers\BlackholeController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Indexers\Abstract\CouchPotatoTracker.cs" />
-    <Compile Include="Indexers\HDOnly.cs" />
-    <Compile Include="Indexers\cgpeers.cs" />
-    <Compile Include="Indexers\LostFilm.cs" />
-    <Compile Include="Indexers\PiXELHD.cs" />
-    <Compile Include="Indexers\Hardbay.cs" />
-    <Compile Include="Indexers\Synthesiz3r.cs" />
-    <Compile Include="Indexers\PolishTracker.cs" />
-    <Compile Include="Indexers\yts.cs" />
-    <Compile Include="Indexers\Rarbg.cs" />
-    <Compile Include="Indexers\Psytorrents.cs" />
-    <Compile Include="Indexers\BrokenStones.cs" />
-    <Compile Include="Indexers\HDForever.cs" />
-    <Compile Include="Indexers\ShowRSS.cs" />
-    <Compile Include="Indexers\Superbits.cs" />
-    <Compile Include="Indexers\rutracker.cs" />
-    <Compile Include="Indexers\Abstract\GazelleTracker.cs" />
-    <Compile Include="Indexers\AnimeTorrents.cs" />
-    <Compile Include="Indexers\7tor.cs" />
-    <Compile Include="Indexers\EliteTracker.cs" />
-    <Compile Include="Indexers\Torrentech.cs" />
-    <Compile Include="Indexers\notwhatcd.cs" />
-    <Compile Include="Indexers\Redacted.cs" />
-    <Compile Include="Indexers\Norbits.cs" />
-    <Compile Include="Indexers\TVVault.cs" />
-    <Compile Include="Indexers\BJShare.cs" />
-    <Compile Include="Indexers\CardigannIndexer.cs" />
-    <Compile Include="Indexers\HD4Free.cs" />
-    <Compile Include="Indexers\myAmity.cs" />
-    <Compile Include="Indexers\TorrentNetwork.cs" />
-    <Compile Include="Indexers\Andraste.cs" />
-    <Compile Include="Indexers\TorrentHeaven.cs" />
-    <Compile Include="Indexers\NewRealWorld.cs" />
-    <Compile Include="Indexers\BitCityReloaded.cs" />
-    <Compile Include="Indexers\FunFile.cs" />
-    <Compile Include="Indexers\GhostCity.cs" />
-    <Compile Include="Indexers\Hebits.cs" />
-    <Compile Include="Indexers\MyAnonamouse.cs" />
-    <Compile Include="Indexers\PassThePopcorn.cs" />
-    <Compile Include="Indexers\PirateTheNet.cs" />
-    <Compile Include="Indexers\HouseOfTorrents.cs" />
-    <Compile Include="Indexers\TorrentSyndikat.cs" />
-    <Compile Include="Indexers\x264.cs" />
-    <Compile Include="Indexers\Xthor.cs" />
-    <Compile Include="Indexers\AlphaRatio.cs" />
-    <Compile Include="Indexers\BitSoup.cs" />
-    <Compile Include="Indexers\CinemaZ.cs" />
-    <Compile Include="Indexers\Avistaz.cs" />
-    <Compile Include="Indexers\BaseIndexer.cs" />
-    <Compile Include="Indexers\BB.cs" />
-    <Compile Include="Indexers\BeyondHD.cs" />
-    <Compile Include="Indexers\BitHdtv.cs" />
-    <Compile Include="Indexers\BitMeTV.cs" />
-    <Compile Include="Indexers\Demonoid.cs" />
-    <Compile Include="Indexers\DigitalHive.cs" />
-    <Compile Include="Indexers\BroadcastTheNet.cs" />
-    <Compile Include="Indexers\DanishBits.cs" />
-    <Compile Include="Indexers\Abnormal.cs" />
-    <Compile Include="Indexers\Fuzer.cs" />
-    <Compile Include="Indexers\GFTracker.cs" />
-    <Compile Include="Indexers\GimmePeers.cs" />
-    <Compile Include="Indexers\RevolutionTT.cs" />
-    <Compile Include="Indexers\TehConnection.cs" />
-    <Compile Include="Indexers\Hounddawgs.cs" />
-    <Compile Include="Indexers\Shazbat.cs" />
-    <Compile Include="Indexers\HDSpace.cs" />
-    <Compile Include="Indexers\HDTorrents.cs" />
-    <Compile Include="Indexers\IIndexer.cs" />
-    <Compile Include="Indexers\ImmortalSeed.cs" />
-    <Compile Include="Indexers\FileList.cs" />
-    <Compile Include="Indexers\Abstract\AvistazTracker.cs" />
-    <Compile Include="Indexers\TransmitheNet.cs" />
-    <Compile Include="Indexers\WiHD.cs" />
-    <Compile Include="Indexers\XSpeeds.cs" />
-    <Compile Include="Models\GitHub\Asset.cs" />
-    <Compile Include="Models\GitHub\Release.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNorbits.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataXthor.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAbnormal.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataWiHD.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataUserPasskey.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilterAndPasskey.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithFilter.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataAPIKey.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataLoginLink.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSSAndDisplay.cs" />
-    <Compile Include="Indexers\TVChaosUK.cs" />
-    <Compile Include="Indexers\NCore.cs" />
-    <Compile Include="Indexers\TorrentBytes.cs" />
-    <Compile Include="Indexers\IPTorrents.cs" />
-    <Compile Include="Indexers\MoreThanTV.cs" />
-    <Compile Include="Indexers\Pretome.cs" />
-    <Compile Include="Indexers\PrivateHD.cs" />
-    <Compile Include="Indexers\SceneTime.cs" />
-    <Compile Include="Indexers\SpeedCD.cs" />
-    <Compile Include="Indexers\TorrentDay.cs" />
-    <Compile Include="Indexers\TorrentLeech.cs" />
     <Compile Include="JackettProtectedAttribute.cs" />
-    <Compile Include="Models\CachedLog.cs" />
-    <Compile Include="Models\CachedResult.cs" />
-    <Compile Include="Models\CategoryMapping.cs" />
-    <Compile Include="Models\IndexerConfigurationStatus.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataFileList.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLoginWithRSS.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataRecaptchaLogin.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataLoginTokin.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataNCore.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataCaptchaLogin.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataAnimeBytes.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataUrl.cs" />
-    <Compile Include="Models\IndexerConfig\ISerializableConfig.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataPinNumber.cs" />
-    <Compile Include="Models\TorznabCapabilities.cs" />
-    <Compile Include="Models\Config\ServerConfig.cs" />
-    <Compile Include="Models\TorznabCategory.cs" />
-    <Compile Include="Models\TorznabCatType.cs" />
-    <Compile Include="Models\TorznabCatType.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TorznabCatType.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TrackerCache.cs" />
-    <Compile Include="Models\TrackerCacheResult.cs" />
-    <Compile Include="Services\CacheService.cs" />
-    <Compile Include="Services\Interfaces\ICacheService.cs" />
-    <Compile Include="Services\Interfaces\IImdbResolver.cs" />
-    <Compile Include="Services\Interfaces\IConfigurationService.cs" />
-    <Compile Include="Services\Interfaces\IIndexerConfigurationService.cs" />
-    <Compile Include="Services\Interfaces\IIndexerManagerService.cs" />
-    <Compile Include="Services\Interfaces\ILogCacheService.cs" />
-    <Compile Include="Services\Interfaces\IProcessService.cs" />
-    <Compile Include="Services\Interfaces\IProtectionService.cs" />
-    <Compile Include="Services\Interfaces\ISecuityService.cs" />
-    <Compile Include="Services\Interfaces\ISerializeService.cs" />
-    <Compile Include="Services\Interfaces\IServerService.cs" />
-    <Compile Include="Services\Interfaces\IRunTimeService.cs" />
-    <Compile Include="Services\Interfaces\IServiceConfigService.cs" />
-    <Compile Include="Services\Interfaces\ITrayLockService.cs" />
-    <Compile Include="Services\Interfaces\IUpdateService.cs" />
-    <Compile Include="Services\LogCacheService.cs" />
-    <Compile Include="Services\ProtectionService.cs" />
-    <Compile Include="Services\TrayLockService.cs" />
-    <Compile Include="Services\UpdateService.cs" />
-    <Compile Include="Utils\Clients\BaseWebResult.cs" />
-    <Compile Include="Utils\Clients\HttpWebClient2.cs" />
-    <Compile Include="Utils\Clients\UnixLibCurlWebClient.cs" />
-    <Compile Include="Utils\Clients\WebByteResult.cs" />
-    <Compile Include="Utils\Clients\WebClientResult.cs" />
-    <Compile Include="Services\ProcessService.cs" />
-    <Compile Include="Services\SecuityService.cs" />
-    <Compile Include="Services\SerializeService.cs" />
-    <Compile Include="Services\ServiceConfigService.cs" />
-    <Compile Include="Services\SpinService.cs" />
-    <Compile Include="Utils\BrowserUtil.cs" />
-    <Compile Include="Models\CachedQueryResult.cs" />
-    <Compile Include="Models\ChannelInfo.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationData.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataBasicLogin.cs" />
-    <Compile Include="Models\IndexerConfig\ConfigurationDataCookie.cs" />
     <Compile Include="CookieContainerExtensions.cs" />
-    <Compile Include="Utils\Clients\WebRequest.cs" />
-    <Compile Include="Utils\DataUrl.cs" />
-    <Compile Include="ExceptionWithConfigData.cs" />
     <Compile Include="HttpClientExtensions.cs" />
-    <Compile Include="Indexers\AnimeBytes.cs" />
     <Compile Include="JackettModule.cs" />
-    <Compile Include="Utils\DateTimeUtil.cs" />
-    <Compile Include="Utils\Clients\IWebClient.cs" />
-    <Compile Include="Utils\JackettAuthorizedAttribute.cs" />
-    <Compile Include="Utils\JsonContent.cs" />
-    <Compile Include="Utils\ParseUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ReleaseInfo.cs" />
-    <Compile Include="Models\ResultPage.cs" />
-    <Compile Include="Services\ServerService.cs" />
-    <Compile Include="Utils\ServerUtil.cs" />
-    <Compile Include="Services\ConfigurationService.cs" />
-    <Compile Include="Services\IndexerManagerService.cs" />
+    <Compile Include="Services\ProtectionService.cs" />
+    <Compile Include="Services\SecuityService.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Models\TorznabQuery.cs" />
-    <Compile Include="CurlHelper.cs" />
-    <Compile Include="Utils\StringCipher.cs" />
-    <Compile Include="Utils\StringUtil.cs" />
-    <Compile Include="Utils\TorznabCapsUtil.cs" />
-    <Compile Include="Utils\Clients\UnixSafeCurlWebClient.cs" />
-    <Compile Include="Utils\TvCategoryParser.cs" />
-    <Compile Include="Utils\RedirectMiddleware.cs" />
-    <Compile Include="Utils\WebAPIRequestLogger.cs" />
-    <Compile Include="Utils\WebAPIToNLogTracer.cs" />
-    <Compile Include="Utils\Clients\HttpWebClient.cs" />
-    <Compile Include="Indexers\BakaBT.cs" />
-    <Compile Include="Indexers\Meta\MetaIndexers.cs" />
-    <Compile Include="Indexers\Meta\BaseMetaIndexer.cs" />
-    <Compile Include="Indexers\Meta\Fallbacks.cs" />
-    <Compile Include="Indexers\Meta\ResultFilters.cs" />
-    <Compile Include="Services\ImdbResolver.cs" />
-    <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\JsonUtil.cs" />
-    <Compile Include="Services\IndexerConfigurationService.cs" />
-    <Compile Include="Models\IndexerDefinition.cs" />
-    <Compile Include="Indexers\Feeds\BaseNewznabIndexer.cs" />
-    <Compile Include="Indexers\Feeds\AnimeTosho.cs" />
-    <Compile Include="Indexers\Feeds\BaseFeedIndexer.cs" />
     <Compile Include="Controllers\IndexerApiController.cs" />
     <Compile Include="Controllers\UIController.cs" />
     <Compile Include="Controllers\ServerConfigurationController.cs" />
     <Compile Include="Controllers\ResultsController.cs" />
-    <Compile Include="Models\DTO\Config.cs" />
-    <Compile Include="Models\DTO\Indexer.cs" />
-    <Compile Include="Models\DTO\ServerConfig.cs" />
-    <Compile Include="Models\DTO\ApiSearch.cs" />
-    <Compile Include="Models\DTO\ManualSearchResult.cs" />
-    <Compile Include="Models\DTO\TorrentPotatoRequest.cs" />
-    <Compile Include="Models\DTO\TorrentPotatoResponse.cs" />
-    <Compile Include="Models\DTO\TorrentPotatoResponseItem.cs" />
-    <Compile Include="Models\DTO\TorznabRequest.cs" />
-    <Compile Include="Indexers\SceneFZ.cs" />
-    <Compile Include="Models\IndexerConfig\Bespoke\ConfigurationDataSceneFZ.cs" />
+    <Compile Include="Utils\JackettAuthorizedAttribute.cs" />
+    <Compile Include="Utils\RedirectMiddleware.cs" />
+    <Compile Include="Services\ServerService.cs" />
+    <Compile Include="Utils\WebAPIRequestLogger.cs" />
+    <Compile Include="Utils\WebAPIToNLogTracer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -336,9 +133,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CurlSharp.dll.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="Content\css\bootstrap-multiselect.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -455,10 +249,6 @@
     <Content Include="Content\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Models\TorznabCatType.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TorznabCatType.generated.cs</LastGenOutput>
-    </Content>
     <Content Include="Resources\validator_reply.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -482,23 +272,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AngleSharp">
-      <Version>0.9.9</Version>
-    </PackageReference>
     <PackageReference Include="Autofac.WebApi2.Owin">
       <Version>4.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="AutoMapper">
-      <Version>6.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="BencodeNET">
-      <Version>2.2.22</Version>
-    </PackageReference>
-    <PackageReference Include="CloudFlareUtilities">
-      <Version>0.4.0-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="CsQuery">
-      <Version>1.3.5-beta5</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost">
       <Version>5.2.3</Version>
@@ -509,24 +284,11 @@
     <PackageReference Include="Microsoft.Owin.StaticFiles">
       <Version>3.1.0</Version>
     </PackageReference>
-    <PackageReference Include="NLog">
-      <Version>5.0.0-beta11</Version>
-    </PackageReference>
-    <PackageReference Include="SharpZipLib">
-      <Version>0.86.0</Version>
-    </PackageReference>
-    <PackageReference Include="YamlDotNet">
-      <Version>4.2.2</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
-      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
-      <Name>CurlSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DateTimeRoutines\DateTimeRoutines.csproj">
-      <Project>{c28a79ee-ef81-4eee-a7fe-eb636423c935}</Project>
-      <Name>DateTimeRoutines</Name>
+    <ProjectReference Include="..\Jackett.Common\Jacket.Common.csproj">
+      <Project>{6b854a1b-9a90-49c0-bc37-9a35c75bca73}</Project>
+      <Name>Jacket.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

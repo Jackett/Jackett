@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Tracing;
+using Jacket.Common;
 
 namespace Jackett.Utils
 {
@@ -13,7 +14,7 @@ namespace Jackett.Utils
         public void Trace(HttpRequestMessage request, string category, TraceLevel level,
             Action<TraceRecord> traceAction)
         {
-            if (Startup.TracingEnabled)
+            if (JackettStartup.TracingEnabled)
             {
                 TraceRecord rec = new TraceRecord(request, category, level);
                 traceAction(rec);

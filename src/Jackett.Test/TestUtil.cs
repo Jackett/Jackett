@@ -22,7 +22,7 @@ namespace Jackett.Test
         {
             var builder = new ContainerBuilder();
             builder.RegisterModule<JackettModule>();
-            builder.RegisterType<TestWebClient>().As<IWebClient>().SingleInstance();
+            builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
             builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
             builder.RegisterType<TestIndexerManagerServiceHelper>().As<IIndexerManagerService>().SingleInstance();
             testContainer = builder.Build();
@@ -48,13 +48,13 @@ namespace Jackett.Test
 
         public static void RegisterByteCall(WebRequest r, Func<WebRequest, WebClientByteResult> f)
         {
-            var client = testContainer.Resolve<IWebClient>() as TestWebClient;
+            var client = testContainer.Resolve<WebClient>() as TestWebClient;
             client.RegisterByteCall(r, f);
         }
 
         public static void RegisterStringCall(WebRequest r, Func<WebRequest, WebClientStringResult> f)
         {
-            var client = testContainer.Resolve<IWebClient>() as TestWebClient;
+            var client = testContainer.Resolve<WebClient>() as TestWebClient;
             client.RegisterStringCall(r, f);
         }
 
