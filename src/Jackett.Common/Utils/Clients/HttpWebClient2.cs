@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
@@ -30,28 +31,29 @@ namespace Jackett.Utils.Clients
 
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
 
-        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, IServerService serverService)
+        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
-                   c: c)
+                   c: c,
+                   sc: sc)
         {
 
             cookies = new CookieContainer();
             var useProxy = false;
             WebProxy proxyServer = null;
-            var proxyUrl = serverService.Config.ProxyUrl;
+            var proxyUrl = serverConfig.ProxyUrl;
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                if (serverService.Config.ProxyPort.HasValue)
+                if (serverConfig.ProxyPort.HasValue)
                 {
-                    proxyServer = new WebProxy(proxyUrl, serverService.Config.ProxyPort.Value);
+                    proxyServer = new WebProxy(proxyUrl, serverConfig.ProxyPort.Value);
                 }
                 else
                 {
                     proxyServer = new WebProxy(proxyUrl);
                 }
-                var username = serverService.Config.ProxyUsername;
-                var password = serverService.Config.ProxyPassword;
+                var username = serverConfig.ProxyUsername;
+                var password = serverConfig.ProxyPassword;
                 if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
                 {
                     var creds = new NetworkCredential(username, password);

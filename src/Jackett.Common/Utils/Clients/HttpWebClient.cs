@@ -15,20 +15,21 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
     public class HttpWebClient : WebClient
     {
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
-        private IServerService _serverService;
 
-        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, IServerService serverService)
+        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
-                   c: c)
+                   c: c,
+                   sc: sc)
         {
-            _serverService = serverService;
+            
         }
 
         override public void Init()
@@ -85,19 +86,19 @@ namespace Jackett.Utils.Clients
             }
             var useProxy = false;
             WebProxy proxyServer = null;
-            var proxyUrl = _serverService.Config.ProxyUrl;
+            var proxyUrl = serverConfig.ProxyUrl;
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                if (_serverService.Config.ProxyPort.HasValue)
+                if (serverConfig.ProxyPort.HasValue)
                 {
-                    proxyServer = new WebProxy(proxyUrl, _serverService.Config.ProxyPort.Value);
+                    proxyServer = new WebProxy(proxyUrl, serverConfig.ProxyPort.Value);
                 }
                 else
                 {
                     proxyServer = new WebProxy(proxyUrl);
                 }
-                var username = _serverService.Config.ProxyUsername;
-                var password = _serverService.Config.ProxyPassword;
+                var username = serverConfig.ProxyUsername;
+                var password = serverConfig.ProxyPassword;
                 if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
                 {
                     var creds = new NetworkCredential(username, password);

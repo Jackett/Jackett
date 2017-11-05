@@ -13,19 +13,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
     public class UnixSafeCurlWebClient : WebClient
     {
-        private IServerService _serverService;
-
-        public UnixSafeCurlWebClient(IProcessService p, Logger l, IConfigurationService c, IServerService serverService)
+        public UnixSafeCurlWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
-                   c: c)
+                   c: c,
+                   sc: sc)
         {
-            _serverService = serverService;
+            
         }
 
         override public void Init()
@@ -35,9 +35,9 @@ namespace Jackett.Utils.Clients
         override protected async Task<WebClientByteResult> Run(WebRequest request)
         {
             var args = new StringBuilder();
-            if (_serverService.Config.Proxy != null)
+            if (serverConfig.Proxy != null)
             {
-                args.AppendFormat("-x '" + _serverService.Config.Proxy + "' ");
+                args.AppendFormat("-x '" + serverConfig.Proxy + "' ");
             }
             
             args.AppendFormat("--url \"{0}\" ", request.Url);

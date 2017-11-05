@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
@@ -16,6 +17,7 @@ namespace Jackett.Utils.Clients
     {
         protected Logger logger;
         protected IConfigurationService configService;
+        protected readonly ServerConfig serverConfig;
         protected IProcessService processService;
         protected DateTime lastRequest = DateTime.MinValue;
         protected TimeSpan requestDelayTimeSpan;
@@ -34,11 +36,12 @@ namespace Jackett.Utils.Clients
             // not implemented by default
         }
 
-        public WebClient(IProcessService p, Logger l, IConfigurationService c)
+        public WebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
         {
             processService = p;
             logger = l;
             configService = c;
+            serverConfig = sc;
         }
 
         async protected Task DelayRequest(WebRequest request)

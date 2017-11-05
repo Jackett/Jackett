@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Jackett.Services.Interfaces;
+using Jackett.Models.Config;
 
 namespace Jackett.Controllers
 {
@@ -17,14 +18,15 @@ namespace Jackett.Controllers
     {
         private Logger logger;
         private IIndexerManagerService indexerService;
-        IServerService serverService;
+        private readonly ServerConfig serverConfig;
         IProtectionService protectionService;
 
-        public BlackholeController(IIndexerManagerService i, Logger l, IServerService s, IProtectionService ps)
+        public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig config, IProtectionService ps)
         {
             logger = l;
             indexerService = i;
-            serverService = s;
+            serverConfig = config;
+
             protectionService = ps;
         }
 
@@ -42,7 +44,7 @@ namespace Jackett.Controllers
                     throw new Exception("This indexer is not configured.");
                 }
 
-                if (serverService.Config.APIKey != jackett_apikey)
+                if (serverConfig.APIKey != jackett_apikey)
                     throw new Exception("Incorrect API key");
 
                 path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
@@ -50,14 +52,14 @@ namespace Jackett.Controllers
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(remoteFile);
 
-                if (string.IsNullOrWhiteSpace(Engine.Server.Config.BlackholeDir))
+                if (string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
                     throw new Exception("Blackhole directory not set!");
                 }
 
-                if (!Directory.Exists(Engine.Server.Config.BlackholeDir))
+                if (!Directory.Exists(serverConfig.BlackholeDir))
                 {
-                    throw new Exception("Blackhole directory does not exist: " + Engine.Server.Config.BlackholeDir);
+                    throw new Exception("Blackhole directory does not exist: " + serverConfig.BlackholeDir);
                 }
 
                 var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
@@ -66,7 +68,7 @@ namespace Jackett.Controllers
                 else
                     fileName += "-"+StringUtil.MakeValidFileName(file, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks 
 
-                File.WriteAllBytes(Path.Combine(Engine.Server.Config.BlackholeDir, fileName), downloadBytes);
+                File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)

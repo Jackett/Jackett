@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using BencodeNET.Parsing;
+using Jackett.Models.Config;
 using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using NLog;
@@ -17,16 +18,16 @@ namespace Jackett.Controllers
     [JackettAPINoCache]
     public class DownloadController : ApiController
     {
+        private ServerConfig config;
         private Logger logger;
-        private IIndexerManagerService indexerService;
-        private IServerService serverService;
+        private IIndexerManagerService indexerService;        
         private IProtectionService protectionService;
 
-        public DownloadController(IIndexerManagerService i, Logger l, IServerService s, IProtectionService ps)
+        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig serverConfig)
         {
+            config = serverConfig;
             logger = l;
             indexerService = i;
-            serverService = s;
             protectionService = ps;
         }
 
@@ -46,7 +47,7 @@ namespace Jackett.Controllers
                 path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
                 path = protectionService.UnProtect(path);
 
-                if (serverService.Config.APIKey != jackett_apikey)
+                if (config.APIKey != jackett_apikey)
                     return new HttpResponseMessage(HttpStatusCode.Unauthorized);
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);

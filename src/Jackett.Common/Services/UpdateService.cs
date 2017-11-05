@@ -1,7 +1,6 @@
 ﻿using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
-using Jackett.Models.Config;
 using Jackett.Models.GitHub;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json;
@@ -19,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Services
 {
