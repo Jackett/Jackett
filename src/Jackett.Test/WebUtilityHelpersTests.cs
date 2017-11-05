@@ -18,10 +18,10 @@ namespace Jacket.Common.Tests
             _codePagesToTest = new Encoding[]{
                 Encoding.UTF8,
                 Encoding.ASCII,
-                Encoding.GetEncoding("ISO-8859-1"),
-                Encoding.GetEncoding("Windows-1255"),
-                Encoding.GetEncoding("Windows-1252"),
-                Encoding.GetEncoding("Windows-1251") }
+                Encoding.GetEncoding("iso-8859-1"),
+                Encoding.GetEncoding("windows-1255"),
+                Encoding.GetEncoding("windows-1252"),
+                Encoding.GetEncoding("windows-1251") }
             ;
 
             _stringsToTest = new string[]

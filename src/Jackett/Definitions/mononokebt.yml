@@ -4,7 +4,7 @@
   description: "Mononoke-BT is a FRENCH Private Torrent Tracker for ANIME"
   language: fr-fr
   type: private
-  encoding: ISO-8859-15
+  encoding: iso-8859-15
   links:
     - http://mononoke-bt.org/
 

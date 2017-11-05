@@ -54,7 +54,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataNorbits())
         {
-            Encoding = Encoding.GetEncoding("ISO-8859-1");
+            Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "nb-no";
             Type = "private";
 

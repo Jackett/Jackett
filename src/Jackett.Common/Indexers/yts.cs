@@ -44,7 +44,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataUrl(defaultSiteLink))
         {
-            Encoding = Encoding.GetEncoding("Windows-1252");
+            Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";
             Type = "public";
 
