@@ -44,7 +44,7 @@ namespace Jackett.Indexers
                 configData: new ConfigurationDataCaptchaLogin()
                 )
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
 

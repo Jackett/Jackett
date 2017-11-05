@@ -42,7 +42,7 @@ namespace Jackett.Indexers.Abstract
                 p: protectionService,
                 configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+                Encoding = Encoding.UTF8;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

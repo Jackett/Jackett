@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 p: protectionService,
                 configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
 
             AddCategoryMapping(1, TorznabCatType.Movies);

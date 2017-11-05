@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new NxtGnConfigurationData())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "da-dk";
             Type = "private";
 

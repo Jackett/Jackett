@@ -37,7 +37,7 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "de-de";
             Type = "private";
 

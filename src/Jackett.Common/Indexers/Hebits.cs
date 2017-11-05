@@ -41,7 +41,7 @@ namespace Jackett.Indexers
                 downloadBase: "https://hebits.net/",
                 configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.GetEncoding("windows-1255");
+            Encoding = Encoding.GetEncoding("Windows-1255");
             Language = "he-il";
             Type = "private";
 

@@ -40,7 +40,7 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding = Encoding.GetEncoding("ISO-8859-1");
             Language = "de-de";
             Type = "private";
 

@@ -58,7 +58,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataAnimeBytes())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
 

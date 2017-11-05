@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding = Encoding.GetEncoding("ISO-8859-1");
             Language = "en-us";
             Type = "private";
 

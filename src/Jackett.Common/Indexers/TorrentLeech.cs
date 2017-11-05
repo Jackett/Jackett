@@ -40,7 +40,7 @@ namespace Jackett.Indexers
                 downloadBase: "https://www.torrentleech.org/download/",
                 configData: new ConfigurationDataBasicLogin("For best results, change the 'Default Number of Torrents per Page' setting to the maximum in your profile on the TorrentLeech webpage."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding = Encoding.GetEncoding("ISO-8859-1");
             Language = "en-us";
             Type = "private";
 
