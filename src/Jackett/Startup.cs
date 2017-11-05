@@ -13,11 +13,13 @@ using System.Net.Http;
 using System.Threading;
 using System.Web.Http.Filters;
 using Newtonsoft.Json.Linq;
+using Jacket.Common;
+using System.Text;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
 {
-    class ApiExceptionHandler : System.Web.Http.Filters.IExceptionFilter
+    class ApiExceptionHandler : IExceptionFilter
     {
         public bool AllowMultiple
         {
@@ -94,60 +96,6 @@ namespace Jackett
 
     public class Startup
     {
-        public static bool TracingEnabled
-        {
-            get;
-            set;
-        }
-
-        public static bool LogRequests
-        {
-            get;
-            set;
-        }
-
-        public static string ClientOverride
-        {
-            get;
-            set;
-        }
-
-        public static string ProxyConnection
-        {
-            get;
-            set;
-        }
-
-        public static bool? DoSSLFix
-        {
-            get;
-            set;
-        }
-
-        public static bool? IgnoreSslErrors
-        {
-            get;
-            set;
-        }
-
-        public static string CustomDataFolder
-        {
-            get;
-            set;
-        }
-
-        public static string BasePath
-        {
-            get;
-            set;
-        }
-
-        public static bool NoRestart
-        {
-            get;
-            set;
-        }
-
         public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
@@ -177,13 +125,13 @@ namespace Jackett
             config.Filters.Add(new ApiExceptionHandler());
 
             // Setup tracing if enabled
-            if (TracingEnabled)
+            if (JackettStartup.TracingEnabled)
             {
                 config.EnableSystemDiagnosticsTracing();
                 config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer());
             }
             // Add request logging if enabled
-            if (LogRequests)
+            if (JackettStartup.LogRequests)
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
 
             config.DependencyResolver = Engine.DependencyResolver();
@@ -253,4 +201,5 @@ namespace Jackett
             });
         }
     }
+
 }

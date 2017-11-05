@@ -7,18 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
+using Jackett.Models.Config;
 
 namespace Jackett.Test
 {
-    public class TestWebClient : IWebClient
+    public class TestWebClient : WebClient
     {
         private Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>> byteCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientByteResult>>();
         private Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>> stringCallbacks = new Dictionary<WebRequest, Func<WebRequest, WebClientStringResult>>();
 
-        public TestWebClient(IProcessService p, Logger l, IConfigurationService c)
+        public TestWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
-                   c: c)
+                   c: c,
+                   sc: sc)
         {
         }
 

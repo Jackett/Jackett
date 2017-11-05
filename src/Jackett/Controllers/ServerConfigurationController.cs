@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
+using Jacket.Common;
 using Jackett.Models;
+using Jackett.Models.Config;
 using Jackett.Services;
 using Jackett.Services.Interfaces;
 using Jackett.Utils;
@@ -17,9 +19,20 @@ namespace Jackett.Controllers.V20
     [JackettAPINoCache]
     public class ServerConfigurationController : ApiController
     {
-        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p, IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l)
+        private readonly IConfigurationService configService;
+        private ServerConfig serverConfig;
+        private IServerService serverService;
+        private IProcessService processService;
+        private IIndexerManagerService indexerService;
+        private ISecuityService securityService;
+        private IUpdateService updater;
+        private ILogCacheService logCache;
+        private Logger logger;
+
+        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p,  IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
         {
-            config = c;
+            configService = c;
+            serverConfig = sc;
             serverService = s;
             processService = p;
             indexerService = i;
@@ -32,14 +45,14 @@ namespace Jackett.Controllers.V20
         [HttpPost]
         public void AdminPassword([FromBody]string password)
         {
-            var oldPassword = serverService.Config.AdminPassword;
+            var oldPassword = serverConfig.AdminPassword;
             if (string.IsNullOrEmpty(password))
                 password = string.Empty;
 
             if (oldPassword != password)
             {
-                serverService.Config.AdminPassword = securityService.HashPassword(password);
-                serverService.SaveConfig();
+                serverConfig.AdminPassword = securityService.HashPassword(password);
+                configService.SaveConfig(serverConfig);
             }
         }
 
@@ -53,7 +66,7 @@ namespace Jackett.Controllers.V20
         public Models.DTO.ServerConfig Config()
         {
 
-            var dto = new Models.DTO.ServerConfig(serverService.notices, serverService.Config, config.GetVersion());
+            var dto = new Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion());
             return dto;
         }
 
@@ -61,8 +74,8 @@ namespace Jackett.Controllers.V20
         [HttpPost]
         public void UpdateConfig([FromBody]Models.DTO.ServerConfig config)
         {
-            var originalPort = Engine.Server.Config.Port;
-            var originalAllowExternal = Engine.Server.Config.AllowExternal;
+            var originalPort = serverConfig.Port;
+            var originalAllowExternal = serverConfig.AllowExternal;
             int port = config.port;
             bool external = config.external;
             string saveDir = config.blackholedir;
@@ -79,39 +92,39 @@ namespace Jackett.Controllers.V20
 
             string omdbApiKey = config.omdbkey;
 
-            Engine.Server.Config.UpdateDisabled = updateDisabled;
-            Engine.Server.Config.UpdatePrerelease = preRelease;
-            Engine.Server.Config.BasePathOverride = basePathOverride;
-            Startup.BasePath = Engine.Server.BasePath();
-            Engine.Server.SaveConfig();
+            serverConfig.UpdateDisabled = updateDisabled;
+            serverConfig.UpdatePrerelease = preRelease;
+            serverConfig.BasePathOverride = basePathOverride;
+            JackettStartup.BasePath = Engine.Server.BasePath();
+            configService.SaveConfig(serverConfig);
 
             Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
-            Startup.TracingEnabled = logging;
+            JackettStartup.TracingEnabled = logging;
 
-            if (omdbApiKey != Engine.Server.Config.OmdbApiKey)
+            if (omdbApiKey != serverConfig.OmdbApiKey)
             {
-                Engine.Server.Config.OmdbApiKey = omdbApiKey;
-                Engine.Server.SaveConfig();
+                serverConfig.OmdbApiKey = omdbApiKey;
+                 configService.SaveConfig(serverConfig);
                 // HACK
                 indexerService.InitAggregateIndexer();
             }
 
-            if (config.proxy_url != Engine.Server.Config.ProxyUrl ||
-                config.proxy_port != Engine.Server.Config.ProxyPort ||
-                config.proxy_username != Engine.Server.Config.ProxyUsername ||
-                config.proxy_password != Engine.Server.Config.ProxyPassword)
+            if (config.proxy_url != serverConfig.ProxyUrl ||
+                config.proxy_port != serverConfig.ProxyPort ||
+                config.proxy_username != serverConfig.ProxyUsername ||
+                config.proxy_password != serverConfig.ProxyPassword)
             {
                 if (config.proxy_port < 1 || config.proxy_port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
-                Engine.Server.Config.ProxyUrl = config.proxy_url;
-                Engine.Server.Config.ProxyPort = config.proxy_port;
-                Engine.Server.Config.ProxyUsername = config.proxy_username;
-                Engine.Server.Config.ProxyPassword = config.proxy_password;
-                Engine.Server.SaveConfig();
+                serverConfig.ProxyUrl = config.proxy_url;
+                serverConfig.ProxyPort = config.proxy_port;
+                serverConfig.ProxyUsername = config.proxy_username;
+                serverConfig.ProxyPassword = config.proxy_password;
+                configService.SaveConfig(serverConfig);
             }
 
-            if (port != Engine.Server.Config.Port || external != Engine.Server.Config.AllowExternal)
+            if (port != serverConfig.Port || external != serverConfig.AllowExternal)
             {
 
                 if (ServerUtil.RestrictedPorts.Contains(port))
@@ -121,9 +134,9 @@ namespace Jackett.Controllers.V20
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
                 // Save port to the config so it can be picked up by the if needed when running as admin below.
-                Engine.Server.Config.AllowExternal = external;
-                Engine.Server.Config.Port = port;
-                Engine.Server.SaveConfig();
+                serverConfig.AllowExternal = external;
+                serverConfig.Port = port;
+                configService.SaveConfig(serverConfig);
 
                 // On Windows change the url reservations
                 if (System.Environment.OSVersion.Platform != PlatformID.Unix)
@@ -136,9 +149,9 @@ namespace Jackett.Controllers.V20
                         }
                         catch
                         {
-                            Engine.Server.Config.Port = originalPort;
-                            Engine.Server.Config.AllowExternal = originalAllowExternal;
-                            Engine.Server.SaveConfig();
+                            serverConfig.Port = originalPort;
+                            serverConfig.AllowExternal = originalAllowExternal;
+                            configService.SaveConfig(serverConfig);
 
                             throw new Exception("Failed to acquire admin permissions to reserve the new port.");
                         }
@@ -159,7 +172,7 @@ namespace Jackett.Controllers.V20
             })).Start();
             }
 
-            if (saveDir != Engine.Server.Config.BlackholeDir)
+            if (saveDir != serverConfig.BlackholeDir)
             {
                 if (!string.IsNullOrEmpty(saveDir))
                 {
@@ -169,8 +182,8 @@ namespace Jackett.Controllers.V20
                     }
                 }
 
-                Engine.Server.Config.BlackholeDir = saveDir;
-                Engine.Server.SaveConfig();
+                serverConfig.BlackholeDir = saveDir;
+                configService.SaveConfig(serverConfig);
             }
         }
 
@@ -180,13 +193,6 @@ namespace Jackett.Controllers.V20
             return logCache.Logs;
         }
 
-        private IConfigurationService config;
-        private IServerService serverService;
-        private IProcessService processService;
-        private IIndexerManagerService indexerService;
-        private ISecuityService securityService;
-        private IUpdateService updater;
-        private ILogCacheService logCache;
-        private Logger logger;
+      
     }
 }
