@@ -39,7 +39,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataFileList())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "ro-ro";
             Type = "private";
 

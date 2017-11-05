@@ -41,7 +41,7 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
         }

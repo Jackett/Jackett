@@ -14,6 +14,7 @@ using System.Threading;
 using System.Web.Http.Filters;
 using Newtonsoft.Json.Linq;
 using Jacket.Common;
+using System.Text;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett

@@ -41,7 +41,7 @@ namespace Jackett.Indexers
                    p: ps,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            Encoding = Encoding.GetEncoding("windows-1251");
+            Encoding = Encoding.GetEncoding("Windows-1251");
             Language = "ru-ru";
             Type = "semi-private";
 

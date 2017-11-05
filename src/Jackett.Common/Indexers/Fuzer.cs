@@ -163,7 +163,7 @@ namespace Jackett.Indexers
             searchUrl += "?";
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                var strEncoded = WebUtilityHelpers.UrlEncode(searchString, Encoding.GetEncoding("Windows-1255"));
+                var strEncoded = WebUtilityHelpers.UrlEncode(searchString, Encoding);
                 searchUrl += "&query=" + strEncoded + "&matchquery=any";
             }
 

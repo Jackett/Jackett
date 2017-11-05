@@ -42,7 +42,7 @@ namespace Jackett.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>QualityEncodeOnly</code><br><code>FreeLeechOnly</code>"))
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
 
