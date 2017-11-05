@@ -67,9 +67,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Jackett.Common\Jacket.Common.csproj">
+    <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj">
       <Project>{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}</Project>
-      <Name>Jacket.Common</Name>
+      <Name>Jackett.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Jackett.Service\Jackett.Service.csproj">
       <Project>{bf611f7b-4658-4cb8-aa9e-0736fadaa3ba}</Project>
