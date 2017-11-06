@@ -149,8 +149,8 @@ namespace Jackett.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
             {
-                var errorMessage = result.Content;
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                CQ errorMessage = result.Content;
+                throw new ExceptionWithConfigData(errorMessage.Text(), configData);
             });
 
             return IndexerConfigurationStatus.RequiresTesting;
