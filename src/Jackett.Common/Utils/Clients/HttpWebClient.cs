@@ -14,6 +14,7 @@ using Jackett.Models.Config;
 using CloudFlareUtilities;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
@@ -98,7 +99,7 @@ namespace Jackett.Utils.Clients
                         var password = serverConfig.ProxyPassword;
                         creds = new NetworkCredential(username, password);
                     }
-                    if (serverConfig.ProxyType != Models.Config.ProxyType.Http)
+                    if (serverConfig.ProxyType != ProxyType.Http)
                     {
                         var addresses = await Dns.GetHostAddressesAsync(serverConfig.ProxyUrl);
                         var socksConfig = new ProxyConfig
@@ -106,7 +107,7 @@ namespace Jackett.Utils.Clients
                             SocksAddress = addresses.FirstOrDefault(),
                             Username = serverConfig.ProxyUsername,
                             Password = serverConfig.ProxyPassword,
-                            Version = serverConfig.ProxyType == Models.Config.ProxyType.Socks4 ?
+                            Version = serverConfig.ProxyType == ProxyType.Socks4 ?
                             ProxyConfig.SocksVersion.Four :
                             ProxyConfig.SocksVersion.Five
                         };

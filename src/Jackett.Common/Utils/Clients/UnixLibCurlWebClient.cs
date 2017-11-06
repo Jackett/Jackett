@@ -84,7 +84,7 @@ namespace Jackett.Utils.Clients
                 await Task.Delay(5000);
 
                 // request clearanceUri to get cf_clearance cookie
-                var response = await CurlHelper.GetAsync(clearanceUri, request.Cookies, request.Referer);
+                var response = await CurlHelper.GetAsync(clearanceUri, serverConfig, request.Cookies, request.Referer);
                 logger.Info(string.Format("UnixLibCurlWebClient: received CloudFlare clearance cookie: {0}", response.Cookies));
 
                 // add new cf_clearance cookies to the original request
@@ -104,7 +104,7 @@ namespace Jackett.Utils.Clients
             Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
             {
-                response = await CurlHelper.GetAsync(request.Url, request.Cookies, request.Referer, request.Headers);
+                response = await CurlHelper.GetAsync(request.Url, serverConfig, request.Cookies, request.Referer, request.Headers);
             }
             else
             {
@@ -117,7 +117,7 @@ namespace Jackett.Utils.Clients
                     logger.Debug("UnixLibCurlWebClient: Posting " + StringUtil.PostDataFromDict(request.PostData));
                 }
 
-                response = await CurlHelper.PostAsync(request.Url, request.PostData, request.Cookies, request.Referer, request.Headers, request.RawBody);
+                response = await CurlHelper.PostAsync(request.Url, serverConfig, request.PostData, request.Cookies, request.Referer, request.Headers, request.RawBody);
             }
 
             var result = new WebClientByteResult()

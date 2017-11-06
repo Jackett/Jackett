@@ -18,6 +18,7 @@
     <PackageReference Include="MimeMapping" Version="1.0.1.10" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
+    <PackageReference Include="SocksWebProxy" Version="1.0.5" />
     <PackageReference Include="YamlDotNet" Version="4.2.2" />
   </ItemGroup>
 

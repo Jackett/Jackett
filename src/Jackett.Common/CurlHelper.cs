@@ -11,6 +11,7 @@ using Jackett.Utils;
 using System.Net;
 using System.Threading;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett
 {
@@ -55,31 +56,31 @@ namespace Jackett
             }
         }
 
-        public static async Task<CurlResponse> GetAsync(string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null)
+        public static async Task<CurlResponse> GetAsync(string url, ServerConfig config, string cookies = null, string referer = null, Dictionary<string, string> headers = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Get, url, cookies, referer, headers);
-            var result = await PerformCurlAsync(curlRequest);
+            var result = await PerformCurlAsync(curlRequest, config);
             return result;
         }
 
-        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData = null)
+        public static async Task<CurlResponse> PostAsync(string url, ServerConfig config, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer, headers);
             curlRequest.PostData = formData;
             curlRequest.RawPOSTDdata = rawPostData;
-            var result = await PerformCurlAsync(curlRequest);
+            var result = await PerformCurlAsync(curlRequest, config);
             return result;
         }
 
-        public static async Task<CurlResponse> PerformCurlAsync(CurlRequest curlRequest)
+        public static async Task<CurlResponse> PerformCurlAsync(CurlRequest curlRequest, ServerConfig config)
         {
-            return await Task.Run(() => PerformCurl(curlRequest));
+            return await Task.Run(() => PerformCurl(curlRequest, config));
         }
 
         public delegate void ErrorMessage(string s);
         public static ErrorMessage OnErrorMessage;
 
-        public static CurlResponse PerformCurl(CurlRequest curlRequest)
+        public static CurlResponse PerformCurl(CurlRequest curlRequest, ServerConfig config)
         {
             lock (instance)
             {
@@ -153,13 +154,13 @@ namespace Jackett
                         easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
-                    var proxy = JackettStartup.GetProxyUrl();
+                    var proxy = config.GetProxyUrl();
                     if (proxy != null)
                     {
                         easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
                         easy.SetOpt(CurlOption.Proxy, proxy);
 
-                        var authString = JackettStartup.GetProxyAuthString();
+                        var authString = config.GetProxyAuthString();
                         if (authString != null)
                         {
                             easy.SetOpt(CurlOption.ProxyUserPwd, authString);
@@ -180,7 +181,7 @@ namespace Jackett
 
                 var headerBytes = Combine(headerBuffers.ToArray());
                 var headerString = Encoding.UTF8.GetString(headerBytes);
-                if (JackettStartup.ProxyConnection != null)
+                if (config.GetProxyUrl() != null)
                 {
                     var firstcrlf = headerString.IndexOf("\r\n\r\n");
                     var secondcrlf = headerString.IndexOf("\r\n\r\n", firstcrlf + 1);

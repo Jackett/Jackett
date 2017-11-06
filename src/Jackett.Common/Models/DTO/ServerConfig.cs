@@ -2,6 +2,7 @@
 using Jacket.Common;
 using Jackett.Services;
 using Jackett.Models.Config;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Models.DTO
 {

@@ -19,6 +19,7 @@ using Jacket.Common;
 using Jackett.Models.Config;
 using com.LandonKey.SocksWebProxy.Proxy;
 using com.LandonKey.SocksWebProxy;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
@@ -42,7 +43,7 @@ namespace Jackett.Utils.Clients
 
             cookies = new CookieContainer();
             var useProxy = false;
-            WebProxy proxyServer = null;
+            IWebProxy proxyServer = null;
             var proxyUrl = serverConfig.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
@@ -54,7 +55,7 @@ namespace Jackett.Utils.Clients
                     var password = serverConfig.ProxyPassword;
                     creds = new NetworkCredential(username, password);
                 }
-                if (serverConfig.ProxyType != Models.Config.ProxyType.Http)
+                if (serverConfig.ProxyType != ProxyType.Http)
                 {
                     var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
                     var socksConfig = new ProxyConfig
@@ -62,7 +63,7 @@ namespace Jackett.Utils.Clients
                         SocksAddress = addresses.FirstOrDefault(),
                         Username = serverConfig.ProxyUsername,
                         Password = serverConfig.ProxyPassword,
-                        Version = EserverConfig.ProxyType == Models.Config.ProxyType.Socks4 ?
+                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
                         ProxyConfig.SocksVersion.Four :
                         ProxyConfig.SocksVersion.Five
                     };
