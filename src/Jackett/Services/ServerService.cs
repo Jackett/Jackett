@@ -18,14 +18,13 @@ using System.Text;
 using System.Threading;
 using System.Web;
 using Jackett.Services.Interfaces;
+using Jacket.Common;
 
 namespace Jackett.Services
 {
 
     public class ServerService : IServerService
     {
-        private ServerConfig config;
-
         private IDisposable _server = null;
 
         private IIndexerManagerService indexerService;
@@ -33,12 +32,13 @@ namespace Jackett.Services
         private ISerializeService serializeService;
         private IConfigurationService configService;
         private Logger logger;
-        private IWebClient client;
+        private Utils.Clients.WebClient client;
         private IUpdateService updater;
         private List<string> _notices = new List<string>();
-        IProtectionService protectionService;
+        private ServerConfig config;
+        IProtectionService _protectionService;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, IWebClient w, IUpdateService u, IProtectionService protectionService)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, Utils.Clients.WebClient w, IUpdateService u, IProtectionService protectionService, ServerConfig serverConfig)
         {
             indexerService = i;
             processService = p;
@@ -47,17 +47,9 @@ namespace Jackett.Services
             logger = l;
             client = w;
             updater = u;
-            this.protectionService = protectionService;
-
-            LoadConfig();
-            // "TEMPORARY" HACK
-            protectionService.InstanceKey = Encoding.UTF8.GetBytes(Config.InstanceId);
-        }
-
-        public ServerConfig Config
-        {
-            get { return config; }
-        }
+            config = serverConfig;
+            _protectionService = protectionService;
+        }        
 
         public List<string> notices
         {
@@ -72,7 +64,7 @@ namespace Jackett.Services
             if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
                 return link;
 
-            var encryptedLink = protectionService.Protect(link.ToString());
+            var encryptedLink = _protectionService.Protect(link.ToString());
             var encodedLink = HttpServerUtility.UrlTokenEncode(Encoding.UTF8.GetBytes(encryptedLink));
             string urlEncodedFile = WebUtility.UrlEncode(file);
             var proxyLink = string.Format("{0}{1}/{2}/?jackett_apikey={3}&path={4}&file={5}", serverUrl, action, indexerId, config.APIKey, encodedLink, urlEncodedFile);
@@ -96,54 +88,7 @@ namespace Jackett.Services
             }
             return path;
         }
-
-        private void LoadConfig()
-        {
-            // Load config
-            config = configService.GetConfig<ServerConfig>();
-            if (config == null)
-            {
-                config = new ServerConfig();
-            }
-
-            if (string.IsNullOrWhiteSpace(config.APIKey))
-            {
-                // Check for legacy key config
-                var apiKeyFile = Path.Combine(configService.GetAppDataFolder(), "api_key.txt");
-                if (File.Exists(apiKeyFile))
-                {
-                    config.APIKey = File.ReadAllText(apiKeyFile);
-                }
-
-                // Check for legacy settings
-
-                var path = Path.Combine(configService.GetAppDataFolder(), "config.json"); ;
-                var jsonReply = new JObject();
-                if (File.Exists(path))
-                {
-                    jsonReply = JObject.Parse(File.ReadAllText(path));
-                    config.Port = (int)jsonReply["port"];
-                    config.AllowExternal = (bool)jsonReply["public"];
-                }
-
-                if (string.IsNullOrWhiteSpace(config.APIKey))
-                    config.APIKey = StringUtil.GenerateRandom(32);
-
-                configService.SaveConfig<ServerConfig>(config);
-            }
-
-            if (string.IsNullOrWhiteSpace(config.InstanceId))
-            {
-                config.InstanceId = StringUtil.GenerateRandom(64);
-                configService.SaveConfig<ServerConfig>(config);
-            }
-        }
-
-        public void SaveConfig()
-        {
-            configService.SaveConfig<ServerConfig>(config);
-        }
-
+        
         public void Initalize()
         {
             logger.Info("Starting Jackett " + configService.GetVersion());
@@ -293,7 +238,7 @@ namespace Jackett.Services
             logger.Info("Starting web server at " + config.GetListenAddresses()[0]);
             var startOptions = new StartOptions();
             config.GetListenAddresses().ToList().ForEach(u => startOptions.Urls.Add(u));
-            Startup.BasePath = BasePath();
+            JackettStartup.BasePath = BasePath();
             try
             {
                 _server = WebApp.Start<Startup>(startOptions);

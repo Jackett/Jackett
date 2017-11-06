@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BT-Scene
  * cpasbien
  * EZTV
+ * Frozen Layer
  * GkTorrent
  * Horrible Subs
  * Idope
