@@ -197,6 +197,7 @@ namespace Jackett.Updater
                 "Definitions/rapidetracker.yml",
                 "Definitions/isohunt.yml",
                 "Definitions/t411v2.yml",
+                "Definitions/bithq.yml",
             };
 
             foreach (var oldFIle in oldFiles)

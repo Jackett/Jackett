@@ -104,7 +104,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BIGTorrent
  * Bit-City Reloaded
  * BIT-HDTV
- * BitHQ
  * BitHUmen
  * BitMe
  * BitMeTV
