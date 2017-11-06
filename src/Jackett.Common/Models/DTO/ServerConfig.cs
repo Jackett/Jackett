@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Jacket.Common;
 using Jackett.Services;
+using Jackett.Models.Config;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Models.DTO
 {
@@ -19,6 +21,7 @@ namespace Jackett.Models.DTO
         public string omdbkey { get; set; }
         public string app_version { get; set; }
 
+        public ProxyType proxy_type { get; set; }
         public string proxy_url { get; set; }
         public int? proxy_port { get; set; }
         public string proxy_username { get; set; }
@@ -44,6 +47,7 @@ namespace Jackett.Models.DTO
             omdbkey = config.OmdbApiKey;
             app_version = version;
 
+            proxy_type = config.ProxyType;
             proxy_url = config.ProxyUrl;
             proxy_port = config.ProxyPort;
             proxy_username = config.ProxyUsername;

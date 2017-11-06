@@ -109,7 +109,8 @@ namespace Jackett.Controllers.V20
                 indexerService.InitAggregateIndexer();
             }
 
-            if (config.proxy_url != serverConfig.ProxyUrl ||
+            if (config.proxy_type != serverConfig.ProxyType ||
+                config.proxy_url != serverConfig.ProxyUrl ||
                 config.proxy_port != serverConfig.ProxyPort ||
                 config.proxy_username != serverConfig.ProxyUsername ||
                 config.proxy_password != serverConfig.ProxyPassword)
@@ -118,6 +119,7 @@ namespace Jackett.Controllers.V20
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
                 serverConfig.ProxyUrl = config.proxy_url;
+                serverConfig.ProxyType = config.proxy_type;
                 serverConfig.ProxyPort = config.proxy_port;
                 serverConfig.ProxyUsername = config.proxy_username;
                 serverConfig.ProxyPassword = config.proxy_password;

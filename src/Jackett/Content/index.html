@@ -124,6 +124,14 @@
         </div>
 
         <div class="input-area">
+            <span class="input-header">Proxy type: </span>
+            <select id="jackett-proxy-type" class="form-control input-right">
+                <option value="0">http</option>
+                <option value="1">socks4</option>
+                <option value="2">socks5</option>
+            </select>
+        </div>
+        <div class="input-area">
             <span class="input-header">Proxy url: </span>
             <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="Blank to disable">
         </div>
@@ -458,14 +466,14 @@
 
     <script id="jackett-search-results" type="text/x-handlebars-template">
         <hr />
-        <p>Your search was done using: 
-        {{#each Indexers}}{{Name}}
-        {{#if Error}}
+        <p>Your search was done using:
+            {{#each Indexers}}{{Name}}
+            {{#if Error}}
             (<span title="{{Error}}"><b>Error</b></span>)
-        {{else}}
-        ({{Results}})
-        {{/if}}
-        , {{/each}}
+            {{else}}
+            ({{Results}})
+            {{/if}}
+            , {{/each}}
         </p>
         <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
             <thead>
