@@ -45,7 +45,7 @@
   search:
     paths:
       - path: /browse.php
-        method: post
+        method: get
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
