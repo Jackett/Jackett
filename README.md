@@ -237,7 +237,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Show
  * The Vault
  * The-Torrents
- * TehConnection
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
