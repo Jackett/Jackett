@@ -20,6 +20,7 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.WebUtilities;
 using Jacket.Common.Helpers;
+using System.Collections;
 
 namespace Jackett.Indexers
 {
@@ -262,8 +263,17 @@ namespace Jackett.Indexers
 
                 if (condition.StartsWith("."))
                 {
-                    string value = (string)variables[condition];
-                    if (!string.IsNullOrWhiteSpace(value))
+                    var conditionResultState = false;
+                    var value = variables[condition];
+
+                    if (value is string)
+                        conditionResultState = !string.IsNullOrWhiteSpace((string)value);
+                    else if(value is ICollection)
+                        conditionResultState = ((ICollection)value).Count > 0;
+                    else
+                        throw new Exception(string.Format("Unexpceted type for variable {0}: {1}", condition, value.GetType()));
+
+                    if (conditionResultState)
                     {
                         conditionResult = onTrue;
                     }
