@@ -198,6 +198,7 @@ namespace Jackett.Updater
                 "Definitions/isohunt.yml",
                 "Definitions/t411v2.yml",
                 "Definitions/bithq.yml",
+                "Definitions/blubits.yml",
             };
 
             foreach (var oldFIle in oldFiles)

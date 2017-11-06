@@ -110,7 +110,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
  * BJ-Share
- * Blu-bits
  * BlueBird
  * Blutopia
  * BroadcastTheNet
