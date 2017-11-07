@@ -199,6 +199,7 @@ namespace Jackett.Updater
                 "Definitions/t411v2.yml",
                 "Definitions/bithq.yml",
                 "Definitions/blubits.yml",
+                "Definitions/torrentproject.yml",
             };
 
             foreach (var oldFIle in oldFiles)
