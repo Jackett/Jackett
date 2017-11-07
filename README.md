@@ -326,6 +326,16 @@ Detailed instructions are available at [LinuxServer.io Jackett Docker](https://h
 ## Installation on Synology
 Jackett is available as beta package from [SynoCommunity](https://synocommunity.com/)
 
+## Running Jackett behind a reverse proxy
+When running jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base Path Override" Jackett option accordingly.
+
+Example config for apache:
+```
+ProxyPreserveHost On
+RequestHeader set X-Forwarded-Proto "https"
+ProxyPass /jackett http://127.0.0.1:9117/
+```
+
 ## Troubleshooting
 
 * __Command line switches__
