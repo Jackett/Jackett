@@ -25,6 +25,7 @@ namespace JackettConsole
         {
             try
             {
+                Engine.BuildContainer(new WebApi2Module());
                 var options = new ConsoleOptions();
                 if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
                 {
@@ -222,7 +223,6 @@ namespace JackettConsole
                     JackettStartup.NoRestart = options.NoRestart;
                 }
 
-                Engine.BuildContainer(new WebApi2Module());
                 Engine.Server.Initalize();
                 Engine.Server.Start();
                 Engine.RunTime.Spin();
