@@ -22,6 +22,7 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
+            Engine.BuildContainer();
             Engine.SetupLogging(null, "updater.txt");
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
             Engine.Logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
