@@ -21,7 +21,7 @@ namespace Jackett.Test
         public static void SetupContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule<CommonModule>();
+            builder.RegisterModule<JackettModule>();
             builder.RegisterModule<WebApi2Module>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
             builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
