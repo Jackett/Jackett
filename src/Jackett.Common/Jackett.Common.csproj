@@ -118,11 +118,11 @@
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="BencodeNET" Version="2.2.22" />
     <PackageReference Include="CloudFlareUtilities" Version="0.4.0-alpha" />
-    <PackageReference Include="DotNet4.SocksProxy" Version="1.3.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.10" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NLog" Version="5.0.0-beta11" />
+    <PackageReference Include="SocksWebProxy" Version="1.0.5" />
     <PackageReference Include="YamlDotNet" Version="4.2.2" />
   </ItemGroup>
 
