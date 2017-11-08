@@ -24,7 +24,7 @@ namespace Jackett
         public static void BuildContainer(params Autofac.Module[] ApplicationSpecificModules)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule<CommonModule>();
+            builder.RegisterModule<JackettModule>();
             foreach(var module in ApplicationSpecificModules)
             {
                 builder.RegisterModule(module);

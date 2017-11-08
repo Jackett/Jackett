@@ -19,12 +19,12 @@ using System.Collections.Generic;
 
 namespace Jackett
 {
-    public class CommonModule : Autofac.Module
+    public class JackettModule : Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             // Just register everything! TODO: Something better and more explicit than scanning everything.
-                builder.RegisterAssemblyTypes(typeof(CommonModule).Assembly)
+                builder.RegisterAssemblyTypes(typeof(JackettModule).Assembly)
                        .Except<IIndexer>()
                        .Except<IImdbResolver>()
                        .Except<OmdbResolver>()
