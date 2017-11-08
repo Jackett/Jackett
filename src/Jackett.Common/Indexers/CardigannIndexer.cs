@@ -266,9 +266,11 @@ namespace Jackett.Indexers
                     var conditionResultState = false;
                     var value = variables[condition];
 
-                    if (value is string)
+                    if (value == null)
+                        conditionResultState = false;
+                    else if (value is string)
                         conditionResultState = !string.IsNullOrWhiteSpace((string)value);
-                    else if(value is ICollection)
+                    else if (value is ICollection)
                         conditionResultState = ((ICollection)value).Count > 0;
                     else
                         throw new Exception(string.Format("Unexpceted type for variable {0}: {1}", condition, value.GetType()));
