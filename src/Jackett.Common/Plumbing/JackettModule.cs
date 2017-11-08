@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Text;
-using Autofac.Integration.WebApi;
 using Jackett.Indexers;
 using Jackett.Utils.Clients;
 using AutoMapper;
@@ -16,6 +15,7 @@ using Jackett.Models.Config;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Jackett.Utils;
+using System.Collections.Generic;
 
 namespace Jackett
 {
@@ -24,10 +24,7 @@ namespace Jackett
         protected override void Load(ContainerBuilder builder)
         {
             // Just register everything! TODO: Something better and more explicit than scanning everything.
-            var assembliesToScan = new Assembly[] { typeof(JackettModule).Assembly, typeof(JackettStartup).Assembly };
-            foreach (var assembly in assembliesToScan)
-            {
-                builder.RegisterAssemblyTypes(assembly)
+                builder.RegisterAssemblyTypes(typeof(JackettModule).Assembly)
                        .Except<IIndexer>()
                        .Except<IImdbResolver>()
                        .Except<OmdbResolver>()
@@ -43,8 +40,7 @@ namespace Jackett
                        .Except<AggregateIndexer>()
                        .Except<CardigannIndexer>()
                        .AsImplementedInterfaces().SingleInstance();
-            }
-            builder.RegisterApiControllers(typeof(JackettModule).Assembly).InstancePerRequest();
+            
             builder.Register(ctx =>
             {
                 return BuildServerConfig(ctx);
