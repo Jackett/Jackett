@@ -21,16 +21,12 @@ namespace Jackett.Test
         public static void SetupContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule<JackettModule>();
+            builder.RegisterModule<CommonModule>();
+            builder.RegisterModule<WebApi2Module>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
             builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
             builder.RegisterType<TestIndexerManagerServiceHelper>().As<IIndexerManagerService>().SingleInstance();
             testContainer = builder.Build();
-
-            // Register the container in itself to allow for late resolves
-            var secondaryBuilder = new ContainerBuilder();
-            secondaryBuilder.RegisterInstance<IContainer>(testContainer).SingleInstance();
-            secondaryBuilder.Update(testContainer);
         }
 
         public static TestIndexerManagerServiceHelper IndexManager

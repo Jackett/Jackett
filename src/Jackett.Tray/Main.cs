@@ -34,6 +34,7 @@ namespace JackettTray
                 toolStripMenuItemAutoStart.Visible = true;
             }
 
+            Engine.BuildContainer(new WebApi2Module());
             Engine.Server.Initalize();
 
             if (!Engine.ServiceConfig.ServiceExists())
