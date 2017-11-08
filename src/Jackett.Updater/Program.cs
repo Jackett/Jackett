@@ -10,12 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-/*
-// no supported by appveyor, disabeling for now
-#if __MonoCS__
-using Mono.Unix.Native;
-#endif
-*/
 
 namespace Jackett.Updater
 {
@@ -68,13 +62,7 @@ namespace Jackett.Updater
                     var exited = proc.WaitForExit(5000);
                     if (!exited)
                         Engine.Logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds");
-/*
-// no supported by appveyor, disabeling for now
-#if __MonoCS__
-                    Engine.Logger.Info("Sending SIGKILL to process " + pid.ToString());
-                    Syscall.kill(proc.Id, Signum.SIGKILL);
-#endif
-*/
+
                 }
                 catch (ArgumentException)
                 {

@@ -10,44 +10,35 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http.Dependencies;
-using Autofac.Integration.WebApi;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
 using Jackett.Models.Config;
+using System.Reflection;
 
 namespace Jackett
 {
     public class Engine
     {
         private static IContainer container = null;
-
-        static Engine()
-        {
-            BuildContainer();
-
-        }
-
-        public static void BuildContainer()
+        
+        public static void BuildContainer(params Autofac.Module[] ApplicationSpecificModules)
         {
             var builder = new ContainerBuilder();
             builder.RegisterModule<JackettModule>();
+            foreach(var module in ApplicationSpecificModules)
+            {
+                builder.RegisterModule(module);
+            }
+            SetupLogging(builder);
             container = builder.Build();
-
-            // Register the container in itself to allow for late resolves
-            var secondaryBuilder = new ContainerBuilder();
-            secondaryBuilder.RegisterInstance(container).SingleInstance();
-            SetupLogging(secondaryBuilder);
-            secondaryBuilder.Update(container);
-
         }
 
-        public static IDependencyResolver DependencyResolver()
+        public static IContainer GetContainer()
         {
-            return new AutofacWebApiDependencyResolver(container);
+            return container;
         }
 
-
+    
         public static IConfigurationService ConfigService
         {
             get

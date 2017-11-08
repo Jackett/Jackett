@@ -222,6 +222,7 @@ namespace JackettConsole
                     JackettStartup.NoRestart = options.NoRestart;
                 }
 
+                Engine.BuildContainer(new WebApi2Module());
                 Engine.Server.Initalize();
                 Engine.Server.Start();
                 Engine.RunTime.Spin();
