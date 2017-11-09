@@ -6,7 +6,9 @@
   type: private
   encoding: UTF-8
   links:
-    - http://shareisland.org
+    - https://shareisland.org/
+  legacylinks:
+    - http://shareisland.org/
 
   caps:
     categorymappings:
