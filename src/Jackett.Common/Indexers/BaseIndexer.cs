@@ -286,6 +286,10 @@ namespace Jackett.Indexers
 
         protected async Task<byte[]> Download(Uri link, RequestType method)
         {
+            // return magnet link
+            if (link.Scheme == "magnet")
+                return Encoding.UTF8.GetBytes(link.OriginalString);
+
             // do some extra escaping, needed for HD-Torrents
             var requestLink = link.ToString()
                 .Replace("(", "%28")

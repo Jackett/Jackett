@@ -156,7 +156,7 @@ namespace Jackett.Controllers.V20
             foreach (var result in results)
             {
                 var link = result.Link;
-                var file = StringUtil.MakeValidFileName(result.Title, '_', false) + ".torrent";
+                var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
                 if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.ServerConfig.BlackholeDir))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
