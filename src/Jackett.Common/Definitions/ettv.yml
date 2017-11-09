@@ -35,10 +35,12 @@
     path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ if .Keywords }}+{{else}}{{end}}{{ .Keywords }}"
       incldead: "1"
-      order: desc
       sort: id
+      order: desc
+    keywordsfilters:
+      - name: urlencode
 
     rows:
       selector: div.myFrame-content > div > table > tbody > tr[class]
