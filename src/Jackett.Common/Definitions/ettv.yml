@@ -1,0 +1,70 @@
+﻿---
+  site: ettv
+  name: ETTV
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.ettv.tv
+
+  caps:
+    categorymappings:
+      - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
+      - {id: 1, cat: Movies/HD, desc: "Movies - HD 1080p"}
+      - {id: 2, cat: Movies/HD, desc: "Movies - HD 720p"}
+      - {id: 3, cat: Movies/HD, desc: "Movies - UltraHD/4K"}
+      - {id: 47, cat: Movies/SD, desc: "Movies - X264/H264"}
+      - {id: 42, cat: Movies/SD, desc: "Movies - XviD"}
+      - {id: 41, cat: TV/HD, desc: "TV - HD/X264/H264"}
+      - {id: 5, cat: TV/SD, desc: "TV - SD/X264/H264"}
+      - {id: 50, cat: TV/SD, desc: "TV - SD/XVID"}
+      - {id: 7, cat: TV, desc: "TV - TV Packs"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings: []
+  
+  download:
+    selector: a[href^="magnet:"]
+
+  search:
+    path: torrents-search.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+      order: desc
+      sort: id
+
+    rows:
+      selector: div.myFrame-content > div > table > tbody > tr[class]
+    fields:
+      download:
+        selector: a[href^="/torrent/"]
+        attribute: href
+      title:
+        selector: a[href^="/torrent/"][title]
+        attribute: title
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="/torrent/"]
+        attribute: href
+      date:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(4)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
