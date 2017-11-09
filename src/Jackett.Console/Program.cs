@@ -25,7 +25,6 @@ namespace JackettConsole
         {
             try
             {
-                Engine.BuildContainer(new WebApi2Module());
                 var options = new ConsoleOptions();
                 if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
                 {
@@ -52,6 +51,26 @@ namespace JackettConsole
                 }
                 else
                 {
+                    
+
+                    // Logging
+                    if (options.Logging)
+                        JackettStartup.LogRequests = true;
+
+                    // Tracing
+                    if (options.Tracing)
+                        JackettStartup.TracingEnabled = true;
+
+                    // Initialize autofac, logger, etc.
+                    Engine.BuildContainer(new WebApi2Module());
+
+                    // Log after the fact as using the logger will cause the options above to be used
+
+                    if (options.Logging)
+                        Engine.Logger.Info("Logging enabled.");
+
+                    if (options.Tracing)
+                        Engine.Logger.Info("Tracing enabled.");
 
                     if (options.ListenPublic && options.ListenPrivate)
                     {
@@ -74,21 +93,6 @@ namespace JackettConsole
                         JackettStartup.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
                         Engine.Logger.Info("Proxy enabled. " + JackettStartup.ProxyConnection);
                     }
-                    // Logging
-                    if (options.Logging)
-                        JackettStartup.LogRequests = true;
-
-                    // Tracing
-                    if (options.Tracing)
-                        JackettStartup.TracingEnabled = true;
-
-                    // Log after the fact as using the logger will cause the options above to be used
-
-                    if (options.Logging)
-                        Engine.Logger.Info("Logging enabled.");
-
-                    if (options.Tracing)
-                        Engine.Logger.Info("Tracing enabled.");
 
                     if (options.SSLFix == true)
                         Engine.Logger.Info("SSL ECC workaround enabled.");
