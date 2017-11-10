@@ -35,12 +35,17 @@
     path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ if .Keywords }}+{{else}}{{end}}{{ .Keywords }}"
+      search: "{{ .Keywords }}"
       incldead: "1"
       sort: id
       order: desc
     keywordsfilters:
-      - name: urlencode
+      - name: replace
+        args: ["-", " "] # remove special search character (negative search)
+      - name: replace
+        args: ["+", " "] # remove special search character (positive search)
+      - name: re_replace
+        args: ["(\\w+)", " +$1"] # prepend + to each word
 
     rows:
       selector: div.myFrame-content > div > table > tbody > tr[class]
