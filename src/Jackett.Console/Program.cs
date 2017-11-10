@@ -25,6 +25,17 @@ namespace JackettConsole
         {
             try
             {
+                // Initialize autofac, logger, etc.
+                Engine.BuildContainer(new WebApi2Module());
+            }
+            catch (Exception e)
+            {
+                Engine.Logger.Error(e, $"Could not register WebApi2Module {e.Message}");
+            }
+
+            try
+            {
+
                 var options = new ConsoleOptions();
                 if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
                 {
@@ -61,8 +72,6 @@ namespace JackettConsole
                     if (options.Tracing)
                         JackettStartup.TracingEnabled = true;
 
-                    // Initialize autofac, logger, etc.
-                    Engine.BuildContainer(new WebApi2Module());
 
                     // Log after the fact as using the logger will cause the options above to be used
 
