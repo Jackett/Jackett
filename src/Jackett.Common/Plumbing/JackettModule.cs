@@ -131,14 +131,14 @@ namespace Jackett
             {
                 cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
                 {
-                    str.Content = Encoding.UTF8.GetString(be.Content);
+                    str.Content = be.Request.Encoding.GetString(be.Content);
                 });
 
                 cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
                 {
                     if (!string.IsNullOrEmpty(str.Content))
                     {
-                        be.Content = Encoding.UTF8.GetBytes(str.Content);
+                        be.Content = str.Request.Encoding.GetBytes(str.Content);
                     }
                 });
 
