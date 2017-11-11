@@ -197,3 +197,4 @@ FakesAssemblies/
 /Build.mono
 /Build.windows
 /Output
+*.DS_Store
