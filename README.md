@@ -128,6 +128,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Demonoid
  * Diablo Torrent
  * DigitalHive
+ * Downloadville
  * Dragonworld Reloaded
  * Dream Team
  * EliteHD  [![(invite needed)][inviteneeded]](#)
