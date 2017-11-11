@@ -78,6 +78,9 @@
       path: torrents-search.php
 
   search:
+    keywordsfilters:
+      - name: re_replace
+        args: [" ", "+"]
     paths:
       - path: torrents-search.php
     inputs:
