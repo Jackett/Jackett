@@ -41,7 +41,7 @@ Task("Clean")
 		CleanDirectories("./" + artifactsDirName);
 		CleanDirectories("./" + testResultsDirName);
 
-		Information(@"Clean completed");
+		Information("Clean completed");
 	});
 
 Task("Restore-NuGet-Packages")
@@ -52,20 +52,20 @@ Task("Restore-NuGet-Packages")
 	});
 
 Task("Build")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .Does(() =>
+	.IsDependentOn("Restore-NuGet-Packages")
+	.Does(() =>
 	{
 		MSBuild("./src/Jackett.sln", settings => settings.SetConfiguration(configuration));
 	});
 
 Task("Run-Unit-Tests")
-    .IsDependentOn("Build")
-    .Does(() =>
+	.IsDependentOn("Build")
+	.Does(() =>
 	{
 		CreateDirectory("./" + testResultsDirName);
 		var resultsFile = $"./{testResultsDirName}/JackettTestResult.xml";
-		
-		NUnit3("./src/**/bin/" + configuration + "/**/*.Test.dll", new NUnit3Settings 
+
+		NUnit3("./src/**/bin/" + configuration + "/**/*.Test.dll", new NUnit3Settings
 		{
 			Results = new[] { new NUnit3Result { FileName = resultsFile } }
 		});
@@ -77,11 +77,11 @@ Task("Run-Unit-Tests")
 	});
 
 Task("Copy-Files-Full-Framework")
-    .IsDependentOn("Run-Unit-Tests")
-    .Does(() =>
+	.IsDependentOn("Run-Unit-Tests")
+	.Does(() =>
 	{
 		var windowsOutput = windowsBuildFullFramework + "/Jackett";
-		
+
 		CopyDirectory("./src/Jackett.Console/bin/" + configuration, windowsOutput);
 		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", windowsOutput);
 		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", windowsOutput);
@@ -95,26 +95,28 @@ Task("Copy-Files-Full-Framework")
 		CopyDirectory(windowsBuildFullFramework, monoBuildFullFramework);
 		DeleteFiles(monoOutput + "/JackettService.*");
 		DeleteFiles(monoOutput + "/JackettTray.*");
+
+		Information("Full framework file copy completed");
 	});
 
 Task("Check-Packaging-Platform")
-    .IsDependentOn("Copy-Files-Full-Framework")
-    .Does(() =>
+	.IsDependentOn("Copy-Files-Full-Framework")
+	.Does(() =>
 	{
 		if (IsRunningOnWindows())
 		{
 			CreateDirectory("./" + artifactsDirName);
-			Information(@"Platform is Windows");
+			Information("Platform is Windows");
 		}
-		else 
+		else
 		{
 			throw new Exception("Packaging is currently only implemented for a Windows environment");
 		}
 	});
 
 Task("Package-Windows-Installer-Full-Framework")
-    .IsDependentOn("Check-Packaging-Platform")
-    .Does(() =>
+	.IsDependentOn("Check-Packaging-Platform")
+	.Does(() =>
 	{
 		InnoSetup("./Installer.iss", new InnoSetupSettings {
 			OutputDirectory = workingDir + "/" + artifactsDirName
@@ -122,16 +124,16 @@ Task("Package-Windows-Installer-Full-Framework")
 	});
 
 Task("Package-Files-Full-Framework-Windows")
-    .IsDependentOn("Check-Packaging-Platform")
-    .Does(() =>
+	.IsDependentOn("Check-Packaging-Platform")
+	.Does(() =>
 	{
 		Zip(windowsBuildFullFramework, $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
 		Information(@"Full Framework Windows Binaries Zipping Completed");
 	});
 
 Task("Package-Files-Full-Framework-Mono")
-    .IsDependentOn("Check-Packaging-Platform")
-    .Does(() =>
+	.IsDependentOn("Check-Packaging-Platform")
+	.Does(() =>
 	{
 		var cygMonoBuildPath = RelativeWinPathToCygPath(monoBuildFullFramework);
 		var tarFileName = "Jackett.Binaries.Mono.tar";
@@ -150,26 +152,25 @@ Task("Package-Full-Framework")
 	.IsDependentOn("Package-Files-Full-Framework-Mono")
 	.Does(() =>
 	{
-		Information(@"Full Framwork Packaging Completed");
+		Information("Full Framwork Packaging Completed");
 	});
 
 Task("Appveyor-Push-Artifacts")
-    .IsDependentOn("Package-Full-Framework")
-    .Does(() =>
+	.IsDependentOn("Package-Full-Framework")
+	.Does(() =>
 	{
 		if (AppVeyor.IsRunningOnAppVeyor)
-        {
-            foreach (var file in GetFiles(workingDir + $"/{artifactsDirName}/*"))
+		{
+			foreach (var file in GetFiles(workingDir + $"/{artifactsDirName}/*"))
 			{
-                AppVeyor.UploadArtifact(file.FullPath);
+				AppVeyor.UploadArtifact(file.FullPath);
 			}
-        }
+		}
 		else
 		{
 			Information(@"Skipping as not running in AppVeyor Environment");
 		}
 	});
-
 
 private void RunCygwinCommand(string utility, string utilityArguments)
 {
@@ -221,7 +222,11 @@ private string RelativeWinPathToCygPath(string relativePath)
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Appveyor-Push-Artifacts");
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.Does(() =>
+	{
+		Information("Default Task Completed");
+	});
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
