@@ -1,38 +1,84 @@
 ﻿using Autofac;
+using AutoMapper;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
+using Jackett.Models;
+using Jackett.Models.Config;
 using Jackett.Services;
+using Jackett.Services.Interfaces;
+using Jackett.Utils.Clients;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Targets;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jackett.Models.Config;
-using System.Reflection;
-using Jackett.Common.Plumbing;
-using Jackett.Common.Models.Config;
 
 namespace Jackett
 {
     public class Engine
     {
         private static IContainer container = null;
-        
+        private static bool _automapperInitialised = false;
+
         public static void BuildContainer(RuntimeSettings settings, params Autofac.Module[] ApplicationSpecificModules)
         {
             var builder = new ContainerBuilder();
             SetupLogging(settings, builder);
+            if (_automapperInitialised == false)
+            {
+                //Automapper only likes being initialized once per app domain.
+                //Since we can restart Jackett from the command line it's possible that we'll build the container more than once. (tests do this too)
+                InitAutomapper();
+                _automapperInitialised = true;
+            }
+
             builder.RegisterModule(new JackettModule(settings));
-            foreach(var module in ApplicationSpecificModules)
+            foreach (var module in ApplicationSpecificModules)
             {
                 builder.RegisterModule(module);
             }
             container = builder.Build();
+        }
+
+        private static void InitAutomapper()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
+                {
+                    var encoding = be.Request.Encoding ?? Encoding.UTF8;
+                    str.Content = encoding.GetString(be.Content);
+                });
+
+                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
+                {
+                    if (!string.IsNullOrEmpty(str.Content))
+                    {
+                        var encoding = str.Request.Encoding ?? Encoding.UTF8;
+                        be.Content = encoding.GetBytes(str.Content);
+                    }
+                });
+
+                cfg.CreateMap<WebClientStringResult, WebClientStringResult>();
+                cfg.CreateMap<WebClientByteResult, WebClientByteResult>();
+                cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
+
+                cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
+                {
+                    if (r.Category != null)
+                    {
+                        var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
+                        t.CategoryDesc = CategoryDesc;
+                    }
+                    else
+                    {
+                        t.CategoryDesc = "";
+                    }
+                });
+            });
         }
 
         public static IContainer GetContainer()
@@ -40,7 +86,6 @@ namespace Jackett
             return container;
         }
 
-    
         public static IConfigurationService ConfigService
         {
             get
@@ -88,7 +133,7 @@ namespace Jackett
                 return container.Resolve<ServerConfig>();
             }
         }
-        
+
         public static IRunTimeService RunTime
         {
             get
@@ -112,7 +157,6 @@ namespace Jackett
                 return container.Resolve<ISecuityService>();
             }
         }
-
 
         private static void SetupLogging(RuntimeSettings settings, ContainerBuilder builder)
         {
@@ -155,7 +199,6 @@ namespace Jackett
 
         public static void SetLogLevel(LogLevel level)
         {
-
             foreach (var rule in LogManager.Configuration.LoggingRules)
             {
                 if (level == LogLevel.Debug)
@@ -172,7 +215,6 @@ namespace Jackett
                         rule.DisableLoggingForLevel(LogLevel.Debug);
                     }
                 }
-
             }
 
             LogManager.ReconfigExistingLoggers();
@@ -183,7 +225,6 @@ namespace Jackett
             ConfigService.SaveConfig(ServerConfig);
         }
     }
-
 
     [LayoutRenderer("simpledatetime")]
     public class SimpleDateTimeRenderer : LayoutRenderer

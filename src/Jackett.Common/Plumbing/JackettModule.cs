@@ -86,7 +86,6 @@ namespace Jackett.Common.Plumbing
                         builder.RegisterType<UnixLibCurlWebClient>().As<WebClient>();
                     break;
             }
-            InitAutomapper();
 
         }
 
@@ -140,43 +139,7 @@ namespace Jackett.Common.Plumbing
             return config;
         }
 
-        private static void InitAutomapper()
-        {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
-                {
-                    var encoding = be.Request.Encoding ?? Encoding.UTF8;
-                    str.Content = encoding.GetString(be.Content);
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
-                {
-                    if (!string.IsNullOrEmpty(str.Content))
-                    {
-                        var encoding = str.Request.Encoding ?? Encoding.UTF8;
-                        be.Content = encoding.GetBytes(str.Content);
-                    }
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientStringResult>();
-                cfg.CreateMap<WebClientByteResult, WebClientByteResult>();
-                cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
-
-                cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
-                {
-                    if (r.Category != null)
-                    {
-                        var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
-                        t.CategoryDesc = CategoryDesc;
-                    }
-                    else
-                    {
-                        t.CategoryDesc = "";
-                    }
-                });
-            });
-        }
+        
 
         private static bool DetectMonoCompatabilityWithHttpClient()
         {
