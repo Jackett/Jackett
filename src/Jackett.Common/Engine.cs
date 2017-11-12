@@ -14,6 +14,8 @@ using Jackett.Services.Interfaces;
 using Jacket.Common;
 using Jackett.Models.Config;
 using System.Reflection;
+using Jackett.Common.Plumbing;
+using Jackett.Common.Models.Config;
 
 namespace Jackett
 {
@@ -21,16 +23,18 @@ namespace Jackett
     {
         private static IContainer container = null;
         
-        public static void BuildContainer(params Autofac.Module[] ApplicationSpecificModules)
+        public static void BuildContainer(RuntimeSettings settings, params Autofac.Module[] ApplicationSpecificModules)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule<JackettModule>();
+            SetupLogging(settings, builder);
+            builder.RegisterModule(new JackettModule(settings));
             foreach(var module in ApplicationSpecificModules)
             {
                 builder.RegisterModule(module);
             }
-            SetupLogging(builder);
             container = builder.Build();
+            
+            
         }
 
         public static IContainer GetContainer()
@@ -112,9 +116,9 @@ namespace Jackett
         }
 
 
-        public static void SetupLogging(ContainerBuilder builder = null, string logfile = "log.txt")
+        private static void SetupLogging(RuntimeSettings settings, ContainerBuilder builder, string logfile = "log.txt")
         {
-            var logLevel = JackettStartup.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
+            var logLevel = settings.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
             ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 
@@ -122,7 +126,7 @@ namespace Jackett
             var logFile = new FileTarget();
             logConfig.AddTarget("file", logFile);
             logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-            logFile.FileName = Path.Combine(ConfigurationService.GetAppDataFolderStatic(), logfile);
+            logFile.FileName = Path.Combine(settings.DataFolder, logfile);
             logFile.ArchiveFileName = "log.{#####}.txt";
             logFile.ArchiveAboveSize = 500000;
             logFile.MaxArchiveFiles = 5;
@@ -146,7 +150,7 @@ namespace Jackett
             LogManager.Configuration = logConfig;
             if (builder != null)
             {
-                builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
+                builder.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();
             }
         }
 

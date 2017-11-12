@@ -95,11 +95,11 @@ namespace Jackett.Controllers.V20
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;
-            JackettStartup.BasePath = Engine.Server.BasePath();
+            serverConfig.RuntimeSettings.BasePath = Engine.Server.BasePath();
             configService.SaveConfig(serverConfig);
 
             Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
-            JackettStartup.TracingEnabled = logging;
+            serverConfig.RuntimeSettings.TracingEnabled = logging;
 
             if (omdbApiKey != serverConfig.OmdbApiKey)
             {
@@ -168,7 +168,7 @@ namespace Jackett.Controllers.V20
             {
                 Thread.Sleep(500);
                 serverService.Stop();
-                Engine.BuildContainer(new WebApi2Module());
+                Engine.BuildContainer(serverConfig.RuntimeSettings, new WebApi2Module());
                 Engine.Server.Initalize();
                 Engine.Server.Start();
             })).Start();

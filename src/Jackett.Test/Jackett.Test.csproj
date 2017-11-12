@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Indexers\**" />
+    <EmbeddedResource Remove="Indexers\**" />
+    <None Remove="Indexers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Util\Invalid-RSS.xml" />
   </ItemGroup>
 
@@ -25,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Indexers\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 

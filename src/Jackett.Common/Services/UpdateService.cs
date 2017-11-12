@@ -127,7 +127,7 @@ namespace Jackett.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
                             if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows, JackettStartup.NoRestart);
+                                StartUpdate(updaterPath, installDir, isWindows, config.RuntimeSettings.NoRestart);
                         }
                         catch (Exception e)
                         {

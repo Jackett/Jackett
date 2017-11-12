@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils
 {
@@ -10,20 +11,21 @@ namespace Jackett.Utils
         public WebApiRootRedirectMiddleware(OwinMiddleware next)
             : base(next)
         {
+            //Ideally we'd dependency inject the server config into the middleware but AutoFac's Owin package has not been updated to support Autofac > 5
         }
 
         public async override Task Invoke(IOwinContext context)
         {
-            if (context.Request.Path != null && context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(JackettStartup.BasePath, StringComparison.Ordinal))
+            if (context.Request.Path != null && context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(Engine.ServerConfig.RuntimeSettings.BasePath, StringComparison.Ordinal))
             {
-                context.Request.Path = new PathString(context.Request.Path.Value.Substring(JackettStartup.BasePath.Length - 1));
+                context.Request.Path = new PathString(context.Request.Path.Value.Substring(Engine.ServerConfig.RuntimeSettings.BasePath.Length - 1));
             }
 
             if (context.Request.Path == null || string.IsNullOrWhiteSpace(context.Request.Path.ToString()) || context.Request.Path.ToString() == "/")
             {
                 // 301 is the status code of permanent redirect
                 context.Response.StatusCode = 302;
-                var redir = JackettStartup.BasePath + "UI/Dashboard";
+                var redir = Engine.ServerConfig.RuntimeSettings.BasePath + "UI/Dashboard";
                 Engine.Logger.Info("redirecting to " + redir);
                 context.Response.Headers.Set("Location", redir);
             }

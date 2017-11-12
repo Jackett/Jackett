@@ -118,6 +118,7 @@
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="BencodeNET" Version="2.2.22" />
     <PackageReference Include="CloudFlareUtilities" Version="0.4.0-alpha" />
+    <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.10" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />

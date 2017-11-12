@@ -3,6 +3,7 @@ using Jacket.Common;
 using Jackett.Services;
 using Jackett.Models.Config;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
 
 namespace Jackett.Models.DTO
 {
@@ -42,7 +43,7 @@ namespace Jackett.Models.DTO
             updatedisabled = config.UpdateDisabled;
             prerelease = config.UpdatePrerelease;
             password = string.IsNullOrEmpty(config.AdminPassword) ? string.Empty : config.AdminPassword.Substring(0, 10);
-            logging = JackettStartup.TracingEnabled;
+            logging = config.RuntimeSettings.TracingEnabled;
             basepathoverride = config.BasePathOverride;
             omdbkey = config.OmdbApiKey;
             app_version = version;
