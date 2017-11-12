@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -44,6 +44,8 @@ namespace Jackett.Indexers
             Encoding = Encoding.UTF8;
             Language = "de-de";
             Type = "private";
+
+            TorznabCaps.SupportsImdbSearch = true;
 
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             this.configData.DisplayText.Name = "Notice";
@@ -125,20 +127,29 @@ namespace Jackett.Indexers
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
-            queryCollection.Add("searchin", "title");
+
             queryCollection.Add("incldead", "1");
             queryCollection.Add("rel_type", "0"); // Alle
-            if (!string.IsNullOrWhiteSpace(searchString))
+
+            if(query.ImdbID != null)
             {
-                // use AND+wildcard operator to avoid getting to many useless results
-                var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
-                searchStringArray = searchStringArray.Where(x => x.Length >= 3).ToList(); //  remove words with less than 3 characters
-                searchStringArray = searchStringArray.Where(x => !new string[] { "der", "die", "das", "the" }.Contains(x.ToLower())).ToList(); //  remove words with less than 3 characters
-                searchStringArray = searchStringArray.Select(x => "+" + x + "*").ToList(); // add AND operators+wildcards
-                var searchStringFinal = String.Join(" ", searchStringArray);
-                queryCollection.Add("search", searchStringFinal);
+                queryCollection.Add("searchin", "imdb");
+                queryCollection.Add("search", query.ImdbID);
+            } else {
+                queryCollection.Add("searchin", "title");
+                
+                if (!string.IsNullOrWhiteSpace(searchString))
+                {
+                    // use AND+wildcard operator to avoid getting to many useless results
+                    var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
+                    searchStringArray = searchStringArray.Where(x => x.Length >= 3).ToList(); //  remove words with less than 3 characters
+                    searchStringArray = searchStringArray.Where(x => !new string[] { "der", "die", "das", "the" }.Contains(x.ToLower())).ToList(); //  remove words with less than 3 characters
+                    searchStringArray = searchStringArray.Select(x => "+" + x + "*").ToList(); // add AND operators+wildcards
+                    var searchStringFinal = String.Join(" ", searchStringArray);
+                    queryCollection.Add("search", searchStringFinal);
             }
 
+            }
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 queryCollection.Add("c" + cat, "1");
