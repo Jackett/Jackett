@@ -33,8 +33,6 @@ namespace Jackett
                 builder.RegisterModule(module);
             }
             container = builder.Build();
-            
-            
         }
 
         public static IContainer GetContainer()
@@ -116,8 +114,9 @@ namespace Jackett
         }
 
 
-        private static void SetupLogging(RuntimeSettings settings, ContainerBuilder builder, string logfile = "log.txt")
+        private static void SetupLogging(RuntimeSettings settings, ContainerBuilder builder)
         {
+            var logFileName = settings.CustomLogFileName ?? "log.txt";
             var logLevel = settings.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
             ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
@@ -126,7 +125,7 @@ namespace Jackett
             var logFile = new FileTarget();
             logConfig.AddTarget("file", logFile);
             logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-            logFile.FileName = Path.Combine(settings.DataFolder, logfile);
+            logFile.FileName = Path.Combine(settings.DataFolder, logFileName);
             logFile.ArchiveFileName = "log.{#####}.txt";
             logFile.ArchiveAboveSize = 500000;
             logFile.MaxArchiveFiles = 5;

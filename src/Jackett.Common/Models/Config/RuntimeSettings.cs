@@ -25,6 +25,8 @@ namespace Jackett.Common.Models.Config
 
         public bool NoRestart { get; set; }
 
+        public string CustomLogFileName { get; set; }
+
         
         public string DataFolder
         {

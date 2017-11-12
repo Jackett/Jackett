@@ -24,7 +24,10 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
-            Engine.BuildContainer(new RuntimeSettings());
+            Engine.BuildContainer(new RuntimeSettings()
+            {
+                CustomLogFileName = "updater.txt"
+            });
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
             Engine.Logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
             try {
