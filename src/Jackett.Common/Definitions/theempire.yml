@@ -73,6 +73,8 @@
       search: "{{ .Query.Keywords }}"
     rows:
       selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+      filters:
+        - name: andmatch
     fields:
       category:
         selector: a[href^="browse.php?cat="]
