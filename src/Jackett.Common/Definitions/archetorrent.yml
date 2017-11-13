@@ -78,6 +78,13 @@
       path: torrents-search.php
 
   search:
+    keywordsfilters:
+      - name: replace
+        args: ["-", " "] # remove special search character (negative search)
+      - name: replace
+        args: ["+", " "] # remove special search character (positive search)
+      - name: re_replace
+        args: ["(\\w+)", " +$1"] # prepend + to each word
     paths:
       - path: torrents-search.php
     inputs:
