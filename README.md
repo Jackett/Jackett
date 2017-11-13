@@ -196,7 +196,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NCore
  * Nebulance
  * New Real World
- * Norbits  [![(invite needed)][inviteneeded]](#) <!-- added by DiseaseNO but no longer maintained? -->
+ * Norbits <!-- added by DiseaseNO but no longer maintained? -->
  * notwhat.cd
  * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
