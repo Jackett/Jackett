@@ -14,6 +14,7 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Jackett.Models.IndexerConfig;
 
 namespace Jackett.Indexers
 {
@@ -32,6 +33,9 @@ namespace Jackett.Indexers
         public bool InsertSeason { get { return configData.InsertSeason != null && configData.InsertSeason.Value; } }
         public bool AddSynonyms { get { return configData.AddSynonyms.Value; } }
         public bool FilterSeasonEpisode { get { return configData.FilterSeasonEpisode.Value; } }
+
+        string csrfIndex = null;
+        string csrfToken = null;
 
         private new ConfigurationDataAnimeBytes configData
         {
@@ -71,6 +75,35 @@ namespace Jackett.Indexers
             return input;
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            // Get the login form as we need the CSRF Token
+            var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
+            {
+                Url = LoginUrl,
+                Encoding = Encoding,
+            });
+            UpdateCookieHeader(loginPage.Cookies);
+
+            CQ loginPageDom = loginPage.Content;
+            csrfIndex = loginPageDom["input[name=\"_CSRF_INDEX\"]"].Last().Attr("value");
+            csrfToken = loginPageDom["input[name=\"_CSRF_TOKEN\"]"].Last().Attr("value");
+
+            CQ qCaptchaImg = loginPageDom.Find("#captcha_img").First();
+            if (qCaptchaImg.Length == 1)
+            {
+                var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
+                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
+                configData.CaptchaImage.Value = captchaImage.Content;
+            }
+            else
+            {
+                configData.CaptchaImage.Value = new byte[0];
+            }
+            configData.CaptchaCookie.Value = loginPage.Cookies;
+            return configData;
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -80,21 +113,10 @@ namespace Jackett.Indexers
                 cache.Clear();
             }
 
-            // Get the login form as we need the CSRF Token
-            var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                Encoding = Encoding,
-            });
-
-            CQ loginPageDom = loginPage.Content;
-            var csrfIndex = loginPageDom["input[name=\"_CSRF_INDEX\"]"].Last();
-            var csrfToken = loginPageDom["input[name=\"_CSRF_TOKEN\"]"].Last();
-
             // Build login form
             var pairs = new Dictionary<string, string> {
-                    { "_CSRF_INDEX", csrfIndex.Attr("value") },
-                    { "_CSRF_TOKEN", csrfToken.Attr("value") },
+                    { "_CSRF_INDEX", csrfIndex },
+                    { "_CSRF_TOKEN", csrfToken },
                     { "username", configData.Username.Value },
                     { "password", configData.Password.Value },
                     { "keeplogged_sent", "true" },
@@ -102,8 +124,13 @@ namespace Jackett.Indexers
                     { "login", "Log In!" }
             };
 
+            if (!string.IsNullOrWhiteSpace(configData.CaptchaText.Value))
+            {
+                pairs.Add("captcha", configData.CaptchaText.Value);
+            }
+
             // Do the login
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true, null);
 
             // Follow the redirect
             await FollowIfRedirect(response, LoginUrl, SearchUrl);
@@ -113,8 +140,14 @@ namespace Jackett.Indexers
 
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/user/logout"), () =>
             {
+                logger.Info(response.Content);
+                CQ responseDom = response.Content;
+                var alert = responseDom.Find("div.alert-danger");
+                if (alert.Any())
+                    throw new ExceptionWithConfigData(alert.Text(), configData);
+
                 // Their login page appears to be broken and just gives a 500 error.
-                throw new ExceptionWithConfigData("Failed to login, 6 failed attempts will get you banned for 6 hours.", configData);
+                throw new ExceptionWithConfigData("Failed to login (unknown reason), 6 failed attempts will get you banned for 6 hours.", configData);
             });
 
             return IndexerConfigurationStatus.RequiresTesting;

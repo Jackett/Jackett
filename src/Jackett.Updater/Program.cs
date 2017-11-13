@@ -10,12 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-/*
-// no supported by appveyor, disabeling for now
-#if __MonoCS__
-using Mono.Unix.Native;
-#endif
-*/
 
 namespace Jackett.Updater
 {
@@ -28,6 +22,7 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
+            Engine.BuildContainer();
             Engine.SetupLogging(null, "updater.txt");
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
             Engine.Logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
@@ -68,13 +63,7 @@ namespace Jackett.Updater
                     var exited = proc.WaitForExit(5000);
                     if (!exited)
                         Engine.Logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds");
-/*
-// no supported by appveyor, disabeling for now
-#if __MonoCS__
-                    Engine.Logger.Info("Sending SIGKILL to process " + pid.ToString());
-                    Syscall.kill(proc.Id, Signum.SIGKILL);
-#endif
-*/
+
                 }
                 catch (ArgumentException)
                 {
@@ -197,6 +186,9 @@ namespace Jackett.Updater
                 "Definitions/rapidetracker.yml",
                 "Definitions/isohunt.yml",
                 "Definitions/t411v2.yml",
+                "Definitions/bithq.yml",
+                "Definitions/blubits.yml",
+                "Definitions/torrentproject.yml",
             };
 
             foreach (var oldFIle in oldFiles)

@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
 using Jackett.Models.Config;
+using com.LandonKey.SocksWebProxy.Proxy;
+using com.LandonKey.SocksWebProxy;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
@@ -40,27 +43,44 @@ namespace Jackett.Utils.Clients
 
             cookies = new CookieContainer();
             var useProxy = false;
-            WebProxy proxyServer = null;
-            var proxyUrl = serverConfig.ProxyUrl;
+            IWebProxy proxyServer = null;
+            var proxyUrl = serverConfig.GetProxyUrl();
             if (!string.IsNullOrWhiteSpace(proxyUrl))
             {
-                if (serverConfig.ProxyPort.HasValue)
+                useProxy = true;
+                NetworkCredential creds = null;
+                if (!serverConfig.ProxyIsAnonymous)
                 {
-                    proxyServer = new WebProxy(proxyUrl, serverConfig.ProxyPort.Value);
+                    var username = serverConfig.ProxyUsername;
+                    var password = serverConfig.ProxyPassword;
+                    creds = new NetworkCredential(username, password);
+                }
+                if (serverConfig.ProxyType != ProxyType.Http)
+                {
+                    var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                    var socksConfig = new ProxyConfig
+                    {
+                        SocksAddress = addresses.FirstOrDefault(),
+                        Username = serverConfig.ProxyUsername,
+                        Password = serverConfig.ProxyPassword,
+                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
+                        ProxyConfig.SocksVersion.Four :
+                        ProxyConfig.SocksVersion.Five
+                    };
+                    if (serverConfig.ProxyPort.HasValue)
+                    {
+                        socksConfig.SocksPort = serverConfig.ProxyPort.Value;
+                    }
+                    proxyServer = new SocksWebProxy(socksConfig, false);
                 }
                 else
                 {
-                    proxyServer = new WebProxy(proxyUrl);
+                    proxyServer = new WebProxy(proxyUrl)
+                    {
+                        BypassProxyOnLocal = false,
+                        Credentials = creds
+                    };
                 }
-                var username = serverConfig.ProxyUsername;
-                var password = serverConfig.ProxyPassword;
-                if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
-                {
-                    var creds = new NetworkCredential(username, password);
-                    proxyServer.Credentials = creds;
-                }
-                proxyServer.BypassProxyOnLocal = false;
-                useProxy = true;
             }
 
             clearanceHandlr = new ClearanceHandler();
@@ -162,7 +182,7 @@ namespace Jackett.Utils.Clients
 
             if (!string.IsNullOrEmpty(webRequest.RawBody))
             {
-                var type = webRequest.Headers.Where(h => h.Key == "Content-Type").Cast<KeyValuePair<string,string>?>().FirstOrDefault();
+                var type = webRequest.Headers.Where(h => h.Key == "Content-Type").Cast<KeyValuePair<string, string>?>().FirstOrDefault();
                 if (type.HasValue)
                 {
                     var str = new StringContent(webRequest.RawBody);
@@ -253,7 +273,7 @@ namespace Jackett.Utils.Clients
                     var nameSplit = value.IndexOf('=');
                     if (nameSplit > -1)
                     {
-                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';')))+";"));
+                        responseCookies.Add(new Tuple<string, string>(value.Substring(0, nameSplit), value.Substring(0, value.IndexOf(';') == -1 ? value.Length : (value.IndexOf(';'))) + ";"));
                     }
                 }
 

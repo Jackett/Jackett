@@ -157,7 +157,7 @@ namespace Jackett.Services
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.FileVersion;
+            return fvi.ProductVersion;
         }
 
         private WebRequest SetDownloadHeaders(WebRequest req)

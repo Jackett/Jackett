@@ -144,7 +144,6 @@ namespace Jackett.Indexers
                         release.BannerUrl = coverUri;
                         release.Imdb = movie_imdbid;
                         release.Comments = new Uri(string.Format("{0}?id={1}", SearchUrl, WebUtility.UrlEncode(movie_groupid)));
-                        release.Guid = release.Comments;
                         release.Size = long.Parse((string)torrent["Size"]);
                         release.Grabs = long.Parse((string)torrent["Snatched"]);
                         release.Seeders = int.Parse((string)torrent["Seeders"]);
@@ -153,6 +152,7 @@ namespace Jackett.Indexers
                                                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         release.Link = new Uri(string.Format("{0}?action=download&id={1}&authkey={2}&torrent_pass={3}",
                                                 SearchUrl, WebUtility.UrlEncode((string)torrent["Id"]), WebUtility.UrlEncode(AuthKey), WebUtility.UrlEncode(configData.Passkey.Value)));
+                        release.Guid = release.Link;
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 345600;
                         release.Category = new List<int> { 2000 };

@@ -11,6 +11,7 @@ using Jackett.Utils;
 using System.Net;
 using System.Threading;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett
 {
@@ -26,7 +27,7 @@ namespace Jackett
             public HttpMethod Method { get; private set; }
             public IEnumerable<KeyValuePair<string, string>> PostData { get; set; }
             public Dictionary<string, string> Headers { get; set; }
-            public string RawPOSTDdata { get; set;}
+            public string RawPOSTDdata { get; set; }
 
             public CurlRequest(HttpMethod method, string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPOSTData = null)
             {
@@ -55,31 +56,31 @@ namespace Jackett
             }
         }
 
-        public static async Task<CurlResponse> GetAsync(string url, string cookies = null, string referer = null, Dictionary<string, string> headers = null)
+        public static async Task<CurlResponse> GetAsync(string url, ServerConfig config, string cookies = null, string referer = null, Dictionary<string, string> headers = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Get, url, cookies, referer, headers);
-            var result = await PerformCurlAsync(curlRequest);
+            var result = await PerformCurlAsync(curlRequest, config);
             return result;
         }
 
-        public static async Task<CurlResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData =null)
+        public static async Task<CurlResponse> PostAsync(string url, ServerConfig config, IEnumerable<KeyValuePair<string, string>> formData, string cookies = null, string referer = null, Dictionary<string, string> headers = null, string rawPostData = null)
         {
             var curlRequest = new CurlRequest(HttpMethod.Post, url, cookies, referer, headers);
             curlRequest.PostData = formData;
             curlRequest.RawPOSTDdata = rawPostData;
-            var result = await PerformCurlAsync(curlRequest);
+            var result = await PerformCurlAsync(curlRequest, config);
             return result;
         }
 
-        public static async Task<CurlResponse> PerformCurlAsync(CurlRequest curlRequest)
+        public static async Task<CurlResponse> PerformCurlAsync(CurlRequest curlRequest, ServerConfig config)
         {
-            return await Task.Run(() => PerformCurl(curlRequest));
+            return await Task.Run(() => PerformCurl(curlRequest, config));
         }
 
         public delegate void ErrorMessage(string s);
         public static ErrorMessage OnErrorMessage;
 
-        public static CurlResponse PerformCurl(CurlRequest curlRequest)
+        public static CurlResponse PerformCurl(CurlRequest curlRequest, ServerConfig config)
         {
             lock (instance)
             {
@@ -88,13 +89,12 @@ namespace Jackett
 
                 using (var easy = new CurlEasy())
                 {
-                    
                     easy.Url = curlRequest.Url;
                     easy.BufferSize = 64 * 1024;
                     easy.UserAgent = BrowserUtil.ChromeUserAgent;
                     easy.FollowLocation = false;
                     easy.ConnectTimeout = 20;
-                    if(curlRequest.Headers != null)
+                    if (curlRequest.Headers != null)
                     {
                         CurlSlist curlHeaders = new CurlSlist();
                         foreach (var header in curlRequest.Headers)
@@ -154,10 +154,17 @@ namespace Jackett
                         easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
-                    if (JackettStartup.ProxyConnection != null)
+                    var proxy = config.GetProxyUrl();
+                    if (proxy != null)
                     {
                         easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
-                        easy.SetOpt(CurlOption.Proxy, JackettStartup.ProxyConnection);
+                        easy.SetOpt(CurlOption.Proxy, proxy);
+
+                        var authString = config.GetProxyAuthString();
+                        if (authString != null)
+                        {
+                            easy.SetOpt(CurlOption.ProxyUserPwd, authString);
+                        }
                     }
 
                     easy.Perform();
@@ -174,7 +181,7 @@ namespace Jackett
 
                 var headerBytes = Combine(headerBuffers.ToArray());
                 var headerString = Encoding.UTF8.GetString(headerBytes);
-                if (JackettStartup.ProxyConnection != null)
+                if (config.GetProxyUrl() != null)
                 {
                     var firstcrlf = headerString.IndexOf("\r\n\r\n");
                     var secondcrlf = headerString.IndexOf("\r\n\r\n", firstcrlf + 1);
@@ -210,7 +217,8 @@ namespace Jackett
                             if (key == "set-cookie")
                             {
                                 var nameSplit = value.IndexOf('=');
-                                if (nameSplit > -1) {
+                                if (nameSplit > -1)
+                                {
                                     var cKey = value.Substring(0, nameSplit);
                                     var cVal = value.Split(';')[0] + ";";
                                     cookies.Add(new Tuple<string, string>(cKey, cVal));
@@ -242,12 +250,12 @@ namespace Jackett
                         OnErrorMessage("request.Cookies: " + curlRequest.Cookies);
                         OnErrorMessage("request.Referer: " + curlRequest.Referer);
                         OnErrorMessage("request.RawPOSTDdata: " + curlRequest.RawPOSTDdata);
-                        OnErrorMessage("cookies: "+ cookieBuilder.ToString().Trim());
+                        OnErrorMessage("cookies: " + cookieBuilder.ToString().Trim());
                         OnErrorMessage("headerString:\n" + headerString);
-                    
+
                         foreach (var headerPart in headerParts)
                         {
-                            OnErrorMessage("headerParts: "+headerPart);
+                            OnErrorMessage("headerParts: " + headerPart);
                         }
                     }
                     catch (Exception ex)
@@ -255,7 +263,7 @@ namespace Jackett
                         OnErrorMessage(string.Format("CurlHelper: error while handling NotImplemented/InternalServerError:\n{0}", ex));
                     }
                 }
-                
+
                 var contentBytes = Combine(contentBuffers.ToArray());
                 var curlResponse = new CurlResponse(headers, contentBytes, status, cookieBuilder.ToString().Trim());
                 return curlResponse;

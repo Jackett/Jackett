@@ -15,6 +15,7 @@ using System.Web.Http.Filters;
 using Newtonsoft.Json.Linq;
 using Jacket.Common;
 using System.Text;
+using Autofac.Integration.WebApi;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Jackett
@@ -134,7 +135,9 @@ namespace Jackett
             if (JackettStartup.LogRequests)
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
 
-            config.DependencyResolver = Engine.DependencyResolver();
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());
+
+
             config.MapHttpAttributeRoutes();
 
             // Sonarr appends /api by default to all Torznab indexers, so we need that "ignored"

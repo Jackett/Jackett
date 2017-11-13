@@ -19,6 +19,7 @@ namespace Jackett.Service
 
         protected override void OnStart(string[] args)
         {
+            Engine.BuildContainer(new WebApi2Module());
             Engine.Logger.Info("Service starting");
             Engine.Server.Initalize();
             Engine.Server.Start();
