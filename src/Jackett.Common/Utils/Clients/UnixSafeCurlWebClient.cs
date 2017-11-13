@@ -72,13 +72,13 @@ namespace Jackett.Utils.Clients
             var tempFile = Path.GetTempFileName();
             args.AppendFormat("--output \"{0}\" ", tempFile);
 
-            if (JackettStartup.DoSSLFix == true)
+            if (serverConfig.RuntimeSettings.DoSSLFix == true)
             {
                 // http://stackoverflow.com/questions/31107851/how-to-fix-curl-35-cannot-communicate-securely-with-peer-no-common-encryptio
                 // https://git.fedorahosted.org/cgit/mod_nss.git/plain/docs/mod_nss.html
                 args.Append("--cipher " + SSLFix.CipherList);
             }
-            if (JackettStartup.IgnoreSslErrors == true)
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
             {
                 args.Append("-k ");
             }
@@ -98,7 +98,7 @@ namespace Jackett.Utils.Clients
             if (headSplit < 0)
                 throw new Exception("Invalid response");
             var headers = stdout.Substring(0, headSplit);
-            if (JackettStartup.ProxyConnection != null)
+            if (serverConfig.RuntimeSettings.ProxyConnection != null)
             {
                 // the proxy provided headers too so we need to split headers again
                 var headSplit1 = stdout.IndexOf("\r\n\r\n", headSplit + 4);

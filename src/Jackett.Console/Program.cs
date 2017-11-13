@@ -1,7 +1,6 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using Jackett;
-using Jackett.Console;
 using Jackett.Indexers;
 using Jackett.Utils;
 using System;
@@ -16,72 +15,64 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Jacket.Common;
+using Jackett.Common.Models.Config;
+using Jacket.Common.Utils;
+using Jackett.Common.Plumbing;
 
 namespace JackettConsole
 {
     public class Program
     {
-      
+
         static void Main(string[] args)
         {
-            try
-            {
-                var options = new ConsoleOptions();
-                if (!Parser.Default.ParseArguments(args, options) || options.ShowHelp == true)
-                {
-                    if (options.LastParserState != null && options.LastParserState.Errors.Count > 0)
-                    {
-                        var help = new HelpText();
-                        var errors = help.RenderParsingErrorsText(options, 2); // indent with two spaces
-                        Console.WriteLine("Jackett v" + JackettStartup.JackettVersion);
-                        Console.WriteLine("Switch error: " + errors);
-                        Console.WriteLine("See --help for further details on switches.");
-                        Environment.ExitCode = 1;
-                        return;
-                    }
-                    else
-                    {
 
-                        var text = HelpText.AutoBuild(options, (HelpText current) => HelpText.DefaultParsingErrorsHandler(options, current));
-                        text.Copyright = " ";
-                        text.Heading = "Jackett v" + Engine.ConfigService.GetVersion() + " options:";
-                        Console.WriteLine(text);
-                        Environment.ExitCode = 1;
-                        return;
-                    }
-                }
-                else
+            var optionsResult = Parser.Default.ParseArguments<ConsoleOptions>(args);
+            optionsResult.WithNotParsed(errors =>
+            {
+                var text = HelpText.AutoBuild(optionsResult);
+                text.Copyright = " ";
+                text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion + " options:";
+                Console.WriteLine(text);
+                Environment.ExitCode = 1;
+                return;
+            });
+
+            optionsResult.WithParsed(options =>
+            {
+                try
                 {
-                    SetJacketOptions(options);
+                    var runtimeSettings = options.ToRunTimeSettings();
+
                     // Initialize autofac, logger, etc. We cannot use any calls to Engine before the container is set up.
-                    Engine.BuildContainer(new WebApi2Module());
-                    
-                    if (options.Logging)
+                    Engine.BuildContainer(runtimeSettings, new WebApi2Module());
+
+                    if (runtimeSettings.LogRequests)
                         Engine.Logger.Info("Logging enabled.");
 
-                    if (options.Tracing)
+                    if (runtimeSettings.TracingEnabled)
                         Engine.Logger.Info("Tracing enabled.");
 
-                    if (options.IgnoreSslErrors == true)
+                    if (runtimeSettings.IgnoreSslErrors == true)
                     {
                         Engine.Logger.Info("Jackett will ignore SSL certificate errors.");
                     }
 
-                    if (options.SSLFix == true)
+                    if (runtimeSettings.DoSSLFix == true)
                         Engine.Logger.Info("SSL ECC workaround enabled.");
-                    else if (options.SSLFix == false)
+                    else if (runtimeSettings.DoSSLFix == false)
                         Engine.Logger.Info("SSL ECC workaround has been disabled.");
                     // Choose Data Folder
-                    if (!string.IsNullOrWhiteSpace(options.DataFolder))
+                    if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
                     {
-                        Engine.Logger.Info("Jackett Data will be stored in: " + JackettStartup.CustomDataFolder);
+                        Engine.Logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
                     }
 
 
                     // Use Proxy
                     if (options.ProxyConnection != null)
                     {
-                        Engine.Logger.Info("Proxy enabled. " + JackettStartup.ProxyConnection);
+                        Engine.Logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
                     }
 
                     /*  ======     Actions    =====  */
@@ -139,7 +130,7 @@ namespace JackettConsole
                     // Show Version
                     if (options.ShowVersion)
                     {
-                        Console.WriteLine("Jackett v" + Engine.ConfigService.GetVersion());
+                        Console.WriteLine("Jackett v" + EnvironmentUtil.JackettVersion);
                         return;
                     }
 
@@ -161,8 +152,7 @@ namespace JackettConsole
                                 else
                                 {
                                     Engine.Logger.Error("Unable to switch to public listening without admin rights.");
-                                    Environment.ExitCode = 1;
-                                    return;
+                                    Environment.Exit(1);
                                 }
                             }
 
@@ -186,67 +176,28 @@ namespace JackettConsole
                                 else
                                 {
                                     Engine.Logger.Error("Unable to switch ports when not running as administrator");
-                                    Environment.ExitCode = 1;
-                                    return;
+                                    Environment.Exit(1);
                                 }
                             }
 
                             Engine.SaveServerConfig();
                         }
                     }
+
+                    Engine.Server.Initalize();
+                    Engine.Server.Start();
+                    Engine.RunTime.Spin();
+                    Engine.Logger.Info("Server thread exit");
                 }
+                catch (Exception e)
+                {
+                    Engine.Logger.Error(e, "Top level exception");
+                }
+            });
+    }
+        
 
-                Engine.Server.Initalize();
-                Engine.Server.Start();
-                Engine.RunTime.Spin();
-                Engine.Logger.Info("Server thread exit");
-            }
-            catch (Exception e)
-            {
-                Engine.Logger.Error(e, "Top level exception");
-            }
-        }
-
-        static void SetJacketOptions(ConsoleOptions options)
-        {
-            // Logging
-            if (options.Logging)
-                JackettStartup.LogRequests = true;
-
-            // Tracing
-            if (options.Tracing)
-                JackettStartup.TracingEnabled = true;
-
-            if (options.ListenPublic && options.ListenPrivate)
-            {
-                Console.WriteLine("You can only use listen private OR listen publicly.");
-                Environment.ExitCode = 1;
-                return;
-            }
-
-            // SSL Fix
-            JackettStartup.DoSSLFix = options.SSLFix;
-
-            // Use curl
-            if (options.Client != null)
-                JackettStartup.ClientOverride = options.Client.ToLowerInvariant();
-
-            // Use Proxy
-            if (options.ProxyConnection != null)
-            {
-                JackettStartup.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
-            }
-
-
-
-            // Ignore SSL errors on Curl
-            JackettStartup.IgnoreSslErrors = options.IgnoreSslErrors;
-
-
-
-            JackettStartup.NoRestart = options.NoRestart;
-
-        }
+       
 
     }
 }

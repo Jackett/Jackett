@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Console
+namespace Jackett.Common.Models.Config
 {
     public class ConsoleOptions
     {
@@ -64,9 +64,47 @@ namespace Jackett.Console
         public string DataFolder { get; set; }
 
         [Option(HelpText = "Don't restart after update")]
-        public bool NoRestart { get; set; }
+        public bool NoRestart { get; set; }        
 
-        [ParserState]
-        public IParserState LastParserState { get; set; }
+
+
+        public RuntimeSettings ToRunTimeSettings()
+        {
+            var options = this;
+                var runtimeSettings = new RuntimeSettings();
+                // Logging
+                if (options.Logging)
+                    runtimeSettings.LogRequests = true;
+
+                // Tracing
+                if (options.Tracing)
+                    runtimeSettings.TracingEnabled = true;
+
+                if (options.ListenPublic && options.ListenPrivate)
+                {
+                    Console.WriteLine("You can only use listen private OR listen publicly.");
+                    Environment.Exit(1);
+                }
+
+                // SSL Fix
+                runtimeSettings.DoSSLFix = options.SSLFix;
+
+                // Use curl
+                if (options.Client != null)
+                    runtimeSettings.ClientOverride = options.Client.ToLowerInvariant();
+
+                // Use Proxy
+                if (options.ProxyConnection != null)
+                {
+                    runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
+                }
+                // Ignore SSL errors on Curl
+                runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
+                runtimeSettings.NoRestart = options.NoRestart;
+
+                return runtimeSettings;
+
+            }
+        }
+
     }
-}

@@ -9,7 +9,7 @@ namespace Jackett.Updater
 {
     public class UpdaterConsoleOptions
     {
-        [Option('p', "Path", HelpText = "Install location")]
+        [Option('p', "Path", HelpText = "Install location", Required = true)]
         public string Path { get; set; }
 
         [Option('t', "Type", HelpText = "Install type")]
