@@ -60,7 +60,7 @@
       incldead: 1
 
     rows:
-      selector: p + table > tbody > tr:has(a[href^="details.php?id="]), p + table > tbody > tr[id^="kdescr"]
+      selector: p + table > tbody > tr:has(a[href^="download.php"]), p + table > tbody > tr:has(a[href^="download.php"]) + tr[id^="kdescr"] # sometimes an unexpected tr[id^="kdescr"] row shows up (for unpublished torrents?)
       filters:
         - name: andmatch
       after: 1

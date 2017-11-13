@@ -53,6 +53,23 @@ namespace Jackett.Controllers
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(target);
 
+                // handle magnet URLs
+                if (downloadBytes.Length >= 7
+                    && downloadBytes[0] == 0x6d // m
+                    && downloadBytes[1] == 0x61 // a
+                    && downloadBytes[2] == 0x67 // g
+                    && downloadBytes[3] == 0x6e // n
+                    && downloadBytes[4] == 0x65 // e
+                    && downloadBytes[5] == 0x74 // t
+                    && downloadBytes[6] == 0x3a // :
+                    )
+                {
+                    var magneturi = Encoding.UTF8.GetString(downloadBytes);
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location = new Uri(magneturi);
+                    return response;
+                }
+
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
                 var parser = new BencodeParser();
                 var torrentDictionary = parser.Parse(downloadBytes);
@@ -63,7 +80,7 @@ namespace Jackett.Controllers
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = StringUtil.MakeValidFileName(file, '_', false) // call MakeValidFileName again to avoid any kind of injection attack
+                    FileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent" // call MakeValidFileName again to avoid any kind of injection attack
                 };
                 return result;
             }

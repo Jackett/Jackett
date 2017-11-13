@@ -29,6 +29,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BT-Scene
  * cpasbien
+ * ETTV
  * EZTV
  * Frozen Layer
  * GkTorrent
@@ -53,7 +54,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * Torrent Downloads
  * Torrent9
- * TorrentProject
  * Torrentz2
  * World Wide Torrents
  * YTS.ag
@@ -104,14 +104,12 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BIGTorrent
  * Bit-City Reloaded
  * BIT-HDTV
- * BitHQ
  * BitHUmen
  * BitMe
  * BitMeTV
  * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
  * BJ-Share
- * Blu-bits
  * BlueBird
  * Blutopia
  * BroadcastTheNet
@@ -130,9 +128,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Demonoid
  * Diablo Torrent
  * DigitalHive
+ * Downloadville
  * Dragonworld Reloaded
  * Dream Team
  * EliteHD  [![(invite needed)][inviteneeded]](#)
+ * Elit Tracker
  * Elite-Tracker
  * EoT-Forum
  * eStone
@@ -239,7 +239,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Show
  * The Vault
  * The-Torrents
- * TehConnection
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
@@ -328,6 +327,16 @@ Detailed instructions are available at [LinuxServer.io Jackett Docker](https://h
 
 ## Installation on Synology
 Jackett is available as beta package from [SynoCommunity](https://synocommunity.com/)
+
+## Running Jackett behind a reverse proxy
+When running jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base Path Override" Jackett option accordingly.
+
+Example config for apache:
+```
+ProxyPreserveHost On
+RequestHeader set X-Forwarded-Proto "https"
+ProxyPass /jackett http://127.0.0.1:9117/
+```
 
 ## Troubleshooting
 

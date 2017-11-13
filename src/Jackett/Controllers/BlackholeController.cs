@@ -50,7 +50,22 @@ namespace Jackett.Controllers
                 path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
                 path = protectionService.UnProtect(path);
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
+                var fileExtension = ".torrent";
                 var downloadBytes = await indexer.Download(remoteFile);
+
+                // handle magnet URLs
+                if (downloadBytes.Length >= 7
+                    && downloadBytes[0] == 0x6d // m
+                    && downloadBytes[1] == 0x61 // a
+                    && downloadBytes[2] == 0x67 // g
+                    && downloadBytes[3] == 0x6e // n
+                    && downloadBytes[4] == 0x65 // e
+                    && downloadBytes[5] == 0x74 // t
+                    && downloadBytes[6] == 0x3a // :
+                    )
+                {
+                    fileExtension = ".magnet";
+                }
 
                 if (string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
@@ -64,9 +79,9 @@ namespace Jackett.Controllers
 
                 var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
                 if (string.IsNullOrWhiteSpace(file))
-                    fileName += ".torrent";
+                    fileName += fileExtension;
                 else
-                    fileName += "-"+StringUtil.MakeValidFileName(file, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks 
+                    fileName += "-"+StringUtil.MakeValidFileName(file + fileExtension, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks 
 
                 File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
                 jsonReply["result"] = "success";

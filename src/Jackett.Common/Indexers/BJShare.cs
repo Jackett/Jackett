@@ -257,8 +257,9 @@ Encoding = Encoding.UTF8;
 
                             var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                             var qSize = Row.QuerySelector("td:nth-last-child(4)");
-                            var qSeeders = Row.QuerySelector("td:nth-last-child(3)");
-                            var qLeechers = Row.QuerySelector("td:nth-last-child(2)");
+                            var qGrabs = Row.QuerySelector("td:nth-last-child(3)");
+                            var qSeeders = Row.QuerySelector("td:nth-last-child(2)");
+                            var qLeechers = Row.QuerySelector("td:nth-last-child(1)");
                             var qFreeLeech = Row.QuerySelector("strong[title=\"Free\"]");
 
                             if (Row.ClassList.Contains("group_torrent")) // torrents belonging to a group
@@ -304,6 +305,7 @@ Encoding = Encoding.UTF8;
                             release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                             release.Guid = release.Link;
 
+                            release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                             release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                             release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
 

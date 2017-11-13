@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jackett.Common.Models.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -27,28 +28,58 @@ namespace Jackett.Models.Config
         public string OmdbApiKey { get; set; }
 
         public string ProxyUrl { get; set; }
+        public ProxyType ProxyType { get; set; }
         public int? ProxyPort { get; set; }
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
 
-        public string Proxy
+        public bool ProxyIsAnonymous
         {
             get
             {
-                var proxy = ProxyUrl;
-
-                if (!string.IsNullOrWhiteSpace(ProxyUsername) && !string.IsNullOrWhiteSpace(ProxyPassword))
-                {
-                    proxy = $"{ProxyUsername}:{ProxyPassword}@{proxy}";
-                }
-
-                if (ProxyPort.HasValue)
-                {
-                    proxy = $"{proxy}:{ProxyPort}";
-                }
-
-                return proxy;
+                return string.IsNullOrWhiteSpace(ProxyUsername) || string.IsNullOrWhiteSpace(ProxyPassword);
             }
+        }
+
+        public string GetProxyAuthString()
+        {
+            if (!ProxyIsAnonymous)
+            {
+                return $"{ProxyUsername}:{ProxyPassword}";
+            }
+            return null;
+        }
+
+        public string GetProxyUrl(bool withCreds = false)
+        {
+            var url = ProxyUrl;
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return null;
+            }
+            //remove protocol from url
+            var index = url.IndexOf("://");
+            if (index > -1)
+            {
+                url = url.Substring(index + 3);
+            }
+            url = ProxyPort.HasValue ? $"{url}:{ProxyPort}" : url;
+
+            var authString = GetProxyAuthString();
+            if (withCreds && authString != null)
+            {
+                url = $"{authString}@{url}";
+            }
+
+            if (ProxyType != ProxyType.Http)
+            {
+                var protocol = (Enum.GetName(typeof(ProxyType), ProxyType) ?? "").ToLower();
+                if (!string.IsNullOrEmpty(protocol))
+                {
+                    url = $"{protocol}://{url}";
+                }
+            }
+            return url;
         }
 
         public string[] GetListenAddresses(bool? external = null)

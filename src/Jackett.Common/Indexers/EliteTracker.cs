@@ -134,7 +134,7 @@ Encoding = Encoding.UTF8;
                 { "password", configData.Password.Value }
             };
 
-            var result = await PostDataWithCookies(LoginUrl, pairs);
+            var result = await PostDataWithCookies(LoginUrl, pairs, "");
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null, () =>
            {

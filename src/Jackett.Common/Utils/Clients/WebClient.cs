@@ -64,10 +64,13 @@ namespace Jackett.Utils.Clients
 
         virtual protected void PrepareRequest(WebRequest request)
         {
-            // add accept header if not set
+            // add Accept/Accept-Language header if not set
+            // some webservers won't accept requests without accept
+            // e.g. elittracker requieres the Accept-Language header
             if (request.Headers == null)
                 request.Headers = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             var hasAccept = false;
+            var hasAcceptLanguage = false;
             foreach (var header in request.Headers)
             {
                 var key = header.Key.ToLower();
@@ -75,9 +78,15 @@ namespace Jackett.Utils.Clients
                 {
                     hasAccept = true;
                 }
+                else if (key == "accept-language")
+                {
+                    hasAcceptLanguage = true;
+                }
             }
             if (!hasAccept)
                 request.Headers.Add("Accept", "*/*");
+            if (!hasAcceptLanguage)
+                request.Headers.Add("Accept-Language", "*");
             return;
         }
 

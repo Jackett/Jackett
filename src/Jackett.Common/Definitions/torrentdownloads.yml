@@ -24,6 +24,9 @@
   
   settings: []
   
+  download:
+    selector: a[href^="magnet:"]
+  
   search:
     paths:
       - path: "{{if .Keywords}}/search/{{else}}/today/{{end}}"
@@ -41,9 +44,6 @@
       download:
         selector: p:nth-child(1) > a[href^="/torrent/"]
         attribute: href
-        filters:
-        - name: replace
-          args: ["/torrent/", "/download/"]
       size:
         selector: span:nth-child(5)
       seeders:

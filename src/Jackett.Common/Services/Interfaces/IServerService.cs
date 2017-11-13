@@ -10,7 +10,7 @@ namespace Jackett.Services.Interfaces
         void Start();
         void Stop();
         void ReserveUrls(bool doInstall = true);
-        Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t.torrent");
+        Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t");
         string BasePath();
         string GetServerUrl(HttpRequestMessage Request);
         List<string> notices { get; } 

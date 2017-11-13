@@ -173,7 +173,7 @@ namespace Jackett.Services
 
 #if DEBUG
             // When we are running in debug use the source files
-            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Content"));
+            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett.Common\\Content"));
             if (Directory.Exists(sourcePath))
             {
                 dir = sourcePath;
@@ -202,7 +202,7 @@ namespace Jackett.Services
 
 #if DEBUG
             // When we are running in debug use the source files
-            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett\\Definitions"));
+            var sourcePath = Path.GetFullPath(Path.Combine(ApplicationFolder(), "..\\..\\..\\Jackett.Common\\Definitions"));
             if (Directory.Exists(sourcePath))
             {
                 dir = sourcePath;

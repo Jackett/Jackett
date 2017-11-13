@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataAnimeBytes : ConfigurationDataBasicLogin
+    class ConfigurationDataAnimeBytes : ConfigurationDataCaptchaLogin
     {
         public BoolItem IncludeRaw { get; private set; }
         public DisplayItem DateWarning { get; private set; }

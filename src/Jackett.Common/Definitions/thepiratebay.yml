@@ -81,6 +81,7 @@
         # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
       - name: re_replace
         args: ["General Hospital S(\\d{2,3})E(\\d{2,3})", "$0 | \\(S$1 E$2\\)"]
+      - name: tolower
     rows:
       selector: "#searchResult tbody tr:has(td.vertTh)"
     fields:
