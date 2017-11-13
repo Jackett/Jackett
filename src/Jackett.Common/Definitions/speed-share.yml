@@ -168,6 +168,18 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: ""
+      default: For the search to work properly you must configure the "Modelo da Home" option to "Sistema Lista de Torrents" in the Speed-Share user settings.
+
   login:
     path: account-login.php
     method: post
