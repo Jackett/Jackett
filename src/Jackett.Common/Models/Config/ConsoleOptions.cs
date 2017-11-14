@@ -63,7 +63,7 @@ namespace Jackett.Common.Models.Config
         [Option('d', "DataFolder", HelpText = "Specify the location of the data folder (Must be admin on Windows) eg. --DataFolder=\"D:\\Your Data\\Jackett\\\". Don't use this on Unix (mono) systems. On Unix just adjust the HOME directory of the user to the datedir or set the XDG_CONFIG_HOME environment variable.")]
         public string DataFolder { get; set; }
 
-        [Option(HelpText = "Don't restart after update")]
+        [Option("NoRestart", HelpText = "Don't restart after update")]
         public bool NoRestart { get; set; }        
 
 
