@@ -256,7 +256,7 @@ namespace Jackett.Services
 
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart)
         {
-            var exe = Path.GetFileName(ExePath()).ToLowerInvariant();
+            var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
 
             var startInfo = new ProcessStartInfo();
