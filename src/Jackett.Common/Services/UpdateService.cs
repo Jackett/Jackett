@@ -155,7 +155,7 @@ namespace Jackett.Services
 
         private string GetCurrentVersion()
         {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             return fvi.ProductVersion;
         }
