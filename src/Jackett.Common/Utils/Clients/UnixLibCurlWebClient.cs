@@ -56,10 +56,10 @@ namespace Jackett.Utils.Clients
             var version = Curl.Version;
             logger.Info("LibCurl version " + version);
 
-            if (!JackettStartup.DoSSLFix.HasValue && version.IndexOf("NSS") > -1)
+            if (!serverConfig.RuntimeSettings.DoSSLFix.HasValue && version.IndexOf("NSS") > -1)
             {
                 logger.Info("NSS Detected SSL ECC workaround enabled.");
-                JackettStartup.DoSSLFix = true;
+                serverConfig.RuntimeSettings.DoSSLFix = true;
             }
         }
 

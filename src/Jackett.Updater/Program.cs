@@ -1,4 +1,6 @@
 ﻿using CommandLine;
+using CommandLine.Text;
+using Jackett.Common.Models.Config;
 using Jackett.Services;
 using System;
 using System.Collections.Generic;
@@ -22,21 +24,25 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
-            Engine.BuildContainer();
-            Engine.SetupLogging(null, "updater.txt");
+            Engine.BuildContainer(new RuntimeSettings()
+            {
+                CustomLogFileName = "updater.txt"
+            });
             Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
             Engine.Logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
             try {
-                var options = new UpdaterConsoleOptions();
-                if (Parser.Default.ParseArguments(args, options))
+                var optionsResult = Parser.Default.ParseArguments<UpdaterConsoleOptions>(args);
+                optionsResult.WithParsed(options =>
                 {
                     ProcessUpdate(options);
                 }
-                else
+                );
+                optionsResult.WithNotParsed(errors =>
                 {
+                    Engine.Logger.Error(HelpText.AutoBuild(optionsResult));
                     Engine.Logger.Error("Failed to process update arguments!");
                     Console.ReadKey();
-                }
+                });
             }
             catch (Exception e)
             {
@@ -46,7 +52,7 @@ namespace Jackett.Updater
 
         private string GetCurrentVersion()
         {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             return fvi.FileVersion;
         }

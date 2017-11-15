@@ -83,7 +83,7 @@ namespace Jackett.Services
 
                 string[] cmdline = { @"/assemblypath=" + exePath};
 
-                var context = new InstallContext("jackettservice_install.log", cmdline);
+                var context = new InstallContext("jackettservice_install.log", cmdline);                
                 serviceInstaller.Context = context;
                 serviceInstaller.DisplayName = NAME;
                 serviceInstaller.ServiceName = NAME;

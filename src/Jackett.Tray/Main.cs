@@ -1,4 +1,5 @@
 ﻿using Jackett;
+using Jackett.Common.Models.Config;
 using Jackett.Utils;
 using Microsoft.Win32;
 using System;
@@ -34,7 +35,7 @@ namespace JackettTray
                 toolStripMenuItemAutoStart.Visible = true;
             }
 
-            Engine.BuildContainer(new WebApi2Module());
+            Engine.BuildContainer(new RuntimeSettings(),new WebApi2Module());
             Engine.Server.Initalize();
 
             if (!Engine.ServiceConfig.ServiceExists())

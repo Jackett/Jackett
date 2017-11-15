@@ -6,15 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Tracing;
 using Jacket.Common;
+using Jackett.Models.Config;
 
 namespace Jackett.Utils
 {
     public class WebAPIToNLogTracer : ITraceWriter
     {
-        public void Trace(HttpRequestMessage request, string category, TraceLevel level,
+        private ServerConfig _serverConfig;
+
+        public WebAPIToNLogTracer(ServerConfig serverConfig)
+        {
+            _serverConfig = serverConfig;
+        }
+
+        public void Trace(HttpRequestMessage request, string category, TraceLevel level, 
             Action<TraceRecord> traceAction)
         {
-            if (JackettStartup.TracingEnabled)
+            if (_serverConfig.RuntimeSettings.TracingEnabled)
             {
                 TraceRecord rec = new TraceRecord(request, category, level);
                 traceAction(rec);

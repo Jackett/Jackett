@@ -62,6 +62,8 @@
       search_mode: "0"
     rows:
       selector: table.torrents > tbody > tr[class]
+      filters:
+        - name: andmatch
     error:
       - selector: b:contains("This is a must-read message, please read before other operations!")
     fields:

@@ -8,6 +8,9 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using Jacket.Common.Utils;
+using Jackett.Common.Models.Config;
+using Jackett.Models.Config;
 
 namespace Jackett.Services
 {
@@ -17,13 +20,20 @@ namespace Jackett.Services
         private ISerializeService serializeService;
         private Logger logger;
         private IProcessService processService;
+        private RuntimeSettings runtimeSettings;
 
-        public ConfigurationService(ISerializeService s, IProcessService p, Logger l)
+        public ConfigurationService(ISerializeService s, IProcessService p, Logger l, RuntimeSettings settings)
         {
             serializeService = s;
             logger = l;
             processService = p;
+            runtimeSettings = settings;
             CreateOrMigrateSettings();
+        }
+
+        public string GetAppDataFolder()
+        {
+            return runtimeSettings.DataFolder;
         }
 
         public void CreateOrMigrateSettings()
@@ -213,31 +223,6 @@ namespace Jackett.Services
         }
 
 
-        public string GetAppDataFolder()
-        {
-            return GetAppDataFolderStatic();
-        }
-
-        /// <summary>
-        ///  This is needed for the logger prior to ioc setup.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetAppDataFolderStatic()
-        {
-            if (!string.IsNullOrWhiteSpace(JackettStartup.CustomDataFolder))
-            {
-                return JackettStartup.CustomDataFolder;
-            }
-
-            if (System.Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-            }
-            else
-            {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
-            }
-        }
 
         public string GetIndexerConfigDir()
         {
@@ -256,7 +241,7 @@ namespace Jackett.Services
 
         public string GetVersion()
         {
-            return JackettStartup.JackettVersion;
+            return EnvironmentUtil.JackettVersion;
         }
     }
 }
