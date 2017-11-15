@@ -154,16 +154,19 @@ namespace Jackett
                         easy.SetOpt(CurlOption.SslVerifyPeer, false);
                     }
 
-                    var proxy = config.GetProxyUrl();
-                    if (proxy != null)
+                    if (config != null)
                     {
-                        easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
-                        easy.SetOpt(CurlOption.Proxy, proxy);
-
-                        var authString = config.GetProxyAuthString();
-                        if (authString != null)
+                        var proxy = config.GetProxyUrl();
+                        if (proxy != null)
                         {
-                            easy.SetOpt(CurlOption.ProxyUserPwd, authString);
+                            easy.SetOpt(CurlOption.HttpProxyTunnel, 1);
+                            easy.SetOpt(CurlOption.Proxy, proxy);
+
+                            var authString = config.GetProxyAuthString();
+                            if (authString != null)
+                            {
+                                easy.SetOpt(CurlOption.ProxyUserPwd, authString);
+                            }
                         }
                     }
 
@@ -181,7 +184,7 @@ namespace Jackett
 
                 var headerBytes = Combine(headerBuffers.ToArray());
                 var headerString = Encoding.UTF8.GetString(headerBytes);
-                if (config.GetProxyUrl() != null)
+                if (config != null && config.GetProxyUrl() != null)
                 {
                     var firstcrlf = headerString.IndexOf("\r\n\r\n");
                     var secondcrlf = headerString.IndexOf("\r\n\r\n", firstcrlf + 1);

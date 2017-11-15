@@ -38,6 +38,8 @@ namespace Jackett.Services
             client = c;
             configService = cfg;
             lockService = ls;
+
+            client.CanUseProxy = false;
         }
 
         private string ExePath()
@@ -84,11 +86,11 @@ namespace Jackett.Services
             forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
-            if (Debugger.IsAttached)
-            {
-                logger.Info($"Skipping checking for new releases as the debugger is attached.");
-                return;
-            }
+            //if (Debugger.IsAttached)
+            //{
+            //    logger.Info($"Skipping checking for new releases as the debugger is attached.");
+            //    return;
+            //}
 
             try
             {
@@ -218,7 +220,7 @@ namespace Jackett.Services
 
             while (data.IsRedirect)
             {
-                data = await client.GetBytes(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET });
+                data = await client.GetBytes(SetDownloadHeaders(new WebRequest() { Url = data.RedirectingTo, EmulateBrowser = true, Type = RequestType.GET }));
             }
 
             var tempDir = Path.Combine(Path.GetTempPath(), "JackettUpdate-" + version + "-" + DateTime.Now.Ticks);

@@ -22,6 +22,7 @@ namespace Jackett.Utils.Clients
         protected DateTime lastRequest = DateTime.MinValue;
         protected TimeSpan requestDelayTimeSpan;
         public bool EmulateBrowser = true;
+        public bool CanUseProxy = true;
         public double requestDelay
         {
             get { return requestDelayTimeSpan.TotalSeconds; }
