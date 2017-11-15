@@ -74,7 +74,7 @@ namespace Jackett.Services
 
         private async Task CheckForUpdates()
         {
-            var config = configService.GetConfig<ServerConfig>();
+            var config = Engine.ServerConfig;
             if (config.UpdateDisabled && !forceupdatecheck)
             {
                 logger.Info($"Skipping update check as it is disabled.");
