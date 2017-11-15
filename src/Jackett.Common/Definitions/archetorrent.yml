@@ -89,7 +89,7 @@
       - path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
       incldead: "1"
 
     rows:
