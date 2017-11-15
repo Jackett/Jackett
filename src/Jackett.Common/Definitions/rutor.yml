@@ -61,7 +61,7 @@
           - name: re_replace
             args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)","$1 - S$2E$3 - rus - $4 - $5"]
           - name: replace
-            args: ["E -", "E01-999 -"]
+            args: ["E -", "E01-99 -"]
           - name: replace
             args: ["Кураж-Бамбей", "kurazh"]
       details:
