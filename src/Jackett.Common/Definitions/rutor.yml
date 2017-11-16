@@ -11,28 +11,12 @@
   caps:
     # unfortunately RuTor does not display categories anywhere in its search results page :-(
     # albeit you can select a single category in its search options
-    # so I've opted not to support categories, and default all results with category=Other.
+    # so I've opted not to support categories
     categorymappings:
-#      - {id: 1, cat: Movies/Foreign, desc: "Foreign films"}
-#      - {id: 2, cat: Audio, desc: "Music"}
-      - {id: 3, cat: Other, desc: "Other"}
-#      - {id: 4, cat: TV, desc: "TV Shows"}
-#      - {id: 5, cat: Movies, desc: "Russian films"}
-#      - {id: 6, cat: TV, desc: "TV"}
-#      - {id: 7, cat: Movies, desc: "Animation"}
-#      - {id: 8, cat: PC/Games, desc: "Games"}
-#      - {id: 9, cat: PC/0day, desc: "Software"}
-#      - {id: 10, cat: TV/Anime, desc: "Anime"}
-#      - {id: 11, cat: Books, desc: "Books"}
-#      - {id: 12, cat: Movies, desc: "Popular films"}
-#      - {id: 13, cat: TV/Sport, desc: "Sports and Health"}
-#      - {id: 14, cat: Books, desc: "Household"}
-#      - {id: 15, cat: TV, desc: "Humor"}
+      - {id: 4, cat: TV, desc: "TV Shows"}
 
     modes:
       search: [q]
-#      tv-search: [q, season, ep]
-#      movie-search: [q]
 
   settings:
     - name: method
@@ -51,18 +35,22 @@
   search:
     paths:
       # http://rutor.info/search/0/0/000/0/gotham%2004x01
-      - path: "{{ if .Keywords }}search/0/0/{{ .Config.method }}00/0/{{ .Keywords }}{{else}}top{{end}}"
+      - path:  "{{ if .Query.Q }}search/0/0/{{ .Config.method }}00/0/{{ .Query.Q }}{{else}}top{{end}}"
     rows:
       selector: table > tbody > tr:has(td:has(a.downgif))
     fields:
       title:
         selector: td:nth-of-type(2) a:nth-of-type(3)
+        filters:
+          - name: re_replace
+            args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)","$1 - S$2E$3 - rus - $4 - $5"]
+          - name: replace
+            args: ["E -", "E01-99 -"]
+          - name: replace
+            args: ["Кураж-Бамбей", "kurazh"]
       details:
         selector: td:nth-of-type(2) a:nth-of-type(3)
         attribute: href
-      category:
-        # Category=Other
-        text: "3"
       download:
         selector: td:nth-of-type(2) a:nth-of-type(1)
         attribute: href
@@ -105,7 +93,7 @@
           - name: append
             args: " 00:00:00 +03:00"
           - name: dateparse
-            args: "02 Jan 06 15:04:15 -07:00"
+            args: "02 Jan 06 15:04:05 -07:00"
       # some results don't have comments which throws off td count. So we go fishing for the following fields
       size:
         optional: true
