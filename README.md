@@ -70,6 +70,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Metal Tracker
  * MVGroup Forum
  * MVGroup Main
+ * Newstudio
  * NetHD
  * RuTracker
  * SkTorrent

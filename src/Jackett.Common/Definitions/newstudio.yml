@@ -35,8 +35,6 @@
       - path: "/tracker.php?nm={{ .Keywords}}&start=50"
       - path: "/tracker.php?nm={{ .Keywords}}&start=100"
       - path: "/tracker.php?nm={{ .Keywords}}&start=150"
-    inputs:
-      nm: "{{ .Query.Keywords }}"
     rows:
       selector: table.well > tbody > tr:has(a[href^="./viewtopic.php?t="])
       filters:

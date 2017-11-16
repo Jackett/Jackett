@@ -51,7 +51,7 @@
   search:
     paths:
       # http://rutor.info/search/0/0/000/0/gotham%2004x01
-      - path: "{{ if .Query.Q }}search/{{ .Query.Q }}{{else}}top{{end}}"
+      - path:  "{{ if .Query.Q }}search/0/0/{{ .Config.method }}00/0/{{ .Query.Q }}{{else}}top{{end}}"
     rows:
       selector: table > tbody > tr:has(td:has(a.downgif))
     fields:
