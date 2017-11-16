@@ -147,7 +147,7 @@ namespace Jackett.Utils.Clients
                     AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                     UseCookies = true,
                     Proxy = proxyServer,
-                    UseProxy = useProxy,
+                    UseProxy = CanUseProxy && useProxy,
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                 })
                 {

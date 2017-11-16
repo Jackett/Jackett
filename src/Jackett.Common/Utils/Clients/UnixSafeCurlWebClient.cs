@@ -36,7 +36,7 @@ namespace Jackett.Utils.Clients
         {
             var args = new StringBuilder();
             var proxy = serverConfig.GetProxyUrl(true);
-            if (proxy != null)
+            if (proxy != null && CanUseProxy)
             {
                 args.AppendFormat("-x '" + proxy + "' ");
             }

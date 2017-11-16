@@ -83,8 +83,10 @@ namespace Jackett.Utils.Clients
                 // wait...
                 await Task.Delay(5000);
 
+                var config = CanUseProxy ? serverConfig : null;
+
                 // request clearanceUri to get cf_clearance cookie
-                var response = await CurlHelper.GetAsync(clearanceUri, serverConfig, request.Cookies, request.Referer);
+                var response = await CurlHelper.GetAsync(clearanceUri, config, request.Cookies, request.Referer);
                 logger.Info(string.Format("UnixLibCurlWebClient: received CloudFlare clearance cookie: {0}", response.Cookies));
 
                 // add new cf_clearance cookies to the original request
@@ -104,7 +106,8 @@ namespace Jackett.Utils.Clients
             Jackett.CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
             {
-                response = await CurlHelper.GetAsync(request.Url, serverConfig, request.Cookies, request.Referer, request.Headers);
+                var config = CanUseProxy ? serverConfig : null;
+                response = await CurlHelper.GetAsync(request.Url, config, request.Cookies, request.Referer, request.Headers);
             }
             else
             {
@@ -132,7 +135,7 @@ namespace Jackett.Utils.Clients
                 foreach (var header in response.HeaderList)
                 {
                     var key = header[0].ToLowerInvariant();
-                    
+
                     result.Headers[key] = new string[] { header[1] }; // doesn't support multiple identical headers?
 
                     switch (key)

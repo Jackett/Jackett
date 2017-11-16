@@ -23,6 +23,7 @@ namespace Jackett.Utils.Clients
         protected TimeSpan requestDelayTimeSpan;
         protected string ClientType;
         public bool EmulateBrowser = true;
+        public bool CanUseProxy = true;
         public double requestDelay
         {
             get { return requestDelayTimeSpan.TotalSeconds; }
