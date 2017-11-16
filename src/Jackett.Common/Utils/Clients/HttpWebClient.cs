@@ -23,13 +23,41 @@ namespace Jackett.Utils.Clients
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
         static protected SocksWebProxy socksWebProxy;
 
+        static public void InitSocksWebProxy(ServerConfig serverConfig)
+        {
+            if (socksWebProxy != null)
+            {
+                socksWebProxy.Dispose();
+            }
+
+            if (serverConfig.ProxyType != ProxyType.Http)
+            {
+                var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                var socksConfig = new ProxyConfig
+                {
+                    SocksAddress = addresses.FirstOrDefault(),
+                    Username = serverConfig.ProxyUsername,
+                    Password = serverConfig.ProxyPassword,
+                    Version = serverConfig.ProxyType == ProxyType.Socks4 ?
+                    ProxyConfig.SocksVersion.Four :
+                    ProxyConfig.SocksVersion.Five
+                };
+                if (serverConfig.ProxyPort.HasValue)
+                {
+                    socksConfig.SocksPort = serverConfig.ProxyPort.Value;
+                }
+                socksWebProxy = new SocksWebProxy(socksConfig, false);
+            }
+        }
+
         public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
             : base(p: p,
                    l: l,
                    c: c,
                    sc: sc)
         {
-            
+            if (socksWebProxy == null)
+                InitSocksWebProxy(sc);
         }
 
         override public void Init()
@@ -95,24 +123,6 @@ namespace Jackett.Utils.Clients
                     useProxy = true;
                     if (serverConfig.ProxyType != ProxyType.Http)
                     {
-                        if (socksWebProxy == null)
-                        {
-                            var addresses = await Dns.GetHostAddressesAsync(serverConfig.ProxyUrl);
-                            var socksConfig = new ProxyConfig
-                            {
-                                SocksAddress = addresses.FirstOrDefault(),
-                                Username = serverConfig.ProxyUsername,
-                                Password = serverConfig.ProxyPassword,
-                                Version = serverConfig.ProxyType == ProxyType.Socks4 ?
-                                ProxyConfig.SocksVersion.Four :
-                                ProxyConfig.SocksVersion.Five
-                            };
-                            if (serverConfig.ProxyPort.HasValue)
-                            {
-                                socksConfig.SocksPort = serverConfig.ProxyPort.Value;
-                            }
-                            socksWebProxy = new SocksWebProxy(socksConfig, false);
-                        }
                         proxyServer = socksWebProxy;
                     }
                     else
