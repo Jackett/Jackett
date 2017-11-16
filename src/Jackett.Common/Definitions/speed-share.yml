@@ -188,7 +188,7 @@
       password: "{{ .Config.password }}"
     test:
       path: torrents.php
-
+      selector: td:contains("Desktop do Usuario")
   search:
     paths:
       - path: buscar_tor.php?search={{ .Keywords }}&incldead=1

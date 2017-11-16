@@ -212,7 +212,7 @@
       password: "{{ .Config.password }}"
     test:
       path: torrents.php
-
+      selector: div:has(a[href*="account-logout.php"])
   search:
     paths:
       - path: torrents-search.php
