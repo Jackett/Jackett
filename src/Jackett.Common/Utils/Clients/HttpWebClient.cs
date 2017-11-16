@@ -35,7 +35,7 @@ namespace Jackett.Utils.Clients
         {
             ServicePointManager.DefaultConnectionLimit = 1000;
 
-            if (JackettStartup.IgnoreSslErrors == true)
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
             {
                 logger.Info(string.Format("HttpWebClient: Disabling certificate validation"));
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };

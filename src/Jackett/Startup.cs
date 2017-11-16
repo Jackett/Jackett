@@ -101,13 +101,13 @@ namespace Jackett
         {
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
+            var jackettServerConfig = Engine.ServerConfig;
 
             // try to fix SocketException crashes
             // based on http://stackoverflow.com/questions/23368885/signalr-owin-self-host-on-linux-mono-socketexception-when-clients-lose-connectio/30583109#30583109
             try
             {
-                object httpListener;
-                if (appBuilder.Properties.TryGetValue(typeof(HttpListener).FullName, out httpListener) && httpListener is HttpListener)
+                if (appBuilder.Properties.TryGetValue(typeof(HttpListener).FullName, out object httpListener) && httpListener is HttpListener)
                 {
                     // HttpListener should not return exceptions that occur when sending the response to the client
                     ((HttpListener)httpListener).IgnoreWriteExceptions = true;
@@ -118,21 +118,22 @@ namespace Jackett
             {
                 Engine.Logger.Error(e, "Error while setting HttpListener.IgnoreWriteExceptions = true");
             }
-
             appBuilder.Use<WebApiRootRedirectMiddleware>();
             appBuilder.Use<LegacyApiRedirectMiddleware>();
 
             // register exception handler
             config.Filters.Add(new ApiExceptionHandler());
 
+            ;
+
             // Setup tracing if enabled
-            if (JackettStartup.TracingEnabled)
+            if (jackettServerConfig.RuntimeSettings.TracingEnabled)
             {
                 config.EnableSystemDiagnosticsTracing();
-                config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer());
+                config.Services.Replace(typeof(ITraceWriter), new WebAPIToNLogTracer(jackettServerConfig));
             }
             // Add request logging if enabled
-            if (JackettStartup.LogRequests)
+            if (jackettServerConfig.RuntimeSettings.LogRequests)
                 config.MessageHandlers.Add(new WebAPIRequestLogger());
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(Engine.GetContainer());

@@ -66,6 +66,8 @@
       search_mode: "0"
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: a[title][href^="details.php?id="]

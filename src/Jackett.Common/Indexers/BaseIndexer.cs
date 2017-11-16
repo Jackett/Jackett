@@ -225,6 +225,8 @@ namespace Jackett.Indexers
         public void Unconfigure()
         {
             IsConfigured = false;
+            SiteLink = DefaultSiteLink;
+            CookieHeader = ""; // clear cookies
         }
 
         public abstract Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson);

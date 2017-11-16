@@ -76,7 +76,7 @@ namespace Jackett.Services
 
         private async Task CheckForUpdates()
         {
-            var config = configService.GetConfig<ServerConfig>();
+            var config = Engine.ServerConfig;
             if (config.UpdateDisabled && !forceupdatecheck)
             {
                 logger.Info($"Skipping update check as it is disabled.");
@@ -129,7 +129,7 @@ namespace Jackett.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
                             if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows, JackettStartup.NoRestart);
+                                StartUpdate(updaterPath, installDir, isWindows, config.RuntimeSettings.NoRestart);
                         }
                         catch (Exception e)
                         {
@@ -157,7 +157,7 @@ namespace Jackett.Services
 
         private string GetCurrentVersion()
         {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             return fvi.ProductVersion;
         }
@@ -258,7 +258,7 @@ namespace Jackett.Services
 
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart)
         {
-            var exe = Path.GetFileName(ExePath()).ToLowerInvariant();
+            var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
 
             var startInfo = new ProcessStartInfo();

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett.Console
+namespace Jackett.Common.Models.Config
 {
     public class ConsoleOptions
     {
@@ -63,10 +63,48 @@ namespace Jackett.Console
         [Option('d', "DataFolder", HelpText = "Specify the location of the data folder (Must be admin on Windows) eg. --DataFolder=\"D:\\Your Data\\Jackett\\\". Don't use this on Unix (mono) systems. On Unix just adjust the HOME directory of the user to the datedir or set the XDG_CONFIG_HOME environment variable.")]
         public string DataFolder { get; set; }
 
-        [Option(HelpText = "Don't restart after update")]
-        public bool NoRestart { get; set; }
+        [Option("NoRestart", HelpText = "Don't restart after update")]
+        public bool NoRestart { get; set; }        
 
-        [ParserState]
-        public IParserState LastParserState { get; set; }
+
+
+        public RuntimeSettings ToRunTimeSettings()
+        {
+            var options = this;
+                var runtimeSettings = new RuntimeSettings();
+                // Logging
+                if (options.Logging)
+                    runtimeSettings.LogRequests = true;
+
+                // Tracing
+                if (options.Tracing)
+                    runtimeSettings.TracingEnabled = true;
+
+                if (options.ListenPublic && options.ListenPrivate)
+                {
+                    Console.WriteLine("You can only use listen private OR listen publicly.");
+                    Environment.Exit(1);
+                }
+
+                // SSL Fix
+                runtimeSettings.DoSSLFix = options.SSLFix;
+
+                // Use curl
+                if (options.Client != null)
+                    runtimeSettings.ClientOverride = options.Client.ToLowerInvariant();
+
+                // Use Proxy
+                if (options.ProxyConnection != null)
+                {
+                    runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
+                }
+                // Ignore SSL errors on Curl
+                runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
+                runtimeSettings.NoRestart = options.NoRestart;
+
+                return runtimeSettings;
+
+            }
+        }
+
     }
-}

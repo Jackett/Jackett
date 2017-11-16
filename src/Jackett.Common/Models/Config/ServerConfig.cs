@@ -1,4 +1,5 @@
 ﻿using Jackett.Common.Models.Config;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,11 @@ namespace Jackett.Models.Config
 {
     public class ServerConfig
     {
-        public ServerConfig()
+        public ServerConfig(RuntimeSettings runtimeSettings)
         {
             Port = 9117;
             AllowExternal = System.Environment.OSVersion.Platform == PlatformID.Unix;
+            RuntimeSettings = runtimeSettings;
         }
 
         public int Port { get; set; }
@@ -26,6 +28,13 @@ namespace Jackett.Models.Config
         public bool UpdatePrerelease { get; set; }
         public string BasePathOverride { get; set; }
         public string OmdbApiKey { get; set; }
+
+        /// <summary>
+        /// Ignore as we don't really want to be saving settings specified in the command line. 
+        /// This is a bit of a hack, but in future it might not be all that bad to be able to override config values using settings that were provided at runtime. (and save them if required)
+        /// </summary>
+        [JsonIgnore]
+        public RuntimeSettings RuntimeSettings { get; set; }
 
         public string ProxyUrl { get; set; }
         public ProxyType ProxyType { get; set; }

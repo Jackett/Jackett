@@ -50,6 +50,8 @@
       incldead: 1
     rows:
       selector: tr:has(td.name)
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td.name > div > a.poster-preview[title]
