@@ -86,11 +86,11 @@ namespace Jackett.Services
             forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
-            //if (Debugger.IsAttached)
-            //{
-            //    logger.Info($"Skipping checking for new releases as the debugger is attached.");
-            //    return;
-            //}
+            if (Debugger.IsAttached)
+            {
+               logger.Info($"Skipping checking for new releases as the debugger is attached.");
+               return;
+            }
 
             try
             {
