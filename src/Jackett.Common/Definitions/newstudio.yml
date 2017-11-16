@@ -1,0 +1,101 @@
+﻿---
+  site: newstudio
+  name: Newstudio
+  description: "newstudio"
+  language: ru-ru
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - http://newstudio.tv
+
+  caps:
+    categorymappings:
+      - {id: 6, cat: TV, desc: "TV series"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: /login.php
+    method: post
+    inputs:
+      login: 1
+      login_username: "{{ .Config.username }}"
+      login_password: "{{ .Config.password }}"
+    error:
+      - selector: div.alert-error
+    test:
+      path: "/"
+      selector: a[href="/login.php?logout=1"]
+
+  search:
+    paths:
+      - path: "/tracker.php?nm={{ .Keywords}}"
+      - path: "/tracker.php?nm={{ .Keywords}}&start=50"
+      - path: "/tracker.php?nm={{ .Keywords}}&start=100"
+      - path: "/tracker.php?nm={{ .Keywords}}&start=150"
+    rows:
+      selector: table.well > tbody > tr:has(a[href^="./viewtopic.php?t="])
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: a[href^="./viewtopic.php?t="] > b
+        filters:
+          - name: re_replace
+            args: ["\\b(\\d)\\b", "0$1"]
+          - name: re_replace
+            args: [".+Сезон\\s+(\\d+)(?:.+Серия\\s+(\\d+))*[\\s\\S]*\\/\\s+(.+)\\s+\\(\\d+\\)\\s+(\\S*)\\s*(\\w*\\d*).*", "$3 - S$1E$2 - rus $5 $4 newstudio"]
+          - name: replace
+            args: ["WEBDLRip","WEBDL"]
+          - name: replace
+            args: ["E -","E01-99 -"]
+      details:
+        selector: a[href^="./viewtopic.php?t="]
+        attribute: href
+      download:
+        selector: a[href^="./download.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(5) > a
+      date:
+        # 27-Окт-17
+        selector: td:nth-child(6)
+        filters:
+            # replace white spaces
+          - name: re_replace
+            args: ["(Сегодня|Вчера|\\s|,|-)+", " "]
+            # replace month abbreviations
+          - name: replace
+            args: ["Янв", "Jan"]
+          - name: replace
+            args: ["Фев", "Feb"]
+          - name: replace
+            args: ["Мар", "Mar"]
+          - name: replace
+            args: ["Апр", "Apr"]
+          - name: replace
+            args: ["Май", "May"]
+          - name: replace
+            args: ["Июн", "Jun"]
+          - name: replace
+            args: ["Июл", "Jul"]
+          - name: replace
+            args: ["Авг", "Aug"]
+          - name: replace
+            args: ["Сен", "Sep"]
+          - name: replace
+            args: ["Окт", "Oct"]
+          - name: replace
+            args: ["Ноя", "Nov"]
+          - name: replace
+            args: ["Дек", "Dec"]
+          - name: append
+            args: " 00:00:00 +05:00"
+          - name: dateparse
+            args: "02 Jan 06 15:04:15 -07:00"
+      downloadvolumefactor:
+          text: "0"
+      uploadvolumefactor:
+          text: "1"

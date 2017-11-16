@@ -11,6 +11,7 @@ using Jackett.Utils;
 using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Indexers
 {
@@ -1498,7 +1499,7 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
+            var searchString = query.SanitizedSearchTerm;
 
             var queryCollection = new NameValueCollection();
 
@@ -1510,6 +1511,10 @@ namespace Jackett.Indexers
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
+                if (query.Season != 0)
+                {
+                    searchString += " Сезон: " + query.Season;
+                }
                 queryCollection.Add("nm", searchString);
             }
 
@@ -1545,6 +1550,7 @@ namespace Jackett.Indexers
                         var qSize = Row.QuerySelector("td.tor-size > u");
 
                         release.Title = qDetailsLink.TextContent;
+
                         release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         release.Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
                         release.Guid = release.Comments;
@@ -1566,6 +1572,21 @@ namespace Jackett.Indexers
 
                         release.DownloadVolumeFactor = 1;
                         release.UploadVolumeFactor = 1;
+
+                        if (release.Category.Contains(TorznabCatType.TV.ID))
+                        {
+                            // extract season and episodes
+                            var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\].+(\\(.+\\)).*");
+
+                            var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
+                            title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
+                            title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
+                            title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
+                            title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
+                            title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
+
+                            release.Title = title;
+                        }
 
                         releases.Add(release);
                     }

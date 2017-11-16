@@ -15,8 +15,8 @@
     categorymappings:
 #      - {id: 1, cat: Movies/Foreign, desc: "Foreign films"}
 #      - {id: 2, cat: Audio, desc: "Music"}
-      - {id: 3, cat: Other, desc: "Other"}
-#      - {id: 4, cat: TV, desc: "TV Shows"}
+#      - {id: 3, cat: Other, desc: "Other"}
+      - {id: 4, cat: TV, desc: "TV Shows"}
 #      - {id: 5, cat: Movies, desc: "Russian films"}
 #      - {id: 6, cat: TV, desc: "TV"}
 #      - {id: 7, cat: Movies, desc: "Animation"}
@@ -51,18 +51,22 @@
   search:
     paths:
       # http://rutor.info/search/0/0/000/0/gotham%2004x01
-      - path: "{{ if .Keywords }}search/0/0/{{ .Config.method }}00/0/{{ .Keywords }}{{else}}top{{end}}"
+      - path:  "{{ if .Query.Q }}search/0/0/{{ .Config.method }}00/0/{{ .Query.Q }}{{else}}top{{end}}"
     rows:
       selector: table > tbody > tr:has(td:has(a.downgif))
     fields:
       title:
         selector: td:nth-of-type(2) a:nth-of-type(3)
+        filters:
+          - name: re_replace
+            args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)","$1 - S$2E$3 - rus - $4 - $5"]
+          - name: replace
+            args: ["E -", "E01-99 -"]
+          - name: replace
+            args: ["Кураж-Бамбей", "kurazh"]
       details:
         selector: td:nth-of-type(2) a:nth-of-type(3)
         attribute: href
-      category:
-        # Category=Other
-        text: "3"
       download:
         selector: td:nth-of-type(2) a:nth-of-type(1)
         attribute: href
