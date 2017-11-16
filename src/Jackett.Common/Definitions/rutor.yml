@@ -93,7 +93,7 @@
           - name: append
             args: " 00:00:00 +03:00"
           - name: dateparse
-            args: "02 Jan 06 15:04:15 -07:00"
+            args: "02 Jan 06 15:04:05 -07:00"
       # some results don't have comments which throws off td count. So we go fishing for the following fields
       size:
         optional: true
