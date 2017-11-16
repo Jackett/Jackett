@@ -190,9 +190,11 @@ namespace Jackett.Indexers
                         var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                         release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                        release.Grabs = ParseUtil.CoerceInt(row.ChildElements.ElementAt(6).Cq().Text());
-                        release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text());
-                        release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text()) + release.Seeders;
+                        var grabselement = row.Cq().Find("td:nth-last-child(3)");
+                        if (!grabselement.HasClass("nobr")) // Snatches column is optional, not all users see it (if class is nobr it's the size column)
+                            release.Grabs = ParseUtil.CoerceInt(grabselement.Text());
+                        release.Seeders = ParseUtil.CoerceInt(row.Cq().Find("td:nth-last-child(2)").Text());
+                        release.Peers = ParseUtil.CoerceInt(row.Cq().Find("td:nth-last-child(1)").Text()) + release.Seeders;
 
                         var files = row.Cq().Find("td:nth-child(4)").Text();
                         release.Files = ParseUtil.CoerceInt(files);
