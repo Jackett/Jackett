@@ -100,7 +100,7 @@ namespace Jackett.Utils.Clients
 
         override public void Init()
         {
-            if (JackettStartup.IgnoreSslErrors == true)
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
             {
                 logger.Info(string.Format("HttpWebClient2: Disabling certificate validation"));
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };

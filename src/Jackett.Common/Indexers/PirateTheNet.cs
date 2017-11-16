@@ -68,6 +68,7 @@ namespace Jackett.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            CookieHeader = ""; // clear old cookies
 
             var result1 = await RequestStringWithCookies(CaptchaUrl);
             var json1 = JObject.Parse(result1.Content);
@@ -123,6 +124,13 @@ namespace Jackett.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            if (results.IsRedirect)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                results = await RequestStringWithCookiesAndRetry(searchUrl);
+            }
+
             try
             {
                 CQ dom = results.Content;

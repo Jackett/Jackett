@@ -16,11 +16,19 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Jackett.Utils;
 using System.Collections.Generic;
+using Jackett.Common.Models.Config;
 
-namespace Jackett
+namespace Jackett.Common.Plumbing
 {
     public class JackettModule : Autofac.Module
     {
+        private RuntimeSettings _runtimeSettings;
+
+        public JackettModule (RuntimeSettings runtimeSettings)
+            {
+            _runtimeSettings = runtimeSettings;
+        }
+
         protected override void Load(ContainerBuilder builder)
         {
             // Just register everything! TODO: Something better and more explicit than scanning everything.
@@ -40,16 +48,17 @@ namespace Jackett
                        .Except<AggregateIndexer>()
                        .Except<CardigannIndexer>()
                        .AsImplementedInterfaces().SingleInstance();
-            
+
+
+            builder.RegisterInstance(_runtimeSettings);
             builder.Register(ctx =>
             {
                 return BuildServerConfig(ctx);
             }).As<ServerConfig>().SingleInstance();
             builder.RegisterType<HttpWebClient>();
-
-
+            
             // Register the best web client for the platform or the override
-            switch (JackettStartup.ClientOverride)
+            switch (_runtimeSettings.ClientOverride)
             {
                 case "httpclient":
                     builder.RegisterType<HttpWebClient>().As<WebClient>();
@@ -77,18 +86,23 @@ namespace Jackett
                         builder.RegisterType<UnixLibCurlWebClient>().As<WebClient>();
                     break;
             }
-            InitAutomapper();
 
         }
 
-        private static ServerConfig BuildServerConfig(IComponentContext ctx)
+        private ServerConfig BuildServerConfig(IComponentContext ctx)
         {
             var configService = ctx.Resolve<IConfigurationService>();
             // Load config
             var config = configService.GetConfig<ServerConfig>();
             if (config == null)
             {
-                config = new ServerConfig();
+                config = new ServerConfig(_runtimeSettings);
+            }
+            else
+            {
+                //We don't load these out of the config files as it could get confusing to users who accidently save. 
+                //In future we could flatten the serverconfig, and use command line parameters to override any configuration.
+                config.RuntimeSettings = _runtimeSettings;
             }
 
             if (string.IsNullOrWhiteSpace(config.APIKey))
@@ -125,43 +139,7 @@ namespace Jackett
             return config;
         }
 
-        private static void InitAutomapper()
-        {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<WebClientByteResult, WebClientStringResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((be, str) =>
-                {
-                    var encoding = be.Request.Encoding ?? Encoding.UTF8;
-                    str.Content = encoding.GetString(be.Content);
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientByteResult>().ForMember(x => x.Content, opt => opt.Ignore()).AfterMap((str, be) =>
-                {
-                    if (!string.IsNullOrEmpty(str.Content))
-                    {
-                        var encoding = str.Request.Encoding ?? Encoding.UTF8;
-                        be.Content = encoding.GetBytes(str.Content);
-                    }
-                });
-
-                cfg.CreateMap<WebClientStringResult, WebClientStringResult>();
-                cfg.CreateMap<WebClientByteResult, WebClientByteResult>();
-                cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
-
-                cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
-                {
-                    if (r.Category != null)
-                    {
-                        var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
-                        t.CategoryDesc = CategoryDesc;
-                    }
-                    else
-                    {
-                        t.CategoryDesc = "";
-                    }
-                });
-            });
-        }
+        
 
         private static bool DetectMonoCompatabilityWithHttpClient()
         {

@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Services.Interfaces;
+using Jackett.Common.Plumbing;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Test
 {
@@ -20,11 +22,11 @@ namespace Jackett.Test
 
         public static void SetupContainer()
         {
-            var builder = new ContainerBuilder();
-            builder.RegisterModule<JackettModule>();
+            var builder = new ContainerBuilder();            
+            builder.RegisterModule(new JackettModule(new RuntimeSettings()));
             builder.RegisterModule<WebApi2Module>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
-            builder.RegisterInstance<Logger>(LogManager.GetCurrentClassLogger()).SingleInstance();
+            builder.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();
             builder.RegisterType<TestIndexerManagerServiceHelper>().As<IIndexerManagerService>().SingleInstance();
             testContainer = builder.Build();
         }
