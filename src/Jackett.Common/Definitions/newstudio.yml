@@ -1,7 +1,7 @@
 ﻿---
   site: newstudio
   name: Newstudio
-  description: "newstudio"
+  description: "Newstudio is a RUSSIAN Semi-Private site for TV"
   language: ru-ru
   type: semi-private
   encoding: UTF-8
@@ -57,15 +57,28 @@
       download:
         selector: a[href^="./download.php?id="]
         attribute: href
+      banner:
+        selector: td:nth-child(3) > a > img
+        attribute: src
       size:
         selector: td:nth-child(5) > a
+      category:
+        # add category for Sonarr
+        text: 6
       date:
-        # 27-Окт-17
+        # 16-Nov-17, Today 01:34
+        # 16-Ноя-17, Сегодня 12:34
+        # 15-Nov-17, Yesterday 17:20
+        # 15-Ноя-17, Вчера 12:40
+        # 4-Nov-17, 23:50
+        # 14-Ноя-17, 06:11
         selector: td:nth-child(6)
         filters:
             # replace white spaces
           - name: re_replace
             args: ["(Сегодня|Вчера|\\s|,|-)+", " "]
+          - name: re_replace
+            args: ["(Today|Yesterday|\\s|,|-)+", " "]
             # replace month abbreviations
           - name: replace
             args: ["Янв", "Jan"]
@@ -92,10 +105,12 @@
           - name: replace
             args: ["Дек", "Dec"]
           - name: append
-            args: " 00:00:00 +05:00"
+            args: ":00 +05:00"
           - name: dateparse
-            args: "02 Jan 06 15:04:15 -07:00"
+            args: "2 Jan 06 15:04:05 -07:00"
       downloadvolumefactor:
-          text: "0"
+        case:
+          img[src="images/tor_gold.gif"]: "0"
+          "*": "1"
       uploadvolumefactor:
           text: "1"
