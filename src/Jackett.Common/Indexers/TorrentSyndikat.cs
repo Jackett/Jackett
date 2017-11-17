@@ -98,6 +98,7 @@ namespace Jackett.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            CookieHeader = "";
 
             var result1 = await RequestStringWithCookies(CaptchaUrl);
             var json1 = JObject.Parse(result1.Content);
