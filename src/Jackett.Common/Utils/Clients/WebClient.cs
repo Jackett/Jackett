@@ -13,8 +13,9 @@ using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
-    public abstract class WebClient
+    public abstract class WebClient : IObserver<ServerConfig>
     {
+        protected IDisposable ServerConfigUnsubscriber;
         protected Logger logger;
         protected IConfigurationService configService;
         protected readonly ServerConfig serverConfig;
@@ -32,6 +33,10 @@ namespace Jackett.Utils.Clients
             }
         }
 
+        virtual protected void OnConfigChange()
+        {
+        }
+
         virtual public void AddTrustedCertificate(string host, string hash)
         {
             // not implemented by default
@@ -44,6 +49,7 @@ namespace Jackett.Utils.Clients
             configService = c;
             serverConfig = sc;
             ClientType = GetType().Name;
+            ServerConfigUnsubscriber = serverConfig.Subscribe(this);
         }
 
         async protected Task DelayRequest(WebRequest request)
@@ -165,5 +171,20 @@ namespace Jackett.Utils.Clients
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         abstract public void Init();
+
+        public virtual void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnNext(ServerConfig value)
+        {
+            // nothing by default
+        }
     }
 }

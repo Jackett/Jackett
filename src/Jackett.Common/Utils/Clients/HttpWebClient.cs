@@ -21,32 +21,54 @@ namespace Jackett.Utils.Clients
     public class HttpWebClient : WebClient
     {
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
-        static protected SocksWebProxy socksWebProxy;
+        static protected string webProxyUrl;
+        static protected IWebProxy webProxy;
 
-        static public void InitSocksWebProxy(ServerConfig serverConfig)
+        static public void InitProxy(ServerConfig serverConfig)
         {
-            if (socksWebProxy != null)
+            // dispose old SocksWebProxy
+            if (webProxy != null && webProxy is SocksWebProxy)
             {
-                socksWebProxy.Dispose();
+                ((SocksWebProxy)webProxy).Dispose();
+                webProxy = null;
             }
 
-            if (serverConfig.ProxyType != ProxyType.Http)
+            webProxyUrl = serverConfig.GetProxyUrl();
+            if (!string.IsNullOrWhiteSpace(webProxyUrl))
             {
-                var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
-                var socksConfig = new ProxyConfig
+                if (serverConfig.ProxyType != ProxyType.Http)
                 {
-                    SocksAddress = addresses.FirstOrDefault(),
-                    Username = serverConfig.ProxyUsername,
-                    Password = serverConfig.ProxyPassword,
-                    Version = serverConfig.ProxyType == ProxyType.Socks4 ?
-                    ProxyConfig.SocksVersion.Four :
-                    ProxyConfig.SocksVersion.Five
-                };
-                if (serverConfig.ProxyPort.HasValue)
-                {
-                    socksConfig.SocksPort = serverConfig.ProxyPort.Value;
+                    var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
+                    var socksConfig = new ProxyConfig
+                    {
+                        SocksAddress = addresses.FirstOrDefault(),
+                        Username = serverConfig.ProxyUsername,
+                        Password = serverConfig.ProxyPassword,
+                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
+                        ProxyConfig.SocksVersion.Four :
+                        ProxyConfig.SocksVersion.Five
+                    };
+                    if (serverConfig.ProxyPort.HasValue)
+                    {
+                        socksConfig.SocksPort = serverConfig.ProxyPort.Value;
+                    }
+                    webProxy = new SocksWebProxy(socksConfig, false);
                 }
-                socksWebProxy = new SocksWebProxy(socksConfig, false);
+                else
+                {
+                    NetworkCredential creds = null;
+                    if (!serverConfig.ProxyIsAnonymous)
+                    {
+                        var username = serverConfig.ProxyUsername;
+                        var password = serverConfig.ProxyPassword;
+                        creds = new NetworkCredential(username, password);
+                    }
+                    webProxy = new WebProxy(webProxyUrl)
+                    {
+                        BypassProxyOnLocal = false,
+                        Credentials = creds
+                    };
+                }
             }
         }
 
@@ -56,8 +78,16 @@ namespace Jackett.Utils.Clients
                    c: c,
                    sc: sc)
         {
-            if (socksWebProxy == null)
-                InitSocksWebProxy(sc);
+            if (webProxyUrl == null)
+                InitProxy(sc);
+        }
+
+        // Called everytime the ServerConfig changes
+        public override void OnNext(ServerConfig value)
+        {
+            var newProxyUrl = serverConfig.GetProxyUrl();
+            if (webProxyUrl != newProxyUrl) // if proxy URL changed
+                InitProxy(serverConfig);
         }
 
         override public void Init()
@@ -112,42 +142,16 @@ namespace Jackett.Utils.Clients
                     }
                 }
             }
-            var useProxy = false;
 
             using (ClearanceHandler clearanceHandlr = new ClearanceHandler())
             {
-                IWebProxy proxyServer = null;
-                var proxyUrl = serverConfig.GetProxyUrl();
-                if (!string.IsNullOrWhiteSpace(proxyUrl))
-                {
-                    useProxy = true;
-                    if (serverConfig.ProxyType != ProxyType.Http)
-                    {
-                        proxyServer = socksWebProxy;
-                    }
-                    else
-                    {
-                        NetworkCredential creds = null;
-                        if (!serverConfig.ProxyIsAnonymous)
-                        {
-                            var username = serverConfig.ProxyUsername;
-                            var password = serverConfig.ProxyPassword;
-                            creds = new NetworkCredential(username, password);
-                        }
-                        proxyServer = new WebProxy(proxyUrl)
-                        {
-                            BypassProxyOnLocal = false,
-                            Credentials = creds
-                        };
-                    }
-                }
                 using (HttpClientHandler clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
                     AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                     UseCookies = true,
-                    Proxy = proxyServer,
-                    UseProxy = useProxy,
+                    Proxy = webProxy,
+                    UseProxy = (webProxy != null),
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
                 })
                 {

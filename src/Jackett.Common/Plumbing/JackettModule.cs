@@ -136,6 +136,7 @@ namespace Jackett.Common.Plumbing
                 config.InstanceId = StringUtil.GenerateRandom(64);
                 configService.SaveConfig(config);
             }
+            config.ConfigChanged();
             return config;
         }
 
