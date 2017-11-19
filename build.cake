@@ -178,49 +178,48 @@ Task("Potential-Release-Notes")
 	.IsDependentOn("Appveyor-Push-Artifacts")
 	.Does(() =>
 	{
-		string tagHashLastGitHubTag = GitDescribe(".", false, GitDescribeStrategy.Tags, 100);
-		Information($"Tag and Hash of last release is: {tagHashLastGitHubTag}");
-		
-		if (tagHashLastGitHubTag.Length > 40)
+		string latestTag = GitDescribe(".", false, GitDescribeStrategy.Tags, 0);
+		Information($"Latest tag is: {latestTag}" + Environment.NewLine);
+
+		List<GitCommit> relevantCommits = new List<GitCommit>();
+
+		var commitCollection = GitLog("./", 50);
+
+		foreach(GitCommit commit in commitCollection)
 		{
-			string lastReleaseHash = tagHashLastGitHubTag.Substring(tagHashLastGitHubTag.Length - 40);
-			Information($"Hash of first commit since last release is: {lastReleaseHash}" + Environment.NewLine);
+			var commitTag = GitDescribe(".", commit.Sha, false, GitDescribeStrategy.Tags, 0);
 
-			List<GitCommit> relevantCommits = new List<GitCommit>();
-
-			var commitCollection = GitLog("./", 50);
-			bool foundHash = false;
-
-			foreach(GitCommit commit in commitCollection)
+			if (commitTag == latestTag)
 			{
 				relevantCommits.Add(commit);
-
-				if (lastReleaseHash == commit.Sha)
-				{
-					foundHash = true;
-					break;
-				}
-			}
-
-			if (foundHash)
-			{
-				List<string> notesList = new List<string>();
-				
-				foreach(GitCommit commit in relevantCommits.AsEnumerable().Reverse().ToList())
-				{
-					notesList.Add($"{commit.MessageShort} (Thank you @{commit.Author.Name})");
-				}
-
-				string buildNote = String.Join(Environment.NewLine, notesList);
-				Information(buildNote);
-
-				FileAppendLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
 			}
 			else
 			{
-				Information($"Unable to create potential release notes as the hash ({lastReleaseHash}) of the first commit since the last release wasn't found in the last 50 commits");
+				break;
 			}
 		}
+
+		relevantCommits = relevantCommits.AsEnumerable().Reverse().Skip(1).ToList();
+
+		if (relevantCommits.Count() > 0)
+		{
+			List<string> notesList = new List<string>();
+				
+			foreach(GitCommit commit in relevantCommits)
+			{
+				notesList.Add($"{commit.MessageShort} (Thank you @{commit.Author.Name})");
+			}
+
+			string buildNote = String.Join(Environment.NewLine, notesList);
+			Information(buildNote);
+
+			FileAppendLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
+		}
+		else
+		{
+			Information($"No commit messages found to create release notes");
+		}
+
 	});
 
 
