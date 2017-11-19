@@ -1,4 +1,6 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.7.0
+#tool nuget:?package=NUnit.ConsoleRunner
+#addin nuget:?package=Cake.FileHelpers
+#addin nuget:?package=Cake.Git
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -172,6 +174,56 @@ Task("Appveyor-Push-Artifacts")
 		}
 	});
 
+Task("Potential-Release-Notes")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.Does(() =>
+	{
+		string tagHashLastGitHubTag = GitDescribe(".", false, GitDescribeStrategy.Tags, 100);
+		Information($"Tag and Hash of last release is: {tagHashLastGitHubTag}");
+		
+		if (tagHashLastGitHubTag.Length > 40)
+		{
+			string lastReleaseHash = tagHashLastGitHubTag.Substring(tagHashLastGitHubTag.Length - 40);
+			Information($"Hash of first commit since last release is: {lastReleaseHash}" + Environment.NewLine);
+
+			List<GitCommit> relevantCommits = new List<GitCommit>();
+
+			var commitCollection = GitLog("./", 50);
+			bool foundHash = false;
+
+			foreach(GitCommit commit in commitCollection)
+			{
+				relevantCommits.Add(commit);
+
+				if (lastReleaseHash == commit.Sha)
+				{
+					foundHash = true;
+					break;
+				}
+			}
+
+			if (foundHash)
+			{
+				List<string> notesList = new List<string>();
+				
+				foreach(GitCommit commit in relevantCommits.AsEnumerable().Reverse().ToList())
+				{
+					notesList.Add($"{commit.MessageShort} (Thank you @{commit.Author.Name})");
+				}
+
+				string buildNote = String.Join(Environment.NewLine, notesList);
+				Information(buildNote);
+
+				FileAppendLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
+			}
+			else
+			{
+				Information($"Unable to create potential release notes as the hash ({lastReleaseHash}) of the first commit since the last release wasn't found in the last 50 commits");
+			}
+		}
+	});
+
+
 private void RunCygwinCommand(string utility, string utilityArguments)
 {
 	var cygwinDir = @"C:\cygwin\bin\";
@@ -222,7 +274,7 @@ private string RelativeWinPathToCygPath(string relativePath)
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Potential-Release-Notes")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
