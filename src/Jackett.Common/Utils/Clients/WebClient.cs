@@ -13,14 +13,16 @@ using Jackett.Models.Config;
 
 namespace Jackett.Utils.Clients
 {
-    public abstract class WebClient
+    public abstract class WebClient : IObserver<ServerConfig>
     {
+        protected IDisposable ServerConfigUnsubscriber;
         protected Logger logger;
         protected IConfigurationService configService;
         protected readonly ServerConfig serverConfig;
         protected IProcessService processService;
         protected DateTime lastRequest = DateTime.MinValue;
         protected TimeSpan requestDelayTimeSpan;
+        protected string ClientType;
         public bool EmulateBrowser = true;
         public double requestDelay
         {
@@ -29,6 +31,10 @@ namespace Jackett.Utils.Clients
             {
                 requestDelayTimeSpan = TimeSpan.FromSeconds(value);
             }
+        }
+
+        virtual protected void OnConfigChange()
+        {
         }
 
         virtual public void AddTrustedCertificate(string host, string hash)
@@ -42,6 +48,8 @@ namespace Jackett.Utils.Clients
             logger = l;
             configService = c;
             serverConfig = sc;
+            ClientType = GetType().Name;
+            ServerConfigUnsubscriber = serverConfig.Subscribe(this);
         }
 
         async protected Task DelayRequest(WebRequest request)
@@ -55,7 +63,7 @@ namespace Jackett.Utils.Clients
                 if (timeElapsed < requestDelayTimeSpan)
                 {
                     var delay = requestDelayTimeSpan - timeElapsed;
-                    logger.Debug(string.Format("IWebClient: delaying request for {0} by {1} seconds", request.Url, delay.TotalSeconds.ToString()));
+                    logger.Debug(string.Format("WebClient({0}): delaying request for {1} by {2} seconds", ClientType, request.Url, delay.TotalSeconds.ToString()));
                     await Task.Delay(delay);
                 }
                 lastRequest = DateTime.Now;
@@ -92,18 +100,18 @@ namespace Jackett.Utils.Clients
 
         virtual public async Task<WebClientByteResult> GetBytes(WebRequest request)
         {
-            logger.Debug(string.Format("IWebClient.GetBytes(Url:{0})", request.Url));
+            logger.Debug(string.Format("WebClient({0}).GetBytes(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
             result.Request = request;
-            logger.Debug(string.Format("IWebClient: Returning {0} => {1} bytes", result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
+            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
         }
 
         virtual public async Task<WebClientStringResult> GetString(WebRequest request)
         {
-            logger.Debug(string.Format("IWebClient.GetString(Url:{0})", request.Url));
+            logger.Debug(string.Format("WebClient({0}).GetString(Url:{1})", ClientType, request.Url));
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
@@ -127,18 +135,18 @@ namespace Jackett.Utils.Clients
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("IWebClient.GetString(Url:{0}): Error loading encoding {0} based on header {1}: {2}", request.Url, charset, result.Headers["content-type"][0], ex));
+                        logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Error loading encoding {2} based on header {3}: {4}", ClientType, request.Url, charset, result.Headers["content-type"][0], ex));
                     }
                 }
                 else
                 {
-                    logger.Error(string.Format("IWebClient.GetString(Url:{0}): Got header without charset: {0}", request.Url, result.Headers["content-type"][0]));
+                    logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): Got header without charset: {2}", ClientType, request.Url, result.Headers["content-type"][0]));
                 }
             }
 
             if (encoding == null)
             {
-                logger.Error(string.Format("IWebClient.GetString(Url:{0}): No encoding detected, defaulting to UTF-8", request.Url));
+                logger.Error(string.Format("WebClient({0}).GetString(Url:{1}): No encoding detected, defaulting to UTF-8", ClientType, request.Url));
                 encoding = Encoding.UTF8;
             }
 
@@ -147,7 +155,7 @@ namespace Jackett.Utils.Clients
                 decodedContent = encoding.GetString(result.Content);
 
             stringResult.Content = decodedContent;
-            logger.Debug(string.Format("IWebClient: Returning {0} => {1}", result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
+            logger.Debug(string.Format("WebClient({0}): Returning {1} => {2}", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (decodedContent == null ? "<NULL>" : decodedContent)));
 
             string[] server;
             if (stringResult.Headers.TryGetValue("server", out server))
@@ -163,5 +171,20 @@ namespace Jackett.Utils.Clients
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         abstract public void Init();
+
+        public virtual void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnNext(ServerConfig value)
+        {
+            // nothing by default
+        }
     }
 }

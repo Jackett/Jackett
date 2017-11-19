@@ -16,7 +16,7 @@
       - {id: 2180, cat: TV, desc: "Film/Vidéo : Concert"}
       - {id: 2181, cat: TV, desc: "Film/Vidéo : Documentaire"}
       - {id: 2182, cat: TV, desc: "Film/Vidéo : Emission TV"}
-      - {id: 2183, cat: TV, desc: "Film/Vidéo : Film"}
+      - {id: 2183, cat: Movies, desc: "Film/Vidéo : Film"}
       - {id: 2184, cat: TV, desc: "Film/Vidéo : Série TV"}
       - {id: 2185, cat: TV, desc: "Film/Vidéo : Spectacle"}
       - {id: 2186, cat: TV, desc: "Film/Vidéo : Sport"}
