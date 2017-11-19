@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace Jackett.Indexers
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
         private string TodayUrl { get { return SiteLink + "torrents.php?action=today"; } }
+        private char[] digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -88,12 +90,11 @@ Encoding = Encoding.UTF8;
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        private string StripSearchString(string term)
+        private string StripSearchString(string term, bool isAnime)
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty);
-            return term.Trim();
+            return isAnime ? term.TrimEnd(digits) : Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -192,9 +193,10 @@ Encoding = Encoding.UTF8;
             else // use search
             {
                 var searchUrl = BrowseUrl;
+                var isAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
 
                 var queryCollection = new NameValueCollection();
-                queryCollection.Add("searchstr", StripSearchString(searchString));
+                queryCollection.Add("searchstr", StripSearchString(searchString, isAnime));
                 queryCollection.Add("order_by", "time");
                 queryCollection.Add("order_way", "desc");
                 queryCollection.Add("group_results", "1");
@@ -228,6 +230,11 @@ Encoding = Encoding.UTF8;
                         {
                             var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                             string Title = qDetailsLink.TextContent;
+                            if (isAnime)
+                            {
+                                Title = Regex.Replace(Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
+                            }
+                               
                             ICollection<int> Category = null;
                             string YearStr = null;
                             Nullable<DateTime> YearPublishDate = null;
