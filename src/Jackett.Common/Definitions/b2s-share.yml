@@ -227,8 +227,19 @@
       details:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
-      title:
+      is_anime:
+        optional: true
+        selector: a[href^="torrents.php?cat=11"]
+        attribute: href
+      title_anime:
         selector: a[href^="torrents-details.php?id="]
+        filters:
+        - name: re_replace
+          args: ["(Ep[\\.]?[ ]?)|([S]\\d\\d[Ee])", "E"]
+      title_normal:
+        selector: a[href^="torrents-details.php?id="]
+      title:
+        text: "{{if .Result.is_anime }}{{ .Result.title_anime }}{{else}}{{ .Result.title_normal }}{{end}}"
       download:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
