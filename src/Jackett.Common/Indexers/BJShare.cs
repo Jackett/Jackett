@@ -193,10 +193,10 @@ Encoding = Encoding.UTF8;
             else // use search
             {
                 var searchUrl = BrowseUrl;
-                var isAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
+                var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
 
                 var queryCollection = new NameValueCollection();
-                queryCollection.Add("searchstr", StripSearchString(searchString, isAnime));
+                queryCollection.Add("searchstr", StripSearchString(searchString, isSearchAnime));
                 queryCollection.Add("order_by", "time");
                 queryCollection.Add("order_way", "desc");
                 queryCollection.Add("group_results", "1");
@@ -230,11 +230,6 @@ Encoding = Encoding.UTF8;
                         {
                             var qDetailsLink = Row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                             string Title = qDetailsLink.TextContent;
-                            if (isAnime)
-                            {
-                                Title = Regex.Replace(Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
-                            }
-                               
                             ICollection<int> Category = null;
                             string YearStr = null;
                             Nullable<DateTime> YearPublishDate = null;
@@ -244,6 +239,12 @@ Encoding = Encoding.UTF8;
                                 var qCatLink = Row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
                                 string CategoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                                 Category = MapTrackerCatToNewznab(CategoryStr);
+
+                                // if result is an anime, convert title from SXXEXX to EXX
+                                if (CategoryStr == "14")
+                                {
+                                    Title = Regex.Replace(Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
+                                }
                                 YearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
                                 YearPublishDate = DateTime.SpecifyKind(DateTime.ParseExact(YearStr, "yyyy", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
