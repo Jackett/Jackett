@@ -161,6 +161,11 @@ Encoding = Encoding.UTF8;
                             }
 
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1];
+                            // if result is an anime, convert title from SXXEXX to EXX
+                            if (catStr == "14")
+                            {
+                                release.Title = Regex.Replace(release.Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
+                            }
                             release.Category = MapTrackerCatToNewznab(catStr);
 
                             release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
