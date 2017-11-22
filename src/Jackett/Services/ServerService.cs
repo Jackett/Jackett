@@ -307,7 +307,7 @@ namespace Jackett.Services
             }
 
             // default to 443 if the Host header doesn't contain the port (needed for reverse proxy setups)
-            if (scheme == "https" && !Request.RequestUri.Host.Contains(":"))
+            if (scheme == "https" && !Request.RequestUri.Authority.Contains(":"))
                 port = 443;
 
             var serverUrl = string.Format("{0}://{1}:{2}{3}", scheme, Request.RequestUri.Host, port, BasePath());
