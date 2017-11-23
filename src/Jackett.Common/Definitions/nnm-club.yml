@@ -671,6 +671,8 @@
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
           - name: replace
+            args: ["WEB-DLRip", "WEBDL"]
+          - name: replace
             args: ["HDTVRip", "HDTV"]
       details:
         selector: a[href^="viewtopic.php?t="]
