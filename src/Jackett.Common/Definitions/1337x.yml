@@ -10,6 +10,13 @@
 
   caps:
     categorymappings:
+      #Anime
+      - {id: 28, cat: TV/Anime, desc: "Anime/Anime"}
+      - {id: 78, cat: TV/Anime, desc: "Anime/Dual Audio"}
+      - {id: 79, cat: TV/Anime, desc: "Anime/Dubbed"}
+      - {id: 80, cat: TV/Anime, desc: "Anime/Subbed"}
+      - {id: 81, cat: TV/Anime, desc: "Anime/Raw"}
+
       #Audio
       - {id: 22, cat: Audio/MP3, desc: "Music/MP3"}
       - {id: 23, cat: Audio/Lossless, desc: "Music/Lossless"}
@@ -17,7 +24,6 @@
       - {id: 25, cat: Audio/Video, desc: "Music/Video"}
       - {id: 26, cat: Audio, desc: "Music/Radio"}
       - {id: 27, cat: Audio/Other, desc: "Music/Other"}
-      - {id: 52, cat: Audio/Audiobook, desc: "Other/Audiobook"}
       - {id: 53, cat: Audio, desc: "Music/Album"}
       - {id: 58, cat: Audio, desc: "Music/Box set"}
       - {id: 59, cat: Audio, desc: "Music/Discography"}
@@ -37,14 +43,16 @@
       - {id: 66, cat: Movies/3D, desc: "Movies/3D"}
       - {id: 70, cat: Movies, desc: "Movies/HEVC/x265"}
       - {id: 73, cat: Movies, desc: "Movies/Bollywood"}
+      - {id: 76, cat: Movies, desc: "Movies/UHD"}
 
       #TV
       - {id: 5, cat: TV, desc: "TV/DVD"}
-      - {id: 6, cat: TV/SD, desc: "TV/Divx/Xvid"}
+      - {id: 6, cat: TV, desc: "TV/Divx/Xvid"}
       - {id: 7, cat: TV, desc: "TV/SVCD/VCD"}
-      - {id: 28, cat: TV/Anime, desc: "Anime/Anime"}
       - {id: 41, cat: TV/HD, desc: "TV/HD"}
       - {id: 71, cat: TV, desc: "TV/HEVC/x265"}
+      - {id: 74, cat: TV, desc: "TV/Cartoons"}
+      - {id: 75, cat: TV/SD, desc: "TV/SD"}
 
       #Apps
       - {id: 18, cat: PC, desc: "Apps/PC Software"}
@@ -56,11 +64,11 @@
 
       #Games
       - {id: 10, cat: PC/Games, desc: "Games/PC Game"}
-      - {id: 11, cat: Console, desc: "Games/PS2"}
+      - {id: 11, cat: Console/Other, desc: "Games/PS2"}
       - {id: 12, cat: Console/PSP, desc: "Games/PSP"}
       - {id: 13, cat: Console/Xbox, desc: "Games/Xbox"}
       - {id: 14, cat: Console/Xbox 360, desc: "Games/Xbox360"}
-      - {id: 15, cat: Console, desc: "Games/PS1"}
+      - {id: 15, cat: Console/Other, desc: "Games/PS1"}
       - {id: 16, cat: Console/Other, desc: "Games/Dreamcast"}
       - {id: 17, cat: PC/Phone-Other, desc: "Games/Other"}
       - {id: 43, cat: Console/PS3, desc: "Games/PS3"}
@@ -68,6 +76,8 @@
       - {id: 45, cat: Console/NDS, desc: "Games/DS"}
       - {id: 46, cat: Console, desc: "Games/GameCube"}
       - {id: 72, cat: Console/3DS, desc: "Games/3DS"}
+      - {id: 77, cat: Console/PS4, desc: "Games/PS4"}
+      - {id: 82, cat: Console/Other, desc: "Games/Switch"}
 
       #XXX
       - {id: 48, cat: XXX/DVD, desc: "XXX/Video"}
@@ -86,6 +96,7 @@
       - {id: 39, cat: Books/Comics, desc: "Other/Comics"}
       - {id: 40, cat: Other/Misc, desc: "Other/Other"}
       - {id: 47, cat: Other, desc: "Other/Nulled Script"}
+      - {id: 52, cat: Audio/Audiobook, desc: "Other/Audiobook"}
 
     modes:
       search: [q]
@@ -97,11 +108,6 @@
   download:
     # the .torrent url is on the on the details page 
     selector: ul li a[href^="http://itorrents.org/"]
-
-# it appears that Jackett Definitions do not currently support fetching magnets from the details page :-(
-#  magnet:
-    # the magnet url is on the on the details page 
-#    selector: ul li a[href^="magnet:?"]
 
   search:
     paths:
@@ -127,10 +133,6 @@
         # .torrent link is on the details page
         selector: td[class^="coll-1"] a[href^="/torrent/"]
         attribute: href
-#      magnet:
-        # magnet URI is on the details page
-#        selector: td[class^="coll-1"] a[href^="/torrent/"]
-#        attribute: href
       # dates come in three flavours:
       date:
         # (within this year) 7am Sep. 14th

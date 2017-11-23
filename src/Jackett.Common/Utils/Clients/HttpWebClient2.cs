@@ -33,28 +33,21 @@ namespace Jackett.Utils.Clients
         HttpClient client;
 
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
+        static protected string webProxyUrl;
+        static protected IWebProxy webProxy;
 
-        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
-            : base(p: p,
-                   l: l,
-                   c: c,
-                   sc: sc)
+        static public void InitProxy(ServerConfig serverConfig)
         {
-
-            cookies = new CookieContainer();
-            var useProxy = false;
-            IWebProxy proxyServer = null;
-            var proxyUrl = serverConfig.GetProxyUrl();
-            if (!string.IsNullOrWhiteSpace(proxyUrl))
+            // dispose old SocksWebProxy
+            if (webProxy != null && webProxy is SocksWebProxy)
             {
-                useProxy = true;
-                NetworkCredential creds = null;
-                if (!serverConfig.ProxyIsAnonymous)
-                {
-                    var username = serverConfig.ProxyUsername;
-                    var password = serverConfig.ProxyPassword;
-                    creds = new NetworkCredential(username, password);
-                }
+                ((SocksWebProxy)webProxy).Dispose();
+                webProxy = null;
+            }
+
+            webProxyUrl = serverConfig.GetProxyUrl();
+            if (!string.IsNullOrWhiteSpace(webProxyUrl))
+            {
                 if (serverConfig.ProxyType != ProxyType.Http)
                 {
                     var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
@@ -71,31 +64,68 @@ namespace Jackett.Utils.Clients
                     {
                         socksConfig.SocksPort = serverConfig.ProxyPort.Value;
                     }
-                    proxyServer = new SocksWebProxy(socksConfig, false);
+                    webProxy = new SocksWebProxy(socksConfig, false);
                 }
                 else
                 {
-                    proxyServer = new WebProxy(proxyUrl)
+                    NetworkCredential creds = null;
+                    if (!serverConfig.ProxyIsAnonymous)
+                    {
+                        var username = serverConfig.ProxyUsername;
+                        var password = serverConfig.ProxyPassword;
+                        creds = new NetworkCredential(username, password);
+                    }
+                    webProxy = new WebProxy(webProxyUrl)
                     {
                         BypassProxyOnLocal = false,
                         Credentials = creds
                     };
                 }
             }
+        }
 
+        public HttpWebClient2(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
+            : base(p: p,
+                   l: l,
+                   c: c,
+                   sc: sc)
+        {
+            if (webProxyUrl == null)
+                InitProxy(sc);
+
+            cookies = new CookieContainer();
+            CreateClient();
+        }
+
+        public void CreateClient()
+        {
             clearanceHandlr = new ClearanceHandler();
             clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
-                Proxy = proxyServer,
-                UseProxy = useProxy,
+                Proxy = webProxy,
+                UseProxy = (webProxy != null),
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
+        }
+
+        // Called everytime the ServerConfig changes
+        public override void OnNext(ServerConfig value)
+        {
+            var newProxyUrl = serverConfig.GetProxyUrl();
+            if (webProxyUrl != newProxyUrl) // if proxy URL changed
+                InitProxy(serverConfig);
+
+            // recreate client if needed (can't just change the proxy attribute)
+            if (!ReferenceEquals(clientHandlr.Proxy, webProxy))
+            {
+                CreateClient();
+            }
         }
 
         override public void Init()

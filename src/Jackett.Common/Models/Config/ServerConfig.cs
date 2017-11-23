@@ -9,10 +9,14 @@ using System.Threading.Tasks;
 
 namespace Jackett.Models.Config
 {
-    public class ServerConfig
+    public class ServerConfig : IObservable<ServerConfig>
     {
+        [JsonIgnore]
+        protected List<IObserver<ServerConfig>> observers;
+
         public ServerConfig(RuntimeSettings runtimeSettings)
         {
+            observers = new List<IObserver<ServerConfig>>();
             Port = 9117;
             AllowExternal = System.Environment.OSVersion.Platform == PlatformID.Unix;
             RuntimeSettings = runtimeSettings;
@@ -107,6 +111,43 @@ namespace Jackett.Models.Config
                     "http://127.0.0.1:" + Port + "/",
                     "http://localhost:" + Port + "/",
                 };
+            }
+        }
+
+        public IDisposable Subscribe(IObserver<ServerConfig> observer)
+        {
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
+            return new UnSubscriber(observers, observer);
+        }
+
+        private class UnSubscriber : IDisposable
+        {
+            private List<IObserver<ServerConfig>> lstObservers;
+            private IObserver<ServerConfig> observer;
+
+            public UnSubscriber(List<IObserver<ServerConfig>> ObserversCollection, IObserver<ServerConfig> observer)
+            {
+                this.lstObservers = ObserversCollection;
+                this.observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (this.observer != null)
+                {
+                    lstObservers.Remove(this.observer);
+                }
+            }
+        }
+
+        public void ConfigChanged()
+        {
+            foreach (var obs in observers)
+            {
+                obs.OnNext(this);
             }
         }
     }

@@ -292,6 +292,7 @@ namespace Jackett.Services
             if (NoRestart)
                 startInfo.Arguments += " --NoRestart";
 
+            logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
             if (NoRestart == false)

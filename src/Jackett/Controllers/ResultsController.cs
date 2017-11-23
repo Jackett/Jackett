@@ -382,8 +382,8 @@ namespace Jackett.Controllers.V20
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                     type = "movie",
                     size = (long)release.Size / (1024 * 1024), // This is in MB
-                    leechers = (int)release.Peers - (int)release.Seeders,
-                    seeders = (int)release.Seeders,
+                    leechers = (release.Peers ?? -1) - (release.Seeders ?? 0),
+                    seeders = release.Seeders ?? -1,
                     publish_date = r.PublishDate == DateTime.MinValue ? null : release.PublishDate.ToUniversalTime().ToString("s")
                 };
                 return item;

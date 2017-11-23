@@ -187,6 +187,8 @@ namespace Jackett.Controllers.V20
                 serverConfig.BlackholeDir = saveDir;
                 configService.SaveConfig(serverConfig);
             }
+            
+            serverConfig.ConfigChanged();
         }
 
         [HttpGet]
@@ -195,6 +197,6 @@ namespace Jackett.Controllers.V20
             return logCache.Logs;
         }
 
-      
+
     }
 }

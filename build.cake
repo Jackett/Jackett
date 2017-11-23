@@ -1,4 +1,6 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.7.0
+#tool nuget:?package=NUnit.ConsoleRunner
+#addin nuget:?package=Cake.FileHelpers
+#addin nuget:?package=Cake.Git
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -172,6 +174,55 @@ Task("Appveyor-Push-Artifacts")
 		}
 	});
 
+Task("Potential-Release-Notes")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.Does(() =>
+	{
+		string latestTag = GitDescribe(".", false, GitDescribeStrategy.Tags, 0);
+		Information($"Latest tag is: {latestTag}" + Environment.NewLine);
+
+		List<GitCommit> relevantCommits = new List<GitCommit>();
+
+		var commitCollection = GitLog("./", 50);
+
+		foreach(GitCommit commit in commitCollection)
+		{
+			var commitTag = GitDescribe(".", commit.Sha, false, GitDescribeStrategy.Tags, 0);
+
+			if (commitTag == latestTag)
+			{
+				relevantCommits.Add(commit);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		relevantCommits = relevantCommits.AsEnumerable().Reverse().Skip(1).ToList();
+
+		if (relevantCommits.Count() > 0)
+		{
+			List<string> notesList = new List<string>();
+				
+			foreach(GitCommit commit in relevantCommits)
+			{
+				notesList.Add($"{commit.MessageShort} (Thank you @{commit.Author.Name})");
+			}
+
+			string buildNote = String.Join(Environment.NewLine, notesList);
+			Information(buildNote);
+
+			FileAppendLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
+		}
+		else
+		{
+			Information($"No commit messages found to create release notes");
+		}
+
+	});
+
+
 private void RunCygwinCommand(string utility, string utilityArguments)
 {
 	var cygwinDir = @"C:\cygwin\bin\";
@@ -222,7 +273,7 @@ private string RelativeWinPathToCygPath(string relativePath)
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Potential-Release-Notes")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
