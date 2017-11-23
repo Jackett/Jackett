@@ -667,7 +667,7 @@
           - name: re_replace
             args: ["\\b(\\d)\\b", "0$1"]
           - name: re_replace
-            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*)*\\))", "(S$2E$3)"]
+            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3)"]
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
           - name: replace
