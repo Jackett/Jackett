@@ -72,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MVGroup Main
  * Newstudio
  * NetHD
+ * NoName Club
  * RuTracker
  * SkTorrent
  * TorrentBytes

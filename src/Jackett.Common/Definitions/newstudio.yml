@@ -50,6 +50,8 @@
           - name: replace
             args: ["WEBDLRip","WEBDL"]
           - name: replace
+            args: ["HDTVRip","HDTV"]
+          - name: replace
             args: ["E -","E01-99 -"]
       details:
         selector: a[href^="./viewtopic.php?t="]
