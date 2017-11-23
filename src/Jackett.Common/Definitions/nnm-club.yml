@@ -667,7 +667,9 @@
           - name: re_replace
             args: ["\\b(\\d)\\b", "0$1"]
           - name: re_replace
-            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3)"]
+            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3) RUS"]
+          - name: replace
+            args: ["Кураж-Бамбей", "kurazh"]
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
           - name: replace
@@ -692,9 +694,7 @@
         selector: td:nth-child(11)
         filters:
           - name: re_replace
-            args: [".*(\\d{2}-\\d{2}-\\d{4})(\\d{2}:\\d{2})", "$1 $2 RUS"]
-          - name: replace
-            args: ["Кураж-Бамбей", "kurazh"]
+            args: [".*(\\d{2}-\\d{2}-\\d{4})(\\d{2}:\\d{2})", "$1 $2"]
           - name: append
             args: ":00 +03:00"
           - name: dateparse
