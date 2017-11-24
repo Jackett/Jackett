@@ -49,6 +49,8 @@
 
     rows:
       selector: div.myFrame-content > div > table > tbody > tr[class]
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="/torrent/"]
