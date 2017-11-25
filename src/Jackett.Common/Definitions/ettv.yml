@@ -37,17 +37,6 @@
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       incldead: "1"
-      sort: id
-      order: desc
-    keywordsfilters:
-      - name: replace
-        args: ["-", " "] # remove special search character (negative search)
-      - name: replace
-        args: ["+", " "] # remove special search character (positive search)
-      - name: re_replace
-        args: ["(\\w+)", " +$1"] # prepend + to each word
-      - name: re_replace
-        args: ["\\s+", " "] # clean up whitespaces (multiple consecutive spaces confuses the search engine)
 
     rows:
       selector: div.myFrame-content > div > table > tbody > tr[class]
