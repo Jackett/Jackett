@@ -71,8 +71,10 @@
     fields:
       title:
         selector: a[href^="details.php?id="]
-#        attribute: title
+        attribute: title
         filters:
+          - name: replace
+            args: ["Zobrazit detaily: ", ""]
           - name: re_replace
             args: [".*? / ", ""]
           - name: diacritics

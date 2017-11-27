@@ -17,7 +17,7 @@ namespace Jackett.Indexers
 {
     public class Yts : BaseWebIndexer
     {
-        private static readonly string defaultSiteLink = "https://yts.ag/";
+        private static readonly string defaultSiteLink = "https://yts.am/";
 
         private Uri BaseUri
         {
@@ -36,7 +36,7 @@ namespace Jackett.Indexers
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.ag/",
+                link: "https://yts.am/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: wc,
