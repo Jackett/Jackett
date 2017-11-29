@@ -25,6 +25,11 @@ namespace Jackett.Indexers
     public class Xthor : BaseCachingWebIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.to/";
+
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://xthor.bz/",
+        };
+
         private string TorrentCommentUrl => TorrentDescriptionUrl;
         private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
         private bool DevMode => ConfigData.DevMode.Value;
