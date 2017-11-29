@@ -108,14 +108,35 @@
           - name: regexp
             args: "Size (.+?),"
       date:
-        selector: td:nth-child(2) font.detDesc
+        optional: true
+        # Today 17:37
+        # Y-day 13:04
+        selector: td:nth-child(2) font.detDesc:contains(":")
         filters:
           - name: regexp
             args: "Uploaded (.+?),"
           - name: replace
             args: ["\xA0", " "]
           - name: replace
-            args: ["Y-day", "yesterday"]
+            args: ["Y-day", "Yesterday"]
+      date:
+        optional: true
+        # 49 mins ago
+        selector: td:nth-child(2) font.detDesc:contains("ago")
+        filters:
+          - name: regexp
+            args: "Uploaded (.+?),"
+          - name: replace
+            args: ["\xA0", " "]
+      date:
+        optional: true
+        # 04-30 2017
+        selector: td:nth-child(2) font.detDesc:not(:contains("ago")):not(:contains(":"))
+        filters:
+          - name: regexp
+            args: "Uploaded (.+?),"
+          - name: replace
+            args: ["\xA0", " "]
           - name: dateparse
             args: "01-02 2006"
       seeders:

@@ -17,32 +17,30 @@ namespace Jackett.Indexers
 {
     public class Yts : BaseWebIndexer
     {
-        private static readonly string defaultSiteLink = "https://yts.ag/";
+        private static readonly string defaultSiteLink = "https://yts.am/";
 
-        private Uri BaseUri
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://yts.ag/",
+        };
+
+        private string ApiEndpoint { get { return SiteLink + "api/v2/list_movies.json"; } }
+
+        private new ConfigurationData configData
         {
-            get { return new Uri(configData.Url.Value); }
-            set { configData.Url.Value = value.ToString(); }
-        }
-
-        private string ApiEndpoint { get { return BaseUri + "api/v2/list_movies.json"; } }
-
-        private new ConfigurationDataUrl configData
-        {
-            get { return (ConfigurationDataUrl)base.configData; }
+            get { return (ConfigurationData)base.configData; }
             set { base.configData = value; }
         }
 
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.ag/",
+                link: "https://yts.am/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataUrl(defaultSiteLink))
+                configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";
@@ -138,7 +136,8 @@ namespace Jackett.Indexers
                         var release = new ReleaseInfo();
 
                         // Append the quality to the title because thats how radarr seems to be determining the quality?
-                        release.Title = movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality");
+                        // All releases are BRRips, see issue #2200
+                        release.Title = movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + " BRRip";
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
@@ -160,15 +159,16 @@ namespace Jackett.Indexers
                         var dateStr = torrent_info.Value<string>("date_uploaded");
                         var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-                        release.Link = new Uri(torrent_info.Value<string>("url"));
+                        release.Link = new Uri(torrent_info.Value<string>("url"));                  
                         release.Seeders = torrent_info.Value<int>("seeds");
                         release.Peers = torrent_info.Value<int>("peers") + release.Seeders;
                         release.Size = torrent_info.Value<long>("size_bytes");
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
-                        release.Comments = release.Link;
-                        release.Guid = release.Comments;
+                        release.Comments = new Uri(movie_item.Value<string>("url"));
+                        release.BannerUrl = new Uri(movie_item.Value<string>("large_cover_image"));
+                        release.Guid = release.Link;
 
                         // Hack to prevent adding non-specified catogery, since API doesn't seem to be working
                         string categories = string.Join(";", MapTorznabCapsToTrackers(query));
