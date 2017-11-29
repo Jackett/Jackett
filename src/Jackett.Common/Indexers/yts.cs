@@ -19,6 +19,10 @@ namespace Jackett.Indexers
     {
         private static readonly string defaultSiteLink = "https://yts.am/";
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://yts.ag/",
+        };
+
         private Uri BaseUri
         {
             get { return new Uri(configData.Url.Value); }
