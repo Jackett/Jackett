@@ -102,6 +102,9 @@ namespace Jackett.Common.Models.Config
                 runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
                 runtimeSettings.NoRestart = options.NoRestart;
 
+                if (!string.IsNullOrWhiteSpace(options.DataFolder))
+                    runtimeSettings.CustomDataFolder = options.DataFolder;
+
                 return runtimeSettings;
 
             }
