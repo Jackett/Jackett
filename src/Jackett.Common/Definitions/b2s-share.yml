@@ -218,11 +218,15 @@
       - path: torrents-search.php
     keywordsfilters: 
       - name: re_replace
+        args: ["[Ss][0-9]{2}[Ee][0-9]{2,3}", ""] # remove season and episode from search
+      - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
       search: "{{ .Keywords }}"
     rows:
       selector: table[class^="ttable_headinner"] > tbody > tr:has(a[href^="torrents-details.php?id="])
+      filters:
+        - name: andmatch
     fields:
       details:
         selector: a[href^="torrents-details.php?id="]
@@ -238,6 +242,11 @@
           args: ["(Ep[\\.]?[ ]?)|([S]\\d\\d[Ee])", "E"]
       title_normal:
         selector: a[href^="torrents-details.php?id="]
+        filters:
+        - name: re_replace
+          args: ["^(.*)[ ]([Ss][0-9]{2}[Ee][0-9]{2,3}).*(?:(?:\\((.*?)\\)))(.*$)", "$3 $2 $4"] # Convert series title from "Translated Name SXXEXX (Original Name) [Other stuffs]" to "Original Name SXXEXX [Other stuffs]"
+        - name: re_replace
+          args: ["^(.*)[ ].*(?:(?:\\((.*?)\\)))(.*$)", "$2 $3"] # Convert movies title from "Translated Name (Original Name) [Other stuffs]" to "Original Name [Other stuffs]"
       title:
         text: "{{if .Result.is_anime }}{{ .Result.title_anime }}{{else}}{{ .Result.title_normal }}{{end}}"
       download:
