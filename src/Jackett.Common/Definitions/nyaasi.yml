@@ -62,6 +62,16 @@
       - {id: 3_1,  cat: Books, desc: "Literature english translated"}
       - {id: 3_2,  cat: Books, desc: "Literature non-english translated"}
       - {id: 3_3,  cat: Books, desc: "Raw literature"}
+      # Live
+      - {id: 4_0,  cat: TV, desc: "Live Action"}
+      - {id: 4_1,  cat: TV, desc: "Live Action - English"}
+      - {id: 4_2,  cat: TV, desc: "Live Action - Idol/PV"}
+      - {id: 4_3,  cat: TV, desc: "Live Action - Non-English"}
+      - {id: 4_4,  cat: TV, desc: "Live Action - Raw"}
+      # Pics
+      - {id: 5_0,  cat: Other, desc: "Pictures"}
+      - {id: 5_1,  cat: Other, desc: "Pictures  - Graphics"}
+      - {id: 5_2,  cat: Other, desc: "Pictures  - Photos"}
       # Software
       - {id: 6_0,  cat: PC, desc: "Software"}
       - {id: 6_1,  cat: PC/ISO, desc: "Applications"}
