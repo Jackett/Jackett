@@ -13,6 +13,10 @@ namespace Jackett.Indexers
 {
     public class DanishBits : CouchPotatoTracker
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://danishbits.org/",
+        };
+
         private new ConfigurationDataUserPasskey configData
         {
             get { return (ConfigurationDataUserPasskey)base.configData; }
