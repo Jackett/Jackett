@@ -298,6 +298,10 @@ namespace Jackett.Indexers
                 .Replace(")", "%29")
                 .Replace("'", "%27");
             var response = await RequestBytesWithCookiesAndRetry(requestLink, null, method, requestLink);
+            if (response.IsRedirect)
+            {
+                await FollowIfRedirect(response);
+            }
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 logger.Error("Failed download cookies: " + this.CookieHeader);
