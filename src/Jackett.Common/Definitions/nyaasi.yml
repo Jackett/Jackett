@@ -47,6 +47,12 @@
       - {id: 1_2,  cat: TV/Anime, desc: "English subtitled animes"}
       - {id: 1_3,  cat: TV/Anime, desc: "Non-english subtitled animes"}
       - {id: 1_4,  cat: TV/Anime, desc: "Raw animes"}
+      # Anime as Movies (Radarr uses t=movie):
+      - {id: 1_0,  cat: Movies/Other, desc: "Anime"}
+      - {id: 1_1,  cat: Movies/Other, desc: "Anime music videos"}
+      - {id: 1_2,  cat: Movies/Other, desc: "English subtitled animes"}
+      - {id: 1_3,  cat: Movies/Other, desc: "Non-english subtitled animes"}
+      - {id: 1_4,  cat: Movies/Other, desc: "Raw animes"}
       # Audio
       - {id: 2_0,  cat: Audio, desc: "Audio"}
       - {id: 2_1,  cat: Audio, desc: "Lossless audio"}
