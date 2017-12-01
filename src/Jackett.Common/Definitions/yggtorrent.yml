@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://ww1.yggtorrent.com/
+  legacylinks:
     - https://yggtorrent.com/
 
   caps:
@@ -110,7 +112,7 @@
       - selector: "body > div.page-content > div > div.col-md-10 > div > div > div > div > div.content-box-large.box-with-header > form > center > table > tbody > tr:nth-child(3) > td:nth-child(2) > button.text:contains('Se connecter')"
     test:
       path: "/"
-      selector: "a[href=\"https://yggtorrent.com/user/logout\"]"
+      selector: "a[href$=\"user/logout\"]"
 
   search:
     paths:
