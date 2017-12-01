@@ -210,7 +210,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PolishTracker
  * Pretome
  * PrivateHD
- * Psytorrents
  * PTFiles
  * Redacted (PassTheHeadphones)
  * RevolutionTT
