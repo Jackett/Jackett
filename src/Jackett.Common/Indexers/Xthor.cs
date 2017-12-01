@@ -452,6 +452,8 @@ namespace Jackett.Indexers
 
             // Request our first page
             var results = await webclient.GetString(myIndexRequest);
+            if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
+                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
             return results.Content;
