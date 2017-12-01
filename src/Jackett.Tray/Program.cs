@@ -15,11 +15,11 @@ namespace JackettTray
         [STAThread]
         static void Main()
         {
-            var JacketTrayProcessName = Process.GetCurrentProcess().ProcessName;
+            var JacketTrayProcess = Process.GetCurrentProcess();
             var runningProcesses = Process.GetProcesses();
             var currentSessionID = Process.GetCurrentProcess().SessionId;
             var sameAsThisSession = runningProcesses.Where(p => p.SessionId == currentSessionID);
-            var sameAsThisSessionJacketTray = sameAsThisSession.Where(p => p.ProcessName == JacketTrayProcessName);
+            var sameAsThisSessionJacketTray = sameAsThisSession.Where(p => p.ProcessName == JacketTrayProcess.ProcessName && p.Id != JacketTrayProcess.Id);
             if (sameAsThisSessionJacketTray.Any())
             {
                 MessageBox.Show("JackettTray is already running");
