@@ -123,6 +123,12 @@
     rows:
       selector: "table.table.table-striped > tbody > tr"
     fields:
+      _id:
+        selector: "a.torrent-name"
+        attribute: href
+        filters:
+          - name: regexp
+            args: "/(\\d+)-"
       title_normal:
         selector: "a.torrent-name"
       title_filtered:
@@ -195,8 +201,7 @@
         selector: "td:nth-child(1) > a[href$=\"#comments\"]"
         attribute: href
       download:
-        selector: "td:nth-child(1) > a[href*=\"/engine/download_torrent?id=\"]"
-        attribute: href
+        text: "/engine/download_torrent?id={ .Result._id }"
       date:
         selector: "td:nth-child(3)"
         filters:
