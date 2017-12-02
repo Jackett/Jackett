@@ -254,7 +254,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrenting
  * TorrentLeech
  * Torrents.Md
- * TorrentVault
  * Torrent-Syndikat
  * TorViet
  * ToTheGlory
