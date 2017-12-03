@@ -145,9 +145,11 @@ namespace Jackett.Indexers
             APIHeaders["Authorization"] = token;
 
             var curuser = await SendAPIRequest("curuser", null);
-
+            if (curuser.passkey.IsNullOrEmptyOrWhitespace())
+                throw new ExceptionWithConfigData("got empty passkey: " + curuser.ToString(), configData);
+            passkey = curuser.passkey;
             var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
-            passkeyItem.Value = curuser.passkey;
+            passkeyItem.Value = passkey;
 
             var tokenItem = (HiddenItem)configData.GetDynamic("token");
             tokenItem.Value = token;
@@ -180,6 +182,9 @@ namespace Jackett.Indexers
                 queryCollection.Add("cats", string.Join(",", cats));
 
             searchUrl += "?" + queryCollection.GetQueryString();
+
+            if (passkey.IsNullOrEmptyOrWhitespace())
+                await ApplyConfiguration(null);
 
             var result = await SendAPIRequest(searchUrl, null);
             try
