@@ -201,7 +201,7 @@
         selector: "td:nth-child(1) > a[href$=\"#comments\"]"
         attribute: href
       download:
-        text: "/engine/download_torrent?id={ .Result._id }"
+        text: "/engine/download_torrent?id={{ .Result._id }}"
       date:
         selector: "td:nth-child(3)"
         filters:
