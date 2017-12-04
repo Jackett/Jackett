@@ -144,7 +144,7 @@ namespace Jackett.Services
                     if (monoVersionO.Major < 4)
                     {
                         logger.Error("Your mono version is to old (mono 3 is no longer supported). Please update to the latest version from http://www.mono-project.com/download/");
-                        Environment.Exit(2);
+                        Engine.Exit(2);
                     }
                     else if (monoVersionO.Major == 4 && monoVersionO.Minor == 2)
                     {
@@ -202,7 +202,7 @@ namespace Jackett.Services
                     {
                         logger.Debug(e);
                         logger.Error(e.Message + " Most likely the mono-locale-extras package is not installed.");
-                        Environment.Exit(2);
+                        Engine.Exit(2);
                     }
                 }
             }
@@ -249,12 +249,12 @@ namespace Jackett.Services
                 if (inner is SocketException && ((SocketException)inner).SocketErrorCode == SocketError.AddressAlreadyInUse) // Linux (mono)
                 {
                     logger.Error("Address already in use: Most likely Jackett is already running.");
-                    Environment.Exit(1);
+                    Engine.Exit(1);
                 }
                 else if (inner is HttpListenerException && ((HttpListenerException)inner).ErrorCode == 183) // Windows
                 {
                     logger.Error(inner.Message + " Most likely Jackett is already running.");
-                    Environment.Exit(1);
+                    Engine.Exit(1);
                 }
                 throw e;
             }

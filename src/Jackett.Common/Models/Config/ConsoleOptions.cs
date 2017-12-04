@@ -64,9 +64,10 @@ namespace Jackett.Common.Models.Config
         public string DataFolder { get; set; }
 
         [Option("NoRestart", HelpText = "Don't restart after update")]
-        public bool NoRestart { get; set; }        
+        public bool NoRestart { get; set; }
 
-
+        [Option("PIDFile", HelpText = "Specify the location of PID file")]
+        public string PIDFile { get; set; }
 
         public RuntimeSettings ToRunTimeSettings()
         {
@@ -83,7 +84,7 @@ namespace Jackett.Common.Models.Config
                 if (options.ListenPublic && options.ListenPrivate)
                 {
                     Console.WriteLine("You can only use listen private OR listen publicly.");
-                    Environment.Exit(1);
+                    Engine.Exit(1);
                 }
 
                 // SSL Fix
@@ -104,6 +105,8 @@ namespace Jackett.Common.Models.Config
 
                 if (!string.IsNullOrWhiteSpace(options.DataFolder))
                     runtimeSettings.CustomDataFolder = options.DataFolder;
+
+                runtimeSettings.PIDFile = options.PIDFile;
 
                 return runtimeSettings;
 

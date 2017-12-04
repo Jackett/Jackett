@@ -152,7 +152,7 @@ namespace JackettConsole
                                 else
                                 {
                                     Engine.Logger.Error("Unable to switch to public listening without admin rights.");
-                                    Environment.Exit(1);
+                                    Engine.Exit(1);
                                 }
                             }
 
@@ -176,7 +176,7 @@ namespace JackettConsole
                                 else
                                 {
                                     Engine.Logger.Error("Unable to switch ports when not running as administrator");
-                                    Environment.Exit(1);
+                                    Engine.Exit(1);
                                 }
                             }
 
