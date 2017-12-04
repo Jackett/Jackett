@@ -73,7 +73,7 @@
   settings:
     - name: username
       type: text
-      label: Username (email or username)
+      label: Username
     - name: password
       type: password
       label: Password
