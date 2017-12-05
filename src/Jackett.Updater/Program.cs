@@ -196,6 +196,7 @@ namespace Jackett.Updater
                 "Definitions/blubits.yml",
                 "Definitions/torrentproject.yml",
                 "Definitions/torrentvault.yml",
+                "Definitions/apollo.yml", // migrated to C# gazelle base tracker
             };
 
             foreach (var oldFIle in oldFiles)
