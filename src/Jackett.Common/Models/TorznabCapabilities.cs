@@ -96,16 +96,6 @@ namespace Jackett.Models
             return supportsCategory;
         }
 
-        public JArray CapsToJson()
-        {
-            var jArray = new JArray();
-            foreach (var cat in Categories.GroupBy(p => p.ID).Select(g => g.First()).OrderBy(c => c.ID < 100000 ? "z" + c.ID.ToString() : c.Name))
-            {
-                jArray.Add(cat.ToJson());
-            }
-            return jArray;
-        }
-
         public string ToXml()
         {
             var xdoc = new XDocument(
