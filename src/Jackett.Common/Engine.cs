@@ -21,6 +21,8 @@ namespace Jackett
 {
     public class Engine
     {
+        public static Type WebClientType;
+
         private static IContainer container = null;
         private static bool _automapperInitialised = false;
 
