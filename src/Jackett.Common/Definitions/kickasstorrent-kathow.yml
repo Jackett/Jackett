@@ -29,9 +29,7 @@
 
   search:
     paths:
-      - path: "search.php"
-    inputs:
-      q: "{{ .Query.Keywords }}"
+      - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{else}}new/{{end}}"
     rows:
       selector: table[class="data"] tr[id]
     fields:
