@@ -193,6 +193,7 @@ namespace Jackett.Models
     public class downloadBlock
     {
         public string Selector { get; set; }
+        public List<filterBlock> Filters { get; set; }
         public string Method { get; set; }
         public requestBlock Before { get; set; }
     }

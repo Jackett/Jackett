@@ -1497,11 +1497,11 @@ namespace Jackett.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
+                var variables = getTemplateVariablesFromConfigData();
+                AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
-                    var beforeVariables = getTemplateVariablesFromConfigData();
-                    AddTemplateVariablesFromUri(beforeVariables, link, ".DownloadUri");
-                    var beforeresult = await handleRequest(Download.Before, beforeVariables, link.ToString());
+                    var beforeresult = await handleRequest(Download.Before, variables, link.ToString());
                 }
                 if (Download.Method != null)
                 {
@@ -1521,6 +1521,7 @@ namespace Jackett.Indexers
                     {
                         logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.ToHtmlPretty()));
                         var href = DlUri.GetAttribute("href");
+                        href = applyFilters(href, Download.Filters, variables);
                         link = resolvePath(href);
                     }
                     else
