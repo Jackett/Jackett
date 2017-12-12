@@ -47,6 +47,10 @@
       download:
         selector: td:nth-child(1) > div > a[data-download=""]
         attribute: href
+        filters:
+          - name: replace
+            args: ["https://mylink.st/r.php?url=",""]
+          - name: urldecode
       size:
         selector: td:nth-child(2)
       date:
