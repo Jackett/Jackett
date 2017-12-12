@@ -355,7 +355,7 @@ ProxyPass /jackett http://127.0.0.1:9117/
 
 *  __Enable logging__
 
-  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface.
+  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface (followed by clicking on the `Apply Server Settings` button).
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
 
