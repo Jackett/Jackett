@@ -36,6 +36,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Horrible Subs
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Isohunt2
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents

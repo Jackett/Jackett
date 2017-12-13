@@ -1,0 +1,99 @@
+---
+  site: isohunt2
+  name: Isohunt2
+  description: "Isohunt2 is a Public torrent search engine for MOVIES / TV / GENERAL"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://isohunt2.net/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV/Anime, desc: "Anime"}
+      - {id: 2, cat: PC/0day, desc: "Software"}
+      - {id: 3, cat: PC/Games, desc: "Games"}
+      - {id: 4, cat: XXX, desc: "Adult"}
+      - {id: 5, cat: Movies, desc: "Movies"}
+      - {id: 6, cat: Audio, desc: "Music"}
+      - {id: 7, cat: Other, desc: "Other"}
+      - {id: 8, cat: TV, desc: "Series & TV"}
+      - {id: 9, cat: Books, desc: "Books"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: category
+      type: select
+      label: Category Filter
+      default: "0"
+      options:
+        "0" : "All"
+        "1": "Anime"
+        "2": "Software"
+        "3": "Games"
+        "4": "Adult"
+        "5": "Movies"
+        "6": "Music"
+        "7": "Other"
+        "8": "Series & TV"
+        "9": "Books"
+
+  download:
+    selector: a.btn-magnet
+    filters:
+      - name: querystring
+        args: url
+      - name: urldecode
+
+  search:
+    paths:
+      - path: torrents
+        inputs:
+          "Torrent_page": "0" 
+      - path: torrents
+        inputs:
+          "Torrent_page": "40" 
+      - path: torrents
+        inputs:
+          "Torrent_page": "80" 
+    inputs:
+      "ihq": "{{ .Keywords }}"
+      "iht": "{{ .Config.category }}"
+      "age": "0"
+    rows:
+      selector: table > tbody > tr[data-key="0"]
+    fields:
+      title:
+        selector: td.title-row > a[href^="/"] > span
+      details:
+        selector: td.title-row > a[href^="/"]
+        attribute: href
+      download:
+        selector: td.title-row > a[href^="/"]
+        attribute: href
+      size:
+        selector: td.size-row
+      seeders:
+        selector: td.sn
+      date:
+        selector: td.date-row
+      category:
+        selector: td.category-row > span
+        case:
+          "span[title=\"anime\"]": "1"
+          "span[title=\"software\"]": "2"
+          "span[title=\"games\"]": "3"
+          "span[title=\"adult\"]": "4"
+          "span[title=\"movies\"]": "5"
+          "span[title=\"music\"]": "6"
+          "span[title=\"other\"]": "7"
+          "span[title=\"seriestv\"]": "8"
+          "span[title=\"books\"]": "9"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
