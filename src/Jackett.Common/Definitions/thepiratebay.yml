@@ -7,6 +7,9 @@
   encoding: UTF-8
   links:
     - https://thepiratebay.org/
+  legacylinks:
+    - https://thepiratesbay.pw/
+    - https://tproxy.pro/
 
   caps:
     categorymappings:
