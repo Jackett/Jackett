@@ -6,9 +6,9 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://ww1.yggtorrent.com/
-  legacylinks:
     - https://yggtorrent.com/
+  legacylinks:
+    - https://ww1.yggtorrent.com/
 
   caps:
     categorymappings:
