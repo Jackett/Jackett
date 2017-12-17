@@ -25,7 +25,7 @@
   settings: []
 
   download:
-    selector: a.csprite_dltorrent
+    selector: a.csprite_dltorrent[href^="magnet:?xt"]
 
   search:
     paths:
