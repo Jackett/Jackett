@@ -77,7 +77,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NoName Club
  * RuTracker
  * SkTorrent
- * TorrentBytes
  * Xtreme Zone
  * YggTorrent
  * Ztracker
@@ -248,6 +247,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Network
  * Torrent Sector Crew
  * TorrentBD
+ * TorrentBytes
  * TorrentCCF  [![(invite needed)][inviteneeded]](#)
  * TorrentDay
  * Torrentech
