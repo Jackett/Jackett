@@ -30,7 +30,7 @@
     # if keyword is specified sorted by descending seeders otherwise by time
     # includes only verified torrents
     paths:
-      - path: "/search?{{if .Keywords}}s=ns&v=t&sd=d{{ .Keywords}}{{else}}s=dt&v=t&sd=d&q= * {{end}}{{if .Categories}}category:{{range .Categories}}{{.}},{{end}}{{else}}{{end}}"
+      - path: "/search?{{if .Keywords}}s=ns&v=t&sd=d&q={{ .Keywords}}{{else}}s=dt&v=t&sd=d&q= *{{end}}{{if .Categories}} category:{{range .Categories}}{{.}},{{end}}{{else}}{{end}}"
     rows:
       selector: tr:has(td[class^="text-muted3"])
     fields:
