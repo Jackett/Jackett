@@ -159,8 +159,7 @@
     paths:
       # https://worldwidetorrents.me/torrents-search.php?c41=1&c118=1&search=game+of+thrones+s07e01&cat=0&incldead=0&lang=0
       # https://worldwidetorrents.me/torrents-search.php?search=midnight+texas+s01e10&cat=0&incldead=0&lang=0
-      # https://worldwidetorrents.me/torrents-search.php
-      - path: "{{if .Query.Keywords}}torrents-search.php?{{range .Categories }}c{{.}}=1&{{end}}search={{ .Query.Keywords}}&cat=0&incldead=0&lang=0{{else}}torrents-search.php{{end}}"
+      - path: "torrents-search.php?{{range .Categories}}c{{.}}=1&{{end}}search={{.Keywords}}{{if .Categories}}{{else}}&cat=0{{end}}&incldead=0&lang=0"
     rows:
       selector: tr:not(:has(script)):has(a[title][href^="torrents-details.php?id="])
     fields:
