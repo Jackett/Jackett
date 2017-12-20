@@ -246,6 +246,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
+ * Torrent.LT
  * TorrentBD
  * TorrentBytes
  * TorrentCCF  [![(invite needed)][inviteneeded]](#)
