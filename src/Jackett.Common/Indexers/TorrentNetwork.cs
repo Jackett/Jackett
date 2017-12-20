@@ -145,7 +145,7 @@ namespace Jackett.Indexers
             APIHeaders["Authorization"] = token;
 
             var curuser = await SendAPIRequest("curuser", null);
-            if (curuser.passkey.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(curuser.passkey.ToString()))
                 throw new ExceptionWithConfigData("got empty passkey: " + curuser.ToString(), configData);
             passkey = curuser.passkey;
             var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
