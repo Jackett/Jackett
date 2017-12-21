@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - http://www.torrentbd.com/
+  legacylinks:
     - http://www.torrentbd.com/torrent
 
   caps:
@@ -80,7 +82,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: account-login.php
+    path: torrent/account-login.php
     method: form
     form: form[action="account-login.php"]
     inputs:
@@ -89,11 +91,11 @@
     error:
       - selector: div.myFrame:has(div.myF-caption > font.error)
     test:
-      path: torrents-search.php
+      path: torrent/torrents-search.php
       selector: div.myB-content:contains("Ratio:")
 
   ratio:
-    path: torrents-search.php
+    path: torrent/torrents-search.php
     selector: div.myB-content:contains("Ratio:")
     filters:
       - name: regexp
@@ -101,7 +103,7 @@
 
   search:
     paths:
-      - path: torrents-search.php
+      - path: torrent/torrents-search.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
