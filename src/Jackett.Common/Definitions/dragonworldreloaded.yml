@@ -73,7 +73,18 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
-  
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: pin
+      type: text
+      label: Pin     
+
   login:
     path: /login.php
     method: form
@@ -86,6 +97,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      pin: "{{ .Config.pin }}"
       loggiin: "einloggen"
     error:
       - selector: div#login_error
