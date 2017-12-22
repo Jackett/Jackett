@@ -27,7 +27,7 @@
       - {id: 42, cat: TV/SD, desc: "Serien - Pack SD"}
       - {id: 80, cat: TV/HD, desc: "Serien - Pack HD"}
       # Musik
-      - {id: 119, cat: Audio, desc: "Musik - ALBEN"}
+      - {id: 119, cat: Audio, desc: "Musik - Alben"}
       - {id: 5, cat: Audio/MP3, desc: "Musik - Mp3"}
       - {id: 6, cat: Audio, desc: "Musik - Mixe"}
       - {id: 92, cat: Audio, desc: "Musik - Discography"}
@@ -155,7 +155,7 @@
           ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack SD\"))": "42"
           ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack HD\"))": "80"
           # Musik
-          ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"ALBEN\"))": "119"
+          ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Alben\"))": "119"
           ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Mp3\"))": "5"
           ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Mixe\"))": "6"
           ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Discography\"))": "92"
