@@ -29,9 +29,7 @@
 
   search:
     paths:
-      - path: "search.php"
-    inputs:
-      q: "{{ .Query.Keywords }}"
+      - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{else}}new/{{end}}"
     rows:
       selector: table[class="data"] tr[id]
     fields:
@@ -49,6 +47,10 @@
       download:
         selector: td:nth-child(1) > div > a[data-download=""]
         attribute: href
+        filters:
+          - name: querystring
+            args: url
+          - name: urldecode
       size:
         selector: td:nth-child(2)
       date:

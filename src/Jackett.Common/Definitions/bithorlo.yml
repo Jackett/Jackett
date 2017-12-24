@@ -1,0 +1,117 @@
+﻿---
+  site: bithorlo
+  name: Bithorlo
+  description: "Bithorlo (BHO) is a HUNGARIAN Private Torrent Tracker for MOVIES / GENERAL"
+  language: hu-hu
+  type: private
+  encoding: ISO-8859-2
+  links:
+    - https://www.bithorlo.info/
+
+  caps:
+    categorymappings:
+      # E-book
+      - {id: 40, cat: Books, desc: "E-book/Eng"}
+      - {id: 19, cat: Books, desc: "E-book/Hun"}
+
+      # Játék
+      - {id: 38, cat: Console, desc: "Játék/Consol"}
+      - {id: 15, cat: PC/Games, desc: "Játék/ISO"}
+      - {id: 37, cat: PC/Games, desc: "Játék/Rip"}
+
+      # Filmek
+      - {id: 51, cat: Movies/SD, desc: "Cam/Eng"}
+      - {id: 50, cat: Movies/SD, desc: "Cam/Hun"}
+      - {id: 2, cat: Movies/DVD, desc: "DVD/Eng"}
+      - {id: 1, cat: Movies/DVD, desc: "DVD/Hun"}
+      - {id: 42, cat: Movies/DVD, desc: "Dvd9/Eng"}
+      - {id: 41, cat: Movies/DVD, desc: "Dvd9/Hun"}
+      - {id: 29, cat: Movies/HD, desc: "HD/Eng"}
+      - {id: 28, cat: Movies/HD, desc: "HD/Hun"}
+      - {id: 33, cat: TV, desc: "Sorozat/Eng"}
+      - {id: 5, cat: TV, desc: "Sorozat/Hun"}
+      - {id: 4, cat: Movies/SD, desc: "Xvid/Eng"}
+      - {id: 3, cat: Movies/SD, desc: "Xvid/Hun"}
+
+      # Zene
+      - {id: 12, cat: Audio, desc: "Zene/Eng"}
+      - {id: 13, cat: Audio, desc: "Zene/Hun"}
+
+      # Egyéb
+      - {id: 20, cat: Other, desc: "Képek"}
+      - {id: 21, cat: PC/Phone-Other, desc: "Mobil"}
+
+      # Program
+      - {id: 22, cat: PC/0day, desc: "Win/Program/ISO"}
+      - {id: 23, cat: PC/0day, desc: "Win/Program/Rip"}
+
+      # Felnőtt tartalom
+      - {id: 9, cat: XXX, desc: "XXX/Film"}
+      - {id: 10, cat: XXX, desc: "XXX/Kép"}
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie      
+
+  login:
+    method: cookie
+    test:
+      path: /browse.php
+
+  search:
+    paths:
+      - path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: tr[class^="browse"]
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="torrent.php?id="]
+        attribute: title
+      banner:
+        optional: true
+        selector: a[href^="torrent.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: ", '(.*)'"
+      downloadvolumefactor:
+        case:
+          img[title="Ingyenes letöltés"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        selector: span:contains("Feltöltési szorzó")
+        filters:
+          - name: replace
+            args: ["Feltöltési szorzó × ", ""]
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+          - name: trim # some torrents have an extra space
+      details:
+        selector: a[href^="torrent.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      grabs:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      date:
+        selector: "a[style=\"font-size: 8pt;cursor: pointer;\"][title]"

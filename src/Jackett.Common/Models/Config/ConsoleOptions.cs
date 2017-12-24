@@ -64,47 +64,51 @@ namespace Jackett.Common.Models.Config
         public string DataFolder { get; set; }
 
         [Option("NoRestart", HelpText = "Don't restart after update")]
-        public bool NoRestart { get; set; }        
+        public bool NoRestart { get; set; }
 
-
+        [Option("PIDFile", HelpText = "Specify the location of PID file")]
+        public string PIDFile { get; set; }
 
         public RuntimeSettings ToRunTimeSettings()
         {
             var options = this;
-                var runtimeSettings = new RuntimeSettings();
-                // Logging
-                if (options.Logging)
-                    runtimeSettings.LogRequests = true;
+            var runtimeSettings = new RuntimeSettings();
+            // Logging
+            if (options.Logging)
+                runtimeSettings.LogRequests = true;
 
-                // Tracing
-                if (options.Tracing)
-                    runtimeSettings.TracingEnabled = true;
+            // Tracing
+            if (options.Tracing)
+                runtimeSettings.TracingEnabled = true;
 
-                if (options.ListenPublic && options.ListenPrivate)
-                {
-                    Console.WriteLine("You can only use listen private OR listen publicly.");
-                    Environment.Exit(1);
-                }
-
-                // SSL Fix
-                runtimeSettings.DoSSLFix = options.SSLFix;
-
-                // Use curl
-                if (options.Client != null)
-                    runtimeSettings.ClientOverride = options.Client.ToLowerInvariant();
-
-                // Use Proxy
-                if (options.ProxyConnection != null)
-                {
-                    runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
-                }
-                // Ignore SSL errors on Curl
-                runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
-                runtimeSettings.NoRestart = options.NoRestart;
-
-                return runtimeSettings;
-
+            if (options.ListenPublic && options.ListenPrivate)
+            {
+                Console.WriteLine("You can only use listen private OR listen publicly.");
+                Engine.Exit(1);
             }
-        }
 
+            // SSL Fix
+            runtimeSettings.DoSSLFix = options.SSLFix;
+
+            // Use curl
+            if (options.Client != null)
+                runtimeSettings.ClientOverride = options.Client.ToLowerInvariant();
+
+            // Use Proxy
+            if (options.ProxyConnection != null)
+            {
+                runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
+            }
+            // Ignore SSL errors on Curl
+            runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
+            runtimeSettings.NoRestart = options.NoRestart;
+
+            if (!string.IsNullOrWhiteSpace(options.DataFolder))
+                runtimeSettings.CustomDataFolder = options.DataFolder;
+
+            runtimeSettings.PIDFile = options.PIDFile;
+
+            return runtimeSettings;
+        }
     }
+}

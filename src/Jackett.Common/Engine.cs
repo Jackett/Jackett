@@ -12,6 +12,7 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Targets;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace Jackett
 {
     public class Engine
     {
+        public static Type WebClientType;
+
         private static IContainer container = null;
         private static bool _automapperInitialised = false;
 
@@ -41,6 +44,20 @@ namespace Jackett
                 builder.RegisterModule(module);
             }
             container = builder.Build();
+
+            // create PID file early
+            if (!string.IsNullOrWhiteSpace(settings.PIDFile))
+            {
+                try
+                {
+                    var proc = Process.GetCurrentProcess();
+                    File.WriteAllText(settings.PIDFile, proc.Id.ToString());
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Error while creating the PID file");
+                }
+            }
         }
 
         private static void InitAutomapper()
@@ -218,6 +235,30 @@ namespace Jackett
             }
 
             LogManager.ReconfigExistingLoggers();
+        }
+
+        public static void Exit(int exitCode)
+        {
+            try
+            {
+                if (Engine.ServerConfig != null &&
+                    Engine.ServerConfig.RuntimeSettings != null &&
+                    !string.IsNullOrWhiteSpace(Engine.ServerConfig.RuntimeSettings.PIDFile))
+                {
+                    var PIDFile = Engine.ServerConfig.RuntimeSettings.PIDFile;
+                    if (File.Exists(PIDFile))
+                    {
+                        Engine.Logger.Info("Deleting PID file " + PIDFile);
+                        File.Delete(PIDFile);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Error while deleting the PID file");
+            }
+
+            Environment.Exit(exitCode);
         }
 
         public static void SaveServerConfig()

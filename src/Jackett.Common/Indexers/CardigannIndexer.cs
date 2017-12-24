@@ -1497,11 +1497,11 @@ namespace Jackett.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
+                var variables = getTemplateVariablesFromConfigData();
+                AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
-                    var beforeVariables = getTemplateVariablesFromConfigData();
-                    AddTemplateVariablesFromUri(beforeVariables, link, ".DownloadUri");
-                    var beforeresult = await handleRequest(Download.Before, beforeVariables, link.ToString());
+                    var beforeresult = await handleRequest(Download.Before, variables, link.ToString());
                 }
                 if (Download.Method != null)
                 {
@@ -1510,17 +1510,19 @@ namespace Jackett.Indexers
                 }
                 if (Download.Selector != null)
                 {
+                    var selector = applyGoTemplateText(Download.Selector, variables);
                     var response = await RequestStringWithCookies(link.ToString());
                     if (response.IsRedirect)
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
                     var SearchResultParser = new HtmlParser();
                     var SearchResultDocument = SearchResultParser.Parse(results);
-                    var DlUri = SearchResultDocument.QuerySelector(Download.Selector);
+                    var DlUri = SearchResultDocument.QuerySelector(selector);
                     if (DlUri != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.ToHtmlPretty()));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, DlUri.ToHtmlPretty()));
                         var href = DlUri.GetAttribute("href");
+                        href = applyFilters(href, Download.Filters, variables);
                         link = resolvePath(href);
                     }
                     else

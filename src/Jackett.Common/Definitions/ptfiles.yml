@@ -66,6 +66,7 @@
       # for some users (don't know why) the table is called tablethree instead of tortable
       selector: table#tortable > tbody > tr.rowhead, table#tablethree > tbody > tr.rowhead
     fields:
+      # column 3 will be the wait time for new users
       download:
         selector: a[href^="dl.php/"]
         attribute: href
@@ -92,19 +93,19 @@
         optional: true
         attribute: href
       files:
-        selector: td:nth-child(3)
+        selector: td:nth-last-child(5)
       grabs:
-        selector: td:nth-child(5) > span
+        selector: td:nth-last-child(3) > span
         filters:
           - name: regexp
             args: ([\d\.]+)
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-last-child(3)
         remove: span
       seeders:
-        selector: td:nth-child(6) > span > b:nth-child(1)
+        selector: td:nth-last-child(2) > span > b:nth-child(1)
       leechers:
-        selector: td:nth-child(6) > span > b:nth-child(2)
+        selector: td:nth-last-child(2) > span > b:nth-child(2)
       date:
         selector: td:nth-child(2) > span > span > small
         filters:

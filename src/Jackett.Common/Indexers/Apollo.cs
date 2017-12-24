@@ -7,12 +7,12 @@ using NLog;
 
 namespace Jackett.Indexers
 {
-    public class Synthesiz3r : GazelleTracker
+    public class Apollo : GazelleTracker
     {
-        public Synthesiz3r(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Synthesiz3r",
-                desc: "Synthesiz3r (ST3) is a Private Torrent Tracker for ELECTRONIC MUSIC",
-                link: "https://synthesiz3r.com/",
+        public Apollo(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+            : base(name: "Apollo",
+                desc: "A music tracker",
+                link: "https://apollo.rip/",
                 configService: configService,
                 logger: logger,
                 protectionService: protectionService,

@@ -6,12 +6,13 @@
   type: public
   encoding: UTF-8
   links:
-    - http://cpabien.club/
+    - http://www.cpabien.cx/
   legacylinks:
     - http://cpabien.org/
     - http://cpabien.cc/
     - http://cpabien.co/
     - http://cpabien.la/
+    - http://cpabien.club/
 
   caps:
     categorymappings:
@@ -25,13 +26,14 @@
   settings: []
 
   download:
-    selector: "#telecharger"
+    selector: div.btn-download a
+    attribute: href
 
   search:
     paths:
-      - path: "/search.php?t={{ .Query.Keywords }}"
+      - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}derniers/{{end}}"
     rows:
-      selector: div[class^='ligne']
+      selector: table.table-corps tbody tr td
     fields:
       site_date:
         selector: a
@@ -60,25 +62,6 @@
         attribute: href
       size:
         selector: div.poid
-        filters:
-          - name: re_replace
-            args: [ "\\.(\\d) Ko", "$1X00"]
-          - name: re_replace
-            args: [ " Ko", "000"]
-          - name: re_replace
-            args: [ "\\.(\\d) Mo", "$1X00000"]
-          - name: re_replace
-            args: [ " Mo", "000000"]
-          - name: re_replace
-            args: [ "\\.(\\d) Go", "$1X00000000"]
-          - name: re_replace
-            args: [ " Go", "000000000"]
-          - name: re_replace
-            args: [ "\\.(\\d) To", "$1X00000000000"]
-          - name: re_replace
-            args: [ " To", "000000000000"]
-          - name: replace
-            args: [ "X", "" ]
       date:
         text: "now"
       seeders:

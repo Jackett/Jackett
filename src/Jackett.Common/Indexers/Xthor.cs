@@ -333,7 +333,6 @@ namespace Jackett.Indexers
             // Loop on Categories needed
             if (categoriesList.Count > 0)
             {
-                // ignore categories for now, something changed or is buggy, needs investigation
                 parameters.Add("category", string.Join("+", categoriesList));
             }
 
@@ -452,6 +451,8 @@ namespace Jackett.Indexers
 
             // Request our first page
             var results = await webclient.GetString(myIndexRequest);
+            if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
+                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
             return results.Content;

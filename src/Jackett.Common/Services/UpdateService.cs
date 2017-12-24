@@ -257,7 +257,7 @@ namespace Jackett.Services
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart)
         {
             var exe = Path.GetFileName(ExePath());
-            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1));
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" +a + "\"" : a )).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo();
 
@@ -299,7 +299,7 @@ namespace Jackett.Services
             { 
                 logger.Info("Exiting Jackett..");
                 lockService.Signal();
-                Environment.Exit(0);
+                Engine.Exit(0);
             }
         }
     }

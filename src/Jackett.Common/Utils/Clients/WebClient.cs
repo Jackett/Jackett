@@ -66,7 +66,6 @@ namespace Jackett.Utils.Clients
                     logger.Debug(string.Format("WebClient({0}): delaying request for {1} by {2} seconds", ClientType, request.Url, delay.TotalSeconds.ToString()));
                     await Task.Delay(delay);
                 }
-                lastRequest = DateTime.Now;
             }
         }
 
@@ -104,6 +103,7 @@ namespace Jackett.Utils.Clients
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
+            lastRequest = DateTime.Now;
             result.Request = request;
             logger.Debug(string.Format("WebClient({0}): Returning {1} => {2} bytes", ClientType, result.Status, (result.IsRedirect ? result.RedirectingTo + " " : "") + (result.Content == null ? "<NULL>" : result.Content.Length.ToString())));
             return result;
@@ -115,6 +115,7 @@ namespace Jackett.Utils.Clients
             PrepareRequest(request);
             await DelayRequest(request);
             var result = await Run(request);
+            lastRequest = DateTime.Now;
             result.Request = request;
             WebClientStringResult stringResult = Mapper.Map<WebClientStringResult>(result);
             Encoding encoding = null;

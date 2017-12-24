@@ -17,8 +17,6 @@ namespace Jackett.Indexers
 {
     public class Yts : BaseWebIndexer
     {
-        private static readonly string defaultSiteLink = "https://yts.am/";
-
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://yts.ag/",
         };

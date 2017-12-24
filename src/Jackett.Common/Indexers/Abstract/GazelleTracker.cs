@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Net;
+using static Jackett.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Indexers.Abstract
 {
@@ -22,8 +23,10 @@ namespace Jackett.Indexers.Abstract
     {
         protected string LoginUrl { get { return SiteLink + "login.php"; } }
         protected string APIUrl { get { return SiteLink + "ajax.php"; } }
-        protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&id="; } }
+        protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
         protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
+        protected bool supportsFreeleechTokens;
+        protected bool useTokens = false;
 
         new ConfigurationDataBasicLogin configData
         {
@@ -31,7 +34,7 @@ namespace Jackett.Indexers.Abstract
             set { base.configData = value; }
         }
 
-        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
+        public GazelleTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link, bool supportsFreeleechTokens)
             : base(name: name,
                 description: desc,
                 link: link,
@@ -42,12 +45,27 @@ namespace Jackett.Indexers.Abstract
                 p: protectionService,
                 configData: new ConfigurationDataBasicLogin())
         {
-                Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
+            this.supportsFreeleechTokens = supportsFreeleechTokens;
+
+            if (supportsFreeleechTokens)
+            {
+                var useTokenItem = new BoolItem { Value = false };
+                useTokenItem.Name = "Use Freeleech Tokens when available";
+                configData.AddDynamic("usetoken", useTokenItem);
+            }
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+
+            var useTokenItem = (BoolItem)configData.GetDynamic("usetoken");
+            if (useTokenItem != null)
+            {
+                useTokens = useTokenItem.Value;
+            }
+
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },

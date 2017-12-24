@@ -36,6 +36,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Horrible Subs
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Isohunt2
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
@@ -44,6 +45,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
+ * OxTorrent
  * RARBG
  * RuTor
  * ShowRSS
@@ -75,7 +77,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NoName Club
  * RuTracker
  * SkTorrent
- * TorrentBytes
  * Xtreme Zone
  * YggTorrent
  * Ztracker
@@ -106,6 +107,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BIGTorrent
  * Bit-City Reloaded
  * BIT-HDTV
+ * Bithorlo
  * BitHUmen
  * BitMe
  * BitMeTV
@@ -118,6 +120,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BrokenStones
  * BTNext
  * Carpathians
+ * CCFBits
  * CGPeers
  * CHDBits
  * Cinematik
@@ -209,7 +212,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PolishTracker
  * Pretome
  * PrivateHD
- * Psytorrents
  * PTFiles
  * Redacted (PassTheHeadphones)
  * RevolutionTT
@@ -244,7 +246,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
+ * Torrent.LT
  * TorrentBD
+ * TorrentBytes
  * TorrentCCF  [![(invite needed)][inviteneeded]](#)
  * TorrentDay
  * Torrentech
@@ -253,7 +257,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrenting
  * TorrentLeech
  * Torrents.Md
- * TorrentVault
  * Torrent-Syndikat
  * TorViet
  * ToTheGlory
@@ -355,7 +358,7 @@ ProxyPass /jackett http://127.0.0.1:9117/
 
 *  __Enable logging__
 
-  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface.
+  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface (followed by clicking on the `Apply Server Settings` button).
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
 
