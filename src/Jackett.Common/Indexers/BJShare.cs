@@ -293,8 +293,8 @@ Encoding = Encoding.UTF8;
                                 var qDescription = Row.QuerySelector("div.torrent_info");
                                 release.Description = qDescription.TextContent;
 
-                                string cleanTitle = Regex.Replace(Title, @" - S?(?<season>\d{1,2})?E?(?<episode>\d{1,4})?", "");
-                                string seasonEp = Regex.Replace(Title, @"^(.*?) - (S?(\d{1,2})?E?(\d{1,4})?)?", "$2");
+                                string cleanTitle = Regex.Replace(Title, @" - ((S(\d{1,2}))?E(\d{1,4}))", "");
+                                string seasonEp = Regex.Replace(Title, @"^(.*?) - ((S(\d{1,2}))?E(\d{1,4}))", "$2");
                                 release.Title = CategoryStr == "14" ? Title : cleanTitle + " " + YearStr + " " + seasonEp;
 
                                 release.PublishDate = YearPublishDate.Value;
