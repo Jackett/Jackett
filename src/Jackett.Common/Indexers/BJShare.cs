@@ -238,20 +238,22 @@ Encoding = Encoding.UTF8;
                             ICollection<int> Category = null;
                             string YearStr = null;
                             Nullable<DateTime> YearPublishDate = null;
+                            string CategoryStr = "";
 
                             if (Row.ClassList.Contains("group") || Row.ClassList.Contains("torrent")) // group/ungrouped headers
                             {
                                 var qCatLink = Row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
-                                string CategoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                                CategoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                                 Category = MapTrackerCatToNewznab(CategoryStr);
+                                
+                                YearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+                                YearPublishDate = DateTime.SpecifyKind(DateTime.ParseExact(YearStr, "yyyy", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
                                 // if result is an anime, convert title from SXXEXX to EXX
                                 if (CategoryStr == "14")
                                 {
                                     Title = Regex.Replace(Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
                                 }
-                                YearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
-                                YearPublishDate = DateTime.SpecifyKind(DateTime.ParseExact(YearStr, "yyyy", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
                                 if (Row.ClassList.Contains("group")) // group headers
                                 {
@@ -278,7 +280,11 @@ Encoding = Encoding.UTF8;
                             if (Row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                             {
                                 release.Description = qDetailsLink.TextContent;
-                                release.Title = GroupTitle + " " + GroupYearStr;
+
+                                string cleanTitle = Regex.Replace(GroupTitle, @" - S?(?<season>\d{1,2})?E?(?<episode>\d{1,4})?", "");
+                                string seasonEp = Regex.Replace(GroupTitle, @"^(.*?) - (S?(\d{1,2})?E?(\d{1,4})?)?", "$2");
+                                release.Title = CategoryStr == "14" ? GroupTitle : cleanTitle + " " + GroupYearStr + " " + seasonEp;
+
                                 release.PublishDate = GroupPublishDate.Value;
                                 release.Category = GroupCategory;
                             }
@@ -286,7 +292,11 @@ Encoding = Encoding.UTF8;
                             {
                                 var qDescription = Row.QuerySelector("div.torrent_info");
                                 release.Description = qDescription.TextContent;
-                                release.Title = Title + " " + YearStr;
+
+                                string cleanTitle = Regex.Replace(Title, @" - ((S(\d{1,2}))?E(\d{1,4}))", "");
+                                string seasonEp = Regex.Replace(Title, @"^(.*?) - ((S(\d{1,2}))?E(\d{1,4}))", "$2");
+                                release.Title = CategoryStr == "14" ? Title : cleanTitle + " " + YearStr + " " + seasonEp;
+
                                 release.PublishDate = YearPublishDate.Value;
                                 release.Category = Category;
                             }
