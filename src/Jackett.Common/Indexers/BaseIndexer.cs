@@ -520,7 +520,9 @@ namespace Jackett.Indexers
                 if (matches.Groups.Count > 2) cookieDIctionary[matches.Groups[1].Value] = matches.Groups[2].Value;
                 matches = matches.NextMatch();
             }
-            return string.Join("; ", cookieDIctionary.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
+            return string.Join("; ", cookieDIctionary
+                .Where(kv => kv.Key != "cf_use_ob" && kv.Key != "cf_ob_info") // These cookies are causing BadGateway errors, so we drop them, see issue #2306
+                .Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray());
         }
 
         // Update CookieHeader with new cookies and save the config if something changed (e.g. a new CloudFlare clearance cookie was issued)
