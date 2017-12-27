@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://downloadville.net/
+  legacylinks:
     - https://downloadville.net/tracker/
 
   caps:
@@ -128,7 +130,7 @@
         "4" : "Argent & Or (Both)"
 
   login:
-    path: index.php?page=login
+    path: tracker/index.php?page=login
     method: post
     form: form[action="index.php?page=login"]
     inputs:
@@ -139,12 +141,12 @@
         message:
           selector: form[action="index.php?page=login&returnto=index.php"] table tr:nth-of-type(2) td span
     test:
-      path: index.php
+      path: tracker/index.php
       select: a[href="logout.php"]
 
   download:
     before:
-      path: "thanks.php"
+      path: tracker/thanks.php
       method: "post"
       inputs:
         infohash: "{{ .DownloadUri.Query.id }}"
@@ -154,7 +156,7 @@
 
   search:
     paths:
-      - path: index.php
+      - path: tracker/index.php
     inputs:
       page: "torrents"
       search: "{{ .Keywords }}"
