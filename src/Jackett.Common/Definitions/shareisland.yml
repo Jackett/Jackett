@@ -6,169 +6,140 @@
   type: private
   encoding: UTF-8
   links:
-    - https://shareisland.org/
+    - http://www.shareisland.org
   legacylinks:
+    - https://shareisland.org/
     - http://shareisland.org/
 
   caps:
     categorymappings:
-       - {id: 32, cat: Other, desc: "Vip"}
-       - {id: 45, cat: XXX, desc: "Vip XXX"}
-       - {id: 33, cat: Other, desc: "ex Vip"}
-       - {id: 1, cat: Movies, desc: "Movies"}
-       - {id: 49, cat: Movies/HD, desc: "H-264"}
-       - {id: 51, cat: Movies/HD, desc: "H-265"}
-       - {id: 41, cat: Movies/Other, desc: "Cartoons"}
-       - {id: 14, cat: Movies/SD, desc: "DivX"}
-       - {id: 16, cat: Movies/Other, desc: "Cine News"}
-       - {id: 39, cat: Movies/HD, desc: "720p"}
-       - {id: 40, cat: Movies/HD, desc: "1080p"}
-       - {id: 46, cat: Movies/BluRay, desc: "Blu Ray Disk"}
-       - {id: 31, cat: Movies/HD, desc: "BDRip"}
-       - {id: 17, cat: Movies/DVD, desc: "DVD"}
-       - {id: 43, cat: Movies/SD, desc: "DVDRip"}
-       - {id: 6, cat: PC, desc: "Applications"}
-       - {id: 18, cat: PC/0day, desc: "PC Applications"}
-       - {id: 19, cat: PC/Mac, desc: "Macintosh Applications"}
-       - {id: 44, cat: PC/Phone-Android, desc: "Android applications"}
-       - {id: 7, cat: Audio, desc: "Music"}
-       - {id: 20, cat: Audio/Video, desc: "Video"}
-       - {id: 21, cat: Audio/MP3, desc: "Mp3"}
-       - {id: 2, cat: Console, desc: "Games"}
-       - {id: 3, cat: Console/PS4, desc: "Sony PS"}
-       - {id: 4, cat: Console/Wii, desc: "Wii"}
-       - {id: 26, cat: Console/Xbox, desc: "XboX"}
-       - {id: 27, cat: PC/Games, desc: "PC"}
-       - {id: 28, cat: Console/NDS, desc: "Nintendo"}
-       - {id: 34, cat: Books, desc: "Edicola"}
-       - {id: 52, cat: Books, desc: "Quotidiani"}
-       - {id: 53, cat: Books, desc: "Libreria"}
-       - {id: 35, cat: TV, desc: "SerieTV"}
-       - {id: 55, cat: TV/HD, desc: "Serie Tv HD"}
-       - {id: 36, cat: Other, desc: "Rip By ShareIsland"}
-       - {id: 47, cat: Other, desc: "Disclaimer"}
-       - {id: 48, cat: Other, desc: "P2P network "}
+       - {id: 36, cat: Other, desc: "Disclaimer"}
+       # Applications
+       - {id: 21, cat: PC/0day, desc: "PC"}
+       - {id: 33, cat: PC/Phone-Android, desc: "Android applications"}
+       - {id: 7, cat: PC/0day, desc: "PC Applications"}
+       - {id: 8, cat: PC/0day, desc: "Apps Linux"}
+       - {id: 9, cat: PC/MAC, desc: "Apps Mac"}
+
+       # Movies
+       - {id: 11, cat: Movies/DVD, desc: "DVD"}
+       - {id: 16, cat: Movies/SD, desc: "DivX"}
+       - {id: 17, cat: Movies/SD, desc: "Cine News"}
+       - {id: 18, cat: Movies/Other, desc: "Video"}
+       - {id: 23, cat: Movies/SD, desc: "BDRip"}
+       - {id: 27, cat: TV/SD, desc: "TV series"}
+       - {id: 28, cat: Movies/Other, desc: "Rip By ShareIsland "}
+       - {id: 29, cat: Movies/HD, desc: "720p"}
+       - {id: 30, cat: Movies/HD, desc: "1080p"}
+       - {id: 32, cat: Movies/SD, desc: "DVDRip"}
+       - {id: 35, cat: Movies/BluRay, desc: "Blu Ray Disk"}
+       - {id: 38, cat: Movies/HD, desc: "H-264"}
+       - {id: 40, cat: Movies/HD, desc: "H-265"}
+       - {id: 44, cat: Movies/HD, desc: "4K Ultra HD"}
+       - {id: 45, cat: TV/HD, desc: "Series TV HD"}
+
+       - {id: 37, cat: Other, desc: "P2P network"}
+       - {id: 39, cat: Other, desc: "test"}
+       # Music
+       - {id: 19, cat: Audio/MP3, desc: "Mp3"}
+
+       # Games
+       - {id: 13, cat: Console/PS4, desc: "Sony PS"}
+       - {id: 14, cat: Console/Wii, desc: "Wii"}
+       - {id: 20, cat: Console/Xbox, desc: "XboX"}
+       - {id: 22, cat: Console/Other, desc: "Nintendo"}
+
+       # Anime
+       - {id: 31, cat: TV/Anime, desc: "Cartoons"}
+
+       # Books
+       - {id: 26, cat: Books, desc: "Newsstand"}
+       - {id: 41, cat: Books, desc: "Newspapers"}
+       - {id: 43, cat: Books, desc: "library"}
+
+       - {id: 4, cat: Other, desc: "Other"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
 
   login:
-    path: /ajax/login.php
+    path: /index.php?page=login
     method: post
-    form: form
     inputs:
-      loginbox_membername: "{{ .Config.username }}"
-      loginbox_password: "{{ .Config.password }}"
-      action: "login"
-      loginbox_remember: "true"
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
     error:
       - selector: div.error
     test:
-      path: /?p=home&pid=1
-      selector: div#member_info_bar
+      path: /index.php
+      selector: a[href="logout.php"]
 
-  ratio:
-    path: /?p=home&pid=1
-    selector: img[title="Ratio"] + span
+  download:
+    selector: a[href^="download.php?id="]      
 
   search:
     paths:
-      - path: /
+      - path: /index.php
     keywordsfilters:
       # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
       - name: re_replace
         args: ["S0?(\\d{1,2})", " $1 "]
       - name: re_replace
         args: ["E(\\d{2,3})", " $1 "]
-      - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "%25"]
     inputs:
-      p: "torrents"
-      pid: "32"
-      $raw: "{{range .Categories}}cid[]={{.}}&{{end}}"
-      keywords: "{{ .Keywords }}"
-      search_type: "name"
-      searchin: "title"
-    error:
-      - selector: div#show_error
+      search: "{{ .Query.Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: torrents
+      active: 0
     rows:
-      selector: table#torrents_table_classic > tbody > tr:not([id="torrents_table_classic_head"])
-      filters:
-        - name: andmatch
+      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
     fields:
+      download:
+        selector: a[href^="index.php?page=downloadcheck&id="]
+        attribute: href
       title:
-        selector: td.torrent_name > a
+        selector: a[title][href^="index.php?page=torrent-details&id="]
+        attribute: title
         filters:
+          - name: replace
+            args: ["Vedi Dettagli: ", ""]
           # normalize to SXXEYY format
           - name: re_replace
             args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
           - name: re_replace
             args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
       category:
-        selector: div.category_image > a
+        selector: a[href^="index.php?page=torrents&category="]
         attribute: href
         filters:
           - name: querystring
-            args: cid
-      comments:
-        selector: td.torrent_name > a
-        attribute: href
-      download:
-        selector: a:has(img[title="Download Torrent"])
+            args: category
+      details:
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       size:
-        selector: td.size
-      seeders:
-        selector: td.seeders
-      leechers:
-        selector: td.leechers
+        selector: td:nth-child(11)
+      date:
+        selector: td:nth-child(6)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
       grabs:
-        selector: td.completed
+        selector: td:nth-child(9)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
       downloadvolumefactor:
         case:
-          "img[title=\"FREE!\"]": "0"
-          "img[title=\"Download Multiplier: 0.5\"]": "0.5"
-          "img[title=\"Moltiplicatore Download: 0.5\"]": "0.5"
+          img[alt="Free Leech"]: "0"
+          img[alt="Gold 100% Free"]: "0"
+          img[alt="Silver 50% Free"]: "0.5"
           "*": "1"
       uploadvolumefactor:
         case:
-          "img[title=\"Upload Multiplier: 3\"]": "3"
-          "img[title=\"Upload Multiplier: 2\"]": "2"
-          "img[title=\"Upload Multiplier: 1.5\"]": "1.5"
-          "img[title=\"Moltiplicatore Upload: 3\"]": "3"
-          "img[title=\"Moltiplicatore Upload: 2\"]": "2"
-          "img[title=\"Moltiplicatore Upload: 1.5\"]": "1.5"
           "*": "1"
-      date:
-        selector: td.torrent_name
-        remove: a, span, div, br
-        filters:
-          - name: replace
-            args: ["Uploaded ", ""]
-          - name: replace
-            args: [" by", ""]
-          - name: replace
-            args: [" at", ""]
-          - name: replace
-            args: ["Oggi", "Today"]
-          - name: replace
-            args: ["Ieri", "Yesterday"]
-          - name: replace
-            args: ["lunedì", "Monday"]
-          - name: replace
-            args: ["martedì", "Tuesday"]
-          - name: replace
-            args: ["Mercoledì", "Wednesday"]
-          - name: replace
-            args: ["Giovedì", "Thursday"]
-          - name: replace
-            args: ["Venerdì", "Friday"]
-          - name: replace
-            args: ["Sabato", "Saturday"]
-          - name: replace
-            args: ["Domenica", "Sunday"]
-          - name: replace
-            args: [" alle", ""]
-          - name: dateparse
-            args: "02-01-2006 15:04"
