@@ -22,10 +22,18 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:"
+      options:
+        "http://itorrents.org/" : "iTorrents.org"
+        "magnet:": "magnet"
 
   download:
-    selector: a.csprite_dltorrent[href^="magnet:?xt"]
+    # the .torrent url is on the on the details page 
+    selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink }}"]
 
   search:
     paths:
