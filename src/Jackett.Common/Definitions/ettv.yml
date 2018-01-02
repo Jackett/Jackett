@@ -58,7 +58,7 @@
         selector: a[href^="/torrent/"][title]
         attribute: title
       category:
-        selector: a[href^="torrents.php?cat="]
+        selector: a[href^="/torrents.php?cat="]
         attribute: href
         filters:
           - name: querystring
