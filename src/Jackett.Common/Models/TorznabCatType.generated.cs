@@ -45,8 +45,10 @@ namespace Jackett.Models
 		public static readonly TorznabCategory MoviesSD = new TorznabCategory(2030, "Movies/SD");
 				
 		public static readonly TorznabCategory MoviesHD = new TorznabCategory(2040, "Movies/HD");
-				
-		public static readonly TorznabCategory Movies3D = new TorznabCategory(2050, "Movies/3D");
+
+        public static readonly TorznabCategory MoviesUHD = new TorznabCategory(2045, "Movies/UHD");
+
+        public static readonly TorznabCategory Movies3D = new TorznabCategory(2050, "Movies/3D");
 				
 		public static readonly TorznabCategory MoviesBluRay = new TorznabCategory(2060, "Movies/BluRay");
 				
@@ -93,8 +95,10 @@ namespace Jackett.Models
 		public static readonly TorznabCategory TVSD = new TorznabCategory(5030, "TV/SD");
 				
 		public static readonly TorznabCategory TVHD = new TorznabCategory(5040, "TV/HD");
-				
-		public static readonly TorznabCategory TVOTHER = new TorznabCategory(5050, "TV/OTHER");
+
+        public static readonly TorznabCategory TVUHD = new TorznabCategory(5045, "TV/UHD");
+
+        public static readonly TorznabCategory TVOTHER = new TorznabCategory(5050, "TV/OTHER");
 				
 		public static readonly TorznabCategory TVSport = new TorznabCategory(5060, "TV/Sport");
 				
@@ -146,13 +150,13 @@ namespace Jackett.Models
 				 
 			Console.SubCategories.AddRange(new List<TorznabCategory> { ConsoleNDS, ConsolePSP, ConsoleWii, ConsoleXbox, ConsoleXbox360, ConsoleWiiwareVC, ConsoleXBOX360DLC, ConsolePS3, ConsoleOther, Console3DS, ConsolePSVita, ConsoleWiiU, ConsoleXboxOne, ConsolePS4 });
 				 
-			Movies.SubCategories.AddRange(new List<TorznabCategory> { MoviesForeign, MoviesOther, MoviesSD, MoviesHD, Movies3D, MoviesBluRay, MoviesDVD, MoviesWEBDL });
+			Movies.SubCategories.AddRange(new List<TorznabCategory> { MoviesForeign, MoviesOther, MoviesSD, MoviesHD, MoviesUHD, Movies3D, MoviesBluRay, MoviesDVD, MoviesWEBDL });
 				 
 			Audio.SubCategories.AddRange(new List<TorznabCategory> { AudioMP3, AudioVideo, AudioAudiobook, AudioLossless, AudioOther, AudioForeign });
 				 
 			PC.SubCategories.AddRange(new List<TorznabCategory> { PC0day, PCISO, PCMac, PCPhoneOther, PCGames, PCPhoneIOS, PCPhoneAndroid });
 				 
-			TV.SubCategories.AddRange(new List<TorznabCategory> { TVWEBDL, TVFOREIGN, TVSD, TVHD, TVOTHER, TVSport, TVAnime, TVDocumentary });
+			TV.SubCategories.AddRange(new List<TorznabCategory> { TVWEBDL, TVFOREIGN, TVSD, TVHD, TVUHD, TVOTHER, TVSport, TVAnime, TVDocumentary });
 				 
 			XXX.SubCategories.AddRange(new List<TorznabCategory> { XXXDVD, XXXWMV, XXXXviD, XXXx264, XXXOther, XXXImageset, XXXPacks });
 				 
