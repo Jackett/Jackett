@@ -47,23 +47,23 @@ namespace Jackett.Indexers
             TorznabCaps.Categories.Clear();
 
             // Movie
-            AddCategoryMapping("70", TorznabCatType.MoviesHD, "Movie/UHD/Blu-Ray");
+            AddCategoryMapping("70", TorznabCatType.MoviesUHD, "Movie/UHD/Blu-Ray");
             AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray");
-            AddCategoryMapping("71", TorznabCatType.MoviesHD, "Movie/UHD/Remux");
+            AddCategoryMapping("71", TorznabCatType.MoviesUHD, "Movie/UHD/Remux");
             AddCategoryMapping("2", TorznabCatType.MoviesHD, "Movie/Remux");
             AddCategoryMapping("5", TorznabCatType.MoviesHD, "Movie/1080p/i");
             AddCategoryMapping("3", TorznabCatType.MoviesHD, "Movie/720p");
-            AddCategoryMapping("64", TorznabCatType.MoviesHD, "Movie/2160p");
+            AddCategoryMapping("64", TorznabCatType.MoviesUHD, "Movie/2160p");
             AddCategoryMapping("63", TorznabCatType.Audio, "Movie/Audio Track");
             // TV Show
 
-            AddCategoryMapping("72", TorznabCatType.TVHD, "TV Show/UHD/Blu-ray");
+            AddCategoryMapping("72", TorznabCatType.TVUHD, "TV Show/UHD/Blu-ray");
             AddCategoryMapping("59", TorznabCatType.TVHD, "TV Show/Blu-ray");
-            AddCategoryMapping("73", TorznabCatType.TVHD, "TV Show/UHD/Remux");
+            AddCategoryMapping("73", TorznabCatType.TVUHD, "TV Show/UHD/Remux");
             AddCategoryMapping("60", TorznabCatType.TVHD, "TV Show/Remux");
             AddCategoryMapping("30", TorznabCatType.TVHD, "TV Show/1080p/i");
             AddCategoryMapping("38", TorznabCatType.TVHD, "TV Show/720p");
-            AddCategoryMapping("65", TorznabCatType.TVHD, "TV Show/2160p");
+            AddCategoryMapping("65", TorznabCatType.TVUHD, "TV Show/2160p");
             // Music
             AddCategoryMapping("44", TorznabCatType.Audio, "Music/Album");
             AddCategoryMapping("61", TorznabCatType.AudioVideo, "Music/Blu-Ray");
