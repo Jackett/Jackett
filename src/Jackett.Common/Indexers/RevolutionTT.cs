@@ -273,7 +273,7 @@ namespace Jackett.Indexers
                         Title = title,
                         Description = title,
                         Guid = new Uri(string.Format(DetailsURL, torrentId)),
-                        Comments = new Uri(string.Format(DetailsURL, torrentId) + "&tocomm=1"),
+                        Comments = new Uri(string.Format(DetailsURL, torrentId)),
                         PublishDate = DateTime.ParseExact(infoMatch.Groups["added"].Value, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
                         Link = new Uri(link),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value == "no" ? "0" : infoMatch.Groups["seeders"].Value),
