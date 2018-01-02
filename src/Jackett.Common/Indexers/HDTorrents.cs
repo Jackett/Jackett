@@ -47,14 +47,19 @@ namespace Jackett.Indexers
             TorznabCaps.Categories.Clear();
 
             // Movie
+            AddCategoryMapping("70", TorznabCatType.MoviesHD, "Movie/UHD/Blu-Ray");
             AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray");
+            AddCategoryMapping("71", TorznabCatType.MoviesHD, "Movie/UHD/Remux");
             AddCategoryMapping("2", TorznabCatType.MoviesHD, "Movie/Remux");
             AddCategoryMapping("5", TorznabCatType.MoviesHD, "Movie/1080p/i");
             AddCategoryMapping("3", TorznabCatType.MoviesHD, "Movie/720p");
             AddCategoryMapping("64", TorznabCatType.MoviesHD, "Movie/2160p");
             AddCategoryMapping("63", TorznabCatType.Audio, "Movie/Audio Track");
             // TV Show
+
+            AddCategoryMapping("72", TorznabCatType.TVHD, "TV Show/UHD/Blu-ray");
             AddCategoryMapping("59", TorznabCatType.TVHD, "TV Show/Blu-ray");
+            AddCategoryMapping("73", TorznabCatType.TVHD, "TV Show/UHD/Remux");
             AddCategoryMapping("60", TorznabCatType.TVHD, "TV Show/Remux");
             AddCategoryMapping("30", TorznabCatType.TVHD, "TV Show/1080p/i");
             AddCategoryMapping("38", TorznabCatType.TVHD, "TV Show/720p");
@@ -68,11 +73,10 @@ namespace Jackett.Indexers
             AddCategoryMapping("66", TorznabCatType.AudioVideo, "Music/2160p");
             // XXX
             AddCategoryMapping("58", TorznabCatType.XXX, "XXX/Blu-ray");
+            AddCategoryMapping("74", TorznabCatType.XXX, "XXX/UHD/Blu-ray");
             AddCategoryMapping("48", TorznabCatType.XXX, "XXX/1080p/i");
             AddCategoryMapping("47", TorznabCatType.XXX, "XXX/720p");
             AddCategoryMapping("67", TorznabCatType.XXX, "XXX/2160p");
-            // 3D
-            AddCategoryMapping("67", TorznabCatType.Movies3D, "3D");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
