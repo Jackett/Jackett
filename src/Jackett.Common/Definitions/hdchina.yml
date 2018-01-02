@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://hdchina.org/
+  legacylinks:
     - https://hdchina.club/
 
   caps:
