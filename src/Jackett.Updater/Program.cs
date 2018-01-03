@@ -197,6 +197,7 @@ namespace Jackett.Updater
                 "Definitions/torrentproject.yml",
                 "Definitions/torrentvault.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
+                "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
             };
 
             foreach (var oldFIle in oldFiles)
