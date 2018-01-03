@@ -100,7 +100,12 @@ namespace Jackett.Indexers.Abstract
             queryCollection.Add("order_by", "time");
             queryCollection.Add("order_way", "desc");
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            {
+                queryCollection.Add("cataloguenumber", query.ImdbID);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 queryCollection.Add("searchstr", searchString);
             }
