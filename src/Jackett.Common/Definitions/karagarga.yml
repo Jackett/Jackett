@@ -71,6 +71,8 @@
         filters:
           - name: replace
             args: ["'", ""]
+          - name: re_replace
+            args: ["[^a-zA-Z0-9]+", " "]
           - name: dateparse
             args: "Jan 02 06"
       downloadvolumefactor:
