@@ -131,7 +131,7 @@ namespace Jackett.Indexers
             {
                 CQ dom = results;
 
-                var rows = dom[".browsetable tr"]; //the class for the table changed
+                var rows = dom[".browsetable:last tr"]; //the class for the table changed
                 foreach (var row in rows.Skip(1))
                 {
                     var release = new ReleaseInfo();
