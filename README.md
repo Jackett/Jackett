@@ -139,6 +139,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EliteHD  [![(invite needed)][inviteneeded]](#)
  * Elit Tracker
  * Elite-Tracker
+ * Empornium
  * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
