@@ -137,7 +137,8 @@ namespace Jackett.Indexers
 
                     release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
                     release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
-
+                    release.Guid = release.Comments;
+                    
                     if (row.frileech == 1)
                         release.DownloadVolumeFactor = 0;
                     else
