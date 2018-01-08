@@ -52,12 +52,12 @@ namespace Jackett.Indexers
 
             AddCategoryMapping(20, TorznabCatType.TV, "TV");
             AddCategoryMapping(21, TorznabCatType.TV, "TV Bokssæt");
-            AddCategoryMapping(21, TorznabCatType.MovieHD, "HD x264 Film");
-            AddCategoryMapping(24, TorznabCatType.MovieSD, "SD Film");
+            AddCategoryMapping(21, TorznabCatType.MoviesHD, "HD x264 Film");
+            AddCategoryMapping(24, TorznabCatType.MoviesSD, "SD Film");
             AddCategoryMapping(25, TorznabCatType.XXX, "XXX");
-            
+
             AddCategoryMapping(28, TorznabCatType.MoviesDVD, "DVD Film (UNiTY)");
-            AddCategoryMapping(29, TorznabCatType.MovieHD, "HD Film (UNiTY)");
+            AddCategoryMapping(29, TorznabCatType.MoviesHD, "HD Film (UNiTY)");
             AddCategoryMapping(30, TorznabCatType.TV, "TV (Substance)");
         }
 
