@@ -130,20 +130,14 @@
       selector: tr:has(a.magnetlink)
     fields:
       title:
-        # fallback title (to prevent abend if neither optional is found)
+        # fallback title (to prevent abend if optional is not found)
         text: "title not found"
       title:
         optional: true
-        selector: td.singleindent a[href^="/index.php?showtopic="]
+        selector: td.doubleindent, td.singleindent a[href^="/index.php?showtopic="]
         filters:
           - name: re_replace
-            args: ["BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
-      title:
-        optional: true
-        selector: td.doubleindent
-        filters:
-          - name: re_replace
-            args: ["BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
+            args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
       details:
         optional: true
         selector: td.singleindent a[href^="/index.php?showtopic="]
