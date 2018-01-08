@@ -55,10 +55,10 @@ namespace Jackett.Indexers
             AddCategoryMapping(21, TorznabCatType.MovieHD, "HD x264 Film");
             AddCategoryMapping(24, TorznabCatType.MovieSD, "SD Film");
             AddCategoryMapping(25, TorznabCatType.XXX, "XXX");
-
-			AddCategoryMapping(28, TorznabCatType.MoviesDVD, "DVD Film (UNiTY)");
-			AddCategoryMapping(29, TorznabCatType.MovieHD, "HD Film (UNiTY)");
-			AddCategoryMapping(30, TorznabCatType.TV, "TV (Substance)");            
+            
+            AddCategoryMapping(28, TorznabCatType.MoviesDVD, "DVD Film (UNiTY)");
+            AddCategoryMapping(29, TorznabCatType.MovieHD, "HD Film (UNiTY)");
+            AddCategoryMapping(30, TorznabCatType.TV, "TV (Substance)");
         }
 
         protected override string GetSearchString(TorznabQuery query)
