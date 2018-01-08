@@ -96,7 +96,7 @@
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
     fields:
       download:
-        selector: a[href^="download.php?"]
+        selector: a[href^="index.php?page=downloadcheck&id="]
         attribute: href
       title:
         selector: a[title][href^="index.php?page=torrent-details&id="]
