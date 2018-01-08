@@ -39,8 +39,26 @@ namespace Jackett.Indexers
             Language = "da-dk";
             Type = "private";
 
-            AddCategoryMapping("movie", TorznabCatType.Movies);
-            AddCategoryMapping("tv", TorznabCatType.TV);
+            AddCategoryMapping(1, TorznabCatType.TVHD, "HD TV");
+            AddCategoryMapping(2, TorznabCatType.MoviesHD, "HD Movies");
+            AddCategoryMapping(3, TorznabCatType.MoviesForeign, "Danske Film");
+            AddCategoryMapping(4, TorznabCatType.TVFOREIGN, "Danske Tv");
+            AddCategoryMapping(5, TorznabCatType.AudioAudiobook, "Lydbøger");
+            AddCategoryMapping(7, TorznabCatType.PC, "PC Apps");
+            AddCategoryMapping(8, TorznabCatType.MoviesBluRay, "Blu-ray Film");
+            AddCategoryMapping(9, TorznabCatType.Movies, "Film Bokssæt");
+            AddCategoryMapping(10, TorznabCatType.MoviesDVD, "Nordiske DVD Film");
+            AddCategoryMapping(11, TorznabCatType.MoviesDVD, "DVD Film");
+
+            AddCategoryMapping(20, TorznabCatType.TV, "TV");
+            AddCategoryMapping(21, TorznabCatType.TV, "TV Bokssæt");
+            AddCategoryMapping(21, TorznabCatType.MovieHD, "HD x264 Film");
+            AddCategoryMapping(24, TorznabCatType.MovieSD, "SD Film");
+            AddCategoryMapping(25, TorznabCatType.XXX, "XXX");
+
+			AddCategoryMapping(28, TorznabCatType.MoviesDVD, "DVD Film (UNiTY)");
+			AddCategoryMapping(29, TorznabCatType.MovieHD, "HD Film (UNiTY)");
+			AddCategoryMapping(30, TorznabCatType.TV, "TV (Substance)");            
         }
 
         protected override string GetSearchString(TorznabQuery query)
