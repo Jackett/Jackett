@@ -41,6 +41,7 @@ namespace Jackett.Indexers
 
             AddCategoryMapping("movie", TorznabCatType.Movies);
             AddCategoryMapping("tv", TorznabCatType.TV);
+            AddCategoryMapping("blandet", TorznabCatType.Other); // e.g. games
         }
 
         protected override string GetSearchString(TorznabQuery query)
