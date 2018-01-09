@@ -94,17 +94,21 @@ Encoding = Encoding.UTF8;
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            return isAnime ? term.TrimEnd(digits) : Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            if (isAnime)
+            {
+                return term.TrimEnd(digits);
+            }
+            
+            var ret = Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            return ret.Replace("Agents of SHIELD", "Agents of S.H.I.E.L.D.");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchString = query.GetQueryString();
-
             // if the search string is empty use the "last 24h torrents" view
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 var results = await RequestStringWithCookies(TodayUrl);
                 try
@@ -199,14 +203,19 @@ Encoding = Encoding.UTF8;
             {
                 var searchUrl = BrowseUrl;
                 var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
+                
+                query.SearchTerm = query.SearchTerm.Replace("Agents of SHIELD", "Agents of S.H.I.E.L.D.");
+                var searchString = query.GetQueryString();
 
-                var queryCollection = new NameValueCollection();
-                queryCollection.Add("searchstr", StripSearchString(searchString, isSearchAnime));
-                queryCollection.Add("order_by", "time");
-                queryCollection.Add("order_way", "desc");
-                queryCollection.Add("group_results", "1");
-                queryCollection.Add("action", "basic");
-                queryCollection.Add("searchsubmit", "1");
+                var queryCollection = new NameValueCollection
+                {
+                    {"searchstr", StripSearchString(searchString, isSearchAnime)},
+                    {"order_by", "time"},
+                    {"order_way", "desc"},
+                    {"group_results", "1"},
+                    {"action", "basic"},
+                    {"searchsubmit", "1"}
+                };
 
                 foreach (var cat in MapTorznabCapsToTrackers(query))
                 {
