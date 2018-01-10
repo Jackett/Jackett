@@ -1,12 +1,13 @@
 ﻿---
   site: scenefz
-  name: SceneFZ
+  name: SceneFZ / u-torrents
   description: "Torrent tracker. Tracking over 50.000 torrent files."
   language: ro-ro
   type: private
   encoding: UTF-8
   links:
     - https://scenefz.me/
+    - https://www.u-torrents.ro/
     
   caps:
     categorymappings:
@@ -49,8 +50,8 @@
     method: form
     form: form
     inputs:
-      "_username": "{{ .Config.username }}"
-      "_password": "{{ .Config.password }}"
+      "username": "{{ .Config.username }}"
+      "password": "{{ .Config.password }}"
     error:
       - selector: div.alert-danger
     test:
