@@ -52,7 +52,7 @@ Encoding = Encoding.UTF8;
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Movies HD");
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "Movies SD");
             AddCategoryMapping(8, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(9, TorznabCatType.AudioVideo, "MusicVideo");
+            AddCategoryMapping(9, TorznabCatType.MoviesUHD, "Movies UHD");
             AddCategoryMapping(10, TorznabCatType.PCGames, "PcGames");
             AddCategoryMapping(11, TorznabCatType.TVHD, "TV HD");
             AddCategoryMapping(12, TorznabCatType.TVSD, "TV SD");
@@ -84,7 +84,8 @@ Encoding = Encoding.UTF8;
 
             var searchUrl = TorrentApiUrl;
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
+            var queryCollection = new List<KeyValuePair<string, string>>();
+
             queryCollection.Add("tpage", "1");
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
