@@ -115,7 +115,7 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.9" />
     <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="AutoMapper" Version="6.2.0" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="BencodeNET" Version="2.2.22" />
     <PackageReference Include="CloudFlareUtilities" Version="1.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
