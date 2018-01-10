@@ -267,7 +267,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * u-torrents (SceneFZ)
  * UHDBits
  * Ultimate Gamer Club
- * ULTRAHDCLUB
  * Waffles
  * World-In-HD
  * WorldOfP2P

@@ -199,6 +199,7 @@ namespace Jackett.Updater
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/utorrents.yml", // same as SzeneFZ now
+                "Definitions/ultrahdclub.yml",
             };
 
             foreach (var oldFIle in oldFiles)
