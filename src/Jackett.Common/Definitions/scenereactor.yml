@@ -76,7 +76,7 @@
         selector: a.torrname
         attribute: href
       files:
-        selector: td:nth-child(3)
+        selector: a[href$="filelist=1"]
       size:
         selector: td:nth-child(5)
       grabs:
