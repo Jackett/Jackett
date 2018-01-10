@@ -218,6 +218,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Rockhard Lossless
  * RoDVD
  * SceneFZ
+ * SceneReactor
  * SceneTime
  * SDBits
  * Secret Cinema
