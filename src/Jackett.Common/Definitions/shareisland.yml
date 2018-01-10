@@ -98,8 +98,17 @@
       download:
         selector: a[href^="index.php?page=downloadcheck&id="]
         attribute: href
-      title:
-        selector: a[title][href^="index.php?page=torrent-details&id="]
+      title: # shortened title?
+        selector: a[href^="index.php?page=torrent-details"]
+        # normalize to SXXEYY format
+        filters:
+          - name: re_replace
+            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
+          - name: re_replace
+            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
+      title: # long titles?
+        optional: true
+        selector: a[title][href^="index.php?page=torrent-details"]
         attribute: title
         filters:
           - name: replace
