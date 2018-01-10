@@ -95,10 +95,6 @@ Encoding = Encoding.UTF8;
             if (!string.IsNullOrWhiteSpace(searchString))
                 queryCollection.Add("search", searchString);
 
-            var cats = MapTorznabCapsToTrackers(query);
-            if (cats.Count > 0)
-                queryCollection.Add("cats", string.Join(",", cats));
-
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var result = await RequestStringWithCookiesAndRetry(searchUrl, null, TorrentApiUrl);
