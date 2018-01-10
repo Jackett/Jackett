@@ -557,6 +557,22 @@ namespace Jackett.Indexers
                             pairs[input] = CaptchaText.Value;
                         }
                     }
+                    if (Captcha.Type == "text")
+                    {
+                        var CaptchaAnswer = (StringItem)configData.GetDynamic("CaptchaAnswer");
+                        if (CaptchaAnswer != null)
+                        {
+                            var input = Captcha.Input;
+                            if (Login.Selectors)
+                            {
+                                var inputElement = landingResultDocument.QuerySelector(Captcha.Input);
+                                if (inputElement == null)
+                                    throw new ExceptionWithConfigData(string.Format("Login failed: No captcha input found using {0}", Captcha.Input), configData);
+                                input = inputElement.GetAttribute("name");
+                            }
+                            pairs[input] = CaptchaAnswer.Value;
+                        }
+                    }
                 }
 
                 // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
@@ -716,7 +732,7 @@ namespace Jackett.Indexers
                 var Captcha = Login.Captcha;
                 if (Captcha.Type == "image")
                 {
-                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
+                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Selector);
                     if (captchaElement != null)
                     {
                         hasCaptcha = true;
@@ -730,6 +746,24 @@ namespace Jackett.Indexers
 
                         configData.AddDynamic("CaptchaImage", CaptchaImage);
                         configData.AddDynamic("CaptchaText", CaptchaText);
+                    }
+                    else
+                    {
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                    }
+                }
+                else if (Captcha.Type == "text")
+                {
+                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Selector);
+                    if (captchaElement != null)
+                    {
+                        hasCaptcha = true;
+
+                        var CaptchaChallenge = new DisplayItem(captchaElement.TextContent) { Name = "Captcha Challenge" };
+                        var CaptchaAnswer = new StringItem { Name = "Captcha Answer" };
+
+                        configData.AddDynamic("CaptchaChallenge", CaptchaChallenge);
+                        configData.AddDynamic("CaptchaAnswer", CaptchaAnswer);
                     }
                     else
                     {

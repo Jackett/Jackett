@@ -29,7 +29,7 @@
     form: form[action="takelogin.php"]
     captcha:
       type: image
-      image: img#captcha
+      selector: img#captcha
       input: imagestring
     inputs:
       username: "{{ .Config.username }}"

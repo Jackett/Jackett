@@ -51,7 +51,7 @@
       password: "{{ .Config.password }}"
     captcha:
       type: image
-      image: img[alt="CAPTCHA"]
+      selector: img[alt="CAPTCHA"]
       input: imagestring
     error:
       - selector: td.embedded:has(h2:contains("failed"))
