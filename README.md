@@ -180,7 +180,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ICE Torrent
  * I Love Classics
  * Immortalseed
- * Infinity-T
  * inPeril
  * Insane Tracker
  * IPTorrents
