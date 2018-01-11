@@ -160,6 +160,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Gormogon
  * Greek Team
+ * HacheDe
  * Hardbay
  * HD-Forever
  * HD-Only
