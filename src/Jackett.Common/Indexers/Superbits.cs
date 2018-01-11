@@ -118,7 +118,7 @@ namespace Jackett.Indexers
             {
                 //var json = JArray.Parse(results.Content);
                 dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
-                foreach (var row in json)
+                foreach (var row in json ?? System.Linq.Enumerable.Empty<dynamic>())
                 {
                     var release = new ReleaseInfo();
                     var descriptions = new List<string>();
