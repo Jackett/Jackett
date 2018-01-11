@@ -132,7 +132,6 @@ search:
       filters:
         - name: replace
           args: ["FREE LEECH!", "0"]
-        - name: strdump
     downloadvolumefactor:
       optional: true
       selector: img[src$="torrent_multiple_download.png"]
@@ -141,7 +140,6 @@ search:
         - name: split
           args: [":", 1]
         - name: trim
-        - name: strdump
     uploadvolumefactor:
       text: "1"
     uploadvolumefactor:
@@ -152,4 +150,3 @@ search:
         - name: split
           args: [":", 1]
         - name: trim
-        - name: strdump
