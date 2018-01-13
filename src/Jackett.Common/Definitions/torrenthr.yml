@@ -62,7 +62,7 @@
       sort: "4"
       type: "desc"
     rows:
-      selector: div.glavni_txt > table > tbody > tr[id^="record-"]
+      selector: div.glavni_txt table > tbody > tr[id^="record-"]
     fields:
       title:
         selector: a[href^="details.php?id="]
