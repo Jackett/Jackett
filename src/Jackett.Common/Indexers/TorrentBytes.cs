@@ -41,33 +41,40 @@ namespace Jackett.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(41, TorznabCatType.TV);
-            AddCategoryMapping(33, TorznabCatType.TVSD);
-            AddCategoryMapping(38, TorznabCatType.TVHD);
-            AddCategoryMapping(32, TorznabCatType.TVSD);
-            AddCategoryMapping(37, TorznabCatType.TVSD);
-            AddCategoryMapping(44, TorznabCatType.TVSD);
-
-            AddCategoryMapping(40, TorznabCatType.Movies);
-            AddCategoryMapping(19, TorznabCatType.MoviesSD);
-            AddCategoryMapping(5, TorznabCatType.MoviesHD);
-            AddCategoryMapping(20, TorznabCatType.MoviesSD);
-            AddCategoryMapping(28, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(45, TorznabCatType.MoviesSD);
-
-            AddCategoryMapping(43, TorznabCatType.Audio);
-            AddCategoryMapping(48, TorznabCatType.AudioLossless);
-            AddCategoryMapping(6, TorznabCatType.AudioMP3);
-            AddCategoryMapping(46, TorznabCatType.Movies);
-
-            AddCategoryMapping(1, TorznabCatType.PC);
-            AddCategoryMapping(2, TorznabCatType.PC);
-            AddCategoryMapping(23, TorznabCatType.TVAnime);
-            AddCategoryMapping(21, TorznabCatType.XXX);
-            AddCategoryMapping(9, TorznabCatType.XXXXviD);
-            AddCategoryMapping(39, TorznabCatType.XXXx264);
-            AddCategoryMapping(29, TorznabCatType.XXXXviD);
-            AddCategoryMapping(24, TorznabCatType.XXXImageset);
+            AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
+            AddCategoryMapping(22, TorznabCatType.PC, "Apps/misc");
+            AddCategoryMapping(1, TorznabCatType.PC, "Apps/PC");
+            AddCategoryMapping(28, TorznabCatType.TVFOREIGN, "Foreign Titles");
+            AddCategoryMapping(50, TorznabCatType.Console, "Games/Consoles");
+            AddCategoryMapping(42, TorznabCatType.PCGames, "Games/Pack");
+            AddCategoryMapping(4, TorznabCatType.PCGames, "Games/PC");
+            AddCategoryMapping(51, TorznabCatType.PC, "Linux/All");
+            AddCategoryMapping(31, TorznabCatType.OtherMisc, "Misc");
+            AddCategoryMapping(20, TorznabCatType.MoviesDVD, "Movies/DVD-R");
+            AddCategoryMapping(12, TorznabCatType.MoviesBluRay, "Movies/Full Blu-ray");
+            AddCategoryMapping(5, TorznabCatType.MoviesHD, "Movies/HD");
+            AddCategoryMapping(40, TorznabCatType.Movies, "Movies/Pack");
+            AddCategoryMapping(19, TorznabCatType.MoviesSD, "Movies/SD");
+            AddCategoryMapping(49, TorznabCatType.MoviesUHD, "Movies/UHD");
+            AddCategoryMapping(25, TorznabCatType.Audio, "Music/DVDR");
+            AddCategoryMapping(48, TorznabCatType.AudioLossless, "Music/Flac");
+            AddCategoryMapping(6, TorznabCatType.AudioMP3, "Music/MP3");
+            AddCategoryMapping(43, TorznabCatType.Audio, "Music/Pack");
+            AddCategoryMapping(34, TorznabCatType.AudioVideo, "Music/Videos");
+            AddCategoryMapping(45, TorznabCatType.MoviesBluRay, "NonScene/BRrip");
+            AddCategoryMapping(46, TorznabCatType.MoviesHD, "NonScene/x264");
+            AddCategoryMapping(44, TorznabCatType.MoviesSD, "NonScene/Xvid");
+            AddCategoryMapping(37, TorznabCatType.TVHD, "TV/BRrip");
+            AddCategoryMapping(38, TorznabCatType.TVHD, "TV/HD");
+            AddCategoryMapping(41, TorznabCatType.TV, "TV/Pack");
+            AddCategoryMapping(33, TorznabCatType.TVSD, "TV/SD");
+            AddCategoryMapping(32, TorznabCatType.TVUHD, "TV/UHD");
+            AddCategoryMapping(39, TorznabCatType.XXXx264, "XXX/HD");
+            AddCategoryMapping(24, TorznabCatType.XXXImageset, "XXX/IMGSET");
+            AddCategoryMapping(21, TorznabCatType.XXXPacks, "XXX/Pack");
+            AddCategoryMapping(9, TorznabCatType.XXXXviD, "XXX/SD");
+            AddCategoryMapping(29, TorznabCatType.XXX, "XXX/Web");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
