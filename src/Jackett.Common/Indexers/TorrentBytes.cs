@@ -59,7 +59,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(49, TorznabCatType.MoviesUHD, "Movies/UHD");
             AddCategoryMapping(25, TorznabCatType.Audio, "Music/DVDR");
             AddCategoryMapping(48, TorznabCatType.AudioLossless, "Music/Flac");
-            AddCategoryMapping(6, TorznabCatType.AudoMP3, "Music/MP3");
+            AddCategoryMapping(6, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(43, TorznabCatType.Audio, "Music/Pack");
             AddCategoryMapping(34, TorznabCatType.AudioVideo, "Music/Videos");
             AddCategoryMapping(45, TorznabCatType.MoviesBluRay, "NonScene/BRrip");
