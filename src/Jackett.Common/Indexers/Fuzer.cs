@@ -208,7 +208,14 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + qRow.Find("a.threadlink[href]").Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("a:has(div.dlimg)").Attr("href"));
                     release.Guid = release.Comments;
-                    release.BannerUrl = new Uri(qRow.Find("a[imgsrc]").Attr("imgsrc"));
+                    try
+                    {
+                        release.BannerUrl = new Uri(qRow.Find("a[imgsrc]").Attr("imgsrc"));
+                    }
+                    catch (Exception)
+                    {
+                        // do nothing, some releases have invalid banner URLs, ignore the banners in this case
+                    }
 
                     var dateStringAll = qRow.Find("div.up_info2")[0].ChildNodes.Last().ToString();
                     var dateParts = dateStringAll.Split(' ');
