@@ -75,9 +75,6 @@
       path: /index.php
       selector: a[href="logout.php"]
 
-  download:
-    selector: a[href^="download.php?id="]      
-
   search:
     paths:
       - path: /index.php
@@ -96,7 +93,7 @@
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
     fields:
       download:
-        selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php?id="]
         attribute: href
       title: # shortened title?
         selector: a[href^="index.php?page=torrent-details"]
@@ -127,6 +124,13 @@
       details:
         selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
+      banner:
+        optional: true
+        selector: a[href^="index.php?page=torrent-details&id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) "
       size:
         selector: td:nth-child(11)
       date:
