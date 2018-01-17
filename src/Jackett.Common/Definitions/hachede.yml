@@ -66,7 +66,6 @@
     method: post
     headers:
       user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
-    form: form
     inputs:
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
@@ -93,6 +92,9 @@
     fields:
       title:
         selector: td.torrent_name > a
+      details:
+        selector: td.torrent_name > a
+        attribute: href
       category:
         optional: true
         selector:  td.torrent_image div.category_image a
