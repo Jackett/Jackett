@@ -139,16 +139,13 @@
           - name: dateparse
             args: "02/01/2006"
       download:
-        optional: true
         selector: a[href^="download.php"]
         attribute: href
-
       downloadvolumefactor: 
         case:
           img[src$="golden.gif"]: "0"
           img[src$="silver.gif"]: "0.5"
           "*": "1"
-
       uploadvolumefactor: 
           case:
             img[src$="x2.gif"]: "2"
