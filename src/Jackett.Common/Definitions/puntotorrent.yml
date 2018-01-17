@@ -95,7 +95,6 @@
   login:
     path: index.php?page=login
     method: post
-    form: form
     inputs:
       uid: "{{ .Config.username }}"
       pwd: "{{ .Config.password }}"
