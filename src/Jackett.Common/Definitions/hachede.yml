@@ -93,6 +93,9 @@
     fields:
       title:
         selector: td.torrent_name > a
+      details:
+        selector: td.torrent_name > a
+        attribute: href
       category:
         optional: true
         selector:  td.torrent_image div.category_image a
