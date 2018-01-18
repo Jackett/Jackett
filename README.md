@@ -170,6 +170,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD4Free
  * HDBits
  * HDChina
+ * HDCity
  * HDHome
  * HDME
  * HDSky
@@ -213,6 +214,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Pretome
  * PrivateHD
  * PTFiles
+ * PuntoTorrent
  * Redacted (PassTheHeadphones)
  * RevolutionTT
  * Rockhard Lossless
