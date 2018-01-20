@@ -1,7 +1,7 @@
 ---
-  site: hachede
-  name: HacheDe
-  description: "HacheDe is a SPANISH site for HD content. This definition uses the Modern view."
+  site: hachede-c
+  name: HacheDe-c
+  description: "HacheDe is a SPANISH site for HD content. This definition uses the Classic view."
   language: es-es
   type: private
   encoding: UTF-8
@@ -71,14 +71,13 @@
     - name: info
       type: info
       label: About this Indexer
-      default: This Indexer uses the 'Modern' view, as selected from your hachede account settings. If you want to use the 'Classic' view, use the other hachede-c indexer.
+      default: This Indexer uses the 'Classic' view, as selected from your hachede account settings. If you want to use the 'Modern' view, use the other hachede indexer.
 
   login:
     path: /ajax/login.php
     method: post
     headers:
       user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
-    form: form
     inputs:
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
@@ -101,44 +100,39 @@
       search_type: "name"
       searchin: "title"
     rows:
-      selector: .torrent-box:not(#search_torrent)
-      after: 1
+      selector: table#torrents_table_classic > tbody > tr:not(:first-child)
     fields:
       title:
-        selector: .newIndicator > a
+        selector: td.torrent_name > a
       details:
-        selector: .newIndicator > a
+        selector: td.torrent_name > a
         attribute: href
       category:
         optional: true
-        selector:  .categoryImage a
+        selector:  td.torrent_image div.category_image a
         attribute: href
         filters:
-          - name: querystring
-            args: cid
+          - name: split
+            args: ["=", 3]
       download:
         optional: true
-        selector: .torrentImages > span:first-child a
+        selector: td.torrent_name > .torrentImages > span:first-child a
         attribute: href
       banner:
         optional: true
-        selector: .previewImage a
+        selector: td.torrent_image div.relativeDiv div:not(.category_image) a
         attribute: href
       size:
-        selector: .torrentInfo a[rel="torrent_size"]
+        selector: td.size a
       grabs:
-        selector: .torrentInfo a[rel="times_completed"]
+        selector: td.completed a
       seeders:
-        selector: .torrentInfo a[rel="torrent_seeders"]
+        selector: td.seeders a
       leechers:
-        selector: .torrentInfo a[rel="torrent_leechers"]
-      imdb:
-        optional: true
-        selector: .torrentFlags a[href^="http://www.imdb.com/title/"]
-        attribute: href
+        selector: td.leechers a
       date:
         optional: true
-        selector: .torrentOwner
+        selector: td.torrent_name
         filters:
           - name: regexp
             args: "(?<=Subido )(.*)(?= por)"
@@ -171,7 +165,3 @@
           - name: split
             args: [":", 1]
           - name: trim
-      minimumratio:
-        text: "1.0"
-      minimumseedtime:
-        text: "259200" # 3 day (72h)
