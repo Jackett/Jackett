@@ -91,14 +91,14 @@
 
   search:
     paths:
-      - path: "{{ if .Keywords }}usearch/torrents-search.php?{{range .Categories }}c{{.}}=1&{{end}}q={{.Keywords}}{{else}}torrents/top-100-latest-uploads.html{{end}}"
+      - path: "{{ if .Keywords }}/katsearch/page/1/{{ .Keywords }}{{ else }}/category/latest/page/1{{ end }}"
     rows:
-      selector: table[class="table table--bordered table--striped table--hover torrents_table sortable"] > tbody > tr
+      selector: table.torrents_table > tbody > tr
     fields:
       title:
         selector: a.torrents_table__torrent_title b
       details:
-        selector: a.torrents_table__torrent_title b
+        selector: a.torrents_table__torrent_title
         attribute: href
       download:
         selector: a[href^="magnet:?xt="]
