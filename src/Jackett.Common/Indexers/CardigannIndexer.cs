@@ -639,6 +639,26 @@ namespace Jackett.Indexers
             return true;
         }
 
+        protected string getRedirectDomainHint(string requestUrl, string RedirectUrl)
+        {
+            if (requestUrl.StartsWith(SiteLink) && !RedirectUrl.StartsWith(SiteLink))
+            {
+                var uri = new Uri(RedirectUrl);
+                return uri.Scheme + "://" + uri.Host + "/";
+            }
+            return null;
+        }
+
+        protected string getRedirectDomainHint(WebClientByteResult result)
+        {
+            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+        }
+
+        protected string getRedirectDomainHint(WebClientStringResult result)
+        {
+            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+        }
+
         protected async Task<bool> TestLogin()
         {
             var Login = Definition.Login;
@@ -652,7 +672,11 @@ namespace Jackett.Indexers
 
             if (testResult.IsRedirect)
             {
-                throw new ExceptionWithConfigData("Login Failed, got redirected", configData);
+                var errormessage = "Login Failed, got redirected.";
+                var DomainHint = getRedirectDomainHint(testResult);
+                if (DomainHint != null)
+                    errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                throw new ExceptionWithConfigData(errormessage, configData);
             }
 
             if (Login.Test.Selector != null)
@@ -672,6 +696,13 @@ namespace Jackett.Indexers
         {
             if (Result.IsRedirect)
             {
+                var DomainHint = getRedirectDomainHint(Result);
+                if (DomainHint != null)
+                {
+                    var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    throw new ExceptionWithConfigData(errormessage, configData);
+                }
+
                 return true;
             }
 
