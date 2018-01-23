@@ -15,7 +15,8 @@ namespace Jackett.Indexers
                 configService: configService,
                 logger: logger,
                 protectionService: protectionService,
-                webClient: webClient
+                webClient: webClient,
+                supportsFreeleechTokens: true
                 )
         {
             Language = "en-us";
