@@ -45,6 +45,7 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
+            TorznabCaps.SupportsImdbSearch = true;
             TorznabCaps.Categories.Clear();
 
             // סרטים
@@ -126,7 +127,7 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var results = await performRegularQuery(query);
-            if (results.Count() == 0)
+            if (results.Count() == 0 && !query.IsImdbQuery)
             {
                 return await performHebrewQuery(query);
             }
@@ -155,6 +156,8 @@ namespace Jackett.Indexers
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
+            if (query.IsImdbQuery)
+                searchString = query.ImdbID;
 
             if (hebName != null)
             {
