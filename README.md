@@ -342,9 +342,12 @@ When running jackett behind a reverse proxy make sure that the original hostname
 
 Example config for apache:
 ```
-ProxyPreserveHost On
-RequestHeader set X-Forwarded-Proto "https"
-ProxyPass /jackett http://127.0.0.1:9117/
+<Location /jackett>
+    ProxyPreserveHost On
+    RequestHeader set X-Forwarded-Proto expr=%{REQUEST_SCHEME}
+    ProxyPass http://127.0.0.1:9117
+    ProxyPassReverse http://127.0.0.1:9117
+</Location>
 ```
 
 ## Troubleshooting
