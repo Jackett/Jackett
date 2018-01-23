@@ -18,14 +18,14 @@ namespace Jackett.Utils
         {
             if (context.Request.Path != null && context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(Engine.ServerConfig.RuntimeSettings.BasePath, StringComparison.Ordinal))
             {
-                context.Request.Path = new PathString(context.Request.Path.Value.Substring(Engine.ServerConfig.RuntimeSettings.BasePath.Length - 1));
+                context.Request.Path = new PathString(context.Request.Path.Value.Substring(Engine.ServerConfig.RuntimeSettings.BasePath.Length));
             }
 
             if (context.Request.Path == null || string.IsNullOrWhiteSpace(context.Request.Path.ToString()) || context.Request.Path.ToString() == "/")
             {
                 // 301 is the status code of permanent redirect
                 context.Response.StatusCode = 302;
-                var redir = Engine.ServerConfig.RuntimeSettings.BasePath + "UI/Dashboard";
+                var redir = Engine.ServerConfig.RuntimeSettings.BasePath + "/UI/Dashboard";
                 Engine.Logger.Info("redirecting to " + redir);
                 context.Response.Headers.Set("Location", redir);
             }

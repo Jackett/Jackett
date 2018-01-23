@@ -77,12 +77,12 @@ namespace Jackett.Services
         {
             if (config.BasePathOverride == null || config.BasePathOverride == "")
             {
-                return "/";
+                return "";
             }
             var path = config.BasePathOverride;
-            if (!path.EndsWith("/"))
+            if (path.EndsWith("/"))
             {
-                path = path + "/";
+                path = path.TrimEnd('/');
             }
             if (!path.StartsWith("/"))
             {
