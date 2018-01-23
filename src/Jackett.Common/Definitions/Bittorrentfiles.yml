@@ -1,6 +1,7 @@
 ﻿---
   site: Bittorrentfiles
   name: Bittorrentfiles
+  description: "Bittorrentfiles is a Private GERMAN tracker"
   language: de-de
   type: private
   encoding: UTF-8
