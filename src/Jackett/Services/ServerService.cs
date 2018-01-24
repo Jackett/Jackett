@@ -359,7 +359,7 @@ namespace Jackett.Services
             if (scheme == "https" && !Request.RequestUri.Authority.Contains(":"))
                 port = 443;
 
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", scheme, Request.RequestUri.Host, port, BasePath());
+            var serverUrl = string.Format("{0}://{1}:{2}{3}/", scheme, Request.RequestUri.Host, port, BasePath());
             return serverUrl;
         }
     }
