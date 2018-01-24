@@ -65,6 +65,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(20, TorznabCatType.ConsoleXbox, "Xbox");
             AddCategoryMapping(21, TorznabCatType.MoviesOther, "Xvid");
             AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
+            AddCategoryMapping(24, TorznabCatType.MoviesUHD, "Film 4K");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
