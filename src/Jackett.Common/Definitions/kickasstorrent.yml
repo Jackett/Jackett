@@ -87,7 +87,15 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+      
+  login:
+    method: cookie
+    test:
+      path: /category/latest/page/1
 
   search:
     paths:
