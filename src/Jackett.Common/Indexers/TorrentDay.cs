@@ -208,7 +208,7 @@ namespace Jackett.Indexers
             try
             {
                 CQ dom = results.Content;
-                var rows = dom["#torrentTable > tbody > tr.browse"];
+                var rows = dom["#torrentTable > tbody > tr[id^=tr]"];
                 foreach (var row in rows)
                 {
                     CQ qRow = row.Cq();
@@ -216,14 +216,14 @@ namespace Jackett.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
-                    release.Title = qRow.Find(".torrentName").Text();
+                    release.Title = qRow.Find(".torrentNameInfo > a").First().Text();
 
                     if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Guid = new Uri(SiteLink + qRow.Find(".torrentName").Attr("href"));
+                    release.Guid = new Uri(SiteLink + qRow.Find(".torrentNameInfo > a").First().Attr("href"));
                     release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + qRow.Find(".dlLinksInfo > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("a[href^=download.php]").Attr("href"));
 
                     var sizeStr = qRow.Find(".sizeInfo").Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
@@ -239,7 +239,7 @@ namespace Jackett.Indexers
                     release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
                     release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
 
-                    var cat = qRow.Find("td:eq(0) a").First().Attr("href").Split('#')[0].Substring(15);//browse.php?cat=24
+                    var cat = qRow.Find("td:eq(0) a").First().Attr("id");
                     release.Category = MapTrackerCatToNewznab(cat);
 
                     if (qRow.Find("span.flTags").Length >= 1)
