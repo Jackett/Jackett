@@ -58,6 +58,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent9
  * Torrentz2
  * World Wide Torrents
+ * YIFY (YTS)
  * YTS.ag
  * Zooqle
  
