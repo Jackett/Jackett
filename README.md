@@ -61,7 +61,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * YIFY (YTS)
  * YTS.ag
  * Zooqle
- 
+
 ### Supported Semi-Private Trackers
  * 7tor
  * CzTorrent
@@ -239,6 +239,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * Synthesiz3r
  * Tasmanit
+ * TBPlus
  * The Empire
  * The Geeks
  * The Horror Charnel
@@ -325,7 +326,7 @@ Install [Mono 4.6](http://www.mono-project.com/download/#download-mac) or better
 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
 2. Open the extracted folder and double-click on `install_service_macos`.
 3. If the installation was a success, you can close the Terminal window.
-       
+
 The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
 Logs are stored as usual under `~/.config/Jackett/log.txt`.
 
