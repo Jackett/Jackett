@@ -13,7 +13,7 @@
       - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
       - {id: 1, cat: Movies/HD, desc: "Movies - HD 1080p"}
       - {id: 2, cat: Movies/HD, desc: "Movies - HD 720p"}
-      - {id: 3, cat: Movies/HD, desc: "Movies - UltraHD/4K"}
+      - {id: 3, cat: Movies/UHD, desc: "Movies - UltraHD/4K"}
       - {id: 47, cat: Movies/SD, desc: "Movies - X264/H264"}
       - {id: 76, cat: Movies/SD, desc: "Movies - HEVC/x265"}
       - {id: 42, cat: Movies/SD, desc: "Movies - XviD"}
