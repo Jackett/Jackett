@@ -129,7 +129,10 @@ namespace Jackett.Indexers
 
                 foreach (var movie_item in data_items.Value<JToken>("movies"))
                 {
-                    foreach (var torrent_info in movie_item.Value<JArray>("torrents"))
+                    var torrents = movie_item.Value<JArray>("torrents");
+                    if (torrents == null)
+                        continue;
+                    foreach (var torrent_info in torrents)
                     {
                         var release = new ReleaseInfo();
 
