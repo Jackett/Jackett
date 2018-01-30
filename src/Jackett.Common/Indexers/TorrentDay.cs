@@ -181,7 +181,6 @@ namespace Jackett.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var queryUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count == 0)
