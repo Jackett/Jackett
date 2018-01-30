@@ -17,7 +17,8 @@
       - {id: tvshows, cat: TV, desc: "TV Shows"}
       - {id: softwares, cat: PC, desc: "Softwares"}
       - {id: music, cat: Audio, desc: "Music"}
-      - {id: games, cat: Console, desc: "Games"}
+      - {id: console-games, cat: Console, desc: "Console Games"}
+      - {id: pc-games, cat: PC/Games, desc: "PC Games"}
       - {id: books, cat: Books, desc: "Books"}
 
     modes:
@@ -78,7 +79,8 @@
           .Séries: "tvshows"
           .Logiciels: "softwares"
           .Musiques: "music"
-          .Jeux: "games"
+          .Jeux-Consoles: "console-games"
+          .Jeux-PC: "pc-games"
           .Ebooks: "books"
       date:
         text: "now"
