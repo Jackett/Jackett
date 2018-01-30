@@ -1,0 +1,979 @@
+---
+  site: extratorrent-ag
+  name: ExtraTorrent.ag
+  description: "ExtraTorrent.ag is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://extratorrent.ag/
+
+  caps:
+    categorymappings:
+      #Anime
+      - {id: 1, cat: TV/Anime, desc: "Anime"}
+      - {id: 963, cat: TV/Anime, desc: "Anime - Absolute Duo"}
+      - {id: 951, cat: TV/Anime, desc: "Anime - Akame ga Kill"}
+      - {id: 959, cat: TV/Anime, desc: "Anime - Aldnoah Zero"}
+      - {id: 99, cat: TV/Anime, desc: "Anime - Anime - Other"}
+      - {id: 86, cat: TV/Anime, desc: "Anime - Battle Programer Shirase"}
+      - {id: 87, cat: TV/Anime, desc: "Anime - Big O"}
+      - {id: 960, cat: TV/Anime, desc: "Anime - Binan Koukou Chikyuu Bouei-bu Love"}
+      - {id: 267, cat: TV/Anime, desc: "Anime - Bleach"}
+      - {id: 88, cat: TV/Anime, desc: "Anime - Cardcaptor Sakura"}
+      - {id: 89, cat: TV/Anime, desc: "Anime - Chobits"}
+      - {id: 142, cat: TV/Anime, desc: "Anime - Comics"}
+      - {id: 962, cat: TV/Anime, desc: "Anime - Death Parade"}
+      - {id: 151, cat: TV/Anime, desc: "Anime - Dragon ball"}
+      - {id: 90, cat: TV/Anime, desc: "Anime - Dragonball GT"}
+      - {id: 91, cat: TV/Anime, desc: "Anime - Dragonball Z"}
+      - {id: 156, cat: TV/Anime, desc: "Anime - DVD-R"}
+      - {id: 950, cat: TV/Anime, desc: "Anime - Fairy Tail"}
+      - {id: 92, cat: TV/Anime, desc: "Anime - Flame of Recca"}
+      - {id: 93, cat: TV/Anime, desc: "Anime - Full Metal Alchemist"}
+      - {id: 95, cat: TV/Anime, desc: "Anime - Ghost In The Shell SAC"}
+      - {id: 94, cat: TV/Anime, desc: "Anime - Gundam"}
+      - {id: 620, cat: TV/Anime, desc: "Anime - Hentai"}
+      - {id: 145, cat: TV/Anime, desc: "Anime - Hunter X Hunter"}
+      - {id: 949, cat: TV/Anime, desc: "Anime - Inou Battle wa Nichijou-kei no Naka de"}
+      - {id: 96, cat: TV/Anime, desc: "Anime - InuYasha"}
+      - {id: 524, cat: TV/Anime, desc: "Anime - Kiba"}
+      - {id: 97, cat: TV/Anime, desc: "Anime - Konkiki No Gash Bell"}
+      - {id: 961, cat: TV/Anime, desc: "Anime - Kuroko No Basuke"}
+      - {id: 98, cat: TV/Anime, desc: "Anime - Last Exile"}
+      - {id: 964, cat: TV/Anime, desc: "Anime - Log Horizon"}
+      - {id: 952, cat: TV/Anime, desc: "Anime - Nanatsu no Taizai"}
+      - {id: 101, cat: TV/Anime, desc: "Anime - Naruto"}
+      - {id: 508, cat: TV/Anime, desc: "Anime - One Piece"}
+      - {id: 100, cat: TV/Anime, desc: "Anime - Onegai Twins"}
+      - {id: 523, cat: TV/Anime, desc: "Anime - Ouran High School Host Club"}
+      - {id: 102, cat: TV/Anime, desc: "Anime - PlanetES"}
+      - {id: 146, cat: TV/Anime, desc: "Anime - Prince of Tennis"}
+      - {id: 103, cat: TV/Anime, desc: "Anime - Ranma 1/2"}
+      - {id: 104, cat: TV/Anime, desc: "Anime - Ruroni Kenshin"}
+      - {id: 105, cat: TV/Anime, desc: "Anime - Samurai Champloo"}
+      - {id: 107, cat: TV/Anime, desc: "Anime - Scrapped Princess"}
+      - {id: 997, cat: TV/Anime, desc: "Anime - Spider-man"}
+      - {id: 106, cat: TV/Anime, desc: "Anime - Stellvia of the Universe"}
+      - {id: 525, cat: TV/Anime, desc: "Anime - Strawberry Panic"}
+      - {id: 953, cat: TV/Anime, desc: "Anime - Sword Art Online II"}
+      - {id: 958, cat: TV/Anime, desc: "Anime - Tokyo Ghoul"}
+
+      #Audio
+      - {id: 5, cat: Audio, desc: "Music"}
+      - {id: 54, cat: Audio, desc: "Music - Alternative"}
+      - {id: 990, cat: Audio, desc: "Music - Ambient"}
+      - {id: 160, cat: Audio, desc: "Music - Anime"}
+      - {id: 55, cat: Audio, desc: "Music - Asian"}
+      - {id: 56, cat: Audio, desc: "Music - Blues"}
+      - {id: 809, cat: Audio, desc: "Music - Bollywood"}
+      - {id: 57, cat: Audio, desc: "Music - Christian"}
+      - {id: 58, cat: Audio, desc: "Music - Classic"}
+      - {id: 515, cat: Audio, desc: "Music - Compilation/Various Artists (VA)"}
+      - {id: 59, cat: Audio, desc: "Music - Country/Western"}
+      - {id: 971, cat: Audio, desc: "Music - Discography"}
+      - {id: 60, cat: Audio, desc: "Music - Drum N Bass"}
+      - {id: 61, cat: Audio, desc: "Music - Electronic"}
+      - {id: 850, cat: Audio, desc: "Music - FLAC"}
+      - {id: 519, cat: Audio, desc: "Music - Folk"}
+      - {id: 62, cat: Audio, desc: "Music - Game Music"}
+      - {id: 233, cat: Audio, desc: "Music - Gothic"}
+      - {id: 63, cat: Audio, desc: "Music - Hardcore"}
+      - {id: 78, cat: Audio, desc: "Music - HardHouse/Old School Radio Mixes"}
+      - {id: 512, cat: Audio, desc: "Music - Hardrock"}
+      - {id: 724, cat: Audio, desc: "Music - Hardstyle"}
+      - {id: 306, cat: Audio, desc: "Music - Heavy/Death Metal"}
+      - {id: 64, cat: Audio, desc: "Music - Hip Hop"}
+      - {id: 511, cat: Audio, desc: "Music - Indie/Britpop"}
+      - {id: 65, cat: Audio, desc: "Music - Industrial"}
+      - {id: 66, cat: Audio, desc: "Music - Jazz"}
+      - {id: 67, cat: Audio, desc: "Music - Karaoke"}
+      - {id: 521, cat: Audio, desc: "Music - Latin"}
+      - {id: 68, cat: Audio, desc: "Music - Metal"}
+      - {id: 526, cat: Audio, desc: "Music - Motown"}
+      - {id: 79, cat: Audio, desc: "Music - Music - Other"}
+      - {id: 69, cat: Audio, desc: "Music - Music Videos"}
+      - {id: 522, cat: Audio, desc: "Music - Non-English"}
+      - {id: 507, cat: Audio, desc: "Music - Now That's What I Call Music"}
+      - {id: 70, cat: Audio, desc: "Music - Pop"}
+      - {id: 852, cat: Audio, desc: "Music - Progressive"}
+      - {id: 71, cat: Audio, desc: "Music - Punk"}
+      - {id: 72, cat: Audio, desc: "Music - R&B"}
+      - {id: 851, cat: Audio, desc: "Music - Rai"}
+      - {id: 73, cat: Audio, desc: "Music - Rap"}
+      - {id: 74, cat: Audio, desc: "Music - Reggae"}
+      - {id: 75, cat: Audio, desc: "Music - Rock"}
+      - {id: 527, cat: Audio, desc: "Music - Rock 'n' Roll"}
+      - {id: 514, cat: Audio, desc: "Music - Singer Songwriter"}
+      - {id: 230, cat: Audio, desc: "Music - Ska"}
+      - {id: 505, cat: Audio, desc: "Music - Soul"}
+      - {id: 77, cat: Audio, desc: "Music - Soundtracks"}
+      - {id: 161, cat: Audio, desc: "Music - Techno"}
+      - {id: 420, cat: Audio, desc: "Music - Trance/House/Dance"}
+      - {id: 76, cat: Audio, desc: "Music - Unsigned/Amateur"}
+      - {id: 1002, cat: Audio, desc: "Music - AAC"}
+      - {id: 1003, cat: Audio, desc: "Music - Album"}
+      - {id: 1004, cat: Audio, desc: "Music - Box Set"}
+      - {id: 1005, cat: Audio, desc: "Music - Concerts"}
+      - {id: 1006, cat: Audio, desc: "Music - Discography"}
+      - {id: 1007, cat: Audio, desc: "Music - DVD"}
+      - {id: 1008, cat: Audio/Lossless, desc: "Music - Lossless"}
+      - {id: 1009, cat: Audio/MP3, desc: "Music - MP3"}
+      - {id: 1011, cat: Audio, desc: "Music - Radio"}
+      - {id: 1012, cat: Audio, desc: "Music - Single"}
+
+      #Movies
+      - {id: 4, cat: Movies, desc: "Movies"}
+      - {id: 419, cat: Movies, desc: "Movies - Action"}
+      - {id: 28, cat: Movies, desc: "Movies - Adventure"}
+      - {id: 29, cat: Movies, desc: "Movies - Animation"}
+      - {id: 30, cat: Movies, desc: "Movies - Asian"}
+      - {id: 32, cat: Movies, desc: "Movies - Automotive/Cars"}
+      - {id: 628, cat: Movies, desc: "Movies - Biography"}
+      - {id: 977, cat: Movies, desc: "Movies - Black and White"}
+      - {id: 558, cat: Movies, desc: "Movies - Bollywood/Desi"}
+      - {id: 976, cat: Movies, desc: "Movies - Classic"}
+      - {id: 33, cat: Movies, desc: "Movies - Comedy"}
+      - {id: 34, cat: Movies, desc: "Movies - Concerts"}
+      - {id: 600, cat: Movies, desc: "Movies - Crime"}
+      - {id: 35, cat: Movies, desc: "Movies - Documentary"}
+      - {id: 37, cat: Movies, desc: "Movies - Drama"}
+      - {id: 742, cat: Movies, desc: "Movies - Dubbed/Dual Audio"}
+      - {id: 36, cat: Movies, desc: "Movies - DVD/Film Extras"}
+      - {id: 149, cat: Movies, desc: "Movies - Family"}
+      - {id: 38, cat: Movies, desc: "Movies - Fantasy"}
+      - {id: 39, cat: Movies, desc: "Movies - Gore Flicks"}
+      - {id: 602, cat: Movies, desc: "Movies - History"}
+      - {id: 40, cat: Movies, desc: "Movies - Horror"}
+      - {id: 41, cat: Movies, desc: "Movies - Kids"}
+      - {id: 150, cat: Movies, desc: "Movies - KVCD"}
+      - {id: 974, cat: Movies, desc: "Movies - Lollywood"}
+      - {id: 42, cat: Movies, desc: "Movies - Martial Arts"}
+      - {id: 44, cat: Movies/Other, desc: "Movies - Other"}
+      - {id: 805, cat: Movies/3D, desc: "Movies - 3D"}
+      - {id: 975, cat: Movies/UHD, desc: "Movies - 4K"}
+      - {id: 947, cat: Movies, desc: "Movies - Musical"}
+      - {id: 43, cat: Movies, desc: "Movies - Mystery"}
+      - {id: 603, cat: Movies/Foreign, desc: "Movies - non English"}
+      - {id: 978, cat: Movies, desc: "Movies - Rarities"}
+      - {id: 45, cat: Movies, desc: "Movies - Romance"}
+      - {id: 46, cat: Movies, desc: "Movies - Samples/Trailers"}
+      - {id: 47, cat: Movies, desc: "Movies - Sci-Fi"}
+      - {id: 48, cat: Movies, desc: "Movies - Sports related"}
+      - {id: 779, cat: Movies, desc: "Movies - Stand-up comedy"}
+      - {id: 49, cat: Movies, desc: "Movies - Thriller"}
+      - {id: 671, cat: Movies, desc: "Movies - Travel"}
+      - {id: 307, cat: Movies, desc: "Movies - War"}
+      - {id: 601, cat: Movies, desc: "Movies - Western"}
+      - {id: 1024, cat: Movies, desc: "Movies - HEVC/x265"}
+      - {id: 1030, cat: Movies, desc: "Movies - Divx/Xvid"}
+      - {id: 1031, cat: Movies, desc: "Movies - h.264/x264"}
+      - {id: 1032, cat: Movies/HD, desc: "Movies - HD"}
+      - {id: 1033, cat: Movies, desc: "Movies - MP4"}
+      - {id: 1034, cat: Movies, desc: "Movies - SVCD/VCD"}
+      - {id: 1035, cat: Movies, desc: "Movies - YIFY"}
+
+      #TV
+      - {id: 8, cat: TV, desc: "TV"}
+      - {id: 986, cat: TV, desc: "TV - 12 Monkeys"}
+      - {id: 598, cat: TV, desc: "TV - 19-2"}
+      - {id: 795, cat: TV, desc: "TV - 2 Broke Girls"}
+      - {id: 435, cat: TV, desc: "TV - 24"}
+      - {id: 169, cat: TV, desc: "TV - 30 Days"}
+      - {id: 561, cat: TV, desc: "TV - 30 Rock"}
+      - {id: 274, cat: TV, desc: "TV - 60 Minutes"}
+      - {id: 862, cat: TV, desc: "TV - 666 Park Avenue"}
+      - {id: 273, cat: TV, desc: "TV - 'Allo 'Allo!"}
+      - {id: 310, cat: TV, desc: "TV - A-Team"}
+      - {id: 797, cat: TV, desc: "TV - About a Boy"}
+      - {id: 998, cat: TV, desc: "TV - Above Suspicion"}
+      - {id: 966, cat: TV, desc: "TV - Adam - E.V.A"}
+      - {id: 573, cat: TV, desc: "TV - Alaska State Troopers"}
+      - {id: 821, cat: TV, desc: "TV - Alcatraz"}
+      - {id: 118, cat: TV, desc: "TV - Alias"}
+      - {id: 810, cat: TV, desc: "TV - Almost Human"}
+      - {id: 771, cat: TV, desc: "TV - Alphas"}
+      - {id: 818, cat: TV, desc: "TV - American Chopper"}
+      - {id: 234, cat: TV, desc: "TV - American Dad"}
+      - {id: 194, cat: TV, desc: "TV - American Horror Story"}
+      - {id: 634, cat: TV, desc: "TV - American Idol"}
+      - {id: 674, cat: TV, desc: "TV - Americas Got Talent"}
+      - {id: 675, cat: TV, desc: "TV - Americas Next Top Model"}
+      - {id: 894, cat: TV, desc: "TV - Ancient Aliens"}
+      - {id: 170, cat: TV, desc: "TV - Angel"}
+      - {id: 911, cat: TV, desc: "TV - Anger Management"}
+      - {id: 659, cat: TV, desc: "TV - Archer"}
+      - {id: 275, cat: TV, desc: "TV - Arrested Development"}
+      - {id: 872, cat: TV, desc: "TV - Arrow"}
+      - {id: 984, cat: TV, desc: "TV - Ash vs Evil Dead"}
+      - {id: 171, cat: TV, desc: "TV - Attack Of The Show"}
+      - {id: 837, cat: TV, desc: "TV - Awake"}
+      - {id: 902, cat: TV, desc: "TV - Awkward"}
+      - {id: 916, cat: TV, desc: "TV - Baby Daddy"}
+      - {id: 165, cat: TV, desc: "TV - Babylon 5"}
+      - {id: 309, cat: TV, desc: "TV - Back In The Game"}
+      - {id: 460, cat: TV, desc: "TV - Band Of Brothers"}
+      - {id: 329, cat: TV, desc: "TV - Banshee"}
+      - {id: 891, cat: TV, desc: "TV - Bates Motel"}
+      - {id: 802, cat: TV, desc: "TV - Batman The Brave and The Bold"}
+      - {id: 163, cat: TV, desc: "TV - Battlestar Galactica"}
+      - {id: 794, cat: TV, desc: "TV - BBC"}
+      - {id: 886, cat: TV, desc: "TV - Beauty and the Beast"}
+      - {id: 172, cat: TV, desc: "TV - Beauty And The Geek"}
+      - {id: 782, cat: TV, desc: "TV - Beavis and Butt-Head"}
+      - {id: 584, cat: TV, desc: "TV - Being Erica"}
+      - {id: 669, cat: TV, desc: "TV - Being Human"}
+      - {id: 683, cat: TV, desc: "TV - Believe"}
+      - {id: 335, cat: TV, desc: "TV - Bellator FC"}
+      - {id: 979, cat: TV, desc: "TV - Better Call Saul"}
+      - {id: 173, cat: TV, desc: "TV - Big Brother"}
+      - {id: 666, cat: TV, desc: "TV - Big Love"}
+      - {id: 774, cat: TV, desc: "TV - Bigg Boss"}
+      - {id: 989, cat: TV, desc: "TV - Billions"}
+      - {id: 174, cat: TV, desc: "TV - Bitten"}
+      - {id: 396, cat: TV, desc: "TV - Black Sails"}
+      - {id: 981, cat: TV, desc: "TV - Blindspot"}
+      - {id: 717, cat: TV, desc: "TV - Blue Bloods"}
+      - {id: 754, cat: TV, desc: "TV - Boardwalk Empire"}
+      - {id: 709, cat: TV, desc: "TV - Bobs Burgers"}
+      - {id: 767, cat: TV, desc: "TV - Body of Proof"}
+      - {id: 175, cat: TV, desc: "TV - Bold and the beautiful"}
+      - {id: 969, cat: TV, desc: "TV - Bollywood TV Shows"}
+      - {id: 269, cat: TV, desc: "TV - Bones"}
+      - {id: 235, cat: TV, desc: "TV - Boston Legal"}
+      - {id: 676, cat: TV, desc: "TV - Breaking Bad"}
+      - {id: 707, cat: TV, desc: "TV - Breakout Kings"}
+      - {id: 409, cat: TV, desc: "TV - Brickleberry"}
+      - {id: 680, cat: TV, desc: "TV - Brooklyn Nine-Nine"}
+      - {id: 560, cat: TV, desc: "TV - Brothers And Sisters"}
+      - {id: 147, cat: TV, desc: "TV - Buffy"}
+      - {id: 677, cat: TV, desc: "TV - Burn Notice"}
+      - {id: 619, cat: TV, desc: "TV - Californication"}
+      - {id: 883, cat: TV, desc: "TV - Call of the Wildman"}
+      - {id: 719, cat: TV, desc: "TV - Camelot"}
+      - {id: 921, cat: TV, desc: "TV - Camp"}
+      - {id: 661, cat: TV, desc: "TV - Caprica"}
+      - {id: 928, cat: TV, desc: "TV - Capture"}
+      - {id: 128, cat: TV, desc: "TV - Carnivale"}
+      - {id: 736, cat: TV, desc: "TV - Cartoon"}
+      - {id: 658, cat: TV, desc: "TV - Castle"}
+      - {id: 941, cat: TV, desc: "TV - Cedar Cove"}
+      - {id: 846, cat: TV, desc: "TV - Celebrity Juice"}
+      - {id: 141, cat: TV, desc: "TV - Charmed"}
+      - {id: 900, cat: TV, desc: "TV - Chicago Fire"}
+      - {id: 324, cat: TV, desc: "TV - Chicago PD"}
+      - {id: 315, cat: TV, desc: "TV - Chopped"}
+      - {id: 184, cat: TV, desc: "TV - Chozen"}
+      - {id: 657, cat: TV, desc: "TV - Chuck"}
+      - {id: 133, cat: TV, desc: "TV - Cold Case"}
+      - {id: 629, cat: TV, desc: "TV - Community"}
+      - {id: 178, cat: TV, desc: "TV - Conan O'Brien"}
+      - {id: 946, cat: TV, desc: "TV - Constantine"}
+      - {id: 879, cat: TV, desc: "TV - Continuum"}
+      - {id: 861, cat: TV, desc: "TV - Copper"}
+      - {id: 322, cat: TV, desc: "TV - Cops"}
+      - {id: 186, cat: TV, desc: "TV - Cosmos A Space Time Odyssey"}
+      - {id: 670, cat: TV, desc: "TV - Cougar Town"}
+      - {id: 729, cat: TV, desc: "TV - Covert Affairs"}
+      - {id: 651, cat: TV, desc: "TV - Craig Ferguson"}
+      - {id: 280, cat: TV, desc: "TV - Criminal Minds"}
+      - {id: 788, cat: TV, desc: "TV - Crisis"}
+      - {id: 279, cat: TV, desc: "TV - Criss Angel BeLIEve"}
+      - {id: 323, cat: TV, desc: "TV - Crossing Jordan"}
+      - {id: 926, cat: TV, desc: "TV - Crossing Lines"}
+      - {id: 108, cat: TV, desc: "TV - CSI"}
+      - {id: 325, cat: TV, desc: "TV - Curb Your Enthusiasm"}
+      - {id: 882, cat: TV, desc: "TV - Da Vincis Demons"}
+      - {id: 282, cat: TV, desc: "TV - Dallas"}
+      - {id: 678, cat: TV, desc: "TV - Damages"}
+      - {id: 798, cat: TV, desc: "TV - Dancing with the Stars US"}
+      - {id: 652, cat: TV, desc: "TV - David Letterman"}
+      - {id: 994, cat: TV, desc: "TV - Days of Our Lives"}
+      - {id: 985, cat: TV, desc: "TV - DCs Legends of Tomorrow"}
+      - {id: 181, cat: TV, desc: "TV - Dead Like Me"}
+      - {id: 679, cat: TV, desc: "TV - Deadliest Catch"}
+      - {id: 182, cat: TV, desc: "TV - Deadwood"}
+      - {id: 890, cat: TV, desc: "TV - Defiance"}
+      - {id: 281, cat: TV, desc: "TV - Democracy Now!"}
+      - {id: 183, cat: TV, desc: "TV - Desperate Housewives"}
+      - {id: 939, cat: TV, desc: "TV - Devious Maids"}
+      - {id: 585, cat: TV, desc: "TV - Dexter"}
+      - {id: 644, cat: TV, desc: "TV - Dirty Jobs"}
+      - {id: 122, cat: TV, desc: "TV - Discovery Channel"}
+      - {id: 167, cat: TV, desc: "TV - Doctor Who"}
+      - {id: 968, cat: TV, desc: "TV - Documentary"}
+      - {id: 606, cat: TV, desc: "TV - Dollhouse"}
+      - {id: 839, cat: TV, desc: "TV - Dont Trust the Bitch in Apartment"}
+      - {id: 326, cat: TV, desc: "TV - Dr Who"}
+      - {id: 925, cat: TV, desc: "TV - Dracula"}
+      - {id: 328, cat: TV, desc: "TV - Drawn Together"}
+      - {id: 732, cat: TV, desc: "TV - Drop Dead"}
+      - {id: 820, cat: TV, desc: "TV - Eastbound and Down"}
+      - {id: 875, cat: TV, desc: "TV - Elementary"}
+      - {id: 283, cat: TV, desc: "TV - Ellen DeGeneres"}
+      - {id: 330, cat: TV, desc: "TV - Enlisted"}
+      - {id: 187, cat: TV, desc: "TV - Entourage"}
+      - {id: 270, cat: TV, desc: "TV - ER"}
+      - {id: 765, cat: TV, desc: "TV - Eureka"}
+      - {id: 238, cat: TV, desc: "TV - Everybody Loves Raymond"}
+      - {id: 571, cat: TV, desc: "TV - Extant"}
+      - {id: 840, cat: TV, desc: "TV - Fact or Faked Paranormal Files"}
+      - {id: 828, cat: TV, desc: "TV - Fairly Legeal"}
+      - {id: 876, cat: TV, desc: "TV - Faking It"}
+      - {id: 917, cat: TV, desc: "TV - Falling Skies"}
+      - {id: 188, cat: TV, desc: "TV - Family Guy"}
+      - {id: 855, cat: TV, desc: "TV - Family Tools"}
+      - {id: 411, cat: TV, desc: "TV - Fargo"}
+      - {id: 331, cat: TV, desc: "TV - Farscape"}
+      - {id: 983, cat: TV, desc: "TV - Fear the Walking Dead"}
+      - {id: 332, cat: TV, desc: "TV - Fifth Gear"}
+      - {id: 672, cat: TV, desc: "TV - Flashforward"}
+      - {id: 753, cat: TV, desc: "TV - Flashpoint"}
+      - {id: 831, cat: TV, desc: "TV - Foreign Series/Non English"}
+      - {id: 266, cat: TV, desc: "TV - Forever"}
+      - {id: 922, cat: TV, desc: "TV - Franklin and Bash"}
+      - {id: 140, cat: TV, desc: "TV - Friends"}
+      - {id: 612, cat: TV, desc: "TV - Fringe"}
+      - {id: 277, cat: TV, desc: "TV - From Dusk Till Dawn"}
+      - {id: 681, cat: TV, desc: "TV - Futurama"}
+      - {id: 728, cat: TV, desc: "TV - Game of Thrones"}
+      - {id: 334, cat: TV, desc: "TV - Gang Related"}
+      - {id: 996, cat: TV, desc: "TV - General Hospital"}
+      - {id: 954, cat: TV, desc: "TV - Geordie Shore"}
+      - {id: 574, cat: TV, desc: "TV - Ghost Adventures"}
+      - {id: 704, cat: TV, desc: "TV - Ghost Hunters"}
+      - {id: 642, cat: TV, desc: "TV - Ghost Mine"}
+      - {id: 338, cat: TV, desc: "TV - Ghost Whisperer"}
+      - {id: 284, cat: TV, desc: "TV - Gilmore Girls"}
+      - {id: 682, cat: TV, desc: "TV - Glee"}
+      - {id: 865, cat: TV, desc: "TV - Go On"}
+      - {id: 276, cat: TV, desc: "TV - Gold Rush"}
+      - {id: 339, cat: TV, desc: "TV - Good Eats"}
+      - {id: 599, cat: TV, desc: "TV - Gossip Girl"}
+      - {id: 580, cat: TV, desc: "TV - Gotham"}
+      - {id: 919, cat: TV, desc: "TV - Graceland"}
+      - {id: 955, cat: TV, desc: "TV - Gracepoint"}
+      - {id: 285, cat: TV, desc: "TV - Greys Anatomy"}
+      - {id: 819, cat: TV, desc: "TV - Grimm"}
+      - {id: 237, cat: TV, desc: "TV - Growing Up Fisher"}
+      - {id: 340, cat: TV, desc: "TV - Guiding Light"}
+      - {id: 866, cat: TV, desc: "TV - Guys With Kids"}
+      - {id: 880, cat: TV, desc: "TV - Hannibal"}
+      - {id: 813, cat: TV, desc: "TV - Happily Divorced"}
+      - {id: 769, cat: TV, desc: "TV - Happy Endings"}
+      - {id: 190, cat: TV, desc: "TV - Harald Schmidt"}
+      - {id: 713, cat: TV, desc: "TV - Harrys Law"}
+      - {id: 832, cat: TV, desc: "TV - Hart of Dixie"}
+      - {id: 341, cat: TV, desc: "TV - Haunted"}
+      - {id: 773, cat: TV, desc: "TV - Haven"}
+      - {id: 712, cat: TV, desc: "TV - Hawaii Five-0"}
+      - {id: 781, cat: TV, desc: "TV - Helix"}
+      - {id: 853, cat: TV, desc: "TV - Hell on Wheels"}
+      - {id: 191, cat: TV, desc: "TV - Hells Kitchen"}
+      - {id: 884, cat: TV, desc: "TV - Hemlock Grove"}
+      - {id: 342, cat: TV, desc: "TV - Hercules"}
+      - {id: 556, cat: TV, desc: "TV - Heroes"}
+      - {id: 343, cat: TV, desc: "TV - Hex"}
+      - {id: 192, cat: TV, desc: "TV - Hogans Heroes"}
+      - {id: 588, cat: TV, desc: "TV - Hollands Hoop"}
+      - {id: 755, cat: TV, desc: "TV - Homeland"}
+      - {id: 812, cat: TV, desc: "TV - Hostages"}
+      - {id: 684, cat: TV, desc: "TV - Hot in Cleveland"}
+      - {id: 286, cat: TV, desc: "TV - House"}
+      - {id: 913, cat: TV, desc: "TV - House Of Cards"}
+      - {id: 287, cat: TV, desc: "TV - How I Met Your Mother"}
+      - {id: 568, cat: TV, desc: "TV - How Its Made"}
+      - {id: 893, cat: TV, desc: "TV - How to Live with Your Parents"}
+      - {id: 288, cat: TV, desc: "TV - Howard Stern"}
+      - {id: 132, cat: TV, desc: "TV - Huff"}
+      - {id: 345, cat: TV, desc: "TV - Humor Amarillo"}
+      - {id: 756, cat: TV, desc: "TV - Hung"}
+      - {id: 637, cat: TV, desc: "TV - Hustle"}
+      - {id: 346, cat: TV, desc: "TV - In Justice"}
+      - {id: 685, cat: TV, desc: "TV - In Plain Sight"}
+      - {id: 582, cat: TV, desc: "TV - Ink Master"}
+      - {id: 347, cat: TV, desc: "TV - Inked"}
+      - {id: 965, cat: TV, desc: "TV - Inside MMA"}
+      - {id: 873, cat: TV, desc: "TV - Intelligence US"}
+      - {id: 240, cat: TV, desc: "TV - Into the West"}
+      - {id: 166, cat: TV, desc: "TV - Iron Chef"}
+      - {id: 289, cat: TV, desc: "TV - Invasion"}
+      - {id: 817, cat: TV, desc: "TV - Ironside"}
+      - {id: 772, cat: TV, desc: "TV - Its Always Sunny in Philadelphia"}
+      - {id: 988, cat: TV, desc: "TV - iZombie"}
+      - {id: 991, cat: TV, desc: "TV - Jane the Virgin"}
+      - {id: 290, cat: TV, desc: "TV - Jay Leno"}
+      - {id: 763, cat: TV, desc: "TV - Jersey Shore"}
+      - {id: 177, cat: TV, desc: "TV - Joe Rogan Questions Everything"}
+      - {id: 110, cat: TV, desc: "TV - Joey"}
+      - {id: 196, cat: TV, desc: "TV - Justice League Unlimited"}
+      - {id: 686, cat: TV, desc: "TV - Justified"}
+      - {id: 412, cat: TV, desc: "TV - kabachitare!"}
+      - {id: 738, cat: TV, desc: "TV - Killer Contact"}
+      - {id: 349, cat: TV, desc: "TV - Killer Instinct"}
+      - {id: 197, cat: TV, desc: "TV - Kim Possible"}
+      - {id: 741, cat: TV, desc: "TV - King"}
+      - {id: 933, cat: TV, desc: "TV - King and Maxwel"}
+      - {id: 350, cat: TV, desc: "TV - King Of The Hill"}
+      - {id: 351, cat: TV, desc: "TV - Kitchen Confidential"}
+      - {id: 790, cat: TV, desc: "TV - Kitchen Nightmares US"}
+      - {id: 348, cat: TV, desc: "TV - Kolchak The Night Stalker"}
+      - {id: 241, cat: TV, desc: "TV - Koot en Bie"}
+      - {id: 198, cat: TV, desc: "TV - Kung Fu"}
+      - {id: 199, cat: TV, desc: "TV - La Femme Nikita"}
+      - {id: 570, cat: TV, desc: "TV - LA Ink"}
+      - {id: 242, cat: TV, desc: "TV - Laguna Beach"}
+      - {id: 130, cat: TV, desc: "TV - Las Vegas"}
+      - {id: 843, cat: TV, desc: "TV - Last Man Standing"}
+      - {id: 867, cat: TV, desc: "TV - Last Resort"}
+      - {id: 200, cat: TV, desc: "TV - Late Night with Conan O'Brien"}
+      - {id: 115, cat: TV, desc: "TV - Law And Order"}
+      - {id: 591, cat: TV, desc: "TV - Law and Order UK"}
+      - {id: 243, cat: TV, desc: "TV - Le Cameleon"}
+      - {id: 578, cat: TV, desc: "TV - Legend of the Seeker"}
+      - {id: 590, cat: TV, desc: "TV - Legends"}
+      - {id: 898, cat: TV, desc: "TV - Legit"}
+      - {id: 638, cat: TV, desc: "TV - Level3"}
+      - {id: 656, cat: TV, desc: "TV - Leverage"}
+      - {id: 618, cat: TV, desc: "TV - Lie To Me"}
+      - {id: 650, cat: TV, desc: "TV - Life"}
+      - {id: 353, cat: TV, desc: "TV - Life on Mars"}
+      - {id: 716, cat: TV, desc: "TV - Lights Out"}
+      - {id: 244, cat: TV, desc: "TV - Line Of Fire"}
+      - {id: 504, cat: TV, desc: "TV - Little Britain"}
+      - {id: 665, cat: TV, desc: "TV - Little Mosque on the Prairie"}
+      - {id: 148, cat: TV, desc: "TV - Long Island Medium"}
+      - {id: 914, cat: TV, desc: "TV - Longmire"}
+      - {id: 354, cat: TV, desc: "TV - Los Serrano"}
+      - {id: 111, cat: TV, desc: "TV - Lost"}
+      - {id: 314, cat: TV, desc: "TV - Lost Girl"}
+      - {id: 858, cat: TV, desc: "TV - Louie"}
+      - {id: 726, cat: TV, desc: "TV - Love Bites"}
+      - {id: 937, cat: TV, desc: "TV - Low Winter Sun"}
+      - {id: 956, cat: TV, desc: "TV - Lucha Underground"}
+      - {id: 980, cat: TV, desc: "TV - Lucifer"}
+      - {id: 503, cat: TV, desc: "TV - Lucky Louie"}
+      - {id: 687, cat: TV, desc: "TV - Luther"}
+      - {id: 157, cat: TV, desc: "TV - MacGyver"}
+      - {id: 705, cat: TV, desc: "TV - Mad Love"}
+      - {id: 826, cat: TV, desc: "TV - Mad Men"}
+      - {id: 869, cat: TV, desc: "TV - Made in Jersey"}
+      - {id: 355, cat: TV, desc: "TV - MADtv"}
+      - {id: 871, cat: TV, desc: "TV - Major Crimes"}
+      - {id: 667, cat: TV, desc: "TV - Make It or Break It"}
+      - {id: 357, cat: TV, desc: "TV - Malcolm In The Middle"}
+      - {id: 662, cat: TV, desc: "TV - Man vs Wild"}
+      - {id: 759, cat: TV, desc: "TV - Marvels Agents of S.H.I.E.L.D"}
+      - {id: 910, cat: TV, desc: "TV - MasterChef US"}
+      - {id: 358, cat: TV, desc: "TV - Masters Of Horror"}
+      - {id: 824, cat: TV, desc: "TV - Masters of Sex"}
+      - {id: 291, cat: TV, desc: "TV - Medium"}
+      - {id: 617, cat: TV, desc: "TV - Melrose Place"}
+      - {id: 688, cat: TV, desc: "TV - Memphis Beat"}
+      - {id: 905, cat: TV, desc: "TV - Men at Work"}
+      - {id: 645, cat: TV, desc: "TV - Men of a Certain Age"}
+      - {id: 633, cat: TV, desc: "TV - Mercy"}
+      - {id: 579, cat: TV, desc: "TV - Merlin"}
+      - {id: 359, cat: TV, desc: "TV - Miami Ink"}
+      - {id: 825, cat: TV, desc: "TV - Midsomer Murders"}
+      - {id: 783, cat: TV, desc: "TV - Mike and Molly"}
+      - {id: 823, cat: TV, desc: "TV - Mind Games"}
+      - {id: 246, cat: TV, desc: "TV - Mind of Mencia"}
+      - {id: 313, cat: TV, desc: "TV - Misfits"}
+      - {id: 842, cat: TV, desc: "TV - Missing"}
+      - {id: 647, cat: TV, desc: "TV - Mistresses US"}
+      - {id: 179, cat: TV, desc: "TV - Mixology"}
+      - {id: 632, cat: TV, desc: "TV - Modern Family"}
+      - {id: 245, cat: TV, desc: "TV - Modern Marvels"}
+      - {id: 398, cat: TV, desc: "TV - Mom"}
+      - {id: 201, cat: TV, desc: "TV - Monk"}
+      - {id: 361, cat: TV, desc: "TV - Monty Pythons Flying Circus"}
+      - {id: 907, cat: TV, desc: "TV - Motive"}
+      - {id: 247, cat: TV, desc: "TV - Mr Bean"}
+      - {id: 992, cat: TV, desc: "TV - Mr. Robot"}
+      - {id: 356, cat: TV, desc: "TV - MST3K"}
+      - {id: 292, cat: TV, desc: "TV - My Favorite Martian"}
+      - {id: 792, cat: TV, desc: "TV - My Ghost Story"}
+      - {id: 999, cat: TV, desc: "TV - My Little Pony - Friendship is Magic"}
+      - {id: 362, cat: TV, desc: "TV - My Name Is Earl"}
+      - {id: 202, cat: TV, desc: "TV - My Restaurant Rules"}
+      - {id: 193, cat: TV, desc: "TV - Mythbusters"}
+      - {id: 940, cat: TV, desc: "TV - Naked And Afraid"}
+      - {id: 203, cat: TV, desc: "TV - NASA 50 Years Of Space Exploration"}
+      - {id: 899, cat: TV, desc: "TV - Nashville"}
+      - {id: 636, cat: TV, desc: "TV - National Geographic"}
+      - {id: 120, cat: TV, desc: "TV - NCIS"}
+      - {id: 920, cat: TV, desc: "TV - Necessary Roughness"}
+      - {id: 841, cat: TV, desc: "TV - New Girl"}
+      - {id: 957, cat: TV, desc: "TV - New Japan Pro Wrestling"}
+      - {id: 311, cat: TV, desc: "TV - NewGamePlus"}
+      - {id: 363, cat: TV, desc: "TV - Night Stalker"}
+      - {id: 722, cat: TV, desc: "TV - Nikita"}
+      - {id: 293, cat: TV, desc: "TV - Nip Tuck"}
+      - {id: 710, cat: TV, desc: "TV - No Ordinary Family"}
+      - {id: 294, cat: TV, desc: "TV - Numb3rs"}
+      - {id: 689, cat: TV, desc: "TV - Nurse Jackie"}
+      - {id: 703, cat: TV, desc: "TV - Off the Map"}
+      - {id: 833, cat: TV, desc: "TV - Once Upon a Time Once"}
+      - {id: 364, cat: TV, desc: "TV - One Tree Hill"}
+      - {id: 424, cat: TV, desc: "TV - Only Fools And Horses"}
+      - {id: 935, cat: TV, desc: "TV - Orange Is The New Black"}
+      - {id: 881, cat: TV, desc: "TV - Orphan Black"}
+      - {id: 113, cat: TV, desc: "TV - Other"}
+      - {id: 365, cat: TV, desc: "TV - Out of Practice S01E"}
+      - {id: 248, cat: TV, desc: "TV - Outer Limits"}
+      - {id: 646, cat: TV, desc: "TV - Outer Space Astronauts"}
+      - {id: 336, cat: TV, desc: "TV - Outlander"}
+      - {id: 723, cat: TV, desc: "TV - Outsourced"}
+      - {id: 249, cat: TV, desc: "TV - Over There"}
+      - {id: 757, cat: TV, desc: "TV - Pan Am"}
+      - {id: 640, cat: TV, desc: "TV - Paradox"}
+      - {id: 778, cat: TV, desc: "TV - Parenthood"}
+      - {id: 613, cat: TV, desc: "TV - Parks and Recreation"}
+      - {id: 250, cat: TV, desc: "TV - Passions"}
+      - {id: 414, cat: TV, desc: "TV - PBS NOW"}
+      - {id: 690, cat: TV, desc: "TV - Penn and Teller Bullshit"}
+      - {id: 945, cat: TV, desc: "TV - Penny Dreadful"}
+      - {id: 927, cat: TV, desc: "TV - Perception"}
+      - {id: 785, cat: TV, desc: "TV - Person of Interest"}
+      - {id: 366, cat: TV, desc: "TV - Phil of the Future"}
+      - {id: 204, cat: TV, desc: "TV - Pimp My Ride"}
+      - {id: 967, cat: TV, desc: "TV - Player Attack"}
+      - {id: 427, cat: TV, desc: "TV - Poker"}
+      - {id: 691, cat: TV, desc: "TV - Pretty Little Liars"}
+      - {id: 784, cat: TV, desc: "TV - Prime Suspect US"}
+      - {id: 734, cat: TV, desc: "TV - Primeval"}
+      - {id: 229, cat: TV, desc: "TV - Prison Break"}
+      - {id: 692, cat: TV, desc: "TV - Private Practice"}
+      - {id: 368, cat: TV, desc: "TV - Project Runway"}
+      - {id: 663, cat: TV, desc: "TV - Psych"}
+      - {id: 205, cat: TV, desc: "TV - Punkd"}
+      - {id: 803, cat: TV, desc: "TV - QI"}
+      - {id: 982, cat: TV, desc: "TV - Quantico"}
+      - {id: 251, cat: TV, desc: "TV - Quantum Leap"}
+      - {id: 993, cat: TV, desc: "TV - Queen of the South"}
+      - {id: 252, cat: TV, desc: "TV - Queer as Folk"}
+      - {id: 714, cat: TV, desc: "TV - Raising Hope"}
+      - {id: 317, cat: TV, desc: "TV - Ravenswood"}
+      - {id: 936, cat: TV, desc: "TV - Ray Donovan"}
+      - {id: 594, cat: TV, desc: "TV - Ray Mears Northern Wilderness"}
+      - {id: 822, cat: TV, desc: "TV - Real Time with Bill Maher"}
+      - {id: 369, cat: TV, desc: "TV - Reba"}
+      - {id: 885, cat: TV, desc: "TV - Rectify"}
+      - {id: 206, cat: TV, desc: "TV - Red Dwarf"}
+      - {id: 906, cat: TV, desc: "TV - Red Widow"}
+      - {id: 117, cat: TV, desc: "TV - ReGenesis"}
+      - {id: 854, cat: TV, desc: "TV - Reign"}
+      - {id: 370, cat: TV, desc: "TV - Related"}
+      - {id: 327, cat: TV, desc: "TV - Remedy"}
+      - {id: 253, cat: TV, desc: "TV - Remington Steele"}
+      - {id: 254, cat: TV, desc: "TV - Reno 911"}
+      - {id: 207, cat: TV, desc: "TV - Rescue Me"}
+      - {id: 576, cat: TV, desc: "TV - Resurrection"}
+      - {id: 295, cat: TV, desc: "TV - Reunion"}
+      - {id: 208, cat: TV, desc: "TV - Revelations"}
+      - {id: 760, cat: TV, desc: "TV - Revenge"}
+      - {id: 859, cat: TV, desc: "TV - Revolution"}
+      - {id: 312, cat: TV, desc: "TV - Rewind"}
+      - {id: 768, cat: TV, desc: "TV - Ringer"}
+      - {id: 604, cat: TV, desc: "TV - Rip Off Britain"}
+      - {id: 693, cat: TV, desc: "TV - River Monsters"}
+      - {id: 929, cat: TV, desc: "TV - Rizzoli and Isles"}
+      - {id: 209, cat: TV, desc: "TV - Robot Chicken"}
+      - {id: 888, cat: TV, desc: "TV - Rogue"}
+      - {id: 944, cat: TV, desc: "TV - ROH-Wrestling"}
+      - {id: 255, cat: TV, desc: "TV - Rome"}
+      - {id: 849, cat: TV, desc: "TV - Rookie Blue"}
+      - {id: 694, cat: TV, desc: "TV - Royal Pains"}
+      - {id: 695, cat: TV, desc: "TV - Rubicon"}
+      - {id: 807, cat: TV, desc: "TV - Rules of Engagement"}
+      - {id: 372, cat: TV, desc: "TV - Ruri no Shima"}
+      - {id: 892, cat: TV, desc: "TV - Rush"}
+      - {id: 555, cat: TV, desc: "TV - Russian TV programs"}
+      - {id: 789, cat: TV, desc: "TV - Salem"}
+      - {id: 605, cat: TV, desc: "TV - Sanctuary"}
+      - {id: 776, cat: TV, desc: "TV - Satisfaction US"}
+      - {id: 373, cat: TV, desc: "TV - Saturday Night Live"}
+      - {id: 915, cat: TV, desc: "TV - Save Me"}
+      - {id: 696, cat: TV, desc: "TV - Saving Grace"}
+      - {id: 931, cat: TV, desc: "TV - Saving Hope"}
+      - {id: 844, cat: TV, desc: "TV - Scandal"}
+      - {id: 344, cat: TV, desc: "TV - Scorpion"}
+      - {id: 987, cat: TV, desc: "TV - Scream"}
+      - {id: 138, cat: TV, desc: "TV - Scrubs"}
+      - {id: 304, cat: TV, desc: "TV - Sean Saves The World"}
+      - {id: 715, cat: TV, desc: "TV - Secret Diary Of A Call Girl"}
+      - {id: 210, cat: TV, desc: "TV - Seinfeld"}
+      - {id: 296, cat: TV, desc: "TV - Sex and The City"}
+      - {id: 708, cat: TV, desc: "TV - Shameless"}
+      - {id: 375, cat: TV, desc: "TV - Sin Rastro"}
+      - {id: 737, cat: TV, desc: "TV - Single Ladies"}
+      - {id: 211, cat: TV, desc: "TV - Six Feet Under"}
+      - {id: 697, cat: TV, desc: "TV - Skins"}
+      - {id: 376, cat: TV, desc: "TV - Sleeper Cell"}
+      - {id: 112, cat: TV, desc: "TV - Sleepy Hollow"}
+      - {id: 256, cat: TV, desc: "TV - Sliders"}
+      - {id: 137, cat: TV, desc: "TV - Smallville"}
+      - {id: 830, cat: TV, desc: "TV - Smash"}
+      - {id: 649, cat: TV, desc: "TV - So You Think You Can Dance"}
+      - {id: 569, cat: TV, desc: "TV - Sons of Anarchy"}
+      - {id: 815, cat: TV, desc: "TV - Sons of Guns"}
+      - {id: 212, cat: TV, desc: "TV - South Park"}
+      - {id: 718, cat: TV, desc: "TV - Southland"}
+      - {id: 257, cat: TV, desc: "TV - Space 1999"}
+      - {id: 297, cat: TV, desc: "TV - Space Above and Beyond"}
+      - {id: 631, cat: TV, desc: "TV - Spartacus"}
+      - {id: 845, cat: TV, desc: "TV - Spike TV"}
+      - {id: 607, cat: TV, desc: "TV - Spooks"}
+      - {id: 131, cat: TV, desc: "TV - Sports Illustrated"}
+      - {id: 159, cat: TV, desc: "TV - Sports related"}
+      - {id: 378, cat: TV, desc: "TV - Stacked"}
+      - {id: 379, cat: TV, desc: "TV - Star Trek"}
+      - {id: 563, cat: TV, desc: "TV - Star Wars The Clone Wars"}
+      - {id: 615, cat: TV, desc: "TV - Star-Crossed"}
+      - {id: 139, cat: TV, desc: "TV - Star-Trek Enterprise"}
+      - {id: 144, cat: TV, desc: "TV - Star-Trek The Next Generation"}
+      - {id: 380, cat: TV, desc: "TV - Stargate"}
+      - {id: 123, cat: TV, desc: "TV - Stargate Atlantis"}
+      - {id: 124, cat: TV, desc: "TV - StarGate SG1"}
+      - {id: 562, cat: TV, desc: "TV - Stargate Universe"}
+      - {id: 258, cat: TV, desc: "TV - Starved"}
+      - {id: 213, cat: TV, desc: "TV - Stella"}
+      - {id: 614, cat: TV, desc: "TV - Steven Seagal Lawman"}
+      - {id: 381, cat: TV, desc: "TV - Still Standing"}
+      - {id: 857, cat: TV, desc: "TV - Strike Back"}
+      - {id: 528, cat: TV, desc: "TV - Studio 60 on the Sunset Strip"}
+      - {id: 838, cat: TV, desc: "TV - Suburgatory"}
+      - {id: 761, cat: TV, desc: "TV - Suits"}
+      - {id: 214, cat: TV, desc: "TV - Summerland"}
+      - {id: 400, cat: TV, desc: "TV - Super Fun Night"}
+      - {id: 298, cat: TV, desc: "TV - Supernatural"}
+      - {id: 299, cat: TV, desc: "TV - Surface"}
+      - {id: 382, cat: TV, desc: "TV - Survivor"}
+      - {id: 215, cat: TV, desc: "TV - Survivors"}
+      - {id: 847, cat: TV, desc: "TV - Swamp People"}
+      - {id: 863, cat: TV, desc: "TV - Switched at Birth"}
+      - {id: 153, cat: TV, desc: "TV - Tattoo Nightmares"}
+      - {id: 217, cat: TV, desc: "TV - Teen Titans"}
+      - {id: 731, cat: TV, desc: "TV - Teen Wolf"}
+      - {id: 764, cat: TV, desc: "TV - Terra Nova"}
+      - {id: 119, cat: TV, desc: "TV - That 70s Show"}
+      - {id: 316, cat: TV, desc: "TV - The 100"}
+      - {id: 168, cat: TV, desc: "TV - The 4400"}
+      - {id: 300, cat: TV, desc: "TV - The Adventures of Sherlock Holmes"}
+      - {id: 185, cat: TV, desc: "TV - The After"}
+      - {id: 383, cat: TV, desc: "TV - The Amazing Race"}
+      - {id: 887, cat: TV, desc: "TV - The Americans"}
+      - {id: 301, cat: TV, desc: "TV - The Apprentice"}
+      - {id: 384, cat: TV, desc: "TV - The Bernie Mac Show"}
+      - {id: 583, cat: TV, desc: "TV - The Big Bang Theory"}
+      - {id: 829, cat: TV, desc: "TV - The Big C"}
+      - {id: 572, cat: TV, desc: "TV - The Biggest Loser"}
+      - {id: 581, cat: TV, desc: "TV - The Blacklist"}
+      - {id: 410, cat: TV, desc: "TV - The Boondocks"}
+      - {id: 608, cat: TV, desc: "TV - The Border"}
+      - {id: 775, cat: TV, desc: "TV - The Borgias"}
+      - {id: 923, cat: TV, desc: "TV - The Bridge US"}
+      - {id: 711, cat: TV, desc: "TV - The Cape"}
+      - {id: 730, cat: TV, desc: "TV - The Carrie Diaries"}
+      - {id: 586, cat: TV, desc: "TV - The Cleveland Show"}
+      - {id: 896, cat: TV, desc: "TV - The Client List"}
+      - {id: 218, cat: TV, desc: "TV - The Closer"}
+      - {id: 272, cat: TV, desc: "TV - The Colbert Report"}
+      - {id: 219, cat: TV, desc: "TV - The Comeback"}
+      - {id: 510, cat: TV, desc: "TV - The Contender"}
+      - {id: 758, cat: TV, desc: "TV - The Crazy Ones"}
+      - {id: 114, cat: TV, desc: "TV - The Daily Show"}
+      - {id: 856, cat: TV, desc: "TV - The Dead Files"}
+      - {id: 220, cat: TV, desc: "TV - The Dead Zone"}
+      - {id: 189, cat: TV, desc: "TV - The Divide"}
+      - {id: 386, cat: TV, desc: "TV - The Dog Whisperer"}
+      - {id: 702, cat: TV, desc: "TV - The Event"}
+      - {id: 610, cat: TV, desc: "TV - The F Word"}
+      - {id: 639, cat: TV, desc: "TV - The Family"}
+      - {id: 835, cat: TV, desc: "TV - The Finder"}
+      - {id: 834, cat: TV, desc: "TV - The Firm"}
+      - {id: 973, cat: TV, desc: "TV - The Flash"}
+      - {id: 877, cat: TV, desc: "TV - The Following"}
+      - {id: 635, cat: TV, desc: "TV - The Forgotten"}
+      - {id: 932, cat: TV, desc: "TV - The Fosters"}
+      - {id: 816, cat: TV, desc: "TV - The Game"}
+      - {id: 766, cat: TV, desc: "TV - The Gates"}
+      - {id: 259, cat: TV, desc: "TV - The Girls Next Door"}
+      - {id: 740, cat: TV, desc: "TV - The Glades"}
+      - {id: 587, cat: TV, desc: "TV - The Goldbergs"}
+      - {id: 648, cat: TV, desc: "TV - The Good Wife"}
+      - {id: 912, cat: TV, desc: "TV - The Goodwin Games"}
+      - {id: 278, cat: TV, desc: "TV - The Haunting Of"}
+      - {id: 903, cat: TV, desc: "TV - The Hero"}
+      - {id: 655, cat: TV, desc: "TV - The Hills"}
+      - {id: 221, cat: TV, desc: "TV - The Inside"}
+      - {id: 595, cat: TV, desc: "TV - The Jeff Dunham Show"}
+      - {id: 387, cat: TV, desc: "TV - The Jetsons"}
+      - {id: 827, cat: TV, desc: "TV - The Killing"}
+      - {id: 388, cat: TV, desc: "TV - The King Of Queens"}
+      - {id: 321, cat: TV, desc: "TV - The Knick"}
+      - {id: 271, cat: TV, desc: "TV - The L Word"}
+      - {id: 609, cat: TV, desc: "TV - The League"}
+      - {id: 897, cat: TV, desc: "TV - The Leftovers"}
+      - {id: 808, cat: TV, desc: "TV - The Life and Times of Tim"}
+      - {id: 924, cat: TV, desc: "TV - The Listener"}
+      - {id: 222, cat: TV, desc: "TV - The Lone Gunmen"}
+      - {id: 152, cat: TV, desc: "TV - The Lost World"}
+      - {id: 643, cat: TV, desc: "TV - The Mentalist"}
+      - {id: 878, cat: TV, desc: "TV - The Michael J Fox"}
+      - {id: 630, cat: TV, desc: "TV - The Middle"}
+      - {id: 405, cat: TV, desc: "TV - The Millers"}
+      - {id: 901, cat: TV, desc: "TV - The Mindy Project"}
+      - {id: 860, cat: TV, desc: "TV - The Mob Doctor"}
+      - {id: 870, cat: TV, desc: "TV - The Musketeers"}
+      - {id: 239, cat: TV, desc: "TV - The Mysteries Of Laura"}
+      - {id: 938, cat: TV, desc: "TV - The Newsroom"}
+      - {id: 109, cat: TV, desc: "TV - The O.C."}
+      - {id: 308, cat: TV, desc: "TV - The Office"}
+      - {id: 319, cat: TV, desc: "TV - The Originals"}
+      - {id: 392, cat: TV, desc: "TV - The Others"}
+      - {id: 390, cat: TV, desc: "TV - The O`Reilly Factor"}
+      - {id: 698, cat: TV, desc: "TV - The Pacific"}
+      - {id: 302, cat: TV, desc: "TV - The PJs"}
+      - {id: 567, cat: TV, desc: "TV - The Practice"}
+      - {id: 260, cat: TV, desc: "TV - The Real World"}
+      - {id: 176, cat: TV, desc: "TV - The Red Road"}
+      - {id: 597, cat: TV, desc: "TV - The Replacements"}
+      - {id: 664, cat: TV, desc: "TV - The Sci Fi Guys"}
+      - {id: 393, cat: TV, desc: "TV - The Secret Adventures of Jules Verne"}
+      - {id: 786, cat: TV, desc: "TV - The Secret Circle"}
+      - {id: 668, cat: TV, desc: "TV - The Secret Life of the American Teenager"}
+      - {id: 735, cat: TV, desc: "TV - The Shadow Line"}
+      - {id: 223, cat: TV, desc: "TV - The Shield"}
+      - {id: 125, cat: TV, desc: "TV - The Simpsons"}
+      - {id: 423, cat: TV, desc: "TV - The Sopranos"}
+      - {id: 333, cat: TV, desc: "TV - The Strain"}
+      - {id: 236, cat: TV, desc: "TV - The Tomorrow People US"}
+      - {id: 699, cat: TV, desc: "TV - The Tudors"}
+      - {id: 611, cat: TV, desc: "TV - The Ultimate Fighter"}
+      - {id: 320, cat: TV, desc: "TV - The Unexplained Files"}
+      - {id: 721, cat: TV, desc: "TV - The Vampire Diaries"}
+      - {id: 654, cat: TV, desc: "TV - The Venture Bros"}
+      - {id: 725, cat: TV, desc: "TV - The Voice"}
+      - {id: 720, cat: TV, desc: "TV - The Walking Dead"}
+      - {id: 394, cat: TV, desc: "TV - The War At Home"}
+      - {id: 116, cat: TV, desc: "TV - The West Wing"}
+      - {id: 577, cat: TV, desc: "TV - The X Factor"}
+      - {id: 425, cat: TV, desc: "TV - Thief"}
+      - {id: 268, cat: TV, desc: "TV - Threshold"}
+      - {id: 796, cat: TV, desc: "TV - Thundercats"}
+      - {id: 216, cat: TV, desc: "TV - TLC Connections"}
+      - {id: 904, cat: TV, desc: "TV - TNA-Wrestling"}
+      - {id: 399, cat: TV, desc: "TV - Tonight Show With Jay Leno"}
+      - {id: 616, cat: TV, desc: "TV - Top Chef"}
+      - {id: 224, cat: TV, desc: "TV - Top Gear"}
+      - {id: 942, cat: TV, desc: "TV - Top Shot"}
+      - {id: 762, cat: TV, desc: "TV - Torchwood"}
+      - {id: 836, cat: TV, desc: "TV - Touch"}
+      - {id: 225, cat: TV, desc: "TV - Trailer Park Boys"}
+      - {id: 1001, cat: TV, desc: "TV - Transformers Prime"}
+      - {id: 733, cat: TV, desc: "TV - Treme"}
+      - {id: 303, cat: TV, desc: "TV - Tripping the Rift"}
+      - {id: 787, cat: TV, desc: "TV - Trophy Wife"}
+      - {id: 565, cat: TV, desc: "TV - True Blood"}
+      - {id: 180, cat: TV, desc: "TV - True Detective"}
+      - {id: 727, cat: TV, desc: "TV - Turn"}
+      - {id: 261, cat: TV, desc: "TV - Twin Peaks"}
+      - {id: 930, cat: TV, desc: "TV - Twisted"}
+      - {id: 401, cat: TV, desc: "TV - Two And A Half Men"}
+      - {id: 337, cat: TV, desc: "TV - Tyrant"}
+      - {id: 793, cat: TV, desc: "TV - UFC"}
+      - {id: 814, cat: TV, desc: "TV - Ugly Americans"}
+      - {id: 559, cat: TV, desc: "TV - Ugly Betty"}
+      - {id: 155, cat: TV, desc: "TV - UK"}
+      - {id: 934, cat: TV, desc: "TV - Under the Dome"}
+      - {id: 791, cat: TV, desc: "TV - Underbelly"}
+      - {id: 706, cat: TV, desc: "TV - Undercover Boss"}
+      - {id: 777, cat: TV, desc: "TV - Unforgettable"}
+      - {id: 129, cat: TV, desc: "TV - Unscripted"}
+      - {id: 739, cat: TV, desc: "TV - Unsealed Alien Files"}
+      - {id: 226, cat: TV, desc: "TV - Unsolved Mysteries"}
+      - {id: 868, cat: TV, desc: "TV - Up All Night"}
+      - {id: 262, cat: TV, desc: "TV - Urgences"}
+      - {id: 566, cat: TV, desc: "TV - V"}
+      - {id: 895, cat: TV, desc: "TV - Veep"}
+      - {id: 864, cat: TV, desc: "TV - Vegas"}
+      - {id: 121, cat: TV, desc: "TV - Veronica Mars"}
+      - {id: 908, cat: TV, desc: "TV - Vice"}
+      - {id: 402, cat: TV, desc: "TV - Viewtiful Joe"}
+      - {id: 799, cat: TV, desc: "TV - Vikings"}
+      - {id: 227, cat: TV, desc: "TV - Viva La Bam"}
+      - {id: 263, cat: TV, desc: "TV - Wanted"}
+      - {id: 593, cat: TV, desc: "TV - Warehouse 13"}
+      - {id: 995, cat: TV, desc: "TV - Wayward Pines"}
+      - {id: 264, cat: TV, desc: "TV - Weeds"}
+      - {id: 404, cat: TV, desc: "TV - Weird U S"}
+      - {id: 909, cat: TV, desc: "TV - Wentworth"}
+      - {id: 596, cat: TV, desc: "TV - When Ghosts Attack"}
+      - {id: 575, cat: TV, desc: "TV - White Collar"}
+      - {id: 406, cat: TV, desc: "TV - Whose Line Is It Anyway"}
+      - {id: 918, cat: TV, desc: "TV - Wilfred US"}
+      - {id: 135, cat: TV, desc: "TV - Will And Grace"}
+      - {id: 673, cat: TV, desc: "TV - Witches of East End"}
+      - {id: 408, cat: TV, desc: "TV - Without A Trace"}
+      - {id: 800, cat: TV, desc: "TV - Workaholics"}
+      - {id: 127, cat: TV, desc: "TV - WWE - Wrestling"}
+      - {id: 228, cat: TV, desc: "TV - X Files"}
+      - {id: 770, cat: TV, desc: "TV - X-Men"}
+      - {id: 265, cat: TV, desc: "TV - Young and the Restless"}
+      - {id: 801, cat: TV, desc: "TV - Young Justice"}
+      - {id: 889, cat: TV, desc: "TV - Zero Hour US"}
+      - {id: 1025, cat: TV, desc: "TV - HEVC/x265"}
+      - {id: 1026, cat: TV, desc: "TV - Divx/Xvid"}
+      - {id: 1027, cat: TV, desc: "TV - DVD"}
+      - {id: 1028, cat: TV, desc: "TV/HD - HD"}
+      - {id: 1029, cat: TV, desc: "TV - SVCD/VCD"}
+
+      #Apps
+      - {id: 7, cat: PC, desc: "Software"}
+      - {id: 416, cat: PC/Phone-Other, desc: "Software - Mobile"}
+      - {id: 532, cat: PC, desc: "Software - KeyGen / Tools"}
+      - {id: 17, cat: PC, desc: "Software - Linux"}
+      - {id: 27, cat: PC/Mac, desc: "Software - Mac"}
+      - {id: 232, cat: PC/Phone-Other, desc: "Software - Mobile phones"}
+      - {id: 18, cat: PC, desc: "Software - Other operating systems"}
+      - {id: 19, cat: PC, desc: "Software - Palm, PocketPC and IPAQ"}
+      - {id: 20, cat: PC, desc: "Software - Windows - CD/DVD Tools"}
+      - {id: 25, cat: PC, desc: "Software - Windows - Other"}
+      - {id: 21, cat: PC, desc: "Software - Windows - Photo Editing"}
+      - {id: 22, cat: PC, desc: "Software - Windows - Security"}
+      - {id: 23, cat: PC, desc: "Software - Windows - Sound Editing"}
+      - {id: 24, cat: PC, desc: "Software - Windows - Video Apps"}
+
+      #Games
+      - {id: 3, cat: PC/Games, desc: "Games"}
+      - {id: 136, cat: PC/Games, desc: "Games - fixes/patches"}
+      - {id: 422, cat: PC/Games, desc: "Games - Other"}
+      - {id: 26, cat: PC/Games, desc: "Games - Mac"}
+      - {id: 231, cat: Console, desc: "Games - Mobile phones"}
+      - {id: 627, cat: Console/NDS, desc: "Games - Nintendo DS"}
+      - {id: 11, cat: Console, desc: "Games - PS 2"}
+      - {id: 700, cat: Console/PS3, desc: "Games - PS 3"}
+      - {id: 12, cat: Console, desc: "Games - PS X"}
+      - {id: 158, cat: Console/PSP, desc: "Games - PSP"}
+      - {id: 13, cat: Console, desc: "Games - ROMS/Retro"}
+      - {id: 15, cat: Console, desc: "Games - Sega Saturn"}
+      - {id: 14, cat: PC/Games, desc: "Games - Video Demonstrations"}
+      - {id: 701, cat: Console/Wii, desc: "Games -Wii"}
+      - {id: 421, cat: PC/Games, desc: "Games - Windows"}
+      - {id: 10, cat: PC/Games, desc: "Games - Windows Kids Games"}
+      - {id: 16, cat: Console/Xbox, desc: "Games - XBox"}
+      - {id: 1017, cat: Console, desc: "Games - PS 1"}
+      - {id: 1018, cat: Console/Xbox 360, desc: "Games - Xbox 360"}
+      - {id: 1014, cat: Console/3DS, desc: "Games - Nintendo 3DS"}
+      - {id: 1015, cat: Console, desc: "Games - Dreamcast"}
+      - {id: 1016, cat: Console, desc: "Games - GameCube"}
+
+      #XXX
+      - {id: 533, cat: XXX, desc: "XXX"}
+      - {id: 943, cat: XXX, desc: "XXX - Animation/Hentai"}
+      - {id: 553, cat: XXX/DVD, desc: "XXX - DVD"}
+      - {id: 536, cat: XXX, desc: "XXX - Games"}
+      - {id: 948, cat: XXX/x264, desc: "XXX - HD Video"}
+      - {id: 535, cat: XXX/Imageset, desc: "XXX - Pictures"}
+      - {id: 552, cat: XXX, desc: "XXX - Video"}
+      - {id: 804, cat: XXX, desc: "XXX - Video 3D"}
+      - {id: 970, cat: XXX, desc: "XXX - Virtual Reality"}
+      - {id: 806, cat: XXX, desc: "XXX - Wallpapers"}
+
+      #Books
+      - {id: 2, cat: Books, desc: "Books"}
+      - {id: 625, cat: Books, desc: "Books - Adventure"}
+      - {id: 51, cat: Books, desc: "Books - Audio books"}
+      - {id: 848, cat: Books/Comics, desc: "Books - Comics"}
+      - {id: 624, cat: Books, desc: "Books - Crime"}
+      - {id: 623, cat: Books, desc: "Books - Drama"}
+      - {id: 50, cat: Books/Ebook, desc: "Books - Ebooks"}
+      - {id: 621, cat: Books, desc: "Books - Educational"}
+      - {id: 622, cat: Books, desc: "Books - Horror"}
+      - {id: 465, cat: Books/Magazines, desc: "Books - Magazines"}
+      - {id: 1000, cat: Books, desc: "Books - Sexual Fitness and Education"}
+      - {id: 626, cat: Books, desc: "Books - True Stories"}
+
+      #Other
+      - {id: 6, cat: Other, desc: "Pictures"}
+      - {id: 9, cat: Other, desc: "Other"}
+      - {id: 53, cat: Other, desc: "Pictures - Other"}
+      - {id: 52, cat: Other, desc: "Wallpapers"}
+      - {id: 80, cat: Other, desc: "Other - Articles"}
+      - {id: 143, cat: Other, desc: "Other - Comics"}
+      - {id: 85, cat: Other, desc: "Other - Funny clips"}
+      - {id: 81, cat: Other, desc: "Other - Manuals"}
+      - {id: 83, cat: Other, desc: "Other - Other"}
+      - {id: 413, cat: Other, desc: "Other - Radio shows"}
+      - {id: 82, cat: Other, desc: "Other - Religion"}
+      - {id: 874, cat: Other, desc: "Other - Subtitles"}
+      - {id: 557, cat: Other, desc: "Other - Training "}
+      - {id: 1021, cat: Other, desc: "Other - Tutorials"}
+      - {id: 1022, cat: Other, desc: "Other - Sounds"}
+      - {id: 1023, cat: Other, desc: "Other - Nulled Scripts"}
+
+      #Mobile
+      - {id: 752, cat: PC/Phone-Other, desc: "Mobile - Games for Android"}
+      - {id: 746, cat: PC/Phone-Other, desc: "Mobile - Games for Apple iPod, iPod Touch, iPad, iPhone"}
+      - {id: 745, cat: PC/Phone-Other, desc: "Mobile - Games for Java"}
+      - {id: 744, cat: PC/Phone-Other, desc: "Mobile - Games for Symbian"}
+      - {id: 743, cat: PC/Phone-Other, desc: "Mobile - Games for Windows Mobile"}
+      - {id: 517, cat: PC/Phone-Other, desc: "Mobile - Music"}
+      - {id: 554, cat: PC/Phone-Other, desc: "Mobile - Other"}
+      - {id: 748, cat: PC/Phone-Other, desc: "Mobile - Software - Other"}
+      - {id: 972, cat: PC/Phone-Other, desc: "Mobile - Software for Android"}
+      - {id: 749, cat: PC/Phone-Other, desc: "Mobile - Software for Apple iPad, iPhone, iPod Touch"}
+      - {id: 747, cat: PC/Phone-Other, desc: "Mobile - Software for Windows Mobile"}
+      - {id: 428, cat: PC/Phone-Other, desc: "Mobile - Tv"}
+      - {id: 417, cat: PC/Phone-Other, desc: "Mobile - Video"}
+      - {id: 750, cat: PC/Phone-Other, desc: "Mobile - Video for Apple iPad, iPhone, iPod Touch"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: "{{if .Keywords}}search/?search={{ .Keywords}}{{else}}{{end}}"
+    rows:
+      selector: tr[class^="tl"]
+    fields:
+      title:
+        selector: td.tli a
+      category:
+        selector:  td a[href^="/category/"]
+        attribute: href
+        filters:
+          - name: split
+            args: ["/", 2]
+      details:
+        selector: td.tli a
+        attribute: href
+      download:
+        selector: td a[href^="magnet:?xt="]
+        attribute: href
+      date:
+        selector: td:nth-last-of-type(5)
+        filters:
+          - name: timeago
+      size:
+        selector: td:nth-last-of-type(4)
+      seeders:
+        text: 0
+      leechers:
+        text: 0
+      seeders:
+        optional: true
+        selector: td.sy
+      leechers:
+        optional: true
+        selector: td.ly
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
