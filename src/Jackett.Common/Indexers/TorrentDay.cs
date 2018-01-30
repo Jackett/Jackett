@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsQuery;
+using Jacket.Common.Helpers;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services.Interfaces;
 using Jackett.Utils;
 using Jackett.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -19,7 +21,7 @@ namespace Jackett.Indexers
     {
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl { get { return SiteLink + "t.json"; } }
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://tdonline.org/",
@@ -52,55 +54,56 @@ namespace Jackett.Indexers
                 p: ps,
                 configData: new ConfigurationDataRecaptchaLogin())
         {
+            wc.EmulateBrowser = false;
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            AddCategoryMapping(29, TorznabCatType.TVAnime); // Anime
-            AddCategoryMapping(28, TorznabCatType.PC); // Appz/Packs
-            AddCategoryMapping(42, TorznabCatType.AudioAudiobook); // Audio Books
-            AddCategoryMapping(20, TorznabCatType.Books); // Books
-            AddCategoryMapping(30, TorznabCatType.TVDocumentary); // Documentary
-            AddCategoryMapping(47, TorznabCatType.Other); // Fonts
-            AddCategoryMapping(43, TorznabCatType.PCMac); // Mac
+            AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(28, TorznabCatType.PC, "Appz/Packs");
+            AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(20, TorznabCatType.Books, "Books");
+            AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
+            AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
+            AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
 
-            AddCategoryMapping(25, TorznabCatType.MoviesSD); // Movies/480p
-            AddCategoryMapping(11, TorznabCatType.MoviesBluRay); // Movies/Bluray
-            AddCategoryMapping(5, TorznabCatType.MoviesBluRay); // Movies/Bluray-Full
-            AddCategoryMapping(3, TorznabCatType.MoviesDVD); // Movies/DVD-R
-            AddCategoryMapping(21, TorznabCatType.MoviesSD); // Movies/MP4
-            AddCategoryMapping(22, TorznabCatType.MoviesForeign); // Movies/Non-English
-            AddCategoryMapping(13, TorznabCatType.Movies); // Movies/Packs
-            AddCategoryMapping(44, TorznabCatType.MoviesSD); // Movies/SD/x264
-            AddCategoryMapping(48, TorznabCatType.MoviesHD); // Movies/x265
-            AddCategoryMapping(1, TorznabCatType.MoviesSD); // Movies/XviD
+            AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
+            AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
+            AddCategoryMapping(5, TorznabCatType.MoviesBluRay, "Movies/Bluray-Full");
+            AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
+            AddCategoryMapping(21, TorznabCatType.MoviesSD, "Movies/MP4");
+            AddCategoryMapping(22, TorznabCatType.MoviesForeign, "Movies/Non-English");
+            AddCategoryMapping(13, TorznabCatType.Movies, "Movies/Packs");
+            AddCategoryMapping(44, TorznabCatType.MoviesSD, "Movies/SD/x264");
+            AddCategoryMapping(48, TorznabCatType.MoviesUHD, "Movies/x265");
+            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
-            AddCategoryMapping(23, TorznabCatType.AudioForeign); // Music/Non-English
-            AddCategoryMapping(41, TorznabCatType.Audio); // Music/Packs
-            AddCategoryMapping(16, TorznabCatType.AudioVideo); // Music/Video
-            AddCategoryMapping(45, TorznabCatType.AudioOther); // Podcast
+            AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
+            AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
+            AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
+            AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
 
-            AddCategoryMapping(4, TorznabCatType.PCGames); // PC/Games
-            AddCategoryMapping(18, TorznabCatType.ConsolePS3); // PS3
-            AddCategoryMapping(8, TorznabCatType.ConsolePSP); // PSP
-            AddCategoryMapping(10, TorznabCatType.ConsoleWii); // Wii
-            AddCategoryMapping(9, TorznabCatType.ConsoleXbox360); // Xbox-360
+            AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
+            AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
+            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
+            AddCategoryMapping(10, TorznabCatType.ConsoleWii, "Wii");
+            AddCategoryMapping(9, TorznabCatType.ConsoleXbox360, "Xbox-360");
 
-            AddCategoryMapping(24, TorznabCatType.TVSD); // TV/480p
-            AddCategoryMapping(32, TorznabCatType.TVHD); // TV/Bluray
-            AddCategoryMapping(31, TorznabCatType.TVSD); // TV/DVD-R
-            AddCategoryMapping(33, TorznabCatType.TVSD); // TV/DVD-Rip
-            AddCategoryMapping(46, TorznabCatType.TVSD); // TV/Mobile
-            AddCategoryMapping(14, TorznabCatType.TV); // TV/Packs
-            AddCategoryMapping(26, TorznabCatType.TVSD); // TV/SD/x264
-            AddCategoryMapping(7, TorznabCatType.TVHD); // TV/x264
-            AddCategoryMapping(34, TorznabCatType.TVHD); // TV/x265
-            AddCategoryMapping(2, TorznabCatType.TVSD); // TV/XviD
+            AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
+            AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
+            AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
+            AddCategoryMapping(33, TorznabCatType.TVSD, "TV/DVD-Rip");
+            AddCategoryMapping(46, TorznabCatType.TVSD, "TV/Mobile");
+            AddCategoryMapping(14, TorznabCatType.TV, "TV/Packs");
+            AddCategoryMapping(26, TorznabCatType.TVSD, "TV/SD/x264");
+            AddCategoryMapping(7, TorznabCatType.TVHD, "TV/x264");
+            AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
+            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
-            AddCategoryMapping(6, TorznabCatType.XXX); // XXX/Movies
-            AddCategoryMapping(15, TorznabCatType.XXXPacks); // XXX/Packs
+            AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
+            AddCategoryMapping(15, TorznabCatType.XXXPacks, "XXX/Packs");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -136,7 +139,7 @@ namespace Jackett.Indexers
                     var results = await PerformQuery(new TorznabQuery());
                     if (results.Count() == 0)
                     {
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("no results found, please report this bug");
                     }
 
                     IsConfigured = true;
@@ -180,21 +183,21 @@ namespace Jackett.Indexers
             var queryUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
-            if (!string.IsNullOrWhiteSpace(query.ImdbID) && query.ImdbID.ToLower().StartsWith("tt"))
+            var cats = MapTorznabCapsToTrackers(query);
+            if (cats.Count == 0)
+                cats = GetAllTrackerCategories();
+
+            var catStr = string.Join(";", cats);
+            queryUrl += "?" + catStr;
+
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
-                queryCollection.Add("search", query.ImdbID);
+                queryUrl += ";q=" + query.ImdbID;
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(searchString))
-                    queryCollection.Add("search", searchString);
+                queryUrl += ";q=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
             }
-
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                queryCollection.Add("c" + cat, "1");
-
-            if (queryCollection.Count > 0)
-                queryUrl += "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookiesAndRetry(queryUrl);
 
@@ -207,47 +210,35 @@ namespace Jackett.Indexers
 
             try
             {
-                CQ dom = results.Content;
-                var rows = dom["#torrentTable > tbody > tr[id^=tr]"]; //handy browse class has gone, use basic tr selector instead but filter for rows with an id beginning "tr"
-                foreach (var row in rows)
+                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
+
+                foreach (var torrent in json)
                 {
-                    CQ qRow = row.Cq();
                     var release = new ReleaseInfo();
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Title = qRow.Find(".torrentNameInfo > a").Text(); //torrentName renamed to torrentNameInfo
-
+                    release.Title = torrent.name;
                     if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Guid = new Uri(SiteLink + qRow.Find(".torrentNameInfo > a").Attr("href")); //torrentName renamed to torrentNameInfo
-                    release.Comments = release.Guid;
-                    release.Link = new Uri(SiteLink + qRow.Find("td:eq(2) > a").Attr("href")); //download button doesnt have class anymore so use index selector instead
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    release.Category = MapTrackerCatToNewznab(torrent.c.ToString());
+                    
+                    var torrentID = (long)torrent.t;
+                    release.Comments = new Uri(SiteLink + "details.php?id=" + torrentID);
+                    release.Guid = release.Comments;
+                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/dummy.torrent");
+                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
 
-                    var sizeStr = qRow.Find(".sizeInfo").Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    var dateStr = qRow.Find(".ulInfo").Text().Split('|').Last().Trim();
-                    var agoIdx = dateStr.IndexOf("ago");
-                    if (agoIdx > -1)
-                    {
-                        dateStr = dateStr.Substring(0, agoIdx);
-                    }
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(dateStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seedersInfo").Text());
-                    release.Peers = ParseUtil.CoerceInt(qRow.Find(".leechersInfo").Text()) + release.Seeders;
-
-                    //category number is stored in the id of the anchor now... it makes no sense to me either but thats how it is
-                    var cat = qRow.Find("td:eq(0) a").First().Attr("id");
-                    release.Category = MapTrackerCatToNewznab(cat);
-
-                    if (qRow.Find("span.flTags").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.Size = (long)torrent.size;
+                    release.Seeders = (int)torrent.seeders;
+                    release.Peers = release.Seeders + (int)torrent.leechers;
+                    release.Files = (long)torrent.files;
+                    release.Grabs = (long)torrent.completed;
+                    var imdbId = (string)torrent["imdb-id"];
+                    release.Imdb = ParseUtil.GetImdbID(imdbId);
+                    var downloadMultiplier = (double?)torrent["download-multiplier"];
+                    release.DownloadVolumeFactor = downloadMultiplier ?? 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
