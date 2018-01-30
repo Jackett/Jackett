@@ -15,11 +15,37 @@
       - {id: 2, cat: Movies/HD, desc: "Movies - HD 720p"}
       - {id: 3, cat: Movies/HD, desc: "Movies - UltraHD/4K"}
       - {id: 47, cat: Movies/SD, desc: "Movies - X264/H264"}
+      - {id: 76, cat: Movies/SD, desc: "Movies - HEVC/x265"}
       - {id: 42, cat: Movies/SD, desc: "Movies - XviD"}
+      - {id: 65, cat: Movies, desc: "Movies - CAM/TS"}
+      - {id: 51, cat: Movies, desc: "Movies - Dubs/Dual Audio"}
+      - {id: 67, cat: Movies/DVD, desc: "Movies - DVDR"}
+      - {id: 66, cat: Movies/BluRay, desc: "Movies - BluRay Disc/Remux"}
       - {id: 41, cat: TV/HD, desc: "TV - HD/X264/H264"}
       - {id: 5, cat: TV/SD, desc: "TV - SD/X264/H264"}
+      - {id: 77, cat: TV/SD, desc: "TV - HEVC/x265"}
       - {id: 50, cat: TV/SD, desc: "TV - SD/XVID"}
       - {id: 7, cat: TV, desc: "TV - TV Packs"}
+      - {id: 72, cat: TV/Sport, desc: "TV - Sport"}
+      - {id: 74, cat: TV/Anime, desc: "Anime - Dubbed/Subbed"}
+      - {id: 73, cat: TV/Anime, desc: "Anime - Movies"}
+      - {id: 75, cat: TV/Anime, desc: "Anime - Others"}
+      - {id: 56, cat: Audio/Audiobook, desc: "Books - Audio"}
+      - {id: 55, cat: Books/Comics, desc: "Books - Comics"}
+      - {id: 53, cat: Books/Ebook, desc: "Books - Ebooks"}
+      - {id: 54, cat: Books/Magazines, desc: "Books - Magazines"}
+      - {id: 68, cat: Books/Other, desc: "Books - Others"}
+      - {id: 58, cat: PC/Games, desc: "Games - Android"}
+      - {id: 71, cat: PC/Games, desc: "Games - Others"}
+      - {id: 57, cat: PC/Games, desc: "Games - Windows"}
+      - {id: 60, cat: Audio/Lossless, desc: "Music - FLAC"}
+      - {id: 59, cat: Audio/MP3, desc: "Music - MP3"}
+      - {id: 61, cat: Audio/Video, desc: "Music - Music Videos"}
+      - {id: 69, cat: Audio/Other, desc: "Music - Others"}
+      - {id: 63, cat: PC/Phone-Android, desc: "Software - Android"}
+      - {id: 64, cat: PC/Mac, desc: "Software - Mac"}
+      - {id: 70, cat: PC, desc: "Software - Others"}
+      - {id: 62, cat: PC/0Day, desc: "Software - Windows"}
 
     modes:
       search: [q]
