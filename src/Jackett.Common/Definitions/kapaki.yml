@@ -81,14 +81,14 @@
     error:
       - selector: div#show_error:not(:contains("Ουπς! Λάθος!Δεν βρέθηκαν αποτελέσματα."))
     rows:
-      selector: div#content > div.torrent-box[id^="torrent_"]
+      selector: table#torrents_table_classic > tbody > tr:not(:first-child), div#content > div.torrent-box[id^="torrent_"]
       filters:
         - name: andmatch
     fields:
       title:
         selector: a[href*="?p=torrents&pid=10&action=details"]
       category:
-        selector: div.categoryImage > a
+        selector: div.category_image > a
         attribute: href
         filters:
           - name: querystring
@@ -114,14 +114,13 @@
         optional: true
         selector: a[rel="fancybox"]
         attribute: href
-      description:
-        selector: div.torrentDetails > div:has(span.floatright)
       downloadvolumefactor:
         case:
-          "img[title=\"No Record!\"]": "0"
+          "img[title=\"ΧΡΥΣΟ!\"]": "0"
           "*": "1"
       uploadvolumefactor:
         case:
+          "img[title=\"Πολλαπλασιαστής Ανεβάσματος: 2\"]": "2"
           "*": "1"
       date:
         optional: true
