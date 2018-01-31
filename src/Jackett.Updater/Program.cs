@@ -201,6 +201,7 @@ namespace Jackett.Updater
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/ultrahdclub.yml",
                 "Definitions/infinityt.yml",
+                "Definitions/hachede-c.yml",
             };
 
             foreach (var oldFIle in oldFiles)
