@@ -46,7 +46,7 @@
       search: [q]
 
   login:
-    path: /login.php
+    path: /login
     method: form
     form: form
     inputs:
