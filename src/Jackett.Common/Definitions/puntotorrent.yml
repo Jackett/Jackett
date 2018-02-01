@@ -132,6 +132,7 @@
       leechers:
         selector: td:nth-child(9) a
       grabs:
+        optional: true
         selector: td:nth-child(10) a
       date:
         selector: td:nth-child(5)
