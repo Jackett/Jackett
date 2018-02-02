@@ -132,8 +132,10 @@
       leechers:
         selector: td:nth-child(9) a
       grabs:
-        optional: true
-        selector: td:nth-child(10) a
+        selector: td:nth-child(10)
+        filters:
+          - name: replace
+            args: ["---", "0"]
       date:
         selector: td:nth-child(5)
         filters:
