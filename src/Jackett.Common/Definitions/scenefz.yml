@@ -70,15 +70,15 @@
       selector: table#minions > tbody > tr
     fields:
       title:
-        selector: a[href^="/details.php?id="]
+        selector: a[href^="/torrents/"]
       details:
-        selector: a[href^="/details.php?id="]
+        selector: a[href^="/torrents/"]
         attribute: href
       download:
-        selector: td:nth-child(3) > a
+        selector: a[href$=".torrent"]
         attribute: href
       category:
-        selector: td:nth-child(1) > a
+        selector: a[href^="/torrents?"]
         attribute: href
         filters:
           - name: querystring
