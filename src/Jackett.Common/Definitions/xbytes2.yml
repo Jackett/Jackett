@@ -1,0 +1,104 @@
+---
+  site: xbytesv2
+  name: xBytesV2
+  description: "xBytesV2 is a SPANISH site for General content"
+  language: es-es
+  type: private
+  encoding: UTF-8
+  links:
+    - http://xbytesv2.li/
+
+  caps:
+    categorymappings:
+      #Peliculas
+      - {id: 16, cat: Movies/HD, desc: "Micro HD"}
+      - {id: 21, cat: Movies/HD, desc: "4K"}
+      #Series
+      - {id: 25, cat: TV/HD, desc: "Series"}
+    modes:
+      search: [q]
+
+  login:
+      path: index.php?page=login
+      method: post
+      inputs:
+        uid: "{{ .Config.username }}"
+        pwd: "{{ .Config.password }}"
+      error:
+        - selector: .alertMessage
+      test:
+        path: index.php
+        selector: form[name="jump1"]
+
+  search:
+    path: index.php
+    inputs:
+      page: "torrents"
+      $raw: "&category={{range .Categories}}{{.}};{{end}}"
+      active: "0"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:not(:first-child)"
+    fields:
+      category:
+        selector:  td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: td:nth-child(2) a
+      banner:
+        optional: true
+        selector: td:nth-child(2) a
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=(.+?)width
+          - name: trim
+      details:
+        selector: td:nth-child(2) a
+        attribute: href
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(8) a
+      leechers:
+        selector: td:nth-child(9) a
+      grabs:
+        selector: td:nth-child(10)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      date:
+        selector: td:nth-child(7)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      downloadvolumefactor:
+        text: "1"
+      downloadvolumefactor:
+        optional: true
+        selector: tr
+        attribute: style
+        filters:
+          - name: regexp
+            args: "background: #(.*)"
+          - name: replace
+            args: ["f9e5a5", "0"]
+          - name: replace
+            args: ["a9a9a9", "0.5"]
+          - name: replace
+            args: ["f6c8a6", "0.75"]
+      uploadvolumefactor:
+          case:
+            img[src$="2x.gif"]: "2"
+            img[src$="3x.gif"]: "3"
+            img[src$="4x.gif"]: "4"
+            img[src$="5x.gif"]: "5"
+            img[src$="6x.gif"]: "6"
+            img[src$="7x.gif"]: "7"
+            "*": "1"
