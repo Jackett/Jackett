@@ -46,20 +46,17 @@
             args: category
       title:
         selector: td:nth-child(2) a
-      details:
-        selector: td:nth-child(3) a
-        attribute: href
       size:
-        selector: td:nth-child(6)
+        selector: td:nth-child(11)
       seeders:
-        selector: td:nth-child(8) a
+        selector: td:nth-child(7) a
       leechers:
-        selector: td:nth-child(9) a
+        selector: td:nth-child(8) a
       grabs:
         optional: true
-        selector: td:nth-child(10) a
+        selector: td:nth-child(9) a
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-child(6)
         filters:
           - name: dateparse
             args: "02/01/2006"
@@ -68,11 +65,6 @@
         attribute: href
       downloadvolumefactor:
         case:
-          img[src$="golden.gif"]: "0"
-          img[src$="silver.gif"]: "0.5"
+          img[src$="images/gold.png"]: "0"
+          img[src$="images/silver.png"]: "0.5"
           "*": "1"
-      uploadvolumefactor:
-          case:
-            img[src$="x2.gif"]: "2"
-            img[src$="x3.gif"]: "3"
-            "*": "1"
