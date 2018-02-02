@@ -8,7 +8,7 @@
   links:
     - https://ilcorsaronero.info/
   certificates:
-    - 8D4B5B12D12693F29271C6A0A65ACB3DF6029202 # incomplete CA chain
+    - 65cfce90841c5522003c8a29f1c139e72b40a88a # incomplete CA chain
 
   caps:
     categorymappings:
