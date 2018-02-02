@@ -10,10 +10,8 @@
 
   caps:
     categorymappings:
-      #Peliculas
       - {id: 16, cat: Movies/HD, desc: "Micro HD"}
       - {id: 21, cat: Movies/HD, desc: "4K"}
-      #Series
       - {id: 25, cat: TV/HD, desc: "Series"}
     modes:
       search: [q]
@@ -35,10 +33,10 @@
     inputs:
       page: "torrents"
       $raw: "&category={{range .Categories}}{{.}};{{end}}"
-      active: "0"
+      active: "1"
       search: "{{ .Query.Keywords }}"
     rows:
-      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:not(:first-child)"
+      selector: "#mcol .block-content-l table table.lista > tbody > tr:not(:first-child):not(.descripcion)"
     fields:
       category:
         selector:  td:nth-child(1) a
@@ -48,16 +46,8 @@
             args: category
       title:
         selector: td:nth-child(2) a
-      banner:
-        optional: true
-        selector: td:nth-child(2) a
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: src=(.+?)width
-          - name: trim
       details:
-        selector: td:nth-child(2) a
+        selector: td:nth-child(3) a
         attribute: href
       size:
         selector: td:nth-child(6)
@@ -66,12 +56,10 @@
       leechers:
         selector: td:nth-child(9) a
       grabs:
-        selector: td:nth-child(10)
-        filters:
-          - name: replace
-            args: ["---", "0"]
+        optional: true
+        selector: td:nth-child(10) a
       date:
-        selector: td:nth-child(7)
+        selector: td:nth-child(5)
         filters:
           - name: dateparse
             args: "02/01/2006"
@@ -79,26 +67,12 @@
         selector: a[href^="download.php"]
         attribute: href
       downloadvolumefactor:
-        text: "1"
-      downloadvolumefactor:
-        optional: true
-        selector: tr
-        attribute: style
-        filters:
-          - name: regexp
-            args: "background: #(.*)"
-          - name: replace
-            args: ["f9e5a5", "0"]
-          - name: replace
-            args: ["a9a9a9", "0.5"]
-          - name: replace
-            args: ["f6c8a6", "0.75"]
+        case:
+          img[src$="golden.gif"]: "0"
+          img[src$="silver.gif"]: "0.5"
+          "*": "1"
       uploadvolumefactor:
           case:
-            img[src$="2x.gif"]: "2"
-            img[src$="3x.gif"]: "3"
-            img[src$="4x.gif"]: "4"
-            img[src$="5x.gif"]: "5"
-            img[src$="6x.gif"]: "6"
-            img[src$="7x.gif"]: "7"
+            img[src$="x2.gif"]: "2"
+            img[src$="x3.gif"]: "3"
             "*": "1"
