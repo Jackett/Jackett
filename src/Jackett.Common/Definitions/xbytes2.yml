@@ -47,15 +47,19 @@
       title:
         selector: td:nth-child(2) a
       size:
+        optional: true
         selector: td:nth-child(11)
       seeders:
+        optional: true
         selector: td:nth-child(7) a
       leechers:
+        optional: true
         selector: td:nth-child(8) a
       grabs:
         optional: true
         selector: td:nth-child(9) a
       date:
+        optional: true
         selector: td:nth-child(6)
         filters:
           - name: dateparse
