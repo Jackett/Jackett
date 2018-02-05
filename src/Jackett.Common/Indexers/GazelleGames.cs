@@ -4,9 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
@@ -22,8 +20,6 @@ namespace Jackett.Indexers
     {
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private string BrowseUrl { get { return SiteLink + "torrents.php"; } }
-        private string TodayUrl { get { return SiteLink + "torrents.php?action=today"; } }
-        private char[] digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
         private new ConfigurationDataCookie configData
         {
