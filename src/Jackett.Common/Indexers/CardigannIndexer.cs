@@ -1588,7 +1588,7 @@ namespace Jackett.Indexers
                         logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, DlUri.ToHtmlPretty()));
                         var href = DlUri.GetAttribute("href");
                         href = applyFilters(href, Download.Filters, variables);
-                        link = resolvePath(href);
+                        link = resolvePath(href, link);
                     }
                     else
                     {
