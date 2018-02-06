@@ -78,9 +78,9 @@
           .Films: "movies"
           .Séries: "tvshows"
           .Logiciels: "softwares"
-          .Musiques: "music"
+          .Musique: "music"
           .Jeux-Consoles: "console-games"
           .Jeux-PC: "pc-games"
-          .Ebooks: "books"
+          .Ebook: "books"
       date:
         text: "now"
