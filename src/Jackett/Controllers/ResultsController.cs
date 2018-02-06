@@ -111,7 +111,7 @@ namespace Jackett.Controllers.V20
                 return;
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"{resultController.CurrentIndexer.ID} does not support the requested query.");
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"{resultController.CurrentIndexer.ID} does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
         }
     }
 
