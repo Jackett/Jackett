@@ -267,10 +267,11 @@ namespace Jackett.Indexers
                         var qDescription = qDetailsLink.QuerySelector("span.torrent_info_tags");
                         var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var qTime = Row.QuerySelector("span.time");
-                        var qSize = Row.QuerySelector("td:nth-last-child(4)");
-                        var qGrabs = Row.QuerySelector("td:nth-last-child(3)");
-                        var qSeeders = Row.QuerySelector("td:nth-last-child(2)");
-                        var qLeechers = Row.QuerySelector("td:nth-last-child(1)");
+                        // some users have an extra colum (8), we can't use nth-last-child
+                        var qSize = Row.QuerySelector("td:nth-child(4)"); 
+                        var qGrabs = Row.QuerySelector("td:nth-child(5)");
+                        var qSeeders = Row.QuerySelector("td:nth-child(6)");
+                        var qLeechers = Row.QuerySelector("td:nth-child(7)");
                         var qFreeLeech = Row.QuerySelector("strong.freeleech_label");
                         var qNeutralLeech = Row.QuerySelector("strong.neutralleech_label");
                         var RowTitle = Row.GetAttribute("title");
