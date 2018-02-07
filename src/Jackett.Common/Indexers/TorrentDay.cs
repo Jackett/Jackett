@@ -84,6 +84,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
             AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
             AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
+            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Albums");
 
             AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
             AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
