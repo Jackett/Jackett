@@ -29,6 +29,8 @@ namespace Jackett.Common.Models.Config
 
         public string PIDFile { get; set; }
 
+        public bool NoUpdates { get; set; }
+
 
         public string DataFolder
         {

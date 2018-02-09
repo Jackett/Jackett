@@ -69,6 +69,9 @@ namespace Jackett.Common.Models.Config
         [Option("PIDFile", HelpText = "Specify the location of PID file")]
         public string PIDFile { get; set; }
 
+        [Option("NoUpdates", HelpText = "Disable automatic updates")]
+        public bool NoUpdates { get; set; }
+
         public RuntimeSettings ToRunTimeSettings()
         {
             var options = this;
@@ -102,6 +105,7 @@ namespace Jackett.Common.Models.Config
             // Ignore SSL errors on Curl
             runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
             runtimeSettings.NoRestart = options.NoRestart;
+            runtimeSettings.NoUpdates = options.NoUpdates;
 
             if (!string.IsNullOrWhiteSpace(options.DataFolder))
                 runtimeSettings.CustomDataFolder = options.DataFolder;
