@@ -42,10 +42,7 @@
       - selector: table:contains("Login failed!")
     test:
       path: my.php
-
-  download:
-    selector: a[href^="download.php?id="]
-        
+       
   search:
     paths:
       - path: browse.php

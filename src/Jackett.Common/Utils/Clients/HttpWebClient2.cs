@@ -317,5 +317,18 @@ namespace Jackett.Utils.Clients
             ServerUtil.ResureRedirectIsFullyQualified(webRequest, result);
             return result;
         }
+
+        override public void AddTrustedCertificate(string host, string hash)
+        {
+            hash = hash.ToUpper();
+            ICollection<string> hosts;
+            trustedCertificates.TryGetValue(hash.ToUpper(), out hosts);
+            if (hosts == null)
+            {
+                hosts = new HashSet<string>();
+                trustedCertificates[hash] = hosts;
+            }
+            hosts.Add(host);
+        }
     }
 }

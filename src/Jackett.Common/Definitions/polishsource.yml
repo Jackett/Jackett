@@ -35,7 +35,7 @@
     form: form[action="takelogin.php"]
     captcha:
       type: image
-      image: img[src="img.php"]
+      selector: img[src="img.php"]
       input: vImageCodP
     inputs:
       username: "{{ .Config.username }}"

@@ -150,7 +150,7 @@
         selector: td:nth-child(5)
         filters:
           - name: dateparse
-            args: "2 April 2017 +05:50"
+            args: "2 January 2006 15:04"
       downloadvolumefactor:
         case:
           "img[title=\"Free Torrent!\"]": "0"

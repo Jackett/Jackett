@@ -87,23 +87,32 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+      
+  login:
+    method: cookie
+    test:
+      path: /category/latest/page/1
 
   search:
     paths:
-      - path: "/new/{{if .Keywords}}search-torrents.php?{{range .Categories }}c{{.}}=1&{{end}}search={{.Keywords}}{{else}}{{end}}"
+      - path: "{{ if .Keywords }}/katsearch/page/1/{{ .Keywords }}{{ else }}/category/latest/page/1{{ end }}"
     rows:
-      selector: table.ttable_headinner > tbody > tr[class^="t-row"]
-      filters:
-        - name: andmatch
+      selector: table.torrents_table > tbody > tr
     fields:
-      download:
-        selector: a[data-download]
-        attribute: href
       title:
-        selector: a.cellMainLink
+        selector: a.torrents_table__torrent_title b
+      details:
+        selector: a.torrents_table__torrent_title
+        attribute: href
+      download:
+        selector: a[href^="magnet:?xt="]
+        attribute: href
       category:
-        selector: span[id^="cat_"]
+        selector: span.torrents_table__upload_info
         case:
           ":has(a:contains(\"Anime\")):contains(\"English Translated\")": 118
           ":has(a:contains(\"Anime\")):contains(\"Other\")": 133
@@ -177,20 +186,19 @@
           ":has(a:contains(\"XXX\")):contains(\"Videos\")": 119
           ":has(a:contains(\"XXX\")):contains(\"XXX Games\")": 126
           "*": 0 # some older torrents's don't have a category
-      details:
-        selector: a.cellMainLink
-        attribute: href
       size:
-        selector: td:nth-child(2)
+        selector: td[data-title="Size"]
+      files:
+        selector: td[data-title="Files"]
       date:
-        selector: td:nth-child(3)
+        selector: td[data-title="Age"]
         filters:
           - name: dateparse
-            args: "02-01-2006 15:04:05 -07:00"
+            args: "2006-01-02 15:04:05"
       seeders:
-        selector: td:nth-child(4)
+        selector: td[data-title="Seed"]
       leechers:
-        selector: td:nth-child(5)
+        selector: td[data-title="Leech"]
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

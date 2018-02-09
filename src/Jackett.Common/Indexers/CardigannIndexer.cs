@@ -557,6 +557,22 @@ namespace Jackett.Indexers
                             pairs[input] = CaptchaText.Value;
                         }
                     }
+                    if (Captcha.Type == "text")
+                    {
+                        var CaptchaAnswer = (StringItem)configData.GetDynamic("CaptchaAnswer");
+                        if (CaptchaAnswer != null)
+                        {
+                            var input = Captcha.Input;
+                            if (Login.Selectors)
+                            {
+                                var inputElement = landingResultDocument.QuerySelector(Captcha.Input);
+                                if (inputElement == null)
+                                    throw new ExceptionWithConfigData(string.Format("Login failed: No captcha input found using {0}", Captcha.Input), configData);
+                                input = inputElement.GetAttribute("name");
+                            }
+                            pairs[input] = CaptchaAnswer.Value;
+                        }
+                    }
                 }
 
                 // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
@@ -623,6 +639,26 @@ namespace Jackett.Indexers
             return true;
         }
 
+        protected string getRedirectDomainHint(string requestUrl, string RedirectUrl)
+        {
+            if (requestUrl.StartsWith(SiteLink) && !RedirectUrl.StartsWith(SiteLink))
+            {
+                var uri = new Uri(RedirectUrl);
+                return uri.Scheme + "://" + uri.Host + "/";
+            }
+            return null;
+        }
+
+        protected string getRedirectDomainHint(WebClientByteResult result)
+        {
+            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+        }
+
+        protected string getRedirectDomainHint(WebClientStringResult result)
+        {
+            return getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+        }
+
         protected async Task<bool> TestLogin()
         {
             var Login = Definition.Login;
@@ -636,7 +672,11 @@ namespace Jackett.Indexers
 
             if (testResult.IsRedirect)
             {
-                throw new ExceptionWithConfigData("Login Failed, got redirected", configData);
+                var errormessage = "Login Failed, got redirected.";
+                var DomainHint = getRedirectDomainHint(testResult);
+                if (DomainHint != null)
+                    errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                throw new ExceptionWithConfigData(errormessage, configData);
             }
 
             if (Login.Test.Selector != null)
@@ -656,6 +696,13 @@ namespace Jackett.Indexers
         {
             if (Result.IsRedirect)
             {
+                var DomainHint = getRedirectDomainHint(Result);
+                if (DomainHint != null)
+                {
+                    var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    throw new ExceptionWithConfigData(errormessage, configData);
+                }
+
                 return true;
             }
 
@@ -716,7 +763,7 @@ namespace Jackett.Indexers
                 var Captcha = Login.Captcha;
                 if (Captcha.Type == "image")
                 {
-                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Image);
+                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Selector);
                     if (captchaElement != null)
                     {
                         hasCaptcha = true;
@@ -730,6 +777,24 @@ namespace Jackett.Indexers
 
                         configData.AddDynamic("CaptchaImage", CaptchaImage);
                         configData.AddDynamic("CaptchaText", CaptchaText);
+                    }
+                    else
+                    {
+                        logger.Debug(string.Format("CardigannIndexer ({0}): No captcha image found", ID));
+                    }
+                }
+                else if (Captcha.Type == "text")
+                {
+                    var captchaElement = landingResultDocument.QuerySelector(Captcha.Selector);
+                    if (captchaElement != null)
+                    {
+                        hasCaptcha = true;
+
+                        var CaptchaChallenge = new DisplayItem(captchaElement.TextContent) { Name = "Captcha Challenge" };
+                        var CaptchaAnswer = new StringItem { Name = "Captcha Answer" };
+
+                        configData.AddDynamic("CaptchaChallenge", CaptchaChallenge);
+                        configData.AddDynamic("CaptchaAnswer", CaptchaAnswer);
                     }
                     else
                     {
@@ -1497,11 +1562,11 @@ namespace Jackett.Indexers
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
+                var variables = getTemplateVariablesFromConfigData();
+                AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
                 if (Download.Before != null)
                 {
-                    var beforeVariables = getTemplateVariablesFromConfigData();
-                    AddTemplateVariablesFromUri(beforeVariables, link, ".DownloadUri");
-                    var beforeresult = await handleRequest(Download.Before, beforeVariables, link.ToString());
+                    var beforeresult = await handleRequest(Download.Before, variables, link.ToString());
                 }
                 if (Download.Method != null)
                 {
@@ -1510,18 +1575,20 @@ namespace Jackett.Indexers
                 }
                 if (Download.Selector != null)
                 {
+                    var selector = applyGoTemplateText(Download.Selector, variables);
                     var response = await RequestStringWithCookies(link.ToString());
                     if (response.IsRedirect)
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
                     var SearchResultParser = new HtmlParser();
                     var SearchResultDocument = SearchResultParser.Parse(results);
-                    var DlUri = SearchResultDocument.QuerySelector(Download.Selector);
+                    var DlUri = SearchResultDocument.QuerySelector(selector);
                     if (DlUri != null)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, Download.Selector, DlUri.ToHtmlPretty()));
+                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", ID, selector, DlUri.ToHtmlPretty()));
                         var href = DlUri.GetAttribute("href");
-                        link = resolvePath(href);
+                        href = applyFilters(href, Download.Filters, variables);
+                        link = resolvePath(href, link);
                     }
                     else
                     {

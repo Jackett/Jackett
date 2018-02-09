@@ -218,6 +218,8 @@
       # workaroud to remove year in search keywords
       - name: re_replace
         args: ["([1-2]\\d{3})", ""]    
+      - name: replace
+        args: ["Agents of SHIELD", "Agents of S.H.I.E.L.D."]
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "%"]
     inputs:
@@ -245,6 +247,27 @@
             args: ["|", ""]
           - name: replace
             args: ["Ep. ","E"]
+          - name: re_replace
+            args: ["(\\d{2})[ºª°] Temporada( Completa)?", "S$1"]
+          - name: re_replace
+            args: ["(\\d{1})[ºª°] Temporada( Completa)?", "S0$1"]
+          # Workaround to add year to series that is an remake, since the year returned from the tracker isn't reliable, feel free to add more as needed.
+          - name: re_replace
+            args: ["^Doctor Who", "Doctor Who 2005"]
+          - name: re_replace
+            args: ["^Extinct", "Extinct 2017"]
+          - name: re_replace
+            args: ["^The Flash", "The Flash 2014"]
+          - name: re_replace
+            args: ["^The Magicians", "The Magicians 2015"]
+          # Workaround to remove the translated name from the series, didn't found an better and reliable way to do this, feel free to add more as needed.
+          - name: replace
+            args: ["O Sócio - The Profit", "The Profit"]
+          - name: replace
+            args: ["Arquivo X - The X Files", "The X Files"]
+          - name: replace
+            args: ["Deuses Americanos - American Gods", "American Gods"]
+          
       size:
         selector: td:nth-child(4)
       grabs:

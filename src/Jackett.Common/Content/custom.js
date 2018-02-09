@@ -110,6 +110,7 @@ function reloadIndexers() {
         unconfiguredIndexers = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
+            item.rss_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
             item.torznab_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/");
             item.potato_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/potato/");
 

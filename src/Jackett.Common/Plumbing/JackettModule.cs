@@ -61,32 +61,37 @@ namespace Jackett.Common.Plumbing
             switch (_runtimeSettings.ClientOverride)
             {
                 case "httpclient":
-                    builder.RegisterType<HttpWebClient>().As<WebClient>();
+                    RegisterWebClient<HttpWebClient>(builder);
                     break;
                 case "httpclient2":
-                    builder.RegisterType<HttpWebClient2>().As<WebClient>();
+                    RegisterWebClient<HttpWebClient2>(builder);
                     break;
                 case "safecurl":
-                    builder.RegisterType<UnixSafeCurlWebClient>().As<WebClient>();
+                    RegisterWebClient<UnixSafeCurlWebClient>(builder);
                     break;
                 case "libcurl":
-                    builder.RegisterType<UnixLibCurlWebClient>().As<WebClient>();
+                    RegisterWebClient<UnixLibCurlWebClient>(builder);
                     break;
                 case "automatic":
                 default:
                     if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        builder.RegisterType<HttpWebClient>().As<WebClient>();
+                        RegisterWebClient<HttpWebClient>(builder);
                         break;
                     }
                     var usehttpclient = DetectMonoCompatabilityWithHttpClient();
                     if (usehttpclient)
-                        builder.RegisterType<HttpWebClient>().As<WebClient>();
+                        RegisterWebClient<HttpWebClient>(builder);
                     else
-                        builder.RegisterType<UnixLibCurlWebClient>().As<WebClient>();
+                        RegisterWebClient<UnixLibCurlWebClient>(builder);
                     break;
             }
+        }
 
+        private void RegisterWebClient<WebClientType>(ContainerBuilder builder)
+        {
+            Engine.WebClientType = typeof(WebClientType);
+            builder.RegisterType<WebClientType>().As<WebClient>();
         }
 
         private ServerConfig BuildServerConfig(IComponentContext ctx)

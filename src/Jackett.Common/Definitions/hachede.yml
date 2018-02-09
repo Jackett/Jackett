@@ -1,0 +1,161 @@
+---
+  site: hachede
+  name: HacheDe
+  description: "HacheDe is a SPANISH site for HD content"
+  language: es-es
+  type: private
+  encoding: UTF-8
+  links:
+    - https://hachede.me/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Películas"}
+      - {id: 32, cat: Movies/3D, desc: "Películas 3D"}
+      - {id: 52, cat: Movies/BluRay, desc: "Películas Full Bluray"}
+      - {id: 33, cat: Movies/BluRay, desc: "Películas BDRemux"}
+      - {id: 120, cat: Movies/BluRay, desc: "Películas JMBD"}
+      - {id: 34, cat: Movies/HD, desc: "Películas BDrip 1080p"}
+      - {id: 99, cat: Movies/HD, desc: "Películas BDrip 720p"}
+      - {id: 37, cat: Movies/HD, desc: "Películas HDTVrip"}
+      - {id: 119, cat: Movies/HD, desc: "Películas HDiTunes"}
+      - {id: 84, cat: Movies/HD, desc: "Películas MicroHD 1080p"}
+      - {id: 100, cat: Movies/HD, desc: "Películas MicroHD 720p"}
+
+      - {id: 32, cat: Other/Misc, desc: "Documentales"}
+      - {id: 51, cat: Audio/Video, desc: "Conciertos/Videos Musicales"}
+      - {id: 131, cat: Movies/HD, desc: "Películas UHD"}
+
+      - {id: 16, cat: TV/HD, desc: "Series"}
+      - {id: 44, cat: TV/HD, desc: "Series HDTVrip"}
+      - {id: 89, cat: TV/HD, desc: "Series HDiTunes"}
+      - {id: 58, cat: TV/HD, desc: "Series 3D"}
+      - {id: 57, cat: TV/HD, desc: "Series Full Bluray"}
+      - {id: 40, cat: TV/HD, desc: "Series BDRemux"}
+      - {id: 121, cat: TV/HD, desc: "Series JMBD"}
+      - {id: 41, cat: TV/HD, desc: "Series BDrip 1080p"}
+      - {id: 101, cat: TV/HD, desc: "Series BDrip 720p"}
+      - {id: 45, cat: TV/HD, desc: "Series MicroHD 1080p"}
+      - {id: 102, cat: TV/HD, desc: "Series MicroHD 720p"}
+
+      - {id: 114, cat: TV/HD, desc: "TV"}
+      - {id: 115, cat: TV/HD, desc: "TV 1080p"}
+      - {id: 116, cat: TV/HD, desc: "TV 720p"}
+
+      - {id: 90, cat: Movies, desc: "Animación"}
+      - {id: 91, cat: Movies/3D, desc: "Animación 3D"}
+      - {id: 92, cat: Movies/BluRay, desc: "Animación Full Bluray"}
+      - {id: 93, cat: Movies/HD, desc: "Animación BDrip 1080p"}
+      - {id: 104, cat: Movies/HD, desc: "Animación BDrip 720p"}
+      - {id: 94, cat: Movies/BluRay, desc: "Animación BDRemux"}
+      - {id: 123, cat: Movies/BluRay, desc: "Animación JMBD"}
+      - {id: 96, cat: Movies/HD, desc: "Animación HDTVrip"}
+      - {id: 98, cat: Movies/HD, desc: "Animación MicroHD 1080p"}
+      - {id: 105, cat: Movies/HD, desc: "Animación MicroHD 720p"}
+
+      - {id: 126, cat: Movies/HD, desc: "Peliculas H265"}
+      - {id: 127, cat: TV/HD, desc: "Series H265"}
+      - {id: 130, cat: Movies/3D, desc: "3D H265"}
+      - {id: 128, cat: Movies/HD, desc: "Animación H265"}
+      - {id: 129, cat: Other/Misc, desc: "Documentales H265"}
+    modes:
+      search: [q]
+
+  login:
+    path: /ajax/login.php
+    method: post
+    headers:
+      user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
+    form: form
+    inputs:
+      loginbox_membername: "{{ .Config.username }}"
+      loginbox_password: "{{ .Config.password }}"
+      action: "login"
+      loginbox_remember: "true"
+    error:
+      - selector: div.error
+    test:
+      path: /?p=home&pid=1
+      selector: div#member_info_bar
+
+  search:
+    path: /
+    inputs:
+      p: "torrents"
+      page: "1"
+      pid: "10"
+      $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+      keywords: "{{ .Query.Keywords }}"
+      search_type: "name"
+      searchin: "title"
+    rows:
+      selector: table#torrents_table_classic > tbody > tr:not(:first-child), .torrent-box[id^="torrent_"]
+    fields:
+      title:
+        selector: td.torrent_name > a, .newIndicator > a
+      details:
+        selector: td.torrent_name > a, .newIndicator > a
+        attribute: href
+      category:
+        selector:  td.torrent_image div.category_image a, .categoryImage a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
+      download:
+        selector: .torrentImages > span:first-child a
+        attribute: href
+      banner:
+        optional: true
+        selector: td.torrent_image div.relativeDiv div:not(.category_image) a, .previewImage a
+        attribute: href
+      size:
+        selector: td.size a, .torrentInfo a[rel="torrent_size"]
+      grabs:
+        selector: td.completed a, .torrentInfo a[rel="times_completed"]
+      seeders:
+        selector: td.seeders a, .torrentInfo a[rel="torrent_seeders"]
+      leechers:
+        selector: td.leechers a, .torrentInfo a[rel="torrent_leechers"]
+      imdb:
+        optional: true
+        selector: .torrentFlags a[href^="http://www.imdb.com/title/"]
+        attribute: href
+      date:
+        selector: td.torrent_name, .torrentOwner
+        filters:
+          - name: regexp
+            args: "(?<=Subido )(.*)(?= por)"
+          - name: dateparse
+            args: "02-01-2006 15:04"    
+      downloadvolumefactor:
+        text: "1"
+      downloadvolumefactor:
+        optional: true
+        selector: img[src$="torrent_free.png"]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["FREE LEECH!", "0"]
+      downloadvolumefactor:
+        optional: true
+        selector: img[src$="torrent_multiple_download.png"]
+        attribute: title
+        filters:
+          - name: split
+            args: [":", 1]
+          - name: trim
+      uploadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        optional: true
+        selector: img[src$="torrent_multiple_upload.png"]
+        attribute: title
+        filters:
+          - name: split
+            args: [":", 1]
+          - name: trim
+      minimumratio:
+        text: "1.0"
+      minimumseedtime:
+        text: "259200" # 3 day (72h)

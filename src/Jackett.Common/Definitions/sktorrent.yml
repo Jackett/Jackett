@@ -6,6 +6,8 @@
   type: semi-private
   encoding: windows-1250
   links:
+    - http://sktorrent.eu/
+  legacylinks:
     - http://sktorrent.eu/torrent/
 
   caps:
@@ -46,7 +48,7 @@
       movie-search: [q]
 
   login:
-    path: /torrent/login.php
+    path: torrent/login.php
     method: form
     form: form[action^="login.php?returnto=index.php"]
     inputs:
@@ -55,11 +57,11 @@
     error:
       - selector: font:contains("Incorrect")
     test:
-      path: /torrent/index.php
+      path: torrent/index.php
 
   search:
     paths:
-      - path: /torrent/torrents.php
+      - path: torrent/torrents.php
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"

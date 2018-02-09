@@ -63,6 +63,7 @@ namespace Jackett.Indexers
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");
             AddCategoryMapping(77, TorznabCatType.MoviesSD, "Movie/480p");
+            AddCategoryMapping(101, TorznabCatType.MoviesHD, "Movie/4K");
             AddCategoryMapping(89, TorznabCatType.MoviesHD, "Movie/BD-R");
             AddCategoryMapping(90, TorznabCatType.MoviesSD, "Movie/BD-Rip");
             AddCategoryMapping(96, TorznabCatType.MoviesSD, "Movie/Cam");

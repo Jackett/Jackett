@@ -46,7 +46,7 @@
     form: form[action="login3.php?takelogin=1"]
     captcha:
       type: image
-      image: img#validationimage
+      selector: img#validationimage
       input: validationcode
     inputs:
       username: "{{ .Config.username }}"

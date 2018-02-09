@@ -1,0 +1,133 @@
+---
+  site: tbplus
+  name: TBPlus
+  description: "TBPlus is a Spanish site of general content"
+  language: es-es
+  type: private
+  encoding: ISO-8859-1
+  links:
+    - https://tbplus.li/
+
+  caps:
+    categorymappings:
+      # Estrenos
+      - {id: 13, cat: Movies/SD, desc: "Ts - Estrenos"}
+      - {id: 15, cat: Movies/HD, desc: "DVD-BRscreener - Estrenos"}
+      - {id: 16, cat: Movies/HD, desc: "DVDScrn/BRScrn MKV - Estrenos"}
+      # Películas / Documentales
+      - {id: 18, cat: Movies/SD, desc: "Xvid/DVDRip MKV - Películas / Documentales"}
+      - {id: 19, cat: Movies/HD, desc: "HD - Películas / Documentales"}
+      - {id: 20, cat: Movies/HD, desc: "Dvd / Full Bluray - Películas / Documentales"}
+      - {id: 74, cat: Movies/HD, desc: "3D - Películas / Documentales"}
+      - {id: 69, cat: Movies/SD, desc: "MP4 - Películas / Documentales"}
+      - {id: 75, cat: Movies/HD, desc: "MicroHD - Películas / Documentales"}
+      # Series
+      - {id: 22, cat: TV/SD, desc: "Xvid/DVDRip MKV - Series"}
+      - {id: 23, cat: TV/HD, desc: "HD - Series"}
+      - {id: 24, cat: TV/HD, desc: "DVD / Full BluRay - Series"}
+      - {id: 71, cat: TV/SD, desc: "MP4 - Series"}
+      - {id: 76, cat: TV/HD, desc: "MicroHD - Series"}
+      # Deportes
+      - {id: 26, cat: TV/Sport, desc: "Xvid/DVDRip MKV - Deportes"}
+      - {id: 27, cat: TV/Sport, desc: "HD - Deportes"}
+      - {id: 28, cat: TV/Sport, desc: "DVD / Full Bluray - Deportes"}
+      - {id: 77, cat: TV/Sport, desc: "MicroHD - Deportes"}
+      # Anime / Animación
+      - {id: 30, cat: TV/Anime, desc: "Xvid/DVDRip MKV - Anime / Animación"}
+      - {id: 31, cat: TV/Anime, desc: "HD - Anime / Animación"}
+      - {id: 32, cat: TV/Anime, desc: "DVD / Full Bluray - Anime / Animación"}
+      - {id: 78, cat: TV/Anime, desc: "MicroHD - Anime / Animación"}
+      # VOSE
+      - {id: 34, cat: Movies/SD, desc: "Xvid/DVDRip MKV - VOSE"}
+      - {id: 35, cat: Movies/HD, desc: "HD - VOSE"}
+      - {id: 36, cat: Movies/HD, desc: "DVD / Full Bluray - VOSE"}
+      - {id: 79, cat: Movies/HD, desc: "MicroHD - VOSE"}
+      # Adulto (+18)
+      - {id: 38, cat: XXX, desc: "Xvid/DVDRip MKV - Adulto (+18)"}
+      - {id: 39, cat: XXX, desc: "HD - Adulto (+18)"}
+      - {id: 40, cat: XXX, desc: "DVD / Full Bluray - Adulto (+18)"}
+      - {id: 80, cat: XXX, desc: "MicroHD - Adulto (+18)"}
+      # Música
+      - {id: 42, cat: Audio/MP3, desc: "Mp3 / Varios - Música"}
+      - {id: 43, cat: Audio/Lossless, desc: "Flac - Música"}
+      - {id: 44, cat: Audio/Video, desc: "Videos Musicales - Música"}
+      # Móviles
+      - {id: 46, cat: PC/Phone-IOS, desc: "IOS - Móviles"}
+      - {id: 47, cat: PC/Phone-Android, desc: "Android - Móviles"}
+      - {id: 48, cat: PC/Phone-Other, desc: "Otros - Móviles"}
+      # Apps / Software
+      - {id: 50, cat: PC, desc: "OS - Windows - Apps / Software"}
+      - {id: 51, cat: PC, desc: "OS - Linux - Apps / Software"}
+      - {id: 52, cat: PC, desc: "OS - Mac - Apps / Software"}
+      - {id: 53, cat: PC, desc: "Herramientas Windows - Apps / Software"}
+      - {id: 54, cat: PC, desc: "Herramientas Linux - Apps / Software"}
+      - {id: 55, cat: PC/Mac, desc: "Herramientas Mac - Apps / Software"}
+      - {id: 56, cat: PC/ISO, desc: "Imagen Windows - Apps / Software"}
+      - {id: 57, cat: PC/ISO, desc: "Imagen Linux - Apps / Software"}
+      - {id: 58, cat: PC/ISO, desc: "Imagen Mac - Apps / Software"}
+      # Ebooks
+      - {id: 60, cat: Books/Ebook, desc: "Ebooks - Ebooks"}
+      - {id: 61, cat: Books/Ebook, desc: "Ebooks + 18 - Ebooks"}
+      - {id: 62, cat: Books, desc: "Audiolibros - Ebooks"}
+      # Juegos
+      - {id: 64, cat: PC/Games, desc: "Microsoft - Juegos"}
+      - {id: 65, cat: PC/Games, desc: "Sony - Juegos"}
+      - {id: 66, cat: PC/Games, desc: "PC - Juegos"}
+      - {id: 67, cat: PC/Games, desc: "Nintendo - Juegos"}
+      - {id: 68, cat: PC/Games, desc: "MAC - Juegos"}
+      # Subtítulos
+      - {id: 85, cat: Other, desc: "Subtítulos"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: .lista>span
+    test:
+      path: index.php
+      selector: form[name="jump1"]
+
+  search:
+    path: index.php
+    inputs:
+      page: "torrents"
+      $raw: "&category={{range .Categories}}{{.}};{{end}}"
+      active: "1"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: "#mcol .block-content-l table table.lista > tbody > tr:not(:first-child)"
+    fields:
+      category:
+        selector:  td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: td:nth-child(2) a
+      details:
+        selector: td:nth-child(2) a
+        attribute: href
+      size:
+        selector: td:nth-child(7) center
+      seeders:
+        selector: td:nth-child(8) a
+      leechers:
+        selector: td:nth-child(9) a
+      grabs:
+        selector: td:nth-child(10) a
+        optional: true
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: dateparse
+            args: "02/01/2006  15:04:05"
+      download:
+        selector: a[href^="download.php"]
+        attribute: href

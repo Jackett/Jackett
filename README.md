@@ -3,7 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
 [![Bountysource](https://img.shields.io/bountysource/team/jackett/activity.svg?style=flat-square)](https://www.bountysource.com/teams/jackett)
-[![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp/branch/master?svg=true)](https://ci.appveyor.com/project/camjac251/jackett)
+[![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp/branch/master?svg=true)](https://ci.appveyor.com/project/Jackett/jackett)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
@@ -30,12 +30,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BT-Scene
  * cpasbien
  * ETTV
+ * ExtraTorrent.ag
  * EZTV
  * Frozen Layer
  * GkTorrent
  * Horrible Subs
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Isohunt2
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
@@ -44,6 +46,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
+ * OxTorrent
  * RARBG
  * RuTor
  * ShowRSS
@@ -56,9 +59,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent9
  * Torrentz2
  * World Wide Torrents
+ * YIFY (YTS)
  * YTS.ag
  * Zooqle
- 
+
 ### Supported Semi-Private Trackers
  * 7tor
  * CzTorrent
@@ -75,7 +79,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NoName Club
  * RuTracker
  * SkTorrent
- * TorrentBytes
  * Xtreme Zone
  * YggTorrent
  * Ztracker
@@ -106,11 +109,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BIGTorrent
  * Bit-City Reloaded
  * BIT-HDTV
+ * Bithorlo
  * BitHUmen
  * BitMe
  * BitMeTV
  * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
+ * BitTorrentFiles
  * BJ-Share
  * BlueBird
  * Blutopia
@@ -118,6 +123,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BrokenStones
  * BTNext
  * Carpathians
+ * CCFBits
  * CGPeers
  * CHDBits
  * Cinematik
@@ -136,17 +142,20 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EliteHD  [![(invite needed)][inviteneeded]](#)
  * Elit Tracker
  * Elite-Tracker
+ * Empornium
  * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
  * FANO.IN
  * FileList
+ * Femdomcult
  * Freedom-HD
  * FullMixMusic
  * FunFile
  * FunkyTorrents
  * Fuzer
  * GayTorrent.ru
+ * GazelleGames
  * GFTracker
  * Gfxnews
  * GFXPeers
@@ -156,6 +165,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Gormogon
  * Greek Team
+ * HacheDe
  * Hardbay
  * HD-Forever
  * HD-Only
@@ -165,19 +175,18 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD4Free
  * HDBits
  * HDChina
+ * HDCity
  * HDHome
  * HDME
  * HDSky
  * HDTorrents.it
  * Hebits
  * Hon3y HD
- * Hounddawgs
  * House-of-Torrents
  * Hyperay
  * ICE Torrent
  * I Love Classics
  * Immortalseed
- * Infinity-T
  * inPeril
  * Insane Tracker
  * IPTorrents
@@ -211,11 +220,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PrivateHD
  * Psytorrents
  * PTFiles
+ * PuntoTorrent
  * Redacted (PassTheHeadphones)
  * RevolutionTT
  * Rockhard Lossless
  * RoDVD
  * SceneFZ
+ * SceneReactor
  * SceneTime
  * SDBits
  * Secret Cinema
@@ -231,6 +242,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * Synthesiz3r
  * Tasmanit
+ * TBPlus
  * The Empire
  * The Geeks
  * The Horror Charnel
@@ -244,16 +256,18 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
+ * Torrent.LT
  * TorrentBD
+ * TorrentBytes
  * TorrentCCF  [![(invite needed)][inviteneeded]](#)
  * TorrentDay
  * Torrentech
  * TorrentHeaven
  * TorrentHR
  * Torrenting
+ * Torrentland
  * TorrentLeech
  * Torrents.Md
- * TorrentVault
  * Torrent-Syndikat
  * TorViet
  * ToTheGlory
@@ -261,16 +275,16 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Trezzor
  * TV Chaos UK
  * TV-Vault
- * u-Torrent
+ * u-torrents (SceneFZ)
  * UHDBits
  * Ultimate Gamer Club
- * ULTRAHDCLUB
  * Waffles
  * World-In-HD
  * WorldOfP2P
  * x264
  * XSpeeds
  * Xthor
+ * Your Exotic Torrents
  * Zamunda.net
  * Zelka.org
 
@@ -317,7 +331,7 @@ Install [Mono 4.6](http://www.mono-project.com/download/#download-mac) or better
 1. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases).
 2. Open the extracted folder and double-click on `install_service_macos`.
 3. If the installation was a success, you can close the Terminal window.
-       
+
 The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
 Logs are stored as usual under `~/.config/Jackett/log.txt`.
 
@@ -335,9 +349,12 @@ When running jackett behind a reverse proxy make sure that the original hostname
 
 Example config for apache:
 ```
-ProxyPreserveHost On
-RequestHeader set X-Forwarded-Proto "https"
-ProxyPass /jackett http://127.0.0.1:9117/
+<Location /jackett>
+    ProxyPreserveHost On
+    RequestHeader set X-Forwarded-Proto expr=%{REQUEST_SCHEME}
+    ProxyPass http://127.0.0.1:9117
+    ProxyPassReverse http://127.0.0.1:9117
+</Location>
 ```
 
 ## Troubleshooting
@@ -355,7 +372,7 @@ ProxyPass /jackett http://127.0.0.1:9117/
 
 *  __Enable logging__
 
-  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface.
+  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface (followed by clicking on the `Apply Server Settings` button).
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
 

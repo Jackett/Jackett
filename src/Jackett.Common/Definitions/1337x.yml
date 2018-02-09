@@ -103,11 +103,18 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:"
+      options:
+        "http://itorrents.org/" : "iTorrents.org"
+        "magnet:": "magnet"
 
   download:
     # the .torrent url is on the on the details page 
-    selector: ul li a[href^="http://itorrents.org/"]
+    selector: ul li a[href^="{{ .Config.downloadlink }}"]
 
   search:
     paths:

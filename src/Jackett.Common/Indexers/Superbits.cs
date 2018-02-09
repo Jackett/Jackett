@@ -65,6 +65,8 @@ namespace Jackett.Indexers
             AddCategoryMapping(20, TorznabCatType.ConsoleXbox, "Xbox");
             AddCategoryMapping(21, TorznabCatType.MoviesOther, "Xvid");
             AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
+            AddCategoryMapping(24, TorznabCatType.MoviesUHD, "Film 4K");
+            AddCategoryMapping(26, TorznabCatType.TV, "TV DK");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -118,7 +120,7 @@ namespace Jackett.Indexers
             {
                 //var json = JArray.Parse(results.Content);
                 dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
-                foreach (var row in json)
+                foreach (var row in json ?? System.Linq.Enumerable.Empty<dynamic>())
                 {
                     var release = new ReleaseInfo();
                     var descriptions = new List<string>();
@@ -136,6 +138,7 @@ namespace Jackett.Indexers
                     release.Grabs = row.times_completed;
 
                     release.Comments = new Uri(SiteLink + "torrent/" + row.id.ToString() + "/");
+                    release.Guid = release.Comments;
                     release.Link = new Uri(SiteLink + "api/v1/torrents/download/" + row.id.ToString());
 
                     if (row.frileech == 1)

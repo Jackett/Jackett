@@ -7,6 +7,8 @@
   encoding: UTF-8
   links:
     - https://yggtorrent.com/
+  legacylinks:
+    - https://ww1.yggtorrent.com/
 
   caps:
     categorymappings:
@@ -71,7 +73,7 @@
   settings:
     - name: username
       type: text
-      label: Username (email or username)
+      label: Username
     - name: password
       type: password
       label: Password
@@ -101,16 +103,11 @@
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
       submit: ""
-    headers:
-      "[:authority]": "yggtorrent.com"
-      "[:method]": "post"
-      "[:path]": "/"
-      "[:scheme]": "https"
     error:
-      - selector: "body > div.page-content > div > div.col-md-10 > div > div > div > div > div.content-box-large.box-with-header > form > center > table > tbody > tr:nth-child(3) > td:nth-child(2) > button.text:contains('Se connecter')"
+      - selector: "form > center > span[style=\"color:red\"]"
     test:
       path: "/"
-      selector: "a[href=\"https://yggtorrent.com/user/logout\"]"
+      selector: "a[href$=\"user/logout\"]"
 
   search:
     paths:
@@ -121,6 +118,12 @@
     rows:
       selector: "table.table.table-striped > tbody > tr"
     fields:
+      _id:
+        selector: "a.torrent-name"
+        attribute: href
+        filters:
+          - name: regexp
+            args: "/(\\d+)-"
       title_normal:
         selector: "a.torrent-name"
       title_filtered:
@@ -193,8 +196,7 @@
         selector: "td:nth-child(1) > a[href$=\"#comments\"]"
         attribute: href
       download:
-        selector: "td:nth-child(1) > a[href*=\"/engine/download_torrent?id=\"]"
-        attribute: href
+        text: "/engine/download_torrent?id={{ .Result._id }}"
       date:
         selector: "td:nth-child(3)"
         filters:

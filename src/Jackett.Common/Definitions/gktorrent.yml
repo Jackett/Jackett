@@ -6,9 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.gktorrent.com
+    - http://www.gktorrent.net/
   legacylinks:
-    - https://www.gktorrent.com # they're forcing http
+    - https://www.gktorrent.com/ # they're forcing http
+    - http://www.gktorrent.com/
 
   caps:
     categorymappings:
@@ -16,7 +17,8 @@
       - {id: tvshows, cat: TV, desc: "TV Shows"}
       - {id: softwares, cat: PC, desc: "Softwares"}
       - {id: music, cat: Audio, desc: "Music"}
-      - {id: games, cat: Console, desc: "Games"}
+      - {id: console-games, cat: Console, desc: "Console Games"}
+      - {id: pc-games, cat: PC/Games, desc: "PC Games"}
       - {id: books, cat: Books, desc: "Books"}
 
     modes:
@@ -76,8 +78,9 @@
           .Films: "movies"
           .Séries: "tvshows"
           .Logiciels: "softwares"
-          .Musiques: "music"
-          .Jeux: "games"
-          .Ebooks: "books"
+          .Musique: "music"
+          .Jeux-Consoles: "console-games"
+          .Jeux-PC: "pc-games"
+          .Ebook: "books"
       date:
         text: "now"

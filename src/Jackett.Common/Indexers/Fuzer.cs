@@ -45,6 +45,7 @@ namespace Jackett.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
+            TorznabCaps.SupportsImdbSearch = true;
             TorznabCaps.Categories.Clear();
 
             // סרטים
@@ -126,7 +127,7 @@ namespace Jackett.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var results = await performRegularQuery(query);
-            if (results.Count() == 0)
+            if (results.Count() == 0 && !query.IsImdbQuery)
             {
                 return await performHebrewQuery(query);
             }
@@ -155,6 +156,8 @@ namespace Jackett.Indexers
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
             var searchString = query.GetQueryString();
+            if (query.IsImdbQuery)
+                searchString = query.ImdbID;
 
             if (hebName != null)
             {
@@ -208,7 +211,14 @@ namespace Jackett.Indexers
                     release.Comments = new Uri(SiteLink + qRow.Find("a.threadlink[href]").Attr("href"));
                     release.Link = new Uri(SiteLink + qRow.Find("a:has(div.dlimg)").Attr("href"));
                     release.Guid = release.Comments;
-                    release.BannerUrl = new Uri(qRow.Find("a[imgsrc]").Attr("imgsrc"));
+                    try
+                    {
+                        release.BannerUrl = new Uri(qRow.Find("a[imgsrc]").Attr("imgsrc"));
+                    }
+                    catch (Exception)
+                    {
+                        // do nothing, some releases have invalid banner URLs, ignore the banners in this case
+                    }
 
                     var dateStringAll = qRow.Find("div.up_info2")[0].ChildNodes.Last().ToString();
                     var dateParts = dateStringAll.Split(' ');

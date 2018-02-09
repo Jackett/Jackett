@@ -8,6 +8,7 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Jackett.Services.Interfaces;
+using System.Text;
 
 namespace Jackett.Services
 {
@@ -34,6 +35,7 @@ namespace Jackett.Services
                 imdbId = "tt" + imdbId;
 
             var request = new WebRequest("http://omdbapi.com/?apikey=" + apiKey + "&i=" + imdbId);
+            request.Encoding = Encoding.UTF8;
             var result = await WebClient.GetString(request);
             var movie = JsonConvert.DeserializeObject<Movie>(result.Content);
 

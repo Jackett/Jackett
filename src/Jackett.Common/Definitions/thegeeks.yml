@@ -92,7 +92,7 @@
       password: "{{ .Config.password }}"
     captcha:
       type: image
-      image: img#freecap
+      selector: img#freecap
       input: word
     error:
       - selector: table:contains("Login failed!")

@@ -102,7 +102,8 @@ namespace Jackett.Models
     public class captchaBlock
     {
         public string Type { get; set; }
-        public string Image { get; set; }
+        public string Selector { get; set; }
+        public string Image { get { throw new Exception("Deprecated, please use Login.Captcha.Selector instead"); } set { throw new Exception("Deprecated, please use login/captcha/selector instead of image"); } }
         public string Input { get; set; }
     }
 
@@ -193,6 +194,7 @@ namespace Jackett.Models
     public class downloadBlock
     {
         public string Selector { get; set; }
+        public List<filterBlock> Filters { get; set; }
         public string Method { get; set; }
         public requestBlock Before { get; set; }
     }

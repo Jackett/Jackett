@@ -94,17 +94,21 @@ Encoding = Encoding.UTF8;
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            return isAnime ? term.TrimEnd(digits) : Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            if (isAnime)
+            {
+                return term.TrimEnd(digits);
+            }
+            
+            var ret = Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            return ret.Replace("Agents of SHIELD", "Agents of S.H.I.E.L.D.");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchString = query.GetQueryString();
-
             // if the search string is empty use the "last 24h torrents" view
-            if (string.IsNullOrWhiteSpace(searchString))
+            if (string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 var results = await RequestStringWithCookies(TodayUrl);
                 try
@@ -199,14 +203,19 @@ Encoding = Encoding.UTF8;
             {
                 var searchUrl = BrowseUrl;
                 var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
+                
+                query.SearchTerm = query.SearchTerm.Replace("Agents of SHIELD", "Agents of S.H.I.E.L.D.");
+                var searchString = query.GetQueryString();
 
-                var queryCollection = new NameValueCollection();
-                queryCollection.Add("searchstr", StripSearchString(searchString, isSearchAnime));
-                queryCollection.Add("order_by", "time");
-                queryCollection.Add("order_way", "desc");
-                queryCollection.Add("group_results", "1");
-                queryCollection.Add("action", "basic");
-                queryCollection.Add("searchsubmit", "1");
+                var queryCollection = new NameValueCollection
+                {
+                    {"searchstr", StripSearchString(searchString, isSearchAnime)},
+                    {"order_by", "time"},
+                    {"order_way", "desc"},
+                    {"group_results", "1"},
+                    {"action", "basic"},
+                    {"searchsubmit", "1"}
+                };
 
                 foreach (var cat in MapTorznabCapsToTrackers(query))
                 {
@@ -238,20 +247,22 @@ Encoding = Encoding.UTF8;
                             ICollection<int> Category = null;
                             string YearStr = null;
                             Nullable<DateTime> YearPublishDate = null;
+                            string CategoryStr = "";
 
                             if (Row.ClassList.Contains("group") || Row.ClassList.Contains("torrent")) // group/ungrouped headers
                             {
                                 var qCatLink = Row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
-                                string CategoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                                CategoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                                 Category = MapTrackerCatToNewznab(CategoryStr);
+                                
+                                YearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+                                YearPublishDate = DateTime.SpecifyKind(DateTime.ParseExact(YearStr, "yyyy", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
                                 // if result is an anime, convert title from SXXEXX to EXX
                                 if (CategoryStr == "14")
                                 {
                                     Title = Regex.Replace(Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
                                 }
-                                YearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
-                                YearPublishDate = DateTime.SpecifyKind(DateTime.ParseExact(YearStr, "yyyy", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
 
                                 if (Row.ClassList.Contains("group")) // group headers
                                 {
@@ -278,7 +289,11 @@ Encoding = Encoding.UTF8;
                             if (Row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                             {
                                 release.Description = qDetailsLink.TextContent;
-                                release.Title = GroupTitle + " " + GroupYearStr;
+
+                                string cleanTitle = Regex.Replace(GroupTitle, @" - S?(?<season>\d{1,2})?E?(?<episode>\d{1,4})?", "");
+                                string seasonEp = Regex.Replace(GroupTitle, @"^(.*?) - (S?(\d{1,2})?E?(\d{1,4})?)?", "$2");
+                                release.Title = CategoryStr == "14" ? GroupTitle : cleanTitle + " " + GroupYearStr + " " + seasonEp;
+
                                 release.PublishDate = GroupPublishDate.Value;
                                 release.Category = GroupCategory;
                             }
@@ -286,7 +301,11 @@ Encoding = Encoding.UTF8;
                             {
                                 var qDescription = Row.QuerySelector("div.torrent_info");
                                 release.Description = qDescription.TextContent;
-                                release.Title = Title + " " + YearStr;
+
+                                string cleanTitle = Regex.Replace(Title, @" - ((S(\d{1,2}))?E(\d{1,4}))", "");
+                                string seasonEp = Regex.Replace(Title, @"^(.*?) - ((S(\d{1,2}))?E(\d{1,4}))", "$2");
+                                release.Title = CategoryStr == "14" ? Title : cleanTitle + " " + YearStr + " " + seasonEp;
+
                                 release.PublishDate = YearPublishDate.Value;
                                 release.Category = Category;
                             }

@@ -24,6 +24,8 @@ namespace Jackett.Services
 
         public string HashPassword(string input)
         {
+            if (input == null)
+                return null;
             // Append key as salt
             input += _serverConfig.APIKey;
 
