@@ -42,7 +42,7 @@
       pwd: "{{ .Config.password }}"
     captcha:
       type: image
-      image: img.captcha
+      selector: img.captcha
       input: private_key
     error:
       - selector: span.errormsg

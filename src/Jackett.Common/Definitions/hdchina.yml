@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://hdchina.org/
+  legacylinks:
     - https://hdchina.club/
 
   caps:
@@ -49,7 +51,7 @@
       password: "{{ .Config.password }}"
     captcha:
       type: image
-      image: img[alt="CAPTCHA"]
+      selector: img[alt="CAPTCHA"]
       input: imagestring
     error:
       - selector: td.embedded:has(h2:contains("failed"))

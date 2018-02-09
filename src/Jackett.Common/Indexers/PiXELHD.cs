@@ -105,7 +105,7 @@ namespace Jackett.Indexers
            {
                var LoginParser = new HtmlParser();
                var LoginDocument = LoginParser.Parse(result.Content);
-               var errorMessage = LoginDocument.QuerySelector("span.warning:has(br)").TextContent;
+               var errorMessage = LoginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
 

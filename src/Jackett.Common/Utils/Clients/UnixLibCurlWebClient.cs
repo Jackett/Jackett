@@ -70,7 +70,7 @@ namespace Jackett.Utils.Clients
 
             // check if we've received a CloudFlare challenge
             string[] server;
-            if (result.Status == HttpStatusCode.ServiceUnavailable && result.Headers.TryGetValue("server", out server) && server[0] == "cloudflare-nginx")
+            if (result.Status == HttpStatusCode.ServiceUnavailable && result.Headers.TryGetValue("server", out server) && (server[0] == "cloudflare-nginx" || server[0] == "cloudflare"))
             {
                 logger.Info("UnixLibCurlWebClient: Received a new CloudFlare challenge");
 

@@ -1,0 +1,102 @@
+---
+  site: yourexotic
+  name: Your Exotic Torrents
+  description: "a porn tracker"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://torrents.yourexotic.com/
+
+  caps:
+    categorymappings:
+      - {id: 11, cat: XXX, desc: "DVDRip"}
+      - {id: 2, cat: XXX, desc: "DVDRip Censored"}
+      - {id: 1, cat: XXX, desc: "Video Clip"}
+      - {id: 20, cat: XXX, desc: "Censored Clips"}
+      - {id: 14, cat: XXX, desc: "Hentai"}
+      - {id: 19, cat: XXX, desc: "Full DVD"}
+      - {id: 16, cat: XXX, desc: "HD 720p"}
+      - {id: 17, cat: XXX, desc: "HD 1080p"}
+      - {id: 18, cat: XXX, desc: "HD Censored"}
+      - {id: 15, cat: XXX, desc: "SVCD/VCD"}
+      - {id: 13, cat: XXX, desc: "Softcore"}
+      - {id: 3, cat: XXX, desc: "Pictures"}
+      - {id: 21, cat: XXX, desc: "Mixed Videos"}
+    modes:
+      search: [q]
+      tv-search: [q]
+      movie-search: [q]
+
+  login:
+    path: /index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: .lista>span
+    test:
+      path: index.php
+      selector: form[name="jump1"]
+
+  search:
+    path: index.php
+    inputs:
+      $raw: "&category={{range .Categories}}{{.}};{{end}}"
+      page: "torrents"
+      active: "0"
+      search: "{{ .Query.Keywords }}"
+    rows:
+      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+    fields:
+      category:
+        selector:  td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: a[href^="index.php?page=torrent-details&id="]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["View details: ", ""]
+      details:
+        selector: a[href^="index.php?page=torrent-details&id="]
+        attribute: href
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      grabs:
+        selector: td:nth-child(11)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      date:
+        selector: td:nth-child(6)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      downloadvolumefactor: 
+        case:
+          img[src$="freeleech.gif"]: "0"
+          img[src$="silver.gif"]: "0.5"
+          "*": "1"
+      uploadvolumefactor: 
+          case:
+            img[src$="2x.gif"]: "2"
+            img[src$="3x.gif"]: "3"
+            img[src$="4x.gif"]: "4"
+            img[src$="5x.gif"]: "5"
+            img[src$="6x.gif"]: "6"
+            img[src$="7x.gif"]: "7"
+            img[src$="8x.gif"]: "8"
+            img[src$="9x.gif"]: "9"
+            "*": "1"

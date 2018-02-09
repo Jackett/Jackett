@@ -38,7 +38,11 @@ namespace Jackett.Models.DTO
 
             alternativesitelinks = indexer.AlternativeSiteLinks;
 
-            caps = indexer.TorznabCaps.Categories.Select(c => new Capability
+            caps = indexer.TorznabCaps.Categories
+                .GroupBy(p => p.ID)
+                .Select(g => g.First())
+                .OrderBy(c => c.ID < 100000 ? "z" + c.ID.ToString() : c.Name)
+                .Select(c => new Capability
             {
                 ID = c.ID.ToString(),
                 Name = c.Name

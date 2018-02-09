@@ -195,6 +195,13 @@ namespace Jackett.Updater
                 "Definitions/bithq.yml",
                 "Definitions/blubits.yml",
                 "Definitions/torrentproject.yml",
+                "Definitions/torrentvault.yml",
+                "Definitions/apollo.yml", // migrated to C# gazelle base tracker
+                "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
+                "Definitions/utorrents.yml", // same as SzeneFZ now
+                "Definitions/ultrahdclub.yml",
+                "Definitions/infinityt.yml",
+                "Definitions/hachede-c.yml",
             };
 
             foreach (var oldFIle in oldFiles)

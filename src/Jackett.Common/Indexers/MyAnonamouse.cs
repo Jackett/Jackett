@@ -180,6 +180,12 @@ namespace Jackett.Indexers
             }
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
+            if (response.Status == System.Net.HttpStatusCode.Forbidden)
+            {
+                // re-login
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(urlSearch);
+            }
 
             try
             {

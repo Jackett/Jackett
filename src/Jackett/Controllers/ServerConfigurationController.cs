@@ -47,7 +47,7 @@ namespace Jackett.Controllers.V20
         {
             var oldPassword = serverConfig.AdminPassword;
             if (string.IsNullOrEmpty(password))
-                password = string.Empty;
+                password = null;
 
             if (oldPassword != password)
             {

@@ -114,7 +114,7 @@
       category: "{{ .Config.category }}"
 
     rows:
-      selector: table > tbody > tr:has(td a[href*="/browse.php?browse_categories&category="])
+      selector: table > tbody > tr:has(img[src*="/pic/categories/"])
     fields:
       title:
         # using attribute title from td(3) because the text from td(2) a(2) can be abbreviated
@@ -124,7 +124,7 @@
           - name: replace
             args: ["Torrent letöltése: ", ""]
       details:
-        selector: td:nth-of-type(2) a:nth-of-type(2)
+        selector: td:nth-of-type(2) > a[href$=".ts"]
         attribute: href
       banner:
         selector: td:nth-of-type(2) a:nth-of-type(2)
@@ -136,11 +136,11 @@
         selector: td:nth-of-type(3) a
         attribute: href
       category:
-        selector: td:nth-of-type(1) a
+        selector: td:nth-of-type(1) > a
         attribute: href
         filters:
-          - name: querystring
-            args: category
+          - name: regexp
+            args: -c-(\d+)\.ts
       date:
         selector: td:nth-of-type(2)
         remove: b

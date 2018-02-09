@@ -65,7 +65,7 @@
     form: form#login
     captcha:
       type: image
-      image: img[alt="Security code"]
+      selector: img[alt="Security code"]
       input: code
     inputs:
       username: "{{ .Config.username }}"

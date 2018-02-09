@@ -24,7 +24,12 @@ namespace Jackett.Indexers
     /// </summary>
     public class Xthor : BaseCachingWebIndexer
     {
-        private static string ApiEndpoint => "https://api.xthor.bz/";
+        private static string ApiEndpoint => "https://api.xthor.to/";
+
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://xthor.bz/",
+        };
+
         private string TorrentCommentUrl => TorrentDescriptionUrl;
         private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
         private bool DevMode => ConfigData.DevMode.Value;
@@ -37,13 +42,13 @@ namespace Jackett.Indexers
             : base(
                 name: "Xthor",
                 description: "General French Private Tracker",
-                link: "https://xthor.bz/",
+                link: "https://xthor.to/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "https://xthor.bz/download.php?torrent=",
+                downloadBase: "https://xthor.to/download.php?torrent=",
                 configData: new ConfigurationDataXthor())
         {
             Encoding = Encoding.UTF8;
@@ -328,7 +333,6 @@ namespace Jackett.Indexers
             // Loop on Categories needed
             if (categoriesList.Count > 0)
             {
-                // ignore categories for now, something changed or is buggy, needs investigation
                 parameters.Add("category", string.Join("+", categoriesList));
             }
 
@@ -447,6 +451,8 @@ namespace Jackett.Indexers
 
             // Request our first page
             var results = await webclient.GetString(myIndexRequest);
+            if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
+                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
             return results.Content;

@@ -19,6 +19,8 @@ using System.Threading;
 using System.Web;
 using Jackett.Services.Interfaces;
 using Jacket.Common;
+using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Jackett.Services
 {
@@ -75,12 +77,12 @@ namespace Jackett.Services
         {
             if (config.BasePathOverride == null || config.BasePathOverride == "")
             {
-                return "/";
+                return "";
             }
             var path = config.BasePathOverride;
-            if (!path.EndsWith("/"))
+            if (path.EndsWith("/"))
             {
-                path = path + "/";
+                path = path.TrimEnd('/');
             }
             if (!path.StartsWith("/"))
             {
@@ -144,7 +146,7 @@ namespace Jackett.Services
                     if (monoVersionO.Major < 4)
                     {
                         logger.Error("Your mono version is to old (mono 3 is no longer supported). Please update to the latest version from http://www.mono-project.com/download/");
-                        Environment.Exit(2);
+                        Engine.Exit(2);
                     }
                     else if (monoVersionO.Major == 4 && monoVersionO.Minor == 2)
                     {
@@ -202,7 +204,54 @@ namespace Jackett.Services
                     {
                         logger.Debug(e);
                         logger.Error(e.Message + " Most likely the mono-locale-extras package is not installed.");
-                        Environment.Exit(2);
+                        Engine.Exit(2);
+                    }
+
+                    if (Engine.WebClientType == typeof(HttpWebClient) || Engine.WebClientType == typeof(HttpWebClient2))
+                    { 
+                        // check if the certificate store was initialized using Mono.Security.X509.X509StoreManager.TrustedRootCertificates.Count
+                        try
+                        {
+                            var monoSecurity = Assembly.Load("Mono.Security");
+                            Type monoX509StoreManager = monoSecurity.GetType("Mono.Security.X509.X509StoreManager");
+                            if (monoX509StoreManager != null)
+                            {
+                                var TrustedRootCertificatesProperty = monoX509StoreManager.GetProperty("TrustedRootCertificates");
+                                var TrustedRootCertificates = (ICollection)TrustedRootCertificatesProperty.GetValue(null);
+
+                                logger.Info("TrustedRootCertificates count: " + TrustedRootCertificates.Count);
+
+                                if (TrustedRootCertificates.Count == 0)
+                                {
+                                    var CACertificatesFiles = new string[] {
+                                        "/etc/ssl/certs/ca-certificates.crt", // Debian based
+                                        "/etc/pki/tls/certs/ca-bundle.c", // RedHat based
+                                        "/etc/ssl/ca-bundle.pem", // SUSE
+                                        };
+
+                                    var notice = "The mono certificate store is not initialized.<br/>\n";
+                                    var logSpacer = "                     ";
+                                    var CACertificatesFile = CACertificatesFiles.Where(f => File.Exists(f)).FirstOrDefault();
+                                    var CommandRoot = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin";
+                                    var CommandUser = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin";
+                                    if (CACertificatesFile != null)
+                                    {
+                                        CommandRoot = "cert-sync " + CACertificatesFile;
+                                        CommandUser = "cert-sync --user " + CACertificatesFile;
+                                    }
+                                    notice += logSpacer + "Please run the following command as root:<br/>\n";
+                                    notice += logSpacer + "<pre>" + CommandRoot + "</pre><br/>\n";
+                                    notice += logSpacer + "If you don't have root access, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
+                                    notice += logSpacer + "<pre>" + CommandUser + "</pre>";
+                                    _notices.Add(notice);
+                                    logger.Error(Regex.Replace(notice, "<.*?>", String.Empty));
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e, "Error while chekcing the mono certificate store");
+                        }
                     }
                 }
             }
@@ -249,12 +298,12 @@ namespace Jackett.Services
                 if (inner is SocketException && ((SocketException)inner).SocketErrorCode == SocketError.AddressAlreadyInUse) // Linux (mono)
                 {
                     logger.Error("Address already in use: Most likely Jackett is already running.");
-                    Environment.Exit(1);
+                    Engine.Exit(1);
                 }
                 else if (inner is HttpListenerException && ((HttpListenerException)inner).ErrorCode == 183) // Windows
                 {
                     logger.Error(inner.Message + " Most likely Jackett is already running.");
-                    Environment.Exit(1);
+                    Engine.Exit(1);
                 }
                 throw e;
             }
@@ -310,7 +359,7 @@ namespace Jackett.Services
             if (scheme == "https" && !Request.RequestUri.Authority.Contains(":"))
                 port = 443;
 
-            var serverUrl = string.Format("{0}://{1}:{2}{3}", scheme, Request.RequestUri.Host, port, BasePath());
+            var serverUrl = string.Format("{0}://{1}:{2}{3}/", scheme, Request.RequestUri.Host, port, BasePath());
             return serverUrl;
         }
     }

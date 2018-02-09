@@ -1,0 +1,171 @@
+﻿---
+  site: Bittorrentfiles
+  name: Bittorrentfiles
+  description: "Bittorrentfiles is a Private GERMAN tracker"
+  language: de-de
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.Bittorrentfiles.me/
+
+  caps:
+    categorymappings:
+      # Movie
+      - {id: 48, cat: Movies/HD, desc: "1080p"}
+      - {id: 31, cat: Movies/3D, desc: "3D"}
+      - {id: 21, cat: Movies/HD, desc: "720p"}
+      - {id: 28, cat: Movies/SD, desc: "AVI"}
+      - {id: 20, cat: Movies/DVD, desc: "DVD-R"}
+      - {id: 40, cat: Movies/HD, desc: "h264/x264"}
+      - {id: 30, cat: Movies/HD, desc: "HD/BD"}
+      - {id: 49, cat: Movies/Foreign, desc: "International"}
+      - {id: 78, cat: Movies/HD, desc: "UHD"}
+
+      # Serien
+      - {id: 79, cat: TV/HD, desc: "Staffeln HD"}
+      - {id: 56, cat: TV/SD, desc: "Staffeln SD"}
+      - {id: 54, cat: TV/HD, desc: "Folgen HD"}
+      - {id: 80, cat: TV/HD, desc: "Folgen HD/BD"}
+      - {id: 7, cat: TV/SD, desc: "Folgen SD"}
+      - {id: 55, cat: TV/Foreign, desc: "International"}
+
+      # Doku
+      - {id: 64, cat: TV/Documentary, desc: "HD"}
+      - {id: 36, cat: TV/Documentary, desc: "SD"}
+      - {id: 81, cat: TV/Documentary, desc: "3D"}
+      - {id: 82, cat: TV/Documentary, desc: "Packs"}
+
+      # Spiele
+      - {id: 4, cat: PC/Games, desc: "Windows"}
+      - {id: 72, cat: Console/XBox360, desc: "XBOX 360"}
+      - {id: 44, cat: Console/XBoxOne, desc: "XBOX One"}
+      - {id: 43, cat: Console/Wii, desc: "Wii"}
+      - {id: 69, cat: Console, desc: "PS2"}
+      - {id: 70, cat: Console/PS3, desc: "PS3"}
+      - {id: 70, cat: Console/PS4, desc: "PS4"}
+      - {id: 70, cat: Console/PSP, desc: "PSP"}
+      - {id: 42, cat: Console/Other, desc: "Misc"}
+
+      # Musik
+      - {id: 66, cat: Audio, desc: "Alben"}
+      - {id: 75, cat: Audio, desc: "Singles"}
+      - {id: 50, cat: Audio, desc: "Charts"}
+      - {id: 52, cat: Audio, desc: "Packs"}
+      - {id: 53, cat: Audio/Video, desc: "Video"}
+      - {id: 61, cat: Audio/Video, desc: "DVD-R"}
+      - {id: 83, cat: Audio, desc: "Flac"}
+      - {id: 68, cat: Audio, desc: "Live"}
+      - {id: 6, cat: Audio, desc: "Misc"}
+      - {id: 51, cat: Audio, desc: "OST"}
+      - {id: 67, cat: Audio, desc: "Sampler"}
+
+      # App
+      - {id: 22, cat: PC/0day, desc: "Windows"}
+      - {id: 62, cat: PC/Mac, desc: "Mac OS"}
+      - {id: 63, cat: PC/0day, desc: "Linux"}
+      - {id: 34, cat: PC, desc: "Andere"}
+
+      # Sport
+      - {id: 74, cat: TV/Sport, desc: "HD"}
+      - {id: 39, cat: TV/Sport, desc: "SD"}
+
+      # Sonstiges
+      - {id: 41, cat: Books/Comics, desc: "A-Book"}
+      - {id: 33, cat: TV/Anime, desc: "Anime"}
+      - {id: 35, cat: Books, desc: "e-Book"}
+      - {id: 65, cat: Other, desc: "E-Learning"}
+      - {id: 65, cat: PC, desc: "Mobile"}
+      - {id: 9, cat: Other, desc: "Other"}
+
+      #XXX
+      - {id: 58, cat: Books/Comics, desc: "HD"}
+      - {id: 33, cat: XXX, desc: "Hentai"}
+      - {id: 35, cat: XXX/Other, desc: "Other"}
+      - {id: 65, cat: XXX/Packs, desc: "Pack"}
+      - {id: 65, cat: XXX, desc: "SD"}
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings:
+    - name: user
+      type: text
+      label: Username
+    - name: pass
+      type: password
+      label: Password
+
+  login:
+    path: signin.php
+    method: form
+    form: form
+    inputs:
+      user: "{{ .Config.user }}"
+      pass: "{{ .Config.pass }}"
+    error:
+      - selector: .error
+    test:
+      path: browse.php
+
+  search:
+    path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: "1"
+
+    rows:
+      selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
+    fields:
+      title:
+        selector: a[href^="details.php"]
+        attribute: title
+      category:
+        selector: a[href^="/browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="details.php"]
+        attribute: href
+      download:
+        selector: a[href^="/download.php"]
+        attribute: href
+      files:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5) > a
+      grabs:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2)
+      size:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(6) 
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      seeders:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2)
+      leechers:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3)
+      date:
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(10)
+        filters:
+          - name: split
+            args: ["by", 0]
+          - name: replace
+            args: ["Heute", "Today"]
+          - name: replace
+            args: ["Gestern", "Yesterday"]
+          - name: dateparse
+            args: "02.01.2006 15:04:05"
+      downloadvolumefactor:
+        case:
+          img[alt="OU"]: "0"
+          img[alt="D/2"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[alt="2xU"]: "2"
+          "*": "1"

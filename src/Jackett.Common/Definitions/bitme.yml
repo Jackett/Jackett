@@ -50,7 +50,7 @@
     form: form[action="takelogin.php"]
     captcha:
       type: image
-      image: img[src="visual.php"]
+      selector: img[src="visual.php"]
       input: secimage
     inputs:
       username: "{{ .Config.username }}"

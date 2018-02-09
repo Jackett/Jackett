@@ -13,6 +13,10 @@ namespace Jackett.Indexers
 {
     public class DanishBits : CouchPotatoTracker
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://danishbits.org/",
+        };
+
         private new ConfigurationDataUserPasskey configData
         {
             get { return (ConfigurationDataUserPasskey)base.configData; }
@@ -37,6 +41,7 @@ namespace Jackett.Indexers
 
             AddCategoryMapping("movie", TorznabCatType.Movies);
             AddCategoryMapping("tv", TorznabCatType.TV);
+            AddCategoryMapping("blandet", TorznabCatType.Other); // e.g. games
         }
 
         protected override string GetSearchString(TorznabQuery query)

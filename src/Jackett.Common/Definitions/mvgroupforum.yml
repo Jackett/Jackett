@@ -88,6 +88,10 @@
       type: checkbox
       label: Only released and seeded torrents
       default: false
+    - name: dropbbc
+      type: checkbox
+      label: Drop "BBC " from the front of result titles
+      default: false
     - name: info
       type: info
       label: Category for Sonarr and Radarr
@@ -126,14 +130,14 @@
       selector: tr:has(a.magnetlink)
     fields:
       title:
-        # fallback title (to prevent abend if neither optional is found)
+        # fallback title (to prevent abend if optional is not found)
         text: "title not found"
       title:
         optional: true
-        selector: td.singleindent a[href^="/index.php?showtopic="]
-      title:
-        optional: true
-        selector: td.doubleindent
+        selector: td.doubleindent, td.singleindent a[href^="/index.php?showtopic="]
+        filters:
+          - name: re_replace
+            args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
       details:
         optional: true
         selector: td.singleindent a[href^="/index.php?showtopic="]

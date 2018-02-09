@@ -3,7 +3,7 @@
 Provide a description of the feature request or bug, the more details the better.
 If you are experiencing an issue with a tracker, a **full log must be included**. Instructions for obtaining logs are here: https://github.com/Jackett/Jackett#troubleshooting
 
-Jackett version:  
-Mono version (if not using Windows):  
+**Jackett version**:  
+**Mono version** (if not using Windows):  
 
 -------------------------------
