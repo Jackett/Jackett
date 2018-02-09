@@ -1587,6 +1587,11 @@ namespace Jackett.Indexers
 
                             release.Title = title;
                         }
+                        else
+                        {
+                            var regex = new Regex(@"(\([А-Яа-я\W]+\))|(^[А-Яа-я\W\d]+\/ )|([а-яА-Я \-]+,+)|([а-яА-Я]+)");
+                            release.Title = regex.Replace(release.Title, "");
+                        }
 
                         releases.Add(release);
                     }
