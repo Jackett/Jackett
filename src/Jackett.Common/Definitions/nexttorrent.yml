@@ -6,39 +6,47 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.nextorrent.tv/
+    - http://www.nextorrent.pro/
   legacylinks:
     - https://www.nextorrent.cc/
     - https://www.nextorrent.org/
+    - https://www.nextorrent.tv/
 
   caps:
     categorymappings:
-      - {id: films, cat: Movies, desc: "Movies"}
-      - {id: series, cat: TV, desc: "TV"}
+      - {id: Film, cat: Movies, desc: "Movies"}
+      - {id: Séries, cat: TV, desc: "TV"}
+      - {id: Animes, cat: TV/Anime, desc: "TV/Anime"}
+      - {id: Jeux, cat: Console, desc: "Games"}
+      - {id: Ebooks, cat: Books, desc: "EBooks"}
+      - {id: Logiciels, cat: PC, desc: "Software"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings: []
 
   download:
-    selector: a[href^="/get_torrent/"]
+    selector: a[href^="/_get/NexTorrent.pro-"]
 
   search:
     paths:
-      - path: "recherche/{{ .Query.Keywords }}"
+      - path: /
+    inputs:
+      s: "{{ .Keywords }}"
     rows:
-      selector: div.listing-torrent > table tbody tr:has(a)
+      selector: article[id^="post-"]
     fields:
       site_date:
-        selector: td:nth-child(1) a
+        selector: h2 a
         filters:
           # date is at the end of the title, so we get it and name it site_date
           - name: regexp
             args: "(\\w+)$"
       title:
-        selector: td:nth-child(1) a
+        selector: h2 a
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
@@ -51,44 +59,32 @@
           - name: re_replace
             args: ["(\\w+)$", ""]
       details:
-        selector: td:nth-child(1) a
+        selector: h2 a
         attribute: href
       download:
-        selector: td:nth-child(1) a
+        selector: h2 a
         attribute: href
+      banner:
+        selector: div.post_image
+        attribute: src
+      category:
+        selector: p.meta span.post-category a
+        
       size:
-        selector: td:nth-child(2)
-        filters:
-          - name: re_replace
-            args: [ "\\.(\\d) Ko", "$1X00"]
-          - name: re_replace
-            args: [ " Ko", "000"]
-          - name: re_replace
-            args: [ "\\.(\\d) Mo", "$1X00000"]
-          - name: re_replace
-            args: [ " Mo", "000000"]
-          - name: re_replace
-            args: [ "\\.(\\d) Go", "$1X00000000"]
-          - name: re_replace
-            args: [ " Go", "000000000"]
-          - name: re_replace
-            args: [ "\\.(\\d) To", "$1X00000000000"]
-          - name: re_replace
-            args: [ " To", "000000000000"]
-          - name: replace
-            args: [ "X", "" ]
+      # there is no size on the primary search results page. defaulting to 500 MB 
+        text: "500 MB"
       date:
-        text: "now"
+        selector: p.meta span.post-date a time.entry-date
+        attribute: datetime
+        filters:
+          - name: dateparse
+            args: "2006-01-02T15:04:05+07:00"
       seeders:
-        text: 0
-      seeders:
-        selector: td:nth-child(3)
-        optional: true
-      leechers:
+      # there is no seeders on the primary search results page. defaulting to 0
         text: 0
       leechers:
-        selector: td:nth-child(4)
-        optional: true
+      # there is no leechers on the primary search results page. defaulting to 0
+        text: 0
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
