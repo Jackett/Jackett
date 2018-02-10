@@ -6,8 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.cpabien.bz/
+    - http://cpabien.mx/
   legacylinks:
+    - https://www.cpabien.bz/
     - http://www.cpabien.bz/
     - http://www.cpabien.cx/
     - http://cpabien.org/
@@ -28,14 +29,13 @@
   settings: []
 
   download:
-    selector: div.btn-download a
-    attribute: href
+    selector: "#telecharger a"
 
   search:
     paths:
-      - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}derniers/{{end}}"
+      - path: "/search.php?t={{ .Keywords }}"
     rows:
-      selector: table.table-corps tbody tr td
+      selector: div[class^='ligne']
     fields:
       site_date:
         selector: a
