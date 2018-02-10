@@ -12,6 +12,7 @@ using Jackett.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System.Text.RegularExpressions;
+using Jackett.Models.IndexerConfig.Bespoke;
 
 namespace Jackett.Indexers
 {
@@ -25,9 +26,9 @@ namespace Jackett.Indexers
         protected string cap_sid = null;
         protected string cap_code_field = null;
 
-        private new ConfigurationDataCaptchaLogin configData
+        private new ConfigurationDataRutracker configData
         {
-            get { return (ConfigurationDataCaptchaLogin)base.configData; }
+            get { return (ConfigurationDataRutracker)base.configData; }
             set { base.configData = value; }
         }
 
@@ -40,7 +41,7 @@ namespace Jackett.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataCaptchaLogin())
+                   configData: new ConfigurationDataRutracker())
         {
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-ru";
@@ -1586,6 +1587,11 @@ namespace Jackett.Indexers
                             title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
 
                             release.Title = title;
+                        }
+                        else if (configData.StripRussianLetters.Value)
+                        {
+                            var regex = new Regex(@"(\([А-Яа-я\W]+\))|(^[А-Яа-я\W\d]+\/ )|([а-яА-Я \-]+,+)|([а-яА-Я]+)");
+                            release.Title = regex.Replace(release.Title, "");
                         }
 
                         releases.Add(release);
