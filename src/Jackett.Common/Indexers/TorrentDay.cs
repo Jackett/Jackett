@@ -80,11 +80,14 @@ namespace Jackett.Indexers
             AddCategoryMapping(48, TorznabCatType.MoviesUHD, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
+            AddCategoryMapping(6, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(17, TorznabCatType.Audio, "Music/Audio");
             AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
             AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
             AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
+            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
+            
             AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
-            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Albums");
 
             AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
             AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
