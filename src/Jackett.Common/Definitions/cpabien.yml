@@ -64,6 +64,25 @@
         attribute: href
       size:
         selector: div.poid
+        filters:
+          - name: re_replace
+            args: [ "\\.(\\d) Ko", "$1X00"]
+          - name: re_replace
+            args: [ " Ko", "000"]
+          - name: re_replace
+            args: [ "\\.(\\d) Mo", "$1X00000"]
+          - name: re_replace
+            args: [ " Mo", "000000"]
+          - name: re_replace
+            args: [ "\\.(\\d) Go", "$1X00000000"]
+          - name: re_replace
+            args: [ " Go", "000000000"]
+          - name: re_replace
+            args: [ "\\.(\\d) To", "$1X00000000000"]
+          - name: re_replace
+            args: [ " To", "000000000000"]
+          - name: replace
+            args: [ "X", "" ]
       date:
         text: "now"
       seeders:
