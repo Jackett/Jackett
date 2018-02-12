@@ -61,9 +61,9 @@
       grabs:
         selector: div[class$="info"] span:nth-of-type(4)
       seeders:
-        text: "0"
+        text: "999"
       leechers:
-        text: "0"
+        text: "999"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
