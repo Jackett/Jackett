@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using CsQuery;
+using Jacket.Common.Helpers;
 using Jackett.Models;
 using Jackett.Models.IndexerConfig;
 using Jackett.Services.Interfaces;
@@ -86,9 +87,9 @@ namespace Jackett.Indexers
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                searchUrl += "&search=" + WebUtility.UrlEncode(searchString);
+                searchUrl += "&search=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
             }
-            string.Format(SearchUrl, WebUtility.UrlEncode(searchString));
+            string.Format(SearchUrl, WebUtilityHelpers.UrlEncode(searchString, Encoding));
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
