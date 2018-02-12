@@ -237,7 +237,8 @@ namespace Jackett.Indexers
                 {
                     if (Row.ClassList.Contains("torrent"))
                     {
-                        throw new Exception("Unexpected torrent row found, please report this issue");
+                        // garbage rows
+                        continue;
                     }
                     else if (Row.ClassList.Contains("group"))
                     {
@@ -292,6 +293,8 @@ namespace Jackett.Indexers
                                 continue;
 
                         var Size = qSize.TextContent;
+                        if (string.IsNullOrEmpty(Size)) // external links, example BlazBlue: Calamity Trigger Manual - Guide [GameDOX - External Link]
+                            continue;
                         release.Size = ReleaseInfo.GetBytes(Size);
 
                         release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
