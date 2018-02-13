@@ -40,13 +40,23 @@
   settings:
     - name: itorrents-links
       type: checkbox
-      label: Add download links via itorrents.org
+      label: "Add download links via itorrents.org"
+      default: false
+    - name: filter-safe
+      type: checkbox
+      label: "Exclude adult content from results"
+      default: true
+    - name: filter-verified
+      type: checkbox
+      label: "Only include verifed content in results"
+      default: false
 
   search:
     paths:
-      - path: searchA
+      - path: "{{if .Config.filter-verified }}verified{{else}}searchA{{end}}"
     inputs:
        f: "{{ .Query.Keywords }}"
+       safe: "{{if .Config.filter-safe }}1{{else}}0{{end}}"
     rows:
       selector: "html body #wrap .results dl:has(a)"
       filters:
