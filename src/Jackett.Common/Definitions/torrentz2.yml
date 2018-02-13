@@ -11,25 +11,39 @@
   caps:
     categories:
       "video tv": TV
+      "video anime": TV/Anime
       "video": Movies
+      "movies divx xvid": Movies
+      "video movie dvd": Movies
+      "video movie dvdrip": Movies
       "video movie hd": Movies/HD
-      "adult": XXX
-      "ebook comics": Books/Comics
       "ebook": Books/Ebook
-      "ebook tutorial": Books/Technical
+      "ebook comics": Books/Comics
       "ebook magazine": Books/Magazines
-      "audio music mp3": Audio/MP3
+      "ebook tutorial": Books/Technical
       "ebook audio book": Audio/Audiobook
+      "audio": Audio
       "audio music lossless": Audio/Lossless
+      "audio music mp3": Audio/MP3
       "application": PC/0day
       "game": PC/Games
-      "game xbox": Console/Xbox
-      "adult milf": XXX
-      "adult hairy": XXX
-      "adult anal": XXX
-      "adult blowjobs": XXX
       "game pc": PC/Games
-      "audio": Audio
+      "game xbox": Console/Xbox
+      "adult": XXX
+      "adult amateur": XXX
+      "adult anal": XXX
+      "adult asian": XXX
+      "adult blowjobs": XXX
+      "adult creampie": XXX
+      "adult double p": XXX
+      "adult fisting": XXX
+      "adult hairy": XXX
+      "adult lesbian": XXX
+      "adult milf": XXX
+      "adult squirting": XXX
+      "adult tattoo": XXX
+      "other": Other
+      "images": Other
       
 
     modes:
