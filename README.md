@@ -173,7 +173,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Space
  * HD-Torrents
  * HD-Bits.com
- * HD4Free
  * HDBits
  * HDChina
  * HDCity
