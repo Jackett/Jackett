@@ -79,6 +79,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NoName Club
  * RuTracker
  * SkTorrent
+ * Union Fansub
  * Xtreme Zone
  * YggTorrent
  * Ztracker
@@ -172,7 +173,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Space
  * HD-Torrents
  * HD-Bits.com
- * HD4Free
  * HDBits
  * HDChina
  * HDCity
