@@ -612,7 +612,7 @@ namespace Jackett.Indexers
                         quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
 
                         var techComponents = new string[] {
-                            "rus", quality
+                            "rus", quality, "(LostFilm)"
                         };
                         var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
 
