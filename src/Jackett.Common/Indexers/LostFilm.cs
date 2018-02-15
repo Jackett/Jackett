@@ -22,7 +22,7 @@ namespace Jackett.Indexers
 {
     class LostFilm : BaseWebIndexer
     {
-        private static Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d+)','(?<season>\\d+)','(?<episode>\\d+)'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         // http://www.lostfilm.tv/login
@@ -54,9 +54,9 @@ namespace Jackett.Indexers
                 var trigger = button.GetAttribute("onclick");
                 var match = parsePlayEpisodeRegex.Match(trigger);
 
-                seriesId = match.Groups["id"].Value;
-                season = match.Groups["season"].Value;
-                episode = match.Groups["episode"].Value;
+                seriesId = match.Groups["id"].Value.TrimStart('0');
+                season = match.Groups["season"].Value.TrimStart('0');
+                episode = match.Groups["episode"].Value.TrimStart('0');
             }
 
             internal string GetEpisodeString()
@@ -612,7 +612,7 @@ namespace Jackett.Indexers
                         quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
 
                         var techComponents = new string[] {
-                            "rus", quality
+                            "rus", quality, "(LostFilm)"
                         };
                         var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
 
