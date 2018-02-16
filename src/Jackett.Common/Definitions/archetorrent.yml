@@ -102,7 +102,7 @@
           - name: replace
             args: ["torrents-details.php", "download.php"]
       date:
-        selector: td:nth-child(2) a
+        selector: td:nth-child(3) a
         attribute: onmouseover
         filters:
           - name: regexp
