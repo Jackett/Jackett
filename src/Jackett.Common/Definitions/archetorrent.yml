@@ -127,13 +127,13 @@
         selector: img.rounded-img
         attribute: src
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-child(6)
       grabs:
-        selector: td:nth-child(8) font b
+        selector: td:nth-child(9) font b
       seeders:
-        selector: td:nth-child(6) font b
-      leechers:
         selector: td:nth-child(7) font b
+      leechers:
+        selector: td:nth-child(8) font b
       downloadvolumefactor:
         case:
           img[title="freeleech"]: "0"
