@@ -53,6 +53,8 @@
       - path: "{{ if .Keywords }}results_.php?q={{ .Keywords }}&advcat={{ .Config.category }}{{else}}indexfull/{{end}}"
     rows:
       selector: table.tor > tbody > tr[id^="_"]
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td[class^="tname"] > a
