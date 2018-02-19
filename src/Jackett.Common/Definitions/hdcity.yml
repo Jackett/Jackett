@@ -135,7 +135,7 @@
       active: "1"
       search: "{{ .Query.Keywords }}"
     rows:
-      selector: "#Mcol #category+table table tr:not(:first-child):not(:last-child)"
+      selector: "#category+table table tr:not(:first-child):not(:last-child)"
     fields:
       category:
         selector:  td:nth-child(1) a
