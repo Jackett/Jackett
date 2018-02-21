@@ -203,6 +203,7 @@ namespace Jackett.Updater
                 "Definitions/infinityt.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4Free.yml",
+                "Definitions/skytorrents.yml",
             };
 
             foreach (var oldFIle in oldFiles)

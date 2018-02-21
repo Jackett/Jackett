@@ -50,7 +50,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * RuTor
  * ShowRSS
- * Sky torrents
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
