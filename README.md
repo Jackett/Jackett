@@ -57,6 +57,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * Torrent Downloads
  * Torrent9
+ * TorrentKim
  * Torrentz2
  * World Wide Torrents
  * YIFY (YTS)
