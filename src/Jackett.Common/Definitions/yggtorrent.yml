@@ -13,8 +13,8 @@
   caps:
     categorymappings:
       - {id: 2145, cat: TV, desc: "Film/Vidéo"}
-      - {id: 2178, cat: TV, desc: "Film/Vidéo : Animation"}
-      - {id: 2179, cat: TV, desc: "Film/Vidéo : Animation Série"}
+      - {id: 2178, cat: TV/Anime, desc: "Film/Vidéo : Animation"}
+      - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
       - {id: 2180, cat: TV, desc: "Film/Vidéo : Concert"}
       - {id: 2181, cat: TV, desc: "Film/Vidéo : Documentaire"}
       - {id: 2182, cat: TV, desc: "Film/Vidéo : Emission TV"}
