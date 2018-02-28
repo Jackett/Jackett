@@ -35,7 +35,7 @@ namespace Jackett.Test.Util
         {
             var invalidRss = InvalidRssXml;
             Action parseAction = () => XDocument.Parse(invalidRss);
-            parseAction.ShouldThrow<Exception>().WithMessage("'\a', hexadecimal value 0x07, is an invalid character. Line 12, position 7.");
+            parseAction.Should().Throw<Exception>().WithMessage("'\a', hexadecimal value 0x07, is an invalid character. Line 12, position 7.");
 
             var validRSs = ParseUtil.RemoveInvalidXmlChars(invalidRss);
             var rssDoc = XDocument.Parse(validRSs);
