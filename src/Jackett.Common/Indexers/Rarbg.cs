@@ -214,7 +214,7 @@ namespace Jackett.Indexers
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
 
                     release.Comments = new Uri(item.Value<string>("info_page"));
-                    release.Guid = release.Comments;
+                    release.Guid = release.MagnetUri;
 
                     var episode_info = item.Value<JToken>("episode_info");
 
