@@ -12,8 +12,8 @@
     categorymappings:
       - {id: 1, cat: Movies, desc: "Filmy"}
       - {id: 2, cat: TV, desc: "Seriály"}
-      - {id: 3, cat: Music, desc: "Hudba"}
-      - {id: 5, cat: Games, desc: "Hry"}
+      - {id: 3, cat: Audio, desc: "Hudba"}
+      - {id: 5, cat: PC/Games, desc: "Hry"}
       - {id: 6, cat: Books, desc: "Knihy"}
       - {id: 8, cat: PC, desc: "Software"}
       - {id: 9, cat: XXX, desc: "xXx"}
