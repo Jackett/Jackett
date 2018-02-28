@@ -45,7 +45,7 @@ namespace Jackett.Indexers
             Type = "private";
 
             AddCategoryMapping(32, TorznabCatType.TVAnime);
-            AddCategoryMapping(31, TorznabCatType.TVOther);
+            AddCategoryMapping(31, TorznabCatType.TVOTHER);
             AddCategoryMapping(47, TorznabCatType.TVSD);
             AddCategoryMapping(8, TorznabCatType.TVHD);
             AddCategoryMapping(48, TorznabCatType.TVHD);
