@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,6 +24,7 @@ namespace Jackett.Indexers
 {
     /// <summary>
     /// Provider for Abnormal Private French Tracker
+    /// gazelle based but the ajax.php API seems to be broken (always returning failure)
     /// </summary>
     public class Abnormal : BaseCachingWebIndexer
     {
@@ -191,6 +193,13 @@ namespace Jackett.Indexers
         /// <returns>Releases</returns>
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            TimeZoneInfo FranceTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+
             var releases = new List<ReleaseInfo>();
             var torrentRowList = new List<CQ>();
             var searchTerm = query.GetQueryString();
@@ -319,9 +328,10 @@ namespace Jackett.Indexers
                     output("Size: " + sizeStr + " (" + size + " bytes)");
 
                     // Publish DateToString
-                    IList<string> clockList = tRow.Find("td:eq(2) > span").Text().Replace("Il y a", "").Split(',').Select(s => s.Trim()).Where(s => s != String.Empty).ToList();
-                    var date = agoToDate(clockList);
-                    output("Released on: " + date.ToLocalTime());
+                    var datestr = tRow.Find("span.time").Attr("title");
+                    var dateLocal = DateTime.SpecifyKind(DateTime.ParseExact(datestr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
+                    var date = TimeZoneInfo.ConvertTimeToUtc(dateLocal, FranceTz);
+                    output("Released on: " + date);
 
                     // Torrent Details URL
                     Uri detailsLink = new Uri(TorrentDescriptionUrl + id);
@@ -623,94 +633,6 @@ namespace Jackett.Indexers
             return fDom[".torrent_table > tbody > tr"].Not(".colhead");
         }
 
-        /// <summary>
-        /// Convert Ago date to DateTime
-        /// </summary>
-        /// <param name="clockList"></param>
-        /// <returns>A DateTime</returns>
-        private DateTime agoToDate(IList<string> clockList)
-        {
-            DateTime release = DateTime.Now;
-            foreach (var ago in clockList)
-            {
-                // Check for years
-                if (ago.Contains("années") || ago.Contains("année"))
-                {
-                    // Number of years to remove
-                    int years = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddYears(-years);
-
-                    continue;
-                }
-                // Check for months
-                else if (ago.Contains("mois"))
-                {
-                    // Number of months to remove
-                    int months = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddMonths(-months);
-
-                    continue;
-                }
-                // Check for weeks
-                else if (ago.Contains("semaines") || ago.Contains("semaine"))
-                {
-                    // Number of weeks to remove
-                    int weeks = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddDays(-(7 * weeks));
-
-                    continue;
-                }
-                // Check for days
-                else if (ago.Contains("jours") || ago.Contains("jour"))
-                {
-                    // Number of days to remove
-                    int days = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddDays(-days);
-
-                    continue;
-                }
-                // Check for hours
-                else if (ago.Contains("heures") || ago.Contains("heure"))
-                {
-                    // Number of hours to remove
-                    int hours = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddHours(-hours);
-
-                    continue;
-                }
-                // Check for minutes
-                else if (ago.Contains("mins") || ago.Contains("min"))
-                {
-                    // Number of minutes to remove
-                    int minutes = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddMinutes(-minutes);
-
-                    continue;
-                }
-                // Check for seconds
-                else if (ago.Contains("secondes") || ago.Contains("seconde"))
-                {
-                    // Number of seconds to remove
-                    int seconds = ParseUtil.CoerceInt(Regex.Match(ago.ToString(), @"\d+").Value);
-                    // Removing
-                    release = release.AddSeconds(-seconds);
-
-                    continue;
-                }
-                else
-                {
-                    output("Unable to detect release date of torrent", "error");
-                    //throw new Exception("Unable to detect release date of torrent");
-                }
-            }
-            return release;
-        }
 
         /// <summary>
         /// Output message for logging or developpment (console)
