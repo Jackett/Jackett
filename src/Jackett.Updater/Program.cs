@@ -204,6 +204,7 @@ namespace Jackett.Updater
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4Free.yml",
                 "Definitions/skytorrents.yml",
+                "Definitions/gormogon.yml",
             };
 
             foreach (var oldFIle in oldFiles)
