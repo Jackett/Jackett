@@ -241,7 +241,7 @@ namespace Jackett.Services
                                     }
                                     notice += logSpacer + "Please run the following command as root:<br/>\n";
                                     notice += logSpacer + "<pre>" + CommandRoot + "</pre><br/>\n";
-                                    notice += logSpacer + "If you don't have root access, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
+                                    notice += logSpacer + "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
                                     notice += logSpacer + "<pre>" + CommandUser + "</pre>";
                                     _notices.Add(notice);
                                     logger.Error(Regex.Replace(notice, "<.*?>", String.Empty));
