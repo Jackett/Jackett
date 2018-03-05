@@ -182,7 +182,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDTorrents.it
  * Hebits
  * Hon3y HD
- * House-of-Torrents
  * Hyperay
  * ICE Torrent
  * I Love Classics
