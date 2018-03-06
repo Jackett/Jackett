@@ -220,7 +220,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PuntoTorrent
  * Redacted (PassTheHeadphones)
  * RevolutionTT
- * Rockhard Lossless
  * RoDVD
  * SceneFZ
  * SceneReactor
