@@ -23,7 +23,7 @@ namespace Jackett.Services
                 logs.Insert(0, new CachedLog()
                 {
                     Level = l.Level.Name,
-                    Message = l.Message,
+                    Message = l.FormattedMessage,
                     When = l.TimeStamp 
                 });
                 logs = logs.Take(50).ToList();
