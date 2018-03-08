@@ -26,7 +26,7 @@ namespace Jackett.Services
                     Message = l.FormattedMessage,
                     When = l.TimeStamp 
                 });
-                logs = logs.Take(50).ToList();
+                logs = logs.Take(200).ToList();
             }
 
         }
