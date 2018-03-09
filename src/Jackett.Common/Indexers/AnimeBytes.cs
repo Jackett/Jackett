@@ -226,6 +226,7 @@ namespace Jackett.Indexers
             if (response.IsRedirect)
             {
                 // re-login
+                await GetConfigurationForSetup();
                 await ApplyConfiguration(null);
                 response = await RequestStringWithCookiesAndRetry(queryUrl);
             }
