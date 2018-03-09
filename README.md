@@ -264,6 +264,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentland
  * TorrentLeech
  * Torrents.Md
+ * TorrentSeeds
  * Torrent-Syndikat
  * TorrentWTF
  * TorViet
