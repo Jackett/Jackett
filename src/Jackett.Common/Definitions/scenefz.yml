@@ -69,7 +69,7 @@
       dead: 1
 
     rows:
-      selector: table#minions > tbody > tr
+      selector: div.table-responsive > table > tbody > tr:has(a[href^="/torrents?"])
     fields:
       title:
         selector: a[href^="/torrents/"]
@@ -85,22 +85,35 @@
         filters:
           - name: querystring
             args: cat
+      banner:
+        selector: a[href^="/torrents/"][title]
+        optional: true
+        attribute: title
+        filters:
+          - name: regexp
+            args: src='(.+?)'
       date:
-        selector: td:nth-child(5)
+        selector: span.text-muted[data-toggle="tooltip"][title]
+        attribute: title
+        filters:
+          - name: append
+            args: " +02:00"
+          - name: dateparse
+            args: "02.01.2006 15:04:05 -07:00"
       size:
-        selector: td:nth-child(6)
+        selector: td:nth-child(5)
       grabs:
-        selector: td:nth-child(7)
+        selector: td:nth-child(6)
         filters:
           - name: regexp
             args: ([\d,]+)
       seeders:
-        selector: td:nth-child(8)
+        selector: td:nth-child(7)
       leechers:
-        selector: td:nth-child(9)
+        selector: td:nth-child(8)
       downloadvolumefactor:
         case:
-          "img[title=\"FreeLeech\"]": "0"
+          "div.badge-success:contains(\"FREE\")": "0"
           "*": "1"
       uploadvolumefactor:
         text: "1"
