@@ -90,11 +90,7 @@
     - selector: td.lista[align="center"][colspan="2"] > span
     test:
       path: index.php
-      selector: img[alt="Ratio"]
-
-  ratio:
-    path: index.php
-    selector: img[alt="Ratio"] + font
+      selector: a[href^="logout.php"]
 
   search:
     paths:
