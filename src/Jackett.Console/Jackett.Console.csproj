@@ -38,7 +38,7 @@
     <ApplicationIcon>jackett.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>JackettConsole.Program</StartupObject>
+    <StartupObject>Jackett.Console.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

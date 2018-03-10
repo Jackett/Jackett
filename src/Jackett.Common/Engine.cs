@@ -1,23 +1,22 @@
-﻿using Autofac;
-using AutoMapper;
-using Jackett.Common.Models.Config;
-using Jackett.Common.Plumbing;
-using Jackett.Models;
-using Jackett.Models.Config;
-using Jackett.Services;
-using Jackett.Services.Interfaces;
-using Jackett.Utils.Clients;
-using NLog;
-using NLog.Config;
-using NLog.LayoutRenderers;
-using NLog.Targets;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Autofac;
+using AutoMapper;
+using Jackett.Common.Models;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
+using NLog;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Targets;
 
-namespace Jackett
+namespace Jackett.Common
 {
     public class Engine
     {

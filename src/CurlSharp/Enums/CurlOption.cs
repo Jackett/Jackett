@@ -17,7 +17,9 @@
  *
  **************************************************************************/
 
-namespace CurlSharp
+using CurlSharp.Callbacks;
+
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     One of these is passed as the first parameter to

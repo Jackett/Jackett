@@ -1,8 +1,9 @@
-﻿using Jackett.Services.Interfaces;
-using Jackett.Utils.Clients;
+﻿using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class Avistaz : AvistazTracker
     {

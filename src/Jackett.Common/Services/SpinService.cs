@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
+﻿using System.Threading;
+using Jackett.Common.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     class RunTimeService : IRunTimeService

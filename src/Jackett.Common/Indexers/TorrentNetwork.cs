@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Threading.Tasks;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Models.IndexerConfig.ConfigurationData;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class TorrentNetwork : BaseWebIndexer
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
 using Newtonsoft.Json.Linq;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class IndexerResult
     {

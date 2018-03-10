@@ -1,4 +1,4 @@
-﻿namespace Jackett.Models.IndexerConfig.Bespoke
+﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     class ConfigurationDataSceneFZ : ConfigurationData
     {

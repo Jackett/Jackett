@@ -1,12 +1,9 @@
-﻿using Jackett.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Jackett.Indexers;
+using Jackett.Common.Indexers;
+using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
-using Jackett.Services.Interfaces;
 
 namespace Jackett.Test
 {

@@ -1,9 +1,9 @@
 ﻿//Regex sourced from Sonarr  - https://github.com/Sonarr/Sonarr/blob/develop/src/NzbDrone.Core/Parser/QualityParser.cs
 
 using System.Text.RegularExpressions;
-using Jackett.Models;
+using Jackett.Common.Models;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public static class TvCategoryParser
     {

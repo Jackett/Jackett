@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Jackett.Indexers.Abstract;
-using Jackett.Models;
-using Jackett.Services.Interfaces;
-using Jackett.Utils.Clients;
+using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class HDOnly : GazelleTracker
     {

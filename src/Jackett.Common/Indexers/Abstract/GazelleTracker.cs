@@ -1,23 +1,20 @@
-﻿using AngleSharp.Parser.Html;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Utils;
-using Jackett.Services.Interfaces;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Net;
-using static Jackett.Models.IndexerConfig.ConfigurationData;
+using AngleSharp.Parser.Html;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Newtonsoft.Json.Linq;
+using NLog;
 
-namespace Jackett.Indexers.Abstract
+namespace Jackett.Common.Indexers.Abstract
 {
     public abstract class GazelleTracker : BaseWebIndexer
     {
@@ -50,7 +47,7 @@ namespace Jackett.Indexers.Abstract
 
             if (supportsFreeleechTokens)
             {
-                var useTokenItem = new BoolItem { Value = false };
+                var useTokenItem = new ConfigurationData.BoolItem { Value = false };
                 useTokenItem.Name = "Use Freeleech Tokens when available";
                 configData.AddDynamic("usetoken", useTokenItem);
             }
@@ -60,7 +57,7 @@ namespace Jackett.Indexers.Abstract
         {
             LoadValuesFromJson(configJson);
 
-            var useTokenItem = (BoolItem)configData.GetDynamic("usetoken");
+            var useTokenItem = (ConfigurationData.BoolItem)configData.GetDynamic("usetoken");
             if (useTokenItem != null)
             {
                 useTokens = useTokenItem.Value;

@@ -1,11 +1,11 @@
-﻿using Jackett.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Jackett.Indexers;
+using Jackett.Common.Indexers;
+using Jackett.Common.Utils;
 using Newtonsoft.Json;
 
-namespace Jackett.Models
+namespace Jackett.Common.Models
 {
 
     public class ReleaseInfo : ICloneable

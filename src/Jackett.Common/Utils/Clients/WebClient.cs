@@ -1,17 +1,14 @@
-﻿using AutoMapper;
-using Jackett.Models;
-using Jackett.Services;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
-using Jackett.Models.Config;
+using AutoMapper;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
-namespace Jackett.Utils.Clients
+namespace Jackett.Common.Utils.Clients
 {
     public abstract class WebClient : IObserver<ServerConfig>
     {

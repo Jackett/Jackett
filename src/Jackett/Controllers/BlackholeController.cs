@@ -1,5 +1,4 @@
-﻿using Jackett.Utils;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.IO;
@@ -7,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Jackett.Services.Interfaces;
-using Jackett.Models.Config;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 
 namespace Jackett.Controllers
 {

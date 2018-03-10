@@ -8,7 +8,7 @@
 // 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     public enum CurlMultiOption
     {

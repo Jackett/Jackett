@@ -1,14 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+using Newtonsoft.Json.Linq;
+using NLog;
 
-namespace Jackett
+namespace Jackett.Common.Helpers
 {
     public static class CookieContainerExtensions
     {

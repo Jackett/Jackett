@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using Jackett.Models.Config;
-using Jackett.Services;
-using Jackett.Services.Interfaces;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
 using Jackett.Utils;
 using MimeMapping;
 using NLog;

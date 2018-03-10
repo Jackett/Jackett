@@ -1,4 +1,4 @@
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     Values containing the type of shared access requested when libcurl

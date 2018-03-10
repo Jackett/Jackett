@@ -1,13 +1,8 @@
-﻿using Jackett.Utils.Clients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Security.Principal;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Jackett.Common.Utils.Clients;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public class ServerUtil
     {

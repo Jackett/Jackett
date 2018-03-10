@@ -1,6 +1,7 @@
 ﻿using System;
+using CurlSharp.Enums;
 
-namespace CurlSharp
+namespace CurlSharp.Callbacks
 {
     /// <summary>
     ///     Called when <c>cURL</c> wants to lock a shared resource.

@@ -1,5 +1,4 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,15 +7,14 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jackett.Models.Config;
-using CloudFlareUtilities;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
+using CloudFlareUtilities;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
-namespace Jackett.Utils.Clients
+namespace Jackett.Common.Utils.Clients
 {
     public class HttpWebClient : WebClient
     {

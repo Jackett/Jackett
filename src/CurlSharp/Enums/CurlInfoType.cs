@@ -1,4 +1,4 @@
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     A member of this enumeration is passed as the first parameter to the

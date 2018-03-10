@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models;
-using Newtonsoft.Json.Linq;
-using Jackett.Services.Interfaces;
-using Jackett.Utils.Clients;
+﻿using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 using NLog;
-using Jackett.Models.IndexerConfig;
 
-namespace Jackett.Indexers.Meta
+namespace Jackett.Common.Indexers.Meta
 {
     public class AggregateIndexer : BaseMetaIndexer
     {

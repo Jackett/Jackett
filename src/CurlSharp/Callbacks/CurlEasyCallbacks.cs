@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using CurlSharp.Enums;
 
-namespace CurlSharp
+namespace CurlSharp.Callbacks
 {
     /// <summary>
     ///     Called when cURL has debug information for the client.

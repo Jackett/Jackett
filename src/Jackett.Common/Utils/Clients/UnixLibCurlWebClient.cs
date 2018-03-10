@@ -1,22 +1,16 @@
-﻿using AutoMapper;
-using CurlSharp;
-using Jackett.Models;
-using Jackett.Services;
-using NLog;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using CloudFlareUtilities;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jackett.Models.Config;
+using CurlSharp;
+using CurlSharp.Enums;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
-namespace Jackett.Utils.Clients
+namespace Jackett.Common.Utils.Clients
 {
     public class UnixLibCurlWebClient : WebClient
     {
@@ -101,7 +95,7 @@ namespace Jackett.Utils.Clients
 
         protected async Task<WebClientByteResult> RunCurl(WebRequest request)
         {
-            Jackett.CurlHelper.CurlResponse response;
+            CurlHelper.CurlResponse response;
             if (request.Type == RequestType.GET)
             {
                 response = await CurlHelper.GetAsync(request.Url, serverConfig, request.Cookies, request.Referer, request.Headers);

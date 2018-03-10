@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using NLog;
 
-namespace Jackett.Indexers.Newznab
+namespace Jackett.Common.Indexers.Feeds
 {
     public class AnimeTosho : BaseNewznabIndexer
     {

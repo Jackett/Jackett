@@ -1,4 +1,4 @@
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     A bitmask of libcurl features OR'd together as the value of the

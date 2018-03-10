@@ -1,11 +1,6 @@
-﻿using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace Jackett.Models
+namespace Jackett.Common.Models
 {
     public class CachedLog
     {

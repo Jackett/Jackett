@@ -1,4 +1,4 @@
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     Contains values used to specify the order in which cached connections
