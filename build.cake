@@ -1,5 +1,4 @@
 #tool nuget:?package=NUnit.ConsoleRunner
-#addin nuget:?package=Cake.FileHelpers
 #addin nuget:?package=Cake.Git
 
 //////////////////////////////////////////////////////////////////////
@@ -174,7 +173,7 @@ Task("Appveyor-Push-Artifacts")
 		}
 	});
 
-Task("Potential-Release-Notes")
+Task("Release-Notes")
 	.IsDependentOn("Appveyor-Push-Artifacts")
 	.Does(() =>
 	{
@@ -213,7 +212,7 @@ Task("Potential-Release-Notes")
 			string buildNote = String.Join(Environment.NewLine, notesList);
 			Information(buildNote);
 
-			FileAppendLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
+			System.IO.File.WriteAllLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
 		}
 		else
 		{
@@ -273,7 +272,7 @@ private string RelativeWinPathToCygPath(string relativePath)
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Potential-Release-Notes")
+	.IsDependentOn("Release-Notes")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
