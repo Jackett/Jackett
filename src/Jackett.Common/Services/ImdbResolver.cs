@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web;
-using CsQuery;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Jackett.Services.Interfaces;
 using System.Text;
+using System.Threading.Tasks;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public struct Movie

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using Jackett.Utils;
+﻿using System.Linq;
+using Jackett.Common.Utils;
 
-namespace Jackett.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class TorznabRequest
     {

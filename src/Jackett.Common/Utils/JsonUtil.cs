@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public class EncodingJsonConverter : JsonConverter
     {

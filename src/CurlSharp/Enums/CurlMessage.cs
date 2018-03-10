@@ -1,4 +1,4 @@
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     The status code associated with an <see cref="CurlEasy" /> object in a

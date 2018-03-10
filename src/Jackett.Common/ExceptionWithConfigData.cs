@@ -1,12 +1,7 @@
-﻿using Jackett.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Models.IndexerConfig;
+﻿using System;
+using Jackett.Common.Models.IndexerConfig;
 
-namespace Jackett
+namespace Jackett.Common
 {
 
     public class ExceptionWithConfigData : Exception

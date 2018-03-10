@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using MimeMapping;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public class DataUrlUtils
     {

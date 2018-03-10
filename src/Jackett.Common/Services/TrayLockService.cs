@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
+using Jackett.Common.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public class TrayLockService : ITrayLockService

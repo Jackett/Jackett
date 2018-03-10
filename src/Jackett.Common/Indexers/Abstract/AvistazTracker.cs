@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Jackett.Models;
+using CsQuery;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
-using Jackett.Utils;
-using CsQuery;
-using System.Web;
-using Jackett.Utils.Clients;
-using System.Text.RegularExpressions;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using System.Net;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers.Abstract
 {
     public abstract class AvistazTracker : BaseWebIndexer
     {

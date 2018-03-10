@@ -1,21 +1,16 @@
-﻿using AutoMapper;
-using CurlSharp;
-using Jackett.Models;
-using Jackett.Services;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jackett.Models.Config;
+using CurlSharp;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
-namespace Jackett.Utils.Clients
+namespace Jackett.Common.Utils.Clients
 {
     public class UnixSafeCurlWebClient : WebClient
     {

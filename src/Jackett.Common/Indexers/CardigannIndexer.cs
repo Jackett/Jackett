@@ -1,28 +1,27 @@
-﻿using Jackett.Utils.Clients;
-using NLog;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Models;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System;
-using Jackett.Models.IndexerConfig;
 using System.Collections.Specialized;
-using System.Text;
-using static Jackett.Models.IndexerConfig.ConfigurationData;
-using AngleSharp.Parser.Html;
-using System.Text.RegularExpressions;
-using System.Web;
-using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
 using System.Linq;
 using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using AngleSharp.Dom.Html;
+using AngleSharp.Parser.Html;
+using Jackett.Common.Helpers;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.WebUtilities;
-using Jacket.Common.Helpers;
-using System.Collections;
+using Newtonsoft.Json.Linq;
+using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class CardigannIndexer : BaseWebIndexer
     {

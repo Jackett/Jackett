@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Jackett.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class TorrentPotatoResponse
     {

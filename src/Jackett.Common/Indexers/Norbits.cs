@@ -4,23 +4,22 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
-using Jacket.Common.Helpers;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig.Bespoke;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
+using Jackett.Common.Helpers;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     /// <summary>s
     /// Provider for Norbits Private Tracker

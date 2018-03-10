@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Jackett.Services.Interfaces
+namespace Jackett.Common.Services.Interfaces
 {
     public interface IConfigurationService
     {

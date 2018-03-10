@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public static class ParseUtil
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Jacket.Common.Utils
+namespace Jackett.Common.Utils
 {
     public static class EnvironmentUtil
     {

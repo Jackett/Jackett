@@ -1,12 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
+﻿using Jackett.Common.Services.Interfaces;
+using Newtonsoft.Json;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     class SerializeService : ISerializeService

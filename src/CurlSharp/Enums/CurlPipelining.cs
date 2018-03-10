@@ -8,7 +8,7 @@
 // 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /* bitmask bits for CURLMOPT_PIPELINING */
 

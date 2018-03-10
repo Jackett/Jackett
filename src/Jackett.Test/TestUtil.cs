@@ -1,18 +1,12 @@
 ﻿using Autofac;
-using Jackett;
-using Jackett.Services;
-using Jackett.Utils.Clients;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 
 namespace Jackett.Test
 {

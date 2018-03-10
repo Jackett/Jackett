@@ -1,12 +1,8 @@
-﻿using Jackett.Utils;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Jackett.Common.Utils;
 
-namespace Jackett.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataLoginTokin : ConfigurationDataBasicLogin
     {

@@ -1,8 +1,8 @@
-﻿using Jackett.Indexers;
-using Jackett.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Jackett.Common.Indexers;
+using Jackett.Common.Models;
 
-namespace Jackett.Services.Interfaces
+namespace Jackett.Common.Services.Interfaces
 {
     public interface ICacheService
     {

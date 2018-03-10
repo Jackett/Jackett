@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using Jackett.Utils;
+using Jackett.Common.Utils;
 
-namespace Jackett.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class ApiSearch
     {

@@ -1,13 +1,9 @@
-﻿using NLog;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public class ProcessService : IProcessService

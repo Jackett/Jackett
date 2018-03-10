@@ -17,7 +17,7 @@
  * $Id: Enums.cs,v 1.1 2005/02/17 22:47:25 jeffreyphillips Exp $
  **************************************************************************/
 
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     One of these is returned by <see cref="CurlHttpMultiPartForm.AddSection" />.

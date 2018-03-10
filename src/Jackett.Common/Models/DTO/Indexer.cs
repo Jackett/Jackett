@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Jackett.Indexers;
+using Jackett.Common.Indexers;
 
-namespace Jackett.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class Capability
     {

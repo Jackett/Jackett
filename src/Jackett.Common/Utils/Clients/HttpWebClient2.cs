@@ -1,27 +1,20 @@
-﻿using AutoMapper;
-using CloudFlareUtilities;
-using Jackett.Models;
-using Jackett.Services;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jackett.Models.Config;
-using com.LandonKey.SocksWebProxy.Proxy;
 using com.LandonKey.SocksWebProxy;
+using com.LandonKey.SocksWebProxy.Proxy;
+using CloudFlareUtilities;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using NLog;
 
-namespace Jackett.Utils.Clients
+namespace Jackett.Common.Utils.Clients
 {
     // Compared to HttpWebClient this implementation will reuse the HttpClient instance (one per indexer).
     // This should improve performance and avoid problems with too man open file handles.

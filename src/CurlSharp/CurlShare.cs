@@ -19,6 +19,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+using CurlSharp.Callbacks;
+using CurlSharp.Enums;
 
 namespace CurlSharp
 {

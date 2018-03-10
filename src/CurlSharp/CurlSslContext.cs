@@ -18,6 +18,7 @@
  **************************************************************************/
 
 using System;
+using CurlSharp.Callbacks;
 
 namespace CurlSharp
 {

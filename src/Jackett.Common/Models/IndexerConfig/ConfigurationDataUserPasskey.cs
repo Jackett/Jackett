@@ -1,4 +1,4 @@
-namespace Jackett.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataUserPasskey : ConfigurationData
     {

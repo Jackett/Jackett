@@ -1,14 +1,11 @@
-﻿using Jackett.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
 using NLog;
 using NLog.Targets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     [Target("LogService")]

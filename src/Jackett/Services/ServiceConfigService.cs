@@ -1,15 +1,12 @@
 ﻿using NLog;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration.Install;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
+using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Services
 {

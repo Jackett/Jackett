@@ -1,22 +1,15 @@
 ﻿using Autofac;
 using System;
-using System.Linq;
-using System.Text;
-using Jackett.Indexers;
-using Jackett.Utils.Clients;
-using AutoMapper;
-using Jackett.Models;
 using System.Reflection;
-using Jackett.Services;
-using Jackett.Indexers.Meta;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jackett.Models.Config;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using Jackett.Utils;
-using System.Collections.Generic;
+using Jackett.Common.Indexers;
+using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 
 namespace Jackett.Common.Plumbing
 {

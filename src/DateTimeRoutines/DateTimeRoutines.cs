@@ -5,14 +5,11 @@
 //        sergey.stoyan@gmail.com
 //        27 February 2007
 //********************************************************************************************
+
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Collections;
-namespace Cliver
+
+namespace DateTimeRoutines
 {
     /// <summary>
     /// Miscellaneous and parsing methods for DateTime

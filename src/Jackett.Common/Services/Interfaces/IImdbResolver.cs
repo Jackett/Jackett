@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Jackett.Utils;
+using Jackett.Common.Utils;
 
-namespace Jackett.Services.Interfaces
+namespace Jackett.Common.Services.Interfaces
 {
     public interface IImdbResolver
     {

@@ -1,4 +1,4 @@
-namespace CurlSharp
+namespace CurlSharp.Enums
 {
     /// <summary>
     ///     Your handler for the <see cref="CurlEasy.CurlIoctlCallback" /> delegate

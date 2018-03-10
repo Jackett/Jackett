@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web.Http;
-using Jacket.Common;
-using Jackett.Models;
-using Jackett.Models.Config;
-using Jackett.Services;
-using Jackett.Services.Interfaces;
+using Jackett.Common;
+using Jackett.Common.Models;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Utils;
 using NLog;
 
-namespace Jackett.Controllers.V20
+namespace Jackett.Controllers
 {
     [RoutePrefix("api/v2.0/server")]
     [JackettAuthorized]
@@ -63,16 +63,16 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public Models.DTO.ServerConfig Config()
+        public Common.Models.DTO.ServerConfig Config()
         {
 
-            var dto = new Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion());
+            var dto = new Common.Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion());
             return dto;
         }
 
         [ActionName("Config")]
         [HttpPost]
-        public void UpdateConfig([FromBody]Models.DTO.ServerConfig config)
+        public void UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
         {
             var originalPort = serverConfig.Port;
             var originalAllowExternal = serverConfig.AllowExternal;

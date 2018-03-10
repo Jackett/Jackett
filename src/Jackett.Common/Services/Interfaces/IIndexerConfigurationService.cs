@@ -1,7 +1,7 @@
-﻿using Jackett.Indexers;
+﻿using Jackett.Common.Indexers;
 using Newtonsoft.Json.Linq;
 
-namespace Jackett.Services.Interfaces
+namespace Jackett.Common.Services.Interfaces
 {
     public interface IIndexerConfigurationService
     {

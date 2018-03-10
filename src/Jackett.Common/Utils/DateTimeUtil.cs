@@ -1,13 +1,8 @@
-﻿using Cliver;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public static class DateTimeUtil
     {
@@ -110,14 +105,14 @@ namespace Jackett.Utils
         // http://www.codeproject.com/Articles/33298/C-Date-Time-Parser
         public static DateTime FromFuzzyTime(string str, string format = null)
         {
-            DateTimeRoutines.DateTimeFormat dt_format = DateTimeRoutines.DateTimeFormat.USA_DATE;
+            DateTimeRoutines.DateTimeRoutines.DateTimeFormat dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.USA_DATE;
             if (format == "UK")
             {
-                dt_format = DateTimeRoutines.DateTimeFormat.UK_DATE;
+                dt_format = DateTimeRoutines.DateTimeRoutines.DateTimeFormat.UK_DATE;
             }
 
-            DateTimeRoutines.ParsedDateTime dt;
-            if (DateTimeRoutines.TryParseDateOrTime(str, dt_format, out dt))
+            DateTimeRoutines.DateTimeRoutines.ParsedDateTime dt;
+            if (DateTimeRoutines.DateTimeRoutines.TryParseDateOrTime(str, dt_format, out dt))
             {
                 return dt.DateTime;
             }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.Owin;
 using System;
 using System.Threading.Tasks;
-using Jacket.Common;
-using Jackett.Models.Config;
+using Jackett.Common;
 
 namespace Jackett.Utils
 {

@@ -10,14 +10,15 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Xml.Linq;
-using Jackett.Indexers;
-using Jackett.Models;
-using Jackett.Utils;
+using Jackett.Common;
+using Jackett.Common.Indexers;
+using Jackett.Common.Models;
+using Jackett.Common.Models.DTO;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using NLog;
-using Jackett.Models.DTO;
-using Jackett.Services.Interfaces;
 
-namespace Jackett.Controllers.V20
+namespace Jackett.Controllers
 {
     public class RequiresApiKeyAttribute : AuthorizationFilterAttribute
     {
@@ -154,7 +155,7 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public async Task<Models.DTO.ManualSearchResult> Results([FromUri]Models.DTO.ApiSearch request)
+        public async Task<ManualSearchResult> Results([FromUri]ApiSearch request)
         {
             var manualResult = new ManualSearchResult();
             var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured);
@@ -237,7 +238,7 @@ namespace Jackett.Controllers.V20
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Torznab([FromUri]Models.DTO.TorznabRequest request)
+        public async Task<IHttpActionResult> Torznab([FromUri]Common.Models.DTO.TorznabRequest request)
         {
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -353,7 +354,7 @@ namespace Jackett.Controllers.V20
 
         [HttpGet]
         [JsonResponse]
-        public async Task<Models.DTO.TorrentPotatoResponse> Potato([FromUri]Models.DTO.TorrentPotatoRequest request)
+        public async Task<TorrentPotatoResponse> Potato([FromUri]TorrentPotatoRequest request)
         {
             var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
@@ -372,7 +373,7 @@ namespace Jackett.Controllers.V20
             {
                 var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.ID, "dl", release.Title);
-                var item = new Models.DTO.TorrentPotatoResponseItem()
+                var item = new TorrentPotatoResponseItem()
                 {
                     release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                     torrent_id = release.Guid.ToString(),
@@ -389,7 +390,7 @@ namespace Jackett.Controllers.V20
                 return item;
             });
 
-            var potatoResponse = new Models.DTO.TorrentPotatoResponse()
+            var potatoResponse = new TorrentPotatoResponse()
             {
                 results = potatoReleases.ToList()
             };
