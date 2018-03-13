@@ -159,7 +159,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GFTracker
  * Gfxnews
  * GFXPeers
- * Ghost City
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
  * GODS  [![(invite needed)][inviteneeded]](#)
