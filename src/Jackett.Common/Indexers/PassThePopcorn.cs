@@ -94,8 +94,6 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            await DoLogin();
-
             var releases = new List<ReleaseInfo>();
             bool configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
             bool configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
@@ -116,6 +114,12 @@ namespace Jackett.Common.Indexers
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+            if (results.IsRedirect) // untested
+            {
+                // re-login
+                await DoLogin();
+                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+            }
             try
             {
                 //Iterate over the releases for each movie
