@@ -1,7 +1,7 @@
 ---
   site: blutopia
   name: Blutopia
-  description: "HD Movie tracker"
+  description: "HD Tracker Movies/TV/FANRES"
   language: en-us
   type: private
   encoding: UTF-8
@@ -32,13 +32,15 @@
 
   search:
     paths:
-      - path: /filter
+      - path: /filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
       tmdb: ""
+      mal: ""
       sorting: created_at
       direction: desc
       qty: 100
