@@ -373,6 +373,10 @@ Example config for apache:
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
 
+## Configuring OMDb
+This feature is used as a fallback to get the movie/series title if only the IMDB ID is provided in the request.
+To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
+
 ## Creating an issue
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
 
