@@ -1,13 +1,14 @@
 ---
   site: kickasstorrent-kathow
-  name: KickAssTorrent (thekat.nz)
+  name: KickAssTorrent (thekat.io)
   description: "thekat.nz is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
   language: en-us
   type: public
   encoding: UTF-8
   links:
-    - https://thekat.nz/
+    - https://katcr.io/
   legacylinks:
+    - https://thekat.nz/  
     - https://thekat.se/
     - https://kat.how/
 
