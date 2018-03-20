@@ -3,15 +3,12 @@ using CommandLine.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Services;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
+using Jackett.Common;
 
 namespace Jackett.Updater
 {
@@ -203,6 +200,10 @@ namespace Jackett.Updater
                 "Definitions/infinityt.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4Free.yml",
+                "Definitions/skytorrents.yml",
+                "Definitions/gormogon.yml",
+                "Definitions/czteam.yml",
+                "Definitions/rockhardlossless.yml",
             };
 
             foreach (var oldFIle in oldFiles)

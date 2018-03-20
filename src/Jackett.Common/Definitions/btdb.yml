@@ -37,6 +37,8 @@
       - path: "{{if .Keywords}}q/{{ .Keywords}}/10?sort=time{{else}}{{end}}"
     rows:
       selector: li[class$="item"]
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: h2[class$="title"] a[href^="/torrent/"]

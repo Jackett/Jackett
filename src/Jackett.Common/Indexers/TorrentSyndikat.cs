@@ -7,15 +7,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class TorrentSyndikat : BaseWebIndexer
     {
@@ -192,7 +192,7 @@ namespace Jackett.Indexers
                     var torrentTags = torrentTag.Elements.Select(x => x.InnerHTML).ToList();
                     release.Title = qCommentLink.Attr("title");
                     release.Description = String.Join(", ", torrentTags);
-                    release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href").Replace("&hit=1", ""));
+                    release.Comments = new Uri(SiteLink + qCommentLink.Attr("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
 
                     var torrent_details = descCol.ChildElements.Last();

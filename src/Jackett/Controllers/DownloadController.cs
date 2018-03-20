@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using BencodeNET.Parsing;
-using Jackett.Models.Config;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using NLog;
 
 namespace Jackett.Controllers

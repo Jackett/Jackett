@@ -1,9 +1,10 @@
-﻿using CommandLine;
+﻿using System;
+using CommandLine;
 using CommandLine.Text;
-using Jackett;
-using Jackett.Indexers;
+using Jackett.Common;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Utils;
 using Jackett.Utils;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,12 +15,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Jacket.Common;
-using Jackett.Common.Models.Config;
-using Jacket.Common.Utils;
-using Jackett.Common.Plumbing;
 
-namespace JackettConsole
+namespace Jackett.Console
 {
     public class Program
     {
@@ -33,7 +30,7 @@ namespace JackettConsole
                 var text = HelpText.AutoBuild(optionsResult);
                 text.Copyright = " ";
                 text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion + " options:";
-                Console.WriteLine(text);
+                System.Console.WriteLine(text);
                 Environment.ExitCode = 1;
                 return;
             });
@@ -130,7 +127,7 @@ namespace JackettConsole
                     // Show Version
                     if (options.ShowVersion)
                     {
-                        Console.WriteLine("Jackett v" + EnvironmentUtil.JackettVersion);
+                        System.Console.WriteLine("Jackett v" + EnvironmentUtil.JackettVersion);
                         return;
                     }
 

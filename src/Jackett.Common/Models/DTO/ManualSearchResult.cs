@@ -1,11 +1,6 @@
-﻿using Jackett.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Jackett.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public enum ManualSearchResultIndexerStatus { Unknown = 0, Error = 1, OK = 2 };
 

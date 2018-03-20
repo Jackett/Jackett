@@ -1,11 +1,9 @@
-﻿using System;
-using System.Net.Http;
-using System.Text;
+﻿using System.Text;
 using System.Web;
-using Jacket.Common.Helpers;
+using Jackett.Common.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jacket.Common.Tests
+namespace Jackett.Test
 {
     [TestClass]
     public class WebUtilityHelpersTests

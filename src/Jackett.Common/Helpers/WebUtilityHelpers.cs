@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Text;
 
-namespace Jacket.Common.Helpers
+namespace Jackett.Common.Helpers
 {
     public static class WebUtilityHelpers
     {

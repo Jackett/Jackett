@@ -1,21 +1,20 @@
-﻿using Jackett.Indexers;
-using Jackett.Models;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Newtonsoft.Json.Linq;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Jackett.Indexers.Meta;
+using Jackett.Common.Indexers;
+using Jackett.Common.Indexers.Meta;
+using Jackett.Common.Models;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
+using NLog;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using Jackett.Services.Interfaces;
-using Jackett.Models.Config;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public class IndexerManagerService : IIndexerManagerService

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http.Tracing;
-using Jacket.Common;
-using Jackett.Models.Config;
+using Jackett.Common;
+using Jackett.Common.Models.Config;
 
 namespace Jackett.Utils
 {

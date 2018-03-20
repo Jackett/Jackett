@@ -1,13 +1,7 @@
-﻿using Jackett.Services;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
 using Autofac;
-using Jackett.Services.Interfaces;
-using Jackett.Models.Config;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Test.Services
 {

@@ -1,19 +1,16 @@
-﻿using CurlSharp;
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using Jackett.Utils;
-using System.Net;
-using System.Threading;
-using Jacket.Common;
-using Jackett.Models.Config;
+using CurlSharp;
+using CurlSharp.Enums;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Utils;
 
-namespace Jackett
+namespace Jackett.Common
 {
     public class CurlHelper
     {

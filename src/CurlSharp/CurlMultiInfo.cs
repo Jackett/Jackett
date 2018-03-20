@@ -17,6 +17,8 @@
  *
  **************************************************************************/
 
+using CurlSharp.Enums;
+
 namespace CurlSharp
 {
     /// <summary>

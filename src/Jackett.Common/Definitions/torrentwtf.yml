@@ -1,18 +1,23 @@
 ---
-  site: blutopia
-  name: Blutopia
-  description: "HD Tracker Movies/TV/FANRES"
-  language: en-us
+  site: torrentwtf
+  name: Torrentwtf
+  description: "Torrentwtf is a Czech Private site for TV / MOVIES / GENERAL"
+  language: cs-cz
   type: private
   encoding: UTF-8
   links:
-    - https://blutopia.xyz/
+    - https://torrent.wtf/
 
   caps:
     categorymappings:
-      - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: TV, desc: "TV"}
-      - {id: 3, cat: Movies, desc: "FANRES"}
+      - {id: 1, cat: Movies, desc: "Filmy"}
+      - {id: 2, cat: TV, desc: "Seriály"}
+      - {id: 3, cat: Audio, desc: "Hudba"}
+      - {id: 5, cat: PC/Games, desc: "Hry"}
+      - {id: 6, cat: Books, desc: "Knihy"}
+      - {id: 8, cat: PC, desc: "Software"}
+      - {id: 9, cat: XXX, desc: "xXx"}
+      - {id: 10, cat: Other, desc: "Ostatní"}
 
     modes:
       search: [q]
@@ -26,21 +31,19 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: table.main:contains("Login Failed!")
+      - selector: table.main:contains("Tieto poverenia sa nezhodujú s našimi záznamami.")
     test:
       path: /torrents
 
   search:
     paths:
-      - path: /filterTorrents
+      - path: /filter
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
-      uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
       tmdb: ""
-      mal: ""
       sorting: created_at
       direction: desc
       qty: 100
@@ -62,6 +65,9 @@
             args: "/categories/.*?\\.(\\d+)"
       title:
         selector: a.view-torrent
+        filters:
+          - name: re_replace
+            args: [".*? / ", ""]
       download:
         selector: a[href*="/download_check/"]
         attribute: href

@@ -1,14 +1,11 @@
-﻿using Jackett.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
 using NLog;
 using NLog.Targets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     [Target("LogService")]
@@ -23,10 +20,10 @@ namespace Jackett.Services
                 logs.Insert(0, new CachedLog()
                 {
                     Level = l.Level.Name,
-                    Message = l.Message,
+                    Message = l.FormattedMessage,
                     When = l.TimeStamp 
                 });
-                logs = logs.Take(50).ToList();
+                logs = logs.Take(200).ToList();
             }
 
         }

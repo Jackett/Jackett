@@ -1,4 +1,8 @@
-﻿---
+﻿# UGC uses the Luminance code, which is based on gazelle
+# ajax.php API additionally needs the auth=$authkey argument
+# Because the API is e.g. missing banner images we use screen scraping instead of the generic gazelle based approach
+
+---
   site: ultimategamerclub
   name: Ultimate Gamer Club
   description: "Ultimate Gamer (UGC) is a Private Torrent Tracker for GAMES"
@@ -56,71 +60,84 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
-    path: account-login.php
-    method: post
+    path: login
+    method: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      cinfo: "2550|1350|24|-60"
+      keeploggedin: 1
     error:
-      - selector: div.errFrame
+      - selector: form#loginform > span.warning
     test:
-      path: torrents-search.php
+      path: torrents.php
+      selector: a.username
 
   search:
     paths:
-      - path: torrents-search.php
-    keywordsfilters: 
-      - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "+"]
+      - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      incldead: "1"
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      title: "{{ .Query.Keywords }}"
+      order_by: time
+      order_way: desc
+      action: basic
+      searchsubmit: 1
     rows:
-      selector: table.ttable_headinner > tbody > tr[class^="t-row"]
-      filters:
-        - name: andmatch
+      # exclude redbar torrents
+      selector: table#torrent_table > tbody > tr[class^="torrent row"]
     fields:
       download:
-        selector: a[href^="download.php?id="]
+        selector: a[href^="torrents.php?action=download&id="]
         attribute: href
+      description:
+        selector: div.tags
       title:
-        selector: a[href^="torrents-details.php?id="]
-        attribute: title
+        selector: a[href^="/torrents.php?id="]
       category:
-        selector: a[href^="torrents.php?cat="]
+        selector: a[href*="filter_cat"]
         attribute: href
         filters:
-          - name: querystring
-            args: cat
+          - name: regexp
+            args: "\\[(\\d+?)\\]"
       details:
-        selector: a[href^="torrents-details.php?id="]
+        selector: a[href^="/torrents.php?id="]
         attribute: href
-      date:
-        selector: td:nth-child(2) span:contains("Added:")
+      banner:
+        optional: true
+        selector: td:nth-child(2) > script
         filters:
+          - name: regexp
+            args: "src=\\\\\"(.*?)\\\\\""
+          - name: re_replace
+            args: ["\\\\(.)", "$1"]
           - name: replace
-            args: ["Added: ", ""]
-          - name: replace
-            args: [" at", ""]
+            args: ["/static/common/noartwork/noimage.png", ""]
+      files:
+        selector: td:nth-child(3)
+      date:
+        selector: td:nth-child(5) > span
+        attribute: title
+        filters:
           - name: append
             args: " +00:00"
           - name: dateparse
-            args: "02/01/2006 15:04:05 -07:00"
+            args: "Jan 02 2006, 15:04 -07:00"
       size:
-        selector: td:nth-child(7)
+        selector: td:nth-child(6)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(7)
       seeders:
-        selector: td:nth-child(9)
+        selector: td:nth-child(8)
       leechers:
-        selector: td:nth-child(10)
+        selector: td:nth-child(9)
       downloadvolumefactor:
         case:
-          ":root:has(globnfo:contains(\"sitewide freeleech\"))": "0"
-          img[title="freeleech"]: "0"
+          "span.fltag": "0"
           "*": "1"
       uploadvolumefactor:
         case:

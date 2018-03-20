@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using Jackett.Indexers;
+using Jackett.Common.Indexers;
+using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using NLog;
-using Jackett.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public class IndexerConfigurationService : IIndexerConfigurationService

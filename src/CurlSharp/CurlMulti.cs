@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using CurlSharp.Enums;
 
 namespace CurlSharp
 {

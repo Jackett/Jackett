@@ -1,14 +1,12 @@
-﻿using AutoMapper;
-using Jackett.Indexers;
-using Jackett.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Services.Interfaces;
+using AutoMapper;
+using Jackett.Common.Indexers;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public class CacheService : ICacheService

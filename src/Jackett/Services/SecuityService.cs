@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models.Config;
-using Jackett.Services.Interfaces;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Services
 {

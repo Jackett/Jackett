@@ -1,0 +1,175 @@
+﻿---
+  site: torrentseeds
+  name: TorrentSeeds
+  description: "TorrentSeeds is a Private site for MOVIES / TV / GENERAL"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.torrentseeds.org/
+
+  caps:
+    categorymappings:
+      - {id: 13, cat: PC/0day, desc: "0DAY"}
+      - {id: 37, cat: TV/Anime, desc: "ANIME/HD"}
+      - {id: 9, cat: TV/Anime, desc: "Anime/SD"}
+      - {id: 1, cat: PC/0day, desc: "Apps"}
+      - {id: 27, cat: Books, desc: "Bookware"}
+      - {id: 32, cat: Books/EBook, desc: "EBOOK"}
+      - {id: 47, cat: Console/Other, desc: "GAMES/NSW"}
+      - {id: 2, cat: PC/Games, desc: "Games/PC"}
+      - {id: 8, cat: Console/PS3, desc: "Games/PS3"}
+      - {id: 30, cat: Console/PS4, desc: "GAMES/PS4"}
+      - {id: 7, cat: Console/PSP, desc: "Games/PSP"}
+      - {id: 16, cat: Console/Wii, desc: "GAMES/WII"}
+      - {id: 29, cat: Console/WiiU, desc: "GAMES/WIIU"}
+      - {id: 17, cat: Console/XBox360, desc: "GAMES/XBOX360"}
+      - {id: 50, cat: Movies/BluRay, desc: "Movies/Bluray-UHD"}
+      - {id: 31, cat: Movies/BluRay, desc: "MOVIES/COMPLETE-BLURAY"}
+      - {id: 3, cat: Movies/DVD, desc: "MOVIES/DVDR"}
+      - {id: 39, cat: Movies/Foreign, desc: "MOVIES/HD-Foreign"}
+      - {id: 19, cat: Movies/HD, desc: "MOVIES/X264"}
+      - {id: 49, cat: Movies/HD, desc: "Movies/X265"}
+      - {id: 25, cat: Movies/SD, desc: "MOVIES/XVID"}
+      - {id: 6, cat: XXX, desc: "MOVIES/XXX"}
+      - {id: 53, cat: XXX, desc: "Movies/XXX-HD"}
+      - {id: 33, cat: Audio/Lossless, desc: "Music/FLAC"}
+      - {id: 28, cat: Audio/Other, desc: "Music/MBluRay"}
+      - {id: 34, cat: Audio/Other, desc: "Music/MDVDR"}
+      - {id: 4, cat: Audio/MP3, desc: "Music/MP3"}
+      - {id: 20, cat: Audio/Video, desc: "Music/MVID"}
+      - {id: 38, cat: TV/Anime, desc: "P2P/ANIME"}
+      - {id: 48, cat: PC/0day, desc: "P2P/APPS"}
+      - {id: 43, cat: Movies/BluRay, desc: "P2P/BLURAY"}
+      - {id: 52, cat: Movies/BluRay, desc: "P2P/Bluray-UHD"}
+      - {id: 40, cat: Movies/DVD, desc: "P2P/DVDR"}
+      - {id: 46, cat: Books/EBook, desc: "P2P/EBOOKS"}
+      - {id: 45, cat: PC/Games, desc: "P2P/GAMES"}
+      - {id: 42, cat: Movies/HD, desc: "P2P/HD-MOVIES"}
+      - {id: 44, cat: TV/HD, desc: "P2P/TV-HD"}
+      - {id: 51, cat: Movies/HD, desc: "P2P/X265"}
+      - {id: 41, cat: Movies/SD, desc: "P2P/XVID"}
+      - {id: 35, cat: TV/Sport, desc: "SPORT"}
+      - {id: 36, cat: TV/Sport, desc: "SPORT-HD"}
+      - {id: 11, cat: TV/HD, desc: "TV/BluRay"}
+      - {id: 23, cat: TV/SD, desc: "TV/DVDR"}
+      - {id: 24, cat: TV/SD, desc: "TV/DVDRIP"}
+      - {id: 18, cat: TV/SD, desc: "TV/SD"}
+      - {id: 26, cat: TV/HD, desc: "TV/X264"}
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: incldead
+      type: select
+      label: "Search Torrents that are:"
+      default: "0"
+      options:
+        "0" : "Active"
+        "1": "Including Dead"
+        "2": "Only Dead"
+    - name: onlyfree
+      type: checkbox
+      label: Show only Free torrents
+      default: false
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Mega-Blitz webpage.
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      submitme: "X"
+    error:
+      - selector: h2:contains("Login failed!")
+        message:
+          selector: td.colhead2
+    test:
+      path: browse.php
+
+  search:
+    paths:
+      - path: browse.php      
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      searchin: "title"
+      incldead: "{{ .Config.incldead }}"
+      "only_free": "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
+
+    rows:
+      selector: tr.browse_color, tr[id^="kdescr"]
+      after: 1
+    fields:
+      category:
+        selector: td:nth-of-type(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: td:nth-of-type(2) a
+        attribute: onmouseover
+        filters:
+          - name: split
+            args: [">", "1"]
+          - name: replace
+            args: ["</b", ""]
+      details:
+        selector: td:nth-of-type(2) > a[onmouseover]
+        attribute: href
+      banner:
+        selector: td:nth-of-type(2) > a[onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=\\\\'(.+?)\\\\'"
+          - name: replace
+            args: ["./pic/noposter.png", ""]
+      download:
+        selector: td:nth-of-type(3) a
+        attribute: href
+      files:
+        selector: td:nth-of-type(5)
+      date:
+        selector: td:nth-of-type(7)
+        filters:
+          - name: dateparse
+            args: "Jan 02 2006 03:04 PM"
+      size:
+        selector: td:nth-of-type(8)
+      grabs:
+        selector: td:nth-of-type(9)
+        filters:
+          - name: regexp
+            args: "([\\d]+)"
+      seeders:
+        selector: td:nth-of-type(10)
+      leechers:
+        selector: td:nth-of-type(11)
+      description:
+        selector: td[colspan="14"]
+        filters:
+          - name: replace
+            args: ["\n", "<br>\n"]
+      downloadvolumefactor:
+        case:
+          "img[alt=\"Free Torrent\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        text: "1"

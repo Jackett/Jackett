@@ -1,4 +1,4 @@
-﻿namespace Jackett.Models.DTO
+﻿namespace Jackett.Common.Models.DTO
 {
     public class TorrentPotatoRequest
     {

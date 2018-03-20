@@ -107,6 +107,7 @@
     paths:
       - path: browse.php      
     inputs:
+      #$raw: "{{range .Categories}}c{{.}}=1&{{end}}" # this should work, untested
       search: "{{ .Keywords }}"
       searchin: "title"
       incldead: "{{ .Config.incldead }}"

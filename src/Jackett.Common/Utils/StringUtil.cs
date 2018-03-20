@@ -1,6 +1,4 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Html;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -10,12 +8,11 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-using System.Net;
-using Jacket.Common.Helpers;
+using AngleSharp.Dom;
+using AngleSharp.Html;
+using Jackett.Common.Helpers;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public static class StringUtil
     {

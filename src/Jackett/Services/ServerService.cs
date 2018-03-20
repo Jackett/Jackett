@@ -1,8 +1,4 @@
-﻿using Jackett.Models.Config;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
-using Microsoft.Owin.Hosting;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Owin.Hosting;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -17,10 +13,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Web;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
 using System.Collections;
 using System.Text.RegularExpressions;
+using Jackett.Common;
+using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
 
 namespace Jackett.Services
 {
@@ -34,13 +32,13 @@ namespace Jackett.Services
         private ISerializeService serializeService;
         private IConfigurationService configService;
         private Logger logger;
-        private Utils.Clients.WebClient client;
+        private Common.Utils.Clients.WebClient client;
         private IUpdateService updater;
         private List<string> _notices = new List<string>();
         private ServerConfig config;
         IProtectionService _protectionService;
 
-        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, Utils.Clients.WebClient w, IUpdateService u, IProtectionService protectionService, ServerConfig serverConfig)
+        public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, Common.Utils.Clients.WebClient w, IUpdateService u, IProtectionService protectionService, ServerConfig serverConfig)
         {
             indexerService = i;
             processService = p;
@@ -241,7 +239,7 @@ namespace Jackett.Services
                                     }
                                     notice += logSpacer + "Please run the following command as root:<br/>\n";
                                     notice += logSpacer + "<pre>" + CommandRoot + "</pre><br/>\n";
-                                    notice += logSpacer + "If you don't have root access, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
+                                    notice += logSpacer + "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
                                     notice += logSpacer + "<pre>" + CommandUser + "</pre>";
                                     _notices.Add(notice);
                                     logger.Error(Regex.Replace(notice, "<.*?>", String.Empty));

@@ -5,17 +5,16 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using CsQuery;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class IPTorrents : BaseWebIndexer
     {
@@ -280,8 +279,9 @@ namespace Jackett.Indexers
                     var catIcon = row.Cq().Find("td:eq(0) a");
                     if (catIcon.Length >= 1) // Torrents - Category column == Icons
                         release.Category = MapTrackerCatToNewznab(catIcon.First().Attr("href").Substring(1));
-                    else // Torrents - Category column == Text (Code is not supported)
-                        release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text());
+                    else // Torrents - Category column == Text or Code
+                        throw new Exception("Please go to " + SiteLink + "settings.php and change the \"Torrents - Category column\" option to \"Icons\". Wait a minute (cache) and then try again.");
+                        //release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
 
                     var filesElement = row.Cq().Find("a[href*=\"/files\"]"); // optional
                     if (filesElement.Length == 1)

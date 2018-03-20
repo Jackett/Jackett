@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Jackett.Utils
+namespace Jackett.Common.Utils
 {
     public class NonNullException : Exception
     {

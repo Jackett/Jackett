@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Jackett.Models
+namespace Jackett.Common.Models
 {
     public static partial class TorznabCatType
     {

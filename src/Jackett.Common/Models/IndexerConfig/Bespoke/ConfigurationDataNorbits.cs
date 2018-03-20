@@ -1,4 +1,4 @@
-﻿namespace Jackett.Models.IndexerConfig.Bespoke
+﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     internal class ConfigurationDataNorbits : ConfigurationData
     {

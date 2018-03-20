@@ -1,4 +1,4 @@
-﻿namespace JackettTray
+﻿namespace Jackett.Tray
 {
     partial class Main
     {

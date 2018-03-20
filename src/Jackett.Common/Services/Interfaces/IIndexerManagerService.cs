@@ -1,8 +1,8 @@
-﻿using Jackett.Indexers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Jackett.Common.Indexers;
 
-namespace Jackett.Services.Interfaces
+namespace Jackett.Common.Services.Interfaces
 {
     public interface IIndexerManagerService
     {

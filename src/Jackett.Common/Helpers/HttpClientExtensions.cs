@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Jackett
+namespace Jackett.Common.Helpers
 {
     public static class HttpClientExtensions
     {

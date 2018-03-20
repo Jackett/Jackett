@@ -1,18 +1,15 @@
-﻿using Jackett.Utils;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using Jackett.Services.Interfaces;
-using Jacket.Common;
-using Jacket.Common.Utils;
 using Jackett.Common.Models.Config;
-using Jackett.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
 
-namespace Jackett.Services
+namespace Jackett.Common.Services
 {
 
     public class ConfigurationService : IConfigurationService

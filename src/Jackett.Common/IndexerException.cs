@@ -1,11 +1,7 @@
-﻿using Jackett.Indexers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Jackett.Common.Indexers;
 
-namespace Jackett
+namespace Jackett.Common
 {
     public class IndexerException : Exception
     {

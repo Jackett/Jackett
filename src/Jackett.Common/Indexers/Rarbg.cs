@@ -5,17 +5,15 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Jacket.Common;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
-using Jackett.Utils.Clients;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using Jacket.Common.Utils;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
@@ -214,7 +212,7 @@ namespace Jackett.Indexers
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
 
                     release.Comments = new Uri(item.Value<string>("info_page"));
-                    release.Guid = release.Comments;
+                    release.Guid = release.MagnetUri;
 
                     var episode_info = item.Value<JToken>("episode_info");
 

@@ -50,7 +50,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * RuTor
  * ShowRSS
- * Sky torrents
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
@@ -132,7 +131,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Cinemageddon
  * CinemaZ
  * Classix
- * CZTeam
  * DanishBits
  * DataScene
  * Demonoid
@@ -161,11 +159,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GFTracker
  * Gfxnews
  * GFXPeers
- * Ghost City
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
  * GODS  [![(invite needed)][inviteneeded]](#)
- * Gormogon
  * Greek Team
  * HacheDe
  * Hardbay
@@ -183,7 +179,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDTorrents.it
  * Hebits
  * Hon3y HD
- * House-of-Torrents
  * Hyperay
  * ICE Torrent
  * I Love Classics
@@ -224,7 +219,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PuntoTorrent
  * Redacted (PassTheHeadphones)
  * RevolutionTT
- * Rockhard Lossless
  * RoDVD
  * SceneFZ
  * SceneReactor
@@ -269,7 +263,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentland
  * TorrentLeech
  * Torrents.Md
+ * TorrentSeeds
  * Torrent-Syndikat
+ * TorrentWTF
  * TorViet
  * ToTheGlory
  * TranceTraffic
@@ -376,6 +372,10 @@ Example config for apache:
   You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface (followed by clicking on the `Apply Server Settings` button).
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
+
+## Configuring OMDb
+This feature is used as a fallback to get the movie/series title if only the IMDB ID is provided in the request.
+To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
 
 ## Creating an issue
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.

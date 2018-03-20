@@ -5,15 +5,17 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using Jackett.Indexers;
-using Jackett.Models;
-using Jackett.Services.Interfaces;
+using Jackett.Common;
+using Jackett.Common.Indexers;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Controllers.V20
+namespace Jackett.Controllers
 {
     public interface IIndexerController
     {
@@ -78,7 +80,7 @@ namespace Jackett.Controllers.V20
         [HttpPost]
         [ActionName("Config")]
         [RequiresIndexer]
-        public async Task UpdateConfig([FromBody]Models.DTO.ConfigItem[] config)
+        public async Task UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
         {
             try
             {
@@ -102,9 +104,9 @@ namespace Jackett.Controllers.V20
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Models.DTO.Indexer> Indexers()
+        public IEnumerable<Common.Models.DTO.Indexer> Indexers()
         {
-            var dto = IndexerService.GetAllIndexers().Select(i => new Models.DTO.Indexer(i));
+            var dto = IndexerService.GetAllIndexers().Select(i => new Common.Models.DTO.Indexer(i));
             return dto;
         }
 

@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using Jacket.Common;
-using Jackett.Services;
-using Jackett.Models.Config;
 using Jackett.Common.Models.Config;
-using Jackett.Common.Plumbing;
 
-namespace Jackett.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class ServerConfig
     {

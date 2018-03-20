@@ -5,15 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using Jackett.Models;
-using Jackett.Models.IndexerConfig;
-using Jackett.Services.Interfaces;
-using Jackett.Utils.Clients;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Jackett.Indexers
+namespace Jackett.Common.Indexers
 {
     public class PassThePopcorn : BaseWebIndexer
     {
@@ -96,8 +94,6 @@ namespace Jackett.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            await DoLogin();
-
             var releases = new List<ReleaseInfo>();
             bool configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
             bool configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
@@ -118,6 +114,12 @@ namespace Jackett.Indexers
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+            if (results.IsRedirect) // untested
+            {
+                // re-login
+                await DoLogin();
+                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);
+            }
             try
             {
                 //Iterate over the releases for each movie

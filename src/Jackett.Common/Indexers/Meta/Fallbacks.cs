@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Jackett.Models;
-using Jackett.Services;
-using Jackett.Services.Interfaces;
-using Jackett.Utils;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 
-namespace Jackett.Indexers.Meta
+namespace Jackett.Common.Indexers.Meta
 {
     public interface IFallbackStrategy
     {
