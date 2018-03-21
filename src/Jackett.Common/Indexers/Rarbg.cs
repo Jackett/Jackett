@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
             set { configData.Url.Value = value.ToString(); }
         }
 
-        private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php"; } }
+        private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php?app_id=Jackett"; } }
 
         private new ConfigurationDataUrl configData
         {
@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
                 var queryCollection = new NameValueCollection();
                 queryCollection.Add("get_token", "get_token");
 
-                var tokenUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
+                var tokenUrl = ApiEndpoint + "&" + queryCollection.GetQueryString();
 
                 var result = await RequestStringWithCookiesAndRetry(tokenUrl);
                 var json = JObject.Parse(result.Content);
@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("category", cats);
             }
 
-            var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
+            var searchUrl = ApiEndpoint + "&" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
 
             try
