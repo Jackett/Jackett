@@ -56,7 +56,6 @@
         filters:
           - name: regexp
             args: ([\d,]+)
-          - name: strdump
       downloadvolumefactor:
         text: "1"
       uploadvolumefactor:
