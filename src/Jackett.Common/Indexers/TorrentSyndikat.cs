@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(SiteLink + qCommentLink.Attr("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
 
-                    var torrent_details = descCol.ChildElements.Last();
+                    var torrent_details = descCol.Cq().Find(".torrent_details").Get(0);
                     var dateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text().Replace(" von ", "").Trim();
                     DateTime dateGerman;
                     if (dateStr.StartsWith("Heute "))
@@ -207,6 +207,10 @@ namespace Jackett.Common.Indexers
 
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
+
+                    var imdbLink = descCol.Cq().Find("a[href*=\"&searchin=imdb\"]");
+                    if (imdbLink.Any())
+                        release.Imdb = ParseUtil.GetLongFromString(imdbLink.Attr("href"));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
