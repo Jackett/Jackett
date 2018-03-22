@@ -94,6 +94,11 @@
             args: ".torrent"
       download:
         text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
+      magfile:
+        text: "{{ .Result.title }}"
+        filters:
+          - name: validfilename
+          - name: urlencode
       magnet:
         selector: dt a
         attribute: href
@@ -103,7 +108,7 @@
           - name: prepend
             args: "magnet:?xt=urn:btih:"
           - name: append
-            args: "&dn={{ .Result.title }}.torrent"
+            args: "&dn={{ .Result.magfile }}.torrent"
       category:
         optional: true
         selector: dt
