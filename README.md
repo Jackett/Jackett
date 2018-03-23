@@ -120,6 +120,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BJ-Share
  * BlueBird
  * Blutopia
+ * Brasil Tracker
  * BroadcastTheNet
  * BrokenStones
  * BTNext
