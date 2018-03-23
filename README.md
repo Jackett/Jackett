@@ -280,6 +280,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * World-In-HD
  * WorldOfP2P
  * x264
+ * xBytesV2
  * XSpeeds
  * Xthor
  * Your Exotic Torrents
