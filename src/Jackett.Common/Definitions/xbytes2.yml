@@ -1,0 +1,101 @@
+---
+  site: xbytesv2
+  name: XbytesV2
+  description: "xbytesV2 is a SPANISH site for HD content"
+  language: es-es
+  type: private
+  encoding: UTF-8
+  links:
+    - http://xbytesv2.li
+
+  caps:
+    categorymappings:
+      - {id: 18 , cat: Movies/HD, desc: "Peliculas - BluRay Rip 1080p"}
+      - {id: 16 , cat: Movies/HD, desc: "Peliculas - MicroHD 1080p"}
+      - {id: 23 , cat: Movies/3D, desc: "Peliculas - 3D"}
+      - {id: 17 , cat: Movies/HD, desc: "Peliculas - FullBluray/BDRemux"}
+      - {id: 29 , cat: Movies/HD, desc: "Peliculas - 1080p x265"}
+      - {id: 21 , cat: Movies/HD, desc: "Peliculas - 4K"}
+      - {id: 30 , cat: Movies/HD, desc: "Peliculas - MicroHD x265"}
+      - {id: 35 , cat: TV/HD, desc: "TV/Series - 4K"}
+      - {id: 31 , cat: TV/HD, desc: "TV/Series - x265"}
+      - {id: 25 , cat: TV/HD, desc: "TV/Series"}
+      - {id: 37 , cat: TV/Documentary, desc: "Documentales"}
+      - {id: 41 , cat: TV/Sport, desc: "Deportes"}
+      - {id: 5  , cat: Movies/HD, desc: "Anime"}
+      - {id: 34 , cat: TV/HD, desc: "Dibujos animados"}
+    modes:
+      search: [q]
+
+  login:
+    path: index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    test:
+      path: index.php
+
+  search:
+    path: index.php
+    keywordsfilters:
+      - name: re_replace
+        args: ["S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
+    inputs:
+      page: "torrents"
+      $raw: "&category={{range .Categories}}{{.}};{{end}}"
+      active: "1"
+      search: "{{ .Keywords }}"
+    rows:
+      selector: "#Mcol > div > div.block-content > div > div > div > table > tbody > tr:nth-child(3) > td > table tr:not(:first-child):not(:last-child)"
+    fields:
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      title:
+        selector: td[valign="middle"] a
+      details:
+        selector: td[valign="middle"] a
+        attribute: href
+      banner:
+        optional: true
+        selector: td[valign="middle"] a
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) "
+      size:
+        selector: td:nth-child(11)
+      seeders:
+        selector: td:nth-child(7) a
+      leechers:
+        selector: td:nth-child(8) a
+      grabs:
+        selector: td:nth-child(9) a
+      date:
+        selector: td:nth-child(6)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      downloadvolumefactor:
+        case:
+          img[src$="gold.gif"]: "0"
+          img[src$="silver.gif"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+          case:
+            img[src$="2x.gif"]: "2"
+            img[src$="3x.gif"]: "3"
+            img[src$="4x.gif"]: "4"
+            img[src$="5x.gif"]: "5"
+            img[src$="6x.gif"]: "6"
+            img[src$="7x.gif"]: "7"
+            img[src$="8x.gif"]: "8"
+            img[src$="9x.gif"]: "9"
+            "*": "1"
