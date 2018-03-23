@@ -60,9 +60,9 @@
        - {id: 4, cat: Other, desc: "Other"}
 
     modes:
-        search: [q]
-        tv-search: [q, season, ep]
-        movie-search: [q]
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: /index.php?page=login
