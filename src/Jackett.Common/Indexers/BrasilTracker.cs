@@ -11,7 +11,7 @@ namespace Jackett.Common.Indexers
     {
         public BrasilTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Brasil Tracker",
-                desc: "A Brasil tracker",
+                desc: "Brasil Tracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://brasiltracker.org/",
                 configService: configService,
                 logger: logger,
