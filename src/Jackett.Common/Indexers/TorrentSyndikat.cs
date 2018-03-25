@@ -196,7 +196,8 @@ namespace Jackett.Common.Indexers
                     release.Guid = release.Comments;
 
                     var torrent_details = descCol.Cq().Find(".torrent_details").Get(0);
-                    var dateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text().Replace("von", "").Trim();
+                    var rawDateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text();
+                    var dateStr = rawDateStr.Trim().Replace("von", "").Trim();
                     DateTime dateGerman;
                     if (dateStr.StartsWith("Heute "))
                         dateGerman = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStr.Split(' ')[1]);
