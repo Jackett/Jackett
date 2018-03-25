@@ -64,12 +64,12 @@
           - name: split
             args: [ "/", -1 ]
           - name: urldecode
-          - name: replace
-            args: [ "_", " "]
-          - name: replace
-            args: [ "  ", " "]
+          - name: re_replace
+            args: [ "_+", " "]
           - name: replace
             args: [ ".", " "]
+          - name: re_replace
+            args: [ "\\s{2,}", " "]
           # normalize to SXXEYY format
           - name: re_replace
             args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
@@ -88,6 +88,8 @@
           - name: re_replace #remove various
             args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
           # fine prova
+          - name: re_replace #try to find multi episode
+            args: ["(S\\d{2}E\\d{2})\\s(\\d{2})", "$1-$2"]
       category:
         selector: td:nth-child(1) a
         attribute: href
