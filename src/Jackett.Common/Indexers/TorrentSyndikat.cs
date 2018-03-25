@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "eing2.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
+        private TimeZoneInfo germanyTz;
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -93,7 +93,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(17, TorznabCatType.Books); // Misc / eBooks
             AddCategoryMapping(5,  TorznabCatType.PCPhoneOther); // Misc / Mobile
             AddCategoryMapping(39, TorznabCatType.Other); // Misc / Bildung
-        }
+
+
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+    }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
