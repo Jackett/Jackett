@@ -178,7 +178,7 @@ namespace Jackett.Common.Indexers
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Link = new Uri(qRow.Find(".quickdownload > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find(".quickdownload > a").Attr("href"));
 
                     var dateString = qRow.Find("span.addedInLine").Get(0).LastChild.NodeValue.Replace("on", string.Empty).Trim(); ;
                     release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
