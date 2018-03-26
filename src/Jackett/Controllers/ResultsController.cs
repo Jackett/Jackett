@@ -250,28 +250,22 @@ namespace Jackett.Controllers
 
             if (CurrentQuery.ImdbID != null)
             {
-                if (CurrentQuery.QueryType != "movie")
-                {
-                    logger.Warn($"A non movie request with an imdbid was made from {Request.GetOwinContext().Request.RemoteIpAddress}.");
-                    return GetErrorXML(201, "Incorrect parameter: only movie-search supports the imdbid parameter");
-                }
-
                 if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
-                    logger.Warn($"A movie-search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made contining q and imdbid.");
+                    logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made contining q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
 
                 CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
                 if (CurrentQuery.ImdbID == null)
                 {
-                    logger.Warn($"A movie-search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made with an invalid imdbid.");
+                    logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made with an invalid imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
                 if (!CurrentIndexer.TorznabCaps.SupportsImdbSearch)
                 {
-                    logger.Warn($"A movie-search request with imdbid from {Request.GetOwinContext().Request.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with imdbid from {Request.GetOwinContext().Request.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");
                 }
             }
