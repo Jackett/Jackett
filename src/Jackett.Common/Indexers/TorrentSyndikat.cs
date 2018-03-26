@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "eing2.php"; } }
         private string CaptchaUrl { get { return SiteLink + "simpleCaptcha.php?numImages=1"; } }
-        private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
+        private TimeZoneInfo germanyTz;
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
         {
@@ -50,50 +50,62 @@ namespace Jackett.Common.Indexers
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             this.configData.DisplayText.Name = "Notice";
 
-            AddCategoryMapping(2,  TorznabCatType.PC); // Apps / Windows
-            AddCategoryMapping(13, TorznabCatType.PC); // Apps / Linux
-            AddCategoryMapping(4,  TorznabCatType.PCMac); // Apps / Mac
-            AddCategoryMapping(6,  TorznabCatType.PC); // Apps / Misc
+            AddCategoryMapping(2, TorznabCatType.PC, "Apps / Windows");
+            AddCategoryMapping(13, TorznabCatType.PC, "Apps / Linux");
+            AddCategoryMapping(4, TorznabCatType.PCMac, "Apps / Mac");
+            AddCategoryMapping(6, TorznabCatType.PC, "Apps / Misc");
 
-            AddCategoryMapping(12, TorznabCatType.PCGames); // Spiele / PC
-            AddCategoryMapping(8,  TorznabCatType.ConsolePSP); // Spiele / PSX/PSP
-            AddCategoryMapping(7,  TorznabCatType.ConsoleWii); // Spiele / Wii
-            AddCategoryMapping(32, TorznabCatType.ConsoleXbox); // Spiele / XBOX
-            AddCategoryMapping(41, TorznabCatType.ConsoleNDS); // Spiele / Nintendo DS
+            AddCategoryMapping(12, TorznabCatType.PCGames, "Spiele / PC");
+            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "Spiele / PSX/PSP");
+            AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Spiele / Wii");
+            AddCategoryMapping(32, TorznabCatType.ConsoleXbox, "Spiele / XBOX");
+            AddCategoryMapping(41, TorznabCatType.ConsoleOther, "Spiele / Misc");
 
-            AddCategoryMapping(22, TorznabCatType.Movies3D); // Filme / 3D
-            AddCategoryMapping(3,  TorznabCatType.MoviesBluRay); // Filme / BluRay
-            AddCategoryMapping(11, TorznabCatType.MoviesOther); // Filme / REMUX
-            AddCategoryMapping(42, TorznabCatType.MoviesHD); // Filme / 2160p
-            AddCategoryMapping(9,  TorznabCatType.MoviesHD); // Filme / 1080p
-            AddCategoryMapping(20, TorznabCatType.MoviesHD); // Filme / 720p
-            AddCategoryMapping(21, TorznabCatType.MoviesDVD); // Filme / DVD
-            AddCategoryMapping(10, TorznabCatType.MoviesSD); // Filme / SD
-            AddCategoryMapping(31, TorznabCatType.MoviesOther); // Filme / Anime
-            AddCategoryMapping(37, TorznabCatType.MoviesForeign); // Filme / Englisch
+            AddCategoryMapping(22, TorznabCatType.Movies3D, "Filme / 3D");
+            AddCategoryMapping(3, TorznabCatType.MoviesBluRay, "Filme / BluRay");
+            AddCategoryMapping(11, TorznabCatType.MoviesOther, "Filme / REMUX");
+            AddCategoryMapping(42, TorznabCatType.MoviesUHD, "Filme / 2160p");
+            AddCategoryMapping(9, TorznabCatType.MoviesHD, "Filme / 1080p");
+            AddCategoryMapping(20, TorznabCatType.MoviesHD, "Filme / 720p");
+            AddCategoryMapping(21, TorznabCatType.MoviesDVD, "Filme / DVD");
+            AddCategoryMapping(10, TorznabCatType.MoviesSD, "Filme / SD");
+            AddCategoryMapping(31, TorznabCatType.MoviesOther, "Filme / Anime");
 
-            AddCategoryMapping(16, TorznabCatType.TVHD); // TV / Serien/HD
-            AddCategoryMapping(15, TorznabCatType.TVSD); // TV / Serien/SD
-            AddCategoryMapping(44, TorznabCatType.TVHD); // TV / Packs/UHD
-            AddCategoryMapping(23, TorznabCatType.TVHD); // TV / Packs/HD
-            AddCategoryMapping(27, TorznabCatType.TVSD); // TV / Packs/SD
-            AddCategoryMapping(28, TorznabCatType.TVDocumentary); // TV / Dokus/SD
-            AddCategoryMapping(29, TorznabCatType.TVDocumentary); // TV / Dokus/HD
-            AddCategoryMapping(30, TorznabCatType.TVSport); // TV / Sport
-            AddCategoryMapping(40, TorznabCatType.TVAnime); // TV / Anime
-            AddCategoryMapping(36, TorznabCatType.TVFOREIGN); // TV / Englisch
+            AddCategoryMapping(43, TorznabCatType.TVUHD, "TV / Serien/UHD");
+            AddCategoryMapping(16, TorznabCatType.TVHD, "TV / Serien/HD");
+            AddCategoryMapping(15, TorznabCatType.TVSD, "TV / Serien/SD");
+            AddCategoryMapping(44, TorznabCatType.TVUHD, "TV / Packs/UHD");
+            AddCategoryMapping(23, TorznabCatType.TVHD, "TV / Packs/HD");
+            AddCategoryMapping(27, TorznabCatType.TVSD, "TV / Packs/SD");
+            AddCategoryMapping(28, TorznabCatType.TVDocumentary, "TV / Dokus/SD");
+            AddCategoryMapping(29, TorznabCatType.TVDocumentary, "TV / Dokus/HD");
+            AddCategoryMapping(30, TorznabCatType.TVSport, "TV / Sport");
+            AddCategoryMapping(40, TorznabCatType.TVAnime, "TV / Anime");
 
-            AddCategoryMapping(24, TorznabCatType.AudioLossless); // Audio / FLAC
-            AddCategoryMapping(25, TorznabCatType.AudioMP3); // Audio / MP3
-            AddCategoryMapping(35, TorznabCatType.AudioOther); // Audio / Other
-            AddCategoryMapping(26, TorznabCatType.Audio); // Audio / Packs
-            AddCategoryMapping(18, TorznabCatType.AudioAudiobook); // Audio / aBooks
-            AddCategoryMapping(33, TorznabCatType.AudioVideo); // Audio / Videos
+            AddCategoryMapping(24, TorznabCatType.AudioLossless, "Audio / FLAC");
+            AddCategoryMapping(25, TorznabCatType.AudioMP3, "Audio / MP3");
+            AddCategoryMapping(35, TorznabCatType.AudioOther, "Audio / Other");
+            AddCategoryMapping(26, TorznabCatType.Audio, "Audio / Packs");
+            AddCategoryMapping(18, TorznabCatType.AudioAudiobook, "Audio / aBooks");
+            AddCategoryMapping(33, TorznabCatType.AudioVideo, "Audio / Videos");
 
-            AddCategoryMapping(17, TorznabCatType.Books); // Misc / eBooks
-            AddCategoryMapping(5,  TorznabCatType.PCPhoneOther); // Misc / Mobile
-            AddCategoryMapping(39, TorznabCatType.Other); // Misc / Bildung
-        }
+            AddCategoryMapping(17, TorznabCatType.Books, "Misc / eBooks");
+            AddCategoryMapping(5, TorznabCatType.PCPhoneOther, "Misc / Mobile");
+            AddCategoryMapping(39, TorznabCatType.Other, "Misc / Bildung");
+
+            AddCategoryMapping(36, TorznabCatType.TVFOREIGN, "Englisch / TV");
+            AddCategoryMapping(37, TorznabCatType.MoviesForeign, "Englisch / Filme");
+            AddCategoryMapping(47, TorznabCatType.Books, "Englisch / eBooks");
+            AddCategoryMapping(48, TorznabCatType.Other, "Englisch / Bildung");
+            AddCategoryMapping(49, TorznabCatType.TVSport, "Englisch / Sport");
+
+            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
+            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
+            TimeSpan delta = new TimeSpan(1, 0, 0);
+            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
+            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
+            germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
+    }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -195,8 +207,9 @@ namespace Jackett.Common.Indexers
                     release.Comments = new Uri(SiteLink + qCommentLink.Attr("href").Replace("&hit=1", ""));
                     release.Guid = release.Comments;
 
-                    var torrent_details = descCol.ChildElements.Last();
-                    var dateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text().Replace(" von ", "").Trim();
+                    var torrent_details = descCol.Cq().Find(".torrent_details").Get(0);
+                    var rawDateStr = torrent_details.ChildNodes.ElementAt(torrent_details.ChildNodes.Length - 3).Cq().Text();
+                    var dateStr = rawDateStr.Trim().Replace("von", "").Trim();
                     DateTime dateGerman;
                     if (dateStr.StartsWith("Heute "))
                         dateGerman = DateTime.SpecifyKind(DateTime.UtcNow.Date, DateTimeKind.Unspecified) + TimeSpan.Parse(dateStr.Split(' ')[1]);
@@ -207,6 +220,10 @@ namespace Jackett.Common.Indexers
 
                     DateTime pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     release.PublishDate = pubDateUtc.ToLocalTime();
+
+                    var imdbLink = descCol.Cq().Find("a[href*=\"&searchin=imdb\"]");
+                    if (imdbLink.Any())
+                        release.Imdb = ParseUtil.GetLongFromString(imdbLink.Attr("href"));
 
                     var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

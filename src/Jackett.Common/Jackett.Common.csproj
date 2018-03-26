@@ -113,18 +113,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.9.1" />
+    <PackageReference Include="AngleSharp" Version="0.9.9.2" />
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="BencodeNET" Version="2.2.24" />
-    <PackageReference Include="CloudFlareUtilities" Version="1.0.0" />
+    <PackageReference Include="CloudFlareUtilities" Version="1.1.0" />
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="NLog" Version="4.4.13" />
-    <PackageReference Include="YamlDotNet" Version="4.3.1" />
+    <PackageReference Include="NLog" Version="4.5.0-rc07" />
+    <PackageReference Include="YamlDotNet" Version="4.3.2-pre0473" />
   </ItemGroup>
 
   <ItemGroup>

@@ -120,6 +120,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BJ-Share
  * BlueBird
  * Blutopia
+ * Brasil Tracker
  * BroadcastTheNet
  * BrokenStones
  * BTNext
@@ -159,7 +160,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GFTracker
  * Gfxnews
  * GFXPeers
- * Ghost City
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
  * GODS  [![(invite needed)][inviteneeded]](#)
@@ -280,6 +280,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * World-In-HD
  * WorldOfP2P
  * x264
+ * xBytesV2
  * XSpeeds
  * Xthor
  * Your Exotic Torrents
@@ -368,11 +369,15 @@ Example config for apache:
    - On Linux (as user root): `wget -O - https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin`
    - On macOS: `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
-*  __Enable logging__
+*  __Enable enhanced logging__
 
-  You can get additional logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface (followed by clicking on the `Apply Server Settings` button).
+  You can get *enhanced* logging with the command line switches `-t -l` or by enabling `Enhanced logging` via the web interface (followed by clicking on the `Apply Server Settings` button).
   Please post logs if you are unable to resolve your issue with these switches ensuring to remove your username/password/cookies.
   The logfiles (log.txt/updater.txt) are stored in `%ProgramData%\Jackett` on Windows and `~/.config/Jackett/` on Linux/macOS.
+
+## Configuring OMDb
+This feature is used as a fallback to get the movie/series title if only the IMDB ID is provided in the request.
+To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
 
 ## Creating an issue
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.

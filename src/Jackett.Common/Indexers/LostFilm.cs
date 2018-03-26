@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
+using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -23,6 +24,7 @@ namespace Jackett.Common.Indexers
         private static Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        string LoginUrl { get { return SiteLink + "login"; } }
         // http://www.lostfilm.tv/login
         string ApiUrl { get { return SiteLink + "ajaxik.php"; } }
         // http://www.lostfilm.tv/new
@@ -75,9 +77,9 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        new ConfigurationDataBasicLogin configData
+        new ConfigurationDataCaptchaLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataCaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
@@ -91,17 +93,42 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    // TODO: Provide optional instructions
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "semi-private";
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            // looks like after some failed login attempts there's a captcha
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            CQ dom = loginPage.Content;
+            CQ qCaptchaImg = dom.Find("img#captcha_pictcha").First();
+            if (qCaptchaImg.Length == 1)
+            {
+                var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
+                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
+                configData.CaptchaImage.Value = captchaImage.Content;
+            }
+            else
+            {
+                configData.CaptchaImage.Value = new byte[0];
+            }
+            configData.CaptchaCookie.Value = loginPage.Cookies;
+            UpdateCookieHeader(loginPage.Cookies);
+            return configData;
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             logger.Debug("Applying configuration");
             LoadValuesFromJson(configJson);
+
+            if (!configData.Username.Value.Contains("@"))
+                throw new ExceptionWithConfigData("Username must be an e-mail address", configData);
+
 
             // Performing Logout is required to invalidate previous session otherwise the `{"error":1,"result":"ok"}` will be returned.
             await Logout();
@@ -115,10 +142,18 @@ namespace Jackett.Common.Indexers
                 { "rem", "1" }
             };
 
+            if (!string.IsNullOrWhiteSpace(configData.CaptchaText.Value))
+            {
+                data.Add("need_captcha", "1");
+                data.Add("captcha", configData.CaptchaText.Value);
+            }
+
             var result = await RequestLoginAndFollowRedirect(ApiUrl, data, CookieHeader, true, SiteLink, ApiUrl, true);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("\"success\":true"), () =>
             {
                 var errorMessage = result.Content;
+                if (errorMessage.StartsWith("\"error\":3,"))
+                    errorMessage = "E-mail or password is incorrect";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
 

@@ -59,6 +59,9 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("status\":\"success\""), () =>
             {
+                if (result.Content.Contains("Your IP address has been banned."))
+                    throw new ExceptionWithConfigData("Your IP address has been banned.", ConfigData);
+
                 CQ dom = result.Content;
                 dom["#loginform > table"].Remove();
                 var errorMessage = dom["#loginform"].Text().Trim().Replace("\n\t", " ");

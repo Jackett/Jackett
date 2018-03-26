@@ -80,6 +80,7 @@
           span.tv8: EBOOKS
           span.tv9: IMAGES
           span.tv12: AUDIOBOOK
+          "*": "" # some torrents have invalid categories
       downloadvolumefactor:
         text: "1"
       uploadvolumefactor:

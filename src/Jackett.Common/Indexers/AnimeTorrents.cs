@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Common.Models;
@@ -91,6 +92,11 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
+
+            //  replace any space, special char, etc. with % (wildcard)
+            Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
+            searchString = ReplaceRegex.Replace(searchString, "%");
+
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
 
