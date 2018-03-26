@@ -252,7 +252,7 @@ namespace Jackett.Controllers
             {
                 if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
-                    logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made contining q and imdbid.");
+                    logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made containing q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
 
