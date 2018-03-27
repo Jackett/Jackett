@@ -31,29 +31,29 @@
     - name: category
       type: select
       label: Category Filter
-      default: "/"
+      default: "_"
       options:
-        "/" : "All"
-        "/films/": "Movies"
-        "/films-french/": "Movies/French"
-        "/films-vostfr/": "Movies/VOSTFR"
-        "/films-dvdrip-x264/": "Movies/DVDRIP .x264"
-        "/720p/": "Movies/BluRay 720p"
-        "/1080p/": "Movies/BluRay 1080p"
-        "/series/": "TV/Series"
-        "/series-vostfr/": "TV/VOSTFR"
-        "/series-francaise/": "TV/French"
-        "/series-dvdrip/": "TV/DVDRIP"
-        "/spectacles/": "Shows"
-        "/musique/": "Music"
-        "/ebook/": "Ebooks"
-        "/logiciels/": "Software"
-        "/jeux-pc/": "PC Games"
-        "/jeux-consoles/": "Console Games"
+        "_" : "All"
+        "films": "Movies"
+        "films-french": "Movies/French"
+        "films-vostfr": "Movies/VOSTFR"
+        "films-dvdrip-x264": "Movies/DVDRIP .x264"
+        "720p": "Movies/BluRay 720p"
+        "1080p": "Movies/BluRay 1080p"
+        "series": "TV/Series"
+        "series-vostfr": "TV/VOSTFR"
+        "series-francaise": "TV/French"
+        "series-dvdrip": "TV/DVDRIP"
+        "spectacles": "Shows"
+        "musique": "Music"
+        "ebook": "Ebooks"
+        "logiciels": "Software"
+        "jeux-pc": "PC Games"
+        "jeux-consoles": "Console Games"
 
   search:
     paths:
-      - path: "{{ if .Keywords }}/search_torrent{{ .Config.category }}{{ .Keywords }}/page-0{{else}}/top_torrent.php{{end}}"
+      - path: "{{ if .Keywords }}/search_torrent/{{ re_replace .Config.category \"_\" \"\" }}/{{ .Keywords }}/page-0{{else}}/top_torrent.php{{end}}"
     rows:
       selector: div.table-responsive > table tbody tr
     fields:
