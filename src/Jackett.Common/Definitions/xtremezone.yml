@@ -7,8 +7,9 @@
   encoding: UTF-8
   links:
     - https://www.myxz.eu/
-  legacylinks:
-    - https://www.myxz.org/
+# not yet enabled (legitimacy concerns, see #2821)
+#  legacylinks:
+#    - https://www.myxz.org/
 
   caps:
     categorymappings:
