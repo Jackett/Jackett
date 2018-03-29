@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://www.myxz.eu/
+  legacylinks:
     - https://www.myxz.org/
 
   caps:
@@ -48,7 +50,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login
+    path: /login.php
     method: form
     form: form
     inputs:
@@ -57,15 +59,15 @@
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
-      path: /browse
+      path: /browse.php
       
   ratio:
-    path: /browse
+    path: /browse.php
     selector: font:contains("Ratio:")+font
 
   search:
     paths:
-      - path: /browse
+      - path: /browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
