@@ -90,9 +90,6 @@
       download:
         selector: a[href^="dwn.php"]
         attribute: href
-        filters:
-          - name: replace
-            args: ["dwn.php", "dwn"]
       size:
         selector: td:nth-child(7)
       date:
