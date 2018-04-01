@@ -106,11 +106,14 @@
 
   search:
     path: index.php
+    keywordsfilters:
+      - name: re_replace
+        args: ["S0?(\\d{1,2})E(\\d{1,2})", "T$1 $2"]
     inputs:
       page: "torrents"
       $raw: "&category={{range .Categories}}{{.}};{{end}}"
       active: "1"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
     rows:
       selector: "#mcol .block-content-l table table.lista > tbody > tr:not(:first-child):not(.descripcion)"
     fields:
@@ -122,6 +125,9 @@
             args: category
       title:
         selector: td:nth-child(2) a
+        filters:
+          - name: append
+            args: " [spanish]"
       details:
         selector: td:nth-child(3) a
         attribute: href
