@@ -188,7 +188,7 @@
           img[alt="Free Leech"]: "0"
           img[alt="Gold 100% Free"]: "0"
           img[alt="Silver 50% Free"]: "0.5"
-          img[alt="Bronze 25% Free"]: "0.25"
+          img[alt="Bronze 25% Free"]: "0.75"
           "*": "1"
       uploadvolumefactor:
         text: "1"
