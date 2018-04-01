@@ -56,12 +56,21 @@
           - name: urldecode
       size:
         selector: td:nth-child(2)
+        filters:
+          - name: replace
+            args: ["N/A", "0 Bytes"]
       date:
         selector: td:nth-child(3)
       seeders:
         selector: td:nth-child(4)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       leechers:
         selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       description:
         selector: td:nth-child(1) > div > div > span
       downloadvolumefactor:
