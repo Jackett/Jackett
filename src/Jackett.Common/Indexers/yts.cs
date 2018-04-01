@@ -112,7 +112,11 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var jsonContent = JObject.Parse(response.Content);
+                // returned content might start with an html error message, remove it first
+                var jsonStart = response.Content.IndexOf('{');
+                var jsonContentStr = response.Content.Remove(0, jsonStart);
+
+                var jsonContent = JObject.Parse(jsonContentStr);
 
                 string result = jsonContent.Value<string>("status");
                 if (result != "ok") // query was not successful
