@@ -31,6 +31,8 @@ namespace Jackett.Common.Indexers
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
 
+        protected List<string> DefaultCategories = new List<string>();
+
         new ConfigurationData configData
         {
             get { return (ConfigurationData)base.configData; }
@@ -172,6 +174,8 @@ namespace Jackett.Common.Indexers
                         }
                     }
                     AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
+                    if (Categorymapping.Default)
+                        DefaultCategories.Add(Categorymapping.id);
                 }
             }
             LoadValuesFromJson(null);
@@ -1082,6 +1086,11 @@ namespace Jackett.Common.Indexers
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
+            if (mappedCategories.Count == 0)
+            {
+                mappedCategories = this.DefaultCategories;
+            }
+
             variables[".Categories"] = mappedCategories;
 
             var KeywordTokens = new List<string>();
