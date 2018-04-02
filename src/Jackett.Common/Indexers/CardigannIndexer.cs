@@ -251,6 +251,27 @@ namespace Jackett.Common.Indexers
                 ReReplaceRegexMatches = ReReplaceRegexMatches.NextMatch();
             }
 
+            // handle join expression
+            // Example: {{ join .Categories "," }}
+            Regex JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
+            var JoinMatches = JoinRegex.Match(template);
+
+            while (JoinMatches.Success)
+            {
+                string all = JoinMatches.Groups[0].Value;
+                string variable = JoinMatches.Groups[1].Value;
+                string delimiter = JoinMatches.Groups[2].Value;
+
+                var input = (ICollection<string>)variables[variable];
+                var expanded = string.Join(delimiter, input);
+
+                if (modifier != null)
+                    expanded = modifier(expanded);
+
+                template = template.Replace(all, expanded);
+                JoinMatches = JoinMatches.NextMatch();
+            }
+
             // handle if ... else ... expression
             Regex IfElseRegex = new Regex(@"{{\s*if\s*(.+?)\s*}}(.*?){{\s*else\s*}}(.*?){{\s*end\s*}}");
             var IfElseRegexMatches = IfElseRegex.Match(template);
