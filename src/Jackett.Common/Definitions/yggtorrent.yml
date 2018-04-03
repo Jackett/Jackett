@@ -6,8 +6,9 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://yggtorrent.com/
+    - https://yggtorrent.is/
   legacylinks:
+    - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
 
   caps:
@@ -97,37 +98,36 @@
       default: false
 
   login:
-    path: "/user/login"
+    path: "/"
     method: post
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
       submit: ""
     error:
-      - selector: "form > center > span[style=\"color:red\"]"
+      - selector: "#login_msg_pass[style=\"\"][style] > center"
     test:
       path: "/"
       selector: "a[href$=\"user/logout\"]"
 
   search:
     paths:
-      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&q={{ .Keywords }}{{else}}/torrents/today?category=2145{{end}}"
-      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&q={{ .Keywords }}&page=25{{else}}/torrents/today?category=2145&page=25{{end}}"
-      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&q={{ .Keywords }}&page=50{{else}}/torrents/today?category=2145&page=50{{end}}"
+      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search{{else}}/top/day?category=2145{{end}}"
+      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&page=50{{else}}/top/day?category=2145&page=50{{end}}"
 
     rows:
-      selector: "table.table.table-striped > tbody > tr"
+      selector: "table.table > tbody > tr"
     fields:
       _id:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         attribute: href
         filters:
           - name: regexp
             args: "/(\\d+)-"
       title_normal:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
       title_filtered:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         filters:
           - name: re_replace
             args: ["(?i)^(?:(.+?)((?:[\\.\\-\\s_\\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\\-?rip)?|720\\s*p?|1080\\s*p?|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\\.\\-\\s_\\]]*)*)([\\(\\[]?(?:20|1[7-9])\\d{2}[\\)\\]]?)(.*)$|(.*))$", "$1 $3 $2 $4 $5"]
@@ -142,10 +142,10 @@
       title:
         text: "{{if .Config.filter_title }}{{ .Result.title_filtered }}{{else}}{{ .Result.title_normal }}{{end}}"
       details:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         attribute: href
       category:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         case:
           "a[href*=\"/filmvidéo/animation/\"]" : 2178
           "a[href*=\"/filmvidéo/animation-série/\"]" : 2179
@@ -198,7 +198,7 @@
       download:
         text: "/engine/download_torrent?id={{ .Result._id }}"
       date:
-        selector: "td:nth-child(3)"
+        selector: "td:nth-child(5)"
         filters:
           - name: replace
             args: ["il y a ", ""]
@@ -223,16 +223,16 @@
           - name: append
             args: " ago"
       size:
-        selector: "td:nth-child(4)"
+        selector: "td:nth-child(6)"
       seeders:
         text: 0
       seeders:
-        selector: "td:nth-child(5)"
+        selector: "td:nth-child(8)"
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: "td:nth-child(6)"
+        selector: "td:nth-child(*)"
         optional: true
       downloadvolumefactor:
         text: "1"
