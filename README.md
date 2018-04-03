@@ -238,6 +238,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Synthesiz3r
  * Tasmanit
  * TBPlus
+ * TehConnection
+ * TenYardTracker
  * The Empire
  * The Geeks
  * The Horror Charnel
@@ -248,7 +250,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Show
  * The Vault
  * The-Torrents
- * TenYardTracker
  * Torrent Network
  * Torrent Sector Crew
  * Torrent.LT
