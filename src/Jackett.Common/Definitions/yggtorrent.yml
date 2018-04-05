@@ -72,9 +72,6 @@
       movie-search: [q]
 
   settings:
-    - name: cookie
-      type: text
-      label: Cookie
     - name: username
       type: text
       label: Username
@@ -101,8 +98,9 @@
       default: false
 
   login:
-    path: "/"
-    method: cookie # temp
+    method: form
+    path: /
+    form: form[action$="/user/login"]
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
@@ -110,8 +108,8 @@
     error:
       - selector: "#login_msg_pass[style=\"\"][style] > center"
     test:
-      path: "/"
-      selector: "a[href$=\"user/logout\"]"
+      path: /
+      selector: a[href$="/user/logout"]
 
   search:
     paths:
