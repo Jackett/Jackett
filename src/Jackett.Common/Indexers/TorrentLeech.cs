@@ -12,13 +12,14 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Newtonsoft.Json;
 
 namespace Jackett.Common.Indexers
 {
     public class TorrentLeech : BaseWebIndexer
     {
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
-        private string SearchUrl { get { return SiteLink + "torrents/browse/index/"; } }
+        private string SearchUrl { get { return SiteLink + "torrents/browse/list/"; } }
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -146,7 +147,7 @@ namespace Jackett.Common.Indexers
 
             var results = await RequestStringWithCookiesAndRetry(searchUrl);
 
-            if (!results.Content.Contains("/user/account/logout"))
+            if (results.Content.Contains("/user/account/login"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
@@ -155,45 +156,37 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                CQ dom = results.Content;
+                dynamic jsonObj = JsonConvert.DeserializeObject(results.Content);
 
-                CQ qRows = dom["#torrenttable > tbody > tr"];
-
-                foreach (var row in qRows)
+                foreach (var torrent in jsonObj.torrentList)
                 {
                     var release = new ReleaseInfo();
 
-                    var qRow = row.Cq();
-
-                    var debug = qRow.Html();
+                    var debug = torrent;
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
 
-                    CQ qLink = qRow.Find(".title > a").First();
-                    release.Guid = new Uri(SiteLink + qLink.Attr("href").Substring(1));
+                    release.Guid = new Uri(SiteLink + "torrent/" + torrent.fid);
                     release.Comments = release.Guid;
-                    release.Title = qLink.Text();
+                    release.Title = torrent.name;
 
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Link = new Uri(new Uri(SiteLink), qRow.Find(".quickdownload > a").Attr("href"));
+                    release.Link = new Uri(SiteLink + "download/" + torrent.fid + "/" + torrent.filename);
 
-                    var dateString = qRow.Find("span.addedInLine").Get(0).LastChild.NodeValue.Replace("on", string.Empty).Trim(); ;
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    release.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                    release.PublishDate = release.PublishDate.AddSeconds((double)torrent.addedTimestamp).ToLocalTime();
 
-                    var sizeStr = qRow.Children().ElementAt(4).InnerText;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+                    release.Size = (long)torrent.size;
 
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".seeders").Text());
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".leechers").Text());
+                    release.Seeders = torrent.seeders;
+                    release.Peers = release.Seeders + (int?)torrent.leechers;
 
-                    var category = qRow.Find(".category a").Attr("href").Replace("/torrents/browse/index/categories/", string.Empty);
-                    release.Category = MapTrackerCatToNewznab(category);
+                    release.Category = MapTrackerCatToNewznab(torrent.categoryID.ToString());
 
-                    var grabs = qRow.Find("td:nth-child(6)").Get(0).FirstChild.ToString();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
+                    release.Grabs = torrent.completed;
 
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
