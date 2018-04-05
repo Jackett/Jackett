@@ -49,6 +49,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * RuTor
  * ShowRSS
+ * sukebei.Nyaa.si
+ * sukebei-Pantsu
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
