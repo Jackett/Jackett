@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
             Language = "pt-br";
             Type = "private";
 
@@ -136,6 +136,7 @@ Encoding = Encoding.UTF8;
                             var qDLLink = Row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                             var qSeeders = Row.QuerySelector("td:nth-child(4)");
                             var qLeechers = Row.QuerySelector("td:nth-child(5)");
+                            var qQuality = Row.QuerySelector("font[color=\"red\"]");
                             var qFreeLeech = Row.QuerySelector("font[color=\"green\"]:contains(Free)");
 
                             release.Description = "";
@@ -170,6 +171,13 @@ Encoding = Encoding.UTF8;
                             {
                                 release.Title = Regex.Replace(release.Title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
                             }
+
+                            var Quality = qQuality.TextContent;
+                            if (Quality == "Full HD")
+                                release.Title += " 1080p";
+                            else if(Quality == "Full HD")
+                                release.Title += " 720p";
+
                             release.Category = MapTrackerCatToNewznab(catStr);
 
                             release.Link = new Uri(SiteLink + qDLLink.GetAttribute("href"));
