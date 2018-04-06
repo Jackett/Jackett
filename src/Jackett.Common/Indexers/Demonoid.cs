@@ -197,7 +197,7 @@ namespace Jackett.Common.Indexers
                             release.Category = new List<int> { TorznabCatType.AudioOther.ID };
                     }
 
-                    release.Comments = new Uri(SiteLink + qLink.Attr("href"));
+                    release.Comments = new Uri(new Uri(SiteLink), qLink.Attr("href"));
                     release.Guid = release.Comments;
 
                     var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(0).Cq();
