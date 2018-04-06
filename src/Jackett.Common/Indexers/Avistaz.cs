@@ -1,4 +1,5 @@
 ﻿using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -18,6 +19,12 @@ namespace Jackett.Common.Indexers
                 )
         {
             Type = "private";
+        }
+
+        // hook to adjust the search term
+        protected override string GetSearchTerm(TorznabQuery query)
+        {
+            return query.SanitizedSearchTerm;
         }
     }
 }
