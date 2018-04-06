@@ -51,7 +51,7 @@ namespace Jackett.Common.Models
                         new XElement("title", ChannelInfo.Title),
                         new XElement("description", ChannelInfo.Description),
                         new XElement("link", ChannelInfo.Link),
-                        new XElement("lanuage", ChannelInfo.Language),
+                        new XElement("language", ChannelInfo.Language),
                         new XElement("category", ChannelInfo.Category),
                         new XElement("image",
                             new XElement("url", ChannelInfo.ImageUrl.ToString()),
