@@ -143,7 +143,7 @@ namespace Jackett.Common.Utils.Clients
 
             using (ClearanceHandler clearanceHandlr = new ClearanceHandler())
             {
-                clearanceHandlr.ClearanceDelay = 7000; // 2018/03/22: something odd is going on with cloudflare, for a few users higher delays are needed (depending on which server you end up?)
+                clearanceHandlr.MaxRetries = 10;
                 using (HttpClientHandler clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
