@@ -162,8 +162,6 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
-                    var debug = torrent;
-
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
 
@@ -176,17 +174,18 @@ namespace Jackett.Common.Indexers
 
                     release.Link = new Uri(SiteLink + "download/" + torrent.fid + "/" + torrent.filename);
 
-                    release.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                    release.PublishDate = release.PublishDate.AddSeconds((double)torrent.addedTimestamp).ToLocalTime();
+                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceLong(torrent.addedTimestamp.ToString()));
 
                     release.Size = (long)torrent.size;
 
-                    release.Seeders = torrent.seeders;
-                    release.Peers = release.Seeders + (int?)torrent.leechers;
+                    release.Seeders = ParseUtil.CoerceInt(torrent.seeders.ToString());
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(torrent.leechers.ToString());
 
                     release.Category = MapTrackerCatToNewznab(torrent.categoryID.ToString());
 
-                    release.Grabs = torrent.completed;
+                    release.Grabs = ParseUtil.CoerceInt(torrent.completed.ToString());
+
+                    release.Imdb = ParseUtil.GetImdbID(torrent.imdbID.ToString());
 
                     release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
