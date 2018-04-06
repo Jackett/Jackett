@@ -175,7 +175,7 @@ namespace Jackett.Common.Indexers
                             var Quality = qQuality.TextContent;
                             if (Quality == "Full HD")
                                 release.Title += " 1080p";
-                            else if(Quality == "Full HD")
+                            else if(Quality == "HD")
                                 release.Title += " 720p";
 
                             release.Category = MapTrackerCatToNewznab(catStr);
