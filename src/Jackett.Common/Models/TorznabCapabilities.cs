@@ -93,7 +93,7 @@ namespace Jackett.Common.Models
             return supportsCategory;
         }
 
-        public string ToXml()
+        public XDocument GetXDocument()
         {
             var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
@@ -144,6 +144,12 @@ namespace Jackett.Common.Models
                     )
                 )
             );
+            return xdoc;
+        }
+
+        public string ToXml()
+        {
+            var xdoc = GetXDocument();
 
             return xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
         }

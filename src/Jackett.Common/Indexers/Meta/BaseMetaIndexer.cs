@@ -22,6 +22,15 @@ namespace Jackett.Common.Indexers.Meta
             this.resultFilterProvider = resultFilterProvider;
         }
 
+        public override bool CanHandleQuery(TorznabQuery query)
+        {
+            if (query == null)
+                return false;
+            if (query.QueryType == "indexers")
+                return true;
+            return base.CanHandleQuery(query);
+        }
+
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             return Task.FromResult(IndexerConfigurationStatus.Completed);

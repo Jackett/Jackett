@@ -12,6 +12,7 @@ using System.Web.Http.Filters;
 using System.Xml.Linq;
 using Jackett.Common;
 using Jackett.Common.Indexers;
+using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.DTO;
 using Jackett.Common.Services.Interfaces;
@@ -245,6 +246,39 @@ namespace Jackett.Controllers
                 return ResponseMessage(new HttpResponseMessage()
                 {
                     Content = new StringContent(CurrentIndexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/xml")
+                });
+            }
+
+            // indexers - returns a list of all included indexers (meta indexers only)
+            if (string.Equals(CurrentQuery.QueryType, "indexers", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (!(CurrentIndexer is BaseMetaIndexer)) // shouldn't be needed because CanHandleQuery should return false
+                {
+                    logger.Warn($"A search request with t=indexers from {Request.GetOwinContext().Request.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} isn't a meta indexer.");
+                    return GetErrorXML(203, "Function Not Available: this isn't a meta indexer");
+                }
+                var CurrentBaseMetaIndexer = (BaseMetaIndexer)CurrentIndexer;
+
+                var xdoc = new XDocument(
+                    new XDeclaration("1.0", "UTF-8", null),
+                    new XElement("indexers",
+                        from i in CurrentBaseMetaIndexer.Indexers
+                        select new XElement("indexer",
+                            new XAttribute("id", i.ID),
+                            new XAttribute("configured", i.IsConfigured),
+                            new XElement("title", i.DisplayName),
+                            new XElement("description", i.DisplayDescription),
+                            new XElement("link", i.SiteLink),
+                            new XElement("language", i.Language),
+                            new XElement("type", i.Type),
+                            i.TorznabCaps.GetXDocument().FirstNode
+                        )
+                    )
+                );
+
+                return ResponseMessage(new HttpResponseMessage()
+                {
+                    Content = new StringContent(xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString(), Encoding.UTF8, "application/xml")
                 });
             }
 

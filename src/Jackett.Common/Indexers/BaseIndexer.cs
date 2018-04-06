@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers
             return filteredResults;
         }
 
-        public bool CanHandleQuery(TorznabQuery query)
+        public virtual bool CanHandleQuery(TorznabQuery query)
         {
             if (query == null)
                 return false;
