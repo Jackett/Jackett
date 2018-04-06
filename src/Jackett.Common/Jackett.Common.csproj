@@ -117,7 +117,7 @@
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="BencodeNET" Version="2.2.24" />
-    <PackageReference Include="CloudFlareUtilities" Version="1.1.0" />
+    <PackageReference Include="CloudFlareUtilities" Version="1.2.0" />
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
