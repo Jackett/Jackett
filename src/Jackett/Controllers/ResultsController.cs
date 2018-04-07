@@ -258,11 +258,16 @@ namespace Jackett.Controllers
                     return GetErrorXML(203, "Function Not Available: this isn't a meta indexer");
                 }
                 var CurrentBaseMetaIndexer = (BaseMetaIndexer)CurrentIndexer;
+                var indexers = CurrentBaseMetaIndexer.Indexers;
+                if (string.Equals(request.configured, "true", StringComparison.InvariantCultureIgnoreCase))
+                    indexers = indexers.Where(i => i.IsConfigured);
+                else if (string.Equals(request.configured, "false", StringComparison.InvariantCultureIgnoreCase))
+                    indexers = indexers.Where(i => !i.IsConfigured);
 
                 var xdoc = new XDocument(
                     new XDeclaration("1.0", "UTF-8", null),
                     new XElement("indexers",
-                        from i in CurrentBaseMetaIndexer.Indexers
+                        from i in indexers
                         select new XElement("indexer",
                             new XAttribute("id", i.ID),
                             new XAttribute("configured", i.IsConfigured),
