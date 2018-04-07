@@ -291,6 +291,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maintainer and are missing features or are broken. If you have an invite for them please send it to kaso1717 -at- gmail.com to get them fixed/improved.
 
+### Aggregate indexers
+
+A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab/api`.
+It will query all configured indexers and return the combined results.
+
+To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as query parameter.
+
 ## Installation on Windows
 
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
