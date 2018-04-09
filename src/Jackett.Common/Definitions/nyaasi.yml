@@ -122,3 +122,7 @@
         selector: td:nth-child(7)
       grabs:
         selector: td:nth-child(8)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

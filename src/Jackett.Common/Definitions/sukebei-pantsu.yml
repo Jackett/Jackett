@@ -99,3 +99,7 @@
         filters:
           - name: replace
             args: ["Unknown", "0"]
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
