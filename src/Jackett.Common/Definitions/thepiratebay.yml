@@ -14,6 +14,7 @@
   caps:
     categorymappings:
       #Audio
+      - {id: 100, cat: Audio, desc: "Audio", default: true}
       - {id: 101, cat: Audio, desc: "Music", default: true}
       - {id: 102, cat: Audio/Audiobook, desc: "Audio books", default: true}
       - {id: 103, cat: Audio, desc: "Sound clips", default: true}
@@ -21,6 +22,7 @@
       - {id: 199, cat: Audio/Other, desc: "Audio Other", default: true}
 
       #Video
+      - {id: 200, cat: Movies, desc: "Video", default: true}
       - {id: 201, cat: Movies, desc: "Movies", default: true}
       - {id: 202, cat: Movies/DVD, desc: "Movies DVDR", default: true}
       - {id: 203, cat: Audio/Video, desc: "Music videos", default: true}
@@ -33,6 +35,7 @@
       - {id: 299, cat: Movies/Other, desc: "Video Other", default: true}
 
       #Applications
+      - {id: 300, cat: PC, desc: "Applications", default: true}
       - {id: 301, cat: PC, desc: "Windows", default: true}
       - {id: 302, cat: PC/Mac, desc: "Mac", default: true}
       - {id: 303, cat: PC, desc: "UNIX", default: true}
@@ -42,6 +45,7 @@
       - {id: 399, cat: PC, desc: "Other OS", default: true}
 
       #Games
+      - {id: 401, cat: Console, desc: "Games", default: true}
       - {id: 401, cat: PC/Games, desc: "PC", default: true}
       - {id: 402, cat: PC/Mac, desc: "Mac", default: true}
       - {id: 403, cat: Console/PS4, desc: "PSx", default: true}
@@ -53,6 +57,7 @@
       - {id: 499, cat: Console/Other, desc: "Games Other", default: true}
 
       #Porn
+      - {id: 500, cat: XXX, desc: "Porn", default: true}
       - {id: 501, cat: XXX, desc: "Movies", default: true}
       - {id: 502, cat: XXX/DVD, desc: "Movies DVDR", default: true}
       - {id: 503, cat: XXX/Imageset, desc: "Pictures", default: true}
@@ -62,6 +67,7 @@
       - {id: 599, cat: XXX/Other, desc: "Porn Other", default: true}
 
       #Other
+      - {id: 600, cat: Other, desc: "Other", default: true}
       - {id: 601, cat: Books, desc: "E-books", default: true}
       - {id: 602, cat: Books/Comics, desc: "Comics", default: true}
       - {id: 603, cat: Books, desc: "Pictures", default: true}
@@ -72,11 +78,19 @@
     modes:
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: order
+      type: select
+      label: Order results
+      default: "99"
+      options:
+        "99": "Default"
+        "8": "Seeders"
+        "3": "Time"
   
   search:
     paths:
-      - path: "{{if .Query.Keywords}}/search/{{ .Keywords}}/0/99/{{join .Categories \",\"}}{{else}}/recent{{end}}"
+      - path: "{{if .Query.Keywords}}/search/{{ .Keywords}}/0/{{ .Config.order }}/{{join .Categories \",\"}}{{else}}/recent{{end}}"
     keywordsfilters:
         # currently, the only uploader for General Hospital puts a space between season and episode
         # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
