@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +9,9 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using Newtonsoft.Json;
 
 namespace Jackett.Common.Indexers
 {
@@ -174,7 +173,7 @@ namespace Jackett.Common.Indexers
 
                     release.Link = new Uri(SiteLink + "download/" + torrent.fid + "/" + torrent.filename);
 
-                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(ParseUtil.CoerceLong(torrent.addedTimestamp.ToString()));
+                    release.PublishDate = DateTime.ParseExact(torrent.addedTimestamp.ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
 
                     release.Size = (long)torrent.size;
 
