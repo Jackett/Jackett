@@ -100,7 +100,13 @@
     rows:
       selector: "#searchResult tbody tr:has(td.vertTh)"
     fields:
-      category:
+      category: # parent category
+        selector: td:nth-child(1) a:first-child
+        attribute: href
+        filters:
+          - name: split
+            args: [ "/", -1 ]
+      category: # sub category
         selector: td:nth-child(1) a:last-child
         attribute: href
         filters:
