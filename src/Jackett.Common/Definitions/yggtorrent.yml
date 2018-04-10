@@ -98,18 +98,15 @@
       default: false
 
   login:
-    method: form
-    path: /
-    form: form[action$="/user/login"]
+    method: post
+    path: /user/login
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
-      submit: ""
     error:
       - selector: "#login_msg_pass[style=\"\"][style] > center"
     test:
-      path: /
-      selector: a[href$="/user/logout"]
+      path: /user/login
 
   search:
     paths:
