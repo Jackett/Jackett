@@ -1347,7 +1347,19 @@ namespace Jackett.Common.Indexers
                                             value = release.Description;
                                             break;
                                         case "category":
-                                            release.Category = MapTrackerCatToNewznab(value);
+                                            var cats = MapTrackerCatToNewznab(value);
+                                            if (release.Category == null)
+                                            {
+                                                release.Category = cats;
+                                            }
+                                            else
+                                            {
+                                                foreach (var cat in cats)
+                                                {
+                                                    if (!release.Category.Contains(cat))
+                                                        release.Category.Add(cat);
+                                                }
+                                            }
                                             value = release.Category.ToString();
                                             break;
                                         case "size":
