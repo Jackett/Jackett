@@ -165,6 +165,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = query.GetEpisodeSearchString() + " " + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
+            searchTerm = searchTerm.Trim();
             searchTerm = searchTerm.ToLower();
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
