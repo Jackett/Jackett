@@ -19,6 +19,10 @@ namespace Jackett.Common.Indexers
 {
     public class FileList : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://filelist.ro/",
+        };
+
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string BrowseUrl { get { return SiteLink + "browse.php"; } }
 
@@ -31,7 +35,7 @@ namespace Jackett.Common.Indexers
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "FileList",
                 description: "The best Romanian site.",
-                link: "http://filelist.ro/",
+                link: "https://filelist.ro/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
