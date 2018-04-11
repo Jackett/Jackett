@@ -157,7 +157,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Fuzer
  * GayTorrent.ru
  * GazelleGames
- * GFTracker
  * Gfxnews
  * GFXPeers
  * GigaTorrents
