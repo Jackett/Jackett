@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchTerm = query.GetEpisodeSearchString() + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
+            var searchTerm = query.GetEpisodeSearchString() + " " + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
             searchTerm = searchTerm.ToLower();
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
