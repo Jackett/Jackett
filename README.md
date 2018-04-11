@@ -91,7 +91,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Abnormal
  * Acid-Lounge
  * AlphaRatio
- * Andraste
  * AnimeBytes
  * AnimeTorrents
  * AOX
