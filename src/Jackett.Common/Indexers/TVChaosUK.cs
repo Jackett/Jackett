@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
                     var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d,]*)\W\/\WLeechers:\W(?<leechers>[\d,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)\W\/\WSnatched:\W(?<snatched>[\d,]*) x times");
                     if (!infoMatch.Success)
                         throw new Exception(string.Format("Unable to find info in {0}: ", description));
-
+                    
                     var release = new ReleaseInfo()
                     {
                         Title = title,
@@ -279,7 +279,15 @@ namespace Jackett.Common.Indexers
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
-                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51
+                        var qDate = qRow.Find("td:eq(1) div").Last();
+                        var date = qDate.Text().Trim();
+                        if (date.StartsWith("Pre Release Time:")) // in some cases the pre time is shown
+                        {
+                            date = date.Replace("Pre Release Time:", "");
+                            date = date.Split(new string[] { "Uploaded:" }, StringSplitOptions.None)[0];
+                            date = date.Trim();
+                        }
+                        release.PublishDate = DateTime.ParseExact(date, "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                         release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
