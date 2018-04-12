@@ -1,0 +1,109 @@
+---
+  site: racing4everyone
+  name: racing4everyone
+  description: "Private Torrent Tracker for RACING"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://racing4everyone.jp/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: BTCC, desc: "BTCC"}
+      - {id: 3, cat: DTM, desc: "DTM"}
+      - {id: 4, cat: Formula 1 2018, desc: "Formula 1 2018"}
+      - {id: 6, cat: Formula 1 2017-1950 (HD), desc: "Formula 1 2017-1950 (HD)"}
+      - {id: 21, cat: Formula 1 2017-1950 (SD), desc: "Formula 1 2017-1950 (SD)"}
+      - {id: 22, cat: Formula 2, desc: "Formula 2"}
+      - {id: 23, cat: Formula E, desc: "Formula E"}
+      - {id: 24, cat: Misc, desc: "Misc"}
+      - {id: 25, cat: Motorbikes, desc: "Motorbikes"}
+      - {id: 26, cat: MotoGP/2/3, desc: "MotoGP/2/3"}
+      - {id: 31, cat: Nascar, desc: "Nascar"}
+      - {id: 32, cat: Stockcars, desc: "Stockcars"}
+      - {id: 33, cat: Touring Cars, desc: "Touring Cars"}
+      - {id: 50, cat: WRC, desc: "WRC"}
+      - {id: 53, cat: Open-Wheelers, desc: "Open-Wheelers"}
+      - {id: 54, cat: Documentaries/Movies, desc: "Documentaries/Movies"}
+      - {id: 55, cat: Season Reviews, desc: "Season Reviews"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: /login
+    method: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table.main:contains("Login Failed!")
+    test:
+      path: /torrents
+
+  search:
+    paths:
+      - path: /filterTorrents
+    inputs:
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{ .Keywords }}"
+      uploader: ""
+      sorting: created_at
+      direction: desc
+      qty: 100
+    preprocessingfilters:
+      - name: jsonjoinarray
+        args: ["$.result", ""]
+      - name: prepend
+        args: "<table>"
+      - name: append
+        args: "</table>"
+    rows:
+      selector: tr
+    fields:
+      category:
+        selector: a[href*="/categories/"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "/categories/.*?\\.(\\d+)"
+      title:
+        selector: a.view-torrent
+      download:
+        selector: a[href*="/download_check/"]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["/download_check/", "/download/"]
+      details:
+        selector: a.view-torrent
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      date:
+        selector: time
+        attribute: datetime
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "2006-01-02 15:04:05 -07:00"
+      downloadvolumefactor:
+        case:
+          "i[data-original-title=\"100% Free\"]": "0"
+          "i[data-original-title=\"Global FreeLeech\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "i[data-original-title=\"Double upload\"]": "2"
+          "*": "1"
