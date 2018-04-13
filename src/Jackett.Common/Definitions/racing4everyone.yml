@@ -1,6 +1,6 @@
 ---
   site: racing4everyone
-  name: racing4everyone
+  name: Racing4Everyone (R4E)
   description: "Private Torrent Tracker for RACING"
   language: en-us
   type: private
@@ -10,23 +10,23 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: BTCC, desc: "BTCC"}
-      - {id: 3, cat: DTM, desc: "DTM"}
-      - {id: 4, cat: Formula 1 2018, desc: "Formula 1 2018"}
-      - {id: 6, cat: Formula 1 2017-1950 (HD), desc: "Formula 1 2017-1950 (HD)"}
-      - {id: 21, cat: Formula 1 2017-1950 (SD), desc: "Formula 1 2017-1950 (SD)"}
-      - {id: 22, cat: Formula 2, desc: "Formula 2"}
-      - {id: 23, cat: Formula E, desc: "Formula E"}
-      - {id: 24, cat: Misc, desc: "Misc"}
-      - {id: 25, cat: Motorbikes, desc: "Motorbikes"}
-      - {id: 26, cat: MotoGP/2/3, desc: "MotoGP/2/3"}
-      - {id: 31, cat: Nascar, desc: "Nascar"}
-      - {id: 32, cat: Stockcars, desc: "Stockcars"}
-      - {id: 33, cat: Touring Cars, desc: "Touring Cars"}
-      - {id: 50, cat: WRC, desc: "WRC"}
-      - {id: 53, cat: Open-Wheelers, desc: "Open-Wheelers"}
-      - {id: 54, cat: Documentaries/Movies, desc: "Documentaries/Movies"}
-      - {id: 55, cat: Season Reviews, desc: "Season Reviews"}
+      - {id: 1, cat: TV/Sport, desc: "BTCC"}
+      - {id: 3, cat: TV/Sport, desc: "DTM"}
+      - {id: 4, cat: TV/Sport, desc: "Formula 1 2018"}
+      - {id: 6, cat: TV/Sport, desc: "Formula 1 2017-1950 (HD)"}
+      - {id: 21, cat: TV/Sport, desc: "Formula 1 2017-1950 (SD)"}
+      - {id: 22, cat: TV/Sport, desc: "Formula 2"}
+      - {id: 23, cat: TV/Sport, desc: "Formula E"}
+      - {id: 24, cat: TV/Sport, desc: "Misc"}
+      - {id: 25, cat: TV/Sport, desc: "Motorbikes"}
+      - {id: 26, cat: TV/Sport, desc: "MotoGP/2/3"}
+      - {id: 31, cat: TV/Sport, desc: "Nascar"}
+      - {id: 32, cat: TV/Sport, desc: "Stockcars"}
+      - {id: 33, cat: TV/Sport, desc: "Touring Cars"}
+      - {id: 50, cat: TV/Sport, desc: "WRC"}
+      - {id: 53, cat: TV/Sport, desc: "Open-Wheelers"}
+      - {id: 54, cat: TV/Sport, desc: "Documentaries/Movies"}
+      - {id: 55, cat: TV/Sport, desc: "Season Reviews"}
 
     modes:
       search: [q]
