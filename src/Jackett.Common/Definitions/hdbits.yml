@@ -33,9 +33,6 @@
       - selector: table.main:contains("Login Failed!")
     test:
       path: my.php
-
-  download:
-    selector: a[href^="/download.php"]
         
   search:
     paths:
