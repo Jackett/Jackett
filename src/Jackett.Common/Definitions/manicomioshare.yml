@@ -258,6 +258,8 @@
             args: ["^Extinct", "Extinct 2017"]
           - name: re_replace
             args: ["^The Flash", "The Flash 2014"]
+          - name: replace
+            args: ["Nanatsu no Taizai - Imashime no Fukkatsu - E", "Nanatsu no Taizai - Imashime no Fukkatsu - S02E"]
           - name: re_replace
             args: ["^The Magicians", "The Magicians 2015"]
           # Workaround to remove the translated name from the series, didn't found an better and reliable way to do this, feel free to add more as needed.
