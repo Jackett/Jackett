@@ -162,6 +162,8 @@
       - path: "torrents-search.php?{{range .Categories}}c{{.}}=1&{{end}}search={{.Keywords}}{{if .Categories}}{{else}}&cat=0{{end}}&incldead=0&lang=0"
     rows:
       selector: tr:not(:has(script)):has(a[title][href^="torrents-details.php?id="])
+      filters:
+        - name: andmatch
     fields:
       category:
         optional: true
