@@ -207,7 +207,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * notwhat.cd
  * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
- * PassThePopcorn  [![(invite needed)][inviteneeded]](#)
+ * PassThePopcorn
  * PirateTheNet
  * PiXELHD
  * PolishSource
