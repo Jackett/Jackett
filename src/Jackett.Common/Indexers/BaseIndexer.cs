@@ -205,7 +205,10 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-
+            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+                return true;
+            else if(!caps.SupportsImdbSearch && query.IsImdbQuery)
+                return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
             if (caps.TVSearchAvailable && query.IsTVSearch)
