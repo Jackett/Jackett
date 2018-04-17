@@ -84,10 +84,16 @@ namespace Jackett.Common.Indexers.Abstract
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
+        // hook to adjust the search term
+        protected virtual string GetSearchTerm(TorznabQuery query)
+        {
+            return query.GetQueryString();
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
+            var searchString = GetSearchTerm(query);
 
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
