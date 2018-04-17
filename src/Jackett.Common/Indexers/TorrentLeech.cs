@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
                 CQ dom = result.Content;
-                var errorMessage = dom["div#login_heading + div.card-panel-error"].Text();
+                var errorMessage = dom["p.text-danger:contains(\"Error:\")"].Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
