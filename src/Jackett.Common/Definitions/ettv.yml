@@ -52,10 +52,17 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:"
+      options:
+        "https://etorrent.click/" : "eTorrent.click"
+        "magnet:": "magnet"
   
   download:
-    selector: a[href^="magnet:"]
+    selector: a[href^="{{ .Config.downloadlink }}"]
 
   search:
     path: torrents-search.php
