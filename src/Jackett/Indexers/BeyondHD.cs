@@ -50,10 +50,15 @@ namespace Jackett.Indexers
             );
             AddMultiCategoryMapping(TorznabCatType.MoviesHD,
                 77, // Movie / 1080p/i
-                94, // Movie / 4K
+                102, // Movie / 4K Disk
+                94, // Movie / 4K Other
+                103, // Movie / 4K Remux
                 78, // Movie / 720p
                 54, // Movie / MP4
                 17, // Movie / Remux
+                38, // Movie / WEB-DL
+                106, // Internal / BHDStudio 1080p
+                105, // Internal / BHDStudio 720p
                 50, // Internal / FraMeSToR 1080p
                 75, // Internal / FraMeSToR 720p
                 49, // Internal / FraMeSToR REMUX
@@ -65,11 +70,14 @@ namespace Jackett.Indexers
             );
 
             AddMultiCategoryMapping(TorznabCatType.TVHD,
+                104, // TV Show / 4K
                 40, // TV Show / Blu-ray
                 44, // TV Show / Encodes
                 48, // TV Show / HDTV
                 89, // TV Show / Packs
                 46, // TV Show / Remux
+                99, // TV Show / Sports
+                100, // TV Show / Sports / WEB-DL
                 45, // TV Show / WEB-DL
                 97 //  Nightripper TV Show Encodes
             );
