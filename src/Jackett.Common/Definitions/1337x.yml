@@ -120,11 +120,17 @@
     paths:
       # present trending results if there are no search parms supplied
       - path: "{{if .Keywords}}/search/{{ .Keywords}}/1/{{else}}/trending{{end}}"
+    keywordsfilters: 
+      - name: replace # use this as a workaround till #893 is implemented
+        args: ["Greys Anatomy", "Grey's Anatomy"]
     rows:
       selector: tr:has(a[href^="/torrent/"])
     fields:
       title:
         selector: td[class^="coll-1"] a[href^="/torrent/"]
+        filters:
+          - name: replace
+            args: ["Grey's Anatomy", "Greys Anatomy"]
       category:
         optional: true
         selector:  td[class^="coll-1"] a[href^="/sub/"]
