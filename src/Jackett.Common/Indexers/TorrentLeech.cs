@@ -18,6 +18,10 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentLeech : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://v4.torrentleech.org/",
+        };
+
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
         private string SearchUrl { get { return SiteLink + "torrents/browse/list/"; } }
 
