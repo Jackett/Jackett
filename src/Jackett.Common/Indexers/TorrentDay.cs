@@ -22,6 +22,10 @@ namespace Jackett.Common.Indexers
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
         private string SearchUrl { get { return SiteLink + "t.json"; } }
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://torrentday.it/", // temp down?
+        };
+
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
@@ -45,7 +49,7 @@ namespace Jackett.Common.Indexers
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://torrentday.it/",
+                link: "https://torrentday.com/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
