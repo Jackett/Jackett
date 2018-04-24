@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://torrentday.it/", // temp down?
-            "https://torrentday.com"
+            "https://torrentday.com/"
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
