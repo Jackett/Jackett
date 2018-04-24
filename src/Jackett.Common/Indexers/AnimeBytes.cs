@@ -106,6 +106,8 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
+            throw new Exception("Indexer currently not available, see https://github.com/Jackett/Jackett/issues/3008");
+
             lock (cache)
             {
                 cache.Clear();
