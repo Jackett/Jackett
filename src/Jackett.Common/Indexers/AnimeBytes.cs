@@ -161,6 +161,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            throw new Exception("Indexer currently not available, see https://github.com/Jackett/Jackett/issues/3008");
             // The result list
             var releases = new List<ReleaseInfo>();
 
