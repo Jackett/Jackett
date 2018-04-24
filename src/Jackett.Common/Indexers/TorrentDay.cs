@@ -24,19 +24,18 @@ namespace Jackett.Common.Indexers
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://torrentday.it/", // temp down?
+            "https://torrentday.com"
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
             "https://torrentday.eu/",
-            "https://torrentday.it/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
             "https://td-update.com/",
             "https://www.torrentday.me/",
             "https://www.torrentday.ru/",
-            "https://www.torrentday.com/",
             "https://www.td.af/",
         };
 
