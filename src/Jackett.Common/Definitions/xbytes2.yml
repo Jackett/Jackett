@@ -19,7 +19,7 @@
       - {id: 30 , cat: Movies/HD, desc: "Peliculas - MicroHD x265"}
       - {id: 35 , cat: TV/HD, desc: "TV/Series - 4K"}
       - {id: 31 , cat: TV/HD, desc: "TV/Series - x265"}
-      - {id: 25 , cat: TV/HD, desc: "TV/Series"}
+      - {id: 25 , cat: TV/HD, desc: "TV/Series - HDTV & WEB-DL 1080p"}
       - {id: 37 , cat: TV/Documentary, desc: "Documentales"}
       - {id: 41 , cat: TV/Sport, desc: "Deportes"}
       - {id: 5  , cat: Movies/HD, desc: "Anime"}
@@ -40,6 +40,8 @@
     path: index.php
     keywordsfilters:
       - name: re_replace
+        args: ["S(\\d{1,2})E(\\d{1,2}) S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
+      - name: re_replace
         args: ["S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
     inputs:
       page: "torrents"
@@ -57,6 +59,21 @@
             args: category
       title:
         selector: td[valign="middle"] a
+        filters:
+          - name: re_replace
+            args: ["S0(\\d{1,2})\\/E(\\d{1,2})", "$1x$2"]
+          - name: re_replace
+            args: ["\\/", " "]
+          - name: re_replace
+            args: ["\\(", ""]
+          - name: re_replace
+            args: ["\\)", ""]
+          - name: re_replace
+            args: ["2017", ""]
+          - name: re_replace
+            args: ["2018", ""]
+          - name: re_replace
+            args: ["2019", ""]
       details:
         selector: td[valign="middle"] a
         attribute: href
