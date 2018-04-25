@@ -23,7 +23,6 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "t.json"; } }
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrentday.it/", // temp down?
             "https://torrentday.com/"
         };
 
@@ -37,6 +36,7 @@ namespace Jackett.Common.Indexers
             "https://www.torrentday.me/",
             "https://www.torrentday.ru/",
             "https://www.td.af/",
+            "https://torrentday.it/",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
