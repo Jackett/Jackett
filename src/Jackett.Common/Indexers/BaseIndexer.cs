@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
                     return false;
             if (caps.SupportsImdbSearch && query.IsImdbQuery)
                 return true;
-            else if(!caps.SupportsImdbSearch && query.IsImdbQuery)
+            else if(!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
