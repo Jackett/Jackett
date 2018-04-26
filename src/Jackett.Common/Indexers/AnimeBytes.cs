@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -24,9 +25,8 @@ namespace Jackett.Common.Indexers
             Audio
         }
 
-        private string LoginUrl { get { return SiteLink + "user/login"; } }
-        private string SearchUrl { get { return SiteLink + "torrents.php?"; } }
-        private string MusicSearchUrl { get { return SiteLink + "torrents2.php?"; } }
+        private string ScrapeUrl { get { return SiteLink + "scrape.php"; } }
+        private string TorrentsUrl { get { return SiteLink + "torrents.php"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
         public bool InsertSeason { get { return configData.InsertSeason != null && configData.InsertSeason.Value; } }
         public bool AddSynonyms { get { return configData.AddSynonyms.Value; } }
@@ -73,71 +73,14 @@ namespace Jackett.Common.Indexers
             return input;
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            // Get the login form as we need the CSRF Token
-            var loginPage = await webclient.GetString(new Utils.Clients.WebRequest()
-            {
-                Url = LoginUrl,
-                Encoding = Encoding,
-            });
-            UpdateCookieHeader(loginPage.Cookies);
-
-            CQ loginPageDom = loginPage.Content;
-            csrfIndex = loginPageDom["input[name=\"_CSRF_INDEX\"]"].Last().Attr("value");
-            csrfToken = loginPageDom["input[name=\"_CSRF_TOKEN\"]"].Last().Attr("value");
-
-            CQ qCaptchaImg = loginPageDom.Find("#captcha_img").First();
-            if (qCaptchaImg.Length == 1)
-            {
-                var CaptchaUrl = SiteLink + qCaptchaImg.Attr("src");
-                var captchaImage = await RequestBytesWithCookies(CaptchaUrl, loginPage.Cookies);
-                configData.CaptchaImage.Value = captchaImage.Content;
-            }
-            else
-            {
-                configData.CaptchaImage.Value = new byte[0];
-            }
-            configData.CaptchaCookie.Value = loginPage.Cookies;
-            return configData;
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
-            throw new Exception("Indexer currently not available, see https://github.com/Jackett/Jackett/issues/3008");
+            IsConfigured = true;
+            return IndexerConfigurationStatus.Completed;
 
-            lock (cache)
-            {
-                cache.Clear();
-            }
-
-            // Build login form
-            var pairs = new Dictionary<string, string> {
-                    { "_CSRF_INDEX", csrfIndex },
-                    { "_CSRF_TOKEN", csrfToken },
-                    { "username", configData.Username.Value },
-                    { "password", configData.Password.Value },
-                    { "keeplogged_sent", "true" },
-                    { "keeplogged", "on" },
-                    { "login", "Log In!" }
-            };
-
-            if (!string.IsNullOrWhiteSpace(configData.CaptchaText.Value))
-            {
-                pairs.Add("captcha", configData.CaptchaText.Value);
-            }
-
-            // Do the login
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true, null);
-
-            // Follow the redirect
-            await FollowIfRedirect(response, LoginUrl, SearchUrl);
-
-            if (response.Status == HttpStatusCode.Forbidden)
-                throw new ExceptionWithConfigData("Failed to login, your IP seems to be blacklisted (shared VPN/seedbox?). Contact the staff to resolve this.", configData);
-
+            /*
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/user/logout"), () =>
             {
                 logger.Info(response.Content);
@@ -149,7 +92,7 @@ namespace Jackett.Common.Indexers
                 // Their login page appears to be broken and just gives a 500 error.
                 throw new ExceptionWithConfigData("Failed to login (unknown reason), 6 failed attempts will get you banned for 6 hours.", configData);
             });
-
+            */
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -163,19 +106,18 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            throw new Exception("Indexer currently not available, see https://github.com/Jackett/Jackett/issues/3008");
             // The result list
             var releases = new List<ReleaseInfo>();
 
             if (ContainsMusicCategories(query.Categories))
             {
-                foreach (var result in await GetResults(query, SearchType.Audio, query.SanitizedSearchTerm))
+                foreach (var result in await GetResults(query, "music", query.SanitizedSearchTerm))
                 {
                     releases.Add(result);
                 }
             }
 
-            foreach (var result in await GetResults(query, SearchType.Video, StripEpisodeNumber(query.SanitizedSearchTerm)))
+            foreach (var result in await GetResults(query, "anime", StripEpisodeNumber(query.SanitizedSearchTerm)))
             {
                 releases.Add(result);
             }
@@ -197,19 +139,26 @@ namespace Jackett.Common.Indexers
             return categories.Length == 0 || music.Any(categories.Contains);
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> GetResults(TorznabQuery query, SearchType searchType, string searchTerm)
+        private async Task<IEnumerable<ReleaseInfo>> GetResults(TorznabQuery query, string searchType, string searchTerm)
         {
-            var cleanSearchTerm = WebUtility.UrlEncode(searchTerm);
-
             // The result list
             var releases = new List<ReleaseInfo>();
 
-            var queryUrl = searchType == SearchType.Video ? SearchUrl : MusicSearchUrl;
-            // Only include the query bit if its required as hopefully the site caches the non query page
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            https://animebytes.tv/scrape.php?torrent_pass=W96ReJt2K9nHo6bXoRlqPvYtWnXDfoLI&type=anime
+
+            var queryCollection = new NameValueCollection();
+
+            var cat = "0";
+            var queryCats = MapTorznabCapsToTrackers(query);
+            if (queryCats.Count == 1)
             {
-                queryUrl += string.Format("searchstr={0}&action=advanced&search_type=title&year=&year2=&tags=&tags_type=0&sort=time_added&way=desc&hentai=2&releasegroup=&epcount=&epcount2=&artbooktitle=", cleanSearchTerm);
+                cat = queryCats.First().ToString();
             }
+
+            queryCollection.Add("torrent_pass", configData.Passkey.Value);
+            queryCollection.Add("type", searchType);
+            queryCollection.Add("searchstr", searchTerm);
+            var queryUrl = ScrapeUrl + "?" + queryCollection.GetQueryString();
 
             // Check cache first so we don't query the server for each episode when searching for each episode in a series.
             lock (cache)
@@ -224,58 +173,32 @@ namespace Jackett.Common.Indexers
 
             // Get the content from the tracker
             var response = await RequestStringWithCookiesAndRetry(queryUrl);
-            if (response.IsRedirect)
-            {
-                // re-login
-                await GetConfigurationForSetup();
-                await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(queryUrl);
-            }
-
-            CQ dom = response.Content;
+            if (!response.Content.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData("unexcepted response (not JSON)", configData);
+            dynamic json = JsonConvert.DeserializeObject<dynamic>(response.Content);
 
             // Parse
             try
             {
-                var releaseInfo = "S01";
-                var root = dom.Find(".group_cont");
-                // We may have got redirected to the series page if we have none of these
-                if (root.Count() == 0)
-                    root = dom.Find(".torrent_table");
+                if (json["error"] != null)
+                    throw new Exception(json["error"].ToString());
 
-                foreach (var series in root)
+                var groups = (JArray)json.Groups;
+
+                foreach (JObject group in groups)
                 {
-                    var seriesCq = series.Cq();
 
                     var synonyms = new List<string>();
-                    string mainTitle;
-                    if (searchType == SearchType.Video)
-                        mainTitle = seriesCq.Find(".group_title strong a").First().Text().Trim();
-                    else
-                        mainTitle = seriesCq.Find(".group_title strong").Text().Trim();
-
-                    var yearStr = seriesCq.Find(".group_title strong").First().Text().Trim().Replace("]", "").Trim();
-                    int yearIndex = yearStr.LastIndexOf("[");
-                    if (yearIndex > -1)
-                        yearStr = yearStr.Substring(yearIndex + 1);
-
-                    int year = 0;
-                    if (!int.TryParse(yearStr, out year))
-                        year = DateTime.Now.Year;
-
+                    var groupID = (long)group["ID"];
+                    logger.Error("group"+groupID.ToString());
+                    var mainTitle = WebUtility.HtmlDecode((string)group["Name"]).Trim();
                     synonyms.Add(mainTitle);
+
 
                     // If the title contains a comma then we can't use the synonyms as they are comma seperated
                     if (!mainTitle.Contains(",") && AddSynonyms)
                     {
-                        var symnomnNames = string.Empty;
-                        foreach (var e in seriesCq.Find(".group_statbox li"))
-                        {
-                            if (e.FirstChild.InnerText == "Synonyms:")
-                            {
-                                symnomnNames = e.InnerText;
-                            }
-                        }
+                        var symnomnNames = WebUtility.HtmlDecode((string)group["Synonymns"]);
 
                         if (!string.IsNullOrWhiteSpace(symnomnNames))
                         {
@@ -290,199 +213,185 @@ namespace Jackett.Common.Indexers
                         }
                     }
 
-                    foreach (var title in synonyms)
+                    List<int> Category = null;
+                    var category = (string)group["CategoryName"];
+
+                    var Description = (string)group["Description"];
+
+                    foreach (JObject torrent in group["Torrents"])
                     {
-                        var releaseRows = seriesCq.Find(".torrent_group tr");
+                        var releaseInfo = "S01";
                         string episode = null;
                         int? season = null;
+                        var EditionTitle = (string)torrent["EditionData"]["EditionTitle"];
+                        if (!string.IsNullOrWhiteSpace(EditionTitle))
+                            releaseInfo = WebUtility.HtmlDecode(EditionTitle);
 
-                        // Skip the first two info rows
-                        for (int r = 1; r < releaseRows.Count(); r++)
+                        Regex SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                        var SeasonRegExMatch = SeasonRegEx.Match(releaseInfo);
+                        if (SeasonRegExMatch.Success)
+                            season = ParseUtil.CoerceInt(SeasonRegExMatch.Groups[1].Value);
+
+                        Regex EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                        var EpisodeRegExMatch = EpisodeRegEx.Match(releaseInfo);
+                        if (EpisodeRegExMatch.Success)
+                            episode = EpisodeRegExMatch.Groups[1].Value;
+
+                        releaseInfo = releaseInfo.Replace("Episode ", "");
+                        releaseInfo = releaseInfo.Replace("Season ", "S");
+                        releaseInfo = releaseInfo.Trim();
+
+                        int test = 0;
+                        if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length <= 3)
                         {
-                            var row = releaseRows.Get(r);
-                            var rowCq = row.Cq();
-                            if (rowCq.HasClass("edition_info"))
+                            releaseInfo = "E0" + releaseInfo;
+                        }
+
+                        if (FilterSeasonEpisode)
+                        {
+                            if (query.Season != 0 && season != null && season != query.Season) // skip if season doesn't match
+                                continue;
+                            if (query.Episode != null && episode != null && episode != query.Episode) // skip if episode doesn't match
+                                continue;
+                        }
+                        var torrentID = (long)torrent["ID"];
+                        logger.Error(torrentID);
+                        var Property = (string)torrent["Property"];
+                        Property = Property.Replace(" | Freeleech", "");
+                        var Link = (string)torrent["Link"];
+                        var LinkUri = new Uri(Link);
+                        var UploadTimeString = (string)torrent["UploadTime"];
+                        var UploadTime = DateTime.ParseExact(UploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture).ToLocalTime();
+                        var PublushDate = DateTime.SpecifyKind(UploadTime, DateTimeKind.Utc).ToLocalTime();
+                        var CommentsLink = TorrentsUrl + "?id=" + groupID.ToString() + "&torrentid=" + torrentID.ToString();
+                        var CommentsLinkUri = new Uri(CommentsLink);
+                        var Size = (long)torrent["Size"];
+                        var Snatched = (long)torrent["Snatched"];
+                        var Seeders = (int)torrent["Seeders"];
+                        var Leechers = (int)torrent["Leechers"];
+                        var FileCount = (long)torrent["FileCount"];
+                        var Peers = Seeders + Leechers;
+
+                        var RawDownMultiplier = (int?)torrent["RawDownMultiplier"];
+                        if (RawDownMultiplier == null)
+                            RawDownMultiplier = 0;
+                        var RawUpMultiplier = (int?)torrent["RawUpMultiplier"];
+                        if (RawUpMultiplier == null)
+                            RawDownMultiplier = 0;
+
+                        if (searchType == "anime")
+                        {
+                            if (category == "TV Series")
+                                Category = new List<int> { TorznabCatType.TVAnime.ID };
+
+                            // Ignore these categories as they'll cause hell with the matcher
+                            // TV Special, OVA, ONA, DVD Special, BD Special
+
+                            if (category == "Movie")
+                                Category = new List<int> { TorznabCatType.Movies.ID };
+
+                            if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
+                                Category = new List<int> { TorznabCatType.BooksComics.ID };
+
+                            if (category == "Novel" || category == "Artbook")
+                                Category = new List<int> { TorznabCatType.BooksComics.ID };
+
+                            if (category == "Game" || category == "Visual Novel")
                             {
-                                episode = null;
-                                season = null;
-                                releaseInfo = rowCq.Find("td").Text();
-                                if (string.IsNullOrWhiteSpace(releaseInfo))
-                                {
-                                    // Single episodes alpha - Reported that this info is missing.
-                                    // It should self correct when availible
-                                    break;
-                                }
-
-                                Regex SeasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
-                                var SeasonRegExMatch = SeasonRegEx.Match(releaseInfo);
-                                if (SeasonRegExMatch.Success)
-                                    season = ParseUtil.CoerceInt(SeasonRegExMatch.Groups[1].Value);
-
-                                Regex EpisodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
-                                var EpisodeRegExMatch = EpisodeRegEx.Match(releaseInfo);
-                                if (EpisodeRegExMatch.Success)
-                                    episode = EpisodeRegExMatch.Groups[1].Value;
-
-                                releaseInfo = releaseInfo.Replace("Episode ", "");
-                                releaseInfo = releaseInfo.Replace("Season ", "S");
-                                releaseInfo = releaseInfo.Trim();
-                                int test = 0;
-                                if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length <= 3)
-                                {
-                                    releaseInfo = "E0" + releaseInfo;
-                                }
+                                if (Property.Contains(" PSP "))
+                                    Category = new List<int> { TorznabCatType.ConsolePSP.ID };
+                                if (Property.Contains("PSX"))
+                                    Category = new List<int> { TorznabCatType.ConsoleOther.ID };
+                                if (Property.Contains(" NES "))
+                                    Category = new List<int> { TorznabCatType.ConsoleOther.ID };
+                                if (Property.Contains(" PC "))
+                                    Category = new List<int> { TorznabCatType.PCGames.ID };
                             }
-                            else if (rowCq.HasClass("torrent"))
+                        }
+                        else if (searchType == "music")
+                        {
+                            if (category == "Single" || category == "EP" || category == "Album" || category == "Compilation" || category == "Soundtrack" || category == "Remix CD" || category == "PV" || category == "Live Album" || category == "Image CD" || category == "Drama CD" || category == "Vocal CD")
                             {
-                                var links = rowCq.Find("a");
-                                // Protect against format changes
-                                if (links.Count() != 2)
-                                {
-                                    continue;
-                                }
-
-                                if (FilterSeasonEpisode)
-                                {
-                                    if (query.Season != 0 && season != null && season != query.Season) // skip if season doesn't match
-                                        continue;
-                                    if (query.Episode != null && episode != null && episode != query.Episode) // skip if episode doesn't match
-                                        continue;
-                                }
-
-                                var release = new ReleaseInfo();
-                                release.MinimumRatio = 1;
-                                release.MinimumSeedTime = 259200;
-                                var downloadLink = links.Get(0);
-
-                                // We dont know this so try to fake based on the release year
-                                release.PublishDate = new DateTime(year, 1, 1);
-                                release.PublishDate = release.PublishDate.AddDays(Math.Min(DateTime.Now.DayOfYear, 365) - 1);
-
-                                var infoLink = links.Get(1);
-                                release.Comments = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href"));
-                                release.Guid = new Uri(SiteLink + infoLink.Attributes.GetAttribute("href") + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
-                                release.Link = new Uri(downloadLink.Attributes.GetAttribute("href"));
-
-                                string category = null;
-                                if (searchType == SearchType.Video)
-                                {
-                                    category = seriesCq.Find("a[title=\"View Torrent\"]").Text().Trim();
-                                    if (category == "TV Series")
-                                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
-
-                                    // Ignore these categories as they'll cause hell with the matcher
-                                    // TV Special, OVA, ONA, DVD Special, BD Special
-
-                                    if (category == "Movie")
-                                        release.Category = new List<int> { TorznabCatType.Movies.ID };
-
-                                    if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
-                                        release.Category = new List<int> { TorznabCatType.BooksComics.ID };
-
-                                    if (category == "Novel" || category == "Artbook")
-                                        release.Category = new List<int> { TorznabCatType.BooksComics.ID };
-
-                                    if (category == "Game" || category == "Visual Novel")
-                                    {
-                                        var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
-                                        if (description.Contains(" PSP "))
-                                            release.Category = new List<int> { TorznabCatType.ConsolePSP.ID };
-                                        if (description.Contains("PSX"))
-                                            release.Category = new List<int> { TorznabCatType.ConsoleOther.ID };
-                                        if (description.Contains(" NES "))
-                                            release.Category = new List<int> { TorznabCatType.ConsoleOther.ID };
-                                        if (description.Contains(" PC "))
-                                            release.Category = new List<int> { TorznabCatType.PCGames.ID };
-                                    }
-                                }
-
-                                if (searchType == SearchType.Audio)
-                                {
-                                    category = seriesCq.Find(".group_img .cat a").Text();
-                                    if (category == "Single" || category == "EP" || category == "Album" || category == "Compilation" || category == "Soundtrack" || category == "Remix CD" || category == "PV" || category == "Live Album" || category == "Image CD" || category == "Drama CD" || category == "Vocal CD")
-                                    {
-                                        var description = rowCq.Find(".torrent_properties a:eq(1)").Text();
-                                        if (description.Contains(" Lossless "))
-                                            release.Category = new List<int> { TorznabCatType.AudioLossless.ID };
-                                        else if (description.Contains("MP3"))
-                                            release.Category = new List<int> { TorznabCatType.AudioMP3.ID };
-                                        else
-                                            release.Category = new List<int> { TorznabCatType.AudioOther.ID };
-                                    }
-                                }
-
-                                // We dont actually have a release name >.> so try to create one
-                                var releaseTags = infoLink.InnerText.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                                for (int i = releaseTags.Count - 1; i >= 0; i--)
-                                {
-                                    releaseTags[i] = releaseTags[i].Trim();
-                                    if (string.IsNullOrWhiteSpace(releaseTags[i]))
-                                        releaseTags.RemoveAt(i);
-                                }
-
-                                var group = releaseTags.LastOrDefault();
-                                if (group != null && group.Contains("(") && group.Contains(")"))
-                                {
-                                    // Skip raws if set
-                                    if (group.ToLowerInvariant().StartsWith("raw") && !AllowRaws)
-                                    {
-                                        continue;
-                                    }
-
-                                    var start = group.IndexOf("(");
-                                    group = "[" + group.Substring(start + 1, (group.IndexOf(")") - 1) - start) + "] ";
-                                }
+                                if (Property.Contains(" Lossless "))
+                                    Category = new List<int> { TorznabCatType.AudioLossless.ID };
+                                else if (Property.Contains("MP3"))
+                                    Category = new List<int> { TorznabCatType.AudioMP3.ID };
                                 else
-                                {
-                                    group = string.Empty;
-                                }
-
-                                var infoString = "";
-
-                                for (int i = 0; i + 1 < releaseTags.Count(); i++)
-                                {
-                                    if (releaseTags[i] == "Raw" && !AllowRaws)
-                                        continue;
-                                    infoString += "[" + releaseTags[i] + "]";
-                                }
-
-                                if (category == "Movie")
-                                {
-                                    release.Title = string.Format("{0} {1} {2}{3}", title, year, group, infoString);
-                                }
-                                else
-                                {
-                                    release.Title = string.Format("{0}{1} {2} {3}", group, title, releaseInfo, infoString);
-                                }
-                                release.Description = title;
-
-                                var size = rowCq.Find(".torrent_size");
-                                if (size.Count() > 0)
-                                {
-                                    release.Size = ReleaseInfo.GetBytes(size.First().Text());
-                                }
-
-                                //  Additional 5 hours per GB
-                                release.MinimumSeedTime += (release.Size / 1000000000) * 18000;
-
-                                // Peer info
-                                release.Seeders = ParseUtil.CoerceInt(rowCq.Find(".torrent_seeders").Text());
-                                release.Peers = release.Seeders + ParseUtil.CoerceInt(rowCq.Find(".torrent_leechers").Text());
-
-                                // grabs
-                                var grabs = rowCq.Find("td.torrent_snatched").Text();
-                                release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                                // freeleech
-                                if (rowCq.Find("img[alt=\"Freeleech!\"]").Length >= 1)
-                                    release.DownloadVolumeFactor = 0;
-                                else
-                                    release.DownloadVolumeFactor = 1;
-                                release.UploadVolumeFactor = 1;
-
-                                //if (release.Category != null)
-                                releases.Add(release);
+                                    Category = new List<int> { TorznabCatType.AudioOther.ID };
                             }
+                        }
+
+                        // We dont actually have a release name >.> so try to create one
+                        var releaseTags = Property.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                        for (int i = releaseTags.Count - 1; i >= 0; i--)
+                        {
+                            releaseTags[i] = releaseTags[i].Trim();
+                            if (string.IsNullOrWhiteSpace(releaseTags[i]))
+                                releaseTags.RemoveAt(i);
+                        }
+
+                        var releasegroup = releaseTags.LastOrDefault();
+                        if (releasegroup != null && releasegroup.Contains("(") && releasegroup.Contains(")"))
+                        {
+                            // Skip raws if set
+                            if (releasegroup.ToLowerInvariant().StartsWith("raw") && !AllowRaws)
+                            {
+                                continue;
+                            }
+
+                            var start = releasegroup.IndexOf("(");
+                            releasegroup = "[" + releasegroup.Substring(start + 1, (releasegroup.IndexOf(")") - 1) - start) + "] ";
+                        }
+                        else
+                        {
+                            releasegroup = string.Empty;
+                        }
+
+                        var infoString = "";
+
+                        for (int i = 0; i + 1 < releaseTags.Count(); i++)
+                        {
+                            if (releaseTags[i] == "Raw" && !AllowRaws)
+                                continue;
+                            infoString += "[" + releaseTags[i] + "]";
+                        }
+
+                        var MinimumSeedTime = 259200;
+                        //  Additional 5 hours per GB
+                        MinimumSeedTime += (int)((Size / 1000000000) * 18000);
+
+                        foreach (var title in synonyms)
+                        {
+                            string releaseTitle = null;
+                            if (category == "Movie")
+                            {
+                                var year = 0;
+                                releaseTitle = string.Format("{0} {1} {2}{3}", title, year, group, infoString);
+                            }
+                            else
+                            {
+                                releaseTitle = string.Format("{0}{1} {2} {3}", releasegroup, title, releaseInfo, infoString);
+                            }
+
+                            var release = new ReleaseInfo();
+                            release.MinimumRatio = 1;
+                            release.MinimumSeedTime = MinimumSeedTime;
+                            release.Title = releaseTitle;
+                            release.Comments = CommentsLinkUri;
+                            release.Guid = new Uri(CommentsLinkUri + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
+                            release.Link = LinkUri;
+                            release.PublishDate = PublushDate;
+                            release.Category = Category;
+                            release.Description = Description;
+                            release.Size = Size;
+                            release.Seeders = Seeders;
+                            release.Peers = Peers;
+                            release.Grabs = Snatched;
+                            release.Files = FileCount;
+                            release.DownloadVolumeFactor = RawDownMultiplier;
+                            release.UploadVolumeFactor = RawUpMultiplier;
+
+                            releases.Add(release);
                         }
                     }
                 }
