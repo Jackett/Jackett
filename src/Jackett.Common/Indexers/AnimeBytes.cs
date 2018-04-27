@@ -19,12 +19,6 @@ namespace Jackett.Common.Indexers
 {
     public class AnimeBytes : BaseCachingWebIndexer
     {
-        private enum SearchType
-        {
-            Video,
-            Audio
-        }
-
         private string ScrapeUrl { get { return SiteLink + "scrape.php"; } }
         private string TorrentsUrl { get { return SiteLink + "torrents.php"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
@@ -77,23 +71,18 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            IsConfigured = true;
-            return IndexerConfigurationStatus.Completed;
+            if (configData.Passkey.Value.Length != 32)
+                throw new Exception("invalid passkey configured: expected length: 32, got " + configData.Passkey.Value.Length.ToString());
 
-            /*
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("/user/logout"), () =>
+            var results = await PerformQuery(new TorznabQuery());
+            if (results.Count() == 0)
             {
-                logger.Info(response.Content);
-                CQ responseDom = response.Content;
-                var alert = responseDom.Find("div.alert-danger");
-                if (alert.Any())
-                    throw new ExceptionWithConfigData(alert.Text(), configData);
+                throw new Exception("no results found, please report this bug");
+            }
 
-                // Their login page appears to be broken and just gives a 500 error.
-                throw new ExceptionWithConfigData("Failed to login (unknown reason), 6 failed attempts will get you banned for 6 hours.", configData);
-            });
-            */
-            return IndexerConfigurationStatus.RequiresTesting;
+            IsConfigured = true;
+            SaveConfig();
+            return IndexerConfigurationStatus.Completed;
         }
 
         private string StripEpisodeNumber(string term)
@@ -144,8 +133,6 @@ namespace Jackett.Common.Indexers
             // The result list
             var releases = new List<ReleaseInfo>();
 
-            https://animebytes.tv/scrape.php?torrent_pass=W96ReJt2K9nHo6bXoRlqPvYtWnXDfoLI&type=anime
-
             var queryCollection = new NameValueCollection();
 
             var cat = "0";
@@ -187,13 +174,20 @@ namespace Jackett.Common.Indexers
 
                 foreach (JObject group in groups)
                 {
-
                     var synonyms = new List<string>();
                     var groupID = (long)group["ID"];
-                    logger.Error("group"+groupID.ToString());
-                    var mainTitle = WebUtility.HtmlDecode((string)group["Name"]).Trim();
-                    synonyms.Add(mainTitle);
+                    var Image = (string)group["Image"];
+                    var ImageUrl = (string.IsNullOrWhiteSpace(Image) ? null : new Uri(Image));
+                    var Year = (int)group["Year"];
+                    var GroupName = (string)group["GroupName"];
+                    var SeriesName = (string)group["SeriesName"];
+                    var Artists = (string)group["Artists"];
 
+                    var mainTitle = WebUtility.HtmlDecode((string)group["FullName"]);
+                    if (SeriesName != null)
+                        mainTitle = SeriesName;
+
+                    synonyms.Add(mainTitle);
 
                     // If the title contains a comma then we can't use the synonyms as they are comma seperated
                     if (!mainTitle.Contains(",") && AddSynonyms)
@@ -261,7 +255,7 @@ namespace Jackett.Common.Indexers
                         var Link = (string)torrent["Link"];
                         var LinkUri = new Uri(Link);
                         var UploadTimeString = (string)torrent["UploadTime"];
-                        var UploadTime = DateTime.ParseExact(UploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture).ToLocalTime();
+                        var UploadTime = DateTime.ParseExact(UploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         var PublushDate = DateTime.SpecifyKind(UploadTime, DateTimeKind.Utc).ToLocalTime();
                         var CommentsLink = TorrentsUrl + "?id=" + groupID.ToString() + "&torrentid=" + torrentID.ToString();
                         var CommentsLinkUri = new Uri(CommentsLink);
@@ -380,6 +374,7 @@ namespace Jackett.Common.Indexers
                             release.Comments = CommentsLinkUri;
                             release.Guid = new Uri(CommentsLinkUri + "&nh=" + StringUtil.Hash(title)); // Sonarr should dedupe on this url - allow a url per name.
                             release.Link = LinkUri;
+                            release.BannerUrl = ImageUrl;
                             release.PublishDate = PublushDate;
                             release.Category = Category;
                             release.Description = Description;
