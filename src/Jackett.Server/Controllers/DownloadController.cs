@@ -1,26 +1,24 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using BencodeNET.Parsing;
+﻿using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using NLog;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Jackett.Controllers
+namespace Jackett.Server.Controllers
 {
-    [AllowAnonymous]
-    [JackettAPINoCache]
-    public class DownloadController : ApiController
+    //[AllowAnonymous]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Route("dl/{indexerID}")]
+    public class DownloadController : Controller
     {
         private ServerConfig config;
         private Logger logger;
-        private IIndexerManagerService indexerService;        
+        private IIndexerManagerService indexerService;
         private IProtectionService protectionService;
 
         public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig serverConfig)
@@ -32,7 +30,7 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        public async Task<HttpResponseMessage> Download(string indexerID, string path, string jackett_apikey, string file)
+        public async Task<IActionResult> Download(string indexerID, string path, string jackett_apikey, string file)
         {
             try
             {
@@ -41,14 +39,14 @@ namespace Jackett.Controllers
                 if (!indexer.IsConfigured)
                 {
                     logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
-                    return Request.CreateResponse(HttpStatusCode.Forbidden, "This indexer is not configured.");
+                    return Forbid("This indexer is not configured.");
                 }
 
-                path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
+                path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = protectionService.UnProtect(path);
 
                 if (config.APIKey != jackett_apikey)
-                    return new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                    return Unauthorized();
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(target);
@@ -65,9 +63,7 @@ namespace Jackett.Controllers
                     )
                 {
                     var magneturi = Encoding.UTF8.GetString(downloadBytes);
-                    var response = Request.CreateResponse(HttpStatusCode.Moved);
-                    response.Headers.Location = new Uri(magneturi);
-                    return response;
+                    return Redirect(new Uri(magneturi).ToString());
                 }
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
@@ -75,19 +71,14 @@ namespace Jackett.Controllers
                 var torrentDictionary = parser.Parse(downloadBytes);
                 byte[] sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
 
-                var result = new HttpResponseMessage(HttpStatusCode.OK);
-                result.Content = new ByteArrayContent(sortedDownloadBytes);
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-bittorrent");
-                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent" // call MakeValidFileName again to avoid any kind of injection attack
-                };
-                return result;
+                string fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+
+                return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
             catch (Exception e)
             {
                 logger.Error(e, "Error downloading " + indexerID + " " + path);
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                return NotFound();
             }
         }
     }

@@ -1,59 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
-using System.Xml.Linq;
-using Jackett.Common;
+﻿using Jackett.Common;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.DTO;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
-namespace Jackett.Controllers
+namespace Jackett.Server.Controllers
 {
-    public class RequiresApiKeyAttribute : AuthorizationFilterAttribute
+    public class RequiresApiKey : IActionFilter
     {
-        public override void OnAuthorization(HttpActionContext actionContext)
+        public IServerService serverService;
+
+        public RequiresApiKey(IServerService ss)
         {
-            var validApiKey = Engine.ServerConfig.APIKey;
-            var queryParams = actionContext.Request.GetQueryNameValuePairs();
+            serverService = ss;
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            var validApiKey = serverService.GetApiKey();
+            var queryParams = context.HttpContext.Request.Query;
             var queryApiKey = queryParams.Where(x => x.Key == "apikey" || x.Key == "passkey").Select(x => x.Value).FirstOrDefault();
 
 #if DEBUG
             if (Debugger.IsAttached)
+            {
                 return;
+            }
 #endif
             if (queryApiKey != validApiKey)
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
+        }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            // do something after the action executes
         }
     }
 
-    public class RequiresConfiguredIndexerAttribute : ActionFilterAttribute
+    public class RequiresConfiguredIndexer : IActionFilter
     {
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public void OnActionExecuting(ActionExecutingContext context)
         {
-            var controller = actionContext.ControllerContext.Controller;
+            var controller = context.Controller;
             if (!(controller is IIndexerController))
                 return;
 
             var indexerController = controller as IIndexerController;
 
-            var parameters = actionContext.RequestContext.RouteData.Values;
+            var parameters = context.RouteData.Values;
 
             if (!parameters.ContainsKey("indexerId"))
             {
                 indexerController.CurrentIndexer = null;
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid parameter");
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
@@ -61,7 +75,7 @@ namespace Jackett.Controllers
             if (indexerId.IsNullOrEmptyOrWhitespace())
             {
                 indexerController.CurrentIndexer = null;
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid parameter");
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
@@ -71,63 +85,68 @@ namespace Jackett.Controllers
             if (indexer == null)
             {
                 indexerController.CurrentIndexer = null;
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Invalid parameter");
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
             if (!indexer.IsConfigured)
             {
                 indexerController.CurrentIndexer = null;
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, "Indexer is not configured");
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
             indexerController.CurrentIndexer = indexer;
         }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            // do something after the action executes
+        }
     }
 
-    public class RequiresValidQueryAttribute : RequiresConfiguredIndexerAttribute
+    public class RequiresValidQuery : IActionFilter
     {
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public void OnActionExecuting(ActionExecutingContext context)
         {
-            base.OnActionExecuting(actionContext);
-            if (actionContext.Response != null)
-                return;
+            //TODO: Not sure what this is meant to do
+            //if (context.HttpContext.Response != null)
+            //    return;
 
-            var controller = actionContext.ControllerContext.Controller;
+            var controller = context.Controller;
             if (!(controller is IResultController))
+            {
                 return;
+            }
 
             var resultController = controller as IResultController;
 
-            var query = actionContext.ActionArguments.First().Value;
+            var query = context.ActionArguments.First().Value;
             var queryType = query.GetType();
             var converter = queryType.GetMethod("ToTorznabQuery", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
             if (converter == null)
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "");
+            {
+                context.Result = new BadRequestResult();
+            }
+
             var converted = converter.Invoke(null, new object[] { query });
             var torznabQuery = converted as TorznabQuery;
             resultController.CurrentQuery = torznabQuery;
 
             if (queryType == typeof(ApiSearch)) // Skip CanHandleQuery() check for manual search (CurrentIndexer isn't used during manul search)
+            {
                 return;
+            }
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $"{resultController.CurrentIndexer.ID} does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
+            {
+                context.Result = new BadRequestObjectResult($"{resultController.CurrentIndexer.ID} does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
+            }
         }
-    }
 
-    public class JsonResponseAttribute : ActionFilterAttribute
-    {
-        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        public void OnActionExecuted(ActionExecutedContext context)
         {
-            base.OnActionExecuted(actionExecutedContext);
-
-            if (actionExecutedContext.Exception != null)
-                throw new Exception("Error while executing request", actionExecutedContext.Exception);
-
-            var content = actionExecutedContext.Response.Content as ObjectContent;
-            actionExecutedContext.Response.Content = new JsonContent(content.Value);
+            // do something after the action executes
         }
     }
 
@@ -136,12 +155,13 @@ namespace Jackett.Controllers
         TorznabQuery CurrentQuery { get; set; }
     }
 
-    [AllowAnonymous]
-    [JackettAPINoCache]
-    [RoutePrefix("api/v2.0/indexers")]
-    [RequiresApiKey]
-    [RequiresValidQuery]
-    public class ResultsController : ApiController, IResultController
+    //[AllowAnonymous]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Route("api/v2.0/indexers/{indexerId}/results")]
+    [TypeFilter(typeof(RequiresApiKey))]
+    [TypeFilter(typeof(RequiresConfiguredIndexer))]
+    [TypeFilter(typeof(RequiresValidQuery))]
+    public class ResultsController : Controller, IResultController
     {
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
@@ -155,13 +175,39 @@ namespace Jackett.Controllers
             this.logger = logger;
         }
 
+        [Route("")]
         [HttpGet]
-        public async Task<ManualSearchResult> Results([FromUri]ApiSearch request)
+        public async Task<IActionResult> Results([FromQuery] ApiSearch requestt)
         {
+            //TODO: Better way to parse querystring
+
+            ApiSearch request = new ApiSearch();
+
+            foreach (var t in Request.Query)
+            {
+                if (t.Key == "Tracker[]")
+                {
+                    request.Tracker = t.Value.ToString().Split(",");
+                }
+
+                if (t.Key == "Category[]")
+                {
+                    request.Category = t.Value.ToString().Split(",").Select(Int32.Parse).ToArray();
+                }
+
+                if (t.Key == "query")
+                {
+                    request.Query = t.Value.ToString();
+                }
+            }
+
             var manualResult = new ManualSearchResult();
-            var trackers = IndexerService.GetAllIndexers().Where(t => t.IsConfigured);
+            var trackers = IndexerService.GetAllIndexers().ToList().Where(t => t.IsConfigured);
             if (request.Tracker != null)
+            {
                 trackers = trackers.Where(t => request.Tracker.Contains(t.ID));
+            }
+
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
             var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
@@ -235,18 +281,16 @@ namespace Jackett.Controllers
             ConfigureCacheResults(manualResult.Results);
 
             logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", CurrentQuery.SanitizedSearchTerm, string.Join(", ", manualResult.Indexers.Select(i => i.ID)), manualResult.Results.Count()));
-            return manualResult;
+            return Json(manualResult);
         }
 
+        [Route("[action]/{ignored?}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Torznab([FromUri]Common.Models.DTO.TorznabRequest request)
+        public async Task<IActionResult> Torznab([FromQuery]TorznabRequest request)
         {
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
-                return ResponseMessage(new HttpResponseMessage()
-                {
-                    Content = new StringContent(CurrentIndexer.TorznabCaps.ToXml(), Encoding.UTF8, "application/xml")
-                });
+                return Content(CurrentIndexer.TorznabCaps.ToXml(), "application/rss+xml", Encoding.UTF8);
             }
 
             // indexers - returns a list of all included indexers (meta indexers only)
@@ -254,7 +298,7 @@ namespace Jackett.Controllers
             {
                 if (!(CurrentIndexer is BaseMetaIndexer)) // shouldn't be needed because CanHandleQuery should return false
                 {
-                    logger.Warn($"A search request with t=indexers from {Request.GetOwinContext().Request.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} isn't a meta indexer.");
+                    logger.Warn($"A search request with t=indexers from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} isn't a meta indexer.");
                     return GetErrorXML(203, "Function Not Available: this isn't a meta indexer");
                 }
                 var CurrentBaseMetaIndexer = (BaseMetaIndexer)CurrentIndexer;
@@ -281,30 +325,27 @@ namespace Jackett.Controllers
                     )
                 );
 
-                return ResponseMessage(new HttpResponseMessage()
-                {
-                    Content = new StringContent(xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString(), Encoding.UTF8, "application/xml")
-                });
+                return Content(xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString(), "application/xml", Encoding.UTF8);
             }
 
             if (CurrentQuery.ImdbID != null)
             {
                 if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
-                    logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made containing q and imdbid.");
+                    logger.Warn($"A search request from {Request.HttpContext.Connection.RemoteIpAddress} was made containing q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
 
                 CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
                 if (CurrentQuery.ImdbID == null)
                 {
-                    logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made with an invalid imdbid.");
+                    logger.Warn($"A search request from {Request.HttpContext.Connection.RemoteIpAddress} was made with an invalid imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
                 if (!CurrentIndexer.TorznabCaps.SupportsImdbSearch)
                 {
-                    logger.Warn($"A search request with imdbid from {Request.GetOwinContext().Request.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");
                 }
             }
@@ -361,13 +402,12 @@ namespace Jackett.Controllers
 
             var xml = resultPage.ToXml(new Uri(serverUrl));
             // Force the return as XML
-            return ResponseMessage(new HttpResponseMessage()
-            {
-                Content = new StringContent(xml, Encoding.UTF8, "application/rss+xml")
-            });
+
+            return Content(xml, "application/rss+xml", Encoding.UTF8);
         }
 
-        public IHttpActionResult GetErrorXML(int code, string description)
+        [Route("[action]/{ignored?}")]
+        public IActionResult GetErrorXML(int code, string description)
         {
             var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
@@ -378,16 +418,12 @@ namespace Jackett.Controllers
             );
 
             var xml = xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString();
-
-            return ResponseMessage(new HttpResponseMessage()
-            {
-                Content = new StringContent(xml, Encoding.UTF8, "application/xml")
-            });
+            return Content(xml, "application/xml", Encoding.UTF8);
         }
 
+        [Route("[action]/{ignored?}")]
         [HttpGet]
-        [JsonResponse]
-        public async Task<TorrentPotatoResponse> Potato([FromUri]TorrentPotatoRequest request)
+        public async Task<TorrentPotatoResponse> Potato([FromQuery]TorrentPotatoRequest request)
         {
             var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
@@ -431,6 +467,7 @@ namespace Jackett.Controllers
             return potatoResponse;
         }
 
+        [Route("[action]/{ignored?}")]
         private void ConfigureCacheResults(IEnumerable<TrackerCacheResult> results)
         {
             var serverUrl = serverService.GetServerUrl(Request);
@@ -439,9 +476,8 @@ namespace Jackett.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
-                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.ServerConfig.BlackholeDir))
+                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(serverService.GetBlackholeDirectory()))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
-
             }
         }
 

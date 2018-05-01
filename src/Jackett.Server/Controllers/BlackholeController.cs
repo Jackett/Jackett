@@ -1,39 +1,37 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.IO;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using Jackett.Common.Models.Config;
-using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 
-namespace Jackett.Controllers
+namespace Jackett.Server.Controllers
 {
-    [AllowAnonymous]
-    [JackettAPINoCache]
-    public class BlackholeController : ApiController
+    //[AllowAnonymous]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    [Route("bh/{indexerID}")]
+    public class BlackholeController : Controller
     {
         private Logger logger;
         private IIndexerManagerService indexerService;
         private readonly ServerConfig serverConfig;
-        IProtectionService protectionService;
+        private IProtectionService protectionService;
 
         public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig config, IProtectionService ps)
         {
             logger = l;
             indexerService = i;
             serverConfig = config;
-
             protectionService = ps;
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Blackhole(string indexerID, string path, string jackett_apikey, string file)
+        public async Task<IActionResult> Blackhole(string indexerID, string path, string jackett_apikey, string file)
         {
-
             var jsonReply = new JObject();
             try
             {
@@ -47,7 +45,7 @@ namespace Jackett.Controllers
                 if (serverConfig.APIKey != jackett_apikey)
                     throw new Exception("Incorrect API key");
 
-                path = Encoding.UTF8.GetString(HttpServerUtility.UrlTokenDecode(path));
+                path = WebUtility.UrlDecode(path);
                 path = protectionService.UnProtect(path);
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
                 var fileExtension = ".torrent";
@@ -81,9 +79,9 @@ namespace Jackett.Controllers
                 if (string.IsNullOrWhiteSpace(file))
                     fileName += fileExtension;
                 else
-                    fileName += "-"+StringUtil.MakeValidFileName(file + fileExtension, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks 
+                    fileName += "-" + StringUtil.MakeValidFileName(file + fileExtension, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks
 
-                File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
+                System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
                 jsonReply["result"] = "success";
             }
             catch (Exception ex)
