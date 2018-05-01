@@ -6,7 +6,7 @@ using System.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 
-namespace Jackett.Services
+namespace Jackett.Server.Services
 {
 
     class SecuityService : ISecuityService
@@ -60,10 +60,10 @@ namespace Jackett.Services
 
             try
             {
-                var cookie = request.Headers.GetCookies(COOKIENAME).FirstOrDefault();
+                var cookie = request.Headers.GetValues(COOKIENAME).FirstOrDefault();
                 if (cookie != null)
                 {
-                    return cookie[COOKIENAME].Value == _serverConfig.AdminPassword;
+                    return cookie == _serverConfig.AdminPassword;
                 }
             }
             catch { }
