@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET Core", ".NET Core", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Executables", "Executables", "{AA50F785-12B8-4669-8D4F-EAFB49258E60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Server", "Jackett.Server\Jackett.Server.csproj", "{84182782-EDBC-4342-ADA6-72B7694D0862}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84182782-EDBC-4342-ADA6-72B7694D0862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84182782-EDBC-4342-ADA6-72B7694D0862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84182782-EDBC-4342-ADA6-72B7694D0862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84182782-EDBC-4342-ADA6-72B7694D0862}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{6B854A1B-9A90-49C0-BC37-9A35C75BCA73} = {2FA9B879-5882-4B39-8D34-9EBCB82B4F2B}
 		{FF8B9A1B-AE7E-4F14-9C37-DA861D034738} = {AA50F785-12B8-4669-8D4F-EAFB49258E60}
 		{6A06EC9B-AF21-4DE8-9B50-BC7E3C2C78B9} = {AA50F785-12B8-4669-8D4F-EAFB49258E60}
+		{84182782-EDBC-4342-ADA6-72B7694D0862} = {6A06EC9B-AF21-4DE8-9B50-BC7E3C2C78B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54BC4102-8B85-49C1-BA12-257D941D1B97}
