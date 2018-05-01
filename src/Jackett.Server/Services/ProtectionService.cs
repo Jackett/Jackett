@@ -9,7 +9,7 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 
-namespace Jackett.Services
+namespace Jackett.Server.Services
 {
 
     public class ProtectionService : IProtectionService
