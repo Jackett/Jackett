@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Web.Http;
-using Jackett.Common;
-using Jackett.Common.Models;
+﻿using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Utils;
+using Microsoft.AspNetCore.Mvc;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-namespace Jackett.Controllers
+namespace Jackett.Server.Controllers
 {
-    [RoutePrefix("api/v2.0/server")]
-    [JackettAuthorized]
-    [JackettAPINoCache]
-    public class ServerConfigurationController : ApiController
+    [Route("api/v2.0/server/[action]")]
+    //[JackettAuthorized]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    public class ServerConfigurationController : Controller
     {
         private readonly IConfigurationService configService;
         private ServerConfig serverConfig;
@@ -29,7 +26,7 @@ namespace Jackett.Controllers
         private ILogCacheService logCache;
         private Logger logger;
 
-        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p,  IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
+        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p, IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
         {
             configService = c;
             serverConfig = sc;
@@ -65,14 +62,13 @@ namespace Jackett.Controllers
         [HttpGet]
         public Common.Models.DTO.ServerConfig Config()
         {
-
             var dto = new Common.Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion());
             return dto;
         }
 
         [ActionName("Config")]
         [HttpPost]
-        public void UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
+        public IActionResult UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
         {
             var originalPort = serverConfig.Port;
             var originalAllowExternal = serverConfig.AllowExternal;
@@ -95,16 +91,16 @@ namespace Jackett.Controllers
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;
-            serverConfig.RuntimeSettings.BasePath = Engine.Server.BasePath();
+            serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 
-            Engine.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
+            Initialisation.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
             serverConfig.RuntimeSettings.TracingEnabled = logging;
 
             if (omdbApiKey != serverConfig.OmdbApiKey)
             {
                 serverConfig.OmdbApiKey = omdbApiKey;
-                 configService.SaveConfig(serverConfig);
+                configService.SaveConfig(serverConfig);
                 // HACK
                 indexerService.InitAggregateIndexer();
             }
@@ -128,7 +124,6 @@ namespace Jackett.Controllers
 
             if (port != serverConfig.Port || external != serverConfig.AllowExternal)
             {
-
                 if (ServerUtil.RestrictedPorts.Contains(port))
                     throw new Exception("The port you have selected is restricted, try a different one.");
 
@@ -147,7 +142,8 @@ namespace Jackett.Controllers
                     {
                         try
                         {
-                            processService.StartProcessAndLog(System.Windows.Forms.Application.ExecutablePath, "--ReserveUrls", true);
+                            //TODO
+                            //processService.StartProcessAndLog(System.Windows.Forms.Application.ExecutablePath, "--ReserveUrls", true);
                         }
                         catch
                         {
@@ -163,15 +159,15 @@ namespace Jackett.Controllers
                         serverService.ReserveUrls(true);
                     }
                 }
-
-            (new Thread(() =>
-            {
-                Thread.Sleep(500);
-                serverService.Stop();
-                Engine.BuildContainer(serverConfig.RuntimeSettings, new WebApi2Module());
-                Engine.Server.Initalize();
-                Engine.Server.Start();
-            })).Start();
+                //TODO
+                //(new Thread(() =>
+                //{
+                //    Thread.Sleep(500);
+                //    serverService.Stop();
+                //    Engine.BuildContainer(serverConfig.RuntimeSettings, new WebApi2Module());
+                //    Engine.Server.Initalize();
+                //    Engine.Server.Start();
+                //})).Start();
             }
 
             if (saveDir != serverConfig.BlackholeDir)
@@ -187,8 +183,10 @@ namespace Jackett.Controllers
                 serverConfig.BlackholeDir = saveDir;
                 configService.SaveConfig(serverConfig);
             }
-            
+
             serverConfig.ConfigChanged();
+
+            return Json(serverConfig);
         }
 
         [HttpGet]
@@ -196,7 +194,5 @@ namespace Jackett.Controllers
         {
             return logCache.Logs;
         }
-
-
     }
 }

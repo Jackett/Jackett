@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
-using Jackett.Common;
-using Jackett.Common.Indexers;
+﻿using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Jackett.Controllers
+namespace Jackett.Server.Controllers
 {
     public interface IIndexerController
     {
@@ -23,19 +20,17 @@ namespace Jackett.Controllers
         IIndexer CurrentIndexer { get; set; }
     }
 
-    public class RequiresIndexerAttribute : ActionFilterAttribute
+    public class RequiresIndexer : IActionFilter
     {
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public void OnActionExecuting(ActionExecutingContext context)
         {
-            base.OnActionExecuting(actionContext);
-
-            var controller = actionContext.ControllerContext.Controller;
+            var controller = context.Controller;
             if (!(controller is IIndexerController))
                 return;
 
             var indexerController = controller as IIndexerController;
 
-            var parameters = actionContext.RequestContext.RouteData.Values;
+            var parameters = context.RouteData.Values;
 
             if (!parameters.ContainsKey("indexerId"))
             {
@@ -51,15 +46,23 @@ namespace Jackett.Controllers
             var indexer = indexerService.GetIndexer(indexerId);
             indexerController.CurrentIndexer = indexer;
         }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            // do something after the action executes
+        }
     }
 
-    [RoutePrefix("api/v2.0/indexers")]
-    [JackettAuthorized]
-    [JackettAPINoCache]
-    public class IndexerApiController : ApiController, IIndexerController
+    [Route("api/v2.0/indexers")]
+    //[JackettAuthorized]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+    public class IndexerApiController : Controller, IIndexerController
     {
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
+        private Logger logger;
+        private IServerService serverService;
+        private ICacheService cacheService;
 
         public IndexerApiController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {
@@ -70,16 +73,17 @@ namespace Jackett.Controllers
         }
 
         [HttpGet]
-        [RequiresIndexer]
-        public async Task<IHttpActionResult> Config()
+        [TypeFilter(typeof(RequiresIndexer))]
+        [Route("{indexerId?}/Config")]
+        public async Task<IActionResult> Config()
         {
             var config = await CurrentIndexer.GetConfigurationForSetup();
             return Ok(config.ToJson(null));
         }
 
         [HttpPost]
-        [ActionName("Config")]
-        [RequiresIndexer]
+        [Route("{indexerId?}/Config")]
+        [TypeFilter(typeof(RequiresIndexer))]
         public async Task UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
         {
             try
@@ -111,14 +115,16 @@ namespace Jackett.Controllers
         }
 
         [HttpPost]
-        [RequiresIndexer]
-        public async Task Test()
+        [Route("{indexerid}/[action]")]
+        [TypeFilter(typeof(RequiresIndexer))]
+        public async Task<IActionResult> Test()
         {
             JToken jsonReply = new JObject();
             try
             {
                 await IndexerService.TestIndexer(CurrentIndexer.ID);
                 CurrentIndexer.LastError = null;
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -134,8 +140,8 @@ namespace Jackett.Controllers
         }
 
         [HttpDelete]
-        [RequiresIndexer]
-        [Route("{indexerId}")]
+        [TypeFilter(typeof(RequiresIndexer))]
+        [Route("{indexerid}")]
         public void Delete()
         {
             IndexerService.DeleteIndexer(CurrentIndexer.ID);
@@ -160,14 +166,10 @@ namespace Jackett.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
-                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.ServerConfig.BlackholeDir))
+                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(serverService.GetBlackholeDirectory()))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
-
             }
         }
 
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
     }
 }
