@@ -22,10 +22,18 @@
     modes:
       search: [q]
   
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:"
+      options:
+        "http://itorrents.org/" : "iTorrents.org"
+        "magnet:": "magnet"
+
   
   download:
-    selector: a[href^="magnet:"]
+    selector: a[href^="{{ .Config.downloadlink }}"]
   
   search:
     paths:
