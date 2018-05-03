@@ -100,7 +100,7 @@
   login:
     method: form
     path: /
-    form: form[action$="/user/login"]
+    form: form[action$="https://yggtorrent.is/user/login"]
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
