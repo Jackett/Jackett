@@ -3,9 +3,11 @@ using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -58,6 +60,14 @@ namespace Jackett.Server
             Initialisation.Initialize();
 
             app.UseDeveloperExceptionPage();
+
+            app.UseCustomExceptionHandler();
+
+            var rewriteOptions = new RewriteOptions()
+                .Add(RewriteRules.RewriteBasePath)
+                .Add(RedirectRules.RedirectToDashboard);
+
+            app.UseRewriter(rewriteOptions);
 
             app.UseFileServer(new FileServerOptions
             {
