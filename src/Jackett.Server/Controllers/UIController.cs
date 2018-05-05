@@ -54,20 +54,24 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         [HttpPost]
         //[AllowAnonymous]
-        public async Task<HttpResponseMessage> Dashboard()
+        public IActionResult Dashboard()
         {
-            if (Request.Path != null && Request.Path.ToString().Contains("logout"))
-            {
-                var file = GetFile("login.html");
-                securityService.Logout(file);
-                return file;
-            }
+            var result = new PhysicalFileResult(config.GetContentFolder() + "/index.html", "text/html");
+            return result;
+
+
+            //if (Request.Path != null && Request.Path.ToString().Contains("logout"))
+            //{
+            //    var file = GetFile("login.html");
+            //    securityService.Logout(file);
+            //    return file;
+            //}
 
             //TODO
 
             //if (securityService.CheckAuthorised(Request))
             //{
-            return GetFile("index.html");
+            //return GetFile("index.html");
 
             //}
             //else

@@ -40,7 +40,7 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpPost]
-        public void AdminPassword([FromBody]string password)
+        public IActionResult AdminPassword([FromBody]string password)
         {
             var oldPassword = serverConfig.AdminPassword;
             if (string.IsNullOrEmpty(password))
@@ -51,6 +51,8 @@ namespace Jackett.Server.Controllers
                 serverConfig.AdminPassword = securityService.HashPassword(password);
                 configService.SaveConfig(serverConfig);
             }
+
+            return new NoContentResult();
         }
 
         [HttpPost]
