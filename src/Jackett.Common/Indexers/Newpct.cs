@@ -17,17 +17,28 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class Newpct : BaseWebIndexer
+    public class Newpct : BaseCachingWebIndexer
     {
-        private string _mostRecentUrl;
-        Regex _searchStringRegex = new Regex(@"(.+) S0?(\d+)E0?(\d+)");
-        Regex _titleListRegex = new Regex(@"Serie(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)");
+        class NewpctRelease : ReleaseInfo
+        {
+            public int? Season;
+            public int? Episode;
+            public int? EpisodeTo;
+        }
+
+        private ReleaseInfo _mostRecentRelease;
+        private Regex _searchStringRegex = new Regex(@"(.+?)S0?(\d+)(E0?(\d+))?$", RegexOptions.IgnoreCase);
+        private Regex _titleListRegex = new Regex(@"Serie(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
+        private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})(_(\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
+        private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
 
         private int _maxDailyPages = 7;
+        private int _maxEpisodesListPages = 100;
+        private int[] _allTvCategories = TorznabCatType.TV.SubCategories.Select(c => c.ID).ToArray();
 
         private string _dailyUrl = "/ultimas-descargas/pg/{0}";
-        private string[] _seriesLetterUrl = new string[] { "/series/letter/{0}", "/series-hd/letter/{0}" };
-        private string[] _seriesUrl = new string[] { "/series", "/series-hd" };
+        private string[] _seriesLetterUrls = new string[] { "/series/letter/{0}", "/series-hd/letter/{0}" };
+        private string _seriesUrl = "{0}/pg/{1}";
 
         private new ConfigurationData configData
         {
@@ -103,47 +114,128 @@ namespace Jackett.Common.Indexers
                     Uri url = new Uri(siteLinkUri, string.Format(_dailyUrl, pg));
                     var results = await RequestStringWithCookies(url.AbsoluteUri);
 
-                    var items = ParseDailyContent(query, results.Content);
+                    var items = ParseDailyContent(results.Content);
                     if (items == null || !items.Any())
                         break;
 
                     releases.AddRange(items);
 
                     //Check if we need to go to next page
-                    if (items.Any(r => r.Link.AbsoluteUri == _mostRecentUrl))
-                        break;
+                    bool recentFound = _mostRecentRelease != null &&
+                        items.Any(r => r.Title == _mostRecentRelease.Title && r.Link.AbsoluteUri == _mostRecentRelease.Link.AbsoluteUri);
                     if (pg == 1)
-                        _mostRecentUrl = items.First().Link.AbsoluteUri;
+                        _mostRecentRelease = (ReleaseInfo)items.First().Clone();
+                    if (recentFound)
+                        break;
 
                     pg++;
                 }
             }
             else
             {
-                Match match = _searchStringRegex.Match(query.SanitizedSearchTerm);
-                if (match.Success)
+                bool isTvSearch = query.Categories == null || query.Categories.Length == 0 ||
+                    query.Categories.Any(c => _allTvCategories.Contains(c));
+                if (isTvSearch)
                 {
-                    var seriesName = match.Groups[1].Value;
-                    var season = int.Parse(match.Groups[2].Value);
-                    var episode = int.Parse(match.Groups[3].Value);
+                    var newpctReleases = new List<ReleaseInfo>();
 
+                    string seriesName = query.SanitizedSearchTerm;
+                    int? season = query.Season > 0 ? (int?)query.Season : null;
+                    int? episode = null;
+                    if (!string.IsNullOrWhiteSpace(query.Episode) && int.TryParse(query.Episode, out int episodeTemp))
+                        episode = episodeTemp;
 
+                    //If query has no season/episode info, try to parse title
+                    if (season == null && episode == null)
+                    {
+                        Match searchMatch = _searchStringRegex.Match(query.SanitizedSearchTerm);
+                        if (searchMatch.Success)
+                        {
+                            seriesName = searchMatch.Groups[1].Value.Trim();
+                            season = int.Parse(searchMatch.Groups[2].Value);
+                            episode = searchMatch.Groups[4].Success ? (int?)int.Parse(searchMatch.Groups[4].Value) : null;
+                        }
+                    }
 
+                    bool cacheFound = false;
+                    lock (cache)
+                    {
+                        CleanCache();
+                        var cachedResult = cache.FirstOrDefault(i => i.Query == seriesName.ToLower());
+                        if (cachedResult != null)
+                        {
+                            newpctReleases = cachedResult.Results.Where(r => (r as NewpctRelease) != null).ToList();
+                            cacheFound = newpctReleases.Any();
+                        }
+                    }
+
+                    if (!cacheFound)
+                    {
+                        string seriesLetter = !char.IsDigit(seriesName[0]) ? seriesName[0].ToString() : "0-9";
+                        //Search series url
+                        foreach (string urlFormat in _seriesLetterUrls)
+                        {
+                            Uri seriesListUrl = new Uri(siteLinkUri, string.Format(urlFormat, seriesLetter.ToLower()));
+                            var results = await RequestStringWithCookies(seriesListUrl.AbsoluteUri);
+
+                            //Episodes list
+                            string seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
+                            if (!string.IsNullOrEmpty(seriesEpisodesUrl))
+                            {
+                                int pg = 1;
+                                while (pg < _maxEpisodesListPages)
+                                {
+                                    Uri episodesListUrl = new Uri(string.Format(_seriesUrl, seriesEpisodesUrl, pg));
+                                    results = await RequestStringWithCookies(episodesListUrl.AbsoluteUri);
+
+                                    var items = ParseEpisodesListContent(results.Content);
+                                    if (items == null || !items.Any())
+                                        break;
+
+                                    newpctReleases.AddRange(items);
+
+                                    pg++;
+                                }
+                            }
+                        }
+
+                        if (newpctReleases.Any())
+                        {
+                            lock (cache)
+                            {
+                                cache.Add(new CachedQueryResult(seriesName.ToLower(), newpctReleases));
+                            }
+                        }
+                    }
+
+                    //Filter only episodes needed
+                    releases.AddRange(newpctReleases.Where(r =>
+                    {
+                        NewpctRelease nr = r as NewpctRelease;
+                        return nr != null &&
+                        nr.Season.HasValue != season.HasValue || //Can't determine if same season
+                        nr.Season.HasValue && season.Value == nr.Season.Value && //Same season and ...
+                        (
+                            nr.Episode.HasValue != episode.HasValue || //Can't determine if same episode
+                            nr.Episode.HasValue &&
+                            (
+                                nr.Episode.Value == episode.Value || //Same episode
+                                nr.EpisodeTo.HasValue && episode.Value >= nr.Episode.Value && episode.Value <= nr.EpisodeTo.Value //Episode in interval
+                            )
+                        );
+                    }));
                 }
-
-
-
             }
 
             return releases;
         }
 
-        private IEnumerable<ReleaseInfo> ParseDailyContent(TorznabQuery query, string content)
+        private IEnumerable<NewpctRelease> ParseDailyContent(string content)
         {
             var SearchResultParser = new HtmlParser();
             var doc = SearchResultParser.Parse(content);
 
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            List<NewpctRelease> releases = new List<NewpctRelease>();
 
             try
             {
@@ -155,24 +247,17 @@ namespace Jackett.Common.Indexers
                     var detailsUrl = anchor.GetAttribute("href");
 
                     var span = row.QuerySelector("span");
-                    var qualityText = span.ChildNodes[0].TextContent.Trim();
+                    var quality = span.ChildNodes[0].TextContent.Trim();
                     var sizeText = span.ChildNodes[1].TextContent.Replace("Tamaño", "").Trim();
 
                     var div = row.QuerySelector("div");
-                    var languageText = div.ChildNodes[1].TextContent.Trim();
+                    var language = div.ChildNodes[1].TextContent.Trim();
 
-                    ReleaseInfo release = new ReleaseInfo()
-                    {
-                        Title = ParseTitle(title, qualityText, languageText, out ICollection<int> category),
-                        Category = category,
-                        Link = new Uri(detailsUrl),
-                        Size = ReleaseInfo.GetBytes(sizeText),
-                        Seeders = 1,
-                        Peers = 1,
-                        PublishDate = DateTime.Now,
-                    };
+                    NewpctRelease newpctRelease = GetReleaseFromData(
+                        string.Format("Serie {0} - {1} Calidad [{2}]", title, language, quality),
+                        detailsUrl, null, quality, language, ReleaseInfo.GetBytes(sizeText), DateTime.Now);
 
-                    releases.Add(release);
+                    releases.Add(newpctRelease);
                 }
             }
             catch (Exception ex)
@@ -183,61 +268,130 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private void ParseSeriesList()
+        private string ParseSeriesListContent(string content, string title)
         {
+            var SearchResultParser = new HtmlParser();
+            var doc = SearchResultParser.Parse(content);
 
-        }
+            Dictionary<string, string> results = new Dictionary<string, string>();
 
-        private IEnumerable<ReleaseInfo> ParseEpisodesListContent(TorznabQuery query, string content)
-        {
+            try
+            {
+                var rows = doc.QuerySelectorAll(".pelilist li a");
+                foreach (var anchor in rows)
+                {
+                    if (anchor.GetAttribute("title").Trim().ToLower() == title.Trim().ToLower())
+                        return anchor.GetAttribute("href");
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(content, ex);
+            }
 
             return null;
         }
 
-        private string ParseTitle(string title, string quality, string language, out ICollection<int> categories)
+        private IEnumerable<NewpctRelease> ParseEpisodesListContent(string content)
         {
-            if (quality.ToLower().StartsWith("hdtv"))
-            {
-                if (quality.Contains("720") || quality.Contains("1080"))
-                    categories = new List<int> { TorznabCatType.TVHD.ID };
-                else
-                    categories = new List<int> { TorznabCatType.TV.ID };
+            var SearchResultParser = new HtmlParser();
+            var doc = SearchResultParser.Parse(content);
 
-                return SeriesTitleToNewpctFormat(string.Format("Serie {0} - {1} Calidad [{2}]", title, language, quality));
-            }
-            else
+            List<NewpctRelease> releases = new List<NewpctRelease>();
+
+            try
             {
-                categories = new List<int> { TorznabCatType.Movies.ID };
-                return title;
+                var rows = doc.QuerySelectorAll(".content .info");
+                foreach (var row in rows)
+                {
+                    var anchor = row.QuerySelector("a");
+                    var title = anchor.TextContent.Replace("\t", "").Trim();
+                    var detailsUrl = anchor.GetAttribute("href");
+
+                    var span = row.QuerySelector("span");
+                    var pubDateText = row.ChildNodes[3].TextContent.Trim();
+                    var sizeText = row.ChildNodes[5].TextContent.Trim();
+
+                    long size = ReleaseInfo.GetBytes(sizeText);
+                    DateTime publishDate = DateTime.ParseExact(pubDateText, "dd-MM-yyyy", null);
+                    NewpctRelease newpctRelease = GetReleaseFromData(title, detailsUrl, true, null, null, size, publishDate);
+
+                    releases.Add(newpctRelease);
+                }
             }
+            catch (Exception ex)
+            {
+                OnParseError(content, ex);
+            }
+
+            return releases;
         }
 
-        private string SeriesTitleToNewpctFormat(string title)
+        NewpctRelease GetReleaseFromData(string title, string detailsUrl, bool? isTv, string quality, string language, long size, DateTime publishDate)
         {
+            NewpctRelease result = new NewpctRelease();
+
+            //Sanitize
+            title = title.Replace("\t", "").Replace("\x2013", "-");
+
             Match match = _titleListRegex.Match(title);
             if (match.Success)
             {
+                isTv = true;
+
                 string name = match.Groups[1].Value.Trim(' ', '-');
-                string seasonText = match.Groups[4].Success ? match.Groups[4].Value.Trim() : "1";
-                string episodeText = match.Groups[7].Value.Trim().PadLeft(2, '0');
-                string episode_toText = match.Groups[10].Success ? match.Groups[10].Value.Trim().PadLeft(2, '0') : null;
-                string audio_quality = match.Groups[12].Value.Trim(' ', '[', ']');
-                string video_quality = match.Groups[13].Value.Trim(' ', '[', ']');
+                result.Season = int.Parse(match.Groups[4].Success ? match.Groups[4].Value.Trim() : "1");
+                result.Episode = int.Parse(match.Groups[7].Value.Trim().PadLeft(2, '0'));
+                result.EpisodeTo = match.Groups[10].Success ? (int?)int.Parse(match.Groups[10].Value.Trim()) : null;
+                string audioQuality = match.Groups[12].Value.Trim(' ', '[', ']');
+                quality = match.Groups[13].Value.Trim(' ', '[', ']');
 
-                if (!string.IsNullOrEmpty(episode_toText))
-                    title = string.Format("{0} - Temporada {1} [{2}][Cap.{3}{4}_{5}{6}][{7}]", name, seasonText, video_quality,
-                        seasonText, episodeText, seasonText, episode_toText, audio_quality);
-                else
-                    title = string.Format("{0} - Temporada {1} [{2}][Cap.{3}{4}][{5}]", name, seasonText, video_quality,
-                        seasonText, episodeText, audio_quality);
+                string seasonText = result.Season.ToString();
+                string episodeText = seasonText + result.Episode.ToString().PadLeft(2, '0');
+                string episodeToText = result.EpisodeTo.HasValue ? "_" + seasonText + result.EpisodeTo.ToString().PadLeft(2, '0') : "";
 
-                return title;
+                result.Title = string.Format("{0} - Temporada {1} [{2}][Cap.{3}{4}][{5}]",
+                    name, seasonText, quality, episodeText, episodeToText, audioQuality);
             }
             else
             {
-                return title;
-            }
-        }
+                Match matchClassic = _titleClassicRegex.Match(title);
+                if (matchClassic.Success)
+                {
+                    isTv = true;
 
+                    result.Season = matchClassic.Groups[2].Success ? (int?)int.Parse(matchClassic.Groups[2].Value) : null;
+                    result.Episode = matchClassic.Groups[3].Success ? (int?)int.Parse(matchClassic.Groups[3].Value) : null;
+                    result.EpisodeTo = matchClassic.Groups[6].Success ? (int?)int.Parse(matchClassic.Groups[6].Value) : null;
+                    if (matchClassic.Groups[1].Success)
+                        quality = matchClassic.Groups[1].Value;
+                }
+
+                result.Title = title;
+            }
+
+            isTv |= !string.IsNullOrWhiteSpace(quality) && quality.ToLower().StartsWith("hdtv");
+
+            if (isTv.HasValue && isTv.Value)
+            {
+                if (!string.IsNullOrWhiteSpace(quality) && (quality.Contains("720") || quality.Contains("1080")))
+                    result.Category = new List<int> { TorznabCatType.TVHD.ID };
+                else
+                    result.Category = new List<int> { TorznabCatType.TV.ID };
+            }
+            else
+            {
+                result.Title = title;
+                result.Category = new List<int> { TorznabCatType.Movies.ID };
+            }
+
+            result.Size = size;
+            result.Link = new Uri(detailsUrl);
+            result.PublishDate = publishDate;
+            result.Seeders = 1;
+            result.Peers = 1;
+
+            return result;
+        }
     }
 }
