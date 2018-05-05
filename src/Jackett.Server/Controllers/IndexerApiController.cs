@@ -84,7 +84,7 @@ namespace Jackett.Server.Controllers
         [HttpPost]
         [Route("{indexerId?}/Config")]
         [TypeFilter(typeof(RequiresIndexer))]
-        public async Task UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
+        public async Task<IActionResult> UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
         {
             try
             {
@@ -95,7 +95,11 @@ namespace Jackett.Server.Controllers
                 var configurationResult = await CurrentIndexer.ApplyConfiguration(json);
 
                 if (configurationResult == IndexerConfigurationStatus.RequiresTesting)
+                {
                     await IndexerService.TestIndexer(CurrentIndexer.ID);
+                }
+
+                return new NoContentResult();
             }
             catch
             {
