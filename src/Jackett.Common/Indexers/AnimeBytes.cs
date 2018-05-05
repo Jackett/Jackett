@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
                                               TorznabCatType.AudioOther),
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataAnimeBytes())
+                configData: new ConfigurationDataAnimeBytes("Note about Passkey: This is not your login Password. Find the Passkey by logging into AnimeBytes with your browser"))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -139,6 +139,7 @@ namespace Jackett.Common.Indexers
                 cat = queryCats.First().ToString();
             }
 
+            queryCollection.Add("username", configData.Username.Value);
             queryCollection.Add("torrent_pass", configData.Passkey.Value);
             queryCollection.Add("type", searchType);
             queryCollection.Add("searchstr", searchTerm);
