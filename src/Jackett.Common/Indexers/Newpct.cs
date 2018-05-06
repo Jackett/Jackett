@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             bool rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
-            Uri siteLinkUri = new Uri(SiteLink);
+            Uri siteLinkUri = new Uri(configData.SiteLink.Value);
 
             if (rssMode)
             {
