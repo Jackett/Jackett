@@ -14,11 +14,18 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
     public class Newpct : BaseCachingWebIndexer
     {
+        enum ReleaseType
+        {
+            TV,
+            Movie,
+        }
+
         class NewpctRelease : ReleaseInfo
         {
             public int? Season;
@@ -38,13 +45,8 @@ namespace Jackett.Common.Indexers
 
         private string _dailyUrl = "/ultimas-descargas/pg/{0}";
         private string[] _seriesLetterUrls = new string[] { "/series/letter/{0}", "/series-hd/letter/{0}" };
+        private string[] _seriesVOLetterUrls = new string[] { "/series-vo/letter/{0}" };
         private string _seriesUrl = "{0}/pg/{1}";
-
-        private new ConfigurationData configData
-        {
-            get { return (ConfigurationData)base.configData; }
-            set { base.configData = value; }
-        }
 
         public Newpct(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "Newpct",
@@ -64,6 +66,8 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
+            var voItem = new BoolItem() { Name = "Include original versions in search results", Value = false };
+            configData.AddDynamic("IncludeVo", voItem);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -133,6 +137,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
+                //Only tv search supported. (newpct web search is useless)
                 bool isTvSearch = query.Categories == null || query.Categories.Length == 0 ||
                     query.Categories.Any(c => _allTvCategories.Contains(c));
                 if (isTvSearch)
@@ -157,23 +162,32 @@ namespace Jackett.Common.Indexers
                         }
                     }
 
+                    //Try to reuse cache
                     bool cacheFound = false;
                     lock (cache)
                     {
                         CleanCache();
                         var cachedResult = cache.FirstOrDefault(i => i.Query == seriesName.ToLower());
-                        if (cachedResult != null)
+                        if (cachedResult != null && cachedResult.Results != null)
                         {
+                            cacheFound = true;
                             newpctReleases = cachedResult.Results.Where(r => (r as NewpctRelease) != null).ToList();
-                            cacheFound = newpctReleases.Any();
+                            if (!newpctReleases.Any() && cachedResult.Results.Any())
+                                cacheFound = false;
                         }
                     }
 
                     if (!cacheFound)
                     {
+                        IEnumerable<string> lettersUrl;
+                        if (!((BoolItem)configData.GetDynamic("IncludeVo")).Value)
+                            lettersUrl = _seriesLetterUrls;
+                        else
+                            lettersUrl = _seriesLetterUrls.Concat(_seriesVOLetterUrls);
+
                         string seriesLetter = !char.IsDigit(seriesName[0]) ? seriesName[0].ToString() : "0-9";
                         //Search series url
-                        foreach (string urlFormat in _seriesLetterUrls)
+                        foreach (string urlFormat in lettersUrl)
                         {
                             Uri seriesListUrl = new Uri(siteLinkUri, string.Format(urlFormat, seriesLetter.ToLower()));
                             var results = await RequestStringWithCookies(seriesListUrl.AbsoluteUri);
@@ -199,12 +213,10 @@ namespace Jackett.Common.Indexers
                             }
                         }
 
-                        if (newpctReleases.Any())
+                        //Cache ALL episodes
+                        lock (cache)
                         {
-                            lock (cache)
-                            {
-                                cache.Add(new CachedQueryResult(seriesName.ToLower(), newpctReleases));
-                            }
+                            cache.Add(new CachedQueryResult(seriesName.ToLower(), newpctReleases));
                         }
                     }
 
@@ -212,17 +224,16 @@ namespace Jackett.Common.Indexers
                     releases.AddRange(newpctReleases.Where(r =>
                     {
                         NewpctRelease nr = r as NewpctRelease;
-                        return nr != null &&
-                        nr.Season.HasValue != season.HasValue || //Can't determine if same season
-                        nr.Season.HasValue && season.Value == nr.Season.Value && //Same season and ...
-                        (
-                            nr.Episode.HasValue != episode.HasValue || //Can't determine if same episode
-                            nr.Episode.HasValue &&
+                        return nr.Season.HasValue != season.HasValue || //Can't determine if same season
+                            nr.Season.HasValue && season.Value == nr.Season.Value && //Same season and ...
                             (
-                                nr.Episode.Value == episode.Value || //Same episode
-                                nr.EpisodeTo.HasValue && episode.Value >= nr.Episode.Value && episode.Value <= nr.EpisodeTo.Value //Episode in interval
-                            )
-                        );
+                                nr.Episode.HasValue != episode.HasValue || //Can't determine if same episode
+                                nr.Episode.HasValue &&
+                                (
+                                    nr.Episode.Value == episode.Value || //Same episode
+                                    nr.EpisodeTo.HasValue && episode.Value >= nr.Episode.Value && episode.Value <= nr.EpisodeTo.Value //Episode in interval
+                                )
+                            );
                     }));
                 }
             }
@@ -248,14 +259,21 @@ namespace Jackett.Common.Indexers
 
                     var span = row.QuerySelector("span");
                     var quality = span.ChildNodes[0].TextContent.Trim();
-                    var sizeText = span.ChildNodes[1].TextContent.Replace("Tamaño", "").Trim();
+                    ReleaseType releaseType = ReleaseTypeFromQuality(quality);
+                    var sizeText = span.ChildNodes[1].TextContent.Replace("Tama\u00F1o", "").Trim();
 
                     var div = row.QuerySelector("div");
                     var language = div.ChildNodes[1].TextContent.Trim();
 
-                    NewpctRelease newpctRelease = GetReleaseFromData(
+                    NewpctRelease newpctRelease;
+                    if (releaseType == ReleaseType.TV)
+                        newpctRelease = GetReleaseFromData(releaseType, 
                         string.Format("Serie {0} - {1} Calidad [{2}]", title, language, quality),
-                        detailsUrl, null, quality, language, ReleaseInfo.GetBytes(sizeText), DateTime.Now);
+                        detailsUrl, quality, language, ReleaseInfo.GetBytes(sizeText), DateTime.Now);
+                    else
+                        newpctRelease = GetReleaseFromData(releaseType,
+                        string.Format("{0} [{1}][{2}]", title, quality, language), 
+                        detailsUrl, quality, language, ReleaseInfo.GetBytes(sizeText), DateTime.Now);
 
                     releases.Add(newpctRelease);
                 }
@@ -280,7 +298,8 @@ namespace Jackett.Common.Indexers
                 var rows = doc.QuerySelectorAll(".pelilist li a");
                 foreach (var anchor in rows)
                 {
-                    if (anchor.GetAttribute("title").Trim().ToLower() == title.Trim().ToLower())
+                    var h2 = anchor.QuerySelector("h2");
+                    if (h2.TextContent.Trim().ToLower() == title.Trim().ToLower())
                         return anchor.GetAttribute("href");
                 }
             }
@@ -314,7 +333,7 @@ namespace Jackett.Common.Indexers
 
                     long size = ReleaseInfo.GetBytes(sizeText);
                     DateTime publishDate = DateTime.ParseExact(pubDateText, "dd-MM-yyyy", null);
-                    NewpctRelease newpctRelease = GetReleaseFromData(title, detailsUrl, true, null, null, size, publishDate);
+                    NewpctRelease newpctRelease = GetReleaseFromData(ReleaseType.TV, title, detailsUrl, null, null, size, publishDate);
 
                     releases.Add(newpctRelease);
                 }
@@ -327,7 +346,15 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        NewpctRelease GetReleaseFromData(string title, string detailsUrl, bool? isTv, string quality, string language, long size, DateTime publishDate)
+        ReleaseType ReleaseTypeFromQuality(string quality)
+        {
+            if (quality.Trim().ToLower().StartsWith("hdtv"))
+                return ReleaseType.TV;
+            else
+                return ReleaseType.Movie;
+        }
+
+        NewpctRelease GetReleaseFromData(ReleaseType releaseType, string title, string detailsUrl, string quality, string language, long size, DateTime publishDate)
         {
             NewpctRelease result = new NewpctRelease();
 
@@ -337,8 +364,6 @@ namespace Jackett.Common.Indexers
             Match match = _titleListRegex.Match(title);
             if (match.Success)
             {
-                isTv = true;
-
                 string name = match.Groups[1].Value.Trim(' ', '-');
                 result.Season = int.Parse(match.Groups[4].Success ? match.Groups[4].Value.Trim() : "1");
                 result.Episode = int.Parse(match.Groups[7].Value.Trim().PadLeft(2, '0'));
@@ -358,8 +383,6 @@ namespace Jackett.Common.Indexers
                 Match matchClassic = _titleClassicRegex.Match(title);
                 if (matchClassic.Success)
                 {
-                    isTv = true;
-
                     result.Season = matchClassic.Groups[2].Success ? (int?)int.Parse(matchClassic.Groups[2].Value) : null;
                     result.Episode = matchClassic.Groups[3].Success ? (int?)int.Parse(matchClassic.Groups[3].Value) : null;
                     result.EpisodeTo = matchClassic.Groups[6].Success ? (int?)int.Parse(matchClassic.Groups[6].Value) : null;
@@ -370,9 +393,7 @@ namespace Jackett.Common.Indexers
                 result.Title = title;
             }
 
-            isTv |= !string.IsNullOrWhiteSpace(quality) && quality.ToLower().StartsWith("hdtv");
-
-            if (isTv.HasValue && isTv.Value)
+            if (releaseType == ReleaseType.TV)
             {
                 if (!string.IsNullOrWhiteSpace(quality) && (quality.Contains("720") || quality.Contains("1080")))
                     result.Category = new List<int> { TorznabCatType.TVHD.ID };
