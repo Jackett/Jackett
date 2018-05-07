@@ -240,7 +240,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Synthesiz3r
  * Tasmanit
  * TBPlus
- * TehConnection
  * TenYardTracker
  * The Empire
  * The Geeks
