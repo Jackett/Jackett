@@ -7,6 +7,7 @@
   encoding: UTF-8
   links:
     - https://www.nextorrent.site/
+    # don't forget to check the download selector which uses a case sensitive portion of the SiteLink ;-)
   legacylinks:
     - http://www.nextorrent.site/
     - http://www.nextorrent.bz/
@@ -32,7 +33,7 @@
   settings: []
 
   download:
-    selector: a[href^="/_get/NexTorrent.pro-"]
+    selector: a[href^="/_get/www.Nextorrent.Site-"] 
 
   search:
     paths:
@@ -83,11 +84,11 @@
           - name: dateparse
             args: "2006-01-02T15:04:05-07:00"
       seeders:
-      # there is no seeders on the primary search results page. defaulting to 0
-        text: 0
+      # there is no seeders on the primary search results page. defaulting to 999
+        text: 999
       leechers:
-      # there is no leechers on the primary search results page. defaulting to 0
-        text: 0
+      # there is no leechers on the primary search results page. defaulting to 999
+        text: 999
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
