@@ -68,8 +68,8 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            if (configData.Passkey.Value.Length != 32)
-                throw new Exception("invalid passkey configured: expected length: 32, got " + configData.Passkey.Value.Length.ToString());
+            if (configData.Passkey.Value.Length != 32 && configData.Passkey.Value.Length != 48)
+                throw new Exception("invalid passkey configured: expected length: 32 or 48, got " + configData.Passkey.Value.Length.ToString());
 
             var results = await PerformQuery(new TorznabQuery());
             if (results.Count() == 0)
