@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
                                               TorznabCatType.AudioOther),
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataAnimeBytes("Note about Passkey: This is not your login Password. Find the Passkey by logging into AnimeBytes with your browser"))
+                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
