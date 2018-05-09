@@ -62,40 +62,35 @@ namespace Jackett.Common.Indexers
             TorznabCaps.Categories.Clear();
 
             // Movies
-            AddCategoryMapping("5a64b8934a23a8d6188b4569", TorznabCatType.MoviesHD, "Movies 1080p");
-            AddCategoryMapping("5a64b8934a23a8d6188b456b", TorznabCatType.MoviesHD, "Movies 720p");
-            AddCategoryMapping("5a64b8934a23a8d6188b456d", TorznabCatType.MoviesHD, "Movies HDTV");
-            AddCategoryMapping("5a64b8934a23a8d6188b456f", TorznabCatType.MoviesBluRay, "Movies Bluray");
-            AddCategoryMapping("5a64b8934a23a8d6188b4571", TorznabCatType.MoviesBluRay, "Movies Bluray Remux");
-            AddCategoryMapping("5a64b8934a23a8d6188b4573", TorznabCatType.Movies3D, "Movies Bluray 3D");
-            AddCategoryMapping("5a64b8934a23a8d6188b4575", TorznabCatType.MoviesUHD, "Movies Bluray 4K");
-            AddCategoryMapping("5a64b8934a23a8d6188b4577", TorznabCatType.MoviesUHD, "Movies Bluray Remux 4K");
-            AddCategoryMapping("5a64b8934a23a8d6188b4579", TorznabCatType.MoviesWEBDL, "Movies WEB-DL");
+            AddCategoryMapping("565af82b1fd35761568b4572", TorznabCatType.MoviesHD);        // 1080P
+            AddCategoryMapping("565af82b1fd35761568b4574", TorznabCatType.MoviesHD);        // 720P
+            AddCategoryMapping("565af82b1fd35761568b4576", TorznabCatType.MoviesHD);        // HDTV
+            AddCategoryMapping("565af82b1fd35761568b4578", TorznabCatType.MoviesBluRay);    // Bluray
+            AddCategoryMapping("565af82b1fd35761568b457a", TorznabCatType.MoviesBluRay);    // Bluray Remux
+            AddCategoryMapping("565af82b1fd35761568b457c", TorznabCatType.Movies3D);        // Bluray 3D
 
             // TV
-            AddCategoryMapping("59eb66144a23a8ea4c8b456a", TorznabCatType.TVHD, "TV 1080P");
-            AddCategoryMapping("59eb66144a23a8ea4c8b456c", TorznabCatType.TVHD, "TV 720P"); 
-            AddCategoryMapping("59eb66144a23a8ea4c8b456e", TorznabCatType.TVHD, "TV HDTV");
-            AddCategoryMapping("59eb66144a23a8ea4c8b4570", TorznabCatType.TVHD, "TV Bluray");
-            AddCategoryMapping("59eb66144a23a8ea4c8b4572", TorznabCatType.TVHD, "TV Bluray Remux");
-            AddCategoryMapping("59eb66144a23a8ea4c8b4574", TorznabCatType.TVHD, "TV Bluray 3D");
+            AddCategoryMapping("565af82d1fd35761568b4587", TorznabCatType.TVHD);            // 1080P
+            AddCategoryMapping("565af82d1fd35761568b4589", TorznabCatType.TVHD);            // 720P
+            AddCategoryMapping("565af82d1fd35761568b458b", TorznabCatType.TVHD);            // HDTV
+            AddCategoryMapping("565af82d1fd35761568b458d", TorznabCatType.TVHD);            // Bluray
+            AddCategoryMapping("565af82d1fd35761568b458f", TorznabCatType.TVHD);            // Bluray Remux
+            AddCategoryMapping("565af82d1fd35761568b4591", TorznabCatType.TVHD);            // Bluray 3D
 
             // Anime
-            AddCategoryMapping("59e73b8b4a23a8594c8b456a", TorznabCatType.TVAnime, "Anime 1080P");
-            AddCategoryMapping("59e73b8b4a23a8594c8b456c", TorznabCatType.TVAnime, "Anime 720P");
-            AddCategoryMapping("59e73b8b4a23a8594c8b456e", TorznabCatType.TVAnime, "Anime HDTV");
-            AddCategoryMapping("59e73b8b4a23a8594c8b4570", TorznabCatType.TVAnime, "Anime Bluray");
-            AddCategoryMapping("59e73b8b4a23a8594c8b4572", TorznabCatType.TVAnime, "Anime Bluray Remux");
-            AddCategoryMapping("59e73b8b4a23a8594c8b4574", TorznabCatType.TVAnime, "Anime Bluray 3D");
+            AddCategoryMapping("565af82d1fd35761568b459c", TorznabCatType.TVAnime);         // 1080P
+            AddCategoryMapping("565af82d1fd35761568b459e", TorznabCatType.TVAnime);         // 720P
+            AddCategoryMapping("565af82d1fd35761568b45a0", TorznabCatType.TVAnime);         // HDTV
+            AddCategoryMapping("565af82d1fd35761568b45a2", TorznabCatType.TVAnime);         // Bluray
+            AddCategoryMapping("565af82d1fd35761568b45a4", TorznabCatType.TVAnime);         // Bluray Remux
+            AddCategoryMapping("565af82d1fd35761568b45a6", TorznabCatType.TVAnime);         // Bluray 3D
 
             // Other
-            AddCategoryMapping("59f0c5ed4a23a8617d8b456a", TorznabCatType.PC, "Other Apps");
-            AddCategoryMapping("59f0c5ed4a23a8617d8b456c", TorznabCatType.AudioVideo, "Other Clips");
-            AddCategoryMapping("59f0c5ed4a23a8617d8b456e", TorznabCatType.AudioOther, "Other Audios Tracks of Movies/TV/Anime");
-            AddCategoryMapping("59f0c5ed4a23a8617d8b4570", TorznabCatType.TVDocumentary, "Other Documentary");
-            AddCategoryMapping("59f0c5ed4a23a8617d8b4572", TorznabCatType.MoviesBluRay, "Other Bluray (ALL)");
-            AddCategoryMapping("59f0c5ed4a23a8617d8b4574", TorznabCatType.Other, "Other 1080p");
-            AddCategoryMapping("59f0c5ed4a23a8617d8b4576", TorznabCatType.Other, "Other 720p");
+            AddCategoryMapping("565af82d1fd35761568b45af", TorznabCatType.PC);              // Apps
+            AddCategoryMapping("565af82d1fd35761568b45b1", TorznabCatType.AudioVideo);      // Clips
+            AddCategoryMapping("565af82d1fd35761568b45b3", TorznabCatType.AudioOther);      // Audios Tracks of Movies/TV/Anime
+            AddCategoryMapping("565af82d1fd35761568b45b5", TorznabCatType.TVDocumentary);   // Documentary
+            AddCategoryMapping("565af82d1fd35761568b45b7", TorznabCatType.MoviesBluRay);    // Bluray (ALL)
         }
 
         /// <summary>
@@ -734,50 +729,45 @@ namespace Jackett.Common.Indexers
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
             // Movies
-            dictionary.Add("5a64b8934a23a8d6188b456a", "5a64b8934a23a8d6188b4569");         // 1080P
-            dictionary.Add("5a64b8934a23a8d6188b456c", "5a64b8934a23a8d6188b456b");         // 720P
-            dictionary.Add("5a64b8934a23a8d6188b456e", "5a64b8934a23a8d6188b456d");         // HDTV
-            dictionary.Add("5a64b8934a23a8d6188b4570", "5a64b8934a23a8d6188b456f");         // Bluray
-            dictionary.Add("5a64b8934a23a8d6188b4572", "5a64b8934a23a8d6188b4571");         // Bluray Remux
-            dictionary.Add("5a64b8934a23a8d6188b4574", "5a64b8934a23a8d6188b4573");         // Bluray 3D
-            dictionary.Add("5a64b8934a23a8d6188b4576", "5a64b8934a23a8d6188b4575");         // Bluray 4K
-            dictionary.Add("5a64b8934a23a8d6188b4578", "5a64b8934a23a8d6188b4577");         // Bluray Remux 4K
-            dictionary.Add("5a64b8934a23a8d6188b457a", "5a64b8934a23a8d6188b4579");         // WEBDL
+            dictionary.Add("565af82b1fd35761568b4573", "565af82b1fd35761568b4572");         // 1080P
+            dictionary.Add("565af82b1fd35761568b4575", "565af82b1fd35761568b4574");         // 720P
+            dictionary.Add("565af82b1fd35761568b4577", "565af82b1fd35761568b4576");         // HDTV
+            dictionary.Add("565af82b1fd35761568b4579", "565af82b1fd35761568b4578");         // Bluray
+            dictionary.Add("565af82b1fd35761568b457b", "565af82b1fd35761568b457a");         // Bluray Remux
+            dictionary.Add("565af82b1fd35761568b457d", "565af82b1fd35761568b457c");         // Bluray 3D
 
             // TV
-            dictionary.Add("59eb66144a23a8ea4c8b456b", "59eb66144a23a8ea4c8b456a");         // 1080P
-            dictionary.Add("59eb66144a23a8ea4c8b456d", "59eb66144a23a8ea4c8b456c");         // 720P
-            dictionary.Add("59eb66144a23a8ea4c8b456f", "59eb66144a23a8ea4c8b456e");         // HDTV
-            dictionary.Add("59eb66144a23a8ea4c8b4571", "59eb66144a23a8ea4c8b4570");         // Bluray
-            dictionary.Add("59eb66144a23a8ea4c8b4573", "59eb66144a23a8ea4c8b4572");         // Bluray Remux
-            dictionary.Add("59eb66144a23a8ea4c8b4575", "59eb66144a23a8ea4c8b4574");         // Bluray 3D
+            dictionary.Add("565af82d1fd35761568b4588", "565af82d1fd35761568b4587");         // 1080P
+            dictionary.Add("565af82d1fd35761568b458a", "565af82d1fd35761568b4589");         // 720P
+            dictionary.Add("565af82d1fd35761568b458c", "565af82d1fd35761568b458b");         // HDTV
+            dictionary.Add("565af82d1fd35761568b458e", "565af82d1fd35761568b458d");         // Bluray
+            dictionary.Add("565af82d1fd35761568b4590", "565af82d1fd35761568b458f");         // Bluray Remux
+            dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b4591");         // Bluray 3D
 
             // Anime
-            dictionary.Add("59e73b8b4a23a8594c8b456b", "59e73b8b4a23a8594c8b456a");         // 1080P
-            dictionary.Add("59e73b8b4a23a8594c8b456d", "59e73b8b4a23a8594c8b456c");         // 720P
-            dictionary.Add("59e73b8b4a23a8594c8b456f", "59e73b8b4a23a8594c8b456e");         // HDTV
-            dictionary.Add("59e73b8b4a23a8594c8b4571", "59e73b8b4a23a8594c8b4570");         // Bluray
-            dictionary.Add("59e73b8b4a23a8594c8b4573", "59e73b8b4a23a8594c8b4572");         // Bluray Remux
+            dictionary.Add("565af82d1fd35761568b459d", "565af82d1fd35761568b459c");         // 1080P
+            dictionary.Add("565af82d1fd35761568b459f", "565af82d1fd35761568b459e");         // 720P
+            dictionary.Add("565af82d1fd35761568b45a1", "565af82d1fd35761568b45a0");         // HDTV
+            dictionary.Add("565af82d1fd35761568b45a3", "565af82d1fd35761568b45a2");         // Bluray
+            dictionary.Add("565af82d1fd35761568b45a5", "565af82d1fd35761568b45a4");         // Bluray Remux
             // BUG ~~ Media ID for Anime BR 3D is same as TV BR 3D ~~
-            //dictionary.Add("59e73b8b4a23a8594c8b4575", "59e73b8b4a23a8594c8b4574");       // Bluray 3D
+            //dictionary.Add("565af82d1fd35761568b4592", "565af82d1fd35761568b45a6");       // Bluray 3D
 
             // Other
-            dictionary.Add("59f0c5ed4a23a8617d8b456b", "59f0c5ed4a23a8617d8b456a");         // Apps
-            dictionary.Add("59f0c5ed4a23a8617d8b456d", "59f0c5ed4a23a8617d8b456c");         // Clips
-            dictionary.Add("59f0c5ed4a23a8617d8b456f", "59f0c5ed4a23a8617d8b456e");         // Audios Tracks of Movies/TV/Anime
-            dictionary.Add("59f0c5ed4a23a8617d8b4571", "59f0c5ed4a23a8617d8b4570");         // Documentary
-            dictionary.Add("59f0c5ed4a23a8617d8b4573", "59f0c5ed4a23a8617d8b4572");         // Bluray (ALL)
-            dictionary.Add("59f0c5ed4a23a8617d8b4575", "59f0c5ed4a23a8617d8b4574");         // 1080p
-            dictionary.Add("59f0c5ed4a23a8617d8b4577", "59f0c5ed4a23a8617d8b4576");         // 720p
+            dictionary.Add("565af82d1fd35761568b45b0", "565af82d1fd35761568b45af");         // Apps
+            dictionary.Add("565af82d1fd35761568b45b2", "565af82d1fd35761568b45b1");         // Clips
+            dictionary.Add("565af82d1fd35761568b45b4", "565af82d1fd35761568b45b3");         // Audios Tracks of Movies/TV/Anime
+            dictionary.Add("565af82d1fd35761568b45b6", "565af82d1fd35761568b45b5");         // Documentary
+            dictionary.Add("565af82d1fd35761568b45b8", "565af82d1fd35761568b45b7");         // Bluray (ALL)
 
             // Check if we know this media ID
             if (dictionary.ContainsKey(media))
             {
                 // Due to a bug on tracker side, check for a specific id/name as image is same for TV/Anime BR 3D
-                if (media == "59eb66144a23a8ea4c8b4574" && name == "Animations - Bluray 3D")
+                if (media == "565af82d1fd35761568b4592" && name == "Animations - Bluray 3D")
                 {
                     // If it's an Anime BR 3D
-                    return "59e73b8b4a23a8594c8b4574";
+                    return "565af82d1fd35761568b45a6";
                 }
                 else
                 {
