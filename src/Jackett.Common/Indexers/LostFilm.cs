@@ -388,7 +388,7 @@ namespace Jackett.Common.Indexers
                     var comments = new Uri(url);
 
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
-                    dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
+                    dateString = TrimString(dateString, "ru: ", " г."); // '... Дата выхода ru: 09 марта 2012 г. ...' -> '09 марта 2012'
                     var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
 
                     var urlDetails = new TrackerUrlDetails(playButton);
