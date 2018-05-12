@@ -33,6 +33,8 @@ namespace Jackett.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                         options =>
@@ -80,6 +82,8 @@ namespace Jackett.Server
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             Initialisation.Initialize();
+
+            app.UseResponseCompression();
 
             app.UseDeveloperExceptionPage();
 
