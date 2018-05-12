@@ -2,6 +2,7 @@
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Route("dl/{indexerID}")]
     public class DownloadController : Controller

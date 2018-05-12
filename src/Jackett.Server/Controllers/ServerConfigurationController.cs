@@ -12,7 +12,6 @@ using System.Linq;
 namespace Jackett.Server.Controllers
 {
     [Route("api/v2.0/server/[action]")]
-    //[JackettAuthorized]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class ServerConfigurationController : Controller
     {
