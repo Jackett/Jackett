@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
                                               TorznabCatType.AudioOther),
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value."))
+                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
