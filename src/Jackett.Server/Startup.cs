@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
@@ -55,7 +56,8 @@ namespace Jackett.Server
                     .AddJsonOptions(options =>
                     {
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Web app uses Pascal Case JSON
-                    });
+                    })
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             RuntimeSettings runtimeSettings = new RuntimeSettings();
             Configuration.GetSection("RuntimeSettings").Bind(runtimeSettings);

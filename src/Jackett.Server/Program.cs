@@ -41,7 +41,7 @@ namespace Jackett.Server
 
             Configuration = builder.Build();
 
-            BuildWebHost().Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static Dictionary<string, string> GetValues(object obj)
@@ -52,10 +52,9 @@ namespace Jackett.Server
                     .ToDictionary(p => "RuntimeSettings:" + p.Name, p => p.GetValue(obj) == null ? null : p.GetValue(obj).ToString());
         }
 
-        public static IWebHost BuildWebHost() =>
-            WebHost.CreateDefaultBuilder()
-            .UseConfiguration(Configuration)
-                .UseStartup<Startup>()
-                .Build();
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(Configuration)
+                .UseStartup<Startup>();
     }
 }
