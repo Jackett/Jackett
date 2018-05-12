@@ -5,6 +5,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.DTO;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
@@ -155,7 +156,7 @@ namespace Jackett.Server.Controllers
         TorznabQuery CurrentQuery { get; set; }
     }
 
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Route("api/v2.0/indexers/{indexerId}/results")]
     [TypeFilter(typeof(RequiresApiKey))]
@@ -166,6 +167,9 @@ namespace Jackett.Server.Controllers
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
         public TorznabQuery CurrentQuery { get; set; }
+        private Logger logger;
+        private IServerService serverService;
+        private ICacheService cacheService;
 
         public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {
@@ -481,8 +485,5 @@ namespace Jackett.Server.Controllers
             }
         }
 
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
     }
 }

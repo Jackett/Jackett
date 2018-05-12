@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Net.Http.Headers;
+using System;
 
 namespace Jackett.Server.Middleware
 {
@@ -8,9 +9,10 @@ namespace Jackett.Server.Middleware
     {
         public static void RedirectToDashboard(RewriteContext context)
         {
-            var request = context.HttpContext.Request;
+            HttpRequest request = context.HttpContext.Request;
 
-            if (request.Path == null || string.IsNullOrWhiteSpace(request.Path.ToString()) || request.Path.ToString() == "/")
+            if (request.Path == null || string.IsNullOrWhiteSpace(request.Path.ToString()) || request.Path.ToString() == "/" 
+                || request.Path.ToString().Equals("/index.html", StringComparison.OrdinalIgnoreCase))
             {
                 // 301 is the status code of permanent redirect
                 var redir = Initialisation.ServerService.BasePath() + "/UI/Dashboard";

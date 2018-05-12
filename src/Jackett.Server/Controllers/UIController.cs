@@ -1,18 +1,19 @@
 ﻿using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MimeMapping;
 using NLog;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
     [Route("UI/[action]")]
-    //[JackettAuthorized]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class WebUIController : Controller
     {
@@ -29,66 +30,76 @@ namespace Jackett.Server.Controllers
             logger = l;
         }
 
-        private HttpResponseMessage GetFile(string path)
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login()
         {
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
-            var mappedPath = Path.Combine(config.GetContentFolder(), path);
-            var stream = new FileStream(mappedPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeUtility.GetMimeMapping(mappedPath));
+            if (string.IsNullOrEmpty(serverConfig.AdminPassword))
+            {
+                await MakeUserAuthenticated();
+            }
 
-            return result;
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("Dashboard");
+            }
+
+            return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html"); ;
         }
 
         [HttpGet]
-        //[AllowAnonymous]
-        public IActionResult Logout()
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
         {
-            var ctx = Request.HttpContext;
-            //TODO
-            //var authManager = ctx.Authentication;
-            //authManager.SignOut("ApplicationCookie");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Redirect("Login");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Dashboard([FromForm] string password)
+        {
+            if (password != null && securityService.HashPassword(password) == serverConfig.AdminPassword)
+            {
+                await MakeUserAuthenticated();
+            }
+
             return Redirect("Dashboard");
         }
 
         [HttpGet]
-        [HttpPost]
-        //[AllowAnonymous]
         public IActionResult Dashboard()
         {
-            var result = new PhysicalFileResult(config.GetContentFolder() + "/index.html", "text/html");
-            return result;
+            bool logout = HttpContext.Request.Query.Where(x => String.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
+                                                            && String.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
 
+            if (logout)
+            {
+                return Redirect("Logout");
+            }
 
-            //if (Request.Path != null && Request.Path.ToString().Contains("logout"))
-            //{
-            //    var file = GetFile("login.html");
-            //    securityService.Logout(file);
-            //    return file;
-            //}
+            return new PhysicalFileResult(config.GetContentFolder() + "/index.html", "text/html");
+        }
 
-            //TODO
+        //TODO: Move this to security service once off Mono
+        private async Task MakeUserAuthenticated()
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, "Jackett", ClaimValueTypes.String)
+            };
 
-            //if (securityService.CheckAuthorised(Request))
-            //{
-            //return GetFile("index.html");
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            //}
-            //else
-            //{
-            //    var formData = await Request.ReadFormAsync();
-
-            //    if (formData != null && securityService.HashPassword(formData["password"]) == serverConfig.AdminPassword)
-            //    {
-            //        var file = GetFile("index.html");
-            //        securityService.Login(file);
-            //        return file;
-            //    }
-            //    else
-            //    {
-            //        return GetFile("login.html");
-            //    }
-            //}
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(20),
+                    IsPersistent = false,
+                    AllowRefresh = true
+                });
         }
     }
 }

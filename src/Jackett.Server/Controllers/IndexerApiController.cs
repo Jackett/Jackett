@@ -54,7 +54,6 @@ namespace Jackett.Server.Controllers
     }
 
     [Route("api/v2.0/indexers")]
-    //[JackettAuthorized]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class IndexerApiController : Controller, IIndexerController
     {
