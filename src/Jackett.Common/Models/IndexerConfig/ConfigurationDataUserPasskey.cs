@@ -4,7 +4,7 @@ namespace Jackett.Common.Models.IndexerConfig
     {
         public StringItem Username { get; private set; }
         public StringItem Passkey { get; private set; }
-        public DisplayItem Instructions { get; private set; }
+        public DisplayItem Instructions { get; protected set; }
 
         public ConfigurationDataUserPasskey(string instructionMessageOptional = null)
         {

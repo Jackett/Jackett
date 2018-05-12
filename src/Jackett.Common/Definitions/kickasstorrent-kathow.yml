@@ -38,6 +38,7 @@
       selector: table[class="data"] tr[id]
     fields:
       category:
+        optional: true
         selector: span[id^="cat_"] > strong > a
         attribute: href
         filters:

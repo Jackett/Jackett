@@ -61,9 +61,13 @@
           - name: re_replace
             args: ["\\/", " "]
           - name: re_replace
+            args: ["S(\\d{1,2}) E(\\d{1,2})", "S$1E$2"]
+          - name: re_replace
             args: ["\\(", ""]
           - name: re_replace
             args: ["\\)", ""]
+          - name: re_replace
+            args: ["20[0-2][0-9] [0-9][0-9]", ""]
           - name: re_replace
             args: ["20[0-2][0-9]", ""]
       details:
