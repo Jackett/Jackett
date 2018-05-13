@@ -38,16 +38,15 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+          
   login:
-    path: /login-page
-    method: form
-    form: form[action^="/login"]
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-      persistent_login: "1"
-    error:
-      - selector: div.error
+      cookie: "{{ .Config.cookie }}"
     test:
       path: /torrents
 
