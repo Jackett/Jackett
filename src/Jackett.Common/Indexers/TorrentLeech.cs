@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Common.Models;
@@ -177,7 +178,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            searchString = searchString.Replace('-', ' '); // remove dashes as they exclude search strings
+            searchString = Regex.Replace(searchString, @"(^|\s)-", " "); // remove dashes at the beginning of keywords as they exclude search strings (see issue #3096)
             var searchUrl = SearchUrl;
 
             if (!string.IsNullOrWhiteSpace(searchString))
