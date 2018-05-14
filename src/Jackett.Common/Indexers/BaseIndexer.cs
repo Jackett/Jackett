@@ -242,6 +242,10 @@ namespace Jackett.Common.Indexers
                     return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
                 results = FilterResults(query, results);
+                if (query.Limit > 0)
+                {
+                    results = results.Take(query.Limit);
+                }
                 results = results.Select(r =>
                 {
                     r.Origin = this;
