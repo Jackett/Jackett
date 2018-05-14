@@ -30,7 +30,8 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: login.php
@@ -42,34 +43,37 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: browse.php
+      path: t
 
   search:
     paths:
-      - path: browse.php
+      - path: t
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{range .Categories}}{{.}}=&{{end}}"
+      q: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
     rows:
-      selector: table#torrentsTable > tbody > tr.torrentsTableTR
+      selector: table#torrentTable > tbody > tr:has(td.torrentNameInfo)
     fields:
       download:
-        selector: a[href^="download.php/"]
+        selector: a[href^="/download.php/"]
         attribute: href
       title:
-        selector: a.nameLink
+        selector: a[href^="/details.php?id="]
       details:
-        selector: a.nameLink
+        selector: a[href^="/details.php?id="]
         attribute: href
       category:
-        selector: a[href^="browse.php?cat="]
+        selector: a[href^="?"]
         attribute: href
         filters:
-          - name: querystring
-            args: cat
+          - name: replace
+            args: ["?", ""]
       date:
-        selector: div.uploaded
+        selector: td.torrentNameInfo > div
+        filters:
+          - name: split
+            args: ["|", -1]
       seeders:
         selector: td:nth-last-child(2)
       leechers:

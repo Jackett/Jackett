@@ -38,6 +38,7 @@
       selector: table[class="data"] tr[id]
     fields:
       category:
+        optional: true
         selector: span[id^="cat_"] > strong > a
         attribute: href
         filters:
@@ -60,6 +61,8 @@
         filters:
           - name: replace
             args: ["N/A", "0 Bytes"]
+          - name: re_replace # replace all but last dot (They use dots as decimal and thousands separators)
+            args: ["[.](?=.*[.])", ""]
       date:
         selector: td:nth-child(3)
       seeders:
