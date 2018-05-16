@@ -93,7 +93,7 @@ namespace Jackett.Common.Utils.Clients
         public void CreateClient()
         {
             clearanceHandlr = new ClearanceHandler();
-            clearanceHandlr.MaxRetries = 10;
+            clearanceHandlr.MaxRetries = 30;
             clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,

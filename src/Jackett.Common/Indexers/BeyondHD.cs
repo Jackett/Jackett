@@ -43,45 +43,46 @@ namespace Jackett.Common.Indexers
 
             configData.DisplayText.Value = "Go to the general tab of your BeyondHD user profile and create/copy the Login Link.";
 
-            AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
-            AddMultiCategoryMapping(TorznabCatType.Movies3D,
-                71,  // Movie / 3D
-                83 // FraMeSToR 3D
-            );
-            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
-                77, // Movie / 1080p/i
-                94, // Movie / 4K
-                78, // Movie / 720p
-                54, // Movie / MP4
-                17, // Movie / Remux
-                50, // Internal / FraMeSToR 1080p
-                75, // Internal / FraMeSToR 720p
-                49, // Internal / FraMeSToR REMUX
-                101, // Internal / FraMeSToR 4K REMUX
-                61, // Internal / HDX REMUX
-                86, // Internal / SC4R
-                95, // Nightripper 1080p
-                96, // Nightripper 720p
-                98 // Nightripper MicroHD
-            );
+            AddCategoryMapping(37, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
+            AddCategoryMapping(71, TorznabCatType.Movies3D, "Movie / 3D");
+            AddCategoryMapping(83, TorznabCatType.Movies3D, "FraMeSToR 3D");
 
-            AddMultiCategoryMapping(TorznabCatType.TVHD,
-                40, // TV Show / Blu-ray
-                44, // TV Show / Encodes
-                48, // TV Show / HDTV
-                89, // TV Show / Packs
-                46, // TV Show / Remux
-                45, // TV Show / WEB-DL
-                97 //  Nightripper TV Show Encodes
-            );
+            AddCategoryMapping(77, TorznabCatType.MoviesHD, "Movie / 1080p/i");
+            AddCategoryMapping(102, TorznabCatType.MoviesUHD, "Movie / 4K Disk");
+            AddCategoryMapping(94, TorznabCatType.MoviesUHD, "Movie / 4K Other");
+            AddCategoryMapping(103, TorznabCatType.MoviesUHD, "Movie / 4K Remux");
+            AddCategoryMapping(78, TorznabCatType.MoviesHD, "Movie / 720p");
+            AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movie / MP4");
+            AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movie / Remux");
+            AddCategoryMapping(38, TorznabCatType.MoviesHD, "Movie / WEB-DL");
+            AddCategoryMapping(106, TorznabCatType.MoviesHD, "Internal / BHDStudio 1080p");
+            AddCategoryMapping(105, TorznabCatType.MoviesHD, "Internal / BHDStudio 720p");
+            AddCategoryMapping(50, TorznabCatType.MoviesHD, "Internal / FraMeSToR 1080p");
+            AddCategoryMapping(75, TorznabCatType.MoviesHD, "Internal / FraMeSToR 720p");
+            AddCategoryMapping(49, TorznabCatType.MoviesHD, "Internal / FraMeSToR REMUX");
+            AddCategoryMapping(101, TorznabCatType.MoviesHD, "Internal / FraMeSToR 4K REMUX");
+            AddCategoryMapping(61, TorznabCatType.MoviesHD, "Internal / HDX REMUX");
+            AddCategoryMapping(86, TorznabCatType.MoviesHD, "Internal / SC4R");
+            AddCategoryMapping(95, TorznabCatType.MoviesHD, "Nightripper 1080p");
+            AddCategoryMapping(96, TorznabCatType.MoviesHD, "Nightripper 720p");
+            AddCategoryMapping(98, TorznabCatType.MoviesHD, "Nightripper MicroHD");
 
-            AddCategoryMapping(36, TorznabCatType.AudioLossless); // Music / Lossless
-            AddCategoryMapping(69, TorznabCatType.AudioMP3); // Music / MP3
-            AddMultiCategoryMapping(TorznabCatType.AudioVideo,
-                55, // Music / 1080p/i
-                56, // Music / 720p
-                42 // Music / Blu-ray
-            );
+            AddCategoryMapping(104, TorznabCatType.TVUHD, "TV Show / 4K");
+            AddCategoryMapping(40, TorznabCatType.TVHD, "TV Show / Blu-ray");
+            AddCategoryMapping(44, TorznabCatType.TVHD, "TV Show / Encodes");
+            AddCategoryMapping(48, TorznabCatType.TVHD, "TV Show / HDTV");
+            AddCategoryMapping(89, TorznabCatType.TVHD, "TV Show / Packs");
+            AddCategoryMapping(46, TorznabCatType.TVHD, "TV Show / Remux");
+            AddCategoryMapping(99, TorznabCatType.TVHD, "TV Show / Sports");
+            AddCategoryMapping(100, TorznabCatType.TVHD, "TV Show / Sports / WEB-DL");
+            AddCategoryMapping(45, TorznabCatType.TVHD, "TV Show / WEB-DL");
+            AddCategoryMapping(97, TorznabCatType.TVHD, "Nightripper TV Show Encodes");
+
+            AddCategoryMapping(36, TorznabCatType.AudioLossless, "Music / Lossless");
+            AddCategoryMapping(69, TorznabCatType.AudioMP3, "Music / MP3");
+            AddCategoryMapping(55, TorznabCatType.AudioVideo, "Music / 1080p/i");
+            AddCategoryMapping(56, TorznabCatType.AudioVideo, "Music / 720p");
+            AddCategoryMapping(42, TorznabCatType.AudioVideo, "Music / Blu-ray");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

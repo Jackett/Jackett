@@ -43,6 +43,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LimeTorrents
  * MagnetDL
  * NextTorrent
+ * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
@@ -124,6 +125,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BroadcastTheNet
  * BrokenStones
  * BTNext
+ * BTWorld
  * Carpathians
  * CCFBits
  * CGPeers
@@ -207,7 +209,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * notwhat.cd
  * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
- * PassThePopcorn  [![(invite needed)][inviteneeded]](#)
+ * PassThePopcorn
  * PirateTheNet
  * PiXELHD
  * PolishSource
@@ -220,6 +222,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
  * RevolutionTT
+ * RGU
  * RoDVD
  * SceneFZ
  * SceneReactor
@@ -239,7 +242,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Synthesiz3r
  * Tasmanit
  * TBPlus
- * TehConnection
  * TenYardTracker
  * The Empire
  * The Geeks

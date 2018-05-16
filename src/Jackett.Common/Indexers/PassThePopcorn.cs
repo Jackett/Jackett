@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -38,7 +40,7 @@ namespace Jackett.Common.Indexers
                 p: ps,
                 configData: new ConfigurationDataBasicLoginWithFilterAndPasskey(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
-                                                                        <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code>"))
+                                                                        <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -98,19 +100,28 @@ namespace Jackett.Common.Indexers
             bool configGoldenPopcornOnly = configData.FilterString.Value.ToLowerInvariant().Contains("goldenpopcorn");
             bool configSceneOnly = configData.FilterString.Value.ToLowerInvariant().Contains("scene");
             bool configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
-            string movieListSearchUrl;
+            bool configFreeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("free");
+
+
+            string movieListSearchUrl = SearchUrl;
+            var queryCollection = new NameValueCollection();
+            queryCollection.Add("json", "noredirect");
 
             if (!string.IsNullOrEmpty(query.ImdbID))
             {
-                movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, WebUtility.UrlEncode(query.ImdbID));
+                queryCollection.Add("searchstr", query.ImdbID);
             }
             else if (!string.IsNullOrEmpty(query.GetQueryString()))
             {
-                movieListSearchUrl = string.Format("{0}?json=noredirect&searchstr={1}", SearchUrl, WebUtility.UrlEncode(query.GetQueryString()));
+                queryCollection.Add("searchstr", query.GetQueryString());
             }
-            else
+
+            if(configFreeOnly)
+                queryCollection.Add("freetorrent", "1");
+
+            if (queryCollection.Count > 0)
             {
-                movieListSearchUrl = string.Format("{0}?json=noredirect", SearchUrl);
+                movieListSearchUrl += "?" + queryCollection.GetQueryString();
             }
 
             var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl);

@@ -205,6 +205,7 @@ namespace Jackett.Updater
                 "Definitions/czteam.yml",
                 "Definitions/rockhardlossless.yml",
                 "Definitions/oxtorrent.yml",
+                "Definitions/tehconnection.yml",
             };
 
             foreach (var oldFIle in oldFiles)

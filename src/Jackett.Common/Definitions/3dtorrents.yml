@@ -48,9 +48,6 @@
       - selector: span.errormsg
     test:
       path: index.php
-
-  download:
-    selector: a[href^="download.php?id="]
         
   search:
     paths:

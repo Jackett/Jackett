@@ -143,7 +143,7 @@ namespace Jackett.Common.Utils.Clients
 
             using (ClearanceHandler clearanceHandlr = new ClearanceHandler())
             {
-                clearanceHandlr.MaxRetries = 10;
+                clearanceHandlr.MaxRetries = 30;
                 using (HttpClientHandler clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,

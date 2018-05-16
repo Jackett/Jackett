@@ -497,10 +497,14 @@ function populateConfigItems(configForm, config) {
             hasReacaptcha = true;
             captchaItem = config[i];
         }
+        else if (config[i].id === 'cookieheader' && hasReacaptcha) { // inject cookie into captcha item
+            captchaItem.cookieheader = config[i].value;
+            console.log(captchaItem);
+        }
     }
 
     var setupItemTemplate = Handlebars.compile($("#setup-item").html());
-    if (hasReacaptcha && !window.jackettIsLocal) {
+    if (hasReacaptcha && !window.jackettIsLocal && false) { // disable this for now, use inline cookie (below)
         var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
         captchaItem.value_element = setupValueTemplate(captchaItem);
         var template = setupItemTemplate(captchaItem);
@@ -509,11 +513,22 @@ function populateConfigItems(configForm, config) {
 
         for (var i = 0; i < config.length; i++) {
             var item = config[i];
-            var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
-            item.value_element = setupValueTemplate(item);
-            var template = setupItemTemplate(item);
-            $formItemContainer.append(template);
+            if ((item.id === 'username' || item.id === 'password') && hasReacaptcha) {
+                continue; // skip username/password if there's a recaptcha
+            }
+            if (item.type != 'recaptcha') {
+                var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
+                item.value_element = setupValueTemplate(item);
+                var template = setupItemTemplate(item);
+                $formItemContainer.append(template);
+            }
             if (item.type === 'recaptcha') {
+                // inject cookie dialog until recaptcha can be solved again
+                var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
+                captchaItem.value_element = setupValueTemplate(captchaItem);
+                var template = setupItemTemplate(captchaItem);
+                $formItemContainer.append(template);
+                /*
                 var jackettrecaptcha = $('.jackettrecaptcha');
                 jackettrecaptcha.data("version", item.version);
                 switch (item.version) {
@@ -543,6 +558,7 @@ function populateConfigItems(configForm, config) {
                         });
                         break;
                 }
+                */
             }
         }
     }

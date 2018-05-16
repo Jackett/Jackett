@@ -47,5 +47,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(23, TorznabCatType.AudioOther, "Music");
             AddCategoryMapping(24, TorznabCatType.Other, "Misc");
         }
+
+        protected override string GetSearchTerm(TorznabQuery query)
+        {
+            return query.GetQueryString().Replace(".", " "); // Alpharatio can't handle dots in the searchstr
+        }
     }
 }

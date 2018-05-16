@@ -205,7 +205,10 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-
+            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+                return true;
+            else if(!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
+                return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
             if (caps.TVSearchAvailable && query.IsTVSearch)
@@ -239,6 +242,10 @@ namespace Jackett.Common.Indexers
                     return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
                 results = FilterResults(query, results);
+                if (query.Limit > 0)
+                {
+                    results = results.Take(query.Limit);
+                }
                 results = results.Select(r =>
                 {
                     r.Origin = this;

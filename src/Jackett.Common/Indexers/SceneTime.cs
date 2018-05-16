@@ -65,6 +65,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
             AddCategoryMapping(43, TorznabCatType.TV, "TV/Packs");
             AddCategoryMapping(9, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(19, TorznabCatType.TVHD, "TV-HD HEVC/x265");
             AddCategoryMapping(63, TorznabCatType.TV, "TV/Classic");
             AddCategoryMapping(77, TorznabCatType.TVSD, "TV/SD");
             AddCategoryMapping(79, TorznabCatType.TVSport, "Sports");
