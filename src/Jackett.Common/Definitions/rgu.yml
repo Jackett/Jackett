@@ -66,6 +66,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       submitme: "X"
+      submitme: "X" # two submitme needed?!? shouldn't make a difference
     error:
       - selector: h2:contains("Login failed!")
         message:
