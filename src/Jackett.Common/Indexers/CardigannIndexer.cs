@@ -197,6 +197,7 @@ namespace Jackett.Common.Indexers
         {
             Dictionary<string, object> variables = new Dictionary<string, object>();
 
+            variables[".Config.sitelink"] = SiteLink;
             foreach (settingsField Setting in Definition.Settings)
             {
                 string value;
