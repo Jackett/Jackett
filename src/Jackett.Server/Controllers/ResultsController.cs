@@ -191,12 +191,12 @@ namespace Jackett.Server.Controllers
             {
                 if (t.Key == "Tracker[]")
                 {
-                    request.Tracker = t.Value.ToString().Split(",");
+                    request.Tracker = t.Value.ToString().Split(',');
                 }
 
                 if (t.Key == "Category[]")
                 {
-                    request.Category = t.Value.ToString().Split(",").Select(Int32.Parse).ToArray();
+                    request.Category = t.Value.ToString().Split(',').Select(Int32.Parse).ToArray();
                 }
 
                 if (t.Key == "query")
