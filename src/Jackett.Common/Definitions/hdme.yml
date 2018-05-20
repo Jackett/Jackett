@@ -91,6 +91,11 @@
       download:
         selector: td:nth-child(11) > a
         attribute: href
+        filters:
+          - name: prepend
+            args: "{{ .Config.sitelink }}"
+          - name: replace # https download links are redirected to http causing invalid cookies => invalid passkeys
+            args: ["https", "http"]
       size:
         selector: td:nth-child(6)
         remove: br
@@ -103,3 +108,9 @@
         selector: td:nth-child(8)
       leechers:
         selector: td:nth-child(9)
+      downloadvolumefactor:
+        case:
+          "font:contains(\"(FreeLeech)\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        text: "1"
