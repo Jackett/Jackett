@@ -1,13 +1,19 @@
-﻿using CommandLine;
+﻿using Autofac;
+using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Plumbing;
+using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Server.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
@@ -23,16 +29,17 @@ namespace Jackett.Server
                 var text = HelpText.AutoBuild(optionsResult);
                 text.Copyright = " ";
                 text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion + " options:";
-                Console.WriteLine(text);
-                Environment.ExitCode = 1;
+                Environment.Exit(1);
                 return;
             });
 
             var runtimeDictionary = new Dictionary<string, string>();
-
+            RuntimeSettings r = new RuntimeSettings();
+            ConsoleOptions consoleOptions = new ConsoleOptions();
             optionsResult.WithParsed(options =>
             {
-                RuntimeSettings r = options.ToRunTimeSettings();
+                r = options.ToRunTimeSettings();
+                consoleOptions = options;
                 runtimeDictionary = GetValues(r);
             });
 
@@ -41,7 +48,52 @@ namespace Jackett.Server
 
             Configuration = builder.Build();
 
-            CreateWebHostBuilder(args).Build().Run();
+            //hack TODO: Get the configuration without any DI
+            var containerBuilder = new ContainerBuilder();
+            Initialisation.SetupLogging(r, containerBuilder);
+            containerBuilder.RegisterModule(new JackettModule(r));
+            containerBuilder.RegisterType<ServerService>().As<IServerService>();
+            containerBuilder.RegisterType<SecuityService>().As<ISecuityService>();
+            containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
+            var tempContainer = containerBuilder.Build();
+
+            Logger logger = tempContainer.Resolve<Logger>();
+            ServerConfig serverConfig = tempContainer.Resolve<ServerConfig>();
+            IConfigurationService configurationService = tempContainer.Resolve<IConfigurationService>();
+            IServerService serverService = tempContainer.Resolve<IServerService>();
+            Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
+
+
+            // Override port
+            if (consoleOptions.Port != 0)
+            {
+                if (configPort != consoleOptions.Port)
+                {
+                    logger.Info("Overriding port to " + consoleOptions.Port);
+                    serverConfig.Port = consoleOptions.Port;
+                    bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                    if (isWindows)
+                    {
+                        if (ServerUtil.IsUserAdministrator())
+                        {
+                            serverService.ReserveUrls(doInstall: true);
+                        }
+                        else
+                        {
+                            logger.Error("Unable to switch ports when not running as administrator");
+                            Environment.Exit(1);
+                        }
+                    }
+                    configurationService.SaveConfig(serverConfig);
+                }
+            }
+
+            string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
+
+            tempContainer.Dispose();
+            tempContainer = null;
+
+            CreateWebHostBuilder(args, url).Build().Run();
         }
 
         public static Dictionary<string, string> GetValues(object obj)
@@ -52,9 +104,11 @@ namespace Jackett.Server
                     .ToDictionary(p => "RuntimeSettings:" + p.Name, p => p.GetValue(obj) == null ? null : p.GetValue(obj).ToString());
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(Configuration)
+            .UseUrls(urls)
+            .PreferHostingUrls(true)
                 .UseStartup<Startup>();
     }
 }
