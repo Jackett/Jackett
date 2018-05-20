@@ -400,6 +400,7 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 
 ### Windows
 * Open the Jackett solution in Visual Studio 2017
+* Install all missing assemblies (Jackett, Jackett.Console, Jackett.Service etc.)
 * Select Jackett.Console as startup project
 * Build/Start the project
 
