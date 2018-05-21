@@ -329,6 +329,8 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
 
+Mono must bee compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See #2704).
+
 ## Installation on macOS
 
 ### Prerequisites
