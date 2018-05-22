@@ -128,6 +128,10 @@
         "2" : "Argent (Silver)"
         "3" : "Or (Gold)"
         "4" : "Argent & Or (Both)"
+    - name: multilang
+      type: checkbox
+      label: Replace MULTI by FRENCH in release name
+      default:  false
 
   login:
     path: tracker/index.php?page=login
@@ -168,8 +172,15 @@
     rows:
       selector: table > tbody > tr > td > table.lista > tbody > tr:has(td[onmouseover="this.className='post'"])
     fields:
-      title:
+      title_phase1:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      title_multilang:
+        text: "{{ .Result.title_phase1 }}r"
+        filters:
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-[Mm][Uu][Ll][Tt][Ii][\\.i\\s\\]\\-]", ".FRENCH."] 
+      title:
+        text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
       details:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         attribute: href
