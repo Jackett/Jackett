@@ -261,6 +261,7 @@ namespace Jackett.Common.Indexers
                     ICollection<int> groupCategory = null;
                     string groupTitle = null;
                     string groupYearStr = null;
+                    var categoryStr = "";
                     DateTime? groupPublishDate = null;
 
                     foreach (var row in rows)
@@ -271,7 +272,7 @@ namespace Jackett.Common.Indexers
                             var title = qDetailsLink.TextContent;
                             ICollection<int> category = null;
                             string yearStr = null;
-                            var categoryStr = "";
+                            
 
                             if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
                             {
@@ -307,13 +308,23 @@ namespace Jackett.Common.Indexers
 
                             if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                             {
-                                release.Description = qDetailsLink.TextContent;
+                                var description = Regex.Replace(qDetailsLink.TextContent.Trim(), @"\s+", " ");
+                                description = Regex.Replace(description, @"((S\d{2})(E\d{2,4})?) (.*)", "$4");
+                                release.Description = description;
 
-                                var cleanTitle = Regex.Replace(groupTitle, @" - S?(?<season>\d{1,2})?E?(?<episode>\d{1,4})?", "");
-                                var seasonEp = Regex.Replace(groupTitle, @"^(.*?) - (S?(\d{1,2})?E?(\d{1,4})?)?", "$2");
+                                var cleanTitle = Regex.Replace(groupTitle, @" - ((S(\d{2}))?E(\d{1,4}))", "");
+                                title = Regex.Replace(title.Trim(), @"\s+", " ");
+                                var seasonEp = Regex.Replace(title, @"((S\d{2})?(E\d{2,4})?) .*", "$1");
                                 
-                                release.Title = categoryStr == "14" ? groupTitle : cleanTitle + " " + groupYearStr + " " + seasonEp;
-                                release.PublishDate = groupPublishDate.Value;
+                                // do not include year to animes
+                                if (categoryStr == "14")
+                                {
+                                    release.Title = cleanTitle + " " + seasonEp;
+                                }
+                                else
+                                {
+                                    release.Title = cleanTitle + " " + groupYearStr + " " + seasonEp;
+                                }
                                 release.Category = groupCategory;
                             }
                             else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
@@ -321,10 +332,19 @@ namespace Jackett.Common.Indexers
                                 var qDescription = row.QuerySelector("div.torrent_info");
                                 release.Description = qDescription.TextContent;
 
-                                var cleanTitle = Regex.Replace(title, @" - ((S(\d{1,2}))?E(\d{1,4}))", "");
-                                var seasonEp = Regex.Replace(title, @"^(.*?) - ((S(\d{1,2}))?E(\d{1,4}))", "$2");
+                                var cleanTitle = Regex.Replace(title, @" - ((S\d{2})?(E\d{2,4})?)", "");
+                                var seasonEp = Regex.Replace(title, @"^(.*?) - ((S\d{2})?(E\d{2,4})?)", "$2");
+
+                                // do not include year to animes
+                                if (categoryStr == "14")
+                                {
+                                    release.Title = cleanTitle + " " + seasonEp;
+                                }
+                                else
+                                {
+                                    release.Title = cleanTitle + " " + yearStr + " " + seasonEp;
+                                }
                                 
-                                release.Title = categoryStr == "14" ? title : cleanTitle + " " + yearStr + " " + seasonEp;
                                 release.Category = category;
                             }
 
@@ -335,7 +355,7 @@ namespace Jackett.Common.Indexers
                             release.Description = release.Description.Replace("4K", "2160p");
 
                             // Get international title if available, or use the full title if not
-                            release.Title = Regex.Replace(title, @".* \[(.*?)\](.*)", "$1$2");
+                            release.Title = Regex.Replace(release.Title, @".* \[(.*?)\](.*)", "$1$2");
                             release.Title += " " + release.Description; // add year and Description to the release Title to add some meaning to it
                             
                             // This tracker does not provide an publish date to search terms (only on last 24h page)
