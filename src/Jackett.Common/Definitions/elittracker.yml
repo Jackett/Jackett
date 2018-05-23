@@ -115,6 +115,8 @@
 
     rows:
       selector: table > tbody > tr:has(img[src*="/pic/categories/"])
+      filters:
+        - name: andmatch
     fields:
       title:
         # using attribute title from td(3) because the text from td(2) a(2) can be abbreviated
