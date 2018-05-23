@@ -130,9 +130,16 @@
         "4" : "Argent & Or (Both)"
     - name: multilang
       type: checkbox
-      label: Replace MULTI by FRENCH in release name
+      label: Replace MULTI by another language in release name
       default:  false
-
+    - name: multilanguage
+      type: select
+      label: Replace MULTI by this language
+      default: FRENCH
+      options:
+        FRENCH : "FRENCH"
+        MULTI.FRENCH : "MULTI.FRENCH" 
+        ENGLISH: "ENGLISH"
   login:
     path: tracker/index.php?page=login
     method: post
@@ -178,7 +185,7 @@
         text: "{{ .Result.title_phase1 }}r"
         filters:
           - name: re_replace
-            args: ["[\\.\\s\\[\\-[Mm][Uu][Ll][Tt][Ii][\\.i\\s\\]\\-]", ".FRENCH."] 
+            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.i\\s\\]\\-]", ".{{ .Config.multilanguage }}."] 
       title:
         text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
       details:
