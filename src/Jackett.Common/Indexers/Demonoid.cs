@@ -135,6 +135,11 @@ namespace Jackett.Common.Indexers
             var episodeSearchUrl = string.Format(SearchUrl, cat, WebUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
+            if (results.IsRedirect)
+            {
+                throw new ExceptionWithConfigData("Unexpected redirect to " + results.RedirectingTo + ". Check your credentials.", configData);
+            }
+
             if (results.Content.Contains("No torrents found"))
             {
                 return releases;
