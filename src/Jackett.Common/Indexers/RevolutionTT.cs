@@ -269,7 +269,6 @@ namespace Jackett.Common.Indexers
                     var PublishDate = DateTime.ParseExact(date, "ddd, dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture);
                     var PublishDateLocal = PublishDate.ToLocalTime();
                     var diff = Now - PublishDateLocal;
-                    logger.Warn(title + ": " + Now.ToString(DateTimeUtil.RFC1123ZPattern) + "; " + date + "; " + PublishDate.ToString(DateTimeUtil.RFC1123ZPattern) + "; " + PublishDateLocal.ToString(DateTimeUtil.RFC1123ZPattern) + "; " + diff.ToString() + "; ");
 
                     var release = new ReleaseInfo()
                     {
