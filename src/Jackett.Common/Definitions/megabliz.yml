@@ -10,53 +10,20 @@
 
   caps:
     categorymappings:
-      # TV
-      - {id: 23, cat: TV, desc: "TV/HD"}
-      - {id: 47, cat: TV, desc: "TV/PACKS"}
-      - {id: 28, cat: TV, desc: "TV/eps"}
-      - {id: 25, cat: TV, desc: "TV/HDRIP"}
-      - {id: 24, cat: TV, desc: "TV/TV-packs"}
-      - {id: 26, cat: TV/HD, desc: "TV/X264-HD"}
-      - {id: 27, cat: TV/SD, desc: "TV/X264-SD"}
-      # Movies
-      - {id: 10, cat: Movies, desc: "Movies/0DAY"}
-      - {id: 56, cat: Movies/3D, desc: "Movies/3D"}
-      - {id: 16, cat: TV/Anime, desc: "Movies/ANIME"}
-      - {id: 44, cat: Movies, desc: "Movies/CAM"}
-      - {id: 18, cat: Movies/DVD, desc: "Movies/DVDR"}
-      - {id: 49, cat: Movies/HD, desc: "Movies/hd 1080p"}
-      - {id: 48, cat: Movies/HD, desc: "Movies/hd 720p"}
-      - {id: 55, cat: Movies, desc: "Movies/Box Sets"}
-      - {id: 53, cat: Movies, desc: "Movies/Sports"}
-      - {id: 17, cat: Movies, desc: "Movies/X264"}
-      - {id: 57, cat: Movies, desc: "Movies/xmas"}
-      - {id: 15, cat: Movies/SD, desc: "Movies/XVID"}
-       # Music
-      - {id: 54, cat: Audio/Audiobook, desc: "Music/Audio Book"}
-      - {id: 19, cat: Audio/Lossless, desc: "Music/FLAC"}
-      - {id: 20, cat: Audio, desc: "Music/DVDR"}
-      - {id: 21, cat: Audio/MP3, desc: "Music/MP3"}
-      - {id: 42, cat: Audio, desc: "Music/0DAY"}
-      - {id: 22, cat: Audio/Video, desc: "Music/VID"}
-       # Apps
-      - {id: 9, cat: PC/0day, desc: "Apps/APPS"}
-      - {id: 11, cat: Books/Ebook, desc: "Apps/EBOOKS"}
-      - {id: 46, cat: PC/Phone-Other, desc: "Apps/IPHONE/ANDROID"}
-      - {id: 51, cat: PC, desc: "Apps/Linux"}
-      - {id: 52, cat: PC/Mac, desc: "Apps/MAC"}
-       # Games
-      - {id: 58, cat: Console/Other, desc: "Games/Android"}
-      - {id: 45, cat: PC/Games, desc: "Games/GAMES"}
-      - {id: 59, cat: Console/NDS, desc: "Games/NDS"}
-      - {id: 50, cat: Console, desc: "Games/PS2"}
-      - {id: 14, cat: Console/PS3, desc: "Games/PS3"}
-      - {id: 12, cat: Console/Wii, desc: "Games/WII"}
-      - {id: 13, cat: Console/Xbox 360, desc: "Games/XBOX360"}
-      # XXX
-      - {id: 38, cat: XXX, desc: "XXX"}
-      - {id: 39, cat: XXX, desc: "XXX/0DAY"}
-      - {id: 40, cat: XXX/Imageset, desc: "XXX/IMAGESET"}
-      - {id: 41, cat: XXX/Other, desc: "XXX/SITERIPS"}
+      - {id: 9, cat: TV/Anime, desc: "Anime"}
+      - {id: 1, cat: PC/0day, desc: "Apps"}
+      - {id: 13, cat: PC/0day, desc: "Apps"}
+      - {id: 5, cat: TV, desc: "Episodes"}
+      - {id: 2, cat: PC/Games, desc: "Games"}
+      - {id: 12, cat: PC/Games, desc: "Games/PC Rips"}
+      - {id: 8, cat: Console/Other, desc: "Games/PS2"}
+      - {id: 7, cat: Console/PSP, desc: "Games/PSP"}
+      - {id: 3, cat: Movies, desc: "Movies"}
+      - {id: 11, cat: Movies/SD, desc: "Movies/HDTV"}
+      - {id: 10, cat: Movies/SD, desc: "Movies/XviD"}
+      - {id: 4, cat: Audio, desc: "Music"}
+      - {id: 14, cat: Audio, desc: "Music"}
+      - {id: 6, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
@@ -101,13 +68,13 @@
           selector: table tr td.text
     test:
       path: browse.php
-      selector: li a[href^="logout.php?hash_please="]
+      selector: a[href*="logout.php?hash_please="]
 
   search:
     paths:
       - path: browse.php      
     inputs:
-      #$raw: "{{range .Categories}}c{{.}}=1&{{end}}" # this should work, untested
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
       searchin: "title"
       incldead: "{{ .Config.incldead }}"
@@ -137,11 +104,7 @@
         selector: td:nth-of-type(3) a
         attribute: href
       files:
-        optional: true
-        selector: td:nth-of-type(5) a
-      files:
-        optional: true
-        selector: td:nth-of-type(5):not(:has(a))
+        selector: td:nth-of-type(5)
       date:
         selector: td:nth-of-type(7)
         filters:
@@ -155,12 +118,13 @@
           - name: regexp
             args: "([\\d]+)"
       seeders:
-        selector: td:nth-of-type(10) a font
+        selector: td:nth-of-type(10)
       leechers:
         selector: td:nth-of-type(11)
       downloadvolumefactor:
         case:
-          "span:contains(\"Unlimited\")": "0"
+          "img[title=\"Free Torrent\"]": "0" # torrent specific free leech (icon)?
+          "a.info:contains(\"Free\")": "0" # global freeleech note?
           "*": "1"
       uploadvolumefactor:
         text: "1"
