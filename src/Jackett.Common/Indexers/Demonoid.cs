@@ -204,17 +204,15 @@ namespace Jackett.Common.Indexers
 
                     release.Comments = new Uri(new Uri(SiteLink), qLink.Attr("href"));
                     release.Guid = release.Comments;
+                    release.Link = release.Comments; // indirect download see Download() method
 
-                    var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(0).Cq();
-                    release.Link = new Uri(qDownload.Attr("href"));
-
-                    var sizeStr = rowB.ChildElements.ElementAt(3).Cq().Text();
+                    var sizeStr = rowB.ChildElements.ElementAt(2).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text());
+                    release.Seeders = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(5).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
 
-                    var grabs = rowB.Cq().Find("td:nth-child(6)").Text();
+                    var grabs = rowB.Cq().Find("td:nth-child(5)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     release.DownloadVolumeFactor = 0; // ratioless
@@ -228,6 +226,18 @@ namespace Jackett.Common.Indexers
                 OnParseError(results.Content, ex);
             }
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var results = await RequestStringWithCookies(link.AbsoluteUri);
+            await FollowIfRedirect(results);
+            CQ dom = results.Content;
+            var dl = dom.Find("a:has(font:contains(\"Download torrent file\"))");
+
+            link = new Uri(dl.Attr("href"));
+
+            return await base.Download(link);
         }
     }
 }
