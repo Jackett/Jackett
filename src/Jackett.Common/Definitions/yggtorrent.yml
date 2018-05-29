@@ -154,10 +154,10 @@
       title_phase1:
         text: "{{if .Config.filter_title }}{{ .Result.title_filtered }}{{else}}{{ .Result.title_normal }}{{end}}"
       title_multilang:
-        text: "{{ .Result.title_phase1 }}r"
+        text: "{{ .Result.title_phase1 }}"
         filters:
           - name: re_replace
-            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.i\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
       title:
         text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
       details:
