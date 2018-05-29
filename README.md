@@ -163,6 +163,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GFXPeers
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
+ * Girotottent
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Greek Team
  * HacheDe
