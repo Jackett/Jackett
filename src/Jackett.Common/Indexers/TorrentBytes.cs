@@ -156,7 +156,14 @@ namespace Jackett.Common.Indexers
                     var link = row.Cq().Find("td:eq(1) a:eq(1)").First();
                     release.Guid = new Uri(SiteLink + link.Attr("href"));
                     release.Comments = release.Guid;
-                    release.Title = link.Get(0).FirstChild.ToString();
+                    release.Title = link.Attr("title");
+
+                    // There isn't a title attribute if the release name isn't truncated.
+                    if (string.IsNullOrWhiteSpace(release.Title))
+                    {
+                        release.Title = link.Get(0).FirstChild.ToString();
+                    }
+
                     release.Description = release.Title;
 
                     // If we search an get no results, we still get a table just with no info.
