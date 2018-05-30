@@ -8,6 +8,7 @@ using Jackett.Common;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Jackett.Server.Services
 {
@@ -18,18 +19,38 @@ namespace Jackett.Server.Services
         private const string JACKETT_KEY = "JACKETT_KEY";
         const string APPLICATION_KEY = "Dvz66r3n8vhTGip2/quiw5ISyM37f7L2iOdupzdKmzkvXGhAgQiWK+6F+4qpxjPVNks1qO7LdWuVqRlzgLzeW8mChC6JnBMUS1Fin4N2nS9lh4XPuCZ1che75xO92Nk2vyXUo9KSFG1hvEszAuLfG2Mcg1r0sVyVXd2gQDU/TbY=";
         private byte[] _instanceKey;
+        IDataProtector _protector = null;
 
-        public ProtectionService(ServerConfig config)
+        public ProtectionService(ServerConfig config, IDataProtectionProvider provider = null)
         {
-            if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 // We should not be running as root and will only have access to the local store.
                 PROTECTION_SCOPE = DataProtectionScope.CurrentUser;
             }
             _instanceKey = Encoding.UTF8.GetBytes(config.InstanceId);
+
+            if (provider != null)
+            {
+                var jackettKey = Environment.GetEnvironmentVariable(JACKETT_KEY);
+                string purpose = string.IsNullOrEmpty(jackettKey) ? APPLICATION_KEY : jackettKey.ToString();
+
+                _protector = provider.CreateProtector(purpose);
+            }
+            
         }
 
         public string Protect(string plainText)
+        {
+            return _protector.Protect(plainText);
+        }
+
+        public string UnProtect(string plainText)
+        {
+            return _protector.Unprotect(plainText);
+        }
+
+        public string LegacyProtect(string plainText)
         {
             var jackettKey = Environment.GetEnvironmentVariable(JACKETT_KEY);
 
@@ -43,7 +64,7 @@ namespace Jackett.Server.Services
             }
         }
 
-        public string UnProtect(string plainText)
+        public string LegacyUnProtect(string plainText)
         {
             var jackettKey = Environment.GetEnvironmentVariable(JACKETT_KEY);
 
