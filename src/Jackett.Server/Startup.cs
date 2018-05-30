@@ -8,6 +8,7 @@ using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.IO;
 using System.Text;
 
 namespace Jackett.Server
@@ -61,6 +63,12 @@ namespace Jackett.Server
 
             RuntimeSettings runtimeSettings = new RuntimeSettings();
             Configuration.GetSection("RuntimeSettings").Bind(runtimeSettings);
+
+            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
+
+            services.AddDataProtection()
+                        .PersistKeysToFileSystem(dataProtectionFolder)
+                        .SetApplicationName("Jackett");
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -34,13 +35,13 @@ namespace Jackett.Server
             });
 
             var runtimeDictionary = new Dictionary<string, string>();
-            RuntimeSettings r = new RuntimeSettings();
+            RuntimeSettings runtimeSettings = new RuntimeSettings();
             ConsoleOptions consoleOptions = new ConsoleOptions();
             optionsResult.WithParsed(options =>
             {
-                r = options.ToRunTimeSettings();
+                runtimeSettings = options.ToRunTimeSettings();
                 consoleOptions = options;
-                runtimeDictionary = GetValues(r);
+                runtimeDictionary = GetValues(runtimeSettings);
             });
 
             var builder = new ConfigurationBuilder();
@@ -50,8 +51,8 @@ namespace Jackett.Server
 
             //hack TODO: Get the configuration without any DI
             var containerBuilder = new ContainerBuilder();
-            Initialisation.SetupLogging(r, containerBuilder);
-            containerBuilder.RegisterModule(new JackettModule(r));
+            Initialisation.SetupLogging(runtimeSettings, containerBuilder);
+            containerBuilder.RegisterModule(new JackettModule(runtimeSettings));
             containerBuilder.RegisterType<ServerService>().As<IServerService>();
             containerBuilder.RegisterType<SecuityService>().As<ISecuityService>();
             containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
@@ -63,6 +64,11 @@ namespace Jackett.Server
             IServerService serverService = tempContainer.Resolve<IServerService>();
             Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
 
+            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
+            if (!dataProtectionFolder.Exists)
+            {
+                dataProtectionFolder.Create();
+            }
 
             // Override port
             if (consoleOptions.Port != 0)
