@@ -1,6 +1,6 @@
 ﻿namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataAnimeBytes : ConfigurationDataPasskey
+    class ConfigurationDataAnimeBytes : ConfigurationDataUserPasskey
     {
         public BoolItem IncludeRaw { get; private set; }
         //public DisplayItem DateWarning { get; private set; }
@@ -8,7 +8,7 @@
         public BoolItem AddSynonyms { get; private set; }
         public BoolItem FilterSeasonEpisode { get; private set; }
 
-        public ConfigurationDataAnimeBytes()
+        public ConfigurationDataAnimeBytes(string instructionMessageOptional = null)
             : base()
         {
             IncludeRaw = new BoolItem() { Name = "IncludeRaw", Value = false };
@@ -16,6 +16,7 @@
             InsertSeason = new BoolItem() { Name = "Prefix episode number with E0 for Sonarr Compatability", Value = false };
             AddSynonyms = new BoolItem() { Name = "Add releases for each synonym title", Value = true };
             FilterSeasonEpisode = new BoolItem() { Name = "Filter results by season/episode", Value = false };
+            Instructions = new DisplayItem(instructionMessageOptional) { Name = "" };
         }
     }
 }

@@ -140,9 +140,8 @@ namespace Jackett.Common.Indexers
                         release.MagnetUri = new Uri(magnet_uri);
                         release.InfoHash = torrent_info.Value<string>("hash");
 
-                        // ex: 2015-08-16 21:25:08 +0000
-                        var dateStr = torrent_info.Value<string>("date_uploaded");
-                        var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        var dateStr = torrent_info.Value<long>("date_uploaded_unix");
+                        var dateTime = DateTimeUtil.UnixTimestampToDateTime(dateStr);
                         release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
                         release.Link = new Uri(torrent_info.Value<string>("url"));                  
                         release.Seeders = torrent_info.Value<int>("seeds");

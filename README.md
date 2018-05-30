@@ -2,7 +2,6 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
-[![Bountysource](https://img.shields.io/bountysource/team/jackett/activity.svg?style=flat-square)](https://www.bountysource.com/teams/jackett)
 [![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp/branch/master?svg=true)](https://ci.appveyor.com/project/Jackett/jackett)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
@@ -37,12 +36,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Horrible Subs
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Il Corsaro Blu
  * Isohunt2
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
  * MagnetDL
  * NextTorrent
+ * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
@@ -124,6 +125,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BroadcastTheNet
  * BrokenStones
  * BTNext
+ * BTWorld
  * Carpathians
  * CCFBits
  * CGPeers
@@ -161,6 +163,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GFXPeers
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
+ * Girotottent
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Greek Team
  * HacheDe
@@ -220,6 +223,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
  * RevolutionTT
+ * RGU
  * RoDVD
  * SceneFZ
  * SceneReactor
@@ -239,7 +243,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Synthesiz3r
  * Tasmanit
  * TBPlus
- * TehConnection
  * TenYardTracker
  * The Empire
  * The Geeks
@@ -267,6 +270,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrents.Md
  * TorrentSeeds
  * Torrent-Syndikat
+ * TOrrent-tuRK (TORK)
  * TorrentWTF
  * TorViet
  * ToTheGlory
@@ -327,6 +331,8 @@ Jackett can also be run from the command line if you would like to see log messa
 Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jackett-on-ubuntu-14-x-for-custom-torrents-in-sonarr/) and [Ubuntu 15.x](http://www.htpcguides.com/install-jackett-ubuntu-15-x-for-custom-torrents-in-sonarr/)
 
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
+
+Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
 
 ## Installation on macOS
 
@@ -397,7 +403,8 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 ## Building from source
 
 ### Windows
-* Open the Jackett solution in Visual Studio 2017
+* Open the Jackett solution in Visual Studio 2017 (version 15.7 or above)
+* Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Console as startup project
 * Build/Start the project
 

@@ -76,20 +76,20 @@ search:
         - name: replace
           args: ["&hit=", "&aviso="]
     files:
-      selector: td:nth-child(6)
+      selector: td:nth-last-child(8)
     size:
-      selector: td:nth-child(9)
+      selector: td:nth-last-child(5)
       filters:
         - name: replace
           args: [",", "."]
     grabs:
-      selector: td:nth-child(10)
+      selector: td:nth-last-child(4)
     seeders:
-      selector: td:nth-child(11)
+      selector: td:nth-last-child(3)
     leechers:
-      selector: td:nth-child(12)
+      selector: td:nth-last-child(2)
     date:
-      selector: td:nth-child(8)
+      selector: td:nth-last-child(6)
       filters:
         - name: timeago
     downloadvolumefactor:

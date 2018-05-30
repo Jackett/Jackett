@@ -265,6 +265,10 @@ namespace Jackett.Common.Indexers
                             imdbID = l;
                         }
                     }
+                    var Now = DateTime.Now;
+                    var PublishDate = DateTime.ParseExact(date, "ddd, dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture);
+                    var PublishDateLocal = PublishDate.ToLocalTime();
+                    var diff = Now - PublishDateLocal;
 
                     var release = new ReleaseInfo()
                     {
@@ -272,7 +276,8 @@ namespace Jackett.Common.Indexers
                         Description = title,
                         Guid = new Uri(string.Format(DetailsURL, torrentId)),
                         Comments = new Uri(string.Format(DetailsURL, torrentId)),
-                        PublishDate = DateTime.ParseExact(infoMatch.Groups["added"].Value, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
+                        //PublishDate = DateTime.ParseExact(infoMatch.Groups["added"].Value, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 TODO: correct timezone (always -4)
+                        PublishDate = PublishDateLocal,
                         Link = new Uri(link),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value == "no" ? "0" : infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value == "no" ? "0" : infoMatch.Groups["leechers"].Value),

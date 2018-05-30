@@ -1,29 +1,33 @@
-﻿---
-  site: megabliz
-  name: Mega-Bliz
-  description: "Mega-Bliz is a Semi-Private site for MOVIES / TV / GENERAL"
+---
+  site: RGU
+  name: RGU
+  description: "RGU is a Private site for MOVIES / TV / GENERAL"
   language: en-us
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
-    - https://mega-bliz.nl/
+    - https://rgu.rgt.life/
 
   caps:
     categorymappings:
-      - {id: 9, cat: TV/Anime, desc: "Anime"}
+      - {id: 19, cat: Movies/BluRay, desc: "007 Movies"}
+      - {id: 9, cat: TV/Anime, desc: "ANIME/HD"}
       - {id: 1, cat: PC/0day, desc: "Apps"}
-      - {id: 13, cat: PC/0day, desc: "Apps"}
-      - {id: 5, cat: TV, desc: "Episodes"}
-      - {id: 2, cat: PC/Games, desc: "Games"}
-      - {id: 12, cat: PC/Games, desc: "Games/PC Rips"}
-      - {id: 8, cat: Console/Other, desc: "Games/PS2"}
+      - {id: 18, cat: Movies/BluRay, desc: "Dr Who"}
+      - {id: 5, cat: TV, desc: "TV Episodes"}
+      - {id: 2, cat: PC/Games, desc: "Games/PC"}
+      - {id: 11, cat: TV/HD, desc: "TV/HD"}
+      - {id: 30, cat: Console/PS4, desc: "GAMES/PS4"}
       - {id: 7, cat: Console/PSP, desc: "Games/PSP"}
-      - {id: 3, cat: Movies, desc: "Movies"}
-      - {id: 11, cat: Movies/SD, desc: "Movies/HDTV"}
-      - {id: 10, cat: Movies/SD, desc: "Movies/XviD"}
-      - {id: 4, cat: Audio, desc: "Music"}
-      - {id: 14, cat: Audio, desc: "Music"}
-      - {id: 6, cat: XXX, desc: "XXX"}
+      - {id: 17, cat: Movies/BluRay, desc: "Movie Packs"}
+      - {id: 10, cat: Movies, desc: "Movies X264"}
+      - {id: 3, cat: Movies/DVD, desc: "Movies/DVDR"}
+      - {id: 50, cat: Movies/BluRay, desc: "Movies/Bluray-UHD"}
+      - {id: 31, cat: Movies/BluRay, desc: "MOVIES/COMPLETE-BLURAY"}
+      - {id: 3, cat: Movies/DVD, desc: "MOVIES/DVDR"}
+      - {id: 16, cat: TV, desc: "TV Packs"}
+      - {id: 6, cat: XXX, desc: "MOVIES/XXX"}
+
 
     modes:
       search: [q]
@@ -52,8 +56,8 @@
     - name: info
       type: info
       label: Results Per Page
-      default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Mega-Blitz webpage.
-
+      default: For best results, change the 'Torrents per page' setting to 100 on your profile.
+      
   login:
     path: login.php
     method: form
@@ -62,13 +66,13 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       submitme: "X"
+      submitme: "X" # two submitme needed?!? shouldn't make a difference
     error:
-      - selector: h2
+      - selector: h2:contains("Login failed!")
         message:
-          selector: table tr td.text
+          selector: td.colhead2
     test:
       path: browse.php
-      selector: a[href*="logout.php?hash_please="]
 
   search:
     paths:
@@ -79,9 +83,12 @@
       searchin: "title"
       incldead: "{{ .Config.incldead }}"
       "only_free": "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
-
+    keywordsfilters:
+      - name: re_replace
+        args: ["(\\w+)", " +$1"] # prepend + to each word
     rows:
-      selector: tr.browse_color
+      selector: tr.browse_color, tr[id^="kdescr"]
+      after: 1
     fields:
       category:
         selector: td:nth-of-type(1) a
@@ -98,8 +105,16 @@
           - name: replace
             args: ["</b", ""]
       details:
-        selector: td:nth-of-type(2) a
+        selector: td:nth-of-type(2) > a[onmouseover]
         attribute: href
+      banner:
+        selector: td:nth-of-type(2) > a[onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=\\\\'(.+?)\\\\'"
+          - name: replace
+            args: ["./pic/noposter.png", ""]
       download:
         selector: td:nth-of-type(3) a
         attribute: href
@@ -113,7 +128,7 @@
       size:
         selector: td:nth-of-type(8)
       grabs:
-        selector: td:nth-of-type(9) a
+        selector: td:nth-of-type(9)
         filters:
           - name: regexp
             args: "([\\d]+)"
@@ -121,10 +136,17 @@
         selector: td:nth-of-type(10)
       leechers:
         selector: td:nth-of-type(11)
+      description:
+        selector: td[colspan="14"]
+        filters:
+          - name: replace
+            args: ["\n", "<br>\n"]
       downloadvolumefactor:
         case:
-          "img[title=\"Free Torrent\"]": "0" # torrent specific free leech (icon)?
-          "a.info:contains(\"Free\")": "0" # global freeleech note?
+          "b:contains(\"[Free and Double]\")": "0"
+          "img[alt=\"Free Torrent\"]": "0"
           "*": "1"
       uploadvolumefactor:
-        text: "1"
+        case:
+          "b:contains(\"[Free and Double]\")": "2"
+          "*": "1"

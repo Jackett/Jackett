@@ -219,6 +219,11 @@ namespace Jackett.Common.Indexers
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);
+            if (results.IsRedirect && results.RedirectingTo.EndsWith("login.php"))
+            {
+                throw new Exception("relogin needed, please update your cookie");
+            }
+
             try
             {
                 string RowsSelector = ".torrent_table > tbody > tr";

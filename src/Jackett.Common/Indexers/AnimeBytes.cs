@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
                                               TorznabCatType.AudioOther),
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataAnimeBytes())
+                configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
@@ -68,8 +68,8 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            if (configData.Passkey.Value.Length != 32)
-                throw new Exception("invalid passkey configured: expected length: 32, got " + configData.Passkey.Value.Length.ToString());
+            if (configData.Passkey.Value.Length != 32 && configData.Passkey.Value.Length != 48)
+                throw new Exception("invalid passkey configured: expected length: 32 or 48, got " + configData.Passkey.Value.Length.ToString());
 
             var results = await PerformQuery(new TorznabQuery());
             if (results.Count() == 0)
@@ -139,6 +139,7 @@ namespace Jackett.Common.Indexers
                 cat = queryCats.First().ToString();
             }
 
+            queryCollection.Add("username", configData.Username.Value);
             queryCollection.Add("torrent_pass", configData.Passkey.Value);
             queryCollection.Add("type", searchType);
             queryCollection.Add("searchstr", searchTerm);
