@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -154,8 +157,11 @@ namespace Jackett.Common.Indexers
         {
             if (jsonConfig is JArray)
             {
-                LoadValuesFromJson(jsonConfig, true);
-                IsConfigured = true;
+                if (!MigratedFromDPAPI(jsonConfig))
+                {
+                    LoadValuesFromJson(jsonConfig, true);
+                    IsConfigured = true;
+                }
             }
             // read and upgrade old settings file format
             else if (jsonConfig is Object)
@@ -164,6 +170,81 @@ namespace Jackett.Common.Indexers
                 SaveConfig();
                 IsConfigured = true;
             }
+        }
+
+        //TODO: Remove this section once users have moved off DPAPI
+        private bool MigratedFromDPAPI(JToken jsonConfig)
+        {
+            var currentAssembly = Assembly.GetExecutingAssembly();
+            bool runningLegacyOwin = new StackTrace().GetFrames()
+                                        .Select(x => x.GetMethod().ReflectedType.Assembly).Distinct()
+                                        .Where(x => x.GetReferencedAssemblies().Any(y => y.FullName == currentAssembly.FullName))
+                                        .Where(x => x.ManifestModule.Name == "Jackett.dll" || x.ManifestModule.Name == "JackettConsole.exe")
+                                        .Count() == 2;
+
+            if (runningLegacyOwin)
+            {
+                //Still running legacy Owin and using the DPAPI, we don't want to migrate
+                logger.Debug("Running Owin, no need to migrate from DPAPI");
+                return false;
+            }
+
+            Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
+            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+            if (!isWindows && dotNetVersion.Major < 4)
+            {
+                // User isn't running Windows, but is running on .NET Core framewrok, no access to the DPAPI, so don't bother trying to migrate
+                return false;
+            }
+
+            LoadValuesFromJson(jsonConfig, false);
+
+            object passwordPropertyValue = null;
+            string passwordValue = "";
+
+            try
+            {
+                passwordPropertyValue = configData.GetType().GetProperty("Password").GetValue(configData, null);
+                passwordValue = passwordPropertyValue.GetType().GetProperty("Value").GetValue(passwordPropertyValue, null).ToString();
+            }
+            catch (Exception ex)
+            {
+                logger.Info("Attempt to source password from json failed: " + ex.ToString());
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(passwordValue))
+            {
+                try
+                {
+                    protectionService.UnProtect(passwordValue);
+                    //Password successfully unprotected using Microsoft.AspNetCore.DataProtection, no further action needed as we've already converted the password previously
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    logger.Info("Password could not be unprotected using Microsoft.AspNetCore.DataProtection, trying legacy: " + ex.ToString());
+
+                    try
+                    {
+                        string unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
+                        //Password successfully unprotected using Windows/Mono DPAPI
+
+                        passwordPropertyValue.GetType().GetProperty("Value").SetValue(passwordPropertyValue, unprotectedPassword);
+                        SaveConfig();
+                        IsConfigured = true;
+
+                        return true;
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Info("Password could not be unprotected using legacy DPAPI: " + exception.ToString());
+                    }
+                }
+            }
+
+            return false;
         }
 
         protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
