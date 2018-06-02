@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             //AddCategoryMapping("cat_id", TorznabCatType.AudioForeign);
             AddCategoryMapping("21", TorznabCatType.PC);
             AddCategoryMapping("22", TorznabCatType.PC0day);
-            AddCategoryMapping("4", TorznabCatType.PCISO);
+            AddCategoryMapping("1", TorznabCatType.PCISO);
             AddCategoryMapping("2", TorznabCatType.PCMac);
             //AddCategoryMapping("cat_id", TorznabCatType.PCPhoneOther);
             //Games/PC-ISO, Games/PC-Rips
@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
             // RSS Textual categories
             AddCategoryMapping("Anime", TorznabCatType.TVAnime);
             AddCategoryMapping("Appz/Misc", TorznabCatType.PC0day);
-            AddCategoryMapping("Appz/PC-ISO", TorznabCatType.Books);
+            AddCategoryMapping("Appz/PC-ISO", TorznabCatType.PCISO);
             AddCategoryMapping("E-Book", TorznabCatType.BooksEbook);
             AddCategoryMapping("Games/PC-ISO", TorznabCatType.PCGames);
             AddCategoryMapping("Games/PC-Rips", TorznabCatType.PCGames);
