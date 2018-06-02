@@ -149,15 +149,8 @@ Task("Package-Files-Full-Framework-Mono")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
-		var cygMonoBuildPath = RelativeWinPathToCygPath(monoBuildFullFramework);
-		var tarFileName = "Jackett.Binaries.Mono.tar";
-		var tarArguments = @"-cvf " + cygMonoBuildPath + "/" + tarFileName + " -C " + cygMonoBuildPath + " Jackett --mode ='755'";
-		var gzipArguments = @"-k " + cygMonoBuildPath + "/" + tarFileName;
-
-		RunCygwinCommand("Tar", tarArguments);
-		RunCygwinCommand("Gzip", gzipArguments);
-
-		MoveFile($"{monoBuildFullFramework}/{tarFileName}.gz", $"./{artifactsDirName}/{tarFileName}.gz");
+		Gzip(monoBuildFullFramework, $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
+		Information(@"Full Framework Mono Binaries Gzip Completed");
 	});
 
 Task("Package-Full-Framework")
@@ -167,6 +160,25 @@ Task("Package-Full-Framework")
 	.Does(() =>
 	{
 		Information("Full Framework Packaging Completed");
+	});
+
+Task("Experimental")
+	.IsDependentOn("Clean")
+	.Does(() =>
+	{
+		ExperimentalPublish("netcoreapp2.1", "win-x86");
+		ExperimentalPublish("netcoreapp2.1", "linux-x64");
+		ExperimentalPublish("netcoreapp2.1", "osx-x64");
+
+		Zip("./BuildOutput/Experimental/netcoreapp2.1/win-x86", $"./{artifactsDirName}/Experimental.netcoreapp.win-x86.zip");
+		Zip("./BuildOutput/Experimental/netcoreapp2.1/osx-x64", $"./{artifactsDirName}/Experimental.netcoreapp.osx-x64.zip");
+		Gzip("./BuildOutput/Experimental/netcoreapp2.1/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.netcoreapp.linux-x64.tar.gz");
+
+		ExperimentalPublish("net461", "win7-x86");
+		ExperimentalPublish("net461", "linux-x64");
+
+		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Experimental.net461.win7-x86.zip");
+		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.mono.linux-x64.tar.gz");
 	});
 
 Task("Appveyor-Push-Artifacts")
@@ -276,8 +288,33 @@ private void RunCygwinCommand(string utility, string utilityArguments)
 private string RelativeWinPathToCygPath(string relativePath)
 {
 	var cygdriveBase = "/cygdrive/" + workingDir.ToString().Replace(":", "").Replace("\\", "/");
-	var cygPath = cygdriveBase + relativePath.Replace(".", "");
+	var cygPath = cygdriveBase + relativePath.TrimStart('.');
 	return cygPath;
+}
+
+private void Gzip(string sourceFolder, string outputDirectory, string tarCdirectoryOption, string outputFileName)
+{
+	var cygSourcePath = RelativeWinPathToCygPath(sourceFolder);
+	var tarFileName = outputFileName.Remove(outputFileName.Length - 3, 3);
+	var tarArguments = @"-cvf " + cygSourcePath + "/" + tarFileName + " -C " + cygSourcePath + $" {tarCdirectoryOption} --mode ='755'";
+	var gzipArguments = @"-k " + cygSourcePath + "/" + tarFileName;
+
+	RunCygwinCommand("Tar", tarArguments);
+	RunCygwinCommand("Gzip", gzipArguments);
+
+	MoveFile($"{sourceFolder}/{tarFileName}.gz", $"{outputDirectory}/{tarFileName}.gz");
+}
+
+private void ExperimentalPublish(string framework, string runtime)
+{
+	var settings = new DotNetCorePublishSettings
+		 {
+			 Framework = framework,
+			 Runtime = runtime,
+			 OutputDirectory = $"./BuildOutput/Experimental/{framework}/{runtime}/Jackett"
+		 };
+
+		 DotNetCorePublish("./src/Jackett.Server/Jackett.Server.csproj", settings);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -286,6 +323,7 @@ private string RelativeWinPathToCygPath(string relativePath)
 
 Task("Default")
 	.IsDependentOn("Release-Notes")
+	.IsDependentOn("Experimental")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
