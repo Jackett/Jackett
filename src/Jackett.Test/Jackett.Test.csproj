@@ -15,7 +15,7 @@
     <EmbeddedResource Include="Util\Invalid-RSS.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="FluentAssertions" Version="5.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />

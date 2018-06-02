@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers
             if (runningLegacyOwin)
             {
                 //Still running legacy Owin and using the DPAPI, we don't want to migrate
-                logger.Debug("Running Owin, no need to migrate from DPAPI");
+                logger.Debug(ID + " - Running Owin, no need to migrate from DPAPI");
                 return false;
             }
 
@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                logger.Info("Attempt to source password from json failed: " + ex.ToString());
+                logger.Warn($"Attempt to source password from json failed - {ID} : " + ex.ToString());
                 return false;
             }
 
@@ -224,7 +224,12 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    logger.Info("Password could not be unprotected using Microsoft.AspNetCore.DataProtection, trying legacy: " + ex.ToString());
+                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
+                    {
+                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {ID} : " + ex.ToString());
+                    }
+
+                    logger.Info($"Attempting legacy Unprotect - {ID} : ");
 
                     try
                     {
@@ -235,11 +240,13 @@ namespace Jackett.Common.Indexers
                         SaveConfig();
                         IsConfigured = true;
 
+                        logger.Info($"Password successfully migrated for {ID}");
+
                         return true;
                     }
                     catch (Exception exception)
                     {
-                        logger.Info("Password could not be unprotected using legacy DPAPI: " + exception.ToString());
+                        logger.Info($"Password could not be unprotected using legacy DPAPI - {ID} : " + exception.ToString());
                     }
                 }
             }
