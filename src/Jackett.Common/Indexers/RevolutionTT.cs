@@ -349,6 +349,9 @@ namespace Jackett.Common.Indexers
                             release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").Text());
                             release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").Text());
 
+                            var grabsStr = qRow.Find("td:nth-child(8)").Text();
+                            release.Grabs = ParseUtil.GetLongFromString(grabsStr);
+
                             var category = qRow.Find(".br_type > a").Attr("href").Replace("browse.php?cat=", string.Empty);
                             release.Category = MapTrackerCatToNewznab(category);
                         }
