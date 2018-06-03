@@ -9,13 +9,14 @@ using Jackett.Common.Utils.Clients;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace Jackett.Server
 {
-    public class Initialisation
+    public static class Helper
     {
         public static IContainer ApplicationContainer { get; set; }
 
@@ -31,8 +32,85 @@ namespace Jackett.Server
                 _automapperInitialised = true;
             }
 
+            ProcessRuntimeSettings();
+
             //Load the indexers
             ServerService.Initalize();
+        }
+
+        private static void ProcessRuntimeSettings()
+        {
+            RuntimeSettings runtimeSettings = ServerConfiguration.RuntimeSettings;
+
+            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2")
+            {
+                Logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
+                Environment.Exit(1);
+            }
+
+            if (runtimeSettings.DoSSLFix != null)
+            {
+                Logger.Error("SSLFix has been deprecated, please remove it from your start arguments");
+                Environment.Exit(1);
+            }
+
+            if (runtimeSettings.LogRequests)
+            {
+                Logger.Info("Logging enabled.");
+            }
+
+            if (runtimeSettings.TracingEnabled)
+            {
+                Logger.Info("Tracing enabled.");
+            }
+
+            if (runtimeSettings.IgnoreSslErrors == true)
+            {
+                Logger.Info("Jackett will ignore SSL certificate errors.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
+            {
+                Logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
+            }
+
+            // Use Proxy
+            if (runtimeSettings.ProxyConnection != null)
+            {
+                Logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
+            }
+        }
+
+        public static IConfigurationService ConfigService
+        {
+            get
+            {
+                return ApplicationContainer.Resolve<IConfigurationService>();
+            }
+        }
+
+        public static IServerService ServerService
+        {
+            get
+            {
+                return ApplicationContainer.Resolve<IServerService>();
+            }
+        }
+
+        public static ServerConfig ServerConfiguration
+        {
+            get
+            {
+                return ApplicationContainer.Resolve<ServerConfig>();
+            }
+        }
+
+        public static Logger Logger
+        {
+            get
+            {
+                return ApplicationContainer.Resolve<Logger>();
+            }
         }
 
         private static void InitAutomapper()
@@ -62,8 +140,7 @@ namespace Jackett.Server
                 {
                     if (r.Category != null)
                     {
-                        var CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
-                        t.CategoryDesc = CategoryDesc;
+                        t.CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
                     }
                     else
                     {
@@ -71,22 +148,6 @@ namespace Jackett.Server
                     }
                 });
             });
-        }
-
-        public static IConfigurationService ConfigService
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<IConfigurationService>();
-            }
-        }
-
-        public static IServerService ServerService
-        {
-            get
-            {
-                return ApplicationContainer.Resolve<IServerService>();
-            }
         }
 
         public static void SetupLogging(RuntimeSettings settings, ContainerBuilder builder)

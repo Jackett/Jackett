@@ -74,7 +74,7 @@ namespace Jackett.Server
 
             var builder = new ContainerBuilder();
 
-            Initialisation.SetupLogging(runtimeSettings, builder);
+            Helper.SetupLogging(runtimeSettings, builder);
 
             builder.Populate(services);
             builder.RegisterModule(new JackettModule(runtimeSettings));
@@ -83,15 +83,17 @@ namespace Jackett.Server
             builder.RegisterType<ProtectionService>().As<IProtectionService>();
 
             IContainer container = builder.Build();
-            Initialisation.ApplicationContainer = container;
+            Helper.ApplicationContainer = container;
+
+            Helper.Initialize();
 
             return new AutofacServiceProvider(container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
-            Initialisation.Initialize();
+            applicationLifetime.ApplicationStopping.Register(OnShutdown);
 
             app.UseResponseCompression();
 
@@ -107,7 +109,7 @@ namespace Jackett.Server
 
             app.UseFileServer(new FileServerOptions
             {
-                FileProvider = new PhysicalFileProvider(Initialisation.ConfigService.GetContentFolder()),
+                FileProvider = new PhysicalFileProvider(Helper.ConfigService.GetContentFolder()),
                 RequestPath = "",
                 EnableDefaultFiles = true,
                 EnableDirectoryBrowsing = false
@@ -116,6 +118,11 @@ namespace Jackett.Server
             app.UseAuthentication();
 
             app.UseMvc();
+        }
+
+        private void OnShutdown()
+        {
+            //this code is called when the application stops
         }
     }
 }

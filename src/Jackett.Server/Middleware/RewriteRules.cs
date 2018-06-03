@@ -10,7 +10,7 @@ namespace Jackett.Server.Middleware
         {
             var request = context.HttpContext.Request;
 
-            string serverBasePath = Initialisation.ServerService.BasePath() ?? string.Empty;
+            string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
 
             if (request.Path != null && request.Path.HasValue && serverBasePath.Length > 0 && request.Path.Value.StartsWith(serverBasePath, StringComparison.Ordinal))
             {
