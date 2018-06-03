@@ -18,30 +18,42 @@ using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
-    public class Program
+    public static class Program
     {
         public static IConfiguration Configuration { get; set; }
 
+        private static RuntimeSettings Settings { get; set; }
+
         public static void Main(string[] args)
         {
-            var optionsResult = Parser.Default.ParseArguments<ConsoleOptions>(args);
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+
+            var parser = new Parser();
+            var optionsResult = parser.ParseArguments<ConsoleOptions>(args);
+
             optionsResult.WithNotParsed(errors =>
             {
                 var text = HelpText.AutoBuild(optionsResult);
                 text.Copyright = " ";
-                text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion + " options:";
+                text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion;
+                Console.WriteLine(text);
                 Environment.Exit(1);
                 return;
             });
 
             var runtimeDictionary = new Dictionary<string, string>();
-            RuntimeSettings runtimeSettings = new RuntimeSettings();
             ConsoleOptions consoleOptions = new ConsoleOptions();
             optionsResult.WithParsed(options =>
             {
-                runtimeSettings = options.ToRunTimeSettings();
+                if (string.IsNullOrEmpty(options.Client))
+                {
+                    //TODO: Remove libcurl once off owin
+                    options.Client = "httpclient";
+                }
+
+                Settings = options.ToRunTimeSettings();
                 consoleOptions = options;
-                runtimeDictionary = GetValues(runtimeSettings);
+                runtimeDictionary = GetValues(Settings);                
             });
 
             var builder = new ConfigurationBuilder();
@@ -51,8 +63,8 @@ namespace Jackett.Server
 
             //hack TODO: Get the configuration without any DI
             var containerBuilder = new ContainerBuilder();
-            Initialisation.SetupLogging(runtimeSettings, containerBuilder);
-            containerBuilder.RegisterModule(new JackettModule(runtimeSettings));
+            Helper.SetupLogging(Settings, containerBuilder);
+            containerBuilder.RegisterModule(new JackettModule(Settings));
             containerBuilder.RegisterType<ServerService>().As<IServerService>();
             containerBuilder.RegisterType<SecuityService>().As<ISecuityService>();
             containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
@@ -64,7 +76,7 @@ namespace Jackett.Server
             IServerService serverService = tempContainer.Resolve<IServerService>();
             Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
 
-            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
+            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(Settings.DataFolder, "DataProtection"));
             if (!dataProtectionFolder.Exists)
             {
                 dataProtectionFolder.Create();
@@ -108,6 +120,26 @@ namespace Jackett.Server
                     .GetType()
                     .GetProperties()
                     .ToDictionary(p => "RuntimeSettings:" + p.Name, p => p.GetValue(obj) == null ? null : p.GetValue(obj).ToString());
+        }
+
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Settings != null && !string.IsNullOrWhiteSpace(Settings.PIDFile))
+                {
+                    var PIDFile = Settings.PIDFile;
+                    if (File.Exists(PIDFile))
+                    {
+                        Console.WriteLine("Deleting PID file " + PIDFile);
+                        File.Delete(PIDFile);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString(), "Error while deleting the PID file");
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls) =>

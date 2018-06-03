@@ -15,7 +15,7 @@ namespace Jackett.Server.Middleware
                 || request.Path.ToString().Equals("/index.html", StringComparison.OrdinalIgnoreCase))
             {
                 // 301 is the status code of permanent redirect
-                var redir = Initialisation.ServerService.BasePath() + "/UI/Dashboard";
+                var redir = Helper.ServerService.BasePath() + "/UI/Dashboard";
                 var response = context.HttpContext.Response;
                 response.StatusCode = StatusCodes.Status301MovedPermanently;
                 context.Result = RuleResult.EndResponse;
