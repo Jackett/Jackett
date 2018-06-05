@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -190,15 +189,7 @@ namespace Jackett.Common.Indexers
             }
 
             Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
-            bool isWindows = false;
-            try {
-                // RuntimeInformation not available on older mono versions?
-                isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, "IsOSPlatform check failed, assuming no windows system");
-            }
+            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
             if (!isWindows && dotNetVersion.Major < 4)
             {
@@ -216,9 +207,9 @@ namespace Jackett.Common.Indexers
                 passwordPropertyValue = configData.GetType().GetProperty("Password").GetValue(configData, null);
                 passwordValue = passwordPropertyValue.GetType().GetProperty("Value").GetValue(passwordPropertyValue, null).ToString();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                logger.Info("Attempt to source password from json failed: " + ex.ToString());
+                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a public tracker");
                 return false;
             }
 

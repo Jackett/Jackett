@@ -153,9 +153,9 @@ namespace Jackett.Services
                         logger.Error(notice);
                     }
 
-                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 4))
+                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
                     {
-                        string notice = "Mono version 5.4 is the minimum required. Please update to the latest version from http://www.mono-project.com/download/";
+                        string notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
                         _notices.Add(notice);
                         logger.Error(notice);
                     }
