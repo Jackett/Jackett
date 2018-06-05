@@ -190,7 +190,15 @@ namespace Jackett.Common.Indexers
             }
 
             Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
-            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            bool isWindows = false;
+            try {
+                // RuntimeInformation not available on older mono versions?
+                isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "IsOSPlatform check failed, assuming no windows system");
+            }
 
             if (!isWindows && dotNetVersion.Major < 4)
             {
@@ -210,7 +218,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                logger.Warn($"Attempt to source password from json failed - {ID} : " + ex.ToString());
+                logger.Info("Attempt to source password from json failed: " + ex.ToString());
                 return false;
             }
 
@@ -224,12 +232,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
-                    {
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {ID} : " + ex.ToString());
-                    }
-
-                    logger.Info($"Attempting legacy Unprotect - {ID} : ");
+                    logger.Info("Password could not be unprotected using Microsoft.AspNetCore.DataProtection, trying legacy: " + ex.ToString());
 
                     try
                     {
@@ -240,13 +243,11 @@ namespace Jackett.Common.Indexers
                         SaveConfig();
                         IsConfigured = true;
 
-                        logger.Info($"Password successfully migrated for {ID}");
-
                         return true;
                     }
                     catch (Exception exception)
                     {
-                        logger.Info($"Password could not be unprotected using legacy DPAPI - {ID} : " + exception.ToString());
+                        logger.Info("Password could not be unprotected using legacy DPAPI: " + exception.ToString());
                     }
                 }
             }
