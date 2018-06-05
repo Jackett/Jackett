@@ -25,6 +25,7 @@
        - {id: 41, cat: Books, desc: "Quotidiani"}
        - {id: 59, cat: Books, desc: "Fumetti"}
        - {id: 60, cat: Books, desc: "Riviste"}
+       - {id: 61, cat: Books, desc: "Audiolibri"}
       # Games
        - {id: 47, cat: PC/Games, desc: "Games PC"}
        - {id: 22, cat: Console/Other, desc: "Nintendo"}
