@@ -6,10 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.ilcorsaroblu.org/
+    - https://www.ilcorsaroblu.info/
   legacylinks:
-    - https://ilcorsaroblu.org/
     - http://ilcorsaroblu.org/
+    - https://www.ilcorsaroblu.org/
 
   caps:
     categorymappings:
@@ -45,6 +45,8 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings: []
+
   search:
     paths:
       - path: /index.php
@@ -64,7 +66,7 @@
       page: torrents
       active: 0
     rows:
-      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[onmouseover])
+      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
     fields:
       title:
         selector: td:nth-child(2) > a

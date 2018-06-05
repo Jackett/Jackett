@@ -153,6 +153,13 @@ namespace Jackett.Services
                         logger.Error(notice);
                     }
 
+                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
+                    {
+                        string notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
+                        _notices.Add(notice);
+                        logger.Error(notice);
+                    }
+
                     try
                     {
                         // Check for mono-devel

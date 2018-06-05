@@ -231,7 +231,9 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var results = await RequestStringWithCookies(link.AbsoluteUri);
-            await FollowIfRedirect(results);
+            //await FollowIfRedirect(results); // manual follow for better debugging (string)
+            if (results.IsRedirect)
+                results = await RequestStringWithCookies(results.RedirectingTo);
             CQ dom = results.Content;
             var dl = dom.Find("a:has(font:contains(\"Download torrent file\"))");
 
