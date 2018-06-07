@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -167,7 +168,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            Dictionary<string, string> qParams = new Dictionary<string, string>();
+            var qParams = new NameValueCollection();
             qParams.Add("cata", "yes");
             qParams.Add("sec", "jax");
 
@@ -182,7 +183,9 @@ namespace Jackett.Common.Indexers
                 qParams.Add("search", query.GetQueryString());
             }
 
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
+            var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
+
+            var results = await RequestStringWithCookies(searchUrl);
             List<ReleaseInfo> releases = ParseResponse(query, results.Content);
 
             return releases;
