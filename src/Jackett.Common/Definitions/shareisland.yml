@@ -7,6 +7,8 @@
   encoding: UTF-8
   links:
     - http://shareisland.org/
+  legacylinks:
+    - http://www.shareisland.org/
 
   caps:
     categorymappings:
