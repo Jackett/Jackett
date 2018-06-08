@@ -86,7 +86,7 @@ namespace Jackett.Common.Utils
             return qs[argument].FirstOrDefault();
         }
 
-        public static long? GetLongFromString(string str, bool getInt=false)
+        public static long? GetLongFromString(string str)
         {
             if (str == null)
                 return null;
@@ -95,7 +95,7 @@ namespace Jackett.Common.Utils
             if (!IdMatch.Success)
                 return null;
             var Id = IdMatch.Groups[1].Value;
-            return getInt==false ? CoerceLong(Id) : CoerceInt(Id);
+            return CoerceLong(Id);
         }
 
         public static int? GetImdbID(string imdbstr)
@@ -114,7 +114,7 @@ namespace Jackett.Common.Utils
             var imdbid = GetImdbID(imdbstr);
             if (imdbid == null)
                 return null;
-
+         
             return "tt" + ((int)imdbid).ToString("D7");
         }
     }
