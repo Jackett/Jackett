@@ -352,6 +352,9 @@ namespace Jackett.Common.Indexers
                             var grabsStr = qRow.Find("td:nth-child(8)").Text();
                             release.Grabs = ParseUtil.GetLongFromString(grabsStr);
 
+                            var filesStr = qRow.Find("td:nth-child(7) > a").Text();
+                            release.Files = ParseUtil.GetLongFromString(filesStr, true);
+
                             var category = qRow.Find(".br_type > a").Attr("href").Replace("browse.php?cat=", string.Empty);
                             release.Category = MapTrackerCatToNewznab(category);
                         }
