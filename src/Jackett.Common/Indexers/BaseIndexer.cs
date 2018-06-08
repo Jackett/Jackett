@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -190,7 +189,7 @@ namespace Jackett.Common.Indexers
             }
 
             Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
-            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
             if (!isWindows && dotNetVersion.Major < 4)
             {
@@ -208,9 +207,9 @@ namespace Jackett.Common.Indexers
                 passwordPropertyValue = configData.GetType().GetProperty("Password").GetValue(configData, null);
                 passwordValue = passwordPropertyValue.GetType().GetProperty("Value").GetValue(passwordPropertyValue, null).ToString();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                logger.Warn($"Attempt to source password from json failed - {ID} : " + ex.ToString());
+                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a public tracker");
                 return false;
             }
 
@@ -224,12 +223,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception ex)
                 {
-                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
-                    {
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {ID} : " + ex.ToString());
-                    }
-
-                    logger.Info($"Attempting legacy Unprotect - {ID} : ");
+                    logger.Info("Password could not be unprotected using Microsoft.AspNetCore.DataProtection, trying legacy: " + ex.ToString());
 
                     try
                     {
@@ -240,13 +234,11 @@ namespace Jackett.Common.Indexers
                         SaveConfig();
                         IsConfigured = true;
 
-                        logger.Info($"Password successfully migrated for {ID}");
-
                         return true;
                     }
                     catch (Exception exception)
                     {
-                        logger.Info($"Password could not be unprotected using legacy DPAPI - {ID} : " + exception.ToString());
+                        logger.Info("Password could not be unprotected using legacy DPAPI: " + exception.ToString());
                     }
                 }
             }

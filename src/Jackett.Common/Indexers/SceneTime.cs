@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,7 +20,7 @@ namespace Jackett.Common.Indexers
     {
         private string StartPageUrl { get { return SiteLink + "login.php"; } }
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse_API.php"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
 
         private new ConfigurationDataRecaptchaLogin configData
@@ -53,25 +54,27 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies/HD");
             AddCategoryMapping(61, TorznabCatType.Movies, "Movies/Classic");
             AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies/3D");
-            AddCategoryMapping(78, TorznabCatType.XXX, "0day/XxX");
             AddCategoryMapping(80, TorznabCatType.MoviesForeign, "Movies/Non-English");
             AddCategoryMapping(81, TorznabCatType.MoviesBluRay, "Movies/BluRay");
             AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies/CAM-TS");
             AddCategoryMapping(102, TorznabCatType.MoviesOther, "Movies/Remux");
             AddCategoryMapping(103, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip");
             AddCategoryMapping(105, TorznabCatType.Movies, "Movies/Kids");
+            AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies/4K");
+            AddCategoryMapping(17, TorznabCatType.MoviesBluRay, "Movies/4K bluray");
 
             //TV
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
             AddCategoryMapping(43, TorznabCatType.TV, "TV/Packs");
             AddCategoryMapping(9, TorznabCatType.TVHD, "TV-HD");
-            AddCategoryMapping(19, TorznabCatType.TVHD, "TV-HD HEVC/x265");
             AddCategoryMapping(63, TorznabCatType.TV, "TV/Classic");
             AddCategoryMapping(77, TorznabCatType.TVSD, "TV/SD");
             AddCategoryMapping(79, TorznabCatType.TVSport, "Sports");
             AddCategoryMapping(100, TorznabCatType.TVFOREIGN, "TV/Non-English");
             AddCategoryMapping(83, TorznabCatType.TVWEBDL, "TV/Web-Rip");
             AddCategoryMapping(8, TorznabCatType.TVOTHER, "TV-Mobile");
+            AddCategoryMapping(18, TorznabCatType.TVAnime, "TV/Anime");
+            AddCategoryMapping(19, TorznabCatType.TVHD, "TV-x265");
 
             // Games
             AddCategoryMapping(6, TorznabCatType.PCGames, "Games/PC ISO");
@@ -165,7 +168,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            Dictionary<string, string> qParams = new Dictionary<string, string>();
+            var qParams = new NameValueCollection();
             qParams.Add("cata", "yes");
             qParams.Add("sec", "jax");
 
@@ -180,7 +183,9 @@ namespace Jackett.Common.Indexers
                 qParams.Add("search", query.GetQueryString());
             }
 
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, qParams);
+            var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
+
+            var results = await RequestStringWithCookies(searchUrl);
             List<ReleaseInfo> releases = ParseResponse(query, results.Content);
 
             return releases;

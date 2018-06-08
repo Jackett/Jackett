@@ -16,8 +16,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Systems
-* Windows using .NET 4.5.2 [Download here](https://www.microsoft.com/net/framework/versions/net452).
-* Linux and macOS using Mono 4.6.0 and above. [Download here](http://www.mono-project.com/download/). Earlier versions of mono may work but some trackers may fail to negotiate SSL correctly, and others may cause Jackett to crash when used.
+* Windows using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461).
+* Linux and macOS using Mono 5.8 or above. [Download here](http://www.mono-project.com/download/). Earlier versions of mono may work, but some trackers may fail to negotiate SSL correctly, and others may cause Jackett to crash when used.
 
 ### Supported Public Trackers
  * 1337x
@@ -319,7 +319,7 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
 
 ## Installation on Linux
- 1. Install [Mono 4.6](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release for your distribution is recommended)
+ 1. Install [Mono 5.8](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:
