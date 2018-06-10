@@ -53,7 +53,7 @@ namespace Jackett.Server.Services
 
         public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t")
         {
-            if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
+            if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet" && action != "bh")) // no need to convert a magnet link to a proxy link unless it's a blackhole link
                 return link;
 
             var encryptedLink = _protectionService.Protect(link.ToString());
