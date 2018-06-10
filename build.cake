@@ -6,7 +6,7 @@
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var configuration = Argument("configuration", "Debug");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -36,8 +36,8 @@ Task("Clean")
 	.IsDependentOn("Info")
 	.Does(() =>
 	{
-		CleanDirectories("./src/**/obj" + configuration);
-		CleanDirectories("./src/**/bin" + configuration);
+		CleanDirectories("./src/**/obj");
+		CleanDirectories("./src/**/bin");
 		CleanDirectories("./BuildOutput");
 		CleanDirectories("./" + artifactsDirName);
 		CleanDirectories("./" + testResultsDirName);
@@ -166,16 +166,19 @@ Task("Experimental")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		ExperimentalPublish("netcoreapp2.1", "win-x86");
-		ExperimentalPublish("netcoreapp2.1", "linux-x64");
-		ExperimentalPublish("netcoreapp2.1", "osx-x64");
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string serviceProjectPath = "./src/Jackett.Service.Windows/Jackett.Service.Windows.csproj";
+		
+		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "win-x86");
+		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "linux-x64");
+		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "osx-x64");
 
 		Zip("./BuildOutput/Experimental/netcoreapp2.1/win-x86", $"./{artifactsDirName}/Experimental.netcoreapp.win-x86.zip");
 		Zip("./BuildOutput/Experimental/netcoreapp2.1/osx-x64", $"./{artifactsDirName}/Experimental.netcoreapp.osx-x64.zip");
 		Gzip("./BuildOutput/Experimental/netcoreapp2.1/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.netcoreapp.linux-x64.tar.gz");
 
-		ExperimentalPublish("net461", "win7-x86");
-		ExperimentalPublish("net461", "linux-x64");
+		DotNetCorePublish(serviceProjectPath, "net461", "win7-x86");
+		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
 
 		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Experimental.net461.win7-x86.zip");
 		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.mono.linux-x64.tar.gz");
@@ -183,6 +186,7 @@ Task("Experimental")
 
 Task("Appveyor-Push-Artifacts")
 	.IsDependentOn("Package-Full-Framework")
+	.IsDependentOn("Experimental")
 	.Does(() =>
 	{
 		if (AppVeyor.IsRunningOnAppVeyor)
@@ -305,7 +309,7 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	MoveFile($"{sourceFolder}/{tarFileName}.gz", $"{outputDirectory}/{tarFileName}.gz");
 }
 
-private void ExperimentalPublish(string framework, string runtime)
+private void DotNetCorePublish(string projectPath, string framework, string runtime)
 {
 	var settings = new DotNetCorePublishSettings
 		 {
@@ -314,7 +318,7 @@ private void ExperimentalPublish(string framework, string runtime)
 			 OutputDirectory = $"./BuildOutput/Experimental/{framework}/{runtime}/Jackett"
 		 };
 
-		 DotNetCorePublish("./src/Jackett.Server/Jackett.Server.csproj", settings);
+		 DotNetCorePublish(projectPath, settings);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -323,7 +327,6 @@ private void ExperimentalPublish(string framework, string runtime)
 
 Task("Default")
 	.IsDependentOn("Release-Notes")
-	.IsDependentOn("Experimental")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
