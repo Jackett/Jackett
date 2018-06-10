@@ -23,11 +23,11 @@ namespace Jackett.Common.Indexers
         { get { return SiteLink + "takelogin.php"; } }
         private string BrowseUrl
         { get { return SiteLink + "browse.php"; } }
-        private bool TorrentHTTPSMode => ((ConfigurationDataEliteTracker)configData).TorrentHTTPSMode.Value;
+        private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataEliteTracker configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataEliteTracker)base.configData; }
             set { base.configData = value; }
         }
 
@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
                 configData: new ConfigurationDataEliteTracker()
                 )
         {
-Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
 
