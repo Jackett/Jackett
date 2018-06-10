@@ -39,7 +39,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET Core", ".NET Core", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Executables", "Executables", "{AA50F785-12B8-4669-8D4F-EAFB49258E60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jackett.Server", "Jackett.Server\Jackett.Server.csproj", "{84182782-EDBC-4342-ADA6-72B7694D0862}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Server", "Jackett.Server\Jackett.Server.csproj", "{84182782-EDBC-4342-ADA6-72B7694D0862}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Service.Windows", "Jackett.Service.Windows\Jackett.Service.Windows.csproj", "{45EA874E-4FF6-4D35-AE62-668EDA5E910D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{84182782-EDBC-4342-ADA6-72B7694D0862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84182782-EDBC-4342-ADA6-72B7694D0862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84182782-EDBC-4342-ADA6-72B7694D0862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45EA874E-4FF6-4D35-AE62-668EDA5E910D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EA874E-4FF6-4D35-AE62-668EDA5E910D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45EA874E-4FF6-4D35-AE62-668EDA5E910D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45EA874E-4FF6-4D35-AE62-668EDA5E910D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{FF8B9A1B-AE7E-4F14-9C37-DA861D034738} = {AA50F785-12B8-4669-8D4F-EAFB49258E60}
 		{6A06EC9B-AF21-4DE8-9B50-BC7E3C2C78B9} = {AA50F785-12B8-4669-8D4F-EAFB49258E60}
 		{84182782-EDBC-4342-ADA6-72B7694D0862} = {6A06EC9B-AF21-4DE8-9B50-BC7E3C2C78B9}
+		{45EA874E-4FF6-4D35-AE62-668EDA5E910D} = {FF8B9A1B-AE7E-4F14-9C37-DA861D034738}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54BC4102-8B85-49C1-BA12-257D941D1B97}
