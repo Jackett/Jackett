@@ -6,6 +6,7 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
+using Microsoft.AspNetCore.Hosting;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -19,8 +20,10 @@ namespace Jackett.Server
     public static class Helper
     {
         public static IContainer ApplicationContainer { get; set; }
-
+        public static IApplicationLifetime applicationLifetime;
         private static bool _automapperInitialised = false;
+        public static ConsoleOptions ConsoleOptions { get; set; }
+
 
         public static void Initialize()
         {
@@ -32,13 +35,13 @@ namespace Jackett.Server
                 _automapperInitialised = true;
             }
 
-            ProcessRuntimeSettings();
+            ProcessSettings();
 
             //Load the indexers
             ServerService.Initalize();
         }
 
-        private static void ProcessRuntimeSettings()
+        private static void ProcessSettings()
         {
             RuntimeSettings runtimeSettings = ServerConfiguration.RuntimeSettings;
 
@@ -74,11 +77,83 @@ namespace Jackett.Server
                 Logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
             }
 
-            // Use Proxy
             if (runtimeSettings.ProxyConnection != null)
             {
                 Logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
             }
+
+            if (ConsoleOptions.Install || ConsoleOptions.Uninstall || ConsoleOptions.StartService || ConsoleOptions.StopService || ConsoleOptions.ReserveUrls)
+            {
+                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+
+                if (!isWindows)
+                {
+                    Logger.Error($"ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
+                    Environment.Exit(1);
+                }
+            }
+
+
+            /*  ======     Actions    =====  */
+
+            // Install service
+            if (ConsoleOptions.Install)
+            {
+                Logger.Info("Initiating Jackett service install");
+                ServiceConfigService.Install();
+                Environment.Exit(1);
+            }
+
+            // Uninstall service
+            if (ConsoleOptions.Uninstall)
+            {
+                Logger.Info("Initiating Jackett service uninstall");
+                ServiceConfigService.Uninstall();
+                Environment.Exit(1);
+            }
+
+            // Start Service
+            if (ConsoleOptions.StartService)
+            {
+                if (!ServiceConfigService.ServiceRunning())
+                {
+                    Logger.Info("Initiating Jackett service start");
+                    ServiceConfigService.Start();
+                }
+                Environment.Exit(1);
+            }
+
+            // Stop Service
+            if (ConsoleOptions.StopService)
+            {
+                if (ServiceConfigService.ServiceRunning())
+                {
+                    Logger.Info("Initiating Jackett service stop");
+                    ServiceConfigService.Stop();
+                }
+                Environment.Exit(1);
+            }
+
+            // Reserve urls
+            if (ConsoleOptions.ReserveUrls)
+            {
+                Logger.Info("Initiating ReserveUrls");
+                ServerService.ReserveUrls(doInstall: true);
+                Environment.Exit(1);
+            }
+        }
+
+        public static void RestartWebHost()
+        {
+            Logger.Info("Restart of the web application host (not process) initiated");
+            Program.isWebHostRestart = true;
+            applicationLifetime.StopApplication();
+        }
+
+        public static void StopWebHost()
+        {
+            Logger.Info("Jackett is being stopped");
+            applicationLifetime.StopApplication();
         }
 
         public static IConfigurationService ConfigService
@@ -94,6 +169,14 @@ namespace Jackett.Server
             get
             {
                 return ApplicationContainer.Resolve<IServerService>();
+            }
+        }
+
+        public static IServiceConfigService ServiceConfigService
+        {
+            get
+            {
+                return ApplicationContainer.Resolve<IServiceConfigService>();
             }
         }
 

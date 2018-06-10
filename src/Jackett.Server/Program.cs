@@ -21,15 +21,17 @@ namespace Jackett.Server
     public static class Program
     {
         public static IConfiguration Configuration { get; set; }
-
         private static RuntimeSettings Settings { get; set; }
+        public static bool isWebHostRestart = false;
 
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            var parser = new Parser();
-            var optionsResult = parser.ParseArguments<ConsoleOptions>(args);
+            var commandLineParser = new Parser();
+            var optionsResult = commandLineParser.ParseArguments<ConsoleOptions>(args);
+            var runtimeDictionary = new Dictionary<string, string>();
+            ConsoleOptions consoleOptions = new ConsoleOptions();
 
             optionsResult.WithNotParsed(errors =>
             {
@@ -41,8 +43,6 @@ namespace Jackett.Server
                 return;
             });
 
-            var runtimeDictionary = new Dictionary<string, string>();
-            ConsoleOptions consoleOptions = new ConsoleOptions();
             optionsResult.WithParsed(options =>
             {
                 if (string.IsNullOrEmpty(options.Client))
@@ -53,8 +53,10 @@ namespace Jackett.Server
 
                 Settings = options.ToRunTimeSettings();
                 consoleOptions = options;
-                runtimeDictionary = GetValues(Settings);                
+                runtimeDictionary = GetValues(Settings);
             });
+
+            Helper.ConsoleOptions = consoleOptions;
 
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
@@ -111,7 +113,12 @@ namespace Jackett.Server
             tempContainer.Dispose();
             tempContainer = null;
 
-            CreateWebHostBuilder(args, url).Build().Run();
+            //TODO Handle scenario where user changes the port in the UI and we need to restart the WebHost with new port
+            do
+            {
+                isWebHostRestart = false;
+                CreateWebHostBuilder(args, url).Build().Run();
+            } while (isWebHostRestart);
         }
 
         public static Dictionary<string, string> GetValues(object obj)
@@ -145,8 +152,8 @@ namespace Jackett.Server
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(Configuration)
-            .UseUrls(urls)
-            .PreferHostingUrls(true)
+                .UseUrls(urls)
+                .PreferHostingUrls(true)
                 .UseStartup<Startup>();
     }
 }

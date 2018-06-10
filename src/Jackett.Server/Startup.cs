@@ -81,6 +81,7 @@ namespace Jackett.Server
             builder.RegisterType<SecuityService>().As<ISecuityService>();
             builder.RegisterType<ServerService>().As<IServerService>();
             builder.RegisterType<ProtectionService>().As<IProtectionService>();
+            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;
@@ -94,7 +95,7 @@ namespace Jackett.Server
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStopping.Register(OnShutdown);
-
+            Helper.applicationLifetime = applicationLifetime;
             app.UseResponseCompression();
 
             app.UseDeveloperExceptionPage();
