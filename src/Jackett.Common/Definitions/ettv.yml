@@ -69,6 +69,8 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
+      sort: "id"
+      order: "desc"
       incldead: "1"
     keywordsfilters:
       - name: replace

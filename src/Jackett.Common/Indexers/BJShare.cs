@@ -262,7 +262,6 @@ namespace Jackett.Common.Indexers
                     string groupTitle = null;
                     string groupYearStr = null;
                     var categoryStr = "";
-                    DateTime? groupPublishDate = null;
 
                     foreach (var row in rows)
                     {
