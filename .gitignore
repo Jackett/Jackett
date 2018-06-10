@@ -200,3 +200,4 @@ FakesAssemblies/
 /TestResults
 *.DS_Store
 .idea/
+launchSettings.json
