@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
                     {
                         var linkHttps = Row.QuerySelector("td:nth-child(4)").QuerySelector("a").GetAttribute("href");
                         var idTorrent = ParseUtil.GetArgumentFromQueryString(linkHttps, "id");
-                        release.Link = new Uri($"https://elite-tracker.net/download.php?id={idTorrent}&type=ssl");
+                        release.Link = new Uri($"{SiteLink}download.php?id={idTorrent}&type=ssl");
                     }
 
                     if (added.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
