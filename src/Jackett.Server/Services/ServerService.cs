@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Jackett.Server.Services
@@ -93,9 +96,7 @@ namespace Jackett.Server.Services
 
                 try
                 {
-                    int workerThreads;
-                    int completionPortThreads;
-                    ThreadPool.GetMaxThreads(out workerThreads, out completionPortThreads);
+                    ThreadPool.GetMaxThreads(out int workerThreads, out int completionPortThreads);
                     logger.Info("ThreadPool MaxThreads: " + workerThreads + " workerThreads, " + completionPortThreads + " completionPortThreads");
                 }
                 catch (Exception e)
@@ -110,8 +111,7 @@ namespace Jackett.Server.Services
                     {
                         using (StreamReader reader = new StreamReader(issuefile))
                         {
-                            string firstLine;
-                            firstLine = reader.ReadLine();
+                            string firstLine = reader.ReadLine();
                             if (firstLine != null)
                                 logger.Info("issue: " + firstLine);
                         }
@@ -121,6 +121,122 @@ namespace Jackett.Server.Services
                 {
                     logger.Error(e, "Error while reading the issue file");
                 }
+
+                Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
+
+                Type monotype = Type.GetType("Mono.Runtime");
+                if (monotype != null && dotNetVersion.Major > 3)
+                {
+                    MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var monoVersion = "unknown";
+                    if (displayName != null)
+                        monoVersion = displayName.Invoke(null, null).ToString();
+                    logger.Info("mono version: " + monoVersion);
+
+                    var monoVersionO = new Version(monoVersion.Split(' ')[0]);
+
+                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 4))
+                    {
+                        logger.Error("Your mono version is too old. Please update to the latest version from http://www.mono-project.com/download/");
+                        Environment.Exit(2);
+                    }
+
+                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
+                    {
+                        string notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
+                        _notices.Add(notice);
+                        logger.Error(notice);
+                    }
+
+                    try
+                    {
+                        // Check for mono-devel
+                        // Is there any better way which doesn't involve a hard cashes?
+                        var mono_devel_file = Path.Combine(runtimedir, "mono-api-info.exe");
+                        if (!File.Exists(mono_devel_file))
+                        {
+                            var notice = "It looks like the mono-devel package is not installed, please make sure it's installed to avoid crashes.";
+                            _notices.Add(notice);
+                            logger.Error(notice);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error while checking for mono-devel");
+                    }
+
+                    try
+                    {
+                        // Check for ca-certificates-mono
+                        var mono_cert_file = Path.Combine(runtimedir, "cert-sync.exe");
+                        if (!File.Exists(mono_cert_file))
+                        {
+                            var notice = "The ca-certificates-mono package is not installed, HTTPS trackers won't work. Please install it.";
+                            _notices.Add(notice);
+                            logger.Error(notice);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error while checking for ca-certificates-mono");
+                    }
+
+                    try
+                    {
+                        Encoding.GetEncoding("windows-1255");
+                    }
+                    catch (NotSupportedException e)
+                    {
+                        logger.Debug(e);
+                        logger.Error(e.Message + " Most likely the mono-locale-extras package is not installed.");
+                        Environment.Exit(2);
+                    }
+
+                    // check if the certificate store was initialized using Mono.Security.X509.X509StoreManager.TrustedRootCertificates.Count
+                    try
+                    {
+                        var monoSecurity = Assembly.Load("Mono.Security");
+                        Type monoX509StoreManager = monoSecurity.GetType("Mono.Security.X509.X509StoreManager");
+                        if (monoX509StoreManager != null)
+                        {
+                            var TrustedRootCertificatesProperty = monoX509StoreManager.GetProperty("TrustedRootCertificates");
+                            var TrustedRootCertificates = (ICollection)TrustedRootCertificatesProperty.GetValue(null);
+
+                            logger.Info("TrustedRootCertificates count: " + TrustedRootCertificates.Count);
+
+                            if (TrustedRootCertificates.Count == 0)
+                            {
+                                var CACertificatesFiles = new string[] {
+                                    "/etc/ssl/certs/ca-certificates.crt", // Debian based
+                                    "/etc/pki/tls/certs/ca-bundle.c", // RedHat based
+                                    "/etc/ssl/ca-bundle.pem", // SUSE
+                                    };
+
+                                var notice = "The mono certificate store is not initialized.<br/>\n";
+                                var logSpacer = "                     ";
+                                var CACertificatesFile = CACertificatesFiles.Where(f => File.Exists(f)).FirstOrDefault();
+                                var CommandRoot = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync /dev/stdin";
+                                var CommandUser = "curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin";
+                                if (CACertificatesFile != null)
+                                {
+                                    CommandRoot = "cert-sync " + CACertificatesFile;
+                                    CommandUser = "cert-sync --user " + CACertificatesFile;
+                                }
+                                notice += logSpacer + "Please run the following command as root:<br/>\n";
+                                notice += logSpacer + "<pre>" + CommandRoot + "</pre><br/>\n";
+                                notice += logSpacer + "If you don't have root access or you're running MacOS, please run the following command as the jackett user (" + Environment.UserName + "):<br/>\n";
+                                notice += logSpacer + "<pre>" + CommandUser + "</pre>";
+                                _notices.Add(notice);
+                                logger.Error(Regex.Replace(notice, "<.*?>", String.Empty));
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e, "Error while chekcing the mono certificate store");
+                    }
+                }
+
             }
             catch (Exception e)
             {
