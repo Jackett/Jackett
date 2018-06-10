@@ -12,9 +12,13 @@ namespace Jackett.Server.Middleware
 
             string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
 
-            if (request.Path != null && request.Path.HasValue && serverBasePath.Length > 0 && request.Path.Value.StartsWith(serverBasePath, StringComparison.Ordinal))
+            if (request.Path != null && request.Path.HasValue && serverBasePath.Length > 0
+                && (request.Path.Value.StartsWith(serverBasePath + "/", StringComparison.Ordinal)
+                    || request.Path.Value.Equals(serverBasePath, StringComparison.Ordinal)))
             {
-                request.Path = new PathString(request.Path.Value.Substring(serverBasePath.Length));
+                string path = request.Path.Value.Substring(serverBasePath.Length);
+                path = string.IsNullOrEmpty(path) ? "/" : path;
+                request.Path = new PathString(path);
             }
         }
     }
