@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-            Type = "private";
+            Type = "public";
 
             AddCategoryMapping(5, TorznabCatType.PC0day, "Applications");
             AddCategoryMapping(17, TorznabCatType.AudioAudiobook, "Audio Books");
