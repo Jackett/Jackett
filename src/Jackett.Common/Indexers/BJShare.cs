@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
         public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("BJ-Share",
                    description: "A brazilian tracker.",
-                   link: "https://bj-share.me/",
+                   link: "https://bj-share.info/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
