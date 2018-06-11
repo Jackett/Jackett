@@ -27,6 +27,7 @@ deploy:
   description: $(release_description)
   auth_token:
     secure: hOg+16YTIbq4kO9u4D1YVOTbWDqgCX6mAQYMbnmBBSw2CiUsZh7OKbupoUb3FtWa
+  artifact: /^(?:(?![Ee]xperimental).)*$/
   draft: true
   on:
     branch: master
