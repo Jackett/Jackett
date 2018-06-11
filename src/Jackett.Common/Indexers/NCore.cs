@@ -125,7 +125,7 @@ namespace Jackett.Common.Indexers
 
             if (seasonep != null)
             {
-                searchString = Regex.Split(query.GetQueryString(), @"(?i)S\d+E?\d+\s?$")[0];
+                searchString = query.SanitizedSearchTerm;
             }
 
             pairs.Add(new KeyValuePair<string, string>("nyit_sorozat_resz", "true"));
@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers
                     else
                     {
                         Match m = Regex.Match(release.Title, @""+ seasonep + @"\s?$", RegexOptions.IgnoreCase);
-                        if (m.Success)
+                        if (query.MatchQueryStringAND(release.Title, null, seasonep))
                         {
                             releases.Add(release);
                         }
@@ -230,9 +230,7 @@ namespace Jackett.Common.Indexers
             var results = await PerformQuery(query, null);
             if (results.Count()==0 && query.IsTVSearch)
             {
-                var regex = new Regex(@"(?i)S\d+E?\d+\s?$");
-                String seasonepisode = regex.Match(query.GetQueryString()).Value;
-                results = await PerformQuery(query, seasonepisode.Trim());
+                results = await PerformQuery(query,query.GetEpisodeSearchString());
             }
 
             return results;
