@@ -174,14 +174,7 @@ namespace Jackett.Common.Indexers
         //TODO: Remove this section once users have moved off DPAPI
         private bool MigratedFromDPAPI(JToken jsonConfig)
         {
-            var currentAssembly = Assembly.GetExecutingAssembly();
-            bool runningLegacyOwin = new StackTrace().GetFrames()
-                                        .Select(x => x.GetMethod().ReflectedType.Assembly).Distinct()
-                                        .Where(x => x.GetReferencedAssemblies().Any(y => y.FullName == currentAssembly.FullName))
-                                        .Where(x => x.ManifestModule.Name == "Jackett.dll" || x.ManifestModule.Name == "JackettConsole.exe")
-                                        .Count() == 2;
-
-            if (runningLegacyOwin)
+            if (EnvironmentUtil.IsRunningLegacyOwin)
             {
                 //Still running legacy Owin and using the DPAPI, we don't want to migrate
                 logger.Debug(ID + " - Running Owin, no need to migrate from DPAPI");

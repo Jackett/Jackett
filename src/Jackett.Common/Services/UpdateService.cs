@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Models.GitHub;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using NLog;
@@ -28,14 +30,16 @@ namespace Jackett.Common.Services
         IConfigurationService configService;
         ManualResetEvent locker = new ManualResetEvent(false);
         ITrayLockService lockService;
+        private ServerConfig serverConfig;
         bool forceupdatecheck = false;
 
-        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls)
+        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, ServerConfig sc)
         {
             logger = l;
             client = c;
             configService = cfg;
             lockService = ls;
+            serverConfig = sc;
         }
 
         private string ExePath()
@@ -74,13 +78,12 @@ namespace Jackett.Common.Services
 
         private async Task CheckForUpdates()
         {
-            var config = Engine.ServerConfig;
-            if (config.RuntimeSettings.NoUpdates)
+            if (serverConfig.RuntimeSettings.NoUpdates)
             {
                 logger.Info($"Updates are disabled via --NoUpdates.");
                 return;
             }
-            if (config.UpdateDisabled && !forceupdatecheck)
+            if (serverConfig.UpdateDisabled && !forceupdatecheck)
             {
                 logger.Info($"Skipping update check as it is disabled.");
                 return;
@@ -112,7 +115,7 @@ namespace Jackett.Common.Services
 
                 var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
 
-                if (!config.UpdatePrerelease)
+                if (!serverConfig.UpdatePrerelease)
                 {
                     releases = releases.Where(r => !r.Prerelease).ToList();
                 }
@@ -132,7 +135,7 @@ namespace Jackett.Common.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
                             if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows, config.RuntimeSettings.NoRestart);
+                                StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart);
                         }
                         catch (Exception e)
                         {
@@ -304,7 +307,15 @@ namespace Jackett.Common.Services
             { 
                 logger.Info("Exiting Jackett..");
                 lockService.Signal();
-                Engine.Exit(0);
+                //TODO: Remove once off Owin
+                if (EnvironmentUtil.IsRunningLegacyOwin)
+                {
+                    Engine.Exit(0);
+                }
+                else
+                {
+                    Environment.Exit(0);
+                }
             }
         }
     }
