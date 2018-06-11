@@ -228,7 +228,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var results = await PerformQuery(query, null);
-            if (results.Count()==0 && query.IsTVSearch)
+            if (results.Count()==0 && query.IsTVSearch) // if we search for a localized title ncore can't handle any extra S/E information, search without it and AND filter the results. See #1450
             {
                 results = await PerformQuery(query,query.GetEpisodeSearchString());
             }
