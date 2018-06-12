@@ -28,6 +28,10 @@ namespace Jackett.Common.Indexers
         {
             { "agents of shield", "Agents of S.H.I.E.L.D."}
         };
+        
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://bj-share.me/"
+        };
 
         private ConfigurationDataBasicLoginWithRSSAndDisplay ConfigData
         {
