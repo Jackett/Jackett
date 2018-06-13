@@ -214,19 +214,29 @@ namespace Jackett.Common.Indexers
                             var temp = release.Title;
                             
                             // releasedata everithing after Name.S0Xe0X
-                            var releasedata =release.Title.Split(new[] { seasonep }, StringSplitOptions.None)[1].Trim();
-                            
+                            String releasedata =release.Title.Split(new[] { seasonep }, StringSplitOptions.None)[1].Trim();
+
                             /* if the release name not contains the language we add it because it is know from category */
                             if (cat.Contains("hun") && !releasedata.Contains("hun"))
                                 releasedata += ".hun";
 
-                            // release description contains [imdb: 8.7] but we only need the data before it for title
-                            var description = release.Description.Split('[');
-                            
-                            release.Title = (description[0].Trim() + "." + seasonep.Trim() + "."+ releasedata.Trim('.')).Replace(' ', '.');
+                            // release description contains [imdb: ****] but we only need the data before it for title
+                            String[] description = {"",""};
+                            if (release.Description.Contains("[imdb:"))
+                            {
+                                description = release.Description.Split('[');
+                                description[1] = "[" + description[1];
+                            }
+
+                            release.Title = (description[0].Trim() + "." + seasonep.Trim() + "." + releasedata.Trim('.')).Replace(' ', '.');
+
+                            // if search is done for S0X than we dont want to put . between S0X and E0X 
+                            Match match = Regex.Match(releasedata, @"^E\d\d?");
+                            if (seasonep.Length==3 && match.Success)
+                                release.Title = (description[0].Trim() + "." + seasonep.Trim() + releasedata.Trim('.')).Replace(' ', '.');
 
                             // add back imdb points to the description [imdb: 8.7]
-                            release.Description = temp+" ["+ description[1];
+                            release.Description = temp+" "+ description[1];
                             releases.Add(release);
                         }
                     }
