@@ -221,12 +221,13 @@ namespace Jackett.Common.Indexers
                                 releasedata += ".hun";
 
                             // release description contains [imdb: ****] but we only need the data before it for title
-                            String[] description = {"",""};
+                            String[] description = {release.Description, ""};
                             if (release.Description.Contains("[imdb:"))
                             {
                                 description = release.Description.Split('[');
                                 description[1] = "[" + description[1];
                             }
+                            else
 
                             release.Title = (description[0].Trim() + "." + seasonep.Trim() + "." + releasedata.Trim('.')).Replace(' ', '.');
 
@@ -237,6 +238,7 @@ namespace Jackett.Common.Indexers
 
                             // add back imdb points to the description [imdb: 8.7]
                             release.Description = temp+" "+ description[1];
+                            release.Description = release.Description.Trim();
                             releases.Add(release);
                         }
                     }
