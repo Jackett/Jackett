@@ -39,6 +39,9 @@ namespace Jackett.Server
 
             //Load the indexers
             ServerService.Initalize();
+
+            //Kicks off the update checker
+            ServerService.Start();
         }
 
         private static void ProcessSettings()
