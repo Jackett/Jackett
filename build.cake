@@ -162,12 +162,11 @@ Task("Package-Full-Framework")
 		Information("Full Framework Packaging Completed");
 	});
 
-Task("Experimental")
+Task("Experimental-DotNetCore")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
-		string serviceProjectPath = "./src/Jackett.Service.Windows/Jackett.Service.Windows.csproj";
 		
 		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "win-x86");
 		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "linux-x64");
@@ -176,12 +175,49 @@ Task("Experimental")
 		Zip("./BuildOutput/Experimental/netcoreapp2.1/win-x86", $"./{artifactsDirName}/Experimental.netcoreapp.win-x86.zip");
 		Zip("./BuildOutput/Experimental/netcoreapp2.1/osx-x64", $"./{artifactsDirName}/Experimental.netcoreapp.osx-x64.zip");
 		Gzip("./BuildOutput/Experimental/netcoreapp2.1/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.netcoreapp.linux-x64.tar.gz");
+	});
 
+Task("Experimental-Kestrel-Windows-Full-Framework")
+	.IsDependentOn("Clean")
+	.Does(() =>
+	{
+		string serviceProjectPath = "./src/Jackett.Service.Windows/Jackett.Service.Windows.csproj";
+		
 		DotNetCorePublish(serviceProjectPath, "net461", "win7-x86");
-		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
 
 		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Experimental.net461.win7-x86.zip");
-		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.mono.linux-x64.tar.gz");
+	});
+
+Task("Experimental-Kestrel-Mono-FullFramework")
+	.IsDependentOn("Clean")
+	.Does(() =>
+	{
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/Experimental/net461/linux-x64";
+
+		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/JackettUpdater.*", buildOutputPath + "/Jackett");
+
+		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
+		//https://github.com/dotnet/corefx/issues/19914
+		//https://bugzilla.xamarin.com/show_bug.cgi?id=60315
+		//The workaround is to delete System.Net.Http.dll and patch the .exe.config file
+
+		DeleteFile(buildOutputPath + "/Jackett/System.Net.Http.dll");
+
+		var configFile = File(buildOutputPath + "/Jackett/JackettConsole.exe.config");
+		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
+
+		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.Mono.tar.gz");
+	});
+
+Task("Experimental")
+	.IsDependentOn("Experimental-DotNetCore")
+	.IsDependentOn("Experimental-Kestrel-Windows-Full-Framework")
+	.IsDependentOn("Experimental-Kestrel-Mono-FullFramework")
+	.Does(() =>
+	{
+		Information("Experimental builds completed");
 	});
 
 Task("Appveyor-Push-Artifacts")
