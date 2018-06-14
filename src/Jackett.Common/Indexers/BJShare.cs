@@ -28,6 +28,10 @@ namespace Jackett.Common.Indexers
         {
             { "agents of shield", "Agents of S.H.I.E.L.D."}
         };
+        
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://bj-share.me/"
+        };
 
         private ConfigurationDataBasicLoginWithRSSAndDisplay ConfigData
         {
@@ -38,7 +42,7 @@ namespace Jackett.Common.Indexers
         public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base("BJ-Share",
                    description: "A brazilian tracker.",
-                   link: "https://bj-share.me/",
+                   link: "https://bj-share.info/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
