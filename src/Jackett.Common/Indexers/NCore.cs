@@ -117,11 +117,16 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        protected async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, String seasonep)
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var pairs = new List<KeyValuePair<string, string>>();
+
+            if (seasonep != null)
+            {
+                searchString = query.SanitizedSearchTerm;
+            }
 
             pairs.Add(new KeyValuePair<string, string>("nyit_sorozat_resz", "true"));
             pairs.Add(new KeyValuePair<string, string>("miben", "name"));
@@ -198,8 +203,18 @@ namespace Jackett.Common.Indexers
                     string catlink = qRow.Find("a:has(img[class='categ_link'])").First().Attr("href");
                     string cat = ParseUtil.GetArgumentFromQueryString(catlink, "tipus");
                     release.Category = MapTrackerCatToNewznab(cat);
+                    if (seasonep == null)
+                        releases.Add(release);
+        
+                    else
+                    {
+                        Match m = Regex.Match(release.Title, @""+ seasonep + @"\s?$", RegexOptions.IgnoreCase);
+                        if (query.MatchQueryStringAND(release.Title, null, seasonep))
+                        {
+                            releases.Add(release);
+                        }
+                    }
 
-                    releases.Add(release);
                 }
             }
             catch (Exception ex)
@@ -208,6 +223,17 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var results = await PerformQuery(query, null);
+            if (results.Count()==0 && query.IsTVSearch) // if we search for a localized title ncore can't handle any extra S/E information, search without it and AND filter the results. See #1450
+            {
+                results = await PerformQuery(query,query.GetEpisodeSearchString());
+            }
+
+            return results;
         }
     }
 }
