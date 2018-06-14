@@ -20,8 +20,6 @@ namespace Jackett.Server.Services
 {
     public class ServerService : IServerService
     {
-        private IDisposable _server = null;
-
         private IIndexerManagerService indexerService;
         private IProcessService processService;
         private ISerializeService serializeService;
@@ -292,10 +290,7 @@ namespace Jackett.Server.Services
 
         public void Stop()
         {
-            if (_server != null)
-            {
-                _server.Dispose();
-            }
+            // Only needed for Owin
         }
 
         public string GetServerUrl(Object obj)
