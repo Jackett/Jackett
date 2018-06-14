@@ -135,8 +135,11 @@ namespace Jackett.Server.Services
 
                     var monoVersionO = new Version(monoVersion.Split(' ')[0]);
 
-                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 4))
+                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
                     {
+                        //Hard minimum of 5.8
+                        //5.4 throws a SIGABRT, looks related to this which was fixed in 5.8 https://bugzilla.xamarin.com/show_bug.cgi?id=60625
+
                         logger.Error("Your mono version is too old. Please update to the latest version from http://www.mono-project.com/download/");
                         Environment.Exit(2);
                     }
