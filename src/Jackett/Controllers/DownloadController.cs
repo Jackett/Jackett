@@ -71,9 +71,19 @@ namespace Jackett.Controllers
                 }
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
-                var parser = new BencodeParser();
-                var torrentDictionary = parser.Parse(downloadBytes);
-                byte[] sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
+                byte[] sortedDownloadBytes = null;
+                try
+                {
+                    var parser = new BencodeParser();
+                    var torrentDictionary = parser.Parse(downloadBytes);
+                    sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
+                }
+                catch (Exception e)
+                {
+                    var content = indexer.Encoding.GetString(downloadBytes);
+                    logger.Error(content);
+                    throw new Exception("BencodeParser failed", e);
+                }
 
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 result.Content = new ByteArrayContent(sortedDownloadBytes);
