@@ -295,7 +295,7 @@ namespace Jackett.Common.Indexers.Abstract
                 && content[0] != 'd' // simple test for torrent vs HTML content
                 && requestLink.Contains("usetoken=1"))
             {
-                var html = Encoding.UTF8.GetString(content);
+                var html = Encoding.GetString(content);
                 if (html.Contains("You do not have any freeleech tokens left."))
                 {
                     // download again with usetoken=0
