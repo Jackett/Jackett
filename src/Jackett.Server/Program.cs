@@ -58,6 +58,10 @@ namespace Jackett.Server
 
             Helper.ConsoleOptions = consoleOptions;
 
+            LogManager.Configuration = Initialisation.SetupLogging(Settings);
+            Logger logger = LogManager.GetCurrentClassLogger();
+            logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
+
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
 
@@ -74,7 +78,6 @@ namespace Jackett.Server
                 containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
                 var tempContainer = containerBuilder.Build();
 
-                Logger logger = tempContainer.Resolve<Logger>();
                 ServerConfig serverConfig = tempContainer.Resolve<ServerConfig>();
                 IConfigurationService configurationService = tempContainer.Resolve<IConfigurationService>();
                 IServerService serverService = tempContainer.Resolve<IServerService>();
