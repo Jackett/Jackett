@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Jackett.Server.Controllers
 {
@@ -160,15 +161,9 @@ namespace Jackett.Server.Controllers
                         serverService.ReserveUrls(true);
                     }
                 }
-                //TODO
-                //(new Thread(() =>
-                //{
-                //    Thread.Sleep(500);
-                //    serverService.Stop();
-                //    Engine.BuildContainer(serverConfig.RuntimeSettings, new WebApi2Module());
-                //    Engine.Server.Initalize();
-                //    Engine.Server.Start();
-                //})).Start();
+
+                Thread.Sleep(500);
+                Helper.RestartWebHost();
             }
 
             if (saveDir != serverConfig.BlackholeDir)
