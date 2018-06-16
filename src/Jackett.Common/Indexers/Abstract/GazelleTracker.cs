@@ -283,5 +283,28 @@ namespace Jackett.Common.Indexers.Abstract
                 release.UploadVolumeFactor = 0;
             }
         }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var content = await base.Download(link);
+
+            // Check if we're out of FL tokens
+            // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
+            var requestLink = link.ToString();
+            if (content.Length >= 1
+                && content[0] != 'd' // simple test for torrent vs HTML content
+                && requestLink.Contains("usetoken=1"))
+            {
+                var html = Encoding.GetString(content);
+                if (html.Contains("You do not have any freeleech tokens left."))
+                {
+                    // download again with usetoken=0
+                    var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
+                    content = await base.Download(new Uri(requestLinkNew));
+                }
+            }
+
+            return content;
+        }
     }
 }

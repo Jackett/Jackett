@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -30,6 +31,7 @@ namespace Jackett.Common.Indexers
         string Language { get; }
         string LastError { get; set; }
         string ID { get; }
+        Encoding Encoding { get; }
 
         TorznabCapabilities TorznabCaps { get; }
 

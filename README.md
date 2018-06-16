@@ -241,7 +241,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SportsCult
  * SportHD
  * Superbits
- * Synthesiz3r
  * Tasmanit
  * TBPlus
  * TenYardTracker
@@ -272,7 +271,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentSeeds
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
- * TorrentWTF
  * TorViet
  * ToTheGlory
  * TranceTraffic

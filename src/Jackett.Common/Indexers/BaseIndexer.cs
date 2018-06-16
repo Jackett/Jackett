@@ -34,6 +34,9 @@ namespace Jackett.Common.Indexers
         public string Type { get; protected set; }
         public virtual string ID { get { return GetIndexerID(GetType()); } }
 
+        [JsonConverter(typeof(EncodingJsonConverter))]
+        public Encoding Encoding { get; protected set; }
+
         public virtual bool IsConfigured { get; protected set; }
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
@@ -835,8 +838,6 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
 
-        [JsonConverter(typeof(EncodingJsonConverter))]
-        public Encoding Encoding { get; protected set; }
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
         protected WebClient webclient;
