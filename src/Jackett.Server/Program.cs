@@ -63,62 +63,72 @@ namespace Jackett.Server
 
             Configuration = builder.Build();
 
-            //hack TODO: Get the configuration without any DI
-            var containerBuilder = new ContainerBuilder();
-            Helper.SetupLogging(Settings, containerBuilder);
-            containerBuilder.RegisterModule(new JackettModule(Settings));
-            containerBuilder.RegisterType<ServerService>().As<IServerService>();
-            containerBuilder.RegisterType<SecuityService>().As<ISecuityService>();
-            containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
-            var tempContainer = containerBuilder.Build();
-
-            Logger logger = tempContainer.Resolve<Logger>();
-            ServerConfig serverConfig = tempContainer.Resolve<ServerConfig>();
-            IConfigurationService configurationService = tempContainer.Resolve<IConfigurationService>();
-            IServerService serverService = tempContainer.Resolve<IServerService>();
-            Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-
-            DirectoryInfo dataProtectionFolder = new DirectoryInfo(Path.Combine(Settings.DataFolder, "DataProtection"));
-            if (!dataProtectionFolder.Exists)
-            {
-                dataProtectionFolder.Create();
-            }
-
-            // Override port
-            if (consoleOptions.Port != 0)
-            {
-                if (configPort != consoleOptions.Port)
-                {
-                    logger.Info("Overriding port to " + consoleOptions.Port);
-                    serverConfig.Port = consoleOptions.Port;
-                    bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-                    if (isWindows)
-                    {
-                        if (ServerUtil.IsUserAdministrator())
-                        {
-                            serverService.ReserveUrls(doInstall: true);
-                        }
-                        else
-                        {
-                            logger.Error("Unable to switch ports when not running as administrator");
-                            Environment.Exit(1);
-                        }
-                    }
-                    configurationService.SaveConfig(serverConfig);
-                }
-            }
-
-            string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
-
-            tempContainer.Dispose();
-            tempContainer = null;
-
-            //TODO Handle scenario where user changes the port in the UI and we need to restart the WebHost with new port
             do
             {
+                //hack TODO: Get the configuration without any DI
+                var containerBuilder = new ContainerBuilder();
+                Helper.SetupLogging(Settings, containerBuilder);
+                containerBuilder.RegisterModule(new JackettModule(Settings));
+                containerBuilder.RegisterType<ServerService>().As<IServerService>();
+                containerBuilder.RegisterType<SecuityService>().As<ISecuityService>();
+                containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
+                var tempContainer = containerBuilder.Build();
+
+                Logger logger = tempContainer.Resolve<Logger>();
+                ServerConfig serverConfig = tempContainer.Resolve<ServerConfig>();
+                IConfigurationService configurationService = tempContainer.Resolve<IConfigurationService>();
+                IServerService serverService = tempContainer.Resolve<IServerService>();
+                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
+
+                if (!isWebHostRestart)
+                {
+                    // Override port
+                    if (consoleOptions.Port != 0)
+                    {
+                        if (configPort != consoleOptions.Port)
+                        {
+                            logger.Info("Overriding port to " + consoleOptions.Port);
+                            serverConfig.Port = consoleOptions.Port;
+                            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                            if (isWindows)
+                            {
+                                if (ServerUtil.IsUserAdministrator())
+                                {
+                                    serverService.ReserveUrls(doInstall: true);
+                                }
+                                else
+                                {
+                                    logger.Error("Unable to switch ports when not running as administrator");
+                                    Environment.Exit(1);
+                                }
+                            }
+                            configurationService.SaveConfig(serverConfig);
+                        }
+                    }
+                }
+
+                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
+
                 isWebHostRestart = false;
-                CreateWebHostBuilder(args, url).Build().Run();
+                tempContainer.Dispose();
+                tempContainer = null;
+
+                try
+                {
+                    CreateWebHostBuilder(args, url).Build().Run();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
+                    {
+                        Console.WriteLine("Address already in use: Most likely Jackett is already running. " + ex.Message);
+                        Environment.Exit(1);
+                    }
+                    throw;
+                }
+
             } while (isWebHostRestart);
+
         }
 
         public static Dictionary<string, string> GetValues(object obj)
