@@ -1,17 +1,11 @@
 ﻿using Autofac;
 using AutoMapper;
-using Jackett.Common;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
-using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
-using NLog.Config;
-using NLog.Targets;
-using System;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -22,8 +16,6 @@ namespace Jackett.Server
         public static IContainer ApplicationContainer { get; set; }
         public static IApplicationLifetime applicationLifetime;
         private static bool _automapperInitialised = false;
-        public static ConsoleOptions ConsoleOptions { get; set; }
-
 
         public static void Initialize()
         {
@@ -35,55 +27,11 @@ namespace Jackett.Server
                 _automapperInitialised = true;
             }
 
-            ProcessSettings();
-
             //Load the indexers
             ServerService.Initalize();
 
             //Kicks off the update checker
             ServerService.Start();
-        }
-
-        private static void ProcessSettings()
-        {
-            RuntimeSettings runtimeSettings = ServerConfiguration.RuntimeSettings;
-
-            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2")
-            {
-                Logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
-                Environment.Exit(1);
-            }
-
-            if (runtimeSettings.DoSSLFix != null)
-            {
-                Logger.Error("SSLFix has been deprecated, please remove it from your start arguments");
-                Environment.Exit(1);
-            }
-
-            if (runtimeSettings.LogRequests)
-            {
-                Logger.Info("Logging enabled.");
-            }
-
-            if (runtimeSettings.TracingEnabled)
-            {
-                Logger.Info("Tracing enabled.");
-            }
-
-            if (runtimeSettings.IgnoreSslErrors == true)
-            {
-                Logger.Info("Jackett will ignore SSL certificate errors.");
-            }
-
-            if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
-            {
-                Logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
-            }
-
-            if (runtimeSettings.ProxyConnection != null)
-            {
-                Logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
-            }
         }
 
         public static void RestartWebHost()
@@ -185,6 +133,5 @@ namespace Jackett.Server
                 builder.RegisterInstance(logger).SingleInstance();
             }
         }
-
     }
 }

@@ -14,62 +14,45 @@ namespace Jackett.Server
 {
     public static class Initialisation
     {
-        public static LoggingConfiguration SetupLogging(RuntimeSettings settings)
+        
+        public static void ProcessSettings(RuntimeSettings runtimeSettings, Logger logger)
         {
-            var logFileName = settings.CustomLogFileName ?? "log.txt";
-            var logLevel = settings.TracingEnabled ? NLog.LogLevel.Debug : NLog.LogLevel.Info;
-            // Add custom date time format renderer as the default is too long
-            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
-
-            var logConfig = new LoggingConfiguration();
-            var logFile = new FileTarget();
-            logConfig.AddTarget("file", logFile);
-            logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-            logFile.FileName = Path.Combine(settings.DataFolder, logFileName);
-            logFile.ArchiveFileName = "log.{#####}.txt";
-            logFile.ArchiveAboveSize = 500000;
-            logFile.MaxArchiveFiles = 5;
-            logFile.KeepFileOpen = false;
-            logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
-            var logFileRule = new LoggingRule("*", logLevel, logFile);
-            logConfig.LoggingRules.Add(logFileRule);
-
-            var logConsole = new ColoredConsoleTarget();
-            logConfig.AddTarget("console", logConsole);
-
-            logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
-            var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
-            logConfig.LoggingRules.Add(logConsoleRule);
-
-            var logService = new LogCacheService();
-            logConfig.AddTarget("service", logService);
-            var serviceRule = new LoggingRule("*", logLevel, logService);
-            logConfig.LoggingRules.Add(serviceRule);
-
-            return logConfig;
-        }
-
-        public static void SetLogLevel(LogLevel level)
-        {
-            foreach (var rule in LogManager.Configuration.LoggingRules)
+            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2")
             {
-                if (level == LogLevel.Debug)
-                {
-                    if (!rule.Levels.Contains(LogLevel.Debug))
-                    {
-                        rule.EnableLoggingForLevel(LogLevel.Debug);
-                    }
-                }
-                else
-                {
-                    if (rule.Levels.Contains(LogLevel.Debug))
-                    {
-                        rule.DisableLoggingForLevel(LogLevel.Debug);
-                    }
-                }
+                logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
+                Environment.Exit(1);
             }
 
-            LogManager.ReconfigExistingLoggers();
+            if (runtimeSettings.DoSSLFix != null)
+            {
+                logger.Error("SSLFix has been deprecated, please remove it from your start arguments");
+                Environment.Exit(1);
+            }
+
+            if (runtimeSettings.LogRequests)
+            {
+                logger.Info("Logging enabled.");
+            }
+
+            if (runtimeSettings.TracingEnabled)
+            {
+                logger.Info("Tracing enabled.");
+            }
+
+            if (runtimeSettings.IgnoreSslErrors == true)
+            {
+                logger.Info("Jackett will ignore SSL certificate errors.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
+            {
+                logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
+            }
+
+            if (runtimeSettings.ProxyConnection != null)
+            {
+                logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
+            }
         }
 
         public static void ProcessWindowsSpecificArgs(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, Logger logger)
@@ -142,6 +125,64 @@ namespace Jackett.Server
         private static void RunNetSh(IProcessService processService, string args)
         {
             processService.StartProcessAndLog("netsh.exe", args);
+        }
+
+        public static LoggingConfiguration SetupLogging(RuntimeSettings settings)
+        {
+            var logFileName = settings.CustomLogFileName ?? "log.txt";
+            var logLevel = settings.TracingEnabled ? NLog.LogLevel.Debug : NLog.LogLevel.Info;
+            // Add custom date time format renderer as the default is too long
+            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
+
+            var logConfig = new LoggingConfiguration();
+            var logFile = new FileTarget();
+            logConfig.AddTarget("file", logFile);
+            logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
+            logFile.FileName = Path.Combine(settings.DataFolder, logFileName);
+            logFile.ArchiveFileName = "log.{#####}.txt";
+            logFile.ArchiveAboveSize = 500000;
+            logFile.MaxArchiveFiles = 5;
+            logFile.KeepFileOpen = false;
+            logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
+            var logFileRule = new LoggingRule("*", logLevel, logFile);
+            logConfig.LoggingRules.Add(logFileRule);
+
+            var logConsole = new ColoredConsoleTarget();
+            logConfig.AddTarget("console", logConsole);
+
+            logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
+            var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
+            logConfig.LoggingRules.Add(logConsoleRule);
+
+            var logService = new LogCacheService();
+            logConfig.AddTarget("service", logService);
+            var serviceRule = new LoggingRule("*", logLevel, logService);
+            logConfig.LoggingRules.Add(serviceRule);
+
+            return logConfig;
+        }
+
+        public static void SetLogLevel(LogLevel level)
+        {
+            foreach (var rule in LogManager.Configuration.LoggingRules)
+            {
+                if (level == LogLevel.Debug)
+                {
+                    if (!rule.Levels.Contains(LogLevel.Debug))
+                    {
+                        rule.EnableLoggingForLevel(LogLevel.Debug);
+                    }
+                }
+                else
+                {
+                    if (rule.Levels.Contains(LogLevel.Debug))
+                    {
+                        rule.DisableLoggingForLevel(LogLevel.Debug);
+                    }
+                }
+            }
+
+            LogManager.ReconfigExistingLoggers();
         }
     }
 }
