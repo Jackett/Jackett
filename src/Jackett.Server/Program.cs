@@ -102,37 +102,17 @@ namespace Jackett.Server
 
             do
             {
-                ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
-
-                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-
                 if (!isWebHostRestart)
                 {
-                    // Override port
-                    if (consoleOptions.Port != 0)
+                    if (consoleOptions.Port != 0 || consoleOptions.ListenPublic || consoleOptions.ListenPrivate)
                     {
-                        if (configPort != consoleOptions.Port)
-                        {
-                            logger.Info("Overriding port to " + consoleOptions.Port);
-                            serverConfig.Port = consoleOptions.Port;
-                            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-                            if (isWindows)
-                            {
-                                if (ServerUtil.IsUserAdministrator())
-                                {
-                                    Initialisation.ReserveUrls(processService, serverConfig, logger, doInstall: true);
-                                }
-                                else
-                                {
-                                    logger.Error("Unable to switch ports when not running as administrator");
-                                    Environment.Exit(1);
-                                }
-                            }
-                            configurationService.SaveConfig(serverConfig);
-                        }
+                        ServerConfig serverConfiguration = configurationService.BuildServerConfig(Settings);
+                        Initialisation.ProcessConsoleOverrides(consoleOptions, processService, serverConfiguration, configurationService, logger);
                     }
                 }
 
+                ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
+                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
                 string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
 
                 isWebHostRestart = false;
