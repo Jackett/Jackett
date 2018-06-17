@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Jackett.Common.Models.Config;
+using System.Collections.Generic;
 
 namespace Jackett.Common.Services.Interfaces
 {
@@ -15,5 +16,6 @@ namespace Jackett.Common.Services.Interfaces
         List<string> GetCardigannDefinitionsFolders();
         void CreateOrMigrateSettings();
         void PerformMigration();
+        ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings);
     }
 }

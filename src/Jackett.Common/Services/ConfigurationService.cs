@@ -7,6 +7,7 @@ using System.Security.Principal;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace Jackett.Common.Services
@@ -48,8 +49,6 @@ namespace Jackett.Common.Services
                         dir.SetAccessControl(directorySecurity);
                     }
                 }
-
-                logger.Info("App config/log directory: " + GetAppDataFolder());
             }
             catch (Exception ex)
             {
@@ -239,6 +238,57 @@ namespace Jackett.Common.Services
         public string GetVersion()
         {
             return EnvironmentUtil.JackettVersion;
+        }
+
+        public ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings)
+        {
+            // Load config
+            var config = GetConfig<ServerConfig>();
+            if (config == null)
+            {
+                config = new ServerConfig(runtimeSettings);
+            }
+            else
+            {
+                //We don't load these out of the config files as it could get confusing to users who accidently save. 
+                //In future we could flatten the serverconfig, and use command line parameters to override any configuration.
+                config.RuntimeSettings = runtimeSettings;
+            }
+
+            if (string.IsNullOrWhiteSpace(config.APIKey))
+            {
+                // Check for legacy key config
+                var apiKeyFile = Path.Combine(GetAppDataFolder(), "api_key.txt");
+                if (File.Exists(apiKeyFile))
+                {
+                    config.APIKey = File.ReadAllText(apiKeyFile);
+                }
+
+                // Check for legacy settings
+
+                var path = Path.Combine(GetAppDataFolder(), "config.json"); ;
+                var jsonReply = new JObject();
+                if (File.Exists(path))
+                {
+                    jsonReply = JObject.Parse(File.ReadAllText(path));
+                    config.Port = (int)jsonReply["port"];
+                    config.AllowExternal = (bool)jsonReply["public"];
+                }
+
+                if (string.IsNullOrWhiteSpace(config.APIKey))
+                    config.APIKey = StringUtil.GenerateRandom(32);
+
+                SaveConfig(config);
+            }
+
+            if (string.IsNullOrWhiteSpace(config.InstanceId))
+            {
+                config.InstanceId = StringUtil.GenerateRandom(64);
+                SaveConfig(config);
+            }
+
+            config.ConfigChanged();
+            return config;
         }
     }
 }

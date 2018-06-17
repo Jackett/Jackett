@@ -111,6 +111,8 @@ namespace Jackett.Services
                     logger.Error("Error while getting MaxThreads details: " + e);
                 }
 
+                logger.Info("App config/log directory: " + configService.GetAppDataFolder());
+
                 try
                 {
                     var issuefile = "/etc/issue";
