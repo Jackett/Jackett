@@ -1,17 +1,16 @@
-﻿using Autofac;
-using CommandLine;
+﻿using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
-using Jackett.Common.Plumbing;
+using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Server.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -62,6 +61,40 @@ namespace Jackett.Server
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
 
+            // create PID file early
+            if (!string.IsNullOrWhiteSpace(Settings.PIDFile))
+            {
+                try
+                {
+                    var proc = Process.GetCurrentProcess();
+                    File.WriteAllText(Settings.PIDFile, proc.Id.ToString());
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Error while creating the PID file");
+                }
+            }
+
+            ISerializeService serializeService = new SerializeService();
+            IProcessService processService = new ProcessService(logger);
+            IConfigurationService configurationService = new ConfigurationService(serializeService, processService, logger, Settings);
+
+            if (consoleOptions.Install || consoleOptions.Uninstall || consoleOptions.StartService || consoleOptions.StopService || consoleOptions.ReserveUrls)
+            {
+                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+
+                if (isWindows)
+                {
+                    ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
+                    Initialisation.ProcessWindowsSpecificArgs(consoleOptions, processService, serverConfig, logger);
+                }
+                else
+                {
+                    logger.Error($"ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
+                    Environment.Exit(1);
+                }
+            }
+
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
 
@@ -69,18 +102,8 @@ namespace Jackett.Server
 
             do
             {
-                //hack TODO: Get the configuration without any DI
-                var containerBuilder = new ContainerBuilder();
-                Helper.SetupLogging(Settings, containerBuilder);
-                containerBuilder.RegisterModule(new JackettModule(Settings));
-                containerBuilder.RegisterType<ServerService>().As<IServerService>();
-                containerBuilder.RegisterType<SecuityService>().As<ISecuityService>();
-                containerBuilder.RegisterType<ProtectionService>().As<IProtectionService>();
-                var tempContainer = containerBuilder.Build();
+                ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
 
-                ServerConfig serverConfig = tempContainer.Resolve<ServerConfig>();
-                IConfigurationService configurationService = tempContainer.Resolve<IConfigurationService>();
-                IServerService serverService = tempContainer.Resolve<IServerService>();
                 Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
 
                 if (!isWebHostRestart)
@@ -97,7 +120,7 @@ namespace Jackett.Server
                             {
                                 if (ServerUtil.IsUserAdministrator())
                                 {
-                                    serverService.ReserveUrls(doInstall: true);
+                                    Initialisation.ReserveUrls(processService, serverConfig, logger, doInstall: true);
                                 }
                                 else
                                 {
@@ -113,8 +136,6 @@ namespace Jackett.Server
                 string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
 
                 isWebHostRestart = false;
-                tempContainer.Dispose();
-                tempContainer = null;
 
                 try
                 {
@@ -124,14 +145,13 @@ namespace Jackett.Server
                 {
                     if (ex.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
                     {
-                        Console.WriteLine("Address already in use: Most likely Jackett is already running. " + ex.Message);
+                        logger.Error("Address already in use: Most likely Jackett is already running. " + ex.Message);
                         Environment.Exit(1);
                     }
+                    logger.Error(ex);
                     throw;
                 }
-
             } while (isWebHostRestart);
-
         }
 
         public static Dictionary<string, string> GetValues(object obj)
@@ -154,6 +174,7 @@ namespace Jackett.Server
                         Console.WriteLine("Deleting PID file " + PIDFile);
                         File.Delete(PIDFile);
                     }
+                    LogManager.Shutdown();
                 }
             }
             catch (Exception ex)

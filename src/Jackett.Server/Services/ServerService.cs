@@ -84,7 +84,6 @@ namespace Jackett.Server.Services
 
         public void Initalize()
         {
-            logger.Info("Starting Jackett " + configService.GetVersion());
             try
             {
                 var x = Environment.OSVersion;
@@ -101,6 +100,8 @@ namespace Jackett.Server.Services
                 {
                     logger.Error("Error while getting MaxThreads details: " + e);
                 }
+
+                logger.Info("App config/log directory: " + configService.GetAppDataFolder());
 
                 try
                 {
