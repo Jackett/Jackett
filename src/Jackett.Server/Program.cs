@@ -27,7 +27,7 @@ namespace Jackett.Server
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            var commandLineParser = new Parser();
+            var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
             var optionsResult = commandLineParser.ParseArguments<ConsoleOptions>(args);
             var runtimeDictionary = new Dictionary<string, string>();
             ConsoleOptions consoleOptions = new ConsoleOptions();
