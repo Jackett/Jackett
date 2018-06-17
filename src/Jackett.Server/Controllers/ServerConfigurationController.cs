@@ -144,8 +144,8 @@ namespace Jackett.Server.Controllers
                     {
                         try
                         {
-                            //TODO
-                            //processService.StartProcessAndLog(System.Windows.Forms.Application.ExecutablePath, "--ReserveUrls", true);
+                            var consoleExePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Replace(".dll", ".exe");
+                            processService.StartProcessAndLog(consoleExePath, "--ReserveUrls", true);
                         }
                         catch
                         {

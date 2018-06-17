@@ -84,66 +84,6 @@ namespace Jackett.Server
             {
                 Logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
             }
-
-            if (ConsoleOptions.Install || ConsoleOptions.Uninstall || ConsoleOptions.StartService || ConsoleOptions.StopService || ConsoleOptions.ReserveUrls)
-            {
-                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
-
-                if (!isWindows)
-                {
-                    Logger.Error($"ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
-                    Environment.Exit(1);
-                }
-            }
-
-
-            /*  ======     Actions    =====  */
-
-            // Install service
-            if (ConsoleOptions.Install)
-            {
-                Logger.Info("Initiating Jackett service install");
-                ServiceConfigService.Install();
-                Environment.Exit(1);
-            }
-
-            // Uninstall service
-            if (ConsoleOptions.Uninstall)
-            {
-                Logger.Info("Initiating Jackett service uninstall");
-                ServiceConfigService.Uninstall();
-                Environment.Exit(1);
-            }
-
-            // Start Service
-            if (ConsoleOptions.StartService)
-            {
-                if (!ServiceConfigService.ServiceRunning())
-                {
-                    Logger.Info("Initiating Jackett service start");
-                    ServiceConfigService.Start();
-                }
-                Environment.Exit(1);
-            }
-
-            // Stop Service
-            if (ConsoleOptions.StopService)
-            {
-                if (ServiceConfigService.ServiceRunning())
-                {
-                    Logger.Info("Initiating Jackett service stop");
-                    ServiceConfigService.Stop();
-                }
-                Environment.Exit(1);
-            }
-
-            // Reserve urls
-            if (ConsoleOptions.ReserveUrls)
-            {
-                Logger.Info("Initiating ReserveUrls");
-                ServerService.ReserveUrls(doInstall: true);
-                Environment.Exit(1);
-            }
         }
 
         public static void RestartWebHost()

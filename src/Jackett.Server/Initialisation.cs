@@ -1,10 +1,14 @@
 ﻿using Jackett.Common;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Server.Services;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using System;
 using System.IO;
+using System.Linq;
 
 namespace Jackett.Server
 {
@@ -66,6 +70,78 @@ namespace Jackett.Server
             }
 
             LogManager.ReconfigExistingLoggers();
+        }
+
+        public static void ProcessWindowsSpecificArgs(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, Logger logger)
+        {
+            IServiceConfigService serviceConfigService = new ServiceConfigService();
+
+            /*  ======     Actions    =====  */
+
+            // Install service
+            if (consoleOptions.Install)
+            {
+                logger.Info("Initiating Jackett service install");
+                serviceConfigService.Install();
+                Environment.Exit(1);
+            }
+
+            // Uninstall service
+            if (consoleOptions.Uninstall)
+            {
+                logger.Info("Initiating Jackett service uninstall");
+                ReserveUrls(processService, serverConfig, logger, doInstall: false);
+                serviceConfigService.Uninstall();
+                Environment.Exit(1);
+            }
+
+            // Start Service
+            if (consoleOptions.StartService)
+            {
+                if (!serviceConfigService.ServiceRunning())
+                {
+                    logger.Info("Initiating Jackett service start");
+                    serviceConfigService.Start();
+                }
+                Environment.Exit(1);
+            }
+
+            // Stop Service
+            if (consoleOptions.StopService)
+            {
+                if (serviceConfigService.ServiceRunning())
+                {
+                    logger.Info("Initiating Jackett service stop");
+                    serviceConfigService.Stop();
+                }
+                Environment.Exit(1);
+            }
+
+            // Reserve urls
+            if (consoleOptions.ReserveUrls)
+            {
+                logger.Info("Initiating ReserveUrls");
+                ReserveUrls(processService, serverConfig, logger, doInstall: true);
+                Environment.Exit(1);
+            }
+        }
+
+        public static void ReserveUrls(IProcessService processService, ServerConfig serverConfig, Logger logger, bool doInstall = true)
+        {
+            logger.Debug("Unreserving Urls");
+            serverConfig.GetListenAddresses(false).ToList().ForEach(u => RunNetSh(processService, string.Format("http delete urlacl {0}", u)));
+            serverConfig.GetListenAddresses(true).ToList().ForEach(u => RunNetSh(processService, string.Format("http delete urlacl {0}", u)));
+            if (doInstall)
+            {
+                logger.Debug("Reserving Urls");
+                serverConfig.GetListenAddresses(serverConfig.AllowExternal).ToList().ForEach(u => RunNetSh(processService, string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", u)));
+                logger.Debug("Urls reserved");
+            }
+        }
+
+        private static void RunNetSh(IProcessService processService, string args)
+        {
+            processService.StartProcessAndLog("netsh.exe", args);
         }
     }
 }

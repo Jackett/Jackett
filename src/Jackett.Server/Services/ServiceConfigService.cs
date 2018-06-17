@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using Jackett.Common.Services.Interfaces;
+using System.Reflection;
+using Jackett.Common.Services;
 
 namespace Jackett.Server.Services
 {
@@ -14,15 +16,13 @@ namespace Jackett.Server.Services
         private const string DESCRIPTION = "API Support for your favorite torrent trackers";
         private const string SERVICEEXE = "JackettService.exe";
 
-        private IConfigurationService configService;
         private IProcessService processService;
         private Logger logger;
 
-        public ServiceConfigService(IConfigurationService c, IProcessService p, Logger l)
+        public ServiceConfigService()
         {
-            configService = c;
-            processService = p;
-            logger = l;
+            logger = LogManager.GetCurrentClassLogger();
+            processService = new ProcessService(logger);
         }
 
         public bool ServiceExists()
@@ -64,10 +64,12 @@ namespace Jackett.Server.Services
             }
             else
             {
-                var exePath = Path.Combine(configService.ApplicationFolder(), SERVICEEXE);
+                string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+
+                var exePath = Path.Combine(applicationFolder, SERVICEEXE);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
                 {
-                    exePath = Path.Combine(configService.ApplicationFolder(), "..\\..\\..\\Jackett.Service\\bin\\Debug", SERVICEEXE);
+                    exePath = Path.Combine(applicationFolder, "..\\..\\..\\Jackett.Service\\bin\\Debug", SERVICEEXE);
                 }
 
                 string arg = $"create {NAME} start= auto binpath= \"{exePath}\" DisplayName= {NAME}";
