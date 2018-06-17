@@ -55,8 +55,6 @@ namespace Jackett.Server
                 runtimeDictionary = GetValues(Settings);
             });
 
-            Helper.ConsoleOptions = consoleOptions;
-
             LogManager.Configuration = Initialisation.SetupLogging(Settings);
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
@@ -74,6 +72,8 @@ namespace Jackett.Server
                     logger.Error(e, "Error while creating the PID file");
                 }
             }
+
+            Initialisation.ProcessSettings(Settings, logger);
 
             ISerializeService serializeService = new SerializeService();
             IProcessService processService = new ProcessService(logger);
