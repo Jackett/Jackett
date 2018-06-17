@@ -2,6 +2,7 @@
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Server.Services;
 using NLog;
 using NLog.Config;
@@ -9,6 +10,7 @@ using NLog.Targets;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
@@ -106,6 +108,58 @@ namespace Jackett.Server
                 logger.Info("Initiating ReserveUrls");
                 ReserveUrls(processService, serverConfig, logger, doInstall: true);
                 Environment.Exit(1);
+            }
+        }
+
+        public static void ProcessConsoleOverrides(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, IConfigurationService configurationService, Logger logger)
+        {
+            // Override port
+            if (consoleOptions.Port != 0)
+            {
+                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
+
+                if (configPort != consoleOptions.Port)
+                {
+                    logger.Info("Overriding port to " + consoleOptions.Port);
+                    serverConfig.Port = consoleOptions.Port;
+                    bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                    if (isWindows)
+                    {
+                        if (ServerUtil.IsUserAdministrator())
+                        {
+                            ReserveUrls(processService, serverConfig, logger, doInstall: true);
+                        }
+                        else
+                        {
+                            logger.Error("Unable to switch ports when not running as administrator");
+                            Environment.Exit(1);
+                        }
+                    }
+                    configurationService.SaveConfig(serverConfig);
+                }
+            }
+
+            // Override listen public
+            if (consoleOptions.ListenPublic || consoleOptions.ListenPrivate)
+            {
+                if (serverConfig.AllowExternal != consoleOptions.ListenPublic)
+                {
+                    logger.Info("Overriding external access to " + consoleOptions.ListenPublic);
+                    serverConfig.AllowExternal = consoleOptions.ListenPublic;
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        if (ServerUtil.IsUserAdministrator())
+                        {
+                            ReserveUrls(processService, serverConfig, logger, doInstall: true);
+                        }
+                        else
+                        {
+                            logger.Error("Unable to switch to public listening without admin rights.");
+                            Environment.Exit(1);
+                        }
+                    }
+                    configurationService.SaveConfig(serverConfig);
+                }
             }
         }
 
