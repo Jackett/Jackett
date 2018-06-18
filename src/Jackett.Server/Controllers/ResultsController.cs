@@ -173,13 +173,15 @@ namespace Jackett.Server.Controllers
         private Logger logger;
         private IServerService serverService;
         private ICacheService cacheService;
+        private Common.Models.Config.ServerConfig serverConfig;
 
-        public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
+        public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger, Common.Models.Config.ServerConfig sConfig)
         {
             IndexerService = indexerManagerService;
             serverService = ss;
             cacheService = c;
             this.logger = logger;
+            serverConfig = sConfig;
         }
 
         [Route("")]
@@ -528,7 +530,7 @@ namespace Jackett.Server.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
-                if (!string.IsNullOrWhiteSpace(Engine.ServerConfig.BlackholeDir))
+                if (!string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
                     if (result.Link != null)
                         result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
