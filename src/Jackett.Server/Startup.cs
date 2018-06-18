@@ -74,7 +74,7 @@ namespace Jackett.Server
 
             var builder = new ContainerBuilder();
 
-            Helper.SetupLogging(runtimeSettings, builder);
+            Helper.SetupLogging(builder);
 
             builder.Populate(services);
             builder.RegisterModule(new JackettModule(runtimeSettings));
