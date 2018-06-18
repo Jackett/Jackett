@@ -124,7 +124,7 @@ namespace Jackett.Server
             });
         }
 
-        public static void SetupLogging(RuntimeSettings settings, ContainerBuilder builder)
+        public static void SetupLogging(ContainerBuilder builder)
         {
             Logger logger = LogManager.GetCurrentClassLogger();
 
