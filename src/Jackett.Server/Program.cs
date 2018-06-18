@@ -8,12 +8,13 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NLog;
+using NLog.Web;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+
 
 namespace Jackett.Server
 {
@@ -168,6 +169,7 @@ namespace Jackett.Server
                 .UseConfiguration(Configuration)
                 .UseUrls(urls)
                 .PreferHostingUrls(true)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseNLog();
     }
 }
