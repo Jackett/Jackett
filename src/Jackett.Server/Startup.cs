@@ -104,6 +104,8 @@ namespace Jackett.Server
 
             var rewriteOptions = new RewriteOptions()
                 .Add(RewriteRules.RewriteBasePath)
+                .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
+                .AddRewrite(@"^potato\/([\w-]*)", "api/v2.0/indexers/$1/results/potato", skipRemainingRules: true) //legacy potato route
                 .Add(RedirectRules.RedirectToDashboard);
 
             app.UseRewriter(rewriteOptions);
