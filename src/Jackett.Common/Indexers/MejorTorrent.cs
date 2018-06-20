@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
             var downloadScraper = new DownloadScraper();
             var tvShowPerformer = new TvShowPerformer(requester, tvShowScraper, seasonScraper, downloadScraper);
             var rssPerformer = new RssPerformer(requester, tvShowScraper, seasonScraper, downloadScraper);
-            if (query.SearchTerm == "" || query.SearchTerm == null)
+            if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
             {
                 return await rssPerformer.PerformQuery(query);
             }
@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
             T Extract(IHtmlDocument html);
         }
 
-        class RssReleases : IScraper<IEnumerable<ReleaseInfo>>
+        class RssScraper : IScraper<IEnumerable<ReleaseInfo>>
         {
             public IEnumerable<ReleaseInfo> Extract(IHtmlDocument html)
             {
@@ -420,7 +420,10 @@ namespace Jackett.Common.Indexers
             {
                 var seasonHtml = await requester.MakeRequest(CreateSearchUri(query.SanitizedSearchTerm));
                 var seasons = tvShowScraper.Extract(seasonHtml);
-                seasons = seasons.Where(s => s.Number == query.Season);
+                if (query.Season != 0)
+                {
+                    seasons = seasons.Where(s => s.Number == query.Season);
+                }
                 if (query.Categories.Count() != 0)
                 {
                     seasons = seasons.Where(s => new List<int>(query.Categories).Contains(s.Category.ID));
@@ -448,8 +451,11 @@ namespace Jackett.Common.Indexers
                         return e;
                     });
                 });
-                var episodeNumber = Int32.Parse(query.Episode);
-                episodes = episodes.Where(e => e.EpisodeNumber <= episodeNumber && episodeNumber <= e.FinalEpisodeNumber);
+                if (!string.IsNullOrEmpty(query.Episode))
+                {
+                    var episodeNumber = Int32.Parse(query.Episode);
+                    episodes = episodes.Where(e => e.EpisodeNumber <= episodeNumber && episodeNumber <= e.FinalEpisodeNumber);
+                }
                 return episodes.ToList();
             }
 
