@@ -19,6 +19,8 @@ namespace Jackett.Common.Indexers
     class MejorTorrent : BaseWebIndexer
     {
         public static Uri WebUri = new Uri("http://www.mejortorrent.com/");
+        public static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
+        private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "MejorTorrent",
@@ -36,9 +38,6 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "es-es";
             Type = "public";
-
-            var voItem = new BoolItem() { Name = "Include original versions in search results", Value = false };
-            configData.AddDynamic("IncludeVo", voItem);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -66,13 +65,24 @@ namespace Jackett.Common.Indexers
             var seasonScraper = new SeasonScraper();
             var downloadScraper = new DownloadScraper();
             var tvShowPerformer = new TvShowPerformer(requester, tvShowScraper, seasonScraper, downloadScraper);
-            var releases = await tvShowPerformer.PerformQuery(query);
-            return releases;
+            var rssPerformer = new RssPerformer(requester, tvShowScraper, seasonScraper, downloadScraper);
+            if (query.SearchTerm == "" || query.SearchTerm == null)
+            {
+                return await rssPerformer.PerformQuery(query);
+            }
+            return await tvShowPerformer.PerformQuery(query);
         }
 
         // IF THERE IS NOT QUERY AT ALL IT IS LOOKING FOR NEW RELEASES
         // THIS IS USED TOO IN ORDER TO CHECK ALIVE
         // bool rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
+
+        public static Uri CreateSearchUri(string search)
+        {
+            var finalUri = SearchUriBase.AbsoluteUri;
+            finalUri += "?sec=buscador&valor=" + search;
+            return new Uri(finalUri);
+        }
 
         interface IScraper<T>
         {
@@ -198,15 +208,17 @@ namespace Jackett.Common.Indexers
                     {
                         case "HDTV":
                             Category = TorznabCatType.TVSD;
+                            _type = "SDTV";
                             break;
                         case "HDTV-720p":
                             Category = TorznabCatType.TVHD;
+                            _type = "HDTV-720p";
                             break;
                         default:
                             Category = TorznabCatType.TV;
+                            _type = "HDTV-720p";
                             break;
                     }
-                    _type = value;
                 }
             }
         }
@@ -220,7 +232,6 @@ namespace Jackett.Common.Indexers
 
             public MejorTorrentReleaseInfo()
             {
-                this.Description = "This is a short description of the chapter.";
                 this.Grabs = 5;
                 this.Files = 1;
                 this.PublishDate = new DateTime();
@@ -261,9 +272,63 @@ namespace Jackett.Common.Indexers
             }
         }
 
+        class MejorTorrentDownloadRequesterDecorator
+        {
+            private IRequester r;
+
+            public MejorTorrentDownloadRequesterDecorator(IRequester r)
+            {
+                this.r = r;
+            }
+
+            public async Task<IHtmlDocument> MakeRequest(IEnumerable<string> ids)
+            {
+                var downloadHtmlTasks = new List<Task<IHtmlDocument>>();
+                var formData = new List<KeyValuePair<string, string>>();
+                int index = 1;
+                ids.ToList().ForEach(id =>
+                {
+                    var episodeID = new KeyValuePair<string, string>("episodios[" + index + "]", id);
+                    formData.Add(episodeID);
+                    index++;
+                });
+                formData.Add(new KeyValuePair<string, string>("total_capis", index.ToString()));
+                formData.Add(new KeyValuePair<string, string>("tabla", "series"));
+                //var downloadHtml = await requester.MakeRequest(new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios"), RequestType.POST, formData);
+
+                return await r.MakeRequest(DownloadUri, RequestType.POST, formData);
+            }
+        }
+
         interface IPerformer
         {
             Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+        }
+
+        class RssPerformer : IPerformer
+        {
+            private IRequester requester;
+            private IScraper<IEnumerable<Season>> tvShowScraper;
+            private IScraper<IEnumerable<MejorTorrentReleaseInfo>> seasonScraper;
+            private IScraper<IEnumerable<Uri>> downloadScraper;
+
+            public RssPerformer(
+                IRequester requester,
+                IScraper<IEnumerable<Season>> tvShowScraper,
+                IScraper<IEnumerable<MejorTorrentReleaseInfo>> seasonScraper,
+                IScraper<IEnumerable<Uri>> downloadScraper)
+            {
+                this.requester = requester;
+                this.tvShowScraper = tvShowScraper;
+                this.seasonScraper = seasonScraper;
+                this.downloadScraper = downloadScraper;
+            }
+
+            public Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+            {
+                query.SearchTerm = "stranger things";
+                return new TvShowPerformer(requester, tvShowScraper, seasonScraper, downloadScraper).PerformQuery(query);
+            }
         }
 
         class TvShowPerformer : IPerformer
@@ -287,14 +352,8 @@ namespace Jackett.Common.Indexers
 
             public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
             {
-                var seasonHtml = await requester.MakeRequest(new Uri(WebUri, "secciones.php?sec=buscador&valor=" + query.SanitizedSearchTerm));
-
-                // TEMP
-                if (query.SearchTerm == null || query.SearchTerm == "")
-                {
-                    seasonHtml = await requester.MakeRequest(new Uri(WebUri, "secciones.php?sec=buscador&valor=stranger things"));
-                }
-                // TEMP
+                query = FixQuery(query);
+                var seasonHtml = await requester.MakeRequest(CreateSearchUri(query.SanitizedSearchTerm));
                 var seasons = tvShowScraper.Extract(seasonHtml);
                 seasons.Where(season => new List<int>(query.Categories).Contains(season.Category.ID));
                 var episodesHtmlTasks = new Dictionary<Season, Task<IHtmlDocument>>();
@@ -315,26 +374,20 @@ namespace Jackett.Common.Indexers
                         return e;
                     });
                 }).ToList();
-                var downloadHtmlTasks = new List<Task<IHtmlDocument>>();
-                var formData = new List<KeyValuePair<string, string>>();
-                int index = 1;
-                episodes.ForEach(episode =>
-                {
-                    var episodeID = new KeyValuePair<string, string>("episodios[" + index + "]", episode.MejorTorrentID);
-                    formData.Add(episodeID);
-                    index++;
-                });
-                formData.Add(new KeyValuePair<string, string>("total_capis", index.ToString()));
-                formData.Add(new KeyValuePair<string, string>("tabla", "series"));
-                var downloadHtml = await requester.MakeRequest(new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios"), RequestType.POST, formData);
-                var downloads = downloadScraper.Extract(downloadHtml).ToList();
 
+                var downloadRequester = new MejorTorrentDownloadRequesterDecorator(requester);
+                var downloadHtml = await downloadRequester.MakeRequest(episodes.Select(e => e.MejorTorrentID));
+                var downloads = downloadScraper.Extract(downloadHtml).ToList();
                 
                 for (var i = 0; i < downloads.Count; i++)
                 {
                     var e = episodes.ElementAt(i);
                     episodes.ElementAt(i).Link = downloads.ElementAt(i);
-                    episodes.ElementAt(i).Title = seasons.First().Title + " S" + e.Season.ToString("00") + "E" + e.EpisodeNumber.ToString("00") + " " + e.CategoryText + " - Spanish";
+                    episodes.ElementAt(i).Guid = downloads.ElementAt(i);
+                    var title = seasons.First().Title.Trim().Replace(' ', '.');
+                    title = char.ToUpper(title[0]) + title.Substring(1);
+                    var seasonAndEpisode = "S" + e.Season.ToString("00") + "E" + e.EpisodeNumber.ToString("00");
+                    episodes.ElementAt(i).Title = String.Join(".", new List<string>() { title, seasonAndEpisode, e.CategoryText, "Spanish" });
                 }
 
                 // TEMP //
@@ -350,7 +403,28 @@ namespace Jackett.Common.Indexers
                     return episodes;
                 }
                 // TEMP //
+
                 return filteredEpisodes;
+            }
+
+            private TorznabQuery FixQuery(TorznabQuery query)
+            {
+                var seasonRegex = new Regex(@".*?(s\d{1,2})", RegexOptions.IgnoreCase);
+                var episodeRegex = new Regex(@".*?(e\d{1,2})", RegexOptions.IgnoreCase);
+                var seasonMatch = seasonRegex.Match(query.SearchTerm);
+                var episodeMatch = episodeRegex.Match(query.SearchTerm);
+                if (seasonMatch.Success)
+                {
+                    query.Season = Int32.Parse(seasonMatch.Groups[1].Value.Substring(1));
+                    query.SearchTerm = query.SearchTerm.Replace(seasonMatch.Groups[1].Value, "");
+                }
+                if (episodeMatch.Success)
+                {
+                    query.Episode = episodeMatch.Groups[1].Value.Substring(1);
+                    query.SearchTerm = query.SearchTerm.Replace(episodeMatch.Groups[1].Value, "");
+                }
+                query.SearchTerm = query.SearchTerm.Trim();
+                return query;
             }
 
         }
