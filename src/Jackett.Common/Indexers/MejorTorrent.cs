@@ -158,8 +158,8 @@ namespace Jackett.Common.Indexers
             public IEnumerable<MejorTorrentReleaseInfo> Extract(IHtmlDocument html)
             {
                 var episodesLinksHtml = html.QuerySelectorAll("a[href*=\"/serie-episodio-descargar-torrent\"]");
-
-                // Example: Fecha: 2013-05-29
+                var episodesTexts = episodesLinksHtml.Select(l => l.TextContent).ToList();
+                var episodesLinks = episodesLinksHtml.Select(e => e.Attributes["href"].Value).ToList();
                 var dates = episodesLinksHtml
                     .Select(e => e.ParentElement.ParentElement.QuerySelector("div").TextContent)
                     .Select(stringDate => stringDate.Replace("Fecha: ", ""))
@@ -167,35 +167,54 @@ namespace Jackett.Common.Indexers
                     .Select(stringParts => new int[]{ Int32.Parse(stringParts[0]), Int32.Parse(stringParts[1]), Int32.Parse(stringParts[2]) })
                     .Select(intParts => new DateTime(intParts[0], intParts[1], intParts[2]));
 
-                var episodesLinks = episodesLinksHtml
-                    .Select(e => e.Attributes["href"].Value)
-                    .Select(link => ExtractInfo(link))
-                    .ToList();
+                var episodes = episodesLinks.Select(e => new MejorTorrentReleaseInfo()).ToList();
 
-                for (var i = 0; i < episodesLinks.Count(); i++)
+                for (var i = 0; i < episodes.Count(); i++)
                 {
-                    episodesLinks.ElementAt(i).PublishDate = dates.ElementAt(i);
+                    GuessEpisodes(episodes.ElementAt(i), episodesTexts.ElementAt(i));
+                    ExtractLinkInfo(episodes.ElementAt(i), episodesLinks.ElementAt(i));
+                    episodes.ElementAt(i).PublishDate = dates.ElementAt(i);
                 }
 
-                return episodesLinks;
+                return episodes;
             }
 
-            private MejorTorrentReleaseInfo ExtractInfo(String link)
+            private void GuessEpisodes(MejorTorrentReleaseInfo release, string episodeText)
             {
-                // LINK FORMAT: /serie-episodio-descargar-torrent-${ID}-${TITLE}-${SEASON_NUMBER}x${EPISODE_NUMBER}.html
-                var regex = new Regex(@"\/serie-episodio-descargar-torrent-([0-9]+)-(.*)-([0-9]+)x([0-9]+)\.html");
+                var seasonEpisodeRegex = new Regex(@"(\d{1,2}).*?(\d{1,2})", RegexOptions.IgnoreCase);
+                var matchSeasonEpisode = seasonEpisodeRegex.Match(episodeText);
+                if (!matchSeasonEpisode.Success) return;
+                release.Season = Int32.Parse(matchSeasonEpisode.Groups[1].Value);
+                release.EpisodeNumber = Int32.Parse(matchSeasonEpisode.Groups[2].Value);
+
+                char[] textArray = episodeText.ToCharArray();
+                Array.Reverse(textArray);
+                var reversedText = new string(textArray);
+                var finalEpisodeRegex = new Regex(@"(\d{1,2})");
+                var matchFinalEpisode = finalEpisodeRegex.Match(reversedText);
+                if (!matchFinalEpisode.Success) return;
+                var finalEpisodeArray = matchFinalEpisode.Groups[1].Value.ToCharArray();
+                Array.Reverse(finalEpisodeArray);
+                var finalEpisode = Int32.Parse(new string(finalEpisodeArray));
+                if (finalEpisode > release.EpisodeNumber)
+                {
+                    release.Files = (finalEpisode + 1) - release.EpisodeNumber;
+                    release.Size = release.Size * release.Files;
+                }
+            }
+
+            private void ExtractLinkInfo(MejorTorrentReleaseInfo release, String link)
+            {
+                // LINK FORMAT: /serie-episodio-descargar-torrent-${ID}-${TITLE}-${SEASON_NUMBER}x${EPISODE_NUMBER}[range].html
+                var regex = new Regex(@"\/serie-episodio-descargar-torrent-(\d+)-(.*)-(\d{1,2}).*(\d{1,2}).*\.html", RegexOptions.IgnoreCase);
                 var linkMatch = regex.Match(link);
 
                 if (!linkMatch.Success)
                 {
-                    return null;
+                    return;
                 }
-                var e = new MejorTorrentReleaseInfo();
-                e.MejorTorrentID = linkMatch.Groups[1].Value;
-                e.Title = linkMatch.Groups[2].Value;
-                e.Season = Int32.Parse(linkMatch.Groups[3].Value);
-                e.EpisodeNumber = Int32.Parse(linkMatch.Groups[4].Value);
-                return e;
+                release.MejorTorrentID = linkMatch.Groups[1].Value;
+                release.Title = linkMatch.Groups[2].Value;
             }
         }
 
@@ -246,6 +265,7 @@ namespace Jackett.Common.Indexers
             public int Season;
             public int EpisodeNumber;
             public string CategoryText;
+            public int FinalEpisodeNumber { get { return (int)(EpisodeNumber + Files - 1); } }
 
             public MejorTorrentReleaseInfo()
             {
@@ -404,6 +424,10 @@ namespace Jackett.Common.Indexers
                     var title = seasons.First().Title.Trim().Replace(' ', '.');
                     title = char.ToUpper(title[0]) + title.Substring(1);
                     var seasonAndEpisode = "S" + e.Season.ToString("00") + "E" + e.EpisodeNumber.ToString("00");
+                    if (e.Files > 1)
+                    {
+                        seasonAndEpisode += "-" + e.FinalEpisodeNumber.ToString("00");
+                    }
                     episodes.ElementAt(i).Title = String.Join(".", new List<string>() { title, seasonAndEpisode, e.CategoryText, "Spanish" });
                 }
 
@@ -413,7 +437,7 @@ namespace Jackett.Common.Indexers
                 var filteredEpisodes = episodes.Where(e => e.Season == query.Season);
                 if (isNumber)
                 {
-                    filteredEpisodes = filteredEpisodes.Where(e => e.EpisodeNumber == episodeNumber);
+                    filteredEpisodes = filteredEpisodes.Where(e => e.EpisodeNumber <= episodeNumber && episodeNumber <= e.FinalEpisodeNumber);
                 }
                 if (filteredEpisodes.Count() == 0)
                 {
