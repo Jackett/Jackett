@@ -157,9 +157,26 @@ namespace Jackett.Common.Indexers
         {
             public IEnumerable<MejorTorrentReleaseInfo> Extract(IHtmlDocument html)
             {
-                var episodesLinks = html.QuerySelectorAll("a[href*=\"/serie-episodio-descargar-torrent\"]")
+                var episodesLinksHtml = html.QuerySelectorAll("a[href*=\"/serie-episodio-descargar-torrent\"]");
+
+                // Example: Fecha: 2013-05-29
+                var dates = episodesLinksHtml
+                    .Select(e => e.ParentElement.ParentElement.QuerySelector("div").TextContent)
+                    .Select(stringDate => stringDate.Replace("Fecha: ", ""))
+                    .Select(stringDate => stringDate.Split('-'))
+                    .Select(stringParts => new int[]{ Int32.Parse(stringParts[0]), Int32.Parse(stringParts[1]), Int32.Parse(stringParts[2]) })
+                    .Select(intParts => new DateTime(intParts[0], intParts[1], intParts[2]));
+
+                var episodesLinks = episodesLinksHtml
                     .Select(e => e.Attributes["href"].Value)
-                    .Select(link => ExtractInfo(link));
+                    .Select(link => ExtractInfo(link))
+                    .ToList();
+
+                for (var i = 0; i < episodesLinks.Count(); i++)
+                {
+                    episodesLinks.ElementAt(i).PublishDate = dates.ElementAt(i);
+                }
+
                 return episodesLinks;
             }
 
