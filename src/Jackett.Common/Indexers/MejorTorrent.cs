@@ -390,62 +390,10 @@ namespace Jackett.Common.Indexers
             public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
             {
                 query = FixQuery(query);
-                var seasonHtml = await requester.MakeRequest(CreateSearchUri(query.SanitizedSearchTerm));
-                var seasons = tvShowScraper.Extract(seasonHtml);
-                seasons.Where(season => new List<int>(query.Categories).Contains(season.Category.ID));
-                var episodesHtmlTasks = new Dictionary<Season, Task<IHtmlDocument>>();
-                seasons.ToList().ForEach(season =>
-                {
-                    episodesHtmlTasks.Add(season, requester.MakeRequest(new Uri(WebUri, season.Link)));
-                });
-                var episodesHtml = await Task.WhenAll(episodesHtmlTasks.Values);
-                var episodes = episodesHtmlTasks.SelectMany(seasonAndHtml =>
-                {
-                    var season = seasonAndHtml.Key;
-                    var html = seasonAndHtml.Value.Result;
-                    var eps = seasonScraper.Extract(html);
-                    return eps.ToList().Select(e =>
-                    {
-                        e.CategoryText = season.Type;
-                        e.Category = new List<int>{ season.Category.ID };
-                        return e;
-                    });
-                }).ToList();
-
-                var downloadRequester = new MejorTorrentDownloadRequesterDecorator(requester);
-                var downloadHtml = await downloadRequester.MakeRequest(episodes.Select(e => e.MejorTorrentID));
-                var downloads = downloadScraper.Extract(downloadHtml).ToList();
-                
-                for (var i = 0; i < downloads.Count; i++)
-                {
-                    var e = episodes.ElementAt(i);
-                    episodes.ElementAt(i).Link = downloads.ElementAt(i);
-                    episodes.ElementAt(i).Guid = downloads.ElementAt(i);
-                    var title = seasons.First().Title.Trim().Replace(' ', '.');
-                    title = char.ToUpper(title[0]) + title.Substring(1);
-                    var seasonAndEpisode = "S" + e.Season.ToString("00") + "E" + e.EpisodeNumber.ToString("00");
-                    if (e.Files > 1)
-                    {
-                        seasonAndEpisode += "-" + e.FinalEpisodeNumber.ToString("00");
-                    }
-                    episodes.ElementAt(i).Title = String.Join(".", new List<string>() { title, seasonAndEpisode, e.CategoryText, "Spanish" });
-                }
-
-                // TEMP //
-                int episodeNumber;
-                var isNumber = Int32.TryParse(query.Episode, out episodeNumber);
-                var filteredEpisodes = episodes.Where(e => e.Season == query.Season);
-                if (isNumber)
-                {
-                    filteredEpisodes = filteredEpisodes.Where(e => e.EpisodeNumber <= episodeNumber && episodeNumber <= e.FinalEpisodeNumber);
-                }
-                if (filteredEpisodes.Count() == 0)
-                {
-                    return episodes;
-                }
-                // TEMP //
-
-                return filteredEpisodes;
+                var seasons = await GetSeasons(query);
+                var episodes = await GetEpisodes(query, seasons);
+                await AddDownloadLinks(seasons.First().Title, episodes);
+                return episodes;
             }
 
             private TorznabQuery FixQuery(TorznabQuery query)
@@ -466,6 +414,65 @@ namespace Jackett.Common.Indexers
                 }
                 query.SearchTerm = query.SearchTerm.Trim();
                 return query;
+            }
+
+            private async Task<List<Season>> GetSeasons(TorznabQuery query)
+            {
+                var seasonHtml = await requester.MakeRequest(CreateSearchUri(query.SanitizedSearchTerm));
+                var seasons = tvShowScraper.Extract(seasonHtml);
+                seasons = seasons.Where(s => s.Number == query.Season);
+                if (query.Categories.Count() != 0)
+                {
+                    seasons = seasons.Where(s => new List<int>(query.Categories).Contains(s.Category.ID));
+                }
+                return seasons.ToList();
+            }
+
+            private async Task<List<MejorTorrentReleaseInfo>> GetEpisodes(TorznabQuery query, IEnumerable<Season> seasons)
+            {
+                var episodesHtmlTasks = new Dictionary<Season, Task<IHtmlDocument>>();
+                seasons.ToList().ForEach(season =>
+                {
+                    episodesHtmlTasks.Add(season, requester.MakeRequest(new Uri(WebUri, season.Link)));
+                });
+                var episodesHtml = await Task.WhenAll(episodesHtmlTasks.Values);
+                var episodes = episodesHtmlTasks.SelectMany(seasonAndHtml =>
+                {
+                    var season = seasonAndHtml.Key;
+                    var html = seasonAndHtml.Value.Result;
+                    var eps = seasonScraper.Extract(html);
+                    return eps.ToList().Select(e =>
+                    {
+                        e.CategoryText = season.Type;
+                        e.Category = new List<int> { season.Category.ID };
+                        return e;
+                    });
+                });
+                var episodeNumber = Int32.Parse(query.Episode);
+                episodes = episodes.Where(e => e.EpisodeNumber <= episodeNumber && episodeNumber <= e.FinalEpisodeNumber);
+                return episodes.ToList();
+            }
+
+            private async Task AddDownloadLinks(string tvTitle, IEnumerable<MejorTorrentReleaseInfo> episodes)
+            {
+                var downloadRequester = new MejorTorrentDownloadRequesterDecorator(requester);
+                var downloadHtml = await downloadRequester.MakeRequest(episodes.Select(e => e.MejorTorrentID));
+                var downloads = downloadScraper.Extract(downloadHtml).ToList();
+
+                for (var i = 0; i < downloads.Count; i++)
+                {
+                    var e = episodes.ElementAt(i);
+                    episodes.ElementAt(i).Link = downloads.ElementAt(i);
+                    episodes.ElementAt(i).Guid = downloads.ElementAt(i);
+                    var title = tvTitle.Trim().Replace(' ', '.');
+                    title = char.ToUpper(title[0]) + title.Substring(1);
+                    var seasonAndEpisode = "S" + e.Season.ToString("00") + "E" + e.EpisodeNumber.ToString("00");
+                    if (e.Files > 1)
+                    {
+                        seasonAndEpisode += "-" + e.FinalEpisodeNumber.ToString("00");
+                    }
+                    episodes.ElementAt(i).Title = String.Join(".", new List<string>() { title, seasonAndEpisode, e.CategoryText, "Spanish" });
+                }
             }
 
         }
