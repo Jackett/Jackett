@@ -12,7 +12,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -66,9 +65,9 @@ namespace Jackett.Common.Indexers
             var seasonScraper = new SeasonScraper();
             var downloadScraper = new DownloadScraper();
             var rssScraper = new RssScraper();
-
-            var tvShowPerformer = new TvShowPerformer(requester, tvShowScraper, seasonScraper, downloadScraper);
-            var rssPerformer = new RssPerformer(requester, rssScraper, seasonScraper, downloadScraper);
+            var downloadGenerator = new DownloadGenerator(requester, downloadScraper);
+            var tvShowPerformer = new TvShowPerformer(requester, tvShowScraper, seasonScraper, downloadGenerator);
+            var rssPerformer = new RssPerformer(requester, rssScraper, seasonScraper, downloadGenerator);
 
             if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
             {
@@ -89,17 +88,23 @@ namespace Jackett.Common.Indexers
             T Extract(IHtmlDocument html);
         }
 
-        class RssScraper : IScraper<IEnumerable<MejorTorrentReleaseInfo>>
+        class RssScraper : IScraper<IEnumerable<KeyValuePair<MejorTorrentReleaseInfo, Uri>>>
         {
             private readonly string LinkQuerySelector = "a[href*=\"/serie\"]";
 
-            public IEnumerable<MejorTorrentReleaseInfo> Extract(IHtmlDocument html)
+            public IEnumerable<KeyValuePair<MejorTorrentReleaseInfo, Uri>> Extract(IHtmlDocument html)
             {
                 var episodes = GetNewEpisodesScratch(html);
-                return episodes;
+                var links = GetLinks(html);
+                var results = new List<KeyValuePair<MejorTorrentReleaseInfo, Uri>>();
+                for (var i = 0; i < episodes.Count(); i++)
+                {
+                    results.Add(new KeyValuePair<MejorTorrentReleaseInfo, Uri>(episodes.ElementAt(i), links.ElementAt(i)));
+                }
+                return results;
             }
 
-            private IEnumerable<MejorTorrentReleaseInfo> GetNewEpisodesScratch(IHtmlDocument html)
+            private List<MejorTorrentReleaseInfo> GetNewEpisodesScratch(IHtmlDocument html)
             {
                 var tvShowsElements = html.QuerySelectorAll(LinkQuerySelector);
                 var seasonLinks = tvShowsElements.Select(e => e.Attributes["href"].Value);
@@ -112,7 +117,7 @@ namespace Jackett.Common.Indexers
                 for(var i = 0; i < tvShowsElements.Count(); i++)
                 {
                     var e = new MejorTorrentReleaseInfo();
-                    e.Title = titles.ElementAt(i);
+                    e.TitleOriginal = titles.ElementAt(i);
                     e.PublishDate = dates.ElementAt(i);
                     e.CategoryText = qualities.ElementAt(i);
                     var sfeal = seasonsFirstEpisodesAndLast.ElementAt(i);
@@ -129,6 +134,14 @@ namespace Jackett.Common.Indexers
                     episodes.Add(e);
                 }
                 return episodes;
+            }
+
+            private List<Uri> GetLinks(IHtmlDocument html)
+            {
+                return html.QuerySelectorAll(LinkQuerySelector)
+                    .Select(e => e.Attributes["href"].Value)
+                    .Select(relativeLink => new Uri(WebUri, relativeLink))
+                    .ToList();
             }
 
             private List<DateTime> GetDates(IHtmlDocument html)
@@ -369,14 +382,29 @@ namespace Jackett.Common.Indexers
         class MejorTorrentReleaseInfo : ReleaseInfo
         {
             public string MejorTorrentID;
-            public int Season;
-            public int EpisodeNumber;
+            public int _season;
+            public int _episodeNumber;
             private string _categoryText;
+            private string _originalTitle;
+
+            public MejorTorrentReleaseInfo()
+            {
+                this.Category = new List<int>();
+                this.Grabs = 5;
+                this.Files = 1;
+                this.PublishDate = new DateTime();
+                this.Peers = 10;
+                this.Seeders = 10;
+                this.Size = ReleaseInfo.BytesFromGB(1);
+                this._originalTitle = "";
+            }
+
+            public int Season { get { return _season; } set { _season = value; TitleOriginal = _originalTitle; } }
+
+            public int EpisodeNumber { get { return _episodeNumber; } set { _episodeNumber = value; TitleOriginal = _originalTitle; } }
+
             public string CategoryText {
-                get
-                {
-                    return _categoryText;
-                }
+                get { return _categoryText; }
                 set
                 {
                     switch (value)
@@ -398,20 +426,30 @@ namespace Jackett.Common.Indexers
                             _categoryText = "HDTV-720p";
                             break;
                     }
+                    TitleOriginal = _originalTitle;
                 }
             }
         
             public int FinalEpisodeNumber { get { return (int)(EpisodeNumber + Files - 1); } }
 
-            public MejorTorrentReleaseInfo()
+            public string TitleOriginal
             {
-                this.Category = new List<int>();
-                this.Grabs = 5;
-                this.Files = 1;
-                this.PublishDate = new DateTime();
-                this.Peers = 10;
-                this.Seeders = 10;
-                this.Size = ReleaseInfo.BytesFromGB(1);
+                get { return _originalTitle; }
+                set
+                {
+                    _originalTitle = value;
+                    if (_originalTitle != "")
+                    {
+                        Title = _originalTitle.Replace(' ', '.');
+                        Title = char.ToUpper(Title[0]) + Title.Substring(1);
+                    }
+                    var seasonAndEpisode = "S" + Season.ToString("00") + "E" + EpisodeNumber.ToString("00");
+                    if (Files > 1)
+                    {
+                        seasonAndEpisode += "-" + FinalEpisodeNumber.ToString("00");
+                    }
+                    Title = String.Join(".", new List<string>() { Title, seasonAndEpisode, CategoryText, "Spanish" });
+                }
             }
         }
 
@@ -480,28 +518,52 @@ namespace Jackett.Common.Indexers
         class RssPerformer : IPerformer
         {
             private IRequester requester;
-            private IScraper<IEnumerable<MejorTorrentReleaseInfo>> rssScraper;
+            private IScraper<IEnumerable<KeyValuePair<MejorTorrentReleaseInfo, Uri>>> rssScraper;
             private IScraper<IEnumerable<MejorTorrentReleaseInfo>> seasonScraper;
-            private IScraper<IEnumerable<Uri>> downloadScraper;
+            private IDownloadGenerator downloadGenerator;
 
             public RssPerformer(
                 IRequester requester,
-                IScraper<IEnumerable<MejorTorrentReleaseInfo>> rssScraper,
+                IScraper<IEnumerable<KeyValuePair<MejorTorrentReleaseInfo, Uri>>> rssScraper,
                 IScraper<IEnumerable<MejorTorrentReleaseInfo>> seasonScraper,
-                IScraper<IEnumerable<Uri>> downloadScraper)
+                IDownloadGenerator downloadGenerator)
             {
                 this.requester = requester;
                 this.rssScraper = rssScraper;
                 this.seasonScraper = seasonScraper;
-                this.downloadScraper = downloadScraper;
+                this.downloadGenerator = downloadGenerator;
             }
 
             public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
             {
                 var html = await requester.MakeRequest(NewTorrentsUri);
-                var episodes = rssScraper.Extract(html);
+                var episodesAndSeasonsUri = rssScraper.Extract(html);
+
+                Task.WaitAll(episodesAndSeasonsUri.ToList().Select(async epAndSeasonUri =>
+                {
+                    var episode = epAndSeasonUri.Key;
+                    var seasonUri = epAndSeasonUri.Value;
+                    await AddMejorTorrentIDs(episode, seasonUri);
+                }).ToArray());
+
+                var episodes = episodesAndSeasonsUri.Select(epAndSeason => epAndSeason.Key).ToList();
+                await downloadGenerator.AddDownloadLinks(episodes);
                 return episodes;
             }
+
+            private async Task AddMejorTorrentIDs(MejorTorrentReleaseInfo episode, Uri seasonUri)
+            {
+                var html = await requester.MakeRequest(seasonUri);
+                var newEpisodes = seasonScraper.Extract(html);
+                // GET BY EPISODE NUMBER
+                newEpisodes = newEpisodes.Where(e => e.EpisodeNumber == episode.EpisodeNumber);
+                if (newEpisodes.Count() == 0)
+                {
+                    throw new Exception("Imposible to detect episode ID in RSS");
+                }
+                episode.MejorTorrentID = newEpisodes.First().MejorTorrentID;
+            }
+
         }
 
         class TvShowPerformer : IPerformer
@@ -509,18 +571,18 @@ namespace Jackett.Common.Indexers
             private IRequester requester;
             private IScraper<IEnumerable<Season>> tvShowScraper;
             private IScraper<IEnumerable<MejorTorrentReleaseInfo>> seasonScraper;
-            private IScraper<IEnumerable<Uri>> downloadScraper;
+            private IDownloadGenerator downloadGenerator;
 
             public TvShowPerformer(
                 IRequester requester,
                 IScraper<IEnumerable<Season>> tvShowScraper,
                 IScraper<IEnumerable<MejorTorrentReleaseInfo>> seasonScraper,
-                IScraper<IEnumerable<Uri>> downloadScraper)
+                IDownloadGenerator downloadGenerator)
             {
                 this.requester = requester;
                 this.tvShowScraper = tvShowScraper;
                 this.seasonScraper = seasonScraper;
-                this.downloadScraper = downloadScraper;
+                this.downloadGenerator = downloadGenerator;
             }
 
             public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -528,8 +590,11 @@ namespace Jackett.Common.Indexers
                 query = FixQuery(query);
                 var seasons = await GetSeasons(query);
                 var episodes = await GetEpisodes(query, seasons);
-                await AddDownloadLinks(episodes);
-                FixTitle(seasons.First().Title, episodes);
+                await downloadGenerator.AddDownloadLinks(episodes);
+                if (seasons.Count() > 0)
+                {
+                    episodes.ForEach(e => e.TitleOriginal = seasons.First().Title);
+                }
                 return episodes;
             }
 
@@ -594,8 +659,25 @@ namespace Jackett.Common.Indexers
                 }
                 return episodes.ToList();
             }
+        }
 
-            private async Task AddDownloadLinks(IEnumerable<MejorTorrentReleaseInfo> episodes)
+        interface IDownloadGenerator
+        {
+            Task AddDownloadLinks(IEnumerable<MejorTorrentReleaseInfo> episodes);
+        }
+
+        class DownloadGenerator : IDownloadGenerator
+        {
+            private IRequester requester;
+            private IScraper<IEnumerable<Uri>> downloadScraper;
+
+            public DownloadGenerator(IRequester requester, IScraper<IEnumerable<Uri>> downloadScraper)
+            {
+                this.requester = requester;
+                this.downloadScraper = downloadScraper;
+            }
+
+            public async Task AddDownloadLinks(IEnumerable<MejorTorrentReleaseInfo> episodes)
             {
                 var downloadRequester = new MejorTorrentDownloadRequesterDecorator(requester);
                 var downloadHtml = await downloadRequester.MakeRequest(episodes.Select(e => e.MejorTorrentID));
@@ -608,24 +690,6 @@ namespace Jackett.Common.Indexers
                     episodes.ElementAt(i).Guid = downloads.ElementAt(i);
                 }
             }
-
-            private void FixTitle(string tvShowTitle, IEnumerable<MejorTorrentReleaseInfo> episodes)
-            {
-                for (var i = 0; i < episodes.Count(); i++)
-                {
-                    var e = episodes.ElementAt(i);
-                    var title = tvShowTitle.Trim().Replace(' ', '.');
-                    title = char.ToUpper(title[0]) + title.Substring(1);
-                    var seasonAndEpisode = "S" + e.Season.ToString("00") + "E" + e.EpisodeNumber.ToString("00");
-                    if (e.Files > 1)
-                    {
-                        seasonAndEpisode += "-" + e.FinalEpisodeNumber.ToString("00");
-                    }
-                    episodes.ElementAt(i).Title = String.Join(".", new List<string>() { title, seasonAndEpisode, e.CategoryText, "Spanish" });
-                }
-            }
-
         }
-
     }
 }
