@@ -133,5 +133,28 @@ namespace Jackett.Server
                 builder.RegisterInstance(logger).SingleInstance();
             }
         }
+
+        public static void SetLogLevel(LogLevel level)
+        {
+            foreach (var rule in LogManager.Configuration.LoggingRules)
+            {
+                if (level == LogLevel.Debug)
+                {
+                    if (!rule.Levels.Contains(LogLevel.Debug))
+                    {
+                        rule.EnableLoggingForLevel(LogLevel.Debug);
+                    }
+                }
+                else
+                {
+                    if (rule.Levels.Contains(LogLevel.Debug))
+                    {
+                        rule.DisableLoggingForLevel(LogLevel.Debug);
+                    }
+                }
+            }
+
+            LogManager.ReconfigExistingLoggers();
+        }
     }
 }
