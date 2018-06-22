@@ -227,8 +227,7 @@ namespace Jackett.Common.Indexers
                                 description = release.Description.Split('[');
                                 description[1] = "[" + description[1];
                             }
-                            else
-
+                            
                             release.Title = (description[0].Trim() + "." + seasonep.Trim() + "." + releasedata.Trim('.')).Replace(' ', '.');
 
                             // if search is done for S0X than we dont want to put . between S0X and E0X 
