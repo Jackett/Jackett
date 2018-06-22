@@ -409,6 +409,10 @@ namespace Jackett.Common.Indexers
                 {
                     switch (value)
                     {
+                        case "SDTV":
+                            Category.Add(TorznabCatType.TVSD.ID);
+                            _categoryText = "SDTV";
+                            break;
                         case "HDTV":
                             Category.Add(TorznabCatType.TVSD.ID);
                             _categoryText = "SDTV";
