@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers
             return await tvShowPerformer.PerformQuery(query);
         }
 
-        public static Uri CreateSearchUri(string search)
+        public Uri CreateSearchUri(string search)
         {
             var finalUri = SearchUriBase.AbsoluteUri;
             finalUri += "?sec=buscador&valor=" + WebUtilityHelpers.UrlEncode(search, Encoding);
@@ -464,7 +464,8 @@ namespace Jackett.Common.Indexers
                 Uri uri,
                 RequestType method = RequestType.GET,
                 IEnumerable<KeyValuePair<string, string>> data = null,
-                Dictionary<string, string> headers = null);
+                Dictionary<string, string> headers = null,
+                );
         }
 
         class MejorTorrentRequester : IRequester
@@ -484,7 +485,7 @@ namespace Jackett.Common.Indexers
             {
                 var result = await mt.RequestBytesWithCookies(uri.AbsoluteUri, null, method, null, data, headers);
                 var SearchResultParser = new HtmlParser();
-                var doc = SearchResultParser.Parse(Encoding.GetString(result.Content));
+                var doc = SearchResultParser.Parse(mt.Encoding.GetString(result.Content));
                 return doc;
             }
         }
