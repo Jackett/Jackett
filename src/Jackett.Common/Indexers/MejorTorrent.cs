@@ -22,6 +22,7 @@ namespace Jackett.Common.Indexers
         public static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
         private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
         public static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
+        public static Encoding MEEncoding = Encoding.GetEncoding("windows-1252");
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "MejorTorrent",
@@ -36,7 +37,7 @@ namespace Jackett.Common.Indexers
                 p: ps,
                 configData: new ConfigurationData())
         {
-            Encoding = Encoding.GetEncoding("windows-1252");
+            Encoding = MEEncoding;
             Language = "es-es";
             Type = "public";
         }
@@ -77,10 +78,10 @@ namespace Jackett.Common.Indexers
             return await tvShowPerformer.PerformQuery(query);
         }
 
-        public Uri CreateSearchUri(string search)
+        public static Uri CreateSearchUri(string search)
         {
             var finalUri = SearchUriBase.AbsoluteUri;
-            finalUri += "?sec=buscador&valor=" + WebUtilityHelpers.UrlEncode(search, Encoding);
+            finalUri += "?sec=buscador&valor=" + WebUtilityHelpers.UrlEncode(search, MEEncoding);
             return new Uri(finalUri);
         }
 
@@ -464,8 +465,7 @@ namespace Jackett.Common.Indexers
                 Uri uri,
                 RequestType method = RequestType.GET,
                 IEnumerable<KeyValuePair<string, string>> data = null,
-                Dictionary<string, string> headers = null,
-                );
+                Dictionary<string, string> headers = null);
         }
 
         class MejorTorrentRequester : IRequester
