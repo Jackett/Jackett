@@ -1,31 +1,51 @@
-﻿using System;
+﻿using Jackett.Common.Models.Config;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Jackett.Common;
-using Jackett.Common.Models.Config;
-using Jackett.Common.Utils;
-using Microsoft.Win32;
-using Jackett;
-using Jackett.Utils;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-
 
 namespace Jackett.Tray
 {
     public partial class Main : Form
     {
+        private IProcessService processService;
+        private IServiceConfigService windowsService;
+        private ITrayLockService trayLockService;
+        private ISerializeService serializeService;
+        private IConfigurationService configurationService;
+        private ServerConfig serverConfig;
+        private Process consoleProcess;
+        private Logger logger;
+        private bool closeApplicationInitiated;
+
         public Main()
         {
             Hide();
             InitializeComponent();
+
+            RuntimeSettings runtimeSettings = new RuntimeSettings()
+            {
+                CustomLogFileName = "TrayLog.txt"
+            };
+
+            LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
+            logger = LogManager.GetCurrentClassLogger();
+
+            logger.Info("Starting Jackett Tray v" + EnvironmentUtil.JackettVersion);
+
+            processService = new ProcessService(logger);
+            windowsService = new WindowsServiceConfigService(processService, logger);
+            trayLockService = new TrayLockService();
+            serializeService = new SerializeService();
+            configurationService = new ConfigurationService(serializeService, processService, logger, runtimeSettings);
+            serverConfig = configurationService.BuildServerConfig(runtimeSettings);
 
             toolStripMenuItemAutoStart.Checked = AutoStart;
             toolStripMenuItemAutoStart.CheckedChanged += toolStripMenuItemAutoStart_CheckedChanged;
@@ -34,18 +54,15 @@ namespace Jackett.Tray
             toolStripMenuItemShutdown.Click += toolStripMenuItemShutdown_Click;
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            { 
+            {
                 toolStripMenuItemAutoStart.Visible = true;
             }
 
-            Engine.BuildContainer(new RuntimeSettings(),new WebApi2Module());
-            Engine.Server.Initalize();
-
-            if (!Engine.ServiceConfig.ServiceExists())
+            if (!windowsService.ServiceExists())
             {
-                // We are not installed as a service so just the web server too and run from the tray.
-                Engine.Logger.Info("Starting server from tray");
-                Engine.Server.Start();
+                // We are not installed as a service so just start the web server via JackettConsole and run from the tray.
+                logger.Info("Starting server from tray");
+                StartConsoleApplication();
             }
 
             Task.Factory.StartNew(WaitForEvent);
@@ -53,26 +70,26 @@ namespace Jackett.Tray
 
         private void WaitForEvent()
         {
-            Engine.LockService.WaitForSignal();
-            Application.Exit();
+            trayLockService.WaitForSignal();
+            CloseTrayApplication();
         }
 
-        void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
+        private void toolStripMenuItemWebUI_Click(object sender, EventArgs e)
         {
-            Process.Start("http://127.0.0.1:" + Engine.ServerConfig.Port);
+            Process.Start("http://127.0.0.1:" + serverConfig.Port);
         }
 
-        void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
+        private void toolStripMenuItemShutdown_Click(object sender, EventArgs e)
         {
-            Process.GetCurrentProcess().Kill();
+            CloseTrayApplication();
         }
 
-        void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e)
+        private void toolStripMenuItemAutoStart_CheckedChanged(object sender, EventArgs e)
         {
             AutoStart = toolStripMenuItemAutoStart.Checked;
         }
 
-        string ProgramTitle
+        private string ProgramTitle
         {
             get
             {
@@ -80,7 +97,7 @@ namespace Jackett.Tray
             }
         }
 
-        bool AutoStart
+        private bool AutoStart
         {
             get
             {
@@ -122,22 +139,29 @@ namespace Jackett.Tray
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            if (Engine.ServiceConfig.ServiceExists())
+            if (windowsService.ServiceExists())
             {
                 backgroundMenuItem.Visible = true;
                 serviceControlMenuItem.Visible = true;
                 toolStripSeparator1.Visible = true;
                 toolStripSeparator2.Visible = true;
-                if (Engine.ServiceConfig.ServiceRunning())
+
+                if (windowsService.ServiceRunning())
                 {
                     serviceControlMenuItem.Text = "Stop background service";
-                } else
+                    backgroundMenuItem.Text = "Jackett is running as a background service";
+                    toolStripMenuItemWebUI.Enabled = true;
+                }
+                else
                 {
                     serviceControlMenuItem.Text = "Start background service";
+                    backgroundMenuItem.Text = "Jackett will run as a background service";
+                    toolStripMenuItemWebUI.Enabled = false;
                 }
 
                 toolStripMenuItemShutdown.Text = "Close tray icon";
-            } else
+            }
+            else
             {
                 backgroundMenuItem.Visible = false;
                 serviceControlMenuItem.Visible = false;
@@ -151,17 +175,17 @@ namespace Jackett.Tray
         {
             var consolePath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "JackettConsole.exe");
 
-            if (Engine.ServiceConfig.ServiceRunning())
+            if (windowsService.ServiceRunning())
             {
                 if (ServerUtil.IsUserAdministrator())
                 {
-                    Engine.ServiceConfig.Stop();
-                    
-                } else
+                    windowsService.Stop();
+                }
+                else
                 {
                     try
                     {
-                        Engine.ProcessService.StartProcessAndLog(consolePath, "--Stop", true);
+                        processService.StartProcessAndLog(consolePath, "--Stop", true);
                     }
                     catch
                     {
@@ -173,19 +197,78 @@ namespace Jackett.Tray
             {
                 if (ServerUtil.IsUserAdministrator())
                 {
-                    Engine.ServiceConfig.Start();
+                    windowsService.Start();
                 }
                 else
                 {
                     try
                     {
-                        Engine.ProcessService.StartProcessAndLog(consolePath, "--Start", true);
+                        processService.StartProcessAndLog(consolePath, "--Start", true);
                     }
                     catch
                     {
                         MessageBox.Show("Failed to get admin rights to start the service.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+            }
+        }
+
+        private void CloseTrayApplication()
+        {
+            closeApplicationInitiated = true;
+
+            logger.Info("Close of tray application initiated");
+
+            //Clears notify icon, otherwise icon will still appear on taskbar until you hover the mouse over
+            notifyIcon1.Icon = null;
+            notifyIcon1.Dispose();
+            Application.DoEvents();
+
+            if (consoleProcess != null && !consoleProcess.HasExited)
+            {
+                consoleProcess.StandardInput.Close();
+                System.Threading.Thread.Sleep(1000);
+                if (consoleProcess != null && !consoleProcess.HasExited)
+                {
+                    consoleProcess.Kill();
+                }
+            }
+
+            Application.Exit();
+        }
+
+        private void StartConsoleApplication()
+        {
+            string applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+
+            var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
+
+            var startInfo = new ProcessStartInfo()
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                FileName = exePath,
+                RedirectStandardInput = true,
+                RedirectStandardError = true
+            };
+
+            consoleProcess = Process.Start(startInfo);
+            consoleProcess.EnableRaisingEvents = true;
+            consoleProcess.Exited += ProcessExited;
+            consoleProcess.ErrorDataReceived += ProcessErrorDataReceived;
+        }
+
+        private void ProcessErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            logger.Error(e.Data);
+        }
+
+        private void ProcessExited(object sender, EventArgs e)
+        {
+            if (!closeApplicationInitiated)
+            {
+                logger.Info("Tray icon not responsible for process exit");
+                CloseTrayApplication();
             }
         }
     }
