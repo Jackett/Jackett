@@ -79,7 +79,7 @@ namespace Jackett.Common.Indexers
         public static Uri CreateSearchUri(string search)
         {
             var finalUri = SearchUriBase.AbsoluteUri;
-            finalUri += "?sec=buscador&valor=" + search;
+            finalUri += "?sec=buscador&valor=" + WebUtilityHelpers.UrlEncode(search, Encoding);
             return new Uri(finalUri);
         }
 
