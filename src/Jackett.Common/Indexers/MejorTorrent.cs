@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
+using Jackett.Common.Helpers;
 using Newtonsoft.Json.Linq;
 using NLog;
 
