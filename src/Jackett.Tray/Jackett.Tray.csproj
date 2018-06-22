@@ -14,6 +14,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <RuntimeIdentifier>win</RuntimeIdentifier>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -89,21 +90,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="jackett.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj">
       <Project>{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}</Project>
       <Name>Jackett.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Jackett\Jackett.csproj">
-      <Project>{e636d5f8-68b4-4903-b4ed-ccfd9c9e899f}</Project>
-      <Name>Jackett</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
