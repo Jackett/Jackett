@@ -96,7 +96,7 @@ namespace Jackett.Server.Controllers
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 
-            Initialisation.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
+            Helper.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
             serverConfig.RuntimeSettings.TracingEnabled = logging;
 
             if (omdbApiKey != serverConfig.OmdbApiKey)

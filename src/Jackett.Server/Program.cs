@@ -56,7 +56,7 @@ namespace Jackett.Server
                 runtimeDictionary = GetValues(Settings);
             });
 
-            LogManager.Configuration = Initialisation.SetupLogging(Settings);
+            LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
 
