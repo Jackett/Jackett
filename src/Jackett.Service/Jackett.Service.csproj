@@ -14,6 +14,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <RuntimeIdentifier>win</RuntimeIdentifier>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -66,23 +67,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="jackett.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj">
-      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
-      <Name>CurlSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj">
       <Project>{6B854A1B-9A90-49C0-BC37-9A35C75BCA73}</Project>
       <Name>Jackett.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Jackett\Jackett.csproj">
-      <Project>{e636d5f8-68b4-4903-b4ed-ccfd9c9e899f}</Project>
-      <Name>Jackett</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
