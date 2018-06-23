@@ -42,6 +42,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
  * MagnetDL
+ * MejorTorrent <!-- maintained by ivandelabeldad -->
  * NextTorrent
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si

@@ -119,9 +119,18 @@ Task("Package-Windows-Installer-Full-Framework")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
-		InnoSetup("./Installer.iss", new InnoSetupSettings {
-			OutputDirectory = workingDir + "/" + artifactsDirName
-		});
+		string sourceFolder = MakeAbsolute(Directory(windowsBuildFullFramework)).ToString();
+
+		InnoSetupSettings settings = new InnoSetupSettings();
+		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
+ 		settings.Defines = new Dictionary<string, string>
+			{
+				{ "MyFileForVersion", sourceFolder + "/Jackett/Jackett.Common.dll" },
+				{ "MySourceFolder",  sourceFolder },
+				{ "MyOutputFilename",  "Jackett.Installer.Windows" },
+			};
+
+		InnoSetup("./Installer.iss", settings);
 	});
 
 Task("Package-Files-Full-Framework-Windows")

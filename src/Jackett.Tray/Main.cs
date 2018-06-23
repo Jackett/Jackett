@@ -265,10 +265,9 @@ namespace Jackett.Tray
 
         private void ProcessExited(object sender, EventArgs e)
         {
-            logger.Info("Tray icon not responsible for process exit");
-
             if (!closeApplicationInitiated)
             {
+                logger.Info("Tray icon not responsible for process exit");
                 CloseTrayApplication();
             }
         }
