@@ -168,7 +168,6 @@ Task("Kestrel-Full-Framework")
 	{
 		CleanDirectories("./src/**/obj");
 		CleanDirectories("./src/**/bin");
-		CleanDirectories("./BuildOutput");
 
 		//Patch csproj to net461 until off Owin (net452 can't handle a nestandard library)
 		var trayCsproj = File("./src/Jackett.Tray/Jackett.Tray.csproj");
