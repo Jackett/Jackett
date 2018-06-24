@@ -162,8 +162,86 @@ Task("Package-Full-Framework")
 		Information("Full Framework Packaging Completed");
 	});
 
+Task("Kestrel-Full-Framework")
+	.IsDependentOn("Package-Full-Framework")
+	.Does(() =>
+	{
+		CleanDirectories("./src/**/obj");
+		CleanDirectories("./src/**/bin");
+		CleanDirectories("./BuildOutput");
+
+		//Patch csproj to net461 until off Owin (net452 can't handle a nestandard library)
+		var trayCsproj = File("./src/Jackett.Tray/Jackett.Tray.csproj");
+		XmlPoke(trayCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.6.1");
+
+		var serviceCsproj = File("./src/Jackett.Service/Jackett.Service.csproj");
+		XmlPoke(serviceCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.6.1");
+
+		NuGetRestore("./src/Jackett.sln");
+
+		var buildSettings = new MSBuildSettings()
+                .SetConfiguration(configuration)
+                .UseToolVersion(MSBuildToolVersion.VS2017);
+		
+		MSBuild("./src/Jackett.sln", buildSettings);
+	});
+
+Task("Experimental-Kestrel-Windows-Full-Framework")
+	.IsDependentOn("Kestrel-Full-Framework")
+	.Does(() =>
+	{
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/Experimental/net461/win7-x86/Jackett";
+		
+		DotNetCorePublish(serverProjectPath, "net461", "win7-x86");
+
+		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
+
+		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Experimental.Jackett.Binaries.Windows.zip");
+
+		//InnoSetup
+		string sourceFolder = MakeAbsolute(Directory(buildOutputPath)).ToString();
+
+		InnoSetupSettings settings = new InnoSetupSettings();
+		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
+ 		settings.Defines = new Dictionary<string, string>
+			{
+				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
+				{ "MySourceFolder",  sourceFolder },
+				{ "MyOutputFilename",  "Experimental.Jackett.Installer.Windows" },
+			};
+
+		InnoSetup("./Installer.iss", settings);
+	});
+
+Task("Experimental-Kestrel-Mono-Full-Framework")
+	.IsDependentOn("Kestrel-Full-Framework")
+	.Does(() =>
+	{
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/Experimental/net461/linux-x64/Jackett";
+
+		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
+
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
+
+		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
+		//https://github.com/dotnet/corefx/issues/19914
+		//https://bugzilla.xamarin.com/show_bug.cgi?id=60315
+		//The workaround is to delete System.Net.Http.dll and patch the .exe.config file
+
+		DeleteFile(buildOutputPath + "/System.Net.Http.dll");
+
+		var configFile = File(buildOutputPath + "/JackettConsole.exe.config");
+		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
+
+		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.Mono.tar.gz");
+	});
+	
 Task("Experimental-DotNetCore")
-	.IsDependentOn("Clean")
+	.IsDependentOn("Kestrel-Full-Framework")
 	.Does(() =>
 	{
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
@@ -177,46 +255,19 @@ Task("Experimental-DotNetCore")
 		Gzip("./BuildOutput/Experimental/netcoreapp2.1/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.netcoreapp.linux-x64.tar.gz");
 	});
 
-Task("Experimental-Kestrel-Windows-Full-Framework")
-	.IsDependentOn("Clean")
-	.Does(() =>
-	{
-		string serviceProjectPath = "./src/Jackett.Service.Windows/Jackett.Service.Windows.csproj";
-		
-		DotNetCorePublish(serviceProjectPath, "net461", "win7-x86");
-
-		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Experimental.net461.win7-x86.zip");
-	});
-
-Task("Experimental-Kestrel-Mono-FullFramework")
-	.IsDependentOn("Clean")
-	.Does(() =>
-	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
-		string buildOutputPath = "./BuildOutput/Experimental/net461/linux-x64";
-
-		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
-		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/JackettUpdater.*", buildOutputPath + "/Jackett");
-
-		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
-		//https://github.com/dotnet/corefx/issues/19914
-		//https://bugzilla.xamarin.com/show_bug.cgi?id=60315
-		//The workaround is to delete System.Net.Http.dll and patch the .exe.config file
-
-		DeleteFile(buildOutputPath + "/Jackett/System.Net.Http.dll");
-
-		var configFile = File(buildOutputPath + "/Jackett/JackettConsole.exe.config");
-		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
-
-		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.Mono.tar.gz");
-	});
-
 Task("Experimental")
-	.IsDependentOn("Experimental-DotNetCore")
 	.IsDependentOn("Experimental-Kestrel-Windows-Full-Framework")
-	.IsDependentOn("Experimental-Kestrel-Mono-FullFramework")
+	.IsDependentOn("Experimental-Kestrel-Mono-Full-Framework")
+	.IsDependentOn("Experimental-DotNetCore")
 	.Does(() =>
 	{
+		//Unpatch csproj because it's annoying in source control (remove once off Owin)
+		var trayCsproj = File("./src/Jackett.Tray/Jackett.Tray.csproj");
+		XmlPoke(trayCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.5.2");
+
+		var serviceCsproj = File("./src/Jackett.Service/Jackett.Service.csproj");
+		XmlPoke(serviceCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.5.2");
+		
 		Information("Experimental builds completed");
 	});
 
