@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -14,6 +7,12 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Jackett.Common.Indexers
 {
@@ -184,10 +183,10 @@ namespace Jackett.Common.Indexers
                 return false;
             }
 
-            Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
+            bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("core", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
-            if (!isWindows && dotNetVersion.Major < 4)
+            if (!isWindows && runningOnDotNetCore)
             {
                 // User isn't running Windows, but is running on .NET Core framework, no access to the DPAPI, so don't bother trying to migrate
                 return false;
@@ -290,7 +289,7 @@ namespace Jackett.Common.Indexers
                     return false;
             if (caps.SupportsImdbSearch && query.IsImdbQuery)
                 return true;
-            else if(!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
+            else if (!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
@@ -837,7 +836,6 @@ namespace Jackett.Common.Indexers
         }
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
-
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
         protected WebClient webclient;
