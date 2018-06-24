@@ -56,7 +56,11 @@ Task("Build")
 	.IsDependentOn("Restore-NuGet-Packages")
 	.Does(() =>
 	{
-		MSBuild("./src/Jackett.sln", settings => settings.SetConfiguration(configuration));
+		var buildSettings = new MSBuildSettings()
+                .SetConfiguration(configuration)
+                .UseToolVersion(MSBuildToolVersion.VS2017);
+		
+		MSBuild("./src/Jackett.sln", buildSettings);
 	});
 
 Task("Run-Unit-Tests")
@@ -86,7 +90,7 @@ Task("Copy-Files-Full-Framework")
 		CopyDirectory("./src/Jackett.Console/bin/" + configuration, windowsOutput);
 		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", windowsOutput);
 		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", windowsOutput);
-		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/JackettUpdater.*", windowsOutput);
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net452" + "/JackettUpdater.*", windowsOutput);  //builds against multiple frameworks
 		CopyFiles("./Upstart.config", windowsOutput);
 		CopyFiles("./LICENSE", windowsOutput);
 		CopyFiles("./README.md", windowsOutput);
@@ -119,13 +123,13 @@ Task("Package-Windows-Installer-Full-Framework")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
-		string sourceFolder = MakeAbsolute(Directory(windowsBuildFullFramework)).ToString();
+		string sourceFolder = MakeAbsolute(Directory(windowsBuildFullFramework + "/Jackett")).ToString();
 
 		InnoSetupSettings settings = new InnoSetupSettings();
 		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
  		settings.Defines = new Dictionary<string, string>
 			{
-				{ "MyFileForVersion", sourceFolder + "/Jackett/Jackett.Common.dll" },
+				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
 				{ "MySourceFolder",  sourceFolder },
 				{ "MyOutputFilename",  "Jackett.Installer.Windows" },
 			};
@@ -155,7 +159,7 @@ Task("Package-Full-Framework")
 	.IsDependentOn("Package-Files-Full-Framework-Mono")
 	.Does(() =>
 	{
-		Information("Full Framwork Packaging Completed");
+		Information("Full Framework Packaging Completed");
 	});
 
 Task("Experimental-DotNetCore")

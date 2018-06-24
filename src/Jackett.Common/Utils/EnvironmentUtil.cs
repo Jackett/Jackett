@@ -32,17 +32,7 @@ namespace Jackett.Common.Utils
 
                 try
                 {
-                    var currentAssembly = Assembly.GetExecutingAssembly();
-
-                    bool aspNetCorePresent = new StackTrace().GetFrames()
-                                                .Select(x => x.GetMethod().ReflectedType.Assembly).Distinct()
-                                                .Where(x => x.GetReferencedAssemblies().Any(y => y.FullName == currentAssembly.FullName))
-                                                .Where(x => x.ManifestModule.Name == "JackettConsole.exe").Select(x => x.CustomAttributes)
-                                                .FirstOrDefault()
-                                                .Where(x => x.AttributeType.Assembly.FullName.StartsWith("Microsoft.AspNetCore", StringComparison.OrdinalIgnoreCase))
-                                                .Any();
-
-                    runningOwin = !aspNetCorePresent;
+                    runningOwin = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith("Jackett, ")).Any();
                 }
                 catch
                 {
