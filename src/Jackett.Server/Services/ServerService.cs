@@ -121,10 +121,10 @@ namespace Jackett.Server.Services
                     logger.Error(e, "Error while reading the issue file");
                 }
 
-                Version dotNetVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.RuntimeFramework.Version;
+                bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
 
                 Type monotype = Type.GetType("Mono.Runtime");
-                if (monotype != null && dotNetVersion.Major > 3)
+                if (monotype != null && !runningOnDotNetCore)
                 {
                     MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
                     var monoVersion = "unknown";
