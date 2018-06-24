@@ -5,6 +5,7 @@
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <AssemblyName>JackettUpdater</AssemblyName>
     <OutputType>Exe</OutputType>
+    <Version>0.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
