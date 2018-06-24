@@ -98,6 +98,12 @@ namespace Jackett.Common.Services
                 return;
             }
 
+            bool trayIsRunning = false;
+            if (isWindows)
+            {
+                trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
+            }
+
             try
             {
 
@@ -135,7 +141,7 @@ namespace Jackett.Common.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
                             if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart);
+                                StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
                         }
                         catch (Exception e)
                         {
@@ -212,7 +218,7 @@ namespace Jackett.Common.Services
 
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            var targetAsset = assets.Where(a => isWindows ? a.Browser_download_url.ToLowerInvariant().EndsWith(".zip") : a.Browser_download_url.ToLowerInvariant().EndsWith(".gz")).FirstOrDefault();
+            var targetAsset = assets.Where(a => isWindows ? a.Browser_download_url.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) : a.Browser_download_url.EndsWith(".gz", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
             if (targetAsset == null)
             {
@@ -262,7 +268,7 @@ namespace Jackett.Common.Services
             return tempDir;
         }
 
-        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart)
+        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayWasRunning)
         {
             var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" +a + "\"" : a )).Replace("\"", "\\\"");
@@ -298,7 +304,14 @@ namespace Jackett.Common.Services
             }
 
             if (NoRestart)
+            {
                 startInfo.Arguments += " --NoRestart";
+            }
+
+            if (trayWasRunning)
+            {
+                startInfo.Arguments += " --StartTray";
+            }
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
