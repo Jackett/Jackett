@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -194,17 +195,31 @@ namespace Jackett.Common.Indexers
 
             LoadValuesFromJson(jsonConfig, false);
 
-            object passwordPropertyValue = null;
+            StringItem passwordPropertyValue = null;
             string passwordValue = "";
 
             try
             {
-                passwordPropertyValue = configData.GetType().GetProperty("Password").GetValue(configData, null);
-                passwordValue = passwordPropertyValue.GetType().GetProperty("Value").GetValue(passwordPropertyValue, null).ToString();
+                // try dynamic items first (e.g. all cardigann indexers)
+                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
+
+                if (passwordPropertyValue == null) // if there's no dynamic password try the static property
+                {
+                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
+
+                    // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
+                    if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{ID}] while attempting migration");
+                        return false;
+                    }
+                }
+
+                passwordValue = passwordPropertyValue.Value;
             }
             catch (Exception)
             {
-                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a public tracker");
+                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a tracker without a password setting");
                 return false;
             }
 
@@ -230,7 +245,7 @@ namespace Jackett.Common.Indexers
                         string unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
                         //Password successfully unprotected using Windows/Mono DPAPI
 
-                        passwordPropertyValue.GetType().GetProperty("Value").SetValue(passwordPropertyValue, unprotectedPassword);
+                        passwordPropertyValue.Value = unprotectedPassword;
                         SaveConfig();
                         IsConfigured = true;
 
