@@ -42,11 +42,17 @@ namespace Jackett.Server.Services
 
         public string Protect(string plainText)
         {
+            if (string.IsNullOrEmpty(plainText))
+                return string.Empty;
+
             return _protector.Protect(plainText);
         }
 
         public string UnProtect(string plainText)
         {
+            if (string.IsNullOrEmpty(plainText))
+                return string.Empty;
+
             return _protector.Unprotect(plainText);
         }
 
