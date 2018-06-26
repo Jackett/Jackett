@@ -270,15 +270,27 @@ namespace Jackett.Common.Services
 
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayWasRunning)
         {
+            string appType = "Console";
+            //DI once off Owin
+            IProcessService processService = new ProcessService(logger);
+            IServiceConfigService windowsService = new WindowsServiceConfigService(processService, logger);
+
+            if (isWindows && windowsService.ServiceExists())
+            {
+                appType = "WindowsService";
+            }
+
             var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" +a + "\"" : a )).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo();
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
 
             // Note: add a leading space to the --Args argument to avoid parsing as arguments
             if (isWindows)
             {
-                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \" {args}\"";
+                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = Path.Combine(updaterExePath);
             }
             else
@@ -287,13 +299,12 @@ namespace Jackett.Common.Services
                 args = exe + " " + args;
                 exe = "mono";
 
-                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{exe}\" --Args \" {args}\"";
+                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
-                startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
             }
 
-            try { 
+            try
+            {
                 var pid = Process.GetCurrentProcess().Id;
                 startInfo.Arguments += $" --KillPids \"{pid}\"";
             }
@@ -317,7 +328,7 @@ namespace Jackett.Common.Services
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
             if (NoRestart == false)
-            { 
+            {
                 logger.Info("Exiting Jackett..");
                 lockService.Signal();
                 //TODO: Remove once off Owin

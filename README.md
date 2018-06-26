@@ -17,7 +17,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 #### Supported Systems
 * Windows using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461).
-* Linux and macOS using Mono 5.8 or above. [Download here](http://www.mono-project.com/download/). Earlier versions of mono may work, but some trackers may fail to negotiate SSL correctly, and others may cause Jackett to crash when used.
+* Linux and macOS using Mono 5.8 or above. [Download here](http://www.mono-project.com/download/).
 
 ### Supported Public Trackers
  * 1337x

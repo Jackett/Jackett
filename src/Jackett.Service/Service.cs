@@ -77,10 +77,12 @@ namespace Jackett.Service
 
         private void ProcessExited(object sender, EventArgs e)
         {
+            logger.Info("Console process exited");
+
             if (!serviceStopInitiated)
             {
                 logger.Info("Service stop not responsible for process exit");
-                OnStop();
+                Stop();
             }
         }
 
@@ -89,7 +91,7 @@ namespace Jackett.Service
             if (consoleProcess != null && !consoleProcess.HasExited)
             {
                 consoleProcess.StandardInput.Close();
-                System.Threading.Thread.Sleep(1000);
+                consoleProcess.WaitForExit(2000);
                 if (consoleProcess != null && !consoleProcess.HasExited)
                 {
                     consoleProcess.Kill();
