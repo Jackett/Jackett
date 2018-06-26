@@ -25,7 +25,7 @@ namespace Jackett.Tray
         private Logger logger;
         private bool closeApplicationInitiated;
 
-        public Main()
+        public Main(string updatedVersion)
         {
             Hide();
             InitializeComponent();
@@ -65,12 +65,22 @@ namespace Jackett.Tray
                 StartConsoleApplication();
             }
 
+            if (!string.IsNullOrWhiteSpace(updatedVersion))
+            {
+                notifyIcon1.BalloonTipTitle = "Jackett";
+                notifyIcon1.BalloonTipText = $"Jackett has updated to version {updatedVersion}";
+                notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                notifyIcon1.ShowBalloonTip(10000);
+                logger.Info($"Display balloon tip, updated to {updatedVersion}");
+            }
+
             Task.Factory.StartNew(WaitForEvent);
         }
 
         private void WaitForEvent()
         {
             trayLockService.WaitForSignal();
+            logger.Info("Received signal from tray lock service");
             CloseTrayApplication();
         }
 

@@ -38,6 +38,14 @@ namespace Jackett.Updater
             logger.Info("Jackett Updater v" + GetCurrentVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
 
+            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            if (isWindows)
+            {
+                //The updater starts before Jackett closes
+                logger.Info("Pausing for 3 seconds to give Jackett & tray time to shutdown");
+                System.Threading.Tasks.Task.Delay(3000);
+            }
+         
             processService = new ProcessService(logger);
             windowsService = new WindowsServiceConfigService(processService, logger);
 
@@ -248,15 +256,16 @@ namespace Jackett.Updater
 
             if (options.NoRestart == false)
             {
-                if (trayRunning || options.StartTray)
+                if (isWindows && (trayRunning || options.StartTray))
                 {
                     var startInfo = new ProcessStartInfo()
                     {
-                        Arguments = options.Args,
+                        Arguments = $"--UpdatedVersion \" {EnvironmentUtil.JackettVersion}\"",
                         FileName = Path.Combine(options.Path, "JackettTray.exe"),
                         UseShellExecute = true
                     };
 
+                    logger.Info("Starting Tray: " + startInfo.FileName + " " + startInfo.Arguments);
                     Process.Start(startInfo);
 
                     if (!windowsService.ServiceExists())
@@ -266,12 +275,27 @@ namespace Jackett.Updater
                     }
                 }
 
-                if (string.Equals(options.Type, "JackettService.exe", StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(options.Type, "WindowsService", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (windowsService.ServiceExists())
+                    logger.Info("Starting Windows service");
+
+                    if (ServerUtil.IsUserAdministrator())
                     {
                         windowsService.Start();
                     }
+                    else
+                    {
+                        try
+                        {
+                            var consolePath = Path.Combine(options.Path, "JackettConsole.exe");
+                            processService.StartProcessAndLog(consolePath, "--Start", true);
+                        }
+                        catch
+                        {
+                            logger.Error("Failed to get admin rights to start the service.");
+                        }
+                    }
+
                 }
                 else
                 {
