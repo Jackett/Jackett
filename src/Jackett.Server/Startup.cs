@@ -83,7 +83,8 @@ namespace Jackett.Server
             builder.RegisterType<ServerService>().As<IServerService>();
             builder.RegisterType<ProtectionService>().As<IProtectionService>();
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>();
-            builder.RegisterType<HttpWebClientNetCore>().As<WebClient>();
+            if (runtimeSettings.ClientOverride == "httpclientnetcore")
+                builder.RegisterType<HttpWebClientNetCore>().As<WebClient>();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;
