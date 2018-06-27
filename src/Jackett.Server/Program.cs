@@ -48,7 +48,7 @@ namespace Jackett.Server
                 if (string.IsNullOrEmpty(options.Client))
                 {
                     //TODO: Remove libcurl once off owin
-                    options.Client = "httpclient";
+                    options.Client = "httpclientnetcore";
                 }
 
                 Settings = options.ToRunTimeSettings();
