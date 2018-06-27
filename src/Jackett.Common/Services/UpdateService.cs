@@ -268,14 +268,14 @@ namespace Jackett.Common.Services
             return tempDir;
         }
 
-        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayWasRunning)
+        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayIsRunning)
         {
             string appType = "Console";
             //DI once off Owin
             IProcessService processService = new ProcessService(logger);
             IServiceConfigService windowsService = new WindowsServiceConfigService(processService, logger);
 
-            if (isWindows && windowsService.ServiceExists())
+            if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
             {
                 appType = "WindowsService";
             }
@@ -319,18 +319,25 @@ namespace Jackett.Common.Services
                 startInfo.Arguments += " --NoRestart";
             }
 
-            if (trayWasRunning)
+            if (trayIsRunning && appType == "Console")
             {
                 startInfo.Arguments += " --StartTray";
+            }
+
+            if (isWindows)
+            {
+                lockService.Signal();
+                logger.Info("Signal sent to lock service");
+                Thread.Sleep(2000);
             }
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
-            if (NoRestart == false)
+
+            if (!NoRestart)
             {
                 logger.Info("Exiting Jackett..");
-                lockService.Signal();
                 //TODO: Remove once off Owin
                 if (EnvironmentUtil.IsRunningLegacyOwin)
                 {

@@ -43,9 +43,9 @@ namespace Jackett.Updater
             {
                 //The updater starts before Jackett closes
                 logger.Info("Pausing for 3 seconds to give Jackett & tray time to shutdown");
-                System.Threading.Tasks.Task.Delay(3000);
+                System.Threading.Thread.Sleep(3000);
             }
-         
+        
             processService = new ProcessService(logger);
             windowsService = new WindowsServiceConfigService(processService, logger);
 
@@ -256,7 +256,7 @@ namespace Jackett.Updater
 
             if (options.NoRestart == false)
             {
-                if (isWindows && (trayRunning || options.StartTray))
+                if (isWindows && (trayRunning || options.StartTray) && !string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
                     var startInfo = new ProcessStartInfo()
                     {
@@ -275,7 +275,7 @@ namespace Jackett.Updater
                     }
                 }
 
-                if (string.Equals(options.Type, "WindowsService", StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
                     logger.Info("Starting Windows service");
 

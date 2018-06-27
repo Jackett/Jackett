@@ -65,6 +65,8 @@ namespace Jackett.Tray
                 StartConsoleApplication();
             }
 
+            updatedVersion = updatedVersion.Equals("yes", StringComparison.OrdinalIgnoreCase) ? EnvironmentUtil.JackettVersion : updatedVersion;
+
             if (!string.IsNullOrWhiteSpace(updatedVersion))
             {
                 notifyIcon1.BalloonTipTitle = "Jackett";
@@ -81,6 +83,27 @@ namespace Jackett.Tray
         {
             trayLockService.WaitForSignal();
             logger.Info("Received signal from tray lock service");
+
+            if (windowsService.ServiceExists() && windowsService.ServiceRunning())
+            {
+                //We won't be able to start the tray app up again from the updater, as when running via a windows service there is no interaction with the desktop
+                //Fire off a console process that will start the tray 20 seconds later
+
+                string trayExePath = Assembly.GetEntryAssembly().Location;
+
+                var startInfo = new ProcessStartInfo()
+                {
+                    Arguments = $"/c timeout 20 > NUL & \"{trayExePath}\" --UpdatedVersion yes",
+                    FileName = "cmd.exe",
+                    UseShellExecute = true,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+
+                logger.Info("Starting 20 second delay tray launch as Jackett is running as a Windows service: " + startInfo.FileName + " " + startInfo.Arguments);
+                Process.Start(startInfo);
+            }
+
             CloseTrayApplication();
         }
 
