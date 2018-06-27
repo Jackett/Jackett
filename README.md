@@ -403,6 +403,7 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 ## Building from source
 
 ### Windows
+* Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Open the Jackett solution in Visual Studio 2017 (version 15.7 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Console as startup project
