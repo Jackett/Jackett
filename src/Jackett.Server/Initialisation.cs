@@ -37,7 +37,7 @@ namespace Jackett.Server
 
             if (runtimeSettings.IgnoreSslErrors == true)
             {
-                logger.Info("Jackett will ignore SSL certificate errors.");
+                logger.Error($"The IgnoreSslErrors option has been deprecated, please remove it from your start arguments");
             }
 
             if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
