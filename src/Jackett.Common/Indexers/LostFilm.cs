@@ -389,7 +389,15 @@ namespace Jackett.Common.Indexers
 
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
                     dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
-                    var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+                    DateTime date;
+                    if (dateString.Length == 4) //dateString might be just a year, e.g. https://www.lostfilm.tv/series/Ghosted/season_1/episode_14/
+                    {
+                        date = DateTime.ParseExact(dateString, "yyyy", CultureInfo.InvariantCulture).ToLocalTime();
+                    }
+                    else
+                    {
+                        date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+                    }
 
                     var urlDetails = new TrackerUrlDetails(playButton);
                     var episodeReleases = await FetchTrackerReleases(urlDetails);
