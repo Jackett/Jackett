@@ -1,21 +1,23 @@
 ---
-  site: tehconnection
-  name: TehConnection
-  description: "Movies Tracker"
+  site: btworld
+  name: BTWorld
+  description: "HD Movie/TV Tracker"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://tehconnection.me/
-
+    - https://btworld.org/
+  
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
-
+      - {id: 2, cat: TV, desc: "TV"}
+    
     modes:
       search: [q]
+      tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
-
+      
   login:
     path: /login
     method: form
@@ -26,7 +28,7 @@
       - selector: table.main:contains("Login Failed!")
     test:
       path: /torrents
-
+      
   search:
     paths:
       - path: /filterTorrents

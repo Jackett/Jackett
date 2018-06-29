@@ -53,15 +53,20 @@ namespace Jackett.Common.Indexers.Abstract
             }
         }
 
-        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
-            LoadValuesFromJson(configJson);
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
             var useTokenItem = (ConfigurationData.BoolItem)configData.GetDynamic("usetoken");
             if (useTokenItem != null)
             {
                 useTokens = useTokenItem.Value;
             }
+        }
+
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -277,6 +282,29 @@ namespace Jackett.Common.Indexers.Abstract
                 release.DownloadVolumeFactor = 0;
                 release.UploadVolumeFactor = 0;
             }
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var content = await base.Download(link);
+
+            // Check if we're out of FL tokens
+            // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
+            var requestLink = link.ToString();
+            if (content.Length >= 1
+                && content[0] != 'd' // simple test for torrent vs HTML content
+                && requestLink.Contains("usetoken=1"))
+            {
+                var html = Encoding.GetString(content);
+                if (html.Contains("You do not have any freeleech tokens left."))
+                {
+                    // download again with usetoken=0
+                    var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
+                    content = await base.Download(new Uri(requestLinkNew));
+                }
+            }
+
+            return content;
         }
     }
 }

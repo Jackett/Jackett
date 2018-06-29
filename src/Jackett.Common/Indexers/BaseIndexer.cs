@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -12,6 +7,13 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -31,6 +33,9 @@ namespace Jackett.Common.Indexers
         public string Language { get; protected set; }
         public string Type { get; protected set; }
         public virtual string ID { get { return GetIndexerID(GetType()); } }
+
+        [JsonConverter(typeof(EncodingJsonConverter))]
+        public Encoding Encoding { get; protected set; }
 
         public virtual bool IsConfigured { get; protected set; }
         protected Logger logger;
@@ -154,8 +159,11 @@ namespace Jackett.Common.Indexers
         {
             if (jsonConfig is JArray)
             {
-                LoadValuesFromJson(jsonConfig, true);
-                IsConfigured = true;
+                if (!MigratedFromDPAPI(jsonConfig))
+                {
+                    LoadValuesFromJson(jsonConfig, true);
+                    IsConfigured = true;
+                }
             }
             // read and upgrade old settings file format
             else if (jsonConfig is Object)
@@ -164,6 +172,95 @@ namespace Jackett.Common.Indexers
                 SaveConfig();
                 IsConfigured = true;
             }
+        }
+
+        //TODO: Remove this section once users have moved off DPAPI
+        private bool MigratedFromDPAPI(JToken jsonConfig)
+        {
+            if (EnvironmentUtil.IsRunningLegacyOwin)
+            {
+                //Still running legacy Owin and using the DPAPI, we don't want to migrate
+                logger.Debug(ID + " - Running Owin, no need to migrate from DPAPI");
+                return false;
+            }
+
+            bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("core", StringComparison.OrdinalIgnoreCase) >= 0;
+            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+
+            if (!isWindows && runningOnDotNetCore)
+            {
+                // User isn't running Windows, but is running on .NET Core framework, no access to the DPAPI, so don't bother trying to migrate
+                return false;
+            }
+
+            LoadValuesFromJson(jsonConfig, false);
+
+            StringItem passwordPropertyValue = null;
+            string passwordValue = "";
+
+            try
+            {
+                // try dynamic items first (e.g. all cardigann indexers)
+                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
+
+                if (passwordPropertyValue == null) // if there's no dynamic password try the static property
+                {
+                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
+
+                    // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
+                    if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{ID}] while attempting migration");
+                        return false;
+                    }
+                }
+
+                passwordValue = passwordPropertyValue.Value;
+            }
+            catch (Exception)
+            {
+                logger.Debug($"Unable to source password for [{ID}] while attempting migration, likely a tracker without a password setting");
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(passwordValue))
+            {
+                try
+                {
+                    protectionService.UnProtect(passwordValue);
+                    //Password successfully unprotected using Microsoft.AspNetCore.DataProtection, no further action needed as we've already converted the password previously
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
+                    {
+                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {ID} : " + ex);
+                    }
+
+                    logger.Info($"Attempting legacy Unprotect - {ID} : ");
+
+                    try
+                    {
+                        string unprotectedPassword = protectionService.LegacyUnProtect(passwordValue);
+                        //Password successfully unprotected using Windows/Mono DPAPI
+
+                        passwordPropertyValue.Value = unprotectedPassword;
+                        SaveConfig();
+                        IsConfigured = true;
+
+                        logger.Info($"Password successfully migrated for {ID}");
+
+                        return true;
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Info($"Password could not be unprotected using legacy DPAPI - {ID} : " + exception);
+                    }
+                }
+            }
+
+            return false;
         }
 
         protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
@@ -207,7 +304,7 @@ namespace Jackett.Common.Indexers
                     return false;
             if (caps.SupportsImdbSearch && query.IsImdbQuery)
                 return true;
-            else if(!caps.SupportsImdbSearch && query.IsImdbQuery)
+            else if (!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
@@ -242,6 +339,10 @@ namespace Jackett.Common.Indexers
                     return new IndexerResult(this, new ReleaseInfo[0]);
                 var results = await PerformQuery(query);
                 results = FilterResults(query, results);
+                if (query.Limit > 0)
+                {
+                    results = results.Take(query.Limit);
+                }
                 results = results.Select(r =>
                 {
                     r.Origin = this;
@@ -750,9 +851,6 @@ namespace Jackett.Common.Indexers
         }
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
-
-        [JsonConverter(typeof(EncodingJsonConverter))]
-        public Encoding Encoding { get; protected set; }
 
         private List<CategoryMapping> categoryMapping = new List<CategoryMapping>();
         protected WebClient webclient;

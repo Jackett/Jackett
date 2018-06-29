@@ -87,6 +87,7 @@
       - selector: div.myFrame:has(font.error)
     test:
       path: torrents-search.php
+      selector: a.logout
 
   search:
     paths:

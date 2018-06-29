@@ -6,8 +6,9 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.nextorrent.site/
+    - http://www.nextorrent.tv/
   legacylinks:
+    - https://www.nextorrent.site/
     - http://www.nextorrent.site/
     - http://www.nextorrent.bz/
     - http://www.nextorrent.pro/
@@ -17,11 +18,12 @@
 
   caps:
     categorymappings:
-      - {id: Film, cat: Movies, desc: "Movies"}
+      - {id: Films, cat: Movies, desc: "Movies"}
       - {id: Séries, cat: TV, desc: "TV"}
-      - {id: Animes, cat: TV/Anime, desc: "TV/Anime"}
-      - {id: Jeux, cat: Console, desc: "Games"}
-      - {id: Ebooks, cat: Books, desc: "EBooks"}
+      - {id: Jeux-PC, cat: PC/Games, desc: "Games PC"}
+      - {id: Jeux-Consoles, cat: Console, desc: "Games Console"}
+      - {id: Musique, cat: Audio, desc: "Music"}
+      - {id: Ebook, cat: Books, desc: "EBooks"}
       - {id: Logiciels, cat: PC, desc: "Software"}
 
     modes:
@@ -32,24 +34,22 @@
   settings: []
 
   download:
-    selector: a[href^="/_get/NexTorrent.pro-"]
+    selector: a[href^="/get_torrent/"]
 
   search:
     paths:
-      - path: /
-    inputs:
-      s: "{{ .Keywords }}"
+      - path: "recherche/{{ .Query.Keywords }}"
     rows:
-      selector: article[id^="post-"]
+      selector: div.listing-torrent > table tbody tr:has(a)
     fields:
       site_date:
-        selector: h2 a
+        selector: td:nth-child(1) a
         filters:
           # date is at the end of the title, so we get it and name it site_date
           - name: regexp
             args: "(\\w+)$"
       title:
-        selector: h2 a
+        selector: td:nth-child(1) a
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
@@ -62,32 +62,28 @@
           - name: re_replace
             args: ["(\\w+)$", ""]
       details:
-        selector: h2 a
+        selector: td:nth-child(1) a
         attribute: href
       download:
-        selector: h2 a
+        selector: td:nth-child(1) a
         attribute: href
-      banner:
-        selector: div.post_image
-        attribute: src
       category:
-        selector: p.meta span.post-category a
-        
+        selector: td:nth-child(1) i
+        attribute: class
       size:
-      # there is no size on the primary search results page. defaulting to 500 MB 
-        text: "500 MB"
+        selector: td:nth-child(2)
       date:
-        selector: p.meta span.post-date a time.entry-date
-        attribute: datetime
-        filters:
-          - name: dateparse
-            args: "2006-01-02T15:04:05-07:00"
+        text: now
       seeders:
-      # there is no seeders on the primary search results page. defaulting to 0
+        text: 0
+      seeders:
+        optional: true
+        selector: td:nth-child(3)
+      leechers:
         text: 0
       leechers:
-      # there is no leechers on the primary search results page. defaulting to 0
-        text: 0
+        optional: true
+        selector: td:nth-child(4)
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

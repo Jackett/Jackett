@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             //AddCategoryMapping("cat_id", TorznabCatType.AudioForeign);
             AddCategoryMapping("21", TorznabCatType.PC);
             AddCategoryMapping("22", TorznabCatType.PC0day);
-            AddCategoryMapping("4", TorznabCatType.PCISO);
+            AddCategoryMapping("1", TorznabCatType.PCISO);
             AddCategoryMapping("2", TorznabCatType.PCMac);
             //AddCategoryMapping("cat_id", TorznabCatType.PCPhoneOther);
             //Games/PC-ISO, Games/PC-Rips
@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
             // RSS Textual categories
             AddCategoryMapping("Anime", TorznabCatType.TVAnime);
             AddCategoryMapping("Appz/Misc", TorznabCatType.PC0day);
-            AddCategoryMapping("Appz/PC-ISO", TorznabCatType.Books);
+            AddCategoryMapping("Appz/PC-ISO", TorznabCatType.PCISO);
             AddCategoryMapping("E-Book", TorznabCatType.BooksEbook);
             AddCategoryMapping("Games/PC-ISO", TorznabCatType.PCGames);
             AddCategoryMapping("Games/PC-Rips", TorznabCatType.PCGames);
@@ -265,6 +265,10 @@ namespace Jackett.Common.Indexers
                             imdbID = l;
                         }
                     }
+                    var Now = DateTime.Now;
+                    var PublishDate = DateTime.ParseExact(date, "ddd, dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture);
+                    var PublishDateLocal = PublishDate.ToLocalTime();
+                    var diff = Now - PublishDateLocal;
 
                     var release = new ReleaseInfo()
                     {
@@ -272,7 +276,8 @@ namespace Jackett.Common.Indexers
                         Description = title,
                         Guid = new Uri(string.Format(DetailsURL, torrentId)),
                         Comments = new Uri(string.Format(DetailsURL, torrentId)),
-                        PublishDate = DateTime.ParseExact(infoMatch.Groups["added"].Value, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31
+                        //PublishDate = DateTime.ParseExact(infoMatch.Groups["added"].Value, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture), //2015-08-08 21:20:31 TODO: correct timezone (always -4)
+                        PublishDate = PublishDateLocal,
                         Link = new Uri(link),
                         Seeders = ParseUtil.CoerceInt(infoMatch.Groups["seeders"].Value == "no" ? "0" : infoMatch.Groups["seeders"].Value),
                         Peers = ParseUtil.CoerceInt(infoMatch.Groups["leechers"].Value == "no" ? "0" : infoMatch.Groups["leechers"].Value),
@@ -343,6 +348,12 @@ namespace Jackett.Common.Indexers
 
                             release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:nth-child(9)").Text());
                             release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:nth-child(10)").Text());
+
+                            var grabsStr = qRow.Find("td:nth-child(8)").Text();
+                            release.Grabs = ParseUtil.GetLongFromString(grabsStr);
+
+                            var filesStr = qRow.Find("td:nth-child(7) > a").Text();
+                            release.Files = ParseUtil.GetLongFromString(filesStr);
 
                             var category = qRow.Find(".br_type > a").Attr("href").Replace("browse.php?cat=", string.Empty);
                             release.Category = MapTrackerCatToNewznab(category);

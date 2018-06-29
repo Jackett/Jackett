@@ -116,7 +116,7 @@ namespace Jackett.Common.Models.IndexerConfig
                     case ItemType.HiddenData:
                     case ItemType.DisplayInfo:
                         var value = ((StringItem)item).Value;
-                        if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+                        if (string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase)) // if we chagne this logic we've to change the MigratedFromDPAPI() logic too, #2114 is realted
                         {
                             if (string.IsNullOrEmpty(value))
                                 value = string.Empty;
@@ -188,6 +188,11 @@ namespace Jackett.Common.Models.IndexerConfig
             {
                 return null;
             }
+        }
+
+        public Item GetDynamicByName(string Name)
+        {
+            return dynamics.Values.Where(i => string.Equals(i.Name, Name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
         }
 
         public class Item

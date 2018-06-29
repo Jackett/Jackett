@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Jackett.Common.Services
 {
 
-    class SerializeService : ISerializeService
+    public class SerializeService : ISerializeService
     {
         public string Serialise(object obj)
         {

@@ -120,7 +120,7 @@
       selector: table#browsetable > tbody > tr:has(a[href^="/details.php?id="])
     fields:
       category:
-        selector: a[href^="/browse.php?q="]
+        selector: a[href^="/browse.php"]
         attribute: href
         filters:
           - name: querystring

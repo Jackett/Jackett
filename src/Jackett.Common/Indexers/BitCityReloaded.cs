@@ -17,7 +17,7 @@ namespace Jackett.Common.Indexers
 {
     public class BitCityReloaded : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
+        private string LoginUrl { get { return SiteLink + "login/index.php"; } }
         private string BrowseUrl { get { return SiteLink + "uebersicht.php"; } }
         private TimeZoneInfo germanyTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "W. Europe Standard Time", "W. Europe Standard Time");
 

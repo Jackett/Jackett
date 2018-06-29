@@ -57,6 +57,16 @@ namespace Jackett.Services
             }
         }
 
+        public string LegacyProtect(string plainText)
+        {
+            return Protect(plainText);
+        }
+
+        public string LegacyUnProtect(string plainText)
+        {
+            return UnProtect(plainText);
+        }
+
         private string ProtectDefaultMethod(string plainText)
         {
             if (string.IsNullOrEmpty(plainText))

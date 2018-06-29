@@ -12,6 +12,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using static Jackett.Common.Utils.ParseUtil;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -195,6 +196,7 @@ namespace Jackett.Common.Indexers
             if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
+                rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
                 var rssDoc = XDocument.Parse(rssPage.Content);
 
                 foreach (var item in rssDoc.Descendants("item"))

@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Jackett"
-#define MyAppVersion GetFileVersion("BuildOutput\FullFramework\Windows\Jackett\Jackett.Common.dll")
-#define MyAppPublisher "Jackett  Inc."
+#define MyAppVersion GetFileVersion(MyFileForVersion)
+#define MyAppPublisher "Jackett"
 #define MyAppURL "https://github.com/Jackett/Jackett"
 #define MyAppExeName "JackettTray.exe"
 
@@ -22,9 +22,11 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=Jackett.Installer.Windows
+OutputBaseFilename={#MyOutputFilename}
 SetupIconFile=src\Jackett.Console\jackett.ico
 UninstallDisplayIcon={commonappdata}\Jackett\JackettConsole.exe
+VersionInfoVersion={#MyAppVersion}
+UninstallDisplayName={#MyAppName}
 Compression=lzma
 SolidCompression=yes
 DisableDirPage=yes
@@ -37,9 +39,7 @@ Name: "windowsService"; Description: "Install as a Windows Service"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "BuildOutput\FullFramework\Windows\Jackett\JackettTray.exe"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion
-Source: "BuildOutput\FullFramework\Windows\Jackett\JackettUpdater.exe"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion
-Source: "BuildOutput\FullFramework\Windows\Jackett\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MySourceFolder}\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -51,13 +51,12 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyApp
 Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Run]
-Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated;
-Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated;
-Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--MigrateSettings"; Flags: waituntilterminated;
-Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated; Tasks: windowsService
-Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated; Tasks: windowsService
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated runhidden;
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated runhidden;
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated runhidden; Tasks: windowsService
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated runhidden; Tasks: windowsService
 
 [UninstallRun]
-Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated skipifdoesntexist
+Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated skipifdoesntexist runhidden
 
 

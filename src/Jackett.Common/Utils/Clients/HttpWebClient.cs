@@ -13,6 +13,7 @@ using CloudFlareUtilities;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
+using Jackett.Common.Helpers;
 
 namespace Jackett.Common.Utils.Clients
 {
@@ -143,7 +144,7 @@ namespace Jackett.Common.Utils.Clients
 
             using (ClearanceHandler clearanceHandlr = new ClearanceHandler())
             {
-                clearanceHandlr.MaxRetries = 10;
+                clearanceHandlr.MaxRetries = 30;
                 using (HttpClientHandler clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
@@ -257,7 +258,10 @@ namespace Jackett.Common.Utils.Clients
                                 // See issue #1200
                                 if (result.RedirectingTo != null && result.RedirectingTo.StartsWith("file://"))
                                 {
-                                    var newRedirectingTo = result.RedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
+                                    // URL decoding apparently is needed to, without it e.g. Demonoid download is broken
+                                    // TODO: is it always needed (not just for relative redirects)?
+                                    var newRedirectingTo = WebUtilityHelpers.UrlDecode(result.RedirectingTo, webRequest.Encoding);
+                                    newRedirectingTo = newRedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
                                     logger.Debug("[MONO relative redirect bug] Rewriting relative redirect URL from " + result.RedirectingTo + " to " + newRedirectingTo);
                                     result.RedirectingTo = newRedirectingTo;
                                 }

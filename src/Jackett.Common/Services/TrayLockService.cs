@@ -7,7 +7,7 @@ namespace Jackett.Common.Services
 
     public class TrayLockService : ITrayLockService
     {
-        private readonly string EVENT_HANDLE_NAME = "JACKETT.TRAY";
+        private readonly string EVENT_HANDLE_NAME = @"Global\JACKETT.TRAY";
 
         private EventWaitHandle GetEventHandle()
         {

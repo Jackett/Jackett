@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Common.Models;
@@ -18,6 +19,10 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentLeech : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://v4.torrentleech.org/",
+        };
+
         private string LoginUrl { get { return SiteLink + "user/account/login/"; } }
         private string SearchUrl { get { return SiteLink + "torrents/browse/list/"; } }
 
@@ -164,7 +169,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
             {
                 CQ dom = result.Content;
-                var errorMessage = dom["div#login_heading + div.card-panel-error"].Text();
+                var errorMessage = dom["p.text-danger:contains(\"Error:\")"].Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
@@ -173,7 +178,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
-            searchString = searchString.Replace('-', ' '); // remove dashes as they exclude search strings
+            searchString = Regex.Replace(searchString, @"(^|\s)-", " "); // remove dashes at the beginning of keywords as they exclude search strings (see issue #3096)
             var searchUrl = SearchUrl;
 
             if (!string.IsNullOrWhiteSpace(searchString))

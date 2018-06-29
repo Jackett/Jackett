@@ -60,6 +60,8 @@
         args: ["[^a-zA-Z0-9]+", "-"]
     rows:
       selector: table > tbody > tr:has(td:has(div:has(a[href^="/torrent/"])))
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(1) > div > a

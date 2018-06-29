@@ -115,6 +115,8 @@
     rows:
       selector: tr.browse_color, tr[id^="kdescr"]
       after: 1
+      filters:
+        - name: andmatch
     fields:
       category:
         selector: td:nth-of-type(1) a

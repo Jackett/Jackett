@@ -18,5 +18,8 @@ namespace Jackett.Updater
 
         [Option("KillPids", HelpText = "PIDs which will be killed before (Windows) or after (Unix) the update")]
         public string KillPids { get; set; }
+
+        [Option("StartTray", HelpText = "Indicates that the updater should start the tray icon")]
+        public bool StartTray { get; set; }
     }
 }

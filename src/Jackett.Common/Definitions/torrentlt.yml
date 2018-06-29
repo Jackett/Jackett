@@ -55,6 +55,7 @@
       - {id: 71, cat: XXX/Packs, desc: "pr0n / pack"}
       - {id: 30, cat: Other, desc: "Kita"}
       - {id: 41, cat: Books, desc: "E-Books"}
+      - {id: 76, cat: TV, desc: "Animacija / LT"}
 
     modes:
       search: [q]
@@ -77,6 +78,9 @@
     inputs:
       $raw: "{{range .Categories}}cats[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"
+    keywordsfilters:
+      - name: replace
+        args: [".", " "] # issue #3296
     rows:
       selector: table> tbody > tr[class^="torrents_table_row_"]
       filters:

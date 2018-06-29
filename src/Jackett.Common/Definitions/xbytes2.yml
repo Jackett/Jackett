@@ -4,7 +4,7 @@
   description: "xbytesV2 is a SPANISH site for HD content"
   language: es-es
   type: private
-  encoding: UTF-8
+  encoding: ISO-8859-1
   links:
     - http://xbytesv2.li
 
@@ -19,7 +19,7 @@
       - {id: 30 , cat: Movies/HD, desc: "Peliculas - MicroHD x265"}
       - {id: 35 , cat: TV/HD, desc: "TV/Series - 4K"}
       - {id: 31 , cat: TV/HD, desc: "TV/Series - x265"}
-      - {id: 25 , cat: TV/HD, desc: "TV/Series"}
+      - {id: 25 , cat: TV/HD, desc: "TV/Series - HDTV & WEB-DL 1080p"}
       - {id: 37 , cat: TV/Documentary, desc: "Documentales"}
       - {id: 41 , cat: TV/Sport, desc: "Deportes"}
       - {id: 5  , cat: Movies/HD, desc: "Anime"}
@@ -57,6 +57,19 @@
             args: category
       title:
         selector: td[valign="middle"] a
+        filters:
+          - name: re_replace
+            args: ["\\/", " "]
+          - name: re_replace
+            args: ["S(\\d{1,2}) E(\\d{1,2})", "S$1E$2"]
+          - name: re_replace
+            args: ["\\(", ""]
+          - name: re_replace
+            args: ["\\)", ""]
+          - name: re_replace
+            args: ["20[0-2][0-9] [0-9][0-9]", ""]
+          - name: re_replace
+            args: ["20[0-2][0-9]", ""]
       details:
         selector: td[valign="middle"] a
         attribute: href
@@ -85,8 +98,8 @@
         attribute: href
       downloadvolumefactor:
         case:
-          img[src$="gold.gif"]: "0"
-          img[src$="silver.gif"]: "0.5"
+          img[src$="gold.png"]: "0"
+          img[src$="silver.png"]: "0.5"
           "*": "1"
       uploadvolumefactor:
           case:

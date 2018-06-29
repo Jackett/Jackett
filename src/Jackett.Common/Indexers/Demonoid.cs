@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-            Type = "private";
+            Type = "public";
 
             AddCategoryMapping(5, TorznabCatType.PC0day, "Applications");
             AddCategoryMapping(17, TorznabCatType.AudioAudiobook, "Audio Books");
@@ -135,6 +135,11 @@ namespace Jackett.Common.Indexers
             var episodeSearchUrl = string.Format(SearchUrl, cat, WebUtility.UrlEncode(query.GetQueryString()));
             var results = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
 
+            if (results.IsRedirect)
+            {
+                throw new ExceptionWithConfigData("Unexpected redirect to " + results.RedirectingTo + ". Check your credentials.", configData);
+            }
+
             if (results.Content.Contains("No torrents found"))
             {
                 return releases;
@@ -199,17 +204,15 @@ namespace Jackett.Common.Indexers
 
                     release.Comments = new Uri(new Uri(SiteLink), qLink.Attr("href"));
                     release.Guid = release.Comments;
+                    release.Link = release.Comments; // indirect download see Download() method
 
-                    var qDownload = rowB.ChildElements.ElementAt(2).ChildElements.ElementAt(0).Cq();
-                    release.Link = new Uri(qDownload.Attr("href"));
-
-                    var sizeStr = rowB.ChildElements.ElementAt(3).Cq().Text();
+                    var sizeStr = rowB.ChildElements.ElementAt(2).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text());
+                    release.Seeders = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(5).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(rowB.ChildElements.ElementAt(6).Cq().Text()) + release.Seeders;
 
-                    var grabs = rowB.Cq().Find("td:nth-child(6)").Text();
+                    var grabs = rowB.Cq().Find("td:nth-child(5)").Text();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
                     release.DownloadVolumeFactor = 0; // ratioless
@@ -223,6 +226,20 @@ namespace Jackett.Common.Indexers
                 OnParseError(results.Content, ex);
             }
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var results = await RequestStringWithCookies(link.AbsoluteUri);
+            //await FollowIfRedirect(results); // manual follow for better debugging (string)
+            if (results.IsRedirect)
+                results = await RequestStringWithCookies(results.RedirectingTo);
+            CQ dom = results.Content;
+            var dl = dom.Find("a:has(font:contains(\"Download torrent file\"))");
+
+            link = new Uri(dl.Attr("href"));
+
+            return await base.Download(link);
         }
     }
 }

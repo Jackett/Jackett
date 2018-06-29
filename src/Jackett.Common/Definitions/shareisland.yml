@@ -6,10 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.shareisland.org/
-  legacylinks:
     - https://shareisland.org/
-    - http://shareisland.org/
+  legacylinks:
+    - http://shareisland.org/  
+    - http://www.shareisland.org/
 
   caps:
     categorymappings:
@@ -28,35 +28,35 @@
        - {id: 41, cat: Books, desc: "Quotidiani"}
        - {id: 59, cat: Books, desc: "Fumetti"}
        - {id: 60, cat: Books, desc: "Riviste"}
+       - {id: 61, cat: Books, desc: "Audiolibri"}
       # Games
        - {id: 47, cat: PC/Games, desc: "Games PC"}
-       - {id: 22, cat: Console/Other, desc: "Nintendo"}
+       - {id: 40, cat: Console/Other, desc: "Nintendo"}
        - {id: 13, cat: Console/PS4, desc: "Sony PS"}
-       - {id: 20, cat: Console/Xbox, desc: "XboX"}
+       - {id: 33, cat: Console/Xbox, desc: "XboX"}
        - {id: 14, cat: Console/Wii, desc: "Wii"}
       # Music
        - {id: 54, cat: Audio/MP3, desc: "MP3"}
        - {id: 55, cat: Audio/Lossless, desc: "Flac"}
       # Movies
        - {id: 17, cat: Movies/SD, desc: "Cine News"}
-       - {id: 23, cat: Movies/SD, desc: "BDRip"}
+       - {id: 43, cat: Movies/SD, desc: "BDRip"}
        - {id: 16, cat: Movies/SD, desc: "DivX"}
-       - {id: 32, cat: Movies/SD, desc: "DVDRip"}
-       - {id: 11, cat: Movies/DVD, desc: "DVD"}
-       - {id: 29, cat: Movies/HD, desc: "720p"}
-       - {id: 30, cat: Movies/HD, desc: "1080p"}
-       - {id: 35, cat: Movies/BluRay, desc: "Blu Ray Disk"}
-       - {id: 40, cat: Movies/HD, desc: "H-265"}
-       - {id: 56, cat: Movies/3D, desc: "FullHD-3D"}
-       - {id: 27, cat: TV/SD, desc: "SerieTV"}
+       - {id: 20, cat: Movies/SD, desc: "DVDRip"}
+       - {id: 21, cat: Movies/DVD, desc: "DVD"}
+       - {id: 25, cat: Movies/HD, desc: "720p"}
+       - {id: 24, cat: Movies/HD, desc: "1080p"}
+       - {id: 27, cat: Movies/BluRay, desc: "Blu Ray Disk"}
+       - {id: 23, cat: Movies/HD, desc: "H-265"}
+       - {id: 26, cat: Movies/3D, desc: "3D-FullHD"}
+       - {id: 31, cat: TV/SD, desc: "SerieTV"}
        - {id: 45, cat: TV/HD, desc: "Serie Tv HD"}
-       - {id: 44, cat: Movies/UHD, desc: "4K Ultra HD"}
+       - {id: 22, cat: Movies/UHD, desc: "4K-Ultra-HD"}
        - {id: 49, cat: TV/Documentary, desc: "Documentari"}
        - {id: 50, cat: TV/Other, desc: "Programmi TV"}
        - {id: 51, cat: Movies/Other, desc: "Mp4"}
 
        - {id: 5, cat: TV/Anime, desc: "Anime"}
-       - {id: 31, cat: TV/Anime, desc: "Cartoni Animati"}
 
     modes:
       search: [q]

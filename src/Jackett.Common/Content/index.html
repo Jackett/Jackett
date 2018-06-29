@@ -30,7 +30,7 @@
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
-    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+    <!--<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>-->
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
@@ -94,11 +94,11 @@
         <hr />
         <h3>Jackett Configuration</h3>
         <div class="text-center">
-            <div class="btn-group">
+            <div class="btn-toolbar">
                 <button id="change-jackett-port" class="btn btn-primary btn-sm">
                     <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
                 </button>
-                <button id="view-jackett-logs" class="btn btn-danger btn-sm">
+                <button id="view-jackett-logs" class="btn btn-success btn-sm">
                     <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
                 </button>
                 <button id="trigger-updater" class="btn btn-warning btn-sm">
@@ -189,7 +189,7 @@
         <div class="setup-item-recaptcha">
             <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
             <div class="setup-item-label">Full cookie header</div>
-            <input class="form-control" type="text" value="" />
+            <input class="form-control" type="text" value="{{cookieheader}}" />
         </div>
     </script>
     <script id="setup-item" type="text/x-handlebars-template">
@@ -659,6 +659,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2017110602"></script>
+    <script type="text/javascript" src="../custom.js?changed=2017110603"></script>
 </body>
 </html>
