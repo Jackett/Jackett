@@ -28,6 +28,7 @@ namespace Jackett.Common.Indexers
 
         class NewpctRelease : ReleaseInfo
         {
+            public string SerieName;
             public int? Season;
             public int? Episode;
             public int? EpisodeTo;
@@ -364,7 +365,7 @@ namespace Jackett.Common.Indexers
             Match match = _titleListRegex.Match(title);
             if (match.Success)
             {
-                string name = match.Groups[1].Value.Trim(' ', '-');
+                result.SerieName = match.Groups[1].Value.Trim(' ', '-');
                 result.Season = int.Parse(match.Groups[4].Success ? match.Groups[4].Value.Trim() : "1");
                 result.Episode = int.Parse(match.Groups[7].Value.Trim().PadLeft(2, '0'));
                 result.EpisodeTo = match.Groups[10].Success ? (int?)int.Parse(match.Groups[10].Value.Trim()) : null;
@@ -376,7 +377,7 @@ namespace Jackett.Common.Indexers
                 string episodeToText = result.EpisodeTo.HasValue ? "_" + seasonText + result.EpisodeTo.ToString().PadLeft(2, '0') : "";
 
                 result.Title = string.Format("{0} - Temporada {1} [{2}][Cap.{3}{4}][{5}]",
-                    name, seasonText, quality, episodeText, episodeToText, audioQuality);
+                    result.SerieName, seasonText, quality, episodeText, episodeToText, audioQuality);
             }
             else
             {
@@ -412,7 +413,22 @@ namespace Jackett.Common.Indexers
             result.Seeders = 1;
             result.Peers = 1;
 
+            result.Title = FixedTitle(result, quality);
+
             return result;
+        }
+
+        private string FixedTitle(NewpctRelease release, string quality)
+        {
+            var titleParts = new List<string>();
+            titleParts.Add(release.SerieName);
+            titleParts.Add("S" + release.Season.ToString().PadLeft(2, '0') + "E" + release.Episode.ToString().PadLeft(2, '0'));
+            titleParts.Add(quality);
+            if (release.Title.ToLower().Contains("esp") || release.Title.ToLower().Contains("cast"))
+            {
+                titleParts.Add("Spanish");
+            }
+            return String.Join(".", titleParts);
         }
     }
 }
