@@ -68,6 +68,10 @@ namespace Jackett.Common.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
+            if (query.SearchTerm == null)
+            {
+                query.SearchTerm = "";
+            }
             query.SearchTerm = query.SearchTerm.Replace("'", "");
             var requester = new MejorTorrentRequester(this);
             var tvShowScraper = new TvShowScraper();
