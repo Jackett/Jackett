@@ -79,9 +79,27 @@ namespace Jackett.Common.Indexers
 
             if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
             {
-                return await rssPerformer.PerformQuery(query);
+                var releases = await rssPerformer.PerformQuery(query);
+                if (releases.Count() == 0)
+                {
+                    releases = await AliveCheck(tvShowPerformer);
+                }
+                return releases;
             }
             return await tvShowPerformer.PerformQuery(query);
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> AliveCheck(TvShowPerformer tvShowPerformer)
+        {
+            IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var tests = new Queue<string>(new[] { "stranger things", "westworld", "friends" });
+            while (releases.Count() == 0 && tests.Count > 0)
+            {
+                var query = new TorznabQuery();
+                query.SearchTerm = tests.Dequeue();
+                releases = await tvShowPerformer.PerformQuery(query);
+            }
+            return releases;
         }
 
         public static Uri CreateSearchUri(string search)
