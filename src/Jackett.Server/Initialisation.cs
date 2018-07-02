@@ -13,7 +13,7 @@ namespace Jackett.Server
     {
         public static void ProcessSettings(RuntimeSettings runtimeSettings, Logger logger)
         {
-            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2")
+            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2" && runtimeSettings.ClientOverride != "httpclientnetcore")
             {
                 logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
                 Environment.Exit(1);
@@ -37,7 +37,7 @@ namespace Jackett.Server
 
             if (runtimeSettings.IgnoreSslErrors == true)
             {
-                logger.Info("Jackett will ignore SSL certificate errors.");
+                logger.Error($"The IgnoreSslErrors option has been deprecated, please remove it from your start arguments");
             }
 
             if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))

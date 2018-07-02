@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
+using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
@@ -48,7 +48,16 @@ namespace Jackett.Server
                 if (string.IsNullOrEmpty(options.Client))
                 {
                     //TODO: Remove libcurl once off owin
-                    options.Client = "httpclient";
+                    bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
+                    
+                    if (runningOnDotNetCore)
+                    {
+                        options.Client = "httpclientnetcore";
+                    }
+                    else
+                    {
+                        options.Client = "httpclient";
+                    }
                 }
 
                 Settings = options.ToRunTimeSettings();
