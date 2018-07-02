@@ -1,8 +1,12 @@
 ﻿using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
+using NLog;
 using NLog.Config;
+using NLog.LayoutRenderers;
 using NLog.Targets;
+using System;
 using System.IO;
+using System.Text;
 
 namespace Jackett.Common.Utils
 {
@@ -44,6 +48,15 @@ namespace Jackett.Common.Utils
             }
 
             return logConfig;
+        }
+
+        [LayoutRenderer("simpledatetime")]
+        public class SimpleDateTimeRenderer : LayoutRenderer
+        {
+            protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+            {
+                builder.Append(DateTime.Now.ToString("MM-dd HH:mm:ss"));
+            }
         }
     }
 }

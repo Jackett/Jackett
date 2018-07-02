@@ -18,7 +18,7 @@ namespace Jackett.Test
         {
             var builder = new ContainerBuilder();            
             builder.RegisterModule(new JackettModule(new RuntimeSettings()));
-            builder.RegisterModule<WebApi2Module>();
+            builder.RegisterType<Jackett.Services.ProtectionService>().As<IProtectionService>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
             builder.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();
             builder.RegisterType<TestIndexerManagerServiceHelper>().As<IIndexerManagerService>().SingleInstance();
