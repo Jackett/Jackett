@@ -54,6 +54,7 @@ namespace Jackett.Server
         public static void ProcessWindowsSpecificArgs(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, Logger logger)
         {
             IServiceConfigService serviceConfigService = new ServiceConfigService();
+            IServerService serverService = new ServerService(null, processService, null, null, logger, null, null, null, serverConfig);
 
             /*  ======     Actions    =====  */
 
@@ -69,7 +70,7 @@ namespace Jackett.Server
             if (consoleOptions.Uninstall)
             {
                 logger.Info("Initiating Jackett service uninstall");
-                ReserveUrls(processService, serverConfig, logger, doInstall: false);
+                serverService.ReserveUrls(false);
                 serviceConfigService.Uninstall();
                 Environment.Exit(1);
             }
@@ -100,13 +101,15 @@ namespace Jackett.Server
             if (consoleOptions.ReserveUrls)
             {
                 logger.Info("Initiating ReserveUrls");
-                ReserveUrls(processService, serverConfig, logger, doInstall: true);
+                serverService.ReserveUrls(true);
                 Environment.Exit(1);
             }
         }
 
         public static void ProcessConsoleOverrides(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, IConfigurationService configurationService, Logger logger)
         {
+            IServerService serverService = new ServerService(null, processService, null, null, logger, null, null, null, serverConfig);
+
             // Override port
             if (consoleOptions.Port != 0)
             {
@@ -121,7 +124,7 @@ namespace Jackett.Server
                     {
                         if (ServerUtil.IsUserAdministrator())
                         {
-                            ReserveUrls(processService, serverConfig, logger, doInstall: true);
+                            serverService.ReserveUrls(true);
                         }
                         else
                         {
@@ -144,7 +147,7 @@ namespace Jackett.Server
                     {
                         if (ServerUtil.IsUserAdministrator())
                         {
-                            ReserveUrls(processService, serverConfig, logger, doInstall: true);
+                            serverService.ReserveUrls(true);
                         }
                         else
                         {
@@ -155,24 +158,6 @@ namespace Jackett.Server
                     configurationService.SaveConfig(serverConfig);
                 }
             }
-        }
-
-        public static void ReserveUrls(IProcessService processService, ServerConfig serverConfig, Logger logger, bool doInstall = true)
-        {
-            logger.Debug("Unreserving Urls");
-            serverConfig.GetListenAddresses(false).ToList().ForEach(u => RunNetSh(processService, string.Format("http delete urlacl {0}", u)));
-            serverConfig.GetListenAddresses(true).ToList().ForEach(u => RunNetSh(processService, string.Format("http delete urlacl {0}", u)));
-            if (doInstall)
-            {
-                logger.Debug("Reserving Urls");
-                serverConfig.GetListenAddresses(serverConfig.AllowExternal).ToList().ForEach(u => RunNetSh(processService, string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", u)));
-                logger.Debug("Urls reserved");
-            }
-        }
-
-        private static void RunNetSh(IProcessService processService, string args)
-        {
-            processService.StartProcessAndLog("netsh.exe", args);
         }
     }
 }

@@ -279,7 +279,7 @@ namespace Jackett.Server.Services
             if (doInstall)
             {
                 logger.Debug("Reserving Urls");
-                config.GetListenAddresses(config.AllowExternal).ToList().ForEach(u => RunNetSh(string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", u)));
+                config.GetListenAddresses(true).ToList().ForEach(u => RunNetSh(string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", u)));
                 logger.Debug("Urls reserved");
             }
         }
