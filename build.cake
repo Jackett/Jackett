@@ -257,7 +257,7 @@ Task("Experimental-DotNetCore")
 Task("Experimental")
 	.IsDependentOn("Experimental-Kestrel-Windows-Full-Framework")
 	.IsDependentOn("Experimental-Kestrel-Mono-Full-Framework")
-	.IsDependentOn("Experimental-DotNetCore")
+	//.IsDependentOn("Experimental-DotNetCore")
 	.Does(() =>
 	{
 		//Unpatch csproj because it's annoying in source control (remove once off Owin)
