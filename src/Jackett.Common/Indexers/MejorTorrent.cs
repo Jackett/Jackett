@@ -45,6 +45,12 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+
+            WebUri = new Uri(configData.SiteLink.Value);
+            DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
+            SearchUriBase = new Uri(WebUri, "secciones.php");
+            NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
+
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
