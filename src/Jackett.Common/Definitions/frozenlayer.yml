@@ -47,11 +47,33 @@
     paths:
       - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{else}}descargas{{end}}"
       - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{else}}descargas{{end}}"
+    keywordsfilters:
+      - name: re_replace #remove S/EXX from search string
+        args: ["([SE]\\d{1,2})", ""]
     rows:
       selector: table#descargas > tbody > tr:has(td:has(a[href^="magnet:?"]))
     fields:
       title:
         selector: td.tit a
+        filters:
+          - name: re_replace
+            args: ["\\/", " "]
+          - name: re_replace
+            args: ["\\(", ""]
+          - name: re_replace
+            args: ["\\)", ""]
+          - name: re_replace
+            args: ["([A-z]*) temporada", "S$1"]
+          - name: re_replace
+            args: ["S[pP]rimera", "S1"]
+          - name: re_replace
+            args: ["S[sS]egunda", "S2"]
+          - name: re_replace
+            args: ["S[tT]ercera", "S3"]
+          - name: re_replace
+            args: ["S([0-9]) - Episodio ([0-9]*)", "S$1E$2"]
+          - name: re_replace
+            args: ["- Episodio ([0-9]*)", "E$1"]
       details:
         selector: td.tit a
         attribute: href

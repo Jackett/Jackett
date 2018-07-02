@@ -78,6 +78,9 @@
     inputs:
       $raw: "{{range .Categories}}cats[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"
+    keywordsfilters:
+      - name: replace
+        args: [".", " "] # issue #3296
     rows:
       selector: table> tbody > tr[class^="torrents_table_row_"]
       filters:

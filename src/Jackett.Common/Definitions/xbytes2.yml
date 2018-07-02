@@ -98,8 +98,8 @@
         attribute: href
       downloadvolumefactor:
         case:
-          img[src$="gold.gif"]: "0"
-          img[src$="silver.gif"]: "0.5"
+          img[src$="gold.png"]: "0"
+          img[src$="silver.png"]: "0.5"
           "*": "1"
       uploadvolumefactor:
           case:

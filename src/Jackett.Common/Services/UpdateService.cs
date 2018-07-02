@@ -324,20 +324,21 @@ namespace Jackett.Common.Services
                 startInfo.Arguments += " --StartTray";
             }
 
-            if (isWindows)
-            {
-                lockService.Signal();
-                logger.Info("Signal sent to lock service");
-                Thread.Sleep(2000);
-            }
-
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
 
             if (!NoRestart)
             {
+                if (isWindows)
+                {
+                    logger.Info("Signal sent to lock service");
+                    lockService.Signal();
+                    Thread.Sleep(2000);
+                }
+
                 logger.Info("Exiting Jackett..");
+
                 //TODO: Remove once off Owin
                 if (EnvironmentUtil.IsRunningLegacyOwin)
                 {

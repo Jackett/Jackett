@@ -244,6 +244,11 @@
             args: " ago"
       size:
         selector: "td:nth-child(6)"
+        filters:
+          - name: replace
+            args: ["o", "B"]
+      grabs:
+        selector: "td:nth-child(7)"
       seeders:
         text: 0
       seeders:

@@ -306,7 +306,15 @@ namespace Jackett.Updater
                         UseShellExecute = true
                     };
 
-                    if (!isWindows)
+                    if (isWindows)
+                    {
+                        //User didn't initiate the update from Windows service and wasn't running Jackett via the tray, must have started from the console
+                        startInfo.Arguments = $"/K {startInfo.FileName} {startInfo.Arguments}";
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.CreateNoWindow = false;
+                        startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    }
+                    else
                     {
                         startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
                         startInfo.FileName = "mono";
