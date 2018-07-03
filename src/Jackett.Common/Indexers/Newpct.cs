@@ -420,13 +420,13 @@ namespace Jackett.Common.Indexers
 
         private string FixedTitle(NewpctRelease release, string quality)
         {
-            if (String.IsNullOrEmpty(release.SerieName) && release.Title.Contains("-"))
-            {
-                release.SerieName = release.Title.Substring(0, release.Title.IndexOf('-') - 1);
-            }
-            else
+            if (String.IsNullOrEmpty(release.SerieName))
             {
                 release.SerieName = release.Title;
+                if (release.Title.Contains("-"))
+                {
+                    release.SerieName = release.Title.Substring(0, release.Title.IndexOf('-') - 1);
+                }
             }
             if (String.IsNullOrEmpty(quality))
             {
