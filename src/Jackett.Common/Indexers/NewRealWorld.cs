@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
                     var qCatLink = qRow.Find("a[href^=browse.php?cat=]").First();
                     var qSeeders = qRow.Find("td > table.testtable > tbody > tr > td > strong:eq(3)");
                     var qLeechers = qRow.Find("td > table.testtable > tbody > tr > td > strong:eq(4)");
-                    var qDateStr = qRow.Find("td > table.testtable > tbody > tr > td:eq(6)");
+                    var qDateStr = qRow.Find("td > table.testtable > tbody > tr > td:eq(7)");
                     var qSize = qRow.Find("td > table.testtable > tbody > tr > td > strong:eq(1)");
                     var qDownloadLink = qRow.Find("a[href*=download]").First();
 

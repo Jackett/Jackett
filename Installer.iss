@@ -23,8 +23,8 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename={#MyOutputFilename}
-SetupIconFile=src\Jackett.Console\jackett.ico
-UninstallDisplayIcon={commonappdata}\Jackett\JackettConsole.exe
+SetupIconFile=src\Jackett.Tray\jackett.ico
+UninstallDisplayIcon={commonappdata}\Jackett\{#MyAppExeName}
 VersionInfoVersion={#MyAppVersion}
 UninstallDisplayName={#MyAppName}
 Compression=lzma
@@ -48,15 +48,15 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
-[Run]
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated runhidden;
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--ReserveUrls"; Flags: waituntilterminated runhidden;
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Install"; Flags: waituntilterminated runhidden; Tasks: windowsService
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Start"; Flags: waituntilterminated runhidden; Tasks: windowsService
+Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated skipifdoesntexist runhidden
+Filename: "{sys}\taskkill.exe"; Parameters: "/f /im {#MyAppExeName}"; Flags: waituntilterminated skipifdoesntexist runhidden
+Filename: "{sys}\taskkill.exe"; Parameters: "/f /im JackettConsole.exe"; Flags: waituntilterminated skipifdoesntexist runhidden
 
 

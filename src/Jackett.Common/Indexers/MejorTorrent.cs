@@ -45,6 +45,12 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
+
+            WebUri = new Uri(configData.SiteLink.Value);
+            DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
+            SearchUriBase = new Uri(WebUri, "secciones.php");
+            NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
+
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
@@ -62,6 +68,11 @@ namespace Jackett.Common.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
+            if (query.SearchTerm == null)
+            {
+                query.SearchTerm = "";
+            }
+            query.SearchTerm = query.SearchTerm.Replace("'", "");
             var requester = new MejorTorrentRequester(this);
             var tvShowScraper = new TvShowScraper();
             var seasonScraper = new SeasonScraper();
@@ -73,9 +84,27 @@ namespace Jackett.Common.Indexers
 
             if (string.IsNullOrEmpty(query.SanitizedSearchTerm))
             {
-                return await rssPerformer.PerformQuery(query);
+                var releases = await rssPerformer.PerformQuery(query);
+                if (releases.Count() == 0)
+                {
+                    releases = await AliveCheck(tvShowPerformer);
+                }
+                return releases;
             }
             return await tvShowPerformer.PerformQuery(query);
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> AliveCheck(TvShowPerformer tvShowPerformer)
+        {
+            IEnumerable<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var tests = new Queue<string>(new[] { "stranger things", "westworld", "friends" });
+            while (releases.Count() == 0 && tests.Count > 0)
+            {
+                var query = new TorznabQuery();
+                query.SearchTerm = tests.Dequeue();
+                releases = await tvShowPerformer.PerformQuery(query);
+            }
+            return releases;
         }
 
         public static Uri CreateSearchUri(string search)
