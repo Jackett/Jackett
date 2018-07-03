@@ -196,6 +196,16 @@ namespace Jackett.Common.Indexers
                     newpctReleases.AddRange(await GetReleasesFromUri(seriesListUrl, seriesName));
                 }
 
+                //Sonarr removes "the" from shows. If there is nothing try prepending "the"
+                if (newpctReleases.Count == 0 && !(seriesName.ToLower().StartsWith("the")))
+                {
+                    seriesName = "The " + seriesName;
+                    foreach (Uri seriesListUrl in SeriesListUris(seriesName))
+                    {
+                        newpctReleases.AddRange(await GetReleasesFromUri(seriesListUrl, seriesName));
+                    }
+                }
+
                 //Cache ALL episodes
                 lock (cache)
                 {
