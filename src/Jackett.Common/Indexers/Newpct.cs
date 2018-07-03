@@ -193,27 +193,7 @@ namespace Jackett.Common.Indexers
                 //Search series url
                 foreach (Uri seriesListUrl in SeriesListUris(seriesName))
                 {
-                    var results = await RequestStringWithCookies(seriesListUrl.AbsoluteUri);
-
-                    //Episodes list
-                    string seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
-                    if (!string.IsNullOrEmpty(seriesEpisodesUrl))
-                    {
-                        int pg = 1;
-                        while (pg < _maxEpisodesListPages)
-                        {
-                            Uri episodesListUrl = new Uri(string.Format(_seriesUrl, seriesEpisodesUrl, pg));
-                            results = await RequestStringWithCookies(episodesListUrl.AbsoluteUri);
-
-                            var items = ParseEpisodesListContent(results.Content);
-                            if (items == null || !items.Any())
-                                break;
-
-                            newpctReleases.AddRange(items);
-
-                            pg++;
-                        }
-                    }
+                    newpctReleases.AddRange(await GetReleasesFromUri(seriesListUrl, seriesName));
                 }
 
                 //Cache ALL episodes
@@ -238,6 +218,33 @@ namespace Jackett.Common.Indexers
                         )
                     );
             });
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> GetReleasesFromUri(Uri uri, string seriesName)
+        {
+            var newpctReleases = new List<ReleaseInfo>();
+            var results = await RequestStringWithCookies(uri.AbsoluteUri);
+
+            //Episodes list
+            string seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
+            if (!string.IsNullOrEmpty(seriesEpisodesUrl))
+            {
+                int pg = 1;
+                while (pg < _maxEpisodesListPages)
+                {
+                    Uri episodesListUrl = new Uri(string.Format(_seriesUrl, seriesEpisodesUrl, pg));
+                    results = await RequestStringWithCookies(episodesListUrl.AbsoluteUri);
+
+                    var items = ParseEpisodesListContent(results.Content);
+                    if (items == null || !items.Any())
+                        break;
+
+                    newpctReleases.AddRange(items);
+
+                    pg++;
+                }
+            }
+            return newpctReleases;
         }
 
         private IEnumerable<Uri> SeriesListUris(string seriesName)
