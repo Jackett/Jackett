@@ -190,17 +190,9 @@ namespace Jackett.Common.Indexers
 
             if (!cacheFound)
             {
-                IEnumerable<string> lettersUrl;
-                if (!((BoolItem)configData.GetDynamic("IncludeVo")).Value)
-                    lettersUrl = _seriesLetterUrls;
-                else
-                    lettersUrl = _seriesLetterUrls.Concat(_seriesVOLetterUrls);
-
-                string seriesLetter = !char.IsDigit(seriesName[0]) ? seriesName[0].ToString() : "0-9";
                 //Search series url
-                foreach (string urlFormat in lettersUrl)
+                foreach (Uri seriesListUrl in SeriesListUris(seriesName))
                 {
-                    Uri seriesListUrl = new Uri(SiteLinkUri, string.Format(urlFormat, seriesLetter.ToLower()));
                     var results = await RequestStringWithCookies(seriesListUrl.AbsoluteUri);
 
                     //Episodes list
@@ -245,6 +237,24 @@ namespace Jackett.Common.Indexers
                             nr.EpisodeTo.HasValue && episode.Value >= nr.Episode.Value && episode.Value <= nr.EpisodeTo.Value //Episode in interval
                         )
                     );
+            });
+        }
+
+        private IEnumerable<Uri> SeriesListUris(string seriesName)
+        {
+            IEnumerable<string> lettersUrl;
+            if (!((BoolItem)configData.GetDynamic("IncludeVo")).Value)
+            {
+                lettersUrl = _seriesLetterUrls;
+            }
+            else
+            {
+                lettersUrl = _seriesLetterUrls.Concat(_seriesVOLetterUrls);
+            }
+            string seriesLetter = !char.IsDigit(seriesName[0]) ? seriesName[0].ToString() : "0-9";
+            return lettersUrl.Select(urlFormat =>
+            {
+                return new Uri(SiteLinkUri, string.Format(urlFormat, seriesLetter.ToLower()));
             });
         }
 
