@@ -442,6 +442,7 @@ namespace Jackett.Common.Indexers
 
             result.Size = size;
             result.Link = new Uri(detailsUrl);
+            result.Guid = result.Link;
             result.PublishDate = publishDate;
             result.Seeders = 1;
             result.Peers = 1;
