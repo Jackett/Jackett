@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
         private ReleaseInfo _mostRecentRelease;
         private Regex _searchStringRegex = new Regex(@"(.+?)S0?(\d+)(E0?(\d+))?$", RegexOptions.IgnoreCase);
         private Regex _titleListRegex = new Regex(@"Serie(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
-        private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})(_(\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
+        private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
 
         private int _maxDailyPages = 7;
@@ -420,10 +420,24 @@ namespace Jackett.Common.Indexers
 
         private string FixedTitle(NewpctRelease release, string quality)
         {
+            if (String.IsNullOrEmpty(release.SerieName))
+            {
+                release.SerieName = release.Title.Substring(0, release.Title.IndexOf('-') - 1);
+            }
+            if (String.IsNullOrEmpty(quality))
+            {
+                quality = "HDTV";
+            }
+            var seasonAndEpisode = "S" + release.Season.ToString().PadLeft(2, '0');
+            seasonAndEpisode += "E" + release.Episode.ToString().PadLeft(2, '0');
+            if (release.EpisodeTo != release.Episode && release.EpisodeTo != null && release.EpisodeTo != 0)
+            {
+                seasonAndEpisode += "-" + release.EpisodeTo.ToString().PadLeft(2, '0');
+            }
             var titleParts = new List<string>();
             titleParts.Add(release.SerieName);
-            titleParts.Add("S" + release.Season.ToString().PadLeft(2, '0') + "E" + release.Episode.ToString().PadLeft(2, '0'));
-            titleParts.Add(quality);
+            titleParts.Add(seasonAndEpisode);
+            titleParts.Add(quality.Replace("[", "").Replace("]", ""));
             if (release.Title.ToLower().Contains("esp") || release.Title.ToLower().Contains("cast"))
             {
                 titleParts.Add("Spanish");
