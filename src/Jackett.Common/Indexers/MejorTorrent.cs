@@ -438,6 +438,7 @@ namespace Jackett.Common.Indexers
         {
             public string MejorTorrentID;
             public bool IsMovie;
+            public int? Year;
             public int _season;
             public int _episodeNumber;
             private string _categoryText;
@@ -546,6 +547,7 @@ namespace Jackett.Common.Indexers
 
             public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
             {
+                query = SanitizeQuery(query);
                 var uriSearch = CreateSearchUri(query.SearchTerm);
                 var htmlSearch = await requester.MakeRequest(uriSearch);
                 var moviesInfoUris = movieSearchScraper.Extract(htmlSearch);
@@ -568,7 +570,25 @@ namespace Jackett.Common.Indexers
                     return movie;
                 });
 
+                if (query.Year != null)
+                {
+                    movies = movies.Where(m => m.Year == query.Year);
+                }
+
                 return movies;
+            }
+
+            private TorznabQuery SanitizeQuery(TorznabQuery query)
+            {
+                var regex = new Regex(@"\d{4}$");
+                var match = regex.Match(query.SanitizedSearchTerm);
+                if (match.Success)
+                {
+                    var yearStr = match.Groups[0].Value;
+                    query.Year = Int32.Parse(yearStr);
+                    query.SearchTerm = query.SearchTerm.Replace(yearStr, "").Trim();
+                }
+                return query;
             }
         }
 
@@ -604,6 +624,7 @@ namespace Jackett.Common.Indexers
                 {
                     var year = selectors.Where(s => s.TextContent.ToLower().Contains("año"))
                         .First().NextSibling.TextContent.Trim();
+                    release.Year = Int32.Parse(year);
                     release.TitleOriginal += " (" + year + ")";
                 } catch { }
                 try
