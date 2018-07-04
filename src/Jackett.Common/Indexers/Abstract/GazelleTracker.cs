@@ -239,9 +239,39 @@ namespace Jackett.Common.Indexers.Abstract
             if (torrent["hasCue"] != null && (bool)torrent["hasCue"])
                 flags.Add("Cue");
 
+            // tehconnection.me specific?
+            var lang = (string)torrent["lang"];
+            if (!string.IsNullOrEmpty(lang) && lang != "---")
+                flags.Add(lang);
+
             var media = (string)torrent["media"];
             if (!string.IsNullOrEmpty(media))
                 flags.Add(media);
+
+            // tehconnection.me specific?
+            var resolution = (string)torrent["resolution"];
+            if (!string.IsNullOrEmpty(resolution))
+                flags.Add(resolution);
+
+            // tehconnection.me specific?
+            var container = (string)torrent["container"];
+            if (!string.IsNullOrEmpty(container))
+                flags.Add(container);
+
+            // tehconnection.me specific?
+            var codec = (string)torrent["codec"];
+            if (!string.IsNullOrEmpty(codec))
+                flags.Add(codec);
+
+            // tehconnection.me specific?
+            var audio = (string)torrent["audio"];
+            if (!string.IsNullOrEmpty(audio))
+                flags.Add(audio);
+
+            // tehconnection.me specific?
+            var subbing = (string)torrent["subbing"];
+            if (!string.IsNullOrEmpty(subbing) && subbing != "---")
+                flags.Add(subbing);
 
             if (torrent["remastered"] != null && (bool)torrent["remastered"])
             {

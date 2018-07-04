@@ -244,6 +244,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * Tasmanit
  * TBPlus
+ * TehConnection.me
  * TenYardTracker
  * The Empire
  * The Geeks
