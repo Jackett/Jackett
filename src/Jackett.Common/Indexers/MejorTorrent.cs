@@ -69,6 +69,7 @@ namespace Jackett.Common.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
+            var originalSearchTerm = query.SearchTerm;
             if (query.SearchTerm == null)
             {
                 query.SearchTerm = "";
@@ -115,6 +116,7 @@ namespace Jackett.Common.Indexers
                 releases.AddRange(await tvShowPerformer.PerformQuery(query));
             }
 
+            query.SearchTerm = originalSearchTerm;
             return releases;
         }
 
