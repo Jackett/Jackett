@@ -71,10 +71,6 @@
       details:
         selector: a.view-torrent
         attribute: href
-      imdb:
-        optional: true
-        selector: a[href*="://www.imdb.com/title/"]
-        attribute: href
       size:
         selector: td:nth-child(4)
       seeders:

@@ -1,23 +1,24 @@
 ---
-  site: btworld
-  name: BTWorld
-  description: "HD Movie/TV Tracker"
+  site: btxpress
+  name: BTXpress
+  description: "HD Tracker Movies/TV/Music"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://btworld.org/
-  
+    - https://btxpress.org/
+    
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
-    
+      - {id: 3, cat: Music, desc: "Music"}
+
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
-      
+
   login:
     path: /login
     method: form
@@ -28,7 +29,7 @@
       - selector: table.main:contains("Login Failed!")
     test:
       path: /torrents
-      
+
   search:
     paths:
       - path: /filterTorrents
@@ -70,18 +71,14 @@
       details:
         selector: a.view-torrent
         attribute: href
-      imdb:
-        optional: true
-        selector: a[href*="://www.imdb.com/title/"]
-        attribute: href
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
       seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      grabs:
         selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(5)
         filters:
           - name: regexp
             args: ([\d\.]+)
