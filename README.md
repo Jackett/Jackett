@@ -338,7 +338,7 @@ Mono must be compiled with the Roslyn compiler (default), using MCS will cause "
 ## Installation on macOS
 
 ### Prerequisites
-Install [Mono 4.6](http://www.mono-project.com/download/#download-mac) or better (using the latest pkg installer is recommended).
+Install [Mono 5.8](http://www.mono-project.com/download/#download-mac) or better (using the latest pkg installer is recommended).
  * Setup ssl support by running `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
 ### Install as service
