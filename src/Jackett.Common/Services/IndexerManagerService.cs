@@ -160,7 +160,7 @@ namespace Jackett.Common.Services
             IResultFilterProvider resultFilterProvider = null;
             if (!omdbApiKey.IsNullOrEmptyOrWhitespace())
             {
-                var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull());
+                var imdbResolver = new OmdbResolver(webClient, omdbApiKey.ToNonNull(), serverConfig.OmdbApiUrl);
                 fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
                 resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
             }
