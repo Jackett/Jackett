@@ -71,7 +71,7 @@
           - name: re_replace
             args: ["S[tT]ercera", "S3"]
           - name: re_replace
-            args: ["S([0-9]*) - Episodio ([0-9]*)", "S$1E$2"]
+            args: ["S([0-9]+) - Episodio ([0-9]+)", "S$1E$2"]
           - name: re_replace
             args: ["- Episodio ([0-9]*)", "E$1"]
       details:
