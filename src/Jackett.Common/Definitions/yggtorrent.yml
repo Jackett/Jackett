@@ -112,7 +112,7 @@
   login:
     method: form
     path: /
-    form: form[action$="/user/login"]
+    form: form[id$="user-login"]
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
