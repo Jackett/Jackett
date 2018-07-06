@@ -590,7 +590,16 @@ namespace Jackett.Common.Indexers
 
                 if (query.Year != null)
                 {
-                    movies = movies.Where(m => m.Year == query.Year);
+                    movies = movies
+                        .Where(m => 
+                            m.Year == query.Year ||
+                            m.Year == query.Year + 1 ||
+                            m.Year == query.Year - 1)
+                        .Select(m => 
+                        {
+                            m.TitleOriginal = m.TitleOriginal.Replace("(" + m.Year + ")", "(" + query.Year + ")");
+                            return m;
+                        });
                 }
 
                 return movies;
