@@ -70,6 +70,22 @@
             args: ["20[0-2][0-9] [0-9][0-9]", ""]
           - name: re_replace
             args: ["20[0-2][0-9]", ""]
+          - name: replace
+            args: ["ESP", "Spanish"]
+          - name: re_replace
+            args: ["[EI]NG", "English"]
+          - name: replace
+            args: ["CAT", "Catalan"]
+          - name: replace
+            args: ["FRA", "French"]
+          - name: replace
+            args: ["JAP", "Japanese"]
+          - name: replace
+            args: ["ITA", "Italian"]
+          - name: replace
+            args: ["RUS", "Russian"]
+          - name: replace
+            args: ["DUAL", "Spanish English"]
       details:
         selector: td[valign="middle"] a
         attribute: href
