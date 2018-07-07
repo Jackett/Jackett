@@ -36,6 +36,7 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
@@ -72,13 +73,13 @@
         selector: a.view-torrent
         attribute: href
       size:
-        selector: td:nth-child(4)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
-      grabs:
         selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
         filters:
           - name: regexp
             args: ([\d\.]+)
