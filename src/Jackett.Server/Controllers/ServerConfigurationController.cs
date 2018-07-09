@@ -89,6 +89,7 @@ namespace Jackett.Server.Controllers
             }
 
             string omdbApiKey = config.omdbkey;
+            string omdbApiUrl = config.omdburl;
 
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
@@ -99,9 +100,10 @@ namespace Jackett.Server.Controllers
             Helper.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
             serverConfig.RuntimeSettings.TracingEnabled = logging;
 
-            if (omdbApiKey != serverConfig.OmdbApiKey)
+            if (omdbApiKey != serverConfig.OmdbApiKey || omdbApiUrl != serverConfig.OmdbApiUrl)
             {
                 serverConfig.OmdbApiKey = omdbApiKey;
+                serverConfig.OmdbApiUrl = omdbApiUrl.TrimEnd('/');
                 configService.SaveConfig(serverConfig);
                 // HACK
                 indexerService.InitAggregateIndexer();
