@@ -69,6 +69,7 @@ namespace Jackett.Common.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
+            var originalSearchTerm = query.SearchTerm;
             if (query.SearchTerm == null)
             {
                 query.SearchTerm = "";
@@ -115,6 +116,7 @@ namespace Jackett.Common.Indexers
                 releases.AddRange(await tvShowPerformer.PerformQuery(query));
             }
 
+            query.SearchTerm = originalSearchTerm;
             return releases;
         }
 
@@ -548,6 +550,22 @@ namespace Jackett.Common.Indexers
             public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
             {
                 query = SanitizeQuery(query);
+                var movies = await FetchMoviesBasedOnLongestWord(query);
+                return movies;
+            }
+            
+            private async Task<IEnumerable<MTReleaseInfo>> FetchMoviesBasedOnLongestWord(TorznabQuery query)
+            {
+                var originalSearch = query.SearchTerm;
+                var regexStr = ".*" + originalSearch.Replace(" ", ".*") + ".*";
+                var regex = new Regex(regexStr, RegexOptions.IgnoreCase);
+                query.SearchTerm = LongestWord(query);
+                var movies = await FetchMovies(query);
+                return movies.Where(m => regex.Match(m.Title).Success);
+            }
+
+            private async Task<IEnumerable<MTReleaseInfo>> FetchMovies(TorznabQuery query)
+            {
                 var uriSearch = CreateSearchUri(query.SearchTerm);
                 var htmlSearch = await requester.MakeRequest(uriSearch);
                 var moviesInfoUris = movieSearchScraper.Extract(htmlSearch);
@@ -572,10 +590,34 @@ namespace Jackett.Common.Indexers
 
                 if (query.Year != null)
                 {
-                    movies = movies.Where(m => m.Year == query.Year);
+                    movies = movies
+                        .Where(m => 
+                            m.Year == query.Year ||
+                            m.Year == query.Year + 1 ||
+                            m.Year == query.Year - 1)
+                        .Select(m => 
+                        {
+                            m.TitleOriginal = m.TitleOriginal.Replace("(" + m.Year + ")", "(" + query.Year + ")");
+                            return m;
+                        });
                 }
 
                 return movies;
+            }
+
+            private string LongestWord(TorznabQuery query)
+            {
+                var words = query.SearchTerm.Split(' ');
+                if (words.Count() == 0) return null;
+                var longestWord = words.First();
+                foreach(var word in words)
+                {
+                    if (word.Length >= longestWord.Length)
+                    {
+                        longestWord = word;
+                    }
+                }
+                return longestWord;
             }
 
             private TorznabQuery SanitizeQuery(TorznabQuery query)
