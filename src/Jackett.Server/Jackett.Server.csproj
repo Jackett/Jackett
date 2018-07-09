@@ -23,7 +23,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.0" />
