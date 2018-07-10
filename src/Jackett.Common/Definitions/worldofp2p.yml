@@ -72,8 +72,8 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
-    method: post
+    path: /login.php
+    method: form
     form: form
     inputs:
       username: "{{ .Config.username }}"
