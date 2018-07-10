@@ -89,6 +89,8 @@ namespace Jackett.Server
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;
 
+            Helper.Logger.Debug("Autofac container built");
+
             Helper.Initialize();
 
             return new AutofacServiceProvider(container);

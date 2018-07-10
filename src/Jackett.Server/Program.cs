@@ -129,6 +129,7 @@ namespace Jackett.Server
 
                 try
                 {
+                    logger.Debug("Creating web host...");
                     CreateWebHostBuilder(args, url).Build().Run();
                 }
                 catch (Exception ex)

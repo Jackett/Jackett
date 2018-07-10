@@ -32,6 +32,8 @@ namespace Jackett.Server
 
             //Kicks off the update checker
             ServerService.Start();
+
+            Logger.Debug("Helper initialization complete");
         }
 
         public static void RestartWebHost()
