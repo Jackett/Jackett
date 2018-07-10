@@ -36,7 +36,6 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
-      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
@@ -45,15 +44,8 @@
       sorting: created_at
       direction: desc
       qty: 100
-    preprocessingfilters:
-      - name: jsonjoinarray
-        args: ["$.result", ""]
-      - name: prepend
-        args: "<table>"
-      - name: append
-        args: "</table>"
     rows:
-      selector: tr
+      selector: table > tbody > tr
     fields:
       category:
         selector: a[href*="/categories/"]
@@ -64,11 +56,8 @@
       title:
         selector: a.view-torrent
       download:
-        selector: a[href*="/download_check/"]
+        selector: a[href*="/download/"]
         attribute: href
-        filters:
-          - name: replace
-            args: ["/download_check/", "/download/"]
       details:
         selector: a.view-torrent
         attribute: href
@@ -85,12 +74,6 @@
             args: ([\d\.]+)
       date:
         selector: time
-        attribute: datetime
-        filters:
-          - name: append
-            args: " +00:00"
-          - name: dateparse
-            args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
           "i[data-original-title=\"100% Free\"]": "0"
