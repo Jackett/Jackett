@@ -154,8 +154,8 @@ Task("Package-Files-Full-Framework-Mono")
 	});
 
 Task("Package-Full-Framework")
-	.IsDependentOn("Package-Windows-Installer-Full-Framework")
-	.IsDependentOn("Package-Files-Full-Framework-Windows")
+	//.IsDependentOn("Package-Windows-Installer-Full-Framework")  Now distributing Kestrel builds
+	//.IsDependentOn("Package-Files-Full-Framework-Windows")  Now distributing Kestrel builds
 	.IsDependentOn("Package-Files-Full-Framework-Mono")
 	.Does(() =>
 	{
@@ -198,7 +198,7 @@ Task("Experimental-Kestrel-Windows-Full-Framework")
 		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", buildOutputPath);
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
-		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Experimental.Jackett.Binaries.Windows.zip");
+		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
 
 		//InnoSetup
 		string sourceFolder = MakeAbsolute(Directory(buildOutputPath)).ToString();
@@ -209,7 +209,7 @@ Task("Experimental-Kestrel-Windows-Full-Framework")
 			{
 				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
 				{ "MySourceFolder",  sourceFolder },
-				{ "MyOutputFilename",  "Experimental.Jackett.Installer.Windows" },
+				{ "MyOutputFilename",  "Jackett.Installer.Windows" },
 			};
 
 		InnoSetup("./Installer.iss", settings);
