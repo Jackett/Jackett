@@ -88,8 +88,6 @@ Task("Copy-Files-Full-Framework")
 		var windowsOutput = windowsBuildFullFramework + "/Jackett";
 
 		CopyDirectory("./src/Jackett.Console/bin/" + configuration, windowsOutput);
-		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", windowsOutput);
-		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", windowsOutput);
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net452" + "/JackettUpdater.*", windowsOutput);  //builds against multiple frameworks
 		CopyFiles("./Upstart.config", windowsOutput);
 		CopyFiles("./LICENSE", windowsOutput);
@@ -119,32 +117,6 @@ Task("Check-Packaging-Platform")
 		}
 	});
 
-Task("Package-Windows-Installer-Full-Framework")
-	.IsDependentOn("Check-Packaging-Platform")
-	.Does(() =>
-	{
-		string sourceFolder = MakeAbsolute(Directory(windowsBuildFullFramework + "/Jackett")).ToString();
-
-		InnoSetupSettings settings = new InnoSetupSettings();
-		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
- 		settings.Defines = new Dictionary<string, string>
-			{
-				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
-				{ "MySourceFolder",  sourceFolder },
-				{ "MyOutputFilename",  "Jackett.Installer.Windows" },
-			};
-
-		InnoSetup("./Installer.iss", settings);
-	});
-
-Task("Package-Files-Full-Framework-Windows")
-	.IsDependentOn("Check-Packaging-Platform")
-	.Does(() =>
-	{
-		Zip(windowsBuildFullFramework, $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
-		Information(@"Full Framework Windows Binaries Zipping Completed");
-	});
-
 Task("Package-Files-Full-Framework-Mono")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
@@ -154,8 +126,6 @@ Task("Package-Files-Full-Framework-Mono")
 	});
 
 Task("Package-Full-Framework")
-	//.IsDependentOn("Package-Windows-Installer-Full-Framework")  Now distributing Kestrel builds
-	//.IsDependentOn("Package-Files-Full-Framework-Windows")  Now distributing Kestrel builds
 	.IsDependentOn("Package-Files-Full-Framework-Mono")
 	.Does(() =>
 	{
@@ -168,13 +138,6 @@ Task("Kestrel-Full-Framework")
 	{
 		CleanDirectories("./src/**/obj");
 		CleanDirectories("./src/**/bin");
-
-		//Patch csproj to net461 until off Owin (net452 can't handle a nestandard library)
-		var trayCsproj = File("./src/Jackett.Tray/Jackett.Tray.csproj");
-		XmlPoke(trayCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.6.1");
-
-		var serviceCsproj = File("./src/Jackett.Service/Jackett.Service.csproj");
-		XmlPoke(serviceCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.6.1");
 
 		NuGetRestore("./src/Jackett.sln");
 
@@ -260,13 +223,6 @@ Task("Experimental")
 	//.IsDependentOn("Experimental-DotNetCore")
 	.Does(() =>
 	{
-		//Unpatch csproj because it's annoying in source control (remove once off Owin)
-		var trayCsproj = File("./src/Jackett.Tray/Jackett.Tray.csproj");
-		XmlPoke(trayCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.5.2");
-
-		var serviceCsproj = File("./src/Jackett.Service/Jackett.Service.csproj");
-		XmlPoke(serviceCsproj, "*[name()='Project']/*[name()='PropertyGroup']/*[name()='TargetFrameworkVersion']", "v4.5.2");
-		
 		Information("Experimental builds completed");
 	});
 
