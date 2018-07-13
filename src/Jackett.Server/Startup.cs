@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
@@ -107,8 +108,19 @@ namespace Jackett.Server
 
             app.UseCustomExceptionHandler();
 
+            string serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
+
+            if (!string.IsNullOrEmpty(serverBasePath))
+            {
+                app.UsePathBase(serverBasePath);
+            }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             var rewriteOptions = new RewriteOptions()
-                .Add(RewriteRules.RewriteBasePath)
                 .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
                 .AddRewrite(@"^potato\/([\w-]*)", "api/v2.0/indexers/$1/results/potato", skipRemainingRules: true) //legacy potato route
                 .Add(RedirectRules.RedirectToDashboard);

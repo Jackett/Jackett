@@ -72,6 +72,8 @@ namespace Jackett.Server.Controllers
         [HttpPost]
         public IActionResult UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
         {
+            bool webHostRestartNeeded = false;
+
             var originalPort = serverConfig.Port;
             var originalAllowExternal = serverConfig.AllowExternal;
             int port = config.port;
@@ -90,6 +92,11 @@ namespace Jackett.Server.Controllers
 
             string omdbApiKey = config.omdbkey;
             string omdbApiUrl = config.omdburl;
+
+            if (config.basepathoverride != serverConfig.BasePathOverride)
+            {
+                webHostRestartNeeded = true;
+            }
 
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
@@ -164,8 +171,7 @@ namespace Jackett.Server.Controllers
                     }
                 }
 
-                Thread.Sleep(500);
-                Helper.RestartWebHost();
+                webHostRestartNeeded = true;
             }
 
             if (saveDir != serverConfig.BlackholeDir)
@@ -180,6 +186,13 @@ namespace Jackett.Server.Controllers
 
                 serverConfig.BlackholeDir = saveDir;
                 configService.SaveConfig(serverConfig);
+            }
+
+            if (webHostRestartNeeded)
+            {
+                Thread.Sleep(500);
+                logger.Info("Restarting webhost due to configuration change");
+                Helper.RestartWebHost();
             }
 
             serverConfig.ConfigChanged();
