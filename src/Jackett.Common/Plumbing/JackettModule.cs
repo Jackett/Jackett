@@ -62,24 +62,9 @@ namespace Jackett.Common.Plumbing
                 case "httpclient2":
                     RegisterWebClient<HttpWebClient2>(builder);
                     break;
-                case "safecurl":
-                    RegisterWebClient<UnixSafeCurlWebClient>(builder);
-                    break;
-                case "libcurl":
-                    RegisterWebClient<UnixLibCurlWebClient>(builder);
-                    break;
-                case "automatic":
                 default:
-                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
-                    {
-                        RegisterWebClient<HttpWebClient>(builder);
-                        break;
-                    }
                     var usehttpclient = DetectMonoCompatabilityWithHttpClient();
-                    if (usehttpclient)
-                        RegisterWebClient<HttpWebClient>(builder);
-                    else
-                        RegisterWebClient<UnixLibCurlWebClient>(builder);
+                    RegisterWebClient<HttpWebClient>(builder);
                     break;
             }
         }

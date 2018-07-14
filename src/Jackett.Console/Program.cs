@@ -65,6 +65,14 @@ namespace Jackett.Console
                         Engine.Logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
                     }
 
+                    if(!string.IsNullOrEmpty(runtimeSettings.ClientOverride))
+                    {
+                        if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2" && runtimeSettings.ClientOverride != "httpclientnetcore")
+                        {
+                            Engine.Logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
+                            Environment.Exit(1);
+                        }
+                    }
 
                     // Use Proxy
                     if (options.ProxyConnection != null)
