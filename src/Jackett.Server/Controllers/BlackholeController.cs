@@ -3,11 +3,12 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.IO;
-using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
@@ -46,7 +47,7 @@ namespace Jackett.Server.Controllers
                 if (serverConfig.APIKey != jackett_apikey)
                     throw new Exception("Incorrect API key");
 
-                path = WebUtility.UrlDecode(path);
+                path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = protectionService.UnProtect(path);
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
                 var fileExtension = ".torrent";
