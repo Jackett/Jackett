@@ -71,6 +71,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
             AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
 
+            AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
             AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
             AddCategoryMapping(5, TorznabCatType.MoviesBluRay, "Movies/Bluray-Full");
@@ -79,7 +80,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.MoviesForeign, "Movies/Non-English");
             AddCategoryMapping(13, TorznabCatType.Movies, "Movies/Packs");
             AddCategoryMapping(44, TorznabCatType.MoviesSD, "Movies/SD/x264");
-            AddCategoryMapping(48, TorznabCatType.MoviesUHD, "Movies/x265");
+            AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
             AddCategoryMapping(17, TorznabCatType.Audio, "Music/Audio");
