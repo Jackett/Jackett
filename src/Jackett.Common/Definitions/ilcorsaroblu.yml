@@ -10,6 +10,8 @@
   legacylinks:
     - http://ilcorsaroblu.org/
     - https://www.ilcorsaroblu.org/
+  certificates:
+    - e6dd93ef71f96d04559e2bee8cc8e6fd74957730 # incomplete CA chain
 
   caps:
     categorymappings:
