@@ -56,6 +56,9 @@
             args: id
       title:
         selector: td:nth-child(3) > a.torrent > span.span-1440
+        filters:
+          - name: re_replace # remove anidb id from return string
+            args: ["(\\[[A-Z0-9]*\\])\\.", "."]
       details:
         selector: td:nth-child(3) > a.torrent
         attribute: href
