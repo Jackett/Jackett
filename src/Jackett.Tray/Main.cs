@@ -30,6 +30,9 @@ namespace Jackett.Tray
             Hide();
             InitializeComponent();
 
+            WindowState = FormWindowState.Minimized;
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+
             RuntimeSettings runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "TrayLog.txt"

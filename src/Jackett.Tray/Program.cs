@@ -39,7 +39,7 @@ namespace Jackett.Tray
                         }
                     });
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     newVersion = "";
                 }
