@@ -30,6 +30,8 @@ namespace Jackett.Tray
             Hide();
             InitializeComponent();
 
+            Opacity = 0;
+            Enabled = false;
             WindowState = FormWindowState.Minimized;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
 

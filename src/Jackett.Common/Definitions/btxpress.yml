@@ -12,7 +12,6 @@
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
-      - {id: 3, cat: Audio, desc: "Music"}
 
     modes:
       search: [q]
@@ -36,7 +35,6 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
-      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
