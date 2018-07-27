@@ -12,10 +12,10 @@
     - https://gay-area.org/
 
   settings:
-    - name: uid
+    - name: username
       type: text
       label: Username
-    - name: pwd
+    - name: password
       type: password
       label: Password
     - name: active
@@ -79,8 +79,8 @@
     method: post
     path: login.php
     inputs:
-      uid: "{{ .Config.uid }}"
-      pwd: "{{ .Config.pwd }}"
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
     error:
       - selector: div.fixed_width:nth-child(4) > span:contains("Incorrect")
     test:
