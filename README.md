@@ -286,6 +286,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Waffles
  * World-In-HD
  * WorldOfP2P
+ * x-ite.me
  * x264
  * xBytesV2
  * XSpeeds
