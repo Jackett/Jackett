@@ -1,6 +1,6 @@
 ---
   # Update by LA5T based on the orignial 'karagarga.yml'
-  # 27.07.2018 13:00 UTC+2
+  # 29.07.2018 23:15 UTC+2
   #
   site: karagarga
   name: Karagarga
@@ -141,14 +141,14 @@
         filters:
           - name: re_replace
             args: ["([a-zA-Z]+)\\s+(\\d{1,2})\\s+'(\\d{2})", "$2 $1 $3"]
-          - name: append
-            args: " +01:00"
           - name: dateparse
-            args: "02 Jan 06 -07:00"
+            args: "02 Jan 06"
       downloadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
       uploadvolumefactor:
         case:
-          "td:nth-child(1) > div:nth-child(1) > a:nth-child(1) > div:nth-child(2) > img[title^=CURRENT]": 0.5
-          "*": "0.1"
+          ":has(img[title^=HD]):has(img[title^=CURRENT])": 1.8
+          "img[title^=CURRENT]": 1.6
+          "img[title^=HD]": 1.3
+          "*": 1.1
