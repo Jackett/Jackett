@@ -290,7 +290,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * xBytesV2
  * XSpeeds
  * Xthor
- * Your Exotic Torrents
+ * ExoticaZ (Your Exotic Torrents)
  * Zamunda.net
  * Zelka.org
 
