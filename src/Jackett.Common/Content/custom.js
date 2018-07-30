@@ -738,9 +738,9 @@ function updateReleasesRow(row)
         if (DownloadVolumeFactor == 0) {
             labels.append('\n<span class="label label-success">FREELEECH</span>');
         } else if (DownloadVolumeFactor < 1) {
-            labels.append('\n<span class="label label-primary">' + DownloadVolumeFactor * 100 + '%DL</span>');
+            labels.append('\n<span class="label label-primary">' + (DownloadVolumeFactor * 100).toFixed(0) + '%DL</span>');
         } else if (DownloadVolumeFactor > 1) {
-            labels.append('\n<span class="label label-danger">' + DownloadVolumeFactor * 100 + '%DL</span>');
+            labels.append('\n<span class="label label-danger">' + (DownloadVolumeFactor * 100).toFixed(0) + '%DL</span>');
         }
     }
 
@@ -748,7 +748,7 @@ function updateReleasesRow(row)
         if (UploadVolumeFactor == 0) {
             labels.append('\n<span class="label label-warning">NO UPLOAD</span>');
         } else if (UploadVolumeFactor != 1) {
-            labels.append('\n<span class="label label-info">' + UploadVolumeFactor * 100 + '%UL</span>');
+            labels.append('\n<span class="label label-info">' + (UploadVolumeFactor * 100).toFixed(0) + '%UL</span>');
         }
     }
 }
