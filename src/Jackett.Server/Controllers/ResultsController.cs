@@ -202,6 +202,7 @@ namespace Jackett.Server.Controllers
                 if (t.Key == "Category[]")
                 {
                     request.Category = t.Value.ToString().Split(',').Select(Int32.Parse).ToArray();
+                    CurrentQuery.Categories = request.Category;
                 }
 
                 if (t.Key == "query")
