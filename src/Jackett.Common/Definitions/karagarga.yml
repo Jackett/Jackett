@@ -127,7 +127,7 @@
         selector: td:nth-child(12)
         filters:
           - name: regexp
-            args: (\d+)
+            args: ([\d,]+)
       files:
         selector: td:nth-child(10)
       size:
