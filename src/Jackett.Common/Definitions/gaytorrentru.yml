@@ -117,7 +117,7 @@
         selector: .tfiles
         filters:
           - name: regexp
-            args: (\d+)
+            args: ([\d,]+)
       size:
         selector: .tsize
       seeders:
