@@ -231,6 +231,7 @@ namespace Jackett.Updater
                 "Definitions/oxtorrent.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/torrentwtf.yml",
+                "Definitions/eotforum.yml",
             };
 
             foreach (var oldFile in oldFiles)
