@@ -145,18 +145,18 @@
           - name: regexp
             args: "src=(.+?) "
       size:
-        selector: td:nth-child(9)
+        selector: td:nth-child(10)
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-child(6)
         filters:
           - name: dateparse
             args: "02/01/2006"
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(9)
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-child(6)
-      leechers:
         selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
