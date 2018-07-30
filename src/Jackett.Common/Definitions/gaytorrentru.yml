@@ -1,6 +1,6 @@
 ---
   # Update by LA5T based on the orignial 'gaytorrentru.yml'
-  # 27.07.2018 13:00 UTC+2
+  # 29.07.2018 23:02 UTC+2
   #
   site: gaytorrentru
   name: GAYtorrent.ru
@@ -130,11 +130,9 @@
         selector: .tadded
         filters:
           - name: re_replace
-            args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2})(?:.*)", "$1 $2"]
-          - name: append
-            args: " +01:00"
+            args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2}).*", "$1 $2"]
           - name: dateparse
-            args: "2006-01-02 15:04:05 -07:00"
+            args: "2006-01-02 15:04:05"
       downloadvolumefactor:
         case:
           "td:nth-child(3) > div > nobr > font[color=\"yellow\"]": 0
