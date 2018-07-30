@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://v2.rgut.uk/
+  legacylinks:
     - https://rgu.rgt.life/
 
   caps:
@@ -65,8 +67,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      submitme: "X"
-      submitme: "X" # two submitme needed?!? shouldn't make a difference
+      use_ssl: "1"
     error:
       - selector: h2:contains("Login failed!")
         message:
