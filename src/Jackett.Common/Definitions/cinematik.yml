@@ -1,6 +1,6 @@
 ---
   # Update by LA5T based on the orignial 'cinematik.yml'
-  # 27.07.2018 13:00 UTC+2
+  # 29.07.2018 22:53 UTC+2
   #
   site: cinematik
   name: Cinematik
@@ -75,7 +75,7 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
-      incldead:	"{{ .Config.incldead }}"
+      incldead: "{{ .Config.incldead }}"
       srchdtls: "{{ if .Config.srchdtls }}1{{ else }}0{{ end }}"
     rows:
       selector: table[border="1"] tr:not(:first-child)
@@ -97,7 +97,7 @@
         selector: td:nth-child(8)
         filters:
           - name: regexp
-            args: (\d+)
+            args: ([\d,]+)
       files:
         selector: td:nth-child(5)
       size:
@@ -110,11 +110,11 @@
         selector: td:nth-child(11) div.addedtor
       downloadvolumefactor:
         case:
-          "img[title=\"Golden Torrent: No Download Stats are Recorded\"]": "0"
-          "img[title=\"Silver Torrent: Download Stats are 25% Recorded\"]": "0.25"
-          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": "0"
-          "*": "1"
+          "img[title=\"Golden Torrent: No Download Stats are Recorded\"]": 0
+          "img[title=\"Silver Torrent: Download Stats are 25% Recorded\"]": 0.25
+          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": "2"
-          "*": "1"
+          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": 2
+          "*": 1
