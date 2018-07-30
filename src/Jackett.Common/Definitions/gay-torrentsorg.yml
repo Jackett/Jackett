@@ -108,6 +108,11 @@
       details:
         selector: a[href^="details.php?id="]
         attribute: href
+      grabs:
+         selector: div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > a
+         filters:
+           - name: regexp
+             args: ([\d,]+)
       comments:
         selector: a[href^="details.php?id="]
         attribute: href
