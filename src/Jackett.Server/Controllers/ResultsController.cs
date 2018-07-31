@@ -340,11 +340,13 @@ namespace Jackett.Server.Controllers
 
             if (CurrentQuery.ImdbID != null)
             {
+                /* We should allow this (helpful in case of aggregate indexers)
                 if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
                     logger.Warn($"A search request from {Request.HttpContext.Connection.RemoteIpAddress} was made containing q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
+                */
 
                 CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
                 if (CurrentQuery.ImdbID == null)
