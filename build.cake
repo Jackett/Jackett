@@ -45,17 +45,12 @@ Task("Clean")
 		Information("Clean completed");
 	});
 
-Task("Restore-NuGet-Packages")
+Task("Build-Kestrel-Full-Framework")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
 		NuGetRestore("./src/Jackett.sln");
-	});
 
-Task("Build")
-	.IsDependentOn("Restore-NuGet-Packages")
-	.Does(() =>
-	{
 		var buildSettings = new MSBuildSettings()
                 .SetConfiguration(configuration)
                 .UseToolVersion(MSBuildToolVersion.VS2017);
@@ -64,7 +59,7 @@ Task("Build")
 	});
 
 Task("Run-Unit-Tests")
-	.IsDependentOn("Build")
+	.IsDependentOn("Build-Kestrel-Full-Framework")
 	.Does(() =>
 	{
 		CreateDirectory("./" + testResultsDirName);
@@ -81,29 +76,8 @@ Task("Run-Unit-Tests")
 		}
 	});
 
-Task("Copy-Files-Full-Framework")
-	.IsDependentOn("Run-Unit-Tests")
-	.Does(() =>
-	{
-		var windowsOutput = windowsBuildFullFramework + "/Jackett";
-
-		CopyDirectory("./src/Jackett.Console/bin/" + configuration, windowsOutput);
-		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net452" + "/JackettUpdater.*", windowsOutput);  //builds against multiple frameworks
-		CopyFiles("./Upstart.config", windowsOutput);
-		CopyFiles("./LICENSE", windowsOutput);
-		CopyFiles("./README.md", windowsOutput);
-
-		var monoOutput = monoBuildFullFramework + "/Jackett";
-
-		CopyDirectory(windowsBuildFullFramework, monoBuildFullFramework);
-		DeleteFiles(monoOutput + "/JackettService.*");
-		DeleteFiles(monoOutput + "/JackettTray.*");
-
-		Information("Full framework file copy completed");
-	});
-
 Task("Check-Packaging-Platform")
-	.IsDependentOn("Copy-Files-Full-Framework")
+	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
 		if (IsRunningOnWindows())
@@ -117,39 +91,8 @@ Task("Check-Packaging-Platform")
 		}
 	});
 
-Task("Package-Files-Full-Framework-Mono")
-	.IsDependentOn("Check-Packaging-Platform")
-	.Does(() =>
-	{
-		Gzip(monoBuildFullFramework, $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
-		Information(@"Full Framework Mono Binaries Gzip Completed");
-	});
-
-Task("Package-Full-Framework")
-	.IsDependentOn("Package-Files-Full-Framework-Mono")
-	.Does(() =>
-	{
-		Information("Full Framework Packaging Completed");
-	});
-
-Task("Kestrel-Full-Framework")
-	.IsDependentOn("Package-Full-Framework")
-	.Does(() =>
-	{
-		CleanDirectories("./src/**/obj");
-		CleanDirectories("./src/**/bin");
-
-		NuGetRestore("./src/Jackett.sln");
-
-		var buildSettings = new MSBuildSettings()
-                .SetConfiguration(configuration)
-                .UseToolVersion(MSBuildToolVersion.VS2017);
-		
-		MSBuild("./src/Jackett.sln", buildSettings);
-	});
-
 Task("Experimental-Kestrel-Windows-Full-Framework")
-	.IsDependentOn("Kestrel-Full-Framework")
+	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
@@ -179,7 +122,7 @@ Task("Experimental-Kestrel-Windows-Full-Framework")
 	});
 
 Task("Experimental-Kestrel-Mono-Full-Framework")
-	.IsDependentOn("Kestrel-Full-Framework")
+	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
@@ -199,11 +142,11 @@ Task("Experimental-Kestrel-Mono-Full-Framework")
 		var configFile = File(buildOutputPath + "/JackettConsole.exe.config");
 		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
 
-		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.Mono.tar.gz");
+		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
 	});
 	
 Task("Experimental-DotNetCore")
-	.IsDependentOn("Kestrel-Full-Framework")
+	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
@@ -227,7 +170,6 @@ Task("Experimental")
 	});
 
 Task("Appveyor-Push-Artifacts")
-	.IsDependentOn("Package-Full-Framework")
 	.IsDependentOn("Experimental")
 	.Does(() =>
 	{
