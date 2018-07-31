@@ -232,6 +232,7 @@ namespace Jackett.Updater
                 "Definitions/tehconnection.yml",
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
+                "Definitions/nexttorrent.yml",
             };
 
             foreach (var oldFile in oldFiles)
