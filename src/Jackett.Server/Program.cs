@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Jackett.Server
@@ -130,7 +131,10 @@ namespace Jackett.Server
                 try
                 {
                     logger.Debug("Creating web host...");
-                    CreateWebHostBuilder(args, url).Build().Run();
+                    string applicationFolder = configurationService.ApplicationFolder();
+                    logger.Debug($"Content root path is: {applicationFolder}");
+
+                    CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
                 }
                 catch (Exception ex)
                 {
@@ -174,9 +178,10 @@ namespace Jackett.Server
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(Configuration)
+                .UseContentRoot(contentRoot)
                 .UseUrls(urls)
                 .PreferHostingUrls(true)
                 .UseStartup<Startup>()
