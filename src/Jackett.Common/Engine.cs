@@ -13,7 +13,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using NLog.Config;
-using NLog.LayoutRenderers;
 using NLog.Targets;
 
 namespace Jackett.Common
@@ -179,7 +178,7 @@ namespace Jackett.Common
             var logFileName = settings.CustomLogFileName ?? "log.txt";
             var logLevel = settings.TracingEnabled ? LogLevel.Debug : LogLevel.Info;
             // Add custom date time format renderer as the default is too long
-            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
+            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(Utils.LoggingSetup.SimpleDateTimeRenderer));
 
             var logConfig = new LoggingConfiguration();
             var logFile = new FileTarget();
@@ -263,15 +262,6 @@ namespace Jackett.Common
         public static void SaveServerConfig()
         {
             ConfigService.SaveConfig(ServerConfig);
-        }
-    }
-
-    [LayoutRenderer("simpledatetime")]
-    public class SimpleDateTimeRenderer : LayoutRenderer
-    {
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
-        {
-            builder.Append(DateTime.Now.ToString("MM-dd HH:mm:ss"));
         }
     }
 }

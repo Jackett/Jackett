@@ -61,7 +61,7 @@ namespace Jackett.Services
 
         public Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t")
         {
-            if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet"))
+            if (link == null || (link.IsAbsoluteUri && link.Scheme == "magnet" && action != "bh")) // no need to convert a magnet link to a proxy link unless it's a blackhole link
                 return link;
 
             var encryptedLink = _protectionService.Protect(link.ToString());
@@ -111,6 +111,8 @@ namespace Jackett.Services
                     logger.Error("Error while getting MaxThreads details: " + e);
                 }
 
+                logger.Info("App config/log directory: " + configService.GetAppDataFolder());
+
                 try
                 {
                     var issuefile = "/etc/issue";
@@ -141,16 +143,12 @@ namespace Jackett.Services
 
                     var monoVersionO = new Version(monoVersion.Split(' ')[0]);
 
-                    if (monoVersionO.Major < 4)
+                    if (monoVersionO.Major < 5 || (monoVersionO.Major == 5 && monoVersionO.Minor < 8))
                     {
-                        logger.Error("Your mono version is to old (mono 3 is no longer supported). Please update to the latest version from http://www.mono-project.com/download/");
-                        Engine.Exit(2);
-                    }
-                    else if (monoVersionO.Major == 4 && monoVersionO.Minor == 2)
-                    {
-                        var notice = "mono version 4.2.* is known to cause problems with Jackett. If you experience any problems please try updating to the latest mono version from http://www.mono-project.com/download/ first.";
+                        string notice = "A minimum Mono version of 5.8 is required. Please update to the latest version from http://www.mono-project.com/download/";
                         _notices.Add(notice);
                         logger.Error(notice);
+                        Engine.Exit(1);
                     }
 
                     try

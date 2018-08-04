@@ -53,98 +53,43 @@ namespace Jackett.Common.Plumbing
             // Register the best web client for the platform or the override
             switch (_runtimeSettings.ClientOverride)
             {
+                case "httpclientnetcore":
+                    // do nothing, registered by the netcore app
+                    break;
                 case "httpclient":
                     RegisterWebClient<HttpWebClient>(builder);
                     break;
                 case "httpclient2":
                     RegisterWebClient<HttpWebClient2>(builder);
                     break;
-                case "safecurl":
-                    RegisterWebClient<UnixSafeCurlWebClient>(builder);
-                    break;
-                case "libcurl":
-                    RegisterWebClient<UnixLibCurlWebClient>(builder);
-                    break;
-                case "automatic":
                 default:
-                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
-                    {
-                        RegisterWebClient<HttpWebClient>(builder);
-                        break;
-                    }
                     var usehttpclient = DetectMonoCompatabilityWithHttpClient();
-                    if (usehttpclient)
-                        RegisterWebClient<HttpWebClient>(builder);
-                    else
-                        RegisterWebClient<UnixLibCurlWebClient>(builder);
+                    RegisterWebClient<HttpWebClient>(builder);
                     break;
             }
         }
 
         private void RegisterWebClient<WebClientType>(ContainerBuilder builder)
         {
-            Engine.WebClientType = typeof(WebClientType);
+            //TODO: Remove once off Owin
+            if (EnvironmentUtil.IsRunningLegacyOwin)
+            {
+                Engine.WebClientType = typeof(WebClientType);
+            }
             builder.RegisterType<WebClientType>().As<WebClient>();
         }
 
         private ServerConfig BuildServerConfig(IComponentContext ctx)
         {
             var configService = ctx.Resolve<IConfigurationService>();
-            // Load config
-            var config = configService.GetConfig<ServerConfig>();
-            if (config == null)
-            {
-                config = new ServerConfig(_runtimeSettings);
-            }
-            else
-            {
-                //We don't load these out of the config files as it could get confusing to users who accidently save. 
-                //In future we could flatten the serverconfig, and use command line parameters to override any configuration.
-                config.RuntimeSettings = _runtimeSettings;
-            }
-
-            if (string.IsNullOrWhiteSpace(config.APIKey))
-            {
-                // Check for legacy key config
-                var apiKeyFile = Path.Combine(configService.GetAppDataFolder(), "api_key.txt");
-                if (File.Exists(apiKeyFile))
-                {
-                    config.APIKey = File.ReadAllText(apiKeyFile);
-                }
-
-                // Check for legacy settings
-
-                var path = Path.Combine(configService.GetAppDataFolder(), "config.json"); ;
-                var jsonReply = new JObject();
-                if (File.Exists(path))
-                {
-                    jsonReply = JObject.Parse(File.ReadAllText(path));
-                    config.Port = (int)jsonReply["port"];
-                    config.AllowExternal = (bool)jsonReply["public"];
-                }
-
-                if (string.IsNullOrWhiteSpace(config.APIKey))
-                    config.APIKey = StringUtil.GenerateRandom(32);
-
-                configService.SaveConfig(config);
-            }
-
-            if (string.IsNullOrWhiteSpace(config.InstanceId))
-            {
-                config.InstanceId = StringUtil.GenerateRandom(64);
-                configService.SaveConfig(config);
-            }
-            config.ConfigChanged();
-            return config;
+            return configService.BuildServerConfig(_runtimeSettings);
         }
-
-        
 
         private static bool DetectMonoCompatabilityWithHttpClient()
         {
             bool usehttpclient = false;
-                try
-                  {                    
+            try
+            {
                 Type monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null)
                 {

@@ -1,23 +1,23 @@
 ---
-  site: btworld
-  name: BTWorld
-  description: "HD Movie/TV Tracker"
+  site: btxpress
+  name: BTXpress
+  description: "HD Tracker Movies/TV"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://btworld.org/
-  
+    - https://btxpress.org/
+
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
-    
+
     modes:
       search: [q]
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
-      
+
   login:
     path: /login
     method: form
@@ -28,7 +28,7 @@
       - selector: table.main:contains("Login Failed!")
     test:
       path: /torrents
-      
+
   search:
     paths:
       - path: /filterTorrents
@@ -43,15 +43,8 @@
       sorting: created_at
       direction: desc
       qty: 100
-    preprocessingfilters:
-      - name: jsonjoinarray
-        args: ["$.result", ""]
-      - name: prepend
-        args: "<table>"
-      - name: append
-        args: "</table>"
     rows:
-      selector: tr
+      selector: table > tbody > tr
     fields:
       category:
         selector: a[href*="/categories/"]
@@ -62,37 +55,24 @@
       title:
         selector: a.view-torrent
       download:
-        selector: a[href*="/download_check/"]
+        selector: a[href*="/download/"]
         attribute: href
-        filters:
-          - name: replace
-            args: ["/download_check/", "/download/"]
       details:
         selector: a.view-torrent
         attribute: href
-      imdb:
-        optional: true
-        selector: a[href*="://www.imdb.com/title/"]
-        attribute: href
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
       seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      grabs:
         selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(5)
         filters:
           - name: regexp
             args: ([\d\.]+)
       date:
         selector: time
-        attribute: datetime
-        filters:
-          - name: append
-            args: " +00:00"
-          - name: dateparse
-            args: "2006-01-02 15:04:05 -07:00"
       downloadvolumefactor:
         case:
           "i[data-original-title=\"100% Free\"]": "0"

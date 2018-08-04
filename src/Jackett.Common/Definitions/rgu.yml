@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://v2.rgut.uk/
+  legacylinks:
     - https://rgu.rgt.life/
 
   caps:
@@ -65,7 +67,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      submitme: "X"
+      use_ssl: "1"
     error:
       - selector: h2:contains("Login failed!")
         message:
@@ -82,7 +84,9 @@
       searchin: "title"
       incldead: "{{ .Config.incldead }}"
       "only_free": "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
-
+    keywordsfilters:
+      - name: re_replace
+        args: ["(\\w+)", " +$1"] # prepend + to each word
     rows:
       selector: tr.browse_color, tr[id^="kdescr"]
       after: 1
@@ -140,7 +144,10 @@
             args: ["\n", "<br>\n"]
       downloadvolumefactor:
         case:
+          "b:contains(\"[Free and Double]\")": "0"
           "img[alt=\"Free Torrent\"]": "0"
           "*": "1"
       uploadvolumefactor:
-        text: "1"
+        case:
+          "b:contains(\"[Free and Double]\")": "2"
+          "*": "1"

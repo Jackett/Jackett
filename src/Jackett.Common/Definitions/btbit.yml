@@ -28,7 +28,7 @@
 
   search:
     paths:
-      - path: "list/{{if .Keywords}}{{.Keywords}}{{else}}movie{{end}}.html"
+      - path: "list/{{if .Keywords}}{{.Keywords}}{{else}}movie{{end}}/1-1-0.html"
     rows:
       selector: .rs
     fields:

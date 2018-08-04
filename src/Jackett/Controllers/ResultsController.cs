@@ -289,11 +289,13 @@ namespace Jackett.Controllers
 
             if (CurrentQuery.ImdbID != null)
             {
+                /* We should allow this (helpful in case of aggregate idnexers)
                 if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
                     logger.Warn($"A search request from {Request.GetOwinContext().Request.RemoteIpAddress} was made containing q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
+                */
 
                 CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
                 if (CurrentQuery.ImdbID == null)
@@ -440,7 +442,7 @@ namespace Jackett.Controllers
                     torrent_id = release.Guid.ToString(),
                     details_url = release.Comments.ToString(),
                     download_url = (release.Link != null ? release.Link.ToString() : release.MagnetUri.ToString()),
-                    imdb_id = release.Imdb.HasValue ? "tt" + release.Imdb : null,
+                    imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbID("tt" + release.Imdb) : null,
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                     type = "movie",
                     size = (long)release.Size / (1024 * 1024), // This is in MB
@@ -467,8 +469,13 @@ namespace Jackett.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
-                if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(Engine.ServerConfig.BlackholeDir))
-                    result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
+                if (!string.IsNullOrWhiteSpace(Engine.ServerConfig.BlackholeDir))
+                {
+                    if (result.Link != null)
+                        result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
+                    else if (result.MagnetUri != null)
+                        result.BlackholeLink = serverService.ConvertToProxyLink(result.MagnetUri, serverUrl, result.TrackerId, "bh", file);
+                }
 
             }
         }

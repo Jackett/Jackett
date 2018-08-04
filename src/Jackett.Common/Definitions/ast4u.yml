@@ -40,6 +40,18 @@
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+      
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: Results Per Page
+      default: For best results, change the 'Torrentliste' setting to "Platzsparendes Layout mit PopUp für zusätzliche Informationen" in your profile.
 
   login:
     path: takelogin.php
@@ -63,9 +75,13 @@
 
     rows:
       selector: table.tableinborder > tbody > tr:has(a[href^="details.php"])
-    fields:
+    fields: # note: two alternative layouts available
       title:
         selector: a[href^="details.php"]
+      title:
+        optional: true
+        selector: a[href^="details.php"][title]
+        attribute: title
       category:
         selector: a[href^="browse.php?cat="]
         attribute: href
@@ -76,32 +92,34 @@
         selector: a[href^="details.php"]
         attribute: href
       download:
-        selector: a[href^=" /gettorrent/ssl/"]
+        selector: a[href^=" /gettorrent/"]
         attribute: href
       files:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2), a[href*="&filelist=1"]
       grabs:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1)
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) > b:nth-child(1), a[href*="&tosnatchers=1"]
       size:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1), td:nth-child(7):has(br)
         filters:
           - name: replace
             args: [".", ""]
           - name: replace
             args: [",", "."]
       seeders:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1), a[href*="&toseeders=1"]
       leechers:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3), a[href*="&todlers=1"]
       date:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5)
+        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5), td:nth-child(5):has(br)
         filters:
+          - name: replace
+            args: [" ", ""]
           - name: append
             args: " +2:00"
           - name: replace
-            args: ["\xA0", " "]
+            args: ["\xA0", ""]
           - name: dateparse
-            args: "02.01.2006 15:04:05 -07:00"
+            args: "02.01.200615:04:05 -07:00"
       downloadvolumefactor:
         case:
           img[src="/pic/free.gif"]: "0"

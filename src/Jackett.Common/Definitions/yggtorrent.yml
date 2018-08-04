@@ -6,10 +6,13 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://yggtorrent.is/
+    - https://ww3.yggtorrent.is/
   legacylinks:
+    - https://yggtorrent.is/
     - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
+    - https://ww1.yggtorrent.is/
+    - https://ww2.yggtorrent.is/
 
   caps:
     categorymappings:
@@ -96,7 +99,18 @@
       type: checkbox
       label: Try to normalize releases names by moving year after the title
       default: false
-
+    - name: multilang
+      type: checkbox
+      label: Replace MULTI by another language in release name
+      default:  false
+    - name: multilanguage
+      type: select
+      label: Replace MULTI by this language
+      default: FRENCH
+      options:
+        FRENCH : "FRENCH"
+        MULTI.FRENCH: "MULTI.FRENCH"
+        ENGLISH: "ENGLISH"
   login:
     method: form
     path: /
@@ -140,8 +154,15 @@
           - name: re_replace
             args: ["(\\s{2,5})", " "]
           - name: trim
-      title:
+      title_phase1:
         text: "{{if .Config.filter_title }}{{ .Result.title_filtered }}{{else}}{{ .Result.title_normal }}{{end}}"
+      title_multilang:
+        text: "{{ .Result.title_phase1 }}"
+        filters:
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+      title:
+        text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
       details:
         selector: ":nth-child(2) > a"
         attribute: href
@@ -225,6 +246,11 @@
             args: " ago"
       size:
         selector: "td:nth-child(6)"
+        filters:
+          - name: replace
+            args: ["o", "B"]
+      grabs:
+        selector: "td:nth-child(7)"
       seeders:
         text: 0
       seeders:

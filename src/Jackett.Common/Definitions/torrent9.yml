@@ -6,12 +6,15 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.torrent9.red/
+    - https://www.torrent9.blue/
   legacylinks:
+    - http://www.torrent9.ec/
+    - http://www.torrent9.red/
     - http://www.torrent9.bz/
     - http://www.torrents9.pe/
     - http://www.torrent9.cc/
     - http://www.torrent9.pe/
+    - http://www.torrent9.blue/
 
   caps:
     categorymappings:

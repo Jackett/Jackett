@@ -2,7 +2,6 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Jackett/Jackett.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/pulls)
-[![Bountysource](https://img.shields.io/bountysource/team/jackett/activity.svg?style=flat-square)](https://www.bountysource.com/teams/jackett)
 [![Build status](https://ci.appveyor.com/api/projects/status/gaybh5mvyx418nsp/branch/master?svg=true)](https://ci.appveyor.com/project/Jackett/jackett)
 [![Github Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
@@ -17,8 +16,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 
 #### Supported Systems
-* Windows using .NET 4.5.2 [Download here](https://www.microsoft.com/net/framework/versions/net452).
-* Linux and macOS using Mono 4.6.0 and above. [Download here](http://www.mono-project.com/download/). Earlier versions of mono may work but some trackers may fail to negotiate SSL correctly, and others may cause Jackett to crash when used.
+* Windows using .NET 4.6.1 or above [Download here](https://www.microsoft.com/net/framework/versions/net461).
+* Linux and macOS using Mono 5.8 or above. [Download here](http://www.mono-project.com/download/).
 
 ### Supported Public Trackers
  * 1337x
@@ -37,12 +36,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Horrible Subs
  * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Il Corsaro Blu
  * Isohunt2
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
  * MagnetDL
- * NextTorrent
+ * MejorTorrent <!-- maintained by ivandelabeldad -->
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si
  * Nyaa-Pantsu
@@ -70,6 +70,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CzTorrent
  * Deildu
  * Gay-Torrents.net
+ * Gay-Torrents.org
  * Kinozal
  * LostFilm.tv
  * Mega-Bliz
@@ -125,7 +126,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BroadcastTheNet
  * BrokenStones
  * BTNext
- * BTWorld
+ * BTXpress
  * Carpathians
  * CCFBits
  * CGPeers
@@ -146,7 +147,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Elit Tracker
  * Elite-Tracker
  * Empornium
- * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
  * FANO.IN
@@ -157,12 +157,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile
  * FunkyTorrents
  * Fuzer
- * GayTorrent.ru
+ * GAYtorrent.ru
  * GazelleGames
  * Gfxnews
  * GFXPeers
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
+ * Girotottent
  * GODS  [![(invite needed)][inviteneeded]](#)
  * Greek Team
  * HacheDe
@@ -170,6 +171,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Forever
  * HD-Only
  * HD-Space
+ * HD-Spain
  * HD-Torrents
  * HD-Bits.com
  * HDBits
@@ -239,9 +241,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SportsCult
  * SportHD
  * Superbits
- * Synthesiz3r
  * Tasmanit
  * TBPlus
+ * TehConnection.me
  * TenYardTracker
  * The Empire
  * The Geeks
@@ -269,7 +271,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrents.Md
  * TorrentSeeds
  * Torrent-Syndikat
- * TorrentWTF
+ * TOrrent-tuRK (TORK)
  * TorViet
  * ToTheGlory
  * TranceTraffic
@@ -282,11 +284,12 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Waffles
  * World-In-HD
  * WorldOfP2P
+ * x-ite.me
  * x264
  * xBytesV2
  * XSpeeds
  * Xthor
- * Your Exotic Torrents
+ * ExoticaZ (Your Exotic Torrents)
  * Zamunda.net
  * Zelka.org
 
@@ -317,7 +320,7 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
 
 ## Installation on Linux
- 1. Install [Mono 4.6](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release for your distribution is recommended)
+ 1. Install [Mono 5.8](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:
@@ -330,10 +333,12 @@ Detailed instructions for [Ubuntu 14.x](http://www.htpcguides.com/install-jacket
 
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
 
+Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
+
 ## Installation on macOS
 
 ### Prerequisites
-Install [Mono 4.6](http://www.mono-project.com/download/#download-mac) or better (using the latest pkg installer is recommended).
+Install [Mono 5.8](http://www.mono-project.com/download/#download-mac) or better (using the latest pkg installer is recommended).
  * Setup ssl support by running `curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin`
 
 ### Install as service
@@ -364,6 +369,19 @@ Example config for apache:
     ProxyPass http://127.0.0.1:9117
     ProxyPassReverse http://127.0.0.1:9117
 </Location>
+```
+
+Example config for nginx:
+```
+location /jackett {
+	proxy_pass http://127.0.0.1:9117;
+	proxy_set_header Host $host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $scheme;
+	proxy_set_header X-Forwarded-Host $host;
+	proxy_redirect off;
+}
 ```
 
 ## Troubleshooting
@@ -399,9 +417,27 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 ## Building from source
 
 ### Windows
-* Open the Jackett solution in Visual Studio 2017
+* Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
+* Open the Jackett solution in Visual Studio 2017 (version 15.7 or above)
+* Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Console as startup project
 * Build/Start the project
+
+### OSX
+NOTE: msbuild is included in the mono release. 
+* Install Homebrew https://brew.sh
+* open terminal
+* brew install nuget mono
+* git clone https://github.com/Jackett/Jackett.git
+* cd Jackett/src
+* nuget restore Jackett.sln
+
+NOTE: if you get the error "NU1102: Unable to find package Microsoft.AspNetCore with version (>= 2.1.2)" while restoring packages, you'll need to install it manually.https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.302-macos-x64-installer then delete the entire project directory and restart from a new clone
+
+* msbuild Jackett.Console/Jackett.Console.csproj /t:Build /p:Configuration=Debug
+* curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin
+* mono Jackett.Console/bin/Debug/JackettConsole.exe
+
 
 ### Linux
 

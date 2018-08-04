@@ -197,6 +197,7 @@ namespace Jackett.Common.Indexers
         {
             Dictionary<string, object> variables = new Dictionary<string, object>();
 
+            variables[".Config.sitelink"] = SiteLink;
             foreach (settingsField Setting in Definition.Settings)
             {
                 string value;
@@ -363,6 +364,9 @@ namespace Jackett.Common.Indexers
 
         protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
+            if(loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
+                throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
+
             if (errorBlocks == null)
                 return true; // no error
 

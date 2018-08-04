@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
-            if (response.Status == System.Net.HttpStatusCode.Forbidden)
+            if (response.Status == System.Net.HttpStatusCode.Forbidden || CookieHeader.Contains("pass=deleted"))
             {
                 // re-login
                 await ApplyConfiguration(null);

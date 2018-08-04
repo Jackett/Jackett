@@ -53,15 +53,20 @@ namespace Jackett.Common.Indexers.Abstract
             }
         }
 
-        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
-            LoadValuesFromJson(configJson);
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
             var useTokenItem = (ConfigurationData.BoolItem)configData.GetDynamic("usetoken");
             if (useTokenItem != null)
             {
                 useTokens = useTokenItem.Value;
             }
+        }
+
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -234,9 +239,39 @@ namespace Jackett.Common.Indexers.Abstract
             if (torrent["hasCue"] != null && (bool)torrent["hasCue"])
                 flags.Add("Cue");
 
+            // tehconnection.me specific?
+            var lang = (string)torrent["lang"];
+            if (!string.IsNullOrEmpty(lang) && lang != "---")
+                flags.Add(lang);
+
             var media = (string)torrent["media"];
             if (!string.IsNullOrEmpty(media))
                 flags.Add(media);
+
+            // tehconnection.me specific?
+            var resolution = (string)torrent["resolution"];
+            if (!string.IsNullOrEmpty(resolution))
+                flags.Add(resolution);
+
+            // tehconnection.me specific?
+            var container = (string)torrent["container"];
+            if (!string.IsNullOrEmpty(container))
+                flags.Add(container);
+
+            // tehconnection.me specific?
+            var codec = (string)torrent["codec"];
+            if (!string.IsNullOrEmpty(codec))
+                flags.Add(codec);
+
+            // tehconnection.me specific?
+            var audio = (string)torrent["audio"];
+            if (!string.IsNullOrEmpty(audio))
+                flags.Add(audio);
+
+            // tehconnection.me specific?
+            var subbing = (string)torrent["subbing"];
+            if (!string.IsNullOrEmpty(subbing) && subbing != "---")
+                flags.Add(subbing);
 
             if (torrent["remastered"] != null && (bool)torrent["remastered"])
             {
@@ -277,6 +312,30 @@ namespace Jackett.Common.Indexers.Abstract
                 release.DownloadVolumeFactor = 0;
                 release.UploadVolumeFactor = 0;
             }
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var content = await base.Download(link);
+
+            // Check if we're out of FL tokens/torrent is to large
+            // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
+            var requestLink = link.ToString();
+            if (content.Length >= 1
+                && content[0] != 'd' // simple test for torrent vs HTML content
+                && requestLink.Contains("usetoken=1"))
+            {
+                var html = Encoding.GetString(content);
+                if (html.Contains("You do not have any freeleech tokens left.")
+                    || html.Contains("This torrent is too large."))
+                {
+                    // download again with usetoken=0
+                    var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
+                    content = await base.Download(new Uri(requestLinkNew));
+                }
+            }
+
+            return content;
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string omdbkey { get; set; }
         [DataMember]
+        public string omdburl { get; set; }
+        [DataMember]
         public string app_version { get; set; }
 
         [DataMember]
@@ -61,6 +63,7 @@ namespace Jackett.Common.Models.DTO
             logging = config.RuntimeSettings.TracingEnabled;
             basepathoverride = config.BasePathOverride;
             omdbkey = config.OmdbApiKey;
+            omdburl = config.OmdbApiUrl;
             app_version = version;
 
             proxy_type = config.ProxyType;

@@ -45,6 +45,17 @@
       search: [q]
       tv-search: [q, season, ep]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: pin
+      type: text
+      label: Pin
+
   login:
     path: /login.php
     method: form
@@ -52,6 +63,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      secure_pin: "{{ .Config.pin }}"
       returnto: "/"
     error:
     - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea

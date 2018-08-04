@@ -6,7 +6,7 @@
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var configuration = Argument("configuration", "Debug");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -36,8 +36,8 @@ Task("Clean")
 	.IsDependentOn("Info")
 	.Does(() =>
 	{
-		CleanDirectories("./src/**/obj" + configuration);
-		CleanDirectories("./src/**/bin" + configuration);
+		CleanDirectories("./src/**/obj");
+		CleanDirectories("./src/**/bin");
 		CleanDirectories("./BuildOutput");
 		CleanDirectories("./" + artifactsDirName);
 		CleanDirectories("./" + testResultsDirName);
@@ -45,22 +45,21 @@ Task("Clean")
 		Information("Clean completed");
 	});
 
-Task("Restore-NuGet-Packages")
+Task("Build-Kestrel-Full-Framework")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
 		NuGetRestore("./src/Jackett.sln");
-	});
 
-Task("Build")
-	.IsDependentOn("Restore-NuGet-Packages")
-	.Does(() =>
-	{
-		MSBuild("./src/Jackett.sln", settings => settings.SetConfiguration(configuration));
+		var buildSettings = new MSBuildSettings()
+                .SetConfiguration(configuration)
+                .UseToolVersion(MSBuildToolVersion.VS2017);
+		
+		MSBuild("./src/Jackett.sln", buildSettings);
 	});
 
 Task("Run-Unit-Tests")
-	.IsDependentOn("Build")
+	.IsDependentOn("Build-Kestrel-Full-Framework")
 	.Does(() =>
 	{
 		CreateDirectory("./" + testResultsDirName);
@@ -77,31 +76,8 @@ Task("Run-Unit-Tests")
 		}
 	});
 
-Task("Copy-Files-Full-Framework")
-	.IsDependentOn("Run-Unit-Tests")
-	.Does(() =>
-	{
-		var windowsOutput = windowsBuildFullFramework + "/Jackett";
-
-		CopyDirectory("./src/Jackett.Console/bin/" + configuration, windowsOutput);
-		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", windowsOutput);
-		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", windowsOutput);
-		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/JackettUpdater.*", windowsOutput);
-		CopyFiles("./Upstart.config", windowsOutput);
-		CopyFiles("./LICENSE", windowsOutput);
-		CopyFiles("./README.md", windowsOutput);
-
-		var monoOutput = monoBuildFullFramework + "/Jackett";
-
-		CopyDirectory(windowsBuildFullFramework, monoBuildFullFramework);
-		DeleteFiles(monoOutput + "/JackettService.*");
-		DeleteFiles(monoOutput + "/JackettTray.*");
-
-		Information("Full framework file copy completed");
-	});
-
 Task("Check-Packaging-Platform")
-	.IsDependentOn("Copy-Files-Full-Framework")
+	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
 		if (IsRunningOnWindows())
@@ -115,49 +91,86 @@ Task("Check-Packaging-Platform")
 		}
 	});
 
-Task("Package-Windows-Installer-Full-Framework")
+Task("Experimental-Kestrel-Windows-Full-Framework")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
-		InnoSetup("./Installer.iss", new InnoSetupSettings {
-			OutputDirectory = workingDir + "/" + artifactsDirName
-		});
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/Experimental/net461/win7-x86/Jackett";
+		
+		DotNetCorePublish(serverProjectPath, "net461", "win7-x86");
+
+		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
+
+		Zip("./BuildOutput/Experimental/net461/win7-x86", $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
+
+		//InnoSetup
+		string sourceFolder = MakeAbsolute(Directory(buildOutputPath)).ToString();
+
+		InnoSetupSettings settings = new InnoSetupSettings();
+		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
+ 		settings.Defines = new Dictionary<string, string>
+			{
+				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
+				{ "MySourceFolder",  sourceFolder },
+				{ "MyOutputFilename",  "Jackett.Installer.Windows" },
+			};
+
+		InnoSetup("./Installer.iss", settings);
 	});
 
-Task("Package-Files-Full-Framework-Windows")
+Task("Experimental-Kestrel-Mono-Full-Framework")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
-		Zip(windowsBuildFullFramework, $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
-		Information(@"Full Framework Windows Binaries Zipping Completed");
-	});
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/Experimental/net461/linux-x64/Jackett";
 
-Task("Package-Files-Full-Framework-Mono")
+		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
+
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
+
+		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
+		//https://github.com/dotnet/corefx/issues/19914
+		//https://bugzilla.xamarin.com/show_bug.cgi?id=60315
+		//The workaround is to delete System.Net.Http.dll and patch the .exe.config file
+
+		DeleteFile(buildOutputPath + "/System.Net.Http.dll");
+
+		var configFile = File(buildOutputPath + "/JackettConsole.exe.config");
+		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
+
+		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
+	});
+	
+Task("Experimental-DotNetCore")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
-		var cygMonoBuildPath = RelativeWinPathToCygPath(monoBuildFullFramework);
-		var tarFileName = "Jackett.Binaries.Mono.tar";
-		var tarArguments = @"-cvf " + cygMonoBuildPath + "/" + tarFileName + " -C " + cygMonoBuildPath + " Jackett --mode ='755'";
-		var gzipArguments = @"-k " + cygMonoBuildPath + "/" + tarFileName;
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		
+		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "win-x86");
+		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "linux-x64");
+		DotNetCorePublish(serverProjectPath, "netcoreapp2.1", "osx-x64");
 
-		RunCygwinCommand("Tar", tarArguments);
-		RunCygwinCommand("Gzip", gzipArguments);
-
-		MoveFile($"{monoBuildFullFramework}/{tarFileName}.gz", $"./{artifactsDirName}/{tarFileName}.gz");
+		Zip("./BuildOutput/Experimental/netcoreapp2.1/win-x86", $"./{artifactsDirName}/Experimental.netcoreapp.win-x86.zip");
+		Zip("./BuildOutput/Experimental/netcoreapp2.1/osx-x64", $"./{artifactsDirName}/Experimental.netcoreapp.osx-x64.zip");
+		Gzip("./BuildOutput/Experimental/netcoreapp2.1/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.netcoreapp.linux-x64.tar.gz");
 	});
 
-Task("Package-Full-Framework")
-	.IsDependentOn("Package-Windows-Installer-Full-Framework")
-	.IsDependentOn("Package-Files-Full-Framework-Windows")
-	.IsDependentOn("Package-Files-Full-Framework-Mono")
+Task("Experimental")
+	.IsDependentOn("Experimental-Kestrel-Windows-Full-Framework")
+	.IsDependentOn("Experimental-Kestrel-Mono-Full-Framework")
+	//.IsDependentOn("Experimental-DotNetCore")
 	.Does(() =>
 	{
-		Information("Full Framwork Packaging Completed");
+		Information("Experimental builds completed");
 	});
 
 Task("Appveyor-Push-Artifacts")
-	.IsDependentOn("Package-Full-Framework")
+	.IsDependentOn("Experimental")
 	.Does(() =>
 	{
 		if (AppVeyor.IsRunningOnAppVeyor)
@@ -263,8 +276,33 @@ private void RunCygwinCommand(string utility, string utilityArguments)
 private string RelativeWinPathToCygPath(string relativePath)
 {
 	var cygdriveBase = "/cygdrive/" + workingDir.ToString().Replace(":", "").Replace("\\", "/");
-	var cygPath = cygdriveBase + relativePath.Replace(".", "");
+	var cygPath = cygdriveBase + relativePath.TrimStart('.');
 	return cygPath;
+}
+
+private void Gzip(string sourceFolder, string outputDirectory, string tarCdirectoryOption, string outputFileName)
+{
+	var cygSourcePath = RelativeWinPathToCygPath(sourceFolder);
+	var tarFileName = outputFileName.Remove(outputFileName.Length - 3, 3);
+	var tarArguments = @"-cvf " + cygSourcePath + "/" + tarFileName + " -C " + cygSourcePath + $" {tarCdirectoryOption} --mode ='755'";
+	var gzipArguments = @"-k " + cygSourcePath + "/" + tarFileName;
+
+	RunCygwinCommand("Tar", tarArguments);
+	RunCygwinCommand("Gzip", gzipArguments);
+
+	MoveFile($"{sourceFolder}/{tarFileName}.gz", $"{outputDirectory}/{tarFileName}.gz");
+}
+
+private void DotNetCorePublish(string projectPath, string framework, string runtime)
+{
+	var settings = new DotNetCorePublishSettings
+		 {
+			 Framework = framework,
+			 Runtime = runtime,
+			 OutputDirectory = $"./BuildOutput/Experimental/{framework}/{runtime}/Jackett"
+		 };
+
+		 DotNetCorePublish(projectPath, settings);
 }
 
 //////////////////////////////////////////////////////////////////////

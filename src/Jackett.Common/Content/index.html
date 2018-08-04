@@ -98,7 +98,7 @@
                 <button id="change-jackett-port" class="btn btn-primary btn-sm">
                     <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
                 </button>
-                <button id="view-jackett-logs" class="btn btn-danger btn-sm">
+                <button id="view-jackett-logs" class="btn btn-success btn-sm">
                     <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
                 </button>
                 <button id="trigger-updater" class="btn btn-warning btn-sm">
@@ -152,7 +152,7 @@
         </div>
         <div class="input-area">
             <span class="input-header">Proxy password: </span>
-            <input id="jackett-proxy-password" class="form-control input-right" type="text" value="" placeholder="">
+            <input id="jackett-proxy-password" class="form-control input-right" type="password" value="" placeholder="">
         </div>
 
         <div class="input-area">
@@ -176,6 +176,10 @@
         <div class="input-area">
             <span class="input-header">OMDB API key: </span>
             <input id="jackett-omdbkey" class="form-control input-right" type="text" value="" placeholder="">
+        </div>
+        <div class="input-area">
+            <span class="input-header">OMDB API Url: </span>
+            <input id="jackett-omdburl" class="form-control input-right" type="text" value="" placeholder="Blank for default">
         </div>
         <hr />
         <div id="footer">
@@ -659,6 +663,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2017110603"></script>
+    <script type="text/javascript" src="../custom.js?changed=20180710"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Jackett.Common.Utils;
 using System;
 
 namespace Jackett.Common.Models.Config
@@ -83,7 +84,16 @@ namespace Jackett.Common.Models.Config
             if (options.ListenPublic && options.ListenPrivate)
             {
                 Console.WriteLine("You can only use listen private OR listen publicly.");
-                Engine.Exit(1);
+                
+                //TODO: Remove once off Owin
+                if (EnvironmentUtil.IsRunningLegacyOwin)
+                {
+                    Engine.Exit(1);
+                }
+                else
+                {
+                    Environment.Exit(1);
+                }
             }
 
             // SSL Fix
