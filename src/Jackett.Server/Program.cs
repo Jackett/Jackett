@@ -131,7 +131,7 @@ namespace Jackett.Server
                 try
                 {
                     logger.Debug("Creating web host...");
-                    string applicationFolder = configurationService.ApplicationFolder();
+                    string applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
                     logger.Debug($"Content root path is: {applicationFolder}");
 
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
