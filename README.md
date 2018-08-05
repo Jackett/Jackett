@@ -335,6 +335,12 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
 
+### Installation on Linux via Ansible
+
+On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
+
+On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
+
 ## Installation on macOS
 
 ### Prerequisites
