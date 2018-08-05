@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
@@ -128,13 +127,7 @@ namespace Jackett.Server
 
             app.UseRewriter(rewriteOptions);
 
-            app.UseFileServer(new FileServerOptions
-            {
-                FileProvider = new PhysicalFileProvider(Helper.ConfigService.GetContentFolder()),
-                RequestPath = "",
-                EnableDefaultFiles = true,
-                EnableDirectoryBrowsing = false
-            });
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

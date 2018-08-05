@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Jackett.Server
@@ -50,7 +49,7 @@ namespace Jackett.Server
                 {
                     //TODO: Remove libcurl once off owin
                     bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-                    
+
                     if (runningOnDotNetCore)
                     {
                         options.Client = "httpclientnetcore";
@@ -182,6 +181,7 @@ namespace Jackett.Server
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(Configuration)
                 .UseContentRoot(contentRoot)
+                .UseWebRoot(contentRoot)
                 .UseUrls(urls)
                 .PreferHostingUrls(true)
                 .UseStartup<Startup>()
