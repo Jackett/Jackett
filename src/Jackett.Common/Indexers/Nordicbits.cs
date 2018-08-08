@@ -375,6 +375,14 @@ namespace Jackett.Common.Indexers
                         // Publish DateToString
                         var dateTimeOrig = tRow.Find("td:eq(6)").Text();
                         var datestr = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
+                        if (datestr.ToUpperInvariant().Contains("TODAY"))
+                        {
+                            datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
+                        }
+                        if (datestr.ToUpperInvariant().Contains("YESTERDAY"))
+                        {
+                            datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
+                        }
                         DateTime date = DateTime.Parse(datestr);
                         Output("Released on: " + date);
 
