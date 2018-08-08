@@ -68,6 +68,10 @@
           - name: diacritics
             args: replace
           - name: replace
+            args: ["1080i", "1080p"] 
+          - name: replace
+            args: ["720i", "720p"] 
+          - name: replace
             args: ["pLQ", "p"] 
           - name: replace
             args: ["pHD", "p"] 
