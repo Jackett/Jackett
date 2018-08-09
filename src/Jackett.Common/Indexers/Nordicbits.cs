@@ -345,7 +345,7 @@ namespace Jackett.Common.Indexers
                         var name = tRow.Find("td:eq(1) > a:eq(0)").Text();
 
                         // Category
-                        //var categoryName = tRow.Find("td:eq(0) > a:eq(0) > img:eq(0)"); // not working - may not be needed
+
                         string categoryID = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
                         var newznab = MapTrackerCatToNewznab(categoryID);
                         Output("Category: " + MapTrackerCatToNewznab(categoryID).First().ToString() + " (" + categoryID + ")");
@@ -375,14 +375,8 @@ namespace Jackett.Common.Indexers
                         // Publish DateToString
                         var dateTimeOrig = tRow.Find("td:eq(6)").Text();
                         var datestr = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
-                        if (datestr.ToUpperInvariant().Contains("TODAY"))
-                        {
-                            datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
-                        }
-                        if (datestr.ToUpperInvariant().Contains("YESTERDAY"))
-                        {
-                            datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
-                        }
+                        datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
+                        datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
                         DateTime date = DateTime.Parse(datestr);
                         Output("Released on: " + date);
 
@@ -479,12 +473,48 @@ namespace Jackett.Common.Indexers
                 term = "all";
             }
 
+            // Loop on categories and change the catagories for search purposes
+            for (int i = 0; i < categoriesList.Count; i++)
+            {
+                // APPS
+                if (new[] { "28", "60", "4", "59", "1", "61" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                {
+                    categoriesList[i] = categoriesList[i].Replace("cat=", "cats5[]=");
+                }
+                // Books
+                if (new[] { "28", "60", "4", "59", "1", "61" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                {
+                    categoriesList[i] = categoriesList[i].Replace("cat=", "cats6[]=");
+                }
+                // Games
+                if (new[] { "24", "53", "49", "51" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                {
+                    categoriesList[i] = categoriesList[i].Replace("cat=", "cats3[]=");
+                }
+                // Movies
+                if (new[] { "35", "42", "47", "15", "5", "16", "6", "21", "19", "22", "20", "25", "10", "23" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                {
+                    categoriesList[i] = categoriesList[i].Replace("cat=", "cats1[]=");
+                }
+                // Music
+                if (new[] { "28", "60", "4", "59", "1", "61" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                {
+                    categoriesList[i] = categoriesList[i].Replace("cat=", "cats4[]=");
+                }
+                // Series
+                if (new[] { "48", "57", "11", "7", "31", "30", "32", "5", "66" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                {
+                    categoriesList[i] = categoriesList[i].Replace("cat=", "cats2[]=");
+                }
+            }
+
+            // Build category search string
             var CatQryStr = "";
             foreach (var cat in categoriesList)
-                CatQryStr += "&" + cat;
+                CatQryStr += cat + "&";
 
             // Building our query
-            url += "?" + searchterm + "&" + parameters.GetQueryString() + "&" + CatQryStr;
+            url += "?" + CatQryStr + searchterm + "&" + parameters.GetQueryString();
 
             Output("\nBuilded query for \"" + term + "\"... " + url);
 
