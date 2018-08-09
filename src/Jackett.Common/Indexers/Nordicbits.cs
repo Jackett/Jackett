@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
             Language = "da-dk";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbSearch = false;
 
             // Apps
             AddCategoryMapping("cat=63", TorznabCatType.PCPhoneAndroid, "APPS - Android");
@@ -345,7 +345,6 @@ namespace Jackett.Common.Indexers
                         var name = tRow.Find("td:eq(1) > a:eq(0)").Text();
 
                         // Category
-
                         string categoryID = tRow.Find("td:eq(0) > a:eq(0)").Attr("href").Split('?').Last();
                         var newznab = MapTrackerCatToNewznab(categoryID);
                         Output("Category: " + MapTrackerCatToNewznab(categoryID).First().ToString() + " (" + categoryID + ")");
