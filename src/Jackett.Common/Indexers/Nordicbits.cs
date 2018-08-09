@@ -377,7 +377,7 @@ namespace Jackett.Common.Indexers
                         var datestr = Regex.Replace(dateTimeOrig, @"<[^>]+>|&nbsp;", "").Trim();
                         datestr = Regex.Replace(datestr, "Today", DateTime.Now.ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
                         datestr = Regex.Replace(datestr, "Yesterday", DateTime.Now.Date.AddDays(-1).ToString("MMM dd yyyy"), RegexOptions.IgnoreCase);
-                        DateTime date = DateTime.Parse(datestr);
+                        DateTime date = DateTimeUtil.FromUnknown(datestr, "DK");
                         Output("Released on: " + date);
 
                         // Torrent Details URL
