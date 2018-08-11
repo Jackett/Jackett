@@ -476,12 +476,12 @@ namespace Jackett.Common.Indexers
             for (int i = 0; i < categoriesList.Count; i++)
             {
                 // APPS
-                if (new[] { "28", "60", "4", "59", "1", "61" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "63", "17", "12", "62", "64" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats5[]=");
                 }
                 // Books
-                if (new[] { "28", "60", "4", "59", "1", "61" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "54", "9" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats6[]=");
                 }
