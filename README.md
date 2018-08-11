@@ -207,6 +207,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NCore
  * Nebulance
  * New Real World
+ * NordicBits
  * Norbits <!-- added by DiseaseNO but no longer maintained? -->
  * notwhat.cd
  * Ourbits
