@@ -79,15 +79,12 @@
     paths:
       - path: /index.php
     keywordsfilters:
-      - name: re_replace
-        args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
       - name: diacritics
         args: replace
-      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
-      - name: re_replace
-        args: ["S0?(\\d{1,2})", " $1 "]
-      - name: re_replace
-        args: ["E(\\d{2,3})", " $1 "]
+      - name: re_replace # S01 to 1
+        args: ["\\b[sS]0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["\\b[sS]0*(\\d+)[eE]0*(\\d+)\\b", "$1 $2"]
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"
@@ -101,56 +98,56 @@
         attribute: href
       title: # shortened title?
         selector: a[href^="index.php?page=torrent-details"]
-        # normalize to SXXEYY format
         filters:
           - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9]|\\.", " "]
+            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
-          - name: re_replace
-            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
-          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
-          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-          - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-          - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
-          # fine prova
+          - name: re_replace # S01 E01 to S01E01
+            args: ["\\b[sS](\\d+)\\s[eE](\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{1})\\b|\\b[sS]eason\\s?(\\d{1})\\b", "S0$1"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{2,})\\b|\\b[sS]easons?\\s?(\\d{2,})\\b", "S$1"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["\\b([\\/\\|]?[eE]pisodio\\s?(\\d+)|[Pp]untata\\s?(\\d+))", "E$2$3"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["\\b(?:[Pp]untat[eE]\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["([Ss]erie completa|[cC]ompleta[tT]?[aA]?|COMPLETA[TA]?|in pausa)", ""]
+          - name: andmatch
       title: # long titles?
         optional: true
         selector: a[title][href^="index.php?page=torrent-details"]
         attribute: title
         filters:
-          - name: replace
-            args: ["Vedi Dettagli: ", ""]
-          # inizio prova
           - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9]|\\.", " "]
+            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
-          - name: re_replace
-            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
-          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
-          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-          - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-          - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
-          # fine prova
+          - name: re_replace # S01 E01 to S01E01
+            args: ["\\b[sS](\\d+)\\s[eE](\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{1})\\b|\\b[sS]eason\\s?(\\d{1})\\b", "S0$1"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{2,})\\b|\\b[sS]easons?\\s?(\\d{2,})\\b", "S$1"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["\\b([\\/\\|]?[eE]pisodio\\s?(\\d+)|[Pp]untata\\s?(\\d+))", "E$2$3"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["\\b(?:[Pp]untat[eE]\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["([Ss]erie completa|[cC]ompleta[tT]?[aA]?|COMPLETA[TA]?|in pausa)", ""]
+          - name: andmatch
       category:
         selector: a[href^="index.php?page=torrents&category="]
         attribute: href

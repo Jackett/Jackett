@@ -43,7 +43,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LimeTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
- * NextTorrent
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si
  * Nyaa-Pantsu
@@ -71,6 +70,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CzTorrent
  * Deildu
  * Gay-Torrents.net
+ * Gay-Torrents.org
  * Kinozal
  * LostFilm.tv
  * Mega-Bliz
@@ -147,7 +147,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Elit Tracker
  * Elite-Tracker
  * Empornium
- * EoT-Forum
  * eStone
  * Ethor.net (Thor's Land)
  * FANO.IN
@@ -158,7 +157,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile
  * FunkyTorrents
  * Fuzer
- * GayTorrent.ru
+ * GAYtorrent.ru
  * GazelleGames
  * Gfxnews
  * GFXPeers
@@ -208,6 +207,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NCore
  * Nebulance
  * New Real World
+ * NordicBits
  * Norbits <!-- added by DiseaseNO but no longer maintained? -->
  * notwhat.cd
  * Ourbits
@@ -285,11 +285,12 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Waffles
  * World-In-HD
  * WorldOfP2P
+ * x-ite.me
  * x264
  * xBytesV2
  * XSpeeds
  * Xthor
- * Your Exotic Torrents
+ * ExoticaZ (Your Exotic Torrents)
  * Zamunda.net
  * Zelka.org
 
@@ -335,6 +336,12 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
 
+### Installation on Linux via Ansible
+
+On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
+
+On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
+
 ## Installation on macOS
 
 ### Prerequisites
@@ -369,6 +376,19 @@ Example config for apache:
     ProxyPass http://127.0.0.1:9117
     ProxyPassReverse http://127.0.0.1:9117
 </Location>
+```
+
+Example config for nginx:
+```
+location /jackett {
+	proxy_pass http://127.0.0.1:9117;
+	proxy_set_header Host $host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $scheme;
+	proxy_set_header X-Forwarded-Host $host;
+	proxy_redirect off;
+}
 ```
 
 ## Troubleshooting

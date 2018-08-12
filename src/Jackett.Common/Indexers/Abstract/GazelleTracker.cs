@@ -318,7 +318,7 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var content = await base.Download(link);
 
-            // Check if we're out of FL tokens
+            // Check if we're out of FL tokens/torrent is to large
             // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
             var requestLink = link.ToString();
             if (content.Length >= 1
@@ -326,7 +326,8 @@ namespace Jackett.Common.Indexers.Abstract
                 && requestLink.Contains("usetoken=1"))
             {
                 var html = Encoding.GetString(content);
-                if (html.Contains("You do not have any freeleech tokens left."))
+                if (html.Contains("You do not have any freeleech tokens left.")
+                    || html.Contains("This torrent is too large."))
                 {
                     // download again with usetoken=0
                     var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");

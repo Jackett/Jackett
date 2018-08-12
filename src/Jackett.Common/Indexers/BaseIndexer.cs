@@ -752,26 +752,22 @@ namespace Jackett.Common.Indexers
 
         protected ICollection<int> MapTrackerCatToNewznab(string input)
         {
-            var cats = new List<int>();
-            if (null != input)
-            {
-                var mapping = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
-                if (mapping != null)
-                {
-                    cats.Add(mapping.NewzNabCategory);
-                }
+            if (input == null)
+                return new List<int>();
 
-                // 1:1 category mapping
-                try
-                {
-                    var trackerCategoryInt = int.Parse(input);
-                    cats.Add(trackerCategoryInt + 100000);
-                }
-                catch (FormatException)
-                {
-                    // input is not an integer, continue
-                }
+            var cats = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).Select(c => c.NewzNabCategory).ToList();
+
+            // 1:1 category mapping
+            try
+            {
+                var trackerCategoryInt = int.Parse(input);
+                cats.Add(trackerCategoryInt + 100000);
             }
+            catch (FormatException)
+            {
+                // input is not an integer, continue
+            }
+
             return cats;
         }
 

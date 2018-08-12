@@ -44,20 +44,23 @@ namespace Jackett.Common.Models.DTO
             stringQuery.ExpandCatsToSubCats();
 
             // try to build an IMDB Query
-            var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
-            TorznabQuery imdbQuery = null;
-            if (imdbID != null)
+            if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 9)
             {
-                imdbQuery = new TorznabQuery()
+                var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
+                TorznabQuery imdbQuery = null;
+                if (imdbID != null)
                 {
-                    ImdbID = imdbID,
-                    Categories = stringQuery.Categories,
-                    Season = stringQuery.Season,
-                    Episode = stringQuery.Episode,
-                };
-                imdbQuery.ExpandCatsToSubCats();
+                    imdbQuery = new TorznabQuery()
+                    {
+                        ImdbID = imdbID,
+                        Categories = stringQuery.Categories,
+                        Season = stringQuery.Season,
+                        Episode = stringQuery.Episode,
+                    };
+                    imdbQuery.ExpandCatsToSubCats();
 
-                return imdbQuery;
+                    return imdbQuery;
+                }
             }
 
             return stringQuery;
