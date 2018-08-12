@@ -117,7 +117,8 @@ namespace Jackett.Server
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                ForwardLimit = 10,
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto
             });
 
             var rewriteOptions = new RewriteOptions()
