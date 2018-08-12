@@ -142,6 +142,12 @@ Task("Experimental-Kestrel-Mono-Full-Framework")
 		var configFile = File(buildOutputPath + "/JackettConsole.exe.config");
 		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
 
+		//Mono on FreeBSD doesn't like the bundled System.Runtime.InteropServices.RuntimeInformation
+		//https://github.com/dotnet/corefx/issues/23989
+		//https://github.com/Jackett/Jackett/issues/3547
+
+		DeleteFile(buildOutputPath + "/System.Runtime.InteropServices.RuntimeInformation.dll");
+
 		Gzip("./BuildOutput/Experimental/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
 	});
 	
