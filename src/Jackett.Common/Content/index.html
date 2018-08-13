@@ -72,7 +72,7 @@
     <div id="footer">
         <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version"></span>
     </div>
-
+    <div id="modals"></div>
     <script id="configuration" type="text/x-handlebars-template">
         <div id="page" class="page">
             <div class="input-area">
@@ -299,6 +299,166 @@
             </table>
         </div>
     </script>
+    <script id="jackett-search" type="text/x-handlebars-template">
+        <div id="page" class="page">
+            <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span> Manual Search</button>
+            <div>
+                <label for="text">Query</label>
+                <input class="searchqueryinput" type="text" name="query" id="searchquery" />
+
+                <label for="tracker">Tracker</label>
+                <select name="tracker" id="searchTracker" multiple="multiple">
+                    {{#each indexers}}
+                    <option value="{{id}}" selected>{{name}}</option>
+                    {{/each}}
+                </select>
+
+                <label for="category">Category</label>
+                <select name="category" id="searchCategory" multiple="multiple"></select>
+                <br/>
+                <div id="searchResults"></div>
+            </div>
+        </div>
+    </script>
+    <script id="jackett-search-results" type="text/x-handlebars-template">
+        <hr />
+        <p>
+            Your search was done using:
+            {{#each Indexers}}{{Name}}
+            {{#if Error}}
+            (<span title="{{Error}}"><b>Error</b></span>)
+            {{else}}
+            ({{Results}})
+            {{/if}}
+            , {{/each}}
+        </p>
+        <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
+            <thead>
+                <tr>
+                    <th>Published</th>
+                    <th>Published</th>
+                    <th>Tracker</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Size</th>
+                    <th>Files</th>
+                    <th>Category</th>
+                    <th>Grabs</th>
+                    <th>Seeds</th>
+                    <th>Leechers</th>
+                    <th>DL Factor</th>
+                    <th>UL Factor</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each Results}}
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                    <td>{{PublishDate}}</td>
+                    <td>{{jacketTimespan PublishDate}}</td>
+                    <td>{{Tracker}}</td>
+                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td>{{Size}}</td>
+                    <td class="fit">{{jacketSize Size}}</td>
+                    <td>{{Files}}</td>
+                    <td>{{CategoryDesc}}</td>
+                    <td>{{Grabs}}</td>
+                    <td>{{Seeders}}</td>
+                    <td>{{Peers}}</td>
+                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                    <td class="downloadcolumn">
+                        {{#if Link}}
+                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                        {{/if}}
+                        {{#if MagnetUri}}
+                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                        {{/if}}
+                        {{#if BlackholeLink}}
+                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </script>
+    <script id="search-button-ready" type="text/x-handlebars-template">
+        <span class="fa fa-search"></span>
+    </script>
+    <script id="jackett-logs" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Server Logs</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px">When</th>
+                                    <th style="width: 80px">Level</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each logs}}
+                                <tr class="jackettlog{{Level}}">
+                                    <td>{{dateFormat When}}</td>
+                                    <td>{{Level}}</td>
+                                    <td><pre>{{Message}}</pre></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="select-indexer" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Select an indexer to setup</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="unconfigured-indexers">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
     <script type="text/javascript" src="../custom.js"></script>
 </body>
