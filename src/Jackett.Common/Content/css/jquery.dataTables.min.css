@@ -7,7 +7,7 @@ table.dataTable {
 }
 
     table.dataTable thead th, table.dataTable tfoot th {
-        font-weight: bold
+        font-weight: normal
     }
 
     table.dataTable thead th, table.dataTable thead td {
@@ -192,7 +192,7 @@ table.dataTable {
     }
 
     table.dataTable.compact thead th, table.dataTable.compact thead td {
-        padding: 4px 17px 4px 4px
+        padding: 4px 10px 4px 4px
     }
 
     table.dataTable.compact tfoot th, table.dataTable.compact tfoot td {

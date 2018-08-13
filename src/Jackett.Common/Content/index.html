@@ -63,7 +63,7 @@
             </button>
         </div>
         <div class="currentPageHeader">
-            <h3>Configured Indexers</h3>
+            <h3>Wait</h3>
         </div>
     </div>
     <div id="page" class="page">
@@ -215,6 +215,85 @@
                 <tfoot>
                     <tr>
                         <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </script>
+    <script id="jackett-releases" type="text/x-handlebars-template">
+        <div class="page" id="page">
+            <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
+            <table id="jackett-releases-datatable" class="dataTable compact cell-border hover stripe">
+                <thead>
+                    <tr>
+                        <th>Published</th>
+                        <th>First Seen</th>
+                        <th>Published</th>
+                        <th>First Seen</th>
+                        <th>Tracker</th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Size</th>
+                        <th>Files</th>
+                        <th>Category</th>
+                        <th>Grabs</th>
+                        <th>Seeds</th>
+                        <th>Leechers</th>
+                        <th class="fit">DL Factor</th>
+                        <th class="fit">UL Factor</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each releases}}
+                    <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                        <td class="fit">{{PublishDate}}</td>
+                        <td class="fit">{{FirstSeen}}</td>
+                        <td class="fit">{{jacketTimespan PublishDate}}</td>
+                        <td class="fit">{{jacketTimespan FirstSeen}}</td>
+                        <td class="fit">{{Tracker}}</td>
+                        <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                        <td class="fit">{{Size}}</td>
+                        <td class="fit">{{jacketSize Size}}</td>
+                        <td class="fit">{{Files}}</td>
+                        <td class="fit">{{CategoryDesc}}</td>
+                        <td class="fit">{{Grabs}}</td>
+                        <td class="fit">{{Seeders}}</td>
+                        <td class="fit">{{Peers}}</td>
+                        <td class="fit DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                        <td class="fit UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                        <td class="fit downloadcolumn">
+                            {{#if Link}}
+                            <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
+                            {{/if}}
+                            {{#if MagnetUri}}
+                            <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
+                            {{/if}}
+                            {{#if BlackholeLink}}
+                            <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </tfoot>
             </table>
