@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat=42", TorznabCatType.MoviesUHD, "Movies - 4K/2160p");
             AddCategoryMapping("cat=47", TorznabCatType.MoviesUHD, "Movies - 4k/2160p Boxset");
             AddCategoryMapping("cat=15", TorznabCatType.MoviesBluRay, "Movies - BluRay");
-            AddCategoryMapping("cat=5", TorznabCatType.MoviesHD, "Movies - Remux");
+            AddCategoryMapping("cat=58", TorznabCatType.MoviesHD, "Movies - Remux");
             AddCategoryMapping("cat=16", TorznabCatType.MoviesDVD, "Movies - DVD Boxset");
             AddCategoryMapping("cat=6", TorznabCatType.MoviesDVD, "Movies - DVD");
             AddCategoryMapping("cat=21", TorznabCatType.MoviesHD, "Movies - HD-1080p");
@@ -91,14 +91,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat=25", TorznabCatType.MoviesHD, "Movies - Kids");
             AddCategoryMapping("cat=10", TorznabCatType.MoviesSD, "Movies - SD");
             AddCategoryMapping("cat=23", TorznabCatType.MoviesSD, "Movies - MP4 Tablet");
+            AddCategoryMapping("cat=65", TorznabCatType.XXX, "Movies - Porn");
 
             // Music
             AddCategoryMapping("cat=28", TorznabCatType.AudioLossless, "Music - FLAC");
             AddCategoryMapping("cat=60", TorznabCatType.AudioLossless, "Music - FLAC Boxset");
             AddCategoryMapping("cat=4", TorznabCatType.AudioMP3, "Music - MP3");
             AddCategoryMapping("cat=59", TorznabCatType.AudioMP3, "Music - MP3 Boxset");
-            AddCategoryMapping("cat=1", TorznabCatType.AudioMP3, "Music - Musicvideos");
             AddCategoryMapping("cat=61", TorznabCatType.AudioMP3, "Music - Musicvideos Boxset");
+            AddCategoryMapping("cat=1", TorznabCatType.AudioMP3, "Music - Musicvideos");
 
             // Series
             AddCategoryMapping("cat=48", TorznabCatType.TVUHD, "TV - HD-4K/2160p");
@@ -491,12 +492,12 @@ namespace Jackett.Common.Indexers
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats3[]=");
                 }
                 // Movies
-                if (new[] { "35", "42", "47", "15", "5", "16", "6", "21", "19", "22", "20", "25", "10", "23" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "35", "42", "47", "15", "58", "16", "6", "21", "19", "22", "20", "25", "10", "23", "65" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats1[]=");
                 }
                 // Music
-                if (new[] { "28", "60", "4", "59", "1", "61" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
+                if (new[] { "28", "60", "4", "59", "61", "1" }.Any(c => categoriesList[i].Contains(categoriesList[i])))
                 {
                     categoriesList[i] = categoriesList[i].Replace("cat=", "cats4[]=");
                 }
