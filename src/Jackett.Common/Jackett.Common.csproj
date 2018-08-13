@@ -139,6 +139,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Content\configuration.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Models\TorznabCatType.generated.cs">
       <DependentUpon>TorznabCatType.tt</DependentUpon>
       <DesignTime>True</DesignTime>

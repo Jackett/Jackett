@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -31,7 +30,6 @@
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
     <!--<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>-->
-
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../custom.css?changed=2017083001" media="only screen and (min-device-width: 480px)">
@@ -42,18 +40,17 @@
     <title>Jackett</title>
 </head>
 <body>
-    <div id="page">
-
+    <div id="header">
         <img id="logo" src="../jacket_medium.png" alt="Logo" /><span id="header-title">Jackett</span>
-
         <div class="pull-right jackett-apikey">
             <span class="input-header">API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
         </div>
-        <hr />
+    </div>
+    <div id="menu">
         <div class="pull-right">
-            <button id="jackett-add-indexer" class="btn btn-success btn-sm">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
+            <button id="jackett-configured-indexers" class="btn btn-success btn-sm">
+                <span class="fa fa-bars" aria-hidden="true"></span> Indexers
             </button>
             <button id="jackett-show-search" class="btn btn-success btn-sm">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Manual Search
@@ -61,206 +58,123 @@
             <button id="jackett-show-releases" class="btn btn-primary btn-sm">
                 <i class="fa fa-database"></i>  View cached releases
             </button>
+            <button id="jackett-config" class="btn btn-warning btn-sm">
+                <span class="fa fa-cog" aria-hidden="true"></span> Configuration
+            </button>
+        </div>
+        <div class="currentPageHeader">
+            <h3>Configured Indexers</h3>
+        </div>
+    </div>
+    <div id="page" class="page">
+        <div id="indexers"> </div>
+    </div>
+    <div id="footer">
+        <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version"></span>
+    </div>
+
+    <script id="configuration" type="text/x-handlebars-template">
+        <div id="page" class="page">
+            <div class="input-area">
+                <span class="input-header">Admin password: </span>
+                <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
+                <button id="change-jackett-password" class="btn btn-primary btn-sm">
+                    <i class="fa fa-user-secret"></i>  Set Password <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                </button>
+                <a href="Dashboard?logout=true" id="logoutBtn" style="display:none" class="btn btn-danger btn-sm">
+                    Logout
+                </a>
+            </div>
+            <div class="input-area">
+                <span class="input-header">Base Path Override: </span>
+                <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="/jackett">
+            </div>
+            <div class="input-area">
+                <span class="input-header">Server port: </span>
+                <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
+            </div>
+            <div class="input-area">
+                <span class="input-header">Manual download blackhole directory: </span>
+                <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
+            </div>
+            <div class="input-area">
+                <span class="input-header">Proxy type: </span>
+                <select id="jackett-proxy-type" class="form-control input-right">
+                    <option value="0">http</option>
+                    <option value="1">socks4</option>
+                    <option value="2">socks5</option>
+                </select>
+            </div>
+            <div class="input-area">
+                <span class="input-header">Proxy url: </span>
+                <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="Blank to disable">
+            </div>
+            <div class="input-area">
+                <span class="input-header">Proxy port: </span>
+                <input id="jackett-proxy-port" class="form-control input-right" type="text" value="" placeholder="">
+            </div>
+            <div class="input-area">
+                <span class="input-header">Proxy username: </span>
+                <input id="jackett-proxy-username" class="form-control input-right" type="text" value="" placeholder="">
+            </div>
+            <div class="input-area">
+                <span class="input-header">Proxy password: </span>
+                <input id="jackett-proxy-password" class="form-control input-right" type="password" value="" placeholder="">
+            </div>
+            <div class="input-area">
+                <span class="input-header">External access: </span>
+                <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
+            </div>
+            <div class="input-area">
+                <span class="input-header">Disable auto update: </span>
+                <input id="jackett-allowupdate" class="form-control input-right" type="checkbox" />
+
+            </div>
+            <div class="input-area">
+                <span class="input-header">Update to pre-release: </span>
+                <input id="jackett-prerelease" class="form-control input-right" type="checkbox" />
+
+            </div>
+            <div class="input-area">
+                <span class="input-header">Enhanced logging: </span>
+                <input id="jackett-logging" class="form-control input-right" type="checkbox" />
+            </div>
+            <div class="input-area">
+                <span class="input-header">OMDB API key: </span>
+                <input id="jackett-omdbkey" class="form-control input-right" type="text" value="" placeholder="">
+            </div>
+            <div class="input-area">
+                <span class="input-header">OMDB API Url: </span>
+                <input id="jackett-omdburl" class="form-control input-right" type="text" value="" placeholder="Blank for default">
+            </div>
+            <div class="text-center">
+                <div class="btn-toolbar">
+                    <button id="change-jackett-port" class="btn btn-primary btn-sm">
+                        <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                    </button>
+                    <button id="view-jackett-logs" class="btn btn-success btn-sm">
+                        <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                    </button>
+                    <button id="trigger-updater" class="btn btn-warning btn-sm">
+                        <i class="fa fa-wrench"></i>   Check for updates <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </script>
+    <script id="displayIndexers" type="text/x-handlebars-template">
+        <div id="page" class="page">
+            <button id="jackett-add-indexer" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
+            </button>
             <button id="jackett-test-all" class="btn btn-warning btn-sm">
                 <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> Test All
             </button>
-        </div>
-        <h3>Configured Indexers</h3>
-        <div id="indexers"> </div>
-        <hr />
-
-        <div class="input-area">
-            <h4>Adding a Jackett indexer in Sonarr or Radarr</h4>
-            <ol>
-                <li>Go to <b>Settings > Indexers > Add > Torznab > Custom</b>.</li>
-                <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy Torznab Feed</button> button and paste it into the Sonarr/Radarr <b>URL</b> field.</li>
-                <li>For the <b>API key</b> use <b class="api-key-text"></b>.</li>
-                <li>Configure the correct category IDs via the <b>(Anime) Categories</b> options. See the Jackett indexer configuration for a list of supported categories.</li>
-            </ol>
-            <h4>Adding a Jackett indexer in CouchPotato</h4>
-            <ol>
-                <li>Go to <b>Settings > Searchers</b>.</li>
-                <li>Enable <b>TorrentPotato</b>.
-                <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy Potato Feed</button> button and paste it into the CouchPotato <b>host</b> field.</li>
-                <li>For the <b>Passkey</b> use <b class="api-key-text"></b>. Leave the <b>username</b> field blank.</li>
-            </ol>
-            <h4>Adding a Jackett indexer to RSS clients (RSS feed)</h4>
-            <ol>
-                <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy RSS Feed</button> button and paste it into the URL field of the RSS client.</li>
-                <li>You can adjust the <b>q</b> (search string) and <b>cat</b> (categories) arguments accordingly.
-                E.g. <b>...&cat=2030,2040&q=big+buck+bunny</b> will search for "big buck bunny" in the Movies/SD (2030) and Movies/HD (2040) categories (See the indexer configuration for available categories).</li>
-            </ol>
-        </div>
-        <hr />
-        <h3>Jackett Configuration</h3>
-        <div class="text-center">
-            <div class="btn-toolbar">
-                <button id="change-jackett-port" class="btn btn-primary btn-sm">
-                    <i class="fa fa-wrench"></i>   Apply server settings <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-                </button>
-                <button id="view-jackett-logs" class="btn btn-success btn-sm">
-                    <i class="fa fa-rss"></i> View logs <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-                </button>
-                <button id="trigger-updater" class="btn btn-warning btn-sm">
-                    <i class="fa fa-wrench"></i>   Check for updates <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-                </button>
-            </div>
-        </div>
-        <br />
-        <div class="input-area">
-            <span class="input-header">Admin password: </span>
-            <input id="jackett-adminpwd" class="form-control input-right" type="password" value="" placeholder="Blank to disable" />
-            <button id="change-jackett-password" class="btn btn-primary btn-sm">
-                <i class="fa fa-user-secret"></i>  Set Password <span class="glyphicon glyphicon-ok-wrench" aria-hidden="true"></span>
-            </button>
-            <a href="Dashboard?logout=true" id="logoutBtn" style="display:none" class="btn btn-danger btn-sm">
-                Logout
-            </a>
-        </div>
-        <div class="input-area">
-            <span class="input-header">Base Path Override: </span>
-            <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="/jackett">
-        </div>
-        <div class="input-area">
-            <span class="input-header">Server port: </span>
-            <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
-        </div>
-        <div class="input-area">
-            <span class="input-header">Manual download blackhole directory: </span>
-            <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
-        </div>
-
-        <div class="input-area">
-            <span class="input-header">Proxy type: </span>
-            <select id="jackett-proxy-type" class="form-control input-right">
-                <option value="0">http</option>
-                <option value="1">socks4</option>
-                <option value="2">socks5</option>
-            </select>
-        </div>
-        <div class="input-area">
-            <span class="input-header">Proxy url: </span>
-            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="Blank to disable">
-        </div>
-        <div class="input-area">
-            <span class="input-header">Proxy port: </span>
-            <input id="jackett-proxy-port" class="form-control input-right" type="text" value="" placeholder="">
-        </div>
-        <div class="input-area">
-            <span class="input-header">Proxy username: </span>
-            <input id="jackett-proxy-username" class="form-control input-right" type="text" value="" placeholder="">
-        </div>
-        <div class="input-area">
-            <span class="input-header">Proxy password: </span>
-            <input id="jackett-proxy-password" class="form-control input-right" type="password" value="" placeholder="">
-        </div>
-
-        <div class="input-area">
-            <span class="input-header">External access: </span>
-            <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
-        </div>
-        <div class="input-area">
-            <span class="input-header">Disable auto update: </span>
-            <input id="jackett-allowupdate" class="form-control input-right" type="checkbox" />
-
-        </div>
-        <div class="input-area">
-            <span class="input-header">Update to pre-release: </span>
-            <input id="jackett-prerelease" class="form-control input-right" type="checkbox" />
-
-        </div>
-        <div class="input-area">
-            <span class="input-header">Enhanced logging: </span>
-            <input id="jackett-logging" class="form-control input-right" type="checkbox" />
-        </div>
-        <div class="input-area">
-            <span class="input-header">OMDB API key: </span>
-            <input id="jackett-omdbkey" class="form-control input-right" type="text" value="" placeholder="">
-        </div>
-        <div class="input-area">
-            <span class="input-header">OMDB API Url: </span>
-            <input id="jackett-omdburl" class="form-control input-right" type="text" value="" placeholder="Blank for default">
-        </div>
-        <hr />
-        <div id="footer">
-            <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version"></span>
-        </div>
-    </div>
-
-    <div id="modals"></div>
-
-    <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
-        <div class="setup-item-recaptcha">
-            <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
-            <div class="setup-item-label">Full cookie header</div>
-            <input class="form-control" type="text" value="{{cookieheader}}" />
+            <div id="indexers"> </div>
         </div>
     </script>
-    <script id="setup-item" type="text/x-handlebars-template">
-        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
-            <div class="setup-item-label">{{name}}</div>
-            <div class="setup-item-value">{{{value_element}}}</div>
-        </div>
-    </script>
-    <script id="setup-item-inputstring" type="text/x-handlebars-template">
-        <div class="setup-item-inputstring">
-            {{#if ispassword}}
-            <input class="form-control" type="password" value="{{{value}}}" />
-            {{else}}
-            <input class="form-control" type="text" value="{{{value}}}" />
-            {{/if}}
-        </div>
-    </script>
-    <script id="setup-item-inputbool" type="text/x-handlebars-template">
-        <div class="setup-item-inputbool">
-            {{#if value}}
-            <input type="checkbox" data-id="{{id}}" class="form-control" checked />
-            {{else}}
-            <input type="checkbox" data-id="{{id}}" class="form-control" />
-            {{/if}}
-        </div>
-    </script>
-    <script id="setup-item-inputselect" type="text/x-handlebars-template">
-        <div class="setup-item-inputselect">
-            <select class="form-control" data-id="{{id}}">
-                {{#each options}}
-                {{#ifCond ../value @key}}
-                <option value="{{@key}}" selected>{{this}}</option>
-                {{else}}
-                <option value="{{@key}}">{{this}}</option>
-                {{/ifCond}}
-                {{/each}}
-            </select>
-        </div>
-    </script>
-    <script id="setup-item-recaptcha" type="text/x-handlebars-template">
-        <div class="jackettrecaptcha">
-        </div>
-    </script>
-    <script id="setup-item-displayimage" type="text/x-handlebars-template">
-        <img class="setup-item-displayimage" src="{{{value}}}" alt="No image available" />
-    </script>
-    <script id="setup-item-displayinfo" type="text/x-handlebars-template">
-        <div class="setup-item-displayinfo alert alert-info" role="alert">{{{value}}}</div>
-    </script>
-    <script id="setup-item-hiddendata" type="text/x-handlebars-template">
-        <div class="setup-item-hiddendata">
-            <input class="form-control" type="text" value="{{{value}}}" />
-        </div>
-    </script>
-    <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
-        <div class="setup-item-alternativesitelinks alert alert-info" role="alert">
-            This indexer has multiple known URLs:
-            <ul>
-                {{#each alternativesitelinks}}
-                <li><a target="_blank" href="{{this}}" class="alternativesitelink">{{this}}</a></li>
-                {{/each}}
-            </ul>
-            Click on an URL to copy it to the Site Link field.
-        </div>
-    </script>
-
-
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <div class="configured-indexer-div">
             <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
@@ -306,363 +220,8 @@
             </table>
         </div>
     </script>
-
-    <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
-        <div class="unconfigured-indexer-div">
-            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
-                <thead>
-                    <tr>
-                        <th>Indexer</th>
-                        <th>Categories</th>
-                        <th>Type</th>
-                        <th>Type string</th>
-                        <th>Language</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each indexers}}
-                    <tr class="unconfigured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
-                        <td>{{mains_cats}}</td>
-                        <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
-                        <td>{{type}}</td>
-                        <td class="fit">{{language}}</td>
-                        <td class="fit">
-                            <div class="indexer-buttons">
-                                <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
-                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                                </button>
-                                {{#if_eq type "public"}}
-                                <button title="Add" class="btn btn-success btn-xs indexer-add" data-id="{{id}}" data-link="{{site_link}}">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </button>
-                                {{/if_eq}}
-                            </div>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="6"></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </script>
-
-    <script id="jackett-releases" type="text/x-handlebars-template">
-        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-fillwidth">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Cached Releases</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>This screen shows releases which have been recently returned from Jackett. Only the last 300 releases for each tracker are returned.</p>
-                        <table id="jackett-releases-datatable" class="dataTable compact cell-border hover stripe">
-                            <thead>
-                                <tr>
-                                    <th>Published</th>
-                                    <th>First Seen</th>
-                                    <th>Published</th>
-                                    <th>First Seen</th>
-                                    <th>Tracker</th>
-                                    <th>Name</th>
-                                    <th>Size</th>
-                                    <th>Size</th>
-                                    <th>Files</th>
-                                    <th>Category</th>
-                                    <th>Grabs</th>
-                                    <th>Seeds</th>
-                                    <th>Leechers</th>
-                                    <th class="fit">DL Factor</th>
-                                    <th class="fit">UL Factor</th>
-                                    <th>Download</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each releases}}
-                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
-                                    <td class="fit">{{PublishDate}}</td>
-                                    <td class="fit">{{FirstSeen}}</td>
-                                    <td class="fit">{{jacketTimespan PublishDate}}</td>
-                                    <td class="fit">{{jacketTimespan FirstSeen}}</td>
-                                    <td class="fit">{{Tracker}}</td>
-                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
-                                    <td class="fit">{{Size}}</td>
-                                    <td class="fit">{{jacketSize Size}}</td>
-                                    <td class="fit">{{Files}}</td>
-                                    <td class="fit">{{CategoryDesc}}</td>
-                                    <td class="fit">{{Grabs}}</td>
-                                    <td class="fit">{{Seeders}}</td>
-                                    <td class="fit">{{Peers}}</td>
-                                    <td class="fit DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
-                                    <td class="fit UploadVolumeFactor">{{UploadVolumeFactor}}</td>
-                                    <td class="fit downloadcolumn">
-                                        {{#if Link}}
-                                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
-                                        {{/if}}
-                                        {{#if MagnetUri}}
-                                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
-                                        {{/if}}
-                                        {{#if BlackholeLink}}
-                                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
-                                        {{/if}}
-                                    </td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
-
-    <script id="jackett-search" type="text/x-handlebars-template">
-        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-fillwidth">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Manual search</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>You can search all configured indexers from this screen.</p>
-                        <label for="text">Query</label>
-                        <input type="text" name="query" id="searchquery" />
-                        <label for="tracker">Tracker</label>
-                        <select name="tracker" id="searchTracker" multiple="multiple">
-                            {{#each indexers}}
-                            <option value="{{id}}" selected>{{name}}</option>
-                            {{/each}}
-                        </select>
-                        <label for="category">Category</label>
-                        <select name="category" id="searchCategory" multiple="multiple"></select>
-                        <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button>
-                        <div id="searchResults"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
-
-    <script id="jackett-search-results" type="text/x-handlebars-template">
-        <hr />
-        <p>Your search was done using:
-            {{#each Indexers}}{{Name}}
-            {{#if Error}}
-            (<span title="{{Error}}"><b>Error</b></span>)
-            {{else}}
-            ({{Results}})
-            {{/if}}
-            , {{/each}}
-        </p>
-        <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
-            <thead>
-                <tr>
-                    <th>Published</th>
-                    <th>Published</th>
-                    <th>Tracker</th>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Size</th>
-                    <th>Files</th>
-                    <th>Category</th>
-                    <th>Grabs</th>
-                    <th>Seeds</th>
-                    <th>Leechers</th>
-                    <th>DL Factor</th>
-                    <th>UL Factor</th>
-                    <th>Download</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
-                    <td>{{PublishDate}}</td>
-                    <td>{{jacketTimespan PublishDate}}</td>
-                    <td>{{Tracker}}</td>
-                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
-                    <td>{{Size}}</td>
-                    <td class="fit">{{jacketSize Size}}</td>
-                    <td>{{Files}}</td>
-                    <td>{{CategoryDesc}}</td>
-                    <td>{{Grabs}}</td>
-                    <td>{{Seeders}}</td>
-                    <td>{{Peers}}</td>
-                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
-                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
-                    <td class="downloadcolumn">
-                        {{#if Link}}
-                        <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
-                        {{/if}}
-                        {{#if MagnetUri}}
-                        <a class="downloadlink" title="Download locally (magnet)" href="{{MagnetUri}}"><i class="fa fa-magnet"></i></a>
-                        {{/if}}
-                        {{#if BlackholeLink}}
-                        <a class="downloadlink jacketdownloadserver" title="Save to server blackhole directory" href="{{BlackholeLink}}"><i class="fa fa-upload"></i></a>
-                        {{/if}}
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
-    </script>
-    <script id="select-indexer" type="text/x-handlebars-template">
-        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Select an indexer to setup</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="unconfigured-indexers">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
-
-    <script id="jackett-logs" type="text/x-handlebars-template">
-        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-fillwidth">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Server Logs</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table class="dataTable compact cell-border hover stripe">
-                            <thead>
-                                <tr>
-                                    <th style="width: 200px">When</th>
-                                    <th style="width: 80px">Level</th>
-                                    <th>Message</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each logs}}
-                                <tr class="jackettlog{{Level}}">
-                                    <td>{{dateFormat When}}</td>
-                                    <td>{{Level}}</td>
-                                    <td><pre>{{Message}}</pre></td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
-
-    <script id="jackett-config-setup-modal" type="text/x-handlebars-template">
-        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{{title}} - <a target="_blank" href="{{link}}">{{link}}</a></h4>
-                        {{#if description}}
-                        <div class="alert alert-info">{{description}}</div>
-                        {{/if}}
-                    </div>
-                    <div class="modal-body">
-                        <form class="config-setup-form"></form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
-                    </div>
-                    <div class="indexer-caps">
-                        <h4>Capabilities</h4>
-                        <table class="dataTable compact cell-border hover stripe">
-                            <thead>
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each caps}}
-                                <tr>
-                                    <td>{{ID}}</td>
-                                    <td>{{Name}}</td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
-
-    <script id="spinner" type="text/x-handlebars-template">
-        <span class="spinner glyphicon glyphicon-refresh"></span>
-    </script>
-
-    <script id="search-button-ready" type="text/x-handlebars-template">
-        <span class="fa fa-search"></span>
-    </script>
-
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20180710"></script>
+    <script type="text/javascript" src="../custom.js"></script>
 </body>
+
 </html>
