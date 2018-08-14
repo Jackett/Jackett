@@ -61,18 +61,25 @@
             <button id="jackett-config" class="btn btn-warning btn-sm">
                 <span class="fa fa-cog" aria-hidden="true"></span> Configuration
             </button>
+
         </div>
         <div class="currentPageHeader">
             <h3>Wait</h3>
         </div>
+
     </div>
     <div id="page" class="page">
         <div id="indexers"> </div>
     </div>
+
     <div id="footer">
         <a href="https://github.com/Jackett/Jackett" target="_blank" title="Jackett on GitHub">Jackett</a> Version <span id="app-version"></span>
     </div>
     <div id="modals"></div>
+
+
+
+
     <script id="configuration" type="text/x-handlebars-template">
         <div id="page" class="page">
             <div class="input-area">
@@ -166,9 +173,7 @@
     </script>
     <script id="displayIndexers" type="text/x-handlebars-template">
         <div id="page" class="page">
-            <button id="jackett-add-indexer" class="btn btn-success btn-sm">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
-            </button>
+            <button id="jackett-add-indexer" class="btn btn-success btn-sm" type="button"><span class="glyphicon glyphicon-plus"></span> Add indexer </button>
             <button id="jackett-test-all" class="btn btn-warning btn-sm">
                 <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> Test All
             </button>
@@ -315,7 +320,7 @@
 
                 <label for="category">Category</label>
                 <select name="category" id="searchCategory" multiple="multiple"></select>
-                <br/>
+                <br />
                 <div id="searchResults"></div>
             </div>
         </div>
@@ -405,7 +410,7 @@
         <span class="fa fa-search"></span>
     </script>
     <script id="jackett-logs" type="text/x-handlebars-template">
-        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div id="select-indexer-modal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg modal-fillwidth">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -440,7 +445,7 @@
         </div>
     </script>
     <script id="select-indexer" type="text/x-handlebars-template">
-        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div id="select-indexer-modal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -457,6 +462,157 @@
                 </div>
             </div>
         </div>
+    </script>
+    <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
+        <div class="unconfigured-indexer-div">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Indexer</th>
+                        <th>Categories</th>
+                        <th>Type</th>
+                        <th>Type string</th>
+                        <th>Language</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each indexers}}
+                    <tr class="unconfigured-indexer-row">
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
+                        <td>{{mains_cats}}</td>
+                        <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
+                        <td>{{type}}</td>
+                        <td class="fit">{{language}}</td>
+                        <td class="fit">
+                            <div class="indexer-buttons">
+                                <button title="Configure" class="btn btn-primary btn-xs indexer-setup" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                                </button>
+                                {{#if_eq type "public"}}
+                                <button title="Add" class="btn btn-success btn-xs indexer-add" data-id="{{id}}" data-link="{{site_link}}">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                                {{/if_eq}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </script>
+    <script id="setup-item" type="text/x-handlebars-template">
+        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
+            <div class="setup-item-label">{{name}}</div>
+            <div class="setup-item-value">{{{value_element}}}</div>
+        </div>
+    </script>
+    <script id="setup-item-inputstring" type="text/x-handlebars-template">
+        <div class="setup-item-inputstring">
+            {{#if ispassword}}
+            <input class="form-control" type="password" value="{{{value}}}" />
+            {{else}}
+            <input class="form-control" type="text" value="{{{value}}}" />
+            {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputbool" type="text/x-handlebars-template">
+        <div class="setup-item-inputbool">
+            {{#if value}}
+            <input type="checkbox" data-id="{{id}}" class="form-control" checked />
+            {{else}}
+            <input type="checkbox" data-id="{{id}}" class="form-control" />
+            {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputselect" type="text/x-handlebars-template">
+        <div class="setup-item-inputselect">
+            <select class="form-control" data-id="{{id}}">
+                {{#each options}}
+                {{#ifCond ../value @key}}
+                <option value="{{@key}}" selected>{{this}}</option>
+                {{else}}
+                <option value="{{@key}}">{{this}}</option>
+                {{/ifCond}}
+                {{/each}}
+            </select>
+        </div>
+    </script>
+    <script id="setup-item-recaptcha" type="text/x-handlebars-template">
+        <div class="jackettrecaptcha">
+        </div>
+    </script>
+    <script id="setup-item-displayimage" type="text/x-handlebars-template">
+        <img class="setup-item-displayimage" src="{{{value}}}" alt="No image available" />
+    </script>
+    <script id="setup-item-displayinfo" type="text/x-handlebars-template">
+        <div class="setup-item-displayinfo alert alert-info" role="alert">{{{value}}}</div>
+    </script>
+    <script id="setup-item-hiddendata" type="text/x-handlebars-template">
+        <div class="setup-item-hiddendata">
+            <input class="form-control" type="text" value="{{{value}}}" />
+        </div>
+    </script>
+    <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
+        <div class="setup-item-alternativesitelinks alert alert-info" role="alert">
+            This indexer has multiple known URLs:
+            <ul>
+                {{#each alternativesitelinks}}
+                <li><a target="_blank" href="{{this}}" class="alternativesitelink">{{this}}</a></li>
+                {{/each}}
+            </ul>
+            Click on an URL to copy it to the Site Link field.
+        </div>
+    </script>
+    <script id="jackett-config-setup-modal" type="text/x-handlebars-template">
+        <div class="config-setup-modal modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{title}} - <a target="_blank" href="{{link}}">{{link}}</a></h4>
+                        {{#if description}}
+                        <div class="alert alert-info">{{description}}</div>
+                        {{/if}}
+                    </div>
+                    <div class="modal-body">
+                        <form class="config-setup-form"></form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary setup-indexer-go">Okay</button>
+                    </div>
+                    <div class="indexer-caps">
+                        <h4>Capabilities</h4>
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each caps}}
+                                <tr>
+                                    <td>{{ID}}</td>
+                                    <td>{{Name}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="spinner" type="text/x-handlebars-template">
+        <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>

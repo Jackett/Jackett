@@ -3624,7 +3624,7 @@ select[multiple].form-group-lg .form-control, textarea.form-group-lg .form-contr
 }
 
 .btn-group-xs > .btn, .btn-xs {
-    padding: 1px 5px;
+    padding: 0px 10px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px

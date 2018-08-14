@@ -200,7 +200,7 @@ table.dataTable {
     }
 
     table.dataTable.compact tbody th, table.dataTable.compact tbody td {
-        padding: 4px
+        padding: 1px
     }
 
     table.dataTable th.dt-left, table.dataTable td.dt-left {
