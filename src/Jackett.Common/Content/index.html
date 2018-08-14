@@ -337,13 +337,13 @@
             {{/if}}
             , {{/each}}
         </p>
-        <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
+        <table id="jackett-search-results-datatable" class="dataTable cell-border compact">
             <thead>
                 <tr>
                     <th>Published</th>
                     <th>Published</th>
                     <th>Tracker</th>
-                    <th>Name</th>
+                    <th>Name                        </th>
                     <th>Size</th>
                     <th>Size</th>
                     <th>Files</th>
@@ -351,8 +351,8 @@
                     <th>Grabs</th>
                     <th>Seeds</th>
                     <th>Leechers</th>
-                    <th>DL Factor</th>
-                    <th>UL Factor</th>
+                    <th>DL</th>
+                    <th>UL</th>
                     <th>Download</th>
                 </tr>
             </thead>
@@ -362,7 +362,7 @@
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title         }}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
                     <td class="fit">{{jacketSize Size}}</td>
                     <td>{{Files}}</td>
@@ -606,6 +606,41 @@
                                 {{/each}}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="jackett-logs" type="text/x-handlebars-template">
+        <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-fillwidth">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Server Logs</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="dataTable compact cell-border hover stripe">
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px">When</th>
+                                    <th style="width: 80px">Level</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each logs}}
+                                <tr class="jackettlog{{Level}}">
+                                    <td>{{dateFormat When}}</td>
+                                    <td>{{Level}}</td>
+                                    <td><pre>{{Message}}</pre></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

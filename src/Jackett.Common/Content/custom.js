@@ -1067,6 +1067,7 @@ function bindUIButtons() {
         window.location.hash = "configuration";
         var html2 = "<div class='currentPageHeader'><h2>Configuration</h2></div>";
         $(document.body.getElementsByClassName("currentPageHeader")).replaceWith(html2);
+        bindUIButtons();
     });
 
     $("#jackett-configured-indexers").click(function () {
@@ -1089,6 +1090,7 @@ function bindUIButtons() {
         window.location.hash = "search";
         var html2 = "<div class='currentPageHeader'><h2>Manual Search</h2></div>";
         $(document.body.getElementsByClassName("currentPageHeader")).replaceWith(html2);
+        bindUIButtons();
     });
 
     $("#change-jackett-password").click(function () {
@@ -1177,6 +1179,7 @@ function bindUIButtons() {
             var releaseDialog = $(releaseTemplate(item));
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
+            bindUIButtons();
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
@@ -1205,7 +1208,7 @@ function bindUIButtons() {
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
-
+        bindUIButtons();
     });
 
     $("#jackett-test-all").click(function () {
