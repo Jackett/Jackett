@@ -113,7 +113,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.9.2" />
+    <PackageReference Include="AngleSharp" Version="0.9.10" />
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="BencodeNET" Version="2.2.24" />
@@ -123,7 +123,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NLog" Version="4.5.6" />
+    <PackageReference Include="NLog" Version="4.5.8" />
     <PackageReference Include="YamlDotNet" Version="5.0.1" />
   </ItemGroup>
 
