@@ -107,6 +107,7 @@ namespace Jackett.Server
 
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
+            builder.AddJsonFile(Path.Combine(configurationService.GetAppDataFolder(), "appsettings.json"), optional: true);
 
             Configuration = builder.Build();
 
@@ -179,11 +180,11 @@ namespace Jackett.Server
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(Configuration)
                 .UseContentRoot(contentRoot)
                 .UseWebRoot(contentRoot)
                 .UseUrls(urls)
                 .PreferHostingUrls(true)
+                .UseConfiguration(Configuration)
                 .UseStartup<Startup>()
                 .UseNLog();
     }

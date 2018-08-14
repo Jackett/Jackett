@@ -233,6 +233,8 @@ namespace Jackett.Updater
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
+                "appsettings.Development.json",
+                "appsettings.json",
             };
 
             foreach (var oldFile in oldFiles)
