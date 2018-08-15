@@ -117,8 +117,10 @@ namespace Jackett.Server
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
+                // When adjusting these pareamters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
                 ForwardLimit = 10,
-                ForwardedHeaders = ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
             });
 
             var rewriteOptions = new RewriteOptions()
