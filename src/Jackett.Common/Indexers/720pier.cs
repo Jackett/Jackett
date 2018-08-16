@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
-            Type = "semi-private";
+            Type = "private";
 
             AddCategoryMapping(30, TorznabCatType.Movies, "Video content");
         }
@@ -116,23 +116,7 @@ namespace Jackett.Common.Indexers
                 foreach (var Row in Rows)
                 {
                     try
-                    {
-                        var size = "";
-
-                        try
-                        {
-                            size = Row.QuerySelector("dl.row-item > dt > div.list-inner > div[style=\"float:right;\"").TextContent;
-                            size = size.Replace("GiB", "GB");
-                            size = size.Replace("MiB", "MB");
-                            size = size.Replace("KiB", "KB");
-                        } 
-                        catch (Exception ex)
-                        {
-                            logger.Debug(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", ID, Row.OuterHtml, ex));
-                            size = "";
-                        }
-
-                        if (size != "")
+                    {     
                         {
                             var release = new ReleaseInfo();
 
@@ -144,7 +128,7 @@ namespace Jackett.Common.Indexers
                             var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
                             var DetailsResultDocument = ResultParser.Parse(detailsResult.Content);
 
-                            var qDownloadLink = DetailsResultDocument.QuerySelector("a[href^=\"/download/torrent.php?id\"]");
+                            var qDownloadLink = DetailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent.php?id\"]");
 
                             release.Title = qDetailsLink.TextContent;
                             release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
@@ -155,35 +139,20 @@ namespace Jackett.Common.Indexers
                             release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("span.leech").TextContent) + release.Seeders;
                             release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("span.complet").TextContent);
 
-                            var author = Row.QuerySelector("a[href^=\"./memberlist.php?mode=viewprofile&\"]");
-                            var timestr = author.NextSibling.NodeValue.Substring(3).Split('\n')[0].Trim();
-
-                            timestr = timestr.Replace("менее минуты назад", "now");
-                            timestr = timestr.Replace("назад", "ago");
-                            timestr = timestr.Replace("минуту", "minute");
-                            timestr = timestr.Replace("минуты", "minutes");
-                            timestr = timestr.Replace("минут", "minutes");
-
-                            timestr = timestr.Replace("Сегодня", "Today");
-                            timestr = timestr.Replace("Вчера", "Yesterday"); // untested
-
-                            timestr = timestr.Replace("янв", "Jan");
-                            timestr = timestr.Replace("фев", "Feb");
-                            timestr = timestr.Replace("мар", "Mar");
-                            timestr = timestr.Replace("апр", "Apr");
-                            timestr = timestr.Replace("май", "May");
-                            timestr = timestr.Replace("июн", "Jun");
-                            timestr = timestr.Replace("июл", "Jul");
-                            timestr = timestr.Replace("авг", "Aug");
-                            timestr = timestr.Replace("сен", "Sep");
-                            timestr = timestr.Replace("окт", "Oct");
-                            timestr = timestr.Replace("ноя", "Nov");
-                            timestr = timestr.Replace("дек", "Dec");
+                            var author = Row.QuerySelector("dd.lastpost > span");
+                            var timestr = author.TextContent.Split('\n')[4].Trim();
+        
                             release.PublishDate = DateTimeUtil.FromUnknown(timestr, "UK");
 
                             var forum = Row.QuerySelector("a[href^=\"./viewforum.php?f=\"]");
                             var forumid = forum.GetAttribute("href").Split('=')[1];
                             release.Category = MapTrackerCatToNewznab(forumid);
+
+                            var size = Row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]").TextContent;
+                            size = size.Replace("GiB", "GB");
+                            size = size.Replace("MiB", "MB");
+                            size = size.Replace("KiB", "KB");
+
                             release.Size = ReleaseInfo.GetBytes(size);
 
                             release.DownloadVolumeFactor = 1;
