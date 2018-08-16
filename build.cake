@@ -17,9 +17,6 @@ var workingDir = MakeAbsolute(Directory("./"));
 var artifactsDirName = "Artifacts";
 var testResultsDirName = "TestResults";
 
-var windowsBuildFullFramework = "./BuildOutput/FullFramework/Windows";
-var monoBuildFullFramework = "./BuildOutput/FullFramework/Mono";
-
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -45,7 +42,7 @@ Task("Clean")
 		Information("Clean completed");
 	});
 
-Task("Build-Kestrel-Full-Framework")
+Task("Build-Full-Framework")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
@@ -59,7 +56,7 @@ Task("Build-Kestrel-Full-Framework")
 	});
 
 Task("Run-Unit-Tests")
-	.IsDependentOn("Build-Kestrel-Full-Framework")
+	.IsDependentOn("Build-Full-Framework")
 	.Does(() =>
 	{
 		CreateDirectory("./" + testResultsDirName);
@@ -91,7 +88,7 @@ Task("Check-Packaging-Platform")
 		}
 	});
 
-Task("Experimental-Kestrel-Windows-Full-Framework")
+Task("Package-Windows-Full-Framework")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
@@ -121,7 +118,7 @@ Task("Experimental-Kestrel-Windows-Full-Framework")
 		InnoSetup("./Installer.iss", settings);
 	});
 
-Task("Experimental-Kestrel-Mono-Full-Framework")
+Task("Package-Mono-Full-Framework")
 	.IsDependentOn("Check-Packaging-Platform")
 	.Does(() =>
 	{
@@ -166,17 +163,17 @@ Task("Experimental-DotNetCore")
 		Gzip("./BuildOutput/Experimental/netcoreapp2.1/linux-x64", $"./{artifactsDirName}", "Jackett", "Experimental.netcoreapp.linux-x64.tar.gz");
 	});
 
-Task("Experimental")
-	.IsDependentOn("Experimental-Kestrel-Windows-Full-Framework")
-	.IsDependentOn("Experimental-Kestrel-Mono-Full-Framework")
+Task("Package")
+	.IsDependentOn("Package-Windows-Full-Framework")
+	.IsDependentOn("Package-Mono-Full-Framework")
 	//.IsDependentOn("Experimental-DotNetCore")
 	.Does(() =>
 	{
-		Information("Experimental builds completed");
+		Information("Packaging completed");
 	});
 
 Task("Appveyor-Push-Artifacts")
-	.IsDependentOn("Experimental")
+	.IsDependentOn("Package")
 	.Does(() =>
 	{
 		if (AppVeyor.IsRunningOnAppVeyor)
