@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("53", TorznabCatType.TVSD);
             AddCategoryMapping("41", TorznabCatType.TV);
             AddCategoryMapping("55", TorznabCatType.TV);
-            AddCategoryMapping("2", TorznabCatType.TV);
+            AddCategoryMapping("2", TorznabCatType.TVSD);
             AddCategoryMapping("30", TorznabCatType.TVAnime);
             AddCategoryMapping("25", TorznabCatType.PCISO);
             AddCategoryMapping("39", TorznabCatType.ConsoleWii);
