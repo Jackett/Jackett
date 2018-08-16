@@ -40,8 +40,69 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
             Type = "private";
+            
+            AddCategoryMapping(32, TorznabCatType.TVSport, "Basketball");
+            AddCategoryMapping(34, TorznabCatType.TVSport, "Basketball - NBA");
+            AddCategoryMapping(87, TorznabCatType.TVSport, "Basketball - NBA Playoffs");
+            AddCategoryMapping(81, TorznabCatType.TVSport, "Basketball - NBA Playoffs - 2016");
+            AddCategoryMapping(95, TorznabCatType.TVSport, "Basketball - NBA Playoffs - 2017");
+            AddCategoryMapping(58, TorznabCatType.TVSport, "Basketball - NBA (до 2015 г.)");
+            AddCategoryMapping(52, TorznabCatType.TVSport, "Basketball - NCAA");
+            AddCategoryMapping(82, TorznabCatType.TVSport, "Basketball - WNBA");
+            AddCategoryMapping(36, TorznabCatType.TVSport, "Basketball - European basketball");
+            AddCategoryMapping(37, TorznabCatType.TVSport, "Basketball - World Championship");
+            AddCategoryMapping(51, TorznabCatType.TVSport, "Basketball - Reviews and highlights");
+            AddCategoryMapping(41, TorznabCatType.TVSport, "Basketball - Other");
+            AddCategoryMapping(38, TorznabCatType.TVSport, "Basketball - Olympic Games");
 
-            AddCategoryMapping(30, TorznabCatType.Movies, "Video content");
+            AddCategoryMapping(42, TorznabCatType.TVSport, "Football");
+            AddCategoryMapping(43, TorznabCatType.TVSport, "Football - NFL");
+            AddCategoryMapping(66, TorznabCatType.TVSport, "Football - Super Bowls");
+            AddCategoryMapping(53, TorznabCatType.TVSport, "Football - NCAA");
+            AddCategoryMapping(99, TorznabCatType.TVSport, "Football - CFL");
+            AddCategoryMapping(54, TorznabCatType.TVSport, "Football - Reviews and highlights");
+            AddCategoryMapping(97, TorznabCatType.TVSport, "Football - Documentaries");
+            AddCategoryMapping(44, TorznabCatType.TVSport, "Football - Other");
+
+            AddCategoryMapping(46, TorznabCatType.TVSport, "Hockey");
+            AddCategoryMapping(48, TorznabCatType.TVSport, "Hockey - NHL");
+            AddCategoryMapping(88, TorznabCatType.TVSport, "Hockey - NHL Playoffs");
+            AddCategoryMapping(93, TorznabCatType.TVSport, "Hockey - NHL Playoffs - 2017");
+            AddCategoryMapping(80, TorznabCatType.TVSport, "Hockey - NHL Playoffs - 2016");
+            AddCategoryMapping(65, TorznabCatType.TVSport, "Hockey - Stanley Cup Finals");
+            AddCategoryMapping(69, TorznabCatType.TVSport, "Hockey - Stanley Cup Finals - 2005-2014");
+            AddCategoryMapping(70, TorznabCatType.TVSport, "Hockey - Stanley Cup Finals - 2003");
+            AddCategoryMapping(92, TorznabCatType.TVSport, "Hockey - NCAA");
+            AddCategoryMapping(49, TorznabCatType.TVSport, "Hockey - World Championship");
+            AddCategoryMapping(68, TorznabCatType.TVSport, "Hockey - Documentaries");
+            AddCategoryMapping(64, TorznabCatType.TVSport, "Hockey - Reviews and highlights");
+            AddCategoryMapping(50, TorznabCatType.TVSport, "Hockey - Other");
+
+            AddCategoryMapping(55, TorznabCatType.TVSport, "Baseball");
+            AddCategoryMapping(71, TorznabCatType.TVSport, "Baseball - MLB");
+            AddCategoryMapping(72, TorznabCatType.TVSport, "Baseball - Other");
+            AddCategoryMapping(85, TorznabCatType.TVSport, "Baseball - Reviews, highlights, documentaries");
+
+            AddCategoryMapping(59, TorznabCatType.TVSport, "Soccer");
+            AddCategoryMapping(61, TorznabCatType.TVSport, "Soccer - English soccer");
+            AddCategoryMapping(86, TorznabCatType.TVSport, "Soccer - UEFA");
+            AddCategoryMapping(100, TorznabCatType.TVSport, "Soccer - MLS");
+            AddCategoryMapping(62, TorznabCatType.TVSport, "Soccer - Other tournaments, championships");
+            AddCategoryMapping(63, TorznabCatType.TVSport, "Soccer - World Championships");
+            AddCategoryMapping(98, TorznabCatType.TVSport, "Soccer - FIFA World Cup");
+
+            AddCategoryMapping(45, TorznabCatType.TVSport, "Other sports");
+            AddCategoryMapping(79, TorznabCatType.TVSport, "Other sports - Rugby");
+            AddCategoryMapping(78, TorznabCatType.TVSport, "Other sports - Lacrosse");
+            AddCategoryMapping(77, TorznabCatType.TVSport, "Other sports - Cricket");
+            AddCategoryMapping(76, TorznabCatType.TVSport, "Other sports - Volleyball");
+            AddCategoryMapping(75, TorznabCatType.TVSport, "Other sports - Tennis");
+            AddCategoryMapping(74, TorznabCatType.TVSport, "Other sports - Fighting");
+            AddCategoryMapping(73, TorznabCatType.TVSport, "Other sports - Auto, moto racing");
+            AddCategoryMapping(91, TorznabCatType.TVSport, "Other sports - Olympic Games");
+            AddCategoryMapping(94, TorznabCatType.TVSport, "Other sports - Misc");
+
+            AddCategoryMapping(56, TorznabCatType.TVSport, "Sports on tv");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -116,50 +177,49 @@ namespace Jackett.Common.Indexers
                 foreach (var Row in Rows)
                 {
                     try
-                    {     
-                        {
-                            var release = new ReleaseInfo();
+                    {    
+                        var release = new ReleaseInfo();
 
-                            release.MinimumRatio = 1;
-                            release.MinimumSeedTime = 0;
+                        release.MinimumRatio = 1;
+                        release.MinimumSeedTime = 0;
 
-                            var qDetailsLink = Row.QuerySelector("a.topictitle");
+                        var qDetailsLink = Row.QuerySelector("a.topictitle");
 
-                            var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
-                            var DetailsResultDocument = ResultParser.Parse(detailsResult.Content);
+                        release.Title = qDetailsLink.TextContent;
+                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Guid = release.Comments;
 
-                            var qDownloadLink = DetailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent.php?id\"]");
+                        var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var DetailsResultDocument = ResultParser.Parse(detailsResult.Content);
+                        var qDownloadLink = DetailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent.php?id\"]");
 
-                            release.Title = qDetailsLink.TextContent;
-                            release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                            release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
-                            release.Guid = release.Comments;
+                        release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
 
-                            release.Seeders = ParseUtil.CoerceInt(Row.QuerySelector("span.seed").TextContent);
-                            release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("span.leech").TextContent) + release.Seeders;
-                            release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("span.complet").TextContent);
+                        release.Seeders = ParseUtil.CoerceInt(Row.QuerySelector("span.seed").TextContent);
+                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("span.leech").TextContent) + release.Seeders;
+                        release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("span.complet").TextContent);
 
-                            var author = Row.QuerySelector("dd.lastpost > span");
-                            var timestr = author.TextContent.Split('\n')[4].Trim();
-        
-                            release.PublishDate = DateTimeUtil.FromUnknown(timestr, "UK");
+                        var author = Row.QuerySelector("dd.lastpost > span");
+                        var timestr = author.TextContent.Split('\n')[4].Trim();
 
-                            var forum = Row.QuerySelector("a[href^=\"./viewforum.php?f=\"]");
-                            var forumid = forum.GetAttribute("href").Split('=')[1];
-                            release.Category = MapTrackerCatToNewznab(forumid);
+                        release.PublishDate = DateTimeUtil.FromUnknown(timestr, "UK");
 
-                            var size = Row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]").TextContent;
-                            size = size.Replace("GiB", "GB");
-                            size = size.Replace("MiB", "MB");
-                            size = size.Replace("KiB", "KB");
+                        var forum = Row.QuerySelector("a[href^=\"./viewforum.php?f=\"]");
+                        var forumid = forum.GetAttribute("href").Split('=')[1];
 
-                            release.Size = ReleaseInfo.GetBytes(size);
+                        release.Category = MapTrackerCatToNewznab(forumid);
 
-                            release.DownloadVolumeFactor = 1;
-                            release.UploadVolumeFactor = 1;
+                        var size = Row.QuerySelector("dl.row-item > dt > div.list-inner > div[style^=\"float:right\"]").TextContent;
+                        size = size.Replace("GiB", "GB");
+                        size = size.Replace("MiB", "MB");
+                        size = size.Replace("KiB", "KB");
 
-                            releases.Add(release);
-                        }
+                        release.Size = ReleaseInfo.GetBytes(size);
+
+                        release.DownloadVolumeFactor = 1;
+                        release.UploadVolumeFactor = 1;
+
+                        releases.Add(release);
                     }
                     catch (Exception ex)
                     {
