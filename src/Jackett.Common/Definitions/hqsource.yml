@@ -1,0 +1,130 @@
+---
+  site: hqsource
+  name: HQSource
+  description: "HQSource (HQS) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: pl-pl
+  type: private
+  encoding: ISO-8859-2
+  links:
+    - http://hqsource.org/
+
+  caps:
+    categorymappings:
+      - {id: 36, cat: Movies/3D, desc: "3D"}
+      - {id: 3, cat: Movies/UHD, desc: "4K/UHD"}
+      - {id: 2, cat: Movies/HD, desc: "BDRip"}
+      - {id: 1, cat: Movies/HD, desc: "BRRip"}
+      - {id: 49, cat: Movies/BluRay, desc: "BluRay"}
+      - {id: 8, cat: Movies/SD, desc: "DVD"}
+      - {id: 4, cat: TV/HD, desc: "HDTV"}
+      - {id: 7, cat: Movies/SD, desc: "HQDVDRip"}
+      - {id: 45, cat: Movies/HD, desc: "MKV"}
+      - {id: 11, cat: Audio, desc: "Music"}
+      - {id: 6, cat: Other, desc: "Special"}
+      - {id: 46, cat: PC, desc: "Tools"}
+      - {id: 9, cat: TV, desc: "TV-Series"}
+      - {id: 5, cat: Movies, desc: "WEB-DL"}
+      - {id: 35, cat: XXX, desc: "XXX"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+       
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: pin
+      type: text
+      label: Pin     
+
+  login:
+    path: /takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      pin: "{{ .Config.pin }}"
+      returnto:	"/"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+      - selector: td.embedded:has(h2:contains("Error"))
+    test:
+      selector: a[href^="logout.php"]
+      path: /browse.php
+        
+  search:
+    paths:
+      - path: /browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Query.Keywords }}"
+      incldead: 1
+      polish: 0
+      blah: 0
+    rows:
+      selector: table#line > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      description:
+        optional: true
+        selector: img[src="pic/pl.png"]
+        filters:
+          - name: append
+            args: "Language: polish\n<br>"
+          - name: prepend
+            args: {{ .Result.description }}
+      description:
+        optional: true
+        selector: img[src="pic/napisy.png"]
+        filters:
+          - name: append
+            args: "Subbed\n<br>"
+          - name: prepend
+            args: {{ .Result.description }}
+      imdb:
+        optional: true
+        selector: a[href^="http://www.imdb.com/title/tt"]
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(5)
+      date:
+        selector: tr, br
+        filters:
+          - name: append
+            args: " +00:00"
+          - name: dateparse
+            args: "2006-01-0215:04:05 -07:00"
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          "img[src=\"pic/download2.gif\"]": 0
+          "*": 1
+      uploadvolumefactor:
+        case:
+          "img[src=\"pic/double.png\"]": 2
+          "*": 1
