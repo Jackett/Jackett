@@ -125,6 +125,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Brasil Tracker
  * BroadcastTheNet
  * BrokenStones
+ * BTGigs
  * BTNext
  * BTXpress
  * Carpathians
