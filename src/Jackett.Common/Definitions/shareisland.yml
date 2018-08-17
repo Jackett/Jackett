@@ -13,50 +13,50 @@
 
   caps:
     categorymappings:
-      # Vip
-       - {id: 34, cat: XXX, desc: "Adulti"}
-       - {id: 46, cat: Other, desc: "IPTV"}
-       - {id: 57, cat: XXX, desc: "Riviste XXX"}
-       - {id: 58, cat: XXX, desc: "Fumetti XXX"}
-      # Applicazioni
-       - {id: 33, cat: PC/Phone-Android, desc: "Android"}
-       - {id: 8, cat: PC/0day, desc: "Linux"}
-       - {id: 9, cat: PC/Mac, desc: "Mac"}
-       - {id: 7, cat: PC/0day, desc: "PC"}
-      # Books
-       - {id: 43, cat: Books, desc: "Libreria"}
-       - {id: 41, cat: Books, desc: "Quotidiani"}
-       - {id: 59, cat: Books, desc: "Fumetti"}
-       - {id: 60, cat: Books, desc: "Riviste"}
-       - {id: 61, cat: Books, desc: "Audiolibri"}
-      # Games
-       - {id: 47, cat: PC/Games, desc: "Games PC"}
-       - {id: 40, cat: Console/Other, desc: "Nintendo"}
-       - {id: 13, cat: Console/PS4, desc: "Sony PS"}
-       - {id: 33, cat: Console/Xbox, desc: "XboX"}
-       - {id: 14, cat: Console/Wii, desc: "Wii"}
+      # Movie
+       - {id: 21, cat: Movies/DVD, desc: "Movie DVD-9"}
+       - {id: 11, cat: Movies/DVD, desc: "Movie DVD-5"}
+       - {id: 20, cat: Movies/SD, desc: "Movie DVDRip"}
+       - {id: 22, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
+       - {id: 23, cat: Movies/HD, desc: "Movie H-265"}
+       - {id: 24, cat: Movies/HD, desc: "Movie 1080p"}
+       - {id: 25, cat: Movies/HD, desc: "Movie 720p"}
+       - {id: 26, cat: Movies/3D, desc: "Movie 3D-FullHD"}
+       - {id: 27, cat: Movies/BluRay, desc: "Movie Blu Ray Disk"}
+       - {id: 43, cat: Movies/SD, desc: "BMovie DRip"}
+       - {id: 29, cat: Movies/SD, desc: "Movie Cine News"}
+       - {id: 30, cat: TV/HD, desc: "Serie Tv HD"}
+       - {id: 31, cat: TV/SD, desc: "Serie Tv SD"}
+       - {id: 35, cat: TV/Other, desc: "Programmi TV"}
+       - {id: 42, cat: TV/Documentary, desc: "Documentari"}
       # Music
-       - {id: 54, cat: Audio/MP3, desc: "MP3"}
-       - {id: 55, cat: Audio/Lossless, desc: "Flac"}
-      # Movies
-       - {id: 17, cat: Movies/SD, desc: "Cine News"}
-       - {id: 43, cat: Movies/SD, desc: "BDRip"}
-       - {id: 16, cat: Movies/SD, desc: "DivX"}
-       - {id: 20, cat: Movies/SD, desc: "DVDRip"}
-       - {id: 21, cat: Movies/DVD, desc: "DVD"}
-       - {id: 25, cat: Movies/HD, desc: "720p"}
-       - {id: 24, cat: Movies/HD, desc: "1080p"}
-       - {id: 27, cat: Movies/BluRay, desc: "Blu Ray Disk"}
-       - {id: 23, cat: Movies/HD, desc: "H-265"}
-       - {id: 26, cat: Movies/3D, desc: "3D-FullHD"}
-       - {id: 31, cat: TV/SD, desc: "SerieTV"}
-       - {id: 45, cat: TV/HD, desc: "Serie Tv HD"}
-       - {id: 22, cat: Movies/UHD, desc: "4K-Ultra-HD"}
-       - {id: 49, cat: TV/Documentary, desc: "Documentari"}
-       - {id: 50, cat: TV/Other, desc: "Programmi TV"}
-       - {id: 51, cat: Movies/Other, desc: "Mp4"}
-
+       - {id: 36, cat: Audio/MP3, desc: "Music MP3"}
+       - {id: 37, cat: Audio/Lossless, desc: "Music Flac"}
+      # Games
+       - {id: 18, cat: PC/Games, desc: "Games PC"}
+       - {id: 19, cat: Console/PS3, desc: "Games PS3"}
+       - {id: 33, cat: Console/Xbox, desc: "Games XboX"}
+       - {id: 39, cat: Console/Wii, desc: "Games Wii"}
+       - {id: 40, cat: Console/Other, desc: "Games Nintendo"}
+      # Anime
        - {id: 5, cat: TV/Anime, desc: "Anime"}
+      # Edicola
+       - {id: 16, cat: Books, desc: "Edicola Quotidiani"}
+       - {id: 28, cat: Books, desc: "Edicola Libri"}
+       - {id: 17, cat: Books, desc: "Edicola Riviste"}
+       - {id: 41, cat: Books, desc: "Edicola Fumetti"}
+      # Applicazioni
+       - {id: 7, cat: PC/0day, desc: "Applicazioni PC"}
+       - {id: 8, cat: PC/0day, desc: "Applicazioni Linux"}
+       - {id: 9, cat: PC/Mac, desc: "Applicazioni Mac"}
+       - {id: 32, cat: PC/Phone-Android, desc: "Applicazioni Android"}
+       - {id: 34, cat: PC/Phone-IOS, desc: "Applicazioni Iphone"}
+      # Vip
+       - {id: 38, cat: Other, desc: "V.I.P."}
+      # Adult
+       - {id: 13, cat: XXX, desc: "Riviste XXX"}
+       - {id: 14, cat: XXX, desc: "Fumetti XXX"}
+       - {id: 44, cat: XXX, desc: "Adulti"}
 
     modes:
       search: [q]
@@ -82,9 +82,9 @@
       - name: diacritics
         args: replace
       - name: re_replace # S01 to 1
-        args: ["\\b[sS]0*(\\d+)\\b", "$1"]
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
-        args: ["\\b[sS]0*(\\d+)[eE]0*(\\d+)\\b", "$1 $2"]
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"
@@ -92,6 +92,8 @@
       active: 0
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      filters:
+        - name: andmatch
     fields:
       download:
         selector: a[href^="download.php?id="]
@@ -105,22 +107,21 @@
             args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
           - name: re_replace # S01 E01 to S01E01
-            args: ["\\b[sS](\\d+)\\s[eE](\\d+)\\b", "S$1E$2"]
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
           - name: re_replace # 01x01 to S01E01
-            args: ["(\\d{2})x(\\d+)", "S$1E$2"]
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
           - name: re_replace # 1x01 to S01E01
-            args: ["\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
           - name: re_replace # Stagione X --> S0X
-            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{1})\\b|\\b[sS]eason\\s?(\\d{1})\\b", "S0$1"]
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
           - name: re_replace # Stagione XX --> SXX
-            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{2,})\\b|\\b[sS]easons?\\s?(\\d{2,})\\b", "S$1"]
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
           - name: re_replace # Episodio 4 to E4
-            args: ["\\b([\\/\\|]?[eE]pisodio\\s?(\\d+)|[Pp]untata\\s?(\\d+))", "E$2$3"]
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
           - name: re_replace # Episodi 4 5 to E04-05
-            args: ["\\b(?:[Pp]untat[eE]\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
-            args: ["([Ss]erie completa|[cC]ompleta[tT]?[aA]?|COMPLETA[TA]?|in pausa)", ""]
-          - name: andmatch
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       title: # long titles?
         optional: true
         selector: a[title][href^="index.php?page=torrent-details"]
@@ -132,22 +133,21 @@
             args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
           - name: re_replace # S01 E01 to S01E01
-            args: ["\\b[sS](\\d+)\\s[eE](\\d+)\\b", "S$1E$2"]
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
           - name: re_replace # 01x01 to S01E01
-            args: ["(\\d{2})x(\\d+)", "S$1E$2"]
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
           - name: re_replace # 1x01 to S01E01
-            args: ["\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
           - name: re_replace # Stagione X --> S0X
-            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{1})\\b|\\b[sS]eason\\s?(\\d{1})\\b", "S0$1"]
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
           - name: re_replace # Stagione XX --> SXX
-            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{2,})\\b|\\b[sS]easons?\\s?(\\d{2,})\\b", "S$1"]
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
           - name: re_replace # Episodio 4 to E4
-            args: ["\\b([\\/\\|]?[eE]pisodio\\s?(\\d+)|[Pp]untata\\s?(\\d+))", "E$2$3"]
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
           - name: re_replace # Episodi 4 5 to E04-05
-            args: ["\\b(?:[Pp]untat[eE]\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
-            args: ["([Ss]erie completa|[cC]ompleta[tT]?[aA]?|COMPLETA[TA]?|in pausa)", ""]
-          - name: andmatch
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       category:
         selector: a[href^="index.php?page=torrents&category="]
         attribute: href
