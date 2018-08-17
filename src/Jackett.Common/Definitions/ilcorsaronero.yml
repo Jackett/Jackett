@@ -31,32 +31,44 @@
     - name: itorrents-links
       type: checkbox
       label: Add download links via itorrents.org
-    - name: advanced-search
-      type: checkbox
-      label: Use the advanced search of IlCorsaroNero (experimental)
+    # - name: advanced-search
+    #   type: checkbox
+    #   label: Use the advanced search of IlCorsaroNero (experimental)
 
   search:
     paths:
-      # FIX DA FARE:
-      #   1. SE CERCO PER CATEGORIA ALLORA DEVO CAMBIARE IL PERCORSO DI RICERCA
-      #   2. CONTROLLARE SE LE RELEASE VANNO FILTRATE COME PER GIROTORRENT
+      # https://ilcorsaronero.info/advsearch.php?&category=15&search=flash+4&&order=data&by=DESC&page=3
+      # {{range .Categories}}{{.}};{{end}}
+
     ##### Are the "not" and "and" functions implemented? Or am I doing it wrong?
     # path: "{{if and .Query.Keywords .advanced-search}}adv/{{ .Query.Keywords}}.html
     #        {{else if and .Query.Keywords (not .advanced-search)}}argh.php?search={{ .Query.Keywords}}
     #        {{else}}/recenti
     #        {{end}}"
-      - path: "{{if .Keywords}}argh.php?search={{ .Keywords}}
-           {{else}}/recenti
-           {{end}}"
+      # - path: "{{if .Keywords}}argh.php?search={{ .Keywords}}
+      #      {{else}}/recenti
+      #      {{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=3{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=6{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=7{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=8{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=9{{else}}/recenti{{end}}"
     keywordsfilters:
       - name: diacritics
         args: replace
       - name: re_replace # S01 to 1
-        args: ["\\b[sS]0*(\\d+)\\b", "$1"]
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
-        args: ["\\b[sS]0*(\\d+)[eE]0*(\\d+)\\b", "$1 $2"]
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     rows:
       selector: "tr.odd,tr.odd2"
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(2) a.tab
@@ -71,22 +83,21 @@
             args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
           - name: re_replace # S01 E01 to S01E01
-            args: ["\\b[sS](\\d+)\\s[eE](\\d+)\\b", "S$1E$2"]
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
           - name: re_replace # 01x01 to S01E01
-            args: ["(\\d{2})x(\\d+)", "S$1E$2"]
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
           - name: re_replace # 1x01 to S01E01
-            args: ["\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
           - name: re_replace # Stagione X --> S0X
-            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{1})\\b|\\b[sS]eason\\s?(\\d{1})\\b", "S0$1"]
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
           - name: re_replace # Stagione XX --> SXX
-            args: ["\\b[sS]tagion[eiEI]\\s?(\\d{2,})\\b|\\b[sS]easons?\\s?(\\d{2,})\\b", "S$1"]
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
           - name: re_replace # Episodio 4 to E4
-            args: ["\\b([\\/\\|]?[eE]pisodio\\s?(\\d+)|[Pp]untata\\s?(\\d+))", "E$2$3"]
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
           - name: re_replace # Episodi 4 5 to E04-05
-            args: ["\\b(?:[Pp]untat[eE]\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
-            args: ["([Ss]erie completa|[cC]ompleta[tT]?[aA]?|COMPLETA[TA]?|in pausa)", ""]
-          - name: andmatch
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       category:
         selector: td:nth-child(1) a
         attribute: href
