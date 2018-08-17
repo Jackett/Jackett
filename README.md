@@ -227,6 +227,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PuntoTorrent
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
+ * Red Star Torrent
  * RevolutionTT
  * RGU
  * RoDVD
