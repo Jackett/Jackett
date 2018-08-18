@@ -71,11 +71,6 @@ namespace Jackett.Common.Plumbing
 
         private void RegisterWebClient<WebClientType>(ContainerBuilder builder)
         {
-            //TODO: Remove once off Owin
-            if (EnvironmentUtil.IsRunningLegacyOwin)
-            {
-                Engine.WebClientType = typeof(WebClientType);
-            }
             builder.RegisterType<WebClientType>().As<WebClient>();
         }
 

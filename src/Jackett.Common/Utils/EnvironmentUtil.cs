@@ -24,23 +24,5 @@ namespace Jackett.Common.Utils
             }
         }
 
-        public static bool IsRunningLegacyOwin
-        {
-            get
-            {
-                bool runningOwin;
-
-                try
-                {
-                    runningOwin = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith("Jackett, ")).Any();
-                }
-                catch
-                {
-                    runningOwin = true;
-                }
-
-                return runningOwin;
-            }
-        }
     }
 }

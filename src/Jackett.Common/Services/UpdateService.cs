@@ -338,16 +338,7 @@ namespace Jackett.Common.Services
                 }
 
                 logger.Info("Exiting Jackett..");
-
-                //TODO: Remove once off Owin
-                if (EnvironmentUtil.IsRunningLegacyOwin)
-                {
-                    Engine.Exit(0);
-                }
-                else
-                {
-                    Environment.Exit(0);
-                }
+                Environment.Exit(0);
             }
         }
     }
