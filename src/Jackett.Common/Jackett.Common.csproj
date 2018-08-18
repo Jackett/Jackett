@@ -128,7 +128,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CurlSharp\CurlSharp.csproj" />
     <ProjectReference Include="..\DateTimeRoutines\DateTimeRoutines.csproj" />
   </ItemGroup>
 
