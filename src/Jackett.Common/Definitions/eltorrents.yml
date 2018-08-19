@@ -7,8 +7,6 @@
   encoding: UTF-8
   links:
     - https://eltorrents.com/
-  certificates:
-    - 2d42cf7a33712d4798d6ba6536824fb448919889 # incomplete CA chain
 
   caps:
     categorymappings:
