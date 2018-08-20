@@ -1,11 +1,13 @@
 ---
-  site: Eltorrents
-  name: Eltorrents
-  description: "Eltorrents is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
+  site: ExtraTorrentClone
+  name: ExtraTorrentClone
+  description: "ExtraTorrentClone is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
   language: en-us
   type: public
   encoding: UTF-8
   links:
+    - https://geetorrent.com/
+  legacylinks:
     - https://eltorrents.com/
 
   caps:
