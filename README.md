@@ -228,6 +228,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
  * Red Star Torrent
+ * Redtopia (RED)
  * RevolutionTT
  * RGU
  * RoDVD
