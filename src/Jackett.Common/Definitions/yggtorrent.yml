@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://ww4.yggtorrent.is/
+    - https://www.yggtorrent.is/
   legacylinks:
     - https://yggtorrent.is/
     - https://yggtorrent.com/
@@ -14,6 +14,7 @@
     - https://ww1.yggtorrent.is/
     - https://ww2.yggtorrent.is/
     - https://ww3.yggtorrent.is/
+    - https://ww4.yggtorrent.is/
 
   caps:
     categorymappings:
