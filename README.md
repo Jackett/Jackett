@@ -111,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * bB
  * BeyondHD
  * BIGTorrent
+ * BigTower
  * Bit-City Reloaded
  * BIT-HDTV
  * Bithorlo
