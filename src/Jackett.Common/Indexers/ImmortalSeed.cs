@@ -54,6 +54,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games-PC Rips");
             AddCategoryMapping(28, TorznabCatType.ConsolePS4, "Games-PSx");
             AddCategoryMapping(49, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(59, TorznabCatType.MoviesUHD, "Movies-4k");
             AddCategoryMapping(60, TorznabCatType.MoviesForeign, "Non-English 4k Movies");
             AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movies HD");
             AddCategoryMapping(18, TorznabCatType.MoviesForeign, "Movies HD Non-English");
