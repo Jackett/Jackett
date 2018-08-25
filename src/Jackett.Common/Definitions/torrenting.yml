@@ -53,7 +53,7 @@
       q: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
     rows:
-      selector: table#torrentTable > tbody > tr:has(td.torrentNameInfo)
+      selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
     fields:
       download:
         selector: a[href^="/download.php/"]
