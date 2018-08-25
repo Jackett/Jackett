@@ -22,7 +22,7 @@
     path: /login
     method: form
     inputs:
-      username: "{{ .Config.username }}"
+      username_email: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: "on"
     error:
