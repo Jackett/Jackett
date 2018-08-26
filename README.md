@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * cpasbien
  * ETTV
  * ExtraTorrent.ag
+ * ExtraTorrentClone
  * EZTV
  * Frozen Layer
  * GkTorrent
@@ -61,7 +62,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentKim
  * Torrentz2
  * World Wide Torrents
- * YIFY (YTS)
  * YTS.ag
  * Zooqle
 
@@ -90,6 +90,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Private Trackers
  * 2 Fast 4 You
  * 3D Torrents
+ * 720pier
  * Abnormal
  * Acid-Lounge
  * AlphaRatio
@@ -110,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * bB
  * BeyondHD
  * BIGTorrent
+ * BigTower
  * Bit-City Reloaded
  * BIT-HDTV
  * Bithorlo
@@ -125,6 +127,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Brasil Tracker
  * BroadcastTheNet
  * BrokenStones
+ * BTGigs
  * BTNext
  * BTXpress
  * Carpathians
@@ -183,6 +186,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDTorrents.it
  * Hebits
  * Hon3y HD
+ * HQSource
  * Hyperay
  * ICE Torrent
  * I Love Classics
@@ -207,6 +211,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NCore
  * Nebulance
  * New Real World
+ * NordicBits
  * Norbits <!-- added by DiseaseNO but no longer maintained? -->
  * notwhat.cd
  * Ourbits
@@ -223,6 +228,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PuntoTorrent
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
+ * Red Star Torrent
  * RevolutionTT
  * RGU
  * RoDVD
@@ -335,6 +341,12 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
 
+### Installation on Linux via Ansible
+
+On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
+
+On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
+
 ## Installation on macOS
 
 ### Prerequisites
@@ -375,11 +387,10 @@ Example config for nginx:
 ```
 location /jackett {
 	proxy_pass http://127.0.0.1:9117;
-	proxy_set_header Host $host;
 	proxy_set_header X-Real-IP $remote_addr;
 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	proxy_set_header X-Forwarded-Proto $scheme;
-	proxy_set_header X-Forwarded-Host $host;
+	proxy_set_header X-Forwarded-Host $http_host;
 	proxy_redirect off;
 }
 ```

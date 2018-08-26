@@ -47,9 +47,10 @@
         filters:
           - name: split
             args: ["=", "-1"]
-          # normalize to SXXEYY format
-          - name: re_replace
-            args: ["\\b([s])?(\\d{1,3})[x\\s](\\d{1,3})", "S$2E$3"]
+          - name: re_replace # normalize to SXXEYY format
+            args: ["(?i)\\b([s])?(\\d{1,3})[x\\s](\\d{1,3})", "S$2E$3"]
+          - name: re_replace # replace web-dlmux with webdl, sonarr don't like it
+            args: ["(?i)web-?\\s?dlmux", "WEB-DL"]
       details:
         selector: td:nth-child(7) a
         attribute: href

@@ -233,6 +233,23 @@ namespace Jackett.Updater
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
+                "appsettings.Development.json",
+                "appsettings.json",
+                "CurlSharp.dll",
+                "CurlSharp.pdb",
+                "Jackett.dll",
+                "Jackett.dll.config",
+                "Jackett.pdb",
+                "Autofac.Integration.WebApi.dll",
+                "Microsoft.Owin.dll",
+                "Microsoft.Owin.FileSystems.dll",
+                "Microsoft.Owin.Host.HttpListener.dll",
+                "Microsoft.Owin.Hosting.dll",
+                "Microsoft.Owin.StaticFiles.dll",
+                "Owin.dll",
+                "System.Web.Http.dll",
+                "System.Web.Http.Owin.dll",
+                "System.Web.Http.Tracing.dll",
             };
 
             foreach (var oldFile in oldFiles)

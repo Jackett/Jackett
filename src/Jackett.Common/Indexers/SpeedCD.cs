@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "take.login.php"; } }
+        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         private new ConfigurationDataBasicLogin configData
@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("53", TorznabCatType.TVSD);
             AddCategoryMapping("41", TorznabCatType.TV);
             AddCategoryMapping("55", TorznabCatType.TV);
-            AddCategoryMapping("2", TorznabCatType.TV);
+            AddCategoryMapping("2", TorznabCatType.TVSD);
             AddCategoryMapping("30", TorznabCatType.TVAnime);
             AddCategoryMapping("25", TorznabCatType.PCISO);
             AddCategoryMapping("39", TorznabCatType.ConsoleWii);

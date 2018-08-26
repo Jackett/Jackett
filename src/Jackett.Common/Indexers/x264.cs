@@ -86,7 +86,7 @@ namespace Jackett.Common.Indexers
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
                     {
-                        throw new Exception("Your cookie did not work");
+                        throw new Exception("Your cookie did not work. You might have to change the \"Login Type\" to \"Normal\" in the x264 profile settings.");
                     }
 
                     IsConfigured = true;

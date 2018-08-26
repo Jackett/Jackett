@@ -6,18 +6,20 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://ww3.yggtorrent.is/
+    - https://www.yggtorrent.is/
   legacylinks:
     - https://yggtorrent.is/
     - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
     - https://ww1.yggtorrent.is/
     - https://ww2.yggtorrent.is/
+    - https://ww3.yggtorrent.is/
+    - https://ww4.yggtorrent.is/
 
   caps:
     categorymappings:
       - {id: 2145, cat: TV, desc: "Film/Vidéo"}
-      - {id: 2178, cat: TV/Anime, desc: "Film/Vidéo : Animation"}
+      - {id: 2178, cat: Movies, desc: "Film/Vidéo : Animation"} # changed to movies, see #3553
       - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
       - {id: 2180, cat: TV, desc: "Film/Vidéo : Concert"}
       - {id: 2181, cat: TV, desc: "Film/Vidéo : Documentaire"}

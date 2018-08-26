@@ -96,8 +96,8 @@ namespace Jackett.Server.Controllers
                 new ClaimsPrincipal(claimsIdentity),
                 new AuthenticationProperties
                 {
-                    ExpiresUtc = DateTime.UtcNow.AddMinutes(20),
-                    IsPersistent = false,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(14), //Cookie expires at end of session
+                    IsPersistent = true,
                     AllowRefresh = true
                 });
         }

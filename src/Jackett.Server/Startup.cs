@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
@@ -118,7 +117,10 @@ namespace Jackett.Server
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                // When adjusting these pareamters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                ForwardLimit = 10,
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
             });
 
             var rewriteOptions = new RewriteOptions()
@@ -128,13 +130,7 @@ namespace Jackett.Server
 
             app.UseRewriter(rewriteOptions);
 
-            app.UseFileServer(new FileServerOptions
-            {
-                FileProvider = new PhysicalFileProvider(Helper.ConfigService.GetContentFolder()),
-                RequestPath = "",
-                EnableDefaultFiles = true,
-                EnableDirectoryBrowsing = false
-            });
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

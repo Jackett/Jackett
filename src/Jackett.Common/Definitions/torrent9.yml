@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.torrent9.blue/
+    - https://ww2.torrent9.blue/
   legacylinks:
     - http://www.torrent9.ec/
     - http://www.torrent9.red/
@@ -15,6 +15,7 @@
     - http://www.torrent9.cc/
     - http://www.torrent9.pe/
     - http://www.torrent9.blue/
+    - https://www.torrent9.blue/
 
   caps:
     categorymappings:

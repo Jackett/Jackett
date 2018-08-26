@@ -177,13 +177,6 @@ namespace Jackett.Common.Indexers
         //TODO: Remove this section once users have moved off DPAPI
         private bool MigratedFromDPAPI(JToken jsonConfig)
         {
-            if (EnvironmentUtil.IsRunningLegacyOwin)
-            {
-                //Still running legacy Owin and using the DPAPI, we don't want to migrate
-                logger.Debug(ID + " - Running Owin, no need to migrate from DPAPI");
-                return false;
-            }
-
             bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("core", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 

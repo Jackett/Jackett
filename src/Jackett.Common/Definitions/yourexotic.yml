@@ -22,7 +22,7 @@
     path: /login
     method: form
     inputs:
-      username: "{{ .Config.username }}"
+      username_email: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: "on"
     error:
@@ -54,13 +54,13 @@
           - name: split
             args: ["|", 0]
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-child(5)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-child(6)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(7)
       date:
         selector: td:nth-child(3)
         filters:

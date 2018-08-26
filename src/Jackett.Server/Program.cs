@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Jackett.Server
@@ -50,7 +49,7 @@ namespace Jackett.Server
                 {
                     //TODO: Remove libcurl once off owin
                     bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-                    
+
                     if (runningOnDotNetCore)
                     {
                         options.Client = "httpclientnetcore";
@@ -108,6 +107,7 @@ namespace Jackett.Server
 
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
+            builder.AddJsonFile(Path.Combine(configurationService.GetAppDataFolder(), "appsettings.json"), optional: true);
 
             Configuration = builder.Build();
 
@@ -131,7 +131,7 @@ namespace Jackett.Server
                 try
                 {
                     logger.Debug("Creating web host...");
-                    string applicationFolder = configurationService.ApplicationFolder();
+                    string applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
                     logger.Debug($"Content root path is: {applicationFolder}");
 
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
@@ -180,10 +180,11 @@ namespace Jackett.Server
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(Configuration)
                 .UseContentRoot(contentRoot)
+                .UseWebRoot(contentRoot)
                 .UseUrls(urls)
                 .PreferHostingUrls(true)
+                .UseConfiguration(Configuration)
                 .UseStartup<Startup>()
                 .UseNLog();
     }
