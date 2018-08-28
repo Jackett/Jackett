@@ -42,7 +42,7 @@
       - path: torrents.php
         method: get
     inputs:
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       search_mode: 0
