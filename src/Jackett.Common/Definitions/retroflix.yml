@@ -51,11 +51,11 @@
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
       title:
-        selector: a[href^="details.php?id="]
-      title:
-        optional: true
-        selector: a[title][href^="details.php?id="]
-        attribute: title
+        selector: td.embedded
+        remove: img
+        filters:
+          - name: regexp
+            args: Genre:.*
       category:
         selector: a[href^="?cat="]
         attribute: href
@@ -96,6 +96,3 @@
           img.pro_free2up: "2"
           img.pro_2up: "2"
           "*": "1"
-      description:
-        selector: td:nth-child(2)
-        remove: a, img
