@@ -52,12 +52,16 @@
     fields:
       release_year:
         selector: a[href^="/torrents.php?processing="]
+      quality:
+        selector: a[href^="/torrents.php?standard="]
       title:
         selector: a[title][href^="details.php?id="]
         attribute: title
         filters:
           - name: append
             args: " {{ .Result.release_year }}"
+          - name: append
+            args: " {{ .Result.quality }}"
       category:
         selector: a[href^="?cat="]
         attribute: href
