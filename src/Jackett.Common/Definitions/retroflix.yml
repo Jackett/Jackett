@@ -22,8 +22,9 @@
       - {id: 409, cat: Other, desc: "Misc"}
       - {id: 408, cat: Audio, desc: "HQ Audio"}
     modes:
-      search: [q, imdbid]
+      search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q, imdbid]
 
   settings:
     - name: cookie
