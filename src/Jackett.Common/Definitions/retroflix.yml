@@ -53,9 +53,6 @@
       title:
         selector: td.embedded
         remove: img
-        filters:
-          - name: regexp
-            args: Genre:.*
       category:
         selector: a[href^="?cat="]
         attribute: href
