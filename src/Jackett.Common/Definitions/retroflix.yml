@@ -50,9 +50,14 @@
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
+      release_year:
+        selector: a[href^="/torrents.php?processing="]
       title:
-        selector: td.embedded
-        remove: img
+        selector: a[title][href^="details.php?id="]
+        attribute: title
+        filters:
+          - name: append
+            args: " {{ .Result.release_year }}"
       category:
         selector: a[href^="?cat="]
         attribute: href
