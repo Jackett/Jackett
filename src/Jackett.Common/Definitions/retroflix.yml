@@ -1,7 +1,7 @@
 ---
   site: retroflix
   name: RetroFlix
-  description: "RetroFlix - Oldies but Goldies"
+  description: "Private Torrent Tracker for Classic Movies / TV / General Releases."
   language: en-us
   type: private
   encoding: UTF-8
