@@ -147,18 +147,19 @@ namespace Jackett.Common.Indexers
                     CQ torrentData = row.OuterHTML;
                     CQ cells = row.Cq().Find("td");
 
-                    string title = torrentData.Find("a[class='torrent']").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[class='icos save']").First().Parent().Attr("href").Trim());
-                    Uri guid = new Uri(SiteLink + torrentData.Find("a[class='torrent']").First().Attr("href").Trim().TrimStart('/'));
+                    string title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
+                    Uri link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
+                    Uri guid = link;
                     long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    int grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
+                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
 
                     string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
                     DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     long category = 0;
-                    string cat = torrentData.Find("a[class='cat']").First().Attr("id").Trim();
+                    string cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out category);
 
                     var release = new ReleaseInfo();
@@ -168,6 +169,7 @@ namespace Jackett.Common.Indexers
                     release.Link = link;
                     release.PublishDate = publishDate;
                     release.Size = size;
+                    release.Grabs = grabs;
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
                     release.MinimumRatio = 1;

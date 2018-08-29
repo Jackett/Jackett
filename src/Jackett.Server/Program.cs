@@ -124,7 +124,7 @@ namespace Jackett.Server
 
                 ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
                 Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
+                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
 
                 isWebHostRestart = false;
 

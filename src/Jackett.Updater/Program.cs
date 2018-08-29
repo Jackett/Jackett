@@ -234,7 +234,6 @@ namespace Jackett.Updater
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
                 "appsettings.Development.json",
-                "appsettings.json",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Jackett.dll",
