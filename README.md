@@ -447,9 +447,9 @@ NOTE: msbuild is included in the mono release.
 
 NOTE: if you get the error "NU1102: Unable to find package Microsoft.AspNetCore with version (>= 2.1.2)" while restoring packages, you'll need to install it manually.https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.302-macos-x64-installer then delete the entire project directory and restart from a new clone
 
-* msbuild Jackett.Console/Jackett.Console.csproj /t:Build /p:Configuration=Debug
+* msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug
 * curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin
-* mono Jackett.Console/bin/Debug/JackettConsole.exe
+* mono Jackett.Server/bin/Debug/JackettServer.exe
 
 
 ### Linux
@@ -459,8 +459,8 @@ sudo apt install mono-complete nuget msbuild # install build tools (debian/ubunt
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 nuget restore Jackett.sln # prepare dependencies
-msbuild Jackett.Console/Jackett.Console.csproj /t:Build /p:Configuration=Debug # compile
-mono Jackett.Console/bin/Debug/JackettConsole.exe # run jackett
+msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug # compile
+mono Jackett.Server/bin/Debug/JackettServer.exe # run jackett
 ```
 
 ## Screenshots
