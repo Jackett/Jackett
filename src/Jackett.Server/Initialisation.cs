@@ -19,12 +19,6 @@ namespace Jackett.Server
                 Environment.Exit(1);
             }
 
-            if (runtimeSettings.DoSSLFix != null)
-            {
-                logger.Error("SSLFix has been deprecated, please remove it from your start arguments");
-                Environment.Exit(1);
-            }
-
             if (runtimeSettings.LogRequests)
             {
                 logger.Info("Logging enabled.");
