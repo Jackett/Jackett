@@ -114,10 +114,9 @@
         selector: dt
         remove: a
         filters:
+          - name: re_replace
+            args:  ["[^a-zA-Z\\s]+", ""]
           - name: trim
-            args: "»"
-          - name: trim
-            args: " "
       date:
         selector: dd span:nth-child(2)
         attribute: title
