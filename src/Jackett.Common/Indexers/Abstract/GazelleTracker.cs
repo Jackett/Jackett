@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers.Abstract
 {
     public abstract class GazelleTracker : BaseWebIndexer
     {
-        protected string LoginUrl { get { return SiteLink + "login.php"; } }
+        protected virtual string LoginUrl { get { return SiteLink + "login.php"; } }
         protected string APIUrl { get { return SiteLink + "ajax.php"; } }
         protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
         protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
