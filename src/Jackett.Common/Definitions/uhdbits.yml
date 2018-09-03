@@ -68,6 +68,8 @@
         remove: span, div.tags
         filters:
           - name: replace
+            args: ["\t\t\t\t", " "]
+          - name: replace
             args: [" / Free", ""]
           - name: replace
             args: [" / ViE", ""]
