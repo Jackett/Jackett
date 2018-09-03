@@ -87,10 +87,33 @@ namespace Jackett.Updater
                 {
                     var proc = Process.GetProcessById(pid);
                     logger.Info("Killing process " + proc.Id);
-                    proc.Kill();
-                    var exited = proc.WaitForExit(5000);
+
+                    // try to kill gracefully (on unix) first, see #3692
+                    var exited = false;
+                    if (Environment.OSVersion.Platform == PlatformID.Unix)
+                    {
+                        try
+                        {
+                            var startInfo = new ProcessStartInfo();
+                            startInfo.Arguments = "-15 " + pid;
+                            startInfo.FileName = "kill";
+                            Process.Start(startInfo);
+                            exited = proc.WaitForExit(5000);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e, "Error while sending SIGTERM to " + pid.ToString());
+                        }
+                        if (!exited)
+                            logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGTERM");
+                    }
                     if (!exited)
-                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds");
+                    {
+                        proc.Kill(); // send SIGKILL
+                    }
+                    exited = proc.WaitForExit(5000);
+                    if (!exited)
+                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGKILL");
                 }
                 catch (ArgumentException)
                 {
