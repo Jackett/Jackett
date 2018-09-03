@@ -96,9 +96,9 @@ namespace Jackett.Updater
                         {
                             var startInfo = new ProcessStartInfo();
                             startInfo.Arguments = "-15 " + pid;
-                            startInfo.FileName = "/bin/kill";
+                            startInfo.FileName = "kill";
                             Process.Start(startInfo);
-                            System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly).
+                            System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly), https://bugzilla.xamarin.com/show_bug.cgi?id=51742
                             exited = proc.WaitForExit(2000);
                         }
                         catch (Exception e)
