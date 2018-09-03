@@ -49,12 +49,12 @@ namespace Jackett.Common.Plumbing
                 return BuildServerConfig(ctx);
             }).As<ServerConfig>().SingleInstance();
             builder.RegisterType<HttpWebClient>();
-            
+
             // Register the best web client for the platform or the override
             switch (_runtimeSettings.ClientOverride)
             {
                 case "httpclientnetcore":
-                    // do nothing, registered by the netcore app
+                    RegisterWebClient<HttpWebClientNetCore>(builder);
                     break;
                 case "httpclient":
                     RegisterWebClient<HttpWebClient>(builder);

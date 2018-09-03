@@ -47,7 +47,6 @@ namespace Jackett.Server
             {
                 if (string.IsNullOrEmpty(options.Client))
                 {
-                    //TODO: Remove libcurl once off owin
                     bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
 
                     if (runningOnDotNetCore)
