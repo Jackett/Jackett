@@ -69,12 +69,14 @@
     paths:
       - path: "{{if .Config.filter-verified }}verified{{else}}searchA{{end}}"
     inputs:
-       f: "{{ .Query.Keywords }}"
+       f: "{{ .Keywords }}"
        safe: "{{if .Config.filter-safe }}1{{else}}0{{end}}"
+    keywordsfilters:
+      - name: prepend
+        args: "title: " # search only in title, https://torrentz2.eu/help
     rows:
       selector: "html body #wrap .results dl:has(a)"
-      filters:
-        - name: andmatch
+    # andmatch filter removed, see #3737
     fields:
       title:
         selector: dt a
