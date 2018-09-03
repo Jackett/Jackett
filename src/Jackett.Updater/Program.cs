@@ -96,16 +96,17 @@ namespace Jackett.Updater
                         {
                             var startInfo = new ProcessStartInfo();
                             startInfo.Arguments = "-15 " + pid;
-                            startInfo.FileName = "kill";
+                            startInfo.FileName = "/bin/kill";
                             Process.Start(startInfo);
-                            exited = proc.WaitForExit(5000);
+                            System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly).
+                            exited = proc.WaitForExit(2000);
                         }
                         catch (Exception e)
                         {
                             logger.Error(e, "Error while sending SIGTERM to " + pid.ToString());
                         }
                         if (!exited)
-                            logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGTERM");
+                            logger.Info("Process " + pid.ToString() + " didn't exit within 2 seconds after a SIGTERM");
                     }
                     if (!exited)
                     {
