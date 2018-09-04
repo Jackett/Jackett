@@ -65,13 +65,13 @@
         selector: a.view-torrent
         attribute: href
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
       seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      grabs:
         selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(5)
         filters:
           - name: regexp
             args: ([\d\.]+)
@@ -84,5 +84,6 @@
           "*": "1"
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double upload\"]": "2"
+          "i[data-original-title=\"Double Upload\"]": "2" # global flag
+          "i[data-original-title=\"Double upload\"]": "2" # torrent specific flag
           "*": "1"
