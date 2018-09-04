@@ -45,33 +45,39 @@ namespace Jackett.Common.Models
             }
         }
 
-        public object Clone()
+        public ReleaseInfo()
         {
-            return new ReleaseInfo()
-            {
-                Title = Title,
-                Guid = Guid,
-                Link = Link,
-                Comments = Comments,
-                PublishDate = PublishDate,
-                Category = Category,
-                Size = Size,
-                Files = Files,
-                Grabs = Grabs,
-                Description = Description,
-                RageID = RageID,
-                Imdb = Imdb,
-                TMDb = TMDb,
-                Seeders = Seeders,
-                Peers = Peers,
-                BannerUrl = BannerUrl,
-                InfoHash = InfoHash,
-                MagnetUri = MagnetUri,
-                MinimumRatio = MinimumRatio,
-                MinimumSeedTime = MinimumSeedTime,
-                DownloadVolumeFactor = DownloadVolumeFactor,
-                UploadVolumeFactor = UploadVolumeFactor
-            };
+        }
+
+        protected ReleaseInfo(ReleaseInfo copyFrom)
+        {
+            Title = copyFrom.Title;
+            Guid = copyFrom.Guid;
+            Link = copyFrom.Link;
+            Comments = copyFrom.Comments;
+            PublishDate = copyFrom.PublishDate;
+            Category = copyFrom.Category;
+            Size = copyFrom.Size;
+            Files = copyFrom.Files;
+            Grabs = copyFrom.Grabs;
+            Description = copyFrom.Description;
+            RageID = copyFrom.RageID;
+            Imdb = copyFrom.Imdb;
+            TMDb = copyFrom.TMDb;
+            Seeders = copyFrom.Seeders;
+            Peers = copyFrom.Peers;
+            BannerUrl = copyFrom.BannerUrl;
+            InfoHash = copyFrom.InfoHash;
+            MagnetUri = copyFrom.MagnetUri;
+            MinimumRatio = copyFrom.MinimumRatio;
+            MinimumSeedTime = copyFrom.MinimumSeedTime;
+            DownloadVolumeFactor = copyFrom.DownloadVolumeFactor;
+            UploadVolumeFactor = copyFrom.UploadVolumeFactor;
+        }
+
+        public virtual object Clone()
+        {
+            return new ReleaseInfo(this);
         }
 
         // ex: " 3.5  gb   "

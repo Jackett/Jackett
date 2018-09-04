@@ -104,8 +104,7 @@ namespace Jackett.Common.Models.Config
             else
             {
                 return new string[] {
-                    "http://127.0.0.1:" + Port + "/",
-                    "http://localhost:" + Port + "/",
+                    "http://127.0.0.1:" + Port + "/"
                 };
             }
         }

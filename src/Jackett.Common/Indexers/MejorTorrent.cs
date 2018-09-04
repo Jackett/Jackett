@@ -69,6 +69,8 @@ namespace Jackett.Common.Indexers
 
         public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
         {
+            query = query.Clone();
+
             var originalSearchTerm = query.SearchTerm;
             if (query.SearchTerm == null)
             {
