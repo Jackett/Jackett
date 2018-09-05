@@ -67,15 +67,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(20, TorznabCatType.MoviesHD, "Filme / 720p");
             AddCategoryMapping(10, TorznabCatType.MoviesSD, "Filme / SD");
 
-            AddCategoryMapping(43, TorznabCatType.TVUHD, "Serien / UHD");
-            AddCategoryMapping(53, TorznabCatType.TVHD, "Serien / HD");
-            AddCategoryMapping(54, TorznabCatType.TVHD, "Serien / HD");
+            AddCategoryMapping(43, TorznabCatType.TVUHD, "Serien / 2160p");
+            AddCategoryMapping(53, TorznabCatType.TVHD, "Serien / 1080p");
+            AddCategoryMapping(54, TorznabCatType.TVHD, "Serien / 720p");
             AddCategoryMapping(15, TorznabCatType.TVSD, "Serien / SD");
             AddCategoryMapping(30, TorznabCatType.TVSport, "Serien / Sport");
 
-            AddCategoryMapping(44, TorznabCatType.TVUHD, "Serienpacks / UHD");
-            AddCategoryMapping(55, TorznabCatType.TVHD, "Serienpacks / HD");
-            AddCategoryMapping(56, TorznabCatType.TVHD, "Serienpacks / HD");
+            AddCategoryMapping(44, TorznabCatType.TVUHD, "Serienpacks / 2160p");
+            AddCategoryMapping(55, TorznabCatType.TVHD, "Serienpacks / 1080p");
+            AddCategoryMapping(56, TorznabCatType.TVHD, "Serienpacks / 720p");
             AddCategoryMapping(27, TorznabCatType.TVSD, "Serienpacks / SD");
 
             AddCategoryMapping(24, TorznabCatType.AudioLossless, "Audio / Musik / FLAC");
