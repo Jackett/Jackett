@@ -1,0 +1,130 @@
+---
+  site: ncore
+  name: nCore
+  description: "nCore is a Hungarian Private site for TV / MOVIES / GENERAL"
+  language: hu-hu
+  type: private
+  encoding: UTF-8
+  links:
+    - https://ncore.cc/
+
+  caps:
+    categorymappings:
+      - {id: "xvid_hun", cat: Movies/SD, desc: "Movies SD/HU"}
+      - {id: "xvid", cat: Movies/SD, desc: "Movies SD/EN"}
+      - {id: "dvd_hun", cat: Movies/DVD, desc: "Movies DVDR/HU"}
+      - {id: "dvd", cat: Movies/DVD, desc: "Movies DVDR/EN"}
+      - {id: "dvd9_hun", cat: Movies/DVD, desc: "Movies DVD9/HU"}
+      - {id: "dvd9", cat: Movies/DVD, desc: "Movies DVD9/EN"}
+      - {id: "hd_hun", cat: Movies/HD, desc: "Movies HD/HU"}
+      - {id: "hd", cat: Movies/HD, desc: "Movies HD/EN"}
+      - {id: "xvidser_hun", cat: TV/SD, desc: "TV Shows SD/HU"}
+      - {id: "xvidser", cat: TV/SD, desc: "TV Shows SD/EN"}
+      - {id: "dvdser_hun", cat: TV/SD, desc: "TV Shows DVDR/HU"}
+      - {id: "dvdser", cat: TV/SD, desc: "TV Shows DVDR/EN"}
+      - {id: "hdser_hun", cat: TV/HD, desc: "TV Shows HD/HU"}
+      - {id: "hdser", cat: TV/HD, desc: "TV Shows HD/EN"}
+      - {id: "mp3_hun", cat: Audio/MP3, desc: "MP3/HU"}
+      - {id: "mp3", cat: Audio/MP3, desc: "MP3/EN"}
+      - {id: "lossless_hun", cat: Audio/Lossless, desc: "Lossless/HU"}
+      - {id: "lossless", cat: Audio/Lossless, desc: "Lossless/EN"}
+      - {id: "clip", cat: Audio/Other, desc: "Klip"}
+      - {id: "xxx_xvid", cat: XXX/XviD, desc: "XXX SD"}
+      - {id: "xxx_dvd", cat: XXX/DVD, desc: "XXX DVD"}
+      - {id: "xxx_imageset", cat: XXX/Imageset, desc: "XXX Imageset"}
+      - {id: "xxx_hd", cat: XXX/x264, desc: "XXX HD"}
+      - {id: "game_iso", cat: PC/Games, desc: "PC/ISO"}
+      - {id: "game_rip", cat: PC/Games, desc: "PC/RIP"}
+      - {id: "console", cat: Console, desc: "Konzol"}
+      - {id: "iso", cat: PC/ISO, desc: "Prog/ISO"}
+      - {id: "misc", cat: PC/0day, desc: "Prog/RIP"}
+      - {id: "mobil", cat: PC/Phone-Other, desc: "Prog/Mobil"}
+      - {id: "ebook_hun", cat: Books/Ebook, desc: "eBook/HU"}
+      - {id: "ebook", cat: Books/Ebook, desc: "eBook/EN"}
+
+    modes:
+      search: [q]
+      tv-search: [q]
+      movie-search: [q]
+      music-search: [q]
+
+  login:
+    path: login.php
+    method: post
+    inputs:
+      nev: "{{ .Config.username }}"
+      pass: "{{ .Config.password }}"
+      ne_leptessen_ki: "1"
+      set_lang: "hu"
+      submitted: "1"
+      submit: "Belépés!"
+    error:
+      - selector: div#tartalom>div#hibauzenet
+    test:
+      path: torrents.php
+
+  search:
+    paths:
+      - path: torrents.php
+        method: get
+    inputs:
+      $raw: "{{range .Categories}}kivalasztott_tipus[]={{.}}&{{end}}"
+      mire: "{{ .Query.Keywords }}"
+      miben: "name"
+    rows:
+      selector: .box_torrent_all > .box_torrent
+    fields:
+      title:
+        selector: div[class^="box_nagy"] > div[class^="box_nev"] div[class^="torrent_txt"] > a[href^="torrents.php?action=details&id="]
+        attribute: title
+      category:
+        selector: div[class^="box_alap_img"] > a[href^="/torrents.php?tipus="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: tipus
+      details:
+        selector: div[class^="box_nagy"] > div[class^="box_nev"] div[class^="torrent_txt"] > a[href^="torrents.php?action=details&id="]
+        attribute: href
+      comments:
+        selector: div[class^="box_nagy"] > div[class^="box_nev"] div[class^="torrent_txt"] > a[href^="torrents.php?action=details&id="]
+        attribute: href
+        filters:
+          - name: append
+            args: "#comments"
+      download:
+        selector: div[class^="box_nagy"] > div[class^="box_nev"] div[class^="torrent_txt"] > a[href^="torrents.php?action=details&id="]
+        attribute: href
+      imdb:
+        optional: true
+        selector: div[class^="box_nagy"] > div[class^="box_nev"] div[class^="torrent_txt"] a[class^="infolink"]
+        attribute: href
+      size:
+        selector: div[class^="box_nagy"] div[class^="box_meret"]
+      seeders:
+        selector: div[class^="box_nagy"] div[class^="box_s"]
+      leechers:
+        selector: div[class^="box_nagy"] div[class^="box_l"]
+      date:
+        selector: div[class^="box_nagy"] div[class^="box_feltoltve"]
+        filters:
+          - name: dateparse
+            args: "2006-01-0215:04:05"
+      downloadvolumefactor:
+        case:
+          "*": 1
+      uploadvolumefactor:
+        case:
+          "*": 1
+      minimumratio:
+        text: "1.0"
+      minimumseedtime:
+        text: "172800"
+      description:
+        optional: true
+        selector: div[class^="box_nagy"] > div[class^="box_nev"] div[class^="torrent_txt_also"] div[class^="siterank"] > span
+
+  download:
+    method: get
+    selector: div#main_tartalom .fobox_tartalom .torrent_leiras + .download > a
+    attribute: href
