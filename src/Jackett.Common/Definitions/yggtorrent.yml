@@ -129,8 +129,8 @@
 
   search:
     paths:
-      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search"
-      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&page=50"
+      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
 
     rows:
       selector: "table.table > tbody > tr"
