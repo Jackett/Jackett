@@ -125,6 +125,12 @@ namespace Jackett.Common.Indexers
                     string title = releaserow.FirstChild.TextContent;
                     title = title.Replace("SD720p1080p", "");
                     title = title.Replace(dateStr, "");
+
+                    if (title.Contains(episodeno) == false)
+                    {
+                        continue;
+                    }
+
                     DateTime releasedate;
                     if (dateStr == "Today")
                     {
