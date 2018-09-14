@@ -273,6 +273,7 @@ namespace Jackett.Updater
                 "System.Web.Http.dll",
                 "System.Web.Http.Owin.dll",
                 "System.Web.Http.Tracing.dll",
+                "Definitions/torrentkim.yml",
             };
 
             foreach (var oldFile in oldFiles)
