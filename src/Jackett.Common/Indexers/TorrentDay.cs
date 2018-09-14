@@ -37,6 +37,10 @@ namespace Jackett.Common.Indexers
             "https://www.torrentday.ru/",
             "https://www.td.af/",
             "https://torrentday.it/",
+            "https://td.findnemo.net",
+            "https://td.getcrazy.me",
+            "https://td.venom.global",
+            "https://td.workisboring.net",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
