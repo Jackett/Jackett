@@ -117,7 +117,7 @@
   login:
     method: form
     path: /
-    form: form[action$="/user/login"]
+    form: "#user-login"
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
