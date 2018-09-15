@@ -82,6 +82,7 @@ namespace Jackett.Server
                 }
             }
 
+            Initialisation.CheckEnvironmentalVariables(logger);
             Initialisation.ProcessSettings(Settings, logger);
 
             ISerializeService serializeService = new SerializeService();
