@@ -21,6 +21,10 @@ namespace Jackett.Common.Indexers
     {
         private string ApiEndpoint { get { return SiteLink + "api.php"; } }
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://horriblesubs.info/"
+        };
+
         public HorribleSubs(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
     : base(name: "Horrible Subs",
         description: "HorribleSubs &#8211; So bad yet so good",
