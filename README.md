@@ -24,7 +24,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anidex
  * Anime Tosho
  * AniRena
- * AudioBookBay (basic, 1st page scraping)
+ * AudioBookBay
  * btbit
  * BTDB
  * BT-Scene
