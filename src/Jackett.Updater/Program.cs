@@ -247,7 +247,6 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/hachede-c.yml",
-                "Definitions/hd4Free.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/czteam.yml",
