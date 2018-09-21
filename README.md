@@ -59,6 +59,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tokyo Toshokan
  * Torlock
  * Torrent Downloads
+ * TorrentGalaxy.org (TGx)
  * Torrent9
  * Torrentz2
  * World Wide Torrents
