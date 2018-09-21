@@ -16,7 +16,7 @@
       - {id: 4, cat: Books, desc: "Books"}
       - {id: 5, cat: PC/Mac, desc: "Apps"}
       - {id: 6, cat: Other, desc: "Other"}
-      - {id: 7, cat: Games, desc: "Games"}
+      - {id: 7, cat: PC/Games, desc: "Games"}
 
 
     modes:
