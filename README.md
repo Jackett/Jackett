@@ -40,6 +40,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
  * Isohunt2
+ * KATcrs
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
