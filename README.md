@@ -53,7 +53,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * RuTor
  * ShowRSS
- * SkyTorrents.lol (SkyTClone)
+ * SkyTorrentsClone
  * sukebei.Nyaa.si
  * sukebei-Pantsu
  * The Pirate Bay
@@ -62,7 +62,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * TorrentCouch
  * Torrent Downloads
- * TorrentGalaxy.org (TGx)
+ * TorrentGalaxy.org
  * Torrent9
  * Torrentz2
  * World Wide Torrents
