@@ -52,40 +52,35 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(2, TorznabCatType.PC, "Apps / Windows");
             AddCategoryMapping(13, TorznabCatType.PC, "Apps / Linux");
-            AddCategoryMapping(4, TorznabCatType.PCMac, "Apps / Mac");
+            AddCategoryMapping(4, TorznabCatType.PCMac, "Apps / MacOS");
             AddCategoryMapping(6, TorznabCatType.PC, "Apps / Misc");
 
-            AddCategoryMapping(12, TorznabCatType.PCGames, "Spiele / PC");
-            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "Spiele / PSX/PSP");
-            AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Spiele / Wii");
-            AddCategoryMapping(32, TorznabCatType.ConsoleXbox, "Spiele / XBOX");
-            AddCategoryMapping(41, TorznabCatType.ConsoleOther, "Spiele / Misc");
+            AddCategoryMapping(50, TorznabCatType.PCGames, "Spiele / Windows");
+            AddCategoryMapping(51, TorznabCatType.PCGames, "Spiele / MacOS");
+            AddCategoryMapping(52, TorznabCatType.PCGames, "Spiele / Linux");
+            AddCategoryMapping(8, TorznabCatType.ConsoleOther, "Spiele / Playstation");
+            AddCategoryMapping(7, TorznabCatType.ConsoleOther, "Spiele / Nintendo");
+            AddCategoryMapping(32, TorznabCatType.ConsoleOther, "Spiele / XBOX");
 
-            AddCategoryMapping(22, TorznabCatType.Movies3D, "Filme / 3D");
-            AddCategoryMapping(3, TorznabCatType.MoviesBluRay, "Filme / BluRay");
-            AddCategoryMapping(11, TorznabCatType.MoviesOther, "Filme / REMUX");
             AddCategoryMapping(42, TorznabCatType.MoviesUHD, "Filme / 2160p");
             AddCategoryMapping(9, TorznabCatType.MoviesHD, "Filme / 1080p");
             AddCategoryMapping(20, TorznabCatType.MoviesHD, "Filme / 720p");
-            AddCategoryMapping(21, TorznabCatType.MoviesDVD, "Filme / DVD");
             AddCategoryMapping(10, TorznabCatType.MoviesSD, "Filme / SD");
-            AddCategoryMapping(31, TorznabCatType.MoviesOther, "Filme / Anime");
 
-            AddCategoryMapping(43, TorznabCatType.TVUHD, "TV / Serien/UHD");
-            AddCategoryMapping(16, TorznabCatType.TVHD, "TV / Serien/HD");
-            AddCategoryMapping(15, TorznabCatType.TVSD, "TV / Serien/SD");
-            AddCategoryMapping(44, TorznabCatType.TVUHD, "TV / Packs/UHD");
-            AddCategoryMapping(23, TorznabCatType.TVHD, "TV / Packs/HD");
-            AddCategoryMapping(27, TorznabCatType.TVSD, "TV / Packs/SD");
-            AddCategoryMapping(28, TorznabCatType.TVDocumentary, "TV / Dokus/SD");
-            AddCategoryMapping(29, TorznabCatType.TVDocumentary, "TV / Dokus/HD");
-            AddCategoryMapping(30, TorznabCatType.TVSport, "TV / Sport");
-            AddCategoryMapping(40, TorznabCatType.TVAnime, "TV / Anime");
+            AddCategoryMapping(43, TorznabCatType.TVUHD, "Serien / 2160p");
+            AddCategoryMapping(53, TorznabCatType.TVHD, "Serien / 1080p");
+            AddCategoryMapping(54, TorznabCatType.TVHD, "Serien / 720p");
+            AddCategoryMapping(15, TorznabCatType.TVSD, "Serien / SD");
+            AddCategoryMapping(30, TorznabCatType.TVSport, "Serien / Sport");
 
-            AddCategoryMapping(24, TorznabCatType.AudioLossless, "Audio / FLAC");
-            AddCategoryMapping(25, TorznabCatType.AudioMP3, "Audio / MP3");
+            AddCategoryMapping(44, TorznabCatType.TVUHD, "Serienpacks / 2160p");
+            AddCategoryMapping(55, TorznabCatType.TVHD, "Serienpacks / 1080p");
+            AddCategoryMapping(56, TorznabCatType.TVHD, "Serienpacks / 720p");
+            AddCategoryMapping(27, TorznabCatType.TVSD, "Serienpacks / SD");
+
+            AddCategoryMapping(24, TorznabCatType.AudioLossless, "Audio / Musik / FLAC");
+            AddCategoryMapping(25, TorznabCatType.AudioMP3, "Audio / Musik / MP3");
             AddCategoryMapping(35, TorznabCatType.AudioOther, "Audio / Other");
-            AddCategoryMapping(26, TorznabCatType.Audio, "Audio / Packs");
             AddCategoryMapping(18, TorznabCatType.AudioAudiobook, "Audio / aBooks");
             AddCategoryMapping(33, TorznabCatType.AudioVideo, "Audio / Videos");
 
@@ -93,7 +88,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(5, TorznabCatType.PCPhoneOther, "Misc / Mobile");
             AddCategoryMapping(39, TorznabCatType.Other, "Misc / Bildung");
 
-            AddCategoryMapping(36, TorznabCatType.TVFOREIGN, "Englisch / TV");
+            AddCategoryMapping(36, TorznabCatType.TVFOREIGN, "Englisch / Serien");
+            AddCategoryMapping(57, TorznabCatType.TVFOREIGN, "Englisch / Serienpacks");
             AddCategoryMapping(37, TorznabCatType.MoviesForeign, "Englisch / Filme");
             AddCategoryMapping(47, TorznabCatType.Books, "Englisch / eBooks");
             AddCategoryMapping(48, TorznabCatType.Other, "Englisch / Bildung");

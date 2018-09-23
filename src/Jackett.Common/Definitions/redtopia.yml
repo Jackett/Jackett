@@ -1,0 +1,89 @@
+---
+  site: redtopia
+  name: Redtopia
+  description: "Tracker Music/Podcasts/Audiobooks"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://redtopia.xyz/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Audio, desc: "Studio Album"}
+      - {id: 2, cat: Audio, desc: "Studio Single"}
+      - {id: 3, cat: Audio, desc: "Studio Collection"}
+      - {id: 4, cat: Audio, desc: "Indie Album"}
+      - {id: 5, cat: Audio, desc: "Indie Single"}
+      - {id: 6, cat: Audio, desc: "Indie Collection"}
+      - {id: 7, cat: Audio, desc: "Live Album"}
+      - {id: 8, cat: Audio, desc: "OST"}
+      - {id: 9, cat: Audio, desc: "Podcast"}
+      - {id: 10, cat: Audio, desc: "Audio Book"}
+      - {id: 11, cat: Audio, desc: "Audio Drama"}
+
+    modes:
+      search: [q]
+      music-search: [q]
+
+  login:
+    path: /login
+    method: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table.main:contains("Login Failed!")
+    test:
+      path: /torrents
+
+  search:
+    paths:
+      - path: /filterTorrents
+    inputs:
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{ .Keywords }}"
+      uploader: ""
+      sorting: created_at
+      direction: desc
+      qty: 100
+    rows:
+      selector: table > tbody > tr
+    fields:
+      category:
+        selector: a[href*="/categories/"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "/categories/.*?\\.(\\d+)"
+      title:
+        selector: a.view-torrent
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
+      details:
+        selector: a.view-torrent
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(5)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      date:
+        selector: time
+      downloadvolumefactor:
+        case:
+          "i[data-original-title=\"100% Free\"]": "0"
+          "i[data-original-title=\"Global FreeLeech\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "i[data-original-title=\"Double Upload\"]": "2" # global flag
+          "i[data-original-title=\"Double upload\"]": "2" # torrent specific flag
+          "*": "1"

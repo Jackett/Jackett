@@ -6,13 +6,14 @@
   type: public
   encoding: UTF-8
   links:
-    - http://ww2.gktorrent.com/
+    - https://ww2.gktorrent.com/
   legacylinks:
     - https://www.gktorrent.org/  
     - http://www.gktorrent.net/
     - https://www.gktorrent.com/ # they're forcing http
     - http://www.gktorrent.com/
     - http://ww1.gktorrent.com/
+    - http://ww2.gktorrent.com/ # they're forcing https
 
   caps:
     categorymappings:

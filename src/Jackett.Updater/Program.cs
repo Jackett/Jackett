@@ -247,7 +247,6 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/hachede-c.yml",
-                "Definitions/hd4Free.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/czteam.yml",
@@ -273,6 +272,9 @@ namespace Jackett.Updater
                 "System.Web.Http.dll",
                 "System.Web.Http.Owin.dll",
                 "System.Web.Http.Tracing.dll",
+                "Definitions/torrentkim.yml",
+                "Definitions/horriblesubs.yml",
+                "Definitions/idope.yml",
             };
 
             foreach (var oldFile in oldFiles)

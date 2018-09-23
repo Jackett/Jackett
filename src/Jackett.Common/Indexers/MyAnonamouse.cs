@@ -133,7 +133,9 @@ namespace Jackett.Common.Indexers
                 { "returnto", "/" }
             };
 
-            var preRequest = await RequestStringWithCookiesAndRetry(LoginUrl, string.Empty);
+            CookieHeader = ""; // cookie reset needed in order to relogin
+
+            var preRequest = await RequestStringWithCookiesAndRetry(LoginUrl);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, SearchUrl, SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Search Results"), () =>

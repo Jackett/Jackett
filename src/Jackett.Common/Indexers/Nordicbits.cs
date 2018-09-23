@@ -321,7 +321,7 @@ namespace Jackett.Common.Indexers
                         if (torrentRowList.Count == 0)
                         {
                             // No results found
-                            Output("\nNo result found for your query, please try another search term ...\n", "info");
+                            Output("\nNo result found for your query, please try another search term or change the theme you're currently using on the site as this is an unsupported solution...\n", "info");
 
                             // No result found for this query
                             break;
@@ -678,9 +678,23 @@ namespace Jackett.Common.Indexers
         /// <returns>JQuery Object</returns>
         private CQ FindTorrentRows()
         {
-            // Return all occurencis of torrents found
-            //return _fDom["#content > table > tr"];
-            return _fDom["# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)"];
+            var defaultTheme = new[] { "/templates/1/", "/templates/2/", "/templates/3/", "/templates/4/", "/templates/5/", "/templates/6/", "/templates/11/", "/templates/12/" };
+            var oldV2 = new[] { "/templates/7/", "/templates/8/", "/templates/9/", "/templates/10/", "/templates/14/" };
+            
+            if (defaultTheme.Any(_fDom.Document.Body.InnerHTML.Contains))
+            {
+                // Return all occurencis of torrents found
+                // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
+                return _fDom["# base_content2 > div.article > table > tbody:not(:first) > tr"];
+            }
+
+            if (oldV2.Any(_fDom.Document.Body.InnerHTML.Contains))
+            {
+                // Return all occurencis of torrents found
+                // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody')
+                return _fDom["# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)"];
+            }
+            return _fDom;
         }
 
         /// <summary>

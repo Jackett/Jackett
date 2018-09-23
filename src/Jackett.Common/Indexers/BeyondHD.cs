@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
                     var grabs = qRow.Find("td:nth-child(9) > a").Get(0).FirstChild.ToString();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = 0; // ratioless
+                    release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);

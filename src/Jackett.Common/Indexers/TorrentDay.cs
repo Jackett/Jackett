@@ -37,6 +37,10 @@ namespace Jackett.Common.Indexers
             "https://www.torrentday.ru/",
             "https://www.td.af/",
             "https://torrentday.it/",
+            "https://td.findnemo.net",
+            "https://td.getcrazy.me",
+            "https://td.venom.global",
+            "https://td.workisboring.net",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
@@ -48,7 +52,7 @@ namespace Jackett.Common.Indexers
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://www.torrentday.it/",
+                link: "https://td.getcrazy.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
