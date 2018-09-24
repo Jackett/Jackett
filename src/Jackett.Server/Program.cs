@@ -47,9 +47,7 @@ namespace Jackett.Server
             {
                 if (string.IsNullOrEmpty(options.Client))
                 {
-                    bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-
-                    if (runningOnDotNetCore)
+                    if (DotNetCoreUtil.IsRunningOnDotNetCore)
                     {
                         options.Client = "httpclientnetcore";
                     }
