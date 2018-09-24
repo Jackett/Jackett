@@ -317,7 +317,7 @@
       grabs:
         selector: td.ttable_col1 > font[color^=orange]
       seeders:
-        selector: td.ttable_col1 > font[color^=green]
+        selector: td.ttable_col1 > b > font[color^=green]
       leechers:
         selector: td.ttable_col2 > font[color^=red]
       downloadvolumefactor:
