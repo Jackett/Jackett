@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers
                 { "returnto", "/" }
             };
 
-            CookieHeader = ""; // cookie reset needed in order to relogin
+            configData.CookieHeader.Cookie = ""; // cookie reset needed in order to relogin
 
             var preRequest = await RequestStringWithCookiesAndRetry(LoginUrl);
 
@@ -182,7 +182,7 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestStringWithCookiesAndRetry(urlSearch);
-            if (response.Status == System.Net.HttpStatusCode.Forbidden || CookieHeader.Contains("pass=deleted"))
+            if (response.Status == System.Net.HttpStatusCode.Forbidden || CookieHeader.Contains("pass=deleted") || response.Content.Contains("Access limits exceeded."))
             {
                 // re-login
                 await ApplyConfiguration(null);
