@@ -25,6 +25,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anime Tosho
  * AniRena
  * AudioBookBay
+ * BTstor.net
  * btbit
  * BTDB
  * BT-Scene

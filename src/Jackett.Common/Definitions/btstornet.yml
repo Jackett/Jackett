@@ -1,0 +1,78 @@
+﻿---
+  site: btstornet
+  name: BTstor.net
+  description: "BTstor.net is a Public BT-Scene clone for MOVIES / TV / GENERAL"
+  language: us-en
+  type: public
+  encoding: UTF-8
+  links:
+    - https://btstor.net/
+
+  caps:
+    categories:
+      "anime": TV/Anime
+      "books": Books
+      "games": PC/Games
+      "movies": Movies
+      "music": Audio
+      "other": Other
+      "shows": TV
+      "software": PC
+      "video": Movies
+      "xxx": XXX
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: "#dlt_"
+  
+  search:
+      # https://btstor.net/
+      # https://btstor.net/q/midnight+texas+s01e10/date/
+    keywordsfilters:
+      # replace space between keywords with + 
+      - name: re_replace
+        args: [" ", "+"]
+    paths:
+      - path: "{{ if .Keywords }}q/{{ .Keywords }}/date/{{else}}/{{end}}"
+    rows:
+      selector: table.tor > tbody > tr[class$="_tr"]
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: td.tname_index > a
+      details:
+        selector: td.tname_index > a
+        attribute: href
+      category:
+        # src="https://btstor.net/templates/btscene/images/shows.png"
+        selector: td.tname_index > img
+        attribute: src
+        filters:
+          - name: replace
+            args: [".png", ""]
+          - name: split
+            args: ["/", 6]
+      download:
+        selector: td.tname_index > a
+        attribute: href
+      size:
+        selector: td.tsize_index
+      seeders:
+        selector: td.tseeds_index
+      leechers:
+        selector: td.tpeers_index
+      date:
+        selector: td.tupd_index
+        filters:
+          - name: timeago
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
