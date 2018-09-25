@@ -156,7 +156,9 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [480p]", title);
                         release.PublishDate = releasedate;
-                        release.Link = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        var torrentlink = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        release.Link = torrentlink;
+                        release.Guid = torrentlink;
                         release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
@@ -175,7 +177,9 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [720p]", title);
                         release.PublishDate = releasedate;
-                        release.Link = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        var torrentlink = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        release.Link = torrentlink;
+                        release.Guid = torrentlink;
                         release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
@@ -194,7 +198,9 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [1080p]", title);
                         release.PublishDate = releasedate;
-                        release.Link = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        var torrentlink = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        release.Link = torrentlink;
+                        release.Guid = torrentlink;
                         release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
