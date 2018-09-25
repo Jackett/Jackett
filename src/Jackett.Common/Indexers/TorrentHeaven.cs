@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentHeaven",
                    description: "A German general tracker.",
-                   link: "https://torrentheaven.myfqdn.info/",
+                   link: "https://newheaven.nl/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
