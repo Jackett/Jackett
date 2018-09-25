@@ -35,6 +35,8 @@
       - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}new/{{end}}"
     rows:
       selector: table.data tr.odd
+      filters:
+        - name: andmatch
     fields:
       category:
         selector: span.uploader_block strong a
