@@ -1,5 +1,6 @@
 ﻿using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
@@ -121,10 +122,8 @@ namespace Jackett.Server.Services
                     logger.Error(e, "Error while reading the issue file");
                 }
 
-                bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-
                 Type monotype = Type.GetType("Mono.Runtime");
-                if (monotype != null && !runningOnDotNetCore)
+                if (monotype != null && !DotNetCoreUtil.IsRunningOnDotNetCore)
                 {
                     MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
                     var monoVersion = "unknown";

@@ -4,8 +4,6 @@ using Jackett.Common.Utils;
 using Jackett.Server.Services;
 using NLog;
 using System;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
@@ -113,8 +111,8 @@ namespace Jackett.Server
                 {
                     logger.Info("Overriding port to " + consoleOptions.Port);
                     serverConfig.Port = consoleOptions.Port;
-                    bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-                    if (isWindows)
+
+                    if (EnvironmentUtil.IsWindows)
                     {
                         if (ServerUtil.IsUserAdministrator())
                         {
@@ -137,7 +135,7 @@ namespace Jackett.Server
                 {
                     logger.Info("Overriding external access to " + consoleOptions.ListenPublic);
                     serverConfig.AllowExternal = consoleOptions.ListenPublic;
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    if (EnvironmentUtil.IsWindows)
                     {
                         if (ServerUtil.IsUserAdministrator())
                         {
