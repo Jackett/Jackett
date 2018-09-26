@@ -275,6 +275,7 @@ namespace Jackett.Updater
                 "Definitions/torrentkim.yml",
                 "Definitions/horriblesubs.yml",
                 "Definitions/idope.yml",
+                "Definitions/bt-scene.yml",
             };
 
             foreach (var oldFile in oldFiles)
