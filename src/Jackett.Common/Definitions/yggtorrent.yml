@@ -113,7 +113,8 @@
       options:
         FRENCH : "FRENCH"
         MULTI.FRENCH: "MULTI.FRENCH"
-        ENGLISH: "ENGLISH"
+        ENGLISH: "ENGLISH",
+        MULTI.ENGLISH: "MULTI.ENGLISH"
   login:
     method: form
     path: /
