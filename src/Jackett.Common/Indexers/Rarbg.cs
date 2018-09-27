@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
 
             TorznabCaps.SupportsImdbSearch = true;
 
-            webclient.requestDelay = 2.0; // 0.5 requests per second (2 causes problems)
+            webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
 
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
