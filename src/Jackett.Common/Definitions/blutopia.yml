@@ -99,7 +99,6 @@
           - name: re_replace
             args: ["(ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
-      downloadvolumefactor:
         case:
           "i[data-original-title=\"100% Free\"]": "0"
           "i[data-original-title=\"Global FreeLeech\"]": "0"
