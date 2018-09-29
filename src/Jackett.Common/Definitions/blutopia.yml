@@ -76,10 +76,11 @@
         selector: time
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"100% Free\"]": "0"
-          "i[data-original-title=\"Global FreeLeech\"]": "0"
+          "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
           "*": "1"
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double upload\"]": "2"
+          "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
           "*": "1"
