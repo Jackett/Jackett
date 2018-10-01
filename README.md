@@ -37,7 +37,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GkTorrent
  * Horrible Subs
  * IdopeClone
- * Il Corsaro Nero <!-- maintained by bonny1992 -->
+ * Il Corsaro Nero
  * Il Corsaro Blu
  * Isohunt2
  * KATcrs
@@ -45,7 +45,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
  * MagnetDL
- * MejorTorrent <!-- maintained by ivandelabeldad -->
+ * MejorTorrent
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si
  * Nyaa-Pantsu
@@ -57,7 +57,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * sukebei.Nyaa.si
  * sukebei-Pantsu
  * The Pirate Bay
- * TNTVillage <!-- maintained by bonny1992 -->
+ * TNTVillage
  * Tokyo Toshokan
  * Torlock
  * TorrentCouch
@@ -111,7 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Avistaz
  * B2S-Share
  * Back-ups
- * BakaBT  [![(invite needed)][inviteneeded]](#)
+ * BakaBT
  * bB
  * BeyondHD (BHD)
  * BIGTorrent
@@ -122,9 +122,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitHUmen
  * BitMe
  * BitMeTV
- * BitSoup  [![(invite needed)][inviteneeded]](#)
+ * BitSoup
  * Bitspyder
- * BitTorrentFiles  [![(invite needed)][inviteneeded]](#)
+ * BitTorrentFiles
  * BJ-Share
  * BlueBird
  * Blutopia (BLU)
@@ -150,7 +150,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Downloadville
  * Dragonworld Reloaded
  * Dream Team
- * EliteHD  [![(invite needed)][inviteneeded]](#)
+ * EliteHD
  * Elit Tracker
  * Elite-Tracker
  * Empornium (EMP)
@@ -273,7 +273,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent.LT
  * TorrentBD
  * TorrentBytes
- * TorrentCCF  [![(invite needed)][inviteneeded]](#)
+ * TorrentCCF
  * TorrentDay
  * Torrentech
  * TorrentHeaven
