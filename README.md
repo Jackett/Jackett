@@ -99,7 +99,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Acid-Lounge
  * AlphaRatio (AR)
  * AnimeBytes
- * AnimeTorrents
+ * AnimeTorrents (AnT)
  * AOX
  * Apollo (XANAX)
  * ArabaFenice
@@ -108,7 +108,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AST4u
  * Audiobook Torrents
  * Awesome-HD (AHD)
- * Avistaz
+ * Avistaz (AsiaTorrents)
  * B2S-Share
  * Back-ups
  * BakaBT
@@ -132,7 +132,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BroadcastTheNet (BTN)
  * BrokenStones
  * BTGigs
- * BTNext
+ * BTNext (BTNT)
  * BTXpress (BTX)
  * Carpathians
  * CCFBits
@@ -140,7 +140,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CHDBits
  * Cinematik
  * Cinemageddon
- * CinemaZ
+ * CinemaZ (EuTorrents)
  * Classix
  * DanishBits
  * DataScene
@@ -157,15 +157,15 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * eStone
  * Ethor.net (Thor's Land)
  * FANO.IN
- * FileList
+ * FileList (FL)
  * Femdomcult
  * Freedom-HD
  * FullMixMusic
  * FunFile
- * FunkyTorrents
+ * FunkyTorrents (FT)
  * Fuzer
  * GAYtorrent.ru
- * GazelleGames
+ * GazelleGames (GGn)
  * Gfxnews
  * GFXPeers
  * GigaTorrents
@@ -185,7 +185,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDBits
  * HDChina
  * HDCity
- * HDHome
+ * HDHome (HDBigger)
  * HDME
  * HDSky
  * HDTorrents.it
@@ -205,7 +205,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * LinkoManija
  * LosslessClub
  * M-Team (TP)
- * Magico
+ * Magico (Trellas)
  * Majomparádé
  * Manicomio Share
  * Mononoké-BT
@@ -216,7 +216,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NCore
  * Nebulance (NBL)
  * New Real World
- * NordicBits
+ * NordicBits (NB)
  * Norbits
  * notwhat.cd
  * Ourbits
@@ -260,11 +260,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TenYardTracker
  * The Empire
  * The Geeks
- * The Horror Charnel
+ * The Horror Charnel (THC)
  * The Occult
  * The New Retro
  * The Place
- * The Shinning
+ * The Shinning (TsH)
  * The Show
  * The Vault
  * The-Torrents
@@ -282,7 +282,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrentland
  * TorrentLeech (TL)
  * Torrents.Md
- * TorrentSeeds
+ * TorrentSeeds (TS)
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
  * TorViet
@@ -296,8 +296,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ultimate Gamer Club
  * Waffles
  * World-In-HD
- * WorldOfP2P
- * x-ite.me
+ * WorldOfP2P (WOP)
+ * x-ite.me (XM)
  * x264
  * xBytesV2
  * XSpeeds
