@@ -84,6 +84,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            query.SearchTerm = query.SearchTerm.Replace("'", "");
             var searchString = query.GetQueryString();
             var btnResults = query.Limit;
             if (btnResults == 0)
