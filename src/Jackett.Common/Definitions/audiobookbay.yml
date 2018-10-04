@@ -104,10 +104,15 @@
       title:
         selector: div.postTitle
       details:
-        selector: div.postTitle
+        selector: div.postTitle h2 a
+        attribute: href
       download:
         selector: a[href^="/audio-books/"]
         attribute: href
+      banner:
+        optional: true
+        selector: img
+        attribute: src
       category:
         selector: div.postInfo
         filters:
