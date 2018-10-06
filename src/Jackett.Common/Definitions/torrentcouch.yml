@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentcouch.net/
+  legacylinks:
     - https://torrentcouch.com/
 
   caps:
@@ -23,10 +25,12 @@
 
   search:
     # https://torrentcouch.com/?s=expanse
+    # https://torrentcouch.net/page/3/?s=expanse
     paths:
-      - path: /
-    inputs:
-      s: "{{.Keywords}}"
+      - path: "{{if .Keywords}}/?s={{ .Keywords}}{{else}}/{{end}}"
+      - path: "{{if .Keywords}}/page/2/?s={{ .Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}/page/3/?s={{ .Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}/page/4/?s={{ .Keywords}}{{else}}{{end}}"
     rows:
       selector: article
     fields:
