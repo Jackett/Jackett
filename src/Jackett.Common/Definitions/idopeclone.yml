@@ -96,9 +96,9 @@
       size:
         selector: div[class="resultdivbotton"] div[class="resultlength"] div[class="resultdivbottonlength"]
       seeders:
-        text: "999"
+        text: "1"
       leechers:
-        text: "999"
+        text: "1"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

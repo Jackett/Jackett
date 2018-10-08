@@ -205,8 +205,8 @@ namespace Jackett.Common.Indexers
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
                         release.Size = 524288000;
-                        release.Seeders = 999;
-                        release.Peers = 1998;
+                        release.Seeders = 1;
+                        release.Peers = 2;
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
                         releases.Add(release);

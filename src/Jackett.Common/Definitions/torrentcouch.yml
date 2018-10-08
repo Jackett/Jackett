@@ -49,9 +49,9 @@
       size:
         text: "500 MB"
       seeders:
-        text: "999"
+        text: "1"
       leechers:
-        text: "999"
+        text: "1"
       date:
         text: now
       downloadvolumefactor:
