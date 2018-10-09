@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
     public class Yts : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://yts.am/",
+            "https://yts.ag/",
         };
 
         private string ApiEndpoint { get { return SiteLink + "api/v2/list_movies.json"; } }
@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.ag/",
+                link: "https://yts.am/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: wc,
