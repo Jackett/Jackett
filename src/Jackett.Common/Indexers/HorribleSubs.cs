@@ -135,6 +135,13 @@ namespace Jackett.Common.Indexers
                         continue;
                     }
 
+                    // Ensure fansub group name is present in the title
+                    // This is needed for things like configuring tag restrictions in Sonarr
+                    if (title.Contains("[HorribleSubs]") == false)
+                    {
+                        title = "[HorribleSubs] " + title;
+                    }
+
                     DateTime releasedate;
                     if (dateStr == "Today")
                     {
