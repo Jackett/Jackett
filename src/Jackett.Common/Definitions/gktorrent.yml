@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - http://www.gktorrent.net/
+    - https://www.gktorrent.net/
   legacylinks:
     - https://www.gktorrent.org/  
     - https://www.gktorrent.com/
@@ -15,6 +15,7 @@
     - http://ww2.gktorrent.com/
     - https://ww2.gktorrent.com/
     - https://ww3.gktorrent.com/
+    - http://www.gktorrent.net/
 
   caps:
     categorymappings:
