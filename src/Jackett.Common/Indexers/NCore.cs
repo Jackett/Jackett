@@ -117,45 +117,9 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        protected async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, String seasonep)
+        List<ReleaseInfo> parseTorrents(WebClientStringResult results, String seasonep, TorznabQuery query, int already_founded)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var pairs = new List<KeyValuePair<string, string>>();
-
-            if (seasonep != null)
-            {
-                searchString = query.SanitizedSearchTerm;
-            }
-
-            pairs.Add(new KeyValuePair<string, string>("nyit_sorozat_resz", "true"));
-            pairs.Add(new KeyValuePair<string, string>("miben", "name"));
-            pairs.Add(new KeyValuePair<string, string>("tipus", "kivalasztottak_kozott"));
-            pairs.Add(new KeyValuePair<string, string>("submit.x", "1"));
-            pairs.Add(new KeyValuePair<string, string>("submit.y", "1"));
-            pairs.Add(new KeyValuePair<string, string>("submit", "Ok"));
-            pairs.Add(new KeyValuePair<string, string>("mire", searchString));
-
-            var cats = MapTorznabCapsToTrackers(query);
-
-            if (cats.Count == 0)
-                cats = GetAllTrackerCategories();
-
-            foreach (var lcat in LanguageCats)
-            {
-                if (!configData.Hungarian.Value)
-                    cats.Remove(lcat + "_hun");
-                if (!configData.English.Value)
-                    cats.Remove(lcat);
-            }
-
-            foreach (var cat in cats)
-            {
-                pairs.Add(new KeyValuePair<string, string>("kivalasztott_tipus[]", cat));
-            }
-
-            var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
-
             try
             {
                 CQ dom = results.Content;
@@ -163,9 +127,10 @@ namespace Jackett.Common.Indexers
                 ReleaseInfo release;
                 var rows = dom[".box_torrent_all"].Find(".box_torrent");
 
-                foreach (var row in rows)
+                // Check torrents only till we reach the query Limit 
+                for(int i=0; (i<rows.Length && (already_founded + releases.Count) < query.Limit); i++)
                 {
-                    CQ qRow = row.Cq();
+                    CQ qRow = rows[i].Cq();
 
                     var key = dom["link[rel=alternate]"].First().Attr("href").Split('=').Last();
 
@@ -173,7 +138,8 @@ namespace Jackett.Common.Indexers
                     var torrentTxt = qRow.Find(".torrent_txt, .torrent_txt2").Find("a").Get(0);
                     //if (torrentTxt == null) continue;
                     release.Title = torrentTxt.GetAttribute("title");
-                    release.Description = qRow.Find("div.siterank").Text();
+                    release.Description = qRow.Find("span").Get(0).GetAttribute("title") + " " + qRow.Find("a.infolink").Text();
+
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.DownloadVolumeFactor = 0;
@@ -203,6 +169,11 @@ namespace Jackett.Common.Indexers
                     string catlink = qRow.Find("a:has(img[class='categ_link'])").First().Attr("href");
                     string cat = ParseUtil.GetArgumentFromQueryString(catlink, "tipus");
                     release.Category = MapTrackerCatToNewznab(cat);
+
+                    /* if the release name not contains the language we add it because it is know from category */
+                    if (cat.Contains("hun") && !release.Title.Contains("hun"))
+                        release.Title += ".hun";
+
                     if (seasonep == null)
                         releases.Add(release);
         
@@ -247,6 +218,76 @@ namespace Jackett.Common.Indexers
             catch (Exception ex)
             {
                 OnParseError(results.Content, ex);
+            }
+
+            return releases;
+        }
+
+        protected async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, String seasonep)
+        {
+            var releases = new List<ReleaseInfo>();
+            var searchString = query.GetQueryString();
+            var pairs = new List<KeyValuePair<string, string>>();
+
+            if (seasonep != null)
+            {
+                searchString = query.SanitizedSearchTerm;
+            }
+
+            pairs.Add(new KeyValuePair<string, string>("nyit_sorozat_resz", "true"));
+            pairs.Add(new KeyValuePair<string, string>("miben", "name"));
+            pairs.Add(new KeyValuePair<string, string>("tipus", "kivalasztottak_kozott"));
+            pairs.Add(new KeyValuePair<string, string>("submit.x", "1"));
+            pairs.Add(new KeyValuePair<string, string>("submit.y", "1"));
+            pairs.Add(new KeyValuePair<string, string>("submit", "Ok"));
+            pairs.Add(new KeyValuePair<string, string>("mire", searchString));
+
+            var cats = MapTorznabCapsToTrackers(query);
+
+            if (cats.Count == 0)
+                cats = GetAllTrackerCategories();
+
+            foreach (var lcat in LanguageCats)
+            {
+                if (!configData.Hungarian.Value)
+                    cats.Remove(lcat + "_hun");
+                if (!configData.English.Value)
+                    cats.Remove(lcat);
+            }
+
+            foreach (var cat in cats)
+            {
+                pairs.Add(new KeyValuePair<string, string>("kivalasztott_tipus[]", cat));
+            }
+
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
+            
+
+            CQ dom = results.Content;
+            int numVal = 0;
+
+            // find pagelinks in the bottom
+            var pagelinks = dom["div[id=pager_bottom]"].Find("a");
+            if (pagelinks.Length > 0)
+            {
+                // If there are several pages find the link for the latest one
+                var last_page_link = (pagelinks[pagelinks.Length - 1].Cq().Attr("href")).Trim();
+
+                // find out the number of the last page from the link
+                Match match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
+                numVal = Int32.Parse(match.Value);
+            } 
+
+            releases = parseTorrents(results, seasonep, query, releases.Count);
+
+            // Check all the pages for the torrents.
+            // The starting index is 2. (the first one is the original where we parse out the pages.)
+            for (int i=2; (i<= numVal && releases.Count < query.Limit); i++ )
+            {
+                pairs.Add(new KeyValuePair<string, string>("oldal", i.ToString()));
+                results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
+                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count));
+                pairs.Remove(new KeyValuePair<string, string>("oldal", i.ToString()));
             }
 
             return releases;
