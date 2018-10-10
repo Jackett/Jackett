@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
 
                         // Append the quality to the title because thats how radarr seems to be determining the quality?
                         // All releases are BRRips, see issue #2200
-                        release.Title = movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + " BRRip";
+                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + " BRRip";
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
