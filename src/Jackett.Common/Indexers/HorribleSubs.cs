@@ -163,10 +163,16 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [480p]", title);
                         release.PublishDate = releasedate;
-                        var torrentlink = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                        release.Link = torrentlink;
-                        release.Guid = torrentlink;
-                        release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                        if (p480.QuerySelector(".hs-torrent-link > a") != null)
+                        {
+                            var torrentlink = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Link = torrentlink;
+                            release.Guid = torrentlink;
+                        }
+                        if (p480.QuerySelector(".hs-magnet-link > a") != null)
+                        {
+                            release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                        }
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
                         release.Size = 524288000;
@@ -184,10 +190,16 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [720p]", title);
                         release.PublishDate = releasedate;
-                        var torrentlink = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                        release.Link = torrentlink;
-                        release.Guid = torrentlink;
-                        release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                        if (p720.QuerySelector(".hs-torrent-link > a") != null)
+                        {
+                            var torrentlink = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Link = torrentlink;
+                            release.Guid = torrentlink;
+                        }
+                        if (p720.QuerySelector(".hs-magnet-link > a") != null)
+                        {
+                            release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                        }
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
                         release.Size = 524288000;
@@ -205,10 +217,16 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [1080p]", title);
                         release.PublishDate = releasedate;
-                        var torrentlink = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                        release.Link = torrentlink;
-                        release.Guid = torrentlink;
-                        release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                        if (p1080.QuerySelector(".hs-torrent-link > a") != null)
+                        {
+                            var torrentlink = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Link = torrentlink;
+                            release.Guid = torrentlink;
+                        }
+                        if (p1080.QuerySelector(".hs-magnet-link > a") != null)
+                        {
+                            release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                        }                            
                         release.Files = 1;
                         release.Category = new List<int> { TorznabCatType.TVAnime.ID };
                         release.Size = 524288000;
