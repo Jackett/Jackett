@@ -1,9 +1,9 @@
 ---
   site: RockBox
   name: RockBox Rock/Metal Tracker
-  description: "RockBox Public site dedicated to HEAVY METAL/ROCK MUSIC"
+  description: "RockBox Semi-Private site dedicated to HEAVY METAL/ROCK MUSIC. This definition is for the English site."
   language: en-us
-  type: public
+  type: semi-private
   encoding: UTF-8
   links:
     - https://rawkbawx.rocks/
@@ -16,11 +16,25 @@
       search: [q]
       music-search: [q, album, artist, label, year]
   
-  settings: []
+  login:
+    path: login.php
+    method: form
+    form: form[action="login.php?returnto=index.php"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: div.errorSummary
+        message:
+          selector: div.errorSummary ul li
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
   
   search:
     paths:
       - path: torrents.php
+        method: get
     inputs:
       search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
     rows:
@@ -31,25 +45,27 @@
       details:
         selector: td a[href^="details.php?id="]
         attribute: href
-      comments:
+      comments: # link to the comments of the torrent
         selector: td a[href^="details.php?id="]
         attribute: href
       download:
         selector: td a[href^="download.php?id="]
         attribute: href
+        filters:
+          - name: strdump # dump the HTML of each row to the log (for debugging purposes)
       date:
         selector: td:nth-child(6)
-      size:
+      size: # size of the torrent (units are handled automatically)
         selector: td:nth-child(7)
       seeders:
-        selector: td:nth-child(8)
-      leechers:
         selector: td:nth-child(9)
-      grabs:
+      leechers:
         selector: td:nth-child(10)
+      grabs: # number of downloads
+        selector: td:nth-child(11)
       category:
         text: "Music"
       downloadvolumefactor:
-        text: "0"
+        text: "1"
       uploadvolumefactor:
         text: "1"
