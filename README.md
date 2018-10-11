@@ -24,9 +24,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anidex
  * Anime Tosho
  * AniRena
+ * AudioBookBay
+ * BTstor.net
  * btbit
  * BTDB
- * BT-Scene
  * cpasbien
  * ETTV
  * ExtraTorrent.ag
@@ -35,10 +36,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Frozen Layer
  * GkTorrent
  * Horrible Subs
- * Idope
+ * IdopeClone
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
  * Isohunt2
+ * KATcrs
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
@@ -51,15 +53,17 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RARBG
  * RuTor
  * ShowRSS
+ * SkyTorrentsClone
  * sukebei.Nyaa.si
  * sukebei-Pantsu
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
  * Torlock
+ * TorrentCouch
  * Torrent Downloads
+ * TorrentGalaxy.org
  * Torrent9
- * TorrentKim
  * Torrentz2
  * World Wide Torrents
  * YTS.ag
@@ -171,6 +175,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Greek Team
  * HacheDe
  * Hardbay
+ * HD4Free (HD4)
  * HD-Forever
  * HD-Only
  * HD-Space

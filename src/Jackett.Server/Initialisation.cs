@@ -4,8 +4,6 @@ using Jackett.Common.Utils;
 using Jackett.Server.Services;
 using NLog;
 using System;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
@@ -113,8 +111,8 @@ namespace Jackett.Server
                 {
                     logger.Info("Overriding port to " + consoleOptions.Port);
                     serverConfig.Port = consoleOptions.Port;
-                    bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-                    if (isWindows)
+
+                    if (EnvironmentUtil.IsWindows)
                     {
                         if (ServerUtil.IsUserAdministrator())
                         {
@@ -137,7 +135,7 @@ namespace Jackett.Server
                 {
                     logger.Info("Overriding external access to " + consoleOptions.ListenPublic);
                     serverConfig.AllowExternal = consoleOptions.ListenPublic;
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    if (EnvironmentUtil.IsWindows)
                     {
                         if (ServerUtil.IsUserAdministrator())
                         {
@@ -150,6 +148,33 @@ namespace Jackett.Server
                         }
                     }
                     configurationService.SaveConfig(serverConfig);
+                }
+            }
+        }
+
+        public static void CheckEnvironmentalVariables(Logger logger)
+        {
+            //Check the users environmental variables to ensure they aren't using Mono legacy TLS
+
+            var enumerator = Environment.GetEnvironmentVariables().GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Key.ToString().Equals("MONO_TLS_PROVIDER", StringComparison.OrdinalIgnoreCase))
+                {
+                    logger.Info("MONO_TLS_PROVIDER is present with a value of: " + enumerator.Value.ToString());
+
+                    if (enumerator.Value.ToString().IndexOf("legacy", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        logger.Error("The MONO_TLS_PROVIDER=legacy environment variable is not supported, please remove it.");
+                        Environment.Exit(1);
+                    }
+                }
+                else
+                {
+                    if (enumerator.Key.ToString().IndexOf("MONO_", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        logger.Info($"Environment variable {enumerator.Key} is present");
+                    }
                 }
             }
         }

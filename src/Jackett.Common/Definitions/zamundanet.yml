@@ -20,6 +20,11 @@
       20: Movies/DVD
       9: XXX
       49: XXX/Other
+      6: Audio
+      30: Audio/Other
+      29: Audio/Other
+      51: Audio/Other
+      34: Audio/Lossless   
 
     modes:
       search: [q]

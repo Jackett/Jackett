@@ -62,6 +62,9 @@
   search:
     paths:
       - path: torrents.php
+    keywordsfilters: 
+      - name: re_replace
+        args: ["S(\\d{2})E(\\d{2})", "$1 $2"]
     inputs:
       search: "{{ .Keywords }}"
       category: "0"

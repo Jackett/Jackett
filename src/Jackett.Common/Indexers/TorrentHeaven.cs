@@ -19,9 +19,15 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] { 
+            "https://torrentheaven.myfqdn.info/", 
+        }; 
         private string IndexUrl { get { return SiteLink + "index.php"; } }
         private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
-        private static readonly string certificateHash = "6F5CE30D578C2A7AECFB919D0D013976D395055F";
+        private static readonly string[] certificateHashs = new string[] {
+            "6F5CE30D578C2A7AECFB919D0D013976D395055F",
+            "66096DB5FD0107E4FFBAF5EC8378EB235CADA909",
+        };
 
         private new ConfigurationDataCaptchaLogin configData
         {
@@ -32,7 +38,7 @@ namespace Jackett.Common.Indexers
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentHeaven",
                    description: "A German general tracker.",
-                   link: "https://torrentheaven.myfqdn.info/",
+                   link: "https://newheaven.nl/",
                    caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                    configService: configService,
                    client: wc,
@@ -92,7 +98,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(70, TorznabCatType.PC, "APPLICATIONS/Linux");
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");
 
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
+            foreach (var certificateHash in certificateHashs) 
+                webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash); 
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

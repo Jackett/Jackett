@@ -21,11 +21,15 @@ namespace Jackett.Common.Indexers
     {
         private string ApiEndpoint { get { return SiteLink + "api.php"; } }
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://horriblesubs.info/"
+        };
+
         public HorribleSubs(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
     : base(name: "Horrible Subs",
-        description: "HorribleSubs &#8211; So bad yet so good",
+        description: "HorribleSubs - So bad yet so good",
         link: "https://horriblesubs.info/",
-        caps: new TorznabCapabilities(),
+        caps: new TorznabCapabilities(TorznabCatType.TVAnime),
         configService: configService,
         client: wc,
         logger: l,
@@ -131,6 +135,13 @@ namespace Jackett.Common.Indexers
                         continue;
                     }
 
+                    // Ensure fansub group name is present in the title
+                    // This is needed for things like configuring tag restrictions in Sonarr
+                    if (title.Contains("[HorribleSubs]") == false)
+                    {
+                        title = "[HorribleSubs] " + title;
+                    }
+
                     DateTime releasedate;
                     if (dateStr == "Today")
                     {
@@ -152,9 +163,17 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [480p]", title);
                         release.PublishDate = releasedate;
-                        release.Link = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        var torrentlink = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        release.Link = torrentlink;
+                        release.Guid = torrentlink;
                         release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
                         release.Files = 1;
+                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
+                        release.Size = 524288000;
+                        release.Seeders = 999;
+                        release.Peers = 1998;
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
                         releases.Add(release);
                     }
 
@@ -165,9 +184,17 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [720p]", title);
                         release.PublishDate = releasedate;
-                        release.Link = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        var torrentlink = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        release.Link = torrentlink;
+                        release.Guid = torrentlink;
                         release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
                         release.Files = 1;
+                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
+                        release.Size = 524288000;
+                        release.Seeders = 999;
+                        release.Peers = 1998;
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
                         releases.Add(release);
                     }
 
@@ -178,9 +205,17 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
                         release.Title = string.Format("{0} [1080p]", title);
                         release.PublishDate = releasedate;
-                        release.Link = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        var torrentlink = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                        release.Link = torrentlink;
+                        release.Guid = torrentlink;
                         release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
                         release.Files = 1;
+                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
+                        release.Size = 524288000;
+                        release.Seeders = 1;
+                        release.Peers = 2;
+                        release.DownloadVolumeFactor = 0;
+                        release.UploadVolumeFactor = 1;
                         releases.Add(release);
                     }
 

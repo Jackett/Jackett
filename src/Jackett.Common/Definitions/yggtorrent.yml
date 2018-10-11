@@ -6,15 +6,17 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://www.yggtorrent.is/
+    - https://www3.yggtorrent.to/
   legacylinks:
     - https://yggtorrent.is/
     - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
+    - https://www.yggtorrent.is/
     - https://ww1.yggtorrent.is/
     - https://ww2.yggtorrent.is/
     - https://ww3.yggtorrent.is/
     - https://ww4.yggtorrent.is/
+    - https://yggtorrent.to/
 
   caps:
     categorymappings:
@@ -113,10 +115,11 @@
         FRENCH : "FRENCH"
         MULTI.FRENCH: "MULTI.FRENCH"
         ENGLISH: "ENGLISH"
+        MULTI.ENGLISH: "MULTI.ENGLISH"
   login:
     method: form
     path: /
-    form: form[action$="/user/login"]
+    form: "#user-login"
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
@@ -129,8 +132,8 @@
 
   search:
     paths:
-      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search"
-      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&page=50"
+      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "/engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
 
     rows:
       selector: "table.table > tbody > tr"

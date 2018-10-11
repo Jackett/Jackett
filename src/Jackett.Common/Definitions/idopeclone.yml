@@ -1,20 +1,18 @@
 ---
-  site: idope
-  name: Idope
-  description: "iDope is a Public torrent search engine presenting direct magnet links"
+  site: idopeclone
+  name: IdopeClone
+  description: "This Clone of iDope is a Public torrent search engine"
   language: en-us
   type: public
   encoding: UTF-8
   links:
-    - https://idope.cc/
-  legacylinks:
-    - https://idope.se/
+    - https://idope.top/
 
   caps:
     categorymappings:
       - {id: 0, cat: Other, desc: "Others"}
       - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: Other, desc: "Video"}
+      - {id: 2, cat: Other, desc: "Videos"}
       - {id: 3, cat: TV, desc: "TV"}
       - {id: 4, cat: TV/Anime, desc: "Anime"}
       - {id: 5, cat: XXX, desc: "XXX"}
@@ -39,33 +37,36 @@
 
   search:
     paths:
-      # present trending results if there are no search parms supplied
-      # sort torrent-list by age in descending order
-      - path: "{{if .Keywords}}torrent-list/{{ .Keywords}}?&o=-3&c={{range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
+      - path: "{{if .Keywords}}search/{{ .Keywords}}/{{else}}recent-torrents/{{end}}"
     rows:
       selector: div[class="resultdiv"]
+      filters:
+        - name: andmatch
     fields:
       title:
-        selector: div[class="resultdivtop"] a div[class="resultdivtopname"]
+        selector: div[class="resultdivtop"] div[class="resultdivtopname"]
+      details:
+        selector: div[class="resultdivbotton"] div[class="magneticdiv"] a
+        attribute: href
       category:
         optional: true
-        selector:  div[class="resultdivbotton"] div[class="resultdivbottoncategory"]
+        selector: div[class="resultdivbotton"] div[class="resultdivbottoncategory"]
         case:
-          ":contains(\"Others\")": 0
+          ":contains(\"Other\")": 0
           ":contains(\"Movies\")": 1
           ":contains(\"Video\")": 2
           ":contains(\"TV\")": 3
           ":contains(\"Anime\")": 4
+          ":contains(\"xxx\")": 5
           ":contains(\"XXX\")": 5
+          ":contains(\"Adult\")": 5
           ":contains(\"Music\")": 6
           ":contains(\"Games\")": 7
           ":contains(\"Apps\")": 8
+          ":contains(\"Software\")": 8
           ":contains(\"Books\")": 9
-      details:
-        selector: div[class="resultdivtop"] a
-        attribute: href
       download-itorrents:
-        selector: div[class="resultdivbotton"] div[id^="hideinfohash"]
+        selector: div[class="resultdivbotton"] div[class="resultseed"] div[class="resultdivbottonseed"]
         filters:
           - name: toupper
           - name: prepend
@@ -80,7 +81,7 @@
           - name: validfilename
           - name: urlencode
       magnet:
-        selector: div[class="resultdivbotton"] div[id^="hideinfohash"]
+        selector: div[class="resultdivbotton"] div[class="resultseed"] div[class="resultdivbottonseed"]
         filters:
           - name: prepend
             args: "magnet:?xt=urn:btih:"
@@ -95,9 +96,9 @@
       size:
         selector: div[class="resultdivbotton"] div[class="resultlength"] div[class="resultdivbottonlength"]
       seeders:
-        selector: div[class="resultdivbotton"] div[class="resultseed"] div[class="resultdivbottonseed"]
-      files:
-        selector: div[class="resultdivbotton"] div[class="resultfile"] div[class="resultdivbottonfiles"]
+        text: "1"
+      leechers:
+        text: "1"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
