@@ -50,6 +50,6 @@
       category:
         text: "Music"
       downloadvolumefactor:
-        text: "0"
+        text: "1"
       uploadvolumefactor:
         text: "1"
