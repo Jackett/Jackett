@@ -34,10 +34,6 @@
     test:
       path: browse.php
       selector: a[href="logout.php"]
-      
-  download:
-    selector: a[href^="download2.php?id="]
-    attribute: href
   
   search:
     paths:
@@ -47,15 +43,6 @@
       "search": "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
     rows:
       selector: table.torrents_table tbody tr
-      filters: # optional list of row filter
-        - name: andmatch # The andmatch filter will make sure that only torrents which
-                         # contain all words from the search string are returned.
-                         # This is helpful if the tracker returns a lot of unrelated
-                         # search results.
-          args: 66 # optional argument, the maximum length of the search string which 
-                   # should be compared. Specify this if the trackers cuts of the
-                   # torrent name after a certain amount of characters.
-        - name: strdump # dump the HTML of each row to the log (for debugging purposes)
     fields:
       title:
         selector: td a[href^="details.php?id="]
