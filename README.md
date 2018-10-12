@@ -50,6 +50,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
+ * ProStyleX
  * RARBG
  * RuTor
  * ShowRSS
