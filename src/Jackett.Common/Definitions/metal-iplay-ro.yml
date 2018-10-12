@@ -1,12 +1,12 @@
 ---
   site: metaliplayro
-  name: metal.iplay.ro
-  description: "Romanian Metal Torrent is a Semi-Private site dedicated to METAL MUSIC. This definition is for the English site."
+  name: Romanian Metal Torrent
+  description: "Romanian Metal Torrent is a Private site dedicated to METAL MUSIC. This definition is for the English site."
   language: en-us
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
-    - http://metal.iplay.ro/
+    - https://metal.stream.bike/
 
   caps:
     categories:
@@ -35,6 +35,19 @@
       path: browse.php
       selector: a[href="logout.php"]
   
+  ratio:
+    path: browse.php
+    selector: img:contains("Ratio =") > img
+  
+  download:
+    method: get
+    before:
+      path: "login.php"
+      method: "post"
+      inputs:
+        username: "{{ .Config.username }}"
+        password: "{{ .Config.password }}"
+
   search:
     paths:
       - path: browse.php
@@ -52,14 +65,19 @@
       download:
         selector: td a[href^="download2.php?id="]
         attribute: href
-      banner: # link to a banner image (cover, etc.)
-        optional: true # don't fail if the selector doesn't match
+        filters:
+          - name: replace
+            args: ["download2.php?id=", "download.php/"]
+          - name: append
+            args: "/{{ .Result.title }}.torrent"
+      banner:
+        optional: true
         selector: td:nth-child(2) a
         attribute: onmouseover
         filters:
           - name: regexp
             args: src=\\'(.+?)\\'
-          - name: replace # replace dummy image with empty string
+          - name: replace
             args: ["./pic/noposter.jpg", ""]
       date:
         selector: td:nth-child(8) > span
@@ -70,14 +88,20 @@
         selector: td:nth-child(7)
         filters:
           - name: regexp
-            args: '([\d]+) seeders' # get the first number from the result
+            args: '([\d]+) seeders'
       leechers:
         selector: td:nth-child(7)
         filters:
           - name: regexp
-            args: '([\d]+) leechers' # get the first number from the result
-      grabs: # number of downloads
+            args: '([\d]+) leechers'
+      grabs:
         selector: td:nth-child(6)
         filters:
           - name: regexp
-            args: '([\d]+) times' # get the first number from the result
+            args: '([\d]+) times'
+      category:
+        text: "Music"
+      downloadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        text: "1"
