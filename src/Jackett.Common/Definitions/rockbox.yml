@@ -51,8 +51,6 @@
       download:
         selector: td a[href^="download.php?id="]
         attribute: href
-        filters:
-          - name: strdump # dump the HTML of each row to the log (for debugging purposes)
       date:
         selector: td:nth-child(6)
       size: # size of the torrent (units are handled automatically)
