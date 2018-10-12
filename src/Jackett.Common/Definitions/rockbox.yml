@@ -1,0 +1,55 @@
+---
+  site: RockBox
+  name: RockBox Rock/Metal Tracker
+  description: "RockBox Public site dedicated to HEAVY METAL/ROCK MUSIC"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://rawkbawx.rocks/
+
+  caps:
+    categories:
+      "Music": Audio
+
+    modes:
+      search: [q]
+      music-search: [q, album, artist, label, year]
+  
+  settings: []
+  
+  search:
+    paths:
+      - path: torrents.php
+    inputs:
+      search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    rows:
+      selector: body:nth-child(2) tbody tr td:nth-child(2) table.lista tbody tr:nth-child(2) table.lista tbody tr
+    fields:
+      title:
+        selector: td a[href^="details.php?id="]
+      details:
+        selector: td a[href^="details.php?id="]
+        attribute: href
+      comments:
+        selector: td a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: td a[href^="download.php?id="]
+        attribute: href
+      date:
+        selector: td:nth-child(6)
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      grabs:
+        selector: td:nth-child(10)
+      category:
+        text: "Music"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
