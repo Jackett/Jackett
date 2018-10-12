@@ -240,6 +240,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RevolutionTT
  * RGU
  * RoDVD
+ * Romanian Metal Torrent
  * SceneFZ
  * SceneReactor
  * SceneTime
