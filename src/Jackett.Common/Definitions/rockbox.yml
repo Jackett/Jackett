@@ -53,6 +53,8 @@
         attribute: href
       date:
         selector: td:nth-child(6)
+        filters:
+          - name: fuzzytime
       size: # size of the torrent (units are handled automatically)
         selector: td:nth-child(7)
       seeders:
