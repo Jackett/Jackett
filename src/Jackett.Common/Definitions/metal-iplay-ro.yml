@@ -76,7 +76,7 @@
         attribute: onmouseover
         filters:
           - name: regexp
-            args: src=\\'(.+?)\\'
+            args: 'img src=(.+?) >'
           - name: replace
             args: ["./pic/noposter.jpg", ""]
       date:
