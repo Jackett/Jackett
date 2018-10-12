@@ -101,7 +101,12 @@
             args: '([\d]+) times'
       category:
         text: "Music"
-      downloadvolumefactor:
-        text: "1"
+      downloadvolumefactor: 
+        case:
+          img[src$="pic/freedownload.gif"]: "0" 
+          img[src$="pic/half.gif"]: "0.5"
+          "*": "1"
       uploadvolumefactor:
-        text: "1"
+        case:
+          img[src$="pic/sticky2.gif"]: "1.5"
+          "*": "1"
