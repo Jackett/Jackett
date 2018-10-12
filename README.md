@@ -51,7 +51,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa-Pantsu
  * Nyoo
  * RARBG
- * RockBox
  * RuTor
  * ShowRSS
  * SkyTorrentsClone
@@ -85,6 +84,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Newstudio
  * NetHD
  * NoName Club
+ * RockBox
  * RuTracker
  * SkTorrent
  * Union Fansub
@@ -240,6 +240,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RevolutionTT
  * RGU
  * RoDVD
+ * Romanian Metal Torrent
  * SceneFZ
  * SceneReactor
  * SceneTime
