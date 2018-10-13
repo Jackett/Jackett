@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * cpasbien
  * ETTV
+ * EliteTorrent.biz
  * ExtraTorrent.ag
  * ExtraTorrentClone
  * EZTV
