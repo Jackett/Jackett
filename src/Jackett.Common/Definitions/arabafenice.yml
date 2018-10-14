@@ -101,6 +101,13 @@
   search:
     paths:
       - path: index.php
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
       page: "torrents"
