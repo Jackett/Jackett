@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -155,19 +155,22 @@ namespace Jackett.Common.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+                    
+                    int tdIndex = 0;
+                    if(qRow.Find("td:nth-last-child(1)").Text() == "Edit") tdIndex = 1;
 
                     // Sometimes the uploader column is missing
                     int seeders, peers;
-                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-last-child(3)").Text(), out seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-last-child(2)").Text(), out peers))
+                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-last-child(1)").Text());
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text());
 
                     string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
