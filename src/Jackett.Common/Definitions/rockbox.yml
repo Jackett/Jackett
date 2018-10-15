@@ -51,12 +51,20 @@
       download:
         selector: td a[href^="download.php?id="]
         attribute: href
+      # dates come in two flavours:
       date:
         # 13/10/2018
         selector: td:nth-child(6):contains("/")
         optional: true
         filters:
           - name: dateparse
+            #args: "02/01/2006"
+      date:
+        # 1 hour ago, 2 days ago, 3 weeks ago etc
+        selector: td:nth-child(6):not(:contains("/"))
+        optional: true
+        filters:
+          - name: timeago
       size:
         selector: td:nth-child(7)
       seeders:
