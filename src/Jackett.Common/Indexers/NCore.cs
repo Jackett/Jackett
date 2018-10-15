@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        List<ReleaseInfo> parseTorrents(WebClientStringResult results, String seasonep, TorznabQuery query, int already_founded)
+        List<ReleaseInfo> parseTorrents(WebClientStringResult results, String seasonep, TorznabQuery query, int already_founded, int limit)
         {
             var releases = new List<ReleaseInfo>();
             try
@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
                 var rows = dom[".box_torrent_all"].Find(".box_torrent");
 
                 // Check torrents only till we reach the query Limit 
-                for(int i=0; (i<rows.Length && (already_founded + releases.Count) < query.Limit); i++)
+                for(int i=0; (i<rows.Length && ((already_founded + releases.Count) < limit )); i++)
                 {
                     CQ qRow = rows[i].Cq();
 
@@ -276,17 +276,21 @@ namespace Jackett.Common.Indexers
                 // find out the number of the last page from the link
                 Match match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
                 numVal = Int32.Parse(match.Value);
-            } 
+            }
 
-            releases = parseTorrents(results, seasonep, query, releases.Count);
+            var limit = query.Limit;
+            if (limit == 0)
+                limit = 100;
+
+            releases = parseTorrents(results, seasonep, query, releases.Count, limit);
 
             // Check all the pages for the torrents.
             // The starting index is 2. (the first one is the original where we parse out the pages.)
-            for (int i=2; (i<= numVal && releases.Count < query.Limit); i++ )
+            for (int i=2; (i<= numVal && releases.Count < limit); i++ )
             {
                 pairs.Add(new KeyValuePair<string, string>("oldal", i.ToString()));
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
-                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count));
+                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count, limit));
                 pairs.Remove(new KeyValuePair<string, string>("oldal", i.ToString()));
             }
 
