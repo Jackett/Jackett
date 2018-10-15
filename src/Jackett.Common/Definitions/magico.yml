@@ -137,26 +137,26 @@
     error:
       - selector: div#show_error font
     rows:
-      selector: div#content > div.torrent-box[id^="torrent_"], tr:has(a[href*="?p=torrents&pid=10&action=details"])
+      selector: div#content > div.torrent-box[id^="torrent_"], tr:has(a[href*="?p=torrents"][href*="&action=details"])
       filters:
         - name: andmatch
     fields:
       title:
-        selector: a[href*="?p=torrents&pid=10&action=details"]
+        selector: a[href*="?p=torrents"][href*="&action=details"]
         filters:
           - name: replace
             args: ["Grey's Anatomy", "Greys Anatomy"]
       category:
-        selector: a[href*="?p=torrents&pid=10&cid="]
+        selector: a[href*="?p=torrents"][href*="&cid="]
         attribute: href
         filters:
           - name: querystring
             args: cid
       details:
-        selector: a[href*="?p=torrents&pid=10&action=details"]
+        selector: a[href*="?p=torrents"][href*="&action=details"]
         attribute: href
       download:
-        selector: a[href*="?p=torrents&pid=10&action=download"]
+        selector: a[href*="?p=torrents"][href*="&action=download"]
         attribute: href
       imdb:
         optional: true
