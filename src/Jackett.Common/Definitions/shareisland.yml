@@ -71,6 +71,7 @@
       pwd: "{{ .Config.password }}"
     error:
       - selector: div.error
+      - selector: body:has(h1:contains("403 Forbidden")) # for banned IP notices
     test:
       path: /index.php
       selector: a[href="logout.php"]
