@@ -38,28 +38,40 @@
     inputs:
       search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
     rows:
-      selector: body:nth-child(2) tbody tr td:nth-child(2) table.lista tbody tr:nth-child(2) table.lista tbody tr
+      selector: tr:has(a[href^="download.php?id="])
     fields:
       title:
         selector: td a[href^="details.php?id="]
       details:
         selector: td a[href^="details.php?id="]
         attribute: href
-      comments: # link to the comments of the torrent
+      comments:
         selector: td a[href^="details.php?id="]
         attribute: href
       download:
         selector: td a[href^="download.php?id="]
         attribute: href
+      # dates come in two flavours:
       date:
-        selector: td:nth-child(6)
-      size: # size of the torrent (units are handled automatically)
+        # 13/10/2018
+        selector: td:nth-child(6):contains("/")
+        optional: true
+        filters:
+          - name: dateparse
+            #args: "02/01/2006"
+      date:
+        # 1 hour ago, 2 days ago, 3 weeks ago etc
+        selector: td:nth-child(6):not(:contains("/"))
+        optional: true
+        filters:
+          - name: timeago
+      size:
         selector: td:nth-child(7)
       seeders:
         selector: td:nth-child(9)
       leechers:
         selector: td:nth-child(10)
-      grabs: # number of downloads
+      grabs:
         selector: td:nth-child(11)
       category:
         text: "Music"
