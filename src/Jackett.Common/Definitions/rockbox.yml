@@ -58,7 +58,7 @@
         optional: true
         filters:
           - name: dateparse
-            #args: "02/01/2006"
+            args: "02/01/2006"
       date:
         # 1 hour ago, 2 days ago, 3 weeks ago etc
         selector: td:nth-child(6):not(:contains("/"))
