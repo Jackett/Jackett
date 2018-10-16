@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://metal.iplay.ro/
+  legacylinks:
     - https://metal.stream.bike/
 
   caps:
