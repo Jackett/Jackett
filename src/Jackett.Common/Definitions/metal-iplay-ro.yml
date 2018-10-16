@@ -90,12 +90,12 @@
         selector: td:nth-child(7)
         filters:
           - name: regexp
-            args: '([\d]+) seeders'
+            args: '([\d]+) seeders?'
       leechers:
         selector: td:nth-child(7)
         filters:
           - name: regexp
-            args: '([\d]+) leechers'
+            args: '([\d]+) leechers?'
       grabs:
         selector: td:nth-child(6)
         filters:
