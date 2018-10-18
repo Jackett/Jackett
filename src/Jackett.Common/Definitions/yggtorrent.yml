@@ -116,6 +116,10 @@
         MULTI.FRENCH: "MULTI.FRENCH"
         ENGLISH: "ENGLISH"
         MULTI.ENGLISH: "MULTI.ENGLISH"
+    - name: vostfr
+      type: checkbox
+      label: Replace VOSTFR with ENGLISH
+      default:  false
   login:
     method: form
     path: /
@@ -166,8 +170,15 @@
         filters:
           - name: re_replace
             args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
-      title:
+      title_phase2:
         text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
+      title_vostfr:
+        text: "{{ .Result.title_phase2 }}"
+        filters:
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-][Vv][Oo][Ss][Tt][Ff][Rr][\\.\\s\\]\\-]", ".ENGLISH."]
+      title:
+        text: "{{if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
       details:
         selector: ":nth-child(2) > a"
         attribute: href
