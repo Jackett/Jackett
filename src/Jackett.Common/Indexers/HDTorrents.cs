@@ -133,10 +133,10 @@ namespace Jackett.Common.Indexers
                 CQ dom = results.Content;
                 ReleaseInfo release;
 
-                CQ userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0];
-                var rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
-                string[] freeleechRanks = {"VIP", "Uploader", "HD Internal", "Moderator", "Administrator", "Owner"};
-                var hasFreeleech = freeleechRanks.contains(rank);
+                CQ userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
+                string rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
+                string[] freeleechRanks = { "VIP", "Uploader", "HD Internal", "Moderator", "Administrator", "Owner" };
+                bool hasFreeleech = freeleechRanks.Contains(rank);
 
                 var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
                 foreach (var row in rows)
