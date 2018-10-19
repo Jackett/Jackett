@@ -10,7 +10,6 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -177,10 +176,9 @@ namespace Jackett.Common.Indexers
         //TODO: Remove this section once users have moved off DPAPI
         private bool MigratedFromDPAPI(JToken jsonConfig)
         {
-            bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("core", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
-            if (!isWindows && runningOnDotNetCore)
+            if (!isWindows && DotNetCoreUtil.IsRunningOnDotNetCore)
             {
                 // User isn't running Windows, but is running on .NET Core framework, no access to the DPAPI, so don't bother trying to migrate
                 return false;
@@ -574,6 +572,11 @@ namespace Jackett.Common.Indexers
                 )
             {
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The tracker seems to be down.");
+            }
+
+            if (response.Status == System.Net.HttpStatusCode.Forbidden && response.Content.Contains("<span data-translate=\"complete_sec_check\">Please complete the security check to access</span>"))
+            {
+                throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The page is protected by an Cloudflare reCaptcha. The page is in aggressive DDoS mitigation mode or your IP might be blacklisted (e.g. in case of shared VPN IPs). There's no easy way of making it usable with Jackett.");
             }
         }
 

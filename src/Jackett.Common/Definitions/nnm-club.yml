@@ -9,6 +9,20 @@
     - https://nnm-club.me/
   legacylinks:
     - https://nnm-club.name/
+  certificates:
+    - 7877113458e90f3643dd28424657a29469f5dc55
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: striprussian
+      type: checkbox
+      label: Strip Russian Letters
+      default: true
 
   caps:
     categorymappings:
@@ -724,7 +738,7 @@
           - name: re_replace
             args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3) RUS"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", ""]
+            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
           - name: replace

@@ -9,10 +9,14 @@ namespace Jackett.Common.Indexers
 {
     public class TehConnectionMe : GazelleTracker
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://tehconnection.me/",
+        };
+
         public TehConnectionMe(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "TehConnection.me",
                 desc: "A movies tracker",
-                link: "https://tehconnection.me/",
+                link: "https://anthelion.me/",
                 configService: configService,
                 logger: logger,
                 protectionService: protectionService,
