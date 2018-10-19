@@ -100,7 +100,7 @@
         selector: a[href^="download.php?id="]
         attribute: href
       title: # shortened title?
-        selector: a[href^="index.php?page=torrent-details"]
+        selector: td:nth-child(2)
         filters:
           - name: re_replace # replace special characters with " " (space)
             args: ["[^a-zA-Z0-9\\s]|\\.", " "]
@@ -125,7 +125,7 @@
             args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       title: # long titles?
         optional: true
-        selector: a[title][href^="index.php?page=torrent-details"]
+        selector: td:nth-child(2)
         attribute: title
         filters:
           - name: re_replace # replace special characters with " " (space)
