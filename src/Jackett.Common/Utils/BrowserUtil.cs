@@ -11,11 +11,11 @@ namespace Jackett.Common.Utils
                 // When updating these make sure they are not detected by the incapsula bot detection engine (e.g. kickasstorrent indexer)
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                 {
-                    return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+                    return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
                 }
                 else
                 {
-                    return "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) 63.0.3239.132 Safari/537.36";
+                    return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
                 }
             }
         }
