@@ -135,16 +135,15 @@ namespace Jackett.Common.Indexers
 
                 CQ userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
                 string rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
-                Console.WriteLine(rank);
-                HashSet<string> hs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                hs.Add("VIP");
-                hs.Add("Uploader");
-                hs.Add("HD Internal");
-                hs.Add("Moderator");
-                hs.Add("Administrator");
-                hs.Add("Owner");
-                bool hasFreeleech = hs.Contains(rank);
-                Console.WriteLine(hasFreeleech);
+
+                HashSet<string> freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                freeleechRanks.Add("VIP");
+                freeleechRanks.Add("Uploader");
+                freeleechRanks.Add("HD Internal");
+                freeleechRanks.Add("Moderator");
+                freeleechRanks.Add("Administrator");
+                freeleechRanks.Add("Owner");
+                bool hasFreeleech = freeleechRanks.Contains(rank);
 
                 var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
                 foreach (var row in rows)
