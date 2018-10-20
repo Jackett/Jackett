@@ -133,6 +133,18 @@ namespace Jackett.Common.Indexers
                 CQ dom = results.Content;
                 ReleaseInfo release;
 
+                CQ userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
+                string rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
+
+                HashSet<string> freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                freeleechRanks.Add("VIP");
+                freeleechRanks.Add("Uploader");
+                freeleechRanks.Add("HD Internal");
+                freeleechRanks.Add("Moderator");
+                freeleechRanks.Add("Administrator");
+                freeleechRanks.Add("Owner");
+                bool hasFreeleech = freeleechRanks.Contains(rank);
+
                 var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
                 foreach (var row in rows)
                 {
@@ -193,6 +205,8 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }
+                    else if(hasFreeleech)
+                        release.DownloadVolumeFactor = 0;
                     else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.5;
                     else if (qRow.Find("img[alt=\"Bronze Torrent\"]").Length >= 1)
