@@ -221,8 +221,9 @@ namespace Jackett.Common.Indexers
                     if (imdbLink.Any())
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink.Attr("href"));
 
-                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+                    var sizeFileCountRowChilds = row.ChildElements.ElementAt(5).ChildElements;
+                    release.Size = ReleaseInfo.GetBytes(sizeFileCountRowChilds.ElementAt(0).Cq().Text());
+                    release.Files = ParseUtil.CoerceInt(sizeFileCountRowChilds.ElementAt(2).Cq().Text());
 
                     release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text());
                     release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text()) + release.Seeders;
