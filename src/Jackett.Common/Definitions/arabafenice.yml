@@ -101,6 +101,13 @@
   search:
     paths:
       - path: index.php
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
       page: "torrents"
@@ -115,6 +122,21 @@
         attribute: href
       title:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        filters:
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
       banner:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         attribute: onmouseover

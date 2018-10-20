@@ -25,7 +25,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}q/test/{{end}}"
       - path: "{{if .Keywords}}q/{{ .Keywords}}/2?sort=time{{else}}{{end}}"
       - path: "{{if .Keywords}}q/{{ .Keywords}}/3?sort=time{{else}}{{end}}"
       - path: "{{if .Keywords}}q/{{ .Keywords}}/4?sort=time{{else}}{{end}}"

@@ -6,99 +6,75 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.idope.site/
+  legacylinks:
     - https://idope.top/
 
   caps:
     categorymappings:
-      - {id: 0, cat: Other, desc: "Others"}
-      - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: Other, desc: "Videos"}
-      - {id: 3, cat: TV, desc: "TV"}
-      - {id: 4, cat: TV/Anime, desc: "Anime"}
-      - {id: 5, cat: XXX, desc: "XXX"}
-      - {id: 6, cat: Audio, desc: "Music"}
-      - {id: 7, cat: PC/Games, desc: "Games"}
-      - {id: 8, cat: PC, desc: "Apps"}
-      - {id: 9, cat: Books, desc: "Books"}
+      - {id: other, cat: Other, desc: "Others"}
+      - {id: movies, cat: Movies, desc: "Movies"}
+      - {id: videos, cat: Other, desc: "Videos"}
+      - {id: tv, cat: TV, desc: "TV"}
+      - {id: anime, cat: TV/Anime, desc: "Anime"}
+      - {id: xxx, cat: XXX, desc: "XXX"}
+      - {id: adult, cat: XXX, desc: "XXX"}
+      - {id: music, cat: Audio, desc: "Music"}
+      - {id: games, cat: PC/Games, desc: "Games"}
+      - {id: apps, cat: PC/0day, desc: "Apps"}
+      - {id: applications, cat: PC/0day, desc: "Apps"}
+      - {id: android, cat: PC/Phone-Android, desc: "Android"}
+      - {id: software, cat: PC/0day, desc: "Apps"}
+      - {id: books, cat: Books, desc: "Books"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings:
-    - name: itorrents-links
-      type: checkbox
-      label: Add download links via itorrents.org
-    - name: info
-      type: info
-      label: ITorrents Note
-      default: Without the itorrents option only magnet links will be provided.
+  settings: []
 
   search:
     paths:
-      - path: "{{if .Keywords}}search/{{ .Keywords}}/{{else}}recent-torrents/{{end}}"
+      - path: "{{if .Keywords}}search/{{ .Keywords}}/{{else}}recent/{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/2{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/3{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/4{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/5{{else}}{{end}}"
     rows:
-      selector: div[class="resultdiv"]
+      selector: li:has(div.opt-text-w3layouts)
       filters:
         - name: andmatch
     fields:
       title:
-        selector: div[class="resultdivtop"] div[class="resultdivtopname"]
+        selector: div.opt-text-w3layouts a
       details:
-        selector: div[class="resultdivbotton"] div[class="magneticdiv"] a
+        selector: div.opt-text-w3layouts a
         attribute: href
       category:
         optional: true
-        selector: div[class="resultdivbotton"] div[class="resultdivbottoncategory"]
-        case:
-          ":contains(\"Other\")": 0
-          ":contains(\"Movies\")": 1
-          ":contains(\"Video\")": 2
-          ":contains(\"TV\")": 3
-          ":contains(\"Anime\")": 4
-          ":contains(\"xxx\")": 5
-          ":contains(\"XXX\")": 5
-          ":contains(\"Adult\")": 5
-          ":contains(\"Music\")": 6
-          ":contains(\"Games\")": 7
-          ":contains(\"Apps\")": 8
-          ":contains(\"Software\")": 8
-          ":contains(\"Books\")": 9
-      download-itorrents:
-        selector: div[class="resultdivbotton"] div[class="resultseed"] div[class="resultdivbottonseed"]
+        selector: a[href^="/browse/"]
         filters:
-          - name: toupper
-          - name: prepend
-            args: http://itorrents.org/torrent/
-          - name: append
-            args: ".torrent"
-      download:
-        text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
-      magfile:
-        text: "{{ .Result.title }}"
-        filters:
-          - name: validfilename
-          - name: urlencode
+          - name: replace
+            args: ["/browse/", ""]
       magnet:
-        selector: div[class="resultdivbotton"] div[class="resultseed"] div[class="resultdivbottonseed"]
-        filters:
-          - name: prepend
-            args: "magnet:?xt=urn:btih:"
-          - name: append
-            args: "&dn={{ .Result.magfile }}.torrent"
-          - name: append
-            args: "&tr=http://182.176.139.129:6969/announce&tr=http://explodie.org:6969/announce&tr=http://tracker.mgtracker.org:2710/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://tracker.sktorrent.net:6969/announce&tr=udp://tracker.zer0day.to:1337/announce"
+        selector: div.opt-text-w3layouts a
+        attribute: href
       date:
-        selector: div[class="resultdivbotton"] div[class="resulttime"] div[class="resultdivbottontime"]
+        selector: div.seedbar span:nth-child(3)
         filters:
           - name: timeago
+      files:
+        selector: div.seedbar span:nth-child(4)
       size:
-        selector: div[class="resultdivbotton"] div[class="resultlength"] div[class="resultdivbottonlength"]
+        selector: div.seedbar span:nth-child(2)
       seeders:
-        text: "999"
+        selector: div.seedbar span:nth-child(1)
+        filters:
+          - name: replace
+            args: ["Seed: ", ""]
       leechers:
-        text: "999"
+        text: "1"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

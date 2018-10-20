@@ -135,6 +135,13 @@ namespace Jackett.Common.Indexers
                         continue;
                     }
 
+                    // Ensure fansub group name is present in the title
+                    // This is needed for things like configuring tag restrictions in Sonarr
+                    if (title.Contains("[HorribleSubs]") == false)
+                    {
+                        title = "[HorribleSubs] " + title;
+                    }
+
                     DateTime releasedate;
                     if (dateStr == "Today")
                     {
@@ -148,25 +155,33 @@ namespace Jackett.Common.Indexers
                     {
                         releasedate = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MM/dd/yy", CultureInfo.InvariantCulture), DateTimeKind.Utc).ToLocalTime();
                     }
-                    
+
                     var p480 = releaserow.QuerySelector(".link-480p");
 
                     if (p480 != null)
                     {
-                        var release = new ReleaseInfo();
+                        var release = new ReleaseInfo
+                        {
+                            PublishDate = releasedate,
+                            Files = 1,
+                            Category = new List<int> { TorznabCatType.TVAnime.ID },
+                            Size = 524288000,
+                            Seeders = 1,
+                            Peers = 2,
+                            DownloadVolumeFactor = 0,
+                            UploadVolumeFactor = 1
+                        };
                         release.Title = string.Format("{0} [480p]", title);
-                        release.PublishDate = releasedate;
-                        var torrentlink = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                        release.Link = torrentlink;
-                        release.Guid = torrentlink;
-                        release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
-                        release.Files = 1;
-                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
-                        release.Size = 524288000;
-                        release.Seeders = 999;
-                        release.Peers = 1998;
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 1;
+                        if (p480.QuerySelector(".hs-torrent-link > a") != null)
+                        {
+                            release.Link = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Guid = release.Link;
+                        }
+                        if (p480.QuerySelector(".hs-magnet-link > a") != null)
+                        {
+                            release.MagnetUri = new Uri(p480.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                            release.Guid = release.MagnetUri;
+                        }
                         releases.Add(release);
                     }
 
@@ -174,20 +189,28 @@ namespace Jackett.Common.Indexers
 
                     if (p720 != null)
                     {
-                        var release = new ReleaseInfo();
+                        var release = new ReleaseInfo
+                        {
+                            PublishDate = releasedate,
+                            Files = 1,
+                            Category = new List<int> { TorznabCatType.TVAnime.ID },
+                            Size = 524288000,
+                            Seeders = 1,
+                            Peers = 2,
+                            DownloadVolumeFactor = 0,
+                            UploadVolumeFactor = 1
+                        };
                         release.Title = string.Format("{0} [720p]", title);
-                        release.PublishDate = releasedate;
-                        var torrentlink = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                        release.Link = torrentlink;
-                        release.Guid = torrentlink;
-                        release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
-                        release.Files = 1;
-                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
-                        release.Size = 524288000;
-                        release.Seeders = 999;
-                        release.Peers = 1998;
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 1;
+                        if (p720.QuerySelector(".hs-torrent-link > a") != null)
+                        {
+                            release.Link = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Guid = release.Link;
+                        }
+                        if (p720.QuerySelector(".hs-magnet-link > a") != null)
+                        {
+                            release.MagnetUri = new Uri(p720.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                            release.Guid = release.MagnetUri;
+                        }
                         releases.Add(release);
                     }
 
@@ -195,23 +218,30 @@ namespace Jackett.Common.Indexers
 
                     if (p1080 != null)
                     {
-                        var release = new ReleaseInfo();
+                        var release = new ReleaseInfo
+                        {
+                            PublishDate = releasedate,
+                            Files = 1,
+                            Category = new List<int> { TorznabCatType.TVAnime.ID },
+                            Size = 524288000,
+                            Seeders = 1,
+                            Peers = 2,
+                            DownloadVolumeFactor = 0,
+                            UploadVolumeFactor = 1
+                        };
                         release.Title = string.Format("{0} [1080p]", title);
-                        release.PublishDate = releasedate;
-                        var torrentlink = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
-                        release.Link = torrentlink;
-                        release.Guid = torrentlink;
-                        release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
-                        release.Files = 1;
-                        release.Category = new List<int> { TorznabCatType.TVAnime.ID };
-                        release.Size = 524288000;
-                        release.Seeders = 999;
-                        release.Peers = 1998;
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 1;
+                        if (p1080.QuerySelector(".hs-torrent-link > a") != null)
+                        {
+                            release.Link = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Guid = release.Link;
+                        }
+                        if (p1080.QuerySelector(".hs-magnet-link > a") != null)
+                        {
+                            release.MagnetUri = new Uri(p1080.QuerySelector(".hs-magnet-link > a").GetAttribute("href"));
+                            release.Guid = release.MagnetUri;
+                        }
                         releases.Add(release);
                     }
-
                 }
             }
             catch (Exception ex)

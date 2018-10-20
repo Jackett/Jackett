@@ -30,6 +30,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * cpasbien
  * ETTV
+ * EliteTorrent.biz
  * ExtraTorrent.ag
  * ExtraTorrentClone
  * EZTV
@@ -50,6 +51,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
+ * ProStyleX
  * RARBG
  * RuTor
  * ShowRSS
@@ -84,6 +86,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Newstudio
  * NetHD
  * NoName Club
+ * RockBox
  * RuTracker
  * SkTorrent
  * Union Fansub
@@ -239,6 +242,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RevolutionTT
  * RGU
  * RoDVD
+ * Romanian Metal Torrent
  * SceneFZ
  * SceneReactor
  * SceneTime
