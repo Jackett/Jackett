@@ -187,7 +187,7 @@ namespace Jackett.Common.Indexers
 
                     var qRow = row.Cq();
 
-                    var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split('=')[1];
+                    var catStr = row.ChildElements.ElementAt(0).FirstElementChild.GetAttribute("href").Split('=')[1].Split('&')[0];
                     release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qLink = row.ChildElements.ElementAt(2).FirstElementChild.Cq();
