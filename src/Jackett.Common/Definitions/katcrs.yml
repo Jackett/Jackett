@@ -6,10 +6,11 @@
   type: public
   encoding: UTF-8
   links:
-    - https://kickassextratorrent.xyz/
+    - https://kickassextratorrent.website/
   legacylinks:
     - https://kickasskatcr.website/
     - https://kickasskatcr.stream/
+    - https://kickassextratorrent.xyz/
 
   caps:
     categories:
