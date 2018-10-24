@@ -214,6 +214,10 @@ namespace Jackett.Common.Indexers
                         size = size.Replace("MiB", "MB");
                         size = size.Replace("KiB", "KB");
 
+                        size = size.Replace("ГБ", "GB");
+                        size = size.Replace("МБ", "MB");
+                        size = size.Replace("КБ", "KB");
+
                         release.Size = ReleaseInfo.GetBytes(size);
 
                         release.DownloadVolumeFactor = 1;
