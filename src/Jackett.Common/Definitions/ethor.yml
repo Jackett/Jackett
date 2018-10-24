@@ -84,10 +84,11 @@
       title:
         selector: a[href^="/details.php"]:has(b)
         filters:
+          - name: toupper
           - name: replace
             args: ["VFQ", "FRENCH"]
           - name: replace
-            args: ["vfq", "FRENCH"]
+            args: ["MULTI", "FRENCH"]
           - name: re_replace
             args: ["S(\\d{2}) E(\\d{2})", "S$1E$2"]
           - name: re_replace
