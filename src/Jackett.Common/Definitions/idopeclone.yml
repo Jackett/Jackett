@@ -1,0 +1,81 @@
+---
+  site: idopeclone
+  name: IdopeClone
+  description: "This Clone of iDope is a Public torrent search engine"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.idope.site/
+  legacylinks:
+    - https://idope.top/
+
+  caps:
+    categorymappings:
+      - {id: other, cat: Other, desc: "Others"}
+      - {id: movies, cat: Movies, desc: "Movies"}
+      - {id: videos, cat: Other, desc: "Videos"}
+      - {id: tv, cat: TV, desc: "TV"}
+      - {id: anime, cat: TV/Anime, desc: "Anime"}
+      - {id: xxx, cat: XXX, desc: "XXX"}
+      - {id: adult, cat: XXX, desc: "XXX"}
+      - {id: music, cat: Audio, desc: "Music"}
+      - {id: games, cat: PC/Games, desc: "Games"}
+      - {id: apps, cat: PC/0day, desc: "Apps"}
+      - {id: applications, cat: PC/0day, desc: "Apps"}
+      - {id: android, cat: PC/Phone-Android, desc: "Android"}
+      - {id: software, cat: PC/0day, desc: "Apps"}
+      - {id: books, cat: Books, desc: "Books"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: "{{if .Keywords}}search/{{ .Keywords}}/{{else}}recent/{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/2{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/3{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/4{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/5{{else}}{{end}}"
+    rows:
+      selector: li:has(div.opt-text-w3layouts)
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: div.opt-text-w3layouts a
+      details:
+        selector: div.opt-text-w3layouts a
+        attribute: href
+      category:
+        optional: true
+        selector: a[href^="/browse/"]
+        filters:
+          - name: replace
+            args: ["/browse/", ""]
+      magnet:
+        selector: div.opt-text-w3layouts a
+        attribute: href
+      date:
+        selector: div.seedbar span:nth-child(3)
+        filters:
+          - name: timeago
+      files:
+        selector: div.seedbar span:nth-child(4)
+      size:
+        selector: div.seedbar span:nth-child(2)
+      seeders:
+        selector: div.seedbar span:nth-child(1)
+        filters:
+          - name: replace
+            args: ["Seed: ", ""]
+      leechers:
+        text: "1"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

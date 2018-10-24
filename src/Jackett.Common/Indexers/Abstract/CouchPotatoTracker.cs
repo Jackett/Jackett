@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers.Abstract
             
             if (!string.IsNullOrEmpty(query.ImdbID))
             { 
-                queryCollection.Add("imdbid", "browse");
+                queryCollection.Add("imdbid", query.ImdbID);
             }
             if (searchString != null)
             {

@@ -13,10 +13,11 @@
       "anime": TV/Anime
       "app": PC
       "book": Books
+      "files": Other/Misc
       "game": PC/Games
       "movies": Movies
       "music": Audio
-      "other": Other/Misc
+      "other": Other
       "tv": TV
 
     modes:

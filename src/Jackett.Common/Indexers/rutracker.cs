@@ -1470,7 +1470,7 @@ namespace Jackett.Common.Indexers
             {
                 { "login_username", configData.Username.Value },
                 { "login_password", configData.Password.Value },
-                { "login", "entry" }
+                { "login", "Login" }
             };
 
             if (!string.IsNullOrWhiteSpace(cap_sid))
@@ -1483,9 +1483,10 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("class=\"logged-in-as-uname\""), () =>
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("id=\"logged-in-username\""), () =>
             {
-                var errorMessage = result.Content;
+                logger.Debug(result.Content);
+                var errorMessage = "Unknown error message, please report";
                 var LoginResultParser = new HtmlParser();
                 var LoginResultDocument = LoginResultParser.Parse(result.Content);
                 var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
@@ -1521,7 +1522,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("class=\"logged-in-as-uname\""))
+            if (!results.Content.Contains("id=\"logged-in-username\""))
             {
                 // re login
                 await ApplyConfiguration(null);

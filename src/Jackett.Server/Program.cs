@@ -47,10 +47,7 @@ namespace Jackett.Server
             {
                 if (string.IsNullOrEmpty(options.Client))
                 {
-                    //TODO: Remove libcurl once off owin
-                    bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-
-                    if (runningOnDotNetCore)
+                    if (DotNetCoreUtil.IsRunningOnDotNetCore)
                     {
                         options.Client = "httpclientnetcore";
                     }
@@ -83,6 +80,7 @@ namespace Jackett.Server
                 }
             }
 
+            Initialisation.CheckEnvironmentalVariables(logger);
             Initialisation.ProcessSettings(Settings, logger);
 
             ISerializeService serializeService = new SerializeService();
@@ -124,7 +122,7 @@ namespace Jackett.Server
 
                 ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
                 Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
+                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
 
                 isWebHostRestart = false;
 

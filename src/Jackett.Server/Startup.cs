@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -84,8 +83,6 @@ namespace Jackett.Server
             builder.RegisterType<ServerService>().As<IServerService>();
             builder.RegisterType<ProtectionService>().As<IProtectionService>();
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>();
-            if (runtimeSettings.ClientOverride == "httpclientnetcore")
-                builder.RegisterType<HttpWebClientNetCore>().As<WebClient>();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;

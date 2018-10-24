@@ -45,7 +45,7 @@
       - {id: 399, cat: PC, desc: "Other OS", default: true}
 
       #Games
-      - {id: 401, cat: Console, desc: "Games", default: true}
+      - {id: 400, cat: Console, desc: "Games", default: true}
       - {id: 401, cat: PC/Games, desc: "PC", default: true}
       - {id: 402, cat: PC/Mac, desc: "Mac", default: true}
       - {id: 403, cat: Console/PS4, desc: "PSx", default: true}

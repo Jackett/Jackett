@@ -13,8 +13,6 @@ namespace Jackett.Common.Models.Config
 
         public string ProxyConnection { get; set; }
 
-        public bool? DoSSLFix { get; set; }
-
         public bool? IgnoreSslErrors { get; set; }
 
         public string CustomDataFolder { get; set; }

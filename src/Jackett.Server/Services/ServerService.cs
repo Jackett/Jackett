@@ -1,5 +1,6 @@
 ﻿using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
@@ -121,10 +122,8 @@ namespace Jackett.Server.Services
                     logger.Error(e, "Error while reading the issue file");
                 }
 
-                bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-
                 Type monotype = Type.GetType("Mono.Runtime");
-                if (monotype != null && !runningOnDotNetCore)
+                if (monotype != null && !DotNetCoreUtil.IsRunningOnDotNetCore)
                 {
                     MethodInfo displayName = monotype.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
                     var monoVersion = "unknown";
@@ -257,6 +256,30 @@ namespace Jackett.Server.Services
             catch (Exception e)
             {
                 logger.Error(e, "Error while checking the username");
+            }
+
+            //Warn user that they are using an old version of Jackett
+            try
+            {
+                string appFolder = configService.ApplicationFolder();
+                string dllPath = Path.Combine(appFolder, "Jackett.Common.dll");
+
+                if (File.Exists(dllPath))
+                {
+                    DateTime creation = File.GetCreationTime(dllPath);
+
+                    if (creation < DateTime.Now.AddMonths(-3))
+                    {
+                        string version = configService.GetVersion();
+                        string notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
+                        _notices.Add(notice);
+                        logger.Error(notice);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Error while checking build date of Jackett.Common");
             }
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");

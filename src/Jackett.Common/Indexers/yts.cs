@@ -78,6 +78,10 @@ namespace Jackett.Common.Indexers
 
             var queryCollection = new NameValueCollection();
 
+            // without this the API sometimes returns nothing
+            queryCollection.Add("sort", "date_added");
+            queryCollection.Add("limit", "50");
+
             if (query.ImdbID != null)
             {
                 queryCollection.Add("query_term", query.ImdbID);
@@ -131,7 +135,11 @@ namespace Jackett.Common.Indexers
                     return releases.ToArray();
                 }
 
-                foreach (var movie_item in data_items.Value<JToken>("movies"))
+                var movies = data_items.Value<JToken>("movies");
+                if (movies == null)
+                    throw new Exception("API error, movies missing");
+
+                foreach (var movie_item in movies)
                 {
                     var torrents = movie_item.Value<JArray>("torrents");
                     if (torrents == null)
@@ -142,7 +150,7 @@ namespace Jackett.Common.Indexers
 
                         // Append the quality to the title because thats how radarr seems to be determining the quality?
                         // All releases are BRRips, see issue #2200
-                        release.Title = movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + " BRRip";
+                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + " BRRip";
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 

@@ -6,9 +6,11 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.limetorrents.io/
+    - https://www.limetorrents.info/
   legacylinks:
+    - https://www.limetorrents.io/
     - https://www.limetorrents.cc/
+    - https://www.limetorrents.me/
 
   caps:
     categories:

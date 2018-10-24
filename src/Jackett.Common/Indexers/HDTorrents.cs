@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -133,6 +133,18 @@ namespace Jackett.Common.Indexers
                 CQ dom = results.Content;
                 ReleaseInfo release;
 
+                CQ userInfo = dom[".mainmenu > table > tbody > tr:has(td[title=\"Active-Torrents\"])"][0].Cq();
+                string rank = userInfo.Find("td:nth-child(2)").Text().Substring(6);
+
+                HashSet<string> freeleechRanks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                freeleechRanks.Add("VIP");
+                freeleechRanks.Add("Uploader");
+                freeleechRanks.Add("HD Internal");
+                freeleechRanks.Add("Moderator");
+                freeleechRanks.Add("Administrator");
+                freeleechRanks.Add("Owner");
+                bool hasFreeleech = freeleechRanks.Contains(rank);
+
                 var rows = dom[".mainblockcontenttt > tbody > tr:has(a[href^=\"details.php?id=\"])"];
                 foreach (var row in rows)
                 {
@@ -155,19 +167,22 @@ namespace Jackett.Common.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
+                    
+                    int tdIndex = 0;
+                    if(qRow.Find("td:nth-last-child(1)").Text() == "Edit") tdIndex = 1;
 
                     // Sometimes the uploader column is missing
                     int seeders, peers;
-                    if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-last-child(3)").Text(), out seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find("td:nth-last-child(2)").Text(), out peers))
+                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find("td:nth-last-child(1)").Text());
+                    release.Grabs = ParseUtil.CoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text());
 
                     string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
@@ -190,6 +205,8 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 0;
                     }
+                    else if(hasFreeleech)
+                        release.DownloadVolumeFactor = 0;
                     else if (qRow.Find("img[alt=\"Silver Torrent\"]").Length >= 1)
                         release.DownloadVolumeFactor = 0.5;
                     else if (qRow.Find("img[alt=\"Bronze Torrent\"]").Length >= 1)

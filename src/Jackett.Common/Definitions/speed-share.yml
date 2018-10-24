@@ -302,13 +302,24 @@
           - name: dateparse
             args: "02/01/2006 15:04:05"
       size:
-        selector: td:nth-child(5)
+        # seems size might be floating as the 4th or 5th td so lets try matching the size-unit
+        optional: true
+        selector: td.ttable_col2:contains(" GB")
+      size:
+        optional: true
+        selector: td.ttable_col2:contains(" MB")
+      size:
+        optional: true
+        selector: td.ttable_col2:contains(" kB")
+      size:
+        optional: true
+        selector: td.ttable_col2:contains(" B")
       grabs:
-        selector: font[color^=orange]
+        selector: td.ttable_col1 > font[color^=orange]
       seeders:
-        selector: font[color^=green]
+        selector: td.ttable_col1 > b > font[color^=green]
       leechers:
-        selector: td.ttable_col1 > font[color^=red]
+        selector: td.ttable_col2 > font[color^=red]
       downloadvolumefactor:
         case:
           img[src="images/free.gif"]: "0"

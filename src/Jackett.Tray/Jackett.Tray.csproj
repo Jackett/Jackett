@@ -110,7 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser">
-      <Version>2.2.1</Version>
+      <Version>2.3.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
