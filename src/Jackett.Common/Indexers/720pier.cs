@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers
                         var DetailsResultDocument = ResultParser.Parse(detailsResult.Content);
                         var qDownloadLink = DetailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent.php?id\"]");
 
-                        release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
+                        release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
 
                         release.Seeders = ParseUtil.CoerceInt(Row.QuerySelector("span.seed").TextContent);
                         release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("span.leech").TextContent) + release.Seeders;
