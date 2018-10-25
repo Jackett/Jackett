@@ -215,6 +215,7 @@ namespace Jackett.Common.Indexers
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
+                    release.Link = new Uri("http://itorrents.org/torrent/" + release.InfoHash + ".torrent");
 
                     release.Comments = new Uri(item.Value<string>("info_page"));
                     release.Guid = release.MagnetUri;
