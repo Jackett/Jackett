@@ -43,6 +43,17 @@ namespace Jackett.Common.Utils
 
                 var logService = new LogCacheService();
                 logConfig.AddTarget("service", logService);
+
+                var serviceMicrosoftRule = new LoggingRule();
+                serviceMicrosoftRule.LoggerNamePattern = "Microsoft.*";
+                serviceMicrosoftRule.SetLoggingLevels(logLevel, LogLevel.Info);
+                serviceMicrosoftRule.Final = true;
+                if (settings.TracingEnabled)
+                {
+                    serviceMicrosoftRule.Targets.Add(logService);
+                }
+                logConfig.LoggingRules.Add(serviceMicrosoftRule);
+
                 var serviceRule = new LoggingRule("*", logLevel, logService);
                 logConfig.LoggingRules.Add(serviceRule);
             }
