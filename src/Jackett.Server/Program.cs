@@ -8,6 +8,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Web;
 using System;
 using System.Collections.Generic;
@@ -62,8 +63,8 @@ namespace Jackett.Server
                 runtimeDictionary = GetValues(Settings);
             });
 
-            NLog.LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
-            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
+            Logger logger = LogManager.GetCurrentClassLogger();
             logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
 
             // create PID file early
@@ -167,7 +168,7 @@ namespace Jackett.Server
                         Console.WriteLine("Deleting PID file " + PIDFile);
                         File.Delete(PIDFile);
                     }
-                    NLog.LogManager.Shutdown();
+                    LogManager.Shutdown();
                 }
             }
             catch (Exception ex)
@@ -187,7 +188,7 @@ namespace Jackett.Server
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
                 .UseNLog();
     }
