@@ -151,7 +151,6 @@ namespace Jackett.Server
                     {
                         rule.Targets.Remove(target);
                     }
-                    continue;
                 }
 
                 if (level == LogLevel.Debug)
