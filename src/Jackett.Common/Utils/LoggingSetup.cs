@@ -38,19 +38,9 @@ namespace Jackett.Common.Utils
                 logConfig.AddTarget("console", logConsole);
 
                 logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
-
-                if (!settings.TracingEnabled)
-                {
-                    var logMicrosoftConsoleRule = new LoggingRule();
-                    logMicrosoftConsoleRule.LoggerNamePattern = "Microsoft.*";
-                    logMicrosoftConsoleRule.SetLoggingLevels(LogLevel.Debug, LogLevel.Info);
-                    logMicrosoftConsoleRule.Final = true;
-                    logConfig.LoggingRules.Add(logMicrosoftConsoleRule);
-                }
-
                 var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
                 logConfig.LoggingRules.Add(logConsoleRule);
-                
+
                 var logService = new LogCacheService();
                 logConfig.AddTarget("service", logService);
                 var serviceRule = new LoggingRule("*", logLevel, logService);
