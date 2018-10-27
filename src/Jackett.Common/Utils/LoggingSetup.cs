@@ -46,7 +46,7 @@ namespace Jackett.Common.Utils
 
                 var serviceMicrosoftRule = new LoggingRule();
                 serviceMicrosoftRule.LoggerNamePattern = "Microsoft.*";
-                serviceMicrosoftRule.SetLoggingLevels(logLevel, LogLevel.Info);
+                serviceMicrosoftRule.SetLoggingLevels(LogLevel.Debug, LogLevel.Info);
                 serviceMicrosoftRule.Final = true;
                 if (settings.TracingEnabled)
                 {
