@@ -42,6 +42,7 @@ namespace Jackett.Common.Utils
                 logConfig.LoggingRules.Add(logConsoleRule);
 
                 var logService = new LogCacheService();
+                logService.Name = "service";
                 logConfig.AddTarget("service", logService);
 
                 var serviceMicrosoftRule = new LoggingRule();

@@ -140,6 +140,20 @@ namespace Jackett.Server
         {
             foreach (var rule in LogManager.Configuration.LoggingRules)
             {
+                if (rule.LoggerNamePattern == "Microsoft.*")
+                {
+                    var target = LogManager.Configuration.ConfiguredNamedTargets.First(t => t.Name == "service");
+                    if (level == LogLevel.Debug)
+                    {
+                        rule.Targets.Add(target);
+                    }
+                    else
+                    {
+                        rule.Targets.Remove(target);
+                    }
+                    continue;
+                }
+
                 if (level == LogLevel.Debug)
                 {
                     if (!rule.Levels.Contains(LogLevel.Debug))
