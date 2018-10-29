@@ -117,6 +117,8 @@
         MULTI.FRENCH: "MULTI.FRENCH"
         ENGLISH: "ENGLISH"
         MULTI.ENGLISH: "MULTI.ENGLISH"
+        VOSTFR: "VOSTFR"
+        MULTI.VOSTFR: "MULTI.VOSTFR"
     - name: vostfr
       type: checkbox
       label: Replace VOSTFR with ENGLISH
