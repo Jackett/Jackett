@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers
             // Redirect to ? then to /t
             await FollowIfRedirect(response, request.Url, null, firstCallCookies);
 
-            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/my.php"), () =>
+            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/lout.php"), () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();
