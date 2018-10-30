@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -18,21 +18,10 @@ namespace Jackett.Common.Indexers
     public class Rarbg : BaseWebIndexer
     {
         // API doc: https://torrentapi.org/apidocs_v2.txt
-        private static readonly string defaultSiteLink = "https://torrentapi.org/";
 
-        private Uri BaseUri
-        {
-            get { return new Uri(configData.Url.Value); }
-            set { configData.Url.Value = value.ToString(); }
-        }
-
-        private string ApiEndpoint { get { return BaseUri + "pubapi_v2.php"; } }
-
-        private new ConfigurationDataUrl configData
-        {
-            get { return (ConfigurationDataUrl)base.configData; }
-            set { base.configData = value; }
-        }
+        private string BaseUri => ConfigData.BaseUri.Value;
+        private string ApiEndpoint => BaseUri + "pubapi_v2.php"; 
+        private bool ItorrentsEnabled => ConfigData.ItorrentsEnabled.Value;
 
         private DateTime lastTokenFetch;
         private string token;
@@ -41,6 +30,8 @@ namespace Jackett.Common.Indexers
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
         private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
+
+        private ConfigurationDataRarbg ConfigData => (ConfigurationDataRarbg)configData;
 
         public Rarbg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
@@ -51,7 +42,7 @@ namespace Jackett.Common.Indexers
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataUrl(defaultSiteLink))
+                configData: new ConfigurationDataRarbg())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";
@@ -215,7 +206,9 @@ namespace Jackett.Common.Indexers
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-
+                    if (ItorrentsEnabled) {
+                        release.Link = new Uri("http://itorrents.org/torrent/" + release.InfoHash.ToUpper() + ".torrent");                        
+                    }
                     release.Comments = new Uri(item.Value<string>("info_page"));
                     release.Guid = release.MagnetUri;
 
