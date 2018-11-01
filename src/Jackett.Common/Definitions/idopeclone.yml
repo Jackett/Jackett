@@ -37,10 +37,10 @@
   search:
     paths:
       - path: "{{if .Keywords}}search/{{ .Keywords}}/{{else}}recent/{{end}}"
-      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/2{{else}}{{end}}"
-      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/3{{else}}{{end}}"
-      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/4{{else}}{{end}}"
-      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/5{{else}}{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/2{{else}}recent/2{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/3{{else}}recent/3{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/4{{else}}recent/4{{end}}"
+      - path: "{{if .Keywords}}s/{{ .Keywords}}/page/5{{else}}recent/5{{end}}"
     rows:
       selector: li:has(div.opt-text-w3layouts)
       filters:
@@ -58,23 +58,34 @@
           - name: replace
             args: ["/browse/", ""]
       magnet:
-        selector: div.opt-text-w3layouts a
+        selector: a[href^="magnet:?"]
         attribute: href
       date:
-        selector: div.seedbar span:nth-child(3)
+        selector: div.seedbar span:nth-child(4)
         filters:
+          - name: replace
+            args: ["Age: ", ""]
           - name: timeago
       files:
-        selector: div.seedbar span:nth-child(4)
+        selector: div.seedbar span:nth-child(5)
+        filters:
+          - name: replace
+            args: ["Files: ", ""]
       size:
-        selector: div.seedbar span:nth-child(2)
+        selector: div.seedbar span:nth-child(3)
+        filters:
+          - name: replace
+            args: ["Size: ", ""]
       seeders:
         selector: div.seedbar span:nth-child(1)
         filters:
           - name: replace
             args: ["Seed: ", ""]
       leechers:
-        text: "1"
+        selector: div.seedbar span:nth-child(2)
+        filters:
+          - name: replace
+            args: ["Leech: ", ""]
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

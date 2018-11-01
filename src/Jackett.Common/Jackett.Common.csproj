@@ -211,4 +211,11 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!-- Save the compiled date so that we know if the user is running an old version of Jackett -->
+  <ItemGroup>
+    <AssemblyAttribute Include="Jackett.Common.Utils.BuildDateAttribute">
+      <_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
 </Project>

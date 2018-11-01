@@ -215,9 +215,9 @@ namespace Jackett.Common.Indexers
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-                    release.Link = new Uri("http://itorrents.org/torrent/" + release.InfoHash + ".torrent");
 
                     release.Comments = new Uri(item.Value<string>("info_page"));
+                    release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
 
                     var episode_info = item.Value<JToken>("episode_info");
@@ -251,6 +251,19 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            // build download link from info redirect link
+            var response = await RequestStringWithCookies(link.ToString());
+            if (!response.IsRedirect)
+                throw new Exception("Downlaod Failed, expected redirect");
+
+            var targeturi = new Uri(response.RedirectingTo);
+            var id = targeturi.Segments.Last();
+            var dluri = new Uri(targeturi, "/download.php?id=" + id + "&f=jackett.torrent");
+            return await base.Download(dluri, RequestType.GET);
         }
     }
 }

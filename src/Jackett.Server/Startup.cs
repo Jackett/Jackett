@@ -79,10 +79,10 @@ namespace Jackett.Server
 
             builder.Populate(services);
             builder.RegisterModule(new JackettModule(runtimeSettings));
-            builder.RegisterType<SecuityService>().As<ISecuityService>();
-            builder.RegisterType<ServerService>().As<IServerService>();
-            builder.RegisterType<ProtectionService>().As<IProtectionService>();
-            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>();
+            builder.RegisterType<SecuityService>().As<ISecuityService>().SingleInstance();
+            builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
+            builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
+            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;

@@ -261,20 +261,14 @@ namespace Jackett.Server.Services
             //Warn user that they are using an old version of Jackett
             try
             {
-                string appFolder = configService.ApplicationFolder();
-                string dllPath = Path.Combine(appFolder, "Jackett.Common.dll");
+                DateTime compiledData = BuildDate.GetBuildDateTime();
 
-                if (File.Exists(dllPath))
+                if (compiledData < DateTime.Now.AddMonths(-3))
                 {
-                    DateTime creation = File.GetCreationTime(dllPath);
-
-                    if (creation < DateTime.Now.AddMonths(-3))
-                    {
-                        string version = configService.GetVersion();
-                        string notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
-                        _notices.Add(notice);
-                        logger.Error(notice);
-                    }
+                    string version = configService.GetVersion();
+                    string notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
+                    _notices.Add(notice);
+                    logger.Error(notice);
                 }
             }
             catch (Exception e)
