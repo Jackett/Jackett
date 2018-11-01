@@ -256,7 +256,16 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             // build download link from info redirect link
-            var response = await RequestStringWithCookies(link.ToString());
+            var slink = link.ToString();
+            var response = await RequestStringWithCookies(slink);
+            if (!response.IsRedirect && response.Content.Contains("Invalid token."))
+            {
+                // get new token
+                token = null;
+                await CheckToken();
+                slink += "&token=" + token;
+                response = await RequestStringWithCookies(slink);
+            }
             if (!response.IsRedirect)
                 throw new Exception("Downlaod Failed, expected redirect");
 
