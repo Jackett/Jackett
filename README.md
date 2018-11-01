@@ -38,7 +38,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GkTorrent
  * Horrible Subs
  * IdopeClone
- * Il Corsaro Nero
+ * Il Corsaro Nero <!-- maintained by ivandelabeldad -->
  * Il Corsaro Blu
  * Isohunt2
  * KATcrs
@@ -46,7 +46,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
  * MagnetDL
- * MejorTorrent
+ * MejorTorrent <!-- maintained by ivandelabeldad -->
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, etc)
  * Nyaa.si
  * Nyaa-Pantsu
@@ -59,7 +59,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * sukebei.Nyaa.si
  * sukebei-Pantsu
  * The Pirate Bay
- * TNTVillage
+ * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
  * Torlock
  * TorrentCouch
@@ -114,7 +114,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Avistaz (AsiaTorrents)
  * B2S-Share
  * Back-ups
- * BakaBT
+ * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
  * BeyondHD (BHD)
  * BIGTorrent
@@ -125,9 +125,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitHUmen
  * BitMe
  * BitMeTV
- * BitSoup
+ * BitSoup  [![(invite needed)][inviteneeded]](#)
  * Bitspyder
- * BitTorrentFiles
+ * BitTorrentFiles  [![(invite needed)][inviteneeded]](#)
  * BJ-Share
  * BlueBird
  * Blutopia (BLU)
@@ -153,7 +153,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Downloadville
  * Dragonworld Reloaded
  * Dream Team
- * EliteHD
+ * EliteHD  [![(invite needed)][inviteneeded]](#)
  * Elit Tracker
  * Elite-Tracker
  * Empornium (EMP)
@@ -172,7 +172,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Gfxnews
  * GFXPeers
  * GigaTorrents
- * GimmePeers
+ * GimmePeers <!-- maintained by jamesb2147 -->
  * Girotottent
  * GODS
  * Greek Team
@@ -223,7 +223,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Norbits
  * notwhat.cd
  * Ourbits
- * Passione Torrent
+ * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * PirateTheNet
  * PiXELHD
@@ -277,7 +277,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent.LT
  * TorrentBD
  * TorrentBytes
- * TorrentCCF
+ * TorrentCCF  [![(invite needed)][inviteneeded]](#)
  * TorrentDay
  * Torrentech
  * TorrentHeaven
