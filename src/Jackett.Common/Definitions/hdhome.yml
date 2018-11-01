@@ -70,7 +70,6 @@
       selector: img[alt="CAPTCHA"]
       input: imagestring
     inputs:
-      logintype: "username"
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:

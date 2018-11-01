@@ -69,8 +69,8 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("OK"), () =>
             {
                 CQ dom = result.Content;
-                var messageEl = dom["#errorMsg"].Last();
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = dom.Text().Trim();
+                errorMessage += " attempts left. Please check your credentials.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;

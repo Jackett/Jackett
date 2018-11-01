@@ -153,6 +153,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Downloadville
  * Dragonworld Reloaded
  * Dream Team
+ * DXDHD
  * EliteHD  [![(invite needed)][inviteneeded]](#)
  * Elit Tracker
  * Elite-Tracker
