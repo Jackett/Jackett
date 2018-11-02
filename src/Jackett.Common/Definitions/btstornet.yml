@@ -39,7 +39,7 @@
       - name: re_replace
         args: [" ", "+"]
     paths:
-      - path: "{{ if .Keywords }}q/{{ .Keywords }}/date/{{else}}/{{end}}"
+      - path: "q/{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}/date/"
     rows:
       selector: table.tor > tbody > tr[class$="_tr"]
       filters:
