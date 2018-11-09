@@ -245,6 +245,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RoDVD
  * Romanian Metal Torrent
  * SceneFZ
+ * SceneHD
  * SceneReactor
  * SceneTime
  * SDBits
