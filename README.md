@@ -103,6 +103,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlphaRatio (AR)
  * AnimeBytes
  * AnimeTorrents (AnT)
+ * Anthelion (was TehConnection.me)
  * AOX
  * Apollo (XANAX)
  * ArabaFenice
@@ -245,6 +246,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RoDVD
  * Romanian Metal Torrent
  * SceneFZ
+ * SceneHD
  * SceneReactor
  * SceneTime
  * SDBits
@@ -261,7 +263,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * Tasmanit
  * TBPlus
- * TehConnection.me
  * TenYardTracker
  * The Empire
  * The Geeks

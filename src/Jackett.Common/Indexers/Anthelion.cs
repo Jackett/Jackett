@@ -14,7 +14,7 @@ namespace Jackett.Common.Indexers
         };
 
         public TehConnectionMe(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "TehConnection.me",
+            : base(name: "Anthelion (TehConnection.me)",
                 desc: "A movies tracker",
                 link: "https://anthelion.me/",
                 configService: configService,
