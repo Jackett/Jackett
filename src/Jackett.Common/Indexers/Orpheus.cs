@@ -9,7 +9,7 @@ namespace Jackett.Common.Indexers
 {
     public class Orpheus : GazelleTracker
     {
-        public Apollo(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+        public Orpheus(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "Orpheus",
                 desc: "A music tracker",
                 link: "https://orpheus.network/",
