@@ -105,7 +105,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AnimeTorrents (AnT)
  * Anthelion (was TehConnection.me)
  * AOX
- * Apollo (XANAX)
  * ArabaFenice
  * Arche Torrent
  * AsianDVDClub
@@ -224,6 +223,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NordicBits (NB)
  * Norbits
  * notwhat.cd
+ * Orpheus
  * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
