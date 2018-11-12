@@ -7,12 +7,12 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class Apollo : GazelleTracker
+    public class Orpheus : GazelleTracker
     {
         public Apollo(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
-            : base(name: "Apollo",
+            : base(name: "Orpheus",
                 desc: "A music tracker",
-                link: "https://apollo.rip/",
+                link: "https://orpheus.network/",
                 configService: configService,
                 logger: logger,
                 protectionService: protectionService,
