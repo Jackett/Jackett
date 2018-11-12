@@ -32,6 +32,7 @@ namespace Jackett.Common.Indexers
                 description: "Friendliness, Warmth and Sharing",
                 link: "https://www.myanonamouse.net/",
                 configService: configService,
+                caps: new TorznabCapabilities(),
                 client: c,
                 logger: l,
                 p: ps,
@@ -99,7 +100,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("65", TorznabCatType.BooksEbook, "Ebooks - Horror");
             AddCategoryMapping("103", TorznabCatType.BooksEbook, "Ebooks - Humor");
             AddCategoryMapping("115", TorznabCatType.BooksEbook, "Ebooks - Illusion/Magic");
-            AddCategoryMapping("91", TorznabCatType.BooksTechnical, "Ebooks - Instructional");
+            AddCategoryMapping("91", TorznabCatType.BooksEbook, "Ebooks - Instructional");
             AddCategoryMapping("66", TorznabCatType.BooksEbook, "Ebooks - Juvenile");
             AddCategoryMapping("78", TorznabCatType.BooksEbook, "Ebooks - Language");
             AddCategoryMapping("67", TorznabCatType.BooksEbook, "Ebooks - Literary Classics");
@@ -186,9 +187,11 @@ namespace Jackett.Common.Indexers
             List<string> catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
             {
+                int index = 0;
                 foreach (string cat in catList)
                 {
-                    qParams.Add("tor[cat][]", cat);
+                    qParams.Add("tor[cat]["+index+"]", cat);
+                    index++;
                 }
             }
             else
