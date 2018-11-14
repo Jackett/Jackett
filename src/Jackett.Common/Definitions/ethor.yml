@@ -40,6 +40,26 @@
       tv-search: [q, season, ep]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: multilang
+      type: checkbox
+      label: Replace VFQ/MULTI by another language in release name
+      default:  false
+    - name: multilanguage
+      type: select
+      label: Replace MULTI by this language
+      default: MULTI.FRENCH
+      options:
+        FRENCH : "FRENCH"
+        MULTI.FRENCH : "MULTI.FRENCH" 
+        ENGLISH: "ENGLISH"
+      
   login:
     path: login3.php
     method: form
@@ -81,18 +101,28 @@
         filters:
           - name: replace
             args: ["/details.php", "/download.php"]
-      title:
+      _title_original:
         selector: a[href^="/details.php"]:has(b)
+      _title_original: # long titles (shortened with ...)
+        selector: a[href^="/details.php"][title]
+        attribute: title
+        optional: true
+      _title_normalized:
+        text: "{{ .Result._title_original }}"
         filters:
-          - name: toupper
-          - name: replace
-            args: ["VFQ", "FRENCH"]
-          - name: replace
-            args: ["MULTI", "FRENCH"]
           - name: re_replace
             args: ["S(\\d{2}) E(\\d{2})", "S$1E$2"]
           - name: re_replace
             args: ["S(\\d{1}) E(\\d{2})", "S0$1E$2"]
+      _title_multilang:
+        text: "{{ .Result._title_normalized }}"
+        filters:
+          - name: re_replace
+            args: ["(?i)[\\.\\s\\[\\-]MULTI[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+          - name: re_replace
+            args: ["(?i)[\\.\\s\\[\\-]VFQ[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+      title:
+        text: "{{if .Config.multilang }}{{ .Result._title_multilang }}{{else}}{{ .Result._title_normalized }}{{end}}"
       category:
         selector: a[href^="/browse.php?cat="]
         attribute: href

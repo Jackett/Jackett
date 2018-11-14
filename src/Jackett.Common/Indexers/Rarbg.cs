@@ -164,11 +164,11 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("mode", "list");
             }
 
-            var cats = string.Join(";", MapTorznabCapsToTrackers(query));
-            if (!string.IsNullOrEmpty(cats))
-            {
-                queryCollection.Add("category", cats);
-            }
+            var querycats = MapTorznabCapsToTrackers(query);
+            if (querycats.Count == 0)
+                querycats = GetAllTrackerCategories(); // default to all, without specifing it some categories are missing (e.g. games), see #4146
+            var cats = string.Join(";", querycats);
+            queryCollection.Add("category", cats);
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);

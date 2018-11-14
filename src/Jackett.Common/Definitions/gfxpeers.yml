@@ -80,3 +80,10 @@
         selector: td:nth-child(8)
       date:
         selector: td:nth-child(4)
+      downloadvolumefactor:
+        case:
+          "strong.tl_free": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
