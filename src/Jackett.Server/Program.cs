@@ -7,6 +7,7 @@ using Jackett.Common.Utils;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
@@ -184,6 +185,11 @@ namespace Jackett.Server
                 .PreferHostingUrls(true)
                 .UseConfiguration(Configuration)
                 .UseStartup<Startup>()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
                 .UseNLog();
     }
 }
