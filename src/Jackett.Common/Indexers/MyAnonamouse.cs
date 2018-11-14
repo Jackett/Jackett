@@ -216,6 +216,13 @@ namespace Jackett.Common.Indexers
                 var jsonContent = JObject.Parse(response.Content);
                 var sitelink = new Uri(SiteLink);
 
+                var error = jsonContent.Value<string>("error");
+                if(error != null)
+                {
+                    if (error == "Nothing returned, out of 0")
+                        return releases;
+                }
+
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
                     var release = new ReleaseInfo();
