@@ -304,7 +304,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * World-In-HD
  * WorldOfP2P (WOP)
  * x-ite.me (XM)
- * x264
  * xBytesV2
  * XSpeeds
  * Xthor
