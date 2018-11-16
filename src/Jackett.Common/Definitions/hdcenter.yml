@@ -62,6 +62,12 @@
         attribute: href
       title:
         selector: a.torrent_link_title
+      title: # special selector which only matches HDC releases not containing "English" and "only" tags and doesn't contain English in the title
+        selector: td.cats_col:has(a[href*="filter_cat[9]=1"]) + td.title_col:not(:has(span.tags_inner:contains("English"):contains("only"))):not(:has(span.tags_inner:contains("English"):contains("Only"))):not(:has(span.tags_inner:contains("english"):contains("only"))) a.torrent_link_title:not(:contains("English"))
+        optional: true
+        filters:
+          - name: replace # add GERMAN tag
+            args: ["-HDC", ".GERMAN-HDC"]
       category:
         selector: td.cats_col > a
         attribute: href
