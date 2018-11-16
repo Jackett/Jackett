@@ -68,6 +68,12 @@
         filters:
           - name: replace # add GERMAN tag
             args: ["-HDC", ".GERMAN-HDC"]
+      title: # special selector which only matches TvR releases not containing "GERMAN" already
+        selector: td.cats_col:has(a[href*="filter_cat[10]=1"]) + td.title_col a.torrent_link_title:not(:contains("GERMAN"))
+        optional: true
+        filters:
+          - name: replace # add GERMAN tag
+            args: [".DL", ".GERMAN.DL"]
       category:
         selector: td.cats_col > a
         attribute: href
