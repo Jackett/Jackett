@@ -87,10 +87,34 @@ namespace Jackett.Updater
                 {
                     var proc = Process.GetProcessById(pid);
                     logger.Info("Killing process " + proc.Id);
-                    proc.Kill();
-                    var exited = proc.WaitForExit(5000);
+
+                    // try to kill gracefully (on unix) first, see #3692
+                    var exited = false;
+                    if (Environment.OSVersion.Platform == PlatformID.Unix)
+                    {
+                        try
+                        {
+                            var startInfo = new ProcessStartInfo();
+                            startInfo.Arguments = "-15 " + pid;
+                            startInfo.FileName = "kill";
+                            Process.Start(startInfo);
+                            System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly), https://bugzilla.xamarin.com/show_bug.cgi?id=51742
+                            exited = proc.WaitForExit(2000);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e, "Error while sending SIGTERM to " + pid.ToString());
+                        }
+                        if (!exited)
+                            logger.Info("Process " + pid.ToString() + " didn't exit within 2 seconds after a SIGTERM");
+                    }
                     if (!exited)
-                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds");
+                    {
+                        proc.Kill(); // send SIGKILL
+                    }
+                    exited = proc.WaitForExit(5000);
+                    if (!exited)
+                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGKILL");
                 }
                 catch (ArgumentException)
                 {
@@ -223,7 +247,6 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/hachede-c.yml",
-                "Definitions/hd4Free.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/czteam.yml",
@@ -233,6 +256,26 @@ namespace Jackett.Updater
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
+                "appsettings.Development.json",
+                "CurlSharp.dll",
+                "CurlSharp.pdb",
+                "Jackett.dll",
+                "Jackett.dll.config",
+                "Jackett.pdb",
+                "Autofac.Integration.WebApi.dll",
+                "Microsoft.Owin.dll",
+                "Microsoft.Owin.FileSystems.dll",
+                "Microsoft.Owin.Host.HttpListener.dll",
+                "Microsoft.Owin.Hosting.dll",
+                "Microsoft.Owin.StaticFiles.dll",
+                "Owin.dll",
+                "System.Web.Http.dll",
+                "System.Web.Http.Owin.dll",
+                "System.Web.Http.Tracing.dll",
+                "Definitions/torrentkim.yml",
+                "Definitions/horriblesubs.yml",
+                "Definitions/idope.yml",
+                "Definitions/bt-scene.yml",
             };
 
             foreach (var oldFile in oldFiles)

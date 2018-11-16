@@ -20,8 +20,8 @@ namespace Jackett.Common.Utils
             ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 
             var logConfig = new LoggingConfiguration();
+
             var logFile = new FileTarget();
-            logConfig.AddTarget("file", logFile);
             logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
             logFile.FileName = Path.Combine(settings.DataFolder, logFileName);
             logFile.ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt");
@@ -29,23 +29,53 @@ namespace Jackett.Common.Utils
             logFile.MaxArchiveFiles = 5;
             logFile.KeepFileOpen = false;
             logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
+            logConfig.AddTarget("file", logFile);
+
+            var microsoftRule = new LoggingRule();
+            microsoftRule.LoggerNamePattern = "Microsoft.*";
+            microsoftRule.SetLoggingLevels(LogLevel.Warn, LogLevel.Fatal);
+            microsoftRule.Final = true;
+            microsoftRule.Targets.Add(logFile);
+
+            var microsoftDebugRule = new LoggingRule();
+            microsoftDebugRule.LoggerNamePattern = "Microsoft.*";
+            microsoftDebugRule.SetLoggingLevels(LogLevel.Debug, LogLevel.Info);
+            microsoftDebugRule.Final = true;
+            if (settings.TracingEnabled)
+            {
+                microsoftDebugRule.Targets.Add(logFile);
+            }
+            logConfig.LoggingRules.Add(microsoftDebugRule);
+
             var logFileRule = new LoggingRule("*", logLevel, logFile);
             logConfig.LoggingRules.Add(logFileRule);
 
             if (!fileOnly)
             {
                 var logConsole = new ColoredConsoleTarget();
+                logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
                 logConfig.AddTarget("console", logConsole);
 
-                logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
                 var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
                 logConfig.LoggingRules.Add(logConsoleRule);
 
                 var logService = new LogCacheService();
                 logConfig.AddTarget("service", logService);
+
                 var serviceRule = new LoggingRule("*", logLevel, logService);
                 logConfig.LoggingRules.Add(serviceRule);
+
+                microsoftRule.Targets.Add(logConsole);
+                microsoftRule.Targets.Add(logService);
+
+                if (settings.TracingEnabled)
+                {
+                    microsoftDebugRule.Targets.Add(logConsole);
+                    microsoftDebugRule.Targets.Add(logService);
+                }
             }
+
+            logConfig.LoggingRules.Add(microsoftRule);
 
             return logConfig;
         }

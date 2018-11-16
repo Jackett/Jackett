@@ -34,6 +34,13 @@ namespace Jackett.Common.Indexers
             "http://ghost.cable-modem.org/",
             "http://logan.unusualperson.com/",
             "http://baywatch.workisboring.com/",
+            "https://ipt.getcrazy.me",
+            "https://ipt.findnemo.net",
+            "https://ipt.beelyrics.net",
+            "https://ipt.venom.global",
+            "https://ipt.workisboring.net",
+            "https://ipt.lol",
+            
         };
 
         private new ConfigurationDataRecaptchaLogin configData
@@ -202,7 +209,7 @@ namespace Jackett.Common.Indexers
             // Redirect to ? then to /t
             await FollowIfRedirect(response, request.Url, null, firstCallCookies);
 
-            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/my.php"), () =>
+            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/lout.php"), () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();

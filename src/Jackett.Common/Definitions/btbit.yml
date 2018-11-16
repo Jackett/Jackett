@@ -53,6 +53,10 @@
         selector: .sbar span:nth-of-type(5) b
       grabs:
         selector: .sbar span:nth-of-type(6) b
+      seeders:
+        text: "1"
+      leechers:
+        text: "1"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

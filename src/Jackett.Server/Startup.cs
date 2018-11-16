@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -80,12 +79,10 @@ namespace Jackett.Server
 
             builder.Populate(services);
             builder.RegisterModule(new JackettModule(runtimeSettings));
-            builder.RegisterType<SecuityService>().As<ISecuityService>();
-            builder.RegisterType<ServerService>().As<IServerService>();
-            builder.RegisterType<ProtectionService>().As<IProtectionService>();
-            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>();
-            if (runtimeSettings.ClientOverride == "httpclientnetcore")
-                builder.RegisterType<HttpWebClientNetCore>().As<WebClient>();
+            builder.RegisterType<SecuityService>().As<ISecuityService>().SingleInstance();
+            builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
+            builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
+            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;
@@ -117,7 +114,10 @@ namespace Jackett.Server
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                // When adjusting these pareamters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                ForwardLimit = 10,
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
             });
 
             var rewriteOptions = new RewriteOptions()

@@ -69,9 +69,18 @@
       filters:
         - name: andmatch
     fields:
+# download button can be disbled in the profile, use details link instead
+#      download:
+#        selector: a[href^="download.php/"]
+#        attribute: href
       download:
-        selector: a[href^="download.php/"]
+        selector: a[href^="details.php?id="]
         attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php/"]
+          - name: append
+            args: "/invalid.torrent"
       title:
         selector: a[href^="details.php?id="]
       title:

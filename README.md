@@ -24,20 +24,24 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anidex
  * Anime Tosho
  * AniRena
+ * AudioBookBay
+ * BTstor.net
  * btbit
  * BTDB
- * BT-Scene
  * cpasbien
  * ETTV
+ * EliteTorrent.biz
  * ExtraTorrent.ag
+ * ExtraTorrentClone
  * EZTV
  * Frozen Layer
  * GkTorrent
  * Horrible Subs
- * Idope
+ * IdopeClone
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
  * Isohunt2
+ * KATcrs
  * KickAssTorrent
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
@@ -47,21 +51,23 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
+ * ProStyleX
  * RARBG
  * RuTor
  * ShowRSS
+ * SkyTorrentsClone
  * sukebei.Nyaa.si
  * sukebei-Pantsu
  * The Pirate Bay
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Toshokan
  * Torlock
+ * TorrentCouch
  * Torrent Downloads
+ * TorrentGalaxy.org
  * Torrent9
- * TorrentKim
  * Torrentz2
  * World Wide Torrents
- * YIFY (YTS)
  * YTS.ag
  * Zooqle
 
@@ -80,6 +86,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Newstudio
  * NetHD
  * NoName Club
+ * RockBox
  * RuTracker
  * SkTorrent
  * Union Fansub
@@ -90,26 +97,28 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Private Trackers
  * 2 Fast 4 You
  * 3D Torrents
+ * 720pier
  * Abnormal
  * Acid-Lounge
- * AlphaRatio
+ * AlphaRatio (AR)
  * AnimeBytes
- * AnimeTorrents
+ * AnimeTorrents (AnT)
+ * Anthelion (was TehConnection.me)
  * AOX
- * Apollo (XANAX)
  * ArabaFenice
  * Arche Torrent
  * AsianDVDClub
  * AST4u
  * Audiobook Torrents
- * Awesome-HD
- * Avistaz
+ * Awesome-HD (AHD)
+ * Avistaz (AsiaTorrents)
  * B2S-Share
  * Back-ups
  * BakaBT  [![(invite needed)][inviteneeded]](#)
  * bB
- * BeyondHD
+ * BeyondHD (BHD)
  * BIGTorrent
+ * BigTower
  * Bit-City Reloaded
  * BIT-HDTV
  * Bithorlo
@@ -121,19 +130,20 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitTorrentFiles  [![(invite needed)][inviteneeded]](#)
  * BJ-Share
  * BlueBird
- * Blutopia
+ * Blutopia (BLU)
  * Brasil Tracker
- * BroadcastTheNet
+ * BroadcastTheNet (BTN)
  * BrokenStones
- * BTNext
- * BTXpress
+ * BTGigs
+ * BTNext (BTNT)
+ * BTXpress (BTX)
  * Carpathians
  * CCFBits
  * CGPeers
  * CHDBits
  * Cinematik
  * Cinemageddon
- * CinemaZ
+ * CinemaZ (EuTorrents)
  * Classix
  * DanishBits
  * DataScene
@@ -143,91 +153,100 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Downloadville
  * Dragonworld Reloaded
  * Dream Team
+ * DXDHD
  * EliteHD  [![(invite needed)][inviteneeded]](#)
  * Elit Tracker
  * Elite-Tracker
- * Empornium
+ * Empornium (EMP)
  * eStone
  * Ethor.net (Thor's Land)
  * FANO.IN
- * FileList
+ * FileList (FL)
  * Femdomcult
  * Freedom-HD
  * FullMixMusic
  * FunFile
- * FunkyTorrents
+ * FunkyTorrents (FT)
  * Fuzer
  * GAYtorrent.ru
- * GazelleGames
+ * GazelleGames (GGn)
  * Gfxnews
  * GFXPeers
  * GigaTorrents
  * GimmePeers <!-- maintained by jamesb2147 -->
  * Girotottent
- * GODS  [![(invite needed)][inviteneeded]](#)
+ * GODS
  * Greek Team
  * HacheDe
  * Hardbay
- * HD-Forever
- * HD-Only
- * HD-Space
+ * HD4Free (HD4)
+ * HD-Forever (HDF)
+ * HD-Only (HDO)
+ * HD-Space (HDS)
  * HD-Spain
- * HD-Torrents
+ * HD-Torrents (HDT)
  * HD-Bits.com
  * HDBits
  * HDChina
  * HDCity
- * HDHome
+ * HDHome (HDBigger)
  * HDME
  * HDSky
  * HDTorrents.it
  * Hebits
  * Hon3y HD
+ * HQSource
  * Hyperay
  * ICE Torrent
  * I Love Classics
  * Immortalseed
  * inPeril
  * Insane Tracker
- * IPTorrents
+ * IPTorrents (IPT)
  * JPopsuki
  * Kapaki
  * Karagarga
  * LinkoManija
  * LosslessClub
- * M-Team - TP
- * Magico
+ * M-Team (TP)
+ * Magico (Trellas)
  * Majomparádé
  * Manicomio Share
  * Mononoké-BT
- * MoreThanTV
+ * MoreThanTV (MTV)
  * MyAnonamouse
  * myAmity
  * MySpleen
  * NCore
- * Nebulance
+ * Nebulance (NBL)
  * New Real World
- * NordicBits
- * Norbits <!-- added by DiseaseNO but no longer maintained? -->
+ * NordicBits (NB)
+ * Norbits
  * notwhat.cd
+ * Orpheus
  * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
- * PassThePopcorn
+ * PassThePopcorn (PTP)
  * PirateTheNet
  * PiXELHD
  * PolishSource
  * PolishTracker
  * Pretome
- * PrivateHD
+ * PrivateHD (PHD)
  * Psytorrents
  * PTFiles
  * PuntoTorrent
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
+ * Red Star Torrent
+ * Redtopia (RED)
+ * RetroFlix
  * RevolutionTT
  * RGU
  * RoDVD
+ * Romanian Metal Torrent
  * SceneFZ
+ * SceneHD
  * SceneReactor
  * SceneTime
  * SDBits
@@ -244,15 +263,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Superbits
  * Tasmanit
  * TBPlus
- * TehConnection.me
  * TenYardTracker
  * The Empire
  * The Geeks
- * The Horror Charnel
+ * The Horror Charnel (THC)
  * The Occult
  * The New Retro
  * The Place
- * The Shinning
+ * The Shinning (TsH)
  * The Show
  * The Vault
  * The-Torrents
@@ -268,9 +286,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentHR
  * Torrenting
  * Torrentland
- * TorrentLeech
+ * TorrentLeech (TL)
  * Torrents.Md
- * TorrentSeeds
+ * TorrentSeeds (TS)
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
  * TorViet
@@ -284,9 +302,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ultimate Gamer Club
  * Waffles
  * World-In-HD
- * WorldOfP2P
- * x-ite.me
- * x264
+ * WorldOfP2P (WOP)
+ * x-ite.me (XM)
  * xBytesV2
  * XSpeeds
  * Xthor
@@ -382,11 +399,10 @@ Example config for nginx:
 ```
 location /jackett {
 	proxy_pass http://127.0.0.1:9117;
-	proxy_set_header Host $host;
 	proxy_set_header X-Real-IP $remote_addr;
 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	proxy_set_header X-Forwarded-Proto $scheme;
-	proxy_set_header X-Forwarded-Host $host;
+	proxy_set_header X-Forwarded-Host $http_host;
 	proxy_redirect off;
 }
 ```
@@ -427,7 +443,8 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Open the Jackett solution in Visual Studio 2017 (version 15.7 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
-* Select Jackett.Console as startup project
+* Select Jackett.Server as startup project
+* In the drop down menu of the run button select "Jackett.Server" instead of "IIS Express"
 * Build/Start the project
 
 ### OSX
@@ -441,9 +458,9 @@ NOTE: msbuild is included in the mono release.
 
 NOTE: if you get the error "NU1102: Unable to find package Microsoft.AspNetCore with version (>= 2.1.2)" while restoring packages, you'll need to install it manually.https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.302-macos-x64-installer then delete the entire project directory and restart from a new clone
 
-* msbuild Jackett.Console/Jackett.Console.csproj /t:Build /p:Configuration=Debug
+* msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug
 * curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin
-* mono Jackett.Console/bin/Debug/JackettConsole.exe
+* mono Jackett.Server/bin/Debug/JackettServer.exe
 
 
 ### Linux
@@ -453,8 +470,8 @@ sudo apt install mono-complete nuget msbuild # install build tools (debian/ubunt
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 nuget restore Jackett.sln # prepare dependencies
-msbuild Jackett.Console/Jackett.Console.csproj /t:Build /p:Configuration=Debug # compile
-mono Jackett.Console/bin/Debug/JackettConsole.exe # run jackett
+msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug # compile
+mono Jackett.Server/bin/Debug/JackettServer.exe # run jackett
 ```
 
 ## Screenshots

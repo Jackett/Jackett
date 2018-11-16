@@ -102,9 +102,6 @@
       download:
         selector: a.dl_a
         attribute: href
-        filters:
-          - name: regexp
-            args: "^(/download.php/\\d+/).*" # cut off download url after ID to avoid bad request errors with curl
       files:
         selector: td:nth-child(3)
       size:

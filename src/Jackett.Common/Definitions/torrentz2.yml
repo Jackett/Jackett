@@ -69,12 +69,11 @@
     paths:
       - path: "{{if .Config.filter-verified }}verified{{else}}searchA{{end}}"
     inputs:
-       f: "{{ .Query.Keywords }}"
+       f: "{{if .Keywords }}title: {{else}}{{end}}{{ .Keywords }}"
        safe: "{{if .Config.filter-safe }}1{{else}}0{{end}}"
     rows:
       selector: "html body #wrap .results dl:has(a)"
-      filters:
-        - name: andmatch
+    # andmatch filter removed, see #3737
     fields:
       title:
         selector: dt a
@@ -114,10 +113,9 @@
         selector: dt
         remove: a
         filters:
+          - name: re_replace
+            args:  ["[^a-zA-Z\\s]+", ""]
           - name: trim
-            args: "»"
-          - name: trim
-            args: " "
       date:
         selector: dd span:nth-child(2)
         attribute: title

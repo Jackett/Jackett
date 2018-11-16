@@ -261,7 +261,10 @@ namespace Jackett.Common.Utils.Clients
                                     // URL decoding apparently is needed to, without it e.g. Demonoid download is broken
                                     // TODO: is it always needed (not just for relative redirects)?
                                     var newRedirectingTo = WebUtilityHelpers.UrlDecode(result.RedirectingTo, webRequest.Encoding);
-                                    newRedirectingTo = newRedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
+                                    if (newRedirectingTo.StartsWith("file:////")) // Location without protocol but with host (only add scheme)
+                                        newRedirectingTo = newRedirectingTo.Replace("file://", request.RequestUri.Scheme + ":");
+                                    else
+                                        newRedirectingTo = newRedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
                                     logger.Debug("[MONO relative redirect bug] Rewriting relative redirect URL from " + result.RedirectingTo + " to " + newRedirectingTo);
                                     result.RedirectingTo = newRedirectingTo;
                                 }

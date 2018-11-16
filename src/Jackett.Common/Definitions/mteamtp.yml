@@ -124,15 +124,15 @@
           - name: replace
             args: ["pic/nopic.jpg", ""]
       size:
-        selector: td.rowfollow:nth-child(5)
+        selector: td.rowfollow:nth-last-child(6)
       grabs:
-        selector: td.rowfollow:nth-child(8)
+        selector: td.rowfollow:nth-last-child(3)
       seeders:
-        selector: td.rowfollow:nth-child(6)
+        selector: td.rowfollow:nth-last-child(5)
       leechers:
-        selector: td.rowfollow:nth-child(7)
+        selector: td.rowfollow:nth-last-child(4)
       date:
-        selector: td.rowfollow:nth-child(4):not(:has(span))
+        selector: td.rowfollow:nth-last-child(7):not(:has(span))
         optional: true
         filters:
           - name: append
@@ -140,7 +140,7 @@
           - name: dateparse
             args: "2006-01-0215:04:05 -07:00"
       date:
-        selector: td.rowfollow:nth-child(4) > span[title]
+        selector: td.rowfollow:nth-last-child(7) > span[title]
         optional: true
         attribute: title
         filters:

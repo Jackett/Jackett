@@ -25,7 +25,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
+      - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}q/test/{{end}}"
       - path: "{{if .Keywords}}q/{{ .Keywords}}/2?sort=time{{else}}{{end}}"
       - path: "{{if .Keywords}}q/{{ .Keywords}}/3?sort=time{{else}}{{end}}"
       - path: "{{if .Keywords}}q/{{ .Keywords}}/4?sort=time{{else}}{{end}}"
@@ -63,9 +63,9 @@
       grabs:
         selector: div[class$="info"] span:nth-of-type(4)
       seeders:
-        text: "999"
+        selector: div[class$="info"] span:nth-of-type(4)
       leechers:
-        text: "999"
+        selector: div[class$="info"] span:nth-of-type(4)
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
