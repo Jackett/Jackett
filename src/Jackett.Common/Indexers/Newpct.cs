@@ -54,7 +54,8 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private static Uri SiteLinkUri = new Uri("http://www.tvsinpagar.com/");
+        private static Uri DefaultSiteLinkUri = new Uri("http://www.tvsinpagar.com/");
+        private Uri _siteUri;
         private NewpctRelease _mostRecentRelease;
         private Regex _searchStringRegex = new Regex(@"(.+?)S0?(\d+)(E0?(\d+))?$", RegexOptions.IgnoreCase);
         private Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
@@ -78,7 +79,7 @@ namespace Jackett.Common.Indexers
         public Newpct(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "Newpct",
                 description: "Newpct - descargar torrent peliculas, series",
-                link: SiteLinkUri.AbsoluteUri,
+                link: DefaultSiteLinkUri.AbsoluteUri,
                 caps: new TorznabCapabilities(TorznabCatType.TV,
                                               TorznabCatType.TVSD,
                                               TorznabCatType.TVHD,
@@ -101,7 +102,6 @@ namespace Jackett.Common.Indexers
         {
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
-            SiteLinkUri = new Uri(configData.SiteLink.Value);
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
             {
@@ -140,6 +140,7 @@ namespace Jackett.Common.Indexers
                 CleanCache();
             }
 
+            _siteUri = new Uri(configData.SiteLink.Value);
             _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
@@ -150,7 +151,7 @@ namespace Jackett.Common.Indexers
                 int pg = 1;
                 while (pg <= _maxDailyPages)
                 {
-                    Uri url = new Uri(SiteLinkUri, string.Format(_dailyUrl, pg));
+                    Uri url = new Uri(_siteUri, string.Format(_dailyUrl, pg));
                     var results = await RequestStringWithCookies(url.AbsoluteUri);
 
                     var items = ParseDailyContent(results.Content);
@@ -301,7 +302,7 @@ namespace Jackett.Common.Indexers
             string seriesLetter = !char.IsDigit(seriesName[0]) ? seriesName[0].ToString() : "0-9";
             return lettersUrl.Select(urlFormat =>
             {
-                return new Uri(SiteLinkUri, string.Format(urlFormat, seriesLetter.ToLower()));
+                return new Uri(_siteUri, string.Format(urlFormat, seriesLetter.ToLower()));
             });
         }
 
