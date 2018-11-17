@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers.Meta
 
             var remainingResults = results.Except(wrongResults).Except(perfectResults);
 
-            var titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title.ToEnumerable();
+            var titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title?.ToEnumerable() ?? Enumerable.Empty<string>();
             var strippedTitles = titles.Select(t => RemoveSpecialChars(t));
             var normalizedTitles = strippedTitles.SelectMany(t => GenerateTitleVariants(t));
 

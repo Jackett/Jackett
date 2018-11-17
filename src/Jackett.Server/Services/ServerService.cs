@@ -258,6 +258,24 @@ namespace Jackett.Server.Services
                 logger.Error(e, "Error while checking the username");
             }
 
+            //Warn user that they are using an old version of Jackett
+            try
+            {
+                DateTime compiledData = BuildDate.GetBuildDateTime();
+
+                if (compiledData < DateTime.Now.AddMonths(-3))
+                {
+                    string version = configService.GetVersion();
+                    string notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
+                    _notices.Add(notice);
+                    logger.Error(notice);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Error while checking build date of Jackett.Common");
+            }
+
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());

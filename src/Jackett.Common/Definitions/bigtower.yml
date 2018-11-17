@@ -1,4 +1,4 @@
-﻿---
+---
   site: bigtower
   name: BigTower
   description: "Big Tower is an ITALIAN Private site for TV / MOVIES / GENERAL"
@@ -108,6 +108,9 @@
             args: ["index.php?page=torrent-details&id=", "download.php?id="]
       title:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        filters:
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(\\[Richiesta\\])", ""]
       banner:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         attribute: onmouseover

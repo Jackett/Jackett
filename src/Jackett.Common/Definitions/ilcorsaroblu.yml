@@ -144,21 +144,27 @@
 #          - name: regexp
 #            args: "src=(.+?) "
       size:
-        selector: td:nth-last-child(3)
+        selector: td:nth-last-child(2)
       date:
-        selector: td:nth-last-child(7)
+        selector: td:nth-last-child(6):contains('ago')
+        optional: true
+        filters:
+          - name: timeago
+      date:
+        selector: td:nth-last-child(6):contains('/')
+        optional: true
         filters:
           - name: dateparse
             args: "02/01/2006"
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td:nth-last-child(3)
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-last-child(6)
-      leechers:
         selector: td:nth-last-child(5)
+      leechers:
+        selector: td:nth-last-child(4)
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
