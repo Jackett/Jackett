@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             {
             }
 
-            public NewpctRelease(NewpctRelease copyFrom):
+            public NewpctRelease(NewpctRelease copyFrom) :
                 base(copyFrom)
             {
                 NewpctReleaseType = copyFrom.NewpctReleaseType;
@@ -63,13 +63,16 @@ namespace Jackett.Common.Indexers
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
 
         private int _maxDailyPages = 7;
+        private int _maxMoviesPages = 10;
         private int _maxEpisodesListPages = 100;
         private int[] _allTvCategories = TorznabCatType.TV.SubCategories.Select(c => c.ID).ToArray();
+        private int[] _allMoviesCategories = TorznabCatType.Movies.SubCategories.Select(c => c.ID).ToArray();
 
         private bool _includeVo;
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
+        private string _searchUrl = "/buscar";
         private string _dailyUrl = "/ultimas-descargas/pg/{0}";
         private string[] _seriesLetterUrls = new string[] { "/series/letter/{0}", "/series-hd/letter/{0}" };
         private string[] _seriesVOLetterUrls = new string[] { "/series-vo/letter/{0}" };
@@ -173,12 +176,18 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                //Only tv search supported. (newpct web search is useless)
                 bool isTvSearch = query.Categories == null || query.Categories.Length == 0 ||
                     query.Categories.Any(c => _allTvCategories.Contains(c));
                 if (isTvSearch)
                 {
-                    return await TvSearch(query);
+                    releases.AddRange(await TvSearch(query));
+                }
+
+                bool isMovieSearch = query.Categories == null || query.Categories.Length == 0 ||
+                    query.Categories.Any(c => _allMoviesCategories.Contains(c));
+                if (isMovieSearch)
+                {
+                    releases.AddRange(await MovieSearch(query));
                 }
             }
 
@@ -409,6 +418,50 @@ namespace Jackett.Common.Indexers
 
                     releases.Add(newpctRelease);
                 }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(content, ex);
+            }
+
+            return releases;
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> MovieSearch(TorznabQuery query)
+        {
+            var releases = new List<ReleaseInfo>();
+
+            string searchStr = query.SanitizedSearchTerm;
+
+            int pg = 1;
+            while (pg <= _maxMoviesPages)
+            {
+                var queryCollection = new Dictionary<string, string>();
+                queryCollection.Add("q", searchStr);
+                queryCollection.Add("page", pg.ToString());
+
+                Uri url = new Uri(_siteUri, string.Format(_searchUrl, pg));
+                var results = await PostDataWithCookies(url.AbsoluteUri, queryCollection);
+
+                var items = ParseSearchContent(results.Content);
+                if (items == null || !items.Any())
+                    break;
+
+                releases.AddRange(items);
+            }
+
+            return releases;
+        }
+
+        private IEnumerable<NewpctRelease> ParseSearchContent(string content)
+        {
+            var SearchResultParser = new HtmlParser();
+            var doc = SearchResultParser.Parse(content);
+
+            List<NewpctRelease> releases = new List<NewpctRelease>();
+
+            try
+            {
             }
             catch (Exception ex)
             {
