@@ -32,7 +32,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ETTV
  * EliteTorrent.biz
  * ExtraTorrent.ag
- * ExtraTorrentClone
  * EZTV
  * Frozen Layer
  * GkTorrent
