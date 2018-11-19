@@ -5,6 +5,7 @@
   language: fr-fr
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
     - https://ww1.torrent9.ph/
   legacylinks:
