@@ -5,6 +5,7 @@
   language: fr-fr
   type: semi-private
   encoding: UTF-8
+  followredirect: true
   links:
     - https://www8.yggtorrent.to/
   legacylinks:
