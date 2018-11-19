@@ -33,12 +33,13 @@ namespace Jackett.Common.Indexers
             public int? Season;
             public int? Episode;
             public int? EpisodeTo;
+            public int Score;
 
             public NewpctRelease()
             {
             }
 
-            public NewpctRelease(NewpctRelease copyFrom):
+            public NewpctRelease(NewpctRelease copyFrom) :
                 base(copyFrom)
             {
                 NewpctReleaseType = copyFrom.NewpctReleaseType;
@@ -46,6 +47,7 @@ namespace Jackett.Common.Indexers
                 Season = copyFrom.Season;
                 Episode = copyFrom.Episode;
                 EpisodeTo = copyFrom.EpisodeTo;
+                Score = copyFrom.Score;
             }
 
             public override object Clone()
@@ -54,21 +56,28 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private static Uri SiteLinkUri = new Uri("http://www.tvsinpagar.com/");
+        private static Uri DefaultSiteLinkUri = new Uri("http://descargas2020.com/");
+        private Uri _siteUri;
         private NewpctRelease _mostRecentRelease;
+        private char[] _wordSeparators = new char[] { ' ', '.', ',', ';', '(', ')', '-', '_' };
+        private int _wordNotFoundScore = 100000;
         private Regex _searchStringRegex = new Regex(@"(.+?)S0?(\d+)(E0?(\d+))?$", RegexOptions.IgnoreCase);
         private Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
         private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
 
         private int _maxDailyPages = 7;
+        private int _maxMoviesPages = 20;
         private int _maxEpisodesListPages = 100;
         private int[] _allTvCategories = TorznabCatType.TV.SubCategories.Select(c => c.ID).ToArray();
+        private int[] _allMoviesCategories = TorznabCatType.Movies.SubCategories.Select(c => c.ID).ToArray();
 
         private bool _includeVo;
+        private bool _filterMovies;
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
+        private string _searchUrl = "/buscar";
         private string _dailyUrl = "/ultimas-descargas/pg/{0}";
         private string[] _seriesLetterUrls = new string[] { "/series/letter/{0}", "/series-hd/letter/{0}" };
         private string[] _seriesVOLetterUrls = new string[] { "/series-vo/letter/{0}" };
@@ -78,7 +87,7 @@ namespace Jackett.Common.Indexers
         public Newpct(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "Newpct",
                 description: "Newpct - descargar torrent peliculas, series",
-                link: SiteLinkUri.AbsoluteUri,
+                link: DefaultSiteLinkUri.AbsoluteUri,
                 caps: new TorznabCapabilities(TorznabCatType.TV,
                                               TorznabCatType.TVSD,
                                               TorznabCatType.TVHD,
@@ -95,13 +104,15 @@ namespace Jackett.Common.Indexers
 
             var voItem = new BoolItem() { Name = "Include original versions in search results", Value = false };
             configData.AddDynamic("IncludeVo", voItem);
+
+            var filterMoviesItem = new BoolItem() { Name = "Only full match movies", Value = true };
+            configData.AddDynamic("FilterMovies", filterMoviesItem);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
-            SiteLinkUri = new Uri(configData.SiteLink.Value);
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
             {
@@ -140,7 +151,9 @@ namespace Jackett.Common.Indexers
                 CleanCache();
             }
 
+            _siteUri = new Uri(configData.SiteLink.Value);
             _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
+            _filterMovies = ((BoolItem)configData.GetDynamic("FilterMovies")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
             bool rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
@@ -150,7 +163,7 @@ namespace Jackett.Common.Indexers
                 int pg = 1;
                 while (pg <= _maxDailyPages)
                 {
-                    Uri url = new Uri(SiteLinkUri, string.Format(_dailyUrl, pg));
+                    Uri url = new Uri(_siteUri, string.Format(_dailyUrl, pg));
                     var results = await RequestStringWithCookies(url.AbsoluteUri);
 
                     var items = ParseDailyContent(results.Content);
@@ -172,12 +185,18 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                //Only tv search supported. (newpct web search is useless)
                 bool isTvSearch = query.Categories == null || query.Categories.Length == 0 ||
                     query.Categories.Any(c => _allTvCategories.Contains(c));
                 if (isTvSearch)
                 {
-                    return await TvSearch(query);
+                    releases.AddRange(await TvSearch(query));
+                }
+
+                bool isMovieSearch = query.Categories == null || query.Categories.Length == 0 ||
+                    query.Categories.Any(c => _allMoviesCategories.Contains(c));
+                if (isMovieSearch)
+                {
+                    releases.AddRange(await MovieSearch(query));
                 }
             }
 
@@ -301,7 +320,7 @@ namespace Jackett.Common.Indexers
             string seriesLetter = !char.IsDigit(seriesName[0]) ? seriesName[0].ToString() : "0-9";
             return lettersUrl.Select(urlFormat =>
             {
-                return new Uri(SiteLinkUri, string.Format(urlFormat, seriesLetter.ToLower()));
+                return new Uri(_siteUri, string.Format(urlFormat, seriesLetter.ToLower()));
             });
         }
 
@@ -417,6 +436,113 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
+        private async Task<IEnumerable<ReleaseInfo>> MovieSearch(TorznabQuery query)
+        {
+            var releases = new List<NewpctRelease>();
+
+            string searchStr = query.SanitizedSearchTerm;
+
+            int pg = 1;
+            while (pg <= _maxMoviesPages)
+            {
+                var queryCollection = new Dictionary<string, string>();
+                queryCollection.Add("q", searchStr);
+                queryCollection.Add("pg", pg.ToString());
+
+                Uri url = new Uri(_siteUri, string.Format(_searchUrl, pg));
+                var results = await PostDataWithCookies(url.AbsoluteUri, queryCollection);
+
+                var items = ParseSearchContent(results.Content);
+                if (items == null || !items.Any())
+                    break;
+
+                releases.AddRange(items);
+                pg++;
+            }
+
+            ScoreReleases(releases, searchStr);
+
+            if (_filterMovies)
+                releases = releases.Where(r => r.Score < _wordNotFoundScore).ToList();
+
+            return releases;
+        }
+
+        private IEnumerable<NewpctRelease> ParseSearchContent(string content)
+        {
+            var SearchResultParser = new HtmlParser();
+            var doc = SearchResultParser.Parse(content);
+
+            List<NewpctRelease> releases = new List<NewpctRelease>();
+
+            try
+            {
+                var rows = doc.QuerySelectorAll(".content .info");
+                foreach (var row in rows)
+                {
+                    var anchor = row.QuerySelector("a");
+                    var h2 = anchor.QuerySelector("h2");
+                    var title = Regex.Replace(h2.TextContent, @"\s+", " ").Trim();
+                    var detailsUrl = anchor.GetAttribute("href");
+
+                    bool isSeries = h2.QuerySelector("span") != null && h2.TextContent.ToLower().Contains("calidad");
+                    bool isGame = title.ToLower().Contains("pcdvd");
+                    if (isSeries || isGame)
+                        continue;
+
+                    var span = row.QuerySelectorAll("span");
+
+                    var pubDateText = span[1].TextContent.Trim();
+                    var sizeText = span[2].TextContent.Trim();
+
+                    long size = ReleaseInfo.GetBytes(sizeText);
+                    DateTime publishDate = DateTime.ParseExact(pubDateText, "dd-MM-yyyy", null);
+
+                    var div = row.QuerySelector("div");
+
+                    NewpctRelease newpctRelease;
+                    newpctRelease = GetReleaseFromData(ReleaseType.Movie, title, detailsUrl, null, null, size, publishDate);
+
+                    releases.Add(newpctRelease);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(content, ex);
+            }
+
+            return releases;
+        }
+
+        private void ScoreReleases(IEnumerable<NewpctRelease> releases, string searchTerm)
+        {
+            string[] searchWords = searchTerm.ToLower().Split(_wordSeparators, StringSplitOptions.None).
+                Select(s => s.Trim()).
+                Where(s => !string.IsNullOrEmpty(s)).ToArray();
+
+            foreach (NewpctRelease release in releases)
+            {
+                release.Score = 0;
+                string[] releaseWords = release.Title.ToLower().Split(_wordSeparators, StringSplitOptions.None).
+                    Select(s => s.Trim()).
+                    Where(s => !string.IsNullOrEmpty(s)).ToArray();
+
+                foreach (string search in searchWords)
+                {
+                    int index = Array.IndexOf(releaseWords, search);
+                    if (index >= 0)
+                    {
+                        release.Score += index;
+                        releaseWords[index] = null;
+                    }
+                    else
+                    {
+                        release.Score += _wordNotFoundScore;
+                    }
+                }
+            }
+        }
+
         ReleaseType ReleaseTypeFromQuality(string quality)
         {
             if (quality.Trim().ToLower().StartsWith("hdtv"))
@@ -497,15 +623,8 @@ namespace Jackett.Common.Indexers
             if (String.IsNullOrEmpty(release.SeriesName))
             {
                 release.SeriesName = release.Title;
-                if (release.Title.Contains("-"))
-                {
-                    release.SeriesName = release.Title.Substring(0, release.Title.IndexOf('-') - 1);
-                }
-            }
-
-            if (String.IsNullOrEmpty(quality))
-            {
-                quality = "HDTV";
+                if (release.NewpctReleaseType == ReleaseType.TV && release.SeriesName.Contains("-"))
+                    release.SeriesName = release.Title.Substring(0, release.SeriesName.IndexOf('-') - 1);
             }
 
             var titleParts = new List<string>();
@@ -514,6 +633,9 @@ namespace Jackett.Common.Indexers
 
             if (release.NewpctReleaseType == ReleaseType.TV)
             {
+                if (String.IsNullOrEmpty(quality))
+                    quality = "HDTV";
+
                 var seasonAndEpisode = "S" + release.Season.ToString().PadLeft(2, '0');
                 seasonAndEpisode += "E" + release.Episode.ToString().PadLeft(2, '0');
                 if (release.EpisodeTo != release.Episode && release.EpisodeTo != null && release.EpisodeTo != 0)
@@ -523,7 +645,7 @@ namespace Jackett.Common.Indexers
                 titleParts.Add(seasonAndEpisode);
             }
 
-            if (!release.SeriesName.Contains(quality))
+            if (!string.IsNullOrEmpty(quality) && !release.SeriesName.Contains(quality))
             {
                 titleParts.Add(quality);
             }
@@ -533,7 +655,10 @@ namespace Jackett.Common.Indexers
                 titleParts.Add(language);
             }
 
-            if (release.Title.ToLower().Contains("espa\u00F1ol") || release.Title.ToLower().Contains("castellano"))
+            if (release.Title.ToLower().Contains("espa\u00F1ol") ||
+                release.Title.ToLower().Contains("espanol") ||
+                release.Title.ToLower().Contains("castellano") ||
+                release.Title.ToLower().EndsWith("espa"))
             {
                 titleParts.Add("Spanish");
             }
@@ -541,6 +666,7 @@ namespace Jackett.Common.Indexers
             string result = String.Join(".", titleParts);
 
             result = Regex.Replace(result, @"[\[\]]+", ".");
+            result = Regex.Replace(result, @"\.[ \.]*\.", ".");
 
             return result;
         }
