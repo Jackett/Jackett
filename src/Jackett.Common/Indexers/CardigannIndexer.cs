@@ -703,7 +703,16 @@ namespace Jackett.Common.Indexers
                 var errormessage = "Login Failed, got redirected.";
                 var DomainHint = getRedirectDomainHint(testResult);
                 if (DomainHint != null)
+                {
                     errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                    if (Definition.Followredirect)
+                    {
+                        configData.SiteLink.Value = DomainHint;
+                        SiteLink = configData.SiteLink.Value;
+                        SaveConfig();
+                        errormessage += " Updated site link, please try again.";
+                    }
+                }
                 throw new ExceptionWithConfigData(errormessage, configData);
             }
 
@@ -728,6 +737,13 @@ namespace Jackett.Common.Indexers
                 if (DomainHint != null)
                 {
                     var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    if (Definition.Followredirect)
+                    {
+                        configData.SiteLink.Value = DomainHint;
+                        SiteLink = configData.SiteLink.Value;
+                        SaveConfig();
+                        errormessage += " Updated site link, please try again.";
+                    }
                     throw new ExceptionWithConfigData(errormessage, configData);
                 }
 
