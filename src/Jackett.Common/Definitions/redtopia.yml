@@ -33,7 +33,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: table.main:contains("Login Failed!")
+      - selector: form[action*="/login"] .text-red
     test:
       path: /torrents
 
