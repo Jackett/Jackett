@@ -5,8 +5,9 @@
   language: fr-fr
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - https://www.cpabien.cx/
+    - https://wwv.cpabien.cm/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
@@ -26,6 +27,7 @@
     - https://www.cpasbien.blue/
     - https://wvw.cpabien.cm/
     - https://www.cpabien.io/
+    - https://www.cpabien.cx/
 
   caps:
     categorymappings:
