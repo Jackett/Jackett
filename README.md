@@ -65,6 +65,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Downloads
  * TorrentGalaxy.org
  * Torrent9
+ * Torernt9 .ch alternative
  * Torrentz2
  * World Wide Torrents
  * YTS.ag
