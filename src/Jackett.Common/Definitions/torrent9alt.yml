@@ -1,15 +1,12 @@
 ﻿---
   site: torrent9
-  name: Torrent9
+  name: Torrent9 clone (torrents9.ch)
   description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
   language: fr-fr
   type: public
   encoding: UTF-8
   links:
-    - https://www.torrents9.ch/
-  legacylinks:
-    - http://www.torrent9.cc/
-    - http://www.torrent9.pe/
+    - https://www.torrent9.ch/
 
   caps:
     categorymappings:
