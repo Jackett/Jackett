@@ -5,8 +5,9 @@
   language: fr-fr
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - https://ww4.gktorrent.com/
+    - https://www.gktorrent.me/
   legacylinks:
     - https://www.gktorrent.org/  
     - https://www.gktorrent.com/
@@ -17,6 +18,7 @@
     - https://ww3.gktorrent.com/
     - http://www.gktorrent.net/
     - https://www.gktorrent.net/
+    - https://ww4.gktorrent.com/
 
   caps:
     categorymappings:
