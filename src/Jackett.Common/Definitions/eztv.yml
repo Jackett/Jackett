@@ -5,10 +5,12 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - https://eztv.re/
+    - https://eztv.io/
   legacylinks:
     - https://eztv.ag/
+    - https://eztv.re/
 
   caps:
     categories:
