@@ -277,12 +277,17 @@ namespace Jackett.Common.Indexers
             if (pagelinks.Length > 0)
             {
                 // If there are several pages find the link for the latest one
-                var last_page_link = (pagelinks[pagelinks.Length - 1].Cq().Attr("href")).Trim();
-
-                // find out the number of the last page from the link
-                Match match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
-                numVal = Int32.Parse(match.Value);
-            }
+                for (int i= pagelinks.Length - 1; i > 0; i--)
+                {
+                    var last_page_link = (pagelinks[i].Cq().Attr("href")).Trim();
+                    if (last_page_link.Contains("oldal"))
+                    {
+                        Match match = Regex.Match(last_page_link, @"(?<=[\?,&]oldal=)(\d+)(?=&)");
+                        numVal = Int32.Parse(match.Value);
+                        break;
+                    }
+                }
+             }
 
             var limit = query.Limit;
             if (limit == 0)
