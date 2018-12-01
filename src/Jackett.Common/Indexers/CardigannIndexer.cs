@@ -1227,7 +1227,12 @@ namespace Jackett.Common.Indexers
                     response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
                 else
                     response = await RequestStringWithCookies(searchUrl, null, null, headers);
+
+                if (response.IsRedirect && SearchPath.Followredirect)
+                    await FollowIfRedirect(response);
+
                 var results = response.Content;
+
 
                 try
                 {
@@ -1247,6 +1252,10 @@ namespace Jackett.Common.Indexers
                             response = await PostDataWithCookies(searchUrl, queryCollection);
                         else
                             response = await RequestStringWithCookies(searchUrl);
+
+                        if (response.IsRedirect && SearchPath.Followredirect)
+                            await FollowIfRedirect(response);
+
                         results = response.Content;
                         SearchResultDocument = SearchResultParser.Parse(results);
                     }

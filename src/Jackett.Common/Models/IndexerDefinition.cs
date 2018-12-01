@@ -184,6 +184,7 @@ namespace Jackett.Common.Models
     {
         public List<string> Categories { get; set; }
         public bool Inheritinputs { get; set; } = true;
+        public bool Followredirect { get; set; } = false;
     }
 
     public class requestBlock
