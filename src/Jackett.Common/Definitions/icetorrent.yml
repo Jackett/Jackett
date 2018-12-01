@@ -114,7 +114,7 @@
         selector: td:has(a[href$="filelist=1#filelist"])
         remove: a
       date:
-        selector: td > font:has(i.fa-clock)
+        selector: td > span:has(i.fa-clock)
         remove: b
         filters:
           - name: replace
