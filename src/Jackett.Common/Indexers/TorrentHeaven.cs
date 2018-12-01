@@ -24,10 +24,6 @@ namespace Jackett.Common.Indexers
         }; 
         private string IndexUrl { get { return SiteLink + "index.php"; } }
         private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
-        private static readonly string[] certificateHashs = new string[] {
-            "6F5CE30D578C2A7AECFB919D0D013976D395055F",
-            "66096DB5FD0107E4FFBAF5EC8378EB235CADA909",
-        };
 
         private new ConfigurationDataCaptchaLogin configData
         {
@@ -97,9 +93,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.PC, "APPLICATIONS/Sonstige");
             AddCategoryMapping(70, TorznabCatType.PC, "APPLICATIONS/Linux");
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");
-
-            foreach (var certificateHash in certificateHashs) 
-                webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash); 
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
