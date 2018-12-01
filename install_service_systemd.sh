@@ -19,6 +19,13 @@ echo "${BOLDRED}ERROR${NC}: Couldn't locate JackettConsole.exe. Is the script in
 fi
 jackettdir="$(pwd)"
 
+# Check if Jackett's owner is root
+jackettuser="$(stat -c "%U" ./JackettConsole.exe)"
+if [ "${jackettuser}" == "root" ]; then
+echo "${BOLDRED}ERROR${NC}: Jackett shouldn't run as root. Please, change the owner of the Jackett directory."
+    exit 1
+fi
+
 # Check if mono is installed
 command -v mono >/dev/null 2>&1 || { echo >&2 "${BOLDRED}ERROR${NC}: Jackett requires Mono but it's not installed. Aborting."; exit 1; }
 monodir="$(dirname $(command -v mono))"
@@ -40,6 +47,9 @@ SyslogIdentifier=jackett
 Restart=always
 RestartSec=5
 Type=simple
+User=${jackettuser}
+Group=${jackettuser}
+WorkingDirectory=${jackettdir}
 ExecStart=${monodir}/mono --debug ${jackettdir}/JackettConsole.exe --NoRestart
 TimeoutStopSec=20
 
@@ -63,6 +73,7 @@ ${BOLDRED}ERROR${NC}: Could not launch service. The installation might have fail
 Please open an issue on https://github.com/Jackett/Jackett/issues and paste following information:
 Mono directory: \`${monodir}\`
 Jackett directory: \`${jackettdir}\`
+Jackett user: \`${jackettuser}\`
 
 EOL
 fi
