@@ -63,6 +63,7 @@ namespace Jackett.Common.Models
                         select new XElement("item",
                             new XElement("title", r.Title),
                             new XElement("guid", r.Guid),
+                            new XElement("jackettindexer", new XAttribute("id", r.Origin.ID), r.Origin.DisplayName),
                             r.Comments == null ? null : new XElement("comments", r.Comments.ToString()),
                             r.PublishDate == DateTime.MinValue ? new XElement("pubDate", xmlDateFormat(DateTime.Now)) : new XElement("pubDate", xmlDateFormat(r.PublishDate)),
                             r.Size == null ? null : new XElement("size", r.Size),
