@@ -353,6 +353,14 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
 
+### Install as service
+1. Install Jackett with the steps from above.
+2. Open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service.
+2. If the installation was a success, you can close the Terminal window.
+
+The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`.
+Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+
 ### Installation on Linux via Ansible
 
 On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
