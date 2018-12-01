@@ -54,6 +54,8 @@ namespace Jackett.Common.Indexers
             Language = "pt-br";
             Type = "private";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
             AddCategoryMapping(8, TorznabCatType.Other, "Apostilas/Tutoriais");
@@ -127,7 +129,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // if the search string is empty use the "last 24h torrents" view
-            if (string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
             {
                 var results = await RequestStringWithCookies(TodayUrl);
                 try
@@ -230,12 +232,20 @@ namespace Jackett.Common.Indexers
                 var searchUrl = BrowseUrl;
                 var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
 
-                foreach (var searchTerm in _commonSearchTerms)
+                if (!query.IsImdbQuery)
                 {
-                    query.SearchTerm = query.SearchTerm.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value);
+                    foreach (var searchTerm in _commonSearchTerms)
+                    {
+                        query.SearchTerm = query.SearchTerm.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value);
+                    }
                 }
-                
+
                 var searchString = query.GetQueryString();
+                if (query.IsImdbQuery)
+                {
+                    searchString = query.ImdbID;
+                }
+
                 var queryCollection = new NameValueCollection
                 {
                     {"searchstr", StripSearchString(searchString, isSearchAnime)},
@@ -365,7 +375,7 @@ namespace Jackett.Common.Indexers
                             release.PublishDate = DateTime.Today;
 
                             // check for previously stripped search terms
-                            if (!query.MatchQueryStringAND(release.Title))
+                            if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title))
                                 continue;
 
                             var size = qSize.TextContent;
