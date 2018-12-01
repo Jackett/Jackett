@@ -1260,7 +1260,8 @@ namespace Jackett.Common.Indexers
                         logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
                     }
 
-                    var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                    var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                    var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                     List<IElement> Rows = new List<IElement>();
                     foreach (var RowDom in RowsDom)
                     {
