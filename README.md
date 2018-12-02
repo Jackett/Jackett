@@ -248,6 +248,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SceneFZ
  * SceneHD
  * SceneReactor
+ * SceneRush
  * SceneTime
  * SDBits
  * Secret Cinema
