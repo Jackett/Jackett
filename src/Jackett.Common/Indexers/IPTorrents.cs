@@ -248,6 +248,10 @@ namespace Jackett.Common.Indexers
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
 
             var results = response.Content;
+
+            if (query.IsTest && results.Contains("No Torrents Found!"))
+                throw new Exception("Got No Torrents Found! Make sure your IPTorrents profile config contain proper default category settings.");
+
             try
             {
                 CQ dom = results;
