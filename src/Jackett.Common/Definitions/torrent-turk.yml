@@ -32,6 +32,18 @@
       tv-search: [q]
       movie-search: [q]
       
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: Layout
+      default: Only the classic profile is supported. Make sure to set the "Torrent listesi" option in your profile to "Klasik".
+      
   login:
     path: /?p=home&pid=1
     method: form
