@@ -70,11 +70,22 @@
       - {id: 74, cat: Books/Comics, desc: "Manga"}
       - {id: 87, cat: Books, desc: "Giornali"}
 
-
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: donor
+      type: checkbox
+      label: Show donor torrent? (Enable if you're a donor)
+      default: false
 
   login:
     path: index.php?page=login
@@ -98,7 +109,7 @@
       options: "0"
       active: "0"
     rows:
-      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="]){{if .Config.donor }}{{else}}:not(:has(img[src*="keditbookmarks.png"])){{end}}
     fields:
       download:
         selector: a[href^="index.php?page=torrent-details&id="]
