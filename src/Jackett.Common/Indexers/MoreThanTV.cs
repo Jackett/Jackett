@@ -158,9 +158,9 @@ namespace Jackett.Common.Indexers
                             // Parse required data
                             var downloadAnchor = groupItem.QuerySelectorAll("td a").Last();
                             var qualityData = downloadAnchor.InnerHtml.Split('/');
-
+                            
                             if (qualityData.Length < 2)
-                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length}.");
+                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length} for {season}.");
 
                             // Build title
                             var title = string.Join(".", new List<string>
