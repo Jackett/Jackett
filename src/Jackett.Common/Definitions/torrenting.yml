@@ -72,6 +72,8 @@
       date:
         selector: td.torrentNameInfo > div
         filters:
+          - name: re_replace
+            args: [" by.*", ""]
           - name: split
             args: ["|", -1]
       seeders:
