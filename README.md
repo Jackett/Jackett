@@ -98,6 +98,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Private Trackers
  * 2 Fast 4 You
  * 3D Torrents
+ * 420files
  * 720pier
  * Abnormal
  * Acid-Lounge
