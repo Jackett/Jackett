@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.skytorrents.to/
+  legacylinks:
     - https://www.skytorrents.lol/
 
   caps:
