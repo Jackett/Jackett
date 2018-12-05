@@ -63,7 +63,7 @@
       incldead: "1"
       blah: "0"
     rows:
-      selector: table[cellpadding='5'][width='96%'] > tbody > tr
+      selector: table[cellpadding='5'][width='96%'] > tbody > tr:has(a[href*="details.php?id="])
     fields:
       title:
         selector: td:nth-child(2) > a > b
