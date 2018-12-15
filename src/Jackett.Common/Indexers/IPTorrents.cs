@@ -249,7 +249,7 @@ namespace Jackett.Common.Indexers
 
             var results = response.Content;
 
-            if (string.IsNullOrWhiteSpace(query.SearchTerm) && results.Contains("No Torrents Found!"))
+            if (string.IsNullOrWhiteSpace(query.ImdbID) && string.IsNullOrWhiteSpace(query.SearchTerm) && results.Contains("No Torrents Found!"))
                 throw new Exception("Got No Torrents Found! Make sure your IPTorrents profile config contain proper default category settings.");
 
             try
