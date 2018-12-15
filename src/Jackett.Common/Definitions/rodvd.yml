@@ -6,6 +6,8 @@
   type: private
   encoding: windows-1252
   links:
+    - https://rodvd.net/
+  legacylinks:
     - http://rodvd.net/
 
   caps:
