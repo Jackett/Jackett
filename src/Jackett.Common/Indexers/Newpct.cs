@@ -56,13 +56,20 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private static Uri[] SiteLinkUris = new Uri[]
+        private static Uri DefaultSiteLinkUri =
+            new Uri("http://descargas2020.com/");
+
+        private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
-                new Uri("http://descargas2020.com/"),
-                new Uri("http://torrentrapid.com/"),
-                new Uri("http://torrentlocura.com/"),
-                new Uri("http://tumejortorrent.com/"),
-                new Uri("http://www.tvsinpagar.com/"),
+            new Uri("http://torrentrapid.com/"),
+            new Uri("http://torrentlocura.com/"),
+            new Uri("http://tumejortorrent.com/"),
+            new Uri("http://pctnew.com/"),
+        };
+
+        private static Uri[] LegacySiteLinkUris = new Uri[]
+        {
+            new Uri("http://www.tvsinpagar.com/"),
         };
 
         private NewpctRelease _mostRecentRelease;
@@ -91,10 +98,12 @@ namespace Jackett.Common.Indexers
         private string _seriesUrl = "{0}/pg/{1}";
         private string[] _voUrls = new string[] { "serie-vo", "serievo" };
 
+        public override string[] LegacySiteLinks { get; protected set; } = LegacySiteLinkUris.Select(u => u.AbsoluteUri).ToArray();
+
         public Newpct(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "Newpct",
                 description: "Newpct - descargar torrent peliculas, series",
-                link: SiteLinkUris[0].AbsoluteUri,
+                link: DefaultSiteLinkUri.AbsoluteUri,
                 caps: new TorznabCapabilities(TorznabCatType.TV,
                                               TorznabCatType.TVSD,
                                               TorznabCatType.TVHD,
@@ -146,14 +155,17 @@ namespace Jackett.Common.Indexers
             List<string> links = new List<string>();
             links.Add(linkParam.AbsoluteUri);
 
-            foreach (Uri extraSiteUri in SiteLinkUris)
+            IEnumerable<Uri> knownUris = (new Uri[] { DefaultSiteLinkUri }).
+                Concat(ExtraSiteLinkUris).Concat(LegacySiteLinkUris);
+
+            foreach (Uri extraSiteUri in knownUris)
             {
                 UriBuilder ub = new UriBuilder(linkParam);
                 ub.Host = extraSiteUri.Host;
-                links.Add(ub.Uri.AbsoluteUri);
+                string link = ub.Uri.AbsoluteUri;
+                if (link != linkParam.AbsoluteUri)
+                    links.Add(ub.Uri.AbsoluteUri);
             }
-
-            links = links.Distinct().ToList();
 
             foreach (string link in links)
             {
