@@ -17,6 +17,7 @@
     - c414bf4ad6c69841693c147849f4c314aa200bdf # incomplete CA chain
     - 3a402766ce22fd1aa24bfc1a4fd47e9309eb8c98 # incomplete CA chain
     - 160f832730737a70264768ceddf3cd94bc51ffb7 # incomplete CA chain
+    - a60e969b27965d4dc2ff45d50c20e2e872d4e9b9 # incomplete CA chain
 
   caps:
     categorymappings:
