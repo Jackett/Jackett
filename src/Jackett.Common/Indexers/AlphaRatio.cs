@@ -46,6 +46,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(23, TorznabCatType.AudioOther, "Music");
             AddCategoryMapping(24, TorznabCatType.Other, "Misc");
+            AddCategoryMapping(25, TorznabCatType.TVUHD, "TvUHD");
+            AddCategoryMapping(26, TorznabCatType.TVUHD, "TvPackUHD");
+            AddCategoryMapping(27, TorznabCatType.MoviesUHD, "MovieUHD");
+            AddCategoryMapping(28, TorznabCatType.MoviesUHD, "MoviePackUHD");
+            AddCategoryMapping(29, TorznabCatType.ConsoleOther, "GamesNin");
         }
 
         protected override string GetSearchTerm(TorznabQuery query)
