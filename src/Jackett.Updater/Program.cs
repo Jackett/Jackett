@@ -277,6 +277,7 @@ namespace Jackett.Updater
                 "Definitions/idope.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/extratorrentclone.yml",
+                "Definitions/btdb.yml",
             };
 
             foreach (var oldFile in oldFiles)
