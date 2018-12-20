@@ -119,11 +119,11 @@
   search:
     paths:
       # present trending results if there are no search parms supplied
-      - path: "{{if .Keywords}}/search/{{ .Keywords}}/1/{{else}}/trending{{end}}"
-      - path: "{{if .Keywords}}/search/{{ .Keywords}}/2/{{else}}{{end}}"
-      - path: "{{if .Keywords}}/search/{{ .Keywords}}/3/{{else}}{{end}}"
-      - path: "{{if .Keywords}}/search/{{ .Keywords}}/4/{{else}}{{end}}"
-      - path: "{{if .Keywords}}/search/{{ .Keywords}}/5/{{else}}{{end}}"
+      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/1/{{else}}/trending{{end}}"
+      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/2/{{else}}{{end}}"
+      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/3/{{else}}{{end}}"
+      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/4/{{else}}{{end}}"
+      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/5/{{else}}{{end}}"
     keywordsfilters: 
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
