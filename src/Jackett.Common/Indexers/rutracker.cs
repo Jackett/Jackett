@@ -1440,13 +1440,14 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
+            configData.CookieHeader.Value = null;
             var response = await RequestStringWithCookies(LoginUrl);
             var LoginResultParser = new HtmlParser();
             var LoginResultDocument = LoginResultParser.Parse(response.Content);
-            var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"//static.t-ru.org/captcha/\"]");
+            var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
             if (captchaimg != null)
             {
-                var captchaImage = await RequestBytesWithCookies("https:" + captchaimg.GetAttribute("src"));
+                var captchaImage = await RequestBytesWithCookies(captchaimg.GetAttribute("src"));
                 configData.CaptchaImage.Value = captchaImage.Content;
 
                 var codefield = LoginResultDocument.QuerySelector("input[name^=\"cap_code_\"]");
