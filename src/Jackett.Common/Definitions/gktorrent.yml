@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.gktorrent.co/
+    - https://www.gktorrent.ws/
   legacylinks:
     - https://www.gktorrent.org/  
     - https://www.gktorrent.com/
@@ -21,6 +21,7 @@
     - https://ww4.gktorrent.com/
     - https://www.gktorrent.me/
     - http://www.gktorrent.co/
+    - https://www.gktorrent.co/
 
   caps:
     categorymappings:
