@@ -56,6 +56,9 @@
     <Content Include="..\..\install_service_macos" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\install_service_systemd.sh" Visible="false">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   
 </Project>
