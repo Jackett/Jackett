@@ -5,6 +5,7 @@
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <AssemblyName>JackettConsole</AssemblyName>
     <OutputType>Exe</OutputType>
+    <NoWarn>NU1605</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
