@@ -1,0 +1,146 @@
+---
+  site: desitorrents
+  name: DesiTorrents
+  description: "Desitorrents is a  Private Torrent Tracker for BOLLYWOOD / TOLLYWOOD / GENERAL"
+  language: en-US
+  type: private
+  encoding: UTF-8
+  links:
+    - https://desitorrents.tv/
+  
+  caps:
+    categorymappings:
+      # movies
+      - {id: 47, cat: Movies, desc: "Movies/Bollywood"}
+      - {id: 48, cat: Movies, desc: "Movies/Bengali"}
+      - {id: 49, cat: Movies, desc: "Movies/Tamil"}
+      - {id: 51, cat: Movies, desc: "Movies/Punjabi"}
+      - {id: 52, cat: Movies, desc: "Movies/Marathi"}
+      - {id: 53, cat: Movies, desc: "Movies/Malayalam"}
+      - {id: 54, cat: Movies, desc: "Movies/Kannada"}
+      - {id: 55, cat: Movies, desc: "Movies/Gujarati"}
+      - {id: 56, cat: Movies, desc: "Movies/Foreign"}
+      - {id: 57, cat: Movies, desc: "Movies/Lollywood"}
+      - {id: 58, cat: Movies, desc: "Movies/Hollywood"}
+      - {id: 103, cat: Movies, desc: "Movies/Telugu"}
+      - {id: 104, cat: Movies, desc: "Movies/South Dubbed"}
+      - {id: 110, cat: Movies, desc: "Movies/Documentary"}
+      - {id: 117, cat: Movies, desc: "Movies/Bhojpuri"}
+      - {id: 124, cat: Movies, desc: "Movies/Movie Packs"}
+      - {id: 128, cat: Movies, desc: "Movies/Dubbed Audio"}
+      - {id: 129, cat: Movies, desc: "Movies/Animated"}
+      # tv shows
+      - {id: 59, cat: TV, desc: "TV/Colors"}
+      - {id: 60, cat: TV, desc: "TV/Sony"}
+      - {id: 61, cat: TV, desc: "TV/& TV"}
+      - {id: 62, cat: TV, desc: "TV/Starplus"}
+      - {id: 63, cat: TV, desc: "TV/ZeeTV"}
+      - {id: 97, cat: TV, desc: "TV/Life Ok"}
+      - {id: 98, cat: TV, desc: "TV/Docu"}
+      - {id: 101, cat: TV/Sport, desc: "TV/Sports"}
+      - {id: 102, cat: TV/Other, desc: "TV/Others"}
+      - {id: 113, cat: TV, desc: "TV/Pak Drama"}
+      - {id: 125, cat: TV, desc: "TV/TV Packs"}
+      - {id: 130, cat: TV, desc: "TV/Star Bharat"}
+      - {id: 132, cat: TV, desc: "TV/SAB TV"}
+      # music
+      - {id: 67, cat: Audio/Video, desc: "Music Video"}
+      - {id: 68, cat: Audio, desc: "Hindi Soundtrack"}
+      - {id: 70, cat: Audio, desc: "Remix"}
+      - {id: 71, cat: Audio, desc: "Ghazal"}
+      - {id: 72, cat: Audio, desc: "Instrumental"}
+      - {id: 105, cat: Audio, desc: "Telugu Music"}
+      - {id: 106, cat: Audio, desc: "Tmil Music"}
+      - {id: 107, cat: Audio, desc: "Punjabi Music"}
+      - {id: 108, cat: Audio, desc: "Gujarati Music"}
+      - {id: 109, cat: Audio, desc: "Compilations"}
+      - {id: 118, cat: Audio, desc: "Kannada Music"}
+      - {id: 126, cat: Audio, desc: "Marathi"}
+      - {id: 127, cat: Audio, desc: "Lollywood"}
+      - {id: 131, cat: Audio, desc: "Classical"}
+      # games
+      - {id: 78, cat: PC/Games, desc: "PC"}
+      - {id: 79, cat: PC/Games, desc: "Mac"}
+      - {id: 80, cat: PC/Games, desc: "IOS"}
+      - {id: 81, cat: PC/Games, desc: "Android"}
+      - {id: 83, cat: PC/Games, desc: "XBOX"}
+      - {id: 86, cat: PC/Games, desc: "Playstation"}
+      # XXX
+      - {id: 89, cat: XXX, desc: "Adult Videos"}
+      - {id: 90, cat: XXX, desc: "Adult Pics"}
+
+    modes:
+      search: [q]
+      
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+      
+  login:
+    path: /login.php?from=index1
+    method: post
+    inputs:
+      action: "login"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: ":contains(\"-WARNING-\")"
+    test:
+      path: ajax.php
+      
+  search:
+    paths:
+      - path: ajax.php?action=search_torrent_cats
+        method: post
+    inputs:
+      search_string: "{{ .Keywords }}"
+      selected_sorting: "relevance"
+      selected_group: ""
+      search_username: ""
+      selected_sub[]: "{{join .Categories \",\"}}"
+    error:
+      - selector: ":contains(\"Something was wrong with your request\")"
+    preprocessingfilters:
+      - name: replace
+        args: ["{\"torrent_html\":\"", ""]
+      - name: replace
+        args: ["\\", ""]
+      - name: re_replace
+        args: ["\",\"paging.*", ""]
+      - name: prepend
+        args: "<table>"
+      - name: append
+        args: "</table>"
+    rows:
+      selector: table > tbody > tr
+    fields:
+      title:
+        selector: th:nth-child(2) > a[href]
+      details:
+        selector: th:nth-child(2) > a[href]
+        attribute: href
+      files:
+        selector: th:nth-child(8)
+      # no standard for categories yet :(
+      download:
+        selector: th:nth-child(5) > a[href]
+        attribute: href
+        filters:
+          - name: prepend
+            args: "https://desitorrents.tv" 
+      grabs:
+        selector: th:nth-child(11)
+      size:
+        selector: th:nth-child(7)
+      seeders:
+        selector: th:nth-child(9)
+      leechers:
+        selector: th:nth-child(10)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

@@ -148,6 +148,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Classix
  * DanishBits
  * DataScene
+ * DesiTorrents [![(invite needed)][inviteneeded]](#)
  * Diablo Torrent
  * DigitalHive
  * Downloadville
