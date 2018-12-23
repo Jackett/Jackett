@@ -88,6 +88,11 @@ namespace Jackett.Common.Services
                 logger.Info($"Skipping update check as it is disabled.");
                 return;
             }
+            if (DotNetCoreUtil.IsRunningOnDotNetCore)
+            {
+                logger.Info($"Skipping update check as running Jackett on .NET Core is still in preview. Updates must be performed manually at this time.");
+                return;
+            }
 
             forceupdatecheck = true;
 
