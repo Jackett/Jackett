@@ -131,7 +131,7 @@
         attribute: href
         filters:
           - name: prepend
-            args: "https://desitorrents.tv" 
+            args: "{{ .Config.sitelink }}" 
       grabs:
         selector: th:nth-child(11)
       size:
