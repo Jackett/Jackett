@@ -475,10 +475,17 @@ NOTE: if you get the error "NU1102: Unable to find package Microsoft.AspNetCore 
 
 ### Linux
 
+
 ```bash
-sudo apt install mono-complete nuget msbuild # install build tools (debian/ubuntu)
+sudo apt install mono-complete nuget msbuild dotnet-sdk-2.2 # install build tools (debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
+
+# dotnet core version
+dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/JackettConsole # run jackett
+
+# mono version (currently broken)
 nuget restore Jackett.sln # prepare dependencies
 msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug # compile
 mono Jackett.Server/bin/Debug/JackettServer.exe # run jackett
