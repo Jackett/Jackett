@@ -97,6 +97,7 @@
         selector: td.leecher_col
       downloadvolumefactor:
         case:
+          "span.freeleech_slot": "0" # 24h freeelech slot
           "span.freeleech": "0"
           "*": "1"
       uploadvolumefactor:
