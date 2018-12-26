@@ -458,20 +458,19 @@ All contributions are welcome just send a pull request.  Jackett's framework all
 * Build/Start the project
 
 ### OSX
-NOTE: msbuild is included in the mono release. 
-* Install Homebrew https://brew.sh
-* open terminal
-* brew install nuget mono
-* git clone https://github.com/Jackett/Jackett.git
-* cd Jackett/src
-* nuget restore Jackett.sln
 
-NOTE: if you get the error "NU1102: Unable to find package Microsoft.AspNetCore with version (>= 2.1.2)" while restoring packages, you'll need to install it manually.https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.302-macos-x64-installer then delete the entire project directory and restart from a new clone
 
-* msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug
-* curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin
-* mono Jackett.Server/bin/Debug/JackettServer.exe
+```bash
+# manually install osx dotnet via: 
+https://dotnet.microsoft.com/download?initial-os=macos
+# then: 
+git clone https://github.com/Jackett/Jackett.git
+cd Jackett/src
 
+# dotnet core version
+dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp2.2/osx-x64/JackettConsole # run jackett
+```
 
 ### Linux
 
