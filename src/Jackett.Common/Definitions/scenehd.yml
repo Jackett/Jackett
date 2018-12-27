@@ -30,15 +30,13 @@
       movie-search: [q, imdbid]
       tv-search: [q, season, ep, imdbid]
 
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+
   login:
-    path: login.php
-    method: form
-    form: form#loginform
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: body:contains("Your username or password was incorrect.")
+    method: cookie
     test:
       path: browse.php
 
