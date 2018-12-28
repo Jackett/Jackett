@@ -115,7 +115,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Avistaz (AsiaTorrents)
  * B2S-Share
  * Back-ups
- * BakaBT  [![(invite needed)][inviteneeded]](#)
+ * BakaBT
  * bB
  * BeyondHD (BHD)
  * BIGTorrent
