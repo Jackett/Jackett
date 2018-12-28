@@ -257,6 +257,7 @@ namespace Jackett.Updater
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/torrentsmd.yml",
+                "Definitions/scenehd.yml", // migrated to C# (use JSON API)
                 "appsettings.Development.json",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
