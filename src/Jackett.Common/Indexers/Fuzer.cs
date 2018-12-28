@@ -19,6 +19,10 @@ namespace Jackett.Common.Indexers
 {
     public class Fuzer : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://fuzer.me/",
+        };
+
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
@@ -32,7 +36,7 @@ namespace Jackett.Common.Indexers
         public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
             : base(name: "Fuzer",
                 description: "Fuzer is a private torrent website with israeli torrents.",
-                link: "https://fuzer.me/",
+                link: "https://www.fuzer.me/",
                 configService: configService,
                 client: w,
                 logger: l,
