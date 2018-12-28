@@ -16,7 +16,7 @@ namespace Jackett.Common.Indexers
 {
     public class BakaBT : BaseWebIndexer
     {
-        public string SearchUrl { get { return SiteLink + "browse.php?only=0&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
+        public string SearchUrl { get { return SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
         public string LoginUrl { get { return SiteLink + "login.php"; } }
         public string id = "bakabt";
 
@@ -139,7 +139,10 @@ namespace Jackett.Common.Indexers
                         release.Comments = release.Guid;
 
                         release.Link = new Uri(SiteLink + qRow.Find(".peers a").First().Attr("href"));
-                        release.Grabs = int.Parse(qRow.Find(".peers").Get(0).FirstChild.NodeValue.TrimEnd().TrimEnd('/').TrimEnd());
+
+                        var grabs = qRow.Find(".peers").Get(0).FirstChild.NodeValue.TrimEnd().TrimEnd('/').TrimEnd();
+                        grabs = grabs.Replace("k", "000");
+                        release.Grabs = int.Parse(grabs);
                         release.Seeders = int.Parse(qRow.Find(".peers a").Get(0).InnerText);
                         release.Peers = release.Seeders + int.Parse(qRow.Find(".peers a").Get(1).InnerText);
 
