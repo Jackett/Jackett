@@ -256,6 +256,7 @@ namespace Jackett.Updater
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
+                "Definitions/torrentsmd.yml",
                 "appsettings.Development.json",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
