@@ -104,7 +104,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AlphaRatio (AR)
  * AnimeBytes
  * AnimeTorrents (AnT)
- * Anthelion (was TehConnection.me)
+ * Anthelion
  * AOX
  * ArabaFenice
  * Arche Torrent
