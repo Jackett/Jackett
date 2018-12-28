@@ -22,7 +22,8 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movies/HD");
+            this.supportsCategories = false; // they have categories but the API never returns the category, always default to Movie
+            AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie");
         }
     }
 }

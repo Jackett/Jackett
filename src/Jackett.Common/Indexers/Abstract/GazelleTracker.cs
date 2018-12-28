@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
         protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
         protected bool supportsFreeleechTokens;
+        protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
         protected bool useTokens = false;
 
         new ConfigurationDataBasicLogin configData
@@ -108,7 +109,7 @@ namespace Jackett.Common.Indexers.Abstract
             queryCollection.Add("order_by", "time");
             queryCollection.Add("order_way", "desc");
 
-            
+
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 queryCollection.Add("cataloguenumber", query.ImdbID);
@@ -130,9 +131,12 @@ namespace Jackett.Common.Indexers.Abstract
             if (query.Album != null)
                 queryCollection.Add("groupname", query.Album);
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
+            if (supportsCategories)
             {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
+                foreach (var cat in MapTorznabCapsToTrackers(query))
+                {
+                    queryCollection.Add("filter_cat[" + cat + "]", "1");
+                }
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
