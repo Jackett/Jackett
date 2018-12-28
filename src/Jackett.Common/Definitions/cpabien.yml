@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.cpabien.bz/
+    - https://www.cpabien.link/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
@@ -30,8 +30,8 @@
     - https://www.cpasbien.blue/
     - https://www.cpabien.cx/
     - https://www.cpasbien.re/
-    - https://www.cpabien.io/
     - http://www.cpasbien.io/
+    - https://www.cpabien.bz/
 
   caps:
     categorymappings:
@@ -45,13 +45,16 @@
   settings: []
 
   download:
-    selector: div.btn-download a
+    selector: div#telecharger a
     attribute: href
   search:
     paths:
-      - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}derniers/{{end}}"
+      - path: search.php
+        method: post
+        inputs:
+          t: "{{ .Keywords }}"
     rows:
-      selector: table.table-corps tbody tr td
+      selector: div.ligne1, div.ligne2
     fields:
       site_date:
         selector: a
