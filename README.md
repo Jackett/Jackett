@@ -24,7 +24,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anidex
  * Anime Tosho
  * AniRena
- * AsianCinema
  * AudioBookBay
  * BTstor.net
  * btbit
@@ -109,6 +108,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AOX
  * ArabaFenice
  * Arche Torrent
+ * AsianCinema
  * AsianDVDClub
  * AST4u
  * Audiobook Torrents
