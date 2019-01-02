@@ -167,6 +167,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("Watara Supervision", TorznabCatType.ConsoleOther, "Watara Supervision");
             AddCategoryMapping("Retro - Other", TorznabCatType.ConsoleOther, "Retro - Other");
 
+            // special categories (real categories/not platforms)
+            AddCategoryMapping("OST", TorznabCatType.AudioOther, "OST");
+            AddCategoryMapping("Applications", TorznabCatType.PC0day, "Applications");
+            AddCategoryMapping("E-Books", TorznabCatType.BooksEbook, "E-Books");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
