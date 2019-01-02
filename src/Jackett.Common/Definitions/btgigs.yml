@@ -86,7 +86,7 @@
           - name: append
             args: "Language: polish\n<br>"
           - name: prepend
-            args: {{ .Result.description }}
+            args: "{{ .Result.description }}"
       imdb:
         optional: true
         selector: a[href^="http://www.imdb.com/title/tt"]

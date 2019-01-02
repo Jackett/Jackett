@@ -320,6 +320,14 @@ Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maint
 A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab/api`.
 It will query all configured indexers and return the combined results.
 
+If your client supports multiple feeds it's recommended to add each indexer directly instead of using the all indexer.
+Using the all indexer has no advantages (besides reduced management overhead), only disadvantages:
+* you loose control over indexer specific settings (categories, search modes, etc.)
+* mixing search modes (IMDB, query, etc.) might cause low quality results
+* indexer specific categories (>= 100000) can't be used.
+* slow indexers will slow down the overall result
+* total results are limited to 1000
+
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as query parameter.
 
 ## Installation on Windows
