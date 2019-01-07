@@ -70,6 +70,8 @@
           - name: replace
             args: [" ()", ""]
           - name: replace
+            args: ["\t", ""]            
+          - name: replace
             args: [" / Freeleech!", ""]
       category:
         selector: a[href*="filter_cat"]
