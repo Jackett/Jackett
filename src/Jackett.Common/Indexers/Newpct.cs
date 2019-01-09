@@ -531,8 +531,15 @@ namespace Jackett.Common.Indexers
                     var pubDateText = span[1].TextContent.Trim();
                     var sizeText = span[2].TextContent.Trim();
 
-                    long size = ReleaseInfo.GetBytes(sizeText);
-                    DateTime publishDate = DateTime.ParseExact(pubDateText, "dd-MM-yyyy", null);
+                    long size = 0;
+                    try
+                    {
+                        size = ReleaseInfo.GetBytes(sizeText);
+                    } catch
+                    {
+                    }
+                    DateTime publishDate;
+                    DateTime.TryParseExact(pubDateText, "dd-MM-yyyy", null, DateTimeStyles.None, out publishDate);
 
                     var div = row.QuerySelector("div");
 
@@ -642,7 +649,8 @@ namespace Jackett.Common.Indexers
                 result.Category = new List<int> { TorznabCatType.Movies.ID };
             }
 
-            result.Size = size;
+            if (size > 0)
+                result.Size = size;
             result.Link = new Uri(detailsUrl);
             result.Guid = result.Link;
             result.PublishDate = publishDate;
