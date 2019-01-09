@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers
                     var infoMatch = Regex.Match(description, @"Category:\W(?<cat>.*)\W\/\WSeeders:\W(?<seeders>[\d,]*)\W\/\WLeechers:\W(?<leechers>[\d,]*)\W\/\WSize:\W(?<size>[\d\.]*\W\S*)\W\/\WSnatched:\W(?<snatched>[\d,]*) x times");
                     if (!infoMatch.Success)
                         throw new Exception(string.Format("Unable to find info in {0}: ", description));
-                    
+
                     var release = new ReleaseInfo()
                     {
                         Title = title,
@@ -323,6 +323,18 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var response = await base.Download(link);
+            if (response.Length >= 1 && response[0] == '<') // issue #4395
+            {
+                // relogin
+                await ApplyConfiguration(null);
+                response = await base.Download(link);
+            }
+            return response;
         }
     }
 }
