@@ -238,7 +238,7 @@ namespace Jackett.Common.Indexers
                     var torrentID = (long)torrent.t;
                     release.Comments = new Uri(SiteLink + "details.php?id=" + torrentID);
                     release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/dummy.torrent");
+                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/"+ torrentID + ".torrent");
                     release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
 
                     release.Size = (long)torrent.size;
