@@ -61,6 +61,9 @@ EOL
 # Reload systemd daemon
 systemctl daemon-reload
 
+# Enable the service for following restarts
+systemctl enable ${jackettservice}
+
 # Run the service
 systemctl start ${jackettservice}
 
