@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -31,6 +32,7 @@ namespace Jackett.Common.Indexers
 
         private string TorrentCommentUrl => TorrentDescriptionUrl;
         private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
         private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
@@ -177,6 +179,12 @@ namespace Jackett.Common.Indexers
             var searchTerm = query.GetEpisodeSearchString() + " " + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
             searchTerm = searchTerm.Trim();
             searchTerm = searchTerm.ToLower();
+
+            if (EnhancedAnime && query.HasSpecifiedCategories && query.Categories.Contains(TorznabCatType.TVAnime.ID))
+            {
+                System.Text.RegularExpressions.Regex regex = new Regex(" ([0-9]+)");
+                searchTerm = regex.Replace(searchTerm, " E$1");
+            }
 
             // Check cache first so we don't query the server (if search term used or not in dev mode)
             if (!DevMode && !string.IsNullOrEmpty(searchTerm))
