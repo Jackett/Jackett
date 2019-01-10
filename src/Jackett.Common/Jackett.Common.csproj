@@ -12,7 +12,7 @@
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="2.2.24" />
     <PackageReference Include="CloudFlareUtilities" Version="1.2.0" />
-    <PackageReference Include="CommandLineParser" Version="2.3.0" />
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
