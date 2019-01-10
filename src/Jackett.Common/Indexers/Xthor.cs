@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(34,  TorznabCatType.TVOTHER,         "SPORT");
 
             // Music
-            AddCategoryMapping(20,  TorznabCatType.AudioVideo,       "CONCERT");
+            AddCategoryMapping(20,  TorznabCatType.AudioVideo,      "CONCERT");
             
             // Books
             AddCategoryMapping(24,  TorznabCatType.BooksEbook,      "ENOOKS NOVEL");
@@ -115,13 +115,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(29,  TorznabCatType.ConsoleNDS,      "NDS GAMES");
             AddCategoryMapping(117, TorznabCatType.PC,              "ROM");
             AddCategoryMapping(21,  TorznabCatType.PC,              "PC SOFTWARE");
-            AddCategoryMapping(22,  TorznabCatType.PCMac,           "MAC SOFTWARE"");
+            AddCategoryMapping(22,  TorznabCatType.PCMac,           "MAC SOFTWARE");
             AddCategoryMapping(23,  TorznabCatType.PCPhoneAndroid,  "ANDROID");
 
             // XxX
             AddCategoryMapping(36,  TorznabCatType.XXX,             "XxX / Films");
             AddCategoryMapping(105, TorznabCatType.XXX,             "XxX / Séries");
-            AddCategoryMapping(114, TorznabCatType.XXX,             "XxX / Lesbiennes ");
+            AddCategoryMapping(114, TorznabCatType.XXX,             "XxX / Lesbiennes");
             AddCategoryMapping(115, TorznabCatType.XXX,             "XxX / Gays");
             AddCategoryMapping(113, TorznabCatType.XXX,             "XxX / Hentai");
             AddCategoryMapping(120, TorznabCatType.XXX,             "XxX / Magazines");
