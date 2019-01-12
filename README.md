@@ -433,6 +433,8 @@ location /jackett {
   You can pass various options when running via the command line, see --help for details.
 
 * __Error "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel."__
+  
+  `Error: TrustFailure (A call to SSPI failed, see inner exception.)` or anything else which happens only on `https://`.
 
   This is often caused by missing CA certificates.
   Try reimporting the certificates in this case:
