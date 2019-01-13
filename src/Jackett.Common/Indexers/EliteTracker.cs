@@ -236,7 +236,7 @@ namespace Jackett.Common.Indexers
                             banner.Remove();
                         }
 
-                        tooltip.QuerySelector("div:contains(\"Total Hits: \")").Remove();
+                        tooltip.QuerySelector("div:contains(\"Total Hits : \")").Remove();
 
                         var longtitle = tooltip.QuerySelectorAll("div").First();
                         release.Title = longtitle.TextContent;
