@@ -100,22 +100,43 @@
 
   search:
     paths:
-      # - path: /index.php
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=1{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=1{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=2{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=2{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=3{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=3{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=4{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=4{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=5{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=5{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=6{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=6{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=7{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=7{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=8{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=8{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=9{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=9{{end}}"
-      - path: "{{if .Keywords}}index.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&page=torrents&active=0&order=3&by=2&pages=10{{else}}/index.php?page=torrents&active=0&search=&&options=0&order=3&by=2&pages=10{{end}}"
-    # inputs:
-    #   search: "{{ .Keywords }}"
-    #   category: "{{range .Categories}}{{.}};{{end}}"
-    #   page: "torrents"
-    #   active: 0
+      - path: /index.php
+        inputs:
+          pages: 1
+      - path: /index.php
+        inputs:
+          pages: 2
+      - path: /index.php
+        inputs:
+          pages: 3
+      - path: /index.php
+        inputs:
+          pages: 4
+      - path: /index.php
+        inputs:
+          pages: 5
+      - path: /index.php
+        inputs:
+          pages: 6
+      - path: /index.php
+        inputs:
+          pages: 7
+      - path: /index.php
+        inputs:
+          pages: 8
+      - path: /index.php
+        inputs:
+          pages: 9
+      - path: /index.php
+        inputs:
+          pages: 10
+    inputs:
+      search: "{{ .Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: "torrents"
+      active: 0
+      order: 3
+      by: 2
     keywordsfilters:
       - name: diacritics
         args: replace
