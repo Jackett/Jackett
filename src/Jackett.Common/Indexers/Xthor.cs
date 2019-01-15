@@ -32,6 +32,7 @@ namespace Jackett.Common.Indexers
 
         private string TorrentCommentUrl => TorrentDescriptionUrl;
         private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private bool DevMode => ConfigData.DevMode.Value;
         private bool CacheMode => ConfigData.HardDriveCache.Value;
@@ -221,6 +222,12 @@ namespace Jackett.Common.Indexers
                     // Adding each torrent row to releases
                     releases.AddRange(xthorResponse.torrents.Select(torrent =>
                     {
+                        //issue #3847 replace multi keyword
+                        if(!string.IsNullOrEmpty(ReplaceMulti)){
+                            System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                            torrent.name = regex.Replace(torrent.name, "$1"+ReplaceMulti+"$2");
+                        }
+
                         var release = new ReleaseInfo
                         {
                             // Mapping data
