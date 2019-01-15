@@ -210,7 +210,10 @@ namespace Jackett.Common.Indexers
             var prevCook = CookieHeader + "";
 
             // If we have no query use the RSS Page as their server is slow enough at times!
-            if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
+            // ~15.01.2019 they removed the description tag making the RSS feed almost useless, we don't use it for now. See #4458
+            // if (false && query.IsTest || string.IsNullOrWhiteSpace(searchString))
+            /*
+            if (false)
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 try
@@ -264,7 +267,9 @@ namespace Jackett.Common.Indexers
                     throw ex;
                 }
             }
-            if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
+            */
+            //if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
+            if (true)
             {
                 if (searchString.Length < 3 && !query.IsTest)
                 {
