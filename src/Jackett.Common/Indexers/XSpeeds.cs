@@ -271,11 +271,13 @@ namespace Jackett.Common.Indexers
             //if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
             if (true)
             {
+                /*
                 if (searchString.Length < 3 && !query.IsTest)
                 {
                     OnParseError("", new Exception("Minimum search length is 3"));
                     return releases;
                 }
+                */
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
                     { "keywords",  searchString },
