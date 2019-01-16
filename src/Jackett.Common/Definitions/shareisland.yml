@@ -169,19 +169,19 @@
       size:
         selector: td:nth-last-child(3)
       date:
-        selector: td:nth-last-child(7)
+        selector: td[width="85"] # some users have an extra uploader column between the grabs and size column, see #4435
         filters:
           - name: dateparse
             args: "02/01/2006"
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td[width="85"] + td + td + td
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-last-child(6)
+        selector: td[width="85"] + td
       leechers:
-        selector: td:nth-last-child(5)
+        selector: td[width="85"] + td + td
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: "0"
