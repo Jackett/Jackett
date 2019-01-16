@@ -97,6 +97,8 @@ namespace Jackett.Common.Indexers
             {
                 CQ dom = result.Content;
                 var errorMessage = dom.Text();
+                if (errorMessage.Contains("Wrong Captcha!"))
+                    errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
