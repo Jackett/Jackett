@@ -80,6 +80,42 @@
   search:
     paths:
       - path: /index.php
+        inputs:
+          pages: 1
+      - path: /index.php
+        inputs:
+          pages: 2
+      - path: /index.php
+        inputs:
+          pages: 3
+      - path: /index.php
+        inputs:
+          pages: 4
+      - path: /index.php
+        inputs:
+          pages: 5
+      - path: /index.php
+        inputs:
+          pages: 6
+      - path: /index.php
+        inputs:
+          pages: 7
+      - path: /index.php
+        inputs:
+          pages: 8
+      - path: /index.php
+        inputs:
+          pages: 9
+      - path: /index.php
+        inputs:
+          pages: 10
+    inputs:
+      search: "{{ .Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: torrents
+      active: 0
+      order: 3
+      by: 2
     keywordsfilters:
       - name: diacritics
         args: replace
@@ -87,11 +123,6 @@
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
-    inputs:
-      search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      page: torrents
-      active: 0
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
       filters:
