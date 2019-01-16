@@ -88,7 +88,7 @@
         selector: a[title][href^="details.php?id="]
         attribute: href
       category:
-        selector: a[href*=".php?cat="]
+        selector: a[href^="?cat="]
         attribute: href
         filters:
           - name: querystring
