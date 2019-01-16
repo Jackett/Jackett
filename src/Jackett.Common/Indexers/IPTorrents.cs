@@ -40,7 +40,8 @@ namespace Jackett.Common.Indexers
             "https://ipt.venom.global",
             "https://ipt.workisboring.net",
             "https://ipt.lol",
-            
+            "https://ipt.cool",
+            "https://ipt.world",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
