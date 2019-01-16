@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -15,7 +15,7 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class Digitalcore : BaseWebIndexer
+    public class BitsPiracy : BaseWebIndexer
     {
         private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
         private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
             set { base.configData = value; }
         }
 
-        public Digitalcore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public BitsPiracy(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
             : base(name: "BitsPiracy",
                 description: "BitsPiracy is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                 link: "https://bitspiracy.org/",
@@ -137,8 +137,8 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
 
-                    //  if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
-                    // {
+                  //  if (!string.IsNullOrWhiteSpace(row.customcover.ToString()))
+                   // {
                     //    release.BannerUrl = new Uri(SiteLink + row.customcover);
                     //}
 
@@ -166,9 +166,9 @@ namespace Jackett.Common.Indexers
                     if (tags.Count > 0)
                         descriptions.Add("Tags: " + string.Join(", ", tags));
 
-                    // var preDate = row.preDate.ToString();
-                    // if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
-                    //     descriptions.Add("PRE: " + preDate);
+                   // var preDate = row.preDate.ToString();
+                   // if (!string.IsNullOrWhiteSpace(preDate) && preDate != "1970-01-01 01:00:00")
+                   //     descriptions.Add("PRE: " + preDate);
 
                     descriptions.Add("Section: " + row.section);
 
