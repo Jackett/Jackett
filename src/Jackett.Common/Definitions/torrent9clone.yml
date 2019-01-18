@@ -6,9 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.torrent9.ch/
+    - https://www1.torrent9.ch/
   legacylinks:
     - https://www.torrents9.pw/
+    - https://www.torrent9.ch/
 
   caps:
     categorymappings:
