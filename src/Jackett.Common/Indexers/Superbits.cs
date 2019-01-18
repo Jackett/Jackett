@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "sv-sw";
