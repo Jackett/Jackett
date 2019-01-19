@@ -8,8 +8,12 @@
     <NoWarn>NU1605</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net461' and $(RuntimeIdentifier.Contains('win')) == 'false'">
+    <AssemblyName>jackett</AssemblyName>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
-    <RuntimeIdentifiers>win-x86;osx-x64;linux-x64;linux-arm</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x86;osx-x64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
