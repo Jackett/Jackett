@@ -153,8 +153,9 @@ Task("Package-DotNetCore-macOS")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string runtimeId = "osx-x64";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
 
@@ -167,8 +168,9 @@ Task("Package-DotNetCore-LinuxAMD64")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string runtimeId = "linux-x64";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
 
@@ -182,8 +184,9 @@ Task("Package-DotNetCore-LinuxARM32")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string runtimeId = "linux-arm";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
 
@@ -197,8 +200,9 @@ Task("Package-DotNetCore-LinuxARM64")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string runtimeId = "linux-arm64";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
 		
