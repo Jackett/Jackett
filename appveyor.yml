@@ -1,6 +1,10 @@
 version: 0.10.{build}
 skip_tags: true
-image: Visual Studio 2017
+image: 
+  - Visual Studio 2017
+  - Ubuntu
+environment:
+  APPVEYOR_YML_DISABLE_PS_LINUX: true
 configuration: Release
 assembly_info:
   patch: true
@@ -17,7 +21,8 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 build_script:
-- ps: .\build.ps1
+- ps: .\build.ps1 --target=Default 
+- sh: ./build.sh --target=Linux
 test: off
 before_deploy:
 - ps: ${env:release_description} = ( Get-Content -LiteralPath BuildOutput/ReleaseNotes.txt -Encoding UTF8 ) -join "`n";
