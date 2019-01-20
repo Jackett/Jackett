@@ -8,8 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -371,7 +371,7 @@ namespace Jackett.Common.Indexers
                 return true; // no error
 
             var ResultParser = new HtmlParser();
-            var ResultDocument = ResultParser.Parse(loginResult.Content);
+            var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
             foreach (errorBlock error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
@@ -445,7 +445,7 @@ namespace Jackett.Common.Indexers
                             // request real login page again
                             landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
                             var htmlParser = new HtmlParser();
-                            landingResultDocument = htmlParser.Parse(landingResult.Content);
+                            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
                         }
                         else
                         {
@@ -719,7 +719,7 @@ namespace Jackett.Common.Indexers
             if (Login.Test.Selector != null)
             {
                 var testResultParser = new HtmlParser();
-                var testResultDocument = testResultParser.Parse(testResult.Content);
+                var testResultDocument = testResultParser.ParseDocument(testResult.Content);
                 var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
                 if (selection.Length == 0)
                 {
@@ -784,7 +784,7 @@ namespace Jackett.Common.Indexers
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
-            landingResultDocument = htmlParser.Parse(landingResult.Content);
+            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
 
             var hasCaptcha = false;
 
@@ -1237,7 +1237,7 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                     // check if we need to login again
                     var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
@@ -1257,7 +1257,7 @@ namespace Jackett.Common.Indexers
                             await FollowIfRedirect(response);
 
                         results = response.Content;
-                        SearchResultDocument = SearchResultParser.Parse(results);
+                        SearchResultDocument = SearchResultParser.ParseDocument(results);
                     }
 
                     checkForError(response, Definition.Search.Error);
@@ -1265,7 +1265,7 @@ namespace Jackett.Common.Indexers
                     if (Search.Preprocessingfilters != null)
                     {
                         results = applyFilters(results, Search.Preprocessingfilters, variables);
-                        SearchResultDocument = SearchResultParser.Parse(results);
+                        SearchResultDocument = SearchResultParser.ParseDocument(results);
                         logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
                     }
 
@@ -1652,7 +1652,7 @@ namespace Jackett.Common.Indexers
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
                     var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
                     var DlUri = SearchResultDocument.QuerySelector(selector);
                     if (DlUri != null)
                     {

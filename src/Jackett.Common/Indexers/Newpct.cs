@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -373,7 +373,7 @@ namespace Jackett.Common.Indexers
         private IEnumerable<NewpctRelease> ParseDailyContent(string content)
         {
             var SearchResultParser = new HtmlParser();
-            var doc = SearchResultParser.Parse(content);
+            var doc = SearchResultParser.ParseDocument(content);
 
             List<NewpctRelease> releases = new List<NewpctRelease>();
 
@@ -425,7 +425,7 @@ namespace Jackett.Common.Indexers
         private string ParseSeriesListContent(string content, string title)
         {
             var SearchResultParser = new HtmlParser();
-            var doc = SearchResultParser.Parse(content);
+            var doc = SearchResultParser.ParseDocument(content);
 
             Dictionary<string, string> results = new Dictionary<string, string>();
 
@@ -450,7 +450,7 @@ namespace Jackett.Common.Indexers
         private IEnumerable<NewpctRelease> ParseEpisodesListContent(string content)
         {
             var SearchResultParser = new HtmlParser();
-            var doc = SearchResultParser.Parse(content);
+            var doc = SearchResultParser.ParseDocument(content);
 
             List<NewpctRelease> releases = new List<NewpctRelease>();
 
@@ -517,7 +517,7 @@ namespace Jackett.Common.Indexers
         private IEnumerable<NewpctRelease> ParseSearchContent(string content)
         {
             var SearchResultParser = new HtmlParser();
-            var doc = SearchResultParser.Parse(content);
+            var doc = SearchResultParser.ParseDocument(content);
 
             List<NewpctRelease> releases = new List<NewpctRelease>();
 

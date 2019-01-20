@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(response.Content);
+                var document = parser.ParseDocument(response.Content);
                 var groups = document.QuerySelectorAll(".torrent_table > tbody > tr.group");
                 var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent");
 

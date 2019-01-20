@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -233,7 +233,7 @@ namespace Jackett.Common.Indexers
                 string RowsSelector = ".torrent_table > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
 
                 bool stickyGroup = false;

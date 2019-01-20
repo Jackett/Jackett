@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -78,7 +78,7 @@ namespace Jackett.Common.Indexers.Abstract
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.Parse(response.Content);
+                var loginResultDocument = loginResultParser.ParseDocument(response.Content);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
                     throw new ExceptionWithConfigData(response.Content, configData);

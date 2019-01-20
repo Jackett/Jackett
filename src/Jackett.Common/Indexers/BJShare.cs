@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -144,7 +144,7 @@ namespace Jackett.Common.Indexers
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.Parse(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                     foreach (var row in rows)
                     {
@@ -276,7 +276,7 @@ namespace Jackett.Common.Indexers
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.Parse(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
 
                     ICollection<int> groupCategory = null;

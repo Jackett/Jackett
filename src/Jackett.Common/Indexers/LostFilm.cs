@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -351,7 +351,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var rows = document.QuerySelectorAll("div.row");
 
                 foreach (var row in rows)
@@ -380,7 +380,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
 
                 var playButton = document.QuerySelector("div.external-btn");
                 if (playButton != null && !playButton.ClassList.Contains("inactive"))
@@ -428,7 +428,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var seasons = document.QuerySelectorAll("div.serie-block");
                 var rowSelector = "table.movie-parts-list > tbody > tr";
 
@@ -585,7 +585,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var meta = document.QuerySelector("meta");
                 var metaContent = meta.GetAttribute("content");
 
@@ -611,7 +611,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
                 logger.Debug("> Parsing " + rows.Count().ToString() + " releases");

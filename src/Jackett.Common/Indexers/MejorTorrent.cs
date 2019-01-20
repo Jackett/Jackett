@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -762,7 +762,7 @@ namespace Jackett.Common.Indexers
             {
                 var result = await mt.RequestBytesWithCookies(uri.AbsoluteUri, null, method, null, data, headers);
                 var SearchResultParser = new HtmlParser();
-                var doc = SearchResultParser.Parse(mt.Encoding.GetString(result.Content));
+                var doc = SearchResultParser.ParseDocument(mt.Encoding.GetString(result.Content));
                 return doc;
             }
         }

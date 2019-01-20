@@ -13,7 +13,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System.Text.RegularExpressions;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 
 namespace Jackett.Common.Indexers
 {
@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
                 {
                     return releases.ToArray();
                 }
-                var dom = ResultParser.Parse(response.Content);
+                var dom = ResultParser.ParseDocument(response.Content);
                 var resultLinks = dom.QuerySelectorAll("ul > li > a");
                 var uniqueShowLinks = new HashSet<string>();
                 foreach (var resultLink in resultLinks)
@@ -125,7 +125,7 @@ namespace Jackett.Common.Indexers
                     return releases.ToArray();
                 }
 
-                var dom = ResultParser.Parse(response.Content);
+                var dom = ResultParser.ParseDocument(response.Content);
                 var latestresults = dom.QuerySelectorAll("ul > li > a");
                 foreach (var resultLink in latestresults)
                 {
@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
                     while(true)
                     {
                         var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
-                        var showAPIdom = ResultParser.Parse(showAPIResponse.Content);
+                        var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
                         var releaseRowResults = showAPIdom.QuerySelectorAll("div.rls-info-container");
                         releaserows.AddRange(releaseRowResults);
                         nextId++;

@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -1443,7 +1443,7 @@ namespace Jackett.Common.Indexers
             configData.CookieHeader.Value = null;
             var response = await RequestStringWithCookies(LoginUrl);
             var LoginResultParser = new HtmlParser();
-            var LoginResultDocument = LoginResultParser.Parse(response.Content);
+            var LoginResultDocument = LoginResultParser.ParseDocument(response.Content);
             var captchaimg = LoginResultDocument.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
             if (captchaimg != null)
             {
@@ -1489,7 +1489,7 @@ namespace Jackett.Common.Indexers
                 logger.Debug(result.Content);
                 var errorMessage = "Unknown error message, please report";
                 var LoginResultParser = new HtmlParser();
-                var LoginResultDocument = LoginResultParser.Parse(result.Content);
+                var LoginResultDocument = LoginResultParser.ParseDocument(result.Content);
                 var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
@@ -1534,7 +1534,7 @@ namespace Jackett.Common.Indexers
                 string RowsSelector = "table#tor-tbl > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
