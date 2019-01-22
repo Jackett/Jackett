@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www2.yggtorrent.gg/
+    - https://www.yggtorrent.gg/
   legacylinks:
     - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
@@ -25,7 +25,7 @@
     - https://ygg.to/
     - https://www.ygg.to/
     - https://ww3.yggtorrent.gg/
-    - https://www.yggtorrent.gg/
+    - https://www2.yggtorrent.gg/
 
   caps:
     categorymappings:
