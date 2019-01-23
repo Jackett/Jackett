@@ -90,7 +90,7 @@
     - name: searchanddlurl
       label: Search and download URL
       type: text
-      default: ww2.yggtorrent.gg
+      default: www2.yggtorrent.gg
     - name: username
       type: text
       label: Username
