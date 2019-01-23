@@ -9,12 +9,8 @@
     - https://nyaa.si
   certificates:
     - 3801e330482d4f9baef71ca4e33ba23ede74f59c # incomplete CA chain
-
+    
   settings:
-    - name: agressive_quality_mapping
-      type: checkbox
-      label: "Agressive quality mapping (required for some releases, will map FHD as 1080p)"
-      default: false
     - name: filter-id
       type: select
       label: Filter
@@ -102,15 +98,8 @@
         filters:
           - name: split
             args: [ "=", -1 ]
-      title_quality:
-        selector: td:nth-child(2) a:last-of-type
-        filters:
-          - name: replace
-            args: ["FHD", "1080p"]
-      title_normal:
-        selector: td:nth-child(2) a:last-of-type
       title:
-        text: "{{if .Config.agressive_quality_mapping }}{{ .Result.title_quality }}{{else}}{{ .Result.title_normal }}{{end}}"
+        selector: td:nth-child(2) a:last-of-type
       details:
         selector: td:nth-child(2) a:last-of-type
         attribute: href
