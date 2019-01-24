@@ -92,7 +92,7 @@ Task("Package-Windows-Full-Framework")
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = "./BuildOutput/net461/win7-x86/Jackett";
 		
-		DotNetCorePublish(serverProjectPath, "net461", "win7-x86");
+		DotNetCorePublish(serverProjectPath, "net461", "win7-x86", buildOutputPath);
 
 		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", buildOutputPath);
 		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", buildOutputPath);
@@ -122,7 +122,7 @@ Task("Package-Mono-Full-Framework")
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = "./BuildOutput/net461/linux-x64/Jackett";
 
-		DotNetCorePublish(serverProjectPath, "net461", "linux-x64");
+		DotNetCorePublish(serverProjectPath, "net461", "linux-x64", buildOutputPath);
 
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
@@ -157,7 +157,7 @@ Task("Package-DotNetCore-macOS")
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
-		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
@@ -172,7 +172,7 @@ Task("Package-DotNetCore-LinuxAMD64")
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
-		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
@@ -188,7 +188,7 @@ Task("Package-DotNetCore-LinuxARM32")
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
-		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
@@ -204,7 +204,7 @@ Task("Package-DotNetCore-LinuxARM64")
 		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
-		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId);
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 		
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
@@ -385,13 +385,13 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	}	
 }
 
-private void DotNetCorePublish(string projectPath, string framework, string runtime)
+private void DotNetCorePublish(string projectPath, string framework, string runtime, string outputPath)
 {
 	var settings = new DotNetCorePublishSettings
 	{
 		Framework = framework,
 		Runtime = runtime,
-		OutputDirectory = $"./BuildOutput/{framework}/{runtime}/Jackett"
+		OutputDirectory = outputPath
 	};
 
 	DotNetCorePublish(projectPath, settings);
