@@ -78,6 +78,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Deildu
  * Gay-Torrents.net
  * Gay-Torrents.org
+ * GDF76
  * Kinozal
  * LostFilm.tv
  * Mega-Bliz
