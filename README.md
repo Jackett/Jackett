@@ -28,6 +28,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTstor.net
  * btbit
  * cpasbien
+ * cpasbienClone
  * ETTV
  * EliteTorrent.biz
  * ExtraTorrent.ag
