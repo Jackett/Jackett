@@ -27,6 +27,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AudioBookBay
  * BTstor.net
  * btbit
+ * BTKitty
  * cpasbien
  * cpasbienClone
  * DIGBT
