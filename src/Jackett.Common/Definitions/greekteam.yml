@@ -121,20 +121,20 @@
       download:
         text: "download2.php?torrent={{ .Result._id }}"
       size:
-        selector: td:nth-last-child(3)
+        selector: td:nth-last-child(4)
       date:
-        selector: td:nth-last-child(5) > nobr
+        selector: td:nth-last-child(6) > nobr
         filters:
           - name: append
             args: " +02:00"
           - name: dateparse
             args: "2006-01-0215:04:05 -07:00"
       files:
-        selector: td:nth-last-child(6)
+        selector: td:nth-last-child(8)
       seeders:
-        selector: td:nth-last-child(2)
+        selector: td:nth-last-child(3)
       leechers:
-        selector: td:nth-last-child(1)
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
           "img[src=\"pic/free.png\"]": "0"
