@@ -7,6 +7,8 @@
   encoding: UTF-8
   followredirect: true
   links:
+    - https://www2.cpasbiens.ws/
+  legacylinks:
     - https://www1.cpasbiens.ws/
 
   caps:
