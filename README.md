@@ -55,6 +55,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ProStyleX
  * RARBG
  * RuTor
+ * shokweb
  * ShowRSS
  * SkyTorrentsClone
  * sukebei.Nyaa.si
