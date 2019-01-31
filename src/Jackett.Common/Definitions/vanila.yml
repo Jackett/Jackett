@@ -1,0 +1,171 @@
+﻿---
+  site: vanila
+  name: Vanila
+  description: "Vanila is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
+  language: ru
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://vanila.org/
+
+  caps:
+    categorymappings:
+      # TV
+      - {id: 1252, cat: TV, desc: "All TV Shows"}
+      - {id: 503, cat: TV, desc: "Russian TV Series"}
+      - {id: 504, cat: TV, desc: "TV Series"}
+      - {id: 1355, cat: TV/Foreign, desc: "Asian TV Series"}
+      - {id: 1415, cat: TV/Foreign, desc: "Indian, Latina, Turc TV Series"}
+      - {id: 585, cat: TV/Other, desc: "Video Lessons"}
+      - {id: 1036, cat: TV/Sport, desc: "TV Sport"}
+      # Movies
+      - {id: 442, cat: Movies, desc: "All Movies"}
+      - {id: 463, cat: Movies/HD, desc: "World Movies HD"}
+      - {id: 962, cat: Movies/UHD, desc: "World Movies UHD"}
+      - {id: 963, cat: Movies/3D, desc: "World Movies 3D"}
+      - {id: 465, cat: Movies/Other, desc: "World Movies Collection"}
+      - {id: 466, cat: Movies/DVD, desc: "World Movies DVD/BD Rip"}
+      - {id: 199, cat: Movies/Other, desc: "World Cartoons"}
+      - {id: 467, cat: Movies, desc: "Classic World Movies"}
+      - {id: 1382, cat: Movies, desc: "CIS Movies"}
+      - {id: 468, cat: Movies/Other, desc: "ART Movies"}
+      - {id: 469, cat: Movies/Other, desc: "ART Movies Rip"}
+      # Cartoons
+      - {id: 28, cat: TV/Anime, desc: "All Cartoons/Anime"}
+      - {id: 202, cat: TV/Anime, desc: "Cartoons"}
+      - {id: 342, cat: TV/Anime, desc: "Cartoons - Disney/Pixar"}
+      - {id: 893, cat: TV/Anime, desc: "Cartoons - Anime"}
+      - {id: 200, cat: TV/Anime, desc: "Cartoons - Russian"}
+      # Music
+      - {id: 214, cat: Audio/MP3, desc: "All Lossy Music"}
+      - {id: 165, cat: Audio/Lossless, desc: "All Lossless Music"}
+      - {id: 139, cat: Audio/Video, desc: "Music Video"}
+      - {id: 874, cat: Audio/Audiobook, desc: "Audiobook"}
+      - {id: 7, cat: Audio/Other, desc: "Music Compilation"}
+      # Books
+      - {id: 536, cat: Books, desc: "All Books"}
+      - {id: 537, cat: Books, desc: "Published Books"}
+      - {id: 552, cat: Books/Magazines, desc: "Magazines"}
+      - {id: 611, cat: Books/Technical, desc: "Technical"}
+      # Other
+      - {id: 3, cat: PC, desc: "PC Programs"}
+      - {id: 4, cat: PC/Games, desc: "PC Games"}
+      - {id: 5, cat: Console, desc: "Console Games"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+
+  login:
+    path: ucp.php?mode=login
+    method: form
+    form: form#login
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: fieldset:has(div.error)
+    test:
+      path: /
+      selector: :has(a[href^="./ucp.php?mode=logout&sid="])
+
+  download:
+    selector: a[href^="./download/file.php?id="]:not(img)
+
+  search:
+    paths:
+      # https://vanila.org/search.php?sr=topics&sf=titleonly&tracker_search=torrent&keywords=venom&submit.x=0&submit.y=0
+      - path: search.php
+    inputs:
+      sr: "topics"
+      sf: "titleonly"
+      tracker_search: "torrent"
+      keywords: "{{if .Keywords }}{{.Keywords}}{{else}}test{{end}}"
+      submit.x: "0"
+      submit.y: "0"
+
+    rows:
+      selector: li.row
+    fields:
+      title:
+        selector: a.topictitle
+      details:
+        selector: a.topictitle
+        attribute: href
+      category:
+        selector: a[href^="./viewforum.php?f="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: f
+      download:
+        selector: a.topictitle
+        attribute: href
+      banner:
+        optional: true
+        selector: img.tt_poster
+        attribute: src
+      size:
+        selector: a[href^="./viewforum.php?f="] + b
+        filters:
+          - name: replace
+            args: ["ТБ", "TB"] 
+          - name: replace
+            args: ["ГБ", "GB"]
+          - name: replace
+            args: ["МБ", "MB"]
+          - name: replace
+            args: ["КБ", "KB"]
+      seeders:
+        selector: dd.posts span.seed
+      leechers:
+        selector: dd.posts span.leech
+      grabs:
+        selector: dd.views span.complet
+      date:
+        # 12 янв 2019, 11:26
+        selector: dt
+        filters:
+          # extract the date
+          - name: regexp
+            args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
+            # replace month abbreviations
+          - name: replace
+            args: ["янв", "Jan"]
+          - name: replace
+            args: ["фев", "Feb"]
+          - name: replace
+            args: ["мар", "Mar"]
+          - name: replace
+            args: ["апр", "Apr"]
+          - name: replace
+            args: ["май", "May"]
+          - name: replace
+            args: ["июн", "Jun"]
+          - name: replace
+            args: ["июл", "Jul"]
+          - name: replace
+            args: ["авг", "Aug"]
+          - name: replace
+            args: ["сен", "Sep"]
+          - name: replace
+            args: ["окт", "Oct"]
+          - name: replace
+            args: ["ноя", "Nov"]
+          - name: replace
+            args: ["дек", "Dec"]
+          - name: dateparse
+            args: "02 Jan 06, 15:04"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

@@ -97,6 +97,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RuTracker
  * SkTorrent
  * Union Fansub
+ * Vanila
  * Xtreme Zone
  * YggTorrent
  * Ztracker
