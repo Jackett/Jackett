@@ -132,7 +132,7 @@
           - name: prepend
             args: "magnet:?xt=urn:btih:"
           - name: append
-            args: "&dn={{ .Result.title }}.torrent"
+            args: "&dn={{ .Result.title }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
       size:
         selector: td:nth-child(3) font
       date:
