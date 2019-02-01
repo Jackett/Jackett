@@ -66,6 +66,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * TorrentCouch
  * Torrent Downloads
+ * TorrentFunk
  * TorrentGalaxy.org
  * TorrentKitty
  * Torrent9
