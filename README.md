@@ -279,6 +279,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SportsCult
  * SportHD
  * Superbits
+ * TakeaByte
  * Tasmanit
  * TBPlus
  * TenYardTracker
