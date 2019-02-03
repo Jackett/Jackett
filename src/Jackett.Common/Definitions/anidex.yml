@@ -38,10 +38,13 @@
       type: info
       label: Category Id Note
       default: "You can filter your searches by using any of the following category numbers (comma delimited):<br>1 :Anime - Sub<br>2 :Anime - Raw<br>3 :Anime - Dub<br>4 :LA - Sub<br>5 :LA - Raw<br>6 :Light Novel<br>7 :Manga - TLed<br>8 :Manga - Raw<br>9 :♫ - Lossy<br>10 :♫ - Lossless<br>11 :♫ - Video<br>12 :Games<br>13 :Applications<br>14 :Pictures<br>15 :Adult Video<br>16 :Other"
-      
+    - name: lang-id
+      type: text
+      label: Language Id
+
   search:
     paths:
-      - path: "?{{if .Config.cat-id}}id={{.Config.cat-id }}&{{else}}{{end}}q={{if .Keywords}}{{.Keywords}}{{else}}{{end}}"
+      - path: "?{{if .Config.cat-id}}id={{.Config.cat-id }}&{{else}}{{end}}{{if .Config.lang-id}}lang_id={{.Config.lang-id}}&{{else}}{{end}}q={{if .Keywords}}{{.Keywords}}{{else}}{{end}}"
     rows:
       selector: div.table-responsive > table > tbody > tr
     fields:
@@ -53,6 +56,9 @@
             args: id
       title:
         selector: td:nth-child(3) > a.torrent > span.span-1440
+        filters:
+          - name: re_replace # remove anidb id from return string
+            args: ["(\\[[A-Z0-9]*\\])\\.", "."]
       details:
         selector: td:nth-child(3) > a.torrent
         attribute: href

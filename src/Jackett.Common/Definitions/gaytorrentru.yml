@@ -1,52 +1,80 @@
+---
+  # Update by LA5T based on the orignial 'gaytorrentru.yml'
+  # 29.07.2018 23:02 UTC+2
+  #
   site: gaytorrentru
-  name: GayTorrent.ru
-  description: "World largest gay porn library for free with a stunning forum and 24/7 Chat"
+  name: GAYtorrent.ru
+  description: "World largest gay porn library for free with a stunning forum and 24/7 chat."
   language: en-us
   type: private
   encoding: UTF-8
   links:
     - https://www.gaytorrent.ru/
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: incldead
+      type: select
+      label: Status
+      default: 1
+      options:
+        0: Active
+        1: "Active and Inactive"
+        2: Inactive
+    - name: info
+      type: info
+      label: "Hidden categories"
+      default: "For results in the following categories you must edit your profile.<br />- Straight<br />- Bisexual<br />- Scat"
+
   caps:
     categorymappings:
-     - {id: 62 , cat: XXX , desc: "Amateur"}
-     - {id: 29 , cat: XXX , desc: "Anal"}
-     - {id: 46 , cat: XXX , desc: "Anime Games"}
-     - {id: 30 , cat: XXX , desc: "Asian"}
-     - {id: 43 , cat: XXX , desc: "Bareback"}
-     - {id: 19 , cat: XXX , desc: "BDSM"}
-     - {id: 17 , cat: XXX , desc: "Bears"}
-     - {id: 44 , cat: XXX , desc: "Black"}
-     - {id: 50 , cat: Books , desc: "Books & Magazines"}
-     - {id: 9 , cat: XXX , desc: "Chubbies"}
-     - {id: 7 , cat: XXX , desc: "Clips"}
-     - {id: 48 , cat: Books/Comics  , desc: "Comic & Yaoi"}
-     - {id: 5 , cat: XXX , desc: "Daddies / Sons"}
-     - {id: 34 , cat: XXX , desc: "Fetish"}
-     - {id: 27 , cat: XXX , desc: "Grey / Older"}
-     - {id: 32 , cat: XXX , desc: "Group-Sex"}
-     - {id: 63 , cat: XXX , desc: "Homemade"}
-     - {id: 12 , cat: XXX , desc: "Hunks"}
-     - {id: 33 , cat: XXX , desc: "Images"}
-     - {id: 53 , cat: XXX , desc: "Interracial"}
-     - {id: 57 , cat: XXX , desc: "Jocks"}
-     - {id: 35 , cat: XXX , desc: "Latino"}
-     - {id: 36 , cat: XXX , desc: "Mature"}
-     - {id: 58 , cat: PC , desc: "Media Programs"}
-     - {id: 37 , cat: XXX , desc: "Member"}
-     - {id: 54 , cat: XXX , desc: "Middle Eastern"}
-     - {id: 38 , cat: XXX , desc: "Military"}
-     - {id: 39 , cat: XXX , desc: "Oral-Sex"}
-     - {id: 47 , cat: XXX , desc: "Shemale"}
-     - {id: 56 , cat: XXX , desc: "Softcore"}
-     - {id: 40 , cat: XXX , desc: "Solo"}
-     - {id: 45 , cat: Movies , desc: "Themed Movie"}
-     - {id: 1 , cat: TV , desc: "TV / Episodes"}
-     - {id: 41 , cat: XXX , desc: "Twinks"}
-     - {id: 42 , cat: XXX , desc: "Vintage"}
-     - {id: 51 , cat: XXX , desc: "Voyeur"}
-     - {id: 65 , cat: XXX , desc: "Wrestling and Sports"}
-     - {id: 28 , cat: XXX , desc: "Youngblood"}
+      - {id: 62, cat: XXX, desc: "Amateur"}
+      - {id: 29, cat: XXX, desc: "Anal"}
+      - {id: 46, cat: XXX, desc: "Anime Games"}
+      - {id: 30, cat: XXX, desc: "Asian"}
+      - {id: 43, cat: XXX, desc: "Bareback"}
+      - {id: 19, cat: XXX, desc: "BDSM"}
+      - {id: 17, cat: XXX, desc: "Bears"}
+      - {id: 44, cat: XXX, desc: "Black"}
+      - {id: 50, cat: Books, desc: "Books & Magazines"}
+      - {id: 9, cat: XXX, desc: "Chubbies"}
+      - {id: 7, cat: XXX, desc: "Clips"}
+      - {id: 48, cat: Books/Comics, desc: "Comic & Yaoi"}
+      - {id: 5, cat: XXX, desc: "Daddies / Sons"}
+      - {id: 34, cat: XXX, desc: "Fetish"}
+      - {id: 27, cat: XXX, desc: "Grey / Older"}
+      - {id: 32, cat: XXX, desc: "Group-Sex"}
+      - {id: 63, cat: XXX, desc: "Homemade"}
+      - {id: 12, cat: XXX, desc: "Hunks"}
+      - {id: 33, cat: XXX/Imageset, desc: "Images"}
+      - {id: 53, cat: XXX, desc: "Interracial"}
+      - {id: 57, cat: XXX, desc: "Jocks"}
+      - {id: 35, cat: XXX, desc: "Latino"}
+      - {id: 36, cat: XXX, desc: "Mature"}
+      - {id: 58, cat: PC, desc: "Media Programs"}
+      - {id: 37, cat: XXX, desc: "Member"}
+      - {id: 54, cat: XXX, desc: "Middle Eastern"}
+      - {id: 38, cat: XXX, desc: "Military"}
+      - {id: 39, cat: XXX, desc: "Oral-Sex"}
+      - {id: 47, cat: XXX, desc: "Shemale"}
+      - {id: 56, cat: XXX, desc: "Softcore"}
+      - {id: 40, cat: XXX, desc: "Solo"}
+      - {id: 45, cat: Movies, desc: "Themed Movie"}
+      - {id: 1, cat: TV, desc: "TV / Episodes"}
+      - {id: 41, cat: XXX, desc: "Twinks"}
+      - {id: 42, cat: XXX, desc: "Vintage"}
+      - {id: 51, cat: XXX, desc: "Voyeur"}
+      - {id: 65, cat: XXX, desc: "Wrestling and Sports"}
+      - {id: 28, cat: XXX, desc: "Youngblood"}
+      - {id: 59, cat: XXX, desc: "Bisexual"}
+      - {id: 61, cat: XXX, desc: "Straight older"}
+      - {id: 60, cat: XXX, desc: "Straight younger"}
+      - {id: 64, cat: XXX, desc: "Scat"}
     modes:
       search: [q]
 
@@ -65,7 +93,7 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
-      incldead: "0" # Searches only for alive torrents
+      incldead: "{{ .Config.incldead }}"
     rows:
       selector: table.browse_result > tbody > tr:has(a[href^="details.php?id="])
     fields:
@@ -89,12 +117,12 @@
         selector: .tfiles
         filters:
           - name: regexp
-            args: ([\d]+)
+            args: ([\d,]+)
       size:
         selector: .tsize
       seeders:
         optional: true
-        selector: a[href$="&toseeders=1"]
+        selector: a[href$="&toseeders=1"], span.red
       leechers:
         optional: true
         selector: a[href$="&todlers=1"]
@@ -102,13 +130,13 @@
         selector: .tadded
         filters:
           - name: re_replace
-            args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2})(.*)","$1 $2"]
+            args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2}).*", "$1 $2"]
           - name: dateparse
             args: "2006-01-02 15:04:05"
       downloadvolumefactor:
         case:
-          "td:nth-child(3) > div > nobr > font[color=\"yellow\"]": "0"
-          "*": "1"
+          "td:nth-child(3) > div > nobr > font[color=\"yellow\"]": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1

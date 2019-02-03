@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://hdhome.org
+    - https://hdhome.org/
 
   caps:
     categorymappings:
@@ -70,19 +70,17 @@
       selector: img[alt="CAPTCHA"]
       input: imagestring
     inputs:
-      logintype: "username"
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
       - selector: td.embedded:has(h2:contains("姿势不正确"))
       - selector: td.embedded:has(h2:contains("失败"))
     test:
-      path: /torrents.php
+      path: torrents.php
         
   search:
     paths:
-      - path: /torrents.php
-        method: post
+      - path: torrents.php
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"

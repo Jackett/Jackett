@@ -14,69 +14,87 @@
   caps:
     categorymappings:
       #Audio
-      - {id: 101, cat: Audio, desc: "Music"}
-      - {id: 102, cat: Audio/Audiobook, desc: "Audio books"}
-      - {id: 103, cat: Audio, desc: "Sound clips"}
-      - {id: 104, cat: Audio/Lossless, desc: "FLAC"}
-      - {id: 199, cat: Audio/Other, desc: "Audio Other"}
+      - {id: 100, cat: Audio, desc: "Audio", default: true}
+      - {id: 101, cat: Audio, desc: "Music", default: true}
+      - {id: 102, cat: Audio/Audiobook, desc: "Audio books", default: true}
+      - {id: 103, cat: Audio, desc: "Sound clips", default: true}
+      - {id: 104, cat: Audio/Lossless, desc: "FLAC", default: true}
+      - {id: 199, cat: Audio/Other, desc: "Audio Other", default: true}
 
       #Video
-      - {id: 201, cat: Movies, desc: "Movies"}
-      - {id: 202, cat: Movies/DVD, desc: "Movies DVDR"}
-      - {id: 203, cat: Audio/Video, desc: "Music videos"}
-      - {id: 204, cat: Movies/Other, desc: "Movie clips"}
-      - {id: 205, cat: TV, desc: "TV shows"}
-      - {id: 206, cat: TV/Other, desc: "Handheld"}
-      - {id: 207, cat: Movies/HD, desc: "HD - Movies"}
-      - {id: 208, cat: TV/HD, desc: "HD - TV shows"}
-      - {id: 209, cat: Movies/3D, desc: "3D"}
-      - {id: 299, cat: Movies/Other, desc: "Video Other"}
+      - {id: 200, cat: Movies, desc: "Video", default: true}
+      - {id: 201, cat: Movies, desc: "Movies", default: true}
+      - {id: 202, cat: Movies/DVD, desc: "Movies DVDR", default: true}
+      - {id: 203, cat: Audio/Video, desc: "Music videos", default: true}
+      - {id: 204, cat: Movies/Other, desc: "Movie clips", default: true}
+      - {id: 205, cat: TV, desc: "TV shows", default: true}
+      - {id: 206, cat: TV/Other, desc: "Handheld", default: true}
+      - {id: 207, cat: Movies/HD, desc: "HD - Movies", default: true}
+      - {id: 208, cat: TV/HD, desc: "HD - TV shows", default: true}
+      - {id: 209, cat: Movies/3D, desc: "3D", default: true}
+      - {id: 299, cat: Movies/Other, desc: "Video Other", default: true}
 
       #Applications
-      - {id: 301, cat: PC, desc: "Windows"}
-      - {id: 302, cat: PC/Mac, desc: "Mac"}
-      - {id: 303, cat: PC, desc: "UNIX"}
-      - {id: 304, cat: PC/Phone-Other, desc: "Handheld"}
-      - {id: 305, cat: PC/Phone-IOS, desc: "IOS (iPad/iPhone)"}
-      - {id: 306, cat: PC/Phone-Android, desc: "Android"}
-      - {id: 399, cat: PC, desc: "Other OS"}
+      - {id: 300, cat: PC, desc: "Applications", default: true}
+      - {id: 301, cat: PC, desc: "Windows", default: true}
+      - {id: 302, cat: PC/Mac, desc: "Mac", default: true}
+      - {id: 303, cat: PC, desc: "UNIX", default: true}
+      - {id: 304, cat: PC/Phone-Other, desc: "Handheld", default: true}
+      - {id: 305, cat: PC/Phone-IOS, desc: "IOS (iPad/iPhone)", default: true}
+      - {id: 306, cat: PC/Phone-Android, desc: "Android", default: true}
+      - {id: 399, cat: PC, desc: "Other OS", default: true}
 
       #Games
-      - {id: 401, cat: PC/Games, desc: "PC"}
-      - {id: 402, cat: PC/Mac, desc: "Mac"}
-      - {id: 403, cat: Console/PS4, desc: "PSx"}
-      - {id: 404, cat: Console/Xbox, desc: "XBOX360"}
-      - {id: 405, cat: Console/Wii, desc: "Wii"}
-      - {id: 406, cat: Console/Other, desc: "Handheld"}
-      - {id: 407, cat: Console/Other, desc: "IOS (iPad/iPhone)"}
-      - {id: 408, cat: Console/Other, desc: "Android"}
-      - {id: 499, cat: Console/Other, desc: "Games Other"}
+      - {id: 400, cat: Console, desc: "Games", default: true}
+      - {id: 401, cat: PC/Games, desc: "PC", default: true}
+      - {id: 402, cat: PC/Mac, desc: "Mac", default: true}
+      - {id: 403, cat: Console/PS4, desc: "PSx", default: true}
+      - {id: 404, cat: Console/Xbox, desc: "XBOX360", default: true}
+      - {id: 405, cat: Console/Wii, desc: "Wii", default: true}
+      - {id: 406, cat: Console/Other, desc: "Handheld", default: true}
+      - {id: 407, cat: Console/Other, desc: "IOS (iPad/iPhone)", default: true}
+      - {id: 408, cat: Console/Other, desc: "Android", default: true}
+      - {id: 499, cat: Console/Other, desc: "Games Other", default: true}
 
       #Porn
-      - {id: 501, cat: XXX, desc: "Movies"}
-      - {id: 502, cat: XXX/DVD, desc: "Movies DVDR"}
-      - {id: 503, cat: XXX/Imageset, desc: "Pictures"}
-      - {id: 504, cat: XXX, desc: "Games"}
-      - {id: 505, cat: XXX, desc: "HD - Movies"}
-      - {id: 506, cat: XXX, desc: "Movie clips"}
-      - {id: 599, cat: XXX/Other, desc: "Porn Other"}
+      - {id: 500, cat: XXX, desc: "Porn", default: true}
+      - {id: 501, cat: XXX, desc: "Movies", default: true}
+      - {id: 502, cat: XXX/DVD, desc: "Movies DVDR", default: true}
+      - {id: 503, cat: XXX/Imageset, desc: "Pictures", default: true}
+      - {id: 504, cat: XXX, desc: "Games", default: true}
+      - {id: 505, cat: XXX, desc: "HD - Movies", default: true}
+      - {id: 506, cat: XXX, desc: "Movie clips", default: true}
+      - {id: 599, cat: XXX/Other, desc: "Porn Other", default: true}
 
       #Other
-      - {id: 601, cat: Books, desc: "E-books"}
-      - {id: 602, cat: Books/Comics, desc: "Comics"}
-      - {id: 603, cat: Books, desc: "Pictures"}
-      - {id: 604, cat: Books, desc: "Covers"}
-      - {id: 605, cat: Books, desc: "Physibles"}
-      - {id: 699, cat: Books/Other, desc: "Other Other"}
+      - {id: 600, cat: Other, desc: "Other", default: true}
+      - {id: 601, cat: Books, desc: "E-books", default: true}
+      - {id: 602, cat: Books/Comics, desc: "Comics", default: true}
+      - {id: 603, cat: Books, desc: "Pictures", default: true}
+      - {id: 604, cat: Books, desc: "Covers", default: true}
+      - {id: 605, cat: Books, desc: "Physibles", default: true}
+      - {id: 699, cat: Books/Other, desc: "Other Other", default: true}
 
     modes:
       tv-search: [q, season, ep]
 
-  settings: []
+  settings:
+    - name: order
+      type: select
+      label: Order results
+      default: "99"
+      options:
+        "99": "Default"
+        "8": "Seeders"
+        "3": "Time"
+    - name: info
+      type: info
+      label: Proxies
+      default: The Pirate Bay is currently only reachable via TOR. But you can try to use an unofficial proxy from <a href="https://piratebayproxy.info/" target="_blank">piratebayproxy.info</a>.
   
   search:
     paths:
-      - path: "{{if .Query.Keywords}}/search/{{ .Keywords}}/0/99/{{range .Categories }}{{.}}{{end}}{{else}}/recent{{end}}"
+      - path: "{{if .Query.Keywords}}/search/{{ .Keywords}}/0/{{ .Config.order }}/{{join .Categories \",\"}}{{else}}/recent{{end}}"
     keywordsfilters:
         # currently, the only uploader for General Hospital puts a space between season and episode
         # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
@@ -86,7 +104,13 @@
     rows:
       selector: "#searchResult tbody tr:has(td.vertTh)"
     fields:
-      category:
+      category: # parent category
+        selector: td:nth-child(1) a:first-child
+        attribute: href
+        filters:
+          - name: split
+            args: [ "/", -1 ]
+      category: # sub category
         selector: td:nth-child(1) a:last-child
         attribute: href
         filters:

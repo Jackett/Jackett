@@ -199,3 +199,5 @@ FakesAssemblies/
 /Artifacts
 /TestResults
 *.DS_Store
+.idea/
+launchSettings.json

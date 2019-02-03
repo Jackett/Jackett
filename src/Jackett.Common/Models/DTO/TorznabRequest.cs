@@ -21,6 +21,7 @@ namespace Jackett.Common.Models.DTO
         public string track { get; set; }
         public string year { get; set; }
         public string genre { get; set; }
+        public string configured { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
         {

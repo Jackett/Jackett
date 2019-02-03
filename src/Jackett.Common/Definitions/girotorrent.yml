@@ -1,0 +1,226 @@
+---
+  site: girotorrent
+  name: Girotorrent
+  description: "Girotorrent is an ITALIAN Private site for TV / MOVIES / GENERAL"
+  language: it-it
+  type: private
+  encoding: UTF-8
+  links:
+    - http://girotorrent.org/
+
+  caps:
+    categorymappings:
+      # LIBREDICOLA
+      - {id: 13, cat: Books, desc: "Giornali e Riviste"}
+      - {id: 15, cat: Books, desc: "Ebook"}
+      - {id: 16, cat: Books, desc: "Fumetti"}
+      - {id: 70, cat: Books, desc: "Manuali e Guide"}
+      - {id: 72, cat: Audio/Audiobook, desc: "Audiolibri"}
+      # CINEMA
+      - {id: 17, cat: Movies/Other, desc: "Movie Cam-Ts"}
+      - {id: 18, cat: Movies/Other, desc: "Movie Screener"}
+      - {id: 61, cat: Movies/Other, desc: "Movie R5-R6"}
+      - {id: 19, cat: Movies/Other, desc: "Movie DVDRip"}
+      - {id: 20, cat: Movies/Other, desc: "Movie BDRip"}
+      - {id: 60, cat: Movies/Other, desc: "Movie BluRay"}
+      - {id: 63, cat: Movies/Other, desc: "Movie WEBDLRip"}
+      # VIDEOTECA
+      - {id: 22, cat: Movies/SD, desc: "Movie BDRip"}
+      - {id: 23, cat: Movies/SD, desc: "Movie DvdRip"}
+      - {id: 23, cat: Movies/SD, desc: "Movie WEBRip"}
+      - {id: 24, cat: Movies/DVD, desc: "Movie DVD-R 5"}
+      - {id: 25, cat: Movies/DVD, desc: "Movie DVD-R 9"}
+      - {id: 26, cat: Movies/HD, desc: "Movie Blu-Ray HD"}
+      - {id: 27, cat: Movies/3D, desc: "Movie 3D-SBS"}
+      - {id: 96, cat: Movies/HD, desc: "Movie x265 HEVC"}
+      - {id: 28, cat: Movies/Foreign, desc: "Movie Subbet-ita"}
+      - {id: 73, cat: Movies/SD, desc: "Movie MP4"}
+      - {id: 29, cat: Movies/Foreign, desc: "Movie Ligua Originale"}
+      # ANIMAZIONE
+      - {id: 32, cat: TV/Anime, desc: "Anime Disney"}
+      - {id: 33, cat: TV/Anime, desc: "Anime"}
+      - {id: 34, cat: TV/Anime, desc: "Anime Altri Cartoni"}
+      # TELEVISIONE
+      - {id: 36, cat: TV, desc: "TV Serie TV"}
+      - {id: 77, cat: TV, desc: "TV Reality"}
+      - {id: 37, cat: TV, desc: "TV Film TV"}
+      - {id: 59, cat: TV, desc: "TV Sport"}
+      - {id: 38, cat: TV, desc: "TV Concerti-Spettacoli"}
+      - {id: 39, cat: TV, desc: "TV Teatro-Cabaret"}
+      - {id: 40, cat: TV/Documentary, desc: "Tv Documentario"}
+      # MUSICA
+      - {id: 42, cat: Audio, desc: "Musica CD Singoli"}
+      - {id: 43, cat: Audio, desc: "Musica Italiana"}
+      - {id: 44, cat: Audio, desc: "Musica Straniera"}
+      - {id: 45, cat: Audio, desc: "Musica Compilation"}
+      - {id: 46, cat: Audio, desc: "Musica Video Clip"}
+      - {id: 58, cat: Audio, desc: "Musica Discografie"}
+      # SALA GIOCHI
+      - {id: 47, cat: PC/Games, desc: "PC Games"}
+      - {id: 48, cat: PC/Games, desc: "PC Giochi PS2-PS3"}
+      - {id: 49, cat: PC/Games, desc: "PC Giochi Nintendo Wii"}
+      - {id: 50, cat: PC/Games, desc: "PC Giochi Xbox"}
+      - {id: 52, cat: PC/Games, desc: "PC Giochi DS-DS3"}
+      # SOFTWARE
+      - {id: 54, cat: PC, desc: "PC Programmi Windows"}
+      - {id: 55, cat: PC/Mac, desc: "PC Mac"}
+      - {id: 69, cat: PC, desc: "PC Portable"}
+      - {id: 56, cat: PC, desc: "PC Linux"}
+      # CELLULARI-PALMARI
+      - {id: 71, cat: PC/Phone-Android, desc: "Android APP"}
+      - {id: 74, cat: Other, desc: "Varie"}
+      - {id: 75, cat: Other, desc: "Immagini Wallpaper"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: /index.php?page=login
+    method: post
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: div.error
+    test:
+      path: /index.php
+      selector: a[href="logout.php"]
+
+  download:
+    before:
+      path: "thanks.php"
+      method: "post"
+      inputs:
+        infohash: "{{ .DownloadUri.Query.id }}"
+        thanks: "1"
+        rndval: "1487013827343"
+    selector: a[href^="download.php?id="]
+
+  search:
+    paths:
+      - path: /index.php
+        inputs:
+          pages: 1
+      - path: /index.php
+        inputs:
+          pages: 2
+      - path: /index.php
+        inputs:
+          pages: 3
+      - path: /index.php
+        inputs:
+          pages: 4
+      - path: /index.php
+        inputs:
+          pages: 5
+      - path: /index.php
+        inputs:
+          pages: 6
+      - path: /index.php
+        inputs:
+          pages: 7
+      - path: /index.php
+        inputs:
+          pages: 8
+      - path: /index.php
+        inputs:
+          pages: 9
+      - path: /index.php
+        inputs:
+          pages: 10
+    inputs:
+      search: "{{ .Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: "torrents"
+      active: 0
+      order: 3
+      by: 2
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+    rows:
+      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+      filters:
+        - name: andmatch
+    fields:
+      download:
+        selector: a[href^="index.php?page=downloadcheck&id="]
+        attribute: href
+      title:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        filters:
+          - name: re_replace # replace special characters with " " (space)
+            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
+          # normalize to SXXEYY format
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: href
+      banner:
+        optional: true
+        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) "
+      size:
+        selector: td:nth-last-child(3)
+      date:
+        selector: td:nth-last-child(8)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      grabs:
+        selector: td:nth-last-child(5)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-last-child(7)
+      leechers:
+        selector: td:nth-last-child(6)
+      downloadvolumefactor:
+        case:
+          img[alt="Free Leech"]: "0"
+          img[alt="Gold 100% Free"]: "0"
+          img[alt="Silver 50% Free"]: "0.5"
+          img[alt="Bronze 25% Free"]: "0.75"
+          "*": "1"
+      uploadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        optional: true
+        selector: img[alt$="x Upload Multiplier"]
+        attribute: alt
+        filters:
+          - name: replace
+            args: ["x Upload Multiplier", ""]

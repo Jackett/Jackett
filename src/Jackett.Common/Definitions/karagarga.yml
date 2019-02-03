@@ -1,7 +1,10 @@
 ---
+  # Update by LA5T based on the orignial 'karagarga.yml'
+  # 29.07.2018 23:15 UTC+2
+  #
   site: karagarga
   name: Karagarga
-  description: "Rare and obscure movie tracker"
+  description: "Tracker for non-hollywood, rare and obscure movies, music and literature."
   language: en-us
   type: private
   encoding: UTF-8
@@ -11,6 +14,66 @@
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: Audio, desc: "Music"}
+      - {id: 3, cat: Books, desc: "Literature"}
+      - {id: 4, cat: Movies, desc: "Action"}
+      - {id: 55, cat: Movies, desc: "Adventure"}
+      - {id: 5, cat: Movies, desc: "Animation"}
+      - {id: 6, cat: Movies, desc: "Arthouse"}
+      - {id: 7, cat: Movies, desc: "Asian"}
+      - {id: 43, cat: Movies, desc: "Camp"}
+      - {id: 8, cat: Movies, desc: "Classics"}
+      - {id: 9, cat: Movies, desc: "Comedy"}
+      - {id: 10, cat: Movies, desc: "Crime"}
+      - {id: 11, cat: Movies, desc: "Cult"}
+      - {id: 20, cat: Movies, desc: "Documentary"}
+      - {id: 12, cat: Movies, desc: "Drama"}
+      - {id: 44, cat: Movies, desc: "Epic"}
+      - {id: 13, cat: Movies, desc: "Erotica"}
+      - {id: 51, cat: Movies, desc: "Experimental"}
+      - {id: 47, cat: Movies, desc: "Exploitation"}
+      - {id: 14, cat: Movies, desc: "Fantasy"}
+      - {id: 15, cat: Movies, desc: "Film Noir"}
+      - {id: 53, cat: Movies, desc: "Giallo"}
+      - {id: 17, cat: Movies, desc: "Horror"}
+      - {id: 18, cat: Movies, desc: "Martial Arts"}
+      - {id: 19, cat: Movies, desc: "Musical"}
+      - {id: 54, cat: Movies, desc: "Mystery"}
+      - {id: 60, cat: Movies, desc: "Performance"}
+      - {id: 48, cat: Movies, desc: "Philosophy"}
+      - {id: 49, cat: Movies, desc: "Politics"}
+      - {id: 50, cat: Movies, desc: "Romance"}
+      - {id: 21, cat: Movies, desc: "Sci-Fi"}
+      - {id: 22, cat: Movies, desc: "Short"}
+      - {id: 23, cat: Movies, desc: "Silent"}
+      - {id: 24, cat: Movies, desc: "Thriller"}
+      - {id: 25, cat: Movies, desc: "TV"}
+      - {id: 56, cat: Movies, desc: "Video Art"}
+      - {id: 26, cat: Movies, desc: "War"}
+      - {id: 27, cat: Movies, desc: "Western"}
+      - {id: 800, cat: Audio, desc: "Blues"}
+      - {id: 31, cat: Audio, desc: "Classical"}
+      - {id: 600, cat: Audio, desc: "Country"}
+      - {id: 34, cat: Audio, desc: "Electronica"}
+      - {id: 63, cat: Audio, desc: "Exotica"}
+      - {id: 1000, cat: Audio, desc: "Experimental"}
+      - {id: 250, cat: Audio, desc: "Folk"}
+      - {id: 500, cat: Audio, desc: "Funk"}
+      - {id: 700, cat: Audio, desc: "Indie"}
+      - {id: 32, cat: Audio, desc: "Jazz"}
+      - {id: 1200, cat: Audio, desc: "Latin"}
+      - {id: 35, cat: Audio, desc: "Live"}
+      - {id: 900, cat: Audio, desc: "Metal"}
+      - {id: 62, cat: Audio, desc: "Punk & Hardcore"}
+      - {id: 52, cat: Audio, desc: "Rap & Hiphop"}
+      - {id: 5000, cat: Audio, desc: "Reggae"}
+      - {id: 36, cat: Audio, desc: "Rock"}
+      - {id: 400, cat: Audio, desc: "Soul"}
+      - {id: 33, cat: Audio, desc: "Soundtrack"}
+      - {id: 30, cat: Audio, desc: "World"}
+      - {id: 40, cat: Audio/Audiobook, desc: "Audiobooks"}
+      - {id: 41, cat: Books, desc: "Books"}
+      - {id: 42, cat: Books/Comics, desc: "Comics"}
 
     modes:
       search: [q]
@@ -33,15 +96,22 @@
   search:
     paths:
       - path: browse.php
+    keywordsfilters:
+      - name: re_replace
+        args: ["(?<=^| )(?!-|\\+)[^ ]+(?= |$)", "+$&"]
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "\"{{ .Query.Keywords }}\""
-      search_type: "title"
+      $raw: "{{range .Categories}}genre={{.}}&{{end}}"
+      search: "{{ .Keywords }}"
+      search_type: title
     rows:
       selector: table#browse > tbody > tr:has(a[href^="browse.php?genre="])
     fields:
       category:
-        text: 1
+        selector: a[href^="browse.php?genre="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: genre
       title:
         selector: td:nth-child(2) span
       download:
@@ -69,15 +139,16 @@
       date:
         selector: td:nth-child(9)
         filters:
-          - name: replace
-            args: ["'", ""]
           - name: re_replace
-            args: ["[^a-zA-Z0-9]+", " "]
+            args: ["([a-zA-Z]+)\\s+(\\d{1,2})\\s+'(\\d{2})", "$2 $1 $3"]
           - name: dateparse
-            args: "Jan 02 06"
+            args: "02 Jan 06"
       downloadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          ":has(img[title^=HD]):has(img[title^=CURRENT])": 1.8
+          "img[title^=CURRENT]": 1.6
+          "img[title^=HD]": 1.3
+          "*": 1.1

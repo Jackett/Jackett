@@ -1,0 +1,148 @@
+﻿---
+  site: takeabyte
+  name: TakeaByte
+  description: "TakeaByte is a NORDIC Private Torrent Tracker for 0DAY / GENERAL"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://takeabyte-nordic.org/
+  certificates:
+    - 8b88d216d270b9b672ba44fbbdd5ca3d8919e5fd # expired Nov 2015
+    
+
+  caps:
+    categorymappings:
+      - {id: 3, cat: Movies, desc: "Movies"}
+      - {id: 9, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 47, cat: Movies/BluRay, desc: "Movies BD 1080p"}
+      - {id: 21, cat: Movies/Other, desc: "Movies Boxset"}
+      - {id: 43, cat: Movies, desc: "Movies TBN"}
+      - {id: 40, cat: Movies, desc: "Movies Danish"}
+      - {id: 34, cat: Movies/DVD, desc: "Movies DVD-R"}
+      - {id: 10, cat: Movies/SD, desc: "Movies XviD"}
+      - {id: 19, cat: Movies, desc: "Movies Kids"}
+      - {id: 41, cat: Movies, desc: "Movies Swedish"}
+      - {id: 20, cat: Movies, desc: "Movies MP4"}
+      - {id: 49, cat: Movies, desc: "Movies Nordisk"}
+      - {id: 42, cat: Movies, desc: "Movies Norway"}
+      - {id: 11, cat: Movies/HD, desc: "HD 1080p"}
+      - {id: 25, cat: Movies/HD, desc: "HD-1080p Custom"}
+      - {id: 14, cat: Movies/HD, desc: "HD-720p"}
+      - {id: 26, cat: Movies/HD, desc: "HD-720p Custom"}
+      - {id: 23, cat: Audio/Other, desc: "Music Boxset"}
+      - {id: 35, cat: Audio/Lossless, desc: "Music Flac"}
+      - {id: 22, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 24, cat: Audio/Video, desc: "Music Video"}
+      - {id: 32, cat: Audio/Audiobook, desc: "Audio-Books"}
+      - {id: 33, cat: Books/Ebook, desc: "E-Books"}
+      - {id: 30, cat: PC/Mac, desc: "Apps Mac"}
+      - {id: 31, cat: PC/Phone-Other, desc: "Apps Mobile"}
+      - {id: 1, cat: PC/0day, desc: "Apps Windows"}
+      - {id: 15, cat: Console, desc: "Games Other"}
+      - {id: 45, cat: Console/NDS, desc: "Games NDS"}
+      - {id: 13, cat: Console, desc: "Games Others"}
+      - {id: 37, cat: ConsolePS Vita, desc: "Games PS2"}
+      - {id: 38, cat: Console/PS3, desc: "Games PS3"}
+      - {id: 36, cat: Console/PSP, desc: "Games PSP"}
+      - {id: 7, cat: Console/Wii, desc: "Games Wii"}
+      - {id: 39, cat: Console/Xbox, desc: "Games XBOX"}
+      - {id: 8, cat: PC/Games, desc: "Games PC"}
+      - {id: 12, cat: PC/Games, desc: "Games PC Rips"}
+      - {id: 46, cat: Other, desc: "Wallpapers"}
+      - {id: 27, cat: TV/Other, desc: "TV Boxset"}
+      - {id: 28, cat: TV, desc: "TV-Series"}
+      - {id: 52, cat: XXX, desc: "XXX"}
+      - {id: 53, cat: XXX/Packs, desc: "XXX-Pack"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      returnto: "/browse.php"
+    error:
+      - selector: h2:contains("Login failed!")
+        message:
+          selector: table tr td.colhead2
+    test:
+      path: /
+      selector: :has(a[href^="logout.php?hash_please="])
+
+  search:
+    paths:
+    # http://takeabyte-nordic.org/browse.php?search=first+man&searchin=title&incldead=0
+    # http://takeabyte-nordic.org/browse.php?c9=1&c47=1&c21=1&c11=1&c25=1&c14=1&c26=1&c3=1&search=%22first+man%22&searchin=title&incldead=0
+      - path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{.Keywords}}"
+      searchin: "title"
+      incldead: 1
+    rows:
+      selector: table tr:has(a[href^="browse.php?cat="]):has(a[href^="details.php?id="])
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: a[href^="details.php?id="] b
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="details.php?id="]
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php?torrent="]
+      size:
+        selector: td:nth-last-child(4)
+      files:
+        selector: td:nth-last-child(7)
+      grabs:
+        selector: td:nth-last-child(3)
+        filters:
+          - name: replace
+            args: ["times", ""]
+          - name: replace
+            args: ["time", ""]
+      # 2 flavours of dates
+      date:
+        # Today<br />13:20:59
+        # Yesterday<br />08:03:01
+        optional: true
+        selector: td:nth-last-child(5):contains("day")
+      date:
+        # Feb 14 2019<br />14:20:12
+        optional: true
+        selector: td:nth-last-child(5):not(:contains("day"))
+        filters:
+          - name: regex # drop break in between date and time
+            args: ["(.+?)<[^>]*>(.+?)","$1 $2"]
+          - name: dateparse
+            args: "Jan 2 2006 15:04:05"
+      seeders:
+        selector: td:nth-last-child(2)
+      leechers:
+        selector: td:nth-last-child(1)
+      downloadvolumefactor:
+        case:
+          "b:contains(\"[Free and Double]\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "b:contains(\"[Free and Double]\")": "2"
+          "*": "1"

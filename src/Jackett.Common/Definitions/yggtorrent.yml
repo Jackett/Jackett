@@ -1,19 +1,37 @@
-﻿---
+---
   site: yggtorrent
   name: YGGtorrent
   description: "YGGTorrent is a FRENCH Semi-Private Torrent Tracker for 0DAY / GENERAL"
   language: fr-fr
   type: semi-private
   encoding: UTF-8
+  followredirect: true
   links:
-    - https://yggtorrent.com/
+    - https://www2.yggtorrent.gg/
   legacylinks:
+    - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
+    - https://yggtorrent.is/
+    - https://www.yggtorrent.is/
+    - https://ww1.yggtorrent.is/
+    - https://ww2.yggtorrent.is/
+    - https://ww3.yggtorrent.is/
+    - https://ww4.yggtorrent.is/
+    - https://yggtorrent.to/
+    - https://www3.yggtorrent.to/
+    - https://www6.yggtorrent.to/
+    - https://www8.yggtorrent.to/
+    - https://www9.yggtorrent.to/
+    - https://ygg.to/
+    - https://www.ygg.to/
+    - https://ww3.yggtorrent.gg/
+    - https://yggtorrent.gg/
+    - https://www.yggtorrent.gg/
 
   caps:
     categorymappings:
       - {id: 2145, cat: TV, desc: "Film/Vidéo"}
-      - {id: 2178, cat: TV/Anime, desc: "Film/Vidéo : Animation"}
+      - {id: 2178, cat: Movies, desc: "Film/Vidéo : Animation"} # changed to movies, see #3553
       - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
       - {id: 2180, cat: TV, desc: "Film/Vidéo : Concert"}
       - {id: 2181, cat: TV, desc: "Film/Vidéo : Documentaire"}
@@ -95,39 +113,62 @@
       type: checkbox
       label: Try to normalize releases names by moving year after the title
       default: false
-
+    - name: multilang
+      type: checkbox
+      label: Replace MULTI by another language in release name
+      default:  false
+    - name: multilanguage
+      type: select
+      label: Replace MULTI by this language
+      default: FRENCH
+      options:
+        FRENCH : "FRENCH"
+        MULTI.FRENCH: "MULTI.FRENCH"
+        ENGLISH: "ENGLISH"
+        MULTI.ENGLISH: "MULTI.ENGLISH"
+        VOSTFR: "VOSTFR"
+        MULTI.VOSTFR: "MULTI.VOSTFR"
+    - name: vostfr
+      type: checkbox
+      label: Replace VOSTFR with ENGLISH
+      default:  false
+    - name: enhancedAnime
+      type: checkbox
+      label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
+      default: false
   login:
-    path: "/user/login"
-    method: post
+    method: form
+    path: /
+    form: "#user-login"
     inputs:
       id: "{{ .Config.username }}"
       pass: "{{ .Config.password }}"
       submit: ""
     error:
-      - selector: "form > center > span[style=\"color:red\"]"
+      - selector: "#login_msg_pass[style=\"\"][style] > center"
     test:
-      path: "/"
-      selector: "a[href$=\"user/logout\"]"
+      path: /
+      selector: div#top_panel:contains("Déconnexion")
 
   search:
+    followredirect: true
     paths:
-      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&q={{ .Keywords }}{{else}}/torrents/today?category=2145{{end}}"
-      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&q={{ .Keywords }}&page=25{{else}}/torrents/today?category=2145&page=25{{end}}"
-      - path: "{{ if .Keywords }}/engine/search?category={{ .Config.category }}&q={{ .Keywords }}&page=50{{else}}/torrents/today?category=2145&page=50{{end}}"
+      - path: "/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ .Keywords }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ .Keywords }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
 
     rows:
-      selector: "table.table.table-striped > tbody > tr"
+      selector: "table.table > tbody > tr"
     fields:
       _id:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         attribute: href
         filters:
           - name: regexp
             args: "/(\\d+)-"
       title_normal:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
       title_filtered:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         filters:
           - name: re_replace
             args: ["(?i)^(?:(.+?)((?:[\\.\\-\\s_\\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\\-?rip)?|720\\s*p?|1080\\s*p?|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\\.\\-\\s_\\]]*)*)([\\(\\[]?(?:20|1[7-9])\\d{2}[\\)\\]]?)(.*)$|(.*))$", "$1 $3 $2 $4 $5"]
@@ -139,13 +180,27 @@
           - name: re_replace
             args: ["(\\s{2,5})", " "]
           - name: trim
-      title:
+      title_phase1:
         text: "{{if .Config.filter_title }}{{ .Result.title_filtered }}{{else}}{{ .Result.title_normal }}{{end}}"
+      title_multilang:
+        text: "{{ .Result.title_phase1 }}"
+        filters:
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+      title_phase2:
+        text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
+      title_vostfr:
+        text: "{{ .Result.title_phase2 }}"
+        filters:
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-][Vv][Oo][Ss][Tt][Ff][Rr][\\.\\s\\]\\-]", ".ENGLISH."]
+      title:
+        text: "{{if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
       details:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         attribute: href
       category:
-        selector: "a.torrent-name"
+        selector: ":nth-child(2) > a"
         case:
           "a[href*=\"/filmvidéo/animation/\"]" : 2178
           "a[href*=\"/filmvidéo/animation-série/\"]" : 2179
@@ -198,7 +253,7 @@
       download:
         text: "/engine/download_torrent?id={{ .Result._id }}"
       date:
-        selector: "td:nth-child(3)"
+        selector: "td:nth-child(5)"
         filters:
           - name: replace
             args: ["il y a ", ""]
@@ -223,16 +278,21 @@
           - name: append
             args: " ago"
       size:
-        selector: "td:nth-child(4)"
+        selector: "td:nth-child(6)"
+        filters:
+          - name: replace
+            args: ["o", "B"]
+      grabs:
+        selector: "td:nth-child(7)"
       seeders:
         text: 0
       seeders:
-        selector: "td:nth-child(5)"
+        selector: "td:nth-child(8)"
         optional: true
       leechers:
         text: 0
       leechers:
-        selector: "td:nth-child(6)"
+        selector: "td:nth-child(9)"
         optional: true
       downloadvolumefactor:
         text: "1"

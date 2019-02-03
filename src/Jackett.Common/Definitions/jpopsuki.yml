@@ -1,3 +1,5 @@
+# looks like gazelle but ajax.php seems to be disabled:
+# https://jpopsuki.eu/ajax.php?action=browse&order_by=time&order_way=desc => Invalid
 ---
   site: jpopsuki
   name: JPopsuki
@@ -34,7 +36,7 @@
       keeplogged: 1
       login: "Log in"
     error:
-      - selector: form#loginform > span.warning
+      - selector: form#loginform > span.warning, font[color="red"]
     test:
       path: torrents.php
 
@@ -67,6 +69,8 @@
         filters:
           - name: replace
             args: [" ()", ""]
+          - name: replace
+            args: ["\t", ""]            
           - name: replace
             args: [" / Freeleech!", ""]
       category:

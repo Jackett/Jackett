@@ -72,7 +72,7 @@
     rows:
       selector: tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
       after: 1
-    fields:
+    fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
       banner:
         selector: a[href^="details.php?id="][onmouseover]
         attribute: onmouseover
@@ -98,20 +98,20 @@
         selector: a[href^="download.php"]
         attribute: href
       files:
-        selector: td:nth-child(4)
+        selector: a[href^="filelist.php"]
       size:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(6)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(5)
         filters:
           - name: regexp
             args: ([\d,]+)
       seeders:
-        selector: td:nth-child(9)
+        selector: td:nth-last-child(4)
       leechers:
-        selector: td:nth-child(10)
+        selector: td:nth-last-child(3)
       date:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(7)
       downloadvolumefactor:
         case:
           "a.info > b:contains(\"[FREE]\")": "0"

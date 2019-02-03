@@ -120,13 +120,16 @@
       selector: table#browsetable > tbody > tr:has(a[href^="/details.php?id="])
     fields:
       category:
-        selector: a[href^="/browse.php?q="]
+        selector: a[href^="/browse.php"]
         attribute: href
         filters:
           - name: querystring
             args: c
       title:
         selector: td:nth-child(2)
+        filters:
+          - name: re_replace
+            args: ["\\s+", " "] # strip redundant whitespaces/newlines
       download:
         selector: a[href^="/download.php/"]
         attribute: href

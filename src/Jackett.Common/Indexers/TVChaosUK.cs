@@ -12,6 +12,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using static Jackett.Common.Utils.ParseUtil;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -195,6 +196,7 @@ namespace Jackett.Common.Indexers
             if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
+                rssPage.Content = RemoveInvalidXmlChars(rssPage.Content);
                 var rssDoc = XDocument.Parse(rssPage.Content);
 
                 foreach (var item in rssDoc.Descendants("item"))
@@ -279,7 +281,15 @@ namespace Jackett.Common.Indexers
                         release.Guid = new Uri(qRow.Find("td:eq(2) a").Attr("href"));
                         release.Link = release.Guid;
                         release.Comments = new Uri(qRow.Find("td:eq(1) .tooltip-target a").Attr("href"));
-                        release.PublishDate = DateTime.ParseExact(qRow.Find("td:eq(1) div").Last().Text().Trim(), "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51
+                        var qDate = qRow.Find("td:eq(1) div").Last();
+                        var date = qDate.Text().Trim();
+                        if (date.StartsWith("Pre Release Time:")) // in some cases the pre time is shown
+                        {
+                            date = date.Replace("Pre Release Time:", "");
+                            date = date.Split(new string[] { "Uploaded:" }, StringSplitOptions.None)[0];
+                            date = date.Trim();
+                        }
+                        release.PublishDate = DateTime.ParseExact(date, "dd-MM-yyyy H:mm", CultureInfo.InvariantCulture); //08-08-2015 12:51
                         release.Seeders = ParseUtil.CoerceInt(qRow.Find("td:eq(6)").Text());
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find("td:eq(7)").Text().Trim());
                         release.Size = ReleaseInfo.GetBytes(qRow.Find("td:eq(4)").Text().Trim());
@@ -313,6 +323,18 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var response = await base.Download(link);
+            if (response.Length >= 1 && response[0] == '<') // issue #4395
+            {
+                // relogin
+                await ApplyConfiguration(null);
+                response = await base.Download(link);
+            }
+            return response;
         }
     }
 }

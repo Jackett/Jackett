@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Models.GitHub;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using NLog;
@@ -28,14 +30,17 @@ namespace Jackett.Common.Services
         IConfigurationService configService;
         ManualResetEvent locker = new ManualResetEvent(false);
         ITrayLockService lockService;
+        private ServerConfig serverConfig;
         bool forceupdatecheck = false;
+        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
-        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls)
+        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, ServerConfig sc)
         {
             logger = l;
             client = c;
             configService = cfg;
             lockService = ls;
+            serverConfig = sc;
         }
 
         private string ExePath()
@@ -57,11 +62,13 @@ namespace Jackett.Common.Services
 
         private async void UpdateWorkerThread()
         {
+            var delayHours = 1; // first check after 1 hour (for users not running jackett 24/7)
             while (true)
             {
-                locker.WaitOne((int)new TimeSpan(24, 0, 0).TotalMilliseconds);
+                locker.WaitOne((int)new TimeSpan(delayHours, 0, 0).TotalMilliseconds);
                 locker.Reset();
                 await CheckForUpdates();
+                delayHours = 24; // following checks only once/24 hours
             }
         }
 
@@ -72,15 +79,24 @@ namespace Jackett.Common.Services
 
         private async Task CheckForUpdates()
         {
-            var config = Engine.ServerConfig;
-            if (config.RuntimeSettings.NoUpdates)
+            if (serverConfig.RuntimeSettings.NoUpdates)
             {
                 logger.Info($"Updates are disabled via --NoUpdates.");
                 return;
             }
-            if (config.UpdateDisabled && !forceupdatecheck)
+            if (serverConfig.UpdateDisabled && !forceupdatecheck)
             {
                 logger.Info($"Skipping update check as it is disabled.");
+                return;
+            }
+
+            Variants variants = new Variants();
+            variant = variants.GetVariant();
+            logger.Info("Jackett variant: " + variant.ToString());
+
+            if (DotNetCoreUtil.IsRunningOnDotNetCore)
+            {
+                logger.Info($"Skipping update check as running Jackett on .NET Core is still in preview. Updates must be performed manually at this time.");
                 return;
             }
 
@@ -91,6 +107,12 @@ namespace Jackett.Common.Services
             {
                 logger.Info($"Skipping checking for new releases as the debugger is attached.");
                 return;
+            }
+
+            bool trayIsRunning = false;
+            if (isWindows)
+            {
+                trayIsRunning = Process.GetProcessesByName("JackettTray").Length > 0;
             }
 
             try
@@ -110,7 +132,7 @@ namespace Jackett.Common.Services
 
                 var releases = JsonConvert.DeserializeObject<List<Release>>(response.Content);
 
-                if (!config.UpdatePrerelease)
+                if (!serverConfig.UpdatePrerelease)
                 {
                     releases = releases.Where(r => !r.Prerelease).ToList();
                 }
@@ -130,7 +152,7 @@ namespace Jackett.Common.Services
                             var installDir = Path.GetDirectoryName(ExePath());
                             var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
                             if (updaterPath != null)
-                                StartUpdate(updaterPath, installDir, isWindows, config.RuntimeSettings.NoRestart);
+                                StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
                         }
                         catch (Exception e)
                         {
@@ -207,7 +229,9 @@ namespace Jackett.Common.Services
 
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            var targetAsset = assets.Where(a => isWindows ? a.Browser_download_url.ToLowerInvariant().EndsWith(".zip") : a.Browser_download_url.ToLowerInvariant().EndsWith(".gz")).FirstOrDefault();
+            Variants variants = new Variants();
+            string artifactFileName = variants.GetArtifactFileName(variant);
+            Asset targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
 
             if (targetAsset == null)
             {
@@ -257,17 +281,29 @@ namespace Jackett.Common.Services
             return tempDir;
         }
 
-        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart)
+        private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayIsRunning)
         {
+            string appType = "Console";
+            //DI once off Owin
+            IProcessService processService = new ProcessService(logger);
+            IServiceConfigService windowsService = new WindowsServiceConfigService(processService, logger);
+
+            if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
+            {
+                appType = "WindowsService";
+            }
+
             var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" +a + "\"" : a )).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo();
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
 
             // Note: add a leading space to the --Args argument to avoid parsing as arguments
             if (isWindows)
             {
-                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{exe}\" --Args \" {args}\"";
+                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = Path.Combine(updaterExePath);
             }
             else
@@ -276,13 +312,12 @@ namespace Jackett.Common.Services
                 args = exe + " " + args;
                 exe = "mono";
 
-                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{exe}\" --Args \" {args}\"";
+                startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
-                startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
             }
 
-            try { 
+            try
+            {
                 var pid = Process.GetCurrentProcess().Id;
                 startInfo.Arguments += $" --KillPids \"{pid}\"";
             }
@@ -293,16 +328,30 @@ namespace Jackett.Common.Services
             }
 
             if (NoRestart)
+            {
                 startInfo.Arguments += " --NoRestart";
+            }
+
+            if (trayIsRunning && appType == "Console")
+            {
+                startInfo.Arguments += " --StartTray";
+            }
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
             var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
-            if (NoRestart == false)
-            { 
+
+            if (!NoRestart)
+            {
+                if (isWindows)
+                {
+                    logger.Info("Signal sent to lock service");
+                    lockService.Signal();
+                    Thread.Sleep(2000);
+                }
+
                 logger.Info("Exiting Jackett..");
-                lockService.Signal();
-                Engine.Exit(0);
+                Environment.Exit(0);
             }
         }
     }

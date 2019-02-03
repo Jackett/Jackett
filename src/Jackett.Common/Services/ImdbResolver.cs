@@ -17,10 +17,11 @@ namespace Jackett.Common.Services
 
     public class OmdbResolver : IImdbResolver
     {
-        public OmdbResolver(WebClient webClient, NonNull<string> omdbApiKey)
+        public OmdbResolver(WebClient webClient, NonNull<string> omdbApiKey, string omdbApiUrl)
         {
             WebClient = webClient;
             apiKey = omdbApiKey;
+            url = omdbApiUrl;
         }
 
         public async Task<Movie> MovieForId(NonNull<string> id)
@@ -30,7 +31,10 @@ namespace Jackett.Common.Services
             if (!imdbId.StartsWith("tt", StringComparison.Ordinal))
                 imdbId = "tt" + imdbId;
 
-            var request = new WebRequest("http://omdbapi.com/?apikey=" + apiKey + "&i=" + imdbId);
+            if (string.IsNullOrWhiteSpace(url))
+                url = "http://omdbapi.com";
+
+            var request = new WebRequest(url + "/?apikey=" + apiKey + "&i=" + imdbId);
             request.Encoding = Encoding.UTF8;
             var result = await WebClient.GetString(request);
             var movie = JsonConvert.DeserializeObject<Movie>(result.Content);
@@ -40,5 +44,6 @@ namespace Jackett.Common.Services
 
         private WebClient WebClient;
         private string apiKey;
+        private string url;
     }
 }

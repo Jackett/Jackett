@@ -7,6 +7,8 @@
   encoding: UTF-8
   links:
     - https://et8.org/
+  legacylinks:
+    - http://et8.org/
 
   caps:
     categorymappings:

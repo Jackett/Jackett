@@ -6,7 +6,7 @@
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var configuration = Argument("configuration", "Debug");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -16,9 +16,7 @@ var configuration = Argument("configuration", "Release");
 var workingDir = MakeAbsolute(Directory("./"));
 var artifactsDirName = "Artifacts";
 var testResultsDirName = "TestResults";
-
-var windowsBuildFullFramework = "./BuildOutput/FullFramework/Windows";
-var monoBuildFullFramework = "./BuildOutput/FullFramework/Mono";
+var netCoreFramework = "netcoreapp2.2";
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -28,39 +26,49 @@ Task("Info")
 	.Does(() =>
 	{
 		Information(@"Jackett Cake build script starting...");
-		Information(@"Requires InnoSetup and C:\cygwin to be present for packaging (Pre-installed on AppVeyor)");
+		Information(@"Requires InnoSetup and C:\cygwin to be present for packaging (Pre-installed on AppVeyor) on Windows");
 		Information(@"Working directory is: " + workingDir);
+
+		if (IsRunningOnWindows())
+		{
+			Information("Platform is Windows");
+		}
+		else
+		{
+			Information("Platform is Linux, Windows builds will be skipped");
+		}
 	});
 
 Task("Clean")
 	.IsDependentOn("Info")
 	.Does(() =>
 	{
-		CleanDirectories("./src/**/obj" + configuration);
-		CleanDirectories("./src/**/bin" + configuration);
+		CleanDirectories("./src/**/obj");
+		CleanDirectories("./src/**/bin");
 		CleanDirectories("./BuildOutput");
 		CleanDirectories("./" + artifactsDirName);
 		CleanDirectories("./" + testResultsDirName);
 
+		CreateDirectory("./" + artifactsDirName);
+
 		Information("Clean completed");
 	});
 
-Task("Restore-NuGet-Packages")
+Task("Build-Full-Framework")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
 		NuGetRestore("./src/Jackett.sln");
-	});
 
-Task("Build")
-	.IsDependentOn("Restore-NuGet-Packages")
-	.Does(() =>
-	{
-		MSBuild("./src/Jackett.sln", settings => settings.SetConfiguration(configuration));
+		var buildSettings = new MSBuildSettings()
+                .SetConfiguration(configuration)
+                .UseToolVersion(MSBuildToolVersion.VS2017);
+		
+		MSBuild("./src/Jackett.sln", buildSettings);
 	});
 
 Task("Run-Unit-Tests")
-	.IsDependentOn("Build")
+	.IsDependentOn("Build-Full-Framework")
 	.Does(() =>
 	{
 		CreateDirectory("./" + testResultsDirName);
@@ -71,96 +79,144 @@ Task("Run-Unit-Tests")
 			Results = new[] { new NUnit3Result { FileName = resultsFile } }
 		});
 
-		if(AppVeyor.IsRunningOnAppVeyor)
+		if (AppVeyor.IsRunningOnAppVeyor && IsRunningOnWindows())
 		{
 			AppVeyor.UploadTestResults(resultsFile, AppVeyorTestResultsType.NUnit3);
 		}
 	});
 
-Task("Copy-Files-Full-Framework")
+Task("Package-Windows-Full-Framework")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		var windowsOutput = windowsBuildFullFramework + "/Jackett";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/net461/win7-x86/Jackett";
+		
+		DotNetCorePublish(serverProjectPath, "net461", "win7-x86", buildOutputPath);
 
-		CopyDirectory("./src/Jackett.Console/bin/" + configuration, windowsOutput);
-		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", windowsOutput);
-		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", windowsOutput);
-		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/JackettUpdater.*", windowsOutput);
-		CopyFiles("./Upstart.config", windowsOutput);
-		CopyFiles("./LICENSE", windowsOutput);
-		CopyFiles("./README.md", windowsOutput);
+		CopyFiles("./src/Jackett.Service/bin/" + configuration + "/JackettService.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Tray/bin/" + configuration + "/JackettTray.*", buildOutputPath);
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
-		var monoOutput = monoBuildFullFramework + "/Jackett";
+		Zip("./BuildOutput/net461/win7-x86", $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
 
-		CopyDirectory(windowsBuildFullFramework, monoBuildFullFramework);
-		DeleteFiles(monoOutput + "/JackettService.*");
-		DeleteFiles(monoOutput + "/JackettTray.*");
+		//InnoSetup
+		string sourceFolder = MakeAbsolute(Directory(buildOutputPath)).ToString();
 
-		Information("Full framework file copy completed");
+		InnoSetupSettings settings = new InnoSetupSettings();
+		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
+ 		settings.Defines = new Dictionary<string, string>
+			{
+				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
+				{ "MySourceFolder",  sourceFolder },
+				{ "MyOutputFilename",  "Jackett.Installer.Windows" },
+			};
+
+		InnoSetup("./Installer.iss", settings);
 	});
 
-Task("Check-Packaging-Platform")
-	.IsDependentOn("Copy-Files-Full-Framework")
+Task("Package-Mono-Full-Framework")
+	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		if (IsRunningOnWindows())
-		{
-			CreateDirectory("./" + artifactsDirName);
-			Information("Platform is Windows");
-		}
-		else
-		{
-			throw new Exception("Packaging is currently only implemented for a Windows environment");
-		}
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = "./BuildOutput/net461/linux-x64/Jackett";
+
+		DotNetCorePublish(serverProjectPath, "net461", "linux-x64", buildOutputPath);
+
+		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
+
+		CopyFileToDirectory("./install_service_macos", buildOutputPath);
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./Upstart.config", buildOutputPath);
+
+		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
+		//https://github.com/dotnet/corefx/issues/19914
+		//https://bugzilla.xamarin.com/show_bug.cgi?id=60315
+		//The workaround is to delete System.Net.Http.dll and patch the .exe.config file
+
+		DeleteFile(buildOutputPath + "/System.Net.Http.dll");
+
+		var configFile = File(buildOutputPath + "/JackettConsole.exe.config");
+		XmlPoke(configFile, "configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion", "4.0.0.0");
+
+		//Mono on FreeBSD doesn't like the bundled System.Runtime.InteropServices.RuntimeInformation
+		//https://github.com/dotnet/corefx/issues/23989
+		//https://github.com/Jackett/Jackett/issues/3547
+
+		DeleteFile(buildOutputPath + "/System.Runtime.InteropServices.RuntimeInformation.dll");
+
+		Gzip("./BuildOutput/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
 	});
 
-Task("Package-Windows-Installer-Full-Framework")
-	.IsDependentOn("Check-Packaging-Platform")
+Task("Package-DotNetCore-macOS")
+	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		InnoSetup("./Installer.iss", new InnoSetupSettings {
-			OutputDirectory = workingDir + "/" + artifactsDirName
-		});
+		string runtimeId = "osx-x64";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+
+		CopyFileToDirectory("./install_service_macos", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.macOS.tar.gz");
 	});
 
-Task("Package-Files-Full-Framework-Windows")
-	.IsDependentOn("Check-Packaging-Platform")
+Task("Package-DotNetCore-LinuxAMD64")
+	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		Zip(windowsBuildFullFramework, $"./{artifactsDirName}/Jackett.Binaries.Windows.zip");
-		Information(@"Full Framework Windows Binaries Zipping Completed");
+		string runtimeId = "linux-x64";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./Upstart.config", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxAMD64.tar.gz");
 	});
 
-Task("Package-Files-Full-Framework-Mono")
-	.IsDependentOn("Check-Packaging-Platform")
+Task("Package-DotNetCore-LinuxARM32")
+	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		var cygMonoBuildPath = RelativeWinPathToCygPath(monoBuildFullFramework);
-		var tarFileName = "Jackett.Binaries.Mono.tar";
-		var tarArguments = @"-cvf " + cygMonoBuildPath + "/" + tarFileName + " -C " + cygMonoBuildPath + " Jackett --mode ='755'";
-		var gzipArguments = @"-k " + cygMonoBuildPath + "/" + tarFileName;
+		string runtimeId = "linux-arm";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
-		RunCygwinCommand("Tar", tarArguments);
-		RunCygwinCommand("Gzip", gzipArguments);
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
-		MoveFile($"{monoBuildFullFramework}/{tarFileName}.gz", $"./{artifactsDirName}/{tarFileName}.gz");
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./Upstart.config", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxARM32.tar.gz");
 	});
 
-Task("Package-Full-Framework")
-	.IsDependentOn("Package-Windows-Installer-Full-Framework")
-	.IsDependentOn("Package-Files-Full-Framework-Windows")
-	.IsDependentOn("Package-Files-Full-Framework-Mono")
+Task("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		Information("Full Framwork Packaging Completed");
+		string runtimeId = "linux-arm64";
+		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+
+		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+		
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./Upstart.config", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxARM64.tar.gz");
 	});
 
 Task("Appveyor-Push-Artifacts")
-	.IsDependentOn("Package-Full-Framework")
+	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		if (AppVeyor.IsRunningOnAppVeyor)
+		if (AppVeyor.IsRunningOnAppVeyor && IsRunningOnWindows())
 		{
 			foreach (var file in GetFiles(workingDir + $"/{artifactsDirName}/*"))
 			{
@@ -169,12 +225,12 @@ Task("Appveyor-Push-Artifacts")
 		}
 		else
 		{
-			Information(@"Skipping as not running in AppVeyor Environment");
+			Information(@"Skipping artifact push as not running in AppVeyor Windows Environment");
 		}
 	});
 
 Task("Release-Notes")
-	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Clean")
 	.Does(() =>
 	{
 		string latestTag = GitDescribe(".", false, GitDescribeStrategy.Tags, 0);
@@ -212,13 +268,39 @@ Task("Release-Notes")
 			string buildNote = String.Join(Environment.NewLine, notesList);
 			Information(buildNote);
 
-			System.IO.File.WriteAllLines(workingDir + "\\BuildOutput\\ReleaseNotes.txt", notesList.ToArray());
+			System.IO.File.WriteAllLines(workingDir + "/BuildOutput/ReleaseNotes.txt", notesList.ToArray());
 		}
 		else
 		{
 			Information($"No commit messages found to create release notes");
 		}
 
+	});
+
+Task("Windows-Environment")
+	.IsDependentOn("Package-Windows-Full-Framework")
+	.IsDependentOn("Package-Mono-Full-Framework")
+	.IsDependentOn("Package-DotNetCore-macOS")
+	.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	.IsDependentOn("Package-DotNetCore-LinuxARM32")
+	.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Release-Notes")
+	.Does(() =>
+	{
+		Information("Windows-Environment Task Completed");
+	});
+
+Task("Linux-Environment")
+	.IsDependentOn("Package-DotNetCore-macOS")
+	.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	.IsDependentOn("Package-DotNetCore-LinuxARM32")
+	.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Release-Notes")
+	.Does(() =>
+	{
+		Information("Linux-Environment Task Completed");
 	});
 
 
@@ -263,8 +345,56 @@ private void RunCygwinCommand(string utility, string utilityArguments)
 private string RelativeWinPathToCygPath(string relativePath)
 {
 	var cygdriveBase = "/cygdrive/" + workingDir.ToString().Replace(":", "").Replace("\\", "/");
-	var cygPath = cygdriveBase + relativePath.Replace(".", "");
+	var cygPath = cygdriveBase + relativePath.TrimStart('.');
 	return cygPath;
+}
+
+private void RunLinuxCommand(string file, string arg)
+{
+	var startInfo = new System.Diagnostics.ProcessStartInfo()
+	{
+		Arguments = arg,
+		FileName = file,
+		UseShellExecute = true
+	};
+
+	var process = System.Diagnostics.Process.Start(startInfo);
+	process.WaitForExit();
+}
+
+private void Gzip(string sourceFolder, string outputDirectory, string tarCdirectoryOption, string outputFileName)
+{
+	var tarFileName = outputFileName.Remove(outputFileName.Length - 3, 3);
+	
+	if (IsRunningOnWindows())
+	{
+		var cygSourcePath = RelativeWinPathToCygPath(sourceFolder);
+		var tarArguments = @"-cvf " + cygSourcePath + "/" + tarFileName + " -C " + cygSourcePath + $" {tarCdirectoryOption} --mode ='755'";
+		var gzipArguments = @"-k " + cygSourcePath + "/" + tarFileName;
+
+		RunCygwinCommand("Tar", tarArguments);
+		RunCygwinCommand("Gzip", gzipArguments);
+		MoveFile($"{sourceFolder}/{tarFileName}.gz", $"{outputDirectory}/{tarFileName}.gz");
+	}
+	else
+	{
+		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type d -exec chmod 755 {} \;");
+		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type f -exec chmod 644 {} \;");
+		//RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))} /Jackett/jackett");
+		RunLinuxCommand("tar",  $"-C {sourceFolder} -zcvf {outputDirectory}/{tarFileName}.gz {tarCdirectoryOption}");
+	}	
+}
+
+private void DotNetCorePublish(string projectPath, string framework, string runtime, string outputPath)
+{
+	var settings = new DotNetCorePublishSettings
+	{
+		Framework = framework,
+		Runtime = runtime,
+		OutputDirectory = outputPath
+	};
+
+	DotNetCorePublish(projectPath, settings);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -272,10 +402,17 @@ private string RelativeWinPathToCygPath(string relativePath)
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Release-Notes")
+	.IsDependentOn("Windows-Environment")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
+	});
+
+Task("Linux")
+	.IsDependentOn("Linux-Environment")
+	.Does(() =>
+	{
+		Information("Linux Task Completed");
 	});
 
 //////////////////////////////////////////////////////////////////////

@@ -107,7 +107,8 @@
       orderby: "added"
       sort: "desc"
     rows:
-      selector: table.main > tbody > tr:contains("Alle Torrents") + tr > td > table.tableinborder > tbody > tr
+      # correct selector depends on the "Empfohlene Torrents in der Liste anzeigen" profile option
+      selector: table.main > tbody > tr:contains("Alle Torrents") + tr > td > table.tableinborder > tbody > tr, div.bro_torr_wrap:not(:contains("Alle Torrents")) > table.tableinborder > tbody > tr
       filters:
         - name: andmatch
     fields:

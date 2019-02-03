@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -351,7 +351,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var rows = document.QuerySelectorAll("div.row");
 
                 foreach (var row in rows)
@@ -380,7 +380,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
 
                 var playButton = document.QuerySelector("div.external-btn");
                 if (playButton != null && !playButton.ClassList.Contains("inactive"))
@@ -389,7 +389,15 @@ namespace Jackett.Common.Indexers
 
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
                     dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
-                    var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+                    DateTime date;
+                    if (dateString.Length == 4) //dateString might be just a year, e.g. https://www.lostfilm.tv/series/Ghosted/season_1/episode_14/
+                    {
+                        date = DateTime.ParseExact(dateString, "yyyy", CultureInfo.InvariantCulture).ToLocalTime();
+                    }
+                    else
+                    {
+                        date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+                    }
 
                     var urlDetails = new TrackerUrlDetails(playButton);
                     var episodeReleases = await FetchTrackerReleases(urlDetails);
@@ -420,7 +428,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var seasons = document.QuerySelectorAll("div.serie-block");
                 var rowSelector = "table.movie-parts-list > tbody > tr";
 
@@ -577,7 +585,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var meta = document.QuerySelector("meta");
                 var metaContent = meta.GetAttribute("content");
 
@@ -603,7 +611,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(results.Content);
+                var document = parser.ParseDocument(results.Content);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
                 logger.Debug("> Parsing " + rows.Count().ToString() + " releases");

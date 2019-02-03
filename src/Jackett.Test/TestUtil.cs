@@ -7,21 +7,25 @@ using Jackett.Common.Plumbing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Jackett.Test
 {
-    class TestUtil
+    static class TestUtil
     {
-        private static IContainer testContainer = null;
+        private static IContainer testContainer;
 
         public static void SetupContainer()
         {
+            IDataProtectionProvider dataProtectionProvider = new EphemeralDataProtectionProvider();
+
             var builder = new ContainerBuilder();            
             builder.RegisterModule(new JackettModule(new RuntimeSettings()));
-            builder.RegisterModule<WebApi2Module>();
+            builder.RegisterType<Jackett.Server.Services.ProtectionService>().As<IProtectionService>();
             builder.RegisterType<TestWebClient>().As<WebClient>().SingleInstance();
             builder.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();
             builder.RegisterType<TestIndexerManagerServiceHelper>().As<IIndexerManagerService>().SingleInstance();
+            builder.RegisterInstance(dataProtectionProvider).SingleInstance();
             testContainer = builder.Build();
         }
 

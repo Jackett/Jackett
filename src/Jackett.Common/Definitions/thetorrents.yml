@@ -128,18 +128,18 @@
           - name: replace
             args: ["pic/noposter.jpg", ""]
       files:
-        selector: td:nth-child(5)
+        selector: td:nth-child(4)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(7)
         filters:
           - name: regexp
             args: (\d+)
       size:
-        selector: td:nth-child(7)
+        selector: td:nth-child(6)
       seeders:
-        selector: td:nth-child(9)
+        selector: td:nth-child(8)
       leechers:
-        selector: td:nth-child(10)
+        selector: td:nth-child(9)
       downloadvolumefactor:
         case:
           img[title="FreeLeech"]: "0"

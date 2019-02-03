@@ -5,13 +5,24 @@
   language: fr-fr
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - http://www.torrent9.red/
+    - https://wvw.torrent9.uno/
   legacylinks:
+    - http://www.torrent9.ec/
+    - http://www.torrent9.red/
     - http://www.torrent9.bz/
     - http://www.torrents9.pe/
     - http://www.torrent9.cc/
     - http://www.torrent9.pe/
+    - http://www.torrent9.blue/
+    - https://www.torrent9.blue/
+    - https://ww2.torrent9.blue/
+    - https://www.torrent9.rip/
+    - https://www.torrent9.ph/
+    - https://ww1.torrent9.ph/
+    - https://torrent9.ga/
+    - https://www.torrent9.uno/
 
   caps:
     categorymappings:
@@ -27,33 +38,12 @@
       search: [q]
       tv-search: [q, season, ep]
 
-  settings:
-    - name: category
-      type: select
-      label: Category Filter
-      default: "/"
-      options:
-        "/" : "All"
-        "/films/": "Movies"
-        "/films-french/": "Movies/French"
-        "/films-vostfr/": "Movies/VOSTFR"
-        "/films-dvdrip-x264/": "Movies/DVDRIP .x264"
-        "/720p/": "Movies/BluRay 720p"
-        "/1080p/": "Movies/BluRay 1080p"
-        "/series/": "TV/Series"
-        "/series-vostfr/": "TV/VOSTFR"
-        "/series-francaise/": "TV/French"
-        "/series-dvdrip/": "TV/DVDRIP"
-        "/spectacles/": "Shows"
-        "/musique/": "Music"
-        "/ebook/": "Ebooks"
-        "/logiciels/": "Software"
-        "/jeux-pc/": "PC Games"
-        "/jeux-consoles/": "Console Games"
-
+  download:
+    selector: a[href^="/downloading/"]
+      
   search:
     paths:
-      - path: "{{ if .Keywords }}/search_torrent{{ .Config.category }}{{ .Keywords }}/page-0{{else}}/top_torrent.php{{end}}"
+      - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}/page-0{{else}}/top_torrent.php{{end}}"
     rows:
       selector: div.table-responsive > table tbody tr
     fields:
@@ -91,11 +81,6 @@
       download:
         selector: td:nth-child(1) a
         attribute: href
-        filters:
-          - name: re_replace
-            args: [ "/torrent/\\d{5,}/", "/get_torrent/"]
-          - name: append
-            args: ".torrent"
       date:
           text: "now"
       size:

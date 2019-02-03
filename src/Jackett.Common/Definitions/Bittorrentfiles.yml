@@ -1,4 +1,4 @@
-﻿---
+---
   site: Bittorrentfiles
   name: Bittorrentfiles
   description: "Bittorrentfiles is a Private GERMAN tracker"
@@ -135,22 +135,22 @@
         selector: a[href^="/download.php"]
         attribute: href
       files:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(5) > a
+        selector: td:nth-child(5)
       grabs:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2)
+        selector: td:nth-child(4)
       size:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(6) 
+        selector: td:nth-child(6)
         filters:
           - name: replace
             args: [".", ""]
           - name: replace
             args: [",", "."]
       seeders:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2)
+        selector: td:nth-child(2) > a
       leechers:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3)
+        selector: td:nth-child(3)
       date:
-        selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(10)
+        selector: td:nth-child(10)
         filters:
           - name: split
             args: ["by", 0]

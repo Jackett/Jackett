@@ -6,6 +6,8 @@
   type: private
   encoding: windows-1252
   links:
+    - https://rodvd.net/
+  legacylinks:
     - http://rodvd.net/
 
   caps:
@@ -105,7 +107,7 @@
         selector: a[href*="http://www.imdb.com/title/tt"]
         attribute: href
       size:
-        selector: td:nth-child(6)
+        selector: td:nth-child(4)
       seeders:
         text: 9999
       leechers:

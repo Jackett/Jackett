@@ -131,6 +131,13 @@ namespace Jackett.Common.Indexers
         private async Task ProcessPage(List<ReleaseInfo> releases, string searchUrl)
         {
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            if (response.IsRedirect)
+            {
+                // re login
+                await ApplyConfiguration(null);
+                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            }
+
             var results = response.Content;
             try
             {

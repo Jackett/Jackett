@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers.Meta
         public async Task<IEnumerable<TorznabQuery>> FallbackQueries()
         {
             if (titles == null)
-                titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title.ToEnumerable();
+                titles = (await resolver.MovieForId(query.ImdbID.ToNonNull())).Title?.ToEnumerable() ?? Enumerable.Empty<string>();
             return titles.Select(t => query.CreateFallback(t));
         }
 

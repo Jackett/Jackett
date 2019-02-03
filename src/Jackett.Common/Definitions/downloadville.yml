@@ -128,7 +128,18 @@
         "2" : "Argent (Silver)"
         "3" : "Or (Gold)"
         "4" : "Argent & Or (Both)"
-
+    - name: multilang
+      type: checkbox
+      label: Replace MULTI by another language in release name
+      default:  false
+    - name: multilanguage
+      type: select
+      label: Replace MULTI by this language
+      default: FRENCH
+      options:
+        FRENCH : "FRENCH"
+        MULTI.FRENCH : "MULTI.FRENCH" 
+        ENGLISH: "ENGLISH"
   login:
     path: tracker/index.php?page=login
     method: post
@@ -168,8 +179,15 @@
     rows:
       selector: table > tbody > tr > td > table.lista > tbody > tr:has(td[onmouseover="this.className='post'"])
     fields:
-      title:
+      title_phase1:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      title_multilang:
+        text: "{{ .Result.title_phase1 }}"
+        filters:
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-][Mm][Uu][Ll][Tt][Ii][\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."] 
+      title:
+        text: "{{if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
       details:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         attribute: href
@@ -188,24 +206,24 @@
         filters:
           - name: querystring
             args: "category"
-      date:
-        selector: td:nth-of-type(4)
+      date: # some users will have a extra wait time column before the bookmark column, so use last-of-type
+        selector: td:nth-last-of-type(10)
         filters:
           - name: append
             args: " -04:00"
           - name: dateparse
             args: "02/01/2006 15:04:05 -07:00"
       seeders:
-        selector: td:nth-of-type(6)
+        selector: td:nth-last-of-type(8)
       leechers:
-        selector: td:nth-of-type(7)
+        selector: td:nth-last-of-type(7)
       grabs:
-        selector: td:nth-of-type(8)
+        selector: td:nth-last-of-type(6)
         filters:
           - name: replace
             args: ["---", "0"]
       size:
-        selector: td:nth-of-type(10)
+        selector: td:nth-last-of-type(4)
       downloadvolumefactor:
         case:
           img[src="images/freeleech.gif"]: "0"

@@ -19,25 +19,29 @@ namespace Jackett.Common.Indexers
 {
     public class Fuzer : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://fuzer.me/",
+        };
+
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataRecaptchaLogin configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
             set { base.configData = value; }
         }
 
         public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
             : base(name: "Fuzer",
                 description: "Fuzer is a private torrent website with israeli torrents.",
-                link: "https://fuzer.me/",
+                link: "https://www.fuzer.me/",
                 configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataRecaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
@@ -95,9 +99,57 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(76, TorznabCatType.TV, "סדרות");
         }
 
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            CQ cq = loginPage.Content;
+            var captcha = cq.Find(".g-recaptcha"); // invisible recaptcha
+            if (captcha.Any())
+            {
+                var result = this.configData;
+                result.CookieHeader.Value = loginPage.Cookies;
+                result.Captcha.SiteKey = captcha.Attr("data-sitekey");
+                result.Captcha.Version = "2";
+                return result;
+            }
+            else
+            {
+                var result = new ConfigurationDataBasicLogin();
+                result.SiteLink.Value = configData.SiteLink.Value;
+                result.Instructions.Value = configData.Instructions.Value;
+                result.Username.Value = configData.Username.Value;
+                result.Password.Value = configData.Password.Value;
+                result.CookieHeader.Value = loginPage.Cookies;
+                return result;
+            }
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+
+            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            {
+                CookieHeader = configData.Captcha.Cookie;
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (results.Count() == 0)
+                    {
+                        throw new Exception("Your cookie did not work");
+                    }
+
+                    IsConfigured = true;
+                    SaveConfig();
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception("Your cookie did not work: " + e.Message);
+                }
+            }
+
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
 
             var pairs = new Dictionary<string, string> {

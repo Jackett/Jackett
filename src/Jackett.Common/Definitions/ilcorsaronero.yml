@@ -6,20 +6,29 @@
   type: public
   encoding: UTF-8
   links:
+    - https://ilcorsaronero.cc/
+  legacylinks:
     - https://ilcorsaronero.info/
+    - https://ilcorsaronero.ch/
   certificates:
+    - 89c12d4a080b5aeec00acbb269dc9b44584b1b3f # incomplete CA chain
     - aa7c40aa360a1cec8a9687312fd50402b912e618 # incomplete CA chain
+    - 83174ec1f92fa13cdef9d51888ea1dfba2166e17 # incomplete CA chain
+    - c414bf4ad6c69841693c147849f4c314aa200bdf # incomplete CA chain
+    - 3a402766ce22fd1aa24bfc1a4fd47e9309eb8c98 # incomplete CA chain
+    - 160f832730737a70264768ceddf3cd94bc51ffb7 # incomplete CA chain
+    - a60e969b27965d4dc2ff45d50c20e2e872d4e9b9 # incomplete CA chain
 
   caps:
     categorymappings:
-      - {id: 1, cat: Movies/HD, desc: "BDRiP"}
-      - {id: 2, cat: Audio, desc: "Music"}
-      - {id: 2, cat: PC/Games, desc: "Games"}
-      - {id: 5, cat: TV/Anime, desc: "Anime"}
-      - {id: 7, cat: PC/0day, desc: "App"}
-      - {id: 15, cat: TV, desc: "TV Series"}
-      - {id: 19, cat: Movies/SD, desc: "Screener"}
-      - {id: 20, cat: Movies/SD, desc: "Full DVD"}
+      - {id: 1, cat: Movies/HD, desc: "BDRiP", default: true}
+      - {id: 2, cat: Audio, desc: "Music", default: true}
+      - {id: 2, cat: PC/Games, desc: "Games", default: true}
+      - {id: 5, cat: TV/Anime, desc: "Anime", default: true}
+      - {id: 7, cat: PC/0day, desc: "App", default: true}
+      - {id: 15, cat: TV, desc: "TV Series", default: true}
+      - {id: 19, cat: Movies/SD, desc: "Screener", default: true}
+      - {id: 20, cat: Movies/SD, desc: "Full DVD", default: true}
 
     modes:
       search: [q]
@@ -30,32 +39,44 @@
     - name: itorrents-links
       type: checkbox
       label: Add download links via itorrents.org
-    - name: advanced-search
-      type: checkbox
-      label: Use the advanced search of IlCorsaroNero (experimental)
+    # - name: advanced-search
+    #   type: checkbox
+    #   label: Use the advanced search of IlCorsaroNero (experimental)
 
   search:
     paths:
+      # https://ilcorsaronero.info/advsearch.php?&category=15&search=flash+4&&order=data&by=DESC&page=3
+      # {{range .Categories}}{{.}};{{end}}
+
     ##### Are the "not" and "and" functions implemented? Or am I doing it wrong?
     # path: "{{if and .Query.Keywords .advanced-search}}adv/{{ .Query.Keywords}}.html
     #        {{else if and .Query.Keywords (not .advanced-search)}}argh.php?search={{ .Query.Keywords}}
     #        {{else}}/recenti
     #        {{end}}"
-      - path: "{{if .Keywords}}argh.php?search={{ .Keywords}}
-           {{else}}/recenti
-           {{end}}"
+      # - path: "{{if .Keywords}}argh.php?search={{ .Keywords}}
+      #      {{else}}/recenti
+      #      {{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=3{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=6{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=7{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=8{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=9{{else}}/recenti{{end}}"
     keywordsfilters:
-      - name: re_replace
-        args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
       - name: diacritics
         args: replace
-      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
-      - name: re_replace
-        args: ["S0?(\\d{1,2})", " $1 "]
-      - name: re_replace
-        args: ["E(\\d{2,3})", " $1 "]
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     rows:
       selector: "tr.odd,tr.odd2"
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(2) a.tab
@@ -64,32 +85,27 @@
           - name: split
             args: [ "/", -1 ]
           - name: urldecode
-          - name: re_replace
-            args: [ "_+", " "]
-          - name: replace
-            args: [ ".", " "]
-          - name: re_replace
-            args: [ "\\s{2,}", " "]
+          - name: re_replace # replace special characters with " " (space)
+            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
-          - name: re_replace
-            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
-          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
-          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-          - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-          - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
-          # fine prova
-          - name: re_replace #try to find multi episode
-            args: ["(S\\d{2}E\\d{2})\\s(\\d{2})", "$1-$2"]
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       category:
         selector: td:nth-child(1) a
         attribute: href
@@ -116,7 +132,7 @@
           - name: prepend
             args: "magnet:?xt=urn:btih:"
           - name: append
-            args: "&dn={{ .Result.title }}.torrent"
+            args: "&dn={{ .Result.title }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
       size:
         selector: td:nth-child(3) font
       date:

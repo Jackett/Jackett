@@ -20,6 +20,11 @@
       20: Movies/DVD
       9: XXX
       49: XXX/Other
+      6: Audio
+      30: Audio/Other
+      29: Audio/Other
+      51: Audio/Other
+      34: Audio/Lossless   
 
     modes:
       search: [q]
@@ -48,7 +53,11 @@
       selector: .responsetop > tbody > tr:has(td.td_newborder)
     fields:
       title:
-        selector: td:nth-child(2) > a:nth-child(1)
+        selector: td:nth-child(2) > a[href^="/download.php"]
+        attribute: href
+        filters:
+          - name: re_replace
+            args: ["^(.*?)download\\.php\\/[0-9]{1,10}\\/|\\.torrent(?=[^.]*$)", ""]
       details:
         selector: td:nth-child(2) > a:nth-child(1)
         attribute: href

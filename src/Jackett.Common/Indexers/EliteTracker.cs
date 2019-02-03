@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -22,10 +23,11 @@ namespace Jackett.Common.Indexers
         { get { return SiteLink + "takelogin.php"; } }
         private string BrowseUrl
         { get { return SiteLink + "browse.php"; } }
+        private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataEliteTracker configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataEliteTracker)base.configData; }
             set { base.configData = value; }
         }
 
@@ -37,10 +39,10 @@ namespace Jackett.Common.Indexers
                 logger: logger,
                 p: protectionService,
                 client: webClient,
-                configData: new ConfigurationDataBasicLogin()
+                configData: new ConfigurationDataEliteTracker()
                 )
         {
-Encoding = Encoding.UTF8;
+            Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "private";
 
@@ -168,7 +170,7 @@ Encoding = Encoding.UTF8;
             {
                 var RowsSelector = "table[id='sortabletable'] > tbody > tr";
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 var lastDate = DateTime.Now;
 
@@ -206,6 +208,13 @@ Encoding = Encoding.UTF8;
                     release.Peers = ParseUtil.CoerceInt(Leechers.TextContent) + release.Seeders;
                     release.Grabs = ParseUtil.CoerceLong(Grabs.TextContent);
 
+                    if (TorrentHTTPSMode)
+                    {
+                        var linkHttps = Row.QuerySelector("td:nth-child(4)").QuerySelector("a").GetAttribute("href");
+                        var idTorrent = ParseUtil.GetArgumentFromQueryString(linkHttps, "id");
+                        release.Link = new Uri($"{SiteLink}download.php?id={idTorrent}&type=ssl");
+                    }
+
                     if (added.QuerySelector("img[alt^=\"TORRENT GRATUIT\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else if (added.QuerySelector("img[alt^=\"TORRENT SILVER\"]") != null)
@@ -227,7 +236,7 @@ Encoding = Encoding.UTF8;
                             banner.Remove();
                         }
 
-                        tooltip.QuerySelector("div:contains(\"Total Hits: \")").Remove();
+                        tooltip.QuerySelector("div:contains(\"Total Hits\")").Remove();
 
                         var longtitle = tooltip.QuerySelectorAll("div").First();
                         release.Title = longtitle.TextContent;

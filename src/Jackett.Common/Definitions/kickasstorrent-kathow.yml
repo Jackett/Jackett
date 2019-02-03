@@ -1,13 +1,15 @@
 ---
   site: kickasstorrent-kathow
-  name: KickAssTorrent (thekat.io)
-  description: "thekat.nz is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+  name: KickAssTorrent (kat.li)
+  description: "kat.li is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
   language: en-us
   type: public
   encoding: UTF-8
   links:
-    - https://katcr.io/
+    - https://kat.li/
   legacylinks:
+    - https://kickass.gg/
+    - https://katcr.io/
     - https://thekat.nz/  
     - https://thekat.se/
     - https://kat.how/
@@ -36,6 +38,7 @@
       selector: table[class="data"] tr[id]
     fields:
       category:
+        optional: true
         selector: span[id^="cat_"] > strong > a
         attribute: href
         filters:
@@ -55,12 +58,23 @@
           - name: urldecode
       size:
         selector: td:nth-child(2)
+        filters:
+          - name: replace
+            args: ["N/A", "0 Bytes"]
+          - name: re_replace # replace all but last dot (They use dots as decimal and thousands separators)
+            args: ["[.](?=.*[.])", ""]
       date:
         selector: td:nth-child(3)
       seeders:
         selector: td:nth-child(4)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       leechers:
         selector: td:nth-child(5)
+        filters:
+          - name: replace
+            args: ["N/A", "0"]
       description:
         selector: td:nth-child(1) > div > div > span
       downloadvolumefactor:

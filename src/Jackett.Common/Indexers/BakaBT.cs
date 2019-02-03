@@ -16,7 +16,7 @@ namespace Jackett.Common.Indexers
 {
     public class BakaBT : BaseWebIndexer
     {
-        public string SearchUrl { get { return SiteLink + "browse.php?only=0&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
+        public string SearchUrl { get { return SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q="; } }
         public string LoginUrl { get { return SiteLink + "login.php"; } }
         public string id = "bakabt";
 
@@ -133,12 +133,16 @@ namespace Jackett.Common.Indexers
                             release.Title = release.Title.Substring(0, insertPoint) + "Season 1 " + release.Title.Substring(insertPoint);
                         }
 
-                        release.Description = release.Title;
+                        release.Category = new List<int>() { TorznabCatType.TVAnime.ID };
+                        release.Description = qRow.Find("span.tags").Text();
                         release.Guid = new Uri(SiteLink + qTitleLink.Attr("href"));
                         release.Comments = release.Guid;
 
                         release.Link = new Uri(SiteLink + qRow.Find(".peers a").First().Attr("href"));
 
+                        var grabs = qRow.Find(".peers").Get(0).FirstChild.NodeValue.TrimEnd().TrimEnd('/').TrimEnd();
+                        grabs = grabs.Replace("k", "000");
+                        release.Grabs = int.Parse(grabs);
                         release.Seeders = int.Parse(qRow.Find(".peers a").Get(0).InnerText);
                         release.Peers = release.Seeders + int.Parse(qRow.Find(".peers a").Get(1).InnerText);
 
@@ -164,6 +168,13 @@ namespace Jackett.Common.Indexers
                         {
                             release.PublishDate = DateTime.ParseExact(dateStr, "dd MMM yy", CultureInfo.InvariantCulture);
                         }
+
+                        if (qRow.Find("span.freeleech").Length > 0)
+                            release.DownloadVolumeFactor = 0;
+                        else
+                            release.DownloadVolumeFactor = 1;
+
+                        release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
                     }

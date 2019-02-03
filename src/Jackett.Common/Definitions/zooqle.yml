@@ -13,10 +13,11 @@
       "anime": TV/Anime
       "app": PC
       "book": Books
+      "files": Other/Misc
       "game": PC/Games
       "movies": Movies
       "music": Audio
-      "other": Other/Misc
+      "other": Other
       "tv": TV
 
     modes:
@@ -33,6 +34,8 @@
       - path: "/search?{{if .Keywords}}s=ns&v=t&sd=d&q={{ .Keywords}}{{else}}s=dt&v=t&sd=d&q= *{{end}}{{if .Categories}} category:{{range .Categories}}{{.}},{{end}}{{else}}{{end}}"
     rows:
       selector: tr:has(td[class^="text-muted3"])
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(2) a

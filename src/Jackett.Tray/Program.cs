@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,7 +12,7 @@ namespace Jackett.Tray
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             var JacketTrayProcess = Process.GetCurrentProcess();
             var runningProcesses = Process.GetProcesses();
@@ -23,10 +24,29 @@ namespace Jackett.Tray
                 MessageBox.Show("JackettTray is already running");
             }
             else
-            { 
+            {
+                string newVersion = "";
+                var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
+
+                try
+                {
+                    var optionsResult = commandLineParser.ParseArguments<TrayConsoleOptions>(args);
+                    optionsResult.WithParsed(options =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(options.UpdatedVersion))
+                        {
+                            newVersion = options.UpdatedVersion;
+                        }
+                    });
+                }
+                catch (Exception)
+                {
+                    newVersion = "";
+                }
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Main());
+                Application.Run(new Main(newVersion));
             }
         }
     }

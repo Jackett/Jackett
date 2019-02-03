@@ -22,18 +22,27 @@ namespace Jackett.Common.Indexers
         private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
         private string SearchUrl { get { return SiteLink + "t.json"; } }
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://torrentday.com/"
+        };
+
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+            "https://tday.love/",
+            "https://torrentday.cool/",
             "https://tdonline.org/",
             "https://secure.torrentday.com/",
             "https://torrentday.eu/",
-            "https://torrentday.it/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
             "https://td-update.com/",
             "https://www.torrentday.me/",
             "https://www.torrentday.ru/",
-            "https://www.torrentday.com/",
             "https://www.td.af/",
+            "https://torrentday.it/",
+            "https://td.findnemo.net/",
+            "https://td.getcrazy.me/",
+            "https://td.venom.global/",
+            "https://td.workisboring.net/",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
@@ -45,13 +54,13 @@ namespace Jackett.Common.Indexers
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TorrentDay",
                 description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://torrentday.it/",
+                link: "https://tday.love/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLogin())
+                configData: new ConfigurationDataRecaptchaLogin("Make sure you get the cookies from the same torrent day domain as configured above."))
         {
             wc.EmulateBrowser = false;
             Encoding = Encoding.UTF8;
@@ -68,6 +77,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
             AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
 
+            AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
             AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
             AddCategoryMapping(5, TorznabCatType.MoviesBluRay, "Movies/Bluray-Full");
@@ -76,7 +86,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.MoviesForeign, "Movies/Non-English");
             AddCategoryMapping(13, TorznabCatType.Movies, "Movies/Packs");
             AddCategoryMapping(44, TorznabCatType.MoviesSD, "Movies/SD/x264");
-            AddCategoryMapping(48, TorznabCatType.MoviesUHD, "Movies/x265");
+            AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
             AddCategoryMapping(17, TorznabCatType.Audio, "Music/Audio");
@@ -117,7 +127,9 @@ namespace Jackett.Common.Indexers
                 loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
             CQ cq = loginPage.Content;
             var result = this.configData;
-            result.CookieHeader.Value = loginPage.Cookies;
+            
+            //result.CookieHeader.Value = loginPage.Cookies;
+            UpdateCookieHeader(loginPage.Cookies); // update cookies instead of replacing them, see #3717
             result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
             result.Captcha.Version = "2";
             return result;
@@ -228,7 +240,7 @@ namespace Jackett.Common.Indexers
                     var torrentID = (long)torrent.t;
                     release.Comments = new Uri(SiteLink + "details.php?id=" + torrentID);
                     release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/dummy.torrent");
+                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/"+ torrentID + ".torrent");
                     release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
 
                     release.Size = (long)torrent.size;

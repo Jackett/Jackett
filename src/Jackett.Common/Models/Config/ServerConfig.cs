@@ -27,6 +27,7 @@ namespace Jackett.Common.Models.Config
         public bool UpdatePrerelease { get; set; }
         public string BasePathOverride { get; set; }
         public string OmdbApiKey { get; set; }
+        public string OmdbApiUrl { get; set; }
 
         /// <summary>
         /// Ignore as we don't really want to be saving settings specified in the command line. 
@@ -103,8 +104,7 @@ namespace Jackett.Common.Models.Config
             else
             {
                 return new string[] {
-                    "http://127.0.0.1:" + Port + "/",
-                    "http://localhost:" + Port + "/",
+                    "http://127.0.0.1:" + Port + "/"
                 };
             }
         }

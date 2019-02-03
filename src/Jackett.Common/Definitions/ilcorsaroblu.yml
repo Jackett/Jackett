@@ -1,0 +1,171 @@
+---
+  site: ilcorsaroblu
+  name: Il Corsaro Blu
+  description: "Il Corsaro Blu is an ITALIAN Public site for TV / MOVIES / GENERAL"
+  language: it-it
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.ilcorsaroblu.org/
+  legacylinks:
+    - http://ilcorsaroblu.org/
+    - https://www.ilcorsaroblu.info/
+  certificates:
+    - e6dd93ef71f96d04559e2bee8cc8e6fd74957730 # incomplete CA chain
+
+  caps:
+    categorymappings:
+      # Adult
+       - {id: 12, cat: XXX, desc: "Adult"}
+      # Applicazioni
+       - {id: 5, cat: PC/Phone-Android, desc: "Android"}
+      # Books
+       - {id: 6, cat: Books, desc: "Books"}
+      # Games
+       - {id: 3, cat: Other, desc: "Games"}
+      # Music
+       - {id: 2, cat: Audio, desc: "Music"}
+      # Movies
+       - {id: 17, cat: Movies/SD, desc: "Movie BDRip"}
+       - {id: 21, cat: Movies/Other, desc: "Movies - Films"}
+       - {id: 11, cat: Movies/DVD, desc: "DVD-R"}
+       - {id: 14, cat: Movies/HD, desc: "Movie 720p"}
+       - {id: 13, cat: Movies/HD, desc: "Movie 1080p"}
+       - {id: 15, cat: Movies/3D, desc: "Movie 3D"}
+       - {id: 24, cat: TV/OTHER, desc: "TV Show Standard"}
+       - {id: 19, cat: TV/HD, desc: "Tv Show 1080p"}
+       - {id: 20, cat: TV/HD, desc: "Tv Show 720"}
+      # Various
+       - {id: 4, cat: Other, desc: "Other"}
+       - {id: 7, cat: PC, desc: "Windows"}
+       - {id: 8, cat: Other, desc: "Linux"}
+       - {id: 9, cat: PC/Mac, desc: "Mac"}
+       - {id: 23, cat: Other, desc: "Archive"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: /index.php
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+    inputs:
+      search: "{{ .Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: torrents
+      active: 0
+    rows:
+      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: td:nth-child(2) > a
+        filters:
+          - name: re_replace # replace special characters with " " (space)
+            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
+          # normalize to SXXEYY format
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+      download: # handle torrents with normal torrent file download
+        optional: true
+        selector: a[href^="download.php?id="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: id
+          - name: toupper
+          - name: prepend
+            args: http://itorrents.org/torrent/
+          - name: append
+            args: ".torrent"
+      _magnetfilename: # convert title to valid magnet filename
+        text: "{{ .Result.title }}"
+        filters:
+          - name: validfilename
+          - name: urlencode
+      magnet: # generate magnet link from download link
+        optional: true
+        selector: a[href^="download.php?id="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: id
+          - name: prepend
+            args: "magnet:?xt=urn:btih:"
+          - name: append
+            args: "&dn={{ .Result._magnetfilename }}.torrent"
+          - name: append # add some well known public trackers
+            args: "&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce" 
+      magnet: # in case a direct magnet link is provided use it
+        optional: true
+        selector: a[href^="magnet:?xt="]
+        attribute: href
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      details:
+        selector: td:nth-child(2) > a
+        attribute: href
+#      banner:
+#        optional: true
+#        selector: td:nth-child(2) > a
+#        attribute: onmouseover
+#        filters:
+#          - name: regexp
+#            args: "src=(.+?) "
+      size:
+        selector: td:nth-last-child(2)
+      date:
+        selector: td:nth-last-child(6):contains('ago')
+        optional: true
+        filters:
+          - name: timeago
+      date:
+        selector: td:nth-last-child(6):contains('/')
+        optional: true
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      grabs:
+        selector: td:nth-last-child(3)
+        filters:
+          - name: replace
+            args: ["---", "0"]
+      seeders:
+        selector: td:nth-last-child(5)
+      leechers:
+        selector: td:nth-last-child(4)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

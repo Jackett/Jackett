@@ -28,7 +28,7 @@
 
   search:
     paths:
-      - path: "list/{{if .Keywords}}{{.Keywords}}{{else}}movie{{end}}.html"
+      - path: "list/{{if .Keywords}}{{.Keywords}}{{else}}movie{{end}}/1-1-0.html"
     rows:
       selector: .rs
     fields:
@@ -53,6 +53,10 @@
         selector: .sbar span:nth-of-type(5) b
       grabs:
         selector: .sbar span:nth-of-type(6) b
+      seeders:
+        text: "1"
+      leechers:
+        text: "1"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

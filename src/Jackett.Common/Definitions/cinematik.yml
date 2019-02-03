@@ -1,12 +1,38 @@
 ---
+  # Update by LA5T based on the orignial 'cinematik.yml'
+  # 29.07.2018 22:53 UTC+2
+  #
   site: cinematik
   name: Cinematik
-  description: "Non-Hollywood movie tracker"
+  description: "Tracker for non-hollywood movies."
   language: en-us
   type: private
   encoding: UTF-8
   links:
     - https://www.cinematik.net
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: incldead
+      type: select
+      label: Status
+      default: 1
+      options:
+        0: Active
+        1: "Active and Inactive"
+        2: Inactive
+    - name: srchdtls
+      type: checkbox
+      label: "Detailed search"
+    - name: info_results
+      type: info
+      label: "Search results"
+      default: "You can increase the number of search results in your profile.<br />Default is 15."
 
   caps:
     categorymappings:
@@ -42,13 +68,15 @@
       - selector: table:contains("Login failed!")
     test:
       path: my.php
-       
+
   search:
     paths:
       - path: browse.php
     inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
+      incldead: "{{ .Config.incldead }}"
+      srchdtls: "{{ if .Config.srchdtls }}1{{ else }}0{{ end }}"
     rows:
       selector: table[border="1"] tr:not(:first-child)
     fields:
@@ -82,11 +110,11 @@
         selector: td:nth-child(11) div.addedtor
       downloadvolumefactor:
         case:
-          "img[title=\"Golden Torrent: No Download Stats are Recorded\"]": "0"
-          "img[title=\"Silver Torrent: Download Stats are 25% Recorded\"]": "0.25"
-          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": "0"
-          "*": "1"
+          "img[title=\"Golden Torrent: No Download Stats are Recorded\"]": 0
+          "img[title=\"Silver Torrent: Download Stats are 25% Recorded\"]": 0.25
+          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": "2"
-          "*": "1"
+          "img[title=\"Platinum Torrent: No Download Stats are Recorded, Upload Stats are Doubled!\"]": 2
+          "*": 1

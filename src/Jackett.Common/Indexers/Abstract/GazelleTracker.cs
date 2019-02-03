@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
         protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
         protected bool supportsFreeleechTokens;
+        protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
         protected bool useTokens = false;
 
         new ConfigurationDataBasicLogin configData
@@ -53,15 +54,20 @@ namespace Jackett.Common.Indexers.Abstract
             }
         }
 
-        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
-            LoadValuesFromJson(configJson);
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
             var useTokenItem = (ConfigurationData.BoolItem)configData.GetDynamic("usetoken");
             if (useTokenItem != null)
             {
                 useTokens = useTokenItem.Value;
             }
+        }
+
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
@@ -72,7 +78,7 @@ namespace Jackett.Common.Indexers.Abstract
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.Parse(response.Content);
+                var loginResultDocument = loginResultParser.ParseDocument(response.Content);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
                     throw new ExceptionWithConfigData(response.Content, configData);
@@ -84,10 +90,16 @@ namespace Jackett.Common.Indexers.Abstract
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
+        // hook to adjust the search term
+        protected virtual string GetSearchTerm(TorznabQuery query)
+        {
+            return query.GetQueryString();
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
+            var searchString = GetSearchTerm(query);
 
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
@@ -97,7 +109,7 @@ namespace Jackett.Common.Indexers.Abstract
             queryCollection.Add("order_by", "time");
             queryCollection.Add("order_way", "desc");
 
-            
+
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 queryCollection.Add("cataloguenumber", query.ImdbID);
@@ -119,9 +131,12 @@ namespace Jackett.Common.Indexers.Abstract
             if (query.Album != null)
                 queryCollection.Add("groupname", query.Album);
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
+            if (supportsCategories)
             {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
+                foreach (var cat in MapTorznabCapsToTrackers(query))
+                {
+                    queryCollection.Add("filter_cat[" + cat + "]", "1");
+                }
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
@@ -228,9 +243,39 @@ namespace Jackett.Common.Indexers.Abstract
             if (torrent["hasCue"] != null && (bool)torrent["hasCue"])
                 flags.Add("Cue");
 
+            // tehconnection.me specific?
+            var lang = (string)torrent["lang"];
+            if (!string.IsNullOrEmpty(lang) && lang != "---")
+                flags.Add(lang);
+
             var media = (string)torrent["media"];
             if (!string.IsNullOrEmpty(media))
                 flags.Add(media);
+
+            // tehconnection.me specific?
+            var resolution = (string)torrent["resolution"];
+            if (!string.IsNullOrEmpty(resolution))
+                flags.Add(resolution);
+
+            // tehconnection.me specific?
+            var container = (string)torrent["container"];
+            if (!string.IsNullOrEmpty(container))
+                flags.Add(container);
+
+            // tehconnection.me specific?
+            var codec = (string)torrent["codec"];
+            if (!string.IsNullOrEmpty(codec))
+                flags.Add(codec);
+
+            // tehconnection.me specific?
+            var audio = (string)torrent["audio"];
+            if (!string.IsNullOrEmpty(audio))
+                flags.Add(audio);
+
+            // tehconnection.me specific?
+            var subbing = (string)torrent["subbing"];
+            if (!string.IsNullOrEmpty(subbing) && subbing != "---")
+                flags.Add(subbing);
 
             if (torrent["remastered"] != null && (bool)torrent["remastered"])
             {
@@ -271,6 +316,30 @@ namespace Jackett.Common.Indexers.Abstract
                 release.DownloadVolumeFactor = 0;
                 release.UploadVolumeFactor = 0;
             }
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            var content = await base.Download(link);
+
+            // Check if we're out of FL tokens/torrent is to large
+            // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
+            var requestLink = link.ToString();
+            if (content.Length >= 1
+                && content[0] != 'd' // simple test for torrent vs HTML content
+                && requestLink.Contains("usetoken=1"))
+            {
+                var html = Encoding.GetString(content);
+                if (html.Contains("You do not have any freeleech tokens left.")
+                    || html.Contains("This torrent is too large."))
+                {
+                    // download again with usetoken=0
+                    var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
+                    content = await base.Download(new Uri(requestLinkNew));
+                }
+            }
+
+            return content;
         }
     }
 }

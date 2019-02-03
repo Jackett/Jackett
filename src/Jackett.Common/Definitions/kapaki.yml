@@ -84,11 +84,12 @@
       selector: table#torrents_table_classic > tbody > tr:not(:first-child), div#content > div.torrent-box[id^="torrent_"]
       filters:
         - name: andmatch
+    # the tracker has two different styles (modern/classic) it should work with both
     fields:
       title:
         selector: a[href*="?p=torrents&pid=10&action=details"]
       category:
-        selector: div.category_image > a
+        selector: div.category_image > a, div.categoryImage > a
         attribute: href
         filters:
           - name: querystring
@@ -117,6 +118,9 @@
       downloadvolumefactor:
         case:
           "img[title=\"ΧΡΥΣΟ!\"]": "0"
+          "img[title=\"100% FREE!\"]": "0"
+          "img[title=\"Πολλαπλασιαστής Κατεβάσματος: 0.5\"]": "0.5"
+          
           "*": "1"
       uploadvolumefactor:
         case:

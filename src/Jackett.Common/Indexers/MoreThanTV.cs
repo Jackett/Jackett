@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(response.Content);
+                var document = parser.ParseDocument(response.Content);
                 var groups = document.QuerySelectorAll(".torrent_table > tbody > tr.group");
                 var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent");
 
@@ -158,9 +158,9 @@ namespace Jackett.Common.Indexers
                             // Parse required data
                             var downloadAnchor = groupItem.QuerySelectorAll("td a").Last();
                             var qualityData = downloadAnchor.InnerHtml.Split('/');
-
+                            
                             if (qualityData.Length < 2)
-                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length}.");
+                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length} for {season}.");
 
                             // Build title
                             var title = string.Join(".", new List<string>

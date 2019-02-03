@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.magnetdl.com/
+  legacylinks:
     - http://www.magnetdl.com/
 
   caps:

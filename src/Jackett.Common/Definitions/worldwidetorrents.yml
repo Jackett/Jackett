@@ -7,10 +7,11 @@
   encoding: UTF-8
 
   links:
-    - https://worldwidetorrents.me/
+    - https://worldwidetorrents.to/
 
   legacylinks:
     - https://worldwidetorrents.eu/
+    - https://worldwidetorrents.me/
 
   caps:
     categorymappings:
@@ -162,6 +163,8 @@
       - path: "torrents-search.php?{{range .Categories}}c{{.}}=1&{{end}}search={{.Keywords}}{{if .Categories}}{{else}}&cat=0{{end}}&incldead=0&lang=0"
     rows:
       selector: tr:not(:has(script)):has(a[title][href^="torrents-details.php?id="])
+      filters:
+        - name: andmatch
     fields:
       category:
         optional: true

@@ -7,8 +7,8 @@
   encoding: UTF-8
   links:
     - https://www.torlock2.com/
-  legacylinks:
     - https://www.torlock.com/
+    - https://torlock.com/
 
   caps:
     categorymappings:
@@ -26,18 +26,42 @@
       
     modes:
       search: [q]
+      tv-search: [q, season, ep]
   
   settings: []
   
   search:
     paths:
-      - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html{{else}}/fresh.html{{end}}"
+      - path: "{{if .Keywords}}/television/torrents/{{ .Keywords }}.html{{else}}/television/1/added/desc.html{{end}}"
+        categorymappings: [TELEVISION]
+      - path: "{{if .Keywords}}/movies/torrents/{{ .Keywords }}.html{{else}}/movies/1/added/desc.html{{end}}"
+        categorymappings: [MOVIES]
+      - path: "{{if .Keywords}}/music/torrents/{{ .Keywords }}.html{{else}}/music/1/added/desc.html{{end}}"
+        categorymappings: [MUSIC]
+      - path: "{{if .Keywords}}/games/torrents/{{ .Keywords }}.html{{else}}/games/1/added/desc.html{{end}}"
+        categorymappings: [GAMES]
+      - path: "{{if .Keywords}}/software/torrents/{{ .Keywords }}.html{{else}}/software/1/added/desc.html{{end}}"
+        categorymappings: [SOFTWARE]
+      - path: "{{if .Keywords}}/anime/torrents/{{ .Keywords }}.html{{else}}/anime/1/added/desc.html{{end}}"
+        categorymappings: [ANIME]
+      - path: "{{if .Keywords}}/ebooks/torrents/{{ .Keywords }}.html{{else}}/ebooks/1/added/desc.html{{end}}"
+        categorymappings: [EBOOKS]
+      - path: "{{if .Keywords}}/unknown/torrents/{{ .Keywords }}.html{{else}}/unknown.html{{end}}" # sorting is broken for unknown
+        categorymappings: [OTHER]
+      - path: "{{if .Keywords}}/adult/torrents/{{ .Keywords }}.html{{else}}/adult/1/added/desc.html{{end}}"
+        categorymappings: [ADULT]
+      - path: "{{if .Keywords}}/audiobooks/torrents/{{ .Keywords }}.html{{else}}/audiobooks/1/added/desc.html{{end}}"
+        categorymappings: [AUDIOBOOK]
+      - path: "{{if .Keywords}}/images/torrents/{{ .Keywords }}.html{{else}}/images/1/added/desc.html{{end}}"
+        categorymappings: [IMAGES]
     keywordsfilters:
       - name: tolower
       - name: re_replace
         args: ["[^a-zA-Z0-9]+", "-"]
     rows:
       selector: table > tbody > tr:has(td:has(div:has(a[href^="/torrent/"])))
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(1) > div > a
@@ -58,7 +82,7 @@
         selector: td:nth-child(2)
         filters: 
           - name: re_replace
-            args: ["(day|hour)s?$", "$0s ago"] # add ago to relative dates (fresh torrents page)
+            args: ["(day|hour|min)s?$", "$0s ago"] # add ago to relative dates (fresh torrents page)
       size:
         selector: td:nth-child(3)
       seeders:

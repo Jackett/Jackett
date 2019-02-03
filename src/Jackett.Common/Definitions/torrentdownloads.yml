@@ -22,10 +22,18 @@
     modes:
       search: [q]
   
-  settings: []
+  settings:
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:"
+      options:
+        "http://itorrents.org/" : "iTorrents.org"
+        "magnet:": "magnet"
+
   
   download:
-    selector: a[href^="magnet:"]
+    selector: a[href^="{{ .Config.downloadlink }}"]
   
   search:
     paths:
@@ -44,6 +52,8 @@
       download:
         selector: p:nth-child(1) > a[href^="/torrent/"]
         attribute: href
+      date:
+        text: now
       size:
         selector: span:nth-child(5)
       seeders:

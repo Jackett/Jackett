@@ -80,12 +80,15 @@
 
   search:
     path: /
+    keywordsfilters:
+      - name: re_replace
+        args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
     inputs:
       p: "torrents"
       page: "1"
       pid: "10"
       $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
-      keywords: "{{ .Query.Keywords }}"
+      keywords: "{{ .Keywords }}"
       search_type: "name"
       searchin: "title"
     rows:
@@ -93,6 +96,9 @@
     fields:
       title:
         selector: td.torrent_name > a, .newIndicator > a
+        filters:
+          - name: append
+            args: " [spanish]"
       details:
         selector: td.torrent_name > a, .newIndicator > a
         attribute: href

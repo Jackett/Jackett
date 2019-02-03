@@ -69,8 +69,8 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("OK"), () =>
             {
                 CQ dom = result.Content;
-                var messageEl = dom["#errorMsg"].Last();
-                var errorMessage = messageEl.Text().Trim();
+                var errorMessage = dom.Text().Trim();
+                errorMessage += " attempts left. Please check your credentials.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers
 
                     var qDetailsLink = qRow.Find("a[title][href^=\"details.php\"]");
                     release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
-                    release.Link = new Uri(SiteLink + qRow.Find("a").Attr("href"));
+                    release.Link = new Uri(SiteLink + qRow.Find("a[href^=\"download.php\"]").Attr("href"));
                     release.Guid = release.Link;
 
                     var dateString = qRow.Find("div:last-child").Text().Trim();

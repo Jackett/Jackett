@@ -26,6 +26,12 @@ namespace Jackett.Common.Indexers.Abstract
             set { base.configData = value; }
         }
 
+        // hook to adjust the search term
+        protected virtual string GetSearchTerm(TorznabQuery query)
+        {
+            return query.GetQueryString();
+        }
+
         public AvistazTracker(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService, string name, string desc, string link)
             : base(name: name,
                 description: desc,
@@ -84,7 +90,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
 
 
-            var episodeSearchUrl = string.Format(SearchUrl, category, WebUtility.UrlEncode(query.GetQueryString()));
+            var episodeSearchUrl = string.Format(SearchUrl, category, WebUtility.UrlEncode(GetSearchTerm(query)));
 
             var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
             if (response.IsRedirect)

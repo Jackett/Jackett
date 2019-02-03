@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 namespace Jackett.Common.Utils
@@ -21,7 +23,6 @@ namespace Jackett.Common.Utils
                 return Environment.OSVersion.Platform == PlatformID.Win32NT;
             }
         }
-
 
     }
 }

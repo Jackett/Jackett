@@ -1,0 +1,163 @@
+﻿---
+  site: arenabg
+  name: ArenaBG
+  description: "ArenaBG is a BULGARIAN Semi-Private Torrent Tracker for 0DAY / GENERAL"
+  language: bg-BG
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://arenabg.com/
+
+  caps:
+    categorymappings:
+      - {id: "movies", cat: Movies, desc: "Movies"}
+      - {id: "arenabgtv", cat: Movies, desc: "Movies / ArenaBG.TV"}
+      - {id: "xvid", cat: Movies, desc: "Movies / XviD"}
+      - {id: "dvd-r", cat: Movies, desc: "Movies / DVD-R"}
+      - {id: "x264", cat: Movies, desc: "Movies / x264"}
+      - {id: "animemanga", cat: Movies, desc: "Movies / Anime &amp; Manga"}
+      - {id: "documentaries", cat: Movies, desc: "Movies / Documentaries"}
+      - {id: "blu-ray", cat: Movies, desc: "Movies / Blu-ray"}
+      - {id: "boxset", cat: Movies, desc: "Movies / Boxset"}
+      - {id: "x264boxset", cat: Movies, desc: "Movies / x264 Boxset"}
+      - {id: "tvepisodeshd", cat: Movies, desc: "Movies / HDTV"}
+      - {id: "3d", cat: Movies, desc: "Movies / 3D"}
+      - {id: "movies-hd", cat: Movies, desc: "Movies / Movies HD"}
+      - {id: "x265", cat: Movies, desc: "Movies / x265"}
+      - {id: "series", cat: TV, desc: "Series"}
+      - {id: "hdtv", cat: TV, desc: "Series / TV Episodes HD"}
+      - {id: "tvepisodes", cat: TV, desc: "Series / TV Episodes"}
+      - {id: "tvboxset", cat: TV, desc: "Series / TV Boxset"}
+      - {id: "tvboxsethd", cat: TV, desc: "Series / TV Boxset HD"}
+      - {id: "music", cat: Audio, desc: "Music"}
+      - {id: "mp3", cat: Audio, desc: "Music / MP3"}
+      - {id: "music-video", cat: Audio, desc: "Music / Video"}
+      - {id: "flac", cat: Audio, desc: "Music / FLAC"}
+      - {id: "music-dvd", cat: Audio, desc: "Music / DVD"}
+      - {id: "music-ape", cat: Audio, desc: "Music / APE"}
+      - {id: "music-dts", cat: Audio, desc: "Music / DTS"}
+      - {id: "musicwavpack", cat: Audio, desc: "Music / WavePack"}
+      - {id: "musicost", cat: Audio, desc: "Music / OST"}
+      - {id: "games", cat: PC, desc: "Games"}
+      - {id: "games-iso", cat: PC, desc: "Games / PC ISO"}
+      - {id: "pc-rip", cat: PC, desc: "Games / PC RIP"}
+      - {id: "ps2", cat: Console, desc: "Games / PS2"}
+      - {id: "psp", cat: Console, desc: "Games / PSP"}
+      - {id: "xbox", cat: Console, desc: "Games / XBOX"}
+      - {id: "xbox-360", cat: Console, desc: "Games / XBOX-360"}
+      - {id: "ps3", cat: Console, desc: "Games / PS3"}
+      - {id: "wii", cat: Console, desc: "Games / WII"}
+      - {id: "PS4", cat: Console, desc: "Games / PS4"}
+      - {id: "software", cat: PC, desc: "Software"}
+      - {id: "pc-iso", cat: PC, desc: "Software / PC ISO"}
+      - {id: "pdasmartphone", cat: PC, desc: "Software / Smartphone"}
+      - {id: "tutorial", cat: PC, desc: "Software / Tutorial"}
+      - {id: "android", cat: PC, desc: "Software / Android"}
+      - {id: "ios", cat: PC, desc: "Software / iOS"}
+      - {id: "misc", cat: Other, desc: "Misc"}
+      - {id: "other", cat: Other, desc: "Misc / Other"}
+      - {id: "e-books", cat: Other, desc: "Misc / e-Books"}
+      - {id: "sports", cat: Other, desc: "Misc / Sports"}
+      - {id: "0-day", cat: Other, desc: "Misc / 0-Day"}
+      - {id: "xxx", cat: XXX, desc: "XXX"}
+      - {id: "porn", cat: XXX, desc: "XXX / Porn"}
+      - {id: "xxx-hd", cat: XXX, desc: "XXX / XXX HD"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: /
+    method: form
+    form: form[action="/users/"]
+    inputs:
+      email: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      action: login
+    error:
+      - selector: div.row div div.alert i.fa-warning
+        message:
+          selector: div.row div div.alert
+    test:
+      path: /
+      selector: a[href="/users/logout/"]
+
+  download:
+    selector: a[href^="magnet:?"]
+
+  search:
+    paths:
+      - path: /torrents/
+        method: post
+        followredirect: true
+    inputs:
+      text: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      "text_mobile": ""
+      type: 0
+      audio: 0
+      subtitles: 0
+      action: search
+
+    rows:
+      selector: tr:has(td.category)
+    fields:
+      title:
+        # use the second div for full title
+        selector: td.filename div:nth-child(2) a
+      details:
+        selector: td.filename div a
+        attribute: href
+      category:
+        selector: td.category a
+        attribute: href
+        filters:
+          - name: re_replace
+            args: ["/torrents/type:(.+?)/", "$1"]
+      download:
+        selector: td.filename div a
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      date:
+          # 08:49:09
+        selector: td:nth-child(3):has(":")
+        optional: true
+        filters:
+          - name: dateparse
+            args: "15:04:05"
+      date:
+          # 2018-10-19
+        selector: td:nth-child(3):has("-")
+        optional: true
+        filters:
+          - name: dateparse
+            args: "2006-01-02"
+      seeders:
+        selector: td:nth-child(6)
+        filters:
+          - name: replace
+            args: ["-", "0"]
+          - name: replace
+            args: ["DHT", "0"] # torrent can only be downloaded via DHT
+      leechers:
+        selector: td:nth-child(7)
+        filters:
+          - name: replace
+            args: ["-", "0"]
+      grabs:
+        selector: td:nth-child(8)
+        filters:
+          - name: replace
+            args: ["-", "0"]
+      banner:
+        selector: td.filename div:nth-child(2) a
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=\\'([^\s\\]+)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

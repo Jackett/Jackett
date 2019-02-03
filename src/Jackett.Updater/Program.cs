@@ -1,34 +1,59 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
-using Jackett.Services;
+using Jackett.Common.Services;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using NLog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
-using System.Web;
-using Jackett.Common;
 
 namespace Jackett.Updater
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private IProcessService processService;
+        private IServiceConfigService windowsService;
+        private Logger logger;
+
+        public static void Main(string[] args)
         {
             new Program().Run(args);
         }
 
         private void Run(string[] args)
         {
-            Engine.BuildContainer(new RuntimeSettings()
+            RuntimeSettings runtimeSettings = new RuntimeSettings()
             {
                 CustomLogFileName = "updater.txt"
-            });
-            Engine.Logger.Info("Jackett Updater v" + GetCurrentVersion());
-            Engine.Logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
-            try {
-                var optionsResult = Parser.Default.ParseArguments<UpdaterConsoleOptions>(args);
+            };
+
+            LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
+            logger = LogManager.GetCurrentClassLogger();
+
+            logger.Info("Jackett Updater v" + GetCurrentVersion());
+            logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
+
+            bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            if (isWindows)
+            {
+                //The updater starts before Jackett closes
+                logger.Info("Pausing for 3 seconds to give Jackett & tray time to shutdown");
+                System.Threading.Thread.Sleep(3000);
+            }
+        
+            processService = new ProcessService(logger);
+            windowsService = new WindowsServiceConfigService(processService, logger);
+
+            var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
+
+            try
+            {
+                var optionsResult = commandLineParser.ParseArguments<UpdaterConsoleOptions>(args);
                 optionsResult.WithParsed(options =>
                 {
                     ProcessUpdate(options);
@@ -36,14 +61,14 @@ namespace Jackett.Updater
                 );
                 optionsResult.WithNotParsed(errors =>
                 {
-                    Engine.Logger.Error(HelpText.AutoBuild(optionsResult));
-                    Engine.Logger.Error("Failed to process update arguments!");
+                    logger.Error(HelpText.AutoBuild(optionsResult));
+                    logger.Error("Failed to process update arguments!");
                     Console.ReadKey();
                 });
             }
             catch (Exception e)
             {
-                Engine.Logger.Error(e, "Exception applying update!");
+                logger.Error(e, "Exception applying update!");
             }
         }
 
@@ -61,21 +86,44 @@ namespace Jackett.Updater
                 try
                 {
                     var proc = Process.GetProcessById(pid);
-                    Engine.Logger.Info("Killing process " + proc.Id);
-                    proc.Kill();
-                    var exited = proc.WaitForExit(5000);
-                    if (!exited)
-                        Engine.Logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds");
+                    logger.Info("Killing process " + proc.Id);
 
+                    // try to kill gracefully (on unix) first, see #3692
+                    var exited = false;
+                    if (Environment.OSVersion.Platform == PlatformID.Unix)
+                    {
+                        try
+                        {
+                            var startInfo = new ProcessStartInfo();
+                            startInfo.Arguments = "-15 " + pid;
+                            startInfo.FileName = "kill";
+                            Process.Start(startInfo);
+                            System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly), https://bugzilla.xamarin.com/show_bug.cgi?id=51742
+                            exited = proc.WaitForExit(2000);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e, "Error while sending SIGTERM to " + pid.ToString());
+                        }
+                        if (!exited)
+                            logger.Info("Process " + pid.ToString() + " didn't exit within 2 seconds after a SIGTERM");
+                    }
+                    if (!exited)
+                    {
+                        proc.Kill(); // send SIGKILL
+                    }
+                    exited = proc.WaitForExit(5000);
+                    if (!exited)
+                        logger.Info("Process " + pid.ToString() + " didn't exit within 5 seconds after a SIGKILL");
                 }
                 catch (ArgumentException)
                 {
-                    Engine.Logger.Info("Process " + pid.ToString() + " is already dead");
+                    logger.Info("Process " + pid.ToString() + " is already dead");
                 }
                 catch (Exception e)
                 {
-                    Engine.Logger.Info("Error killing process " + pid.ToString());
-                    Engine.Logger.Info(e);
+                    logger.Info("Error killing process " + pid.ToString());
+                    logger.Info(e);
                 }
             }
         }
@@ -83,7 +131,7 @@ namespace Jackett.Updater
         private void ProcessUpdate(UpdaterConsoleOptions options)
         {
             var updateLocation = GetUpdateLocation();
-            if(!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
+            if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
             {
                 updateLocation += Path.DirectorySeparatorChar;
             }
@@ -95,18 +143,18 @@ namespace Jackett.Updater
                 pids = Array.ConvertAll(pidsStr, pid => int.Parse(pid));
             }
 
-            var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
+            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             var trayRunning = false;
             var trayProcesses = Process.GetProcessesByName("JackettTray");
             if (isWindows)
             {
                 if (trayProcesses.Count() > 0)
-                {  
+                {
                     foreach (var proc in trayProcesses)
                     {
                         try
                         {
-                            Engine.Logger.Info("Killing tray process " + proc.Id);
+                            logger.Info("Killing tray process " + proc.Id);
                             proc.Kill();
                             trayRunning = true;
                         }
@@ -118,9 +166,9 @@ namespace Jackett.Updater
                 // On unix we kill the PIDs after the update so e.g. systemd can automatically restart the process
                 KillPids(pids);
             }
-            Engine.Logger.Info("Finding files in: " + updateLocation);
+            logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 var fileName = Path.GetFileName(file).ToLowerInvariant();
 
@@ -130,20 +178,21 @@ namespace Jackett.Updater
                 {
                     continue;
                 }
-                try {
-                    Engine.Logger.Info("Copying " + fileName);
+                try
+                {
+                    logger.Info("Copying " + fileName);
                     var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
                     var destDir = Path.GetDirectoryName(dest);
                     if (!Directory.Exists(destDir))
                     {
-                        Engine.Logger.Info("Creating directory " + destDir);
+                        logger.Info("Creating directory " + destDir);
                         Directory.CreateDirectory(destDir);
                     }
                     File.Copy(file, dest, true);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    Engine.Logger.Error(e);
+                    logger.Error(e);
                 }
             }
 
@@ -157,16 +206,15 @@ namespace Jackett.Updater
                     var deleteDir = Path.Combine(options.Path, oldDir);
                     if (Directory.Exists(deleteDir))
                     {
-                        Engine.Logger.Info("Deleting directory " + deleteDir);
+                        logger.Info("Deleting directory " + deleteDir);
                         Directory.Delete(deleteDir, true);
                     }
                 }
                 catch (Exception e)
                 {
-                    Engine.Logger.Error(e);
+                    logger.Error(e);
                 }
             }
-
 
             // delete old files
             string[] oldFiles = new string[] {
@@ -199,27 +247,55 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/hachede-c.yml",
-                "Definitions/hd4Free.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/czteam.yml",
                 "Definitions/rockhardlossless.yml",
+                "Definitions/oxtorrent.yml",
+                "Definitions/tehconnection.yml",
+                "Definitions/torrentwtf.yml",
+                "Definitions/eotforum.yml",
+                "Definitions/nexttorrent.yml",
+                "Definitions/torrentsmd.yml",
+                "Definitions/scenehd.yml", // migrated to C# (use JSON API)
+                "appsettings.Development.json",
+                "CurlSharp.dll",
+                "CurlSharp.pdb",
+                "Jackett.dll",
+                "Jackett.dll.config",
+                "Jackett.pdb",
+                "Autofac.Integration.WebApi.dll",
+                "Microsoft.Owin.dll",
+                "Microsoft.Owin.FileSystems.dll",
+                "Microsoft.Owin.Host.HttpListener.dll",
+                "Microsoft.Owin.Hosting.dll",
+                "Microsoft.Owin.StaticFiles.dll",
+                "Owin.dll",
+                "System.Web.Http.dll",
+                "System.Web.Http.Owin.dll",
+                "System.Web.Http.Tracing.dll",
+                "Definitions/torrentkim.yml",
+                "Definitions/horriblesubs.yml",
+                "Definitions/idope.yml",
+                "Definitions/bt-scene.yml",
+                "Definitions/extratorrentclone.yml",
+                "Definitions/btdb.yml",
             };
 
-            foreach (var oldFIle in oldFiles)
+            foreach (var oldFile in oldFiles)
             {
                 try
                 {
-                    var deleteFile = Path.Combine(options.Path, oldFIle);
+                    var deleteFile = Path.Combine(options.Path, oldFile);
                     if (File.Exists(deleteFile))
                     {
-                        Engine.Logger.Info("Deleting file " + deleteFile);
+                        logger.Info("Deleting file " + deleteFile);
                         File.Delete(deleteFile);
                     }
                 }
                 catch (Exception e)
                 {
-                    Engine.Logger.Error(e);
+                    logger.Error(e);
                 }
             }
 
@@ -229,26 +305,48 @@ namespace Jackett.Updater
 
             if (options.NoRestart == false)
             {
-                if (trayRunning)
+                if (isWindows && (trayRunning || options.StartTray) && !string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
                     var startInfo = new ProcessStartInfo()
                     {
-                        Arguments = options.Args,
+                        Arguments = $"--UpdatedVersion \" {EnvironmentUtil.JackettVersion}\"",
                         FileName = Path.Combine(options.Path, "JackettTray.exe"),
                         UseShellExecute = true
                     };
 
+                    logger.Info("Starting Tray: " + startInfo.FileName + " " + startInfo.Arguments);
                     Process.Start(startInfo);
+
+                    if (!windowsService.ServiceExists())
+                    {
+                        //User was running the tray icon, but not using the Windows service, starting Tray icon will start JackettConsole as well
+                        return;
+                    }
                 }
 
-                if(string.Equals(options.Type, "JackettService.exe", StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
-                    var serviceHelper = new ServiceConfigService(null, null);
-                    if (serviceHelper.ServiceExists())
+                    logger.Info("Starting Windows service");
+
+                    if (ServerUtil.IsUserAdministrator())
                     {
-                        serviceHelper.Start();
+                        windowsService.Start();
                     }
-                } else
+                    else
+                    {
+                        try
+                        {
+                            var consolePath = Path.Combine(options.Path, "JackettConsole.exe");
+                            processService.StartProcessAndLog(consolePath, "--Start", true);
+                        }
+                        catch
+                        {
+                            logger.Error("Failed to get admin rights to start the service.");
+                        }
+                    }
+
+                }
+                else
                 {
                     var startInfo = new ProcessStartInfo()
                     {
@@ -257,13 +355,21 @@ namespace Jackett.Updater
                         UseShellExecute = true
                     };
 
-                    if (!isWindows)
+                    if (isWindows)
+                    {
+                        //User didn't initiate the update from Windows service and wasn't running Jackett via the tray, must have started from the console
+                        startInfo.Arguments = $"/K {startInfo.FileName} {startInfo.Arguments}";
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.CreateNoWindow = false;
+                        startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    }
+                    else
                     {
                         startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
                         startInfo.FileName = "mono";
                     }
 
-                    Engine.Logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
+                    logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
                     Process.Start(startInfo);
                 }
             }
@@ -272,7 +378,7 @@ namespace Jackett.Updater
         private string GetUpdateLocation()
         {
             var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
-            return new FileInfo(HttpUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
+            return new FileInfo(WebUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
         }
     }
 }

@@ -1,0 +1,105 @@
+#,==========,
+#|   |  |   |
+#`-./    \.-'   - Config'd by Quatroking (05-05-2017), updated by AeonLucid (26-05-2017) -
+#   `.__.'
+
+---
+  site: sukebei-pantsu
+  name: Sukebei-pantsu
+  description: "Sukebei-pantsu is a Public site dedicated to Adult Asian content"
+  language: en-en
+  type: public
+  encoding: UTF-8
+  links:
+    - https://sukebei.pantsu.cat/
+    
+  settings:
+    - name: cat-id
+      type: select
+      label: Category
+      default: "_"
+      options:
+        _: "All categories"
+        1_: "Art"
+        1_1: "Art - Anime"
+        1_2: "Art - Doujinshi"
+        1_3: "Art - Games"
+        1_4: "Art - Manga"
+        1_5: "Art - Pictures"
+        2_: "Real Life"
+        2_1: "Real Life - Photobooks and Pictures"
+        2_2: "Real Life - Videos"
+    - name: filter-id
+      type: select
+      label: Filter
+      default: "0"
+      options:
+        0: "Show all"
+        1: "Filter Remakes"
+        2: "Trusted"
+        3: "A+"
+
+  caps:
+    categorymappings:
+      # Art
+      - {id: 1_,  cat: XXX, desc: "Adult Art"}
+      - {id: 1_1,  cat: XXX, desc: "Adult Anime"}
+      - {id: 1_2,  cat: XXX, desc: "Doujinshi"}
+      - {id: 1_3,  cat: XXX, desc: "Adult Games"}
+      - {id: 1_4,  cat: XXX, desc: "Adult Manga"}
+      - {id: 1_5,  cat: XXX, desc: "Adult Pictures"}
+      # Real Life
+      - {id: 2_,  cat: XXX, desc: "Adult Real Life"}
+      - {id: 2_1,  cat: XXX, desc: "Adult Photobooks and Pictures"}
+      - {id: 2_2,  cat: XXX, desc: "Adult Videos"}
+    modes:
+      search: [q]
+      tv-search: [q]
+
+  search:
+    paths:
+      - path: /search
+    inputs:
+      q: "{{ .Query.Keywords }}"
+      c: "{{ .Config.cat-id }}"
+      s: "{{ .Config.filter-id }}"
+    rows:
+      selector: tr.torrent-info
+    fields:
+      title:
+        selector: td.tr-name a
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: split
+            args: [ "=", -1 ]
+      details:
+        selector: td.tr-name a
+        attribute: href
+      download:
+        selector: a[title="Magnet Link"]
+        attribute: href
+      seeders:
+        selector: td.tr-se
+        optional: true
+      leechers:
+        selector: td.tr-le
+        optional: true
+      grabs:
+        selector: td.tr-dl
+        optional: true
+      date:
+        selector: td.date-short
+        filters:
+          - name: dateparse
+            args: "2006-01-02T15:04:05Z"
+      size:
+        selector: td.tr-size
+        filters:
+          - name: replace
+            args: ["Unknown", "0"]
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

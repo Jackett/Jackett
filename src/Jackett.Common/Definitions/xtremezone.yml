@@ -6,7 +6,10 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://www.myxz.org/
+    - https://www.myxz.eu/
+# not yet enabled (legitimacy concerns, see #2821)
+#  legacylinks:
+#    - https://www.myxz.org/
 
   caps:
     categorymappings:
@@ -42,13 +45,14 @@
       - {id: 49, cat: XXX/Imageset, desc: "XXX-IMGSet"}
       - {id: 50, cat: XXX, desc: "XXX-Packs"}
       - {id: 51, cat: XXX, desc: "XXX-SD"}
+      - {id: 60, cat: TV/HD, desc: "TV-RO"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
 
   login:
-    path: /login
+    path: /login.php
     method: form
     form: form
     inputs:
@@ -57,15 +61,15 @@
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
-      path: /browse
+      path: /browse.php
       
   ratio:
-    path: /browse
+    path: /browse.php
     selector: font:contains("Ratio:")+font
 
   search:
     paths:
-      - path: /browse
+      - path: /browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
@@ -87,9 +91,6 @@
       download:
         selector: a[href^="dwn.php"]
         attribute: href
-        filters:
-          - name: replace
-            args: ["dwn.php", "dwn"]
       size:
         selector: td:nth-child(7)
       date:

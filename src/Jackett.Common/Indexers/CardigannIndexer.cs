@@ -8,8 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -30,6 +30,8 @@ namespace Jackett.Common.Indexers
 
         protected WebClientStringResult landingResult;
         protected IHtmlDocument landingResultDocument;
+
+        protected List<string> DefaultCategories = new List<string>();
 
         new ConfigurationData configData
         {
@@ -172,6 +174,8 @@ namespace Jackett.Common.Indexers
                         }
                     }
                     AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
+                    if (Categorymapping.Default)
+                        DefaultCategories.Add(Categorymapping.id);
                 }
             }
             LoadValuesFromJson(null);
@@ -193,6 +197,7 @@ namespace Jackett.Common.Indexers
         {
             Dictionary<string, object> variables = new Dictionary<string, object>();
 
+            variables[".Config.sitelink"] = SiteLink;
             foreach (settingsField Setting in Definition.Settings)
             {
                 string value;
@@ -245,6 +250,27 @@ namespace Jackett.Common.Indexers
 
                 template = template.Replace(all, expanded);
                 ReReplaceRegexMatches = ReReplaceRegexMatches.NextMatch();
+            }
+
+            // handle join expression
+            // Example: {{ join .Categories "," }}
+            Regex JoinRegex = new Regex(@"{{\s*join\s+(\..+?)\s+""(.*?)""\s*}}");
+            var JoinMatches = JoinRegex.Match(template);
+
+            while (JoinMatches.Success)
+            {
+                string all = JoinMatches.Groups[0].Value;
+                string variable = JoinMatches.Groups[1].Value;
+                string delimiter = JoinMatches.Groups[2].Value;
+
+                var input = (ICollection<string>)variables[variable];
+                var expanded = string.Join(delimiter, input);
+
+                if (modifier != null)
+                    expanded = modifier(expanded);
+
+                template = template.Replace(all, expanded);
+                JoinMatches = JoinMatches.NextMatch();
             }
 
             // handle if ... else ... expression
@@ -338,11 +364,14 @@ namespace Jackett.Common.Indexers
 
         protected bool checkForError(WebClientStringResult loginResult, IList<errorBlock> errorBlocks)
         {
+            if(loginResult.Status == HttpStatusCode.Unauthorized) // e.g. used by YGGtorrent
+                throw new ExceptionWithConfigData("401 Unauthorized, check your credentials", configData);
+
             if (errorBlocks == null)
                 return true; // no error
 
             var ResultParser = new HtmlParser();
-            var ResultDocument = ResultParser.Parse(loginResult.Content);
+            var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
             foreach (errorBlock error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
@@ -416,7 +445,7 @@ namespace Jackett.Common.Indexers
                             // request real login page again
                             landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
                             var htmlParser = new HtmlParser();
-                            landingResultDocument = htmlParser.Parse(landingResult.Content);
+                            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
                         }
                         else
                         {
@@ -674,14 +703,23 @@ namespace Jackett.Common.Indexers
                 var errormessage = "Login Failed, got redirected.";
                 var DomainHint = getRedirectDomainHint(testResult);
                 if (DomainHint != null)
+                {
                     errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                    if (Definition.Followredirect)
+                    {
+                        configData.SiteLink.Value = DomainHint;
+                        SiteLink = configData.SiteLink.Value;
+                        SaveConfig();
+                        errormessage += " Updated site link, please try again.";
+                    }
+                }
                 throw new ExceptionWithConfigData(errormessage, configData);
             }
 
             if (Login.Test.Selector != null)
             {
                 var testResultParser = new HtmlParser();
-                var testResultDocument = testResultParser.Parse(testResult.Content);
+                var testResultDocument = testResultParser.ParseDocument(testResult.Content);
                 var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
                 if (selection.Length == 0)
                 {
@@ -699,6 +737,13 @@ namespace Jackett.Common.Indexers
                 if (DomainHint != null)
                 {
                     var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    if (Definition.Followredirect)
+                    {
+                        configData.SiteLink.Value = DomainHint;
+                        SiteLink = configData.SiteLink.Value;
+                        SaveConfig();
+                        errormessage += " Updated site link, please try again.";
+                    }
                     throw new ExceptionWithConfigData(errormessage, configData);
                 }
 
@@ -739,7 +784,7 @@ namespace Jackett.Common.Indexers
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
-            landingResultDocument = htmlParser.Parse(landingResult.Content);
+            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
 
             var hasCaptcha = false;
 
@@ -1082,6 +1127,11 @@ namespace Jackett.Common.Indexers
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
+            if (mappedCategories.Count == 0)
+            {
+                mappedCategories = this.DefaultCategories;
+            }
+
             variables[".Categories"] = mappedCategories;
 
             var KeywordTokens = new List<string>();
@@ -1177,12 +1227,17 @@ namespace Jackett.Common.Indexers
                     response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
                 else
                     response = await RequestStringWithCookies(searchUrl, null, null, headers);
+
+                if (response.IsRedirect && SearchPath.Followredirect)
+                    await FollowIfRedirect(response);
+
                 var results = response.Content;
+
 
                 try
                 {
                     var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                     // check if we need to login again
                     var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
@@ -1197,8 +1252,12 @@ namespace Jackett.Common.Indexers
                             response = await PostDataWithCookies(searchUrl, queryCollection);
                         else
                             response = await RequestStringWithCookies(searchUrl);
+
+                        if (response.IsRedirect && SearchPath.Followredirect)
+                            await FollowIfRedirect(response);
+
                         results = response.Content;
-                        SearchResultDocument = SearchResultParser.Parse(results);
+                        SearchResultDocument = SearchResultParser.ParseDocument(results);
                     }
 
                     checkForError(response, Definition.Search.Error);
@@ -1206,11 +1265,12 @@ namespace Jackett.Common.Indexers
                     if (Search.Preprocessingfilters != null)
                     {
                         results = applyFilters(results, Search.Preprocessingfilters, variables);
-                        SearchResultDocument = SearchResultParser.Parse(results);
+                        SearchResultDocument = SearchResultParser.ParseDocument(results);
                         logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
                     }
 
-                    var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                    var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                    var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                     List<IElement> Rows = new List<IElement>();
                     foreach (var RowDom in RowsDom)
                     {
@@ -1317,7 +1377,19 @@ namespace Jackett.Common.Indexers
                                             value = release.Description;
                                             break;
                                         case "category":
-                                            release.Category = MapTrackerCatToNewznab(value);
+                                            var cats = MapTrackerCatToNewznab(value);
+                                            if (release.Category == null)
+                                            {
+                                                release.Category = cats;
+                                            }
+                                            else
+                                            {
+                                                foreach (var cat in cats)
+                                                {
+                                                    if (!release.Category.Contains(cat))
+                                                        release.Category.Add(cat);
+                                                }
+                                            }
                                             value = release.Category.ToString();
                                             break;
                                         case "size":
@@ -1580,7 +1652,7 @@ namespace Jackett.Common.Indexers
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
                     var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
                     var DlUri = SearchResultDocument.QuerySelector(selector);
                     if (DlUri != null)
                     {

@@ -10,23 +10,10 @@
 
   caps:
     categorymappings:
-      # Japanese
-      - {id: 1, cat: Movies, desc: "jMovies"}
-      - {id: 2, cat: TV, desc: "TV Shows"}
-      - {id: 3, cat: TV/Other, desc: "Variety Shows"}
-
-      # Korean
-      - {id: 6, cat: Movies, desc: "kMovies"}
-      - {id: 4, cat: TV, desc: "TV Shows"}
-      - {id: 14, cat: TV/Other, desc: "Variety Shows"}
-
-      # Chinese
-      - {id: 8, cat: Movies, desc: "cMovies"}
-      - {id: 9, cat: TV, desc: "TV Shows"}
-      - {id: 13, cat: TV/Other, desc: "Variety Shows"}
-      
-      # Adult
-      - {id: 13, cat: XXX, desc: "Adult"}
+      - {id: 13, cat: Movies, desc: "Movie"}
+      - {id: 11, cat: TV, desc: "TV-Show"}
+      - {id: 5, cat: TV/Other, desc: "Variety Show"}
+      - {id: 24, cat: XXX, desc: "Adult"}
 
     modes:
       search: [q]
@@ -51,9 +38,6 @@
     test:
       path: index.php
 
-  download:
-    selector: a[href^="download.php?id="]
-
   search:
     paths:
       - path: index.php
@@ -64,19 +48,16 @@
       options: "0"
       active: "0"
     rows:
-      selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+      selector: table.table.table-bordered > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
     fields:
       download:
-        selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php"]
         attribute: href
       title:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        selector: a[title][href^="index.php?page=torrent-details&id="]
       banner:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.*?) "
+        selector: img[src^="torrentimg/"]
+        attribute: src
       category:
         selector: a[href^="index.php?page=torrents&category="]
         attribute: href
@@ -84,43 +65,42 @@
           - name: querystring
             args: category
       details:
-        selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+        selector: a[title][href^="index.php?page=torrent-details&id="]
         attribute: href
       size:
-        selector: td:nth-child(12)
+        selector: p:has(b:contains("Size:"))
+        remove: b
       date:
-        selector: td:nth-child(7)
+        selector: p:has(b:contains("Added:"))
+        remove: b
         filters:
+          - name: replace
+            args: ["@ ", ""]
           - name: append
             args: " +01:00"
           - name: dateparse
-            args: "02/01/2006 -07:00"
+            args: "01/02/2006 15:04:05 -07:00"
+      seeders:
+        selector: b:contains("Seeds:") + a
+      leechers:
+        selector: b:contains("Leechers:") + a
       grabs:
-        selector: td:nth-child(10)
+        selector: p:has(b:contains("Complete:"))
+        remove: b, a[href^="index.php?page=peers"]
         filters:
           - name: replace
             args: ["---", "0"]
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
       downloadvolumefactor:
         case:
-          img[alt="Full Star 100% Free"]: "0"
-          img[alt="Half Star 50% Free"]: "0.5"
-          img[alt="Empty Star 25% Free"]: "0.75"
+          i.fa-star: "0"
+          i.fa-star-half-o: "0.5"
+          i.fa-star-o: "0.75"
           "*": "1"
       uploadvolumefactor:
         case:
+          span[title="2x Upload Multiplier"]: "2"
           "*": "1"
       description:
-        selector: td:nth-child(2)
-        remove: a
-      description|append:
-        selector: td:nth-child(3) > img
-        attribute: title
-        filters:
-          - name: prepend
-            args: "<br>Language: "
-        
+        selector: p:has(b:contains("Language:"))
+       
         

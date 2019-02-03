@@ -1,0 +1,98 @@
+---
+  site: sukebeinyaasi
+  name: sukebei.nyaa.si
+  description: "sukebei.nyaa is a Public torrent site focused on adult Eastern Asian media including anime, manga, games and JAV"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://sukebei.nyaa.si
+    
+  settings:
+    - name: filter-id
+      type: select
+      label: Filter
+      default: "0"
+      options:
+        0: No filter
+        1: No remakes
+        2: Trusted only
+    - name: cat-id
+      type: select
+      label: Category
+      default: "0_0"
+      options:
+        0_0: "All categories"
+        1_0: "Art"
+        1_1: "Art - Anime"
+        1_2: "Art - Doujinshi"
+        1_3: "Art - Games"
+        1_4: "Art - Manga"
+        1_5: "Art - Pictures"
+        2_0: "Real Life"
+        2_1: "Real Life - Photobooks and Pictures"
+        2_2: "Real Life - Videos"
+
+  caps:
+    categorymappings:
+      # Art
+      - {id: 1_0,  cat: XXX, desc: "Adult Art"}
+      - {id: 1_1,  cat: XXX, desc: "Adult Anime"}
+      - {id: 1_2,  cat: XXX, desc: "Doujinshi"}
+      - {id: 1_3,  cat: XXX, desc: "Adult Games"}
+      - {id: 1_4,  cat: XXX, desc: "Adult Manga"}
+      - {id: 1_5,  cat: XXX, desc: "Adult Pictures"}
+      # Real Life
+      - {id: 2_0,  cat: XXX, desc: "Adult Real Life"}
+      - {id: 2_1,  cat: XXX, desc: "Adult Photobooks and Pictures"}
+      - {id: 2_2,  cat: XXX, desc: "Adult Videos"}
+    modes:
+      search: [q]
+      tv-search: [q]
+
+  search:
+    paths:
+      - path: /
+    inputs:
+      q: "{{ .Query.Keywords}}"
+      f: "{{ .Config.filter-id }}"
+      c: "{{ .Config.cat-id }}"
+    rows:
+      selector: tr.default,tr.danger,tr.success
+    fields:
+      category:
+        selector: td:nth-child(1) a
+        attribute: href
+        filters:
+          - name: split
+            args: [ "=", -1 ]
+      title:
+        selector: td:nth-child(2) a:last-of-type
+      details:
+        selector: td:nth-child(2) a:last-of-type
+        attribute: href
+      download:
+        selector: td:nth-child(3) a[href$=".torrent"]
+        attribute: href
+      magnet:
+        selector: td:nth-child(3) a[href^="magnet:?"]
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: append
+            args: " -00"
+          - name: dateparse
+            args: "2006-01-02 15:04 -07"
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

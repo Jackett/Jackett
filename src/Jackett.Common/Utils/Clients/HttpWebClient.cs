@@ -13,6 +13,7 @@ using CloudFlareUtilities;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
+using Jackett.Common.Helpers;
 
 namespace Jackett.Common.Utils.Clients
 {
@@ -143,7 +144,7 @@ namespace Jackett.Common.Utils.Clients
 
             using (ClearanceHandler clearanceHandlr = new ClearanceHandler())
             {
-                clearanceHandlr.ClearanceDelay = 7000; // 2018/03/22: something odd is going on with cloudflare, for a few users higher delays are needed (depending on which server you end up?)
+                clearanceHandlr.MaxRetries = 30;
                 using (HttpClientHandler clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
@@ -257,7 +258,13 @@ namespace Jackett.Common.Utils.Clients
                                 // See issue #1200
                                 if (result.RedirectingTo != null && result.RedirectingTo.StartsWith("file://"))
                                 {
-                                    var newRedirectingTo = result.RedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
+                                    // URL decoding apparently is needed to, without it e.g. Demonoid download is broken
+                                    // TODO: is it always needed (not just for relative redirects)?
+                                    var newRedirectingTo = WebUtilityHelpers.UrlDecode(result.RedirectingTo, webRequest.Encoding);
+                                    if (newRedirectingTo.StartsWith("file:////")) // Location without protocol but with host (only add scheme)
+                                        newRedirectingTo = newRedirectingTo.Replace("file://", request.RequestUri.Scheme + ":");
+                                    else
+                                        newRedirectingTo = newRedirectingTo.Replace("file://", request.RequestUri.Scheme + "://" + request.RequestUri.Host);
                                     logger.Debug("[MONO relative redirect bug] Rewriting relative redirect URL from " + result.RedirectingTo + " to " + newRedirectingTo);
                                     result.RedirectingTo = newRedirectingTo;
                                 }
