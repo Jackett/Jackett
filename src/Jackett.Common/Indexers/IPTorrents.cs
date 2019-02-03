@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://iptorrents.com/",
+            "https://www.iptorrents.com/",
             "https://ipt-update.com/",
             "https://iptorrents.eu/",
             "https://nemo.iptorrents.com/",
