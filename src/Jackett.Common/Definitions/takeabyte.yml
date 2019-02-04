@@ -42,7 +42,7 @@
       - {id: 15, cat: Console, desc: "Games Other"}
       - {id: 45, cat: Console/NDS, desc: "Games NDS"}
       - {id: 13, cat: Console, desc: "Games Others"}
-      - {id: 37, cat: ConsolePS Vita, desc: "Games PS2"}
+      - {id: 37, cat: Console/PS Vita, desc: "Games PS2"}
       - {id: 38, cat: Console/PS3, desc: "Games PS3"}
       - {id: 36, cat: Console/PSP, desc: "Games PSP"}
       - {id: 7, cat: Console/Wii, desc: "Games Wii"}
