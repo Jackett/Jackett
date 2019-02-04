@@ -41,6 +41,8 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: login.php
