@@ -60,6 +60,8 @@
       incldead: 1
     rows:
       selector: table.mainouter
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: a[href^="details.php?id="]
