@@ -203,7 +203,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Torrents (HDT)
  * HD-Bits.com
  * HDBits
- * HDChina
+ * HDChina (HDWing)
  * HDCity
  * HDHome (HDBigger)
  * HDME
@@ -254,6 +254,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PT99
  * PTFiles
  * PuntoTorrent
+ * PWTorrents (PWT)
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
  * Red Star Torrent
