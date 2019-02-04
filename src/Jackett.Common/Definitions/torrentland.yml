@@ -1,7 +1,7 @@
 ---
   site: torrentland
   name: Torrentland
-  description: "Torrentland is a SPANISH site for General content"
+  description: "Torrentland is a SPANISH Private site for General content"
   language: es-es
   type: private
   encoding: UTF-8
@@ -77,7 +77,7 @@
       active: "0"
       search: "{{ .Query.Keywords }}"
     rows:
-      selector: "#Mcol table.lista:nth-child(1) > tbody > tr:not(:first-child)"
+      selector: tr:has(a[href^="download.php?id="])
     fields:
       category:
         selector:  td:nth-child(1) a
