@@ -39,7 +39,6 @@
       - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
       - {id: 22, cat: TV/SD, desc: "Series - DVD"}
       - {id: 51, cat: TV/OTHER, desc: "Series - Otros Formatos"}
-      - {id: 84, cat: TV/HD, desc: "Series - H265"}
       #Documentales
       - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
       - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}
@@ -77,7 +76,7 @@
       active: "0"
       search: "{{ .Query.Keywords }}"
     rows:
-      selector: "#Mcol table.lista:nth-child(1) > tbody > tr:not(:first-child)"
+      selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr:not(:first-child)"
     fields:
       category:
         selector:  td:nth-child(1) a
@@ -86,15 +85,10 @@
           - name: querystring
             args: category
       title:
-        selector: td:nth-child(2)
-        filters:
-          - name: replace
-            args: [">", ""]
-          - name: replace
-            args: ["\"", ""]
+        selector: td:nth-child(2) a
       banner:
         optional: true
-        selector: td:nth-child(2) > a
+        selector: td:nth-child(2) a
         attribute: onmouseover
         filters:
           - name: regexp
@@ -104,23 +98,19 @@
         selector: td:nth-child(2) a
         attribute: href
       size:
-        selector: td:nth-child(10)
+        selector: td:nth-child(6)
       seeders:
-        selector: td:nth-child(6) a
+        selector: td:nth-child(8) a
       leechers:
-        selector: td:nth-child(7) a
+        selector: td:nth-child(9) a
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-child(10)
         filters:
           - name: replace
             args: ["---", "0"]
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-child(7)
         filters:
-          - name: replace
-            args: [">", ""]
-          - name: replace
-            args: ["\"", ""]
           - name: dateparse
             args: "02/01/2006"
       download:
