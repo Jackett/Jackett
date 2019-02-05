@@ -154,6 +154,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTNext (BTNT)
  * BTXpress (BTX)
  * Carpathians
+ * CasStudioTV
  * CCFBits
  * CGPeers
  * CHDBits
