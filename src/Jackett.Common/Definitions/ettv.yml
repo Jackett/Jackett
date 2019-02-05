@@ -65,7 +65,7 @@
     selector: a[href^="{{ .Config.downloadlink }}"]
 
   search:
-    path: torrents-search.php
+    path: "{{if .Keywords}}torrents-search.php{{else}}torrents.php{{end}}"
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
