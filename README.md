@@ -316,6 +316,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory
  * TranceTraffic
  * Trezzor
+ * TurkTorrent (TT)
  * TV Chaos UK
  * TV-Vault
  * u-torrents (SceneFZ)
