@@ -251,6 +251,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PolishTracker
  * Pretome
  * PrivateHD (PHD)
+ * ProAudioTorrents (PAT)
  * Psytorrents
  * PT99
  * PTFiles
