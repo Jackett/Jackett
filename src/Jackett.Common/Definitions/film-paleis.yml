@@ -44,9 +44,8 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      returnto: "/browse.php"
     error:
-      - selector: table tr td font[color="yellow"]:not(contains("Torrents"))
+      - selector: table[border="0"][cellspacing="0"][cellpadding="10"] tr td font[color="yellow"]
     test:
       path: /
       selector: :has(a[href="logout.php"])
