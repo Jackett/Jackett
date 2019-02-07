@@ -2,7 +2,7 @@
   site: turktorrent
   name: TurkTorrent
   description: "TurkTorrent (TT) is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: en
+  language: tr
   type: private
   encoding: ISO-8859-9
   links:
