@@ -224,6 +224,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * Le Saloon
  * LinkoManija
  * LosslessClub
  * M-Team (TP)
