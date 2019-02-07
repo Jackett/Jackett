@@ -125,6 +125,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AsianDVDClub
  * AST4u
  * Audiobook Torrents
+ * AudioNews (AN)
  * Awesome-HD (AHD)
  * Avistaz (AsiaTorrents)
  * B2S-Share
