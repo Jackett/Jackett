@@ -280,6 +280,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ShareSpaceDB
  * Shazbat
  * Shellife
+ * SpaceTorrent
  * Speed-Share
  * SpeedCD
  * SpeedTorrent Reloaded
