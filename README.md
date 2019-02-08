@@ -247,6 +247,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ourbits
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
+ * PiratBit
  * PirateTheNet
  * PiXELHD
  * PolishSource
