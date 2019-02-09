@@ -1,7 +1,7 @@
 ---
   site: chdbits
   name: CHDBits
-  description: "A general tracker"
+  description: "CHDBits is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
   language: zh-cn
   type: private
   encoding: UTF-8
