@@ -10,9 +10,12 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: Movies, desc: "Movies"}
-      - {id: 2, cat: TV, desc: "TV"}
-      - {id: 3, cat: Movies, desc: "FANRES"}
+      - {id: 1, cat: Movies, desc: "Film"}
+      - {id: 2, cat: TV, desc: "Serie"}
+      - {id: 3, cat: Movies, desc: "Doc"}
+      - {id: 4, cat: Movies, desc: "Dessin Anime"}
+      - {id: 5, cat: Movies, desc: "Rlz Hush"}
+      - {id: 6, cat: Movies, desc: "Media"}
 
     modes:
       search: [q]
@@ -106,4 +109,5 @@
       uploadvolumefactor:
         case:
           "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
-          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload          
+          "*": "1"
