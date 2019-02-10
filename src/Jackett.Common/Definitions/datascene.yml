@@ -22,6 +22,7 @@
       - {id: 2, cat: Other, desc: "MiSC"}
       - {id: 5, cat: PC/Phone-Other, desc: "Mobile"}
       - {id: 27, cat: Movies, desc: "Movies | Pack"}
+      - {id: 63, cat: Movies, desc: "Movies | Pack-Ro"}
       - {id: 46, cat: Movies/3D, desc: "Movies | 3D"}
       - {id: 26, cat: Movies/SD, desc: "Movies | Cam"}
       - {id: 25, cat: Movies, desc: "Movies | Documentary"}
@@ -30,20 +31,29 @@
       - {id: 23, cat: Movies/HD, desc: "Movies | HD"}
       - {id: 31, cat: Movies/HD, desc: "Movies | HD-Ro"}
       - {id: 34, cat: Movies/Foreign, desc: "Movies | Hindi"}
-      - {id: 30, cat: Movies/SD, desc: "Movies | Xvid"}
-      - {id: 36, cat: Movies/SD, desc: "Movies | Xvid-Ro"}
+      - {id: 30, cat: Movies/SD, desc: "Movies | SD"}
+      - {id: 36, cat: Movies/SD, desc: "Movies | SD-Ro"}
+      - {id: 50, cat: Movies/BluRay, desc: "Movies | Blu-Ray"}
+      - {id: 51, cat: Movies/BluRay, desc: "Movies | Blu-Ray-Ro"}
+      - {id: 55, cat: Movies/UHD, desc: "Movies | 4K"}
+      - {id: 59, cat: Movies/UHD, desc: "Movies | 4K-Ro"}
       - {id: 21, cat: Audio/Video, desc: "Music | Video"}
       - {id: 19, cat: Audio , desc: "Music | Mp3/Flac"}
       - {id: 18, cat: Other, desc: "Other"}
       - {id: 42, cat: Other, desc: "Premiera | DsT"}
       - {id: 14, cat: TV/Sport, desc: "Sport"}
-      - {id: 47, cat: TV/SD, desc: "Tv | Episodes"}
-      - {id: 28, cat: TV/HD, desc: "Tv-HD | Episodes"}
+      - {id: 47, cat: TV/HD, desc: "Tv | HD"}
+      - {id: 57, cat: TV/HD, desc: "Tv | HD-Ro"}
+      - {id: 28, cat: TV/SD, desc: "Tv | SD"}
+      - {id: 58, cat: TV/SD, desc: "Tv | SD-Ro"}
+      - {id: 54, cat: TV, desc: "Tv | Pack"}
+      - {id: 61, cat: TV, desc: "Tv | Pack-Ro"}
       - {id: 13, cat: Other, desc: "Tutoriale"}
       - {id: 12, cat: XXX, desc: "XxX"}
 
     modes:
       search: [q]
+      movie-search: [q]
       tv-search: [q, season, ep]
 
   login:
@@ -66,46 +76,16 @@
       - path: /browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
       incldead: 1
     rows:
       selector: div.ncls > table > tbody > tr:has(a.tname)
     fields:
-      title-attribute:
-        selector: a.tname
-        attribute: title
-      title-text:
-        selector: a.tname
       title:
-        text: "{{if .Result.title-attribute }}{{ .Result.title-attribute }}{{else}}{{ .Result.title-text }}{{end}}"
+        selector: a.tname
       details:
         selector: a.tname
         attribute: href
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      download:
-        selector: a[href^="/download.php/"], a[href^="/downloadd.php/"] # some releases use a download link with two d's
-        attribute: href
-      grabs:
-        selector: td:nth-child(8)
-        filters:
-          - name: regexp
-            args: (\d+)
-      size:
-        selector: td:nth-child(7)
-      date:
-        selector: td:nth-child(2) > right > div:has(font:contains("Uploaded"))
-        filters:
-          - name: replace
-            args: ["Uploaded: ", ""]
-      seeders:
-        selector: td:nth-child(9)
-      leechers:
-        selector: td:nth-child(10)
       banner:
         selector: a.tname
         attribute: onmouseover
@@ -116,13 +96,35 @@
         selector: a[href^="http://www.imdb.com/title/"]
         optional: true
         attribute: href
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      download:
+        selector: a[href^="/download.php/"], a[href^="/downloadd.php/"] # some releases use a download link with two d's
+        attribute: href
+      date:
+        selector: td:contains("Added:") a#added-btn
+        filters:
+          - name: replace
+            args: ["Added: ", ""]
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+        filters:
+          - name: regexp
+            args: (\d+)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
-          "img[src=\"pic/free.png\"]": "0"
+          "a#free-btn": "0"
           "*": "1"
       uploadvolumefactor:
         case:
           "*": "1"
-      description:
-        selector: td:nth-child(2) > right
-        remove: div
