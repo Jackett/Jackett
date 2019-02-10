@@ -79,6 +79,7 @@ namespace Jackett.Common.Indexers
         private Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
         private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
+        private Regex _downloadMatchRegex = new Regex("[^\"]*/descargar-torrent/[^\"]*");
 
         private int _maxDailyPages = 7;
         private int _maxMoviesPages = 30;
@@ -173,11 +174,11 @@ namespace Jackett.Common.Indexers
 
                 try
                 {
-                    var results = await RequestStringWithCookies(link);
+                    var results = await RequestStringWithCookiesAndRetry(link);
+                    await FollowIfRedirect(results);
                     var content = results.Content;
 
-                    Regex regex = new Regex("[^\"]*/descargar-torrent/\\d+_[^\"]*");
-                    Match match = regex.Match(content);
+                    Match match = _downloadMatchRegex.Match(content);
                     if (match.Success)
                         result = await base.Download(new Uri(match.Groups[0].Value));
                 }
@@ -210,7 +211,8 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     Uri url = new Uri(siteLink, string.Format(_dailyUrl, pg));
-                    var results = await RequestStringWithCookies(url.AbsoluteUri);
+                    var results = await RequestStringWithCookiesAndRetry(url.AbsoluteUri);
+                    await FollowIfRedirect(results);
 
                     var items = ParseDailyContent(results.Content);
                     if (items == null || !items.Any())
@@ -328,7 +330,8 @@ namespace Jackett.Common.Indexers
         private async Task<IEnumerable<ReleaseInfo>> GetReleasesFromUri(Uri uri, string seriesName)
         {
             var newpctReleases = new List<ReleaseInfo>();
-            var results = await RequestStringWithCookies(uri.AbsoluteUri);
+            var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+            await FollowIfRedirect(results);
 
             //Episodes list
             string seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
@@ -338,7 +341,8 @@ namespace Jackett.Common.Indexers
                 while (pg < _maxEpisodesListPages)
                 {
                     Uri episodesListUrl = new Uri(string.Format(_seriesUrl, seriesEpisodesUrl, pg));
-                    results = await RequestStringWithCookies(episodesListUrl.AbsoluteUri);
+                    results = await RequestStringWithCookiesAndRetry(episodesListUrl.AbsoluteUri);
+                    await FollowIfRedirect(results);
 
                     var items = ParseEpisodesListContent(results.Content);
                     if (items == null || !items.Any())
