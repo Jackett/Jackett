@@ -6,6 +6,8 @@
   type: private
   encoding: windows-1252
   links:
+    - https://theshinning.me/
+  legacylinks:
     - https://theshinning.org
 
   caps:
