@@ -104,8 +104,6 @@
     path: index.php
     selector: div#top div:nth-child(2) span:nth-child(2)
     filters:
-      - name: replace
-        args: ["Inf.", "2147483647"] # max int32
       - name: regexp
         args: "Ratio: (.+?) Bonus:"
 

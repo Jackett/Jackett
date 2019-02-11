@@ -56,9 +56,6 @@
   ratio:
     path: /
     selector: td:has(a[href="/articles.php?topic=ratio"])  > td
-    filters:
-      - name: replace
-        args: ["∞", "2147483647"] # max int32
 
   search:
     paths:
