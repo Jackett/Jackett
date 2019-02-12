@@ -14,6 +14,7 @@
       1: TV
     modes:
       tv-search: [q, season, ep]
+      search: [q]
 
   settings: []
 
@@ -24,8 +25,6 @@
       term: "{{ .Query.Keywords }}"
     rows:
       selector: tbody tr
-      filters: # optional list of row filter
-        - name: strdump
     fields:
       title:
         selector: td.title > span.title a
