@@ -116,6 +116,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Abnormal
  * Acid Lounge (A-L)
  * AlphaRatio (AR)
+ * AmigosShareClub
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
  * Anthelion
