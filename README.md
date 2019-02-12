@@ -206,6 +206,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Spain
  * HD-Torrents (HDT)
  * HD-Bits.com
+ * HDArea
  * HDBits
  * HDCenter
  * HDChina (HDWing)
