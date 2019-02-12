@@ -1,7 +1,7 @@
 ---
   site: acg.rip
   name: ACG.RIP
-  description: "ACG.RIP is a Public torrent tracker for the latest anime and Japanese related torrents"
+  description: "ACG.RIP is a CHINESE Public torrent tracker for the latest anime and Japanese related torrents"
   language: zh-cn
   type: public
   followredirect: true
