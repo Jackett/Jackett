@@ -143,7 +143,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitHUmen
  * BitMe
  * BitMeTV
- * BitSoup  [![(invite needed)][inviteneeded]](#)
  * BitsPiracy
  * Bitspyder
  * BitTorrentFiles  [![(invite needed)][inviteneeded]](#)
