@@ -49,3 +49,7 @@
         attribute: datetime
         filters:
           - name: fuzzytime
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
