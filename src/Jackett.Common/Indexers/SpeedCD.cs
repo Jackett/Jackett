@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                     string title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
                     Uri link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
                     Uri guid = link;
-                    Uri comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim());
+                    Uri comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
                     long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
                     int grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
                     int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
