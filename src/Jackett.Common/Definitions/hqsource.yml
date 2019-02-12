@@ -43,7 +43,7 @@
       label: Pin     
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -55,11 +55,11 @@
       - selector: td.embedded:has(h2:contains("Error"))
     test:
       selector: a[href^="logout.php"]
-      path: /browse.php
+      path: browse.php
         
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

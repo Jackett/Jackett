@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://www.icetorrent.org
+    - https://www.icetorrent.org/
 
   caps:
     categorymappings:
@@ -53,7 +53,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form
     inputs:
@@ -62,7 +62,7 @@
     error:
       - selector: font:contains("failed") + table
     test:
-      path: /browse.php
+      path: browse.php
       
   ratio:
     text: -1

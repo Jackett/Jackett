@@ -20,7 +20,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /login
+    path: login
     method: form
     inputs:
       username: "{{ .Config.username }}"
@@ -28,11 +28,11 @@
     error:
       - selector: form[action*="/login"] .text-red
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /filterTorrents
+      - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"

@@ -57,7 +57,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -65,15 +65,15 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /browse.php
+      path: browse.php
       
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: font:contains("Ratio:") > span
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

@@ -48,7 +48,7 @@ login:
     selector: div#statusbar
     
 search:
-  path: /browse.php
+  path: browse.php
   inputs:
     incldead: "0"
     search: "{{ .Query.Keywords }}"

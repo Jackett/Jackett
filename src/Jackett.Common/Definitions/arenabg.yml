@@ -89,7 +89,7 @@
 
   search:
     paths:
-      - path: /torrents/
+      - path: torrents/
         method: post
         followredirect: true
     inputs:

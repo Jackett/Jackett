@@ -72,7 +72,7 @@
 
   search:
     paths:
-      - path: /search
+      - path: search
     inputs:
       q: "{{ .Query.Keywords }}"
       c: "{{ .Config.cat-id }}"

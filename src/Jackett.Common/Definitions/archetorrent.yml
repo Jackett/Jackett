@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://archetorrent.com
+    - https://archetorrent.com/
     
   settings:
     - name: username

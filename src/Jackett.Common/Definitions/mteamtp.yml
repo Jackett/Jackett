@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://tp.m-team.cc
+    - https://tp.m-team.cc/
 
   caps:
     categorymappings:
@@ -72,10 +72,10 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /torrents.php
+      path: torrents.php
 
   ratio:
-    path: /torrents.php
+    path: torrents.php
     selector: table#info_block
     filters:
       - name: regexp

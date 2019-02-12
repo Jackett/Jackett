@@ -29,7 +29,7 @@
 
   search:
     paths:
-      - path: /src/releaselist.php
+      - path: src/releaselist.php
         method: post
     inputs:
       cat: 0

@@ -83,7 +83,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     inputs:
       username: "{{ .Config.username }}"
@@ -91,16 +91,16 @@
     error:
       - selector: div.stderr_info_wrap
     test:
-      path: /browse.php
+      path: browse.php
       selector: img[title="Ratio"] + i
 
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: img[title="Ratio"] + i
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

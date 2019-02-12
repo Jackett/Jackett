@@ -218,7 +218,7 @@
       search: [q]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       "login_username": "{{ .Config.username }}"
@@ -230,12 +230,12 @@
         message:
           selector: td.thead b
     test:
-      path: /tracker.php
+      path: tracker.php
       selector: li a[href^="login.php?logout=1"]
 
   search:
     paths:
-      - path: /tracker.php
+      - path: tracker.php
         method: post
     inputs:
       $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"

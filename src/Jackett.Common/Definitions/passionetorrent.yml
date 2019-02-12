@@ -68,7 +68,7 @@
 
   download:
     before:
-      path: "thanks.php"
+      path: thanks.php
       method: "post"
       inputs:
         infohash: "{{ .DownloadUri.Query.id }}"

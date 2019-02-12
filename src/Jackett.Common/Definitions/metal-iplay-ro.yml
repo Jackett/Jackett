@@ -44,7 +44,7 @@
   download:
     method: get
     before:
-      path: "login.php"
+      path: login.php
       method: "post"
       inputs:
         username: "{{ .Config.username }}"

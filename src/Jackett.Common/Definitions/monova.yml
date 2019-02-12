@@ -34,7 +34,7 @@
     paths:
       # https://monova.to/search?term=vikings+s05e05
       # https://monova.to/video
-      - path: "{{if .Keywords}}/search?term={{.Keywords}}{{else}}/video{{end}}"
+      - path: "{{if .Keywords}}search?term={{.Keywords}}{{else}}video{{end}}"
     rows:
       selector: tr.desktop:not(tr.success)
       filters:

@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://1337x.to
+    - https://1337x.to/
 
   caps:
     categorymappings:
@@ -119,11 +119,11 @@
   search:
     paths:
       # present trending results if there are no search parms supplied
-      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/1/{{else}}/trending{{end}}"
-      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/2/{{else}}{{end}}"
-      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/3/{{else}}{{end}}"
-      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/4/{{else}}{{end}}"
-      - path: "{{if .Keywords}}/sort-search/{{ .Keywords}}/time/desc/5/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/1/{{else}}trending{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/2/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/3/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/4/{{else}}{{end}}"
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/5/{{else}}{{end}}"
     keywordsfilters: 
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]

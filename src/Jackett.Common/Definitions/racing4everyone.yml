@@ -34,7 +34,7 @@
       search: [q]
 
   login:
-    path: /login
+    path: login
     method: form
     inputs:
       username: "{{ .Config.username }}"
@@ -42,11 +42,11 @@
     error:
       - selector: table.main:contains("Login Failed!")
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /filterTorrents
+      - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"

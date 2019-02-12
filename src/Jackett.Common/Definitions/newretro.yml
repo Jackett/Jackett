@@ -57,7 +57,7 @@
       label: Pin
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     cookies: ["JAVA=OK"] # avoid jscheck redirect
     inputs:
@@ -68,10 +68,10 @@
     error:
     - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
     test:
-      path: /usercp.php
+      path: usercp.php
 
   ratio:
-    path: /usercp.php
+    path: usercp.php
     selector: div#lmtd table > tbody > tr:contains("Ratio:") > td:nth-child(2)
     filters:
       - name: replace
@@ -81,7 +81,7 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

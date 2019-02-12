@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.scene-rush.pt
+    - http://www.scene-rush.pt/
 
   caps:
     categorymappings:
@@ -39,7 +39,7 @@
       search: [q]
       tv-search: [q]
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -47,15 +47,15 @@
     error:
       - selector: td.embedded:has(h2:contains("failed")+table)
     test:
-      path: /browse.php
+      path: browse.php
 
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: td[width='60'][style=['text-align:center;'] > span > font
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     method: post
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"

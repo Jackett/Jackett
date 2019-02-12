@@ -57,11 +57,11 @@
     error:
       - selector: td.msg_info > font > b
     test:
-      path: /browse.php
+      path: browse.php
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
         method: post
     inputs:
       search: "{{ .Query.Keywords }}"

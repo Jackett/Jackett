@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://worldofp2p.net
+    - https://worldofp2p.net/
 
   caps:
     categorymappings:
@@ -72,7 +72,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form
     inputs:
@@ -82,11 +82,11 @@
     error:
       - selector: td.stdmsg2
     test:
-      path: /usercp.php?action=default
+      path: usercp.php?action=default
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

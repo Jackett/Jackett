@@ -48,7 +48,7 @@
       search: [q]
 
   login:
-    path: /login
+    path: login
     method: form
     form: form
     inputs:
@@ -57,11 +57,11 @@
     error:
       - selector: div.alert-danger
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /torrents
+      - path: torrents
     inputs:
       q: "{{ .Keywords }}"
       searchin: 0

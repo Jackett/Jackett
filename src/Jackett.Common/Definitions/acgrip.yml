@@ -20,7 +20,7 @@
 
   search:
     paths:
-      - path: "/"
+      - path: /
     inputs:
       term: "{{ .Query.Keywords }}"
     rows:

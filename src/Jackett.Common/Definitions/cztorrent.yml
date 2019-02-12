@@ -52,11 +52,11 @@
     inputs:
       cookie: "{{ .Config.cookie }}"
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /torrents
+      - path: torrents
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       s: "{{ .Keywords }}"

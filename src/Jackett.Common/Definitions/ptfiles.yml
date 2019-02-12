@@ -40,7 +40,7 @@
       movie-search: [q]
 
   login:
-    path: /loginproc/
+    path: loginproc/
     method: form
     form: form#login
     inputs:

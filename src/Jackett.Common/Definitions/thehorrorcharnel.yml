@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://horrorcharnel.org
+    - https://horrorcharnel.org/
 
   caps:
     categories:
@@ -41,7 +41,7 @@
       path: usercp.php
       
   ratio:
-    path: /my.php
+    path: my.php
     selector: td.navi_top:contains("Deine Ratio:")
     filters:
       - name: replace
@@ -53,7 +53,7 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"
