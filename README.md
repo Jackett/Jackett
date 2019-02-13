@@ -172,6 +172,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DesiTorrents
  * Diablo Torrent
  * DigitalHive
+ * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
  * Dream Team
