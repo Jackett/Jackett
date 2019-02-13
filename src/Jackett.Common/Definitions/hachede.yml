@@ -60,6 +60,8 @@
       - {id: 129, cat: Other/Misc, desc: "Documentales H265"}
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: ajax/login.php
