@@ -74,6 +74,8 @@
       - {id: 93, cat: XXX, desc: "XXX"}
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: ajax/login.php
