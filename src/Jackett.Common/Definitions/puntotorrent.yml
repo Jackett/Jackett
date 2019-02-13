@@ -28,13 +28,13 @@
       - {id: 41, cat: Movies/DVD, desc: "DVD - Series"}
       - {id: 42, cat: Movies/DVD, desc: "DVD - Adulto (+18)"}
       - {id: 43, cat: Movies/DVD, desc: "DVD - Música"}
-      - {id: 106, cat: Movies/SD, desc: "HDRip - Animación"}
-      - {id: 107, cat: Movies/SD, desc: "HDRip - Deportes"}
-      - {id: 108, cat: Movies/SD, desc: "HDRip - Documentales"}
-      - {id: 109, cat: Movies/SD, desc: "HDRip - Películas"}
-      - {id: 110, cat: Movies/SD, desc: "HDRip - Series"}
-      - {id: 112, cat: Movies/SD, desc: "HDRip - Adulto (+18)"}
-      - {id: 111, cat: Movies/SD, desc: "HDRip - Música"}
+      - {id: 106, cat: Movies/HD, desc: "HDRip - Animación"}
+      - {id: 107, cat: Movies/HD, desc: "HDRip - Deportes"}
+      - {id: 108, cat: Movies/HD, desc: "HDRip - Documentales"}
+      - {id: 109, cat: Movies/HD, desc: "HDRip - Películas"}
+      - {id: 110, cat: Movies/HD, desc: "HDRip - Series"}
+      - {id: 112, cat: Movies/HD, desc: "HDRip - Adulto (+18)"}
+      - {id: 111, cat: Movies/HD, desc: "HDRip - Música"}
       - {id: 117, cat: Movies/3D, desc: "3D - Animación"}
       - {id: 118, cat: Movies/3D, desc: "3D - Deportes"}
       - {id: 119, cat: Movies/3D, desc: "3D - Documentales"}
@@ -55,31 +55,31 @@
       - {id: 59, cat: Movies/HD, desc: "HD - Series"}
       - {id: 63, cat: Movies/HD, desc: "HD - Adulto (+18)"}
       - {id: 61, cat: Movies/HD, desc: "HD - Música"}
-      - {id: 136, cat: Movies/HD, desc: "UHD - Animación"}
-      - {id: 137, cat: Movies/HD, desc: "UHD - Deportes"}
-      - {id: 138, cat: Movies/HD, desc: "UHD - Documentales"}
-      - {id: 139, cat: Movies/HD, desc: "UHD - Películas"}
-      - {id: 140, cat: Movies/HD, desc: "UHD - Series"}
-      - {id: 141, cat: Movies/HD, desc: "UHD - Adulto (+18)"}
+      - {id: 136, cat: Movies/UHD, desc: "UHD - Animación"}
+      - {id: 137, cat: Movies/UHD, desc: "UHD - Deportes"}
+      - {id: 138, cat: Movies/UHD, desc: "UHD - Documentales"}
+      - {id: 139, cat: Movies/UHD, desc: "UHD - Películas"}
+      - {id: 140, cat: Movies/UHD, desc: "UHD - Series"}
+      - {id: 141, cat: Movies/UHD, desc: "UHD - Adulto (+18)"}
       - {id: 69, cat: Audio/MP3, desc: "MP3"}
       - {id: 70, cat: Audio/Lossless, desc: "FLAC"}
       - {id: 71, cat: Audio/Other, desc: "Otros Formatos"}
-      - {id: 74, cat: PC, desc: "Software - Windows"}
+      - {id: 74, cat: PC/0day, desc: "Software - Windows"}
       - {id: 75, cat: PC, desc: "Software - Linux"}
       - {id: 76, cat: PC/Mac, desc: "Software - MAC"}
-      - {id: 77, cat: PC, desc: "Software - Otras Plataformas"}
+      - {id: 77, cat: PC/Phone-Other, desc: "Software - Otras Plataformas"}
       - {id: 115, cat: PC/Phone-Android, desc: "Software - Android"}
-      - {id: 25, cat: Console, desc: "Juegos - Microsoft"}
+      - {id: 25, cat: PC/Games, desc: "Juegos - Microsoft"}
       - {id: 26, cat: Console, desc: "Juegos - Sony"}
       - {id: 27, cat: PC/Games, desc: "Juegos - PC"}
-      - {id: 28, cat: Console, desc: "Juegos - Nintendo"}
-      - {id: 34, cat: Other, desc: "Juegos - Otros"}
-      - {id: 11, cat: Other, desc: "Juegos - Emuladores/Otras P."}
+      - {id: 28, cat: Console/NDS, desc: "Juegos - Nintendo"}
+      - {id: 34, cat: Console/Other, desc: "Juegos - Otros"}
+      - {id: 11, cat: Console/Other, desc: "Juegos - Emuladores/Otras P."}
       - {id: 6, cat: Books/Ebook, desc: "eBooks - eBooks"}
       - {id: 131, cat: Books/Comics, desc: "eBooks - Cómics"}
       - {id: 134, cat: Books, desc: "eBooks - Manga"}
       - {id: 132, cat: Books/Magazines, desc: "eBooks - Revistas"}
-      - {id: 7, cat: Books, desc: "eBooks - Otros"}
+      - {id: 7, cat: Books/Other, desc: "eBooks - Otros"}
       - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}    
       - {id: 92, cat: Other, desc: "Otros formatos - Animación"}
       - {id: 93, cat: Other, desc: "Otros formatos - Deportes"}
@@ -133,6 +133,9 @@
         attribute: href
       size:
         selector: td:nth-child(6)
+        filters:
+          - name: replace
+            args: [",", "."]
       seeders:
         selector: td:nth-child(8) a
       leechers:
