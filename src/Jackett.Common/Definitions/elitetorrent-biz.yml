@@ -25,7 +25,11 @@
     attribute: href
 
   search:
-    path: index.php
+  # site returns just 30 results, attempt to fetch upto 90
+    paths:
+      - path: index.php
+      - path: index.php/page/2/
+      - path: index.php/page/3/
     keywordsfilters:
       # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
       - name: re_replace
@@ -61,6 +65,10 @@
           - name: split
             args: ["/", 3]
       size:
+        text: "0 B"
+      size:
+      # size can be missing
+        optional: true
         selector: .voto1
         filters:
           - name: replace
