@@ -15,9 +15,6 @@ using NLog;
 
 namespace Jackett.Common.Indexers {
     public class Torrentscsv : BaseWebIndexer {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrents-csv.ml/",
-        };
 
         private string ApiEndpoint { get { return SiteLink + "service/search"; } }
 
@@ -121,9 +118,13 @@ namespace Jackett.Common.Indexers {
                     dateTime = dateTime.AddSeconds (createdunix);
 
                     release.PublishDate = dateTime;
+                    release.Category = new List<int> { TorznabCatType.Other.ID };
                     release.Seeders = torrent.Value<int> ("seeders");
                     release.Peers = torrent.Value<int> ("leechers") + release.Seeders;
                     release.Size = torrent.Value<long> ("size_bytes");
+                    var grabs = torrent.Value<string>("completed");
+                    if (grabs == null) grabs = "0";
+                    release.Grabs = ParseUtil.CoerceInt(grabs);
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 
