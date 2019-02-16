@@ -91,11 +91,11 @@
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: "0"
-      spstate: "0"
-      inclbookmarked: "0"
+      incldead: 1
+      spstate: 0
+      inclbookmarked: 0
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-      search_mode: "0"
+      search_mode: 0
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
