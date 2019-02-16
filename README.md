@@ -72,6 +72,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentFunk
  * TorrentGalaxy.org (TGx)
  * TorrentKitty
+ * Torrents.csv
  * Torrent9
  * Torernt9 clone (torrents9.ch)
  * Torrentz2
