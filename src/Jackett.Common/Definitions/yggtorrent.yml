@@ -208,15 +208,25 @@
         selector: ":nth-child(2) > a"
         case:
           "a[href*=\"/filmvidéo/animation/\"]" : 2178
+          "a[href*=\"/film-video/animation/\"]" : 2178
           "a[href*=\"/filmvidéo/animation-série/\"]" : 2179
+          "a[href*=\"/film-video/animation-serie/\"]" : 2179
           "a[href*=\"/filmvidéo/concert/\"]" : 2180
+          "a[href*=\"/film-video/concert/\"]" : 2180
           "a[href*=\"/filmvidéo/documentaire/\"]" : 2181
+          "a[href*=\"/film-video/documentaire/\"]" : 2181
           "a[href*=\"/filmvidéo/emission-tv/\"]" : 2182
+          "a[href*=\"/film-video/emission-tv/\"]" : 2182
           "a[href*=\"/filmvidéo/film/\"]" : 2183
+          "a[href*=\"/film-video/film/\"]" : 2183
           "a[href*=\"/filmvidéo/série-tv/\"]" : 2184
+          "a[href*=\"/film-video/serie-tv/\"]" : 2184
           "a[href*=\"/filmvidéo/spectacle/\"]" : 2185
+          "a[href*=\"/film-video/spectacle/\"]" : 2185
           "a[href*=\"/filmvidéo/sport/\"]" : 2186
+          "a[href*=\"/film-video/sport/\"]" : 2186
           "a[href*=\"/filmvidéo/vidéo-clips/\"]" : 2187
+          "a[href*=\"/film-video/video-clips/\"]" : 2187
           "a[href*=\"/audio/karaoké/\"]" : 2147
           "a[href*=\"/audio/musique/\"]" : 2148
           "a[href*=\"/audio/podcast-radio/\"]" : 2150
