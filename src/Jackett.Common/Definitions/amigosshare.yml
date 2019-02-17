@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://amigos-share.club/
+  legacylinks:
     - http://amigos-share.club/
 
   caps:
@@ -116,8 +118,7 @@
 
   login:
     path: account-login.php
-    method: form
-    form: form.form-signin
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
