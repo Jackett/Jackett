@@ -15,7 +15,8 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -55,14 +56,12 @@
     paths:
       - path: browse.php
     inputs:
-      #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
+      cat: 0
 
     rows:
       selector: p + table > tbody > tr:has(a[href^="download.php"]), p + table > tbody > tr:has(a[href^="download.php"]) + tr[id^="kdescr"] # sometimes an unexpected tr[id^="kdescr"] row shows up (for unpublished torrents?)
-      filters:
-        - name: andmatch
       after: 1
     fields:
       title:
