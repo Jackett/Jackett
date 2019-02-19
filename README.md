@@ -359,7 +359,7 @@ It will query all configured indexers and return the combined results.
 
 If your client supports multiple feeds it's recommended to add each indexer directly instead of using the all indexer.
 Using the all indexer has no advantages (besides reduced management overhead), only disadvantages:
-* you loose control over indexer specific settings (categories, search modes, etc.)
+* you lose control over indexer specific settings (categories, search modes, etc.)
 * mixing search modes (IMDB, query, etc.) might cause low quality results
 * indexer specific categories (>= 100000) can't be used.
 * slow indexers will slow down the overall result
