@@ -76,8 +76,6 @@
       autocomplete_toggle: 1
     rows:
       selector: table#torrent_table tr:not(:first-child)
-#      filters:
-#        - name: andmatch
     fields:
       title:
         selector: a[href^="/torrents.php?id="]
@@ -85,10 +83,8 @@
         selector: td.cats_col div a
         attribute: href
         filters:
-          - name: strdump
           - name: regexp
             args: "(\\d+)]=1"
-          - name: strdump
       details:
         selector: a[href^="/torrents.php?id="]
         attribute: href
