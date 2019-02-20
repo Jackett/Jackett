@@ -149,6 +149,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BitsPiracy
  * Bitspyder
  * BitTorrentFiles  [![(invite needed)][inviteneeded]](#)
+ * BitTurk
  * BJ-Share (BJ)
  * BlueBird
  * Blutopia (BLU)
