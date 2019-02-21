@@ -23,7 +23,11 @@ namespace Jackett.Common.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string loginPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
         private string SearchUrl { get { return SiteLink + "torrent/br_process.php"; } }
+<<<<<<< HEAD
         private List<SeriesDetail> series = new List<SeriesDetail>();
+=======
+        private List<SeriesDetail> series = new List<SeriesDetail>(); 
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
 
         private new ConfigurationDataTVstore configData
         {
@@ -62,6 +66,7 @@ namespace Jackett.Common.Indexers
                 { "logout", "1"}
             };
 
+<<<<<<< HEAD
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
             await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Főoldal"), () =>
             {
@@ -80,22 +85,43 @@ namespace Jackett.Common.Indexers
         /// <param name="query">Query.</param>
         /// <param name="already_founded">Number of the already founded torrents.(used for limit)</param>
         /// <param name="limit">The limit to the number of torrents to download </param>
+=======
+            var result =   await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: SiteLink);
+            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Főoldal"), () =>
+            {
+                throw new ExceptionWithConfigData("Error while trying to login with: Username: "+ configData.Username.Value +
+                                                  " Password: "+ configData.Password.Value, configData);
+            });
+
+
+           
+
+            return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
         async Task<List<ReleaseInfo>> ParseTorrents(WebClientStringResult results, TorznabQuery query, int already_founded, int limit)
         {
             var releases = new List<ReleaseInfo>();
             try
             {
                 String content = results.Content;
+<<<<<<< HEAD
                 /* Content Looks like this
                  * 2\15\2\1\1727\207244\1x08 \[WebDL-720p - Eng - AJP69]\gb\2018-03-09 08:11:53\akció, kaland, sci-fi \0\0\1\191170047\1\0\Anonymous\50\0\0\\0\4\0\174\0\
                  * 1\ 0\0\1\1727\207243\1x08 \[WebDL-1080p - Eng - AJP69]\gb\2018-03-09 08:11:49\akció, kaland, sci-fi \0\0\1\305729738\1\0\Anonymous\50\0\0\\0\8\0\102\0\0\0\0\1\\\*/
+=======
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                 var splits = content.Split('\\');
                 int i = 0;
 
                 ReleaseInfo release = new ReleaseInfo();
+<<<<<<< HEAD
 
                 /* Split the relases by '\' and go throw them. 
                  * 26 element belongs to one torrent*/
+=======
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                 foreach (var s in splits)
                 {
                     switch (i)
@@ -115,7 +141,11 @@ namespace Jackett.Common.Indexers
                             string fileinfo = (await RequestStringWithCookiesAndRetry(fileinfoURL)).Content;
                             release.Link = new Uri(SiteLink.ToString() + "torrent/download.php?id=" + s);
                             string[] fileinf = fileinfo.Split(new string[] { "\\\\" }, StringSplitOptions.None);
+<<<<<<< HEAD
                             if (fileinf.Length > 1)
+=======
+                            if (fileinf.Length>1)
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                                 release.Title = fileinf[1];
                             goto default;
                         /*case 6:
@@ -143,16 +173,24 @@ namespace Jackett.Common.Indexers
                             release.Grabs = int.Parse(s);
                             goto default;
                         case 26:
+<<<<<<< HEAD
                             /*This is the last element for the torrent. So add it to releases and start parsing to new torrent*/
                             i = 0;
                             release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
                             //todo Added some basic configuration need to improve it
+=======
+
+                            i = 0;
+                            release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
+                            // Added some basic configuration need to improve it
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                             release.MinimumRatio = 1;
                             release.MinimumSeedTime = 172800;
                             release.DownloadVolumeFactor = 1;
                             release.UploadVolumeFactor = 1;
 
                             if ((already_founded + releases.Count) < limit)
+<<<<<<< HEAD
                             {
                                 releases.Add(release);
                             }
@@ -160,13 +198,19 @@ namespace Jackett.Common.Indexers
                             {
                                 return releases;
                             }
+=======
+                                releases.Add(release);
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                             release = new ReleaseInfo();
                             break;
                         default:
                             i++;
                             break;
                     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                 }
 
             }
@@ -179,6 +223,7 @@ namespace Jackett.Common.Indexers
         }
         /* Search is possible only based by Series ID. 
          * All known series ID is on main page, with their attributes. (ID, EngName, HunName, imdbid)*/
+<<<<<<< HEAD
 
         /// <summary>
         /// Get all series info known by site
@@ -189,6 +234,8 @@ namespace Jackett.Common.Indexers
         ///     - IMDB ID
         /// </summary>
         /// <returns>The series info.</returns>
+=======
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
         protected async Task<Boolean> GetSeriesInfo()
         {
 
@@ -217,6 +264,10 @@ namespace Jackett.Common.Indexers
                         }
                         catch (IndexOutOfRangeException e)
                         { }
+<<<<<<< HEAD
+=======
+                       
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
                     }
                 }
             }
@@ -227,11 +278,16 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
+<<<<<<< HEAD
             /* If series from sites are indexed than we dont need to reindex them.*/
+=======
+            /* If series from sites are indexed than we dont need it.*/
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
             if (series == null || series.IsEmpty())
             {
                 await GetSeriesInfo();
             }
+<<<<<<< HEAD
 
             Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
@@ -280,6 +336,59 @@ namespace Jackett.Common.Indexers
 
             }
 
+=======
+            if (query.SearchTerm == null)
+                query.SearchTerm = "";
+
+            /*todo if not exact name is comming in SearchTerm will wont work.     
+            /* Search for series based on English name in the list parsed before */
+            SeriesDetail seriesinfo = series.Find(x => x.EngName.Contains(query.SearchTerm.ToLower()));
+            if (seriesinfo == null)
+            {
+                /* Search for series based on Hungarian name if English has no match*/
+                seriesinfo = series.Find(x => x.HunName.Contains(query.SearchTerm.ToLower()));
+            }
+            if (seriesinfo == null)
+                return releases;
+
+            Console.WriteLine("AAAA Season " + seriesinfo.id);
+
+            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            /*var pairs = new List<KeyValuePair<string, string>>();
+            pairs.Add(new KeyValuePair<string, string>("g", seriesinfo.id));
+            pairs.Add(new KeyValuePair<string, string>("s", query.Season.ToString()));
+            pairs.Add(new KeyValuePair<string, string>("e", query.Episode));
+            pairs.Add(new KeyValuePair<string, string>("now", unixTimestamp.ToString()));
+            var results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
+            */
+
+            WebClientStringResult results;
+
+            /* Create the search URL. 
+             * It will be better to use some func from Baseindexer but they wont work
+               Links looks the following https://tvstore.me/torrent/br_process.php?s=1&e=2&g=33&now=1550570305277
+             */
+            string exactSearchURL = SearchUrl;
+            if (!query.SearchTerm.Equals(""))
+            {
+                exactSearchURL += "?g=" + seriesinfo.id;
+                if (query.Season != 0)
+                    exactSearchURL += "&s=" + query.Season.ToString();
+                if (query.Episode != null && !query.Episode.Equals(""))
+                    exactSearchURL += "&e=" + query.Episode;
+                exactSearchURL += "&now=" + unixTimestamp.ToString();
+            }
+
+            results = await RequestStringWithCookiesAndRetry(exactSearchURL);
+
+            var limit = query.Limit;
+            if (limit == 0)
+                limit = 100;
+
+            releases = await ParseTorrents(results, query, releases.Count, limit);
+              
+>>>>>>> b093c461260eaade262f92f716620d14e0b5da11
             return releases;
         }
     }
