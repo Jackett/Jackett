@@ -334,6 +334,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
  * TV-Vault
+ * TVstore
  * u-torrents (SceneFZ)
  * UHDBits
  * Ultimate Gamer Club (UGC)
