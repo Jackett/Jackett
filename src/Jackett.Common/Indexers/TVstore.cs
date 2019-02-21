@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -23,6 +21,8 @@ namespace Jackett.Common.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string loginPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
         private string SearchUrl { get { return SiteLink + "torrent/br_process.php"; } }
+        private string DownloadUrl { get { return SiteLink + "torrent/download.php"; } }
+        private string BrowseUrl { get { return SiteLink + "torrent/browse.php"; } }
         private List<SeriesDetail> series = new List<SeriesDetail>();
 
         private new ConfigurationDataTVstore configData
@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
 
         public TVstore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TVstore",
-                description: "A Hungarian private torrent site.",
+                description: "TV Store is a HUNGARIAN Private Torrent Tracker for TV",
                 link: "https://tvstore.me/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
@@ -73,14 +73,14 @@ namespace Jackett.Common.Indexers
         }
 
         /// <summary>
-        /// Parses the torrents drom the contetn
+        /// Parses the torrents from the content
         /// </summary>
         /// <returns>The parsed torrents.</returns>
-        /// <param name="results">The result of the querry</param>
+        /// <param name="results">The result of the query</param>
         /// <param name="query">Query.</param>
-        /// <param name="already_founded">Number of the already founded torrents.(used for limit)</param>
+        /// <param name="already_found">Number of the already found torrents.(used for limit)</param>
         /// <param name="limit">The limit to the number of torrents to download </param>
-        async Task<List<ReleaseInfo>> ParseTorrents(WebClientStringResult results, TorznabQuery query, int already_founded, int limit)
+        async Task<List<ReleaseInfo>> ParseTorrents(WebClientStringResult results, TorznabQuery query, int already_found, int limit)
         {
             var releases = new List<ReleaseInfo>();
             try
@@ -88,14 +88,16 @@ namespace Jackett.Common.Indexers
                 String content = results.Content;
                 /* Content Looks like this
                  * 2\15\2\1\1727\207244\1x08 \[WebDL-720p - Eng - AJP69]\gb\2018-03-09 08:11:53\akció, kaland, sci-fi \0\0\1\191170047\1\0\Anonymous\50\0\0\\0\4\0\174\0\
-                 * 1\ 0\0\1\1727\207243\1x08 \[WebDL-1080p - Eng - AJP69]\gb\2018-03-09 08:11:49\akció, kaland, sci-fi \0\0\1\305729738\1\0\Anonymous\50\0\0\\0\8\0\102\0\0\0\0\1\\\*/
+                 * 1\ 0\0\1\1727\207243\1x08 \[WebDL-1080p - Eng - AJP69]\gb\2018-03-09 08:11:49\akció, kaland, sci-fi \0\0\1\305729738\1\0\Anonymous\50\0\0\\0\8\0\102\0\0\0\0\1\\\
+                 */
                 var splits = content.Split('\\');
                 int i = 0;
 
                 ReleaseInfo release = new ReleaseInfo();
 
-                /* Split the relases by '\' and go throw them. 
-                 * 26 element belongs to one torrent*/
+                /* Split the releases by '\' and go through them. 
+                 * 26 element belongs to one torrent
+                 */
                 foreach (var s in splits)
                 {
                     switch (i)
@@ -111,9 +113,11 @@ namespace Jackett.Common.Indexers
                             //ID of the torrent
                             Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-                            string fileinfoURL = "https://tvstore.me/torrent/br_process.php?func=getToggle&id=" + s + "&w=F&pg=0&now=" + unixTimestamp;
+                            string fileinfoURL = SearchUrl + "?func=getToggle&id=" + s + "&w=F&pg=0&now=" + unixTimestamp;
                             string fileinfo = (await RequestStringWithCookiesAndRetry(fileinfoURL)).Content;
-                            release.Link = new Uri(SiteLink.ToString() + "torrent/download.php?id=" + s);
+                            release.Link = new Uri(DownloadUrl + "?id=" + s);
+                            release.Guid = release.Link;
+                            release.Comments = release.Link;
                             string[] fileinf = fileinfo.Split(new string[] { "\\\\" }, StringSplitOptions.None);
                             if (fileinf.Length > 1)
                                 release.Title = fileinf[1];
@@ -143,7 +147,7 @@ namespace Jackett.Common.Indexers
                             release.Grabs = int.Parse(s);
                             goto default;
                         case 26:
-                            /*This is the last element for the torrent. So add it to releases and start parsing to new torrent*/
+                            /* This is the last element for the torrent. So add it to releases and start parsing to new torrent */
                             i = 0;
                             release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
                             //todo Added some basic configuration need to improve it
@@ -152,7 +156,7 @@ namespace Jackett.Common.Indexers
                             release.DownloadVolumeFactor = 1;
                             release.UploadVolumeFactor = 1;
 
-                            if ((already_founded + releases.Count) < limit)
+                            if ((already_found + releases.Count) < limit)
                             {
                                 releases.Add(release);
                             }
@@ -178,7 +182,8 @@ namespace Jackett.Common.Indexers
             return releases;
         }
         /* Search is possible only based by Series ID. 
-         * All known series ID is on main page, with their attributes. (ID, EngName, HunName, imdbid)*/
+         * All known series ID is on main page, with their attributes. (ID, EngName, HunName, imdbid)
+         */
 
         /// <summary>
         /// Get all series info known by site
@@ -192,7 +197,7 @@ namespace Jackett.Common.Indexers
         protected async Task<Boolean> GetSeriesInfo()
         {
 
-            var result = (await RequestStringWithCookiesAndRetry("https://tvstore.me/torrent/browse.php")).Content;
+            var result = (await RequestStringWithCookiesAndRetry(BrowseUrl)).Content;
 
             CQ dom = result;
             var scripts = dom["script"];
@@ -227,7 +232,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            /* If series from sites are indexed than we dont need to reindex them.*/
+            /* If series from sites are indexed than we dont need to reindex them. */
             if (series == null || series.IsEmpty())
             {
                 await GetSeriesInfo();
@@ -238,7 +243,7 @@ namespace Jackett.Common.Indexers
             WebClientStringResult results;
 
             string searchString = "";
-            /* SearcString format is the following: Seriesname 1X09*/
+            /* SearcString format is the following: Seriesname 1X09 */
             if (!query.SearchTerm.Equals(""))
             {
                 searchString += query.SanitizedSearchTerm;
@@ -257,7 +262,7 @@ namespace Jackett.Common.Indexers
             string exactSearchURL = SearchUrl + "?gyors=" + base64coded +"&p="+ page +"&now=" + unixTimestamp.ToString();
             results = await RequestStringWithCookiesAndRetry(exactSearchURL);
 
-            /* Parse page Information from result*/
+            /* Parse page Information from result */
             string content = results.Content;
             var splits = content.Split('\\');
             int maxfounded = int.Parse(splits[0]);
@@ -269,7 +274,7 @@ namespace Jackett.Common.Indexers
             var limit = query.Limit;
             if (limit == 0)
                 limit = 100;
-            /* First page content is already ready*/
+            /* First page content is already ready */
             releases.AddRange(await ParseTorrents(results, query, releases.Count, limit));
 
             for (page =2;(page<=pages && releases.Count<limit);page++)
