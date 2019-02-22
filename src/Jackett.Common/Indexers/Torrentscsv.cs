@@ -37,19 +37,19 @@ namespace Jackett.Common.Indexers {
             Language = "en-us";
             Type = "public";
 
-            // Dummy mappings for sonarr, radarr, etc
-            AddCategoryMapping (1, TorznabCatType.TV);
-            AddCategoryMapping (2, TorznabCatType.Movies);
-            AddCategoryMapping (3, TorznabCatType.Console);
-            AddCategoryMapping (4, TorznabCatType.Audio);
-            AddCategoryMapping (5, TorznabCatType.PC);
-            AddCategoryMapping (6, TorznabCatType.XXX);
-            AddCategoryMapping (7, TorznabCatType.Other);
-            AddCategoryMapping (8, TorznabCatType.Books);
+            // dummy mappings for sonarr, radarr, etc since torrents.csv doesnt return categories
+            AddCategoryMapping (1000, TorznabCatType.Console);
+            AddCategoryMapping (2000, TorznabCatType.Movies);
+            AddCategoryMapping (3000, TorznabCatType.Audio);
+            AddCategoryMapping (4000, TorznabCatType.PC);
+            AddCategoryMapping (5000, TorznabCatType.TV);
+            AddCategoryMapping (6000, TorznabCatType.XXX);
+            AddCategoryMapping (7000, TorznabCatType.Other);
+            AddCategoryMapping (8000, TorznabCatType.Books);
 
             TorznabCaps.SupportsImdbSearch = false;
 
-            webclient.requestDelay = 1;
+            webclient.requestDelay = 0;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration (JToken configJson) {
@@ -94,20 +94,39 @@ namespace Jackett.Common.Indexers {
 
                     // construct magnet link from infohash with all public trackers known to man
                     string magnet_uri = "magnet:?xt=urn:btih:" + torrent.Value<JToken> ("infohash") +
-                        "&tr=udp://tracker.opentrackr.org:1337/announce" +
-                        "&tr=udp://tracker.leechers-paradise.org:6969" +
                         "&tr=udp://tracker.coppersurfer.tk:6969/announce" +
-                        "&tr=udp://tracker1.itzmx.com:8080/announce" +
-                        "&tr=udp://explodie.org:6969/announce" +
+                        "&tr=udp://tracker.leechers-paradise.org:6969/announce" +
+                        "&tr=udp://tracker.internetwarriors.net:1337/announce" +
+                        "&tr=udp://tracker.opentrackr.org:1337/announce" +
                         "&tr=udp://9.rarbg.to:2710/announce" +
                         "&tr=udp://exodus.desync.com:6969/announce" +
-                        "&tr=udp://tracker.openbittorrent.com:80" +
-                        "&tr=udp://torrent.gresille.org:80/announce" +
-                        "&tr=udp://glotorrents.pw:6969/announce" +
-                        "&tr=http://tracker3.itzmx.com:6961/announce" +
-                        "&tr=udp://tracker.internetwarriors.net:1337/announce" +
-                        "&tr=udp://open.demonii.com:1337/announce" +
-                        "&tr=udp://p4p.arenabg.com:1337";
+                        "&tr=udp://explodie.org:6969/announce" +
+                        "&tr=udp://tracker2.itzmx.com:6961/announce" +
+                        "&tr=udp://tracker1.itzmx.com:8080/announce" +
+                        "&tr=udp://tracker.torrent.eu.org:451/announce" +
+                        "&tr=udp://tracker.tiny-vps.com:6969/announce" +
+                        "&tr=udp://tracker.port443.xyz:6969/announce" +
+                        "&tr=udp://thetracker.org:80/announce" +
+                        "&tr=udp://open.stealth.si:80/announce" +
+                        "&tr=udp://open.demonii.si:1337/announce" +
+                        "&tr=udp://ipv4.tracker.harry.lu:80/announce" +
+                        "&tr=udp://denis.stalker.upeer.me:6969/announce" +
+                        "&tr=udp://tracker1.wasabii.com.tw:6969/announce" +
+                        "&tr=udp://tracker.dler.org:6969/announce" +
+                        "&tr=udp://tracker.cyberia.is:6969/announce" +
+                        "&tr=udp://tracker4.itzmx.com:2710/announce" +
+                        "&tr=udp://tracker.uw0.xyz:6969/announce" +
+                        "&tr=udp://tracker.moeking.me:6969/announce" +
+                        "&tr=udp://retracker.lanta-net.ru:2710/announce" +
+                        "&tr=udp://tracker.nyaa.uk:6969/announce" +
+                        "&tr=udp://tracker.novg.net:6969/announce" +
+                        "&tr=udp://tracker.iamhansen.xyz:2000/announce" +
+                        "&tr=udp://tracker.filepit.to:6969/announce" +
+                        "&tr=udp://tracker.dyn.im:6969/announce" +
+                        "&tr=udp://torrentclub.tech:6969/announce" +
+                        "&tr=udp://tracker.tvunderground.org.ru:3218/announce" +
+                        "&tr=udp://tracker.open-tracker.org:1337/announce" +
+                        "&tr=udp://tracker.justseed.it:1337/announce"; 
 
                     release.MagnetUri = new Uri (magnet_uri);
                     release.InfoHash = torrent.Value<JToken> ("infohash").ToString ();
@@ -116,9 +135,7 @@ namespace Jackett.Common.Indexers {
                     double createdunix = torrent.Value<int> ("created_unix");
                     System.DateTime dateTime = new System.DateTime (1970, 1, 1, 0, 0, 0, 0);
                     dateTime = dateTime.AddSeconds (createdunix);
-
                     release.PublishDate = dateTime;
-                    release.Category = new List<int> { TorznabCatType.Other.ID };
                     release.Seeders = torrent.Value<int> ("seeders");
                     release.Peers = torrent.Value<int> ("leechers") + release.Seeders;
                     release.Size = torrent.Value<long> ("size_bytes");
@@ -128,13 +145,43 @@ namespace Jackett.Common.Indexers {
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 
+		    // dummy mappings for sonarr, radarr, etc
+                    string categories = string.Join (";", MapTorznabCapsToTrackers (query));
+                    if (!string.IsNullOrEmpty (categories)) {
+                        if (categories.Contains ("1000")) {
+                            release.Category = new List<int> { TorznabCatType.Console.ID };
+                        }
+                        if (categories.Contains ("2000")) {
+                            release.Category = new List<int> { TorznabCatType.Movies.ID };
+                        }
+                        if (categories.Contains ("3000")) {
+                            release.Category = new List<int> { TorznabCatType.Audio.ID };
+                        }
+                        if (categories.Contains ("4000")) {
+                            release.Category = new List<int> { TorznabCatType.PC.ID };
+                        }
+                        if (categories.Contains ("5000")) {
+                            release.Category = new List<int> { TorznabCatType.TV.ID };
+                        }
+                        if (categories.Contains ("6000")) {
+                            release.Category = new List<int> { TorznabCatType.XXX.ID };
+                        }
+                        if (categories.Contains ("7000")) {
+                            release.Category = new List<int> { TorznabCatType.Other.ID };
+                        }
+                        if (categories.Contains ("8000")) {
+                            release.Category = new List<int> { TorznabCatType.Books.ID };
+                        }
+                    }
+                    // for null category
+                    if (string.IsNullOrEmpty (categories)) {
+                        release.Category = new List<int> { TorznabCatType.Other.ID };
+                    }
                     releases.Add (release);
                 }
-
             } catch (Exception ex) {
                 OnParseError (response.Content, ex);
             }
-
             return releases;
         }
     }
