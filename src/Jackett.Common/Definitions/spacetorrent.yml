@@ -10,67 +10,13 @@
 
   caps:
     categorymappings:
-      - {id: 41, cat: PC/Phone-Android, desc: "Applications / Android"}
-      - {id: 42, cat: PC/Phone-IOS, desc: "Applications / iOS"}
-      - {id: 57, cat: Books/Comics, desc: "Ebooks / Bandes dessinées"}
-      - {id: 58, cat: XXX, desc: "Ebooks / Bandes dessinées X"}
-      - {id: 31, cat: Books/Magazines, desc: "Ebooks / Journaux"}
-      - {id: 32, cat: Books/Ebook, desc: "Ebooks / Livres"}
-      - {id: 59, cat: Books/Comics, desc: "Ebooks / Manga"}
-      - {id: 77, cat: Movies/UHD, desc: "Films / 4K rip"}
-      - {id: 23, cat: Movies, desc: "Films / Animés"}
-      - {id: 49, cat: Movies/BluRay, desc: "Films / BDrip"}
-      - {id: 51, cat: Movies/BluRay, desc: "Films / BluRay 1080"}
-      - {id: 52, cat: Movies/BluRay, desc: "Films / BluRay 4K"}
-      - {id: 50, cat: Movies/BluRay, desc: "Films / BluRay 720"}
-      - {id: 19, cat: Movies/BluRay, desc: "Films / BRrip"}
-      - {id: 74, cat: TV/Documentary, desc: "Films / Documentaires"}
-      - {id: 20, cat: Movies/DVD, desc: "Films / DVD-R 5"}
-      - {id: 48, cat: Movies/DVD, desc: "Films / DVD-R 9"}
-      - {id: 53, cat: Movies/DVD, desc: "Films / DVDrip"}
-      - {id: 64, cat: Movies/HD, desc: "Films / HDLight 1080"}
-      - {id: 63, cat: Movies/HD, desc: "Films / HDLight 720"}
-      - {id: 55, cat: Movies/HD, desc: "Films / HDrip 1080"}
-      - {id: 54, cat: Movies/HD, desc: "Films / HDrip 720"}
-      - {id: 60, cat: Movies/HD, desc: "Films / HDTV"}
-      - {id: 62, cat: Movies/HD, desc: "Films / HDTV 1080"}
-      - {id: 61, cat: Movies/HD, desc: "Films / HDTV 720"}
-      - {id: 75, cat: Movies/SD, desc: "Films / VHSrip"}
-      - {id: 65, cat: Movies/WEBDL, desc: "Films / Web-DL"}
-      - {id: 67, cat: Movies/WEBDL, desc: "Films / Web-DL 1080"}
-      - {id: 68, cat: Movies/WEBDL, desc: "Films / Web-DL 4K"}
-      - {id: 69, cat: Movies/WEBDL, desc: "Films / Web-DL 4K"}
-      - {id: 66, cat: Movies/WEBDL, desc: "Films / Web-DL 720"}
-      - {id: 70, cat: Movies/WEBDL, desc: "Films / WEBrip"}
-      - {id: 72, cat: Movies/WEBDL, desc: "Films / WEBrip 1080"}
-      - {id: 73, cat: Movies/WEBDL, desc: "Films / WEBrip 4K"}
-      - {id: 71, cat: Movies/WEBDL, desc: "Films / WEBrip 720"}
-      - {id: 9, cat: XXX, desc: "Films X"}
-      - {id: 76, cat: Console/3DS, desc: "Jeux / 3DS"}
-      - {id: 29, cat: PC/Phone-Android, desc: "Jeux / Android"}
-      - {id: 12, cat: Console, desc: "Jeux / GameBoy"}
-      - {id: 45, cat: Console, desc: "Jeux / GameBoy Advance"}
-      - {id: 30, cat: PC/Phone-IOS, desc: "Jeux / iOS"}
-      - {id: 46, cat: PC/Mac, desc: "Jeux / Mac"}
-      - {id: 4, cat: PC/Games, desc: "Jeux / PC "}
-      - {id: 36, cat: Console/PSP, desc: "Jeux / PS1"}
-      - {id: 37, cat: Console/PSP, desc: "Jeux / PS2"}
-      - {id: 33, cat: Console/PS3, desc: "Jeux / PS3"}
-      - {id: 34, cat: Console/PS4, desc: "Jeux / PS4"}
-      - {id: 78, cat: Console/Wii, desc: "Jeux / Wii"}
-      - {id: 38, cat: Console/Xbox, desc: "Jeux / Xbox"}
-      - {id: 40, cat: Console/Xbox, desc: "Jeux / Xbox One"}
-      - {id: 39, cat: Console/Xbox 360, desc: "Jeux / Xbox360"}
-      - {id: 28, cat: PC/Mac, desc: "Logiciels / Apple"}
-      - {id: 26, cat: PC, desc: "Logiciels / Linux"}
-      - {id: 27, cat: PC/0day, desc: "Logiciels / Windows"}
-      - {id: 56, cat: Audio/Lossless, desc: "Musiques / FLAC"}
-      - {id: 6, cat: Audio/MP3, desc: "Musiques / MP3"}
-      - {id: 7, cat: TV, desc: "Séries"}
-      - {id: 44, cat: XXX, desc: "Séries  X"}
-      - {id: 47, cat: TV, desc: "Séries animées"}
-      - {id: 43, cat: TV/HD, desc: "Séries HD"}
-      - {id: 0, cat: Other, desc: "Other"}
+      - {id: 1, cat: Audio, desc: "Musique"}
+      - {id: 2, cat: Movies, desc: "Film"}
+      - {id: 3, cat: TV, desc: "Série"}
+      - {id: 4, cat: Console, desc: "Jeux"}
+      - {id: 5, cat: Books, desc: "Ebook"}
+      - {id: 6, cat: PC, desc: "Logiciels"}
+      - {id: 7, cat: XXX, desc: "Contenu Adulte"}
 
     modes:
       search: [q]
@@ -144,8 +90,14 @@
       size:
         selector: td:nth-child(5)
       seeders:
+        text: "0"
+      seeders:
+        optional: true
         selector: td:nth-child(6)
       leechers:
+        text: "0"
+      leechers:
+        optional: true
         selector: td:nth-child(7)
       downloadvolumefactor:
         case:
