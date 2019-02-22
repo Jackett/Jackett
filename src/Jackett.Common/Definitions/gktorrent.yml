@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.gktorrent.tv/
+    - https://www.gktorrent.cx/
   legacylinks:
     - https://www.gktorrent.com/
     - http://www.gktorrent.com/
@@ -24,6 +24,7 @@
     - https://www.gktorrent.me/
     - https://www.rantop.org/
     - https://www.gktorrent.net/
+    - https://www.gktorrent.tv/
   caps:
     categorymappings:
       - {id: movies, cat: Movies, desc: "Movies"}
