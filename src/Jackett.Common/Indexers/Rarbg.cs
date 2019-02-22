@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -37,6 +38,7 @@ namespace Jackett.Common.Indexers
         private DateTime lastTokenFetch;
         private string token;
         private string app_id;
+        private bool provideTorrentLink = false;
 
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
@@ -56,6 +58,10 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";
             Type = "public";
+
+            var provideTorrentLinkItem = new ConfigurationData.BoolItem { Value = false };
+            provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
+            configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
 
             TorznabCaps.SupportsImdbSearch = true;
 
@@ -89,6 +95,17 @@ namespace Jackett.Common.Indexers
             app_id = "jackett_v" + EnvironmentUtil.JackettVersion;
         }
 
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            var provideTorrentLinkItem = (ConfigurationData.BoolItem)configData.GetDynamic("providetorrentlink");
+            if (provideTorrentLinkItem != null)
+            {
+                provideTorrentLink = provideTorrentLinkItem.Value;
+            }
+        }
+
         private async Task CheckToken()
         {
             if (!HasValidToken)
@@ -109,7 +126,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
@@ -210,14 +227,15 @@ namespace Jackett.Common.Indexers
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
                     var release = new ReleaseInfo();
-                    release.Title = item.Value<string>("title");
+                    release.Title = WebUtilityHelpers.UrlDecode(item.Value<string>("title"), Encoding);
                     release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
 
                     release.Comments = new Uri(item.Value<string>("info_page"));
-                    release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
+                    if (provideTorrentLink)
+                        release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
 
                     var episode_info = item.Value<JToken>("episode_info");
