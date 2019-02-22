@@ -62,6 +62,8 @@ namespace Jackett.Common.Models
                 var parameters = new List<string>() { "q", "season", "ep" };
                 if (SupportsTVRageSearch)
                     parameters.Add("rid");
+                if (SupportsImdbSearch)
+                    parameters.Add("imdbid");
                 return string.Join(",", parameters);
             }
         }
