@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers
     {
 
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string loginPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
+        private string LoginPageUrl { get { return SiteLink + "login.php?returnto=%2F"; } }
         private string SearchUrl { get { return SiteLink + "torrent/br_process.php"; } }
         private string DownloadUrl { get { return SiteLink + "torrent/download.php"; } }
         private string BrowseUrl { get { return SiteLink + "torrent/browse.php"; } }
@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var loginPage = await RequestStringWithCookies(loginPageUrl, string.Empty);
+            var loginPage = await RequestStringWithCookies(LoginPageUrl, string.Empty);
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
