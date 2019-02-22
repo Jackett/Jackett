@@ -47,6 +47,8 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVHD);
+            AddCategoryMapping(3, TorznabCatType.TVSD);
 
         }
 
