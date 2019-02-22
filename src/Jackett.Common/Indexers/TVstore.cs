@@ -244,7 +244,7 @@ namespace Jackett.Common.Indexers
 
             string searchString = "";
             /* SearcString format is the following: Seriesname 1X09 */
-            if (!query.SearchTerm.Equals(""))
+            if (query.SearchTerm != null && !query.SearchTerm.Equals(""))
             {
                 searchString += query.SanitizedSearchTerm;
                 if (query.Season != 0)
