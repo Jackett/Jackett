@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -44,7 +44,7 @@ namespace Jackett.Common.Indexers
 
         private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
 
-        public Rarbg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
                 description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                 link: "https://rarbg.to/",
@@ -227,7 +227,7 @@ namespace Jackett.Common.Indexers
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
                     var release = new ReleaseInfo();
-                    release.Title = WebUtilityHelpers.UrlDecode(item.Value<string>("title"), Encoding);
+                    release.Title = WebUtility.HtmlDecode(item.Value<string>("title"));
                     release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
