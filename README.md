@@ -61,6 +61,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * shokweb
  * ShowRSS
  * SkyTorrentsClone
+ * SolidTorrents
  * sukebei.Nyaa.si
  * sukebei-Pantsu
  * The Pirate Bay (TPB)
