@@ -1,39 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Version>0.0.0</Version>
+    <NoWarn>NU1605</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.10" />
+    <PackageReference Include="AngleSharp" Version="0.10.1" />
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="2.2.24" />
     <PackageReference Include="CloudFlareUtilities" Version="1.2.0" />
-    <PackageReference Include="CommandLineParser" Version="2.3.0" />
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+    <PackageReference Include="CsQuery.NETStandard" Version="1.3.6.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NLog" Version="4.5.9" />
-    <PackageReference Include="SharpZipLib" Version="1.0.0" />
-    <PackageReference Include="YamlDotNet" Version="5.0.1" />
-  </ItemGroup>
-
-  <!-- Conditionally obtain references for the .NET Full framework target -->
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
-    <PackageReference Include="CsQuery" Version="1.3.5-beta5" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.2" />
-    <Reference Include="System.ServiceProcess" />
-  </ItemGroup>
-
-  <!-- Conditionally obtain references for the .NETStandard target -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="CsQuery.NETStandard" Version="1.3.6.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="SharpZipLib" Version="1.1.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.1.1" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
+    <PackageReference Include="YamlDotNet" Version="5.3.0" />    
   </ItemGroup>
 
   <ItemGroup>

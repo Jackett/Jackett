@@ -28,7 +28,7 @@
       - name: re_replace
         args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
     rows:
-      selector: "table.forum_header_border tr[name='hover'].forum_header_border"
+      selector: "table.forum_header_border tr[name='hover'].forum_header_border:has(a.magnet)" # some torrents don't have any download links, skip them
       filters:
         - name: andmatch
     fields:
@@ -49,6 +49,8 @@
       download:
         selector: td:nth-child(3) a.magnet, td:nth-child(3) a
         attribute: href
+      size:
+        text: "500 MB"
       size:
         optional: true
         selector: td:nth-child(4)

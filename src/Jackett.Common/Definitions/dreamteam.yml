@@ -30,23 +30,6 @@
       - {id: 144, cat: Movies, desc: "9.5 packages"}
       - {id: 145, cat: Movies, desc: "9.6 filmography"}
       - {id: 143, cat: Movies, desc: "9.7 Tv Movies"}
-#      - {id: 130, cat: , desc: ""}
-#      - {id: 131, cat: , desc: ""}
-#      - {id: 132, cat: , desc: ""}
-#      - {id: 133, cat: , desc: ""}
-#      - {id: 134, cat: , desc: ""}
-#      - {id: 135, cat: , desc: ""}
-#      - {id: 136, cat: , desc: ""}
-#      - {id: 137, cat: , desc: ""}
-#      - {id: 138, cat: , desc: ""}
-#      - {id: 139, cat: , desc: ""}
-#      - {id: 140, cat: , desc: ""}
-#      - {id: 141, cat: , desc: ""}
-#      - {id: 142, cat: , desc: ""}
-#      - {id: 144, cat: , desc: ""}
-#      - {id: 145, cat: , desc: ""}
-#      - {id: 143, cat: , desc: ""}
-#      - {id: 116, cat: , desc: ""}
       - {id: 116, cat: Movies, desc: "Two foreign films integrated subtitles"}
       - {id: 146, cat: Movies, desc: "CAM / TS / TC"}
       - {id: 147, cat: Movies, desc: "DVDSCR / PPVRiP / WebRip / R5"}
@@ -55,24 +38,10 @@
       - {id: 150, cat: Movies, desc: "MicroHD"}
       - {id: 151, cat: Movies, desc: "HD - WEB-DL"}
       - {id: 152, cat: Movies, desc: "Tv Movies"}
-#      - {id: 242, cat: , desc: ""}
       - {id: 153, cat: Movies, desc: "Packages"}
       - {id: 154, cat: Movies, desc: "filmography"}
       - {id: 243, cat: Movies, desc: "HD 1080p"}
       - {id: 244, cat: Movies, desc: "HD 480p"}
-#      - {id: 146, cat: , desc: ""}
-#      - {id: 147, cat: , desc: ""}
-#      - {id: 148, cat: , desc: ""}
-#      - {id: 149, cat: , desc: ""}
-#      - {id: 150, cat: , desc: ""}
-#      - {id: 151, cat: , desc: ""}
-#      - {id: 152, cat: , desc: ""}
-#      - {id: 242, cat: , desc: ""}
-#      - {id: 153, cat: , desc: ""}
-#      - {id: 154, cat: , desc: ""}
-#      - {id: 243, cat: , desc: ""}
-#      - {id: 244, cat: , desc: ""}
-#      - {id: 117, cat: , desc: ""}
       - {id: 117, cat: Movies, desc: "???????e? ?a???e?"}
       - {id: 155, cat: Movies, desc: "CAM / TS / TC"}
       - {id: 156, cat: Movies, desc: "SCR / PPVRiP / Webrip / R5"}
@@ -85,18 +54,6 @@
       - {id: 163, cat: Movies, desc: "TV Movies"}
       - {id: 164, cat: Movies, desc: "?a?eta 8"}
       - {id: 165, cat: Movies, desc: "F??µ???af?e?"}
-#      - {id: 155, cat: , desc: ""}
-#      - {id: 156, cat: , desc: ""}
-#      - {id: 157, cat: , desc: ""}
-#      - {id: 158, cat: , desc: ""}
-#      - {id: 159, cat: , desc: ""}
-#      - {id: 160, cat: , desc: ""}
-#      - {id: 161, cat: , desc: ""}
-#      - {id: 162, cat: , desc: ""}
-#      - {id: 163, cat: , desc: ""}
-#      - {id: 164, cat: , desc: ""}
-#      - {id: 165, cat: , desc: ""}
-#      - {id: 118, cat: , desc: ""}
       - {id: 118, cat: TV, desc: "Foreign Television external subtitles"}
       - {id: 166, cat: TV, desc: "SD"}
       - {id: 167, cat: TV, desc: "720p"}
@@ -104,13 +61,6 @@
       - {id: 169, cat: TV, desc: "Sport"}
       - {id: 170, cat: TV, desc: "documentaries"}
       - {id: 171, cat: TV, desc: "Packages"}
-#      - {id: 166, cat: , desc: ""}
-#      - {id: 167, cat: , desc: ""}
-#      - {id: 168, cat: , desc: ""}
-#      - {id: 169, cat: , desc: ""}
-#      - {id: 170, cat: , desc: ""}
-#      - {id: 171, cat: , desc: ""}
-#      - {id: 119, cat: , desc: ""}
       - {id: 119, cat: TV, desc: "foreign Television integrated subtitles"}
       - {id: 172, cat: TV, desc: "SD"}
       - {id: 173, cat: TV, desc: "720p"}
@@ -119,14 +69,6 @@
       - {id: 176, cat: TV, desc: "documentaries"}
       - {id: 177, cat: TV, desc: "Tv Rips"}
       - {id: 178, cat: TV, desc: "Packages"}
-#      - {id: 172, cat: , desc: ""}
-#      - {id: 173, cat: , desc: ""}
-#      - {id: 174, cat: , desc: ""}
-#      - {id: 175, cat: , desc: ""}
-#      - {id: 176, cat: , desc: ""}
-#      - {id: 177, cat: , desc: ""}
-#      - {id: 178, cat: , desc: ""}
-#      - {id: 120, cat: , desc: ""}
       - {id: 120, cat: TV, desc: "Greek Television"}
       - {id: 179, cat: TV, desc: "SD"}
       - {id: 180, cat: TV, desc: "720p"}
@@ -135,14 +77,6 @@
       - {id: 183, cat: TV, desc: "five documentaries"}
       - {id: 184, cat: TV, desc: "six Tv Rips"}
       - {id: 185, cat: TV, desc: "Packages"}
-#      - {id: 179, cat: , desc: ""}
-#      - {id: 180, cat: , desc: ""}
-#      - {id: 181, cat: , desc: ""}
-#      - {id: 182, cat: , desc: ""}
-#      - {id: 183, cat: , desc: ""}
-#      - {id: 184, cat: , desc: ""}
-#      - {id: 185, cat: , desc: ""}
-#      - {id: 122, cat: , desc: ""}
       - {id: 122, cat: Audio, desc: "?e?? ???s???"}
       - {id: 216, cat: Audio, desc: "1. DJs Stuff & Promos"}
       - {id: 217, cat: Audio, desc: "2. DJs Stuff & Promos (Flac)"}
@@ -156,7 +90,6 @@
       - {id: 225, cat: Audio, desc: "9.1 Varius Artist"}
       - {id: 226, cat: Audio, desc: "9.2 Compact Disc Club"}
       - {id: 227, cat: Audio, desc: "9.3 ???s??a Video Clips"}
-#      - {id: 123, cat: , desc: ""}
       - {id: 123, cat: Audio, desc: "???????? ???s???"}
       - {id: 228, cat: Audio, desc: "1. DJs Stuff & Promos"}
       - {id: 229, cat: Audio, desc: "2. DJs Stuff & Promos (Flac)"}
@@ -171,7 +104,6 @@
       - {id: 238, cat: Audio, desc: "9.2 Varius Artist"}
       - {id: 239, cat: Audio, desc: "9.3 Compact Disc Club"}
       - {id: 240, cat: Audio, desc: "9.4 ???s??a Video Clips"}
-#      - {id: 121, cat: , desc: ""}
       - {id: 121, cat: Movies, desc: "children"}
       - {id: 186, cat: Movies, desc: "children's films external subtitles"}
       - {id: 187, cat: Movies, desc: "two children's films integrated subtitles"}
@@ -182,16 +114,6 @@
       - {id: 192, cat: Movies, desc: "Anime external subtitles"}
       - {id: 193, cat: Movies, desc: "Anime integrated subtitles"}
       - {id: 194, cat: Movies, desc: "Anime Metaglotismenes"}
-#      - {id: 186, cat: , desc: ""}
-#      - {id: 187, cat: , desc: ""}
-#      - {id: 188, cat: , desc: ""}
-#      - {id: 189, cat: , desc: ""}
-#      - {id: 190, cat: , desc: ""}
-#      - {id: 191, cat: , desc: ""}
-#      - {id: 192, cat: , desc: ""}
-#      - {id: 193, cat: , desc: ""}
-#      - {id: 194, cat: , desc: ""}
-#      - {id: 128, cat: , desc: ""}
       - {id: 128, cat: Console, desc: "9.1 ?a????d?a"}
       - {id: 195, cat: Console, desc: "Windows Games"}
       - {id: 196, cat: Console, desc: "Nintendo DS"}
@@ -201,41 +123,23 @@
       - {id: 200, cat: Console, desc: "Sony PSP"}
       - {id: 201, cat: Console, desc: "Wii"}
       - {id: 202, cat: Console, desc: "XboX 360"}
-#      - {id: 124, cat: , desc: ""}
       - {id: 124, cat: PC, desc: "9.2 Applications"}
       - {id: 203, cat: PC, desc: "Applications Windows"}
       - {id: 204, cat: PC, desc: "Applications Mac"}
       - {id: 205, cat: PC, desc: "Linux Applications"}
-#      - {id: 203, cat: , desc: ""}
-#      - {id: 204, cat: , desc: ""}
-#      - {id: 205, cat: , desc: ""}
-#      - {id: 126, cat: , desc: ""}
       - {id: 126, cat: Books, desc: "9.3 Electronic Books"}
       - {id: 206, cat: Books, desc: "Electronic books"}
       - {id: 207, cat: Books, desc: "Magazines"}
       - {id: 208, cat: Books, desc: "Comic Books"}
-#      - {id: 206, cat: , desc: ""}
-#      - {id: 207, cat: , desc: ""}
-#      - {id: 208, cat: , desc: ""}
-#      - {id: 125, cat: , desc: ""}
       - {id: 125, cat: Other, desc: "9.4 Gallery"}
       - {id: 209, cat: Other, desc: "Gallery"}
       - {id: 210, cat: Other, desc: "Gallery HD"}
       - {id: 211, cat: Other, desc: "Photos 3D"}
       - {id: 212, cat: Other, desc: "Wallpapers"}
       - {id: 213, cat: Other, desc: "Screensavers"}
-#      - {id: 209, cat: , desc: ""}
-#      - {id: 210, cat: , desc: ""}
-#      - {id: 211, cat: , desc: ""}
-#      - {id: 212, cat: , desc: ""}
-#      - {id: 213, cat: , desc: ""}
-#      - {id: 127, cat: , desc: ""}
       - {id: 127, cat: PC/Phone-Other, desc: "9.5 Mobile / Miscellaneous"}
       - {id: 214, cat: PC/Phone-Other, desc: "Mobile"}
       - {id: 215, cat: PC/Phone-Other, desc: "Miscellaneous"}
-#      - {id: 214, cat: , desc: ""}
-#      - {id: 215, cat: , desc: ""}
-#      - {id: 129, cat: , desc: ""}
       - {id: 129, cat: Other, desc: "9.6 Blocked DREAM TEAM"}
 
     modes:
@@ -256,7 +160,7 @@
 
   download:
     before:
-      path: "takethanks.php"
+      path: takethanks.php
       method: "post"
       inputs:
         torrentid: "{{ .DownloadUri.Query.id }}"

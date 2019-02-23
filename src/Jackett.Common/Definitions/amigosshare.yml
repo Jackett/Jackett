@@ -1,0 +1,291 @@
+---
+  site: amigosshare
+  name: Amigos Share Club
+  description: "Amigos Share Club is a Brazilian Private site for TV / MOVIES / GENERAL"
+  language: pt-br
+  type: private
+  encoding: UTF-8
+  links:
+    - https://amigos-share.club/
+  legacylinks:
+    - http://amigos-share.club/
+
+  caps:
+    categorymappings:
+      - {id: 74, cat: XXX, desc: "Adultos: XXX"}
+      - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
+      - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
+      - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
+      - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
+      - {id: 23, cat: PC/Phone-Android, desc: "Aplicativos: Android"}
+      - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
+      - {id: 26, cat: PC/Phone-IOS, desc: "Aplicativos: iPhone"}
+      - {id: 27, cat: PC/Phone-IOS, desc: "Aplicativos: iPad"}
+      - {id: 28, cat: PC/Phone-IOS, desc: "Aplicativos: iPod"}
+      - {id: 71, cat: Books, desc: "Apostila: Cursos"}
+      - {id: 72, cat: Books, desc: "Apostila: Apostila"}
+      - {id: 67, cat: Books, desc: "Ebook: Livros"}
+      - {id: 68, cat: Books, desc: "Ebook: Revistas"}
+      - {id: 85, cat: Movies, desc: "Filmes: Guerra"}
+      - {id: 81, cat: Movies, desc: "Filmes: Musical"}
+      - {id: 17, cat: Movies, desc: "Filmes: Biografia"}
+      - {id: 16, cat: Movies, desc: "Filmes: Esportes"}
+      - {id: 15, cat: Movies, desc: "Filmes: Ficção"}
+      - {id: 14, cat: Movies, desc: "Filmes: Infantil"}
+      - {id: 13, cat: Movies, desc: "Filmes: Nacionais"}
+      - {id: 12, cat: Movies, desc: "Filmes: Policial"}
+      - {id: 11, cat: Movies, desc: "Filmes: Religioso"}
+      - {id: 10, cat: Movies, desc: "Filmes: Suspense"}
+      - {id: 9, cat: Movies, desc: "Filmes: Western"}
+      - {id: 8, cat: Movies, desc: "Filmes: Animação"}
+      - {id: 7, cat: Movies, desc: "Filmes: Clássicos"}
+      - {id: 6, cat: Movies, desc: "Filmes: Comédia"}
+      - {id: 5, cat: Movies, desc: "Filmes: Documentário"}
+      - {id: 4, cat: Movies, desc: "Filmes: Drama"}
+      - {id: 3, cat: Movies, desc: "Filmes: Romance"}
+      - {id: 2, cat: Movies, desc: "Filmes: Terror"}
+      - {id: 1, cat: Movies, desc: "Filmes: Ação"}
+      - {id: 80, cat: Movies, desc: "Filmes: Aventura"}
+      - {id: 70, cat: Other, desc: "Fotos: XXX"}
+      - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
+      - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
+      - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
+      - {id: 48, cat: PC/Mac, desc: "Jogos: Mac"}
+      - {id: 49, cat: Console, desc: "Jogos: Ps1"}
+      - {id: 50, cat: Console, desc: "Jogos: Ps2"}
+      - {id: 51, cat: Console/PS3, desc: "Jogos: Ps3"}
+      - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
+      - {id: 54, cat: Console/Xbox 360, desc: "Jogos: X360"}
+      - {id: 56, cat: Console/Xbox, desc: "Jogos: Xbox"}
+      - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
+      - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
+      - {id: 57, cat: Console, desc: "Jogos: Android"}
+      - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
+      - {id: 78, cat: Console/Xbox One, desc: "Jogos: Xbox One"}
+      - {id: 29, cat: Audio, desc: "Musica: Axé"}
+      - {id: 30, cat: Audio, desc: "Musica: Eletronica"}
+      - {id: 31, cat: Audio, desc: "Musica: Funk"}
+      - {id: 32, cat: Audio, desc: "Musica: Pagode"}
+      - {id: 33, cat: Audio, desc: "Musica: Hip-Hop"}
+      - {id: 34, cat: Audio, desc: "Musica: Rap"}
+      - {id: 36, cat: Audio, desc: "Musica: Rock"}
+      - {id: 37, cat: Audio, desc: "Musica: Hard Rock"}
+      - {id: 38, cat: Audio, desc: "Musica: Blues"}
+      - {id: 39, cat: Audio, desc: "Musica: Dance"}
+      - {id: 40, cat: Audio, desc: "Musica: Dicografia"}
+      - {id: 41, cat: Audio, desc: "Musica: Erudita"}
+      - {id: 42, cat: Audio, desc: "Musica: Forró"}
+      - {id: 43, cat: Audio, desc: "Musica: Dubstep"}
+      - {id: 46, cat: Audio, desc: "Musica: Sertanejo"}
+      - {id: 45, cat: Audio, desc: "Musica: Samba"}
+      - {id: 77, cat: Audio, desc: "Musica: Outros"}
+      - {id: 76, cat: Audio, desc: "Musica: Reggae"}
+      - {id: 83, cat: Audio, desc: "Musica: Gospel"}
+      - {id: 84, cat: Audio, desc: "Musica: Game (OST)"}
+      - {id: 88, cat: TV, desc: "Series: Musical"}
+      - {id: 86, cat: TV, desc: "Series: Guerra"}
+      - {id: 105, cat: TV, desc: "Series: Biografia"}
+      - {id: 99, cat: TV/Sport, desc: "Series: Esportes"}
+      - {id: 103, cat: TV, desc: "Series: Ficção"}
+      - {id: 102, cat: TV, desc: "Series: Infantil"}
+      - {id: 89, cat: TV, desc: "Series: Nacionais"}
+      - {id: 100, cat: TV, desc: "Series: Policial"}
+      - {id: 98, cat: TV, desc: "Series: Religioso"}
+      - {id: 90, cat: TV, desc: "Series: Suspense"}
+      - {id: 91, cat: TV, desc: "Series: Western"}
+      - {id: 92, cat: TV, desc: "Series: Animação"}
+      - {id: 93, cat: TV, desc: "Series: Clássicos"}
+      - {id: 94, cat: TV, desc: "Series: Comédia"}
+      - {id: 95, cat: TV/Documentary, desc: "Series: Documentário"}
+      - {id: 96, cat: TV, desc: "Series: Drama"}
+      - {id: 97, cat: TV, desc: "Series: Romance"}
+      - {id: 101, cat: TV, desc: "Series: Terror"}
+      - {id: 104, cat: TV, desc: "Series: Ação"}
+      - {id: 24, cat: TV, desc: "Series: Cartoon"}
+      - {id: 19, cat: TV/HD, desc: "Series: HD"}
+      - {id: 20, cat: TV, desc: "Series: Seriados"}
+      - {id: 87, cat: TV, desc: "Series: Aventura"}
+      - {id: 65, cat: TV, desc: "Shows: Show"}
+      - {id: 63, cat: TV, desc: "Tv: Aberta"}
+      - {id: 62, cat: TV/Sport, desc: "Tv: Esportes"}
+      - {id: 64, cat: TV, desc: "Tv: Fechada"}
+      - {id: 73, cat: TV, desc: "Video Aula: Video Aula"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: account-login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: "yes"
+    error:
+      - selector: div.alert-error
+    test:
+      path: index.php
+      selector: a[href="account-logout.php"]
+
+  ratio:
+    path: index.php
+    selector: li:contains("Ratio:") a b
+
+  search:
+    paths:
+      # http://amigos-share.club/torrents-search.php?search=&c1=1&c19=1&c36=1&incldead=0&freeleech=0&lang=0sort=id&order=desc&page=1
+      - path: torrents-search.php
+      # site displays just 21 results, no profile options found to change this, so we attempt to fetch 5 pages
+      - path: torrents-search.php
+        inputs:
+          page: 1
+      - path: torrents-search.php
+        inputs:
+          page: 2
+      - path: torrents-search.php
+        inputs:
+          page: 3
+      - path: torrents-search.php
+        inputs:
+          page: 4
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: 0
+      freeleech: 0
+      lang: 0
+      sort: "id"
+      order: "desc"
+    rows:
+      selector: table.table-striped > tbody > tr:has(a[href^="torrents-details.php?id="])
+    fields:
+      title:
+        selector: a[href^="torrents-details.php?id="]
+      details:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      category:
+        selector: td:first-child img
+        attribute: src
+        case:
+        # unfortunately the site does not have category numbers on the results page, just a .png which can apply to both movies and tv.
+        # therefore I've order the list to favour movies, 
+        # also, not all .png have been verified as the site has many empty categories. their image names have been extrapolated from the cat desc.
+         "[src$=\"/XXXZ.png\"]": "74"
+         "[src$=\"/Hentai.png\"]": "75"
+         "[src$=\"/Anime.png\"]": "69"
+         "[src$=\"/Windows.png\"]": "21"
+         "[src$=\"/Mac.png\"]": "22"
+         "[src$=\"/Android.png\"]": "23"
+         "[src$=\"/Linux.png\"]": "25"
+         "[src$=\"/iPhone.png\"]": "26"
+         "[src$=\"/iPad.png\"]": "27"
+         "[src$=\"/iPod.png\"]": "28"
+         "[src$=\"/Cursos.png\"]": "71"
+         "[src$=\"/Apostila.png\"]": "72"
+         "[src$=\"/E-books.png\"]": "67"
+         "[src$=\"/Revista.png\"]": "68"
+         "[src$=\"/Aventura.png\"]": "80"
+         "[src$=\"/XXX.png\"]": "70"
+         "[src$=\"/Jogos-Ps4.png\"]": "79"
+         "[src$=\"/Jogos-PC.png\"]": "47"
+         "[src$=\"/Jogos-EmuladoreseRoms.png\"]": "61"
+         "[src$=\"/Jogos-Mac.png\"]": "48"
+         "[src$=\"/Jogos-Ps1.png\"]": "49"
+         "[src$=\"/Jogos-Ps2.png\"]": "50"
+         "[src$=\"/Jogos-Ps3.png\"]": "51"
+         "[src$=\"/Jogos-Dreamcast.png\"]": "52"
+         "[src$=\"/ogos-X360.png\"]": "54"
+         "[src$=\"/Jogos-Xbox.png\"]": "55"
+         "[src$=\"/Jogos-Wii.png\"]": "56"
+         "[src$=\"/Jogos-NintendoDS.png\"]": "58"
+         "[src$=\"/Jogos-Android.png\"]": "57"
+         "[src$=\"/Jogos-PSP.png\"]": "82"
+         "[src$=\"/Jogos-XboxOne.png\"]": "78"
+         "[src$=\"/Axe.png\"]": "29"
+         "[src$=\"/Electronica.png\"]": "30"
+         "[src$=\"/Funk.png\"]": "31"
+         "[src$=\"/Pagode.png\"]": "32"
+         "[src$=\"/Hip-Hop.png\"]": "33"
+         "[src$=\"/Rap.png\"]": "34"
+         "[src$=\"/Rock.png\"]": "36"
+         "[src$=\"/Hard-Rock.png\"]": "37"
+         "[src$=\"/Blues.png\"]": "38"
+         "[src$=\"/Dance.png\"]": "39"
+         "[src$=\"/Dicografia.png\"]": "40"
+         "[src$=\"/Erudita.png\"]": "41"
+         "[src$=\"/Forro.png\"]": "42"
+         "[src$=\"/Dubstep.png\"]": "43"
+         "[src$=\"/Sertanejo.png\"]": "46"
+         "[src$=\"/Samba.png\"]": "45"
+         "[src$=\"/Outros.png\"]": "77"
+         "[src$=\"/Reggae.png\"]": "76"
+         "[src$=\"/Gospel.png\"]": "83"
+         "[src$=\"/Game-OST.png\"]": "84"
+         "[src$=\"/Musical.png\"]": "88"
+         "[src$=\"/Guerra.png\"]": "86"
+         "[src$=\"/Biografia.png\"]": "105"
+         "[src$=\"/Esportes.png\"]": "99"
+         "[src$=\"/Ficcao.png\"]": "103"
+         "[src$=\"/Infantil.png\"]": "102"
+         "[src$=\"/Nacionais.png\"]": "89"
+         "[src$=\"/Policial.png\"]": "100"
+         "[src$=\"/Religioso.png\"]": "98"
+         "[src$=\"/Suspense.png\"]": "90"
+         "[src$=\"/Western.png\"]": "91"
+         "[src$=\"/Animacao.png\"]": "92"
+         "[src$=\"/Classicos.png\"]": "93"
+         "[src$=\"/Comedia.png\"]": "94"
+         "[src$=\"/Documentario.png\"]": "95"
+         "[src$=\"/Drama.png\"]": "96"
+         "[src$=\"/Romance.png\"]": "97"
+         "[src$=\"/Terror.png\"]": "101"
+         "[src$=\"/Acao.png\"]": "104"
+         "[src$=\"/Cartoon.png\"]": "24"
+         "[src$=\"/Serieshd.png\"]": "19"
+         "[src$=\"/Seriado.png\"]": "20"
+         "[src$=\"/Aventura.png\"]": "87"
+         "[src$=\"/Shows.png\"]": "65"
+         "[src$=\"/Aberta.png\"]": "63"
+         "[src$=\"/Esportes.png\"]": "62"
+         "[src$=\"/Fechada.png\"]": "64"
+         "[src$=\"/Videoaula.png\"]": "73"
+         "[src$=\"/Guerra.png\"]": "85"
+         "[src$=\"/Musical.png\"]": "81"
+         "[src$=\"/Biografia.png\"]": "17"
+         "[src$=\"/Esportes.png\"]": "16"
+         "[src$=\"/Ficcao.png\"]": "15"
+         "[src$=\"/Infantil.png\"]": "14"
+         "[src$=\"/Nacionais.png\"]": "13"
+         "[src$=\"/Policial.png\"]": "12"
+         "[src$=\"/Religioso.png\"]": "11"
+         "[src$=\"/Suspense.png\"]": "10"
+         "[src$=\"/Western.png\"]": "9"
+         "[src$=\"/Animacao.png\"]": "8"
+         "[src$=\"/Classicos.png\"]": "7"
+         "[src$=\"/Comedia.png\"]": "6"
+         "[src$=\"/Documentario.png\"]": "5"
+         "[src$=\"/Drama.png\"]": "4"
+         "[src$=\"/Romance.png\"]": "3"
+         "[src$=\"/Terror.png\"]": "2"
+         "[src$=\"/Acao.png\"]": "1"
+      date:
+        text: now
+      size:
+        selector: td:nth-child(2) span.label-info
+      seeders:
+        selector: td:nth-child(4)
+      leechers:
+        selector: td:nth-child(5)
+      downloadvolumefactor:
+        case:
+          "span.label-success i:contains(\"FREE\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

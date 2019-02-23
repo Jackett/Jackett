@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -167,6 +167,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("Watara Supervision", TorznabCatType.ConsoleOther, "Watara Supervision");
             AddCategoryMapping("Retro - Other", TorznabCatType.ConsoleOther, "Retro - Other");
 
+            // special categories (real categories/not platforms)
+            AddCategoryMapping("OST", TorznabCatType.AudioOther, "OST");
+            AddCategoryMapping("Applications", TorznabCatType.PC0day, "Applications");
+            AddCategoryMapping("E-Books", TorznabCatType.BooksEbook, "E-Books");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -229,7 +233,7 @@ namespace Jackett.Common.Indexers
                 string RowsSelector = ".torrent_table > tbody > tr";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
 
                 bool stickyGroup = false;

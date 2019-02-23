@@ -86,7 +86,7 @@
       label: Pin     
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form[action="/login.php"]
     cookies: ["JAVA=OK"] # avoid jscheck redirect
@@ -106,7 +106,7 @@
 
   download:
     before:
-      path: "ajax_det_poll.php"
+      path: ajax_det_poll.php
       method: "post"
       inputs:
         set_thanks: "thanks"

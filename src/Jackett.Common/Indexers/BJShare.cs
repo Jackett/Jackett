@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -26,8 +26,9 @@ namespace Jackett.Common.Indexers
         private readonly char[] _digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         private readonly Dictionary<string, string> _commonSearchTerms = new Dictionary<string, string>
         {
-            { "agents of shield", "Agents of S.H.I.E.L.D."}
-        };
+            { "agents of shield", "Agents of S.H.I.E.L.D."},
+            { "greys anatomy", "grey's anatomy"},
+    };
         
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://bj-share.me/"
@@ -104,7 +105,8 @@ namespace Jackett.Common.Indexers
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            return isAnime ? term.TrimEnd(_digits) : Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            return isAnime ? term.TrimEnd(_digits) : term;
         }
 
         private static string FixAbsoluteNumbering(string title)
@@ -126,7 +128,12 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            query = query.Clone(); // avoid modifing the original query
+            
+
             var releases = new List<ReleaseInfo>();
+
+            
 
             // if the search string is empty use the "last 24h torrents" view
             if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
@@ -137,7 +144,7 @@ namespace Jackett.Common.Indexers
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.Parse(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                     foreach (var row in rows)
                     {
@@ -269,7 +276,7 @@ namespace Jackett.Common.Indexers
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.Parse(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
 
                     ICollection<int> groupCategory = null;

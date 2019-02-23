@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://iptorrents.com/",
+            "https://www.iptorrents.com/",
             "https://ipt-update.com/",
             "https://iptorrents.eu/",
             "https://nemo.iptorrents.com/",
@@ -40,7 +41,8 @@ namespace Jackett.Common.Indexers
             "https://ipt.venom.global",
             "https://ipt.workisboring.net",
             "https://ipt.lol",
-            
+            "https://ipt.cool",
+            "https://ipt.world",
         };
 
         private new ConfigurationDataRecaptchaLogin configData

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -20,9 +21,9 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "api/v1/torrents"; } }
         private string LoginUrl { get { return SiteLink + "api/v1/auth"; } }
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataCookie configData
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
+            get { return (ConfigurationDataCookie)base.configData; }
             set { base.configData = value; }
         }
 
@@ -35,7 +36,7 @@ namespace Jackett.Common.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataBasicLogin())
+                configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "sv-sw";
@@ -72,19 +73,26 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var queryCollection = new NameValueCollection();
 
-            queryCollection.Add("username", configData.Username.Value);
-            queryCollection.Add("password", configData.Password.Value);
-
-            var loginUrl = LoginUrl + "?" + queryCollection.GetQueryString();
-            var loginResult = await RequestStringWithCookies(loginUrl, null, SiteLink);
-
-            await ConfigureIfOK(loginResult.Cookies, loginResult.Content.Contains("\"user\""), () =>
+            // TODO: implement captcha
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                throw new ExceptionWithConfigData(loginResult.Content, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                var results = await PerformQuery(new TorznabQuery());
+                if (results.Count() == 0)
+                {
+                    throw new Exception("Your cookie did not work");
+                }
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

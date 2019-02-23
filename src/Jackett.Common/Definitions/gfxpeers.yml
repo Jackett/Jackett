@@ -23,7 +23,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -32,11 +32,11 @@
     error:
       - selector: .auth_form > .warning
     test:
-      path: /torrents.php
+      path: torrents.php
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
       searchstr: "{{ .Query.Keywords }}"

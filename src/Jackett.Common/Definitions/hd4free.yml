@@ -25,7 +25,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /login
+    path: login
     method: form
     inputs:
       username: "{{ .Config.username }}"
@@ -33,11 +33,11 @@
     error:
       - selector: table.main:contains("Login Failed!")
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /filterTorrents
+      - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
@@ -100,9 +100,9 @@
           - name: re_replace
             args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
           - name: re_replace
-            args: ["(ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
           - name: re_replace
-            args: ["(ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
           "i[data-original-title=\"100% Free\"]": "0"

@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://hdbits.org
+    - https://hdbits.org/
 
   caps:
     categorymappings:
@@ -23,7 +23,7 @@
       search: [q]
 
   login:
-    path: /login
+    path: login
     method: form
     form: form
     inputs:

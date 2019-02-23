@@ -1,7 +1,7 @@
 ---
   site: bigtorrent
   name: BIGTorrent
-  description: "ratio-free Hungarian tracker"
+  description: "BIGTorrent is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: hu
   type: private
   encoding: UTF-8
@@ -41,7 +41,7 @@
       search: [q]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       username: "{{ .Config.username }}"

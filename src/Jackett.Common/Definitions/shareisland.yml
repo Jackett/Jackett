@@ -64,7 +64,7 @@
       movie-search: [q]
 
   login:
-    path: /index.php?page=login
+    path: index.php?page=login
     method: post
     inputs:
       uid: "{{ .Config.username }}"
@@ -74,12 +74,48 @@
       - selector: body:has(h1:contains("403 Forbidden")) # for banned IP notices
       - selector: td.lista > span[style="color:#FF0000;"] # Nome Utente non corretto
     test:
-      path: /index.php
+      path: index.php
       selector: a[href="logout.php"]
 
   search:
     paths:
-      - path: /index.php
+      - path: index.php
+        inputs:
+          pages: 1
+      - path: index.php
+        inputs:
+          pages: 2
+      - path: index.php
+        inputs:
+          pages: 3
+      - path: index.php
+        inputs:
+          pages: 4
+      - path: index.php
+        inputs:
+          pages: 5
+      - path: index.php
+        inputs:
+          pages: 6
+      - path: index.php
+        inputs:
+          pages: 7
+      - path: index.php
+        inputs:
+          pages: 8
+      - path: index.php
+        inputs:
+          pages: 9
+      - path: index.php
+        inputs:
+          pages: 10
+    inputs:
+      search: "{{ .Keywords }}"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      page: torrents
+      active: 0
+      order: 3
+      by: 2
     keywordsfilters:
       - name: diacritics
         args: replace
@@ -87,11 +123,6 @@
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
-    inputs:
-      search: "{{ .Keywords }}"
-      category: "{{range .Categories}}{{.}};{{end}}"
-      page: torrents
-      active: 0
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
       filters:
@@ -169,19 +200,19 @@
       size:
         selector: td:nth-last-child(3)
       date:
-        selector: td:nth-last-child(7)
+        selector: td[width="85"] # some users have an extra uploader column between the grabs and size column, see #4435
         filters:
           - name: dateparse
             args: "02/01/2006"
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td[width="85"] + td + td + td
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-last-child(6)
+        selector: td[width="85"] + td
       leechers:
-        selector: td:nth-last-child(5)
+        selector: td[width="85"] + td + td
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: "0"

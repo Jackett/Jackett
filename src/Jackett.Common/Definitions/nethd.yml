@@ -1,7 +1,7 @@
 ---
   site: nethd
   name: NetHD
-  description: "A vietnamese tracker"
+  description: "NetHD (VietTorrent) is a VIETNAMESE Private Torrent Tracker for HD MOVIES / TV"
   language: vi-vn
   type: semi-private
   encoding: UTF-8
@@ -23,7 +23,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -31,14 +31,14 @@
     error:
       - selector: form#loginform > span.warning
     test:
-      path: /torrents.php
+      path: torrents.php
 
   ratio:
-    path: /torrents.php
+    path: torrents.php
     selector: div.user-info-extend > dl > dt:contains("Ratio:") + dd
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
         method: post
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"

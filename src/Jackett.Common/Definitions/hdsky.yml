@@ -1,12 +1,12 @@
 ﻿---
   site: hdsky
   name: HDSky
-  description: "A chinese tracker"
+  description: "HDSky is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
   language: zh-cn
   type: private
   encoding: UTF-8
   links:
-    - https://hdsky.me
+    - https://hdsky.me/
 
   caps:
     categorymappings:
@@ -40,10 +40,10 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /torrents.php
+      path: torrents.php
 
   ratio:
-    path: /torrents.php
+    path: torrents.php
     selector: table#info_block
     filters:
       - name: regexp
@@ -54,7 +54,7 @@
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"

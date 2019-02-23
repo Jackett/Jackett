@@ -32,7 +32,7 @@
       movie-search: [q]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -40,11 +40,11 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /bananas
+      path: bananas
 
   search:
     paths:
-      - path: /bananas
+      - path: bananas
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

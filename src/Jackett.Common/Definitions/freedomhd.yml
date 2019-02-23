@@ -10,7 +10,7 @@
 
   download:
     before:
-      path: "list_thanks.php"
+      path: list_thanks.php
       method: "get"
       inputs:
         id: "{{ .DownloadUri.Query.id }}"

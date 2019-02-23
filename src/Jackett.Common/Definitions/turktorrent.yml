@@ -1,0 +1,162 @@
+---
+  site: turktorrent
+  name: TurkTorrent
+  description: "TurkTorrent (TT) is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: tr
+  type: private
+  encoding: ISO-8859-9
+  links:
+    - http://turktorrent.us/
+  legacylinks:
+    - http://turktorrent1.in/
+
+  caps:
+    categorymappings:
+      # animation
+      - {id: 3, cat: Movies, desc: "Animasyon GENEL"}
+      - {id: 40, cat: Movies, desc: "Animasyon Turkce"}
+      - {id: 41, cat: Movies, desc: "Animasyon TR Sub"}
+      # Documentary
+      - {id: 16, cat: TV/Documentary, desc: "Belgesel GENEL"}
+      - {id: 42, cat: TV/Documentary, desc: "Belgesel Türkçe"}
+      - {id: 43, cat: TV/Documentary, desc: "Belgesel TR Sub"}
+      # Religious
+      - {id: 22, cat: TV/Other, desc: "Dini"}
+      # TV
+      - {id: 7, cat: TV, desc: "Dizi ve Show"}
+      - {id: 133, cat: TV, desc: "Dizi BoxSet"}
+      - {id: 35, cat: TV, desc: "Dizi Yabancı (Orj-Dub-Sub)"}
+      - {id: 34, cat: TV, desc: "Dizi Yerli (Dizi - TV Show)"}
+      # Other
+      - {id: 29, cat: Other, desc: "Diğer"}
+      - {id: 129, cat: Other, desc: "Diğer E-Kitap"}
+      - {id: 122, cat: Other, desc: "Diğer Resimler"}
+      - {id: 126, cat: Other, desc: "Diğer Spor"}
+      # Training Presentations
+      - {id: 62, cat: Other, desc: "Eğitim Sunumlari"}
+      # Movies
+      - {id: 124, cat: Movies, desc: "Filmler GENEL"}
+      - {id: 98, cat: Movies/3D, desc: "Filmler 3D Türkçe Dublaj"}
+      - {id: 99, cat: Movies/3D, desc: "Filmler 3D Yabancı TR Sub"}
+      - {id: 134, cat: Movies/UHD, desc: "Filmler 4K UHD"}
+      - {id: 125, cat: Movies/Foreign, desc: "Filmler Almanca"}
+      - {id: 88, cat: Movies/BluRay, desc: "Filmler Blu-ray Disc"}
+      - {id: 132, cat: Movies/Other, desc: "Filmler Bollywood"}
+      - {id: 96, cat: Movies, desc: "Filmler BoxSet Türk Filmi"}
+      - {id: 30, cat: Movies, desc: "Filmler Boxset Türkçe Dublaj"}
+      - {id: 33, cat: Movies, desc: "Filmler BoxSet Yabancı TR Sub"}
+      - {id: 36, cat: Movies/DVD, desc: "Filmler DVD (Dijital Video Disk)"}
+      - {id: 127, cat: Movies, desc: "Filmler IMDB Top 250"}
+      - {id: 137, cat: Movies, desc: "Filmler Türk Filmi"}
+      - {id: 66, cat: Movies/HD, desc: "Filmler X264 Türkçe Dublaj"}
+      - {id: 67, cat: Movies/HD, desc: "Filmler X264 Yabancı TR Sub"}
+      - {id: 130, cat: Movies/HD, desc: "Filmler x265 Filmler"}
+      - {id: 51, cat: Movies/SD, desc: "Filmler XviD Türkçe Dublaj"}
+      - {id: 52, cat: Movies/SD, desc: "Filmler XviD Yabancı TR Sub"}
+      # Music
+      - {id: 13, cat: Audio, desc: "Müzik GENEL"}
+      - {id: 94, cat: Audio, desc: "Müzik Discography Türkçe"}
+      - {id: 47, cat: Audio, desc: "Müzik Discography Yabancı"}
+      - {id: 13, cat: Audio, desc: "Müzik Türkçe"}
+      - {id: 13, cat: Audio/Video, desc: "Müzik Video Klip"}
+      - {id: 13, cat: Audio/Foreign, desc: "Müzik Yabancı"}
+      # Netflix
+      - {id: 138, cat: Movies/WEBDL, desc: "Netflix GENEL"}
+      - {id: 142, cat: Movies/WEBDL, desc: "Netflix Animasyon"}
+      - {id: 141, cat: Movies/WEBDL, desc: "Netflix Belgesel"}
+      - {id: 139, cat: Movies/WEBDL, desc: "Netflix Dizi"}
+      - {id: 140, cat: Movies/WEBDL, desc: "Netflix Film"}
+      # Games
+      - {id: 24, cat: Console, desc: "Oyun GENEL"}
+      - {id: 121, cat: PC/Mac, desc: "Oyun Mac OS"}
+      - {id: 92, cat: PC/Games, desc: "Oyun PC"}
+      - {id: 73, cat: Console/PS3, desc: "Oyun PS3"}
+      - {id: 93, cat: Console/Wii, desc: "Oyun Wii"}
+      - {id: 91, cat: Console/Xbox 360, desc: "Oyun Xbox360"}
+      # Software
+      - {id: 25, cat: PC, desc: "Program GENEL"}
+      - {id: 123, cat: PC/Phone-Other, desc: "Program Mobile"}
+      - {id: 103, cat: PC/0day, desc: "Program PC"}
+      # VIP
+      - {id: 131, cat: Other, desc: "Vip"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    captcha:
+      type: image
+      selector: img#regimage
+      input: imagestring
+    error:
+      - selector: table:contains("Bir hata oluştu!")
+    test:
+      path: index.php
+      selector: a[href*="/logout.php?logouthash="]
+
+  ratio:
+    path: index.php
+    selector: div#top div:nth-child(2) span:nth-child(2)
+    filters:
+      - name: regexp
+        args: "Ratio: (.+?) Bonus:"
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+    # does not support multi categories so defaulting to ALL
+      do: "search"
+      keywords: "{{.Keywords}}"
+      category: "0"
+      search_type: "t_name"
+      include_dead_torrents: "yes"
+    rows:
+      selector: table#sortabletable tbody tr:has(div[id^="port-target-"])
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: div[id^="port-target-"] a
+      details:
+        selector: div[id^="port-target-"] a
+        attribute: href
+      category:
+        selector: a[href*="browse.php?category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      date:
+        selector: td:nth-child(2) div:nth-last-child(1)
+        filters:
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      download:
+        selector: a[href*="download.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        case:
+          img[src$="/freedownload.gif"]: "0"
+          img[src$="/silverdownload.gif"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          img[src$="/x2.gif"]: "2"
+          "*": "1"

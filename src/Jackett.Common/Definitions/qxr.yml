@@ -1,0 +1,56 @@
+---
+  site: qxr
+  name: QXR
+  description: "QXR is a Public torrent index of their releases."
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://qxr.pw/
+
+  caps:
+    categories:
+      "Weekly": TV
+      "TV Season Pack": TV
+      "Movie": Movies
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: hashes/
+    rows:
+      selector: tr:has(a[href^="magnet:?xt="])
+#      filters:
+#        - name: andmatch
+    fields:
+      title:
+        selector: td:nth-child(2) a
+      category:
+        selector: td:nth-child(5)
+      details:
+        selector: td:nth-child(2) a
+        attribute: href
+      download:
+        selector: td:nth-child(2) a
+        attribute: href
+      magnet:
+        selector: td:nth-child(2) a
+        attribute: href
+      date:
+        text: now
+      size:
+        selector: td:nth-child(3)
+      seeders:
+        text: "1"
+      leechers:
+        text: "1"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

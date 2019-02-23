@@ -1,0 +1,86 @@
+﻿---
+  site: gdf76
+  name: gdf76
+  description: "gdf76 is an ITALIAN semi-private site for ITA films in mp4 format optimized for streaming"
+  language: it-it
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - http://gdf76.altervista.org/
+
+  caps:
+    categorymappings:
+      - {id: 11, cat: Movies, desc: "Film 720p"}
+      - {id: 13, cat: TV, desc: "Serie TV"}
+      - {id: 2, cat: Audio, desc: "Music"}
+      - {id: 3, cat: PC/Games, desc: "Games"}
+      - {id: 5, cat: TV/Anime, desc: "Anime"}
+      - {id: 6, cat: Books, desc: "Books"}
+      - {id: 7, cat: PC/0day, desc: "Apps Win"}
+      - {id: 8, cat: PC, desc: "Apps Linux"}
+      - {id: 9, cat: PC/Mac, desc: "Apps Mac"}
+      - {id: 4, cat: Other, desc: "Other"}
+      - {id: 12, cat: XXX, desc: "Adult"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: index.php
+    method: form
+    form: form[action="index.php?page=login"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: tr td span[style="color:#FF0000;"]
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
+
+  search:
+    paths:
+      - path: index.php
+    inputs:
+      page: torrents
+      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      category: 0
+      active: 0
+
+    rows:
+      selector: tr:has(a[href^="index.php?page=torrent-details"])
+    fields:
+      title:
+        selector: td a[href^="index.php?page=torrent-details"]
+      details:
+        selector: td a[href^="index.php?page=torrent-details"]
+        attribute: href
+      category:
+        selector: td a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      download:
+        selector: td a[href^="download.php"]
+        attribute: href
+      size:
+        text: "500 MB"
+      date:
+          # 19/01/2019
+        selector: td:nth-child(4)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      seeders:
+        selector: td:nth-child(5)
+      leechers:
+        selector: td:nth-child(6)
+      grabs:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

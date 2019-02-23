@@ -1,7 +1,7 @@
 ﻿---
   site: torrentsectorcrew
   name: Torrent Sector Crew
-  description: "A German general tracker"
+  description: "Torrent Sector Crew (TSC) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: de-de
   type: private
   encoding: windows-1252
@@ -101,7 +101,7 @@
       path: my.php
       
   ratio:
-    path: /my.php
+    path: my.php
     selector: td.navi_top:contains("Deine Ratio:")
     filters:
       - name: replace

@@ -1,7 +1,7 @@
 ---
   site: racing4everyone
   name: Racing4Everyone (R4E)
-  description: "Private Torrent Tracker for RACING"
+  description: "Racing4Everyone (R4E) is a Private Torrent Tracker for RACING"
   language: en-us
   type: private
   encoding: UTF-8
@@ -34,7 +34,7 @@
       search: [q]
 
   login:
-    path: /login
+    path: login
     method: form
     inputs:
       username: "{{ .Config.username }}"
@@ -42,11 +42,11 @@
     error:
       - selector: table.main:contains("Login Failed!")
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /filterTorrents
+      - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"
@@ -72,13 +72,13 @@
         selector: a.view-torrent
         attribute: href
       size:
-        selector: td:nth-child(4)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
-      grabs:
         selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
         filters:
           - name: regexp
             args: ([\d\.]+)
@@ -105,9 +105,9 @@
           - name: re_replace
             args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
           - name: re_replace
-            args: ["(ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
           - name: re_replace
-            args: ["(ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
           "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech

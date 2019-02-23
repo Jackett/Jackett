@@ -256,6 +256,8 @@ namespace Jackett.Updater
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/nexttorrent.yml",
+                "Definitions/torrentsmd.yml",
+                "Definitions/scenehd.yml", // migrated to C# (use JSON API)
                 "appsettings.Development.json",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
@@ -277,6 +279,7 @@ namespace Jackett.Updater
                 "Definitions/idope.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/extratorrentclone.yml",
+                "Definitions/btdb.yml",
             };
 
             foreach (var oldFile in oldFiles)

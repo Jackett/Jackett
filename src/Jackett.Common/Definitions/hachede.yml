@@ -60,9 +60,11 @@
       - {id: 129, cat: Other/Misc, desc: "Documentales H265"}
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
-    path: /ajax/login.php
+    path: ajax/login.php
     method: post
     headers:
       user-agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
@@ -75,7 +77,7 @@
     error:
       - selector: div.error
     test:
-      path: /?p=home&pid=1
+      path: ?p=home&pid=1
       selector: div#member_info_bar
 
   search:

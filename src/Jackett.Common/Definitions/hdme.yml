@@ -6,7 +6,7 @@
   type: private
   encoding: windows-1252
   links:
-    - https://hdme.eu
+    - https://hdme.eu/
 
   caps:
     categorymappings:
@@ -43,7 +43,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     form: form
     inputs:
@@ -54,10 +54,10 @@
         message:
           selector: td.text
     test:
-      path: /my.php
+      path: my.php
 
   ratio:
-    path: /my.php
+    path: my.php
     selector: span.smallfont > font
     filters:
       - name: regexp
@@ -67,7 +67,7 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

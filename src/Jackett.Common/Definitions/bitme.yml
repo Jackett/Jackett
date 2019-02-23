@@ -60,10 +60,10 @@
       - selector: table:contains("Login failed!")
       - selector: table:contains("Wrong Code!")
     test:
-      path: /browse.php
+      path: browse.php
 
   search:
-    path: /browse.php
+    path: browse.php
     method: get
     inputs:
       search: "{{ .Query.Keywords }}"

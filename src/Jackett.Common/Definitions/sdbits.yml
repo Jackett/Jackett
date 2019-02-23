@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://sdbits.org
+    - http://sdbits.org/
 
   caps:
     categorymappings:
@@ -22,7 +22,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takeloginn3.php
+    path: takeloginn3.php
     method: post
     inputs:
       uname: "{{ .Config.username }}"
@@ -31,11 +31,11 @@
     error:
       - selector: td.embedded:has(h2:contains("failed")+table)
     test:
-      path: /browse.php
+      path: browse.php
       selector: span.smallfont:has(a[href="logout.php"])
 
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: span.smallfont:has(a[href="logout.php"])
     filters:
       - name: regexp
@@ -43,7 +43,7 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     method: post
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"

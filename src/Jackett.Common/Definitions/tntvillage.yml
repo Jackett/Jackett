@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - http://tntvillage.scambioetico.org/
+  legacylinks:
     - http://www.tntvillage.scambioetico.org/
 
   caps:
@@ -27,7 +29,7 @@
 
   search:
     paths:
-      - path: /src/releaselist.php
+      - path: src/releaselist.php
         method: post
     inputs:
       cat: 0

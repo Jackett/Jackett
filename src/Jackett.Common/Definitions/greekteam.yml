@@ -78,7 +78,7 @@
       movie-search: [q]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       take_login: "1"
@@ -88,11 +88,11 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /browse.php
+      path: browse.php
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
@@ -130,7 +130,7 @@
           - name: dateparse
             args: "2006-01-0215:04:05 -07:00"
       files:
-        selector: td:nth-last-child(7)
+        selector: td:nth-last-child(8)
       seeders:
         selector: td:nth-last-child(3)
       leechers:

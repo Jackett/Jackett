@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://www.hyperay.org
+    - https://www.hyperay.org/
   legacylinks:
     - https://www.hyperay.cc
 
@@ -46,11 +46,11 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /torrents.php
+      path: torrents.php
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
         method: post
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"

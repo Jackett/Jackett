@@ -1,7 +1,7 @@
 ﻿---
   site: hdchina
   name: HDChina
-  description: "A chinese tracker"
+  description: "HDChina (HDWing) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
   language: zh-cn
   type: private
   encoding: UTF-8
@@ -41,26 +41,28 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+          
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    captcha:
-      type: image
-      selector: img[alt="CAPTCHA"]
-      input: imagestring
-    error:
-      - selector: td.embedded:has(h2:contains("failed"))
+      cookie: "{{ .Config.cookie }}"
     test:
-      path: /torrents.php
+      path: torrents.php
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
@@ -114,10 +116,15 @@
             args: " ago"
       downloadvolumefactor:
         case:
-          img.pro_50pctdown: ".5"
-          img.pro_30pctdown: ".3"
           img.pro_free: "0"
+          img.pro_free2up: "0"
+          img.pro_50pctdown: "0.5"
+          img.pro_50pctdown2up: "0.5"
+          img.pro_30pctdown: "0.3"
           "*": "1"
       uploadvolumefactor:
         case:
+          img.pro_50pctdown2up: "2"
+          img.pro_free2up: "2"
+          img.pro_2up: "2"
           "*": "1"

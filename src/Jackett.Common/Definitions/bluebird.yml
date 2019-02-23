@@ -24,7 +24,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -32,11 +32,11 @@
     error:
       - selector: div.error
     test:
-      path: /browse.php
+      path: browse.php
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

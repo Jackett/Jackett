@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 CQ dom = results.Content;
-                var rows = dom["table.torrenttable > tbody > tr.browse_color"];
+                var rows = dom["table.torrenttable > tbody > tr.browse_color, table.torrenttable > tbody > tr.highlight"];
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();

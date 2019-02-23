@@ -6,7 +6,7 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - http://newstudio.tv
+    - http://newstudio.tv/
 
   caps:
     categorymappings:
@@ -17,7 +17,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       login: 1
@@ -31,10 +31,10 @@
 
   search:
     paths:
-      - path: "/tracker.php?nm={{ .Keywords}}"
-      - path: "/tracker.php?nm={{ .Keywords}}&start=50"
-      - path: "/tracker.php?nm={{ .Keywords}}&start=100"
-      - path: "/tracker.php?nm={{ .Keywords}}&start=150"
+      - path: "tracker.php?nm={{ .Keywords}}"
+      - path: "tracker.php?nm={{ .Keywords}}&start=50"
+      - path: "tracker.php?nm={{ .Keywords}}&start=100"
+      - path: "tracker.php?nm={{ .Keywords}}&start=150"
     rows:
       selector: table.well > tbody > tr:has(a[href^="./viewtopic.php?t="])
       filters:

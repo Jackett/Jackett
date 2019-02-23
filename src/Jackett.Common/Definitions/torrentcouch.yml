@@ -35,16 +35,16 @@
       selector: article
     fields:
       title:
-        selector: h2 a
+        selector: h1.entry-title a
       category:
         text: "1"
       details:
-        selector: h2 a
+        selector: h1.entry-title a
         attribute: href
       description:
         selector: p
       download:
-        selector: h2 a
+        selector: h1.entry-title a
         attribute: href
       size:
         text: "500 MB"
@@ -53,7 +53,10 @@
       leechers:
         text: "1"
       date:
-        text: now
+        selector: span.posted-on a time
+        filters:
+          - name: dateparse
+            args: "January 2, 2006"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

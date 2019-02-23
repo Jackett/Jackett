@@ -7,16 +7,14 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.cpasbien.blue/
+    - https://www.cpasbiens.bz/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
     - http://cpabien.cm/
     - http://cpasbiens1.com/
     - http://cpabien.mx/
-    - https://www.cpabien.bz/
     - http://www.cpabien.bz/
-    - http://www.cpabien.cx/
     - http://cpabien.org/
     - http://cpabien.cc/
     - http://cpabien.co/
@@ -26,9 +24,16 @@
     - https://ww1.cpabien.io/
     - https://wvw.cpabien.cm/
     - https://www.cpabien.io/
-    - https://www.cpabien.cx/
     - https://www.cpabien9.net/
     - https://wwv.cpabien.cm/
+    - http://www.cpabien.cx/
+    - https://www.cpasbien.blue/
+    - https://www.cpabien.cx/
+    - https://www.cpasbien.re/
+    - http://www.cpasbien.io/
+    - https://www.cpabien.bz/
+    - https://www.cpabien.link/
+    - https://www.cpasbiens.cz/
 
   caps:
     categorymappings:
@@ -46,9 +51,9 @@
     attribute: href
   search:
     paths:
-      - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}derniers/{{end}}"
+      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
     rows:
-      selector: table.table-corps tbody tr td
+      selector: div#gauche > table > tbody > tr:has(a)
     fields:
       site_date:
         selector: a

@@ -91,6 +91,9 @@ namespace Jackett.Server.Services
                 var runtimedir = RuntimeEnvironment.GetRuntimeDirectory();
                 logger.Info("Environment version: " + Environment.Version.ToString() + " (" + runtimedir + ")");
                 logger.Info("OS version: " + Environment.OSVersion.ToString() + (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") + (Environment.Is64BitProcess ? " (64bit process)" : ""));
+                Variants variants = new Variants();
+                Variants.JackettVariant variant = variants.GetVariant();
+                logger.Info("Jackett variant: " + variant.ToString());
 
                 try
                 {

@@ -1,7 +1,7 @@
 ---
   site: torrentland
   name: Torrentland
-  description: "Torrentland is a SPANISH site for General content"
+  description: "Torrentland is a SPANISH Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: es-es
   type: private
   encoding: UTF-8
@@ -20,7 +20,11 @@
       - {id: 15, cat: Movies/DVD, desc: "Peliculas - DVDRip"}
       - {id: 71, cat: Movies/Other, desc: "Peliculas - Peliculas V.O."}
       - {id: 72, cat: Movies/3D, desc: "Peliculas - 3D"}
-      - {id: 75, cat: Movies/HD, desc: "Peliculas - 4K"}
+      - {id: 75, cat: Movies/UHD, desc: "Peliculas - 4K"}
+      - {id: 80, cat: Movies/BluRay, desc: "Peliculas - JMBD"}
+      - {id: 81, cat: Movies/UHD, desc: "Peliculas - 4K Remux"}
+      - {id: 82, cat: Movies/BluRay, desc: "Peliculas - CUSTOM FULLBR"}
+      - {id: 83, cat: Movies/UHD, desc: "Peliculas - 4K CUSTOM"}
       #Eml HDTeam
       - {id: 69, cat: Movies/BluRay, desc: "Eml HDTeam - FULLBR"}
       - {id: 68, cat: Movies/BluRay, desc: "Eml HDTeam - JMBD"}
@@ -31,7 +35,7 @@
       - {id: 73, cat: Movies/3D, desc: "EML HDTeam - 3D"}
       - {id: 74, cat: Movies/DVD, desc: "EML HDTeam - DVD"}
       - {id: 77, cat: Movies/Other, desc: "EML HDTeam - Animacion"}
-      - {id: 78, cat: Movies/HD, desc: "EML HDTeam - 4K"}
+      - {id: 78, cat: Movies/UHD, desc: "EML HDTeam - 4K"}
       - {id: 79, cat: Movies/BluRay, desc: "EML HDTeam - CUSTOM BR"}
       #Series
       - {id: 50, cat: TV/HD, desc: "Series - Full BluRay"}
@@ -39,6 +43,7 @@
       - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
       - {id: 22, cat: TV/SD, desc: "Series - DVD"}
       - {id: 51, cat: TV/OTHER, desc: "Series - Otros Formatos"}
+      - {id: 84, cat: TV/HD, desc: "Series - H265"}
       #Documentales
       - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
       - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}

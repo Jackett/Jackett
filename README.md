@@ -9,7 +9,7 @@
 
 This project is a new fork and is recruiting development help.  If you are able to help out please contact us.
 
-Jackett works as a proxy server: it translates queries from apps ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar](https://github.com/evilhero/mylar), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), etc) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.
+Jackett works as a proxy server: it translates queries from apps ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar](https://github.com/evilhero/mylar), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious) etc) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.
 
 Developer note: The software implements the [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with [nZEDb](https://github.com/nZEDb/nZEDb/blob/dev/docs/newznab_api_specification.txt) category numbering) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs.
 
@@ -21,14 +21,17 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 
 ### Supported Public Trackers
  * 1337x
+ * ACG.RIP
  * Anidex
  * Anime Tosho
  * AniRena
- * AudioBookBay
+ * AudioBook Bay (ABB)
  * BTstor.net
  * btbit
- * BTDB
+ * BTKitty
  * cpasbien
+ * cpasbienClone
+ * DIGBT
  * ETTV
  * EliteTorrent.biz
  * ExtraTorrent.ag
@@ -41,43 +44,55 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Il Corsaro Blu
  * Isohunt2
  * KATcrs
- * KickAssTorrent
+ * KickAssTorrent (KATcr)
  * KickAssTorrent (thekat.se clone)
  * LimeTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
- * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, etc)
+ * Monova
+ * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Nyaa.si
  * Nyaa-Pantsu
  * Nyoo
  * ProStyleX
+ * QXR
  * RARBG
  * RuTor
+ * shokweb
  * ShowRSS
  * SkyTorrentsClone
+ * SolidTorrents
  * sukebei.Nyaa.si
  * sukebei-Pantsu
- * The Pirate Bay
+ * The Pirate Bay (TPB)
  * TNTVillage <!-- maintained by bonny1992 -->
- * Tokyo Toshokan
+ * Tokyo Tosho
  * Torlock
  * TorrentCouch
- * Torrent Downloads
- * TorrentGalaxy.org
+ * Torrent Downloads (TD)
+ * TorrentFunk
+ * TorrentGalaxy.org (TGx)
+ * TorrentKitty
+ * TorrentProject2
+ * Torrents.csv
  * Torrent9
  * Torernt9 clone (torrents9.ch)
  * Torrentz2
+ * Torrof (Torrentoff)
  * World Wide Torrents
  * YTS.ag
  * Zooqle
 
 ### Supported Semi-Private Trackers
  * 7tor
+ * Alein
  * ArenaBG
  * CzTorrent
  * Deildu
+ * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
+ * GDF76
  * Kinozal
  * LostFilm.tv
  * Mega-Bliz
@@ -85,97 +100,109 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MVGroup Forum
  * MVGroup Main
  * Newstudio
- * NetHD
- * NoName Club
+ * NetHD (VietTorrent)
+ * NoName Club (NNM-Club)
  * RockBox
  * RuTracker
  * SkTorrent
  * Union Fansub
- * Xtreme Zone
- * YggTorrent
+ * Vanila
+ * XtreMeZone (MYXZ)
+ * YggTorrent (YGG)
  * Ztracker
 
 ### Supported Private Trackers
  * 2 Fast 4 You
- * 3D Torrents
+ * 3D Torrents (3DT) 
+ * 3evils
  * 420files
  * 720pier
  * Abnormal
- * Acid-Lounge
+ * Acid Lounge (A-L)
  * AlphaRatio (AR)
- * AnimeBytes
+ * AmigosShareClub
+ * AnimeBytes (AB)
  * AnimeTorrents (AnT)
- * Anthelion (was TehConnection.me)
- * AOX
- * ArabaFenice
- * Arche Torrent
+ * Anthelion
+ * AOX (Chippu)
+ * Araba Fenice (Phoenix)
+ * ArcheTorrent
+ * AsianCinema
  * AsianDVDClub
  * AST4u
- * Audiobook Torrents
+ * Audiobook Torrents (ABT)
+ * AudioNews (AN)
  * Awesome-HD (AHD)
  * Avistaz (AsiaTorrents)
  * B2S-Share
  * Back-ups
- * BakaBT  [![(invite needed)][inviteneeded]](#)
- * bB
+ * BakaBT
+ * BaconBits (bB)
  * BeyondHD (BHD)
  * BIGTorrent
  * BigTower
  * Bit-City Reloaded
  * BIT-HDTV
- * Bithorlo
+ * Bithorlo (BHO)
  * BitHUmen
  * BitMe
  * BitMeTV
- * BitSoup  [![(invite needed)][inviteneeded]](#)
+ * BitsPiracy
  * Bitspyder
  * BitTorrentFiles  [![(invite needed)][inviteneeded]](#)
- * BJ-Share
+ * BitTurk
+ * BJ-Share (BJ)
  * BlueBird
  * Blutopia (BLU)
  * Brasil Tracker
  * BroadcastTheNet (BTN)
  * BrokenStones
- * BTGigs
+ * BTGigs (TG)
  * BTNext (BTNT)
  * BTXpress (BTX)
  * Carpathians
+ * CartoonChaos (CC)
+ * CasStudioTV
  * CCFBits
  * CGPeers
  * CHDBits
- * Cinematik
  * Cinemageddon
+ * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
- * DanishBits
- * DataScene
+ * CrnaBerza
+ * DanishBits (DB)
+ * DataScene (DS)
+ * DesiTorrents
  * Diablo Torrent
  * DigitalHive
+ * DivTeam
+ * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
  * Dream Team
  * DXDHD
- * EliteHD  [![(invite needed)][inviteneeded]](#)
- * Elit Tracker
+ * EliteHD (HDClub) [![(invite needed)][inviteneeded]](#)
+ * Elit Tracker (ET)
  * Elite-Tracker
  * Empornium (EMP)
- * eStone
+ * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
  * FANO.IN
  * FileList (FL)
  * Femdomcult
- * Freedom-HD
+ * Freedom-HD (Freedom Paradise)
  * FullMixMusic
- * FunFile
+ * FunFile (FF)
  * FunkyTorrents (FT)
- * Fuzer
+ * Fuzer (FZ)
  * GAYtorrent.ru
  * GazelleGames (GGn)
- * Gfxnews
+ * GFXNews
  * GFXPeers
  * GigaTorrents
- * GimmePeers <!-- maintained by jamesb2147 -->
- * Girotottent
+ * GimmePeers (formerly ILT) <!-- maintained by jamesb2147 -->
+ * GiroTorrent
  * GODS
  * Greek Team
  * HacheDe
@@ -187,8 +214,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HD-Spain
  * HD-Torrents (HDT)
  * HD-Bits.com
+ * HDArea (HDA)
  * HDBits
- * HDChina
+ * HDCenter
+ * HDChina (HDWing)
  * HDCity
  * HDHome (HDBigger)
  * HDME
@@ -196,56 +225,63 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDTorrents.it
  * Hebits
  * Hon3y HD
- * HQSource
+ * HQSource (HQS)
+ * HuSh 
  * Hyperay
  * ICE Torrent
- * I Love Classics
- * Immortalseed
+ * iLoveClassics (iLC)
+ * ImmortalSeed (iS)
  * inPeril
  * Insane Tracker
  * IPTorrents (IPT)
  * JPopsuki
  * Kapaki
  * Karagarga
+ * Le Saloon
  * LinkoManija
  * LosslessClub
- * M-Team (TP)
+ * M-Team TP (MTTP)
  * Magico (Trellas)
- * Majomparádé
+ * Majomparádé (TurkDepo)
  * Manicomio Share
  * Mononoké-BT
  * MoreThanTV (MTV)
- * MyAnonamouse
+ * MyAnonamouse (MAM)
  * myAmity
  * MySpleen
  * NCore
- * Nebulance (NBL)
+ * Nebulance (NBL) (TransmiTheNet)
  * New Real World
- * NordicBits (NB)
  * Norbits
+ * NordicBits (NB)
+ * Nostalgic (The Archive)
  * notwhat.cd
  * Orpheus
- * Ourbits
+ * Ourbits (HDPter)
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
- * PirateTheNet
- * PiXELHD
- * PolishSource
+ * PiratBit
+ * PirateTheNet (PTN)
+ * PiXELHD (PxHD)
+ * PolishSource (PS)
  * PolishTracker
  * Pretome
  * PrivateHD (PHD)
+ * ProAudioTorrents (PAT)
  * Psytorrents
- * PTFiles
+ * PT99
+ * PTFiles (PTF)
  * PuntoTorrent
+ * PWTorrents (PWT)
  * Racing4Everyone (R4E)
  * Redacted (PassTheHeadphones)
- * Red Star Torrent
+ * Red Star Torrent (RST)
  * Redtopia (RED)
  * RetroFlix
  * RevolutionTT
  * RGU
- * RoDVD
- * Romanian Metal Torrent
+ * RoDVD (Cinefiles)
+ * Romanian Metal Torrent (RMT)
  * SceneFZ
  * SceneHD
  * SceneReactor
@@ -256,17 +292,19 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Shareisland
  * ShareSpaceDB
  * Shazbat
- * Shellife
+ * Shellife (SL)
+ * SpaceTorrent
  * Speed-Share
  * SpeedCD
  * SpeedTorrent Reloaded
- * SportsCult
  * SportHD
- * Superbits
+ * SportsCult
+ * SuperBits (SBS)
+ * TakeaByte
  * Tasmanit
  * TBPlus
- * TenYardTracker
- * The Empire
+ * TenYardTorrents (TYT)
+ * TheEmpire (TE)
  * The Geeks
  * The Horror Charnel (THC)
  * The Occult
@@ -274,42 +312,45 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * The Place
  * The Shinning (TsH)
  * The Show
- * The Vault
  * The-Torrents
- * Torrent Network
- * Torrent Sector Crew
+ * The Vault
+ * Torrent Network (TN)
+ * Torrent Sector Crew (TSC)
  * Torrent.LT
  * TorrentBD
- * TorrentBytes
- * TorrentCCF  [![(invite needed)][inviteneeded]](#)
- * TorrentDay
- * Torrentech
+ * TorrentBytes (TBy)
+ * TorrentCCF (TCCF) [![(invite needed)][inviteneeded]](#)
+ * TorrentDay (TD)
+ * Torrentech (TTH)
  * TorrentHeaven
  * TorrentHR
- * Torrenting
+ * Torrenting (TT)
  * Torrentland
  * TorrentLeech (TL)
- * Torrents.Md
  * TorrentSeeds (TS)
  * Torrent-Syndikat
  * TOrrent-tuRK (TORK)
- * TorViet
+ * TorViet  (HDVNBits)
  * ToTheGlory
  * TranceTraffic
  * Trezzor
- * TV Chaos UK
+ * TurkTorrent (TT)
+ * TV Chaos UK (TVCUK)
  * TV-Vault
+ * TVstore
  * u-torrents (SceneFZ)
  * UHDBits
- * Ultimate Gamer Club
+ * Ultimate Gamer Club (UGC)
+ * Vizuk
  * Waffles
  * World-In-HD
  * WorldOfP2P (WOP)
  * x-ite.me (XM)
  * xBytesV2
- * XSpeeds
+ * XSpeeds (XS)
+ * XWTorrents (XWT)
  * Xthor
- * ExoticaZ (Your Exotic Torrents)
+ * ExoticaZ (YourExotic)
  * Zamunda.net
  * Zelka.org
 
@@ -319,6 +360,14 @@ Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maint
 
 A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab/api`.
 It will query all configured indexers and return the combined results.
+
+If your client supports multiple feeds it's recommended to add each indexer directly instead of using the all indexer.
+Using the all indexer has no advantages (besides reduced management overhead), only disadvantages:
+* you lose control over indexer specific settings (categories, search modes, etc.)
+* mixing search modes (IMDB, query, etc.) might cause low quality results
+* indexer specific categories (>= 100000) can't be used.
+* slow indexers will slow down the overall result
+* total results are limited to 1000
 
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as query parameter.
 
@@ -423,7 +472,7 @@ location /jackett {
 
   You can pass various options when running via the command line, see --help for details.
 
-* __Error "The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel."__
+* __Error "An error occurred while sending the request: Error: TrustFailure (A call to SSPI failed, see inner exception.)"__
 
   This is often caused by missing CA certificates.
   Try reimporting the certificates in this case:
@@ -444,45 +493,65 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 Please supply as much information about the problem you are experiencing as possible. Your issue has a much greater chance of being resolved if logs are supplied so that we can see what is going on. Creating an issue with '### isn't working' doesn't help anyone to fix the problem.
 
 ## Contributing
-All contributions are welcome just send a pull request.  Jackett's framework allows our team (and any other volunteering dev) to implement new trackers in an hour or two. If you'd like support for a new tracker but are not a developer then feel free to leave a request on the [issues page](https://github.com/Jackett/Jackett/issues).  It is recommended to use Visual Studio 2017 when making code changes in this project. You can download the community version for free [here](https://www.visualstudio.com/downloads/).
 
+Jackett's framework typically allows our team and volunteering developers to implement new trackers in a couple of hours
+
+Depending on logic complexity, there are two common ways new trackers are implemented:
+
+1. simple [definitions](http://github.com/Jackett/Jackett/tree/master/src/Jackett.Common/Definitions) (.yml / YAML), and;
+2. advanced (native) [indexers](http://github.com/Jackett/Jackett/tree/master/src/Jackett.Common/Indexers) (.cs / C#)
+
+Read more about the [simple definition format](https://github.com/Jackett/Jackett/wiki/Definition-format).
+
+If you are a developer then it's recommended to download the free community version of [Visual Studio](http://visualstudio.com)
+
+If you are not a developer and would like a (new) tracker supported then feel free to leave an [issue](https://github.com/Jackett/Jackett/issues) request.
+
+All contributions are welcome just send a pull request.
 
 ## Building from source
 
 ### Windows
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
-* Open the Jackett solution in Visual Studio 2017 (version 15.7 or above)
+* Open the Jackett solution in Visual Studio 2017 (version 15.9 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Server as startup project
 * In the drop down menu of the run button select "Jackett.Server" instead of "IIS Express"
 * Build/Start the project
 
 ### OSX
-NOTE: msbuild is included in the mono release. 
-* Install Homebrew https://brew.sh
-* open terminal
-* brew install nuget mono
-* git clone https://github.com/Jackett/Jackett.git
-* cd Jackett/src
-* nuget restore Jackett.sln
 
-NOTE: if you get the error "NU1102: Unable to find package Microsoft.AspNetCore with version (>= 2.1.2)" while restoring packages, you'll need to install it manually.https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.302-macos-x64-installer then delete the entire project directory and restart from a new clone
 
-* msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug
-* curl -sS https://curl.haxx.se/ca/cacert.pem | cert-sync --user /dev/stdin
-* mono Jackett.Server/bin/Debug/JackettServer.exe
+```bash
+# manually install osx dotnet via: 
+https://dotnet.microsoft.com/download?initial-os=macos
+# then: 
+git clone https://github.com/Jackett/Jackett.git
+cd Jackett/src
 
+# dotnet core version
+dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp2.2/osx-x64/JackettConsole # run jackett
+```
 
 ### Linux
 
+
 ```bash
-sudo apt install mono-complete nuget msbuild # install build tools (debian/ubuntu)
+sudo apt install mono-complete nuget msbuild dotnet-sdk-2.2 # install build tools (debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
+
+# dotnet core version
+dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/JackettConsole # run jackett
+```
+<!--
+# mono version (currently broken)
 nuget restore Jackett.sln # prepare dependencies
 msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug # compile
 mono Jackett.Server/bin/Debug/JackettServer.exe # run jackett
-```
+-->
 
 ## Screenshots
 

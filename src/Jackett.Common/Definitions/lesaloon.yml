@@ -1,0 +1,162 @@
+﻿---
+  site: lesaloon
+  name: LeSaloon
+  description: "Le Saloon is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - http://lesaloonv2-0.net/
+
+  caps:
+    categorymappings:
+      - {id: 13, cat: Movies/BluRay, desc: "Films BD-Rip / BRRip"}
+      - {id: 19, cat: Movies/WEBDL, desc: "Films WEB-DL / WEB-Rip"}
+      - {id: 15, cat: Movies/DVD, desc: "Films DVD-Rip"}
+      - {id: 18, cat: Movies/HD, desc: "Films HD 720p"}
+      - {id: 20, cat: Movies/HD, desc: "Films HD 1080p"}
+      - {id: 26, cat: Movies/HD, desc: "Films mHD 720p"}
+      - {id: 27, cat: Movies/HD, desc: "Films mHD 1080p"}
+      - {id: 28, cat: Movies/HD, desc: "Films x265"}
+      - {id: 29, cat: Movies, desc: "Films Remux"}
+      - {id: 30, cat: Movies/BluRay, desc: "Films Blu-Ray (complet)"}
+      - {id: 31, cat: Movies/3D, desc: "Films 3D"}
+      - {id: 32, cat: Movies/UHD, desc: "Films 4K UHD"}
+      - {id: 33, cat: Movies/SD, desc: "Films Québécois SD"}
+      - {id: 34, cat: Movies/HD, desc: "Films Québécois HD"}
+      - {id: 35, cat: Movies/DVD, desc: "Films Québécois DVD-R"}
+      - {id: 37, cat: Movies/DVD, desc: "Films DVD-R"}
+      - {id: 38, cat: Movies/SD, desc: "Films V.O.S.T. SD"}
+      - {id: 39, cat: Movies/HD, desc: "Films V.O.S.T. HD"}
+      - {id: 40, cat: Movies/SD, desc: "Films V.O. SD"}
+      - {id: 41, cat: Movies/HD, desc: "Films V.O. HD"}
+      - {id: 42, cat: Movies, desc: "Films TV-Rip"}
+      - {id: 21, cat: TV/SD, desc: "Séries-Télé SD"}
+      - {id: 22, cat: TV/HD, desc: "Séries-Télé HD"}
+      - {id: 17, cat: TV/SD, desc: "Séries-Télé Pack SD"}
+      - {id: 23, cat: TV/HD, desc: "Séries-Télé Pack HD"}
+      - {id: 45, cat: TV/SD, desc: "Séries-Télé Québécois SD"}
+      - {id: 46, cat: TV/HD, desc: "Séries-Télé Québécois HD"}
+      - {id: 47, cat: TV/SD, desc: "Séries-Télé V.O.S.T. SD"}
+      - {id: 48, cat: TV/HD, desc: "Séries-Télé V.O.S.T. HD"}
+      - {id: 49, cat: TV/SD, desc: "Séries-Télé Émissions TV SD"}
+      - {id: 50, cat: TV/HD, desc: "Séries-Télé Émissions TV HD"}
+      - {id: 51, cat: TV, desc: "Séries-Télé Blu-Ray"}
+      - {id: 52, cat: TV, desc: "Séries-Télé DVD-R"}
+      - {id: 43, cat: TV/SD, desc: "Séries-Télé Pack SD Québec"}
+      - {id: 44, cat: TV/HD, desc: "Séries-Télé Pack HD Québec"}
+      - {id: 77, cat: TV/Documentary, desc: "Docu. SD"}
+      - {id: 78, cat: TV/Documentary, desc: "Docu. HD"}
+      - {id: 79, cat: TV/Documentary, desc: "Docu. V.O.S.T. SD"}
+      - {id: 80, cat: TV/Documentary, desc: "Docu. V.O.S.T. HD"}
+      - {id: 85, cat: TV/Documentary, desc: "Docu-Série SD"}
+      - {id: 86, cat: TV/Documentary, desc: "Docu-Série HD"}
+      - {id: 87, cat: TV/Documentary, desc: "Docu-Pack SD"}
+      - {id: 88, cat: TV/Documentary, desc: "Docu-Pack HD"}
+      - {id: 54, cat: Audio/MP3, desc: "Musique MP3"}
+      - {id: 55, cat: Audio/Lossless, desc: "Musique FLAC"}
+      - {id: 56, cat: Audio, desc: "Musique DSD"}
+      - {id: 57, cat: Audio, desc: "Musique Karaoke"}
+      - {id: 58, cat: Audio/Other, desc: "Musique Autres"}
+      - {id: 59, cat: PC/Games, desc: "Jeux PC"}
+      - {id: 60, cat: Console, desc: "Jeux Consoles"}
+      - {id: 61, cat: Books/Ebook, desc: "Livres epub"}
+      - {id: 62, cat: Books/Ebook, desc: "Livres pdf"}
+      - {id: 63, cat: Books/Magazines, desc: "Livres Journaux"}
+      - {id: 64, cat: Books/Magazines, desc: "Livres Magazines"}
+      - {id: 65, cat: Books/Comics, desc: "Livres Bandes Dessinées"}
+      - {id: 66, cat: Books/Other, desc: "Livres Multi-Format"}
+      - {id: 71, cat: TV/Other, desc: "Spectacles Humour"}
+      - {id: 72, cat: TV/Other, desc: "Spectacles Live"}
+      - {id: 84, cat: TV/Other, desc: "Théâtre"}
+      - {id: 83, cat: TV/Anime, desc: "Séries Animées"}
+      - {id: 74, cat: TV/Sport, desc: "Sports [Français]"}
+      - {id: 75, cat: TV/Sport, desc: "Sports [Anglais]"}
+      - {id: 82, cat: Other, desc: "Autres / Inclassable"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: index.php?page=login
+    method: form
+    form: form[action^="index.php?page=login"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: tr td span[style="color:#FF0000;"]
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
+
+  ratio:
+    path: index.php
+    selector: table tr td:contains("Ratio")
+    filters:
+      - name: regexp
+        args: "Ratio:\\s\\s(.*?)\\s\\s"
+
+  search:
+    paths:
+      # http://lesaloonv2-0.net/index.php?page=torrents&search=supernatural+s13e20&parentcategory=0&category=0&genre=0&options=0&active=0
+      - path: index.php
+    inputs:
+      page: torrents
+      search: "{{if .Keywords}}{{.Keywords}}{{else}}{{end}}"
+      parentcategory: 0
+      category: 0
+      genre: 0
+      options: 0
+      active: 0
+
+    rows:
+      selector: table.torrentlist tbody tr:has(a[href^="index.php?page=torrent-details"])
+    fields:
+      title:
+        selector: td a[href^="index.php?page=torrent-details"]
+      details:
+        selector: td a[href^="index.php?page=torrent-details"]
+        attribute: href
+      category:
+        selector: td a[href^="index.php?page=torrents&category="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      download:
+        selector: td a[href^="download.php?id="]
+        attribute: href
+      banner:
+        selector: a[href^="index.php?page=torrent-details"][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.*?) "
+      date:
+          # 06/02/2019 18:19:28
+        selector: td:nth-child(7)
+        filters:
+          - name: dateparse
+            args: "02/01/2006 15:04:05"
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      grabs:
+        selector: td:nth-child(10)
+      size:
+        selector: td:nth-child(12)
+      downloadvolumefactor:
+        case:
+          img[src="images/freeleech.gif"]: "0"
+          img[src="images/gold.gif"]: "0"
+          img[src="images/silver.gif"]: "0.5"
+          img[src="images/bronze.gif"]: "0.25"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+#          img[src="images/bronze.gif"]: "2" # its in the rules as x2up, but all the bronze i've see so far are just 1/4 download in the title.
+          "*": "1"

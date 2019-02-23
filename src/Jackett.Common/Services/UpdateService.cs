@@ -32,6 +32,7 @@ namespace Jackett.Common.Services
         ITrayLockService lockService;
         private ServerConfig serverConfig;
         bool forceupdatecheck = false;
+        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, ServerConfig sc)
         {
@@ -86,6 +87,16 @@ namespace Jackett.Common.Services
             if (serverConfig.UpdateDisabled && !forceupdatecheck)
             {
                 logger.Info($"Skipping update check as it is disabled.");
+                return;
+            }
+
+            Variants variants = new Variants();
+            variant = variants.GetVariant();
+            logger.Info("Jackett variant: " + variant.ToString());
+
+            if (DotNetCoreUtil.IsRunningOnDotNetCore)
+            {
+                logger.Info($"Skipping update check as running Jackett on .NET Core is still in preview. Updates must be performed manually at this time.");
                 return;
             }
 
@@ -218,7 +229,9 @@ namespace Jackett.Common.Services
 
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            var targetAsset = assets.Where(a => isWindows ? a.Browser_download_url.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) : a.Browser_download_url.EndsWith(".gz", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            Variants variants = new Variants();
+            string artifactFileName = variants.GetArtifactFileName(variant);
+            Asset targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
 
             if (targetAsset == null)
             {

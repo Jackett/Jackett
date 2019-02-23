@@ -13,7 +13,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System.Text.RegularExpressions;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 
 namespace Jackett.Common.Indexers
 {
@@ -46,7 +46,7 @@ namespace Jackett.Common.Indexers
             configData.LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
             {
                 throw new Exception("Could not find releases from this URL");
             });
@@ -56,10 +56,57 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            return await PerformQuery(query, 0);
+            var ResultParser = new HtmlParser();
+            var releases = new List<ReleaseInfo>();
+            var searchString = query.GetQueryString();
+            var queryCollection = new NameValueCollection();
+
+
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                return await PerformLatestQuery(query);
+            }
+            else
+            {
+                queryCollection.Add("method", "search");
+
+                searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
+                queryCollection.Add("value", searchString);
+            }
+
+            var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
+            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
+
+            try
+            {
+                if (response.Content.Contains("Nothing was found"))
+                {
+                    return releases.ToArray();
+                }
+                var dom = ResultParser.ParseDocument(response.Content);
+                var resultLinks = dom.QuerySelectorAll("ul > li > a");
+                var uniqueShowLinks = new HashSet<string>();
+                foreach (var resultLink in resultLinks)
+                {
+                    var href = SiteLink + resultLink.Attributes["href"].Value.Substring(1); // = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
+                    var showUrl = href.Substring(0, href.LastIndexOf("#"));
+                    uniqueShowLinks.Add(showUrl);
+                }
+                foreach (var showLink in uniqueShowLinks)
+                {
+                    var showReleases = await GetReleases(showLink, latestOnly: false);
+                    releases.AddRange(showReleases);
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(response.Content, ex);
+            }
+
+            return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> PerformLatestQuery(TorznabQuery query, int attempts)
+        private async Task<IEnumerable<ReleaseInfo>> PerformLatestQuery(TorznabQuery query)
         {
             var ResultParser = new HtmlParser();
             var releases = new List<ReleaseInfo>();
@@ -78,15 +125,16 @@ namespace Jackett.Common.Indexers
                     return releases.ToArray();
                 }
 
-                var dom = ResultParser.Parse(response.Content);
+                var dom = ResultParser.ParseDocument(response.Content);
                 var latestresults = dom.QuerySelectorAll("ul > li > a");
-                foreach (var row in latestresults)
+                foreach (var resultLink in latestresults)
                 {
-                    var href = SiteLink + row.Attributes["href"].Value.Substring(1);
-                    var showrels = await GetRelease(href);
-                    releases.AddRange(showrels);
+                    var href = SiteLink + resultLink.Attributes["href"].Value.Substring(1); // = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
+                    var episodeNumber = href.Substring(href.LastIndexOf("#") + 1); // = 71
+                    var showUrl = href.Substring(0, href.LastIndexOf("#"));
+                    var showReleases = await GetReleases(showUrl, latestOnly: true, titleContains: episodeNumber);
+                    releases.AddRange(showReleases);
                 }
-
             }
             catch (Exception ex)
             {
@@ -96,15 +144,12 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<IEnumerable<ReleaseInfo>> GetRelease(string ResultURL)
+        private async Task<IEnumerable<ReleaseInfo>> GetReleases(string ResultURL, bool latestOnly, string titleContains = null)
         {
             var releases = new List<ReleaseInfo>();
             var ResultParser = new HtmlParser();
             try
             {
-                var episodeno = ResultURL.Substring(ResultURL.LastIndexOf("#") + 1); // = 71
-                ResultURL = ResultURL.Replace("#" + episodeno, ""); // = https://horriblesubs.info/shows/boruto-naruto-next-generations
-
                 var showPageResponse = await RequestStringWithCookiesAndRetry(ResultURL, string.Empty);
                 await FollowIfRedirect(showPageResponse);
 
@@ -116,12 +161,28 @@ namespace Jackett.Common.Indexers
 
                 int ShowID = int.Parse(match.Groups[2].Value);
 
-                string showAPIURL = ApiEndpoint + "?method=getshows&type=show&showid=" + ShowID; //https://horriblesubs.info/api.php?method=getshows&type=show&showid=869
-                var showAPIResponse = await RequestStringWithCookiesAndRetry(showAPIURL, string.Empty);
+                var apiUrls = new string[] {
+                    ApiEndpoint + "?method=getshows&type=batch&showid=" + ShowID, //https://horriblesubs.info/api.php?method=getshows&type=batch&showid=1194
+                    ApiEndpoint + "?method=getshows&type=show&showid=" + ShowID //https://horriblesubs.info/api.php?method=getshows&type=show&showid=869
+                };
 
+                var releaserows = new List<AngleSharp.Dom.IElement>();
+                foreach (string apiUrl in apiUrls)
+                {
+                    int nextId = 0;
+                    while(true)
+                    {
+                        var showAPIResponse = await RequestStringWithCookiesAndRetry(apiUrl + "&nextid=" + nextId, string.Empty);
+                        var showAPIdom = ResultParser.ParseDocument(showAPIResponse.Content);
+                        var releaseRowResults = showAPIdom.QuerySelectorAll("div.rls-info-container");
+                        releaserows.AddRange(releaseRowResults);
+                        nextId++;
 
-                var showAPIdom = ResultParser.Parse(showAPIResponse.Content);
-                var releaserows = showAPIdom.QuerySelectorAll("div.rls-info-container");
+                        if (releaseRowResults.Length == 0 || latestOnly) {
+                            break;
+                        }
+                    }
+                }
 
                 foreach (var releaserow in releaserows)
                 {
@@ -130,14 +191,14 @@ namespace Jackett.Common.Indexers
                     title = title.Replace("SD720p1080p", "");
                     title = title.Replace(dateStr, "");
 
-                    if (title.Contains(episodeno) == false)
+                    if (!string.IsNullOrWhiteSpace(titleContains) && !title.Contains(titleContains))
                     {
                         continue;
                     }
 
                     // Ensure fansub group name is present in the title
                     // This is needed for things like configuring tag restrictions in Sonarr
-                    if (title.Contains("[HorribleSubs]") == false)
+                    if (!title.Contains("[HorribleSubs]"))
                     {
                         title = "[HorribleSubs] " + title;
                     }
@@ -175,6 +236,7 @@ namespace Jackett.Common.Indexers
                         if (p480.QuerySelector(".hs-torrent-link > a") != null)
                         {
                             release.Link = new Uri(p480.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Comments = new Uri(release.Link.AbsoluteUri.Replace("/torrent", string.Empty));
                             release.Guid = release.Link;
                         }
                         if (p480.QuerySelector(".hs-magnet-link > a") != null)
@@ -204,6 +266,7 @@ namespace Jackett.Common.Indexers
                         if (p720.QuerySelector(".hs-torrent-link > a") != null)
                         {
                             release.Link = new Uri(p720.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Comments = new Uri(release.Link.AbsoluteUri.Replace("/torrent", string.Empty));
                             release.Guid = release.Link;
                         }
                         if (p720.QuerySelector(".hs-magnet-link > a") != null)
@@ -233,6 +296,7 @@ namespace Jackett.Common.Indexers
                         if (p1080.QuerySelector(".hs-torrent-link > a") != null)
                         {
                             release.Link = new Uri(p1080.QuerySelector(".hs-torrent-link > a").GetAttribute("href"));
+                            release.Comments = new Uri(release.Link.AbsoluteUri.Replace("/torrent", string.Empty));
                             release.Guid = release.Link;
                         }
                         if (p1080.QuerySelector(".hs-magnet-link > a") != null)
@@ -250,55 +314,5 @@ namespace Jackett.Common.Indexers
             }
             return releases;
         }
-
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
-        {
-            var ResultParser = new HtmlParser();
-            var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection();
-
-
-            if (string.IsNullOrWhiteSpace(searchString))
-            {
-                return await PerformLatestQuery(query, attempts);
-            }
-            else
-            {
-                queryCollection.Add("method", "search");
-
-                searchString = searchString.Replace("'", ""); // ignore ' (e.g. search for america's Next Top Model)
-                queryCollection.Add("value", searchString);
-            }
-
-            var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
-
-            try
-            {
-                if (response.Content.Contains("Nothing was found"))
-                {
-                    return releases.ToArray();
-                }
-                var dom = ResultParser.Parse(response.Content);
-                var showlinks = dom.QuerySelectorAll("ul > li > a");
-                foreach (var showlink in showlinks)
-                {
-                    var href = SiteLink + showlink.Attributes["href"].Value.Substring(1); // = https://horriblesubs.info/shows/boruto-naruto-next-generations#71
-
-                    var showrels = await GetRelease(href);
-                    releases.AddRange(showrels);
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(response.Content, ex);
-            }
-
-            return releases;
-        }
-
     }
 }

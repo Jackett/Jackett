@@ -1,7 +1,7 @@
 ---
   site: metaliplayro
   name: Romanian Metal Torrent
-  description: "Romanian Metal Torrent is a Private site dedicated to METAL MUSIC. This definition is for the English site."
+  description: "Romanian Metal Torrent (RMT) is a Private site dedicated to METAL MUSIC. This definition is for the English site."
   language: en-us
   type: private
   encoding: UTF-8
@@ -44,7 +44,7 @@
   download:
     method: get
     before:
-      path: "login.php"
+      path: login.php
       method: "post"
       inputs:
         username: "{{ .Config.username }}"

@@ -1,42 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.2;net461</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <AssemblyName>JackettConsole</AssemblyName>
     <OutputType>Exe</OutputType>
+    <NoWarn>NU1605</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <RuntimeIdentifiers>win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net461' and $(RuntimeIdentifier.Contains('win')) == 'false'">
+    <AssemblyName>jackett</AssemblyName>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
+    <RuntimeIdentifiers>win-x86;osx-x64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
     <RuntimeIdentifiers>win7-x86;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
   
-  <!-- Conditionally obtain references for the .NET Core App 2.1 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+  <!-- Conditionally obtain references for the .NET Core App 2.2 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.5.0" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="CommandLineParser" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
-    <PackageReference Include="NLog" Version="4.5.9" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.6.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.1" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,12 +53,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\LICENSE" Visible="false">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Upstart.config" Visible="false">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\install_service_macos" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

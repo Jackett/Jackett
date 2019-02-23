@@ -3,12 +3,12 @@
   #
   site: gay-torrentsorg
   name: gay-torrents.org
-  description: "Tracker for GAY XXX, movies, TV, books and PC."
+  description: "Gay-Torrents.org is a Private Torrent Tracker for GAY XXX"
   language: en-us
   type: semi-private
   encoding: UTF-8
   links:
-    - https://gay-torrents.org
+    - https://gay-torrents.org/
     - https://gay-area.org/
 
   settings:

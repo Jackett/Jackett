@@ -1,0 +1,116 @@
+﻿---
+  site: alein
+  name: Alein
+  description: "Alein is a BULGARIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: bg
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - http://alein.org/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies/SD, desc: "Movies-XviD"}
+      - {id: 15, cat: Movies/HD, desc: "Movies-x264"}
+      - {id: 41, cat: Movies, desc: "Movies-BG"}
+      - {id: 14, cat: Movies/HD, desc: "Movies-HD"}
+      - {id: 48, cat: Movies/UHD, desc: "Movies-x265"}
+      - {id: 39, cat: Movies/Foreign, desc: "Movies-XviD-Rus"}
+      - {id: 40, cat: Movies/Foreign, desc: "Movies-x264-Rus"}
+      - {id: 20, cat: Movies/Other, desc: "Movies-Animations"}
+      - {id: 16, cat: Movies/3D, desc: "Movies-3D"}
+      - {id: 5, cat: TV/Anime, desc: "Movies-Anime"}
+      - {id: 21, cat: Movies/BluRay, desc: "Movies-Blu-ray"}
+      - {id: 22, cat: TV/Documentary , desc: "Movies-Documentaries"}
+      - {id: 11, cat: Movies/DVD, desc: "Movies-DVD-R"}
+      - {id: 47, cat: TV/SD, desc: "TV-Episodes"}
+      - {id: 46, cat: TV/HD, desc: "TV-Episodes-HD"}
+      - {id: 3, cat: PC/ISO, desc: "Games-PC ISO"}
+      - {id: 31, cat: Console/Xbox, desc: "Games-XBOX"}
+      - {id: 33, cat: Console/PSP, desc: "Games-PS"}
+      - {id: 2, cat: Audio/MP3, desc: "Music-MP3"}
+      - {id: 50, cat: Audio/Lossless, desc: "Music-FLAC"}
+      - {id: 18, cat: Audio/Video, desc: "Music-Video"}
+      - {id: 9, cat: PC/0day, desc: "Software-Windows"}
+      - {id: 8, cat: PC, desc: "Software-Linux"}
+      - {id: 36, cat: Other, desc: "Trailer"}
+      - {id: 34, cat: Other/Misc, desc: "Pictures"}
+      - {id: 4, cat: Other, desc: "Other"}
+      - {id: 6, cat: Books/Comics, desc: "Books-Comics"}
+      - {id: 24, cat: PC/Phone-Other, desc: "Mobile-GSM"}
+      - {id: 23, cat: TV/Sport, desc: "Sport"}
+
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+
+  login:
+    path: index.php?page=login
+    method: form
+    form: form[action*="/index.php?page=login"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: td.lista span[style="color:#FF0000;"]
+    test:
+      path: /
+      selector: :has(a[href="logout.php"])
+
+  download:
+    selector: a[href^="download.php?id="]
+
+  search:
+    paths:
+    # http://alein.org/index.php?page=torrents&category=1%3B15%3B41%3B14%3B48%3B39%3B20%3B16%3B5%3B21%3B22%3B11&search=venom&active=1
+      - path: index.php
+    inputs:
+      page: "torrents"
+      category: "{{range .Categories}}{{.}};{{end}}"
+      search: "{{if .Keywords }}{{.Keywords}}{{else}}{{end}}"
+      active: "1"
+
+    rows:
+      selector: tr.trclass
+    fields:
+      title:
+        selector: td.lista-list a
+      details:
+        selector: td.lista-list a
+        attribute: href
+      category:
+        selector: td.lista-cat a
+        attribute: href
+        filters:
+          - name: querystring
+            args: category
+      download:
+        selector: td.lista-list a
+        attribute: href
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(9)
+      date:
+        selector: td:nth-child(5)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

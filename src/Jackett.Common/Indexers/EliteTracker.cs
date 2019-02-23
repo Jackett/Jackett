@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -170,7 +170,7 @@ namespace Jackett.Common.Indexers
             {
                 var RowsSelector = "table[id='sortabletable'] > tbody > tr";
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 var lastDate = DateTime.Now;
 
@@ -236,7 +236,7 @@ namespace Jackett.Common.Indexers
                             banner.Remove();
                         }
 
-                        tooltip.QuerySelector("div:contains(\"Total Hits: \")").Remove();
+                        tooltip.QuerySelector("div:contains(\"Total Hits\")").Remove();
 
                         var longtitle = tooltip.QuerySelectorAll("div").First();
                         release.Title = longtitle.TextContent;

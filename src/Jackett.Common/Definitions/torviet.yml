@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://torviet.com
+    - http://torviet.com/
 
   caps:
     categorymappings:
@@ -49,7 +49,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -57,10 +57,10 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /torrents.php
+      path: torrents.php
       
   ratio:
-    path: /torrents.php
+    path: torrents.php
     selector: table#info_block
     filters:
       - name: regexp
@@ -68,7 +68,7 @@
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
     inputs:
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       sltCategory: 0

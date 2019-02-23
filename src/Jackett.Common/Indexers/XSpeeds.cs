@@ -53,43 +53,49 @@ namespace Jackett.Common.Indexers
             configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
             configData.DisplayText.Name = "Notice";
 
-            AddCategoryMapping(70, TorznabCatType.TVAnime); // Anime
-            AddCategoryMapping(4, TorznabCatType.PC); // Apps
-            AddCategoryMapping(82, TorznabCatType.PCMac); // Mac
-            AddCategoryMapping(80, TorznabCatType.AudioAudiobook); // Audiobooks
-            AddCategoryMapping(66, TorznabCatType.MoviesBluRay); // Blu-Ray
-            AddCategoryMapping(48, TorznabCatType.Books); // Books Magazines
-            AddCategoryMapping(68, TorznabCatType.MoviesOther); // Cams/TS
-            AddCategoryMapping(65, TorznabCatType.TVDocumentary); // Documentaries
-            AddCategoryMapping(10, TorznabCatType.MoviesDVD); // DVDR
-            AddCategoryMapping(72, TorznabCatType.MoviesForeign); // Foreign
-            AddCategoryMapping(74, TorznabCatType.TVOTHER); // Kids
-            AddCategoryMapping(44, TorznabCatType.TVSport); // MMA
-            AddCategoryMapping(11, TorznabCatType.Movies); // Movie Boxsets
-            AddCategoryMapping(12, TorznabCatType.Movies); // Movies
-            AddCategoryMapping(13, TorznabCatType.Audio); // Music
-            AddCategoryMapping(15, TorznabCatType.AudioVideo); // Music Videos
-            AddCategoryMapping(32, TorznabCatType.ConsoleNDS); // NDS Games
-            AddCategoryMapping(9, TorznabCatType.Other); // Other
-            AddCategoryMapping(6, TorznabCatType.PCGames); // PC Games
-            AddCategoryMapping(45, TorznabCatType.Other); // Pictures
-            AddCategoryMapping(31, TorznabCatType.ConsolePS4); // Playstation
-            AddCategoryMapping(71, TorznabCatType.TV); // PPV
-            AddCategoryMapping(54, TorznabCatType.TV); // Soaps
-            AddCategoryMapping(20, TorznabCatType.TVSport); // Sports
-            AddCategoryMapping(86, TorznabCatType.TVSport); // MotorSports
-            AddCategoryMapping(89, TorznabCatType.TVSport); // Olympics 2016
-            AddCategoryMapping(88, TorznabCatType.TVSport); // World Cup
-            AddCategoryMapping(83, TorznabCatType.Movies); // TOTM
-            AddCategoryMapping(21, TorznabCatType.TVSD); // TV Boxsets
-            AddCategoryMapping(76, TorznabCatType.TVHD); // HD Boxsets
-            AddCategoryMapping(47, TorznabCatType.TVHD); // TV-HD
-            AddCategoryMapping(16, TorznabCatType.TVSD); // TV-SD
-            AddCategoryMapping(7, TorznabCatType.ConsoleWii); // Wii Games
-            AddCategoryMapping(43, TorznabCatType.TVSport); // Wrestling
-            AddCategoryMapping(8, TorznabCatType.ConsoleXbox); // Xbox Games
+            AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
+            AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
+            AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");
+            AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(4, TorznabCatType.PC, "Apps");
+            AddCategoryMapping(82, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
+            AddCategoryMapping(66, TorznabCatType.MoviesBluRay, "Blu-Ray");
+            AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
+            AddCategoryMapping(68, TorznabCatType.MoviesOther, "Cams/TS");
+            AddCategoryMapping(65, TorznabCatType.TVDocumentary, "Documentaries");
+            AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
+            AddCategoryMapping(72, TorznabCatType.MoviesForeign, "Foreign");
+            AddCategoryMapping(74, TorznabCatType.TVOTHER, "Kids");
+            AddCategoryMapping(44, TorznabCatType.TVSport, "MMA");
+            AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
+            AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(13, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
+            AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "NDS Games");
+            AddCategoryMapping(9, TorznabCatType.Other, "Other");
+            AddCategoryMapping(6, TorznabCatType.PCGames, "PC Games");
+            AddCategoryMapping(45, TorznabCatType.Other, "Pictures");
+            AddCategoryMapping(31, TorznabCatType.ConsolePS4, "Playstation");
+            AddCategoryMapping(71, TorznabCatType.TV, "PPV");
+            AddCategoryMapping(54, TorznabCatType.TV, "Soaps");
+            AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
+            AddCategoryMapping(86, TorznabCatType.TVSport, "MotorSports");
+            AddCategoryMapping(89, TorznabCatType.TVSport, "Olympics 2016");
+            AddCategoryMapping(88, TorznabCatType.TVSport, "World Cup");
+            AddCategoryMapping(83, TorznabCatType.Movies, "TOTM");
+            AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
+            AddCategoryMapping(76, TorznabCatType.TVHD, "HD Boxsets");
+            AddCategoryMapping(47, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "TV-SD");
+            AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
+            AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");
+            AddCategoryMapping(8, TorznabCatType.ConsoleXbox, "Xbox Games");
 
             // RSS Textual categories
+            AddCategoryMapping("4K Movies", TorznabCatType.MoviesUHD);
+            AddCategoryMapping("4K TV", TorznabCatType.TVUHD);
+            AddCategoryMapping("4K TV Boxsets", TorznabCatType.TVUHD);
             AddCategoryMapping("Anime", TorznabCatType.TVAnime);
             AddCategoryMapping("Apps", TorznabCatType.PC);
             AddCategoryMapping("Mac", TorznabCatType.PCMac);
@@ -210,7 +216,10 @@ namespace Jackett.Common.Indexers
             var prevCook = CookieHeader + "";
 
             // If we have no query use the RSS Page as their server is slow enough at times!
-            if (query.IsTest || string.IsNullOrWhiteSpace(searchString))
+            // ~15.01.2019 they removed the description tag making the RSS feed almost useless, we don't use it for now. See #4458
+            // if (false && query.IsTest || string.IsNullOrWhiteSpace(searchString))
+            /*
+            if (false)
             {
                 var rssPage = await RequestStringWithCookiesAndRetry(string.Format(RSSUrl, configData.RSSKey.Value));
                 try
@@ -264,13 +273,17 @@ namespace Jackett.Common.Indexers
                     throw ex;
                 }
             }
-            if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
+            */
+            //if (query.IsTest || !string.IsNullOrWhiteSpace(searchString))
+            if (true)
             {
+                /*
                 if (searchString.Length < 3 && !query.IsTest)
                 {
                     OnParseError("", new Exception("Minimum search length is 3"));
                     return releases;
                 }
+                */
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
                     { "keywords",  searchString },

@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
                 string RowsSelector = "table.torrent_table > tbody > tr.torrent";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {

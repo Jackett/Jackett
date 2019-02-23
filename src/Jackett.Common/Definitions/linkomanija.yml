@@ -1,12 +1,12 @@
 ---
   site: linkomanija
   name: LinkoManija
-  description: "LinkoManija is an ITALIAN Private site for TV / MOVIES / GENERAL"
+  description: "LinkoManija is an LITHUANIAN Private site for TV / MOVIES / GENERAL"
   language: lt-lt
   type: private
   encoding: UTF-8
   links:
-    - https://www.linkomanija.net
+    - https://www.linkomanija.net/
 
   caps:
     categorymappings:

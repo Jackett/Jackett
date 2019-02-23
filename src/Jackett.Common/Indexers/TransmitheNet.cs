@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(response.Content);
+                var document = parser.ParseDocument(response.Content);
                 var messageEl = document.QuerySelector("form > span[class='warning']");
                 var errorMessage = response.Content;
                 if (messageEl != null)
@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
             {
                 var globalFreeleech = false;
                 var parser = new HtmlParser();
-                var document = parser.Parse(htmlResponse);
+                var document = parser.ParseDocument(htmlResponse);
 
                 if (document.QuerySelector("div.nicebar > span:contains(\"Personal Freeleech\")") != null)
                     globalFreeleech = true;

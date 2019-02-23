@@ -6,10 +6,11 @@
   type: public
   encoding: UTF-8
   links:
-    - https://ilcorsaronero.cc/
+    - https://ilcorsaronero.vip/
   legacylinks:
     - https://ilcorsaronero.info/
     - https://ilcorsaronero.ch/
+    - https://ilcorsaronero.cc/
   certificates:
     - 89c12d4a080b5aeec00acbb269dc9b44584b1b3f # incomplete CA chain
     - aa7c40aa360a1cec8a9687312fd50402b912e618 # incomplete CA chain
@@ -17,6 +18,7 @@
     - c414bf4ad6c69841693c147849f4c314aa200bdf # incomplete CA chain
     - 3a402766ce22fd1aa24bfc1a4fd47e9309eb8c98 # incomplete CA chain
     - 160f832730737a70264768ceddf3cd94bc51ffb7 # incomplete CA chain
+    - a60e969b27965d4dc2ff45d50c20e2e872d4e9b9 # incomplete CA chain
 
   caps:
     categorymappings:
@@ -131,7 +133,7 @@
           - name: prepend
             args: "magnet:?xt=urn:btih:"
           - name: append
-            args: "&dn={{ .Result.title }}.torrent"
+            args: "&dn={{ .Result.title }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
       size:
         selector: td:nth-child(3) font
       date:

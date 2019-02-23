@@ -15,11 +15,9 @@
       - {id: 10, cat: TV/Anime, desc: "Animation: HD720P"}
       - {id: 11, cat: TV/Anime, desc: "Animation: HD1080P"}
       - {id: 56, cat: TV/Anime, desc: "Animation: DVDRip"}
-      - {id: 13, cat: TV/Anime, desc: "Animation: DVD"}
       - {id: 18, cat: PC/0day, desc: "Applications: PC"}
       - {id: 16, cat: PC/Games, desc: "Applications: Jeux"}
       - {id: 19, cat: PC/Phone-Android, desc: "Applications: Android"}
-      - {id: 38, cat: PC/Phone-IOS, desc: "Applications: Mobile Phone"}
       - {id: 17, cat: PC/0day, desc: "Applications: Autres"}
       - {id: 67, cat: TV, desc: "Autres: Emission TV"}
       - {id: 68, cat: TV/Sport, desc: "Autres: Sport"}
@@ -34,6 +32,7 @@
       - {id: 53, cat: Books, desc: "E-Books: Livre Anglais"}
       - {id: 52, cat: Books, desc: "E-Books: Revue - Journaux"}
       - {id: 51, cat: Books, desc: "E-Books: BD"}
+      - {id: 95, cat: Movies, desc: "Films: Film Divx XviD"}
       - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
       - {id: 71, cat: Movies/WEBDL, desc: "Films: WEB-DL"}
       - {id: 65, cat: Movies, desc: "Films: VO"}
@@ -49,19 +48,13 @@
       - {id: 92, cat: Movies/HD, desc: "Films: 4K"}
       - {id: 69, cat: Movies/3D, desc: "Films: Film 3D"}
       - {id: 3, cat: Movies/DVD, desc: "Films: DVDRIP"}
-      - {id: 4, cat: Movies/DVD, desc: "Films: DVD5"}
       - {id: 5, cat: Movies/DVD, desc: "Films: DVD9"}
       - {id: 91, cat: Movies/HD, desc: "Films: RemuX"}
       - {id: 89, cat: Movies/HD, desc: "Films: BD/BR Rip"}
       - {id: 88, cat: Movies/BluRay, desc: "Films: Full BD/BR"}
-      - {id: 77, cat: Other, desc: "GPS: Cartes"}
-      - {id: 78, cat: Other, desc: "GPS: Radars"}
+      - {id: 97, cat: Movies, desc: "Films: Cours Métrage"}
       - {id: 79, cat: TV/Anime, desc: "Mangas: HD"}
-      - {id: 80, cat: TV/Anime, desc: "Mangas: HD VO"}
       - {id: 81, cat: TV/Anime, desc: "Mangas: HD VOSTFR"}
-      - {id: 82, cat: TV/Anime, desc: "Mangas: DVDRIP"}
-      - {id: 83, cat: TV/Anime, desc: "Mangas: DVDRIP VO"}
-      - {id: 84, cat: TV/Anime, desc: "Mangas: DVDRIP VOSTFR"}
       - {id: 85, cat: TV/Anime, desc: "Mangas: Web-DL"}
       - {id: 86, cat: TV/Anime, desc: "Mangas: TV-RIP"}
       - {id: 75, cat: Audio, desc: "Musique: Concert TVRip"}
@@ -70,6 +63,7 @@
       - {id: 22, cat: Audio/MP3, desc: "Musique: Album MP3"}
       - {id: 23, cat: Audio/Lossless, desc: "Musique: Album Flac"}
       - {id: 64, cat: Audio, desc: "Musique: Mégamix Maison"}
+      - {id: 96, cat: Audio/MP3, desc: "Musique: PlayList MP3"}
       - {id: 94, cat: Audio, desc: "Musique: Podcast"}
       - {id: 58, cat: Audio, desc: "Musique: Concert"}
       - {id: 93, cat: TV, desc: "Serie TV: Saison VOSTFR"}
@@ -80,6 +74,7 @@
       - {id: 73, cat: TV/WEB-DL, desc: "Serie TV: WEB-DL"}
       - {id: 7, cat: TV, desc: "Serie TV: Episode FR"}
       - {id: 6, cat: TV, desc: "Serie TV: Saison FR"}
+      - {id: 98, cat: TV/Anime, desc: "Serie TV: Manga VOSTFR"}
 
     modes:
       search: [q]

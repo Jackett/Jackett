@@ -679,13 +679,21 @@ namespace Jackett.Common.Indexers
         private CQ FindTorrentRows()
         {
             var defaultTheme = new[] { "/templates/1/", "/templates/2/", "/templates/3/", "/templates/4/", "/templates/5/", "/templates/6/", "/templates/11/", "/templates/12/" };
-            var oldV2 = new[] { "/templates/7/", "/templates/8/", "/templates/9/", "/templates/10/", "/templates/14/" };
+            var oldV2 = new[] { "/templates/7/", "/templates/8/", "/templates/9/", "/templates/10/" };
+            var xmas = new[] { "/templates/14/" };
+
+            if (xmas.Any(_fDom.Document.Body.InnerHTML.Contains))
+            {
+                // Return all occurencis of torrents found
+                // $('#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr')
+                return _fDom["#base_around > table.mainouter > tbody > tr > td.outer > div.article > table  > tbody:not(:first) > tr"];
+            }
 
             // template 7 contains a reference to template 2 (logout button), so check for oldV2 first
             if (oldV2.Any(_fDom.Document.Body.InnerHTML.Contains))
             {
                 // Return all occurencis of torrents found
-                // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody')
+                // $('#base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)')
                 return _fDom["# base_content > table.mainouter > tbody > tr > td.outer > div.article > table > tbody > tr:not(:first)"];
             }
 
@@ -695,7 +703,6 @@ namespace Jackett.Common.Indexers
                 // $('#base_content2 > div.article > table > tbody:not(:first) > tr')
                 return _fDom["# base_content2 > div.article > table > tbody:not(:first) > tr"];
             }
-
             return _fDom;
         }
 

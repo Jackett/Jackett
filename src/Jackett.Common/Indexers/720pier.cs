@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
                 string RowsSelector = "ul.topics > li.row";
 
                 var ResultParser = new HtmlParser();
-                var SearchResultDocument = ResultParser.Parse(results.Content);
+                var SearchResultDocument = ResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Comments;
 
                         var detailsResult = await RequestStringWithCookies(SiteLink + qDetailsLink.GetAttribute("href"));
-                        var DetailsResultDocument = ResultParser.Parse(detailsResult.Content);
+                        var DetailsResultDocument = ResultParser.ParseDocument(detailsResult.Content);
                         var qDownloadLink = DetailsResultDocument.QuerySelector("table.table2 > tbody > tr > td > a[href^=\"/download/torrent.php?id\"]");
 
                         release.Link = new Uri(SiteLink + qDownloadLink.GetAttribute("href").TrimStart('/'));
