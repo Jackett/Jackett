@@ -150,11 +150,6 @@ namespace Jackett.Common.Utils.Clients
                                 return true;
                         }
 
-                        if (sslPolicyErrors != SslPolicyErrors.None)
-                        {
-                            throw new Exception("certificate validation failed: " + certificate.ToString());
-                        }
-
                         return sslPolicyErrors == SslPolicyErrors.None;
                     };
 
