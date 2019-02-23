@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
         private string DownloadUrl { get { return SiteLink + "torrent/download.php"; } }
         private string BrowseUrl { get { return SiteLink + "torrent/browse.php"; } }
         private List<SeriesDetail> series = new List<SeriesDetail>();
+        private Regex _searchStringRegex = new Regex(@"(.+?)S0?(\d+)(E0?(\d+))?$", RegexOptions.IgnoreCase);
 
         private new ConfigurationDataTVstore configData
         {
@@ -245,14 +246,33 @@ namespace Jackett.Common.Indexers
             WebClientStringResult results;
 
             string searchString = "";
-            /* SearcString format is the following: Seriesname 1X09 */
+            var limit = query.Limit;
+            if (limit == 0)
+                limit = 100;
+            /* SearchString format is the following: Seriesname 1X09 */
             if (query.SearchTerm != null && !query.SearchTerm.Equals(""))
             {
                 searchString += query.SanitizedSearchTerm;
+                // convert SnnEnn to nnxnn for dashboard searches
+                if (query.Season == 0 && (query.Episode == null || query.Episode.Equals("")))
+                {
+                    Match searchMatch = _searchStringRegex.Match(searchString);
+                    if (searchMatch.Success)
+                    {
+                        query.Season = int.Parse(searchMatch.Groups[2].Value);
+                        query.Episode = searchMatch.Groups[4].Success ? string.Format("{0:00}", (int?)int.Parse(searchMatch.Groups[4].Value)) : null;
+                        searchString = searchMatch.Groups[1].Value; // strip SnnEnn
+                    }
+                }
+
                 if (query.Season != 0)
                     searchString += " " + query.Season.ToString();
                 if (query.Episode != null && !query.Episode.Equals(""))
                     searchString += string.Format("x{0:00}", int.Parse(query.Episode));
+            } else
+            {
+                // if searchquery is empty this is a test, so shorten the response time
+                limit = 20;
             }
 
             /* Search string must be converted to Base64 */
@@ -272,10 +292,6 @@ namespace Jackett.Common.Indexers
             //int incurrentpage = int.Parse(splits[2]);
             double pages = Math.Ceiling((double)maxfounded / (double)perpage);
 
-
-            var limit = query.Limit;
-            if (limit == 0)
-                limit = 100;
             /* First page content is already ready */
             releases.AddRange(await ParseTorrents(results, query, releases.Count, limit));
 
