@@ -274,6 +274,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PuntoTorrent
  * PWTorrents (PWT)
  * Racing4Everyone (R4E)
+ * RacingForMe (RFM)
  * Redacted (PassTheHeadphones)
  * Red Star Torrent (RST)
  * Redtopia (RED)
