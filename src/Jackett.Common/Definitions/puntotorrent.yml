@@ -132,8 +132,13 @@
         selector: td:nth-child(3) a
         attribute: href
       size:
+        # 1,36 GB
+        # 296,98 MB
+        # 1.018,29 MB
         selector: td:nth-child(6)
         filters:
+          - name: replace
+            args: [".", ""]
           - name: replace
             args: [",", "."]
       seeders:
