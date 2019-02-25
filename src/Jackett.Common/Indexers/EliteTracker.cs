@@ -25,6 +25,10 @@ namespace Jackett.Common.Indexers
         { get { return SiteLink + "browse.php"; } }
         private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
 
+        private static readonly string[] certificateHashs = new string[] {
+            "4482711D19A95CDE01D7958E5F1295E05BCA335D", // Let's Encrypt Authority X3
+        };
+
         private new ConfigurationDataEliteTracker configData
         {
             get { return (ConfigurationDataEliteTracker)base.configData; }
@@ -124,6 +128,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(65, TorznabCatType.TVSport, "UFC");
 
             AddCategoryMapping(37, TorznabCatType.XXX, "XXX");
+
+            foreach (var certificateHash in certificateHashs)
+                webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
+
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
