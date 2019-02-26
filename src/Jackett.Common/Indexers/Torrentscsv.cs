@@ -129,6 +129,8 @@ namespace Jackett.Common.Indexers {
                         "&tr=udp://tracker.justseed.it:1337/announce"; 
 
                     release.MagnetUri = new Uri (magnet_uri);
+                    release.Comments = release.MagnetUri;
+                    release.Guid = release.MagnetUri;
                     release.InfoHash = torrent.Value<JToken> ("infohash").ToString ();
 
                     // convert unix timestamp to human readable date
