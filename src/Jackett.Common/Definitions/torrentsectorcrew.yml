@@ -7,6 +7,8 @@
   encoding: windows-1252
   links:
     - https://tsctracker.org/
+  legacylinks:
+    - https://tsctracker.net/
 
   caps:
     categorymappings:
