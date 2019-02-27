@@ -26,7 +26,7 @@
       - {id: 26, cat: PC/Games, desc: "Games/PC"}
       - {id: 38, cat: PC/Phone-Other, desc: "Mobile"}
       - {id: 59, cat: Movies/3D, desc: "Movies/3D"}
-      - {id: 92, cat: Movies/HD, desc: "Movies/4K-UHD"}
+      - {id: 92, cat: Movies/UHD, desc: "Movies/4K-UHD"}
       - {id: 32, cat: Movies/BluRay, desc: "Movies/Blu-Ray"}
       - {id: 28, cat: Movies/DVD, desc: "Movies/DVD"}
       - {id: 42, cat: Movies/HD, desc: "Movies/HD-x264"}
@@ -79,7 +79,7 @@
       incldead: 1
       search_by: "{{ if .Query.IMDBID }}imdb{{else}}name{{end}}"
     rows:
-      selector: table.torrenttable > tbody > tr:has(a[title][href^="details.php?id="])
+      selector: table.table-striped > tbody > tr:has(a[title][href^="details.php?id="])
     fields:
       title:
         selector: a[title][href^="details.php?id="]
@@ -93,13 +93,10 @@
         filters:
           - name: querystring
             args: cat
-      imdb:
-        selector: a[title="IMDB"]
-        attribute: href
       banner:
         attribute: rel
       imdb:
-        selector: a[href^="http://www.imdb.com/title/"]
+        selector: a[href*="https://www.imdb.com/title/"]
         optional: true
         attribute: href
       download:
@@ -114,13 +111,10 @@
         selector: td:has(a[href$="filelist=1#filelist"])
         remove: a
       date:
-        selector: td > span:has(i.fa-clock)
-        remove: b
+        selector: td > small:has(i.fa-clock)
         filters:
           - name: replace
             args: ["\xA0", " "]
-          - name: replace
-            args: ["Added on ", ""]
           - name: replace
             args: ["st ", " "]
           - name: replace
@@ -129,8 +123,8 @@
             args: ["rd ", " "]  
           - name: replace
             args: ["th ", " "]
-          - name: replace
-            args: [" by", ""]
+          - name: regexp
+            args: "(.+?) by"
           - name: append
             args: " +02:00"
           - name: dateparse
@@ -145,6 +139,3 @@
       uploadvolumefactor:
         case:
           "*": "1"
-      description:
-        selector: td:has(a[title][href^="details.php?id="])
-        remove: a[title][href^="details.php?id="], div, font:contains("Added on")
