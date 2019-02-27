@@ -27,9 +27,9 @@
   search:
   # site returns just 30 results, attempt to fetch upto 90
     paths:
-      - path: index.php
-      - path: index.php/page/2/
-      - path: index.php/page/3/
+      - path: /
+      - path: /page/2/
+      - path: /page/3/
     keywordsfilters:
       # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
       - name: re_replace
