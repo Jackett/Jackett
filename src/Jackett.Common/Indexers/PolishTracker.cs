@@ -23,9 +23,9 @@ namespace Jackett.Common.Indexers
             "https://polishtracker.net/",
             };
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLoginWithEmail configData
         {
-            get { return (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData; }
+            get { return (ConfigurationDataBasicLoginWithEmail)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataBasicLoginWithEmail())
         {
 Encoding = Encoding.UTF8;
             Language = "pl-pl";
@@ -64,7 +64,7 @@ Encoding = Encoding.UTF8;
 
             var pairs = new Dictionary<string, string>
             {
-                { "email", configData.Username.Value },
+                { "email", configData.Email.Value },
                 { "pass", configData.Password.Value }
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink);
@@ -72,6 +72,8 @@ Encoding = Encoding.UTF8;
             await ConfigureIfOK(result.Cookies, result.Cookies != null && result.Cookies.Contains("id="), () =>
             {
                 var errorMessage = result.Content;
+                if (errorMessage.Contains("Error!"))
+                    errorMessage = "E-mail or password is incorrect";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
