@@ -1617,23 +1617,22 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("t", "0");
             queryCollection.Add("submit", "Search");
             queryCollection.Add("sr", "topics");
-            //queryCollection.Add("sr", "posts");
-            //queryCollection.Add("ch", "99999");
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                queryCollection.Add("search_id", "newposts");
+                //queryCollection.Add("search_id", "newposts");
+                searchString = "test";
             }
-            else // use the normal search
-            {
+            //else // use the normal search
+            //{
                 searchString = searchString.Replace("-", " ");
                 queryCollection.Add("terms", "all");
                 queryCollection.Add("keywords", searchString);
                 queryCollection.Add("author", "");
                 queryCollection.Add("sc", "1");
                 queryCollection.Add("sf", "titleonly");
-            }
+            //}
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             results = await RequestStringWithCookies(searchUrl);
