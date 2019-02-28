@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
                         release.Category = MapTrackerCatToNewznab(cat);
 
                         /* if the release name not contains the language we add it because it is know from category */
-                        if (cat.Contains("hun") && !release.Title.Contains("hun"))
+                        if (cat.Contains("hun") && !release.Title.ToLower().Contains("hun"))
                             release.Title += ".hun";
 
                         if (seasonep == null)
