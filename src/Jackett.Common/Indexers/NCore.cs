@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        List<ReleaseInfo> parseTorrents(WebClientStringResult results, String seasonep, TorznabQuery query, int already_founded, int limit)
+        List<ReleaseInfo> parseTorrents(WebClientStringResult results, String seasonep, TorznabQuery query, int already_founded, int limit, int previously_parsed_on_page)
         {
             var releases = new List<ReleaseInfo>();
             try
@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
                 var rows = dom[".box_torrent_all"].Find(".box_torrent");
 
                 // Check torrents only till we reach the query Limit 
-                for(int i=0; (i<rows.Length && ((already_founded + releases.Count) < limit )); i++)
+                for(int i= previously_parsed_on_page; (i<rows.Length && ((already_founded + releases.Count) < limit )); i++)
                 { 
                     try
                     {
@@ -272,6 +272,13 @@ namespace Jackett.Common.Indexers
             CQ dom = results.Content;
             int numVal = 0;
 
+            // find number of torrents / page
+            int torrent_per_page = dom[".box_torrent_all"].Find(".box_torrent").Length;
+            int start_page = (query.Offset / torrent_per_page)+1;
+            int previously_parsed_on_page = query.Offset - (start_page * torrent_per_page) + 1; //+1 because indexing start from 0
+            if (previously_parsed_on_page < 0)
+                previously_parsed_on_page = query.Offset;
+
             // find pagelinks in the bottom
             var pagelinks = dom["div[id=pager_bottom]"].Find("a");
             if (pagelinks.Length > 0)
@@ -293,15 +300,22 @@ namespace Jackett.Common.Indexers
             if (limit == 0)
                 limit = 100;
 
-            releases = parseTorrents(results, seasonep, query, releases.Count, limit);
+            if (start_page == 1)
+            {
+                releases = parseTorrents(results, seasonep, query, releases.Count, limit, previously_parsed_on_page);
+                previously_parsed_on_page = 0;
+                start_page++;
+            }
+           
 
             // Check all the pages for the torrents.
             // The starting index is 2. (the first one is the original where we parse out the pages.)
-            for (int i=2; (i<= numVal && releases.Count < limit); i++ )
+            for (int i= start_page; (i<= numVal && releases.Count < limit); i++ )
             {
                 pairs.Add(new KeyValuePair<string, string>("oldal", i.ToString()));
                 results = await PostDataWithCookiesAndRetry(SearchUrl, pairs);
-                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count, limit));
+                releases.AddRange(parseTorrents(results, seasonep, query, releases.Count, limit, previously_parsed_on_page));
+                previously_parsed_on_page = 0;
                 pairs.Remove(new KeyValuePair<string, string>("oldal", i.ToString()));
             }
 
