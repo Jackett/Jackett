@@ -1,7 +1,6 @@
 version: 0.10.{build}
 skip_tags: true
 image: 
-  - Visual Studio 2017
   - Ubuntu
 environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
