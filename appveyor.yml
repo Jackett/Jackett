@@ -28,6 +28,7 @@ before_deploy:
 deploy:
 - provider: GitHub
   tag: v$(appveyor_build_version)
+  release: myproduct-v$(appveyor_build_version)
   description: $(release_description)
   auth_token:
     secure: hOg+16YTIbq4kO9u4D1YVOTbWDqgCX6mAQYMbnmBBSw2CiUsZh7OKbupoUb3FtWa
