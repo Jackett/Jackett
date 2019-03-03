@@ -224,7 +224,9 @@ namespace Jackett.Common.Indexers
                             series.Add(sd);
                         }
                         catch (IndexOutOfRangeException e)
-                        { }
+                        {
+                            throw (e);
+                        }
                     }
                 }
             }
