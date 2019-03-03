@@ -19,6 +19,7 @@ namespace Jackett.Updater
         private IProcessService processService;
         private IServiceConfigService windowsService;
         private Logger logger;
+        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public static void Main(string[] args)
         {
@@ -37,6 +38,10 @@ namespace Jackett.Updater
 
             logger.Info("Jackett Updater v" + GetCurrentVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
+
+            Variants variants = new Variants();
+            variant = variants.GetVariant();
+            logger.Info("Jackett variant: " + variant.ToString());
 
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             if (isWindows)
@@ -351,7 +356,7 @@ namespace Jackett.Updater
                     var startInfo = new ProcessStartInfo()
                     {
                         Arguments = options.Args,
-                        FileName = Path.Combine(options.Path, "JackettConsole.exe"),
+                        FileName = GetJackettConsolePath(options.Path),
                         UseShellExecute = true
                     };
 
@@ -363,7 +368,8 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = false;
                         startInfo.WindowStyle = ProcessWindowStyle.Normal;
                     }
-                    else
+                    
+                    if (variant == Variants.JackettVariant.Mono)
                     {
                         startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
                         startInfo.FileName = "mono";
@@ -379,6 +385,19 @@ namespace Jackett.Updater
         {
             var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
             return new FileInfo(WebUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
+        }
+
+        private string GetJackettConsolePath(string directoryPath)
+        {
+            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmd64 ||
+                variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+            {
+                return Path.Combine(directoryPath, "jackett");
+            }
+            else
+            {
+                return Path.Combine(directoryPath, "JackettConsole.exe");
+            }
         }
     }
 }
