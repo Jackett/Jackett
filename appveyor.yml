@@ -27,8 +27,7 @@ before_deploy:
 - ps: ${env:release_description} = ( Get-Content -LiteralPath BuildOutput/ReleaseNotes.txt -Encoding UTF8 ) -join "`n";
 deploy:
 - provider: GitHub
-  tag: v$(appveyor_build_version)
-  release: myproduct-v$(APPVEYOR_BUILD_VERSION)
+  tag: v$(APPVEYOR_BUILD_VERSION)
   description: $(release_description)
   auth_token:
     secure: hOg+16YTIbq4kO9u4D1YVOTbWDqgCX6mAQYMbnmBBSw2CiUsZh7OKbupoUb3FtWa
