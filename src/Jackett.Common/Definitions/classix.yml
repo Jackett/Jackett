@@ -34,11 +34,9 @@
       - path: torrents-search.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Keywords}}\"{{.Keywords}}\"{{else}}{{end}}"
     rows:
       selector: table > tbody > tr:has(a[href^="torrents.php?cat="])
-      filters:
-        - name: andmatch
     fields:
       category:
         text: 1
