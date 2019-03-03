@@ -217,7 +217,7 @@ Task("Appveyor-Push-Artifacts")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		if (AppVeyor.IsRunningOnAppVeyor && IsRunningOnWindows())
+		if (AppVeyor.IsRunningOnAppVeyor)
 		{
 			foreach (var file in GetFiles(workingDir + $"/{artifactsDirName}/*"))
 			{
