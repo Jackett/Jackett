@@ -165,7 +165,7 @@ Task("Package-DotNetCore-macOS")
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.macOS.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.macOS.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxAMD64")

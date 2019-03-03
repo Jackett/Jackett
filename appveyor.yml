@@ -34,6 +34,7 @@ deploy:
     secure: hOg+16YTIbq4kO9u4D1YVOTbWDqgCX6mAQYMbnmBBSw2CiUsZh7OKbupoUb3FtWa
   artifact: /^(?:(?![Ee]xperimental).)*$/
   draft: true
+  force_update: true
   on:
     branch: master
 notifications:
