@@ -381,7 +381,8 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	{
 		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type d -exec chmod 755 {} \;");
 		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type f -exec chmod 644 {} \;");
-		//RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))} /Jackett/jackett");
+		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/jackett");
+		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/JackettUpdater");
 		RunLinuxCommand("tar",  $"-C {sourceFolder} -zcvf {outputDirectory}/{tarFileName}.gz {tarCdirectoryOption}");
 	}	
 }
