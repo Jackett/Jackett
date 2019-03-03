@@ -30,16 +30,20 @@ namespace Jackett.Common.Services
         IConfigurationService configService;
         ManualResetEvent locker = new ManualResetEvent(false);
         ITrayLockService lockService;
+        IProcessService processService;
+        IServiceConfigService windowsService;
         private ServerConfig serverConfig;
         bool forceupdatecheck = false;
         Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
-        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, ServerConfig sc)
+        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, ServerConfig sc)
         {
             logger = l;
             client = c;
             configService = cfg;
             lockService = ls;
+            processService = ps;
+            windowsService = ws;
             serverConfig = sc;
         }
 
@@ -117,7 +121,6 @@ namespace Jackett.Common.Services
 
             try
             {
-
                 var response = await client.GetString(new WebRequest()
                 {
                     Url = "https://api.github.com/repos/Jackett/Jackett/releases",
@@ -147,12 +150,14 @@ namespace Jackett.Common.Services
                         logger.Info($"New release found.  Current: {currentVersion} New: {latestRelease.Name}");
                         try
                         {
-                            var tempDir = await DownloadRelease(latestRelease.Assets, isWindows,  latestRelease.Name);
+                            var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
                             // Copy updater
                             var installDir = Path.GetDirectoryName(ExePath());
-                            var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
+                            var updaterPath = GetUpdaterPath(tempDir);
                             if (updaterPath != null)
+                            {
                                 StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
+                            }
                         }
                         catch (Exception e)
                         {
@@ -176,6 +181,19 @@ namespace Jackett.Common.Services
                     System.Net.ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
                 }
             }
+        }
+
+        private string GetUpdaterPath(string tempDirectory)
+        {
+            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmd64 ||
+                variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+            {
+                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater");
+            }
+            else
+            {
+                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
+            }            
         }
 
         private string GetCurrentVersion()
@@ -284,9 +302,6 @@ namespace Jackett.Common.Services
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayIsRunning)
         {
             string appType = "Console";
-            //DI once off Owin
-            IProcessService processService = new ProcessService(logger);
-            IServiceConfigService windowsService = new WindowsServiceConfigService(processService, logger);
 
             if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
             {
@@ -294,19 +309,14 @@ namespace Jackett.Common.Services
             }
 
             var exe = Path.GetFileName(ExePath());
-            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" +a + "\"" : a )).Replace("\"", "\\\"");
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a )).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo();
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
 
             // Note: add a leading space to the --Args argument to avoid parsing as arguments
-            if (isWindows)
-            {
-                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
-                startInfo.FileName = Path.Combine(updaterExePath);
-            }
-            else
+            if (variant == Variants.JackettVariant.Mono)
             {
                 // Wrap mono
                 args = exe + " " + args;
@@ -314,6 +324,11 @@ namespace Jackett.Common.Services
 
                 startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
+            }
+            else
+            {
+                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
+                startInfo.FileName = Path.Combine(updaterExePath);
             }
 
             try

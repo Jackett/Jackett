@@ -14,9 +14,11 @@ var configuration = Argument("configuration", "Debug");
 
 // Define directories.
 var workingDir = MakeAbsolute(Directory("./"));
-var artifactsDirName = "Artifacts";
-var testResultsDirName = "TestResults";
-var netCoreFramework = "netcoreapp2.2";
+string artifactsDirName = "Artifacts";
+string testResultsDirName = "TestResults";
+string netCoreFramework = "netcoreapp2.2";
+string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+string updaterProjectPath = "./src/Jackett.Updater/Jackett.Updater.csproj";
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -89,7 +91,6 @@ Task("Package-Windows-Full-Framework")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = "./BuildOutput/net461/win7-x86/Jackett";
 		
 		DotNetCorePublish(serverProjectPath, "net461", "win7-x86", buildOutputPath);
@@ -119,7 +120,6 @@ Task("Package-Mono-Full-Framework")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = "./BuildOutput/net461/linux-x64/Jackett";
 
 		DotNetCorePublish(serverProjectPath, "net461", "linux-x64", buildOutputPath);
@@ -154,10 +154,14 @@ Task("Package-DotNetCore-macOS")
 	.Does(() =>
 	{
 		string runtimeId = "osx-x64";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, recursive:true);
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
@@ -169,7 +173,6 @@ Task("Package-DotNetCore-LinuxAMD64")
 	.Does(() =>
 	{
 		string runtimeId = "linux-x64";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
@@ -185,7 +188,6 @@ Task("Package-DotNetCore-LinuxARM32")
 	.Does(() =>
 	{
 		string runtimeId = "linux-arm";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
@@ -201,7 +203,6 @@ Task("Package-DotNetCore-LinuxARM64")
 	.Does(() =>
 	{
 		string runtimeId = "linux-arm64";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
