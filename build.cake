@@ -177,6 +177,8 @@ Task("Package-DotNetCore-LinuxAMD64")
 		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
 		DeleteDirectory(updaterOutputPath, recursive:true);
 
@@ -195,6 +197,8 @@ Task("Package-DotNetCore-LinuxARM32")
 		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
 		DeleteDirectory(updaterOutputPath, recursive:true);
 
@@ -213,6 +217,8 @@ Task("Package-DotNetCore-LinuxARM64")
 		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
 		DeleteDirectory(updaterOutputPath, recursive:true);
 
