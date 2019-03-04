@@ -165,7 +165,7 @@ Task("Package-DotNetCore-macOS")
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.macOS.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.macOS.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxAMD64")
@@ -174,8 +174,11 @@ Task("Package-DotNetCore-LinuxAMD64")
 	{
 		string runtimeId = "linux-x64";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, recursive:true);
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
@@ -189,8 +192,11 @@ Task("Package-DotNetCore-LinuxARM32")
 	{
 		string runtimeId = "linux-arm";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, recursive:true);
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
@@ -204,9 +210,12 @@ Task("Package-DotNetCore-LinuxARM64")
 	{
 		string runtimeId = "linux-arm64";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
-		
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, recursive:true);
+
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
@@ -282,9 +291,9 @@ Task("Windows-Environment")
 	.IsDependentOn("Package-Windows-Full-Framework")
 	.IsDependentOn("Package-Mono-Full-Framework")
 	//.IsDependentOn("Package-DotNetCore-macOS")
-	.IsDependentOn("Package-DotNetCore-LinuxAMD64")
-	.IsDependentOn("Package-DotNetCore-LinuxARM32")
-	.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	//.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	//.IsDependentOn("Package-DotNetCore-LinuxARM32")
+	//.IsDependentOn("Package-DotNetCore-LinuxARM64")
 	.IsDependentOn("Appveyor-Push-Artifacts")
 	.IsDependentOn("Release-Notes")
 	.Does(() =>
