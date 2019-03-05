@@ -297,16 +297,20 @@ namespace Jackett.Common.Services
                 gzipStream.Close();
                 inStream.Close();
 
-                // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
-                UnixFileInfo jackettFI = new UnixFileInfo(Path.Combine(tempDir, "/Jackett/jackett"))
+                if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
+                variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
                 {
-                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
-                };
+                    // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
+                    UnixFileInfo jackettFI = new UnixFileInfo(Path.Combine(tempDir, "/Jackett/jackett"))
+                    {
+                        FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
+                    };
 
-                UnixFileInfo jackettUpdaterFI = new UnixFileInfo(Path.Combine(tempDir + "/Jackett/JackettUpdater"))
-                {
-                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
-                };
+                    UnixFileInfo jackettUpdaterFI = new UnixFileInfo(Path.Combine(tempDir + "/Jackett/JackettUpdater"))
+                    {
+                        FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
+                    };
+                }
             }
 
             return tempDir;
