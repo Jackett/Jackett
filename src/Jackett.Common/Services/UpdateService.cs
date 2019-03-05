@@ -17,6 +17,8 @@ using Jackett.Common.Models.GitHub;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Mono.Posix;
+using Mono.Unix;
 using Newtonsoft.Json;
 using NLog;
 
@@ -185,7 +187,7 @@ namespace Jackett.Common.Services
 
         private string GetUpdaterPath(string tempDirectory)
         {
-            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmd64 ||
+            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
                 variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
             {
                 return Path.Combine(tempDirectory, "Jackett", "JackettUpdater");
@@ -294,6 +296,17 @@ namespace Jackett.Common.Services
                 tarArchive.Close();
                 gzipStream.Close();
                 inStream.Close();
+
+                // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
+                UnixFileInfo jackettFI = new UnixFileInfo(Path.Combine(tempDir, "/Jackett/jackett"))
+                {
+                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
+                };
+
+                UnixFileInfo jackettUpdaterFI = new UnixFileInfo(Path.Combine(tempDir + "/Jackett/JackettUpdater"))
+                {
+                    FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
+                };
             }
 
             return tempDir;

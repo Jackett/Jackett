@@ -14,7 +14,7 @@ namespace Jackett.Common.Utils
             Mono,
             CoreWindows,
             CoreMacOs,
-            CoreLinuxAmd64,
+            CoreLinuxAmdx64,
             CoreLinuxArm32,
             CoreLinuxArm64
         }
@@ -37,7 +37,7 @@ namespace Jackett.Common.Utils
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
                 {
-                    return JackettVariant.CoreLinuxAmd64;
+                    return JackettVariant.CoreLinuxAmdx64;
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)
@@ -88,9 +88,9 @@ namespace Jackett.Common.Utils
                 {
                     return "Jackett.Binaries.macOS.tar.gz";
                 }
-                case JackettVariant.CoreLinuxAmd64:
+                case JackettVariant.CoreLinuxAmdx64:
                 {
-                    return "Jackett.Binaries.LinuxAMD64.tar.gz";
+                    return "Jackett.Binaries.LinuxAMDx64.tar.gz";
                 }
                 case JackettVariant.CoreLinuxArm32:
                 {

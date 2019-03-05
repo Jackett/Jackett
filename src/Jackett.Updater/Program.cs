@@ -389,7 +389,7 @@ namespace Jackett.Updater
 
         private string GetJackettConsolePath(string directoryPath)
         {
-            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmd64 ||
+            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
                 variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
             {
                 return Path.Combine(directoryPath, "jackett");

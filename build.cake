@@ -168,7 +168,7 @@ Task("Package-DotNetCore-macOS")
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.macOS.tar.gz");
 	});
 
-Task("Package-DotNetCore-LinuxAMD64")
+Task("Package-DotNetCore-LinuxAMDx64")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
@@ -185,7 +185,7 @@ Task("Package-DotNetCore-LinuxAMD64")
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxAMD64.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxAMDx64.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxARM32")
@@ -297,7 +297,7 @@ Task("Windows-Environment")
 	.IsDependentOn("Package-Windows-Full-Framework")
 	.IsDependentOn("Package-Mono-Full-Framework")
 	//.IsDependentOn("Package-DotNetCore-macOS")
-	//.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	//.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
 	//.IsDependentOn("Package-DotNetCore-LinuxARM32")
 	//.IsDependentOn("Package-DotNetCore-LinuxARM64")
 	.IsDependentOn("Appveyor-Push-Artifacts")
@@ -309,7 +309,7 @@ Task("Windows-Environment")
 
 Task("Linux-Environment")
 	.IsDependentOn("Package-DotNetCore-macOS")
-	.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
 	.IsDependentOn("Package-DotNetCore-LinuxARM32")
 	.IsDependentOn("Package-DotNetCore-LinuxARM64")
 	.IsDependentOn("Appveyor-Push-Artifacts")
