@@ -185,7 +185,7 @@ Task("Package-DotNetCore-LinuxAMDx64")
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxAMDx64.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxAMDx64.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxARM32")
