@@ -100,12 +100,6 @@ namespace Jackett.Common.Services
             variant = variants.GetVariant();
             logger.Info("Jackett variant: " + variant.ToString());
 
-            if (DotNetCoreUtil.IsRunningOnDotNetCore && variant != Variants.JackettVariant.CoreMacOs)
-            {
-                logger.Info($"Skipping update check as running Jackett on .NET Core is still in preview. Updates must be performed manually at this time.");
-                return;
-            }
-
             forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
