@@ -19,7 +19,7 @@ namespace Jackett.Updater
         private IProcessService processService;
         private IServiceConfigService windowsService;
         private Logger logger;
-        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
+        private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public static void Main(string[] args)
         {
@@ -50,7 +50,7 @@ namespace Jackett.Updater
                 logger.Info("Pausing for 3 seconds to give Jackett & tray time to shutdown");
                 System.Threading.Thread.Sleep(3000);
             }
-        
+
             processService = new ProcessService(logger);
             windowsService = new WindowsServiceConfigService(processService, logger);
 
@@ -68,6 +68,7 @@ namespace Jackett.Updater
                 {
                     logger.Error(HelpText.AutoBuild(optionsResult));
                     logger.Error("Failed to process update arguments!");
+                    logger.Error(errors.ToString());
                     Console.ReadKey();
                 });
             }
@@ -99,9 +100,11 @@ namespace Jackett.Updater
                     {
                         try
                         {
-                            var startInfo = new ProcessStartInfo();
-                            startInfo.Arguments = "-15 " + pid;
-                            startInfo.FileName = "kill";
+                            var startInfo = new ProcessStartInfo
+                            {
+                                Arguments = "-15 " + pid,
+                                FileName = "kill"
+                            };
                             Process.Start(startInfo);
                             System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly), https://bugzilla.xamarin.com/show_bug.cgi?id=51742
                             exited = proc.WaitForExit(2000);
@@ -153,7 +156,7 @@ namespace Jackett.Updater
             var trayProcesses = Process.GetProcessesByName("JackettTray");
             if (isWindows)
             {
-                if (trayProcesses.Count() > 0)
+                if (trayProcesses.Length > 0)
                 {
                     foreach (var proc in trayProcesses)
                     {
@@ -177,9 +180,9 @@ namespace Jackett.Updater
             {
                 var fileName = Path.GetFileName(file).ToLowerInvariant();
 
-                if (fileName.EndsWith(".zip") ||
-                    fileName.EndsWith(".tar") ||
-                    fileName.EndsWith(".gz"))
+                if (fileName.EndsWith(".zip")
+                    || fileName.EndsWith(".tar")
+                    || fileName.EndsWith(".gz"))
                 {
                     continue;
                 }
@@ -308,7 +311,7 @@ namespace Jackett.Updater
             if (!isWindows)
                 KillPids(pids);
 
-            if (options.NoRestart == false)
+            if (!options.NoRestart)
             {
                 if (isWindows && (trayRunning || options.StartTray) && !string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
@@ -349,7 +352,6 @@ namespace Jackett.Updater
                             logger.Error("Failed to get admin rights to start the service.");
                         }
                     }
-
                 }
                 else
                 {
@@ -368,7 +370,7 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = false;
                         startInfo.WindowStyle = ProcessWindowStyle.Normal;
                     }
-                    
+
                     if (variant == Variants.JackettVariant.Mono)
                     {
                         startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
@@ -389,8 +391,8 @@ namespace Jackett.Updater
 
         private string GetJackettConsolePath(string directoryPath)
         {
-            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
-                variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
+                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
             {
                 return Path.Combine(directoryPath, "jackett");
             }
