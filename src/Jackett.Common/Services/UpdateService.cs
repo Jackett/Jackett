@@ -189,7 +189,7 @@ namespace Jackett.Common.Services
             else
             {
                 return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
-            }            
+            }         
         }
 
         private string GetCurrentVersion()
@@ -218,8 +218,8 @@ namespace Jackett.Common.Services
                 logger.Error("Temp dir doesn't exist: " + tempDir.ToString());
                 return;
             }
-            
-            try { 
+
+            try {
                 DirectoryInfo d = new DirectoryInfo(tempDir);
                 foreach (var dir in d.GetDirectories("JackettUpdate-*"))
                 {
