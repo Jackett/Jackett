@@ -377,6 +377,13 @@ namespace Jackett.Updater
                         startInfo.FileName = "mono";
                     }
 
+                    if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
+                    || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+                    {
+                        startInfo.UseShellExecute = false;
+                        startInfo.CreateNoWindow = true;
+                    }
+
                     logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
                     Process.Start(startInfo);
                 }

@@ -17,7 +17,6 @@ using Jackett.Common.Models.GitHub;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
-//using Mono.Posix;
 using Newtonsoft.Json;
 using NLog;
 
@@ -33,11 +32,12 @@ namespace Jackett.Common.Services
         ITrayLockService lockService;
         IProcessService processService;
         IServiceConfigService windowsService;
+        IFilePermissionService filePermissionService;
         private ServerConfig serverConfig;
         bool forceupdatecheck = false;
         Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
-        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, ServerConfig sc)
+        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, IFilePermissionService fps, ServerConfig sc)
         {
             logger = l;
             client = c;
@@ -46,6 +46,7 @@ namespace Jackett.Common.Services
             processService = ps;
             windowsService = ws;
             serverConfig = sc;
+            filePermissionService = fps;
         }
 
         private string ExePath()
@@ -290,29 +291,20 @@ namespace Jackett.Common.Services
                 gzipStream.Close();
                 inStream.Close();
 
-                //Disabled as the Mono.Posix.NETStandard library causes issues outside of .NET Core
-                //https://github.com/xamarin/XamarinComponents/issues/282
-                //if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
-                //|| variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
-                //{
-                //    // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
+                if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
+                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+                {
+                    //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
+                    //https://github.com/xamarin/XamarinComponents/issues/282
 
-                //    string jackettPath = tempDir + "/Jackett/jackett";
-                //    logger.Debug($"Giving execute permission to jackett from: {jackettPath}");
+                    // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 
-                //    UnixFileInfo jackettFI = new UnixFileInfo(jackettPath)
-                //    {
-                //        FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
-                //    };
+                    string jackettPath = tempDir + "/Jackett/jackett";
+                    filePermissionService.MakeFileExecutable(jackettPath);
 
-                //    string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
-                //    logger.Debug($"Giving execute permission to JackettUpdater from: {jackettUpdaterPath}");
-
-                //    UnixFileInfo jackettUpdaterFI = new UnixFileInfo(jackettUpdaterPath)
-                //    {
-                //        FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
-                //    };
-                //}
+                    string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
+                    filePermissionService.MakeFileExecutable(jackettUpdaterPath);
+                }
             }
 
             return tempDir;

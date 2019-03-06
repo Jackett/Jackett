@@ -83,6 +83,7 @@ namespace Jackett.Server
             builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
             builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
+            builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;
