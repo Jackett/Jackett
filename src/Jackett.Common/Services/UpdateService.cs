@@ -295,12 +295,19 @@ namespace Jackett.Common.Services
                 variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
                 {
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
-                    UnixFileInfo jackettFI = new UnixFileInfo(Path.Combine(tempDir, "/Jackett/jackett"))
+
+                    string jackettPath = Path.Combine(tempDir, "/Jackett/jackett");
+                    logger.Debug($"Giving execute permission to jackett from: {jackettPath}");
+
+                    UnixFileInfo jackettFI = new UnixFileInfo(jackettPath)
                     {
                         FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
                     };
 
-                    UnixFileInfo jackettUpdaterFI = new UnixFileInfo(Path.Combine(tempDir + "/Jackett/JackettUpdater"))
+                    string jackettUpdaterPath = Path.Combine(tempDir + "/Jackett/JackettUpdater");
+                    logger.Debug($"Giving execute permission to JackettUpdater from: {jackettUpdaterPath}");
+
+                    UnixFileInfo jackettUpdaterFI = new UnixFileInfo(jackettUpdaterPath)
                     {
                         FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
                     };
