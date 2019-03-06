@@ -296,7 +296,6 @@ namespace Jackett.Common.Services
                 {
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 
-                    //jackett executable
                     string jackettPath = tempDir + "/Jackett/jackett";
                     logger.Debug($"Giving execute permission to jackett from: {jackettPath}");
 
@@ -305,7 +304,6 @@ namespace Jackett.Common.Services
                         FileAccessPermissions = FileAccessPermissions.UserReadWriteExecute | FileAccessPermissions.GroupRead | FileAccessPermissions.OtherRead
                     };
 
-                    //JackettUpdater executable
                     string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
                     logger.Debug($"Giving execute permission to JackettUpdater from: {jackettUpdaterPath}");
 
