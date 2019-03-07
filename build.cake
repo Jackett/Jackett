@@ -205,7 +205,7 @@ Task("Package-DotNetCore-LinuxARM32")
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxARM32.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM32.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxARM64")
@@ -225,7 +225,7 @@ Task("Package-DotNetCore-LinuxARM64")
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxARM64.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM64.tar.gz");
 	});
 
 Task("Appveyor-Push-Artifacts")
