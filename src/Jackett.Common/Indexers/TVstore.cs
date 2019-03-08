@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace Jackett.Common.Indexers
             set { base.configData = value; }
         }
 
-        public TVstore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TVstore(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "TVstore",
                 description: "TV Store is a HUNGARIAN Private Torrent Tracker for TV",
                 link: "https://tvstore.me/",
@@ -215,7 +216,7 @@ namespace Jackett.Common.Indexers
                         try
                         {
                             var id = seriesknowbysite[i];
-                            string[] serieselement = id.Split(';');
+                            string[] serieselement = WebUtility.HtmlDecode(id).Split(';');
                             SeriesDetail sd = new SeriesDetail();
                             sd.HunName = serieselement[1].Split('=')[1].Trim('\'').ToLower();
                             sd.EngName = serieselement[2].Split('=')[1].Trim('\'').ToLower();
