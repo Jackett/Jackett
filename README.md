@@ -68,7 +68,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Tosho
  * Torlock
- * TorrentCouch
  * Torrent Downloads (TD)
  * TorrentFunk
  * TorrentGalaxy.org (TGx)
