@@ -289,6 +289,7 @@ namespace Jackett.Updater
                 "Definitions/extratorrentclone.yml",
                 "Definitions/btdb.yml",
                 "Definitions/torrentcouch.yml",
+                "Definitions/idopeclone.yml",
             };
 
             foreach (var oldFile in oldFiles)
