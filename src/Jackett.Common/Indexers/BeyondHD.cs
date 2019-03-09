@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class BeyondHD : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?searchin=descr&incldead=1&"; } }
 
         private new ConfigurationDataLoginLink configData
         {
