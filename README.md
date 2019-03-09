@@ -174,6 +174,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DesiTorrents
  * Diablo Torrent
  * DigitalHive
+ * DigitalCore [![(invite needed)][inviteneeded]](#)
  * DivTeam
  * DocumentaryTorrents (DT)
  * Downloadville
