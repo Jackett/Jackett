@@ -145,6 +145,8 @@ namespace Jackett.Common.Indexers
                     var descCol = row.ChildElements.ElementAt(3);
                     var qCommentLink = descCol.FirstChild.Cq();
                     release.Title = qCommentLink.Text();
+                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                        continue;
                     release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href"));
                     release.Guid = release.Comments;
                     release.Link = new Uri($"{SiteLink}download.php?torrent={torrentId}");
