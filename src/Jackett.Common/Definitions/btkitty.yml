@@ -5,8 +5,9 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    -  http://cnbtkitty.ws/
+    -  http://btkitty.pet/
   legacylinks:
     -  https://cnbtkitty.org/
     -  http://cnbtkitty.org/
@@ -14,6 +15,7 @@
     -  http://cnbtkitty.com/
     -  https://cnbtkitty.me/
     -  http://cnbtkitty.me/
+    -  http://cnbtkitty.ws/
 
   caps:
     categorymappings:
