@@ -173,6 +173,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DataScene (DS)
  * DesiTorrents
  * Diablo Torrent
+ * DigitalCore
  * DigitalHive
  * DivTeam
  * DocumentaryTorrents (DT)
