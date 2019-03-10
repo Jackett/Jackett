@@ -1,4 +1,4 @@
-version: 0.10.{build}
+version: 0.11.{build}
 skip_tags: true
 image:
   - Ubuntu
