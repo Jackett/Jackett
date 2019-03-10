@@ -119,12 +119,18 @@
       size:
         selector: td:nth-child(3)
       seeders:
+        text: 1
+      seeders:
         selector: td:nth-child(4)
+        optional: true
         filters:
           - name: re_replace
             args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$1"]
       leechers:
+        text: 1
+      leechers:
         selector: td:nth-child(4)
+        optional: true
         filters:
           - name: re_replace
             args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$2"]
