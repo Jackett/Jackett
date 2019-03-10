@@ -127,7 +127,7 @@ Task("Package-Mono-Full-Framework")
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
-		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./install_service_systemd_mono.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
 		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
@@ -161,7 +161,7 @@ Task("Package-DotNetCore-macOS")
 
 		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
-		DeleteDirectory(updaterOutputPath, recursive:true);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
@@ -180,10 +180,9 @@ Task("Package-DotNetCore-LinuxAMDx64")
 
 		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
-		DeleteDirectory(updaterOutputPath, recursive:true);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
-		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxAMDx64.tar.gz");
 	});
@@ -200,10 +199,9 @@ Task("Package-DotNetCore-LinuxARM32")
 
 		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
-		DeleteDirectory(updaterOutputPath, recursive:true);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
-		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM32.tar.gz");
 	});
@@ -220,10 +218,9 @@ Task("Package-DotNetCore-LinuxARM64")
 
 		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
 		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
-		DeleteDirectory(updaterOutputPath, recursive:true);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
 		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
-		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
 		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM64.tar.gz");
 	});
