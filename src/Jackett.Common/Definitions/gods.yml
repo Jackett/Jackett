@@ -13,7 +13,7 @@
       # Movie
       - {id: 132, cat: Movies/BluRay, desc: "BluRay"}
       - {id: 146, cat: Movies/HD, desc: "Remux"}
-      - {id: 186, cat: Movies/HD, desc: "UHD"}
+      - {id: 186, cat: Movies/UHD, desc: "UHD"}
       - {id: 189, cat: Movies/HD, desc: "HD"}
       - {id: 190, cat: Movies/SD, desc: "SD"}
       - {id: 20, cat: Movies/DVD, desc: "DVD"}
@@ -21,10 +21,10 @@
       - {id: 16, cat: Movies, desc: "Packs"}
 
       # Serien
-      - {id: 187, cat: TV/HD, desc: "Staffeln UHD"}
+      - {id: 187, cat: TV/UHD, desc: "Staffeln UHD"}
       - {id: 173, cat: TV/HD, desc: "Staffeln HD"}
       - {id: 133, cat: TV/SD, desc: "Staffeln SD"}
-      - {id: 188, cat: TV/HD, desc: "Folgen UHD"}
+      - {id: 188, cat: TV/UHD, desc: "Folgen UHD"}
       - {id: 174, cat: TV/HD, desc: "Folgen HD"}
       - {id: 7, cat: TV/SD, desc: "Folgen SD"}
 
@@ -76,6 +76,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: pin
