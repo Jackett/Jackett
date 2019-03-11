@@ -118,6 +118,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * 720pier
  * Abnormal
  * Acid Lounge (A-L)
+ * Aftershock
  * AlphaRatio (AR)
  * AmigosShareClub
  * AnimeBytes (AB)
