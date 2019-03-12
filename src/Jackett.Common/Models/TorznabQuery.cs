@@ -175,6 +175,8 @@ namespace Jackett.Common.Models
                 ret.QueryStringParts = new string[QueryStringParts.Length];
                 Array.Copy(QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
             }
+            ret.RageID = RageID;
+            ret.ImdbID = ImdbID;
 
             return ret;
         }
