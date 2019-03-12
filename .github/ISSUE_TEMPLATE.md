@@ -8,6 +8,5 @@ If you are experiencing an issue with a tracker, then:
 3. If it is still not working for you, then a **full enhanced log must be included**. Instructions for obtaining logs are here: https://github.com/Jackett/Jackett#troubleshooting
 
 **Jackett version**:  
-**Mono version** (if not using Windows):  
 
 -------------------------------
