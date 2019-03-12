@@ -38,7 +38,7 @@
       - {id: 5, cat: Movies/3D, desc: "Filme 3D"}
       - {id: 55, cat: Movies/HD, desc: "Filme 720p"}
       - {id: 111, cat: Movies, desc: "Filme Anime"}
-      - {id: 43, cat: Movies/BluRay, desc: "BluRay"}
+      - {id: 43, cat: Movies/BluRay, desc: "Filme BluRay"}
       - {id: 20, cat: Movies/DVD, desc: "Filme DVDR"}
       - {id: 120, cat: Movies/Foreign, desc: "Filme Int."}
       - {id: 119, cat: Movies, desc: "Filme Remux"}
