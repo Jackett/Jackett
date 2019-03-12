@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://en.metal-tracker.com/
+  legacylinks:
     - http://en.metal-tracker.com/
 
   caps:
@@ -20,7 +22,7 @@
 
   login:
     path: user/login.html
-    method: form
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
