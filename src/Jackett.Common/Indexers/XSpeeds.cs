@@ -53,6 +53,8 @@ namespace Jackett.Common.Indexers
             configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
             configData.DisplayText.Name = "Notice";
 
+            TorznabCaps.SupportsImdbSearch = true;
+
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
             AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");
@@ -214,6 +216,8 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var prevCook = CookieHeader + "";
+            Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
+            var searchStringIsImdbQuery = (ParseUtil.GetImdbID(searchString) != null);
 
             // If we have no query use the RSS Page as their server is slow enough at times!
             // ~15.01.2019 they removed the description tag making the RSS feed almost useless, we don't use it for now. See #4458
@@ -286,11 +290,26 @@ namespace Jackett.Common.Indexers
                 */
                 var searchParams = new Dictionary<string, string> {
                     { "do", "search" },
-                    { "keywords",  searchString },
-                    { "search_type", "t_name" },
                     { "category", "0" },
                     { "include_dead_torrents", "no" }
                 };
+
+                if (query.IsImdbQuery)
+                {
+                    searchParams.Add("keywords", query.ImdbID);
+                    searchParams.Add("search_type", "t_both");
+                }
+                else if (searchStringIsImdbQuery)
+                {
+                    searchParams.Add("keywords", searchString);
+                    searchParams.Add("search_type", "t_both");
+                }
+                else
+                {
+                    searchParams.Add("keywords", searchString);
+                    searchParams.Add("search_type", "t_name");
+                }
+
                 var pairs = new Dictionary<string, string> {
                     { "username", configData.Username.Value },
                     { "password", configData.Password.Value }
