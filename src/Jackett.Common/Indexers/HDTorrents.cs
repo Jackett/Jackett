@@ -216,6 +216,9 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
+                    var imdblink = qRow.Find("a[href^=\"https://www.imdb.com/title/\"]").Attr("href");
+                    release.Imdb = ParseUtil.GetLongFromString(imdblink);
+
                     releases.Add(release);
                 }
             }
