@@ -102,6 +102,7 @@
         case:
           "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
           "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
           "*": "1"
       uploadvolumefactor:
         case:
