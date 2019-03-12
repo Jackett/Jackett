@@ -72,6 +72,10 @@
         filters:
           - name: regexp
             args: ([\d\.]+)
+      imdb:
+        optional: true
+        selector: a[href^="https://www.imdb.com/title/"]
+        attribute: href
       date:
         selector: time
         filters:
