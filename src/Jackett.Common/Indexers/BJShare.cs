@@ -128,12 +128,8 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            query = query.Clone(); // avoid modifing the original query
-            
 
             var releases = new List<ReleaseInfo>();
-
-            
 
             // if the search string is empty use the "last 24h torrents" view
             if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
