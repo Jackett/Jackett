@@ -290,6 +290,7 @@ namespace Jackett.Updater
                 "Definitions/btdb.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/idopeclone.yml",
+                "Definitions/torrof.yml",
             };
 
             foreach (var oldFile in oldFiles)
