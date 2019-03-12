@@ -154,6 +154,21 @@
     fields:
       title:
         selector: td.nam a[href^="/details.php?id="]
+        filters:
+          - name: re_replace
+            args: ["\\b(\\d)\\b", "0$1"]
+          - name: replace
+            args: ["Кураж-Бамбей", "kurazh"]
+          - name: re_replace
+            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3) RUS"]
+          - name: re_replace
+            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          - name: replace
+            args: ["WEBDLRip", "WEBDL"]
+          - name: replace
+            args: ["WEB-DLRip", "WEBDL"]
+          - name: replace
+            args: ["HDTVRip", "HDTV"]
       details:
         selector: td.nam a[href^="/details.php?id="]
         attribute: href
