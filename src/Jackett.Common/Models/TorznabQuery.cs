@@ -137,6 +137,7 @@ namespace Jackett.Common.Models
                                             TorznabCatType.MoviesBluRay.ID,
                                             TorznabCatType.MoviesDVD.ID,
                                             TorznabCatType.MoviesWEBDL.ID,
+                                            TorznabCatType.MoviesUHD.ID,
                 };
             }
             ret.SearchTerm = search;
