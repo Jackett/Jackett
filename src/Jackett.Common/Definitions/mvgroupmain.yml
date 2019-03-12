@@ -104,7 +104,7 @@
   login:
     path: index.php?act=Login&CODE=00
     method: form
-    form: form[action^="?act=Login"]
+    form: form[action^="?act=Login&CODE=01"]
     inputs:
       "UserName": "{{ .Config.username }}"
       "PassWord": "{{ .Config.password }}"
