@@ -198,18 +198,21 @@ namespace Jackett.Common.Indexers
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                             release.Title = FixAbsoluteNumbering(release.Title);
 
-                            var quality = qQuality.TextContent;
-                            switch (quality)
+                            if (qQuality != null)
                             {
-                                case "Full HD":
-                                    release.Title += " 1080p";
-                                    break;
-                                case "HD":
-                                    release.Title += " 720p";
-                                    break;
-                                default:
-                                    release.Title += " 480p";
-                                    break;
+                                var quality = qQuality.TextContent;
+                                switch (quality)
+                                {
+                                    case "Full HD":
+                                        release.Title += " 1080p";
+                                        break;
+                                    case "HD":
+                                        release.Title += " 720p";
+                                        break;
+                                    default:
+                                        release.Title += " 480p";
+                                        break;
+                                }
                             }
 
                             release.Category = MapTrackerCatToNewznab(catStr);
