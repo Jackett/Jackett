@@ -304,6 +304,17 @@ namespace Jackett.Common.Services
 
                     string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
                     filePermissionService.MakeFileExecutable(jackettUpdaterPath);
+
+                    if (variant == Variants.JackettVariant.CoreMacOs)
+                    {
+                        string macosServicePath = tempDir + "/Jackett/install_service_macos";
+                        filePermissionService.MakeFileExecutable(macosServicePath);
+                    }
+                    else
+                    {
+                        string systemdPath = tempDir + "/Jackett/install_service_systemd.sh";
+                        filePermissionService.MakeFileExecutable(systemdPath);
+                    }
                 }
             }
 
