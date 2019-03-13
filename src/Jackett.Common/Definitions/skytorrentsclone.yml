@@ -29,14 +29,14 @@
       movie-search: [q]
 
   settings:
-    - name: itorrents-links
+    - name: btdb.eu-links
       type: checkbox
-      label: Add download links via itorrents.org
+      label: Add download links via btdb.eu
       default: true
     - name: info
       type: info
-      label: ITorrents Note
-      default: Without the itorrents option only magnet links will be provided.
+      label: btdb.eu Note
+      default: Without the btdb.eu option only magnet links will be provided.
 
   search:
     # https://www.skytorrents.lol/?search=mr+mercedes+s02e05&sort=created
@@ -62,11 +62,11 @@
       details:
         selector: td a
         attribute: href
-      download-itorrents:
-        selector: a[href^="//itorrents"]
+      download-btdb.eu:
+        selector: a[href^="//btdb.eu"]
         attribute: href
       download:
-        text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
+        text: "{{if .Config.btdb.eu-links}}{{ .Result.download-btdb.eu }}{{else}}{{end}}"
       magnet:
         selector: a[href^="magnet:?"]
         attribute: href
