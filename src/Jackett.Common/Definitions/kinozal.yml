@@ -88,6 +88,10 @@
         "10" : "9.5GB or higher"
         "11": "Gold (FreeLeech)"
         "12": "Silver (50%DL)"
+    - name: striprussian
+      type: checkbox
+      label: Strip Russian Letters
+      default: true
 
   login:
     path: takelogin.php
