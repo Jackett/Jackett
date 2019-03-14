@@ -164,7 +164,9 @@
           - name: replace
             args: ["Кураж-Бамбей", "kurazh"]
           - name: re_replace
-            args: ["(\\((\\d+)\\s+[Сс]езон:\\s+((\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)*\\))", "(S$2E$4) RUS"]
+            args: ["\\((\\d+)\\s+[Сс]езон:\\s+((\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)*\\)", "S$1E$2 RUS"]
+          - name: re_replace
+            args: ["\\((\\d+p)\\)", "$1"]
           - name: re_replace
             args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
