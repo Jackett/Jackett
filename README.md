@@ -46,6 +46,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KATcrs
  * KickAssTorrent (KATcr)
  * KickAssTorrent (thekat.se clone)
+ * KikiBT
  * LimeTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
