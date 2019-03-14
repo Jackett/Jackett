@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers {
             var queryCollection = new NameValueCollection ();
 
             queryCollection.Add ("q", searchString);
-            queryCollection.Add ("size", "100");
+            queryCollection.Add ("size", "500");
             queryCollection.Add ("type_", "torrent");
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString ();
