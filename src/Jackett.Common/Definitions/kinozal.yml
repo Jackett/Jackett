@@ -110,6 +110,13 @@
     paths:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
       - path: browse.php
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       # multi cat is not supported. so defaulting to ALL
       c: "0"
@@ -159,20 +166,23 @@
       title:
         selector: td.nam a[href^="/details.php?id="]
         filters:
+          # normalize to SXXEYY format
           - name: re_replace
             args: ["\\b(\\d)\\b", "0$1"]
           - name: replace
             args: ["Кураж-Бамбей", "kurazh"]
-          - name: re_replace
-            args: ["\\((\\d+)\\s+[Сс]езон:\\s+((\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)*\\)", "S$1E$2 RUS"]
-          - name: re_replace
+          - name: re_replace # also drop the brackets and move it to the end of string
+            args: ["\\((\\d+)\\s+[Сс]езон:\\s+((\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)", "$4 S$1E$2 RUS "]
+          - name: re_replace # drop brackets around quality
             args: ["\\((\\d+p)\\)", "$1"]
-          - name: re_replace
+          - name: re_replace # optionally strip russian chars
             args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
           - name: replace
             args: ["WEB-DLRip", "WEBDL"]
+          - name: replace
+            args: ["WEB-DL", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
       details:
