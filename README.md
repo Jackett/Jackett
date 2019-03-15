@@ -48,6 +48,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (thekat.se clone)
  * KikiBT
  * LimeTorrents
+ * MacTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
  * Monova
