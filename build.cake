@@ -395,6 +395,19 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type f -exec chmod 644 {} \;");
 		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/jackett");
 		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/JackettUpdater");
+
+		string systemdScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_systemd.sh";
+		if (FileExists(systemdScript))
+		{
+			RunLinuxCommand("chmod", $"755 {systemdScript}");
+		}
+
+		string macOsServiceScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_macos";
+		if (FileExists(macOsServiceScript))
+		{
+			RunLinuxCommand("chmod", $"755 {macOsServiceScript}");
+		}
+
 		RunLinuxCommand("tar",  $"-C {sourceFolder} -zcvf {outputDirectory}/{tarFileName}.gz {tarCdirectoryOption}");
 	}	
 }
