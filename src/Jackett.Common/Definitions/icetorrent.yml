@@ -60,7 +60,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: font:contains("failed") + table
+      - selector: div.alert:contains("failed")
     test:
       path: browse.php
       
