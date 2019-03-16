@@ -168,21 +168,23 @@
         filters:
           # normalize to SXXEYY format
           - name: replace
+            args: [" / ", " "]
+          - name: replace
             args: ["Кураж-Бамбей", "kurazh"]
           - name: replace
             args: ["Кубик в Кубе", "Kubik"]
-          - name: re_replace # also drop the brackets and move it to the end of string
-            args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)", "$3 S$1E$2 RUS "]
-          - name: re_replace # drop brackets around quality
-            args: ["\\((\\d+p)\\)", "$1"]
-          - name: re_replace # optionally strip russian chars
+          - name: re_replace
+            args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
+          - name: re_replace
             args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          - name: re_replace
+            args: ["\\((\\d+p)\\)", "$1"]
           - name: replace
-            args: ["WEBDLRip", "WEBDL"]
-          - name: replace
-            args: ["WEB-DLRip", "WEBDL"]
+            args: ["-Rip", "Rip"]
           - name: replace
             args: ["WEB-DL", "WEBDL"]
+          - name: replace
+            args: ["WEBDLRip", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
       details:
