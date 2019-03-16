@@ -262,6 +262,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * notwhat.cd
  * Orpheus
  * Ourbits (HDPter)
+ * P2PBG
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
  * PiratBit
