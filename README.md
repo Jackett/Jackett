@@ -195,6 +195,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FileList (FL)
  * Femdomcult
  * Freedom-HD (Freedom Paradise)
+ * FreeTorrent
  * FullMixMusic
  * FunFile (FF)
  * FunkyTorrents (FT)
