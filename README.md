@@ -144,6 +144,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BigTower
  * Bit-City Reloaded
  * BIT-HDTV
+ * BiT-TiTAN
  * Bithorlo (BHO)
  * BitHUmen
  * BitMe
