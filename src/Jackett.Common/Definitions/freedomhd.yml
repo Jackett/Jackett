@@ -49,7 +49,7 @@
       - {id: 128, cat: Movies/HD, desc: "FILMS BRrip"}
       - {id: 140, cat: Movies/HD, desc: "FILMS BSD-Team"}
       - {id: 126, cat: Movies/SD, desc: "FILMS DVDrip"}
-      - {id: 136, cat: Movies//BluRay, desc: "FILMS Full-Bluray"}
+      - {id: 136, cat: Movies/BluRay, desc: "FILMS Full-Bluray"}
       - {id: 135, cat: Movies/SD, desc: "FILMS Team Freedom-HD"}
       - {id: 137, cat: Movies/SD, desc: "FILMS Team ticadow"}
       - {id: 89, cat: Movies/HD, desc: "FILMS HDrip-720p"}
