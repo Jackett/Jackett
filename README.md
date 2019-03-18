@@ -104,6 +104,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * NoName Club (NNM-Club)
  * RockBox
  * RuTracker
+ * Sharewood
  * SkTorrent
  * Union Fansub
  * Vanila
