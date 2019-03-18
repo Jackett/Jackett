@@ -291,6 +291,7 @@ namespace Jackett.Updater
                 "Definitions/torrentcouch.yml",
                 "Definitions/idopeclone.yml",
                 "Definitions/torrof.yml",
+                "Definitions/archetorrent.yml",
             };
 
             foreach (var oldFile in oldFiles)
