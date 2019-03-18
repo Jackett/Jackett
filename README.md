@@ -270,6 +270,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PiratBit
  * PirateTheNet (PTN)
  * PiXELHD (PxHD)
+ * Pleasuredome
  * PolishSource (PS)
  * PolishTracker
  * Pretome
