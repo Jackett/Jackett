@@ -163,6 +163,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTNext (BTNT)
  * Carpathians
  * CartoonChaos (CC)
+ * CasaTorrent
  * CasStudioTV
  * CCFBits
  * CGPeers
