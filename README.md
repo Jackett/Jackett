@@ -161,7 +161,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BrokenStones
  * BTGigs (TG)
  * BTNext (BTNT)
- * BTXpress (BTX)
  * Carpathians
  * CartoonChaos (CC)
  * CasStudioTV

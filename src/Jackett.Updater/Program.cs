@@ -294,6 +294,7 @@ namespace Jackett.Updater
                 "Definitions/archetorrent.yml",
                 "Definitions/420files.yml",
                 "Definitions/redtopia.yml",
+                "Definitions/btxpress.yml",
             };
 
             foreach (var oldFile in oldFiles)
