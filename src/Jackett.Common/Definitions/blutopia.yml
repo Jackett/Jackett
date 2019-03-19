@@ -109,9 +109,11 @@
           "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
           "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
           "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
+          "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
           "*": "1"
       uploadvolumefactor:
         case:
           "i[data-original-title=\"Double Upload\"]": "2" # Single Torrent Double Upload
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
