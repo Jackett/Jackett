@@ -287,7 +287,6 @@ namespace Jackett.Updater
                 "Definitions/idope.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/extratorrentclone.yml",
-                "Definitions/btdb.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/idopeclone.yml",
                 "Definitions/torrof.yml",
