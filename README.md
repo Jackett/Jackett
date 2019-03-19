@@ -286,7 +286,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RacingForMe (RFM)
  * Redacted (PassTheHeadphones)
  * Red Star Torrent (RST)
- * Redtopia (RED)
  * RetroFlix
  * RevolutionTT
  * RGU
