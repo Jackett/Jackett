@@ -60,6 +60,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(66, TorznabCatType.TVSport, "Football - Super Bowls");
             AddCategoryMapping(53, TorznabCatType.TVSport, "Football - NCAA");
             AddCategoryMapping(99, TorznabCatType.TVSport, "Football - CFL");
+            AddCategoryMapping(101, TorznabCatType.TVSport, "Football - AAF");
             AddCategoryMapping(54, TorznabCatType.TVSport, "Football - Reviews and highlights");
             AddCategoryMapping(97, TorznabCatType.TVSport, "Football - Documentaries");
             AddCategoryMapping(44, TorznabCatType.TVSport, "Football - Other");
@@ -103,6 +104,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(94, TorznabCatType.TVSport, "Other sports - Misc");
 
             AddCategoryMapping(56, TorznabCatType.TVSport, "Sports on tv");
+            AddCategoryMapping(30, TorznabCatType.TVSport, "Sports");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
