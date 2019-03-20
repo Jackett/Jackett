@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
-        // API doc: https://torrentapi.org/apidocs_v2.txt
+        // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
         private static readonly string defaultSiteLink = "https://torrentapi.org/";
 
         private Uri BaseUri
@@ -232,8 +232,8 @@ namespace Jackett.Common.Indexers
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-
-                    release.Comments = new Uri(item.Value<string>("info_page"));
+                    // append app_id to prevent api server returning 403 forbidden
+                    release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
                     if (provideTorrentLink)
                         release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
