@@ -85,6 +85,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(55, TorznabCatType.AudioVideo, "Music / 1080p/i");
             AddCategoryMapping(56, TorznabCatType.AudioVideo, "Music / 720p");
             AddCategoryMapping(42, TorznabCatType.AudioVideo, "Music / Blu-ray");
+            AddCategoryMapping(41, TorznabCatType.AudioVideo, "Music / Movie OST");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
