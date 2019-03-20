@@ -11,6 +11,7 @@
   caps:
     categorymappings:
       - {id: "Vidéos Torrent", cat: Movies, desc: "Vidéos"}
+      - {id: "Vidéos Torrent", cat: TV, desc: "Vidéos"}
       - {id: "Audios Torrent", cat: Audio, desc: "Audios"}
       - {id: "Applications Torrent", cat: PC, desc: "Applications"}
       - {id: "Ebooks Torrent", cat: Books, desc: "Ebooks"}
