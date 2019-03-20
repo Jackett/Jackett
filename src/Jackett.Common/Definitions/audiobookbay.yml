@@ -11,61 +11,64 @@
 
   caps:
     categorymappings:
-      - {id: Children, cat: Audio/Audiobook, desc: "Children"}
-      - {id: Teen, cat: Audio/Audiobook, desc: "Teen & Young Adult"}
-      - {id: Adults, cat: Audio/Audiobook, desc: "Adults"}
-      - {id: The, cat: Audio/Audiobook, desc: "The Undead"}
+      - {id: "(Post)apocalyptic", cat: Audio/Audiobook, desc: "(Post)apocalyptic"}
+      - {id: "True", cat: Audio/Audiobook, desc: "True Crime"}
       - {id: Action, cat: Audio/Audiobook, desc: "Action"}
+      - {id: Adults, cat: Audio/Audiobook, desc: "Adults"}
       - {id: Adventure, cat: Audio/Audiobook, desc: "Adventure"}
+      - {id: Anthology, cat: Audio/Audiobook, desc: "Anthology"}
       - {id: Art, cat: Audio/Audiobook, desc: "Art"}
       - {id: Autobiography, cat: Audio/Audiobook, desc: "Autobiography & Biographies"}
+      - {id: Bestsellers, cat: Audio/Audiobook, desc: "Bestsellers"}
       - {id: Business, cat: Audio/Audiobook, desc: "Business"}
+      - {id: Children, cat: Audio/Audiobook, desc: "Children"}
+      - {id: Classic, cat: Audio/Audiobook, desc: "Classic"}
       - {id: Computer, cat: Audio/Audiobook, desc: "Computer"}
       - {id: Contemporary, cat: Audio/Audiobook, desc: "Contemporary"}
       - {id: Crime, cat: Audio/Audiobook, desc: "Crime"}
       - {id: Detective, cat: Audio/Audiobook, desc: "Detective"}
       - {id: Doctor, cat: Audio/Audiobook, desc: "Doctor Who"}
+      - {id: Documentary, cat: Audio/Audiobook, desc: "Documentary"}
       - {id: Education, cat: Audio/Audiobook, desc: "Education"}
       - {id: Fantasy, cat: Audio/Audiobook, desc: "Fantasy"}
+      - {id: Full, cat: Audio/Audiobook, desc: "Full Cast"}
+      - {id: Gay, cat: Audio/Audiobook, desc: "Gay"}
       - {id: General, cat: Audio/Audiobook, desc: "General Fiction"}
       - {id: Historical, cat: Audio/Audiobook, desc: "Historical Fiction"}
       - {id: History, cat: Audio/Audiobook, desc: "History"}
       - {id: Horror, cat: Audio/Audiobook, desc: "Horror"}
       - {id: Humor, cat: Audio/Audiobook, desc: "Humor"}
-      - {id: Lecture, cat: Audio/Audiobook, desc: "Lecture"}
       - {id: LGBT, cat: Audio/Audiobook, desc: "LGBT"}
-      - {id: Literature, cat: Audio/Audiobook, desc: "Literature"}
+      - {id: Lecture, cat: Audio/Audiobook, desc: "Lecture"}
+      - {id: Lesbian, cat: Audio/Audiobook, desc: "Lesbian"}
+      - {id: Libertarian, cat: Audio/Audiobook, desc: "Libertarian"}
       - {id: LitRPG, cat: Audio/Audiobook, desc: "LitRPG"}
+      - {id: Literature, cat: Audio/Audiobook, desc: "Literature"}
+      - {id: Military, cat: Audio/Audiobook, desc: "Military"}
       - {id: Misc., cat: Audio/Audiobook, desc: "Misc. Non-fiction"}
       - {id: Mystery, cat: Audio/Audiobook, desc: "Mystery"}
-      - {id: Myth, cat: Audio/Audiobook, desc: "Myth Hunting"}
+      - {id: Novel, cat: Audio/Audiobook, desc: "Novel"}
+      - {id: Other, cat: Audio/Audiobook, desc: "Other"}
       - {id: Paranormal, cat: Audio/Audiobook, desc: "Paranormal"}
       - {id: Plays, cat: Audio/Audiobook, desc: "Plays & Theater"}
       - {id: Poetry, cat: Audio/Audiobook, desc: "Poetry"}
       - {id: Political, cat: Audio/Audiobook, desc: "Political"}
-      - {id: Postapocalyptic, cat: Audio/Audiobook, desc: "Postapocalyptic"}
       - {id: Radio, cat: Audio/Audiobook, desc: "Radio Productions"}
       - {id: Romance, cat: Audio/Audiobook, desc: "Romance"}
       - {id: Sci-Fi, cat: Audio/Audiobook, desc: "Sci-Fi"}
       - {id: Science, cat: Audio/Audiobook, desc: "Science"}
       - {id: Self-help, cat: Audio/Audiobook, desc: "Self-help"}
-      - {id: SHTF, cat: Audio/Audiobook, desc: "SHTF"}
+      - {id: Sex, cat: Audio/Audiobook, desc: "Sex Scenes"}
+      - {id: Short, cat: Audio/Audiobook, desc: "Short Story"}
       - {id: Spiritual, cat: Audio/Audiobook, desc: "Spiritual & Religious"}
       - {id: Sports, cat: Audio/Audiobook, desc: "Sports"}
       - {id: Suspense, cat: Audio/Audiobook, desc: "Suspense"}
+      - {id: Teen, cat: Audio/Audiobook, desc: "Teen & Young Adult"}
+      - {id: The, cat: Audio/Audiobook, desc: "The Undead"}
       - {id: Thriller, cat: Audio/Audiobook, desc: "Thriller"}
-      - {id: "True", cat: Audio/Audiobook, desc: "True Crime"}
       - {id: Tutorial, cat: Audio/Audiobook, desc: "Tutorial"}
+      - {id: Violence, cat: Audio/Audiobook, desc: "Violence"}
       - {id: Westerns, cat: Audio/Audiobook, desc: "Westerns"}
-      - {id: Anthology, cat: Audio/Audiobook, desc: "Anthology"}
-      - {id: Bestsellers, cat: Audio/Audiobook, desc: "Bestsellers"}
-      - {id: Classic, cat: Audio/Audiobook, desc: "Classic"}
-      - {id: Documentary, cat: Audio/Audiobook, desc: "Documentary"}
-      - {id: Full, cat: Audio/Audiobook, desc: "Full Cast"}
-      - {id: Libertarian, cat: Audio/Audiobook, desc: "Libertarian"}
-      - {id: Military, cat: Audio/Audiobook, desc: "Military"}
-      - {id: Novel, cat: Audio/Audiobook, desc: "Novel"}
-      - {id: Short, cat: Audio/Audiobook, desc: "Short Story"}
 
     modes:
       search: [q]
@@ -130,3 +133,11 @@
         filters:
           - name: regexp
             args: "File Size: (.+?)s"
+      seeders:
+        text: 1
+      leechers:
+        text: 1
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1
