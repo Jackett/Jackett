@@ -13,10 +13,8 @@
   caps:
     categorymappings:
       - {id: 1, cat: TV/Sport, desc: "BTCC"}
+      - {id: 2, cat: TV/Sport, desc: "Documentaries/TV"}
       - {id: 3, cat: TV/Sport, desc: "DTM"}
-      - {id: 4, cat: TV/Sport, desc: "Formula 1 2018"}
-      - {id: 6, cat: TV/Sport, desc: "Formula 1 2017-1950 (HD)"}
-      - {id: 21, cat: TV/Sport, desc: "Formula 1 2017-1950 (SD)"}
       - {id: 22, cat: TV/Sport, desc: "Formula 2"}
       - {id: 23, cat: TV/Sport, desc: "Formula E"}
       - {id: 24, cat: TV/Sport, desc: "Misc"}
@@ -27,8 +25,19 @@
       - {id: 33, cat: TV/Sport, desc: "Touring Cars"}
       - {id: 50, cat: TV/Sport, desc: "WRC"}
       - {id: 53, cat: TV/Sport, desc: "Open-Wheelers"}
-      - {id: 54, cat: TV/Sport, desc: "Documentaries/Movies"}
       - {id: 55, cat: TV/Sport, desc: "Season Reviews"}
+      - {id: 56, cat: TV/Sport, desc: "WRX"}
+      - {id: 57, cat: TV/Sport, desc: "WEC"}
+      - {id: 58, cat: TV/Sport, desc: "Formula 1 Full Seasons"}
+      - {id: 60, cat: TV/Sport, desc: "Drag Racing"}
+      - {id: 61, cat: TV/Sport, desc: "Rally"}
+      - {id: 62, cat: TV/Sport, desc: "Formula 1 Testing"}
+      - {id: 63, cat: TV/Sport, desc: "Supercars"}
+      - {id: 64, cat: TV/Sport, desc: "Indycar Complete Seasons"}
+      - {id: 65, cat: TV/Sport, desc: "NASCAR Complete Seasons"}
+      - {id: 66, cat: TV/Sport, desc: "Documentaries"}
+      - {id: 67, cat: TV/Sport, desc: "Formula 1 2019"}
+      - {id: 68, cat: TV/Sport, desc: "Formula 1 2018-1950"}
 
     modes:
       search: [q]
@@ -39,10 +48,19 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: 1
     error:
-      - selector: table.main:contains("Login Failed!")
+      - selector: form[action$="/login"] .text-red
     test:
       path: torrents
+      selector: a[href$="/logout"]
+
+  ratio:
+    path: /
+    selector: span:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
@@ -50,8 +68,12 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{ .Keywords }}"
+      description: ""
       uploader: ""
-      sorting: created_at
+      imdb: ""
+      tvdb: ""
+      tmdb: ""
+      sort: created_at
       direction: desc
       qty: 100
     rows:
@@ -118,3 +140,4 @@
           "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
           "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
           "*": "1"
+# UNIT3D

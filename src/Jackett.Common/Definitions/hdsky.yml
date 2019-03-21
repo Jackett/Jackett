@@ -26,19 +26,19 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: cookie
+      type: text
+      label: Cookie
+    - name: info
+      type: info
+      label: How to get the Cookie
+      default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>"
+
   login:
-    path: login.php
-    method: form
-    form: form[action="takelogin.php"]
-    captcha:
-      type: image
-      selector: img[alt="CAPTCHA"]
-      input: imagestring
+    method: cookie
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    error:
-      - selector: td.embedded:has(h2:contains("failed"))
+      cookie: "{{ .Config.cookie }}"
     test:
       path: torrents.php
 
@@ -58,11 +58,16 @@
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: "1"
-      spstate: "0"
-      inclbookmarked: "0"
+      # 0=including dead 1=active 2=dead
+      incldead: 0
+      # show promotions 0=all 1=normal 2=free 3=2x 4=2x free 5=50% 6=2x50% 7=30%
+      spstate: 0
+      # 0=all 1=bookmarked 2=not
+      inclbookmarked: 0
+      # 0=title 1=descr 3=uploaded 4=imdb url
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-      search_mode: "0"
+      # 0=AND 1=OR 2=exact
+      search_mode: 0
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
       filters:
@@ -84,7 +89,7 @@
         selector: form[action^="download.php?id="]
         attribute: action
       imdb:
-        selector: a[href^="http://www.imdb.com/title/tt"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       size:
         selector: td.rowfollow:nth-child(5)
@@ -119,3 +124,4 @@
       description:
         selector: td:nth-child(2)
         remove: a, img
+# NexusPHP
