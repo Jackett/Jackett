@@ -168,6 +168,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * CCFBits
  * CGPeers
  * CHDBits
+ * ChannelX
  * Cinemageddon
  * Cinematik
  * CinemaZ (EuTorrents)
