@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -1662,8 +1661,6 @@ namespace Jackett.Common.Indexers
                 OnParseError(results.Content, ex);
             }
 
-            if (query.Limit > 0)
-                releases = releases.Take(query.Limit).ToList();
             return releases;
         }
     }
