@@ -206,8 +206,6 @@ namespace Jackett.Common.Indexers.Abstract
                 OnParseError(response.Content, ex);
             }
 
-            if (query.Limit > 0)
-                releases = releases.Take(query.Limit).ToList();
             return releases;
         }
 
