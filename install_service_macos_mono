@@ -12,11 +12,15 @@ launchctl remove org.user.Jackett
 cd "$(dirname "$0")"
 
 # Check if we're running from Jackett's directory
-if [ ! -f ./jackett ]; then
-echo "${BOLDRED}ERROR${NC}: Couldn't locate ./jackett - Is the script in the right directory?"
+if [ ! -f ./JackettConsole.exe ]; then
+echo "${BOLDRED}ERROR${NC}: Couldn't locate JackettConsole.exe. Is the script in the right directory?"
     exit 1
 fi
 jackettdir="$(pwd)"
+
+# Check if mono is installed
+command -v mono >/dev/null 2>&1 || { echo >&2 "${BOLDRED}ERROR${NC}: Jackett requires Mono but it's not installed. Aborting."; exit 1; }
+monodir="$(dirname $(command -v mono))"
 
 # Check that no other service called Jackett is already running
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
@@ -34,7 +38,7 @@ cat >~/Library/LaunchAgents/org.user.Jackett.plist <<EOL
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <string>/usr/bin:/bin:/usr/sbin:/sbin:${monodir}</string>
     </dict>
     <key>KeepAlive</key>
     <true/>
@@ -42,7 +46,9 @@ cat >~/Library/LaunchAgents/org.user.Jackett.plist <<EOL
     <string>org.user.Jackett</string>
     <key>ProgramArguments</key>
     <array>
-        <string>${jackettdir}/jackett</string>
+        <string>${monodir}/mono</string>
+        <string>--debug</string>
+        <string>JackettConsole.exe</string>
         <string>--NoRestart</string>
     </array>
     <key>RunAtLoad</key>
@@ -64,6 +70,7 @@ else
     cat << EOL
 ${BOLDRED}ERROR${NC}: Could not launch agent. The installation might have failed.
 Please open an issue on https://github.com/Jackett/Jackett/issues and paste following information:
+Mono directory: \`${monodir}\`
 Jackett directory: \`${jackettdir}\`
 
 EOL

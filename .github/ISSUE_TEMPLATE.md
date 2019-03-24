@@ -7,7 +7,7 @@ If you are experiencing an issue with a tracker, then:
 2. If you haven't already, try upgrading to the latest version of Jackett, your issue may have already been resolved.
 3. If it is still not working for you, then a **full enhanced log must be included**. Instructions for obtaining logs are here: https://github.com/Jackett/Jackett#troubleshooting
 
-**Jackett version**:  
-**Mono version** (if not using Windows):  
+(At the bottom of your Jackett Dashboard page) **Jackett version**:  
+(if you installed using Jackett.Binaries.Mono.tar.gz) **Mono version**:
 
 -------------------------------

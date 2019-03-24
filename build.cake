@@ -126,7 +126,7 @@ Task("Package-Mono-Full-Framework")
 
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
-		CopyFileToDirectory("./install_service_macos", buildOutputPath);
+		CopyFileToDirectory("./install_service_macos_mono", buildOutputPath);
 		CopyFileToDirectory("./install_service_systemd_mono.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
@@ -165,7 +165,7 @@ Task("Package-DotNetCore-macOS")
 
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.macOS.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.macOS.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxAMDx64")
@@ -290,13 +290,23 @@ Task("Release-Notes")
 
 	});
 
-Task("Windows-Environment")
+Task("Windows-Environment-Dev")
 	.IsDependentOn("Package-Windows-Full-Framework")
 	.IsDependentOn("Package-Mono-Full-Framework")
-	//.IsDependentOn("Package-DotNetCore-macOS")
-	//.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
-	//.IsDependentOn("Package-DotNetCore-LinuxARM32")
-	//.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Package-DotNetCore-macOS")
+	.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
+	.IsDependentOn("Package-DotNetCore-LinuxARM32")
+	.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Release-Notes")
+	.Does(() =>
+	{
+		Information("Windows-Environment Task Completed");
+	});
+
+Task("Windows-Environment-Appveyor")
+	.IsDependentOn("Package-Windows-Full-Framework")
+	.IsDependentOn("Package-Mono-Full-Framework")
 	.IsDependentOn("Appveyor-Push-Artifacts")
 	.IsDependentOn("Release-Notes")
 	.Does(() =>
@@ -429,10 +439,17 @@ private void DotNetCorePublish(string projectPath, string framework, string runt
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Windows-Environment")
+	.IsDependentOn("Windows-Environment-Dev")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
+	});
+
+Task("Windows-Appveyor")
+	.IsDependentOn("Windows-Environment-Appveyor")
+	.Does(() =>
+	{
+		Information("Windows Appveyor Task Completed");
 	});
 
 Task("Linux")
