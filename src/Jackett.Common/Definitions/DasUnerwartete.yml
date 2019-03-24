@@ -51,6 +51,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: username
@@ -68,7 +69,7 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: .tablea:contains("Benutzername oder Passwort ungültig")
+      - selector: .tablea:contains("Benutzername oder Passwort ungÃ¼ltig")
     test:
       path: browse.php
 
