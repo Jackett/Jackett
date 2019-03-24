@@ -290,13 +290,23 @@ Task("Release-Notes")
 
 	});
 
-Task("Windows-Environment")
+Task("Windows-Environment-Dev")
 	.IsDependentOn("Package-Windows-Full-Framework")
 	.IsDependentOn("Package-Mono-Full-Framework")
-	//.IsDependentOn("Package-DotNetCore-macOS")
-	//.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
-	//.IsDependentOn("Package-DotNetCore-LinuxARM32")
-	//.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Package-DotNetCore-macOS")
+	.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
+	.IsDependentOn("Package-DotNetCore-LinuxARM32")
+	.IsDependentOn("Package-DotNetCore-LinuxARM64")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Release-Notes")
+	.Does(() =>
+	{
+		Information("Windows-Environment Task Completed");
+	});
+
+Task("Windows-Environment-Appveyor")
+	.IsDependentOn("Package-Windows-Full-Framework")
+	.IsDependentOn("Package-Mono-Full-Framework")
 	.IsDependentOn("Appveyor-Push-Artifacts")
 	.IsDependentOn("Release-Notes")
 	.Does(() =>
@@ -429,10 +439,17 @@ private void DotNetCorePublish(string projectPath, string framework, string runt
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Windows-Environment")
+	.IsDependentOn("Windows-Environment-Dev")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
+	});
+
+Task("Windows-Appveyor")
+	.IsDependentOn("Windows-Environment-Appveyor")
+	.Does(() =>
+	{
+		Information("Windows Appveyor Task Completed");
 	});
 
 Task("Linux")

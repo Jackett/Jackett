@@ -21,7 +21,7 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 build_script:
-- ps: .\build.ps1 --target=Default 
+- ps: .\build.ps1 --target=Windows-Appveyor 
 - sh: ./build.sh --target=Linux
 test: off
 before_deploy:
