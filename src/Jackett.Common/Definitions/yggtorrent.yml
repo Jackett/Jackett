@@ -25,6 +25,8 @@
     - https://ygg.to/
     - https://www.ygg.to/
     - https://ww3.yggtorrent.gg/
+    - http://www2.yggtorrent.gg/
+
   caps:
     categorymappings:
       - {id: 2145, cat: TV, desc: "Film/Vidéo"}
