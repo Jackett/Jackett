@@ -179,6 +179,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Dark-Shadow
  * Das Unerwartete
  * DataScene (DS)
+ * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
  * DigitalCore
