@@ -117,98 +117,60 @@
       orderby: "added"
       sort: "desc"
     rows:
-      selector: table.tableinborder:has(a[href^="download_ssl.php"])
+      selector: table.tablebrowse > tbody > tr:has(a[href^="download_ssl.php"])
     fields:
       title:
         selector: a[title][href^="details.php"]
         attribute: title
       category:
-        selector: td[style][colspan]
-        case:
-         td[style$="#000033;"]:contains("Android"): 65
-         td[style$="#000033;"]:contains("iOS"): 83
-         td[style$="#000033;"]:contains("Linux"): 107
-         td[style$="#000033;"]:contains("MAC"): 48
-         td[style$="#000033;"]:contains("Sonstige"): 109
-         td[style$="#000033;"]:contains("Win"): 22
-         td[style$="#1d2f8c;"]:contains("aBooks"): 24
-         td[style$="#1d2f8c;"]:contains("Disco's"): 104
-         td[style$="#1d2f8c;"]:contains("Hörspiel"): 38
-         td[style$="#1d2f8c;"]:contains("Musik"): 6
-         td[style$="#1d2f8c;"]:contains("Tracks"): 82
-         td[style$="#1d2f8c;"]:contains("Videos"): 29
-         td[style$="#000000;"]:contains("3D"): 113
-         td[style$="#000000;"]:contains("HD"): 76
-         td[style$="#000000;"]:contains("Packs"): 78
-         td[style$="#000000;"]:contains("SD"): 75
-         td[style$="#000000;"]:contains("Sonstige"): 114
-         td[style$="#000000;"]:contains("Untouched"): 77
-         td[style$="#55316e;"]:contains("1080p"): 54
-         td[style$="#55316e;"]:contains("3D"): 5
-         td[style$="#55316e;"]:contains("720p"): 55
-         td[style$="#55316e;"]:contains("Anime"): 111
-         td[style$="#55316e;"]:contains("BluRay"): 43
-         td[style$="#55316e;"]:contains("DVDR"): 20
-         td[style$="#55316e;"]:contains("Int"): 120
-         td[style$="#55316e;"]:contains("Remux"): 119
-         td[style$="#55316e;"]:contains("UHD"): 121
-         td[style$="#55316e;"]:contains("UHD Remux"): 124
-         td[style$="#55316e;"]:contains("SD"): 36
-         td[style$="#620000;"]:contains("Anime"): 112
-         td[style$="#620000;"]:contains("HD"): 69
-         td[style$="#620000;"]:contains("Int"): 72
-         td[style$="#620000;"]:contains("Packs"): 68
-         td[style$="#620000;"]:contains("SD"): 66
-         td[style$="#620000;"]:contains("TV-Shows"): 108
-         td[style$="#003300;"]:contains("Diverses"): 117
-         td[style$="#003300;"]:contains("eBooks"): 28
-         td[style$="#003300;"]:contains("Sport"): 42
-         td[style$="#003300;"]:contains("Tutorials"): 103
-         td[style$="#003300;"]:contains("Wallpaper"): 9
-         td[style$="#FF00FF;"]:contains("XXX"): 64
-         td[style$="#FF3300;"]:contains("MAC"): 115
-         td[style$="#FF3300;"]:contains("Nintendo"): 37
-         td[style$="#FF3300;"]:contains("PC"): 4
-         td[style$="#FF3300;"]:contains("PSX"): 58
-         td[style$="#FF3300;"]:contains("Sonstige"): 116
-         td[style$="#FF3300;"]:contains("XBOX"): 50
+        selector: a[href*="cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
       comments:
         selector: a[href*="&tocomm="]
         attribute: href
       download:
         selector: a[href^="download_ssl.php"]
         attribute: href
+      banner:
+        selector: a.thumbnail > span > img
+        attribute: src
       grabs:
-        selector: td:has(a[href*="&tosnatchers="])
+        selector: td:nth-child(9)
         filters:
           - name: regexp
-            args: "(\\d+) x"
+            args: "(\\d+)"
       size:
-        selector: td:has(a[href*="&filelist="])
+        selector: td:nth-child(6)
         filters:
-          - name: regexp
-            args: "(.*?) in"
           - name: replace
             args: [".", ""]
           - name: replace
             args: [",", "."]
       files:
-        selector: td:has(a[href*="&filelist="]) > b
+        selector: a[href*="&filelist=1"]
       seeders:
-        selector: td:has(a[href*="&toseeders="]) > font
+        selector: td:has(a[href*="&toseeders="])
+        filters:
+          - name: regexp
+            args: "(\\d+)"
       leechers:
-        selector: td:has(a[href*="&todlers="]) > font
+        selector: td:has(a[href*="&todlers="])
+        filters:
+          - name: regexp
+            args: "(\\d+)"
       date:
-        selector: td:has(a[href*="&tocomm="]) ~ td
+        selector: td:nth-child(5)
         filters:
           - name: re_replace
             args: ["\\s", " "]
           - name: dateparse
-            args: "02.01.2006 15:04:05"
+            args: "02.01.200615:04:05"
       downloadvolumefactor:
         case:
-          img[src="pic/oupic.gif"]: "0"
-          img[src="pic/-40.gif"]: "0.6"
+          "font[color=\"#730d1e\"]:contains(\"[OnlyUpload]\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:
