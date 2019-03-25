@@ -139,6 +139,12 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
             {
                 var results = await RequestStringWithCookies(TodayUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookies(TodayUrl);
+                }
                 try
                 {
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
@@ -274,6 +280,12 @@ namespace Jackett.Common.Indexers
                 searchUrl += "?" + queryCollection.GetQueryString();
 
                 var results = await RequestStringWithCookies(searchUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookies(searchUrl);
+                }
                 try
                 {
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
