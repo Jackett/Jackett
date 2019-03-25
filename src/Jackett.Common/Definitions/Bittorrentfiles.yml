@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://bittorrentfiles.me/
+  legacylinks:
     - https://www.Bittorrentfiles.me/
 
   caps:
