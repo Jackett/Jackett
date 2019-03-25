@@ -10,7 +10,7 @@ namespace Jackett.Common.Indexers
     public class Psytorrents : GazelleTracker
     {
         private static readonly string[] certificateHashs = new string[] {
-            "455333CC651C249E1A91DFF8EFC2A5F8044FE956", // expired
+            "8375026D07C1EAE2DCE7157ABF255357366AE341", // expired
         };
 
         public Psytorrents(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
