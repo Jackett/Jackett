@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.11.0" />
-    <PackageReference Include="Autofac" Version="4.9.1" />
+    <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="2.3.0" />
     <PackageReference Include="CloudFlareUtilities" Version="1.3.0" />
@@ -20,11 +20,11 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.12" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="NLog" Version="4.6.0" />
     <PackageReference Include="SharpZipLib" Version="1.1.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
-    <PackageReference Include="YamlDotNet" Version="5.4.0" />    
+    <PackageReference Include="YamlDotNet" Version="6.0.0" />    
   </ItemGroup>
 
   <ItemGroup>
