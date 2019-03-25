@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
                     var qRow = row.Cq();
 
                     var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                    var qTitle = qRow.Find(".tooltip-content > div:eq(0)"); // use Title from tooltip
                     if (!qTitle.Any()) // fallback to Details link if there's no tooltip
                     {
                         qTitle = qDetails;
@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers
                     if (qDesciption.Any())
                         release.Description = qDesciption.Get(1).InnerText.Trim();
 
-                    var qLink = row.Cq().Find("td:eq(2) a:eq(1)");
+                    var qLink = row.Cq().Find("a[href*=\"download.php\"]");
                     release.Link = new Uri(qLink.Attr("href"));
                     release.Guid = release.Link;
                     release.Comments = new Uri(qDetails.Attr("href"));
@@ -187,7 +187,11 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    release.UploadVolumeFactor = 1;
+
+                    if (qRow.Find("img[title^=\"x2 Torrent\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
