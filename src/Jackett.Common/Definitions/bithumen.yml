@@ -135,13 +135,24 @@
           - name: replace
             args: ["×", ""]
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-child(5):contains('.')
+        optional: true
+        remove: font
+        filters:
+          - name: replace
+            args: [". ", " "]
+          - name: prepend
+            args: "2019."
+          - name: re_replace
+            args: ["([0-9]{4}).([0-9]+).([0-9]+) (.*)", "$2.$3.$1 $4"]
+      date:
+        selector: td:nth-child(5):contains('ma'), td:nth-child(5):contains("tegnap"), td:nth-child(5):contains('-')
+        optional: true
         remove: font
         filters:
           - name: replace
             args: ["ma", "today"]
           - name: replace
             args: ["tegnap", "yesterday"]
-      
       description:
         selector: td:nth-child(2) > div
