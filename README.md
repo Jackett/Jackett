@@ -272,6 +272,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * P2PBG
  * Passione Torrent <!-- maintained by bonny1992 -->
  * PassThePopcorn (PTP)
+ * Peers.FM
  * PiratBit
  * PirateTheNet (PTN)
  * PiXELHD (PxHD)
