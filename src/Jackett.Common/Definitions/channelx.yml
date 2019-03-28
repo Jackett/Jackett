@@ -28,7 +28,7 @@
       password: "{{ .Config.password }}"
       remember: 1
     error:
-      - selector: form[action*="/login"] .text-red
+      - selector: div.has-error
     test:
       path: torrents
       selector: a[href$="/logout"]
@@ -84,15 +84,15 @@
             args: ["https://via.placeholder.com/600x900", ""]
       size:
         selector: td:nth-child(5)
-      grabs:
+      seeders:
         selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
         filters:
           - name: regexp
             args: ([\d\.]+)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
@@ -138,4 +138,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9
+# UNIT3D 1.9.2
