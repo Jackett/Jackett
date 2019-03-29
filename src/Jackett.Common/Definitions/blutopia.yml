@@ -25,8 +25,9 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: 1
     error:
-      - selector: form[action*="/login"] .text-red
+      - selector: div.has-error
     test:
       path: torrents
 
@@ -36,12 +37,13 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
       tmdb: ""
       mal: ""
-      sorting: created_at
+      sort: created_at
       direction: desc
       qty: 100
     rows:
@@ -61,6 +63,13 @@
       details:
         selector: a.view-torrent
         attribute: href
+      banner:
+        optional: true
+        selector: div.torrent-poster img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900", ""]
       size:
         selector: td:nth-child(5)
       seeders:
@@ -74,7 +83,7 @@
             args: ([\d\.]+)
       imdb:
         optional: true
-        selector: a[href^="https://www.imdb.com/title/"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       date:
         selector: time
@@ -117,4 +126,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D
+# UNIT3D 1.9.2
