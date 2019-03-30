@@ -10,6 +10,18 @@
   legacylinks:
     - http://amigos-share.club/
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info_results
+      type: info
+      label: "Search results"
+      default: "Set <b>Exibição De Torrents</b> to <b>Lista</b> in your <b>Minhas Configurações</b>.<br />Using <b>Capas</b> is not supported and will return 0 results."
+
   caps:
     categorymappings:
       - {id: 107, cat: XXX, desc: "Adultos: Gay"}
