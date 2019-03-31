@@ -8,6 +8,18 @@
   links:
     - https://hdf.world/
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: usetoken
+      type: checkbox
+      label: Always try to use the FreeLeech Token
+      default: false
+
   caps:
     categories:
       1: Movies
@@ -49,9 +61,17 @@
     rows:
       selector: table#torrent_table > tbody > tr.torrent
     fields:
-      download:
+      download-regular:
         selector: a[href^="torrents.php?action=download&"]
         attribute: href
+      download-usetoken:
+        selector: a[href^="torrents.php?action=download&"]
+        attribute: href
+        filters:
+          - name: append
+            args: "&usetoken=1"
+      download:
+        text: "{{if .Config.usetoken}}{{ .Result.download-usetoken }}{{else}}{{ .Result.download-regular }}{{end}}" 
       title:
         selector: div.group_info
         remove: span:nth-child(1), div.tags
