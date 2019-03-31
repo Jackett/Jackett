@@ -573,7 +573,7 @@ cd Jackett/src
 
 # dotnet core version
 dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/JackettConsole # run jackett
+./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/jackett # run jackett
 ```
 <!--
 # mono version (currently broken)
