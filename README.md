@@ -391,8 +391,8 @@ Using the all indexer has no advantages (besides reduced management overhead), o
 
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as query parameter.
 
-## Installation on Windows
 
+## Installation on Windows
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
 
 To get started with using the installer for Jackett, follow the steps below:
@@ -408,20 +408,30 @@ When installed as a service the tray icon acts as a way to open/start/stop Jacke
 
 Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
 
-## Install on Linux (AMDx64)
- 1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
- 2. (Optional) To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
+## Install on Linux (AMDx64)
 On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
 
+### Install as service
+To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+
+### Run without installing as a service
+Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
+
+### home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
 
-## Install on Linux (ARMv7 or above)
- 1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
- 2. (Optional) To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
+## Install on Linux (ARMv7 or above)
 On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#linux-distribution-dependencies
 
+### Install as service
+To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+
+### Run without installing as a service
+Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
+
+### home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
 
 
@@ -440,11 +450,13 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
 
+
 ### Installation on Linux via Ansible
 
 On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
 
 On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
+
 
 ## Installation on macOS
 
@@ -462,11 +474,14 @@ Logs are stored as usual under `~/.config/Jackett/log.txt`.
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.macOS.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`.
 
+
 ## Installation using Docker
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
 
+
 ## Installation on Synology
 Jackett is available as beta package from [SynoCommunity](https://synocommunity.com/)
+
 
 ## Running Jackett behind a reverse proxy
 When running jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base Path Override" Jackett option accordingly.
@@ -560,7 +575,7 @@ cd Jackett/src
 
 # dotnet core version
 dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp2.2/osx-x64/JackettConsole # run jackett
+./Jackett.Server/bin/Debug/netcoreapp2.2/osx-x64/jackett # run jackett
 ```
 
 ### Linux
@@ -575,12 +590,6 @@ cd Jackett/src
 dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug # takes care of everything
 ./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/jackett # run jackett
 ```
-<!--
-# mono version (currently broken)
-nuget restore Jackett.sln # prepare dependencies
-msbuild Jackett.Server/Jackett.Server.csproj /t:Build /p:Configuration=Debug # compile
-mono Jackett.Server/bin/Debug/JackettServer.exe # run jackett
--->
 
 ## Screenshots
 
