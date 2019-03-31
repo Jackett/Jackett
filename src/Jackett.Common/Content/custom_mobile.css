@@ -281,10 +281,6 @@ div#jackett-releases-datatable_wrapper {
     width: 100%;
     overflow-x: scroll;
 }
-input#searchquery {
+input#searchquery{
 	width:50%;
-}
-
-#proxy-warning {
-    color: red;
 }
