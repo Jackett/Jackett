@@ -59,16 +59,12 @@
       # - path: "{{if .Keywords}}argh.php?search={{ .Keywords}}
       #      {{else}}/recenti
       #      {{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=3{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=6{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=7{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=8{{else}}/recenti{{end}}"
-      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=9{{else}}/recenti{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/browse/0{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/browse/1{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/browse/2{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=3{{else}}/browse/3{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/browse/4{{end}}"
+      - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/browse/5{{end}}"
     keywordsfilters:
       - name: diacritics
         args: replace
