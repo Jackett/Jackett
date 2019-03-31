@@ -1229,7 +1229,7 @@ function bindUIButtons() {
 }
 
 function proxyWarning(input) {
-    if (input && input.trim() != "")
+    if (input.trim() != "")
         $('#proxy-warning').show();
     else
         $('#proxy-warning').hide();
