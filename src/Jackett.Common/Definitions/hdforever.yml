@@ -210,7 +210,7 @@
         selector: td:nth-child(8)
       downloadvolumefactor:
         case:
-          "div.group_info:contains(\"↓Free\")": "0"
+          "div.group_info:contains(\"/ Free\")": "0"
           "div.group_info:contains(\"↓75%\")": "0.75"
           "div.group_info:contains(\"↓50%\")": "0.50"
           "div.group_info:contains(\"↓25%\")": "0.25"
