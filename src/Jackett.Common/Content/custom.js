@@ -99,7 +99,6 @@ function loadJackettSettings() {
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
         })
 
-        proxyWarning(data.proxy_url);
         reloadIndexers();
     });
 }
@@ -1222,15 +1221,4 @@ function bindUIButtons() {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
         });
     });
-
-    $('#jackett-proxy-url').on('input', function () {
-        proxyWarning($(this).val());
-    });
-}
-
-function proxyWarning(input) {
-    if (input.trim() != "")
-        $('#proxy-warning').show();
-    else
-        $('#proxy-warning').hide();
 }
