@@ -99,8 +99,8 @@ function loadJackettSettings() {
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
         })
 
-        proxyWarning(data.proxy_url);
         reloadIndexers();
+        proxyWarning(data.proxy_url);
     });
 }
 
@@ -1229,8 +1229,11 @@ function bindUIButtons() {
 }
 
 function proxyWarning(input) {
-    if (input.trim() != "")
+    if (input != null && input.trim() !== "") {
         $('#proxy-warning').show();
+    }
     else
+    {
         $('#proxy-warning').hide();
+    }
 }
