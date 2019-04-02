@@ -336,7 +336,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent.LT
  * TorrentBD
  * TorrentBytes (TBy)
- * TorrentCCF (TCCF) [![(invite needed)][inviteneeded]](#)
+ * TorrentCCF (TCCF)
  * TorrentDay (TD)
  * Torrentech (TTH)
  * TorrentHeaven
