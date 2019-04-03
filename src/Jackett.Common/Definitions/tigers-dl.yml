@@ -158,11 +158,36 @@
         selector: td:nth-child(7)
       grabs:
         selector: td:nth-child(8)
-      date:
-        selector: td:nth-child(9) img
-        attribute: alt
         filters:
-          - name: timeago
+          - name: replace
+            args: ["---", "0"]
+      date:
+        selector: td:nth-child(9)
+        filters:
+        filters:
+            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
+          - name: re_replace
+            args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
+          - name: re_replace
+            args: ["(?i)(dakika|minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
+          - name: re_replace
+            args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur)", "hour"]
+          - name: re_replace
+            args: ["(?i)(saat|tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
+          - name: re_replace
+            args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден)", "day"]
+          - name: re_replace
+            args: ["(?i)(gün|päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
+          - name: re_replace
+            args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица)", "week"]
+          - name: re_replace
+            args: ["(?i)(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
+          - name: re_replace
+            args: ["(?i) (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+          - name: re_replace
+            args: ["(?i) (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+          - name: append
+            args: " ago"
       downloadvolumefactor:
         text: "1"
       uploadvolumefactor:
