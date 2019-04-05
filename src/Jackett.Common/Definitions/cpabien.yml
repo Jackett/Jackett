@@ -69,6 +69,8 @@
           - name: replace
             args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
           - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
+          - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace
             args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
