@@ -107,6 +107,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RuTracker
  * Sharewood
  * SkTorrent
+ * SoundPark
  * Union Fansub
  * Vanila
  * XtreMeZone (MYXZ)
