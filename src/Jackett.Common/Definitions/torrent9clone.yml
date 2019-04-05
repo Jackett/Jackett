@@ -72,7 +72,7 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace
