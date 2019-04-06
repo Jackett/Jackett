@@ -12,23 +12,20 @@
     categorymappings:
       - {id: 1, cat: Movies, desc: "Film"}
       - {id: 2, cat: TV, desc: "Série"}
-      - {id: 3, cat: TV/Anime, desc: "Film d'Animation"}
-      - {id: 5, cat: TV/Sport, desc: "Sport"}
+      - {id: 3, cat: TV/Anime, desc: "Animés"}
+      - {id: 5, cat: Audio, desc: "Audios"}
       - {id: 6, cat: TV/Documentary, desc: "Documentaire"}
-      - {id: 7, cat: Audio, desc: "Musique"}
-      - {id: 8, cat: Audio/Other, desc: "Podcast Audio"}
+      - {id: 7, cat: Other, desc: "Formations"}
       - {id: 13, cat: Books/Ebook, desc: "eBooks"}
-      - {id: 14, cat: TV, desc: "Spectacle"}
+      - {id: 14, cat: Console, desc: "Jeux"}
       - {id: 15, cat: Audio/Video, desc: "Concert"}
-      - {id: 18, cat: TV/Anime, desc: "Manga"}
-      - {id: 19, cat: Books/Comics, desc: "Comics"}
-      - {id: 20, cat: Books/Comics, desc: "Bande dessinée"}
-      - {id: 22, cat: Console, desc: "Jeux"}
+      - {id: 25, cat: PC, desc: "Logiciels"}
+      - {id: 27, cat: TV, desc: "Spectacles"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep, imdbid]
-      movie-search: [q, imdbid]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: login
@@ -37,18 +34,14 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       remember: 1
-    selectorinputs:
-      _token:
-        selector: meta[name="csrf-token"]
-        attribute: content
     error:
       - selector: form[action$="/login"] span strong
     test:
-      path: /
+      path: torrents
       selector: a[href$="/logout"]
 
   ratio:
-    path: /
+    path: torrents
     selector: span:has(i.fa-sync-alt)
     filters:
       - name: regexp
@@ -59,14 +52,11 @@
       - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      search: "{{ .Keywords }}"
+      description: ""
       uploader: ""
-      imdb: "{{ .Query.IMDBIDShort }}"
-      tvdb: ""
-      tmdb: ""
-      mal: ""
-      sorting: created_at
-      direction: desc
+      sort: "created_at"
+      direction: "desc"
       qty: 100
     rows:
       selector: table > tbody > tr
@@ -85,21 +75,17 @@
       details:
         selector: a.view-torrent
         attribute: href
-      imdb:
-        selector: a[href^="https://www.imdb.com/title/"]
-        attribute: href
-        optional: true
       size:
-        selector: td:nth-child(5)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
+        selector: td:nth-child(4)
       grabs:
-        selector: td:nth-child(6)
+        selector: td:nth-child(5)
         filters:
           - name: regexp
             args: ([\d\.]+)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
       date:
         selector: time
         filters:
@@ -117,12 +103,13 @@
             args: " ago"
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Freeleech\"]": "0" # Single Torrent Freeleech
           "i[data-original-title=\"Global freeleech\"]": "0" # Global Freeleech
           "*": "1"
       uploadvolumefactor:
         case:
+          "i[data-original-title=\"Global freeleech\"]": "2" # Global Freeleech
           "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
           "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
           "*": "1"
-# UNIT3D
+# UNIT3D 1.?
