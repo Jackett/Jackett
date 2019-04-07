@@ -60,7 +60,7 @@
       - {id: 2, cat: Movies, desc: "Filmes: Terror"}
       - {id: 1, cat: Movies, desc: "Filmes: Ação"}
       - {id: 80, cat: Movies, desc: "Filmes: Aventura"}
-      - {id: 70, cat: Other, desc: "Fotos: XXX"}
+      - {id: 70, cat: XXX, desc: "Fotos: XXX"}
       - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
       - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
       - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
@@ -142,18 +142,18 @@
     error:
       - selector: div.alert-error
     test:
-      path: index.php
-#      selector: a[href="account-logout.php"]
+      path: torrents-search.php
+      selector: a[href="account-logout.php"]
 
   ratio:
-    path: index.php
+    path: torrents-search.php
     selector: li:contains("Ratio:") a b
 
   search:
     paths:
       # http://amigos-share.club/torrents-search.php?search=&c1=1&c19=1&c36=1&incldead=0&freeleech=0&lang=0sort=id&order=desc&page=1
       - path: torrents-search.php
-      # site displays just 21 results, no profile options found to change this, so we attempt to fetch 5 pages
+      # site displays just 9 results, no profile options found to change this, so we attempt to fetch 5 pages
       - path: torrents-search.php
         inputs:
           page: 1
@@ -185,6 +185,12 @@
       download:
         selector: a[href^="download.php?id="]
         attribute: href
+      banner:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: title
+        filters:
+          - name: regexp
+            args: "src=\"(.*?)\""
       category:
         selector: td:first-child img
         attribute: src
@@ -207,7 +213,7 @@
          "[src$=\"/E-books.png\"]": "67"
          "[src$=\"/Revista.png\"]": "68"
          "[src$=\"/Aventura.png\"]": "80"
-         "[src$=\"/XXX.png\"]": "70"
+         "[src$=\"/Revistas-XXX.png\"]": "70"
          "[src$=\"/Jogos-Ps4.png\"]": "79"
          "[src$=\"/Jogos-PC.png\"]": "47"
          "[src$=\"/Jogos-EmuladoreseRoms.png\"]": "61"
