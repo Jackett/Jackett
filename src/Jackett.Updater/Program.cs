@@ -174,6 +174,34 @@ namespace Jackett.Updater
                 // On unix we kill the PIDs after the update so e.g. systemd can automatically restart the process
                 KillPids(pids);
             }
+
+            Variants variants = new Variants();
+            if (variants.IsNonWindowsDotNetCoreVariant(variant))
+            {
+                // On Linux you can't modify an executable while it is executing
+                // https://github.com/Jackett/Jackett/issues/5022
+                // https://stackoverflow.com/questions/16764946/what-generates-the-text-file-busy-message-in-unix#comment32135232_16764967
+                // Delete the ./jackett executable
+                try
+                {
+                    logger.Info("Attempting to remove the jackett executable from: " + options.Path);
+                    string executable = options.Path.TrimEnd('/') + "/jackett";
+                    if (File.Exists(executable))
+                    {
+                        File.Delete(executable);
+                        logger.Info("Deleted " + executable);
+                    }
+                    else
+                    {
+                        logger.Info("jackett executable not found in: " + executable);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                }
+            }
+
             logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
             foreach (var file in files)
@@ -402,8 +430,8 @@ namespace Jackett.Updater
 
         private string GetJackettConsolePath(string directoryPath)
         {
-            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
-                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+            Variants variants = new Variants();
+            if (variants.IsNonWindowsDotNetCoreVariant(variant))
             {
                 return Path.Combine(directoryPath, "jackett");
             }
