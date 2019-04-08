@@ -61,7 +61,7 @@
       - path: "?t={{if .Keywords}}{{.Keywords}}{{else}}test{{end}}&orderby=latest{{if .Config.filter-verified }}&safe=on{{else}}{{end}}"
         followredirect: true
     rows:
-      selector: "#similarfiles div:has(a[href^=\"/t3-\"])"
+      selector: "#similarfiles div:has(a[href^=\"/t0-\"])"
     fields:
       title:
         selector: span > a
