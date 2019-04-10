@@ -320,6 +320,7 @@ namespace Jackett.Updater
                 "Definitions/redtopia.yml",
                 "Definitions/btxpress.yml",
                 "Definitions/btstornet.yml",
+                "Definitions/crazyhd.yml",
             };
 
             foreach (var oldFile in oldFiles)
