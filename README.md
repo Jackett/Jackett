@@ -234,7 +234,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDCity
  * HDHome (HDBigger)
  * HDME
- * HDplus
  * HDSky
  * HDTorrents.it
  * Hebits
