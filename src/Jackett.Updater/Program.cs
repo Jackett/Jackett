@@ -322,6 +322,7 @@ namespace Jackett.Updater
                 "Definitions/btstornet.yml",
                 "Definitions/crazyhd.yml",
                 "Definitions/hdplus.yml",
+                "Definitions/gods.yml",
             };
 
             foreach (var oldFile in oldFiles)

@@ -216,7 +216,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GigaTorrents
  * GimmePeers (formerly ILT) <!-- maintained by jamesb2147 -->
  * GiroTorrent
- * GODS
  * Greek Team
  * HacheDe
  * Hardbay
