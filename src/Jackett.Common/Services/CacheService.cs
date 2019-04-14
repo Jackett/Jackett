@@ -13,7 +13,7 @@ namespace Jackett.Common.Services
     {
         private readonly List<TrackerCache> cache = new List<TrackerCache>();
         private readonly int MAX_RESULTS_PER_TRACKER = 1000;
-        private readonly TimeSpan AGE_LIMIT = new TimeSpan(7, 0, 0, 0);
+        private readonly TimeSpan AGE_LIMIT = new TimeSpan(0, 1, 0, 0);
 
         public void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases)
         {
@@ -44,7 +44,7 @@ namespace Jackett.Common.Services
                 // Prune cache
                 foreach(var tracker in cache)
                 {
-                    tracker.Results = tracker.Results.OrderByDescending(i => i.Created).Take(MAX_RESULTS_PER_TRACKER).ToList();
+                    tracker.Results = tracker.Results.Where(x => x.Created > DateTime.Now.Subtract(AGE_LIMIT)).OrderByDescending(i => i.Created).Take(MAX_RESULTS_PER_TRACKER).ToList();
                 }
             }
         }
