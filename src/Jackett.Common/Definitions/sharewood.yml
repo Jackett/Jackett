@@ -81,6 +81,9 @@
         selector: div.bouton-s
       leechers:
         selector: div.bouton-l
+      grabs:
+        selector: div.bouton-c
+        
       date:
         selector: div.col-detail div.row div span
         filters:
@@ -98,8 +101,10 @@
             args: " ago"
       downloadvolumefactor:
         case:
+          "span.badge-extra:contains('Freeleech')" : "0"
           "*": "1"
       uploadvolumefactor:
         case:
+          "span.badge-extra:contains('Double Upload')" : "2"
           "*": "1"
 # UNIT3D
