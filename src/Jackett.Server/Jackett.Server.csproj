@@ -6,6 +6,7 @@
     <AssemblyName>JackettConsole</AssemblyName>
     <OutputType>Exe</OutputType>
     <NoWarn>NU1605</NoWarn>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' != 'net461' and $(RuntimeIdentifier.Contains('win')) == 'false'">
