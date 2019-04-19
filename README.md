@@ -31,6 +31,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTDigg
  * BTKitty
+ * ConCen
  * cpasbien
  * cpasbienClone
  * DIGBT
