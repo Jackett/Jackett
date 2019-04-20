@@ -46,7 +46,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: takelogin.php
+    path: login.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
