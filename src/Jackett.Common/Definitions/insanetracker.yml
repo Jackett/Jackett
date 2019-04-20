@@ -53,7 +53,7 @@
       password: "{{ .Config.password }}"
       notsecure: "1"
     error:
-      - selector: div.login_error_content
+      - selector: div.login_error_content_text
     test:
       path: browse.php
         
