@@ -7,15 +7,16 @@
   encoding: UTF-8
   followredirect: true
   links:
-    -  http://btkitty.pet/
+    - https://btkittys.co/
   legacylinks:
-    -  https://cnbtkitty.org/
-    -  http://cnbtkitty.org/
-    -  https://cnbtkitty.com/
-    -  http://cnbtkitty.com/
-    -  https://cnbtkitty.me/
-    -  http://cnbtkitty.me/
-    -  http://cnbtkitty.ws/
+    - https://cnbtkitty.org/
+    - http://cnbtkitty.org/
+    - https://cnbtkitty.com/
+    - http://cnbtkitty.com/
+    - https://cnbtkitty.me/
+    - http://cnbtkitty.me/
+    - http://cnbtkitty.ws/
+    - http://btkitty.pet/
 
   caps:
     categorymappings:
