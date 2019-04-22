@@ -97,7 +97,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GDF76
  * Kinozal
  * LostFilm.tv
- * Mega-Bliz
  * Metal Tracker
  * MVGroup Forum
  * MVGroup Main
@@ -257,6 +256,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
  * Manicomio Share
+ * Mega-Bliz
  * Mononoké-BT
  * MoreThanTV (MTV)
  * MyAnonamouse (MAM)
