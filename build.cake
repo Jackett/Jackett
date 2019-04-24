@@ -14,9 +14,11 @@ var configuration = Argument("configuration", "Debug");
 
 // Define directories.
 var workingDir = MakeAbsolute(Directory("./"));
-var artifactsDirName = "Artifacts";
-var testResultsDirName = "TestResults";
-var netCoreFramework = "netcoreapp2.2";
+string artifactsDirName = "Artifacts";
+string testResultsDirName = "TestResults";
+string netCoreFramework = "netcoreapp2.2";
+string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
+string updaterProjectPath = "./src/Jackett.Updater/Jackett.Updater.csproj";
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -89,7 +91,6 @@ Task("Package-Windows-Full-Framework")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = "./BuildOutput/net461/win7-x86/Jackett";
 		
 		DotNetCorePublish(serverProjectPath, "net461", "win7-x86", buildOutputPath);
@@ -119,15 +120,14 @@ Task("Package-Mono-Full-Framework")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = "./BuildOutput/net461/linux-x64/Jackett";
 
 		DotNetCorePublish(serverProjectPath, "net461", "linux-x64", buildOutputPath);
 
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
-		CopyFileToDirectory("./install_service_macos", buildOutputPath);
-		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+		CopyFileToDirectory("./install_service_macos_mono", buildOutputPath);
+		CopyFileToDirectory("./install_service_systemd_mono.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
 		//There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of System.Net.Http.dll, instead of the version supplied in folder
@@ -154,30 +154,37 @@ Task("Package-DotNetCore-macOS")
 	.Does(() =>
 	{
 		string runtimeId = "osx-x64";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
+
 		CopyFileToDirectory("./install_service_macos", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.macOS.tar.gz");
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.macOS.tar.gz");
 	});
 
-Task("Package-DotNetCore-LinuxAMD64")
+Task("Package-DotNetCore-LinuxAMDx64")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
 		string runtimeId = "linux-x64";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
-		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
-		CopyFileToDirectory("./Upstart.config", buildOutputPath);
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxAMD64.tar.gz");
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxAMDx64.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxARM32")
@@ -185,15 +192,18 @@ Task("Package-DotNetCore-LinuxARM32")
 	.Does(() =>
 	{
 		string runtimeId = "linux-arm";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
 
-		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
-		CopyFileToDirectory("./Upstart.config", buildOutputPath);
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxARM32.tar.gz");
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM32.tar.gz");
 	});
 
 Task("Package-DotNetCore-LinuxARM64")
@@ -201,22 +211,25 @@ Task("Package-DotNetCore-LinuxARM64")
 	.Does(() =>
 	{
 		string runtimeId = "linux-arm64";
-		string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 		string buildOutputPath = $"./BuildOutput/{netCoreFramework}/{runtimeId}/Jackett";
+		string updaterOutputPath = buildOutputPath + "/Updater";
 
 		DotNetCorePublish(serverProjectPath, netCoreFramework, runtimeId, buildOutputPath);
-		
-		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
-		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 
-		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Experimental.Jackett.Binaries.LinuxARM64.tar.gz");
+		DotNetCorePublish(updaterProjectPath, netCoreFramework, runtimeId, updaterOutputPath);
+		CopyFiles(updaterOutputPath + "/JackettUpdater*", buildOutputPath);
+		DeleteDirectory(updaterOutputPath, new DeleteDirectorySettings {Recursive = true, Force = true});
+
+		CopyFileToDirectory("./install_service_systemd.sh", buildOutputPath);
+
+		Gzip($"./BuildOutput/{netCoreFramework}/{runtimeId}", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.LinuxARM64.tar.gz");
 	});
 
 Task("Appveyor-Push-Artifacts")
 	.IsDependentOn("Clean")
 	.Does(() =>
 	{
-		if (AppVeyor.IsRunningOnAppVeyor && IsRunningOnWindows())
+		if (AppVeyor.IsRunningOnAppVeyor)
 		{
 			foreach (var file in GetFiles(workingDir + $"/{artifactsDirName}/*"))
 			{
@@ -277,11 +290,11 @@ Task("Release-Notes")
 
 	});
 
-Task("Windows-Environment")
+Task("Windows-Environment-Dev")
 	.IsDependentOn("Package-Windows-Full-Framework")
 	.IsDependentOn("Package-Mono-Full-Framework")
 	.IsDependentOn("Package-DotNetCore-macOS")
-	.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
 	.IsDependentOn("Package-DotNetCore-LinuxARM32")
 	.IsDependentOn("Package-DotNetCore-LinuxARM64")
 	.IsDependentOn("Appveyor-Push-Artifacts")
@@ -291,9 +304,19 @@ Task("Windows-Environment")
 		Information("Windows-Environment Task Completed");
 	});
 
+Task("Windows-Environment-Appveyor")
+	.IsDependentOn("Package-Windows-Full-Framework")
+	.IsDependentOn("Package-Mono-Full-Framework")
+	.IsDependentOn("Appveyor-Push-Artifacts")
+	.IsDependentOn("Release-Notes")
+	.Does(() =>
+	{
+		Information("Windows-Environment Task Completed");
+	});
+
 Task("Linux-Environment")
 	.IsDependentOn("Package-DotNetCore-macOS")
-	.IsDependentOn("Package-DotNetCore-LinuxAMD64")
+	.IsDependentOn("Package-DotNetCore-LinuxAMDx64")
 	.IsDependentOn("Package-DotNetCore-LinuxARM32")
 	.IsDependentOn("Package-DotNetCore-LinuxARM64")
 	.IsDependentOn("Appveyor-Push-Artifacts")
@@ -380,7 +403,21 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	{
 		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type d -exec chmod 755 {} \;");
 		RunLinuxCommand("find",  MakeAbsolute(Directory(sourceFolder)) + @" -type f -exec chmod 644 {} \;");
-		//RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))} /Jackett/jackett");
+		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/jackett");
+		RunLinuxCommand("chmod", $"755 {MakeAbsolute(Directory(sourceFolder))}/Jackett/JackettUpdater");
+
+		string systemdScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_systemd.sh";
+		if (FileExists(systemdScript))
+		{
+			RunLinuxCommand("chmod", $"755 {systemdScript}");
+		}
+
+		string macOsServiceScript = MakeAbsolute(Directory(sourceFolder)) + "/Jackett/install_service_macos";
+		if (FileExists(macOsServiceScript))
+		{
+			RunLinuxCommand("chmod", $"755 {macOsServiceScript}");
+		}
+
 		RunLinuxCommand("tar",  $"-C {sourceFolder} -zcvf {outputDirectory}/{tarFileName}.gz {tarCdirectoryOption}");
 	}	
 }
@@ -402,10 +439,17 @@ private void DotNetCorePublish(string projectPath, string framework, string runt
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Windows-Environment")
+	.IsDependentOn("Windows-Environment-Dev")
 	.Does(() =>
 	{
 		Information("Default Task Completed");
+	});
+
+Task("Windows-Appveyor")
+	.IsDependentOn("Windows-Environment-Appveyor")
+	.Does(() =>
+	{
+		Information("Windows Appveyor Task Completed");
 	});
 
 Task("Linux")

@@ -43,6 +43,10 @@
       type: checkbox
       label: "Only include verifed content in results"
       default: false
+    - name: info
+      type: info
+      label: A note about TP2
+      default: TP2 does not display categories in its search results page. To add to Sonarr or Radarr replace all categories with 7000.
 
   download:
     selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
@@ -57,7 +61,7 @@
       - path: "?t={{if .Keywords}}{{.Keywords}}{{else}}test{{end}}&orderby=latest{{if .Config.filter-verified }}&safe=on{{else}}{{end}}"
         followredirect: true
     rows:
-      selector: "#similarfiles div:has(a[href^=\"/t3-\"])"
+      selector: "#similarfiles div:has(a[href^=\"/t0-\"])"
     fields:
       title:
         selector: span > a

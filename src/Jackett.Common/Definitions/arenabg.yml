@@ -68,6 +68,21 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: downloadlink
+      type: select
+      label: Download link
+      default: "magnet:?xt="
+      options:
+        "/get/key:" : ".torrent"
+        "magnet:?xt=": "magnet"
+
   login:
     path: /
     method: form
@@ -85,7 +100,7 @@
       selector: a[href="/users/logout/"]
 
   download:
-    selector: a[href^="magnet:?"]
+    selector: a[href*="{{ .Config.downloadlink }}"]
 
   search:
     paths:
@@ -122,14 +137,14 @@
         selector: td:nth-child(4)
       date:
           # 08:49:09
-        selector: td:nth-child(3):has(":")
+        selector: td:nth-child(3):contains(":")
         optional: true
         filters:
           - name: dateparse
             args: "15:04:05"
       date:
           # 2018-10-19
-        selector: td:nth-child(3):has("-")
+        selector: td:nth-child(3):contains("-")
         optional: true
         filters:
           - name: dateparse

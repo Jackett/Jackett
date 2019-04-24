@@ -314,36 +314,33 @@ namespace Jackett.Server.Services
             // Only needed for Owin
         }
 
-        public string GetServerUrl(Object obj)
+        public string GetServerUrl(HttpRequest request)
         {
             string serverUrl = "";
 
-            if (obj is HttpRequest request)
+            var scheme = request.Scheme;
+            var port = request.HttpContext.Request.Host.Port;
+
+            // Check for protocol headers added by reverse proxys
+            // X-Forwarded-Proto: A de facto standard for identifying the originating protocol of an HTTP request
+            var X_Forwarded_Proto = request.Headers.Where(x => x.Key == "X-Forwarded-Proto").Select(x => x.Value).FirstOrDefault();
+            if (X_Forwarded_Proto.Count > 0)
             {
-                var scheme = request.Scheme;
-                var port = request.HttpContext.Request.Host.Port;
-
-                // Check for protocol headers added by reverse proxys
-                // X-Forwarded-Proto: A de facto standard for identifying the originating protocol of an HTTP request
-                var X_Forwarded_Proto = request.Headers.Where(x => x.Key == "X-Forwarded-Proto").Select(x => x.Value).FirstOrDefault();
-                if (X_Forwarded_Proto.Count > 0)
-                {
-                    scheme = X_Forwarded_Proto.First();
-                }
-                // Front-End-Https: Non-standard header field used by Microsoft applications and load-balancers
-                else if (request.Headers.Where(x => x.Key == "Front-End-Https" && x.Value.FirstOrDefault() == "on").Any())
-                {
-                    scheme = "https";
-                }
-
-                //default to 443 if the Host header doesn't contain the port (needed for reverse proxy setups)
-                if (scheme == "https" && !request.HttpContext.Request.Host.Value.Contains(":"))
-                {
-                    port = 443;
-                }
-
-                serverUrl = string.Format("{0}://{1}:{2}{3}/", scheme, request.HttpContext.Request.Host.Host, port, BasePath());
+                scheme = X_Forwarded_Proto.First();
             }
+            // Front-End-Https: Non-standard header field used by Microsoft applications and load-balancers
+            else if (request.Headers.Where(x => x.Key == "Front-End-Https" && x.Value.FirstOrDefault() == "on").Any())
+            {
+                scheme = "https";
+            }
+
+            //default to 443 if the Host header doesn't contain the port (needed for reverse proxy setups)
+            if (scheme == "https" && !request.HttpContext.Request.Host.Value.Contains(":"))
+            {
+                port = 443;
+            }
+
+            serverUrl = string.Format("{0}://{1}:{2}{3}/", scheme, request.HttpContext.Request.Host.Host, port, BasePath());
 
             return serverUrl;
         }

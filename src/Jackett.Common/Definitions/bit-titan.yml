@@ -1,0 +1,172 @@
+﻿---
+  site: bit-titan
+  name: BiT-TiTAN
+  description: "BiT-TiTAN is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: de-de
+  type: private
+  encoding: iso-8859-1
+  links:
+    - https://bit-titan.net/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV/Documentary, desc: "Doku HD"}
+      - {id: 2, cat: TV/Documentary, desc: "Doku Packs"}
+      - {id: 3, cat: TV/Documentary, desc: "Doku SD"}
+      - {id: 4, cat: Movies/FOREIGN, desc: "International"}
+      - {id: 5, cat: Movies/HD, desc: "Movies 1080p"}
+      - {id: 6, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 7, cat: Movies/HD, desc: "Movies 720p"}
+      - {id: 36, cat: Movies/BluRay, desc: "Movies BluRay"}
+      - {id: 8, cat: Movies/DVD, desc: "Movies DVD / HDVD"}
+      - {id: 37, cat: Movies/HD, desc: "Movies HD Pack"}
+      - {id: 9, cat: Movies/SD, desc: "Movies SD"}
+      - {id: 38, cat: Movies/SD, desc: "Movies SD Pack"}
+      - {id: 10, cat: Movies/UHD, desc: "Movies UHD"}
+      - {id: 11, cat: TV/HD, desc: "Serien HD"}
+      - {id: 12, cat: TV/OTHER, desc: "Serien Packs"}
+      - {id: 13, cat: TV/SD, desc: "Serien SD"}
+      - {id: 14, cat: TV/Sport, desc: "Sport"}
+      - {id: 15, cat: XXX/x264, desc: "XXX HD"}
+      - {id: 16, cat: XXX/XviD, desc: "XXX SD"}
+      - {id: 17, cat: Audio/Lossless, desc: "Musik FLAC"}
+      - {id: 18, cat: Audio/MP3, desc: "Musik MP3"}
+      - {id: 19, cat: Audio/Other, desc: "Musik Sonstiges"}
+      - {id: 20, cat: Audio/Video, desc: "Musik Videos"}
+      - {id: 23, cat: Console, desc: "Spiele Handy"}
+      - {id: 24, cat: Console, desc: "Spiele Linux"}
+      - {id: 21, cat: Console/NDS, desc: "Spiele Nintendo"}
+      - {id: 22, cat: Console/PSP, desc: "Spiele PlayStation"}
+      - {id: 25, cat: Console, desc: "Spiele Sonstige"}
+      - {id: 40, cat: Console, desc: "Spiele Wimmelbild"}
+      - {id: 26, cat: PC/Games, desc: "Spiele Windows"}
+      - {id: 27, cat: Console, desc: "XBOX 360/ONE"}
+      - {id: 28, cat: PC, desc: "Software Handy"}
+      - {id: 29, cat: PC, desc: "Software Linux"}
+      - {id: 30, cat: PC/Mac, desc: "Software Mac Os"}
+      - {id: 31, cat: PC, desc: "Software Sonstige"}
+      - {id: 32, cat: PC/0day, desc: "Software Windows"}
+      - {id: 33, cat: TV/Anime, desc: "Anime"}
+      - {id: 39, cat: Books/Ebook, desc: "eBook"}
+      - {id: 34, cat: Audio/Audiobook, desc: "Hörbücher/ -spiele"}
+      - {id: 35, cat: XXX/Other, desc: "XXX Sonstiges"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    cookies: ["JAVA=OK"] # avoid jscheck redirect
+    captcha:
+      type: image
+      selector: img[src^="cap/captcha_math.php"]
+      input: stringCaptcha
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div#login_error
+    test:
+      path: browse.php
+      selector: a[href="logout.php"]
+
+  ratio:
+    path: browse.php
+    selector: div#tom-b-t8
+    filters:
+      - name: replace
+        args: [".", ""]
+      - name: replace
+        args: [",", "."]
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      # seachin 0=name 1=descr 2=both
+      blah: 0
+      # include dead 0=active 1=all 2=dead
+      incldead: 1
+      orderby: "added"
+      sort: "desc"
+      showsearch: 0
+    rows:
+      selector: table.tableinborder[border="0"][cellspacing="0"][cellpadding="0"] tr
+    fields:
+      category:
+        selector: td.tableb a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: div a.tor-name
+      details:
+        selector: div a.tor-name
+        attribute: href
+      download:
+        selector: div a.tor-name
+        attribute: href
+        filters:
+          - name: replace
+            args: ["details.php?id=", "download.php?torrent="]
+      banner:
+        selector: div[id^="details-"] img
+        attribute: src
+      seeders:
+        selector: div.tor-sl b
+      leechers:
+        selector: div.tor-sl b:last-of-type
+        # 2 flavours of dates
+      date:
+        # Heute 13:30:04
+        # Gestern 09:10:10
+        selector: div.tor-date:not(:contains("."))
+        optional: true
+        filters:
+          - name: replace
+            args: ["Heute", "Today"]
+          - name: replace
+            args: ["Gestern", "Yesterday"]
+      date:
+          # 30.02.2018&nbsp;23:12:50
+        selector: div.tor-date:contains(".")
+        optional: true
+        filters:
+          - name: replace
+            args: ["\u00a0", " "]
+          - name: dateparse
+            args: "02.01.2006 15:04:05"
+      size:
+        selector: div.tor-size
+        filters:
+          - name: replace
+            args: [".", ""]
+          - name: replace
+            args: [",", "."]
+      grabs:
+        selector: div.tor-take
+        filters:
+          - name: regexp
+            args: "(\\d+)"
+      downloadvolumefactor:
+        case:
+          img[src="pic/ou_new.png"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

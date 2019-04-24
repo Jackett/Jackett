@@ -270,6 +270,11 @@ table td.fit{
     text-align: right;
     margin-right: 1em;
 }
-input#searchquery{
+
+input#searchquery {
 	width:400px;
+}
+
+#proxy-warning {
+    color: red;
 }

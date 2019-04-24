@@ -21,6 +21,10 @@ namespace Jackett.Common.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string QueryString { get { return "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no"; } }
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://immortalseed.me/",
+        };
+
         private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
@@ -30,7 +34,7 @@ namespace Jackett.Common.Indexers
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "ImmortalSeed",
                 description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "http://immortalseed.me/",
+                link: "https://immortalseed.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
@@ -77,6 +81,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.TVSD, "TV - Standard Definition - XviD");
             AddCategoryMapping(4, TorznabCatType.TVHD, "TV Season Packs - HD");
             AddCategoryMapping(6, TorznabCatType.TVSD, "TV Season Packs - SD");
+            AddCategoryMapping(22, TorznabCatType.BooksEbook, "Ebooks");
+            AddCategoryMapping(26, TorznabCatType.PCGames, "Games-PC ISO");
+            AddCategoryMapping(46, TorznabCatType.BooksMagazines, "Magazines");
+            AddCategoryMapping(50, TorznabCatType.PCPhoneIOS, "IOS");
+            AddCategoryMapping(51, TorznabCatType.PCPhoneAndroid, "Android");
+            AddCategoryMapping(52, TorznabCatType.PC0day, "Windows");
+            AddCategoryMapping(53, TorznabCatType.TVDocumentary, "Documentary - SD");
+            AddCategoryMapping(58, TorznabCatType.TVSport, "Olympics");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -130,7 +142,7 @@ namespace Jackett.Common.Indexers
                     var qRow = row.Cq();
 
                     var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                    var qTitle = qRow.Find(".tooltip-content > div:eq(0)"); // use Title from tooltip
                     if (!qTitle.Any()) // fallback to Details link if there's no tooltip
                     {
                         qTitle = qDetails;
@@ -141,7 +153,7 @@ namespace Jackett.Common.Indexers
                     if (qDesciption.Any())
                         release.Description = qDesciption.Get(1).InnerText.Trim();
 
-                    var qLink = row.Cq().Find("td:eq(2) a:eq(1)");
+                    var qLink = row.Cq().Find("a[href*=\"download.php\"]");
                     release.Link = new Uri(qLink.Attr("href"));
                     release.Guid = release.Link;
                     release.Comments = new Uri(qDetails.Attr("href"));
@@ -175,7 +187,11 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    release.UploadVolumeFactor = 1;
+
+                    if (qRow.Find("img[title^=\"x2 Torrent\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

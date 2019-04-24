@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-180x180.png" />
     <link rel="mask-icon" href="jackett_medium.png" color="#35c5f4">
     <link rel="icon" type="image/ico" href="../favicon.ico" />
-    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
+    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico?' />
     <script type="text/javascript" src="../libs/filesize.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/jquery.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/jquery.dataTables.min.js?changed=2017083001" charset="utf8"></script>
@@ -34,8 +34,8 @@
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=2017083001" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=2017083001" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20190401" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20190401" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -87,8 +87,10 @@
             <h4>Adding a Jackett indexer to RSS clients (RSS feed)</h4>
             <ol>
                 <li>Click on the indexers corresponding <button type="button" class="btn btn-xs btn-info">Copy RSS Feed</button> button and paste it into the URL field of the RSS client.</li>
-                <li>You can adjust the <b>q</b> (search string) and <b>cat</b> (categories) arguments accordingly.
-                E.g. <b>...&cat=2030,2040&q=big+buck+bunny</b> will search for "big buck bunny" in the Movies/SD (2030) and Movies/HD (2040) categories (See the indexer configuration for available categories).</li>
+                <li>
+                    You can adjust the <b>q</b> (search string) and <b>cat</b> (categories) arguments accordingly.
+                    E.g. <b>...&cat=2030,2040&q=big+buck+bunny</b> will search for "big buck bunny" in the Movies/SD (2030) and Movies/HD (2040) categories (See the indexer configuration for available categories).
+                </li>
             </ol>
         </div>
         <hr />
@@ -137,6 +139,12 @@
                 <option value="1">socks4</option>
                 <option value="2">socks5</option>
             </select>
+        </div>
+        <div id="proxy-warning" hidden>
+            <span>
+                WARNING: The proxy option is unstable and potentially leaks requests. If no fix from the community is forthcoming 
+                in the next few months, the proxy option will be removed from Jackett. Recommendation is to use a VPN.
+            </span>
         </div>
         <div class="input-area">
             <span class="input-header">Proxy url: </span>
@@ -663,6 +671,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20180711"></script>
+    <script type="text/javascript" src="../custom.js?changed=20190421"></script>
 </body>
 </html>

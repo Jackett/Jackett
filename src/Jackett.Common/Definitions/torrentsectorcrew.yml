@@ -4,77 +4,73 @@
   description: "Torrent Sector Crew (TSC) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: de-de
   type: private
-  encoding: windows-1252
+  encoding: ISO-8859-1
   links:
+    - https://tsctracker.org/
+  legacylinks:
     - https://tsctracker.net/
 
   caps:
     categorymappings:
       # Apps
-      - {id: 65, cat: PC/Phone-Android, desc: "Android"}
-      - {id: 83, cat: PC/Phone-IOS, desc: "iOS"}
-      - {id: 107, cat: PC/0day, desc: "Linux"}
-      - {id: 48, cat: PC/Mac, desc: "MAC"}
-      - {id: 109, cat: PC, desc: "Sonstige"}
-      - {id: 22, cat: PC/0day, desc: "Win"}
-
+      - {id: 65, cat: PC/Phone-Android, desc: "Apps Android"}
+      - {id: 83, cat: PC/Phone-IOS, desc: "Apps iOS"}
+      - {id: 107, cat: PC/0day, desc: "Apps Linux"}
+      - {id: 48, cat: PC/Mac, desc: "Apps MAC"}
+      - {id: 109, cat: PC, desc: "Apps Sonstige"}
+      - {id: 22, cat: PC/0day, desc: "Apps Win"}
       # Audio
-      - {id: 24, cat: Audio/Audiobook, desc: "aBooks"}
-      - {id: 104, cat: Audio, desc: "Disco's"}
-      - {id: 38, cat: Audio/Audiobook, desc: "Hörspiel"}
-      - {id: 6, cat: Audio, desc: "Musik"}
-      - {id: 82, cat: Audio, desc: "Tracks"}
-      - {id: 29, cat: Audio/Video, desc: "Videos"}
-
+      - {id: 24, cat: Audio/Audiobook, desc: "Audio aBooks"}
+      - {id: 104, cat: Audio, desc: "Audio Disco's"}
+      - {id: 38, cat: Audio/Audiobook, desc: "Audio Hörspiel"}
+      - {id: 6, cat: Audio, desc: "Audio Musik"}
+      - {id: 82, cat: Audio, desc: "Audio Tracks"}
+      - {id: 29, cat: Audio/Video, desc: "Audio Videos"}
       # Doku
-      - {id: 113, cat: TV/Documentary, desc: "3D"}
-      - {id: 76, cat: TV/Documentary, desc: "HD"}
-      - {id: 78, cat: TV/Documentary, desc: "Packs"}
-      - {id: 75, cat: TV/Documentary, desc: "SD"}
-      - {id: 114, cat: TV/Documentary, desc: "Sonstige"}
-      - {id: 77, cat: TV/Documentary, desc: "Untouched"}
-
+      - {id: 113, cat: TV/Documentary, desc: "Doku 3D"}
+      - {id: 76, cat: TV/Documentary, desc: "Doku HD"}
+      - {id: 78, cat: TV/Documentary, desc: "Doku Packs"}
+      - {id: 75, cat: TV/Documentary, desc: "Doku SD"}
+      - {id: 114, cat: TV/Documentary, desc: "Doku Sonstige"}
+      - {id: 77, cat: TV/Documentary, desc: "Doku Untouched"}
       # Filme
-      - {id: 54, cat: Movies/HD, desc: "1080p"}
-      - {id: 5, cat: Movies/3D, desc: "3D"}
-      - {id: 55, cat: Movies/HD, desc: "720p"}
-      - {id: 111, cat: Movies, desc: "Anime"}
-      - {id: 43, cat: Movies/BluRay, desc: "BluRay"}
-      - {id: 20, cat: Movies/DVD, desc: "DVDR"}
-      - {id: 120, cat: Movies/Foreign, desc: "Int."}
-      - {id: 119, cat: Movies, desc: "Remux"}
-      - {id: 121, cat: Movies/HD, desc: "UHD"}
-      - {id: 36, cat: Movies/HD, desc: "x264"}
-      - {id: 19, cat: Movies/SD, desc: "XviD"}
-
+      - {id: 54, cat: Movies/HD, desc: "Filme 1080p"}
+      - {id: 5, cat: Movies/3D, desc: "Filme 3D"}
+      - {id: 55, cat: Movies/HD, desc: "Filme 720p"}
+      - {id: 111, cat: Movies, desc: "Filme Anime"}
+      - {id: 43, cat: Movies/BluRay, desc: "Filme BluRay"}
+      - {id: 20, cat: Movies/DVD, desc: "Filme DVDR"}
+      - {id: 120, cat: Movies/Foreign, desc: "Filme Int."}
+      - {id: 119, cat: Movies, desc: "Filme Remux"}
+      - {id: 121, cat: Movies/HD, desc: "Filme UHD"}
+      - {id: 124, cat: Movies/HD, desc: "Filme UHD Remux"}
+      - {id: 36, cat: Movies/HD, desc: "Filme SD"}
       # Serien
-      - {id: 112, cat: TV/Anime, desc: "Anime"}
-      - {id: 69, cat: TV/HD, desc: "HD"}
-      - {id: 72, cat: TV/Foreign, desc: "Int."}
-      - {id: 68, cat: TV, desc: "Packs"}
-      - {id: 66, cat: TV/SD, desc: "SD"}
-      - {id: 108, cat: TV, desc: "TV-Shows"}
-
+      - {id: 112, cat: TV/Anime, desc: "Serien Anime"}
+      - {id: 69, cat: TV/HD, desc: "Serien HD"}
+      - {id: 72, cat: TV/Foreign, desc: "Serien Int."}
+      - {id: 68, cat: TV, desc: "Serien Packs"}
+      - {id: 66, cat: TV/SD, desc: "Serien SD"}
+      - {id: 108, cat: TV, desc: "Serien TV-Shows"}
       # Sonstige
-      - {id: 117, cat: Other, desc: "Diverses"}
-      - {id: 28, cat: Books, desc: "eBooks"}
-      - {id: 42, cat: TV/Sport, desc: "Sport"}
-      - {id: 103, cat: Other, desc: "Tutorials"}
-      - {id: 9, cat: Other, desc: "Wallpaper"}
-      - {id: 64, cat: XXX, desc: "XXX"}
-
+      - {id: 117, cat: Other, desc: "Sonstige Diverses"}
+      - {id: 28, cat: Books, desc: "Sonstige eBooks"}
+      - {id: 42, cat: TV/Sport, desc: "Sonstige Sport"}
+      - {id: 103, cat: Other, desc: "Sonstige Tutorials"}
+      - {id: 9, cat: Other, desc: "Sonstige Wallpaper"}
+      - {id: 64, cat: XXX, desc: "Sonstige XXX"}
       # Spiele
-      - {id: 115, cat: PC/Mac, desc: "MAC"}
-      - {id: 37, cat: Console/NDS, desc: "Nintendo"}
-      - {id: 4, cat: PC/Games, desc: "PC"}
-      - {id: 58, cat: Console/PS4, desc: "PSX"}
-      - {id: 116, cat: Other, desc: "Sonstige"}
-      - {id: 50, cat: Console/Xbox, desc: "XBOX"}
-
+      - {id: 115, cat: PC/Mac, desc: "Spiele MAC"}
+      - {id: 37, cat: Console/NDS, desc: "Spiele Nintendo"}
+      - {id: 4, cat: PC/Games, desc: "Spiele PC"}
+      - {id: 58, cat: Console/PS4, desc: "Spiele PSX"}
+      - {id: 116, cat: Other, desc: "Spiele Sonstige"}
+      - {id: 50, cat: Console/Xbox, desc: "Spiele XBOX"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: pin
@@ -86,7 +82,10 @@
     - name: password
       type: password
       label: Password
-
+    - name: info_results
+      type: info
+      label: "Search results"
+      default: "<ol><li>Only the Classic profile is supported.<li>Make sure to set the <b>TorrentList-Layout</b> option in your profile to <b>Klassisches Layout, sehr breite Darstellung.</b><li>And for best results set the <b>Torrents pro Seite</b> to <b>100.</b></ol>"
   login:
     path: landing.php
     method: form
@@ -116,12 +115,12 @@
       - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
       incldead: "1"
       orderby: "added"
-      sort: desc
+      sort: "desc"
     rows:
-      selector: "h2 +p + br + table.tablebrowse > tbody > tr[style=\"height: 45px;\"], tr:contains(\"Weiter\") > td > table.tablebrowse > tbody > tr[style=\"height: 45px;\"]"
+      selector: table.tablebrowse > tbody > tr:has(a[href^="download_ssl.php"])
     fields:
       title:
         selector: a[title][href^="details.php"]
@@ -138,13 +137,14 @@
       download:
         selector: a[href^="download_ssl.php"]
         attribute: href
-      files:
-        selector: td:nth-child(3)
+      banner:
+        selector: a.thumbnail > span > img
+        attribute: src
       grabs:
         selector: td:nth-child(9)
         filters:
-          - name: replace
-            args: ["-mal", ""]
+          - name: regexp
+            args: "(\\d+)"
       size:
         selector: td:nth-child(6)
         filters:
@@ -152,26 +152,28 @@
             args: [".", ""]
           - name: replace
             args: [",", "."]
+      files:
+        selector: a[href*="&filelist=1"]
       seeders:
-        selector: td:nth-child(7)
+        selector: td:has(a[href*="&toseeders="])
         filters:
           - name: regexp
             args: "(\\d+)"
       leechers:
-        selector: td:nth-child(8)
+        selector: td:has(a[href*="&todlers="])
         filters:
           - name: regexp
             args: "(\\d+)"
       date:
         selector: td:nth-child(5)
-        remove: br
         filters:
+          - name: re_replace
+            args: ["\\s", " "]
           - name: dateparse
             args: "02.01.200615:04:05"
       downloadvolumefactor:
         case:
-          "font:contains(\"[OnlyUpload]\")": "0"
-          "font:contains(\"[-40 Download]\")": "0.6"
+          "font[color=\"#730d1e\"]:contains(\"[OnlyUpload]\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:

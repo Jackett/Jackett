@@ -7,11 +7,15 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www2.torrent9.ch/
+    - https://www.torrent9.lol/
   legacylinks:
     - https://www.torrents9.pw/
     - https://www.torrent9.ch/
     - https://www1.torrent9.ch/
+    - https://www2.torrent9.ch/
+    - https://wwv.torrent9.vg/
+    - https://www.torrent9.vc/
+    - https://wvw.torrent9.vc/
 
   caps:
     categorymappings:
@@ -72,7 +76,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace

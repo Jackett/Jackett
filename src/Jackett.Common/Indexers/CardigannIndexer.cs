@@ -1570,6 +1570,8 @@ namespace Jackett.Common.Indexers
                     OnParseError(results, ex);
                 }
             }
+            if (query.Limit > 0)
+                releases = releases.Take(query.Limit).ToList();
             return releases;
         }
 

@@ -1,18 +1,28 @@
 ---
-  site: 420files
-  name: 420files
-  description: "Tracker Movies/TV/Music"
+  site:  freetorrent
+  name:  FreeTorrent
+  description: "FreeTorrent is a Private Torrent Tracker for HD MOVIES / TV"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://420.org/
+    -  https://freetorrent.tk/
 
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Audio, desc: "Music"}
+      - {id: 4, cat: PC/0day, desc: "Software"}
+      - {id: 5, cat: Books, desc: "Ebook"}
+      - {id: 6, cat: PC/Games, desc: "Games"}
+      - {id: 7, cat: TV, desc: "Animations"}
+      - {id: 8, cat: PC, desc: "Linux"}
+      - {id: 9, cat: PC/Mac, desc: "MacOS"}
+      - {id: 10, cat: PC/Phone-Android, desc: "Android app"}
+      - {id: 11, cat: PC/Phone-Android, desc: "Android ROMs"}
+      - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 13, cat: TV, desc: "Shows"}
 
     modes:
       search: [q]
@@ -41,7 +51,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
-      sorting: created_at
+      sort: created_at
       direction: desc
       qty: 100
     rows:
@@ -72,6 +82,10 @@
         filters:
           - name: regexp
             args: ([\d\.]+)
+      imdb:
+        optional: true
+        selector: a[href^="https://www.imdb.com/title/"]
+        attribute: href
       date:
         selector: time
         filters:
@@ -102,9 +116,11 @@
         case:
           "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
           "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
           "*": "1"
       uploadvolumefactor:
         case:
           "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
           "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
           "*": "1"
+# UNIT3D

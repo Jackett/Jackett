@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class BeyondHD : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php?searchin=title&incldead=0&"; } }
+        private string SearchUrl { get { return SiteLink + "browse.php?searchin=descr&incldead=1&"; } }
 
         private new ConfigurationDataLoginLink configData
         {
@@ -42,6 +42,8 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             configData.DisplayText.Value = "Go to the general tab of your BeyondHD user profile and create/copy the Login Link.";
+
+            TorznabCaps.SupportsImdbSearch = true;
 
             AddCategoryMapping(37, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
             AddCategoryMapping(71, TorznabCatType.Movies3D, "Movie / 3D");
@@ -83,6 +85,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(55, TorznabCatType.AudioVideo, "Music / 1080p/i");
             AddCategoryMapping(56, TorznabCatType.AudioVideo, "Music / 720p");
             AddCategoryMapping(42, TorznabCatType.AudioVideo, "Music / Blu-ray");
+            AddCategoryMapping(41, TorznabCatType.AudioVideo, "Music / Movie OST");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -101,12 +104,22 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
 
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
             var queryCollection = new NameValueCollection();
+            var searchStringIsImdbQuery = (ParseUtil.GetImdbID(searchString) != null);
 
-            if (!string.IsNullOrWhiteSpace(searchString))
+            if (query.IsImdbQuery)
+            {
+                queryCollection.Add("search", query.ImdbID);
+            }
+            else if (searchStringIsImdbQuery)
+            {
+                queryCollection.Add("search", searchString);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 Regex ReplaceRegex = new Regex("[^a-zA-Z0-9]+");
                 searchString = "%" + ReplaceRegex.Replace(searchString, "%") + "%";
@@ -139,13 +152,15 @@ namespace Jackett.Common.Indexers
                     release.Category = MapTrackerCatToNewznab(catStr);
 
                     var qLink = row.ChildElements.ElementAt(2).FirstChild.Cq();
-                    release.Link = new Uri(SiteLink + "/" + qLink.Attr("href"));
+                    release.Link = new Uri(SiteLink + qLink.Attr("href"));
                     var torrentId = qLink.Attr("href").Split('=').Last();
 
                     var descCol = row.ChildElements.ElementAt(3);
                     var qCommentLink = descCol.FirstChild.Cq();
                     release.Title = qCommentLink.Text();
-                    release.Comments = new Uri(SiteLink + "/" + qCommentLink.Attr("href"));
+                    if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title))
+                        continue;
+                    release.Comments = new Uri(SiteLink + qCommentLink.Attr("href"));
                     release.Guid = release.Comments;
                     release.Link = new Uri($"{SiteLink}download.php?torrent={torrentId}");
 
@@ -164,7 +179,14 @@ namespace Jackett.Common.Indexers
                     var grabs = qRow.Find("td:nth-child(9) > a").Get(0).FirstChild.ToString();
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    release.DownloadVolumeFactor = 1;
+                    var imdbLink = qRow.Find("a[href*=\"imdb.com/title/\"]").Attr("href");
+                    if (imdbLink != null)
+                    {
+                        var IMDBMatch = IMDBRegEx.Match(imdbLink);
+                        release.Imdb = ParseUtil.CoerceLong(IMDBMatch.Groups[1].Value);
+                    }
+
+                    release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);

@@ -7,7 +7,8 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://wvw.torrent9.uno/
+    - https://www.torrent9.cat/
+
   legacylinks:
     - http://www.torrent9.ec/
     - http://www.torrent9.red/
@@ -23,6 +24,9 @@
     - https://ww1.torrent9.ph/
     - https://torrent9.ga/
     - https://www.torrent9.uno/
+    - https://wvw.torrent9.uno/
+    - https://ww1.torrent9.uno/
+    - https://wvw.t9.pe/
 
   caps:
     categorymappings:
@@ -38,12 +42,14 @@
       search: [q]
       tv-search: [q, season, ep]
 
+  settings: []
+
   download:
     selector: a[href^="/downloading/"]
       
   search:
     paths:
-      - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}/page-0{{else}}/top_torrent.php{{end}}"
+      - path: "{{ if .Keywords }}/search_torrent/{{ re_replace .Keywords \"[']+\" \"\" }}/page-0{{else}}/top_torrent.php{{end}}"
     rows:
       selector: div.table-responsive > table tbody tr
     fields:
@@ -58,7 +64,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace

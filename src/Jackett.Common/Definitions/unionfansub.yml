@@ -78,8 +78,13 @@
       files:
         selector: td:nth-last-child(8)
       size:
+        # 1,36 GB
+        # 296,98 MB
+        # 1.018,29 MB
         selector: td:nth-last-child(5)
         filters:
+          - name: replace
+            args: [".", ""]
           - name: replace
             args: [",", "."]
       grabs:

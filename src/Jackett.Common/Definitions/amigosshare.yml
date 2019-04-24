@@ -10,8 +10,22 @@
   legacylinks:
     - http://amigos-share.club/
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info_results
+      type: info
+      label: "Search results"
+      default: "Set <b>Exibição De Torrents</b> to <b>Lista</b> in your <b>Minhas Configurações</b>.<br />Using <b>Capas</b> is not supported and will return 0 results."
+
   caps:
     categorymappings:
+      - {id: 107, cat: XXX, desc: "Adultos: Gay"}
+      - {id: 108, cat: XXX, desc: "Adultos: Transex/Female"}
       - {id: 74, cat: XXX, desc: "Adultos: XXX"}
       - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
       - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
@@ -46,7 +60,7 @@
       - {id: 2, cat: Movies, desc: "Filmes: Terror"}
       - {id: 1, cat: Movies, desc: "Filmes: Ação"}
       - {id: 80, cat: Movies, desc: "Filmes: Aventura"}
-      - {id: 70, cat: Other, desc: "Fotos: XXX"}
+      - {id: 70, cat: XXX, desc: "Fotos: XXX"}
       - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
       - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
       - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
@@ -59,6 +73,8 @@
       - {id: 56, cat: Console/Xbox, desc: "Jogos: Xbox"}
       - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
       - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
+      - {id: 111, cat: Console, desc: "Jogos: Nintendo Swich"}
+      - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
       - {id: 57, cat: Console, desc: "Jogos: Android"}
       - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
       - {id: 78, cat: Console/Xbox One, desc: "Jogos: Xbox One"}
@@ -126,18 +142,18 @@
     error:
       - selector: div.alert-error
     test:
-      path: index.php
+      path: torrents-search.php
       selector: a[href="account-logout.php"]
 
   ratio:
-    path: index.php
+    path: torrents-search.php
     selector: li:contains("Ratio:") a b
 
   search:
     paths:
       # http://amigos-share.club/torrents-search.php?search=&c1=1&c19=1&c36=1&incldead=0&freeleech=0&lang=0sort=id&order=desc&page=1
       - path: torrents-search.php
-      # site displays just 21 results, no profile options found to change this, so we attempt to fetch 5 pages
+      # site displays just 9 results, no profile options found to change this, so we attempt to fetch 5 pages
       - path: torrents-search.php
         inputs:
           page: 1
@@ -153,13 +169,13 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"
-      incldead: 0
+      incldead: 1
       freeleech: 0
       lang: 0
       sort: "id"
       order: "desc"
     rows:
-      selector: table.table-striped > tbody > tr:has(a[href^="torrents-details.php?id="])
+      selector: div#fancy-list-group ul.list-group li.list-group-item
     fields:
       title:
         selector: a[href^="torrents-details.php?id="]
@@ -170,7 +186,7 @@
         selector: a[href^="download.php?id="]
         attribute: href
       category:
-        selector: td:first-child img
+        selector: div.list-group-item-addon img
         attribute: src
         case:
         # unfortunately the site does not have category numbers on the results page, just a .png which can apply to both movies and tv.
@@ -191,7 +207,7 @@
          "[src$=\"/E-books.png\"]": "67"
          "[src$=\"/Revista.png\"]": "68"
          "[src$=\"/Aventura.png\"]": "80"
-         "[src$=\"/XXX.png\"]": "70"
+         "[src$=\"/Revistas-XXX.png\"]": "70"
          "[src$=\"/Jogos-Ps4.png\"]": "79"
          "[src$=\"/Jogos-PC.png\"]": "47"
          "[src$=\"/Jogos-EmuladoreseRoms.png\"]": "61"
@@ -277,14 +293,14 @@
       date:
         text: now
       size:
-        selector: td:nth-child(2) span.label-info
+        selector: div.list-group-item-content p.m-0 span.badge-info
       seeders:
-        selector: td:nth-child(4)
+        selector: div.list-group-item-controls a:nth-child(1)
       leechers:
-        selector: td:nth-child(5)
+        selector: div.list-group-item-controls a:nth-child(2)
       downloadvolumefactor:
         case:
-          "span.label-success i:contains(\"FREE\")": "0"
+          "span.badge-success:contains(\"FREE\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:

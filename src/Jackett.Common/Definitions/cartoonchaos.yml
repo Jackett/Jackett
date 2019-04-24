@@ -40,9 +40,9 @@
       - {id: 45, cat: TV/Documentary, desc: "Documentaries"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: index.php?page=login
@@ -63,9 +63,10 @@
       - path: index.php
     inputs:
       page: torrents
-      search: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
+      search: "{{if .Query.IMDBID}}{{.Query.IMDBID}}{{else}}{{.Keywords}}{{end}}"
       category: "{{if .Categories}}{{range .Categories}}{{.}};{{end}}{{else}}0{{end}}"
-      options: 0
+      # options: 0=title, 1=title&descr, 2=descr
+      options: "{{if .Query.IMDBID}}1{{else}}0{{end}}"
       active: 0
 
     rows:

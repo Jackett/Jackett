@@ -21,55 +21,70 @@
   caps:
     categorymappings:
       # ANIMES
-      - {id: 105, cat: TV/Anime, desc: "1080p"}
-      - {id: 104, cat: TV/Anime, desc: "720p"}
-      - {id: 90, cat: TV/Anime, desc: "HDRIP-720p"}
-      - {id: 93, cat: TV/Anime, desc: "HDRIP1080p"}
-      - {id: 131, cat: TV/Anime, desc: "SD"}
-      - {id: 120, cat: TV/Anime, desc: "X265-1080p"}
-      - {id: 119, cat: TV/Anime, desc: "X265-720p"}
-      - {id: 107, cat: TV/Anime, desc: "1080p"}
-      - {id: 106, cat: TV/Anime, desc: "720p"}
-      - {id: 94, cat: TV/Anime, desc: "HDRIP1080p"}
-      - {id: 91, cat: TV/Anime, desc: "HDRIP720p"}
-
+      - {id: 105, cat: TV/Anime, desc: "ANIMES 1080p-Bluray"}
+      - {id: 149, cat: TV/Anime, desc: "ANIMES 3D"}
+      - {id: 143, cat: TV/Anime, desc: "ANIMES 4K-2160p"}
+      - {id: 104, cat: TV/Anime, desc: "ANIMES 720p-Bluray"}
+      - {id: 90, cat: TV/Anime, desc: "ANIMES HDrip-720p"}
+      - {id: 93, cat: TV/Anime, desc: "ANIMES HDrip-1080p"}
+      - {id: 131, cat: TV/Anime, desc: "ANIMES SD"}
+      - {id: 120, cat: TV/Anime, desc: "ANIMES X265-1080p"}
+      - {id: 119, cat: TV/Anime, desc: "ANIMES X265-720p"}
+      # DOCUMENTAIRES
+      - {id: 107, cat: TV/Documentary, desc: "DOCS 1080p-Bluray"}
+      - {id: 152, cat: TV/Documentary, desc: "DOCS 2160p-Bluray"}
+      - {id: 106, cat: TV/Documentary, desc: "DOCS 720p-Bluray"}
+      - {id: 94, cat: TV/Documentary, desc: "DOCS HDrip-1080p"}
+      - {id: 91, cat: TV/Documentary, desc: "DOCS HDrip-720p"}
+      - {id: 142, cat: TV/Documentary, desc: "DOCS HDTV"}
+      - {id: 141, cat: TV/Documentary, desc: "DOCS SD"}
       # EBOOK
       - {id: 124, cat: Books, desc: "Livres et Magazines"}
-
       # FILMS
-      - {id: 97, cat: Movies/HD, desc: "1080p"}
-      - {id: 103, cat: Movies/3D, desc: "3D"}
-      - {id: 111, cat: Movies/HD, desc: "4K"}
-      - {id: 96, cat: Movies/HD, desc: "720p"}
-      - {id: 127, cat: Movies/HD, desc: "BDrip"}
-      - {id: 128, cat: Movies/HD, desc: "BRrip"}
-      - {id: 126, cat: Movies/SD, desc: "DVDrip"}
-      - {id: 89, cat: Movies/HD, desc: "HDRIP-720p"}
-      - {id: 92, cat: Movies/HD, desc: "HDRIP1080p"}
-      - {id: 112, cat: Movies/SD, desc: "Team-Hush"}
-      - {id: 129, cat: Movies/HD, desc: "Team-Romkent"}
-      - {id: 125, cat: Movies/Other, desc: "WEBrip"}
-      - {id: 110, cat: Movies/HD, desc: "X265-1080p"}
-      - {id: 109, cat: Movies/HD, desc: "X265-720p"}
-
+      - {id: 97, cat: Movies/HD, desc: "FILMS Bluray-1080p"}
+      - {id: 103, cat: Movies/3D, desc: "FILMS 3D"}
+      - {id: 111, cat: Movies/UHD, desc: "FILMS 4K"}
+      - {id: 96, cat: Movies/HD, desc: "FILMS Bluray-720p"}
+      - {id: 127, cat: Movies/HD, desc: "FILMS BDrip"}
+      - {id: 128, cat: Movies/HD, desc: "FILMS BRrip"}
+      - {id: 140, cat: Movies/HD, desc: "FILMS BSD-Team"}
+      - {id: 126, cat: Movies/SD, desc: "FILMS DVDrip"}
+      - {id: 136, cat: Movies/BluRay, desc: "FILMS Full-Bluray"}
+      - {id: 135, cat: Movies/SD, desc: "FILMS Team Freedom-HD"}
+      - {id: 137, cat: Movies/SD, desc: "FILMS Team ticadow"}
+      - {id: 89, cat: Movies/HD, desc: "FILMS HDrip-720p"}
+      - {id: 92, cat: Movies/HD, desc: "FILMS HDrip-1080p"}
+      - {id: 112, cat: Movies/SD, desc: "FILMS Team-Hush"}
+      - {id: 129, cat: Movies/HD, desc: "FILMS Team-Romkent"}
+      - {id: 125, cat: Movies/Other, desc: "FILMS WEBrip"}
+      - {id: 110, cat: Movies/HD, desc: "FILMS X265-1080p"}
+      - {id: 109, cat: Movies/HD, desc: "FILMS X265-720p"}
+      # GAMES
+      - {id: 134, cat: PC/Games, desc: "jeu PC"}
       # MUSIQUES
-      - {id: 114, cat: Audio/Lossless, desc: "Flac"}
-      - {id: 113, cat: Audio/MP3, desc: "MP3"}
-      - {id: 132, cat: Audio, desc: "Musiques-HQ"}
-      - {id: 130, cat: Audio/Video, desc: "video clip"}
-
-      # SERIE-sd
-      - {id: 121, cat: TV/SD, desc: "SD"}
-
-      # SERIES-HD
-      - {id: 102, cat: TV/HD, desc: "1080p"}
-      - {id: 101, cat: TV/HD, desc: "720p"}
-      - {id: 100, cat: TV/HD, desc: "HDrip1080p"}
-      - {id: 99, cat: TV/HD, desc: "HDrip720p"}
-
+      - {id: 114, cat: Audio/Lossless, desc: "MUSIQUES Flac"}
+      - {id: 113, cat: Audio/MP3, desc: "MUSIQUES MP3"}
+      - {id: 132, cat: Audio, desc: "MUSIQUES HQ"}
+      - {id: 130, cat: Audio/Video, desc: "MUSIQUES video clip"}
+      # SERIE
+      - {id: 121, cat: TV/SD, desc: "SERIE SD"}
+      - {id: 102, cat: TV/HD, desc: "SERIE 1080p-Bluray"}
+      - {id: 101, cat: TV/HD, desc: "SERIE 720p-Bluray"}
+      - {id: 100, cat: TV/HD, desc: "SERIE HDrip-1080p"}
+      - {id: 99, cat: TV/HD, desc: "SERIE HDrip-720p"}
+      - {id: 151, cat: TV/UHD, desc: "SERIE HDrip-2160p"}
       # SPECTACLES
-      - {id: 118, cat: TV/Sport, desc: "HDRIP1080p"}
-      - {id: 117, cat: TV/Sport, desc: "HDRIP720p"}
+      - {id: 138, cat: TV, desc: "SPECTACLES Bluray-1080p"}
+      - {id: 139, cat: TV, desc: "SPECTACLES Bluray-720p"}
+      - {id: 133, cat: TV, desc: "SPECTACLES DVDrip"}
+      - {id: 118, cat: TV, desc: "SPECTACLES HDrip-1080p"}
+      - {id: 117, cat: TV, desc: "SPECTACLES HDrip-720p"}
+      # SPORT
+      - {id: 146, cat: TV/Sport, desc: "SPORT HDTV-1080p"}
+      - {id: 147, cat: TV/Sport, desc: "SPORT HDTV-720p"}
+      - {id: 148, cat: TV/Sport, desc: "SPORT SD"}
+      - {id: 144, cat: TV/Sport, desc: "SPORT WEB-DL-1080p"}
+      - {id: 145, cat: TV/Sport, desc: "SPORT WEB-DL-720p"}
 
     modes:
       search: [q]
@@ -134,6 +149,8 @@
         selector: td:nth-child(4)
       leechers:
         selector: td:nth-child(5)
+      date:
+        text: now
       downloadvolumefactor:
         case:
           img[alt="freeleech"]: "0"

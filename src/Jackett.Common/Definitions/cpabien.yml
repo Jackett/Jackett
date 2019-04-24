@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.cpasbiens.bz/
+    - https://www.cpasbien.vg/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
@@ -34,6 +34,7 @@
     - https://www.cpabien.bz/
     - https://www.cpabien.link/
     - https://www.cpasbiens.cz/
+    - https://www.cpasbiens.bz/
 
   caps:
     categorymappings:
@@ -66,7 +67,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace

@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers {
             var queryCollection = new NameValueCollection ();
 
             queryCollection.Add ("q", searchString);
-            queryCollection.Add ("size", "100");
+            queryCollection.Add ("size", "500");
             queryCollection.Add ("type_", "torrent");
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString ();
@@ -129,6 +129,8 @@ namespace Jackett.Common.Indexers {
                         "&tr=udp://tracker.justseed.it:1337/announce"; 
 
                     release.MagnetUri = new Uri (magnet_uri);
+                    release.Comments = release.MagnetUri;
+                    release.Guid = release.MagnetUri;
                     release.InfoHash = torrent.Value<JToken> ("infohash").ToString ();
 
                     // convert unix timestamp to human readable date

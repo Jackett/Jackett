@@ -62,9 +62,9 @@ namespace Jackett.Common.Indexers
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
             new Uri("http://torrentrapid.com/"),
-            new Uri("http://torrentlocura.com/"),
             new Uri("http://tumejortorrent.com/"),
             new Uri("http://pctnew.com/"),
+            new Uri("http://torrentlocura.com/"),
         };
 
         private static Uri[] LegacySiteLinkUris = new Uri[]
@@ -157,7 +157,7 @@ namespace Jackett.Common.Indexers
             links.Add(linkParam.AbsoluteUri);
 
             IEnumerable<Uri> knownUris = (new Uri[] { DefaultSiteLinkUri }).
-                Concat(ExtraSiteLinkUris).Concat(LegacySiteLinkUris);
+                Concat(ExtraSiteLinkUris);
 
             foreach (Uri extraSiteUri in knownUris)
             {
@@ -178,9 +178,15 @@ namespace Jackett.Common.Indexers
                     await FollowIfRedirect(results);
                     var content = results.Content;
 
-                    Match match = _downloadMatchRegex.Match(content);
-                    if (match.Success)
-                        result = await base.Download(new Uri(match.Groups[0].Value));
+                    if (content != null)
+                    {
+                        Match match = _downloadMatchRegex.Match(content);
+                        if (match.Success)
+                        {
+                            Uri uriLink = new Uri(new Uri(link), match.Groups[0].Value);
+                            result = await base.Download(uriLink);
+                        }
+                    }
                 }
                 catch
                 {

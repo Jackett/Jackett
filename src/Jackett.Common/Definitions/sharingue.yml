@@ -1,30 +1,24 @@
 ---
-  site: redtopia
-  name: Redtopia
-  description: "Tracker Music/Podcasts/Audiobooks"
-  language: en-us
+  site: sharingue
+  name: Sharingue
+  description: "Sharingue is a BRAZILIAN Private Tracker for TV / MOVIES / ANIME / MUSIC"
+  language: pt-br
   type: private
   encoding: UTF-8
   links:
-    - https://redtopia.xyz/
+    - https://www.sharingue.live/
 
   caps:
     categorymappings:
-      - {id: 1, cat: Audio, desc: "Studio Album"}
-      - {id: 2, cat: Audio, desc: "Studio Single"}
-      - {id: 3, cat: Audio, desc: "Studio Collection"}
-      - {id: 4, cat: Audio, desc: "Indie Album"}
-      - {id: 5, cat: Audio, desc: "Indie Single"}
-      - {id: 6, cat: Audio, desc: "Indie Collection"}
-      - {id: 7, cat: Audio, desc: "Live Album"}
-      - {id: 8, cat: Audio, desc: "OST"}
-      - {id: 9, cat: Audio, desc: "Podcast"}
-      - {id: 10, cat: Audio, desc: "Audio Book"}
-      - {id: 11, cat: Audio, desc: "Audio Drama"}
+      - {id: 1, cat: Movies, desc: "Movies (Filmes)"}
+      - {id: 3, cat: Audio, desc: "Music (Músicas)"}
+      - {id: 4, cat: TV, desc: "TV (Séries)"}
+      - {id: 5, cat: TV/Anime, desc: "Anime (Animes)"}
 
     modes:
       search: [q]
-      music-search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
     path: login
@@ -32,19 +26,36 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: 1
+    selectorinputs:
+      _token:
+        selector: meta[name="csrf-token"]
+        attribute: content
     error:
-      - selector: form[action*="/login"] .text-red
+      - selector: form[action$="/login"] .text-red
     test:
-      path: torrents
+      path: /
+      selector: a[href$="/logout"]
+
+  ratio:
+    path: /
+    selector: span:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
       - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      search: "{{ .Keywords }}"
+      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
       uploader: ""
-      sorting: created_at
+      imdb: "{{ .Query.IMDBIDShort }}"
+      tvdb: ""
+      tmdb: ""
+      mal: ""
+      sort: created_at
       direction: desc
       qty: 100
     rows:
@@ -65,13 +76,13 @@
         selector: a.view-torrent
         attribute: href
       size:
-        selector: td:nth-child(4)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
-      grabs:
         selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(6)
         filters:
           - name: regexp
             args: ([\d\.]+)
@@ -103,11 +114,12 @@
             args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"100% Free\"]": "0"
-          "i[data-original-title=\"Global FreeLeech\"]": "0"
+          "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Global freeleech\"]": "0" # Global Freeleech
           "*": "1"
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double Upload\"]": "2" # global flag
-          "i[data-original-title=\"Double upload\"]": "2" # torrent specific flag
+          "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
           "*": "1"
+# UNIT3D

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace Jackett.Common.Services.Interfaces
 {
@@ -12,7 +12,7 @@ namespace Jackett.Common.Services.Interfaces
         void ReserveUrls(bool doInstall = true);
         Uri ConvertToProxyLink(Uri link, string serverUrl, string indexerId, string action = "dl", string file = "t");
         string BasePath();
-        string GetServerUrl(object Request); //TODO: Once Mono is removed, change type to HttpRequest
+        string GetServerUrl(HttpRequest Request);
         List<string> notices { get; }
         string GetBlackholeDirectory();
         string GetApiKey();

@@ -15,19 +15,22 @@
       - {id: 9, cat: TV/Anime, desc: "Anime/SD"}
       - {id: 1, cat: PC/0day, desc: "Apps"}
       - {id: 27, cat: Books, desc: "Bookware"}
-      - {id: 32, cat: Books/EBook, desc: "EBOOK"}
+      - {id: 32, cat: Books/Ebook, desc: "EBOOK"}
       - {id: 47, cat: Console/Other, desc: "GAMES/NSW"}
+      - {id: 60, cat: Console/Other, desc: "GAMES/ATARI"}
+      - {id: 63, cat: Console/Other, desc: "GAMES/UPDATES"}
       - {id: 2, cat: PC/Games, desc: "Games/PC"}
       - {id: 8, cat: Console/PS3, desc: "Games/PS3"}
       - {id: 30, cat: Console/PS4, desc: "GAMES/PS4"}
       - {id: 7, cat: Console/PSP, desc: "Games/PSP"}
       - {id: 16, cat: Console/Wii, desc: "GAMES/WII"}
       - {id: 29, cat: Console/WiiU, desc: "GAMES/WIIU"}
-      - {id: 17, cat: Console/XBox360, desc: "GAMES/XBOX360"}
+      - {id: 17, cat: Console/XBox 360, desc: "GAMES/XBOX360"}
       - {id: 50, cat: Movies/BluRay, desc: "Movies/Bluray-UHD"}
       - {id: 31, cat: Movies/BluRay, desc: "MOVIES/COMPLETE-BLURAY"}
       - {id: 3, cat: Movies/DVD, desc: "MOVIES/DVDR"}
       - {id: 39, cat: Movies/Foreign, desc: "MOVIES/HD-Foreign"}
+      - {id: 62, cat: Movies/Foreign, desc: "MOVIES/SD-Foreign"}
       - {id: 19, cat: Movies/HD, desc: "MOVIES/X264"}
       - {id: 49, cat: Movies/HD, desc: "Movies/X265"}
       - {id: 25, cat: Movies/SD, desc: "MOVIES/XVID"}
@@ -56,6 +59,8 @@
       - {id: 24, cat: TV/SD, desc: "TV/DVDRIP"}
       - {id: 18, cat: TV/SD, desc: "TV/SD"}
       - {id: 26, cat: TV/HD, desc: "TV/X264"}
+      - {id: 61, cat: TV/UHD, desc: "TV/2160P"}
+      - {id: 64, cat: TV/FOREIGN, desc: "TV/X264-FOREIGN"}
 
 
     modes:
@@ -85,7 +90,7 @@
     - name: info
       type: info
       label: Results Per Page
-      default: For best results, change the 'Torrents per page' setting to 100 on your 'Personal Options' from the 'Personal' menu on the Mega-Blitz webpage.
+      default: For best results, change the 'Torrents per page' setting to 100 on your 'Torrent Options' from the 'Pers Tools > UserCP' menu on the TorrentSeeds webpage.
 
   login:
     path: login.php
@@ -94,7 +99,6 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      submitme: "X"
     error:
       - selector: h2:contains("Login failed!")
         message:
@@ -148,11 +152,19 @@
         attribute: href
       files:
         selector: td:nth-of-type(5)
+      # 2 flavours of dates
       date:
-        selector: td:nth-of-type(7)
+        # Today<br /> 10:20 AM
+        # Yesterday<br /> 08:03 PM
+        optional: true
+        selector: td:nth-child(7):contains("day")
+      date:
+        # Feb 14 2019<br /> 10:20 AM
+        optional: true
+        selector: td:nth-child(7):not(:contains("day"))
         filters:
           - name: dateparse
-            args: "Jan 02 2006 03:04 PM"
+            args: "Jan 2 2006 03:04 pm"
       size:
         selector: td:nth-of-type(8)
       grabs:

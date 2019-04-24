@@ -137,6 +137,7 @@ namespace Jackett.Common.Models
                                             TorznabCatType.MoviesBluRay.ID,
                                             TorznabCatType.MoviesDVD.ID,
                                             TorznabCatType.MoviesWEBDL.ID,
+                                            TorznabCatType.MoviesUHD.ID,
                 };
             }
             ret.SearchTerm = search;
@@ -175,6 +176,8 @@ namespace Jackett.Common.Models
                 ret.QueryStringParts = new string[QueryStringParts.Length];
                 Array.Copy(QueryStringParts, ret.QueryStringParts, QueryStringParts.Length);
             }
+            ret.RageID = RageID;
+            ret.ImdbID = ImdbID;
 
             return ret;
         }

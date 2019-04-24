@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -23,9 +24,10 @@ namespace Jackett.Common.Indexers
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
 
-        private new ConfigurationDataRecaptchaLogin configData
+
+        private new ConfigurationDataSceneTime configData
         {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
+            get { return (ConfigurationDataSceneTime)base.configData; }
             set { base.configData = value; }
         }
 
@@ -38,7 +40,7 @@ namespace Jackett.Common.Indexers
                 client: w,
                 logger: l,
                 p: ps,
-                configData: new ConfigurationDataRecaptchaLogin("For best results, change the 'Torrents per page' setting to the maximum in your profile on the SceneTime webpage."))
+                configData: new ConfigurationDataSceneTime())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
@@ -183,6 +185,11 @@ namespace Jackett.Common.Indexers
                 qParams.Add("search", query.GetQueryString());
             }
 
+            // If Only Freeleech Enabled
+            if (configData.Freeleech.Value)
+            {
+                qParams.Add("freeleech", "on");
+            }
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
 
             var results = await RequestStringWithCookies(searchUrl);

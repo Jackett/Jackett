@@ -22,6 +22,7 @@ namespace Jackett.Common.Indexers
         public override string[] LegacySiteLinks { get; protected set; } = new string[] { 
             "https://torrentheaven.myfqdn.info/", 
         }; 
+
         private string IndexUrl { get { return SiteLink + "index.php"; } }
         private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
 
@@ -45,6 +46,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
             Type = "private";
+
+            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "cbf23ac75b07255ad7548a87567a839d23f31576"); // incomplete CA chain
 
             AddCategoryMapping(1, TorznabCatType.PCGames, "GAMES/PC");
             AddCategoryMapping(3, TorznabCatType.Console, "GAMES/Sonstige");

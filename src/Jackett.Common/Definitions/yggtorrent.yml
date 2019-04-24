@@ -25,6 +25,8 @@
     - https://ygg.to/
     - https://www.ygg.to/
     - https://ww3.yggtorrent.gg/
+    - http://www2.yggtorrent.gg/
+
   caps:
     categorymappings:
       - {id: 2145, cat: TV, desc: "Film/Vidéo"}
@@ -137,6 +139,10 @@
       type: checkbox
       label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
       default: false
+    - name: sonarrv3hack
+      type: checkbox
+      label: "Enable Full season search hack: Sonarrv3 send 'Series Name SXX' but it won't match 'Series Name - Saison 01' for example so we remove the 'SXX' ==> 'Series Name'"
+      default: true
 
   login:
     method: form
@@ -157,12 +163,13 @@
     keywordsfilters:
       # Full season seach hack: Sonarrv3 send 'Series Name SXX' but it won't match 'Series Name - Saison 01' for example so we remove the 'SXX' ==> 'Series Name'
       - name: re_replace
-        args: ["(.*)[sS](\\d{1,4})$", "$1"]
+        args: ["(.*)[sS](\\d{1,4})$", "{{ if .Config.sonarrv3hack }}$1{{else}}$1S$2{{end}}"]
       - name: replace
         args: ["\"", ""]
+      - name: trim
     paths:
-      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ .Keywords }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ .Keywords }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
     rows:
       selector: "table.table > tbody > tr"
     fields:

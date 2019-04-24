@@ -58,6 +58,7 @@
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{.Keywords}}"
+      searchin: "title"
       incldead: 1
     rows:
       selector: table.table-bordered tr:has(a[href^="browse.php?cat="])
@@ -89,8 +90,19 @@
         filters:
           - name: replace
             args: ["details.php?id=", "download.php?torrent="]
+      banner:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+            #  onmouseover="Tip('<b>blahblah /><img src=\'/imdb/images/0090293.jpg\' blahblah />');"
+          - name: regexp
+            args: "/imdb/(.*?).jpg"
+          - name: prepend
+            args: "/imdb/"
+          - name: append
+            args: ".jpg"
       size:
-        selector: td:nth-last-child(6)
+        selector: td:nth-last-child(4)
       files:
         selector: a[href^="filelist.php?id="]
       grabs:
@@ -103,11 +115,11 @@
         # Today<br /> 10:20 AM
         # Yesterday<br /> 08:03 PM
         optional: true
-        selector: td:nth-last-child(7):contains("day")
+        selector: td:nth-last-child(5):contains("day")
       date:
         # Feb 14 2019<br /> 10:20 AM
         optional: true
-        selector: td:nth-last-child(7):not(:contains("day"))
+        selector: td:nth-last-child(5):not(:contains("day"))
         filters:
           - name: dateparse
             args: "Jan 2 2006 03:04 pm"

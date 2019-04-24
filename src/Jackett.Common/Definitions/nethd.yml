@@ -87,10 +87,7 @@
       date:
         selector: td:nth-child(4)
         filters:
-          - name: append
-            args: " +0700"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -0700"
+          - name: timeago
       downloadvolumefactor:
         case:
           "span.label:contains(\"Free\")": "0"

@@ -112,20 +112,26 @@
   search:
     paths:
       - path: browse.php
+    keywordsfilters:
+      - name: re_replace # S01E01 to X.sezon X.blm
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1.sezon $2.blm"]
     inputs:
     # does not support multi categories so defaulting to ALL
       do: "search"
-      keywords: "{{.Keywords}}"
+      keywords: "{{if .Keywords}}\"{{.Keywords}}\"{{else}}{{end}}"
       category: "0"
       search_type: "t_name"
       include_dead_torrents: "yes"
     rows:
       selector: table#sortabletable tbody tr:has(div[id^="port-target-"])
-      filters:
-        - name: andmatch
     fields:
       title:
         selector: div[id^="port-target-"] a
+        filters:
+          - name: re_replace # X.sezon X.blm to S01E01
+            args: ["(?i)\\b(\\d+).sezon\\s(\\d+).blm\\b", "S$1E$2"]
+          - name: re_replace # switch (dd.mm.yyyy) to mm.dd.yyyy
+            args: ["\\((\\d+)\\.(\\d+)\\.(\\d+)\\)", "$2/$1/$3"]
       details:
         selector: div[id^="port-target-"] a
         attribute: href

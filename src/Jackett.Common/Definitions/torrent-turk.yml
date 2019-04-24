@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://torrent-turk.co/
+  legacylinks:
     - https://torrent-turk.org/
   
   caps:
@@ -13,23 +15,43 @@
       - {id: 149, cat: Movies, desc: "Movies/Turkish"}
       - {id: 151, cat: Movies/HD, desc: "Movies/Turkish/1080p"}
       - {id: 152, cat: Movies/HD, desc: "Movies/Turkish/720p"}
+      - {id: 153, cat: Movies/DVD, desc: "Movies/Turkish/DVD5-DVD9"}
+      - {id: 154, cat: Movies/WEBDL, desc: "Movies/Turkish/BRRip-HDRip-DVDRip-WebDL"}
+      - {id: 155, cat: Movies/Other, desc: "Movies/Turkish/Boxset"}
 
       - {id: 156, cat: Movies, desc: "Movies/Foreign"}
-      - {id: 157, cat: Movies/UHD, desc: "Movies/Foreign/4K"}
+      - {id: 157, cat: Movies/UHD, desc: "Movies/Foreign/4K / 3D"}
       - {id: 159, cat: Movies/HD, desc: "Movies/Foreign/1080p"}
       - {id: 160, cat: Movies/HD, desc: "Movies/Foreign/720p"}
+      - {id: 161, cat: Movies/DVD, desc: "Movies/Foreign/DVD5-DVD9"}
+      - {id: 162, cat: Movies/WEBDL, desc: "Movies/Foreign/BRRip-HDRip-DVDRip-WebDL"}
+      - {id: 163, cat: Movies/Other, desc: "Movies/Foreign/Boxset"}
       
       - {id: 164, cat: TV, desc: "TV"}
       - {id: 165, cat: TV, desc: "TV/Turkish"}
       - {id: 166, cat: TV, desc: "TV/Foreign"}
+      - {id: 167, cat: TV/Other, desc: "TV Programs"}
+      - {id: 185, cat: TV/Documentary, desc: "TV/Documentary"}
+      - {id: 168, cat: TV/Other, desc: "TV/Other"}
 
       - {id: 171, cat: Audio, desc: "Music"}
       - {id: 172, cat: Audio, desc: "Music/Turkish"}
       - {id: 173, cat: Audio, desc: "Music/Foreign"}
+      - {id: 184, cat: Audio, desc: "Music/Discography"}
+      - {id: 174, cat: Audio/Video, desc: "Music/Video"}
+
+      - {id: 175, cat: PC, desc: "Apps / Game / Graphics"}
+      - {id: 176, cat: PC, desc: "Apps"}
+      - {id: 177, cat: Other, desc: "Pictures"}
+      - {id: 183, cat: Books/Ebook, desc: "EBook"}
+      - {id: 178, cat: Books/Technical, desc: "Training Sets"}
+      - {id: 179, cat: PC, desc: "OS"}
+      - {id: 180, cat: PC/Games, desc: "PC/Games"}
+      - {id: 181, cat: Console, desc: "Playstation"}
     
     modes:
       search: [q]
-      tv-search: [q]
+      tv-search: [q, season, ep]
       movie-search: [q]
       
   settings:
@@ -42,18 +64,18 @@
     - name: info
       type: info
       label: Layout
-      default: Only the classic profile is supported. Make sure to set the "Torrent listesi" option in your profile to "Klasik".
+      default: "<ol><li>Only the English Classic profile is supported.<li>Make sure to set the <b>Torrent Listing (Listeleme Biçimi)</b> option in your profile to <b>Classic (Klasik)</b><li>And set the <b>Language (Dil)</b> to <b>English</b><li>Using the <i>Modern</i> theme will prevent results, and using <i>Turkish</i> will prevent upload dates.</ol>"
       
   login:
     path: ?p=home&pid=1
     method: form
-    form: form#loginbox_form
+    form: form#sls_form
     submitpath: ajax/login.php
     inputs:
       action: "login"
       loginbox_membername: "{{ .Config.username }}"
       loginbox_password: "{{ .Config.password }}"
-      loginbox_remember: "true"
+      loginbox_remember: 1
     selectorinputs:
       securitytoken:
         selector: "script:contains(\"stKey: \")"
@@ -98,6 +120,26 @@
       download:
         selector: a[href*="?p=torrents&pid=10&action=download"]
         attribute: href
+      date:
+        optional: true
+         # Uploaded 30-01-2019 15:02 by 
+        selector: td.torrent_name:not(:contains(" at "))
+        filters:
+          - name: regexp
+            args: "Uploaded (.+?) by"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      date:
+        optional: true
+         # Uploaded Friday at 05:11 by
+         # Uploaded Today at 00:48 by
+         # Uploaded Yesterday at 23:57 by
+        selector: td.torrent_name:contains(" at ")
+        filters:
+          - name: regexp
+            args: "Uploaded (.+?) by"
+          - name: replace
+            args: [" at ", " "]
       size:
         selector: a[rel="torrent_size"]
       seeders:
@@ -113,11 +155,9 @@
       downloadvolumefactor:
         case:
           "img[title=\"FREE!\"]": "0"
+          "img[title=\"Download Multiplier: 0.5\"]": "0.5"
           "*": "1"
       uploadvolumefactor:
         case:
+          "img[title=\"Upload Multiplier: 2\"]": "2"
           "*": "1"
-      date:
-        selector: td.torrent_name > abbr.timeago
-        optional: true
-        attribute: data-time

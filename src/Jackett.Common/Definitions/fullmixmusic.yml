@@ -16,6 +16,7 @@
 
     modes:
       search: [q]
+      music-search: [q, album, artist, label, year]
 
   login:
     path: login.php
@@ -32,7 +33,7 @@
     paths:
       - path: browse.php
     inputs:
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
       showsearch: "1"
       incldead: "1"
     rows:

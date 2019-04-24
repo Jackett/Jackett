@@ -14,6 +14,7 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using Jackett.Common.Helpers;
+using System.Diagnostics;
 
 namespace Jackett.Common.Utils.Clients
 {
@@ -23,6 +24,32 @@ namespace Jackett.Common.Utils.Clients
         static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
         static protected string webProxyUrl;
         static protected IWebProxy webProxy;
+
+        [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
+        static public bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            {
+                var hash = certificate.GetCertHashString();
+
+                ICollection<string> hosts;
+
+                trustedCertificates.TryGetValue(hash, out hosts);
+                if (hosts != null)
+                {
+                    if (hosts.Contains(request.RequestUri.Host))
+                        return true;
+                }
+
+                if (sslPolicyErrors != SslPolicyErrors.None)
+                {
+                    // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+                    // The certificate is only available inside this function, so we can't catch it at the calling method.
+                    throw new Exception("certificate validation failed: " + certificate.ToString());
+                }
+
+                return sslPolicyErrors == SslPolicyErrors.None;
+            }
+        }
 
         static public void InitProxy(ServerConfig serverConfig)
         {
@@ -137,26 +164,7 @@ namespace Jackett.Common.Utils.Clients
                 })
                 {
                     // custom certificate validation handler (netcore version)
-                    clientHandlr.ServerCertificateCustomValidationCallback = (request, certificate, chain, sslPolicyErrors) =>
-                    {
-                        var hash = certificate.GetCertHashString();
-
-                        ICollection<string> hosts;
-
-                        trustedCertificates.TryGetValue(hash, out hosts);
-                        if (hosts != null)
-                        {
-                            if (hosts.Contains(request.RequestUri.Host))
-                                return true;
-                        }
-
-                        if (sslPolicyErrors != SslPolicyErrors.None)
-                        {
-                            throw new Exception("certificate validation failed: " + certificate.ToString());
-                        }
-
-                        return sslPolicyErrors == SslPolicyErrors.None;
-                    };
+                    clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
 
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
