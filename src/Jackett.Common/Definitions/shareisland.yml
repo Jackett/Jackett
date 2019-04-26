@@ -77,6 +77,16 @@
       path: index.php
       selector: a[href="logout.php"]
 
+  download:
+    before:
+      path: thanks.php
+      method: "post"
+      inputs:
+        infohash: "{{ .DownloadUri.Query.id }}"
+        thanks: "1"
+        rndval: "1487013827343"
+    selector: a[href^="download.php?id="]
+
   search:
     paths:
       - path: index.php
