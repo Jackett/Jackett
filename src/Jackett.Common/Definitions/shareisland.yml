@@ -129,7 +129,7 @@
         - name: andmatch
     fields:
       download:
-        selector: a[href^="download.php?id="]
+        selector: a[href^="index.php?page=downloadcheck&id="]
         attribute: href
       title: # shortened title?
         selector: td:nth-child(2)
