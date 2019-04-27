@@ -77,15 +77,15 @@
       path: index.php
       selector: a[href="logout.php"]
 
-  download:
-    before:
-      path: thanks.php
-      method: "post"
-      inputs:
-        infohash: "{{ .DownloadUri.Query.id }}"
-        thanks: "1"
-        rndval: "1487013827343"
-    selector: a[href^="download.php?id="]
+  # download:
+  #   before:
+  #     path: thanks.php
+  #     method: "post"
+  #     inputs:
+  #       infohash: "{{ .DownloadUri.Query.id }}"
+  #       thanks: "1"
+  #       rndval: "1487013827343"
+  #   selector: a[href^="download.php?id="]
 
   search:
     paths:
@@ -139,7 +139,8 @@
         - name: andmatch
     fields:
       download:
-        selector: a[href^="index.php?page=downloadcheck&id="]
+        # selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php?id="]
         attribute: href
       title: # shortened title?
         selector: td:nth-child(2)
