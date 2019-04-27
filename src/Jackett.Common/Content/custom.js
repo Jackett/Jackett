@@ -94,6 +94,10 @@ function loadJackettSettings() {
             $("#logoutBtn").show();
         }
 
+        if (data.can_run_netcore != null && data.can_run_netcore === true) {
+            $("#can-upgrade-from-mono").show();
+        }
+
         $.each(data.notices, function (index, value) {
             console.log(value);
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
