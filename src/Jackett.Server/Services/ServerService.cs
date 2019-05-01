@@ -389,10 +389,7 @@ namespace Jackett.Server.Services
 
         public bool MonoUserCanRunNetCore()
         {
-            //return isDotNetCoreCapable;
-
-            //Releasing in dark mode, will activate at a later date
-            return false;
+            return isDotNetCoreCapable;
         }
     }
 }
