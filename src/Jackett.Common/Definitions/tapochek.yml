@@ -157,9 +157,9 @@
       - {id: 908, cat: Movies, desc: "Экранки и Low-рипы с рекламой"}
       - {id: 909, cat: Movies/HD, desc: "Новинки 2018-2019 (HD и HD Rips) с рекламой"}
       - {id: 74, cat: Movies/Foreign, desc: "Зарубежное кино"}
-      - {id: 121, cat: Movies.BluRay, desc: "Зарубежное кино | Blu-Ray и BDRemux"}
+      - {id: 121, cat: Movies/BluRay, desc: "Зарубежное кино | Blu-Ray и BDRemux"}
       - {id: 122, cat: Movies/HD, desc: "Зарубежное кино | HD Rips"}
-      - {id: 123, cat: Movies.DVD, desc: "Зарубежное кино | DVD"}
+      - {id: 123, cat: Movies/DVD, desc: "Зарубежное кино | DVD"}
       - {id: 124, cat: Movies/Foreign, desc: "Зарубежное кино | Rips"}
       - {id: 75, cat: Movies, desc: "Отечественное кино"}
       - {id: 127, cat: Movies/BluRay, desc: "Отечественное кино | Blu-Ray и BDRemux"}
