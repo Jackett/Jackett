@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -90,6 +91,13 @@ namespace Jackett.Common.Indexers
                 btnResults = (int)TorznabCaps.LimitsDefault;
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
+
+            // If only the season is searched for then change format to match expected format
+            var seasonOnlyMatch = new Regex(@".*\s[Ss]{1}\d{2}(?<![Ee]{1}\d{2,3})?$").Match(searchString);
+            if (seasonOnlyMatch.Success)
+            {
+                searchString = Regex.Replace(searchString, @"[Ss]{1}\d{2}", $"Season {query.Season}");
+            }
 
             var parameters = new JArray();
             parameters.Add(new JValue(configData.Key.Value));
