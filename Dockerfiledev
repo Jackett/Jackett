@@ -1,0 +1,40 @@
+FROM lsiobase/ubuntu:bionic
+
+RUN \
+ apt-get update && \
+ apt-get install -y wget gpg && \
+ echo "**** install packages ****" && \
+ wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg && \
+ mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/ && \
+ wget -q https://packages.microsoft.com/config/ubuntu/18.04/prod.list && \
+ mv prod.list /etc/apt/sources.list.d/microsoft-prod.list && \
+ chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg && \
+ chown root:root /etc/apt/sources.list.d/microsoft-prod.list && \
+ apt-get update && \
+ apt-get install -y \
+	mono-complete nuget mono-xbuild aspnetcore-runtime-2.2 dotnet-sdk-2.2 && \
+ echo "**** install jackett ****" && \
+ mkdir -p \
+	/app/Jackett && \
+ chown -R root:root /app/Jackett && \
+ echo "**** cleanup ****" && \
+ apt-get clean && \
+ rm -rf \
+	/tmp/* \
+	/var/lib/apt/lists/* \
+	/var/tmp/*
+
+
+ENV DOTNET_CLI_TELEMETRY_OPTOUT="1"
+RUN echo $DOTNET_CLI_TELEMETRY_OPTOUT 
+
+ENTRYPOINT rm -rf /app/Jackett/* && \
+ cp -R /config/* /app/Jackett/ && \
+ chown -R root:root /app/Jackett && \ 
+ cd /app/Jackett/src && \ 
+ dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug && \
+ ./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/jackett
+
+# ports and volumes
+VOLUME /config /downloads
+EXPOSE 9117
