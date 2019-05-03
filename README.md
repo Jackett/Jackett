@@ -599,11 +599,11 @@ dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c 
 docker build -t jackett/jackett:local -f Dockerfiledev .
 
 # run it
-docker run --name jackettdev -d -v <path_to_root>:/config -p 9117:9117 jackett/jackett:local
+docker run --name jackettdev -d -v <path_to_root_of_jackett>:/config -p 9117:9117 jackett/jackett:local
 
 docker stop jackettdev
 
-# make your changes and start it again. jackett in the container will be wiped
+# make your changes and start it again. jackett in the container will be wiped and copied from /config volume
 docker start jackettdev
 ```
 
