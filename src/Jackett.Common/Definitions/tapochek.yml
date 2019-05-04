@@ -105,9 +105,9 @@
       - {id: 818, cat: Console/PS3, desc: "PS3 | Сцена"}
       - {id: 696, cat: Console/PSP, desc: "PSN | Игры"}
       - {id: 853, cat: Console/PS3, desc: "PS3 | Emulation"}
-      - {id: 904, cat: Console/PS Vita , desc: "PS Vita | Игры"}
+      - {id: 904, cat: Console/PS Vita, desc: "PS Vita | Игры"}
       - {id: 102, cat: Console/PSP, desc: "PSP | Игры"}
-      - {id: 103, cat: Console,/PS3 desc: "PS2 | Игры"}
+      - {id: 103, cat: Console/PS3, desc: "PS2 | Игры"}
       - {id: 104, cat: Console/PSP, desc: "PSX | Игры"}
       - {id: 435, cat: Console/PSP, desc: "PSP | Сцена"}
       - {id: 105, cat: Console/PSP, desc: "PSP | PSX-PSP"}
