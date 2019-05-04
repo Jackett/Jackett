@@ -6,6 +6,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -182,55 +183,57 @@ namespace Jackett.Updater
                 // https://github.com/Jackett/Jackett/issues/5022
                 // https://stackoverflow.com/questions/16764946/what-generates-the-text-file-busy-message-in-unix#comment32135232_16764967
                 // Delete the ./jackett executable
-                try
+                // pdb files are also problematic https://github.com/Jackett/Jackett/issues/5167#issuecomment-489301150
+
+                string jackettExecutable = options.Path.TrimEnd('/') + "/jackett";
+                List<string> pdbFiles = Directory.EnumerateFiles(options.Path, "*.pdb", SearchOption.AllDirectories).ToList();
+                List<string> removeList = pdbFiles;
+                removeList.Add(jackettExecutable);
+
+                foreach (string fileForDelete in removeList)
                 {
-                    logger.Info("Attempting to remove the jackett executable from: " + options.Path);
-                    string executable = options.Path.TrimEnd('/') + "/jackett";
-                    if (File.Exists(executable))
+                    try
                     {
-                        File.Delete(executable);
-                        logger.Info("Deleted " + executable);
+                        logger.Info("Attempting to remove: " + fileForDelete);
+
+                        if (File.Exists(fileForDelete))
+                        {
+                            File.Delete(fileForDelete);
+                            logger.Info("Deleted " + fileForDelete);
+                        }
+                        else
+                        {
+                            logger.Info("File for deleting not found: " + fileForDelete);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        logger.Info("jackett executable not found in: " + executable);
+                        logger.Error(e);
                     }
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
                 }
             }
 
             logger.Info("Finding files in: " + updateLocation);
-            var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories).OrderBy(x => x).ToList();
             foreach (var file in files)
             {
                 var fileName = Path.GetFileName(file).ToLowerInvariant();
 
-                if (fileName.EndsWith(".zip")
-                    || fileName.EndsWith(".tar")
-                    || fileName.EndsWith(".gz"))
+                if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
                 {
                     continue;
                 }
-                try
+
+                bool fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
+
+                if (!fileCopySuccess)
                 {
-                    logger.Info("Copying " + fileName);
-                    var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
-                    var destDir = Path.GetDirectoryName(dest);
-                    if (!Directory.Exists(destDir))
-                    {
-                        logger.Info("Creating directory " + destDir);
-                        Directory.CreateDirectory(destDir);
-                    }
-                    File.Copy(file, dest, true);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
+                    //Perform second attempt, this time removing the target file first
+                    CopyUpdateFile(options.Path, file, updateLocation, true);
                 }
             }
+
+            logger.Info("File copying complete");
 
             // delete old dirs
             string[] oldDirs = new string[] { "Content/logos" };
@@ -423,6 +426,73 @@ namespace Jackett.Updater
                     Process.Start(startInfo);
                 }
             }
+        }
+
+        private bool CopyUpdateFile(string jackettDestinationDirectory, string fullSourceFilePath, string updateSourceDirectory, bool previousAttemptFailed)
+        {
+            bool success = false;
+
+            string fileName;
+            string fullDestinationFilePath;
+            string fileDestinationDirectory;
+
+            try
+            {
+                fileName = Path.GetFileName(fullSourceFilePath);
+                fullDestinationFilePath = Path.Combine(jackettDestinationDirectory, fullSourceFilePath.Substring(updateSourceDirectory.Length));
+                fileDestinationDirectory = Path.GetDirectoryName(fullDestinationFilePath);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                return false;
+            }
+
+            logger.Info($"Attempting to copy {fileName} from source: {fullSourceFilePath} to destination: {fullDestinationFilePath}");
+
+            if (previousAttemptFailed)
+            {
+                logger.Info("The first attempt copying file: " + fileName + "failed. Retrying and will delete old file first");
+
+                try
+                {
+                    if (File.Exists(fullDestinationFilePath))
+                    {
+                        logger.Info(fullDestinationFilePath + " was found");
+                        System.Threading.Thread.Sleep(1000);
+                        File.Delete(fullDestinationFilePath);
+                        logger.Info("Deleted " + fullDestinationFilePath);
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        logger.Info(fullDestinationFilePath + " was NOT found");
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                }
+            }
+
+            try
+            {               
+                if (!Directory.Exists(fileDestinationDirectory))
+                {
+                    logger.Info("Creating directory " + fileDestinationDirectory);
+                    Directory.CreateDirectory(fileDestinationDirectory);
+                }
+
+                File.Copy(fullSourceFilePath, fullDestinationFilePath, true);
+                logger.Info("Copied " + fileName);
+                success = true;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+            }
+
+            return success;
         }
 
         private string GetUpdateLocation()
