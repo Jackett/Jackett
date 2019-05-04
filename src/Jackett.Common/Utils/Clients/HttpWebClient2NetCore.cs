@@ -130,6 +130,9 @@ namespace Jackett.Common.Utils.Clients
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
+            // custom certificate validation handler (netcore version)
+            clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
+
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
         }
