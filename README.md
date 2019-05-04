@@ -561,7 +561,7 @@ All contributions are welcome just send a pull request.
 ### Windows
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
-* From the `src` directory, run `dotnet restore`
+* Open Powershell and from the `src` directory, run `dotnet restore`
 * Open the Jackett solution in Visual Studio 2017 (version 15.9 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Server as startup project
