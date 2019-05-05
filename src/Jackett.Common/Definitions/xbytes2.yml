@@ -24,6 +24,7 @@
       - {id: 41 , cat: TV/Sport, desc: "Deportes"}
       - {id: 5  , cat: Movies/HD, desc: "Anime"}
       - {id: 34 , cat: TV/HD, desc: "Dibujos animados"}
+      - {id: 39 , cat: Music, desc: "Música"}
     modes:
       search: [q]
 
