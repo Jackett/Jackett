@@ -15,19 +15,21 @@
       - {id: 23 , cat: Movies/3D, desc: "Peliculas - 3D"}
       - {id: 17 , cat: Movies/HD, desc: "Peliculas - FullBluray/BDRemux"}
       - {id: 29 , cat: Movies/HD, desc: "Peliculas - 1080p x265"}
-      - {id: 21 , cat: Movies/HD, desc: "Peliculas - 4K"}
+      - {id: 21 , cat: Movies/UHD, desc: "Peliculas - 4K"}
       - {id: 30 , cat: Movies/HD, desc: "Peliculas - MicroHD x265"}
-      - {id: 35 , cat: TV/HD, desc: "TV/Series - 4K"}
+      - {id: 35 , cat: TV/UHD, desc: "TV/Series - 4K"}
       - {id: 31 , cat: TV/HD, desc: "TV/Series - x265"}
       - {id: 25 , cat: TV/HD, desc: "TV/Series - HDTV & WEB-DL 1080p"}
       - {id: 37 , cat: TV/Documentary, desc: "Documentales"}
       - {id: 41 , cat: TV/Sport, desc: "Deportes"}
-      - {id: 5  , cat: Movies/HD, desc: "Anime"}
+      - {id: 5  , cat: TV/Anime, desc: "Anime"}
       - {id: 34 , cat: TV/HD, desc: "Dibujos animados"}
-      - {id: 14 , cat: Music, desc: "Música - MP3"}
-      - {id: 39 , cat: Music, desc: "Música - FLAC"}
+      - {id: 14 , cat: Music/MP3, desc: "Música - MP3"}
+      - {id: 39 , cat: Music/Lossless, desc: "Música - FLAC"}
     modes:
       search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: index.php?page=login
