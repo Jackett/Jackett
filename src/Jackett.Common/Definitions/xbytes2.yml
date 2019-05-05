@@ -24,8 +24,8 @@
       - {id: 41 , cat: TV/Sport, desc: "Deportes"}
       - {id: 5  , cat: TV/Anime, desc: "Anime"}
       - {id: 34 , cat: TV/HD, desc: "Dibujos animados"}
-      - {id: 14 , cat: Music/MP3, desc: "Música - MP3"}
-      - {id: 39 , cat: Music/Lossless, desc: "Música - FLAC"}
+      - {id: 14 , cat: Audio/MP3, desc: "Música - MP3"}
+      - {id: 39 , cat: Audio/Lossless, desc: "Música - FLAC"}
     modes:
       search: [q]
       tv-search: [q, season, ep]
