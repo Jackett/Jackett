@@ -7,8 +7,6 @@
   encoding: UTF-8
   links:
     - https://nyaa.si/
-  certificates:
-    - 3801e330482d4f9baef71ca4e33ba23ede74f59c # incomplete CA chain
     
   settings:
     - name: filter-id
