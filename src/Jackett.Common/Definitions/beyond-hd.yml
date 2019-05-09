@@ -18,6 +18,18 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: Show Posters Required
+      default: For this Indexer to work you will first need to visit your <b>profile settings</b> on the Beyond-HD web site, and set the <b>Show Posters</b> in the <b>Torrent</b> section to <b>yes</b>.
+
   login:
     path: login
     method: form
@@ -98,4 +110,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured Torrent\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.?
+# UNIT3D 1.9.2 (with torrent posters enabled)
