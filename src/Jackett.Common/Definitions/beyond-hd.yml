@@ -18,18 +18,6 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
-  settings:
-    - name: username
-      type: text
-      label: Username
-    - name: password
-      type: password
-      label: Password
-    - name: info
-      type: info
-      label: Show Posters Required
-      default: For this Indexer to work you will first need to visit your <b>profile settings</b> on the Beyond-HD web site, and set the <b>Show Posters</b> in the <b>Torrent</b> section to <b>yes</b>.
-
   login:
     path: login
     method: form
@@ -80,17 +68,17 @@
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
       date:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(5)
         filters:
           - name: timeago
       size:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(4)
       seeders:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(3)
       leechers:
-        selector: td:nth-child(9)
+        selector: td:nth-last-child(2)
       grabs:
-        selector: td:nth-child(10)
+        selector: td:nth-last-child(1)
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
@@ -110,4 +98,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured Torrent\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2 (with torrent posters enabled)
+# UNIT3D
