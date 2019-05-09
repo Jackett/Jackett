@@ -52,8 +52,6 @@
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
       notsecure: "1"
-      x: "24"
-      y: "33"
     error:
       - selector: div.login_error_content_text
     test:
@@ -82,7 +80,7 @@
         selector: td.torrentmain > a.torrentname
         attribute: href
       download:
-        selector: a[href^="https://newinsane.info/download.php/"]
+        selector: a[href*="/download.php/"]
         attribute: href
       imdb:
         optional: true
@@ -131,13 +129,14 @@
           - name: re_replace
             args: ["(\\-)(\\d{2})(\\d{2})(\\:)", "-$2 $3:"]
           - name: dateparse
-            args: "2006-01-02 08:01"
+            args: "2006-01-02 15:04"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
         case:
           a[href^="?doubleup=four"]: "4"
-          a[href^="?doubleup=three"]: "3"
+          a[href^="?daoubleup=three"]: "3"
+          a[href^="?doubleup=two"]: "2"
           "*" : "1"
       description:
         selector: div.contenttext
