@@ -24,6 +24,7 @@
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: 1
     error:
       - selector: div.has-error
     test:
@@ -31,19 +32,17 @@
 
   search:
     paths:
-      - path: filterTorrents
+      - path: torrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
       description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
-      tvdb: ""
       tmdb: ""
-      mal: ""
-      sort: created_at
+      sorting: created_at
       direction: desc
-      qty: 100
+      qty: 25
     rows:
       selector: table > tbody > tr
     fields:
@@ -68,48 +67,22 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
-      size:
+      date:
         selector: td:nth-child(6)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      grabs:
-        selector: td:nth-child(9)
         filters:
-          - name: regexp
-            args: ([\d\.]+)
+          - name: timeago
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      grabs:
+        selector: td:nth-child(10)
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
-      date:
-        selector: td:nth-child(5)
-        filters:
-          - name: timeago
-          # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
-          - name: re_replace
-            args: ["(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди)", "ago"]
-          - name: re_replace
-            args: ["(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
-          - name: re_replace
-            args: ["(dakika|minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
-          - name: re_replace
-            args: ["(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur)", "hour"]
-          - name: re_replace
-            args: ["(saat|tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
-          - name: re_replace
-            args: ["(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден)", "day"]
-          - name: re_replace
-            args: ["(gün|päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
-          - name: re_replace
-            args: ["(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица)", "week"]
-          - name: re_replace
-            args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
-          - name: re_replace
-            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
-          - name: re_replace
-            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
           "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
@@ -125,4 +98,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured Torrent\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2
+# UNIT3D 1.9.?
