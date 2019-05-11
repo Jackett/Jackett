@@ -39,9 +39,8 @@
   search:
     paths:
       - path: torrents.php
-        method: post
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{range .Categories}}cat={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       search_mode: 0
@@ -54,7 +53,7 @@
         - name: andmatch
     fields:
       title:
-        selector: td.name > div > a.poster-preview[title]
+        selector: td.name > div > a[href*="-torrent-"][title]
         attribute: title
       category:
         selector: td.category > a
@@ -63,35 +62,39 @@
           - name: querystring
             args: cat
       details:
-        selector: td.name > div > a.poster-preview[title]
+        selector: td.name > div > a[href*="-torrent-"][title]
         attribute: href
+      banner:
+        selector: td.name > a.poster-preview img
+        attribute: src
       comments:
         selector: a[href*="#comments"]
         attribute: href
       download:
-        selector: a.bookmark[onclick]
-        attribute: onclick
+        selector: td.name > div > a[href*="-torrent-"][title]
+        attribute: href
         filters:
-          - name: replace
-            args: [",false)", ""]
-          - name: replace
-            args: ["return bookmark(", "download.php?id="]
-      size:
-        selector: td:nth-child(5)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
-      grabs:
-        selector: td:nth-child(8)
+          - name: regexp
+            args: "-torrent-(\\d+).html"
+          - name: prepend
+            args: "download.php?id="
       date:
-        selector: td:nth-child(4)
+        selector: td:nth-child(5)
         filters:
           - name: timeago
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(9)
       downloadvolumefactor:
         case:
           "span.label:contains(\"Free\")": "0"
           "span.label:contains(\"50%\")": "0.5"
+          "span.label:contains(\"30%\")": "0.7"
           "*": "1"
       uploadvolumefactor:
         case:
