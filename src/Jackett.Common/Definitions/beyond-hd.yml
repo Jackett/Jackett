@@ -42,7 +42,7 @@
       tmdb: ""
       sorting: created_at
       direction: desc
-      qty: 25
+      qty: 100
     rows:
       selector: table > tbody > tr
     fields:
@@ -68,17 +68,17 @@
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
       date:
-        selector: td:nth-last-child(5)
+        selector: td:not(a[href$="/history"]) span.text-orange
         filters:
           - name: timeago
       size:
-        selector: td:nth-last-child(4)
+        selector: td span.text-blue
       seeders:
-        selector: td:nth-last-child(3)
+        selector: a[href$="/peers"] span.text-green
       leechers:
-        selector: td:nth-last-child(2)
+        selector: a[href$="/peers"] span.text-red
       grabs:
-        selector: td:nth-last-child(1)
+        selector: a[href$="/history"]
       imdb:
         optional: true
         selector: a[href*="www.imdb.com/title/tt"]
