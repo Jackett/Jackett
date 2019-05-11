@@ -335,6 +335,7 @@ namespace Jackett.Updater
                 "Definitions/crazyhd.yml",
                 "Definitions/hdplus.yml",
                 "Definitions/gods.yml",
+                "Definitions/freedomhd.yml",
             };
 
             foreach (var oldFile in oldFiles)
