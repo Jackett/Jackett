@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
             webclient.EmulateBrowser = false;
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "81CC4E41B6F8FF656CA0E2396EE6D63383198BF1");
 

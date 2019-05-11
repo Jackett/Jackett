@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
             Language = "sv-sw";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "DVD-R Swesub");
             AddCategoryMapping(2, TorznabCatType.TV, "DVD-R TV");

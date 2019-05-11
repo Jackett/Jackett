@@ -293,9 +293,9 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
                 return true;
-            else if (!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
+            else if (!caps.SupportsImdbMovieSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
@@ -307,7 +307,7 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
                 return true;
-            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
                 return true;
 
             return false;

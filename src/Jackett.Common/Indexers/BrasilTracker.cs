@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         {
             Language = "pt-br";
             Type = "private";
-            TorznabCaps.SupportsImdbSearch = false; // they store the imdb ID but it's not included in the results, search is also not available.
+            TorznabCaps.SupportsImdbMovieSearch = false; // they store the imdb ID but it's not included in the results, search is also not available.
             TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Filmes");
