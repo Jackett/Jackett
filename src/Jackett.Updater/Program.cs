@@ -215,22 +215,31 @@ namespace Jackett.Updater
 
             logger.Info("Finding files in: " + updateLocation);
             var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories).OrderBy(x => x).ToList();
-            foreach (var file in files)
+            logger.Info($"{files.Count()} update files found");
+
+            try
             {
-                var fileName = Path.GetFileName(file).ToLowerInvariant();
-
-                if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
+                foreach (var file in files)
                 {
-                    continue;
-                }
+                    var fileName = Path.GetFileName(file).ToLowerInvariant();
 
-                bool fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
+                    if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
+                    {
+                        continue;
+                    }
 
-                if (!fileCopySuccess)
-                {
-                    //Perform second attempt, this time removing the target file first
-                    CopyUpdateFile(options.Path, file, updateLocation, true);
+                    bool fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
+
+                    if (!fileCopySuccess)
+                    {
+                        //Perform second attempt, this time removing the target file first
+                        CopyUpdateFile(options.Path, file, updateLocation, true);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
             }
 
             logger.Info("File copying complete");
