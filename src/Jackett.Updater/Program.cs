@@ -19,11 +19,12 @@ namespace Jackett.Updater
     {
         private IProcessService processService;
         private IServiceConfigService windowsService;
-        private Logger logger;
+        public static Logger logger;
         private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
             new Program().Run(args);
         }
 
@@ -522,6 +523,13 @@ namespace Jackett.Updater
             {
                 return Path.Combine(directoryPath, "JackettConsole.exe");
             }
+        }
+
+        private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine(e.ExceptionObject.ToString());
+            logger.Error(e.ExceptionObject.ToString());
+            Environment.Exit(1);
         }
     }
 }
