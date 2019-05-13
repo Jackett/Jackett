@@ -70,7 +70,6 @@ else
     cat << EOL
 ${BOLDRED}ERROR${NC}: Could not launch service. The installation might have failed.
 Please open an issue on https://github.com/Jackett/Jackett/issues and paste following information:
-Mono directory: \`${monodir}\`
 Jackett directory: \`${jackettdir}\`
 Jackett user: \`${jackettuser}\`
 
