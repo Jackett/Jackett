@@ -311,6 +311,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Sharingue
  * Shazbat
  * Shellife (SL)
+ * SiamBIT
  * SpaceTorrent
  * Speed-Share
  * SpeedCD
