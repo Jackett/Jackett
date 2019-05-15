@@ -1,0 +1,99 @@
+---
+  site: teamhd
+  name: TeamHD
+  description: "TeamHD is a RUSSIAN Private Torrent Tracker for HD MOVIES / TV"
+  language: ru-ru
+  type: private
+  encoding: UTF-8
+  links:
+    - https://teamhd.org/
+
+  caps:
+    categorymappings:
+      - {id: 29, cat: Movies/HD, desc: "Movies Фильмы"}
+      - {id: 25, cat: TV/Anime, desc: "Cartoons Мультфильмы"}
+      - {id: 26, cat: Audio/Lossless, desc: "Hi-Res Audio"}
+      - {id: 27, cat: Other, desc: "Demo Демо"}
+      - {id: 28, cat: TV/Documentary, desc: "Documentary Документальное кино"}
+      - {id: 30, cat: Audio/Video, desc: "Music Video Музыкальное видео"}
+      - {id: 31, cat: TV/Sport, desc: "Sport Спорт"}
+      - {id: 32, cat: TV/HD, desc: "TV Show ТВ Шоу"}
+      - {id: 33, cat: TV/HD, desc: "Soaps Сериалы"}
+      - {id: 34, cat: TV/HD, desc: "Other"}
+      - {id: 35, cat: Movies, desc: "Content w/o subs Контент без перевода"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.error
+    test:
+      path: index.php
+      selector: a[href="/logout.php"]
+      
+  search:
+    paths:
+      - path: browse
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      incldead: 0
+      free: 0
+      year: ""
+
+    rows:
+      selector: table.browse > tbody > tr
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="/details/id"]
+      details:
+        selector: a[href^="/details/id"]
+        attribute: href
+      category:
+        selector: a[href*="/browse/cat"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: (\d+)
+      date:
+        selector: td > div > small
+        filters:
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      seeders:
+        selector: td:nth-child(4)
+        filters:
+          - name: split
+            args: ["|", 0]
+      leechers:
+        selector: td:nth-child(4)
+        filters:
+          - name: split
+            args: ["|", 1]
+      grabs:
+        selector: td:nth-child(5) strong
+        filters:
+          - name: regexp
+            args: (\d+)
+      size:
+        selector: td:nth-child(5)
+        remove: strong
+      downloadvolumefactor:
+        case:
+          a[href^="/details/id"][style="color:#f2b101"]: "0"
+          a[href^="/details/id"][style="color:#828b8b"]: "0.5"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
