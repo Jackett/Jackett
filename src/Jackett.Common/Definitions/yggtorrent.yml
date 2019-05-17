@@ -155,6 +155,15 @@
       submit: ""
     error:
       - selector: "#login_msg_pass[style=\"\"][style] > center"
+      - selector: "#ban_msg_login[style=\"\"][style] > center"
+      - selector: "#login_msg_mail[style=\"\"][style] > center"
+      - selector: a[href$="/user/disabled"]
+        message:
+          # Compte Inactif
+          selector: a[href$="/user/disabled"] strong
+          filters:
+            - name: append
+              args: " - Dès que vous passez en dessous d'un ratio inférieur à 1, Votre compte devient inactif et le site vous coupe les téléchargements."
     test:
       path: /
       selector: div#top_panel:contains("Déconnexion")
