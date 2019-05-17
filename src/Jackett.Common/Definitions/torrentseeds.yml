@@ -10,32 +10,34 @@
 
   caps:
     categorymappings:
-      - {id: 13, cat: PC/0day, desc: "0DAY"}
-      - {id: 37, cat: TV/Anime, desc: "ANIME/HD"}
+      - {id: 13, cat: PC/0day, desc: "Apps/0DAY"}
+      - {id: 37, cat: TV/Anime, desc: "Anime/HD"}
       - {id: 9, cat: TV/Anime, desc: "Anime/SD"}
       - {id: 1, cat: PC/0day, desc: "Apps"}
       - {id: 27, cat: Books, desc: "Bookware"}
-      - {id: 32, cat: Books/Ebook, desc: "EBOOK"}
-      - {id: 47, cat: Console/Other, desc: "GAMES/NSW"}
-      - {id: 60, cat: Console/Other, desc: "GAMES/ATARI"}
-      - {id: 63, cat: Console/Other, desc: "GAMES/UPDATES"}
+      - {id: 32, cat: Books/Ebook, desc: "EBooks"}
+      - {id: 47, cat: Console/Other, desc: "Games/NSW"}
+      - {id: 60, cat: Console/Other, desc: "Games/ATARI"}
+      - {id: 63, cat: Console/Other, desc: "Games/UPDATES"}
       - {id: 2, cat: PC/Games, desc: "Games/PC"}
       - {id: 8, cat: Console/PS3, desc: "Games/PS3"}
-      - {id: 30, cat: Console/PS4, desc: "GAMES/PS4"}
+      - {id: 30, cat: Console/PS4, desc: "Games/PS4"}
       - {id: 7, cat: Console/PSP, desc: "Games/PSP"}
-      - {id: 16, cat: Console/Wii, desc: "GAMES/WII"}
-      - {id: 29, cat: Console/WiiU, desc: "GAMES/WIIU"}
-      - {id: 17, cat: Console/XBox 360, desc: "GAMES/XBOX360"}
+      - {id: 16, cat: Console/Wii, desc: "Games/WII"}
+      - {id: 29, cat: Console/WiiU, desc: "Games/WIIU"}
+      - {id: 17, cat: Console/XBox 360, desc: "Games/XBOX360"}
       - {id: 50, cat: Movies/BluRay, desc: "Movies/Bluray-UHD"}
-      - {id: 31, cat: Movies/BluRay, desc: "MOVIES/COMPLETE-BLURAY"}
-      - {id: 3, cat: Movies/DVD, desc: "MOVIES/DVDR"}
-      - {id: 39, cat: Movies/Foreign, desc: "MOVIES/HD-Foreign"}
-      - {id: 62, cat: Movies/Foreign, desc: "MOVIES/SD-Foreign"}
-      - {id: 19, cat: Movies/HD, desc: "MOVIES/X264"}
+      - {id: 31, cat: Movies/BluRay, desc: "Movies/COMPLETE-BLURAY"}
+      - {id: 3, cat: Movies/DVD, desc: "Movies/DVDR"}
+      - {id: 39, cat: Movies/Foreign, desc: "Movies/HD-Foreign"}
+      - {id: 62, cat: Movies/Foreign, desc: "Movies/SD-Foreign"}
+      - {id: 19, cat: Movies/HD, desc: "Movies/X264"}
       - {id: 49, cat: Movies/HD, desc: "Movies/X265"}
-      - {id: 25, cat: Movies/SD, desc: "MOVIES/XVID"}
-      - {id: 6, cat: XXX, desc: "MOVIES/XXX"}
+      - {id: 25, cat: Movies/SD, desc: "Movies/XVID"}
+      - {id: 6, cat: XXX, desc: "Movies/XXX"}
       - {id: 53, cat: XXX, desc: "Movies/XXX-HD"}
+      - {id: 57, cat: XXX, desc: "Movies/XXX-PAYSITE"}
+      - {id: 55, cat: XXX, desc: "Movies/XXX-DVDR"}
       - {id: 33, cat: Audio/Lossless, desc: "Music/FLAC"}
       - {id: 28, cat: Audio/Other, desc: "Music/MBluRay"}
       - {id: 34, cat: Audio/Other, desc: "Music/MDVDR"}
@@ -52,8 +54,8 @@
       - {id: 44, cat: TV/HD, desc: "P2P/TV-HD"}
       - {id: 51, cat: Movies/HD, desc: "P2P/X265"}
       - {id: 41, cat: Movies/SD, desc: "P2P/XVID"}
-      - {id: 35, cat: TV/Sport, desc: "SPORT"}
-      - {id: 36, cat: TV/Sport, desc: "SPORT-HD"}
+      - {id: 35, cat: TV/Sport, desc: "TV/SPORT"}
+      - {id: 36, cat: TV/Sport, desc: "TV/SPORT-HD"}
       - {id: 11, cat: TV/HD, desc: "TV/BluRay"}
       - {id: 23, cat: TV/SD, desc: "TV/DVDR"}
       - {id: 24, cat: TV/SD, desc: "TV/DVDRIP"}
@@ -75,22 +77,10 @@
     - name: password
       type: password
       label: Password
-    - name: incldead
-      type: select
-      label: "Search Torrents that are:"
-      default: "0"
-      options:
-        "0" : "Active"
-        "1": "Including Dead"
-        "2": "Only Dead"
-    - name: onlyfree
-      type: checkbox
-      label: Show only Free torrents
-      default: false
     - name: info
       type: info
       label: Results Per Page
-      default: For best results, change the 'Torrents per page' setting to 100 on your 'Torrent Options' from the 'Pers Tools > UserCP' menu on the TorrentSeeds webpage.
+      default: For best results, change the <b>Torrents per page</b> setting to <b>100</b> on your <b>Torrent</b> tab from the <b>Pers Tools > UserCP</b> menu on the TorrentSeeds webpage.
 
   login:
     path: login.php
@@ -108,86 +98,58 @@
 
   search:
     paths:
-      - path: browse.php      
+      - path: browse_elastic.php      
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
-      searchin: "title"
-      incldead: "{{ .Config.incldead }}"
-      "only_free": "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
+      $raw: "{{range .Categories}}cat[{{.}}]=1&{{end}}"
+      query: "{{ .Keywords }}"
+      # name, descr, genre, all
+      search_in: name
+      # all, any
+      search_mode: all
+      # added, name, year, size, snatched, seeders, leechers, random
+      order_by: added
+      # desc, asc
+      order_way: desc
+      # advanced disabled
+      # scene: 1 yes 0 no
+      # freetorrent: 1 freeleech 2 neutral 3 either 0 normal
+      # uploader: 1 uploaded 0 member
+      # archived: 1 yes 0 no
 
     rows:
-      selector: tr.browse_color, tr[id^="kdescr"]
-      after: 1
-      filters:
-        - name: andmatch
+      selector: table.torrent-table tr[class]
     fields:
       category:
-        selector: a[href^="browse.php?cat="]
+        selector: a[href^="/browse_elastic.php?cat="]
         attribute: href
         filters:
           - name: querystring
             args: cat
-      title: # may be abbreviated
-        selector: a[href^="details.php?id="]
-      title: # full title if available
-        optional: true
-        selector: td:nth-of-type(2) a[onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: split
-            args: [">", "1"]
-          - name: replace
-            args: ["</b", ""]
+      title: 
+        selector: a[href^="/details.php?id="]
       details:
-        selector: a[href^="details.php?id="]
+        selector: a[href^="/details.php?id="]
         attribute: href
-      banner:
-        optional: true
-        selector: td:nth-of-type(2) > a[onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=\\\\'(.+?)\\\\'"
-          - name: replace
-            args: ["./pic/noposter.png", ""]
       download:
-        selector: a[href^="download.php?torrent="]
+        selector: a[href^="/download.php?torrent="]
         attribute: href
       files:
-        selector: td:nth-of-type(5)
-      # 2 flavours of dates
+        selector: td.torrent-table-files
       date:
-        # Today<br /> 10:20 AM
-        # Yesterday<br /> 08:03 PM
-        optional: true
-        selector: td:nth-child(7):contains("day")
-      date:
-        # Feb 14 2019<br /> 10:20 AM
-        optional: true
-        selector: td:nth-child(7):not(:contains("day"))
+        selector: td.torrent-table-added
         filters:
-          - name: dateparse
-            args: "Jan 2 2006 03:04 pm"
+          - name: timeago
       size:
-        selector: td:nth-of-type(8)
+        selector: td.torrent-table-size
       grabs:
-        selector: td:nth-of-type(9)
-        filters:
-          - name: regexp
-            args: "([\\d]+)"
+        selector: td.torrent-table-snatched
       seeders:
-        selector: td:nth-of-type(10)
+        selector: td.torrent-table-seeders
       leechers:
-        selector: td:nth-of-type(11)
-      description:
-        selector: td[colspan="14"]
-        filters:
-          - name: replace
-            args: ["\n", "<br>\n"]
+        selector: td.torrent-table-leechers
       downloadvolumefactor:
         case:
-          "img[alt=\"Free Torrent\"]": "0"
+          span.freeleech: "0"
           "*": "1"
       uploadvolumefactor:
         text: "1"
