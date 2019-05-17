@@ -788,8 +788,9 @@ namespace Jackett.Common.Indexers
 
             var hasCaptcha = false;
 
+            var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
             var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
-            if (grecaptcha != null)
+            if (CloudFlareCaptchaChallenge != null && grecaptcha != null)
             {
                 hasCaptcha = true;
                 var CaptchaItem = new RecaptchaItem();
