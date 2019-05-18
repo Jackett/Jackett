@@ -23,6 +23,7 @@
       - {id: 11, cat: PC/Phone-Android, desc: "Android ROMs"}
       - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
       - {id: 13, cat: TV, desc: "Shows"}
+      - {id: 14, cat: Audio/Video, desc: "Music clips"}
 
     modes:
       search: [q]
@@ -46,6 +47,7 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
@@ -74,17 +76,17 @@
       size:
         selector: td:nth-child(5)
       seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
-      grabs:
         selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
         filters:
           - name: regexp
             args: ([\d\.]+)
       imdb:
         optional: true
-        selector: a[href^="https://www.imdb.com/title/"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
       date:
         selector: time
@@ -114,13 +116,17 @@
             args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
+          "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
+          "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
           "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
           "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
+          "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
           "*": "1"
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
-          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D
+# UNIT3D 1.9.2
