@@ -1109,9 +1109,9 @@ namespace Jackett.Common.Indexers
             variables[".Query.Season"] = query.Season;
             variables[".Query.Movie"] = null;
             variables[".Query.Year"] = query.Year.ToString();
-            variables[".Query.Limit"] = query.Limit;
-            variables[".Query.Offset"] = query.Offset;
-            variables[".Query.Extended"] = query.Extended;
+            variables[".Query.Limit"] = query.Limit.ToString();
+            variables[".Query.Offset"] = query.Offset.ToString();
+            variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;
             variables[".Query.TVDBID"] = null;
