@@ -337,6 +337,7 @@ namespace Jackett.Updater
                 "Definitions/hdplus.yml",
                 "Definitions/gods.yml",
                 "Definitions/freedomhd.yml",
+                "Definitions/sharingue.yml",
             };
 
             foreach (var oldFile in oldFiles)
