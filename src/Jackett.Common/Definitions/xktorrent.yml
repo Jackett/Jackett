@@ -21,6 +21,8 @@
       - {id: 15, cat: Audio/Video, desc: "Concert"}
       - {id: 25, cat: PC, desc: "Logiciels"}
       - {id: 27, cat: TV, desc: "Spectacles"}
+      - {id: 28, cat: TV/Sport, desc: "Sports"}
+      - {id: 29, cat: XXX, desc: "XXX"}
 
     modes:
       search: [q]
