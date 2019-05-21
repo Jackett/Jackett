@@ -77,6 +77,14 @@
       path: nDonated.php
       selector: a[href="logout.php"]
 
+  download:
+#    before:
+#      path: thanks.php
+#      method: "post"
+#      inputs:
+#        id: "{{ .DownloadUri.Query.id }}"
+    selector: a[href^="downloadnew.php?id="]
+
   search:
     paths:
       - path: viewno18.php
@@ -88,7 +96,7 @@
       search: "{{ .Keywords }}"
       searchin: 0
     rows:
-      selector: table[width="100%"][border="1"][cellspacing="0"][cellpadding="5"] > tbody > tr:has(a[href^="downloadnew.php?id="])
+      selector: table[width="100%"][border="1"][cellspacing="0"][cellpadding="5"] > tbody > tr:has(a[href*="hashinfo="])
     fields:
       title:
         selector: a[href^="details.php?id="]
@@ -102,7 +110,7 @@
           - name: querystring
             args: cat
       download:
-        selector: a[href^="downloadnew.php?id="]
+        selector: a[href^="details.php?id="]
         attribute: href
       imdb:
         optional: true
