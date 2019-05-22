@@ -78,11 +78,12 @@
       selector: a[href="logout.php"]
 
   download:
-#    before:
-#      path: thanks.php
-#      method: "post"
-#      inputs:
-#        id: "{{ .DownloadUri.Query.id }}"
+    before:
+      path: ajax.php
+      method: get
+      inputs:
+        _action: "say_thank"
+        id: "{{ .DownloadUri.Query.id }}"
     selector: a[href^="downloadnew.php?id="]
 
   search:
