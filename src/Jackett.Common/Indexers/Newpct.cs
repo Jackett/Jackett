@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
         }
 
         private static Uri DefaultSiteLinkUri =
-            new Uri("http://descargas2020.com/");
+            new Uri("https://pctnew.site/");
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
             new Uri("http://www.tvsinpagar.com/"),
+            new Uri("http://descargas2020.com/"),
         };
 
         private NewpctRelease _mostRecentRelease;
