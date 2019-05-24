@@ -28,7 +28,9 @@
       password: "{{ .Config.password }}"
       remember: 1
     error:
-      - selector: div.has-error
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
     test:
       path: torrents
       selector: a[href$="/logout"]
