@@ -64,7 +64,10 @@
           - name: append
             args: " [spanish]"
       details:
-        selector: td.titulo a
+        selector: td.titulo a[id]
+        attribute: href
+      comments:
+        selector: td.foro a
         attribute: href
       size:
         selector: td.tamano
@@ -142,3 +145,10 @@
         filters:
           - name: replace
             args: ["Freeleech X2", "2"]
+      minimumratio:
+        text: "1.0"
+      minimumseedtime:
+        text: "345600"
+      description:
+        optional: true
+        selector: td.titulo a[class]
