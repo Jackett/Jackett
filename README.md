@@ -297,6 +297,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RetroFlix
  * RevolutionTT
  * RGU
+ * RocketHD
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
  * SceneFZ
