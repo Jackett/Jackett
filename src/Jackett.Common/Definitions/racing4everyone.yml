@@ -41,6 +41,7 @@
 
     modes:
       search: [q]
+      tv-search: [q, season, ep, imdbid]
 
   login:
     path: login
@@ -50,7 +51,9 @@
       password: "{{ .Config.password }}"
       remember: 1
     error:
-      - selector: div.has-error
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
     test:
       path: torrents
       selector: a[href$="/logout"]
@@ -67,10 +70,10 @@
       - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
-      search: "{{ .Keywords }}"
+      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
       description: ""
       uploader: ""
-      imdb: ""
+      imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
       tmdb: ""
       sort: created_at
@@ -93,14 +96,21 @@
       details:
         selector: a.view-torrent
         attribute: href
+      banner:
+        optional: true
+        selector: div.torrent-poster img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900", ""]
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-last-child(4)
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(3)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(2)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(1)
         filters:
           - name: regexp
             args: ([\d\.]+)
