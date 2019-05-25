@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers
                             var qualityData = downloadAnchor.InnerHtml.Split('/');
                             
                             if (qualityData.Length < 2)
-                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length} for {season}.");
+                                qualityData[1] = " ";
 
                             // Build title
                             var title = string.Join(".", new List<string>
