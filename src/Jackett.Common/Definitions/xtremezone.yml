@@ -3,7 +3,7 @@
   name: Xtreme Zone
   description: "XtreMeZone (MYXZ) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: ro-ro
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
     - https://www.myxz.eu/
@@ -52,7 +52,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form
     inputs:
@@ -61,15 +61,15 @@
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
-      path: /browse.php
+      path: browse.php
       
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: font:contains("Ratio:")+font
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

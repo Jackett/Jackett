@@ -7,7 +7,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://nyoo.moe
+    - https://nyoo.moe/
     
   settings: []
 
@@ -36,7 +36,7 @@
 
   search:
     paths:
-      - path: /search
+      - path: search
     inputs:
       page: "search"
       q: "{{ .Query.Keywords}}"

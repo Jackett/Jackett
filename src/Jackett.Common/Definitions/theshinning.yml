@@ -1,159 +1,142 @@
-﻿---
+---
   site: theshinning
   name: The Shinning
-  description: "A German gerneral tracker"
+  description: "The Shinning (TsH) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: de-de
   type: private
-  encoding: windows-1252
+  encoding: UTF-8
   links:
+    - https://theshinning.me/
+  legacylinks:
     - https://theshinning.org
+    - https://theshinning.org/
 
   caps:
     categorymappings:
-      # Filme
-      - {id: 28, cat: Movies/SD, desc: "HORROR"}
-      - {id: 25, cat: Movies/DVD, desc: "SD|DVD"}
-      - {id: 99, cat: Movies/SD, desc: "SD|SPORT"}
-      - {id: 24, cat: Movies/SD, desc: "SD|x264"}
-      - {id: 22, cat: Movies/SD, desc: "SD|XVID"}
-      - {id: 26, cat: XXX, desc: "SD|XxX"}
-
-      # High Definition
-      - {id: 29, cat: Movies/BluRay, desc: "BLURAY"}
-      - {id: 19, cat: Movies/HD, desc: "HD|1080p"}
-      - {id: 21, cat: Movies/3D, desc: "HD|3D"}
-      - {id: 107, cat: Movies/HD, desc: "HD|4K"}
-      - {id: 20, cat: Movies/HD, desc: "HD|720p"}
-      - {id: 101, cat: Movies/HD, desc: "HD|REMUX"}
-      - {id: 100, cat: Movies/HD, desc: "HD|SPORT"}
-      - {id: 27, cat: XXX, desc: "HD|XxX"}
-      - {id: 102, cat: Movies/HD, desc: "SMALL|HD"}
-
-      # Musik
-      - {id: 13, cat: Audio, desc: "CHARTS"}
-      - {id: 31, cat: Audio/Lossless, desc: "FLAC"}
-      - {id: 97, cat: Audio/Audiobook, desc: "HOERSPIELE"}
-      - {id: 30, cat: Audio/MP3, desc: "MP3"}
-      - {id: 106, cat: Audio, desc: "SAMPLER"}
-
-      # Releaser
-      - {id: 18, cat: Movies, desc: "CR3WHD"}
-      - {id: 16, cat: Movies, desc: "ONKEL JENS"}
-      - {id: 17, cat: Movies, desc: "xTM|XviD"}
-
-      # Serie
-      - {id: 11, cat: TV/SD, desc: "DVD|SERIEN"}
-      - {id: 9, cat: TV/HD, desc: "HD|SERIEN"}
-      - {id: 32, cat: TV, desc: "MIXED|SERIEN"}
-      - {id: 10, cat: TV, desc: "PACK|SERIEN"}
-      - {id: 8, cat: TV/SD, desc: "SD|SERIEN"}
-      - {id: 105, cat: TV, desc: "SMALL|SERIE"}
-      - {id: 12, cat: TV, desc: "US|SERIEN"}
-
-      # Sonstige
-      - {id: 98, cat: PC, desc: "APPS"}
-      - {id: 90, cat: TV/Documentary, desc: "DOKUS"}
-      - {id: 91, cat: Books, desc: "EBOOKS"}
-      - {id: 14, cat: Movies, desc: "KINOHITS"}
-      - {id: 15, cat: Other, desc: "REQUEST"}
-      - {id: 23, cat: Other , desc: "SONSTIGES"}
-      - {id: 104, cat: XXX/Imageset, desc: "XXX|IMAGE"}
-
-      # Spiele
-      - {id: 96, cat: Console/NDS, desc: "GAMES|NDS"}
-      - {id: 92, cat: PC/Games, desc: "GAMES|PC"}
-      - {id: 94, cat: Console/PS4, desc: "GAMES|PS"}
-      - {id: 95, cat: Console/Wii, desc: "GAMES|WII"}
-      - {id: 93, cat: Console/Xbox, desc: "GAMES|XBOX"}
-
-      # Wrestling
-      - {id: 3, cat: TV/Sport, desc: "HD|RAW"}
-      - {id: 1, cat: TV/Sport, desc: "HD|SMACKD"}
-      - {id: 6, cat: TV/Sport, desc: "NXT"}
-      - {id: 7, cat: TV/Sport, desc: "PPV"}
-      - {id: 4, cat: TV/Sport, desc: "SD|RAW"}
-      - {id: 2, cat: TV/Sport, desc: "SD|SMACKD"}
-      - {id: 5, cat: TV/Sport, desc: "TNA"}
-
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: TV, desc: "TV"}
+      - {id: 3, cat: Audio, desc: "Music"}
+      - {id: 4, cat: Console, desc: "Games"}
+      - {id: 5, cat: PC, desc: "Apps"}
+      - {id: 6, cat: Other, desc: "Misc"}
+      - {id: 7, cat: XXX, desc: "XXX"}
+      - {id: 8, cat: Movies, desc: "Kids"}
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
-    path: /login.php
+    path: login
     method: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      remember: 1
+    selectorinputs:
+      _token:
+        selector: meta[name="csrf-token"]
+        attribute: content
     error:
-      - selector: div.stderr_info_wrap
+      - selector: form[action$="/login"] .text-red
     test:
-      path: /browse.php
-      selector: img[title="Ratio"] + i
+      path: /
+      selector: a[href$="/logout"]
 
   ratio:
-    path: /browse.php
-    selector: img[title="Ratio"] + i
+    path: /
+    selector: span:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
-      - path: /browse.php
+      - path: filterTorrents
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-      showsearch: "1"
-      incldead: "1"
-      orderby: "added"
-      sort: "desc"
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
+      uploader: ""
+      imdb: "{{ .Query.IMDBIDShort }}"
+      tvdb: ""
+      tmdb: ""
+      mal: ""
+      sorting: created_at
+      direction: desc
+      qty: 100
     rows:
-      # correct selector depends on the "Empfohlene Torrents in der Liste anzeigen" profile option
-      selector: table.main > tbody > tr:contains("Alle Torrents") + tr > td > table.tableinborder > tbody > tr, div.bro_torr_wrap:not(:contains("Alle Torrents")) > table.tableinborder > tbody > tr
-      filters:
-        - name: andmatch
+      selector: table > tbody > tr
     fields:
-      download:
-        selector: a[href^="download-ssl.php?torrent="]
-        attribute: href
-      title:
-        selector: div.title_wrap
-        attribute: title
-        filters:
-          - name: replace
-            args: ["[TsH]", ""]
       category:
-        selector: a[href^="browse.php?cat="]
+        selector: a[href*="/categories/"]
         attribute: href
         filters:
-          - name: querystring
-            args: cat
+          - name: regexp
+            args: "/categories/.*?\\.(\\d+)"
+      title:
+        selector: a.view-torrent
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
       details:
-        selector: div.title_wrap > a
+        selector: a.view-torrent
         attribute: href
+      banner:
+        optional: true
+        selector: div.torrent-poster img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900/212121/FFFFFF/?text=NOCOVER", ""]
       size:
-        selector: div.bro_right_ad > b
-        filters:
-          - name: replace
-            args: [".", ""]
-          - name: replace
-            args: [",", "."]
+        selector: td:nth-last-child(4)
       grabs:
-        selector: div.bro_right_ae > b
-      seeders:
-        selector: div.bro_box1_aa > b
-      leechers:
-        selector: div.bro_box_aaa > b
-      date:
-        selector: div.bro_box_date > span
+        selector: td:nth-last-child(3)
         filters:
-          - name: replace
-            args: ["\u00a0", " "]
-          - name: dateparse
-            args: "02.01.2006 15:04:05"
+          - name: regexp
+            args: ([\d\.]+)
+      seeders:
+        selector: td:nth-last-child(2)
+      leechers:
+        selector: td:nth-last-child(1)
+      date:
+        selector: time
+        filters:
+            # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
+          - name: re_replace
+            args: ["(önce|tagasi|geleden|fa|temu|siden|atrás|nazpět|назад|acum|hace|il y a|vor|преди)", "ago"]
+          - name: re_replace
+            args: ["(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
+          - name: re_replace
+            args: ["(dakika|minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten)", "minutes"]
+          - name: re_replace
+            args: ["(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur)", "hour"]
+          - name: re_replace
+            args: ["(saat|tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden)", "hours"]
+          - name: re_replace
+            args: ["(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден)", "day"]
+          - name: re_replace
+            args: ["(gün|päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen)", "days"]
+          - name: re_replace
+            args: ["(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица)", "week"]
+          - name: re_replace
+            args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
+          - name: re_replace
+            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+          - name: re_replace
+            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          span[title="OnlyUp"]: "0"
+          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
+          "i[data-original-title=\"Global freeleech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Featured\"]": "0" # Featured
           "*": "1"
       uploadvolumefactor:
         case:
+          "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Featured\"]": "2" # Featured
           "*": "1"
+# UNIT3D

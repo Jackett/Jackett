@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -17,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
-        // API doc: https://torrentapi.org/apidocs_v2.txt
+        // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
         private static readonly string defaultSiteLink = "https://torrentapi.org/";
 
         private Uri BaseUri
@@ -37,12 +38,13 @@ namespace Jackett.Common.Indexers
         private DateTime lastTokenFetch;
         private string token;
         private string app_id;
+        private bool provideTorrentLink = false;
 
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
         private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
 
-        public Rarbg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
                 description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                 link: "https://rarbg.to/",
@@ -57,7 +59,11 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            var provideTorrentLinkItem = new ConfigurationData.BoolItem { Value = false };
+            provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
+            configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
 
@@ -89,6 +95,17 @@ namespace Jackett.Common.Indexers
             app_id = "jackett_v" + EnvironmentUtil.JackettVersion;
         }
 
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            var provideTorrentLinkItem = (ConfigurationData.BoolItem)configData.GetDynamic("providetorrentlink");
+            if (provideTorrentLinkItem != null)
+            {
+                provideTorrentLink = provideTorrentLinkItem.Value;
+            }
+        }
+
         private async Task CheckToken()
         {
             if (!HasValidToken)
@@ -109,7 +126,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
@@ -210,14 +227,15 @@ namespace Jackett.Common.Indexers
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
                     var release = new ReleaseInfo();
-                    release.Title = item.Value<string>("title");
+                    release.Title = WebUtility.HtmlDecode(item.Value<string>("title"));
                     release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-
-                    release.Comments = new Uri(item.Value<string>("info_page"));
-                    release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
+                    // append app_id to prevent api server returning 403 forbidden
+                    release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
+                    if (provideTorrentLink)
+                        release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
 
                     var episode_info = item.Value<JToken>("episode_info");

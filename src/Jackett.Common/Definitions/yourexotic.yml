@@ -1,7 +1,7 @@
 ---
   site: yourexotic
   name: ExoticaZ
-  description: "a porn tracker"
+  description: "ExoticaZ (YourExotic) is a Private Torrent Tracker for XXX"
   language: en-us
   type: private
   encoding: UTF-8
@@ -19,7 +19,7 @@
       movie-search: [q]
 
   login:
-    path: /login
+    path: login
     method: form
     inputs:
       username_email: "{{ .Config.username }}"
@@ -31,7 +31,7 @@
       selector: div.ratio-bar
 
   search:
-    path: /torrents
+    path: torrents
     inputs:
       in: 1
       search: "{{ .Keywords }}"

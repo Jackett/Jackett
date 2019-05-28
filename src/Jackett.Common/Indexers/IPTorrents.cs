@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");

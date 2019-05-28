@@ -18,7 +18,7 @@
         {
             CredentialsWarning = new DisplayItem("<b>Credentials Configuration</b> (<i>Private Tracker</i>),<br /><br /> <ul><li><b>PassKey</b> is your private key on your account</li></ul>") { Name = "Credentials" };
             PassKey = new StringItem { Name = "PassKey", Value = "" };
-            PagesWarning = new DisplayItem("<b>Preferences Configuration</b> (<i>Tweak your search settings</i>),<br /><br /> <ul><li><b>Freeleech Only</b> let you search <u>only</u> for torrents which are marked Freeleech.</li><b>Replace MULTI</b>, replace multi keyword in the resultset (leave empty  to deactivate)<li></li><li><b>Enhanced anime search</b>, Enhance sonarr compatibility with Xthor. Only effective on requests with the <u>TVAnime Torznab category</u>.</li></ul>") { Name  = "Preferences" };
+            PagesWarning = new DisplayItem("<b>Preferences Configuration</b> (<i>Tweak your search settings</i>),<br /><br /> <ul><li><b>Freeleech Only</b> let you search <u>only</u> for torrents which are marked Freeleech.</li><li><b>Replace MULTI</b>, replace multi keyword in the resultset (leave empty  to deactivate)</li><li><b>Enhanced anime search</b>, Enhance sonarr compatibility with Xthor. Only effective on requests with the <u>TVAnime Torznab category</u>.</li></ul>") { Name  = "Preferences" };
             Freeleech = new BoolItem() { Name = "Freeleech Only (Optional)", Value = false };
             ReplaceMulti = new StringItem() { Name = "Replace MULTI", Value = "MULTI.FRENCH" };
             EnhancedAnime = new BoolItem() { Name = "Enhanced anime search", Value = false };

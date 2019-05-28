@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://en.metal-tracker.com/
+  legacylinks:
     - http://en.metal-tracker.com/
 
   caps:
@@ -19,8 +21,8 @@
       music-search: [q, album, artist, label, year]
 
   login:
-    path: /user/login.html
-    method: form
+    path: user/login.html
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
@@ -30,12 +32,12 @@
         message:
           selector: div.errorSummary ul li
     test:
-      path: /torrents/search.html
+      path: torrents/search.html
       selector: li li:has(a[href="/user/logout.html"])
 
   search:
     paths:
-      - path: /torrents/search.html
+      - path: torrents/search.html
         method: post
     inputs:
       "SearchTorrentsForm[nameTorrent]": "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"

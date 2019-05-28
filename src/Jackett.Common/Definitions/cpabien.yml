@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.cpabien.link/
+    - https://www.cpasbien.vg/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
@@ -32,6 +32,9 @@
     - https://www.cpasbien.re/
     - http://www.cpasbien.io/
     - https://www.cpabien.bz/
+    - https://www.cpabien.link/
+    - https://www.cpasbiens.cz/
+    - https://www.cpasbiens.bz/
 
   caps:
     categorymappings:
@@ -45,16 +48,13 @@
   settings: []
 
   download:
-    selector: div#telecharger a
+    selector: div.btn-download a
     attribute: href
   search:
     paths:
-      - path: search.php
-        method: post
-        inputs:
-          t: "{{ .Keywords }}"
+      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
     rows:
-      selector: div.ligne1, div.ligne2
+      selector: div#gauche > table > tbody > tr:has(a)
     fields:
       site_date:
         selector: a
@@ -67,7 +67,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace

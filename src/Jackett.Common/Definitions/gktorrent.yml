@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.gktorrent.tv/
+    - https://www.gktorrent.biz/
   legacylinks:
     - https://www.gktorrent.com/
     - http://www.gktorrent.com/
@@ -23,7 +23,10 @@
     - https://www.gktorrent.org/
     - https://www.gktorrent.me/
     - https://www.rantop.org/
+    - https://www.gktorrent.cx/
+    - https://www.gktorrent.tv/
     - https://www.gktorrent.net/
+
   caps:
     categorymappings:
       - {id: movies, cat: Movies, desc: "Movies"}
@@ -46,7 +49,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}/recherche/{{.Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
     rows:
       selector: div.listing-torrent > table > tbody > tr:has(a)
     fields:
@@ -61,7 +64,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace

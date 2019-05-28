@@ -45,7 +45,7 @@
       movie-search: [q]
 
   login:
-    path: /login
+    path: login
     method: form
     form: form#login-form
     inputs:
@@ -55,11 +55,11 @@
     error:
       - selector: :contains("\"success\":false")
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /torrent/ajaxfiltertorrent/{{ .Keywords }}
+      - path: torrent/ajaxfiltertorrent/{{ .Keywords }}
     keywordsfilters:
       - name: re_replace
         args: ["^$", "null"]

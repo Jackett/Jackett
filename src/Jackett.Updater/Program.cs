@@ -6,6 +6,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using NLog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,10 +19,12 @@ namespace Jackett.Updater
     {
         private IProcessService processService;
         private IServiceConfigService windowsService;
-        private Logger logger;
+        public static Logger logger;
+        private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
             new Program().Run(args);
         }
 
@@ -38,6 +41,10 @@ namespace Jackett.Updater
             logger.Info("Jackett Updater v" + GetCurrentVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
 
+            Variants variants = new Variants();
+            variant = variants.GetVariant();
+            logger.Info("Jackett variant: " + variant.ToString());
+
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             if (isWindows)
             {
@@ -45,7 +52,7 @@ namespace Jackett.Updater
                 logger.Info("Pausing for 3 seconds to give Jackett & tray time to shutdown");
                 System.Threading.Thread.Sleep(3000);
             }
-        
+
             processService = new ProcessService(logger);
             windowsService = new WindowsServiceConfigService(processService, logger);
 
@@ -63,6 +70,7 @@ namespace Jackett.Updater
                 {
                     logger.Error(HelpText.AutoBuild(optionsResult));
                     logger.Error("Failed to process update arguments!");
+                    logger.Error(errors.ToString());
                     Console.ReadKey();
                 });
             }
@@ -94,9 +102,11 @@ namespace Jackett.Updater
                     {
                         try
                         {
-                            var startInfo = new ProcessStartInfo();
-                            startInfo.Arguments = "-15 " + pid;
-                            startInfo.FileName = "kill";
+                            var startInfo = new ProcessStartInfo
+                            {
+                                Arguments = "-15 " + pid,
+                                FileName = "kill"
+                            };
                             Process.Start(startInfo);
                             System.Threading.Thread.Sleep(1000); // just sleep, WaitForExit() doesn't seem to work on mono/linux (returns immediantly), https://bugzilla.xamarin.com/show_bug.cgi?id=51742
                             exited = proc.WaitForExit(2000);
@@ -148,7 +158,7 @@ namespace Jackett.Updater
             var trayProcesses = Process.GetProcessesByName("JackettTray");
             if (isWindows)
             {
-                if (trayProcesses.Count() > 0)
+                if (trayProcesses.Length > 0)
                 {
                     foreach (var proc in trayProcesses)
                     {
@@ -166,35 +176,74 @@ namespace Jackett.Updater
                 // On unix we kill the PIDs after the update so e.g. systemd can automatically restart the process
                 KillPids(pids);
             }
-            logger.Info("Finding files in: " + updateLocation);
-            var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories);
-            foreach (var file in files)
-            {
-                var fileName = Path.GetFileName(file).ToLowerInvariant();
 
-                if (fileName.EndsWith(".zip") ||
-                    fileName.EndsWith(".tar") ||
-                    fileName.EndsWith(".gz"))
+            Variants variants = new Variants();
+            if (variants.IsNonWindowsDotNetCoreVariant(variant))
+            {
+                // On Linux you can't modify an executable while it is executing
+                // https://github.com/Jackett/Jackett/issues/5022
+                // https://stackoverflow.com/questions/16764946/what-generates-the-text-file-busy-message-in-unix#comment32135232_16764967
+                // Delete the ./jackett executable
+                // pdb files are also problematic https://github.com/Jackett/Jackett/issues/5167#issuecomment-489301150
+
+                string jackettExecutable = options.Path.TrimEnd('/') + "/jackett";
+                List<string> pdbFiles = Directory.EnumerateFiles(options.Path, "*.pdb", SearchOption.AllDirectories).ToList();
+                List<string> removeList = pdbFiles;
+                removeList.Add(jackettExecutable);
+
+                foreach (string fileForDelete in removeList)
                 {
-                    continue;
-                }
-                try
-                {
-                    logger.Info("Copying " + fileName);
-                    var dest = Path.Combine(options.Path, file.Substring(updateLocation.Length));
-                    var destDir = Path.GetDirectoryName(dest);
-                    if (!Directory.Exists(destDir))
+                    try
                     {
-                        logger.Info("Creating directory " + destDir);
-                        Directory.CreateDirectory(destDir);
+                        logger.Info("Attempting to remove: " + fileForDelete);
+
+                        if (File.Exists(fileForDelete))
+                        {
+                            File.Delete(fileForDelete);
+                            logger.Info("Deleted " + fileForDelete);
+                        }
+                        else
+                        {
+                            logger.Info("File for deleting not found: " + fileForDelete);
+                        }
                     }
-                    File.Copy(file, dest, true);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                    }
                 }
             }
+
+            logger.Info("Finding files in: " + updateLocation);
+            var files = Directory.GetFiles(updateLocation, "*.*", SearchOption.AllDirectories).OrderBy(x => x).ToList();
+            logger.Info($"{files.Count()} update files found");
+
+            try
+            {
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file).ToLowerInvariant();
+
+                    if (fileName.EndsWith(".zip") || fileName.EndsWith(".tar") || fileName.EndsWith(".gz"))
+                    {
+                        continue;
+                    }
+
+                    bool fileCopySuccess = CopyUpdateFile(options.Path, file, updateLocation, false);
+
+                    if (!fileCopySuccess)
+                    {
+                        //Perform second attempt, this time removing the target file first
+                        CopyUpdateFile(options.Path, file, updateLocation, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
+
+            logger.Info("File copying complete");
 
             // delete old dirs
             string[] oldDirs = new string[] { "Content/logos" };
@@ -261,9 +310,6 @@ namespace Jackett.Updater
                 "appsettings.Development.json",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
-                "Jackett.dll",
-                "Jackett.dll.config",
-                "Jackett.pdb",
                 "Autofac.Integration.WebApi.dll",
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
@@ -279,7 +325,20 @@ namespace Jackett.Updater
                 "Definitions/idope.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/extratorrentclone.yml",
-                "Definitions/btdb.yml",
+                "Definitions/torrentcouch.yml",
+                "Definitions/idopeclone.yml",
+                "Definitions/torrof.yml",
+                "Definitions/archetorrent.yml",
+                "Definitions/420files.yml",
+                "Definitions/redtopia.yml",
+                "Definitions/btxpress.yml",
+                "Definitions/btstornet.yml",
+                "Definitions/crazyhd.yml",
+                "Definitions/hdplus.yml",
+                "Definitions/gods.yml",
+                "Definitions/freedomhd.yml",
+                "Definitions/sharingue.yml",
+                "Definitions/magnetdl.yml",
             };
 
             foreach (var oldFile in oldFiles)
@@ -303,7 +362,7 @@ namespace Jackett.Updater
             if (!isWindows)
                 KillPids(pids);
 
-            if (options.NoRestart == false)
+            if (!options.NoRestart)
             {
                 if (isWindows && (trayRunning || options.StartTray) && !string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
@@ -344,14 +403,13 @@ namespace Jackett.Updater
                             logger.Error("Failed to get admin rights to start the service.");
                         }
                     }
-
                 }
                 else
                 {
                     var startInfo = new ProcessStartInfo()
                     {
                         Arguments = options.Args,
-                        FileName = Path.Combine(options.Path, "JackettConsole.exe"),
+                        FileName = GetJackettConsolePath(options.Path),
                         UseShellExecute = true
                     };
 
@@ -363,10 +421,18 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = false;
                         startInfo.WindowStyle = ProcessWindowStyle.Normal;
                     }
-                    else
+
+                    if (variant == Variants.JackettVariant.Mono)
                     {
                         startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
                         startInfo.FileName = "mono";
+                    }
+
+                    if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
+                    || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+                    {
+                        startInfo.UseShellExecute = false;
+                        startInfo.CreateNoWindow = true;
                     }
 
                     logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
@@ -375,10 +441,97 @@ namespace Jackett.Updater
             }
         }
 
+        private bool CopyUpdateFile(string jackettDestinationDirectory, string fullSourceFilePath, string updateSourceDirectory, bool previousAttemptFailed)
+        {
+            bool success = false;
+
+            string fileName;
+            string fullDestinationFilePath;
+            string fileDestinationDirectory;
+
+            try
+            {
+                fileName = Path.GetFileName(fullSourceFilePath);
+                fullDestinationFilePath = Path.Combine(jackettDestinationDirectory, fullSourceFilePath.Substring(updateSourceDirectory.Length));
+                fileDestinationDirectory = Path.GetDirectoryName(fullDestinationFilePath);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                return false;
+            }
+
+            logger.Info($"Attempting to copy {fileName} from source: {fullSourceFilePath} to destination: {fullDestinationFilePath}");
+
+            if (previousAttemptFailed)
+            {
+                logger.Info("The first attempt copying file: " + fileName + "failed. Retrying and will delete old file first");
+
+                try
+                {
+                    if (File.Exists(fullDestinationFilePath))
+                    {
+                        logger.Info(fullDestinationFilePath + " was found");
+                        System.Threading.Thread.Sleep(1000);
+                        File.Delete(fullDestinationFilePath);
+                        logger.Info("Deleted " + fullDestinationFilePath);
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        logger.Info(fullDestinationFilePath + " was NOT found");
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                }
+            }
+
+            try
+            {               
+                if (!Directory.Exists(fileDestinationDirectory))
+                {
+                    logger.Info("Creating directory " + fileDestinationDirectory);
+                    Directory.CreateDirectory(fileDestinationDirectory);
+                }
+
+                File.Copy(fullSourceFilePath, fullDestinationFilePath, true);
+                logger.Info("Copied " + fileName);
+                success = true;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+            }
+
+            return success;
+        }
+
         private string GetUpdateLocation()
         {
             var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
             return new FileInfo(WebUtility.UrlDecode(location.AbsolutePath)).DirectoryName;
+        }
+
+        private string GetJackettConsolePath(string directoryPath)
+        {
+            Variants variants = new Variants();
+            if (variants.IsNonWindowsDotNetCoreVariant(variant))
+            {
+                return Path.Combine(directoryPath, "jackett");
+            }
+            else
+            {
+                return Path.Combine(directoryPath, "JackettConsole.exe");
+            }
+        }
+
+        private static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine(e.ExceptionObject.ToString());
+            logger.Error(e.ExceptionObject.ToString());
+            Environment.Exit(1);
         }
     }
 }

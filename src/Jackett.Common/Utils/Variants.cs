@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Jackett.Common.Utils
 {
@@ -14,7 +12,7 @@ namespace Jackett.Common.Utils
             Mono,
             CoreWindows,
             CoreMacOs,
-            CoreLinuxAmd64,
+            CoreLinuxAmdx64,
             CoreLinuxArm32,
             CoreLinuxArm64
         }
@@ -37,7 +35,7 @@ namespace Jackett.Common.Utils
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
                 {
-                    return JackettVariant.CoreLinuxAmd64;
+                    return JackettVariant.CoreLinuxAmdx64;
                 }
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)
@@ -67,7 +65,6 @@ namespace Jackett.Common.Utils
             return JackettVariant.NotFound;
         }
 
-
         public string GetArtifactFileName(JackettVariant variant)
         {
             switch (variant)
@@ -88,9 +85,9 @@ namespace Jackett.Common.Utils
                 {
                     return "Jackett.Binaries.macOS.tar.gz";
                 }
-                case JackettVariant.CoreLinuxAmd64:
+                case JackettVariant.CoreLinuxAmdx64:
                 {
-                    return "Jackett.Binaries.LinuxAMD64.tar.gz";
+                    return "Jackett.Binaries.LinuxAMDx64.tar.gz";
                 }
                 case JackettVariant.CoreLinuxArm32:
                 {
@@ -104,6 +101,19 @@ namespace Jackett.Common.Utils
                 {
                     return "";
                 }
+            }
+        }
+
+        public bool IsNonWindowsDotNetCoreVariant(JackettVariant variant)
+        {
+            if (variant == JackettVariant.CoreMacOs || variant == JackettVariant.CoreLinuxAmdx64
+                || variant == JackettVariant.CoreLinuxArm32 || variant == JackettVariant.CoreLinuxArm64)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

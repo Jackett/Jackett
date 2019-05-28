@@ -1,18 +1,29 @@
 ---
-  site: 420files
-  name: 420files
-  description: "Tracker Movies/TV/Music"
+  site:  freetorrent
+  name:  FreeTorrent
+  description: "FreeTorrent is a Private Torrent Tracker for HD MOVIES / TV"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://420.org/
+    -  https://freetorrent.tk/
 
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Audio, desc: "Music"}
+      - {id: 4, cat: PC/0day, desc: "Software"}
+      - {id: 5, cat: Books, desc: "Ebook"}
+      - {id: 6, cat: PC/Games, desc: "Games"}
+      - {id: 7, cat: TV, desc: "Animations"}
+      - {id: 8, cat: PC, desc: "Linux"}
+      - {id: 9, cat: PC/Mac, desc: "MacOS"}
+      - {id: 10, cat: PC/Phone-Android, desc: "Android app"}
+      - {id: 11, cat: PC/Phone-Android, desc: "Android ROMs"}
+      - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 13, cat: TV, desc: "Shows"}
+      - {id: 14, cat: Audio/Video, desc: "Music clips"}
 
     modes:
       search: [q]
@@ -20,28 +31,31 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /login
+    path: login
     method: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: form[action*="/login"] .text-red
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /filterTorrents
+      - path: filterTorrents
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
       tmdb: ""
       mal: ""
-      sorting: created_at
+      sort: created_at
       direction: desc
       qty: 100
     rows:
@@ -61,17 +75,28 @@
       details:
         selector: a.view-torrent
         attribute: href
+      banner:
+        optional: true
+        selector: div.torrent-poster img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900", ""]
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-last-child(4)
       seeders:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(3)
       leechers:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(2)
       grabs:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(1)
         filters:
           - name: regexp
             args: ([\d\.]+)
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
       date:
         selector: time
         filters:
@@ -95,16 +120,22 @@
           - name: re_replace
             args: ["(hafta|nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken)", "weeks"]
           - name: re_replace
-            args: ["(ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
+            args: [" (ay|kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|mois|Monat|месец|maand)", "month"]
           - name: re_replace
-            args: ["(ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
+            args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
+          "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
+          "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
           "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
+          "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
           "*": "1"
       uploadvolumefactor:
         case:
-          "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
-          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
+# UNIT3D 1.9.2

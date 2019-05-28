@@ -1,7 +1,7 @@
 ---
   site: bigtorrent
   name: BIGTorrent
-  description: "ratio-free Hungarian tracker"
+  description: "BIGTorrent is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: hu
   type: private
   encoding: UTF-8
@@ -41,7 +41,7 @@
       search: [q]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -49,7 +49,7 @@
       sent: "yes"
       returnto: "/"
     error:
-      - selector: table:contains("Login failed!")
+      - selector: div.error
     test:
       path: index.php
 
@@ -61,7 +61,7 @@
       - path: browse.php
     inputs:
       $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Keywords}}{{ .Keywords }}{{else}}  {{end}}"
     rows:
       selector: table#torrent_table > tbody > tr:has(a[href^="browse.php?cat="])
     fields:

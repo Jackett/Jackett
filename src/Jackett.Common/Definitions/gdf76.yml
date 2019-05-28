@@ -2,7 +2,7 @@
   site: gdf76
   name: gdf76
   description: "gdf76 is an ITALIAN semi-private site for ITA films in mp4 format optimized for streaming"
-  language: en
+  language: it-it
   type: semi-private
   encoding: UTF-8
   links:
@@ -50,7 +50,7 @@
       active: 0
 
     rows:
-      selector: tr:has(a[href^="index.php?page=torrent-details"])
+      selector: tr > td > table > tbody tr:has(a[href^="index.php?page=torrent-details"])
     fields:
       title:
         selector: td a[href^="index.php?page=torrent-details"]

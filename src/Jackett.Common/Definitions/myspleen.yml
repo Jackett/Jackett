@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - https://www.myspleen.org
+    - https://www.myspleen.org/
 
   caps:
     categorymappings:
@@ -26,7 +26,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -35,16 +35,16 @@
     error:
       - selector: div#content:has(h2:contains("Login Failed"))
     test:
-      path: /browse.php
+      path: browse.php
       selector: span.key:contains("Ratio") + span.value
 
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: span.key:contains("Ratio") + span.value
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
         method: get
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"

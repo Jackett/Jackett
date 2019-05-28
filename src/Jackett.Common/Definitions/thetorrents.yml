@@ -66,7 +66,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form[action="takelogin.php"]
     inputs:
@@ -75,11 +75,11 @@
     error:
       - selector: table.main > tbody > tr > td.embedded td.text:contains("incorrect")
     test:
-      path: /browse.php
+      path: browse.php
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

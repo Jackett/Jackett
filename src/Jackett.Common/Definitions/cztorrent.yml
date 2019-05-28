@@ -9,13 +9,12 @@
 
   caps:
     categorymappings:
-      - {id: 1, cat: Movies, desc: "Filmy"}
-      - {id: 25, cat: TV, desc: "Seriály"}
-      - {id: 23, cat: TV/Documentary, desc: "Filmy - dokument"}
       - {id: 22, cat: PC, desc: "Aplikace"}
+      - {id: 1, cat: Movies, desc: "Filmy"}
       - {id: 36, cat: Movies/3D, desc: "Filmy - 3D"}
       - {id: 35, cat: Movies/Other, desc: "Filmy - anime"}
       - {id: 37, cat: Movies/BluRay, desc: "Filmy - Blu-ray"}
+      - {id: 33, cat: TV/Documentary, desc: "Filmy - dokument"}
       - {id: 11, cat: Movies/DVD, desc: "Filmy - DVD"}
       - {id: 30, cat: Movies/DVD, desc: "Filmy - DVD full"}
       - {id: 5, cat: Movies, desc: "Filmy - kreslené"}
@@ -29,6 +28,7 @@
       - {id: 32, cat: Audio, desc: "Mluvené slovo"}
       - {id: 16, cat: PC/Phone-Other, desc: "Mobil, PDA"}
       - {id: 4, cat: Other, desc: "Ostatní"}
+      - {id: 25, cat: TV, desc: "Seriály"}
       - {id: 29, cat: Audio, desc: "Soundtrack"}
       - {id: 19, cat:  Audio/Video, desc: "Videoklipy"}
       - {id: 24, cat: XXX, desc: "xXx"}
@@ -38,21 +38,22 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings:
-    - name: cookie
-      type: text
-      label: Cookie
-          
   login:
-    method: cookie
+    path: login-page
+    method: form
+    form: form[action="/login?url=%2F"]
     inputs:
-      cookie: "{{ .Config.cookie }}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      persistent_login: 1
+    error:
+      - selector: div.error
     test:
-      path: /torrents
+      path: torrents
 
   search:
     paths:
-      - path: /torrents
+      - path: torrents
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       s: "{{ .Keywords }}"
@@ -84,11 +85,11 @@
           - name: re_replace
             args: ["(\\d{1})\\.", "S0$1"]
       category:
-        selector: td:nth-child(2)
+        selector: td.categorie
         case:
           ":contains(\"Filmy\")": 1
           ":contains(\"Seriály\")": 25
-          ":contains(\"Filmy - dokument\")": 23
+          ":contains(\"Filmy - dokument\")": 33
           ":contains(\"Aplikace\")": 22
           ":contains(\"Filmy - 3D\")": 36
           ":contains(\"Filmy - anime\")": 35
@@ -119,20 +120,16 @@
         selector: td.detaily
         filters:
           - name: split
-            args: [ "|", 0 ]
-          - name: regexp
-            args: "Velikost: (.+?) ?$"
+            args: [ "|", 1 ]
       date:
-        selector: td:nth-child(4)
+        selector: td.detaily
         filters:
           - name: split
-            args: [ "|", 1 ]
-          - name: regexp
-            args: "Přidán: (.+?) ?$"
+            args: [ "|", 2 ]
           - name: append
             args: " +02:00"
           - name: dateparse 
-            args: "2.1.2006 15:04 -07:00"
+            args: "2.1.2006 15:04  -07:00"
       seeders:
         selector: td:nth-child(7) span
       leechers:

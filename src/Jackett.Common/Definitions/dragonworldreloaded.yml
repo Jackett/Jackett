@@ -86,7 +86,7 @@
       label: Pin     
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form[action="/login.php"]
     cookies: ["JAVA=OK"] # avoid jscheck redirect
@@ -106,7 +106,7 @@
 
   download:
     before:
-      path: "ajax_det_poll.php"
+      path: ajax_det_poll.php
       method: "post"
       inputs:
         set_thanks: "thanks"
@@ -236,13 +236,22 @@
       uploadvolumefactor:
         case:
           "*": "1"
+        # 2 flavours of dates
       date:
-        selector: div.selection_unter_ab
+        # Heute 13:30:04
+        # Gestern 09:10:10
+        selector: div.selection_unter_ab:not(:contains("."))
+        optional: true
         filters:
           - name: replace
             args: ["Heute", "Today"]
           - name: replace
             args: ["Gestern", "Yesterday"]
+      date:
+          # 30.02.2018 um 23:12:50
+        selector: div.selection_unter_ab:contains(".")
+        optional: true
+        filters:
           - name: replace
             args: [" um", ""]
           - name: dateparse

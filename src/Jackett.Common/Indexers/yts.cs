@@ -44,7 +44,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2.5; // 0.5 requests per second (2 causes problems)
 
@@ -149,8 +149,18 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo();
 
                         // Append the quality to the title because thats how radarr seems to be determining the quality?
-                        // All releases are BRRips, see issue #2200
-                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + " BRRip";
+                        // append type: BRRip or WEBRip, resolves #3558 via #4577
+                        var type = torrent_info.Value<string>("type");
+                        switch (type)
+                        {
+                             case "web":
+                                type = " WEBRip";
+                                break;
+                            default:
+                                type = " BRRip";
+                                break;
+                        }
+                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + torrent_info.Value<string>("quality") + type;
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 

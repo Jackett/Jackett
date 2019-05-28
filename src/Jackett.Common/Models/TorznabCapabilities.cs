@@ -18,7 +18,7 @@ namespace Jackett.Common.Models
 
         public bool SupportsTVRageSearch { get; set; }
 
-        public bool SupportsImdbSearch { get; set; }
+        public bool SupportsImdbMovieSearch { get; set; }
 
         public bool MusicSearchAvailable
         {
@@ -39,7 +39,7 @@ namespace Jackett.Common.Models
             TVSearchAvailable = true;
             MovieSearchAvailable = false;
             SupportsTVRageSearch = false;
-            SupportsImdbSearch = false;
+            SupportsImdbMovieSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
         }
 
@@ -48,7 +48,7 @@ namespace Jackett.Common.Models
             SearchAvailable = true;
             TVSearchAvailable = true;
             SupportsTVRageSearch = false;
-            SupportsImdbSearch = false;
+            SupportsImdbMovieSearch = false;
             SupportedMusicSearchParamsList = new List<string>();
             Categories = new List<TorznabCategory>();
             Categories.AddRange(cats);
@@ -71,7 +71,7 @@ namespace Jackett.Common.Models
             get
             {
                 var parameters = new List<string>() { "q" };
-                if (SupportsImdbSearch)
+                if (SupportsImdbMovieSearch)
                     parameters.Add("imdbid");
                 return string.Join(",", parameters);
             }
@@ -159,7 +159,7 @@ namespace Jackett.Common.Models
             lhs.TVSearchAvailable = lhs.TVSearchAvailable || rhs.TVSearchAvailable;
             lhs.MovieSearchAvailable = lhs.MovieSearchAvailable || rhs.MovieSearchAvailable;
             lhs.SupportsTVRageSearch = lhs.SupportsTVRageSearch || rhs.SupportsTVRageSearch;
-            lhs.SupportsImdbSearch = lhs.SupportsImdbSearch || rhs.SupportsImdbSearch;
+            lhs.SupportsImdbMovieSearch = lhs.SupportsImdbMovieSearch || rhs.SupportsImdbMovieSearch;
             lhs.Categories.AddRange(rhs.Categories.Where(x => x.ID < 100000).Except(lhs.Categories)); // exclude indexer specific categories (>= 100000)
 
             return lhs;

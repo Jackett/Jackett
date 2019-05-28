@@ -7,6 +7,7 @@ using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace Jackett.Server.Services
         private List<string> _notices = new List<string>();
         private ServerConfig config;
         private IProtectionService _protectionService;
+        private bool isDotNetCoreCapable;
 
         public ServerService(IIndexerManagerService i, IProcessService p, ISerializeService s, IConfigurationService c, Logger l, Common.Utils.Clients.WebClient w, IUpdateService u, IProtectionService protectionService, ServerConfig serverConfig)
         {
@@ -279,6 +281,36 @@ namespace Jackett.Server.Services
                 logger.Error(e, "Error while checking build date of Jackett.Common");
             }
 
+            //Alert user that they no longer need to use Mono
+            try
+            {
+                Variants variants = new Variants();
+                Variants.JackettVariant variant = variants.GetVariant();
+
+                if (variant == Variants.JackettVariant.Mono)
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = "uname";
+                    process.StartInfo.Arguments = "-m";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.Start();
+                    string output = process.StandardOutput.ReadToEnd();
+                    process.WaitForExit();
+                    logger.Debug($"uname output was: {output}");
+
+                    output = output.ToLower();
+                    if (output.Contains("armv7") || output.Contains("armv8") || output.Contains("x86_64"))
+                    {
+                        isDotNetCoreCapable = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e, "Unable to get architecture");
+            }
+
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             // Load indexers
             indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
@@ -314,36 +346,33 @@ namespace Jackett.Server.Services
             // Only needed for Owin
         }
 
-        public string GetServerUrl(Object obj)
+        public string GetServerUrl(HttpRequest request)
         {
             string serverUrl = "";
 
-            if (obj is HttpRequest request)
+            var scheme = request.Scheme;
+            var port = request.HttpContext.Request.Host.Port;
+
+            // Check for protocol headers added by reverse proxys
+            // X-Forwarded-Proto: A de facto standard for identifying the originating protocol of an HTTP request
+            var X_Forwarded_Proto = request.Headers.Where(x => x.Key == "X-Forwarded-Proto").Select(x => x.Value).FirstOrDefault();
+            if (X_Forwarded_Proto.Count > 0)
             {
-                var scheme = request.Scheme;
-                var port = request.HttpContext.Request.Host.Port;
-
-                // Check for protocol headers added by reverse proxys
-                // X-Forwarded-Proto: A de facto standard for identifying the originating protocol of an HTTP request
-                var X_Forwarded_Proto = request.Headers.Where(x => x.Key == "X-Forwarded-Proto").Select(x => x.Value).FirstOrDefault();
-                if (X_Forwarded_Proto.Count > 0)
-                {
-                    scheme = X_Forwarded_Proto.First();
-                }
-                // Front-End-Https: Non-standard header field used by Microsoft applications and load-balancers
-                else if (request.Headers.Where(x => x.Key == "Front-End-Https" && x.Value.FirstOrDefault() == "on").Any())
-                {
-                    scheme = "https";
-                }
-
-                //default to 443 if the Host header doesn't contain the port (needed for reverse proxy setups)
-                if (scheme == "https" && !request.HttpContext.Request.Host.Value.Contains(":"))
-                {
-                    port = 443;
-                }
-
-                serverUrl = string.Format("{0}://{1}:{2}{3}/", scheme, request.HttpContext.Request.Host.Host, port, BasePath());
+                scheme = X_Forwarded_Proto.First();
             }
+            // Front-End-Https: Non-standard header field used by Microsoft applications and load-balancers
+            else if (request.Headers.Where(x => x.Key == "Front-End-Https" && x.Value.FirstOrDefault() == "on").Any())
+            {
+                scheme = "https";
+            }
+
+            //default to 443 if the Host header doesn't contain the port (needed for reverse proxy setups)
+            if (scheme == "https" && !request.HttpContext.Request.Host.Value.Contains(":"))
+            {
+                port = 443;
+            }
+
+            serverUrl = string.Format("{0}://{1}:{2}{3}/", scheme, request.HttpContext.Request.Host.Host, port, BasePath());
 
             return serverUrl;
         }
@@ -356,6 +385,11 @@ namespace Jackett.Server.Services
         public string GetApiKey()
         {
             return config.APIKey;
+        }
+
+        public bool MonoUserCanRunNetCore()
+        {
+            return isDotNetCoreCapable;
         }
     }
 }

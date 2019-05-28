@@ -1,0 +1,117 @@
+---
+  site: xktorrent
+  name: XKTorrent
+  description: "XKTorrent is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: fr-fr
+  type: private
+  encoding: UTF-8
+  links:
+    - https://xktorrent.com/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Movies, desc: "Film"}
+      - {id: 2, cat: TV, desc: "Série"}
+      - {id: 3, cat: TV/Anime, desc: "Animés"}
+      - {id: 5, cat: Audio, desc: "Audios"}
+      - {id: 6, cat: TV/Documentary, desc: "Documentaire"}
+      - {id: 7, cat: Other, desc: "Formations"}
+      - {id: 13, cat: Books/Ebook, desc: "eBooks"}
+      - {id: 14, cat: Console, desc: "Jeux"}
+      - {id: 15, cat: Audio/Video, desc: "Concert"}
+      - {id: 25, cat: PC, desc: "Logiciels"}
+      - {id: 27, cat: TV, desc: "Spectacles"}
+      - {id: 28, cat: TV/Sport, desc: "Sports"}
+      - {id: 29, cat: XXX, desc: "XXX"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login
+    method: form
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: 1
+    error:
+      - selector: form[action$="/login"] span strong
+    test:
+      path: torrents
+      selector: a[href$="/logout"]
+
+  ratio:
+    path: torrents
+    selector: span:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
+
+  search:
+    paths:
+      - path: filterTorrents
+    inputs:
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{ .Keywords }}"
+      description: ""
+      uploader: ""
+      sort: "created_at"
+      direction: "desc"
+      qty: 100
+    rows:
+      selector: table > tbody > tr
+    fields:
+      category:
+        selector: a[href*="/categories/"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "/categories/.*?\\.(\\d+)"
+      title:
+        selector: a.view-torrent
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
+      details:
+        selector: a.view-torrent
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      grabs:
+        selector: td:nth-child(5)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      date:
+        selector: time
+        filters:
+          - name: replace
+            args: ["il y a ", ""]
+          - name: replace
+            args: ["heure", "hour"]
+          - name: replace
+            args: ["jour", "day"]
+          - name: replace
+            args: ["semaine", "week"]
+          - name: replace
+            args: ["mois", "month"]
+          - name: append
+            args: " ago"
+      downloadvolumefactor:
+        case:
+          "i[data-original-title=\"Freeleech\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Global freeleech\"]": "0" # Global Freeleech
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "i[data-original-title=\"Global freeleech\"]": "2" # Global Freeleech
+          "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
+          "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
+          "*": "1"
+# UNIT3D 1.?

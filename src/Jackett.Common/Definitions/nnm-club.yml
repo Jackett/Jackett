@@ -6,11 +6,10 @@
   type: semi-private
   encoding: windows-1251
   links:
-    - https://nnm-club.me/
+    - http://nnmclub.to/
   legacylinks:
     - https://nnm-club.name/
-  certificates:
-    - 7877113458e90f3643dd28424657a29469f5dc55
+    - https://nnm-club.me/
 
   settings:
     - name: username
@@ -731,18 +730,22 @@
       title:
         selector: a[href^="viewtopic.php?t="] > b
         filters:
-          - name: re_replace
-            args: ["\\b(\\d)\\b", "0$1"]
+          - name: replace
+            args: [" / ", " "]
           - name: replace
             args: ["Кураж-Бамбей", "kurazh"]
+          - name: replace
+            args: ["Кубик в Кубе", "Kubik"]
           - name: re_replace
-            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3) RUS"]
+            args: ["((\\([12][0-9]{3}\\))(.+)\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", " - S$4E$5 - rus $3"]
           - name: re_replace
             args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
           - name: replace
-            args: ["WEBDLRip", "WEBDL"]
+            args: ["-Rip", "Rip"]
           - name: replace
-            args: ["WEB-DLRip", "WEBDL"]
+            args: ["WEB-DL", "WEBDL"]
+          - name: replace
+            args: ["WEBDLRip", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
       details:

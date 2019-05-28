@@ -2,7 +2,7 @@
   site: alein
   name: Alein
   description: "Alein is a BULGARIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
-  language: en
+  language: bg
   type: semi-private
   encoding: UTF-8
   links:
@@ -67,9 +67,6 @@
       path: /
       selector: :has(a[href="logout.php"])
 
-  download:
-    selector: a[href^="download.php?id="]
-
   search:
     paths:
     # http://alein.org/index.php?page=torrents&category=1%3B15%3B41%3B14%3B48%3B39%3B20%3B16%3B5%3B21%3B22%3B11&search=venom&active=1
@@ -81,22 +78,35 @@
       active: "1"
 
     rows:
-      selector: tr.trclass
+      selector: tr.trclass:not(:has(td.lista-cat-rec))
     fields:
       title:
-        selector: td.lista-list a
+        selector: td a[href*="id="]
       details:
-        selector: td.lista-list a
+        selector: td a[href*="id="]
         attribute: href
       category:
-        selector: td.lista-cat a
+        selector: td a[href*="category="]
         attribute: href
         filters:
           - name: querystring
             args: category
       download:
-        selector: td.lista-list a
+        selector: td a[href*="id="]
         attribute: href
+        filters:
+          - name: querystring
+            args: id
+          - name: prepend
+            args: "download.php?id="
+          - name: append
+            args: "&f={{.Result.title}}.torrent"
+      banner:
+        selector: td a[href*="id="]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src=(.+?) width="
       size:
         selector: td:nth-child(6)
       seeders:

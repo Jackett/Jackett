@@ -46,7 +46,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
             TorznabCaps.Categories.Clear();
 
             // סרטים

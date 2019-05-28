@@ -46,7 +46,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2; // 0.5 requests per second
 

@@ -55,7 +55,7 @@
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php?returnto=
+    path: login.php?returnto=
     method: form
     inputs:
       username: "{{ .Config.username }}"
@@ -63,10 +63,10 @@
     error:
       - selector: form#loginform > span.warning
     test:
-      path: /my.php
+      path: my.php
 
   ratio:
-    path: /my.php
+    path: my.php
     selector: span.smallfont:has(span#sp_signed)
     filters:
       - name: regexp
@@ -74,7 +74,7 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       search_field: "{{range .Categories}}分类:`{{.}}` {{end}}{{ .Query.Keywords }}"
       c: "M"

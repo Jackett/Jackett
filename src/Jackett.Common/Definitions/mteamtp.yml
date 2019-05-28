@@ -1,12 +1,12 @@
 ﻿---
   site: mteamtp
   name: M-Team - TP
-  description: "A chinese tracker"
+  description: "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / XXX"
   language: zh-cn
   type: private
   encoding: UTF-8
   links:
-    - https://tp.m-team.cc
+    - https://tp.m-team.cc/
 
   caps:
     categorymappings:
@@ -72,10 +72,10 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /torrents.php
+      path: torrents.php
 
   ratio:
-    path: /torrents.php
+    path: torrents.php
     selector: table#info_block
     filters:
       - name: regexp
@@ -91,11 +91,11 @@
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: "0"
-      spstate: "0"
-      inclbookmarked: "0"
+      incldead: 1
+      spstate: 0
+      inclbookmarked: 0
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-      search_mode: "0"
+      search_mode: 0
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:

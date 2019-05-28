@@ -78,7 +78,7 @@
       movie-search: [q]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       take_login: "1"
@@ -88,11 +88,11 @@
     error:
       - selector: td.embedded:has(h2:contains("failed"))
     test:
-      path: /browse.php
+      path: browse.php
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

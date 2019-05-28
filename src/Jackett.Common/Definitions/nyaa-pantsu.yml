@@ -12,6 +12,7 @@
   encoding: UTF-8
   links:
     - https://nyaa.pantsu.cat/
+    - https://nyaa.pt/
     
   settings:
     - name: cat-id
@@ -72,7 +73,7 @@
 
   search:
     paths:
-      - path: /search
+      - path: search
     inputs:
       q: "{{ .Query.Keywords }}"
       c: "{{ .Config.cat-id }}"

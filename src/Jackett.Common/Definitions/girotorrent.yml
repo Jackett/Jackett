@@ -77,7 +77,7 @@
       movie-search: [q]
 
   login:
-    path: /index.php?page=login
+    path: index.php?page=login
     method: post
     inputs:
       uid: "{{ .Config.username }}"
@@ -85,12 +85,12 @@
     error:
       - selector: div.error
     test:
-      path: /index.php
+      path: index.php
       selector: a[href="logout.php"]
 
   download:
     before:
-      path: "thanks.php"
+      path: thanks.php
       method: "post"
       inputs:
         infohash: "{{ .DownloadUri.Query.id }}"
@@ -100,34 +100,34 @@
 
   search:
     paths:
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 1
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 2
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 3
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 4
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 5
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 6
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 7
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 8
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 9
-      - path: /index.php
+      - path: index.php
         inputs:
           pages: 10
     inputs:

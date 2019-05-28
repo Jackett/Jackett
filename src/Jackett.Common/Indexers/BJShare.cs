@@ -55,7 +55,7 @@ namespace Jackett.Common.Indexers
             Language = "pt-br";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
@@ -139,6 +139,12 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
             {
                 var results = await RequestStringWithCookies(TodayUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookies(TodayUrl);
+                }
                 try
                 {
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
@@ -198,18 +204,21 @@ namespace Jackett.Common.Indexers
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                             release.Title = FixAbsoluteNumbering(release.Title);
 
-                            var quality = qQuality.TextContent;
-                            switch (quality)
+                            if (qQuality != null)
                             {
-                                case "Full HD":
-                                    release.Title += " 1080p";
-                                    break;
-                                case "HD":
-                                    release.Title += " 720p";
-                                    break;
-                                default:
-                                    release.Title += " 480p";
-                                    break;
+                                var quality = qQuality.TextContent;
+                                switch (quality)
+                                {
+                                    case "Full HD":
+                                        release.Title += " 1080p";
+                                        break;
+                                    case "HD":
+                                        release.Title += " 720p";
+                                        break;
+                                    default:
+                                        release.Title += " 480p";
+                                        break;
+                                }
                             }
 
                             release.Category = MapTrackerCatToNewznab(catStr);
@@ -271,6 +280,12 @@ namespace Jackett.Common.Indexers
                 searchUrl += "?" + queryCollection.GetQueryString();
 
                 var results = await RequestStringWithCookies(searchUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookies(searchUrl);
+                }
                 try
                 {
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";

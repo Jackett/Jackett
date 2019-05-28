@@ -5,15 +5,18 @@
   language: en-us
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    -  http://cnbtkitty.ws/
+    - https://btkittys.co/
   legacylinks:
-    -  https://cnbtkitty.org/
-    -  http://cnbtkitty.org/
-    -  https://cnbtkitty.com/
-    -  http://cnbtkitty.com/
-    -  https://cnbtkitty.me/
-    -  http://cnbtkitty.me/
+    - https://cnbtkitty.org/
+    - http://cnbtkitty.org/
+    - https://cnbtkitty.com/
+    - http://cnbtkitty.com/
+    - https://cnbtkitty.me/
+    - http://cnbtkitty.me/
+    - http://cnbtkitty.ws/
+    - http://btkitty.pet/
 
   caps:
     categorymappings:

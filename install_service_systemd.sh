@@ -13,22 +13,18 @@ systemctl stop ${jackettservice}
 cd "$(dirname "$0")"
 
 # Check if we're running from Jackett's directory
-if [ ! -f ./JackettConsole.exe ]; then
-echo "${BOLDRED}ERROR${NC}: Couldn't locate JackettConsole.exe. Is the script in the right directory?"
+if [ ! -f ./jackett ]; then
+echo "${BOLDRED}ERROR${NC}: Couldn't locate jackett. Is the script in the right directory?"
     exit 1
 fi
 jackettdir="$(pwd)"
 
 # Check if Jackett's owner is root
-jackettuser="$(stat -c "%U" ./JackettConsole.exe)"
+jackettuser="$(stat -c "%U" ./jackett)"
 if [ "${jackettuser}" == "root" ]; then
 echo "${BOLDRED}ERROR${NC}: Jackett shouldn't run as root. Please, change the owner of the Jackett directory."
     exit 1
 fi
-
-# Check if mono is installed
-command -v mono >/dev/null 2>&1 || { echo >&2 "${BOLDRED}ERROR${NC}: Jackett requires Mono but it's not installed. Aborting."; exit 1; }
-monodir="$(dirname $(command -v mono))"
 
 # Check that no other service called Jackett is already running
 if [[ $(systemctl status ${jackettservice} | grep "active (running)") ]]; then
@@ -50,7 +46,7 @@ Type=simple
 User=${jackettuser}
 Group=${jackettuser}
 WorkingDirectory=${jackettdir}
-ExecStart=${monodir}/mono --debug ${jackettdir}/JackettConsole.exe --NoRestart
+ExecStart=${jackettdir}/jackett --NoRestart
 TimeoutStopSec=20
 
 [Install]
@@ -74,7 +70,6 @@ else
     cat << EOL
 ${BOLDRED}ERROR${NC}: Could not launch service. The installation might have failed.
 Please open an issue on https://github.com/Jackett/Jackett/issues and paste following information:
-Mono directory: \`${monodir}\`
 Jackett directory: \`${jackettdir}\`
 Jackett user: \`${jackettuser}\`
 

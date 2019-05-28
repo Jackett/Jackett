@@ -57,19 +57,20 @@ namespace Jackett.Common.Indexers
         }
 
         private static Uri DefaultSiteLinkUri =
-            new Uri("http://descargas2020.com/");
+            new Uri("https://pctnew.site/");
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
             new Uri("http://torrentrapid.com/"),
-            new Uri("http://torrentlocura.com/"),
             new Uri("http://tumejortorrent.com/"),
             new Uri("http://pctnew.com/"),
+            new Uri("http://torrentlocura.com/"),
         };
 
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
             new Uri("http://www.tvsinpagar.com/"),
+            new Uri("http://descargas2020.com/"),
         };
 
         private NewpctRelease _mostRecentRelease;
@@ -79,12 +80,13 @@ namespace Jackett.Common.Indexers
         private Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
         private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
+        private Regex _downloadMatchRegex = new Regex("[^\"]*/descargar-torrent/[^\"]*");
 
         private int _maxDailyPages = 7;
         private int _maxMoviesPages = 30;
         private int _maxEpisodesListPages = 100;
-        private int[] _allTvCategories = TorznabCatType.TV.SubCategories.Select(c => c.ID).ToArray();
-        private int[] _allMoviesCategories = TorznabCatType.Movies.SubCategories.Select(c => c.ID).ToArray();
+        private int[] _allTvCategories = (new TorznabCategory[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
+        private int[] _allMoviesCategories = (new TorznabCategory[] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
 
         private bool _includeVo;
         private bool _filterMovies;
@@ -156,7 +158,7 @@ namespace Jackett.Common.Indexers
             links.Add(linkParam.AbsoluteUri);
 
             IEnumerable<Uri> knownUris = (new Uri[] { DefaultSiteLinkUri }).
-                Concat(ExtraSiteLinkUris).Concat(LegacySiteLinkUris);
+                Concat(ExtraSiteLinkUris);
 
             foreach (Uri extraSiteUri in knownUris)
             {
@@ -173,13 +175,19 @@ namespace Jackett.Common.Indexers
 
                 try
                 {
-                    var results = await RequestStringWithCookies(link);
+                    var results = await RequestStringWithCookiesAndRetry(link);
+                    await FollowIfRedirect(results);
                     var content = results.Content;
 
-                    Regex regex = new Regex("[^\"]*/descargar-torrent/\\d+_[^\"]*");
-                    Match match = regex.Match(content);
-                    if (match.Success)
-                        result = await base.Download(new Uri(match.Groups[0].Value));
+                    if (content != null)
+                    {
+                        Match match = _downloadMatchRegex.Match(content);
+                        if (match.Success)
+                        {
+                            Uri uriLink = new Uri(new Uri(link), match.Groups[0].Value);
+                            result = await base.Download(uriLink);
+                        }
+                    }
                 }
                 catch
                 {
@@ -210,7 +218,8 @@ namespace Jackett.Common.Indexers
                 while (pg <= _maxDailyPages)
                 {
                     Uri url = new Uri(siteLink, string.Format(_dailyUrl, pg));
-                    var results = await RequestStringWithCookies(url.AbsoluteUri);
+                    var results = await RequestStringWithCookiesAndRetry(url.AbsoluteUri);
+                    await FollowIfRedirect(results);
 
                     var items = ParseDailyContent(results.Content);
                     if (items == null || !items.Any())
@@ -328,7 +337,8 @@ namespace Jackett.Common.Indexers
         private async Task<IEnumerable<ReleaseInfo>> GetReleasesFromUri(Uri uri, string seriesName)
         {
             var newpctReleases = new List<ReleaseInfo>();
-            var results = await RequestStringWithCookies(uri.AbsoluteUri);
+            var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+            await FollowIfRedirect(results);
 
             //Episodes list
             string seriesEpisodesUrl = ParseSeriesListContent(results.Content, seriesName);
@@ -338,7 +348,8 @@ namespace Jackett.Common.Indexers
                 while (pg < _maxEpisodesListPages)
                 {
                     Uri episodesListUrl = new Uri(string.Format(_seriesUrl, seriesEpisodesUrl, pg));
-                    results = await RequestStringWithCookies(episodesListUrl.AbsoluteUri);
+                    results = await RequestStringWithCookiesAndRetry(episodesListUrl.AbsoluteUri);
+                    await FollowIfRedirect(results);
 
                     var items = ParseEpisodesListContent(results.Content);
                     if (items == null || !items.Any())
@@ -665,6 +676,7 @@ namespace Jackett.Common.Indexers
                 result.Size = size;
             result.Link = new Uri(detailsUrl);
             result.Guid = result.Link;
+            result.Comments = result.Link;
             result.PublishDate = publishDate;
             result.Seeders = 1;
             result.Peers = 1;

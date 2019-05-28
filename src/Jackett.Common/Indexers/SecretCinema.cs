@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
             TorznabCaps.SupportedMusicSearchParamsList = new List<string>() { "q", "album", "artist", "label", "year" };
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(2, TorznabCatType.Audio, "Music");

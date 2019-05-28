@@ -1,0 +1,142 @@
+﻿---
+  site: documentarytorrents
+  name: DocumentaryTorrents
+  description: "Documentary Torrents (DT) is a Private Torrent Tracker for E-LEARNING MOVIES / TV"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - http://www.documentarytorrents.com/
+
+  caps:
+    categorymappings:
+      - {id: 128, cat: TV/HD, desc: "Adventure: HD"}
+      - {id: 129, cat: TV/SD, desc: "Adventure: Xvid / x264"}
+      - {id: 85, cat: TV/SD, desc: "Biography: Xvid / x264"}
+      - {id: 86, cat: TV/HD, desc: "Biography: HD"}
+      - {id: 60, cat: TV/HD, desc: "Computers: HD"}
+      - {id: 58, cat: TV/SD, desc: "Computers: Xvid / x264"}
+      - {id: 103, cat: TV/SD, desc: "Crime: Xvid / x264"}
+      - {id: 105, cat: TV/HD, desc: "Crime: HD"}
+      - {id: 64, cat: TV/SD, desc: "Culture: Xvid / x264"}
+      - {id: 66, cat: TV/HD, desc: "Culture: HD"}
+      - {id: 122, cat: TV/SD, desc: "Discovery: Xvid / x264"}
+      - {id: 123, cat: TV/HD, desc: "Discovery: HD"}
+      - {id: 98, cat: TV/HD, desc: "Drugs: HD"}
+      - {id: 97, cat: TV/SD, desc: "Drugs: Xvid / x264"}
+      - {id: 92, cat: TV/HD, desc: "Economy: HD"}
+      - {id: 91, cat: TV/SD, desc: "Economy: Xvid / x264"}
+      - {id: 83, cat: TV/HD, desc: "Food: HD"}
+      - {id: 82, cat: TV/SD, desc: "Food: Xvid / x264"}
+      - {id: 124, cat: TV/HD, desc: "HBO: HD"}
+      - {id: 125, cat: TV/SD, desc: "HBO: Xvid / x264"}
+      - {id: 76, cat: TV/SD, desc: "Health: Xvid / x264"}
+      - {id: 78, cat: TV/HD, desc: "Health: HD"}
+      - {id: 67, cat: TV/SD, desc: "History: Xvid / x264"}
+      - {id: 69, cat: TV/HD, desc: "History: HD"}
+      - {id: 79, cat: TV/SD, desc: "Humor: Xvid / x264"}
+      - {id: 80, cat: TV/HD, desc: "Humor: HD"}
+      - {id: 116, cat: TV/HD, desc: "Music: HD"}
+      - {id: 115, cat: TV/SD, desc: "Music: Xvid / x264"}
+      - {id: 118, cat: TV/HD, desc: "NatGeo: HD"}
+      - {id: 119, cat: TV/SD, desc: "NatGeo: Xvid / x264"}
+      - {id: 63, cat: TV/HD, desc: "Nature: HD"}
+      - {id: 61, cat: TV/SD, desc: "Nature: Xvid / x264"}
+      - {id: 109, cat: TV/SD, desc: "New World Order: Xvid / x264"}
+      - {id: 111, cat: TV/HD, desc: "New World Order: HD"}
+      - {id: 48, cat: TV/HD, desc: "Other: HD"}
+      - {id: 50, cat: TV/HD, desc: "Other: DVD"}
+      - {id: 9, cat: TV/SD, desc: "Other: Xvid / x264"}
+      - {id: 126, cat: TV/HD, desc: "PBS: HD"}
+      - {id: 127, cat: TV/SD, desc: "PBS: Xvid / x264"}
+      - {id: 72, cat: TV/HD, desc: "Politics: HD"}
+      - {id: 112, cat: Books/Ebook, desc: "Politics: Ebook"}
+      - {id: 70, cat: TV/SD, desc: "Politics: Xvid / x264"}
+      - {id: 114, cat: Books/Ebook, desc: "Reference: Ebook"}
+      - {id: 117, cat: Audio/Audiobook, desc: "Reference: Audio Book"}
+      - {id: 56, cat: TV/HD, desc: "Religion: HD"}
+      - {id: 54, cat: TV/SD, desc: "Religion: Xvid / x264"}
+      - {id: 94, cat: TV/SD, desc: "Science: Xvid / x264"}
+      - {id: 95, cat: TV/HD, desc: "Science: HD"}
+      - {id: 75, cat: TV/HD, desc: "Space: HD"}
+      - {id: 73, cat: TV/SD, desc: "Space: Xvid / x264"}
+      - {id: 113, cat: TV/HD, desc: "Space: DVD"}
+      - {id: 100, cat: TV/SD, desc: "Sports: Xvid / x264"}
+      - {id: 102, cat: TV/HD, desc: "Sports: HD"}
+      - {id: 106, cat: TV/SD, desc: "Technology: Xvid / x264"}
+      - {id: 108, cat: TV/HD, desc: "Technology: HD"}
+      - {id: 121, cat: TV/SD, desc: "Transport: Xvid / x264"}
+      - {id: 120, cat: TV/HD, desc: "Transport: HD"}
+      - {id: 57, cat: TV/HD, desc: "Travel: HD"}
+      - {id: 52, cat: TV/SD, desc: "Travel: Xvid / x264"}
+      - {id: 89, cat: TV/HD, desc: "War: HD"}
+      - {id: 88, cat: TV/SD, desc: "War: Xvid / x264"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  login:
+    path: account-login.php
+    method: form
+    form: form[action="account-login.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.myBlock:has(font.error)
+    test:
+      path: index.php
+      selector: a[href$="/account-logout.php"]
+
+  ratio:
+    path: index.php
+    selector: img[title="Ratio"]
+
+  search:
+    paths:
+    # http://documentarytorrents.com/torrents.php?c123=1&c69=1&c67=1&c89=1&c88=1&search=grow+old&cat=0&incldead=1&freeleech=0&lang=0
+      - path: torrents.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      cat: 0
+      incldead: 1
+      freeleech: 0
+      lang: 0
+
+    rows:
+      selector: table.ttable_headinner tr.t-row
+      filters:
+        - name: andmatch
+    fields:
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      title:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: title
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      details:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      date:
+          text: now
+      downloadvolumefactor:
+        case:
+          img[src="images/freeleech_star.gif"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

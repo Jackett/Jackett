@@ -210,7 +210,7 @@ namespace Jackett.Common.Indexers
                 var qRow = row.Cq();
                 release.Title = qRow.Find("td:nth-child(2) > a").First().Text().Trim();
 
-                if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                     continue;
 
                 release.Guid = new Uri(SiteLink + qRow.Find("td:nth-child(2) > a").First().Attr("href"));

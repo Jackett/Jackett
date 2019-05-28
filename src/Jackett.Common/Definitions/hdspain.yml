@@ -39,6 +39,8 @@
     path: index.php
     keywordsfilters:
       - name: re_replace
+        args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
+      - name: re_replace
         args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
     inputs:
       sec: listado
@@ -56,13 +58,28 @@
         filters:
           - name: querystring
             args: cat
+      extras:
+        text: ""
+      extras:
+        optional: true
+        selector: td.titulo a[class]
+        filters:
+          - name: prepend
+            args: "["
+          - name: append
+            args: "]"
       title:
         selector: td.titulo a[id]
         filters:
+          - name: prepend
+            args: "{{ .Result.extras }} "
           - name: append
-            args: " [spanish]"
+            args: " [Spanish]"
       details:
-        selector: td.titulo a
+        selector: td.titulo a[id]
+        attribute: href
+      comments:
+        selector: td.foro a
         attribute: href
       size:
         selector: td.tamano
@@ -140,3 +157,10 @@
         filters:
           - name: replace
             args: ["Freeleech X2", "2"]
+      minimumratio:
+        text: "1.0"
+      minimumseedtime:
+        text: "345600"
+      description:
+        optional: true
+        selector: td.titulo a[class]

@@ -1,0 +1,104 @@
+---
+  site: pwtorrents
+  name: PWTorrents
+  description: "PWTorrents (PWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://pwtorrents.net/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV/Sport, desc: "Boxing"}
+      - {id: 2, cat: TV/Sport, desc: "Documentaries"}
+      - {id: 3, cat: TV/Sport, desc: "DVD"}
+      - {id: 4, cat: TV/Sport, desc: "ECW"}
+      - {id: 5, cat: TV/Sport, desc: "Games and Software"}
+      - {id: 6, cat: TV/Sport, desc: "Indy's"}
+      - {id: 7, cat: TV/Sport, desc: "Matches"}
+      - {id: 8, cat: TV/Sport, desc: "Misc."}
+      - {id: 9, cat: TV/Sport, desc: "MMA"}
+      - {id: 11, cat: TV/Sport, desc: "Puro"}
+      - {id: 10, cat: TV/Sport, desc: "PWT Packs"}
+      - {id: 12, cat: TV/Sport, desc: "Ring Of Honor"}
+      - {id: 13, cat: TV/Sport, desc: "TNA PPV's"}
+      - {id: 14, cat: TV/Sport, desc: "TNA Weekly"}
+      - {id: 15, cat: TV/Sport, desc: "WCW"}
+      - {id: 18, cat: TV/Sport, desc: "WWE Network"}
+      - {id: 16, cat: TV/Sport, desc: "WWE PPV's"}
+      - {id: 17, cat: TV/Sport, desc: "WWE Weekly"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table.main:contains("Login failed!")
+    test:
+      path: my.php
+
+  ratio:
+    path: browse.php
+    selector: span.smallfont:has(a[href="logout.php"])
+    filters:
+      - name: regexp
+        args: "Ratio:\\s(.*?)\\s\\s"
+
+  search:
+    paths:
+      # https://pwtorrents.net/browse.php?c18=1&c16=1&c17=1&incldead=0
+      - path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      incldead: "1"
+      search: "{{ .Keywords }}"
+      sort: "4" # date
+      type: "desc"
+    rows:
+      selector: table[border="1"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="download.php?id="])
+    fields:
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: a[href^="details.php?id="]
+      download:
+        selector: a[href^="download.php"]
+        attribute: href
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      grabs:
+        selector: td:nth-child(6) a
+        filters:
+          - name: replace
+            args: ["times", ""]
+          - name: replace
+            args: ["time", ""]
+      size:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(8)
+      leechers:
+        selector: td:nth-child(9)
+      date:
+        selector: td:nth-child(4)
+        filters:
+          - name: dateparse
+            args: "2006-01-0215:04:05"
+      downloadvolumefactor:
+        case:
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

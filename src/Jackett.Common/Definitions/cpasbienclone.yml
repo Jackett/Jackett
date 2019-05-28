@@ -16,21 +16,28 @@
     categorymappings:
       - {id: films, cat: Movies, desc: "Movies"}
       - {id: series, cat: TV, desc: "TV"}
+      - {id: musique, cat: Audio, desc: "Music"}
+      - {id: ebook, cat: Books, desc: "Ebook"}
+      - {id: logiciels, cat: PC, desc: "Software"}
+      - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
+      - {id: jeux-consoles, cat: Console, desc: "Console Games"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings: []
 
   download:
-    selector: div#btn-download a
+    selector: div.btn-download a
     attribute: href
+
   search:
     paths:
-      - path: "{{if .Keywords}}/recherche/{{.Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
     rows:
-      selector: div#gauche > table > tbody > tr:has(a)
+      selector: table.table-corps > tbody > tr:has(a)
     fields:
       site_date:
         selector: a
@@ -43,7 +50,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace
@@ -61,21 +70,21 @@
         selector: div.poid
         filters:
           - name: re_replace
-            args: [ "\\.(\\d) Ko", "$1X00"]
+            args: [ "\\.(\\d)Ko", "$1X00"]
           - name: re_replace
-            args: [ " Ko", "000"]
+            args: [ "Ko", "000"]
           - name: re_replace
-            args: [ "\\.(\\d) Mo", "$1X00000"]
+            args: [ "\\.(\\d)Mo", "$1X00000"]
           - name: re_replace
-            args: [ " Mo", "000000"]
+            args: [ "Mo", "000000"]
           - name: re_replace
-            args: [ "\\.(\\d) Go", "$1X00000000"]
+            args: [ "\\.(\\d)Go", "$1X00000000"]
           - name: re_replace
-            args: [ " Go", "000000000"]
+            args: [ "Go", "000000000"]
           - name: re_replace
-            args: [ "\\.(\\d) To", "$1X00000000000"]
+            args: [ "\\.(\\d)To", "$1X00000000000"]
           - name: re_replace
-            args: [ " To", "000000000000"]
+            args: [ "To", "000000000000"]
           - name: replace
             args: [ "X", "" ]
       date:

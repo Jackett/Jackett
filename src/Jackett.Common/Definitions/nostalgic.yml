@@ -1,0 +1,121 @@
+---
+  site: nostalgic
+  name: Nostalgic
+  description: "Nostalgic Torrents (The Archive) is a Private Torrent Tracker for MOVIES / TV / GENERAL NOSTALGIA"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://nostalgic.to/
+
+  caps:
+    categorymappings:
+      - {id: 28, cat: TV, desc: "AdultSwim"}
+      - {id: 29, cat: TV, desc: "AdultSwim WOC"}
+      - {id: 24, cat: TV/Anime, desc: "Anime-x264"}
+      - {id: 20, cat: TV/Anime, desc: "Anime-x265/AV1"}
+      - {id: 32, cat: Movies/Foreign, desc: "Asian Movies"}
+      - {id: 31, cat: TV/FOREIGN, desc: "Asian TV (ENGSUB)"}
+      - {id: 6, cat: Audio/Audiobook, desc: "Audio / E-Books"}
+      - {id: 9, cat: Books/Comics, desc: "Comics / Manga"}
+      - {id: 22, cat: TV, desc: "Current TV"}
+      - {id: 17, cat: TV/Documentary, desc: "Documentaries"}
+      - {id: 27, cat: Movies, desc: "Movies"}
+      - {id: 25, cat: Audio/Video, desc: "Music / Video"}
+      - {id: 23, cat: PC/Games, desc: "PC GAMES"}
+      - {id: 8, cat: TV/WEB-DL, desc: "Podcasts"}
+      - {id: 16, cat: PC/0day, desc: "Roms / Emulation"}
+      - {id: 12, cat: TV, desc: "TV - PRE 2009 W/O/C"}
+      - {id: 11, cat: TV, desc: "TV - PRE 2013"}
+      - {id: 10, cat: TV, desc: "TV Animation"}
+      - {id: 18, cat: TV, desc: "TV Animation W/O/C"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: login
+    method: form
+    form: form[action="/login"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      cinfo: "1536|864|24|-780"
+      iplocked: 0
+      keeploggedin: 1
+      submit: "login"
+    selectorinputs:
+      token:
+        selector: input[name="token"]
+        attribute: value
+    error:
+      - selector: table#maincontent tr td div div#messagebarA
+
+  ratio:
+    path: /
+    selector: td:has(a[href="/articles.php?topic=ratio"])  > td
+
+  search:
+    paths:
+    #https://nostalgic.to/torrents.php?filter_cat%5B32%5D=1&filter_cat%5B27%5D=1&order_by=time&order_way=desc&searchtext=&action=advanced&title=terminator&sizeall=&sizetype=gb&sizerange=0.01&filelist=&taglist=&autocomplete_toggle=1
+      - path: torrents.php
+    inputs:
+      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
+      order_by: "time"
+      order_way: "desc"
+      searchtext: ""
+      action: "advanced"
+      title: "{{ .Keywords }}"
+      sizeall: ""
+      sizetype: "gb"
+      sizerange: 0.01
+      filelist: ""
+      taglist: ""
+      autocomplete_toggle: 1
+    rows:
+      selector: table#torrent_table tr:not(:first-child)
+    fields:
+      title:
+        selector: a[href^="/torrents.php?id="]
+      category:
+        selector: td.cats_col div a
+        attribute: href
+        filters:
+          - name: regexp
+            args: "(\\d+)]=1"
+      details:
+        selector: a[href^="/torrents.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="torrents.php?action=download"]
+        attribute: href
+      files:
+        selector: td:nth-last-child(8)
+      date:
+        selector: td:nth-last-child(6)
+        filters:
+          - name: timeago
+      size:
+        selector: td:nth-last-child(5)
+        filters:
+          - name: replace
+            args: ["GiB", "GB"]
+          - name: replace
+            args: ["MiB", "MB"]
+          - name: replace
+            args: ["KiB", "KB"]
+      grabs:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      downloadvolumefactor:
+        case:
+          "img[alt=\"Freeleech\"]": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

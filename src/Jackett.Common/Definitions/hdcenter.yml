@@ -33,7 +33,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /login.php
+    path: login.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -42,7 +42,7 @@
     error:
       - selector: div#error-text
     test:
-      path: /torrents.php
+      path: torrents.php
 
   search:
     paths:
