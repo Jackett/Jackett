@@ -95,6 +95,10 @@
       title:
         remove: span
         selector: td:nth-child(2)
+        filters:
+          # strip the upright bars in the title
+          - name: re_replace
+            args: ["( \\| )+", " "]
       download:
  # download.php?id=fb27625a0543ed731f7b3505beebf4c8d530f8f9&f=IIHF+2019-05-26+%7C+Gold+Medal+%7C+Canada+vs+Finland+%7C+1080p+EN.torrent
         selector: a[href^="download.php?id="]
