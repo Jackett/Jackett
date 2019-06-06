@@ -385,7 +385,7 @@ Trackers marked with  [![(invite needed)][inviteneeded]](#) have no active maint
 
 ### Aggregate indexers
 
-A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab/api`.
+A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab`.
 It will query all configured indexers and return the combined results.
 
 If your client supports multiple feeds it's recommended to add each indexer directly instead of using the all indexer.
