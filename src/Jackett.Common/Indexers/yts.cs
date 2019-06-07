@@ -19,6 +19,7 @@ namespace Jackett.Common.Indexers
     {
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://yts.ag/",
+            "https://yts.am/",
         };
 
         private string ApiEndpoint { get { return SiteLink + "api/v2/list_movies.json"; } }
@@ -32,7 +33,7 @@ namespace Jackett.Common.Indexers
         public Yts(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
             : base(name: "YTS",
                 description: "YTS is a Public torrent site specialising in HD movies of small size",
-                link: "https://yts.am/",
+                link: "https://yts.lt/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: wc,
@@ -173,7 +174,8 @@ namespace Jackett.Common.Indexers
                         "&tr=udp://glotorrents.pw:6969/announce" +
                         "&tr=udp://tracker.opentrackr.org:1337/announce" +
                         "&tr=udp://torrent.gresille.org:80/announce" +
-                        "&tr=udp://p4p.arenabg.com:1337&tr=udp://tracker.leechers-paradise.org:6969";
+                        "&tr=udp://p4p.arenabg.com:1337" +
+                        "&tr=udp://tracker.leechers-paradise.org:6969";
 
                         release.MagnetUri = new Uri(magnet_uri);
                         release.InfoHash = torrent_info.Value<string>("hash");
