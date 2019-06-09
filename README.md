@@ -301,6 +301,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RocketHD
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
+ * RPTorrents
  * SceneFZ
  * SceneHD
  * SceneReactor
