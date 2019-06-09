@@ -29,9 +29,10 @@
   search:
     paths:
       - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time{{else}}recent{{end}}"
-      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=2{{else}}{{end}}"
-      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=3{{else}}{{end}}"
-      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=4{{else}}{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=2{{else}}recent?page=2{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=3{{else}}recent?page=3{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=4{{else}}recent?page=4{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=5{{else}}recent?page=5{{end}}"
     rows:
       selector: li[class$="item"]
     fields:
