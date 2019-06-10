@@ -137,7 +137,7 @@ namespace Jackett.Common.Indexers
                     release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
 
                     var timeAnchor = row.QuerySelector("span[class='time']");
-                    release.PublishDate = DateTime.ParseExact(timeAnchor.GetAttribute("title"), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+                    release.PublishDate = DateTime.ParseExact(timeAnchor.TextContent.Trim(), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
                     release.Seeders = ParseUtil.CoerceInt(timeAnchor.ParentElement.NextElementSibling.NextElementSibling.TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(timeAnchor.ParentElement.NextElementSibling.NextElementSibling.NextElementSibling.TextContent.Trim()) + release.Seeders;
                     release.Size = ReleaseInfo.GetBytes(timeAnchor.ParentElement.PreviousElementSibling.TextContent);
