@@ -39,8 +39,7 @@
     paths:
       # return movie results if there are no search parms supplied (for use with the TEST button)
       # http://www.magnetdl.com/m/midnight-texas-s01e10/
-      # using "invalid-cat" in the default case (empty keywords) causes no category limitation
-      - path: "{{if .Keywords}}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/invalid-cat/{{end}}"     
+      - path: "{{if .Keywords}}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/movies/{{end}}"     
     rows:
       selector: tr:has(td[class="m"])
     fields:
