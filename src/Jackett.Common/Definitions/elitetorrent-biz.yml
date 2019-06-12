@@ -6,9 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.elitetorrent.io/
+    - https://www.elitetorrent.one/
   legacylinks:
     - https://www.elitetorrent.biz/
+    - https://www.elitetorrent.io/
 
   caps:
     categories:

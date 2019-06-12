@@ -18,14 +18,15 @@ namespace Jackett.Common.Indexers
 {
     class MejorTorrent : BaseWebIndexer
     {
-        public static Uri WebUri = new Uri("http://www.mejortorrent.tv/");
+        public static Uri WebUri = new Uri("http://www.mejortorrentt.com/");
         public static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
         private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
         public static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
         public static Encoding MEEncoding = Encoding.GetEncoding("iso-8859-1");
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "http://www.mejortorrent.org/"
+            "http://www.mejortorrent.org/",
+            "http://www.mejortorrent.tv/",
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)

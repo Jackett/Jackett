@@ -140,21 +140,21 @@
       size:
         selector: td:nth-last-child(2)
       date:
-        selector: td:nth-last-child(7)
+        selector: td:nth-last-child(8)
         filters:
           - name: append
             args: " +01:00"
           - name: dateparse
             args: "02/01/2006 -07:00"
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td:nth-last-child(5)
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-last-child(6)
+        selector: td:nth-last-child(7)
       leechers:
-        selector: td:nth-last-child(5)
+        selector: td:nth-last-child(6)
       downloadvolumefactor:
         case:
           img[alt="Gold 100% Free"]: "0"

@@ -64,7 +64,7 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public Common.Models.DTO.ServerConfig Config()
         {
-            var dto = new Common.Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion());
+            var dto = new Common.Models.DTO.ServerConfig(serverService.notices, serverConfig, configService.GetVersion(), serverService.MonoUserCanRunNetCore());
             return dto;
         }
 

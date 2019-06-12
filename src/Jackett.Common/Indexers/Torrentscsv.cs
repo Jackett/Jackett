@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers {
             AddCategoryMapping (7000, TorznabCatType.Other);
             AddCategoryMapping (8000, TorznabCatType.Books);
 
-            TorznabCaps.SupportsImdbSearch = false;
+            TorznabCaps.SupportsImdbMovieSearch = false;
 
             webclient.requestDelay = 0;
         }

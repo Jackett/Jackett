@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - http://teamctgame.xyz/
+    - https://teamctgame.xyz/
   legacylinks:
     - https://teamctgame.co/
+    - http://teamctgame.xyz/
 
   caps:
     categorymappings:

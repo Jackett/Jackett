@@ -51,6 +51,14 @@
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
         </div>
         <hr />
+
+        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert"> 
+            <strong>Standalone version of Jackett is now available - Mono not required</strong> <br>
+            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions. 
+            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over. 
+            Benefits include: increased performance, improved stability and no dependency on Mono. 
+        </div>
+
         <div class="pull-right">
             <button id="jackett-add-indexer" class="btn btn-success btn-sm">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
@@ -142,8 +150,7 @@
         </div>
         <div id="proxy-warning" hidden>
             <span>
-                WARNING: The proxy option is unstable and potentially leaks requests. If no fix from the community is forthcoming 
-                in the next few months, the proxy option will be removed from Jackett. Recommendation is to use a VPN.
+                WARNING: The proxy option potentially leaks requests. Recommendation is to use a VPN.
             </span>
         </div>
         <div class="input-area">
@@ -671,6 +678,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20190421"></script>
+    <script type="text/javascript" src="../custom.js?changed=20190427"></script>
 </body>
 </html>

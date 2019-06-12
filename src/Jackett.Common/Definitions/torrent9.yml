@@ -45,7 +45,7 @@
   settings: []
 
   download:
-    selector: a[href^="/downloading/"]
+    selector: a.download:contains("le Torrent")
       
   search:
     paths:

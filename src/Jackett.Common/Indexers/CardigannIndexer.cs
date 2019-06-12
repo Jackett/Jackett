@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities();
 
-            TorznabCaps.SupportsImdbSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+            TorznabCaps.SupportsImdbMovieSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
@@ -788,8 +788,9 @@ namespace Jackett.Common.Indexers
 
             var hasCaptcha = false;
 
+            var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
             var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
-            if (grecaptcha != null)
+            if (CloudFlareCaptchaChallenge != null && grecaptcha != null)
             {
                 hasCaptcha = true;
                 var CaptchaItem = new RecaptchaItem();
@@ -1108,9 +1109,9 @@ namespace Jackett.Common.Indexers
             variables[".Query.Season"] = query.Season;
             variables[".Query.Movie"] = null;
             variables[".Query.Year"] = query.Year.ToString();
-            variables[".Query.Limit"] = query.Limit;
-            variables[".Query.Offset"] = query.Offset;
-            variables[".Query.Extended"] = query.Extended;
+            variables[".Query.Limit"] = query.Limit.ToString();
+            variables[".Query.Offset"] = query.Offset.ToString();
+            variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;
             variables[".Query.TVDBID"] = null;
@@ -1494,7 +1495,7 @@ namespace Jackett.Common.Indexers
                                             if (Filter.Args != null)
                                                 CharacterLimit = int.Parse(Filter.Args);
 
-                                            if (query.ImdbID != null && TorznabCaps.SupportsImdbSearch)
+                                            if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
 
                                             if (!query.MatchQueryStringAND(release.Title, CharacterLimit))

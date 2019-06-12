@@ -20,6 +20,7 @@
       - {id: 5, cat: PC, desc: "Apps"}
       - {id: 6, cat: Other, desc: "Misc"}
       - {id: 7, cat: XXX, desc: "XXX"}
+      - {id: 8, cat: Movies, desc: "Kids"}
 
     modes:
       search: [q]
@@ -56,6 +57,7 @@
     inputs:
       $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      description: ""
       uploader: ""
       imdb: "{{ .Query.IMDBIDShort }}"
       tvdb: ""
@@ -81,17 +83,24 @@
       details:
         selector: a.view-torrent
         attribute: href
+      banner:
+        optional: true
+        selector: div.torrent-poster img
+        attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900/212121/FFFFFF/?text=NOCOVER", ""]
       size:
-        selector: td:nth-child(5)
-      seeders:
-        selector: td:nth-child(7)
-      leechers:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(4)
       grabs:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(3)
         filters:
           - name: regexp
             args: ([\d\.]+)
+      seeders:
+        selector: td:nth-last-child(2)
+      leechers:
+        selector: td:nth-last-child(1)
       date:
         selector: time
         filters:
@@ -120,12 +129,14 @@
             args: [" (ay|kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden)", "months"]
       downloadvolumefactor:
         case:
-          "i[data-original-title=\"100% Free\"]": "0" # Single Torrent Freeleech
+          "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
           "i[data-original-title=\"Global freeleech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Featured\"]": "0" # Featured
           "*": "1"
       uploadvolumefactor:
         case:
           "i[data-original-title=\"Double upload\"]": "2" # Single Torrent Double Upload
           "i[data-original-title=\"Double Upload\"]": "2" # Global Double Upload
+          "i[data-original-title=\"Featured\"]": "2" # Featured
           "*": "1"
 # UNIT3D

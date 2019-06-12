@@ -6,6 +6,7 @@
     <AssemblyName>JackettUpdater</AssemblyName>
     <OutputType>Exe</OutputType>
     <Version>0.0.0</Version>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>

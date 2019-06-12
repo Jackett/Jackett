@@ -31,6 +31,8 @@
     paths:
       - path: src/releaselist.php
         method: post
+    headers:
+      Referer: ["{{.Config.sitelink}}?releaselist"]
     inputs:
       cat: 0
       page: 1

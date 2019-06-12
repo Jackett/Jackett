@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers
             Language = "de-de";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             this.configData.DisplayText.Value = "Only the results from the first search result page are shown, adjust your profile settings to show the maximum.";
             this.configData.DisplayText.Name = "Notice";

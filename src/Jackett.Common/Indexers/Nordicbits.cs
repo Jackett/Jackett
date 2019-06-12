@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
             Language = "da-dk";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = false;
+            TorznabCaps.SupportsImdbMovieSearch = false;
 
             // Apps
             AddCategoryMapping("cat=63", TorznabCatType.PCPhoneAndroid, "APPS - Android");

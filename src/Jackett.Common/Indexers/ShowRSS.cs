@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers
                     serie_title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
                     release.Title = serie_title;
 
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                         continue;
 
                     release.Comments = new Uri(node.SelectSingleNode("link").InnerText);

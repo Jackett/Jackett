@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
         }
 
         private static Uri DefaultSiteLinkUri =
-            new Uri("http://descargas2020.com/");
+            new Uri("https://pctnew.site/");
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
             new Uri("http://www.tvsinpagar.com/"),
+            new Uri("http://descargas2020.com/"),
         };
 
         private NewpctRelease _mostRecentRelease;
@@ -84,8 +85,8 @@ namespace Jackett.Common.Indexers
         private int _maxDailyPages = 7;
         private int _maxMoviesPages = 30;
         private int _maxEpisodesListPages = 100;
-        private int[] _allTvCategories = TorznabCatType.TV.SubCategories.Select(c => c.ID).ToArray();
-        private int[] _allMoviesCategories = TorznabCatType.Movies.SubCategories.Select(c => c.ID).ToArray();
+        private int[] _allTvCategories = (new TorznabCategory[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
+        private int[] _allMoviesCategories = (new TorznabCategory[] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
 
         private bool _includeVo;
         private bool _filterMovies;

@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             TorznabCaps.Categories.Clear();
 

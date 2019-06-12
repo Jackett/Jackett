@@ -158,15 +158,9 @@
         attribute: title
         filters:
           - name: replace
-            args: ["FREE LEECH!", "0"]
-      downloadvolumefactor:
-        optional: true
-        selector: img[src$="torrent_multiple_download.png"]
-        attribute: title
-        filters:
-          - name: split
-            args: [":", 1]
-          - name: trim
+            args: ["No cuenta la descarga", "0"]
+          - name: replace
+            args: ["Cuenta descarga: 0.5", "0.5"]
       uploadvolumefactor:
         text: "1"
       uploadvolumefactor:
@@ -174,10 +168,9 @@
         selector: img[src$="torrent_multiple_upload.png"]
         attribute: title
         filters:
-          - name: split
-            args: [":", 1]
-          - name: trim
+          - name: replace
+            args: ["Cuenta subida por: 2", 2]
       minimumratio:
         text: "1.0"
       minimumseedtime:
-        text: "259200" # 3 day (72h)
+        text: "345600" # 4 day (96h)

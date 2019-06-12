@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.yggtorrent.gg/
+    - https://www.yggtorrent.ch/
   legacylinks:
     - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
@@ -26,6 +26,7 @@
     - https://www.ygg.to/
     - https://ww3.yggtorrent.gg/
     - http://www2.yggtorrent.gg/
+    - https://www.yggtorrent.gg/
 
   caps:
     categorymappings:
@@ -91,7 +92,7 @@
     - name: searchanddlurl
       label: Search and download URL
       type: text
-      default: www2.yggtorrent.gg
+      default: www2.yggtorrent.ch
     - name: username
       type: text
       label: Username
@@ -154,6 +155,15 @@
       submit: ""
     error:
       - selector: "#login_msg_pass[style=\"\"][style] > center"
+      - selector: "#ban_msg_login[style=\"\"][style] > center"
+      - selector: "#login_msg_mail[style=\"\"][style] > center"
+      - selector: a[href$="/user/disabled"]
+        message:
+          # Compte Inactif
+          selector: a[href$="/user/disabled"] strong
+          filters:
+            - name: append
+              args: " - Dès que vous passez en dessous d'un ratio inférieur à 1, Votre compte devient inactif et le site vous coupe les téléchargements."
     test:
       path: /
       selector: div#top_panel:contains("Déconnexion")
@@ -168,8 +178,8 @@
         args: ["\"", ""]
       - name: trim
     paths:
-      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ .Keywords }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ .Keywords }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
     rows:
       selector: "table.table > tbody > tr"
     fields:
@@ -216,6 +226,8 @@
         filters:
           - name: re_replace
             args: ["[\\.\\s\\[\\-][Vv][Oo][Ss][Tt][Ff][Rr][\\.\\s\\]\\-]", ".ENGLISH."]
+          - name: re_replace
+            args: ["[\\.\\s\\[\\-][Ss][Uu][Bb][Ff][Rr][Ee][Nn][Cc][Hh][\\.\\s\\]\\-]", ".ENGLISH."]
       title:
         text: "{{if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
       details:

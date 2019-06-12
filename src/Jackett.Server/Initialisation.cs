@@ -11,7 +11,7 @@ namespace Jackett.Server
     {
         public static void ProcessSettings(RuntimeSettings runtimeSettings, Logger logger)
         {
-            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2" && runtimeSettings.ClientOverride != "httpclientnetcore")
+            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2" && runtimeSettings.ClientOverride != "httpclientnetcore" && runtimeSettings.ClientOverride != "httpclient2netcore")
             {
                 logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
                 Environment.Exit(1);

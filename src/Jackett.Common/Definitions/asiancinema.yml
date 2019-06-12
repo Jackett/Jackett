@@ -39,6 +39,9 @@
       - name: regexp
         args: "Ratio : (\\d+)"
 
+  download:
+    selector: a[href*="/download/"]
+
   search:
     paths:
       - path: filterTorrents
@@ -66,7 +69,7 @@
       title:
         selector: a.view-torrent
       download:
-        selector: a[href*="/download/"]
+        selector: a[href*="/download_check/"]
         attribute: href
       details:
         selector: a.view-torrent

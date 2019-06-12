@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://proaudiotorrents.org/
+  legacylinks:
     - http://proaudiotorrents.org/
 
   caps:
@@ -36,21 +38,18 @@
     modes:
       search: [q]
 
-  settings:
-    - name: cookie
-      type: text
-      label: Cookie
-    - name: info
-      type: info
-      label: How to get the Cookie
-      default: "<p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually.</p><ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
-        
   login:
-    method: cookie
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    submitpath: takelogin.php
     inputs:
-      cookie: "{{.Config.cookie}}"
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table tr td.text
     test:
-      path: index.php
+      path: my.php
 
   search:
     paths:

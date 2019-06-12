@@ -33,6 +33,8 @@ namespace Jackett.Common.Models.DTO
         public string omdburl { get; set; }
         [DataMember]
         public string app_version { get; set; }
+        [DataMember]
+        public bool can_run_netcore { get; set; }
 
         [DataMember]
         public ProxyType proxy_type { get; set; }
@@ -50,7 +52,7 @@ namespace Jackett.Common.Models.DTO
             notices = new string[0];
         }
 
-        public ServerConfig(IEnumerable<string> notices, Models.Config.ServerConfig config, string version)
+        public ServerConfig(IEnumerable<string> notices, Models.Config.ServerConfig config, string version, bool canRunNetCore)
         {
             this.notices = notices;
             port = config.Port;
@@ -65,6 +67,7 @@ namespace Jackett.Common.Models.DTO
             omdbkey = config.OmdbApiKey;
             omdburl = config.OmdbApiUrl;
             app_version = version;
+            can_run_netcore = canRunNetCore;
 
             proxy_type = config.ProxyType;
             proxy_url = config.ProxyUrl;

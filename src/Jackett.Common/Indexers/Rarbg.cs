@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
             provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
             configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
 

@@ -173,6 +173,8 @@
             args: ["Кураж-Бамбей", "kurazh"]
           - name: replace
             args: ["Кубик в Кубе", "Kubik"]
+          - name: replace
+            args: ["Кравец", "Kravec"]
           - name: re_replace
             args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
           - name: re_replace

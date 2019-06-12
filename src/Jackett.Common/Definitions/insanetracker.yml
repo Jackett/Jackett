@@ -65,10 +65,10 @@
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Query.Keywords }}{{end}}"
       t: "all"
     rows:
-      selector: table.torrentable > tbody > tr:has(td.maintd)
+      selector: table.torrenttable > tbody > tr:has(td.torrentmain)
     fields:
       title:
-        selector: div.tortitle > a
+        selector: td.torrentmain > a.torrentname
         attribute: title
       category:
         selector: a[href^="browse.php?cat="]
@@ -77,10 +77,10 @@
           - name: querystring
             args: cat
       details:
-        selector: div.tortitle > a
+        selector: td.torrentmain > a.torrentname
         attribute: href
       download:
-        selector: a[href^="download.php/"]
+        selector: a[href*="/download.php/"]
         attribute: href
       imdb:
         optional: true
@@ -95,51 +95,49 @@
         selector: a.cover
         attribute: href
       files:
-        selector: td:nth-child(6)
+        selector: div.files > a.button.small
         filters:
           - name: replace
             args: [".", ""]
       size:
-        selector: td:nth-child(8)
+        selector: td.center.size
         filters:
           - name: replace
             args: [".", ""]
           - name: replace
             args: [",", "."]
-      grabs:
-        selector: td:nth-child(9) > div:first-child
-        filters:
-          - name: replace
-            args: [".", ""]
-          - name: regexp
-            args: "^([\\d]+)"
       seeders:
-        selector: td:nth-child(9) > div:first-child
+        selector: td.center.data > a:first-child
         filters:
           - name: replace
             args: [".", ""]
-          - name: regexp
-            args: "\\|\\s*([\\d]+)\\s*\\|"
       leechers:
-        selector: td:nth-child(9) > div:first-child
+        selector: td.center.data > a:nth-child(2)
         filters:
           - name: replace
             args: [".", ""]
-          - name: regexp
-            args: "([\\d]+)$"
-      date:
-        selector: td.date
+      grabs:
+        selector: td.center.data
         filters:
+          - name: replace
+            args: [".", ""]
+        remove: div.uploader, div.moderation, a.leftborder
+
+      date:
+        selector: td.center.date
+        filters:
+          - name: re_replace
+            args: ["(\\-)(\\d{2})(\\d{2})(\\:)", "-$2 $3:"]
           - name: dateparse
-            args: "2006.01.02 15:04:05"
+            args: "2006-01-02 15:04"
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:
         case:
-          img[src^="pic/4x.gif"]: "4"
-          img[src^="pic/3x.gif"]: "3"
-          img[src^="pic/2x.gif"]: "2"
-          "*": "1"
+          a[href^="?doubleup=four"]: "4"
+          a[href^="?doubleup=three"]: "3"
+          a[href^="?doubleup=two"]: "2"
+          "*" : "1"
       description:
-        selector: td.maintd
-        remove: div.tortitle, div.markcont, div.tablebuttons, div.tablebigbuttons
+        selector: div.contenttext
+        remove: div.contenttitle
