@@ -56,11 +56,19 @@ namespace Jackett.Common.Indexers
             }
         }
 
+        class DownloadMatcher
+        {
+            public Regex MatchRegex;
+            public MatchEvaluator MatchEvaluator;
+        }
+
         private static Uri DefaultSiteLinkUri =
-            new Uri("https://pctnew.site/");
+            new Uri("https://descargas2020.org");
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
+            new Uri("https://pctnew.site"),
+            new Uri("https://descargas2020.site"),
             new Uri("http://torrentrapid.com/"),
             new Uri("http://tumejortorrent.com/"),
             new Uri("http://pctnew.com/"),
@@ -69,6 +77,7 @@ namespace Jackett.Common.Indexers
 
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
+            new Uri("https://pctnew.site"),
             new Uri("http://www.tvsinpagar.com/"),
             new Uri("http://descargas2020.com/"),
         };
@@ -80,7 +89,15 @@ namespace Jackett.Common.Indexers
         private Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
         private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
-        private Regex _downloadMatchRegex = new Regex("[^\"]*/descargar-torrent/[^\"]*");
+        private DownloadMatcher[] _downloadMatchers = new DownloadMatcher[]
+        {
+            new DownloadMatcher() { MatchRegex = new Regex("([^\"]*/descargar-torrent/[^\"]*)") },
+            new DownloadMatcher()
+            {
+                MatchRegex = new Regex(@"nalt\s*=\s*'([^\/]*)"),
+                MatchEvaluator = m => string.Format("/download/{0}.torrent", m.Groups[1])
+            },
+        };
 
         private int _maxDailyPages = 7;
         private int _maxMoviesPages = 30;
@@ -181,12 +198,9 @@ namespace Jackett.Common.Indexers
 
                     if (content != null)
                     {
-                        Match match = _downloadMatchRegex.Match(content);
-                        if (match.Success)
-                        {
-                            Uri uriLink = new Uri(new Uri(link), match.Groups[0].Value);
+                        Uri uriLink = ExtractDownloadUri(content, link);
+                        if (uriLink != null)
                             result = await base.Download(uriLink);
-                        }
                     }
                 }
                 catch
@@ -197,6 +211,27 @@ namespace Jackett.Common.Indexers
                     return result;
                 else
                     this.logger.Warn("Newpct - download link not found in " + link);
+            }
+
+            return null;
+        }
+
+        private Uri ExtractDownloadUri(string content, string baseLink)
+        {
+            foreach (DownloadMatcher matcher in _downloadMatchers)
+            {
+                Match match = matcher.MatchRegex.Match(content);
+                if (match.Success)
+                {
+                    string linkText; 
+                        
+                    if (matcher.MatchEvaluator != null)
+                        linkText = (string)matcher.MatchEvaluator.DynamicInvoke(match);
+                    else
+                        linkText = match.Groups[1].Value;
+
+                    return new Uri(new Uri(baseLink), linkText);
+                }
             }
 
             return null;
@@ -558,7 +593,8 @@ namespace Jackett.Common.Indexers
                     try
                     {
                         size = ReleaseInfo.GetBytes(sizeText);
-                    } catch
+                    }
+                    catch
                     {
                     }
                     DateTime publishDate;
