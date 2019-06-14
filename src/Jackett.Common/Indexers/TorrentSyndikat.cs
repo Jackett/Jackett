@@ -151,9 +151,7 @@ namespace Jackett.Common.Indexers
                 {
                     // use AND+wildcard operator to avoid getting to many useless results
                     var searchStringArray = Regex.Split(searchString.Trim(), "[ _.-]+", RegexOptions.Compiled).ToList();
-                    searchStringArray = searchStringArray.Where(x => x.Length >= 3).ToList(); //  remove words with less than 3 characters
-                    searchStringArray = searchStringArray.Where(x => !new string[] { "der", "die", "das", "the" }.Contains(x.ToLower())).ToList(); //  remove words with less than 3 characters
-                    searchStringArray = searchStringArray.Select(x => "+" + x + "*").ToList(); // add AND operators+wildcards
+                    searchStringArray = searchStringArray.Select(x => "+" + x).ToList(); // add AND operators
                     var searchStringFinal = String.Join(" ", searchStringArray);
                     queryCollection.Add("search", searchStringFinal);
             }
