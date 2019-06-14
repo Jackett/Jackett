@@ -140,10 +140,15 @@
       type: checkbox
       label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
       default: false
-    - name: sonarrv3hack
+# NEW SEARCH ENGINE MIGH BE BETTER THAN THAT
+#    - name: sonarrv3hack
+#      type: checkbox
+#      label: "REMOVED"
+#      default: false
+    - name: betasearchengine
       type: checkbox
-      label: "Enable Full season search hack: Sonarrv3 send 'Series Name SXX' but it won't match 'Series Name - Saison 01' for example so we remove the 'SXX' ==> 'Series Name'"
-      default: true
+      label: "Use Beta Search engine URL (Less restrictive) / SonarrV3 Full Series Search NEW"
+      default: false
 
   login:
     method: form
@@ -171,15 +176,19 @@
   search:
     followredirect: true
     keywordsfilters:
+# COMMENT THAT BECAUSE OF BETA SEARCH
       # Full season seach hack: Sonarrv3 send 'Series Name SXX' but it won't match 'Series Name - Saison 01' for example so we remove the 'SXX' ==> 'Series Name'
-      - name: re_replace
-        args: ["(.*)[sS](\\d{1,4})$", "{{ if .Config.sonarrv3hack }}$1{{else}}$1S$2{{end}}"]
+#      - name: re_replace
+#        args: ["(.*)[sS](\\d{1,4})$", "{{ if .Config.sonarrv3hack }}$1{{else}}$1S$2{{end}}"]
       - name: replace
         args: ["\"", ""]
       - name: trim
     paths:
-      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-      - path: "https://{{ .Config.searchanddlurl }}/engine/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+#      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+#      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+#CHANGED / REMOVED THE quotes around Keyword, seems not needed now / Added betasearch engine
+      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
     rows:
       selector: "table.table > tbody > tr"
     fields:
@@ -228,8 +237,17 @@
             args: ["[\\.\\s\\[\\-][Vv][Oo][Ss][Tt][Ff][Rr][\\.\\s\\]\\-]", ".ENGLISH."]
           - name: re_replace
             args: ["[\\.\\s\\[\\-][Ss][Uu][Bb][Ff][Rr][Ee][Nn][Cc][Hh][\\.\\s\\]\\-]", ".ENGLISH."]
-      title:
+      title_phase3:
         text: "{{if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
+      title_anime:
+        text: "{{ .Result.title_phase3 }}"
+        filters:
+        # Sonarr need E in front of 3 digit number or else it thinks it is episode
+        # S01E10 for number 110 for example ==> enhancedAnime
+          - name: re_replace
+            args: ["(.*)(\\.| |\\-)(\\d{1,4})(\\.| |\\-)(.*)", "$1 E$3 $5"]
+      title:
+        text: "{{if .Config.enhancedAnime }}{{ .Result.title_anime }}{{else}}{{ .Result.title_phase3 }}{{end}}"
       details:
         selector: ":nth-child(2) > a"
         attribute: href
