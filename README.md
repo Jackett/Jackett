@@ -54,6 +54,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MacTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
+ * MkvCage
  * Monova
  * MovCr
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
