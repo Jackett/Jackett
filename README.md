@@ -270,6 +270,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * myAmity
  * MySpleen
  * NCore
+ * NBTorrents
  * Nebulance (NBL) (TransmiTheNet)
  * New Real World
  * Norbits
