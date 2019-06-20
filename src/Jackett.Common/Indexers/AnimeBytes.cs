@@ -282,7 +282,7 @@ namespace Jackett.Common.Indexers
                                 // Ignore these categories as they'll cause hell with the matcher
                                 // TV Special, OVA, ONA, DVD Special, BD Special
 
-                                if (GroupName == "Movie")
+                                if (GroupName == "Movie" || GroupName == "Live Action Movie")
                                     Category = new List<int> { TorznabCatType.Movies.ID };
 
                                 if (category == "Manga" || category == "Oneshot" || category == "Anthology" || category == "Manhwa" || category == "Manhua" || category == "Light Novel")
