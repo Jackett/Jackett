@@ -200,6 +200,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Dragonworld Reloaded
  * Dream Team
  * DXDHD
+ * Ebooks-Shares
  * EfectoDoppler
  * EliteHD (HDClub) [![(invite needed)][inviteneeded]](#)
  * Elit Tracker (ET)
