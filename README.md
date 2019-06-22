@@ -493,6 +493,9 @@ Logs are stored as usual under `~/.config/Jackett/log.txt`.
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.macOS.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`.
 
+### upgrading from mono
+If you were previously using the Mono flavour of Jackett then you should shutdown the service from a terminal with with the command `systemctl stop jackett.service` and then remove the startup script at `/etc/systemd/system/jackett.service` and delete the content of the `/Applications/Jackett` folder, prior to performing this install.
+
 
 ## Installation using Docker
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system eg. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
