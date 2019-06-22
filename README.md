@@ -41,6 +41,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EZTV
  * Frozen Layer
  * GkTorrent
+ * Hon3yHD.net
  * Horrible Subs
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
