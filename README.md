@@ -260,6 +260,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Kapaki
  * Karagarga
  * Le Saloon
+ * LibraNet (LN)
  * LinkoManija
  * LosslessClub
  * M-Team TP (MTTP)
