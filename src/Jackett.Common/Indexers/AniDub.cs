@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
 
         private async Task EnsureAuthorized()
         {
-            var result = await RequestStringWithCookies(SiteLink);
+            var result = await RequestStringWithCookiesAndRetry(SiteLink);
 
             if (!IsAuthorized(result))
             {
@@ -161,7 +161,7 @@ namespace Jackett.Common.Indexers
         {
             const string ReleaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
 
-            var result = await RequestStringWithCookies(SiteLink);
+            var result = await RequestStringWithCookiesAndRetry(SiteLink);
             var releases = new List<ReleaseInfo>();
 
             try
@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers
                 return releases;
             }
 
-            var result = await RequestStringWithCookies(url);
+            var result = await RequestStringWithCookiesAndRetry(url);
 
             try
             {
@@ -389,6 +389,15 @@ namespace Jackett.Common.Indexers
 
             baseTitle = FixMovieInfo(baseTitle);
 
+            // Mostly audio is in original name, which can't be known during parsing
+            // Skipping appending russing language tag
+            var isAudio = categories.Contains(TorznabCatType.Audio.ID);
+
+            if (!isAudio)
+            {
+                baseTitle = AppendRussianLanguageTag(baseTitle);
+            }
+
             return baseTitle.Trim();
         }
 
@@ -455,6 +464,8 @@ namespace Jackett.Common.Indexers
                 title,
                 match => match.Success ? $"S{int.Parse(match.Groups[1].Value):00}" : string.Empty
             );
+
+        private static string AppendRussianLanguageTag(string title) => title + " [RUS]";
 
         private DateTime GetDateFromShowPage(string url, IElement content)
         {
@@ -527,7 +538,7 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
 
-            var response = await PostDataWithCookies(SearchUrl, PreparePostData(query));
+            var response = await PostDataWithCookiesAndRetry(SearchUrl, PreparePostData(query));
 
             try
             {
