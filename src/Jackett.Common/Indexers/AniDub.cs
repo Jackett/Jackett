@@ -389,6 +389,15 @@ namespace Jackett.Common.Indexers
 
             baseTitle = FixMovieInfo(baseTitle);
 
+            // Mostly audio is in original name, which can't be known during parsing
+            // Skipping appending russing language tag
+            var isAudio = categories.Contains(TorznabCatType.Audio.ID);
+
+            if (!isAudio)
+            {
+                baseTitle = AppendRussianLanguageTag(baseTitle);
+            }
+
             return baseTitle.Trim();
         }
 
@@ -455,6 +464,8 @@ namespace Jackett.Common.Indexers
                 title,
                 match => match.Success ? $"S{int.Parse(match.Groups[1].Value):00}" : string.Empty
             );
+
+        private static string AppendRussianLanguageTag(string title) => title + " [RUS]";
 
         private DateTime GetDateFromShowPage(string url, IElement content)
         {
