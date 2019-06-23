@@ -105,7 +105,7 @@ namespace Jackett.Common.Indexers
 
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
-                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
+                    release.Comments = new Uri(SiteLink + qLink.Attr("href"));
                     release.Guid = release.Comments;
                     release.Title = qLink.Attr("title");
                     if (!query.MatchQueryStringAND(release.Title))
@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
                     var date = DateTime.ParseExact(formattedTimeString, "dddd MMMM d yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
                     release.PublishDate = DateTime.SpecifyKind(date, DateTimeKind.Utc).ToLocalTime();
 
-                    release.Link = new Uri(SiteLink.Replace("http:", "https:") + "/" + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
+                    release.Link = new Uri(SiteLink.Replace("http:", "https:") + row.ChildElements.ElementAt(2).Cq().Children("a.index").Attr("href"));
 
                     var sizeStr = row.ChildElements.ElementAt(6).Cq().Text();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
