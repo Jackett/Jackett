@@ -30,7 +30,7 @@
   settings: []
 
   download:
-    selector: div.btn-download a
+    selector: a[href^="magnet:"]
     attribute: href
 
   search:
