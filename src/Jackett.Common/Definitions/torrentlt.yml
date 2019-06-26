@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://torrent.ai/
+  legacylinks:
     - http://www.torrent.ai/
 
   caps:
