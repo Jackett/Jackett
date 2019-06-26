@@ -64,6 +64,11 @@
       magnet:
         selector: td:nth-child(1) div div a[data-nop=""]
         attribute: href
+        # temp fix for #5372
+        filters: 
+          - name: urldecode
+          - name: replace
+            args: [" ⭐", ""]
       size:
         selector: td:nth-child(2)
       date:
