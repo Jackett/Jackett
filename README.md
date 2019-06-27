@@ -270,6 +270,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Mega-Bliz
  * Mononoké-BT
  * MoreThanTV (MTV)
+ * Music-Master
  * MyAnonamouse (MAM)
  * myAmity
  * MySpleen
