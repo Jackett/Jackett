@@ -175,7 +175,6 @@
       date:
         selector: td:nth-child(8)
         filters:
-        filters:
             # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portoguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch
           - name: re_replace
             args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut)", "minute"]
