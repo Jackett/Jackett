@@ -300,7 +300,6 @@ namespace Jackett.Updater
                 "Definitions/gormogon.yml",
                 "Definitions/czteam.yml",
                 "Definitions/rockhardlossless.yml",
-                "Definitions/oxtorrent.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
