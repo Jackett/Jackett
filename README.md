@@ -321,6 +321,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SceneTime
  * SDBits
  * Secret Cinema
+ * SeedFile (SF)
  * Shareisland
  * ShareSpaceDB
  * Shazbat
