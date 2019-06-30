@@ -123,10 +123,12 @@
       filters:
         - name: andmatch
     fields:
-      download:
-        # selector: a[href^="index.php?page=downloadcheck&id="]
-        selector: a[href^="download.php?id="]
+      category:
+        selector: a[href^="index.php?page=torrents&category="]
         attribute: href
+        filters:
+          - name: querystring
+            args: category
       title:
         selector: a[href^="index.php?page=torrent-details&id="]
         filters:
@@ -151,49 +153,36 @@
             args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
           - name: re_replace # rimozioni varie
             args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
-      category:
-        selector: a[href^="index.php?page=torrents&category="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: category
       details:
         selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       banner:
         optional: true
-        selector: a[href^="index.php?page=torrent-details&id="][onmouseover]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: onmouseover
         filters:
           - name: regexp
             args: "src=(.+?) "
+      download:
+        # selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php?id="]
+        attribute: href
       size:
-        selector: td:has(a[href^="index.php?page=torrent-details&id="]) p:nth-of-type(2)
+        selector: td:nth-last-child(3)
+      grabs:
+        selector: td:nth-last-child(4)
         filters:
           - name: replace
-            args: [" \xA0 ", " "]
-          - name: regexp
-            args: "  (.*?)$"
-      date:
-        selector: td:has(a[href^="index.php?page=torrent-details&id="]) p:nth-of-type(3)
-        filters:
-          - name: replace
-            args: ["\xA0 ", " "] 
-          - name: regexp
-            args: " (.*?)$"
-          - name: dateparse
-            args: "15:04:05 02/01/2006"
-      seeders:
-        selector: td:has(a[href^="index.php?page=torrent-details&id="]) p:nth-of-type(4) a:nth-of-type(1)
-        filters:
+            args: ["---", "0"] 
       leechers:
-        selector: td:has(a[href^="index.php?page=torrent-details&id="]) p:nth-of-type(4) a:nth-of-type(2)
+        selector: td:nth-last-child(5)
+      seeders:
+        selector: td:nth-last-child(6)
+      date:
+        selector: td:nth-last-child(7)
         filters:
-      grabs:
-        text: 0
-      grabs:
-        optional: true
-        selector: td:has(a[href^="index.php?page=torrent-details&id="]) p:nth-of-type(4) a:nth-of-type(3)
+          - name: dateparse
+            args: "02/01/2006"
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: "0"
