@@ -117,6 +117,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Sharewood
  * SkTorrent
  * SoundPark
+ * Toloka.to
  * Torrents-Local
  * Union Fansub
  * Vanila
