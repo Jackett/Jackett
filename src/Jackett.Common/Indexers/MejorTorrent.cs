@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     class MejorTorrent : BaseWebIndexer
     {
-        public static Uri WebUri = new Uri("http://www.mejortorrentt.org/");
+        public static Uri WebUri = new Uri("https://www.mejortorrentt.org/");
         public static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
         private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
         public static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
@@ -28,6 +28,7 @@ namespace Jackett.Common.Indexers
             "http://www.mejortorrent.org/",
             "http://www.mejortorrent.tv/",
             "http://www.mejortorrentt.com/",
+            "http://www.mejortorrentt.org/",
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
