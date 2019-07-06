@@ -33,8 +33,8 @@
             AuthKey = new HiddenItem { Name = "AuthKey", Value = "" };
             TorrentPass = new HiddenItem { Name = "TorrentPass", Value = "" };
             CredentialsWarning = new DisplayItem("<b>Credentials Configuration</b> (<i>Private Tracker</i>),<br /><br /> <ul><li><b>Username</b> is your account name on this tracker.</li><li><b>Password</b> is your password associated to your account name.</li></ul>") { Name = "Credentials" };
-            Username = new StringItem { Name = "Username (Required)", Value = "" };
-            Password = new StringItem { Name = "Password (Required)", Value = "" };
+            Username = new StringItem { Name = "Username", Value = "" };
+            Password = new StringItem { Name = "Password", Value = "" };
             PagesWarning = new DisplayItem("<b>Preferences Configuration</b> (<i>Tweak your search settings</i>),<br /><br /> <ul><li><b>Replace MULTI</b>, replace multi keyword in the resultset (leave empty  to deactivate)</li><li><b>Max Pages to Process</b> let you specify how many page (max) Jackett can process when doing a search. Setting a value <b>higher than 4 is dangerous</b> for you account ! (<b>Result of too many requests to tracker...that <u>will be suspect</u></b>).</li></ul>") { Name  = "Preferences" };
             Pages = new StringItem { Name = "Max Pages to Process (Required)", Value = "4" };
             ReplaceMulti = new StringItem() { Name = "Replace MULTI", Value = "MULTI.FRENCH" };
