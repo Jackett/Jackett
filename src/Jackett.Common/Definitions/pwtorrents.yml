@@ -32,6 +32,18 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: seedbox
+      type: checkbox
+      label: "Use SeedBox Download Link"
+      default: false
+
   login:
     path: login.php
     method: form
@@ -72,30 +84,33 @@
             args: cat
       title:
         selector: a[href^="details.php?id="]
-      download:
-        selector: a[href^="download.php"]
-        attribute: href
       details:
         selector: a[href^="details.php?id="]
         attribute: href
-      grabs:
-        selector: td:nth-child(6) a
-        filters:
-          - name: replace
-            args: ["times", ""]
-          - name: replace
-            args: ["time", ""]
-      size:
-        selector: td:nth-child(5)
-      seeders:
-        selector: td:nth-child(8)
-      leechers:
-        selector: td:nth-child(9)
+      download1:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      download2:
+        selector: a[href^="seeddownload.php?id="]
+        attribute: href
+      download:
+        text: "{{if .Config.seedbox}}{{ .Result.download2 }}{{else}}{{ .Result.download1 }}{{end}}"
       date:
         selector: td:nth-child(4)
         filters:
           - name: dateparse
             args: "2006-01-0215:04:05"
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: (\d+)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
       downloadvolumefactor:
         case:
           "*": "1"
