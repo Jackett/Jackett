@@ -477,7 +477,7 @@ Mono must be compiled with the Roslyn compiler (default), using MCS will cause "
 
 ### Installation on Linux via Ansible
 
-On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
+On a CentOS/RedHat 7 system: [jewflix.jackett](https://galaxy.ansible.com/jewflix/jackett)
 
 On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
 
