@@ -28,6 +28,7 @@ namespace Jackett.Common.Indexers
             "http://www.mejortorrent.org/",
             "http://www.mejortorrent.tv/",
             "http://www.mejortorrentt.com/",
+            "https://www.mejortorrentt.org/",
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
