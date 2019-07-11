@@ -6,9 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.mac-torrents.com/
+    - https://mac-torrents.io/
   legacylinks:
     - https://mac-torrents.com/
+    - https://www.mac-torrents.com/
 
   caps:
     categories:
