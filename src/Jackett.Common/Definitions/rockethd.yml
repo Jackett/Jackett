@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - http://rocket-hd.me/
+  legacylinks:
     - https://rocket-hd.me/
 
   caps:
