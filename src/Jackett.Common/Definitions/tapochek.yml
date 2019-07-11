@@ -6,6 +6,8 @@
   type: private
   encoding: windows-1251
   links:
+    - http://tapochek.net/
+  legacylinks:
     - https://tapochek.net/
 
   settings:
