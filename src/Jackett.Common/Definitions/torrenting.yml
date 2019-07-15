@@ -86,7 +86,7 @@
         text: "1"
       downloadvolumefactor:
         case:
-          "span:contains(\"Freeleech\")": "0"
+          "span:contains(\"FreeLeech\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:
