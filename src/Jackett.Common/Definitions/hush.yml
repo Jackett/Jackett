@@ -111,7 +111,7 @@
           "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
           "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
           "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
-          "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Global Freeleech\"]": "0" # Global Freeleech
           "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
           "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
           "*": "1"
