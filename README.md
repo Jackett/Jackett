@@ -339,6 +339,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tapochek
  * Tasmanit
  * TeamHD
+ * TellyTorrent
  * TenYardTorrents (TYT)
  * TheEmpire (TE)
  * The Geeks
