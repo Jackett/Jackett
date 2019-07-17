@@ -140,6 +140,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anthelion
  * AOX (Chippu)
  * Araba Fenice (Phoenix)
+ * Asgaard (AG)
  * AsianCinema
  * AsianDVDClub
  * AST4u
