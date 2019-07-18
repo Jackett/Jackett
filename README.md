@@ -187,6 +187,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
+ * CrazySpirits
  * CrnaBerza
  * DanishBits (DB)
  * Dark-Shadow
