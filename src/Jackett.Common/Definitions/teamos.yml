@@ -1,0 +1,151 @@
+﻿---
+  site: teamos
+  name: TeamOS
+  description: "Team OS is a Private Torrent Tracker for SOFTWARE"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://www.teamos-hkrg.com/
+
+  caps:
+    categorymappings:
+      - {id: 5, cat: PC, desc: "Special OS"}
+      - {id: 6, cat: PC, desc: "Special Release [Requested/Exclusive/Etc]"}
+      - {id: 19, cat: PC, desc: "Windows 7 Releases"}
+      - {id: 20, cat: PC, desc: "Windows 7 Releases 32 Bit"}
+      - {id: 21, cat: PC, desc: "Windows 7 Releases 64 Bit"}
+      - {id: 22, cat: PC, desc: "Windows 7 Releases  x86-x64 AIO"}
+      - {id: 23, cat: PC, desc: "Team OS Program"}
+      - {id: 24, cat: PC, desc: "Windows 8.1 Release"}
+      - {id: 25, cat: PC, desc: "Windows 8.1 Release 32 Bit"}
+      - {id: 26, cat: PC, desc: "Windows 8.1 Release 64 Bit"}
+      - {id: 27, cat: PC, desc: "Windows 8.1 Release x86-x64 AIO"}
+      - {id: 29, cat: PC, desc: "Windows XP"}
+      - {id: 30, cat: PC, desc: "Windows XP 32 Bit"}
+      - {id: 31, cat: PC, desc: "Windows XP 64 Bit"}
+      - {id: 32, cat: PC, desc: "Windows XP x86/64+AIO"}
+      - {id: 33, cat: PC, desc: "Windows 7"}
+      - {id: 34, cat: PC, desc: "Windows 7 32 Bit"}
+      - {id: 35, cat: PC, desc: "Windows 7 64 Bit"}
+      - {id: 36, cat: PC, desc: "Windows 7 x86/64+AIO"}
+      - {id: 37, cat: PC, desc: "Windows 8 & 8.1"}
+      - {id: 38, cat: PC, desc: "Windows 8 & 8.1 32 Bit"}
+      - {id: 39, cat: PC, desc: "Windows 8 & 8.1 64 Bit"}
+      - {id: 40, cat: PC, desc: "Windows 8 & 8.1 x86/64+AIO"}
+      - {id: 41, cat: PC, desc: "Linux/Unix/Mac/Others"}
+      - {id: 43, cat: PC, desc: "Windows 10 (x86)"}
+      - {id: 44, cat: PC, desc: "Windows 10 (x64)"}
+      - {id: 45, cat: PC, desc: "Windows 10 (x86 & x64)"}
+      - {id: 46, cat: PC/ISO, desc: "Windows 10 Untouched ISO(MSDN)"}
+      - {id: 47, cat: PC, desc: "Windows 7 Untouched (MSDN)"}
+      - {id: 48, cat: PC, desc: "Windows 7 32 Bit Untouched (MSDN)"}
+      - {id: 49, cat: PC, desc: "Windows 7 64 Bit Untouched (MSDN)"}
+      - {id: 50, cat: PC/ISO, desc: "Windows 7 x86/64+AIO Untouched ISO"}
+      - {id: 51, cat: PC, desc: "Windows 8&8.1 Untouched (MSDN)"}
+      - {id: 52, cat: PC, desc: "Windows 8&8.1 32 Bit Untouched (MSDN)"}
+      - {id: 53, cat: PC, desc: "Windows 8&8.1 64 Bit Untouched (MSDN)"}
+      - {id: 54, cat: PC/ISO, desc: "Windows 8&8.1 x86/64+AIO Untouched ISO"}
+      - {id: 55, cat: PC, desc: "Windows Server 2003 (Untouched)"}
+      - {id: 56, cat: PC, desc: "Windows Server 2003 32 Bit Untouched"}
+      - {id: 57, cat: PC, desc: "Windows Server 2003 64 Bit Untouched"}
+      - {id: 58, cat: PC/ISO, desc: "Microsoft Office Multi-lang Untouch ISO"}
+      - {id: 59, cat: PC,/ISO desc: "x86-x64 bit Untouched Iso"}
+      - {id: 61, cat: PC/0day, desc: "Antivirus"}
+      - {id: 62, cat: PC/Phone-Android, desc: "Android Apps"}
+      - {id: 63, cat: PC/0day, desc: "Download Managers"}
+      - {id: 64, cat: PC/0day, desc: "DVD Tools"}
+      - {id: 65, cat: PC/0day, desc: "Multimedia"}
+      - {id: 66, cat: PC/0day, desc: "Audio Apps"}
+      - {id: 67, cat: PC/0day, desc: "Video Apps"}
+      - {id: 68, cat: PC/0day, desc: "Photo Apps"}
+      - {id: 69, cat: PC/0day, desc: "Document Tools"}
+      - {id: 70, cat: PC/0day, desc: "Utility Tools"}
+      - {id: 71, cat: PC/0day, desc: "Activators/ Crack/ patch/ keygen"}
+      - {id: 72, cat: PC/0day, desc: "Other Softwares"}
+      - {id: 73, cat: PC/0day, desc: "Microsoft Office"}
+      - {id: 74, cat: PC/0day, desc: "Web Tools"}
+      - {id: 75, cat: PC/0day, desc: "Adobe Plugins"}
+      - {id: 76, cat: PC/0day, desc: "Customisation"}
+      - {id: 77, cat: PC/0day, desc: "Drivers and Necessary Tools"}
+      - {id: 78, cat: PC/0day, desc: "Security Tools"}
+      - {id: 79, cat: PC/0day, desc: "Recovery Tools"}
+      - {id: 80, cat: PC/0day, desc: "Windows Phone Apps"}
+      - {id: 81, cat: PC/0day, desc: "Developers"}
+      - {id: 82, cat: PC/0day, desc: "Designers"}
+      - {id: 83, cat: PC/0day, desc: "Silent Apps"}
+      - {id: 85, cat: PC/Games, desc: "Games"}
+      - {id: 86, cat: Books/Ebook, desc: "Ebooks"}
+      - {id: 87, cat: Other, desc: "Wallpapers, Themes & Screensavers"}
+      - {id: 88, cat: PC/Phone-Android, desc: "Android Games"}
+      - {id: 89, cat: PC, desc: "Other Releases"}
+      - {id: 107, cat: PC, desc: "Windows 10 Releases"}
+      - {id: 109, cat: PC, desc: "Windows 10 Releases 64 Bit"}
+      - {id: 110, cat: PC, desc: "Windows 10 Releases x86-x64 AIO"}
+      - {id: 111, cat: PC/0day, desc: "3D Modeling"}
+      - {id: 112, cat: PC/0day, desc: "Ghost Images"}
+      - {id: 113, cat: PC/0day, desc: "32 Bit Ghost Images"}
+      - {id: 114, cat: PC/0day, desc: "64 Bit Ghost Images"}
+      - {id: 125, cat: PC, desc: "Dead Torrents"}
+      - {id: 131, cat: PC/Mac, desc: "MAC OS X"}
+      - {id: 132, cat: PC/Phone-Other, desc: "Linux/Unix"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: index.php?login/login
+    method: post
+    inputs:
+      login: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: 1
+    error:
+      - selector: div.blockMessage--error
+    test:
+      path: index.php
+      selector: a[href="/index.php?conversations/"]
+
+  search:
+    paths:
+    # 25 results per page
+      - path: "index.php?torrents/&filename={{ .Keywords }}"
+      - path: "index.php?torrents/&filename={{ .Keywords }}&page=2"
+      - path: "index.php?torrents/&filename={{ .Keywords }}&page=3"
+      - path: "index.php?torrents/&filename={{ .Keywords }}&page=4"
+
+    rows:
+      selector: tr.dataList-row:has(td.download)
+    fields:
+      category:
+        selector: a[href^="/index.php?forums/"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: "\\.(\\d+)\\/$"
+      title:
+        selector: a[href^="/index.php?threads/"]
+      details:
+        selector: a[href^="/index.php?threads/"]
+        attribute: href
+      download:
+        selector: td.download a
+        attribute: href
+      date:
+        selector: li.structItem-startDate a time
+        attribute: datetime
+      size:
+        selector: td:nth-last-child(4)
+      grabs:
+        selector: td:nth-last-child(3)
+      seeders:
+        selector: td:nth-last-child(2)
+      leechers:
+        selector: td:nth-last-child(1)
+      downloadvolumefactor:
+        case:
+          "span.label:contains(\"Freeleech\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"
