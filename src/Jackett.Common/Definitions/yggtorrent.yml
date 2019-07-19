@@ -245,7 +245,7 @@
         # Sonarr need E in front of 3 digit number or else it thinks it is episode
         # S01E10 for number 110 for example ==> enhancedAnime
           - name: re_replace
-            args: ["(.*)(\\.| |\\-)(\\d{1,4})(\\.| |\\-)(.*)", "$1 E$3 $5"]
+            args: ["(.*)(\\.| |\\-)(\\d{2,3})(\\.| |\\-)(.*)", "$1 E$3 $5"]
       title:
         text: "{{if .Config.enhancedAnime }}{{ .Result.title_anime }}{{else}}{{ .Result.title_phase3 }}{{end}}"
       details:
