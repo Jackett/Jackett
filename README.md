@@ -309,6 +309,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PThome
  * PuntoTorrent
  * PWTorrents (PWT)
+ * R3V WTF!
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
  * Redacted (PassTheHeadphones)
