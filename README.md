@@ -321,6 +321,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RPTorrents
  * SceneFZ
  * SceneHD
+ * ScenePalace (SP)
  * SceneReactor
  * SceneRush
  * SceneTime
