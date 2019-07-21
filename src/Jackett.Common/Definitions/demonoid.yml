@@ -135,7 +135,7 @@
       - {id: 112, cat: Movies, desc: "Movies Cam"}
       - {id: 113, cat: Movies/DVD, desc: "Movies DVD Full"}
       - {id: 114, cat: Movies/DVD, desc: "Movies DVD Rip"}
-      - {id: 115, cat: Movies,/HD desc: "Movies HD 1080p / 1080i"}
+      - {id: 115, cat: Movies/HD, desc: "Movies HD 1080p / 1080i"}
       - {id: 116, cat: Movies/HD, desc: "Movies HD 720p"}
       - {id: 153, cat: Movies/HD, desc: "Movies HDRip"}
       - {id: 117, cat: Movies/HD, desc: "Movies HEVC / x265"}
