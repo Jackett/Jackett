@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://ww5.torrent9.lol//
+    - https://ww6.torrent9.lol/
 
   legacylinks:
     - https://www.torrents9.pw/
@@ -21,6 +21,7 @@
     - https://wvw.torrent9.lol/
     - https://wwv.torrent9.lol/
     - https://ww1.torrent9.lol/
+    - https://ww5.torrent9.lol/
 
   caps:
     categorymappings:
@@ -35,30 +36,9 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
-  settings:
-    - name: category
-      type: select
-      label: Category Filter
-      default: "/"
-      options:
-        "/" : "All"
-        "/films/": "Movies"
-        "/films-french/": "Movies/French"
-        "/films-vostfr/": "Movies/VOSTFR"
-        "/films-dvdrip-x264/": "Movies/DVDRIP .x264"
-        "/720p/": "Movies/BluRay 720p"
-        "/1080p/": "Movies/BluRay 1080p"
-        "/series/": "TV/Series"
-        "/series-vostfr/": "TV/VOSTFR"
-        "/series-francaise/": "TV/French"
-        "/series-dvdrip/": "TV/DVDRIP"
-        "/spectacles/": "Shows"
-        "/musique/": "Music"
-        "/ebook/": "Ebooks"
-        "/logiciels/": "Software"
-        "/jeux-pc/": "PC Games"
-        "/jeux-consoles/": "Console Games"
+  settings: []
 
   download:
     selector: a[href^="magnet:?"]
@@ -100,7 +80,7 @@
           i[class="Films"]: films
           i[class="Séries"]: series
           i[class="Musique"]: musique
-          i[class=""Jeux-PC"]: jeux-pc
+          i[class="Jeux-PC"]: jeux-pc
           i[class="Logiciels"]: logiciels
           i[class="Ebook"]: ebook
       download:
@@ -110,25 +90,6 @@
           text: "now"
       size:
         selector: td:nth-child(2)
-        filters:
-          - name: re_replace
-            args: [ "\\.(\\d) Ko", "$1X00"]
-          - name: re_replace
-            args: [ " Ko", "000"]
-          - name: re_replace
-            args: [ "\\.(\\d) Mo", "$1X00000"]
-          - name: re_replace
-            args: [ " Mo", "000000"]
-          - name: re_replace
-            args: [ "\\.(\\d) Go", "$1X00000000"]
-          - name: re_replace
-            args: [ " Go", "000000000"]
-          - name: re_replace
-            args: [ "\\.(\\d) To", "$1X00000000000"]
-          - name: re_replace
-            args: [ " To", "000000000000"]
-          - name: replace
-            args: [ "X", "" ]
       seeders:
         text: 0
       seeders:
