@@ -350,6 +350,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TeamOS
  * TellyTorrent
  * TenYardTorrents (TYT)
+ * TheAudioScene
  * TheEmpire (TE)
  * The Geeks
  * The Horror Charnel (THC)
