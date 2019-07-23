@@ -47,6 +47,9 @@
       search: "{{.Keywords }}"
       # 0 active 1 incldead 2 onlydead 3 gold 4 seedfree
       incldead: "1"
+    keywordsfilters:
+      - name: re_replace
+        args: ["[s|S](\\d+)[e|E][\\d]+", "/s$1"]
     rows:
       selector: table > tbody > tr:has(a[href^="details.php?id="])
     fields:
