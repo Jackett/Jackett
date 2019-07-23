@@ -98,6 +98,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Alein
  * AniDUB
  * ArenaBG
+ * BaibaKo
  * Crazy's Corner
  * CzTorrent
  * Deildu
