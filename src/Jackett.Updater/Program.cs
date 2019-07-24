@@ -341,6 +341,7 @@ namespace Jackett.Updater
                 "Definitions/tbplus.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/speed-share.yml",
+                "Definitions/b2s-share.yml",
             };
 
             foreach (var oldFile in oldFiles)

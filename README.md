@@ -153,7 +153,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Awesome-HD (AHD)
  * AVG (Audio Video Games)
  * Avistaz (AsiaTorrents)
- * B2S-Share
  * Back-ups
  * BakaBT
  * BaconBits (bB)
