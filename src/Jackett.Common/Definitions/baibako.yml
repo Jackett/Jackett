@@ -78,6 +78,8 @@
             args: ["HDR1080p", "HD 1080p"]
           - name: re_replace
             args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          - name: append
+            args: " - rus"
       details:
         selector: a[href^="details.php?id="]
         attribute: href
