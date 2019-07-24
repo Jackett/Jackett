@@ -340,6 +340,7 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/tbplus.yml",
                 "Definitions/manicomioshare.yml",
+                "Definitions/speed-share.yml",
             };
 
             foreach (var oldFile in oldFiles)
