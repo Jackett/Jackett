@@ -342,6 +342,7 @@ namespace Jackett.Updater
                 "Definitions/manicomioshare.yml",
                 "Definitions/speed-share.yml",
                 "Definitions/b2s-share.yml",
+                "Definitions/nyoo.yml",
             };
 
             foreach (var oldFile in oldFiles)
