@@ -162,8 +162,30 @@
     rows:
       selector: div#fancy-list-group ul.list-group li.list-group-item
     fields:
+      _quality:
+        selector: div.list-group-item-content p.m-0 span.badge-primary:contains("1080p"), div.list-group-item-content p.m-0 span.badge-primary:contains("720p"), div.list-group-item-content p.m-0 span.badge-primary:contains("4k")
+        optional: true
+      _year:
+        selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#246AB6;"]
+        optional: true
+      _type:
+        selector: div.list-group-item-content p.m-0 span.badge-info:contains("Rip"), div.list-group-item-content p.m-0 span.badge-info:contains("WEB-"), div.list-group-item-content p.m-0 span.badge-info:contains("TV"), div.list-group-item-content p.m-0 span.badge-info:contains("Blu-Ray"), div.list-group-item-content p.m-0 span.badge-info:contains("BD50"), div.list-group-item-content p.m-0 span.badge-info:contains("MUX"), div.list-group-item-content p.m-0 span.badge-info:contains("DVD"), div.list-group-item-content p.m-0 span.badge-info:contains("320"), div.list-group-item-content p.m-0 span.badge-info:contains("CAM"), div.list-group-item-content p.m-0 span.badge-info:contains("rip")
+        optional: true
       title:
         selector: a[href^="torrents-details.php?id="]
+        filters:
+            # strip out the non-english title [to the left of the brackets] and drop the brackets enclosing the english title
+          - name: re_replace
+            args: ["^(.*?)[\\(](.*?)[\\)](.*?)$", "$2$3"]
+            # add the year to the title
+          - name: append
+            args: "{{if .Result._year}} {{.Result._year}}{{else}}{{end}}"
+            # add the quality to the title
+          - name: append
+            args: "{{if .Result._quality}} {{.Result._quality}}{{else}}{{end}}"
+            # add the type to the title
+          - name: append
+            args: "{{if .Result._type}} {{.Result._type}}{{else}}{{end}}"
       details:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
