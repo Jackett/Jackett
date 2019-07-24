@@ -277,7 +277,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * M-Team TP (MTTP)
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
- * Manicomio Share
  * Mega-Bliz
  * Mononoké-BT
  * MoreThanTV (MTV)
