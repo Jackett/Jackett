@@ -213,6 +213,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Elit Tracker (ET)
  * Elite-Tracker
  * Empornium (EMP)
+ * eShareNet
  * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
  * FANO.IN
