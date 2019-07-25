@@ -1,0 +1,110 @@
+﻿---
+  site: xtremefile
+  name: XtremeFile
+  description: "XtremeFile is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: ro-ro
+  type: private
+  encoding: iso-8859-1
+  links:
+    - https://xtremefile.ro/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV/Anime, desc: "Anime"}
+      - {id: 5, cat: Movies/BluRay, desc: "Movies BluRay"}
+      - {id: 9, cat: Movies/DVD, desc: "Movies DVD"}
+      - {id: 10, cat: Movies/DVD, desc: "Movies DVD-RO"}
+      - {id: 11, cat: Movies/HD, desc: "Movies HD"}
+      - {id: 12, cat: Movies/HD, desc: "Movies HD-RO"}
+      - {id: 24, cat: Movies/SD, desc: "Movies Xvid"}
+      - {id: 15, cat: PC/Phone-Other, desc: "Mobile"}
+      - {id: 20, cat: TV, desc: "TV"}
+      - {id: 13, cat: TV/HD, desc: "HDTV"}
+      - {id: 27, cat: XXX, desc: "Adult Movies"}
+      - {id: 30, cat: PC/Games, desc: "Games PC"}
+      - {id: 34, cat: Console, desc: "Console"}
+      - {id: 28, cat: Audio, desc: "Music"}
+      - {id: 29, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 26, cat: PC/0day, desc: "Software"}
+      - {id: 50, cat: TV/Sport, desc: "Sport"}
+      - {id: 43, cat: Books, desc: "Documents"}
+      - {id: 44, cat: Other, desc: "Images"}
+      - {id: 49, cat: Other/Misc, desc: "Misc"}
+      - {id: 45, cat: PC, desc: "Linux"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: td.embedded:has(h2:contains("failed"))
+    test:
+      path: my.php
+      selector: a[href="logout.php"]
+      
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      # 0 name 1 descr 2 both
+      blah: 0
+      # 1 all 2 onlydead 3 free 4 x2
+      incldead: 1
+    rows:
+      selector: table tbody tr.browse, table tbody tr.sticky
+    fields:
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: a[href^="details.php?id="][onmouseover]
+      details:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: href
+      banner:
+        selector: a[href^="details.php?id="][onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=([^\s]+)
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      files:
+        selector: td:nth-last-child(8)
+      date:
+        selector: td:nth-last-child(6)
+        filters:
+          - name: dateparse
+            args: "02-01-200615:04:05"
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+        filters:
+          - name: regexp
+            args: ([\d\.]+)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
+      downloadvolumefactor:
+        case:
+          img[src="pic/freeleech.png"]: 0
+          "*": 1
+      uploadvolumefactor:
+        case:
+          img[src="pic/x2.png"]: 2
+          "*": 1

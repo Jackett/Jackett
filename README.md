@@ -124,7 +124,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrents-Local
  * Union Fansub
  * Vanila
- * XtreMeZone (MYXZ)
  * YggTorrent (YGG)
  * Ztracker
 
@@ -403,6 +402,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * XKTorrent
  * XWTorrents (XWT)
  * Xthor
+ * XtremeFile
+ * XtreMeZone (MYXZ)
  * ExoticaZ (YourExotic)
  * Zamunda.net
  * Zelka.org
