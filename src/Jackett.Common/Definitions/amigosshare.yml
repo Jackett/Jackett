@@ -159,6 +159,9 @@
       lang: 0
       sort: "id"
       order: "desc"
+    keywordsfilters:
+      - name: re_replace
+        args: ["([12][0-9]{3})", ""]
     rows:
       selector: div#fancy-list-group ul.list-group li.list-group-item
     fields:
