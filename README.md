@@ -354,8 +354,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TheEmpire (TE)
  * The Geeks
  * The Horror Charnel (THC)
- * The Occult
+ * The Movie Cave
  * The New Retro
+ * The Occult
  * The Place
  * The Shinning (TsH)
  * The Show
