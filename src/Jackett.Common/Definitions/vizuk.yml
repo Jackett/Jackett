@@ -6,8 +6,6 @@
   type: private
   encoding: UTF-8
   links:
-    - http://torrent.vizuk.li/
-  legacylinks:
     - https://torrent.vizuk.li/
 
   caps:
