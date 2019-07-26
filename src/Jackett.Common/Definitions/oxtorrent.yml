@@ -7,6 +7,8 @@
   encoding: UTF-8
   followredirect: true
   links:
+    - https://www.smartorrent.tv/
+  legacylinks:
     - https://wwv.oxtorrent.com/
 
   caps:
