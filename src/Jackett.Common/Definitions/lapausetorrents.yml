@@ -32,7 +32,7 @@
       - {id: 20, cat: Movies, desc: "Animations - Remux"}
       - {id: 21, cat: Movies/WEBDL, desc: "Animations - TVRip"}
       - {id: 24, cat: Movies/WEBDL, desc: "Animations - WEB-DL"}
-      - {id: 22, cat: Movies,/WEBDL desc: "Animations - WEB-DL 1080p"}
+      - {id: 22, cat: Movies/WEBDL, desc: "Animations - WEB-DL 1080p"}
       - {id: 23, cat: Movies/WEBDL, desc: "Animations - WEB-DL 720p"}
       - {id: 25, cat: Movies/WEBDL, desc: "Animations - WEBRip"}
       - {id: 26, cat: Movies/HD, desc: "Animations - X265"}
