@@ -7,6 +7,8 @@
   encoding: UTF-8
   links:
     - http://audiobookbay.nl/
+  legacylinks:
+    - https://audiobookbay.nl/
     - https://audiobookbay.la/
 
   caps:
@@ -74,8 +76,8 @@
       search: [q]
 
   login:
-    path: https://audiobookbay.nl/member/login.php
-    form: form[action="https://audiobookbay.nl/member/login.php"]
+    path: member/login.php
+    form: form[action$="/member/login.php"]
     method: post
     form: form
     inputs:
@@ -88,8 +90,13 @@
       path: /member/users/
 
   download:
-    selector: a[href^="/download?"]
-    attribute: href 
+    method: get
+    before:
+      path:  member/login.php
+      method: "post"
+      inputs:
+        username: "{{ .Config.username }}"
+        password: "{{ .Config.password }}"
 
   search:
     paths:
@@ -110,8 +117,11 @@
         selector: div.postTitle h2 a
         attribute: href
       download:
-        selector: a[href^="/audio-books/"]
+        selector: a[href^="/dl-now?f="]
         attribute: href
+        filters:
+          - name: replace
+            args: ["/dl-now?f=", "/download?f="]
       banner:
         optional: true
         selector: img
