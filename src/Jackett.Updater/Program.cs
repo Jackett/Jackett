@@ -321,7 +321,6 @@ namespace Jackett.Updater
                 "System.Web.Http.Tracing.dll",
                 "Definitions/torrentkim.yml",
                 "Definitions/horriblesubs.yml",
-                "Definitions/idope.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/torrentcouch.yml",

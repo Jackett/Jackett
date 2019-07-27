@@ -44,6 +44,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GkTorrent
  * Hon3yHD.net
  * Horrible Subs
+ * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
  * Isohunt2
