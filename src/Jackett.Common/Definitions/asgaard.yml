@@ -144,23 +144,23 @@
         selector: a[href*="download.php?torrent="]
         attribute: href
       files:
-        selector: td:nth-last-child(8)
+        selector: td:nth-child(5)
       date:
-        selector: td:nth-last-child(6)
+        selector: td:nth-child(7)
         filters:
           - name: dateparse
             args: "2 Jan 2006 15:04:05"
       size:
-        selector: td:nth-last-child(5)
+        selector: td:nth-child(8)
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td:nth-child(9)
         filters:
           - name: regexp
             args: (\d+)
       seeders:
-        selector: td:nth-last-child(2)
+        selector: td:nth-child(11)
       leechers:
-        selector: td:nth-last-child(1)
+        selector: td:nth-child(12)
       downloadvolumefactor:
         case:
           img[src="./images/gold.png"]: "0"
