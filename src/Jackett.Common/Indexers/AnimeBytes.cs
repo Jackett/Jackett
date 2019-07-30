@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
         private string ScrapeUrl { get { return SiteLink + "scrape.php"; } }
         private string TorrentsUrl { get { return SiteLink + "torrents.php"; } }
         public bool AllowRaws { get { return configData.IncludeRaw.Value; } }
-        public bool InsertSeason { get { return configData.InsertSeason != null && configData.InsertSeason.Value; } }
+        public bool PadEpisode { get { return configData.PadEpisode != null && configData.PadEpisode.Value; } }
         public bool AddSynonyms { get { return configData.AddSynonyms.Value; } }
         public bool FilterSeasonEpisode { get { return configData.FilterSeasonEpisode.Value; } }
 
@@ -237,10 +237,9 @@ namespace Jackett.Common.Indexers
                             releaseInfo = releaseInfo.Replace("Season ", "S");
                             releaseInfo = releaseInfo.Trim();
 
-                            int test = 0;
-                            if (InsertSeason && int.TryParse(releaseInfo, out test) && releaseInfo.Length <= 3)
+                            if (PadEpisode && int.TryParse(releaseInfo, out int test) && releaseInfo.Length == 1)
                             {
-                                releaseInfo = "E0" + releaseInfo;
+                                releaseInfo = "0" + releaseInfo;
                             }
 
                             if (FilterSeasonEpisode)
