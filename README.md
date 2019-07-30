@@ -299,6 +299,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Peers.FM
  * PiratBit
  * PirateTheNet (PTN)
+ * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD)
  * Pleasuredome
  * PolishSource (PS)
