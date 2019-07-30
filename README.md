@@ -392,7 +392,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Twilight Torrents
  * u-torrents (SceneFZ)
  * UHDBits
- * Ultimate Gamer Club (UGC)
  * UnionGang
  * UnlimitZ
  * Vizuk
