@@ -394,6 +394,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * UHDBits
  * Ultimate Gamer Club (UGC)
  * UnionGang
+ * UnlimitZ
  * Vizuk
  * Waffles
  * World-In-HD
