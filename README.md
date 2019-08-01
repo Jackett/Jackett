@@ -348,6 +348,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TakeaByte
  * Tapochek
  * Tasmanit
+ * Tazmania-Den
  * TeamHD
  * TeamOS
  * TellyTorrent
