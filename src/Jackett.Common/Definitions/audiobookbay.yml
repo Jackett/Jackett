@@ -5,10 +5,10 @@
   language: en-us
   type: semi-private
   encoding: UTF-8
+  followredirect: true
   links:
     - http://audiobookbay.nl/
   legacylinks:
-    - https://audiobookbay.nl/
     - https://audiobookbay.la/
 
   caps:
@@ -76,23 +76,23 @@
       search: [q]
 
   login:
-    path: member/login.php
+    path: https://audiobookbay.nl/member/login.php
     form: form[action$="/member/login.php"]
     method: post
     form: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      login: "Login"
     error:
-      - selector: td.embedded:has(h2:contains("Invalid"))
+      - selector: div.warning
     test:
-      path: /member/users/
+      path: http://audiobookbay.nl/member/users/
+      selector: a[href="/member/logout"]
 
   download:
     method: get
     before:
-      path:  member/login.php
+      path:  https://audiobookbay.nl/member/login.php
       method: "post"
       inputs:
         username: "{{ .Config.username }}"
