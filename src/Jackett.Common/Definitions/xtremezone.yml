@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
+    - https://myxz.eu/
+  legacylinks:
     - https://www.myxz.eu/
 # not yet enabled (legitimacy concerns, see #2821)
-#  legacylinks:
 #    - https://www.myxz.org/
 
   caps:
