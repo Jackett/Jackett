@@ -125,8 +125,9 @@
 
   search:
     paths:
-      # present trending results if there are no search parms supplied
-      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/1/{{else}}trending{{end}}"
+      # present first page of movies and tv results if there are no search parms supplied
+      - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/1/{{else}}cat/Movies/1/{{end}}"
+      - path: "{{if .Keywords}}{{else}}cat/TV/1/{{end}}"
       - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/2/{{else}}{{end}}"
       - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/3/{{else}}{{end}}"
       - path: "{{if .Keywords}}sort-search/{{ .Keywords}}/time/desc/4/{{else}}{{end}}"
