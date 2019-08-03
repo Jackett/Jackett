@@ -1,0 +1,124 @@
+---
+  site: hon3yhd-net
+  name: Hon3yHD-net
+  description: "Hon3yHD.net is a Public INDIAN site for MOVIES / TV / MUSIC"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://hon3yhd.net/
+
+  caps:
+    categorymappings:
+      - {id: 84, cat: PC/Games, desc: "Games: PC"}
+      - {id: 85, cat: Console, desc: "Games: Consoles"}
+      - {id: 47, cat: Movies/BluRay, desc: "Movies: 1080P Bluray"}
+      - {id: 48, cat: Movies/BluRay, desc: "Movies: 720P Bluray"}
+      - {id: 49, cat: Movies/3D, desc: "Movies: 3D"}
+      - {id: 51, cat: Movies/BluRay, desc: "Movies: BD50"}
+      - {id: 50, cat: Movies/BluRay, desc: "Movies: BD25"}
+      - {id: 52, cat: Movies/DVD, desc: "Movies: DVD5"}
+      - {id: 53, cat: Movies/DVD, desc: "Movies: DVD9"}
+      - {id: 54, cat: Movies/DVD, desc: "Movies: DVDRips"}
+      - {id: 55, cat: Movies/HD, desc: "Movies: HDRips"}
+      - {id: 56, cat: Movies/HD, desc: "Movies: HEVC"}
+      - {id: 57, cat: Movies, desc: "Movies: Bollywood"}
+      - {id: 58, cat: Movies, desc: "Movies: Hollywood Dub"}
+      - {id: 59, cat: Movies, desc: "Movies: Bengali"}
+      - {id: 60, cat: Movies, desc: "Movies: Malayalam"}
+      - {id: 61, cat: Movies, desc: "Movies: Pakistani"}
+      - {id: 62, cat: Movies, desc: "Movies: Punjabi"}
+      - {id: 63, cat: Movies, desc: "Movies: Tamil"}
+      - {id: 64, cat: Movies, desc: "Movies: Telugu"}
+      - {id: 68, cat: Movies/SD, desc: "Movies: Xvid"}
+      - {id: 73, cat: Movies/WEBDL, desc: "Movies: WEB-HD"}
+      - {id: 74, cat: Movies, desc: "Movies: Remux"}
+      - {id: 75, cat: Movies/UHD, desc: "Movies: 4K/UHD"}
+      - {id: 76, cat: Movies, desc: "Movies: Pre-Releases"}
+      - {id: 82, cat: Movies, desc: "Movies: South Dub"}
+      - {id: 90, cat: Movies, desc: "Movies: Packs"}
+      - {id: 78, cat: Audio/MP3, desc: "Music: MP3"}
+      - {id: 79, cat: Audio, desc: "Music: WAV"}
+      - {id: 80, cat: Audio/Lossless, desc: "Music: FLAC"}
+      - {id: 81, cat: Audio/Video, desc: "Music: Videos"}
+      - {id: 91, cat: Audio, desc: "Music: Bollywood"}
+      - {id: 65, cat: Other, desc: "Other: Ebooks"}
+      - {id: 66, cat: Other, desc: "Other: Religious"}
+      - {id: 67, cat: Other, desc: "Other: Tutorial"}
+      - {id: 83, cat: Other, desc: "Other: Animation"}
+      - {id: 86, cat: Other, desc: "Other: Software"}
+      - {id: 69, cat: TV, desc: "TV: Pakistani"}
+      - {id: 70, cat: TV, desc: "TV: Indian"}
+      - {id: 71, cat: TV/HD, desc: "TV: HDTV"}
+      - {id: 72, cat: TV/WEB-DL, desc: "TV: WEB-HD"}
+      - {id: 77, cat: TV/Sport, desc: "TV: Sports"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="download.php?id="]
+
+  search:
+    paths:
+    # 20 results per page
+      - path: torrents-search.php
+      - path: torrents-search.php
+        inputs:
+          page: 1
+      - path: torrents-search.php
+        inputs:
+          page: 2
+      - path: torrents-search.php
+        inputs:
+          page: 3
+      - path: torrents-search.php
+        inputs:
+          page: 4
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{.Keywords}}"
+      # 0 only active 1 incl dead 2 only dead
+      incldead: 0
+      # 0 all 1 not freeleech 2 only freeleech
+      freeleech: 0
+      # 0 both 1 local only 2 external only
+      inclexternal: 0
+      # 0 all 1 English 2 French 3 German 4 Italian 5 Japanese 6 Spanish 7 Russian 8 Hindi 9 Gujarati 10 Punjabi 11 Telugu 12 Bengali 13 Malayalam 14 Urdu 15 Tamil 16 Kannada 17 Marathi 18 Chinese 19 Korean
+      lang: 0
+    rows:
+      selector: tr.t-row
+      filters:
+        - name: andmatch
+    fields:
+      category:
+        selector: a[href^="torrents.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: title
+      details:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+      download:
+        selector: a[href^="torrents-details.php?id="]
+        attribute: href
+      size:
+        selector: td:nth-child(5)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      date:
+        text: now
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1

@@ -1,0 +1,145 @@
+---
+  site: learnflakes
+  name: LearnFlakes
+  description: "LearnFlakes is a Private Torrent Tracker for CERTIFICATE / TRAINING E-LEARNING"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://learnflakes.net/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: Books, desc: "LearnFlakes"}
+      - {id: 14, cat: Books, desc: "EMC"}
+      - {id: 16, cat: Books, desc: "SANS"}
+      - {id: 17, cat: Books, desc: "MOC "}
+      - {id: 31, cat: Books, desc: "CareerAcademy"}
+      - {id: 32, cat: Books, desc: "CBTNuggets"}
+      - {id: 33, cat: Books, desc: "INE"}
+      - {id: 34, cat: Books, desc: "Symantec"}
+      - {id: 35, cat: Books, desc: "Infiniteskills"}
+      - {id: 36, cat: Books, desc: "IPExpert"}
+      - {id: 37, cat: Books, desc: "Tuts+"}
+      - {id: 38, cat: Books, desc: "Pluralsight"}
+      - {id: 39, cat: Books/Ebook, desc: "E-Books"}
+      - {id: 40, cat: Books, desc: "CBT-Videos"}
+      - {id: 41, cat: Books, desc: "Linux-CBT"}
+      - {id: 42, cat: Books, desc: "VTC"}
+      - {id: 43, cat: Books, desc: "Lynda"}
+      - {id: 44, cat: Books, desc: "TrainSignal"}
+      - {id: 50, cat: Books, desc: "LiveLessons"}
+      - {id: 47, cat: Books, desc: "Health"}
+      - {id: 48, cat: Books/Magazines, desc: "Magazines"}
+      - {id: 49, cat: Books, desc: "CourseWare"}
+      - {id: 51, cat: Books, desc: "Programming"}
+      - {id: 52, cat: Books, desc: "Graphic & Design"}
+      - {id: 53, cat: Books, desc: "Udemy"}
+      - {id: 45, cat: Books/Other, desc: "Others"}
+      - {id: 54, cat: Books, desc: "SAP"}
+      - {id: 46, cat: Books, desc: "LF VIP"}
+      - {id: 55, cat: Books, desc: "Exclusive"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  login:
+    path: ?p=home&pid=1
+    method: form
+    form: form#loginbox_form
+    submitpath: ajax/login.php
+    inputs:
+      action: "login"
+      loginbox_membername: "{{ .Config.username }}"
+      loginbox_password: "{{ .Config.password }}"
+      loginbox_remember: 1
+    selectorinputs:
+      securitytoken:
+        selector: "script:contains(\"stKey: \")"
+        filters:
+          - name: regexp
+            args: "stKey: \"(.+?)\","
+    error:
+      - selector: div.error
+      - selector: :contains("-ERROR-")
+    test:
+      path: ?p=home&pid=1
+      selector: div#member_info_bar
+
+  search:
+    paths:
+    # 15 results per page
+      - path: /
+        inputs:
+          page: "1"
+      - path: /
+        inputs:
+          page: "2"
+      - path: /
+        inputs:
+          page: "3"
+    inputs:
+      p: "torrents"
+      pid: "10"
+      $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+      keywords: "{{ .Keywords }}"
+      # name description both uploader
+      search_type: "name"
+    rows:
+      selector: div.torrent-box[id^="torrent_"]
+    fields:
+      title:
+        selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+      details:
+        selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+        attribute: href
+      category:
+        selector:  a[href*="?p=torrents&pid=10&cid="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cid
+      download:
+        selector: a[href*="?p=torrents&pid=10&action=download&tid="]
+        attribute: href
+      banner:
+        optional: true
+        selector: a[href*="data/torrents/torrent_images/"]
+        attribute: href
+      size:
+        selector: a[rel="torrent_size"]
+      grabs:
+        selector: a[rel="times_completed"]
+      seeders:
+        selector: a[rel="torrent_seeders"]
+      leechers:
+        selector: a[rel="torrent_leechers"]
+      date:
+        selector: div.torrentOwner abbr
+        optional: true
+        attribute: data-time
+      date:
+        selector: div.torrentOwner:contains("day")
+        optional: true
+        filters:
+          - name: regexp
+            args: "Uploaded (.+?) by"
+          - name: replace
+            args: [" at ", " "]
+      date:
+        selector: div.torrentOwner:contains("-")
+        optional: true
+        filters:
+          - name: regexp
+            args: "Uploaded (.+?) by"
+          - name: dateparse
+            args: "02-01-2006 15:04"
+      downloadvolumefactor:
+        case:
+          img[src$="/torrent_free.png"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

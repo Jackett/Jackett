@@ -7,7 +7,8 @@
   encoding: UTF-8
   links:
     - https://torrent.vizuk.li/
-
+  legacylinks:	
+    - http://torrent.vizuk.li/
   caps:
     categorymappings:
       - {id: 1, cat: Movies, desc: "Películas"}

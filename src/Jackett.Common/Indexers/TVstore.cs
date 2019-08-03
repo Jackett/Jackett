@@ -77,6 +77,32 @@ namespace Jackett.Common.Indexers
         }
 
         /// <summary>
+        /// Calculate the Upload Factor for the torrents
+        /// </summary>
+        /// <returns>The calculated factor</returns>
+        /// <param name="dateTime">Date time.</param>
+        /// <param name="type">Type of the torrent (SeasonPack/SingleEpisode).</param>
+        public double UploadFactorCalculator(DateTime dateTime, string type)
+        {
+            var today = DateTime.Now;
+            int dd = (today - dateTime).Days;
+
+            /* In case of season Packs */
+            if (type.Equals("season"))
+            {
+                if (dd >= 90) return 4;
+                if (dd >= 30) return 2;
+                if (dd >= 14) return 1.5;
+            }
+            else /* In case of single episodes */
+            {
+                if (dd >= 60) return 2; 
+                if (dd >= 30) return 1.5;
+            }
+            return 1;
+        }
+
+        /// <summary>
         /// Parses the torrents from the content
         /// </summary>
         /// <returns>The parsed torrents.</returns>
@@ -84,7 +110,7 @@ namespace Jackett.Common.Indexers
         /// <param name="query">Query.</param>
         /// <param name="already_found">Number of the already found torrents.(used for limit)</param>
         /// <param name="limit">The limit to the number of torrents to download </param>
-        async Task<List<ReleaseInfo>> ParseTorrents(WebClientStringResult results, TorznabQuery query, int already_found, int limit)
+        async Task<List<ReleaseInfo>> ParseTorrents(WebClientStringResult results, TorznabQuery query, int already_found, int limit, int previously_parsed_on_page)
         {
             var releases = new List<ReleaseInfo>();
             try
@@ -94,87 +120,72 @@ namespace Jackett.Common.Indexers
                  * 2\15\2\1\1727\207244\1x08 \[WebDL-720p - Eng - AJP69]\gb\2018-03-09 08:11:53\akció, kaland, sci-fi \0\0\1\191170047\1\0\Anonymous\50\0\0\\0\4\0\174\0\
                  * 1\ 0\0\1\1727\207243\1x08 \[WebDL-1080p - Eng - AJP69]\gb\2018-03-09 08:11:49\akció, kaland, sci-fi \0\0\1\305729738\1\0\Anonymous\50\0\0\\0\8\0\102\0\0\0\0\1\\\
                  */
-                var splits = content.Split('\\');
-                int i = 0;
+                string[] parameters = content.Split(new string[] { "\\" }, StringSplitOptions.None);
+                string type = "normal";
 
-                ReleaseInfo release = new ReleaseInfo();
-
-                /* Split the releases by '\' and go through them. 
-                 * 26 element belongs to one torrent
+                /* 
+                 * Split the releases by '\' and go through them. 
+                 * 27 element belongs to one torrent
                  */
-                foreach (var s in splits)
+                for (int j = previously_parsed_on_page * 27; (j + 27 < parameters.Length && ((already_found + releases.Count) < limit)); j = j + 27)
                 {
-                    switch (i)
+                    ReleaseInfo release = new ReleaseInfo();
+
+                    int imdb_id = 4 + j;
+                    int torrent_id = 5 + j;
+                    int is_season_id = 6 + j;
+                    int publish_date_id = 9 + j;
+                    int files_id = 13 + j;
+                    int size_id = 14 + j;
+                    int seeders_id = 23;
+                    int peers_id = 24 + j;
+                    int grabs_id = 25 + j;
+
+
+                    type = "normal";
+                    //IMDB id of the series
+                    SeriesDetail seriesinfo = series.Find(x => x.id.Contains(parameters[imdb_id]));
+                    if (seriesinfo != null && !parameters[imdb_id].Equals(""))
+                        release.Imdb = long.Parse(seriesinfo.imdbid);
+
+                    //ID of the torrent
+                    Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+                    string fileinfoURL = SearchUrl + "?func=getToggle&id=" + parameters[torrent_id] + "&w=F&pg=0&now=" + unixTimestamp;
+                    string fileinfo = (await RequestStringWithCookiesAndRetry(fileinfoURL)).Content;
+                    release.Link = new Uri(DownloadUrl + "?id=" + parameters[torrent_id]);
+                    release.Guid = release.Link;
+                    release.Comments = release.Link;
+                    string[] fileinf = fileinfo.Split(new string[] { "\\\\" }, StringSplitOptions.None);
+                    if (fileinf.Length > 1)
                     {
-                        case 4:
-                            //ID of the series
-                            //Get IMDB id form site series database
-                            SeriesDetail seriesinfo = series.Find(x => x.id.Contains(s));
-                            if (seriesinfo != null && !s.Equals(""))
-                                release.Imdb = long.Parse(seriesinfo.imdbid);
-                            goto default;
-                        case 5:
-                            //ID of the torrent
-                            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-
-                            string fileinfoURL = SearchUrl + "?func=getToggle&id=" + s + "&w=F&pg=0&now=" + unixTimestamp;
-                            string fileinfo = (await RequestStringWithCookiesAndRetry(fileinfoURL)).Content;
-                            release.Link = new Uri(DownloadUrl + "?id=" + s);
-                            release.Guid = release.Link;
-                            release.Comments = release.Link;
-                            string[] fileinf = fileinfo.Split(new string[] { "\\\\" }, StringSplitOptions.None);
-                            if (fileinf.Length > 1)
-                                release.Title = fileinf[1];
-                            goto default;
-                        /*case 6:
-                            Console.WriteLine("Series season/ep =" + s); --> 9x10
-                            goto default;*/
-                        /*case 7:
-                            Console.WriteLine("Releaseinfo =" + s);  --->Releaseinfo =[HDTV - Rip - Eng - SVA]
-                            goto default;*/
-                        case 9:
-                            release.PublishDate = DateTime.Parse(s, CultureInfo.InvariantCulture);
-                            goto default;
-                        case 13:
-                            release.Files = int.Parse(s);
-                            goto default;
-                        case 14:
-                            release.Size = long.Parse(s);
-                            goto default;
-                        case 23:
-                            release.Seeders = int.Parse(s);
-                            goto default;
-                        case 24:
-                            release.Peers = (int.Parse(s) + release.Seeders);
-                            goto default;
-                        case 25:
-                            release.Grabs = int.Parse(s);
-                            goto default;
-                        case 26:
-                            /* This is the last element for the torrent. So add it to releases and start parsing to new torrent */
-                            i = 0;
-                            release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
-                            //todo Added some basic configuration need to improve it
-                            release.MinimumRatio = 1;
-                            release.MinimumSeedTime = 172800;
-                            release.DownloadVolumeFactor = 1;
-                            release.UploadVolumeFactor = 1;
-
-                            if ((already_found + releases.Count) < limit)
-                            {
-                                releases.Add(release);
-                            }
-                            else
-                            {
-                                return releases;
-                            }
-                            release = new ReleaseInfo();
-                            break;
-                        default:
-                            i++;
-                            break;
+                        release.Title = fileinf[1];
+                        if (fileinf[1].Length > 5 && fileinf[1].Substring(fileinf[1].Length - 4).Contains("."))
+                            release.Title = fileinf[1].Substring(0, fileinf[1].Length - 4);
+                    }
+                    // SeasonPack check
+                    if (parameters[is_season_id].Contains("évad/"))
+                    {
+                        type = "season";
+                        // If this is a seasonpack, remove episode nunmber from title.
+                        release.Title = Regex.Replace(release.Title, "s0?(\\d+)(e0?(\\d+))", "S$1", RegexOptions.IgnoreCase);
                     }
 
+                    release.PublishDate = DateTime.Parse(parameters[publish_date_id], CultureInfo.InvariantCulture);
+                    release.Files = int.Parse(parameters[files_id]);
+                    release.Size = long.Parse(parameters[size_id]);
+                    release.Seeders = int.Parse(parameters[seeders_id]);
+                    release.Peers = (int.Parse(parameters[peers_id]) + release.Seeders);
+                    release.Grabs = int.Parse(parameters[grabs_id]);
+                    release.MinimumRatio = 1;
+                    release.MinimumSeedTime = 172800;
+                    release.DownloadVolumeFactor = 1;
+                    release.UploadVolumeFactor = UploadFactorCalculator(release.PublishDate, type);
+                    release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
+                    if ((already_found + releases.Count) < limit)
+                        releases.Add(release);
+                    else
+                        return releases;
                 }
 
             }
@@ -249,60 +260,93 @@ namespace Jackett.Common.Indexers
             WebClientStringResult results;
 
             string searchString = "";
+            string exactSearchURL = "";
+            int page = 1;
+            SeriesDetail seriesinfo = null;
+            String base64coded = "";
+            bool noimdbmatch = false;
             var limit = query.Limit;
             if (limit == 0)
                 limit = 100;
-            /* SearchString format is the following: Seriesname 1X09 */
-            if (query.SearchTerm != null && !query.SearchTerm.Equals(""))
+            if (query.IsImdbQuery)
             {
-                searchString += query.SanitizedSearchTerm;
-                // convert SnnEnn to nnxnn for dashboard searches
-                if (query.Season == 0 && (query.Episode == null || query.Episode.Equals("")))
+                /* Currently this is not supported for series */
+
+            }
+            if (!query.IsImdbQuery || noimdbmatch)
+            {
+                /* SearchString format is the following: Seriesname 1X09 */
+                if (query.SearchTerm != null && !query.SearchTerm.Equals(""))
                 {
-                    Match searchMatch = _searchStringRegex.Match(searchString);
-                    if (searchMatch.Success)
+                    searchString += query.SanitizedSearchTerm;
+                    // convert SnnEnn to nnxnn for dashboard searches
+                    if (query.Season == 0 && (query.Episode == null || query.Episode.Equals("")))
                     {
-                        query.Season = int.Parse(searchMatch.Groups[2].Value);
-                        query.Episode = searchMatch.Groups[4].Success ? string.Format("{0:00}", (int?)int.Parse(searchMatch.Groups[4].Value)) : null;
-                        searchString = searchMatch.Groups[1].Value; // strip SnnEnn
+                        Match searchMatch = _searchStringRegex.Match(searchString);
+                        if (searchMatch.Success)
+                        {
+                            query.Season = int.Parse(searchMatch.Groups[2].Value);
+                            query.Episode = searchMatch.Groups[4].Success ? string.Format("{0:00}", (int?)int.Parse(searchMatch.Groups[4].Value)) : null;
+                            searchString = searchMatch.Groups[1].Value; // strip SnnEnn
+                        }
                     }
+
+                    if (query.Season != 0)
+                        searchString += " " + query.Season.ToString();
+                    if (query.Episode != null && !query.Episode.Equals(""))
+                        searchString += string.Format("x{0:00}", int.Parse(query.Episode));
+                }
+                else
+                {
+                    // if searchquery is empty this is a test, so shorten the response time
+                    limit = 20;
                 }
 
-                if (query.Season != 0)
-                    searchString += " " + query.Season.ToString();
-                if (query.Episode != null && !query.Episode.Equals(""))
-                    searchString += string.Format("x{0:00}", int.Parse(query.Episode));
-            } else
-            {
-                // if searchquery is empty this is a test, so shorten the response time
-                limit = 20;
+                /* Search string must be converted to Base64 */
+                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(searchString);
+                base64coded = System.Convert.ToBase64String(plainTextBytes);
+
+
+                exactSearchURL = SearchUrl + "?gyors=" + base64coded + "&p=" + page + "&now=" + unixTimestamp.ToString();
             }
 
-            /* Search string must be converted to Base64 */
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(searchString);
-            var base64coded = System.Convert.ToBase64String(plainTextBytes);
-
             /*Start search*/
-            int page = 1;
-            string exactSearchURL = SearchUrl + "?gyors=" + base64coded +"&p="+ page +"&now=" + unixTimestamp.ToString();
             results = await RequestStringWithCookiesAndRetry(exactSearchURL);
 
             /* Parse page Information from result */
             string content = results.Content;
             var splits = content.Split('\\');
-            int maxfounded = int.Parse(splits[0]);
-            int perpage = int.Parse(splits[1]);
-            //int incurrentpage = int.Parse(splits[2]);
-            double pages = Math.Ceiling((double)maxfounded / (double)perpage);
+            int max_found = int.Parse(splits[0]);
+            int torrent_per_page = int.Parse(splits[1]);
+
+
+            if (torrent_per_page == 0)
+                return releases;
+            int start_page = (query.Offset / torrent_per_page) + 1;
+            int previously_parsed_on_page = query.Offset - (start_page * torrent_per_page) + 1; //+1 because indexing start from 0
+            if (previously_parsed_on_page <= 0)
+                previously_parsed_on_page = query.Offset;
+                
+
+            double pages = Math.Ceiling((double)max_found / (double)torrent_per_page);
 
             /* First page content is already ready */
-            releases.AddRange(await ParseTorrents(results, query, releases.Count, limit));
-
-            for (page =2;(page<=pages && releases.Count<limit);page++)
+            if (start_page == 1)
             {
-                exactSearchURL = SearchUrl + "?gyors=" + base64coded + "&p=" + page + "&now=" + unixTimestamp.ToString();
+                releases.AddRange(await ParseTorrents(results, query, releases.Count, limit, previously_parsed_on_page));
+                previously_parsed_on_page = 0;
+                start_page++;
+            }
+
+            for (page =start_page; (page<=pages && releases.Count<limit);page++)
+            {
+                if(query.IsImdbQuery && seriesinfo != null )
+                    exactSearchURL = SearchUrl + "?s=" + query.Season + "&e=" + query.Episode + "&g=" + seriesinfo.id + "&p=" + page + "&now=" + unixTimestamp.ToString();
+                else
+                    exactSearchURL = SearchUrl + "?gyors=" + base64coded + "&p=" + page + "&now=" + unixTimestamp.ToString();
                 results = await RequestStringWithCookiesAndRetry(exactSearchURL);
-                releases.AddRange(await ParseTorrents(results, query, releases.Count, limit));
+                releases.AddRange(await ParseTorrents(results, query, releases.Count, limit, previously_parsed_on_page));
+                previously_parsed_on_page = 0;
 
             }
 

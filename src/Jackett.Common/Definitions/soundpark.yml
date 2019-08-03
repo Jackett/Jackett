@@ -6,8 +6,10 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://soundpark-club.com/
+    - https://sound-park.world/
     - https://soundpark-club.casa/
+  legacylinks:
+    - https://soundpark-club.com/
 
   caps:
     categories:

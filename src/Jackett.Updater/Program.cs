@@ -300,7 +300,6 @@ namespace Jackett.Updater
                 "Definitions/gormogon.yml",
                 "Definitions/czteam.yml",
                 "Definitions/rockhardlossless.yml",
-                "Definitions/oxtorrent.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/torrentwtf.yml",
                 "Definitions/eotforum.yml",
@@ -322,7 +321,6 @@ namespace Jackett.Updater
                 "System.Web.Http.Tracing.dll",
                 "Definitions/torrentkim.yml",
                 "Definitions/horriblesubs.yml",
-                "Definitions/idope.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/torrentcouch.yml",
@@ -339,6 +337,13 @@ namespace Jackett.Updater
                 "Definitions/freedomhd.yml",
                 "Definitions/sharingue.yml",
                 "Definitions/cinefilhd.yml",
+                "Definitions/tbplus.yml",
+                "Definitions/manicomioshare.yml",
+                "Definitions/speed-share.yml",
+                "Definitions/b2s-share.yml",
+                "Definitions/nyoo.yml",
+                "Definitions/ultimategamerclub.yml",
+                "Definitions/evolutionpalace.yml",
             };
 
             foreach (var oldFile in oldFiles)

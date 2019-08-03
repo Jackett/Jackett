@@ -30,7 +30,7 @@
   settings: []
 
   download:
-    selector: div.btn-download a
+    selector: a[href^="magnet:"]
     attribute: href
 
   search:
@@ -87,6 +87,9 @@
             args: [ "To", "000000000000"]
           - name: replace
             args: [ "X", "" ]
+            # this is for the search with keywords which returns sizes nnnnn.n without unit indicator.
+          - name: re_replace
+            args: [ "(\\d+)\\.\\d", "$1 MB"]
       date:
         text: "now"
       seeders:

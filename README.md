@@ -34,6 +34,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ConCen
  * cpasbien
  * cpasbienClone
+ * Demonoid
  * DIGBT
  * ETTV
  * EliteTorrent.biz
@@ -41,7 +42,9 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EZTV
  * Frozen Layer
  * GkTorrent
+ * Hon3yHD.net
  * Horrible Subs
+ * Idope
  * Il Corsaro Nero <!-- maintained by bonny1992 -->
  * Il Corsaro Blu
  * Isohunt2
@@ -50,16 +53,17 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KickAssTorrent (KATcr)
  * KickAssTorrent (thekat.se clone)
  * KikiBT
+ * LePorno
  * LimeTorrents
  * MacTorrents
  * MagnetDL
  * MejorTorrent <!-- maintained by ivandelabeldad -->
+ * MkvCage
  * Monova
  * MovCr
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
  * Nyaa.si
  * Nyaa-Pantsu
- * Nyoo
  * OxTorrent
  * ProStyleX
  * QXR
@@ -93,7 +97,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Semi-Private Trackers
  * 7tor
  * Alein
+ * AniDUB
  * ArenaBG
+ * BaibaKo
+ * Crazy's Corner
  * CzTorrent
  * Deildu
  * Film-Paleis
@@ -114,10 +121,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Sharewood
  * SkTorrent
  * SoundPark
+ * Toloka.to
  * Torrents-Local
  * Union Fansub
  * Vanila
- * XtreMeZone (MYXZ)
  * YggTorrent (YGG)
  * Ztracker
 
@@ -136,6 +143,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Anthelion
  * AOX (Chippu)
  * Araba Fenice (Phoenix)
+ * Asgaard (AG)
  * AsianCinema
  * AsianDVDClub
  * AST4u
@@ -144,7 +152,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Awesome-HD (AHD)
  * AVG (Audio Video Games)
  * Avistaz (AsiaTorrents)
- * B2S-Share
  * Back-ups
  * BakaBT
  * BaconBits (bB)
@@ -165,11 +172,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BJ-Share (BJ)
  * BlueBird
  * Blutopia (BLU)
- * Brasil Tracker
  * BroadcastTheNet (BTN)
  * BrokenStones
  * BTGigs (TG)
  * BTNext (BTNT)
+ * BTSCHOOL
  * Carpathians
  * CartoonChaos (CC)
  * CasaTorrent
@@ -182,6 +189,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
+ * CrazySpirits
  * CrnaBerza
  * DanishBits (DB)
  * Dark-Shadow
@@ -198,11 +206,14 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Dragonworld Reloaded
  * Dream Team
  * DXDHD
+ * EbookParadijs
+ * Ebooks-Shares
  * EfectoDoppler
  * EliteHD (HDClub) [![(invite needed)][inviteneeded]](#)
  * Elit Tracker (ET)
  * Elite-Tracker
  * Empornium (EMP)
+ * eShareNet
  * eStone (XiDER, BeLoad)
  * Ethor.net (Thor's Land)
  * FANO.IN
@@ -255,20 +266,25 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
+ * LaPauseTorrents
+ * Le Chaudron
  * Le Saloon
+ * LearnFlakes
+ * LibraNet (LN)
  * LinkoManija
  * LosslessClub
  * M-Team TP (MTTP)
  * Magico (Trellas)
  * Majomparádé (TurkDepo)
- * Manicomio Share
  * Mega-Bliz
  * Mononoké-BT
  * MoreThanTV (MTV)
+ * Music-Master
  * MyAnonamouse (MAM)
  * myAmity
  * MySpleen
  * NCore
+ * NBTorrents
  * Nebulance (NBL) (TransmiTheNet)
  * New Real World
  * Norbits
@@ -283,6 +299,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Peers.FM
  * PiratBit
  * PirateTheNet (PTN)
+ * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD)
  * Pleasuredome
  * PolishSource (PS)
@@ -296,6 +313,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * PThome
  * PuntoTorrent
  * PWTorrents (PWT)
+ * R3V WTF!
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
  * Redacted (PassTheHeadphones)
@@ -309,18 +327,19 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RPTorrents
  * SceneFZ
  * SceneHD
+ * ScenePalace (SP)
  * SceneReactor
  * SceneRush
  * SceneTime
  * SDBits
  * Secret Cinema
+ * SeedFile (SF)
  * Shareisland
  * ShareSpaceDB
  * Shazbat
  * Shellife (SL)
  * SiamBIT
  * SpaceTorrent
- * Speed-Share
  * SpeedCD
  * SpeedTorrent Reloaded
  * SportHD
@@ -329,14 +348,18 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TakeaByte
  * Tapochek
  * Tasmanit
- * TBPlus
+ * Tazmania-Den
  * TeamHD
+ * TeamOS
+ * TellyTorrent
  * TenYardTorrents (TYT)
+ * TheAudioScene
  * TheEmpire (TE)
  * The Geeks
  * The Horror Charnel (THC)
- * The Occult
+ * The Movie Cave
  * The New Retro
+ * The Occult
  * The Place
  * The Shinning (TsH)
  * The Show
@@ -368,10 +391,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TV Chaos UK (TVCUK)
  * TV-Vault
  * TVstore
+ * Twilight Torrents
  * u-torrents (SceneFZ)
  * UHDBits
- * Ultimate Gamer Club (UGC)
  * UnionGang
+ * UnlimitZ
  * Vizuk
  * Waffles
  * World-In-HD
@@ -383,6 +407,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * XKTorrent
  * XWTorrents (XWT)
  * Xthor
+ * XtremeFile
+ * XtreMeZone (MYXZ)
  * ExoticaZ (YourExotic)
  * Zamunda.net
  * Zelka.org
@@ -468,7 +494,7 @@ Mono must be compiled with the Roslyn compiler (default), using MCS will cause "
 
 ### Installation on Linux via Ansible
 
-On a RHEL/Centos 7 system: [linuxhq.jackett](https://galaxy.ansible.com/linuxhq/jackett)
+On a CentOS/RedHat 7 system: [jewflix.jackett](https://galaxy.ansible.com/jewflix/jackett)
 
 On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
 
@@ -488,6 +514,9 @@ Logs are stored as usual under `~/.config/Jackett/log.txt`.
 
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.macOS.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`.
+
+### upgrading from mono
+If you were previously using the Mono flavour of Jackett then you should shutdown the service from a terminal with with the command `systemctl stop jackett.service` and then remove the startup script at `/etc/systemd/system/jackett.service` and delete the content of the `/Applications/Jackett` folder, prior to performing this install.
 
 
 ## Installation using Docker

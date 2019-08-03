@@ -174,7 +174,9 @@ namespace Jackett.Common.Indexers
                                     break;
                             }
 
- 
+                            // Replace 4K quality tag with 2160p, so Sonarr etc. can properly parse it
+                            qualityData[1] = qualityData[1].Replace("4K", "2160p");
+
                             // Build title
                             var title = string.Join(".", new List<string>
                             {

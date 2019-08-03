@@ -1,0 +1,149 @@
+﻿---
+  site: baibako
+  name: BaibaKo
+  description: "BaibaKo is a RUSSIAN Semi-Private Torrent Tracker for TV"
+  language: ru-ru
+  type: private
+  encoding: windows-1251
+  links:
+    - http://baibako.tv/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV, desc: "TV"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: striprussian
+      type: checkbox
+      label: Strip Russian Letters
+      default: false
+
+  login:
+    path: takelogin.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: div.login2
+    test:
+      path: /
+      selector: a[href="logout.php"]
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      search: "{{.Keywords }}"
+      # 0 active 1 incldead 2 onlydead 3 gold 4 seedfree
+      incldead: "1"
+    keywordsfilters:
+      - name: re_replace
+        args: ["[s|S](\\d+)[e|E][\\d]+", "/s$1"]
+    rows:
+      selector: table > tbody > tr:has(a[href^="details.php?id="])
+    fields:
+      title:
+        selector: a[href^="details.php?id="]
+        filters:
+          - name: re_replace
+            args: ["[\\/]+", ""]
+          - name: replace
+            args: [" (Золото)", ""]
+          - name: replace
+            args: ["-Rip", "Rip"]
+          - name: replace
+            args: ["WEB-DL", "WEBDL"]
+          - name: replace
+            args: ["WEBRip", "WEBDL"]
+          - name: re_replace
+            args: ["WEBDLRip", "WEBDL"]
+          - name: replace
+            args: ["HD720p", "HD 720p"]
+          - name: replace
+            args: ["HDR720p", "HD 720p"]
+          - name: replace
+            args: ["HD1080p", "HD 1080p"]
+          - name: replace
+            args: ["HDR1080p", "HD 1080p"]
+          - name: re_replace
+            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          - name: append
+            args: " - rus"
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      category:
+        text: 1
+      banner:
+        selector: img[src^="/posters/"]
+        attribute: src
+      download:
+        selector: a[href^="download.php?id="]
+        attribute: href
+      date:
+        selector: small
+        filters:
+          - name: replace
+            args: ["Загружена: ", ""]
+          - name: replace
+            args: [" в ", " "]
+          - name: replace
+            args: ["января", "January"]
+          - name: replace
+            args: ["февраля", "February"]
+          - name: replace
+            args: ["марта ", "March"]
+          - name: replace
+            args: ["апреля", "April"]
+          - name: replace
+            args: ["мая", "May"]
+          - name: replace
+            args: ["июня", "June"]
+          - name: replace
+            args: ["июля", "July"]
+          - name: replace
+            args: ["августа", "August"]
+          - name: replace
+            args: ["сентября", "September"]
+          - name: replace
+            args: ["октября", "October"]
+          - name: replace
+            args: ["ноября", "November"]
+          - name: replace
+            args: ["декабря", "December"]
+          - name: dateparse
+            args: "2 January 2006 15:04:05"
+      files:
+        selector: td:nth-last-child(5)
+      size:
+        selector: td:nth-last-child(3)
+      seeders:
+        selector: td:nth-last-child(2)
+        filters:
+          - name: split
+            args: ["|", 0]
+      leechers:
+        selector: td:nth-last-child(2)
+        filters:
+          - name: split
+            args: ["|", 1]
+      grabs:
+        selector: td:nth-last-child(1)
+      downloadvolumefactor:
+        case:
+          "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

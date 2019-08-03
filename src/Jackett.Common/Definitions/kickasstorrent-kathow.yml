@@ -56,6 +56,9 @@
           - name: querystring
             args: url
           - name: urldecode
+          # temp fix for #5372
+          - name: replace
+            args: [" ⭐", ""]
       size:
         selector: td:nth-child(2)
         filters:
