@@ -94,6 +94,8 @@
       - path: "{{ if .Keywords }}katsearch/page/1/{{ .Keywords }}{{ else }}category/latest/page/1{{ end }}"
     rows:
       selector: table.torrents_table > tbody > tr
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: a.torrents_table__torrent_title b
