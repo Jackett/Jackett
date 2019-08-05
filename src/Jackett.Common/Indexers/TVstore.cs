@@ -48,6 +48,7 @@ namespace Jackett.Common.Indexers
             Language = "hu-hu";
             Type = "private";
 
+            TorznabCaps.SupportsImdbTVSearch = true;
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(3, TorznabCatType.TVSD);
@@ -270,7 +271,19 @@ namespace Jackett.Common.Indexers
                 limit = 100;
             if (query.IsImdbQuery)
             {
-                /* Currently this is not supported for series */
+                seriesinfo = series.Find(x => x.imdbid.Equals(query.ImdbIDShort));
+                if (seriesinfo != null && !query.ImdbIDShort.Equals(""))
+                {
+                    String querrySeason = "";
+                    if (query.Season != 0)
+                        querrySeason = query.Season.ToString();
+                    exactSearchURL = SearchUrl + "?s=" + querrySeason + "&e=" + query.Episode + "&g=" + seriesinfo.id + "&now=" + unixTimestamp.ToString();
+                }
+                else
+                {
+                    // IMDB_ID was not founded in site database.
+                    return releases;
+                }
 
             }
             if (!query.IsImdbQuery || noimdbmatch)
