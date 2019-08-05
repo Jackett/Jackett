@@ -129,6 +129,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ztracker
 
 ### Supported Private Trackers
+ * 0day.kiev
  * 2 Fast 4 You
  * 3D Torrents (3DT) 
  * 3evils
