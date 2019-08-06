@@ -36,6 +36,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * cpasbienClone
  * Demonoid
  * DIGBT
+ * dmhy
  * ETTV
  * EliteTorrent.biz
  * ExtraTorrent.ag
