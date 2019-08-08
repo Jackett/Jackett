@@ -23,6 +23,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Public Trackers
  * 1337x
  * ACG.RIP
+ * ACGsou
  * Anidex
  * Anime Tosho
  * AniRena

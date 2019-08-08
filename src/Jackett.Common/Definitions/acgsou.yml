@@ -1,0 +1,91 @@
+---
+  site: acgsou
+  name: ACGsou
+  description: "ACGsou is a CHINESE Public torrent tracker for ANIME"
+  language: zh-cn
+  type: public
+  followredirect: true
+  encoding: UTF-8
+  links:
+    - https://www.acgsou.com/
+
+  caps:
+    categorymappings:
+      - {id: 2, cat: TV/Anime, desc: "动画 (Anime)"}
+      - {id: 7, cat: TV/Anime, desc: "新番连载 (Anime New Fan Series)"}
+      - {id: 8, cat: TV/Anime, desc: "动画合集 (Anime Collection)"}
+      - {id: 14, cat: TV/Anime, desc: "英译动画 (Anime English Translation)"}
+      - {id: 5, cat: TV/Anime, desc: "RAW片源"}
+      - {id: 3, cat: Books/Comics, desc: "漫画 (Manga)"}
+      - {id: 12, cat: Books/Comics, desc: "港台漫画 (Manga Hong Kong and Taiwan)"}
+      - {id: 13, cat: Books/Comics, desc: "原版日漫 (Manga Original Japanese)"}
+      - {id: 16, cat: Books/Comics, desc: "英译漫画 (Manga English Translation)"}
+      - {id: 4, cat: Audio, desc: "动漫音乐 (Anime Music)"}
+      - {id: 15, cat: Audio/Video, desc: "音乐视频 (Music Video)"}
+      - {id: 20, cat: TV, desc: "日剧 (Drama Japanese)"}
+      - {id: 21, cat: TV, desc: "特摄片 (Drama Special)"}
+      - {id: 22, cat: TV, desc: "原版日剧 (Drama Original Japanese)"}
+      - {id: 23, cat: TV, desc: "英译日剧 (Drama English Translation)"}
+      - {id: 18, cat: PC/Games, desc: "游戏 (Games)"}
+      - {id: 6, cat: Other, desc: "其他资源 (Other)"}
+      - {id: 17, cat: Other, desc: "写真集 (Photobook)"}
+      - {id: 19, cat: Other, desc: "图集 (Atlas)"}
+
+    modes:
+      search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="magnet:?xt="]
+
+  search:
+    paths:
+    # https://www.acgsou.com/1.html
+    # https://www.acgsou.com/search.php?keyword=test
+      - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}1.html{{end}}"
+    rows:
+      selector: table tbody tr[class^="alt"]
+    fields:
+      date:
+        selector: td:nth-child(1):contains("昨天")
+        optional: true
+        filters:
+          - name: replace
+            args: ["昨天", "Yesterday"]
+      date:
+        selector: td:nth-child(1):contains(":"):not(:contains("昨天"))
+        optional: true
+        filters:
+          - name: dateparse
+            args: "01/02 15:04"
+      date:
+        selector: td:nth-child(1):not(:contains(":"))
+        optional: true
+        filters:
+          - name: dateparse
+            args: "2006/01/02"
+      category:
+        selector: td:nth-child(2) a
+        attribute: href
+        filters:
+          - name: regexp
+            args: "sort-(\\d+)-1.html"
+      title:
+        selector: td:nth-child(3) a
+      details:
+        selector: td:nth-child(3) a
+        attribute: href
+      download:
+        selector: td:nth-child(3) a
+        attribute: href
+      size:
+        selector: td:nth-child(4)
+      seeders:
+        text: 1
+      leechers:
+        text: 1
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"
