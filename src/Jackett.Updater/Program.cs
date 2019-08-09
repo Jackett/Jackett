@@ -331,7 +331,6 @@ namespace Jackett.Updater
                 "Definitions/redtopia.yml",
                 "Definitions/btxpress.yml",
                 "Definitions/btstornet.yml",
-                "Definitions/crazyhd.yml",
                 "Definitions/hdplus.yml",
                 "Definitions/gods.yml",
                 "Definitions/freedomhd.yml",
