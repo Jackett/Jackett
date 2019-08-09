@@ -35,6 +35,7 @@
       - {id:  58, cat: TV, desc: "TV Hindi series"}
       - {id:  28, cat: TV/Sport, desc: "TV Sports"}
       - {id:  29, cat: TV/Documentary, desc: "TV Documentary"}
+      - {id:  95, cat: TV, desc: "TV Other Language"}
       # Games
       - {id:  3, cat: PC/Games, desc: "Games PC"}
       - {id:  75, cat: PC/Phone-Android, desc: "Games Android"}
@@ -109,12 +110,18 @@
       - path: index.php?page=searchlist
         method: post
     inputs:
-      search: "{{ .Keywords }}"
-      category: "{{if .Categories}}{{range .Categories}}{{.}};{{end}}{{else}}0{{end}}"
-      # 0=filename 1=file&desc 2=descr 3=uploader
+      page: searchlist
+      pages: 1
+      order: 3
+      by: 2
+      # 0=mixed 1=no free 2=50%free 3=100%free 4=50%&100%free
+      gold: 0
+      # 0=filename 1=file&descr 2=descr 3=uploader
       options: 0
-      # 0=all 1=active only 2=dead only
+      # 0=all 1=onlyactive 2=onlydead
       active: 0
+      category: "{{if .Categories}}{{range .Categories}}{{.}};{{end}}{{else}}0{{end}}"
+      search: "{{ .Keywords }}"
 
     rows:
       selector: div.inf-table-row
