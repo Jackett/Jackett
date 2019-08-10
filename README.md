@@ -112,6 +112,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HamsterStudio
  * Kinozal
  * LostFilm.tv
+ * Marine Tracker
  * Metal Tracker
  * MVGroup Forum
  * MVGroup Main
