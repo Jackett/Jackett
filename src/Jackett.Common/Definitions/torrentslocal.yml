@@ -728,6 +728,18 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: Layout
+      default: "<ul>Only the Classic forum style is supported.<ul>On the TorrentsLocal web site navigate to the <b>Личные настройки (Preferences)</b> section and set the <b>Стиль форума (Forum Style)</b> option to <b>Классическая тема (Classic Theme)</b></ul>"
+
   login:
     path: login.php
     method: post
