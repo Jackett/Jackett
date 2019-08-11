@@ -143,7 +143,7 @@
       submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
 
     rows:
-      selector: tr[id^="tor_"]
+      selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
 
     fields:
       title:
@@ -152,7 +152,6 @@
         selector: a.tLink
         attribute: href
       download:
-        optional: true
         selector: a[href^="./download.php?id="]
         attribute: href
       category:
