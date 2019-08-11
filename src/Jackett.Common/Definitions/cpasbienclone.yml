@@ -7,10 +7,11 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://cpasbiens.cm/
+    - https://www1.cpasbiens.cm/
   legacylinks:
     - https://www1.cpasbiens.ws/
     - https://www2.cpasbiens.ws/
+    - https://cpasbiens.cm/
 
   caps:
     categorymappings:
