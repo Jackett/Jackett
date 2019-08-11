@@ -68,7 +68,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa-Pantsu
  * OxTorrent
  * ProStyleX
- * QXR
  * RARBG
  * RuTor
  * shokweb

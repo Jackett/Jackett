@@ -343,6 +343,7 @@ namespace Jackett.Updater
                 "Definitions/nyoo.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/evolutionpalace.yml",
+                "Definitions/qxr.yml",
             };
 
             foreach (var oldFile in oldFiles)
