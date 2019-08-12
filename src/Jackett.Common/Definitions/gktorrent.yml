@@ -45,7 +45,7 @@
   settings: []
 
   download:
-    selector: a[href*="/get_torrent/"]
+    selector: a[href^="/download/"]
 
   search:
     paths:
