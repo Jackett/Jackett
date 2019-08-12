@@ -67,18 +67,18 @@ namespace Jackett.Common.Indexers
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
+            new Uri("http://www.tvsinpagar.com/"),
+            new Uri("http://torrentlocura.com/"),
             new Uri("https://pctnew.site"),
             new Uri("https://descargas2020.site"),
             new Uri("http://torrentrapid.com/"),
             new Uri("http://tumejortorrent.com/"),
             new Uri("http://pctnew.com/"),
-            new Uri("http://torrentlocura.com/"),
         };
 
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
             new Uri("https://pctnew.site"),
-            new Uri("http://www.tvsinpagar.com/"),
             new Uri("http://descargas2020.com/"),
         };
 
@@ -254,6 +254,15 @@ namespace Jackett.Common.Indexers
                 {
                     Uri url = new Uri(siteLink, string.Format(_dailyUrl, pg));
                     var results = await RequestStringWithCookiesAndRetry(url.AbsoluteUri);
+                    if (results.Content.Equals(""))
+                    {
+                        foreach (var link in ExtraSiteLinkUris)
+                        {
+                            results = await RequestStringWithCookiesAndRetry(new Uri(link, string.Format(_dailyUrl, pg)).AbsoluteUri);
+                            if (!results.Content.Equals(""))
+                                break;
+                        }
+                    }
                     await FollowIfRedirect(results);
 
                     var items = ParseDailyContent(results.Content);
