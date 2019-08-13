@@ -52,6 +52,7 @@ namespace Jackett.Common.Indexers
             // סרטים
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "סרטים");
             AddCategoryMapping(9, TorznabCatType.MoviesHD, "סרטים HD");
+            AddCategoryMapping(97, TorznabCatType.MoviesUHD, "סרטים UHD");
             AddCategoryMapping(58, TorznabCatType.MoviesDVD, "סרטים DVD-R");
             AddCategoryMapping(59, TorznabCatType.MoviesSD, "סרטי BDRIP-BRRip");
             AddCategoryMapping(60, TorznabCatType.MoviesSD, "סרטים ישראליים");
