@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
 
         class RssScraper : IScraper<IEnumerable<KeyValuePair<MTReleaseInfo, Uri>>>
         {
-            private readonly string LinkQuerySelector = "a[href*=\"/serie\"]";
+            private readonly string LinkQuerySelector = "a[href*=series_extend]";
 
             public IEnumerable<KeyValuePair<MTReleaseInfo, Uri>> Extract(IHtmlDocument html)
             {
@@ -871,7 +871,7 @@ namespace Jackett.Common.Indexers
                 var html = await requester.MakeRequest(seasonUri);
                 var newEpisodes = seasonScraper.Extract(html);
                 // GET BY EPISODE NUMBER
-                newEpisodes = newEpisodes.Where(e => e.EpisodeNumber == episode.EpisodeNumber);
+                newEpisodes = newEpisodes.Where(e => e.EpisodeNumber.Equals(episode.EpisodeNumber));
                 if (newEpisodes.Count() == 0)
                 {
                     throw new Exception("Imposible to detect episode ID in RSS");
