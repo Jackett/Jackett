@@ -23,6 +23,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Public Trackers
  * 1337x
  * ACG.RIP
+ * ACGsou
  * Anidex
  * Anime Tosho
  * AniRena
@@ -36,6 +37,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * cpasbienClone
  * Demonoid
  * DIGBT
+ * dmhy
  * ETTV
  * EliteTorrent.biz
  * ExtraTorrent.ag
@@ -66,7 +68,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Nyaa-Pantsu
  * OxTorrent
  * ProStyleX
- * QXR
  * RARBG
  * RuTor
  * shokweb
@@ -110,6 +111,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HamsterStudio
  * Kinozal
  * LostFilm.tv
+ * Marine Tracker
  * Metal Tracker
  * MVGroup Forum
  * MVGroup Main
@@ -129,9 +131,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Ztracker
 
 ### Supported Private Trackers
+ * 0day.kiev
  * 2 Fast 4 You
  * 3D Torrents (3DT) 
  * 3evils
+ * 4thD (4th Dimension)
  * 720pier
  * Abnormal
  * Acid Lounge (A-L)
@@ -189,6 +193,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
+ * CrazyHD
  * CrazySpirits
  * CrnaBerza
  * DanishBits (DB)

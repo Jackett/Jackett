@@ -6,6 +6,8 @@
   type: semi-private
   encoding: UTF-8
   links:
+    - https://forums.mvgroup.org/
+  legacylinks:
     - http://forums.mvgroup.org/
 
   caps:
@@ -108,18 +110,17 @@
     inputs:
       "UserName": "{{ .Config.username }}"
       "PassWord": "{{ .Config.password }}"
-      "Privacy": "1"
-      "CookieDate": "0"
+      "Privacy": 1
+      "CookieDate": 0
       "CODE": "01"
-      "referer": "http://forums.mvgroup.org/"
+      "referer": "https://forums.mvgroup.org/index.php?"
       "act": "Login"
-      "submit": "Log me in"
     error:
       - selector: div.borderwrap:has(div.tablepad)
         message:
           selector: div.borderwrap div.tablepad
     test:
-      path: index.php?http://forums.mvgroup.org/
+      path: index.php?https://forums.mvgroup.org/
       selector: tr td.nav_mem div span[id="member_menu"]
 
   search:

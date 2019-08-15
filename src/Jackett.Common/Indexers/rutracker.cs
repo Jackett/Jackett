@@ -1550,23 +1550,23 @@ namespace Jackett.Common.Indexers
                             continue;
 
                         var qDetailsLink = Row.QuerySelector("td.t-title > div.t-title > a.tLink");
-                        var qSize = Row.QuerySelector("td.tor-size > u");
+                        var qSize = Row.QuerySelector("td.tor-size");
 
                         release.Title = qDetailsLink.TextContent;
 
                         release.Comments = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
                         release.Link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
                         release.Guid = release.Comments;
-                        release.Size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        release.Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
 
-                        var seeders = Row.QuerySelector("td:nth-child(7) > u").TextContent;
+                        var seeders = Row.QuerySelector("td:nth-child(7)").TextContent;
                         if (string.IsNullOrWhiteSpace(seeders))
                             seeders = "0";
                         release.Seeders = ParseUtil.CoerceInt(seeders);
-                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8) > b").TextContent) + release.Seeders;
+                        release.Peers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent) + release.Seeders;
                         release.Grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
 
-                        var timestr = Row.QuerySelector("td:nth-child(10) > u").TextContent;
+                        var timestr = Row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
                         release.PublishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
 
                         var forum = Row.QuerySelector("td.f-name > div.f-name > a");

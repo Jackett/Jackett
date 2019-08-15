@@ -78,6 +78,18 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info_language
+      type: info
+      label: "Languages"
+      default: "This Indexer only works if your Vizuk account is set for the <b>Spanish</b> language. Using another language will not return results."
+
   login:
     path: ajax/login.php
     method: post

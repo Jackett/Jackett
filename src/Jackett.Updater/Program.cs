@@ -331,7 +331,6 @@ namespace Jackett.Updater
                 "Definitions/redtopia.yml",
                 "Definitions/btxpress.yml",
                 "Definitions/btstornet.yml",
-                "Definitions/crazyhd.yml",
                 "Definitions/hdplus.yml",
                 "Definitions/gods.yml",
                 "Definitions/freedomhd.yml",
@@ -344,6 +343,7 @@ namespace Jackett.Updater
                 "Definitions/nyoo.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/evolutionpalace.yml",
+                "Definitions/qxr.yml",
             };
 
             foreach (var oldFile in oldFiles)

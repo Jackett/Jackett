@@ -74,7 +74,7 @@
     error:
       - selector: td.text
     test:
-      path: nDonated.php
+      path: /
       selector: a[href="logout.php"]
 
   download:

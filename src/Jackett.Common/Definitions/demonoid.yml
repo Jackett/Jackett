@@ -203,6 +203,8 @@
     rows:
       selector: table.ttable_headinner tr:has(td[class^="tone_"])
       after: 1
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: a[href^="/files/details/"]
