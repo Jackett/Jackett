@@ -4,7 +4,7 @@
   description: "Il Corsaro Nero is an ITALIAN Public site for TV / MOVIES / GENERAL"
   language: it-it
   type: public
-  encoding: UTF-8
+  encoding: Windows-1252
   links:
     - https://ilcorsaronero.pizza/
   legacylinks:
@@ -34,23 +34,9 @@
     - name: itorrents-links
       type: checkbox
       label: Add download links via itorrents.org
-    # - name: advanced-search
-    #   type: checkbox
-    #   label: Use the advanced search of IlCorsaroNero (experimental)
 
   search:
     paths:
-      # https://ilcorsaronero.info/advsearch.php?&category=15&search=flash+4&&order=data&by=DESC&page=3
-      # {{range .Categories}}{{.}};{{end}}
-
-    ##### Are the "not" and "and" functions implemented? Or am I doing it wrong?
-    # path: "{{if and .Query.Keywords .advanced-search}}adv/{{ .Query.Keywords}}.html
-    #        {{else if and .Query.Keywords (not .advanced-search)}}argh.php?search={{ .Query.Keywords}}
-    #        {{else}}/recenti
-    #        {{end}}"
-      # - path: "{{if .Keywords}}argh.php?search={{ .Keywords}}
-      #      {{else}}/recenti
-      #      {{end}}"
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/browse/0{{end}}"
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/browse/1{{end}}"
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/browse/2{{end}}"
@@ -58,8 +44,8 @@
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/browse/4{{end}}"
       - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/browse/5{{end}}"
     keywordsfilters:
-      - name: diacritics
-        args: replace
+      # - name: diacritics
+      #   args: replace
       - name: re_replace # S01 to 1
         args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
       - name: re_replace # S01E01 to 1 1
@@ -75,9 +61,13 @@
         filters:
           - name: split
             args: [ "/", -1 ]
+          - name: diacritics
+            args: replace
           - name: urldecode
+          # - name: re_replace # replace special characters with " " (space)
+          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+            args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
           - name: re_replace # replace multiple spaces
             args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
