@@ -334,11 +334,11 @@ namespace Jackett.Common.Indexers
                         Output("Category: " + testcat + " - " + categoryName);
 
                         // Seeders
-                        var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
+                        var seeders = ParseUtil.CoerceInt(tRow.Find("td:eq(8)").Text());
                         Output("Seeders: " + seeders);
 
                         // Leechers
-                        var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(10)").Text());
+                        var leechers = ParseUtil.CoerceInt(tRow.Find("td:eq(9)").Text());
                         Output("Leechers: " + leechers);
 
                         // Completed
@@ -354,10 +354,6 @@ namespace Jackett.Common.Indexers
                             files = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(2) > a").Text(), @"\d+").Value);
                         }
                         Output("Files: " + files);
-
-                        // Health
-                        var percent = ParseUtil.CoerceInt(Regex.Match(tRow.Find("td:eq(8)").Text(), @"\d+").Value.Trim());
-                        Output("Health: " + percent + "%");
 
                         // Size
                         var humanSize = tRow.Find("td:eq(6)").Text().ToLowerInvariant();
