@@ -171,34 +171,21 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            List<string> links = new List<string>();
-            links.Add(linkParam.AbsoluteUri);
+            IEnumerable<Uri> uris = GetLinkUris(linkParam);
 
-            IEnumerable<Uri> knownUris = (new Uri[] { DefaultSiteLinkUri }).
-                Concat(ExtraSiteLinkUris);
-
-            foreach (Uri extraSiteUri in knownUris)
-            {
-                UriBuilder ub = new UriBuilder(linkParam);
-                ub.Host = extraSiteUri.Host;
-                string link = ub.Uri.AbsoluteUri;
-                if (link != linkParam.AbsoluteUri)
-                    links.Add(ub.Uri.AbsoluteUri);
-            }
-
-            foreach (string link in links)
+            foreach (Uri uri in uris)
             {
                 byte[] result = null;
 
                 try
                 {
-                    var results = await RequestStringWithCookiesAndRetry(link);
+                    var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
                     await FollowIfRedirect(results);
                     var content = results.Content;
 
                     if (content != null)
                     {
-                        Uri uriLink = ExtractDownloadUri(content, link);
+                        Uri uriLink = ExtractDownloadUri(content, uri.AbsoluteUri);
                         if (uriLink != null)
                             result = await base.Download(uriLink);
                     }
@@ -210,7 +197,7 @@ namespace Jackett.Common.Indexers
                 if (result != null)
                     return result;
                 else
-                    this.logger.Warn("Newpct - download link not found in " + link);
+                    this.logger.Warn("Newpct - download link not found in " + uri.LocalPath);
             }
 
             return null;
@@ -237,6 +224,30 @@ namespace Jackett.Common.Indexers
             return null;
         }
 
+        IEnumerable<Uri> GetLinkUris(Uri referenceLink)
+        {
+            List<Uri> uris = new List<Uri>();
+            uris.Add(referenceLink);
+            if (DefaultSiteLinkUri.Scheme != referenceLink.Scheme && DefaultSiteLinkUri.Host != referenceLink.Host)
+                uris.Add(DefaultSiteLinkUri);
+
+            uris = uris.Concat(ExtraSiteLinkUris.
+                Where(u => 
+                    (u.Scheme != referenceLink.Scheme || u.Host != referenceLink.Host) && 
+                    (u.Scheme != DefaultSiteLinkUri.Scheme || u.Host != DefaultSiteLinkUri.Host))).ToList();
+
+            List<Uri> result = new List<Uri>();
+
+            foreach (Uri uri in uris)
+            {
+                UriBuilder ub = new UriBuilder(uri);
+                ub.Path = referenceLink.LocalPath;
+                result.Add(ub.Uri);
+            }
+
+            return result;
+        }
+
         private async Task<IEnumerable<ReleaseInfo>> PerformQuery(Uri siteLink, TorznabQuery query, int attempts)
         {
             var releases = new List<ReleaseInfo>();
@@ -250,22 +261,39 @@ namespace Jackett.Common.Indexers
             if (rssMode)
             {
                 int pg = 1;
+                Uri validUri = null;
                 while (pg <= _maxDailyPages)
                 {
-                    Uri url = new Uri(siteLink, string.Format(_dailyUrl, pg));
-                    var results = await RequestStringWithCookiesAndRetry(url.AbsoluteUri);
-                    if (results.Content.Equals(""))
+                    IEnumerable<NewpctRelease> items = null;
+                    WebClientStringResult results = null;
+
+                    if (validUri != null)
                     {
-                        foreach (var link in ExtraSiteLinkUris)
+                        Uri uri = new Uri(validUri, string.Format(_dailyUrl, pg));
+                        results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+                        if (results == null || string.IsNullOrEmpty(results.Content))
+                            break;
+                        await FollowIfRedirect(results);
+                        items = ParseDailyContent(results.Content);
+                    }
+                    else
+                    {
+                        foreach (Uri uri in GetLinkUris(new Uri(siteLink, string.Format(_dailyUrl, pg))))
                         {
-                            results = await RequestStringWithCookiesAndRetry(new Uri(link, string.Format(_dailyUrl, pg)).AbsoluteUri);
-                            if (!results.Content.Equals(""))
-                                break;
+                            results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+                            if (results != null && !string.IsNullOrEmpty(results.Content))
+                            {
+                                await FollowIfRedirect(results);
+                                items = ParseDailyContent(results.Content);
+                                if (items != null && items.Any())
+                                {
+                                    validUri = uri;
+                                    break;
+                                }
+                            }
                         }
                     }
-                    await FollowIfRedirect(results);
 
-                    var items = ParseDailyContent(results.Content);
                     if (items == null || !items.Any())
                         break;
 
@@ -543,6 +571,7 @@ namespace Jackett.Common.Indexers
 
             string searchStr = query.SanitizedSearchTerm;
 
+            Uri validUri = null;
             int pg = 1;
             while (pg <= _maxMoviesPages)
             {
@@ -550,10 +579,35 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("q", searchStr);
                 queryCollection.Add("pg", pg.ToString());
 
-                Uri url = new Uri(siteLink, string.Format(_searchUrl, pg));
-                var results = await PostDataWithCookies(url.AbsoluteUri, queryCollection);
+                WebClientStringResult results = null;
+                IEnumerable<NewpctRelease> items = null;
 
-                var items = ParseSearchContent(results.Content);
+                if (validUri != null)
+                {
+                    Uri uri = new Uri(validUri, string.Format(_searchUrl, pg));
+                    results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                    if (results == null || string.IsNullOrEmpty(results.Content))
+                        break;
+
+                    items = ParseSearchContent(results.Content);
+                }
+                else
+                {
+                    foreach (Uri uri in GetLinkUris(new Uri(siteLink, string.Format(_searchUrl, pg))))
+                    {
+                        results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                        if (results != null && !string.IsNullOrEmpty(results.Content))
+                        {
+                            items = ParseSearchContent(results.Content);
+                            if (items != null && items.Any())
+                            {
+                                validUri = uri;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if (items == null)
                     break;
 

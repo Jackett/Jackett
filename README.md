@@ -265,6 +265,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ICE Torrent
  * iLoveClassics (iLC)
  * ImmortalSeed (iS)
+ * Immortuos
  * inPeril
  * Insane Tracker
  * IPTorrents (IPT)
