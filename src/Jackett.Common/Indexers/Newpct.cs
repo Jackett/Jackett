@@ -107,6 +107,7 @@ namespace Jackett.Common.Indexers
 
         private bool _includeVo;
         private bool _filterMovies;
+        private bool _removeMovieAccents;
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
@@ -142,6 +143,9 @@ namespace Jackett.Common.Indexers
 
             var filterMoviesItem = new BoolItem() { Name = "Only full match movies", Value = true };
             configData.AddDynamic("FilterMovies", filterMoviesItem);
+
+            var removeMovieAccentsItem = new BoolItem() { Name = "Remove accents in movie searchs", Value = true };
+            configData.AddDynamic("RemoveMovieAccents", removeMovieAccentsItem);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -254,6 +258,7 @@ namespace Jackett.Common.Indexers
 
             _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
             _filterMovies = ((BoolItem)configData.GetDynamic("FilterMovies")).Value;
+            _removeMovieAccents = ((BoolItem)configData.GetDynamic("RemoveMovieAccents")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
             bool rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
@@ -570,6 +575,8 @@ namespace Jackett.Common.Indexers
             var releases = new List<NewpctRelease>();
 
             string searchStr = query.SanitizedSearchTerm;
+            if (_removeMovieAccents)
+                searchStr = RemoveDiacritics(searchStr);
 
             Uri validUri = null;
             int pg = 1;
@@ -836,6 +843,23 @@ namespace Jackett.Common.Indexers
             result = Regex.Replace(result, @"\.[ \.]*\.", ".");
 
             return result;
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }
