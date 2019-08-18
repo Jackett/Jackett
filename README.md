@@ -76,6 +76,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SolidTorrents
  * sukebei.Nyaa.si
  * sukebei-Pantsu
+ * TFile
  * The Pirate Bay (TPB)
  * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Tosho
@@ -98,9 +99,11 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Semi-Private Trackers
  * 7tor
  * Alein
+ * AlexFilm
  * AniDUB
  * ArenaBG
  * BaibaKo
+ * BookTracker
  * Crazy's Corner
  * CzTorrent
  * Deildu
