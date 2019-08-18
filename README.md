@@ -99,6 +99,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
 ### Supported Semi-Private Trackers
  * 7tor
  * Alein
+ * AlexFilm
  * AniDUB
  * ArenaBG
  * BaibaKo
