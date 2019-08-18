@@ -103,6 +103,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AniDUB
  * ArenaBG
  * BaibaKo
+ * BookTracker
  * Crazy's Corner
  * CzTorrent
  * Deildu
