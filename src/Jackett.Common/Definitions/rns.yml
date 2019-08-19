@@ -1,0 +1,182 @@
+﻿---
+  site: rns
+  name: RNS
+  description: "RainbowNation Sharing (RNS) is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS"
+  language: en-us
+  type: private
+  encoding: UTF-8
+  links:
+    - https://rainbownationsharing.net/
+
+  caps:
+    categorymappings:
+       - {id: 105, cat: PC/Phone-Android, desc: "(Apps) Android"}
+       - {id: 130, cat: PC, desc: "(Apps) Collections"}
+       - {id: 110, cat: PC, desc: "(Apps) Linux"}
+       - {id: 115, cat: PC/Mac, desc: "(Apps) Mac"}
+       - {id: 125, cat: PC, desc: "(Apps) Other"}
+       - {id: 120, cat: PC/0day, desc: "(Apps) PC"}
+       - {id: 405, cat: Books/Ebook, desc: "[E] Action/Adventure"}
+       - {id: 410, cat: Books/Ebook, desc: "[E] Adult / Erotica"}
+       - {id: 415, cat: Books/Ebook, desc: "[E] Arts & Crafts (Hobbies)"}
+       - {id: 420, cat: Books/Ebook, desc: "[E] Biography/Memoirs"}
+       - {id: 565, cat: Books/Ebook, desc: "[E] Collections"}
+       - {id: 422, cat: Books/Ebook, desc: "[E] Comic Books"}
+       - {id: 425, cat: Books/Ebook, desc: "[E] Computer Learning"}
+       - {id: 430, cat: Books/Ebook, desc: "[E] Cookery"}
+       - {id: 435, cat: Books/Ebook, desc: "[E] Crime/Thriller/Mystery"}
+       - {id: 440, cat: Books/Ebook, desc: "[E] Fantasy"}
+       - {id: 445, cat: Books/Ebook, desc: "[E] Forteana (180)"}
+       - {id: 450, cat: Books/Ebook, desc: "[E] General Fiction"}
+       - {id: 455, cat: Books/Ebook, desc: "[E] Historical Fiction"}
+       - {id: 460, cat: Books/Ebook, desc: "[E] History/Documentary"}
+       - {id: 465, cat: Books/Ebook, desc: "[E] Horror"}
+       - {id: 470, cat: Books/Ebook, desc: "[E] Humor ( Comedy)"}
+       - {id: 475, cat: Books/Ebook, desc: "[E] LGBT"}
+       - {id: 480, cat: Books/Ebook, desc: "[E] Literary Fiction"}
+       - {id: 485, cat: Books/Ebook, desc: "[E] Magazines - all"}
+       - {id: 490, cat: Books/Ebook, desc: "[E] Non-Fiction"}
+       - {id: 495, cat: Books/Ebook, desc: "[E] Paranormal Romance"}
+       - {id: 500, cat: Books/Ebook, desc: "[E] Reference/Educational"}
+       - {id: 505, cat: Books/Ebook, desc: "[E] Religion and Spirituality"}
+       - {id: 510, cat: Books/Ebook, desc: "[E] Romance"}
+       - {id: 515, cat: Books/Ebook, desc: "[E] Sci-Fi"}
+       - {id: 520, cat: Books/Ebook, desc: "[E] Sci-Fi/Apocalyptic"}
+       - {id: 525, cat: Books/Ebook, desc: "[E] Self-Help "}
+       - {id: 530, cat: Books/Ebook, desc: "[E] Sports/Fitness"}
+       - {id: 535, cat: Books/Ebook, desc: "[E] Travel"}
+       - {id: 540, cat: Books/Ebook, desc: "[E] Unsorted"}
+       - {id: 545, cat: Books/Ebook, desc: "[E] Urban Fantasy/Paranormal"}
+       - {id: 550, cat: Books/Ebook, desc: "[E] Western"}
+       - {id: 555, cat: Books/Ebook, desc: "[E] Young Adult"}
+       - {id: 560, cat: Books/Ebook, desc: "[E] Young Children"}
+       - {id: 805, cat: Books/Foreign, desc: "[OL] Action/Adventure"}
+       - {id: 810, cat: Books/Foreign, desc: "[OL] Adult / Erotica 18+"}
+       - {id: 815, cat: Books/Foreign, desc: "[OL] Arts & Crafts (Hobbies)"}
+       - {id: 820, cat: Books/Foreign, desc: "[OL] Biography/Memoirs"}
+       - {id: 970, cat: Books/Foreign, desc: "[OL] Collections"}
+       - {id: 825, cat: Books/Foreign, desc: "[OL] Comic Books"}
+       - {id: 830, cat: Books/Foreign, desc: "[OL] Computer Learning"}
+       - {id: 835, cat: Books/Foreign, desc: "[OL] Cookery"}
+       - {id: 840, cat: Books/Foreign, desc: "[OL] Crime/Thriller/Mystery"}
+       - {id: 845, cat: Books/Foreign, desc: "[OL] Fantasy"}
+       - {id: 850, cat: Books/Foreign, desc: "[OL] Forteana"}
+       - {id: 855, cat: Books/Foreign, desc: "[OL] General Fiction"}
+       - {id: 860, cat: Books/Foreign, desc: "[OL] Historical Fiction"}
+       - {id: 865, cat: Books/Foreign, desc: "[OL] History/Documentary"}
+       - {id: 870, cat: Books/Foreign, desc: "[OL] Horror"}
+       - {id: 875, cat: Books/Foreign, desc: "[OL] Humor (Comedy)"}
+       - {id: 880, cat: Books/Foreign, desc: "[OL] LGBT"}
+       - {id: 885, cat: Books/Foreign, desc: "[OL] Literary Fiction"}
+       - {id: 890, cat: Books/Foreign, desc: "[OL] Magazines - all"}
+       - {id: 895, cat: Books/Foreign, desc: "[OL] Non-Fiction"}
+       - {id: 900, cat: Books/Foreign, desc: "[OL] Paranormal Romance"}
+       - {id: 905, cat: Books/Foreign, desc: "[OL] Reference/Educational"}
+       - {id: 910, cat: Books/Foreign, desc: "[OL] Religion and Spirituality"}
+       - {id: 915, cat: Books/Foreign, desc: "[OL] Romance"}
+       - {id: 920, cat: Books/Foreign, desc: "[OL] Sci-Fi"}
+       - {id: 925, cat: Books/Foreign, desc: "[OL] Sci-Fi/Apocalyptic"}
+       - {id: 930, cat: Books/Foreign, desc: "[OL] Self-Help"}
+       - {id: 935, cat: Books/Foreign, desc: "[OL] Sports/Fitness"}
+       - {id: 940, cat: Books/Foreign, desc: "[OL] Travel"}
+       - {id: 945, cat: Books/Foreign, desc: "[OL] Unsorted"}
+       - {id: 950, cat: Books/Foreign, desc: "[OL] Urban Fantasy/Paranormal"}
+       - {id: 955, cat: Books/Foreign, desc: "[OL] Western"}
+       - {id: 960, cat: Books/Foreign, desc: "[OL] Young Adult"}
+       - {id: 965, cat: Books/Foreign, desc: "[OL] Young Children"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      use_ssl: 1
+      perm_ssl: 0
+    error:
+      - selector: h2
+        message:
+          selector: table tr td.text
+    test:
+      path: browse.php
+      selector: a[href*="logout.php?hash_please="]
+
+  search:
+  # https://rainbownationsharing.net/browse.php?search=%2Bbloom%2Bcounty&searchin=title&incldead=0&vip=0
+    paths:
+      - path: browse.php      
+    inputs:
+      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      search: "{{ .Keywords }}"
+      # title descr all
+      searchin: title
+      # 0 active 2 onlydead
+      incldead: 0
+      # 0 incl vip 1 no vip  2 only vip
+      vip: 0
+
+    rows:
+      selector: tr.browse_color, tr.freeleech_color
+    fields:
+      category:
+        selector: td:nth-of-type(1) a
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      description:
+        selector: td:nth-of-type(1) a img
+        attribute: title
+      title:
+        selector: td:nth-of-type(2) a
+        attribute: onmouseover
+        filters:
+          - name: split
+            args: [">", "1"]
+          - name: replace
+            args: ["</b", ""]
+      banner:
+        selector: td:nth-of-type(2) a
+        optional: true
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: src=\\\'(.+?)\\\'
+      details:
+        selector: td:nth-of-type(2) a
+        attribute: href
+      download:
+        selector: td:nth-of-type(3) a
+        attribute: href
+      files:
+        selector: td:nth-of-type(4)
+      date:
+        selector: td:nth-of-type(6):contains("day")
+        optional: true
+      date:
+        selector: td:nth-of-type(6):not(:contains("day"))
+        optional: true
+        filters:
+          - name: dateparse
+            args: "Jan 2 2006 03:04 PM"
+      size:
+        selector: td:nth-of-type(7)
+      grabs:
+        selector: td:nth-of-type(8) a
+        filters:
+          - name: regexp
+            args: "([\\d]+)"
+      seeders:
+        selector: td:nth-of-type(9)
+      leechers:
+        selector: td:nth-of-type(10)
+      downloadvolumefactor:
+        case:
+          a.info:contains("FREE"): 0
+          "*": 1
+      uploadvolumefactor:
+        text: 1
