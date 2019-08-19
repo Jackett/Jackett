@@ -89,6 +89,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * TorrentProject2
  * TorrentQuest
  * Torrents.csv
+ * TorrentWal
  * Torrent9
  * Torernt9 clone (torrents9.ch)
  * Torrentz2
