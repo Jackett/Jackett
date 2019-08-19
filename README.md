@@ -130,6 +130,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * SoundPark
  * Toloka.to
  * Torrents-Local
+ * Underverse
  * Union Fansub
  * Vanila
  * YggTorrent (YGG)
