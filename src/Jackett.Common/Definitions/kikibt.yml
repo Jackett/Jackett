@@ -7,12 +7,14 @@
   encoding: UTF-8
   followredirect: true
   links:
-    -  https://kikibt8.me/
+    -  https://kikibt8.net/
   legacylinks:
     -  https://kikibt.me/
     -  http://kikibt.pw/
     -  https://kikibt.cc/
     -  https://kikibt.pw/
+    -  https://kikibt8.me/
+    -  http://kikibt8.me/
 
   caps:
     categorymappings:
