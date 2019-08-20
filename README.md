@@ -295,9 +295,10 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * MyAnonamouse (MAM)
  * myAmity
  * MySpleen
- * NCore
  * NBTorrents
+ * NCore
  * Nebulance (NBL) (TransmiTheNet)
+ * NetLab
  * New Real World
  * Norbits
  * NordicBits (NB)
