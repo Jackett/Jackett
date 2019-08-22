@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
-using CloudFlareUtilities;
+using CloudflareSolverRe;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
@@ -118,8 +118,8 @@ namespace Jackett.Common.Utils.Clients
 
         public void CreateClient()
         {
-            clearanceHandlr = new ClearanceHandler();
-            clearanceHandlr.MaxRetries = 30;
+            clearanceHandlr = new ClearanceHandler(BrowserUtil.ChromeUserAgent);
+            clearanceHandlr.MaxTries = 30;
             clientHandlr = new HttpClientHandler
             {
                 CookieContainer = cookies,
@@ -169,10 +169,10 @@ namespace Jackett.Common.Utils.Clients
             request.Headers.ExpectContinue = false;
             request.RequestUri = new Uri(webRequest.Url);
 
-            if (webRequest.EmulateBrowser == true)
-                request.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
-            else
-                request.Headers.UserAgent.ParseAdd("Jackett/" + configService.GetVersion());
+            //if (webRequest.EmulateBrowser == true)
+            //    request.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
+            //else
+            //    request.Headers.UserAgent.ParseAdd("Jackett/" + configService.GetVersion());
 
             // clear cookies from cookiecontainer
             var oldCookies = cookies.GetCookies(request.RequestUri);
