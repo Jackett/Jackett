@@ -238,7 +238,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * GAYtorrent.ru
  * GazelleGames (GGn)
  * Generation-Free
- * GFXNews
  * GFXPeers
  * GigaTorrents
  * GimmePeers (formerly ILT) <!-- maintained by jamesb2147 -->
