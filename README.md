@@ -30,7 +30,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AudioBook Bay (ABB)
  * btbit
  * BTDB
- * BTDigg
  * BTKitty
  * ConCen
  * cpasbien
