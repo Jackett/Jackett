@@ -347,6 +347,7 @@ namespace Jackett.Updater
                 "Definitions/btdigg.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/megabliz.yml",
+                "Definitions/tigers-dl.yml",
             };
 
             foreach (var oldFile in oldFiles)
