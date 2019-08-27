@@ -92,7 +92,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent9
  * Torernt9 clone (torrents9.ch)
  * Torrentz2
- * World Wide Torrents
  * YourBittorrent
  * YTS.ag
  * Zooqle

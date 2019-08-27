@@ -348,6 +348,7 @@ namespace Jackett.Updater
                 "Definitions/gfxnews.yml",
                 "Definitions/megabliz.yml",
                 "Definitions/tigers-dl.yml",
+                "Definitions/worldwidetorrents.yml",
             };
 
             foreach (var oldFile in oldFiles)
