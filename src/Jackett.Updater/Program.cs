@@ -346,6 +346,7 @@ namespace Jackett.Updater
                 "Definitions/qxr.yml",
                 "Definitions/btdigg.yml",
                 "Definitions/gfxnews.yml",
+                "Definitions/megabliz.yml",
             };
 
             foreach (var oldFile in oldFiles)
