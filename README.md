@@ -97,7 +97,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Zooqle
 
 ### Supported Semi-Private Trackers
- * 7tor
  * Alein
  * AlexFilm
  * AniDUB
