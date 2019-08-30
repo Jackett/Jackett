@@ -184,6 +184,8 @@ namespace Jackett.Common.Indexers
                 {
                     CQ dom = result.Content;
                     var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
+                    if (string.IsNullOrWhiteSpace(errorMessage))
+                        errorMessage = dom["div.notification-body"].Text().Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
 
