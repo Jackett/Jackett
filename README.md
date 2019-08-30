@@ -78,7 +78,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * sukebei-Pantsu
  * TFile
  * The Pirate Bay (TPB)
- * TNTVillage <!-- maintained by bonny1992 -->
  * Tokyo Tosho
  * Torlock
  * Torrent Downloads (TD)
