@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www1.cpasbiens.cm/
+    - https://ww6.cpasbiens.to/
   legacylinks:
     - https://www1.cpasbiens.ws/
     - https://www2.cpasbiens.ws/
@@ -36,7 +36,7 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
+      - path: "{{if .Keywords}}search_torrent/{{.Keywords}}{{else}}{{end}}"
     rows:
       selector: table.table-corps > tbody > tr:has(a)
     fields:
