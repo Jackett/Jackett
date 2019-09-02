@@ -191,10 +191,10 @@
 
   search:
     paths:
-      # https://www.dnoid.to/files/?c118=1&c115=1&lang=0&incldead=0&search=&sort=id&order=desc
+      # https://www.dnoid.to/files/?c115&c116&c118&lang=0&incldead=0&search=&sort=id&order=desc
       - path: files/
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{range .Categories}}c{{.}}&{{end}}"
       lang: 0
       incldead: 0
       search: "{{.Keywords}}"
