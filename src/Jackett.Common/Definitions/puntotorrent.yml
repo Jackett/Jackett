@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://xbt.puntotorrent.com/
+  legacylinks:
     - https://xbt.puntotorrent.ch/
 
   caps:
