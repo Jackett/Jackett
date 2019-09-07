@@ -32,6 +32,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * BTDB
  * BTKitty
  * ConCen
+ * Corsaro.red
  * cpasbien
  * cpasbienClone
  * Demonoid
