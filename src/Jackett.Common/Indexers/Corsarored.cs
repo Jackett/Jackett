@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -51,14 +51,33 @@ namespace Jackett.Common.Indexers
 
             //wc.requestDelay = 2.5;
 
-            // TODO: declared cats != returned cats, need fix
-            AddCategoryMapping(0, TorznabCatType.Other, "All");
+            // TNTVillage cats
             AddCategoryMapping(1, TorznabCatType.TV, "TV");
-            AddCategoryMapping(2, TorznabCatType.Movies, "Movies");
-            AddCategoryMapping(3, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(5, TorznabCatType.PC, "Software");
-            AddCategoryMapping(6, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(2, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(3, TorznabCatType.BooksEbook, "Books");
+            AddCategoryMapping(4, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(6, TorznabCatType.PC, "Software");
             AddCategoryMapping(7, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(8, TorznabCatType.TVAnime, "Cartoons");
+            AddCategoryMapping(9, TorznabCatType.PC, "Software");
+            AddCategoryMapping(10, TorznabCatType.PC0day, "Software");
+            AddCategoryMapping(11, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(12, TorznabCatType.Console, "Games");
+            AddCategoryMapping(13, TorznabCatType.Books, "Books");
+            AddCategoryMapping(14, TorznabCatType.TVDocumentary, "Documentaries");
+            AddCategoryMapping(21, TorznabCatType.AudioVideo, "Music Video");
+            AddCategoryMapping(22, TorznabCatType.TVSport, "Sport");
+            AddCategoryMapping(23, TorznabCatType.TV, "TV");
+            AddCategoryMapping(24, TorznabCatType.TV, "TV");
+            AddCategoryMapping(26, TorznabCatType.Console, "Games");
+            AddCategoryMapping(27, TorznabCatType.Other, "Wallpaper");
+            AddCategoryMapping(29, TorznabCatType.TV, "TV Series");
+            AddCategoryMapping(30, TorznabCatType.BooksComics, "Comics");
+            AddCategoryMapping(31, TorznabCatType.TV, "TV");
+            AddCategoryMapping(32, TorznabCatType.Console, "Games");
+            AddCategoryMapping(34, TorznabCatType.AudioAudiobook, "Audiobook");
+            AddCategoryMapping(35, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(36, TorznabCatType.Books, "Books");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -190,10 +209,12 @@ namespace Jackett.Common.Indexers
 
             release.Title = (String)torrent["title"];
 
-            release.Comments = new Uri((string)torrent["link"]);
+            //https://corsaro.red/details/E5BB62E2E58C654F4450325046723A3F013CD7A4
+            release.Comments = new Uri(SiteLink + "details/" + (string)torrent["hash"]);
             release.Guid = release.Comments;
             //release.Link = release.Comments;
 
+            release.PublishDate = DateTime.Now;
             if (torrent["last_updated"] != null)
                 release.PublishDate = DateTime.Parse((string)torrent["last_updated"]);
 
@@ -206,7 +227,7 @@ namespace Jackett.Common.Indexers
 
             release.Grabs = (long)torrent["completed"];
 
-            release.Description = (string)torrent["description"];
+            release.Description = (string)torrent["category"] + " " + (string)torrent["description"];
 
             /*
             RageID = copyFrom.RageID;
