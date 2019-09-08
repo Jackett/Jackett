@@ -350,6 +350,7 @@ namespace Jackett.Updater
                 "Definitions/tigers-dl.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/tntvillage.yml",
+                "Definitions/xktorrent.yml",
             };
 
             foreach (var oldFile in oldFiles)
