@@ -53,12 +53,13 @@
       tv-search: [q, season, ep]
 
   login:
-    path: login.php
+    path: login
     method: form
-    form: form
+    form: form:has(input[name="_remember_me"])
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      _remember_me: 1
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
