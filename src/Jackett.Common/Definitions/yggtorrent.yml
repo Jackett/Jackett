@@ -183,6 +183,8 @@
       - name: replace
         args: ["\"", ""]
       - name: trim
+      - name: re_replace
+        args: ["\\b[^\\s]+\\b", "\"$&\""]
     paths:
 #      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
 #      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
