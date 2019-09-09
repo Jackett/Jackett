@@ -184,11 +184,8 @@
         args: ["\"", ""]
       - name: trim
     paths:
-#      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-#      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
-#CHANGED / REMOVED THE quotes around Keyword, seems not needed now / Added betasearch engine
-      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.betasearchengine}}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.betasearchengine}}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
     rows:
       selector: "table.table > tbody > tr"
     fields:
