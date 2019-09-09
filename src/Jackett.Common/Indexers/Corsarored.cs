@@ -78,6 +78,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(34, TorznabCatType.AudioAudiobook, "Audiobook");
             AddCategoryMapping(35, TorznabCatType.Audio, "Music");
             AddCategoryMapping(36, TorznabCatType.Books, "Books");
+            AddCategoryMapping(37, TorznabCatType.PC, "Software");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
