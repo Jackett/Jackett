@@ -176,19 +176,29 @@
   search:
     followredirect: true
     keywordsfilters:
-# COMMENT THAT BECAUSE OF BETA SEARCH
-      # Full season seach hack: Sonarrv3 send 'Series Name SXX' but it won't match 'Series Name - Saison 01' for example so we remove the 'SXX' ==> 'Series Name'
-#      - name: re_replace
-#        args: ["(.*)[sS](\\d{1,4})$", "{{ if .Config.sonarrv3hack }}$1{{else}}$1S$2{{end}}"]
+      # Hack For anime Search ! example : replace sonarr search of 
+      # One Punch Man S2 10 OR One Punch Man S2 2
+      # BY
+      # One Punch Man S02E10 OR One Punch Man S02E02
+      - name: re_replace #S 1-9 & EP >= 10
+        args: ["(.*)[sS]([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+      - name: re_replace #S 1-9 & EP 1-9
+        args: ["(.*)[sS]([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+      - name: re_replace #S >= 10 & EP >= 10
+        args: ["(.*)[sS]([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
+      - name: re_replace #S >= 10 & EP 1-9
+        args: ["(.*)[sS]([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
+      - name: re_replace #Full season S 1-9
+        args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
+      - name: re_replace #Full season S >= 10
+        args: ["(.*)[sS]([1-9][0-9])$", "$1 S0$2"]
+      # END ANIME HACK
       - name: replace
         args: ["\"", ""]
       - name: trim
     paths:
-#      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-#      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.enhancedAnime}}{{ re_replace .Keywords \"([\\.\\s\\[\\-])(\\d+)$\" \"$1e$2\" }}{{else}}{{ re_replace .Keywords \"\\s\" \"\"\"\" }}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
-#CHANGED / REMOVED THE quotes around Keyword, seems not needed now / Added betasearch engine
-      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
-      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
+      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.betasearchengine}}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date"
+      - path: "https://{{ .Config.searchanddlurl }}/{{if .Config.betasearchengine}}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{if .Config.betasearchengine}}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order=desc&sort=publish_date&page=50"
     rows:
       selector: "table.table > tbody > tr"
     fields:
