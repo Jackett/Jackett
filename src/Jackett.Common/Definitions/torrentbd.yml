@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - http://www.torrentbd.com/
+    - https://www.torrentbd.com/
   legacylinks:
     - http://www.torrentbd.com/torrent
+    - http://www.torrentbd.com/
 
   caps:
     categorymappings:
@@ -83,13 +84,12 @@
 
   login:
     path: torrent/account-login.php
-    method: form
-    form: form[action="account-login.php"]
+    method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
-      - selector: div.myFrame:has(div.myF-caption > font.error)
+      - selector: div.row p.red-text
     test:
       path: torrent/torrents-search.php
       selector: div.myB-content:contains("Ratio:")

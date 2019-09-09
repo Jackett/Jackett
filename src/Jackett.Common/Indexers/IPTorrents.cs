@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
             "https://iptorrents.com/",
+            "https://www.iptorrents.com/",
             "https://ipt-update.com/",
             "https://iptorrents.eu/",
             "https://nemo.iptorrents.com/",
@@ -34,6 +35,14 @@ namespace Jackett.Common.Indexers
             "http://ghost.cable-modem.org/",
             "http://logan.unusualperson.com/",
             "http://baywatch.workisboring.com/",
+            "https://ipt.getcrazy.me",
+            "https://ipt.findnemo.net",
+            "https://ipt.beelyrics.net",
+            "https://ipt.venom.global",
+            "https://ipt.workisboring.net",
+            "https://ipt.lol",
+            "https://ipt.cool",
+            "https://ipt.world",
         };
 
         private new ConfigurationDataRecaptchaLogin configData
@@ -57,7 +66,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");
@@ -202,7 +211,7 @@ namespace Jackett.Common.Indexers
             // Redirect to ? then to /t
             await FollowIfRedirect(response, request.Url, null, firstCallCookies);
 
-            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/my.php"), () =>
+            await ConfigureIfOK(firstCallCookies, response.Content.Contains("/lout.php"), () =>
             {
                 CQ dom = response.Content;
                 var messageEl = dom["body > div"].First();
@@ -241,6 +250,10 @@ namespace Jackett.Common.Indexers
             var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
 
             var results = response.Content;
+
+            if (string.IsNullOrWhiteSpace(query.ImdbID) && string.IsNullOrWhiteSpace(query.SearchTerm) && results.Contains("No Torrents Found!"))
+                throw new Exception("Got No Torrents Found! Make sure your IPTorrents profile config contain proper default category settings.");
+
             try
             {
                 CQ dom = results;

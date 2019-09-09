@@ -1,0 +1,81 @@
+---
+  site: RockBox
+  name: RockBox Rock/Metal Tracker
+  description: "RockBox Semi-Private site dedicated to HEAVY METAL/ROCK MUSIC. This definition is for the English site."
+  language: en-us
+  type: semi-private
+  encoding: UTF-8
+  links:
+    - https://rawkbawx.rocks/
+
+  caps:
+    categories:
+      "Music": Audio
+
+    modes:
+      search: [q]
+      music-search: [q, album, artist, label, year]
+  
+  login:
+    path: login.php
+    method: form
+    form: form[action="login.php?returnto=index.php"]
+    inputs:
+      uid: "{{ .Config.username }}"
+      pwd: "{{ .Config.password }}"
+    error:
+      - selector: div.errorSummary
+        message:
+          selector: div.errorSummary ul li
+    test:
+      path: index.php
+      selector: a[href="logout.php"]
+  
+  search:
+    paths:
+      - path: torrents.php
+        method: get
+    inputs:
+      search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
+    rows:
+      selector: table.lista[width="100%"] tbody tr:has(a[href^="download.php?id="])
+    fields:
+      title:
+        selector: td a[href^="details.php?id="]
+      details:
+        selector: td a[href^="details.php?id="]
+        attribute: href
+      comments:
+        selector: td a[href^="details.php?id="]
+        attribute: href
+      download:
+        selector: td a[href^="download.php?id="]
+        attribute: href
+      # dates come in two flavours:
+      date:
+        # 13/10/2018
+        selector: td:nth-child(6):contains("/")
+        optional: true
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      date:
+        # 1 hour ago, 2 days ago, 3 weeks ago etc
+        selector: td:nth-child(6):not(:contains("/"))
+        optional: true
+        filters:
+          - name: timeago
+      size:
+        selector: td:nth-child(7)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      grabs:
+        selector: td:nth-child(11)
+      category:
+        text: "Music"
+      downloadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        text: "1"

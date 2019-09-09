@@ -45,7 +45,7 @@
       - {id: 399, cat: PC, desc: "Other OS", default: true}
 
       #Games
-      - {id: 401, cat: Console, desc: "Games", default: true}
+      - {id: 400, cat: Console, desc: "Games", default: true}
       - {id: 401, cat: PC/Games, desc: "PC", default: true}
       - {id: 402, cat: PC/Mac, desc: "Mac", default: true}
       - {id: 403, cat: Console/PS4, desc: "PSx", default: true}
@@ -87,6 +87,10 @@
         "99": "Default"
         "8": "Seeders"
         "3": "Time"
+    - name: info
+      type: info
+      label: Proxies
+      default: The Pirate Bay is currently only reachable via TOR. But you can try to use an unofficial proxy from <a href="https://piratebayproxy.info/" target="_blank">piratebayproxy.info</a>.
   
   search:
     paths:

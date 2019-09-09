@@ -49,12 +49,15 @@ namespace Jackett.Common.Plumbing
                 return BuildServerConfig(ctx);
             }).As<ServerConfig>().SingleInstance();
             builder.RegisterType<HttpWebClient>();
-            
+
             // Register the best web client for the platform or the override
             switch (_runtimeSettings.ClientOverride)
             {
                 case "httpclientnetcore":
-                    // do nothing, registered by the netcore app
+                    RegisterWebClient<HttpWebClientNetCore>(builder);
+                    break;
+                case "httpclient2netcore":
+                    RegisterWebClient<HttpWebClient2NetCore>(builder);
                     break;
                 case "httpclient":
                     RegisterWebClient<HttpWebClient>(builder);
@@ -71,11 +74,6 @@ namespace Jackett.Common.Plumbing
 
         private void RegisterWebClient<WebClientType>(ContainerBuilder builder)
         {
-            //TODO: Remove once off Owin
-            if (EnvironmentUtil.IsRunningLegacyOwin)
-            {
-                Engine.WebClientType = typeof(WebClientType);
-            }
             builder.RegisterType<WebClientType>().As<WebClient>();
         }
 

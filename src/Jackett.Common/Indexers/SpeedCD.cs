@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class SpeedCD : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "take.login.php"; } }
+        private string LoginUrl { get { return SiteLink + "take_login.php"; } }
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
 
         private new ConfigurationDataBasicLogin configData
@@ -43,36 +43,39 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
-            AddCategoryMapping("1", TorznabCatType.MoviesOther);
-            AddCategoryMapping("42", TorznabCatType.Movies);
-            AddCategoryMapping("32", TorznabCatType.Movies);
-            AddCategoryMapping("43", TorznabCatType.MoviesHD);
-            AddCategoryMapping("47", TorznabCatType.Movies);
-            AddCategoryMapping("28", TorznabCatType.MoviesBluRay);
-            AddCategoryMapping("48", TorznabCatType.Movies3D);
-            AddCategoryMapping("40", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("49", TorznabCatType.TVHD);
-            AddCategoryMapping("50", TorznabCatType.TVSport);
-            AddCategoryMapping("52", TorznabCatType.TVHD);
-            AddCategoryMapping("53", TorznabCatType.TVSD);
-            AddCategoryMapping("41", TorznabCatType.TV);
-            AddCategoryMapping("55", TorznabCatType.TV);
-            AddCategoryMapping("2", TorznabCatType.TV);
-            AddCategoryMapping("30", TorznabCatType.TVAnime);
-            AddCategoryMapping("25", TorznabCatType.PCISO);
-            AddCategoryMapping("39", TorznabCatType.ConsoleWii);
-            AddCategoryMapping("45", TorznabCatType.ConsolePS3);
-            AddCategoryMapping("35", TorznabCatType.Console);
-            AddCategoryMapping("33", TorznabCatType.ConsoleXbox360);
-            AddCategoryMapping("46", TorznabCatType.PCPhoneOther);
-            AddCategoryMapping("24", TorznabCatType.PC0day);
-            AddCategoryMapping("51", TorznabCatType.PCMac);
-            AddCategoryMapping("27", TorznabCatType.Books);
-            AddCategoryMapping("26", TorznabCatType.Audio);
-            AddCategoryMapping("44", TorznabCatType.Audio);
-            AddCategoryMapping("29", TorznabCatType.AudioVideo);
+            AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
+            AddCategoryMapping(42, TorznabCatType.Movies, "Movies/Packs");
+            AddCategoryMapping(32, TorznabCatType.Movies, "Movies/Kids");
+            AddCategoryMapping(43, TorznabCatType.MoviesHD, "Movies/HD");
+            AddCategoryMapping(47, TorznabCatType.Movies, "Movies/DiVERSiTY");
+            AddCategoryMapping(28, TorznabCatType.MoviesBluRay, "Movies/B-Ray");
+            AddCategoryMapping(48, TorznabCatType.Movies3D, "Movies/3D");
+            AddCategoryMapping(40, TorznabCatType.MoviesDVD, "Movies/DVD-R");
+            AddCategoryMapping(56, TorznabCatType.Movies, "Movies/Anime");
+            AddCategoryMapping(50, TorznabCatType.TVSport, "TV/Sports");
+            AddCategoryMapping(52, TorznabCatType.TVHD, "TV/B-Ray");
+            AddCategoryMapping(53, TorznabCatType.TVSD, "TV/DVD-R");
+            AddCategoryMapping(41, TorznabCatType.TV, "TV/Packs");
+            AddCategoryMapping(55, TorznabCatType.TV, "TV/Kids");
+            AddCategoryMapping(57, TorznabCatType.TV, "TV/DiVERSiTY");
+            AddCategoryMapping(49, TorznabCatType.TVHD, "TV/HD");
+            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/Episodes");
+            AddCategoryMapping(30, TorznabCatType.TVAnime, "TV/Anime");
+            AddCategoryMapping(25, TorznabCatType.PCISO, "Games/PC ISO");
+            AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Games/Wii");
+            AddCategoryMapping(45, TorznabCatType.ConsolePS3, "Games/PS3");
+            AddCategoryMapping(35, TorznabCatType.Console, "Games/Nintendo");
+            AddCategoryMapping(33, TorznabCatType.ConsoleXbox360, "Games/XboX360");
+            AddCategoryMapping(46, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(24, TorznabCatType.PC0day, "Apps/0DAY");
+            AddCategoryMapping(51, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(54, TorznabCatType.Books, "Educational");
+            AddCategoryMapping(27, TorznabCatType.Books, "Books-Mags");
+            AddCategoryMapping(26, TorznabCatType.Audio, "Music/Audio");
+            AddCategoryMapping(44, TorznabCatType.Audio, "Music/Pack");
+            AddCategoryMapping(29, TorznabCatType.AudioVideo, "Music/Video");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -97,6 +100,8 @@ namespace Jackett.Common.Indexers
             {
                 CQ dom = result.Content;
                 var errorMessage = dom.Text();
+                if (errorMessage.Contains("Wrong Captcha!"))
+                    errorMessage = "Captcha requiered due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure jackett.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
         }
@@ -147,18 +152,20 @@ namespace Jackett.Common.Indexers
                     CQ torrentData = row.OuterHTML;
                     CQ cells = row.Cq().Find("td");
 
-                    string title = torrentData.Find("a[class='torrent']").First().Text().Trim();
-                    Uri link = new Uri(SiteLink + torrentData.Find("img[class='icos save']").First().Parent().Attr("href").Trim());
-                    Uri guid = new Uri(SiteLink + torrentData.Find("a[class='torrent']").First().Attr("href").Trim().TrimStart('/'));
+                    string title = torrentData.Find("td[class='lft'] > div > a").First().Text().Trim();
+                    Uri link = new Uri(SiteLink + torrentData.Find("img[title='Download']").First().Parent().Attr("href").Trim());
+                    Uri guid = link;
+                    Uri comments = new Uri(SiteLink + torrentData.Find("td[class='lft'] > div > a").First().Attr("href").Trim().Remove(0, 1));
                     long size = ReleaseInfo.GetBytes(cells.Elements.ElementAt(4).Cq().Text());
-                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
-                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    int grabs = ParseUtil.CoerceInt(cells.Elements.ElementAt(5).Cq().Text());
+                    int seeders = ParseUtil.CoerceInt(cells.Elements.ElementAt(6).Cq().Text());
+                    int leechers = ParseUtil.CoerceInt(cells.Elements.ElementAt(7).Cq().Text());
 
                     string pubDateStr = torrentData.Find("span[class^='elapsedDate']").First().Attr("title").Trim().Replace(" at", "");
                     DateTime publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
                     long category = 0;
-                    string cat = torrentData.Find("a[class='cat']").First().Attr("id").Trim();
+                    string cat = torrentData.Find("img[class^='Tcat']").First().Parent().Attr("href").Trim().Remove(0, 5);
                     long.TryParse(cat, out category);
 
                     var release = new ReleaseInfo();
@@ -168,12 +175,13 @@ namespace Jackett.Common.Indexers
                     release.Link = link;
                     release.PublishDate = publishDate;
                     release.Size = size;
+                    release.Grabs = grabs;
                     release.Seeders = seeders;
                     release.Peers = seeders + leechers;
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     release.Category = MapTrackerCatToNewznab(category.ToString());
-                    release.Comments = guid;
+                    release.Comments = comments;
 
                     if (torrentData.Find("span:contains(\"[Freeleech]\")").Any())
                         release.DownloadVolumeFactor = 0;

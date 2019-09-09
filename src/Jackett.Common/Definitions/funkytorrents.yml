@@ -6,7 +6,7 @@
   type: private
   encoding: UTF-8
   links:
-    - http://funkytorrents.com
+    - http://funkytorrents.com/
 
   caps:
     categories:
@@ -51,7 +51,7 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      music-search: [q, album, artist, label, year]
 
   login:
     path: takelogin.php
@@ -66,10 +66,10 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
     rows:
       selector: table.mainouter > tbody > tr > td.outer > table > tbody > tr.mouse_out

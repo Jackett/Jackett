@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -17,7 +18,7 @@ namespace Jackett.Common.Indexers
 {
     public class Rarbg : BaseWebIndexer
     {
-        // API doc: https://torrentapi.org/apidocs_v2.txt
+        // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
         private static readonly string defaultSiteLink = "https://torrentapi.org/";
 
         private Uri BaseUri
@@ -37,12 +38,13 @@ namespace Jackett.Common.Indexers
         private DateTime lastTokenFetch;
         private string token;
         private string app_id;
+        private bool provideTorrentLink = false;
 
         private readonly TimeSpan TOKEN_DURATION = TimeSpan.FromMinutes(10);
 
         private bool HasValidToken { get { return !string.IsNullOrEmpty(token) && lastTokenFetch > DateTime.Now - TOKEN_DURATION; } }
 
-        public Rarbg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Rarbg(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "RARBG",
                 description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                 link: "https://rarbg.to/",
@@ -57,9 +59,13 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            var provideTorrentLinkItem = new ConfigurationData.BoolItem { Value = false };
+            provideTorrentLinkItem.Name = "Generate torrent download link additionally to magnet (not recommended due to DDoS protection).";
+            configData.AddDynamic("providetorrentlink", provideTorrentLinkItem);
 
-            webclient.requestDelay = 2.0; // 0.5 requests per second (2 causes problems)
+            TorznabCaps.SupportsImdbMovieSearch = true;
+
+            webclient.requestDelay = 2.1; // The api has a 1req/2s limit.
 
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
@@ -89,6 +95,17 @@ namespace Jackett.Common.Indexers
             app_id = "jackett_v" + EnvironmentUtil.JackettVersion;
         }
 
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            var provideTorrentLinkItem = (ConfigurationData.BoolItem)configData.GetDynamic("providetorrentlink");
+            if (provideTorrentLinkItem != null)
+            {
+                provideTorrentLink = provideTorrentLinkItem.Value;
+            }
+        }
+
         private async Task CheckToken()
         {
             if (!HasValidToken)
@@ -109,7 +126,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0, () =>
@@ -164,11 +181,11 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("mode", "list");
             }
 
-            var cats = string.Join(";", MapTorznabCapsToTrackers(query));
-            if (!string.IsNullOrEmpty(cats))
-            {
-                queryCollection.Add("category", cats);
-            }
+            var querycats = MapTorznabCapsToTrackers(query);
+            if (querycats.Count == 0)
+                querycats = GetAllTrackerCategories(); // default to all, without specifing it some categories are missing (e.g. games), see #4146
+            var cats = string.Join(";", querycats);
+            queryCollection.Add("category", cats);
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
             var response = await RequestStringWithCookiesAndRetry(searchUrl, string.Empty);
@@ -210,13 +227,15 @@ namespace Jackett.Common.Indexers
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
                     var release = new ReleaseInfo();
-                    release.Title = item.Value<string>("title");
+                    release.Title = WebUtility.HtmlDecode(item.Value<string>("title"));
                     release.Category = MapTrackerCatDescToNewznab(item.Value<string>("category"));
 
                     release.MagnetUri = new Uri(item.Value<string>("download"));
                     release.InfoHash = release.MagnetUri.ToString().Split(':')[3].Split('&')[0];
-
-                    release.Comments = new Uri(item.Value<string>("info_page"));
+                    // append app_id to prevent api server returning 403 forbidden
+                    release.Comments = new Uri(item.Value<string>("info_page") + "&app_id=" + app_id);
+                    if (provideTorrentLink)
+                        release.Link = release.Comments; // in case of a torrent download we grab the link from the details page in Download()
                     release.Guid = release.MagnetUri;
 
                     var episode_info = item.Value<JToken>("episode_info");
@@ -250,6 +269,28 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            // build download link from info redirect link
+            var slink = link.ToString();
+            var response = await RequestStringWithCookies(slink);
+            if (!response.IsRedirect && response.Content.Contains("Invalid token."))
+            {
+                // get new token
+                token = null;
+                await CheckToken();
+                slink += "&token=" + token;
+                response = await RequestStringWithCookies(slink);
+            }
+            if (!response.IsRedirect)
+                throw new Exception("Downlaod Failed, expected redirect");
+
+            var targeturi = new Uri(response.RedirectingTo);
+            var id = targeturi.Segments.Last();
+            var dluri = new Uri(targeturi, "/download.php?id=" + id + "&f=jackett.torrent");
+            return await base.Download(dluri, RequestType.GET);
         }
     }
 }

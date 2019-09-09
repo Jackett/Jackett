@@ -13,50 +13,53 @@
 
   caps:
     categorymappings:
-      # Vip
-       - {id: 34, cat: XXX, desc: "Adulti"}
-       - {id: 46, cat: Other, desc: "IPTV"}
-       - {id: 57, cat: XXX, desc: "Riviste XXX"}
-       - {id: 58, cat: XXX, desc: "Fumetti XXX"}
-      # Applicazioni
-       - {id: 33, cat: PC/Phone-Android, desc: "Android"}
-       - {id: 8, cat: PC/0day, desc: "Linux"}
-       - {id: 9, cat: PC/Mac, desc: "Mac"}
-       - {id: 7, cat: PC/0day, desc: "PC"}
-      # Books
-       - {id: 43, cat: Books, desc: "Libreria"}
-       - {id: 41, cat: Books, desc: "Quotidiani"}
-       - {id: 59, cat: Books, desc: "Fumetti"}
-       - {id: 60, cat: Books, desc: "Riviste"}
-       - {id: 61, cat: Books, desc: "Audiolibri"}
-      # Games
-       - {id: 47, cat: PC/Games, desc: "Games PC"}
-       - {id: 40, cat: Console/Other, desc: "Nintendo"}
-       - {id: 13, cat: Console/PS4, desc: "Sony PS"}
-       - {id: 33, cat: Console/Xbox, desc: "XboX"}
-       - {id: 14, cat: Console/Wii, desc: "Wii"}
+      # Movie
+       - {id: 21, cat: Movies/DVD, desc: "Movie DVD-9"}
+       - {id: 11, cat: Movies/DVD, desc: "Movie DVD-5"}
+       - {id: 20, cat: Movies/SD, desc: "Movie DVDRip"}
+       - {id: 45, cat: Movies, desc: "Movie RIP mp4"}
+       - {id: 22, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
+       - {id: 23, cat: Movies/HD, desc: "Movie H-265"}
+       - {id: 24, cat: Movies/HD, desc: "Movie 1080p"}
+       - {id: 25, cat: Movies/HD, desc: "Movie 720p"}
+       - {id: 26, cat: Movies/3D, desc: "Movie 3D-FullHD"}
+       - {id: 27, cat: Movies/BluRay, desc: "Movie BluRay"}
+       - {id: 43, cat: Movies/SD, desc: "Movie BDRip"}
+       - {id: 29, cat: Movies/SD, desc: "Movie Cine News"}
+       - {id: 30, cat: TV/HD, desc: "Serie TV HD"}
+       - {id: 31, cat: TV/SD, desc: "Serie TV SD"}
+       - {id: 35, cat: TV/Other, desc: "Programmi TV"}
+       - {id: 42, cat: TV/Documentary, desc: "Documentari"}
       # Music
-       - {id: 54, cat: Audio/MP3, desc: "MP3"}
-       - {id: 55, cat: Audio/Lossless, desc: "Flac"}
-      # Movies
-       - {id: 17, cat: Movies/SD, desc: "Cine News"}
-       - {id: 43, cat: Movies/SD, desc: "BDRip"}
-       - {id: 16, cat: Movies/SD, desc: "DivX"}
-       - {id: 20, cat: Movies/SD, desc: "DVDRip"}
-       - {id: 21, cat: Movies/DVD, desc: "DVD"}
-       - {id: 25, cat: Movies/HD, desc: "720p"}
-       - {id: 24, cat: Movies/HD, desc: "1080p"}
-       - {id: 27, cat: Movies/BluRay, desc: "Blu Ray Disk"}
-       - {id: 23, cat: Movies/HD, desc: "H-265"}
-       - {id: 26, cat: Movies/3D, desc: "3D-FullHD"}
-       - {id: 31, cat: TV/SD, desc: "SerieTV"}
-       - {id: 45, cat: TV/HD, desc: "Serie Tv HD"}
-       - {id: 22, cat: Movies/UHD, desc: "4K-Ultra-HD"}
-       - {id: 49, cat: TV/Documentary, desc: "Documentari"}
-       - {id: 50, cat: TV/Other, desc: "Programmi TV"}
-       - {id: 51, cat: Movies/Other, desc: "Mp4"}
-
+       - {id: 36, cat: Audio/MP3, desc: "Music MP3"}
+       - {id: 37, cat: Audio/Lossless, desc: "Music Flac"}
+       - {id: 46, cat: Audio, desc: "Music"}
+      # Games
+       - {id: 18, cat: PC/Games, desc: "Games PC"}
+       - {id: 19, cat: Console/PS3, desc: "Games PS3"}
+       - {id: 33, cat: Console/Xbox, desc: "Games XboX"}
+       - {id: 39, cat: Console/Wii, desc: "Games Wii"}
+       - {id: 40, cat: Console/Other, desc: "Games Nintendo"}
+      # Anime
        - {id: 5, cat: TV/Anime, desc: "Anime"}
+      # Edicola
+       - {id: 16, cat: Books, desc: "Edicola Quotidiani"}
+       - {id: 28, cat: Books, desc: "Edicola Libri"}
+       - {id: 17, cat: Books, desc: "Edicola Riviste"}
+       - {id: 41, cat: Books, desc: "Edicola Fumetti"}
+      # Applicazioni
+       - {id: 4, cat: PC, desc: "IPTV"}
+       - {id: 7, cat: PC/0day, desc: "Applicazioni PC"}
+       - {id: 8, cat: PC/0day, desc: "Applicazioni Linux"}
+       - {id: 9, cat: PC/Mac, desc: "Applicazioni Mac"}
+       - {id: 32, cat: PC/Phone-Android, desc: "Applicazioni Android"}
+       - {id: 34, cat: PC/Phone-IOS, desc: "Applicazioni Iphone"}
+      # Vip
+       - {id: 38, cat: Other, desc: "V.I.P."}
+      # Adult
+       - {id: 13, cat: XXX, desc: "Riviste XXX"}
+       - {id: 14, cat: XXX, desc: "Fumetti XXX"}
+       - {id: 44, cat: XXX, desc: "Adulti"}
 
     modes:
       search: [q]
@@ -64,125 +67,132 @@
       movie-search: [q]
 
   login:
-    path: /index.php?page=login
+    path: index.php?page=login
     method: post
     inputs:
       uid: "{{ .Config.username }}"
       pwd: "{{ .Config.password }}"
     error:
       - selector: div.error
+      - selector: body:has(h1:contains("403 Forbidden")) # for banned IP notices
+      - selector: td.lista > span[style="color:#FF0000;"] # Nome Utente non corretto
     test:
-      path: /index.php
+      path: index.php
       selector: a[href="logout.php"]
+
+  # download:
+  #   before:
+  #     path: thanks.php
+  #     method: "post"
+  #     inputs:
+  #       infohash: "{{ .DownloadUri.Query.id }}"
+  #       thanks: "1"
+  #       rndval: "1487013827343"
+  #   selector: a[href^="download.php?id="]
 
   search:
     paths:
-      - path: /index.php
-    keywordsfilters:
-      - name: re_replace
-        args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
-      - name: diacritics
-        args: replace
-      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
-      - name: re_replace
-        args: ["S0?(\\d{1,2})", " $1 "]
-      - name: re_replace
-        args: ["E(\\d{2,3})", " $1 "]
+      # 30 entries per page
+      - path: index.php
+        inputs:
+          pages: 1
+      - path: index.php
+        inputs:
+          pages: 2
+      - path: index.php
+        inputs:
+          pages: 3
+      - path: index.php
+        inputs:
+          pages: 4
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"
       page: torrents
       active: 0
+      order: 3
+      by: 2
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     rows:
-      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      filters:
+        - name: andmatch
     fields:
-      download:
-        selector: a[href^="download.php?id="]
-        attribute: href
-      title: # shortened title?
-        selector: a[href^="index.php?page=torrent-details"]
-        # normalize to SXXEYY format
-        filters:
-          - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9]|\\.", " "]
-          # normalize to SXXEYY format
-          - name: re_replace
-            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
-          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
-          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-          - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-          - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
-          # fine prova
-      title: # long titles?
-        optional: true
-        selector: a[title][href^="index.php?page=torrent-details"]
-        attribute: title
-        filters:
-          - name: replace
-            args: ["Vedi Dettagli: ", ""]
-          # inizio prova
-          - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9]|\\.", " "]
-          # normalize to SXXEYY format
-          - name: re_replace
-            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
-          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
-          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-          - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-          - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
-          # fine prova
       category:
         selector: a[href^="index.php?page=torrents&category="]
         attribute: href
         filters:
           - name: querystring
             args: category
+      title:
+        selector: a[href^="index.php?page=torrent-details&id="]
+        filters:
+          # - name: re_replace # replace special characters with " " (space)
+          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace special characters with " " (space)
+            args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+          - name: diacritics
+            args: replace
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
+          # normalize to SXXEYY format
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       details:
         selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       banner:
         optional: true
-        selector: a[href^="index.php?page=torrent-details&id="][onmouseover]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: onmouseover
         filters:
           - name: regexp
             args: "src=(.+?) "
+      download:
+        # selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php?id="]
+        attribute: href
       size:
-        selector: td:nth-child(10)
+        selector: td:nth-child(2) p:nth-last-child(5)
+        filters:
+          - name: regexp
+            args: ":\\s+(.+?)$" 
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-child(2) p:nth-last-child(4)
         filters:
+          - name: regexp
+            args: ":\\s+(.+?)$" 
           - name: dateparse
-            args: "02/01/2006"
-      grabs:
-        selector: td:nth-child(8)
-        filters:
-          - name: replace
-            args: ["---", "0"]
+            args: "15:04:05 02/01/2006"
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(1)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(2)
+      grabs:
+        text: 0
+      grabs:
+        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(3)
+        optional: true
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: "0"

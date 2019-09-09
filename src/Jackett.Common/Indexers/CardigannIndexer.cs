@@ -8,8 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities();
 
-            TorznabCaps.SupportsImdbSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
+            TorznabCaps.SupportsImdbMovieSearch = Definition.Caps.Modes.Where(c => c.Key == "movie-search" && c.Value.Contains("imdbid")).Any();
             if (Definition.Caps.Modes.ContainsKey("music-search"))
                 TorznabCaps.SupportedMusicSearchParamsList = Definition.Caps.Modes["music-search"];
 
@@ -371,7 +371,7 @@ namespace Jackett.Common.Indexers
                 return true; // no error
 
             var ResultParser = new HtmlParser();
-            var ResultDocument = ResultParser.Parse(loginResult.Content);
+            var ResultDocument = ResultParser.ParseDocument(loginResult.Content);
             foreach (errorBlock error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
@@ -445,7 +445,7 @@ namespace Jackett.Common.Indexers
                             // request real login page again
                             landingResult = await RequestStringWithCookies(LoginUrl, null, SiteLink);
                             var htmlParser = new HtmlParser();
-                            landingResultDocument = htmlParser.Parse(landingResult.Content);
+                            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
                         }
                         else
                         {
@@ -703,14 +703,23 @@ namespace Jackett.Common.Indexers
                 var errormessage = "Login Failed, got redirected.";
                 var DomainHint = getRedirectDomainHint(testResult);
                 if (DomainHint != null)
+                {
                     errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                    if (Definition.Followredirect)
+                    {
+                        configData.SiteLink.Value = DomainHint;
+                        SiteLink = configData.SiteLink.Value;
+                        SaveConfig();
+                        errormessage += " Updated site link, please try again.";
+                    }
+                }
                 throw new ExceptionWithConfigData(errormessage, configData);
             }
 
             if (Login.Test.Selector != null)
             {
                 var testResultParser = new HtmlParser();
-                var testResultDocument = testResultParser.Parse(testResult.Content);
+                var testResultDocument = testResultParser.ParseDocument(testResult.Content);
                 var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
                 if (selection.Length == 0)
                 {
@@ -728,6 +737,13 @@ namespace Jackett.Common.Indexers
                 if (DomainHint != null)
                 {
                     var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    if (Definition.Followredirect)
+                    {
+                        configData.SiteLink.Value = DomainHint;
+                        SiteLink = configData.SiteLink.Value;
+                        SaveConfig();
+                        errormessage += " Updated site link, please try again.";
+                    }
                     throw new ExceptionWithConfigData(errormessage, configData);
                 }
 
@@ -768,12 +784,13 @@ namespace Jackett.Common.Indexers
             landingResult = await RequestStringWithCookies(LoginUrl.AbsoluteUri, null, SiteLink);
 
             var htmlParser = new HtmlParser();
-            landingResultDocument = htmlParser.Parse(landingResult.Content);
+            landingResultDocument = htmlParser.ParseDocument(landingResult.Content);
 
             var hasCaptcha = false;
 
+            var CloudFlareCaptchaChallenge = landingResultDocument.QuerySelector("script[src*=\"/recaptcha/api.js\"]");
             var grecaptcha = landingResultDocument.QuerySelector(".g-recaptcha");
-            if (grecaptcha != null)
+            if (CloudFlareCaptchaChallenge != null && grecaptcha != null)
             {
                 hasCaptcha = true;
                 var CaptchaItem = new RecaptchaItem();
@@ -1092,9 +1109,9 @@ namespace Jackett.Common.Indexers
             variables[".Query.Season"] = query.Season;
             variables[".Query.Movie"] = null;
             variables[".Query.Year"] = query.Year.ToString();
-            variables[".Query.Limit"] = query.Limit;
-            variables[".Query.Offset"] = query.Offset;
-            variables[".Query.Extended"] = query.Extended;
+            variables[".Query.Limit"] = query.Limit.ToString();
+            variables[".Query.Offset"] = query.Offset.ToString();
+            variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;
             variables[".Query.TVDBID"] = null;
@@ -1211,12 +1228,17 @@ namespace Jackett.Common.Indexers
                     response = await PostDataWithCookies(searchUrl, queryCollection, null, null, headers);
                 else
                     response = await RequestStringWithCookies(searchUrl, null, null, headers);
+
+                if (response.IsRedirect && SearchPath.Followredirect)
+                    await FollowIfRedirect(response);
+
                 var results = response.Content;
+
 
                 try
                 {
                     var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                     // check if we need to login again
                     var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
@@ -1231,8 +1253,12 @@ namespace Jackett.Common.Indexers
                             response = await PostDataWithCookies(searchUrl, queryCollection);
                         else
                             response = await RequestStringWithCookies(searchUrl);
+
+                        if (response.IsRedirect && SearchPath.Followredirect)
+                            await FollowIfRedirect(response);
+
                         results = response.Content;
-                        SearchResultDocument = SearchResultParser.Parse(results);
+                        SearchResultDocument = SearchResultParser.ParseDocument(results);
                     }
 
                     checkForError(response, Definition.Search.Error);
@@ -1240,11 +1266,12 @@ namespace Jackett.Common.Indexers
                     if (Search.Preprocessingfilters != null)
                     {
                         results = applyFilters(results, Search.Preprocessingfilters, variables);
-                        SearchResultDocument = SearchResultParser.Parse(results);
+                        SearchResultDocument = SearchResultParser.ParseDocument(results);
                         logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", ID, results));
                     }
 
-                    var RowsDom = SearchResultDocument.QuerySelectorAll(Search.Rows.Selector);
+                    var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                    var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                     List<IElement> Rows = new List<IElement>();
                     foreach (var RowDom in RowsDom)
                     {
@@ -1468,7 +1495,7 @@ namespace Jackett.Common.Indexers
                                             if (Filter.Args != null)
                                                 CharacterLimit = int.Parse(Filter.Args);
 
-                                            if (query.ImdbID != null && TorznabCaps.SupportsImdbSearch)
+                                            if (query.ImdbID != null && TorznabCaps.SupportsImdbMovieSearch)
                                                 break; // skip andmatch filter for imdb searches
 
                                             if (!query.MatchQueryStringAND(release.Title, CharacterLimit))
@@ -1544,6 +1571,8 @@ namespace Jackett.Common.Indexers
                     OnParseError(results, ex);
                 }
             }
+            if (query.Limit > 0)
+                releases = releases.Take(query.Limit).ToList();
             return releases;
         }
 
@@ -1626,7 +1655,7 @@ namespace Jackett.Common.Indexers
                         response = await RequestStringWithCookies(response.RedirectingTo);
                     var results = response.Content;
                     var SearchResultParser = new HtmlParser();
-                    var SearchResultDocument = SearchResultParser.Parse(results);
+                    var SearchResultDocument = SearchResultParser.ParseDocument(results);
                     var DlUri = SearchResultDocument.QuerySelector(selector);
                     if (DlUri != null)
                     {

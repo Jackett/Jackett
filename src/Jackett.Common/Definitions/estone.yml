@@ -53,11 +53,11 @@
             - name: replace
               args: ["\");", ""]
     test:
-      path: /letoltes.php
+      path: letoltes.php
 
   search:
     paths:
-      - path: /letoltes.php
+      - path: letoltes.php
         method: get
     inputs:
       $raw: "{{range .Categories}}kat[]={{.}}&{{end}}"

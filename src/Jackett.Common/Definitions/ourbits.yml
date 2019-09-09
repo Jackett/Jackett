@@ -10,23 +10,17 @@
 
   caps:
     categorymappings:
-      - {id: 401, cat: Movies/BluRay, desc: "Movies Blu-ray"}
-      - {id: 402, cat: Movies/HD, desc: "Movies REMUX"}
-      - {id: 419, cat: Movies/HD, desc: "Movies 1080p"}
-      - {id: 404, cat: Movies/HD, desc: "Movies 720p"}
-      - {id: 405, cat: Movies/3D, desc: "Movies 3D"}
-      - {id: 406, cat: Movies/DVD, desc: "Movies DVD"}
-      - {id: 407, cat: Movies/WEBDL, desc: "Movies WEB-DL"}
-      - {id: 408, cat: Movies/SD, desc: "Movies HDTV"}
-      - {id: 409, cat: Movies/Other, desc: "Movies iPad"}
+      - {id: 401, cat: Movies, desc: "Movies"}
+      - {id: 402, cat: Movies/3D, desc: "Movies 3D"}
+      - {id: 405, cat: TV, desc: "TV Packs"}
       - {id: 410, cat: TV/Documentary, desc: "Documentaries"}
       - {id: 411, cat: TV/Anime, desc: "Animations"}
-      - {id: 412, cat: TV, desc: "TV Series"}
+      - {id: 412, cat: TV, desc: "TV Episodes"}
       - {id: 413, cat: TV, desc: "TV Shows"}
       - {id: 414, cat: Audio/Video, desc: "Music Videos"}
       - {id: 415, cat: TV/Sport, desc: "Sports"}
       - {id: 416, cat: Audio, desc: "Music"}
-      - {id: 420, cat: Other, desc: "Other"}
+      - {id: 419, cat: TV, desc: "Concert"}
 
     modes:
       search: [q]
@@ -34,25 +28,43 @@
       movie-search: [imdbid]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
     error:
       - selector: td.embedded:has(h2:contains("登录失败"))
+        message:
+          selector: td.text
     test:
-      path: /torrents.php
+      path: torrents.php
+      selector: a[href="logout.php"]
+
+  ratio:
+    path: torrents.php
+    selector: span.medium:has(a[href="logout.php"])
+    filters:
+      - name: replace
+        args: ["分享率：", "Ratio: "] # for simplified chinese language setting
+      - name: regexp
+        args: "Ratio: (\\d+)"
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
         method: get
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-      incldead: "1"
+      # 0=including dead 1=active 2=dead
+      incldead: 0
+      # show promotions: 0=all 1=normal 2=free 3=2x 4=2xFree 5=50% 6=2x50% 7=30%
+      spstate: 0
+      # 0=title 1=descr 3=uploader 4=imdb URL
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+      # 0=AND 1=OR 2=Exact
+      search_mode: 0
     rows:
       selector: table.torrents > tbody > tr:has(table.torrentname)
     fields:
@@ -74,26 +86,22 @@
       download:
         selector: a[href^="download.php?id="]
         attribute: href
-      imdb:
-        optional: true
-        selector: div.imdb_100 > a
-        attribute: href
-      size:
-        selector: td:nth-child(5)
-      grabs:
-        selector: td:nth-child(8)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
       date:
-        selector: td:nth-child(4) > span[title]
+        selector: td.rowfollow:nth-child(4) > span[title]
         attribute: title
         filters:
           - name: append
             args: " +08:00"
           - name: dateparse
             args: "2006-01-02 15:04:05 -07:00"
+      size:
+        selector: td.rowfollow:nth-child(5)
+      seeders:
+        selector: td.rowfollow:nth-child(6)
+      leechers:
+        selector: td.rowfollow:nth-child(7)
+      grabs:
+        selector: td.rowfollow:nth-child(8)
       downloadvolumefactor:
         case:
           img.pro_free: "0"
@@ -109,5 +117,6 @@
           img.pro_2up: "2"
           "*": "1"
       description:
-        selector: td:nth-child(2)
+        selector: td.rowfollow:nth-child(2)
         remove: a, img
+# NexusPHP Standard v1.5 Beta 4

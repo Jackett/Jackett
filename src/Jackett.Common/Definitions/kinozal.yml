@@ -88,6 +88,10 @@
         "10" : "9.5GB or higher"
         "11": "Gold (FreeLeech)"
         "12": "Silver (50%DL)"
+    - name: striprussian
+      type: checkbox
+      label: Strip Russian Letters
+      default: true
 
   login:
     path: takelogin.php
@@ -106,6 +110,13 @@
     paths:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
       - path: browse.php
+    keywordsfilters:
+      - name: diacritics
+        args: replace
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       # multi cat is not supported. so defaulting to ALL
       c: "0"
@@ -154,6 +165,30 @@
     fields:
       title:
         selector: td.nam a[href^="/details.php?id="]
+        filters:
+          # normalize to SXXEYY format
+          - name: replace
+            args: [" / ", " "]
+          - name: replace
+            args: ["Кураж-Бамбей", "kurazh"]
+          - name: replace
+            args: ["Кубик в Кубе", "Kubik"]
+          - name: replace
+            args: ["Кравец", "Kravec"]
+          - name: re_replace
+            args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
+          - name: re_replace
+            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          - name: re_replace
+            args: ["\\((\\d+p)\\)", "$1"]
+          - name: replace
+            args: ["-Rip", "Rip"]
+          - name: replace
+            args: ["WEB-DL", "WEBDL"]
+          - name: replace
+            args: ["WEBDLRip", "WEBDL"]
+          - name: replace
+            args: ["HDTVRip", "HDTV"]
       details:
         selector: td.nam a[href^="/details.php?id="]
         attribute: href

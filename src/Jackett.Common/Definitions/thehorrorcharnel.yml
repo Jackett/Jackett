@@ -1,12 +1,12 @@
 ﻿---
   site: thehorrorcharnel
   name: The Horror Charnel
-  description: "A Horror, Cult, Sleaze, Sci-Fi & more tracker"
+  description: "The Horror Charnel (THC) is a Private Torrent Tracker for HORROR / CULT / SLEAZE / SCI FI MOVIES"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://horrorcharnel.org
+    - https://horrorcharnel.org/
 
   caps:
     categories:
@@ -15,7 +15,8 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   settings:
     - name: username
@@ -41,7 +42,7 @@
       path: usercp.php
       
   ratio:
-    path: /my.php
+    path: my.php
     selector: td.navi_top:contains("Deine Ratio:")
     filters:
       - name: replace
@@ -53,16 +54,14 @@
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
-      #$raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
+      cat: 0
 
     rows:
       selector: p + table > tbody > tr:has(a[href^="download.php"]), p + table > tbody > tr:has(a[href^="download.php"]) + tr[id^="kdescr"] # sometimes an unexpected tr[id^="kdescr"] row shows up (for unpublished torrents?)
-      filters:
-        - name: andmatch
       after: 1
     fields:
       title:

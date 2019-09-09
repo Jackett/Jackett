@@ -30,16 +30,23 @@ namespace Jackett.Common.Services
         IConfigurationService configService;
         ManualResetEvent locker = new ManualResetEvent(false);
         ITrayLockService lockService;
+        IProcessService processService;
+        IServiceConfigService windowsService;
+        IFilePermissionService filePermissionService;
         private ServerConfig serverConfig;
         bool forceupdatecheck = false;
+        Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
-        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, ServerConfig sc)
+        public UpdateService(Logger l, WebClient c, IConfigurationService cfg, ITrayLockService ls, IProcessService ps, IServiceConfigService ws, IFilePermissionService fps, ServerConfig sc)
         {
             logger = l;
             client = c;
             configService = cfg;
             lockService = ls;
+            processService = ps;
+            windowsService = ws;
             serverConfig = sc;
+            filePermissionService = fps;
         }
 
         private string ExePath()
@@ -89,6 +96,10 @@ namespace Jackett.Common.Services
                 return;
             }
 
+            Variants variants = new Variants();
+            variant = variants.GetVariant();
+            logger.Info("Jackett variant: " + variant.ToString());
+
             forceupdatecheck = true;
 
             var isWindows = System.Environment.OSVersion.Platform != PlatformID.Unix;
@@ -106,7 +117,6 @@ namespace Jackett.Common.Services
 
             try
             {
-
                 var response = await client.GetString(new WebRequest()
                 {
                     Url = "https://api.github.com/repos/Jackett/Jackett/releases",
@@ -136,12 +146,14 @@ namespace Jackett.Common.Services
                         logger.Info($"New release found.  Current: {currentVersion} New: {latestRelease.Name}");
                         try
                         {
-                            var tempDir = await DownloadRelease(latestRelease.Assets, isWindows,  latestRelease.Name);
+                            var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
                             // Copy updater
                             var installDir = Path.GetDirectoryName(ExePath());
-                            var updaterPath = Path.Combine(tempDir, "Jackett", "JackettUpdater.exe");
+                            var updaterPath = GetUpdaterPath(tempDir);
                             if (updaterPath != null)
+                            {
                                 StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
+                            }
                         }
                         catch (Exception e)
                         {
@@ -165,6 +177,19 @@ namespace Jackett.Common.Services
                     System.Net.ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
                 }
             }
+        }
+
+        private string GetUpdaterPath(string tempDirectory)
+        {
+            if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
+                variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+            {
+                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater");
+            }
+            else
+            {
+                return Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
+            }         
         }
 
         private string GetCurrentVersion()
@@ -193,8 +218,8 @@ namespace Jackett.Common.Services
                 logger.Error("Temp dir doesn't exist: " + tempDir.ToString());
                 return;
             }
-            
-            try { 
+
+            try {
                 DirectoryInfo d = new DirectoryInfo(tempDir);
                 foreach (var dir in d.GetDirectories("JackettUpdate-*"))
                 {
@@ -218,7 +243,9 @@ namespace Jackett.Common.Services
 
         private async Task<string> DownloadRelease(List<Asset> assets, bool isWindows, string version)
         {
-            var targetAsset = assets.Where(a => isWindows ? a.Browser_download_url.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) : a.Browser_download_url.EndsWith(".gz", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            Variants variants = new Variants();
+            string artifactFileName = variants.GetArtifactFileName(variant);
+            Asset targetAsset = assets.Where(a => a.Browser_download_url.EndsWith(artifactFileName, StringComparison.OrdinalIgnoreCase) && artifactFileName.Length > 0).FirstOrDefault();
 
             if (targetAsset == null)
             {
@@ -263,6 +290,32 @@ namespace Jackett.Common.Services
                 tarArchive.Close();
                 gzipStream.Close();
                 inStream.Close();
+
+                if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
+                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64)
+                {
+                    //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
+                    //https://github.com/xamarin/XamarinComponents/issues/282
+
+                    // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
+
+                    string jackettPath = tempDir + "/Jackett/jackett";
+                    filePermissionService.MakeFileExecutable(jackettPath);
+
+                    string jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
+                    filePermissionService.MakeFileExecutable(jackettUpdaterPath);
+
+                    if (variant == Variants.JackettVariant.CoreMacOs)
+                    {
+                        string macosServicePath = tempDir + "/Jackett/install_service_macos";
+                        filePermissionService.MakeFileExecutable(macosServicePath);
+                    }
+                    else
+                    {
+                        string systemdPath = tempDir + "/Jackett/install_service_systemd.sh";
+                        filePermissionService.MakeFileExecutable(systemdPath);
+                    }
+                }
             }
 
             return tempDir;
@@ -271,9 +324,6 @@ namespace Jackett.Common.Services
         private void StartUpdate(string updaterExePath, string installLocation, bool isWindows, bool NoRestart, bool trayIsRunning)
         {
             string appType = "Console";
-            //DI once off Owin
-            IProcessService processService = new ProcessService(logger);
-            IServiceConfigService windowsService = new WindowsServiceConfigService(processService, logger);
 
             if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
             {
@@ -281,19 +331,14 @@ namespace Jackett.Common.Services
             }
 
             var exe = Path.GetFileName(ExePath());
-            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" +a + "\"" : a )).Replace("\"", "\\\"");
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a )).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo();
             startInfo.UseShellExecute = false;
             startInfo.CreateNoWindow = true;
 
             // Note: add a leading space to the --Args argument to avoid parsing as arguments
-            if (isWindows)
-            {
-                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
-                startInfo.FileName = Path.Combine(updaterExePath);
-            }
-            else
+            if (variant == Variants.JackettVariant.Mono)
             {
                 // Wrap mono
                 args = exe + " " + args;
@@ -301,6 +346,11 @@ namespace Jackett.Common.Services
 
                 startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";
+            }
+            else
+            {
+                startInfo.Arguments = $"--Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
+                startInfo.FileName = Path.Combine(updaterExePath);
             }
 
             try
@@ -338,16 +388,7 @@ namespace Jackett.Common.Services
                 }
 
                 logger.Info("Exiting Jackett..");
-
-                //TODO: Remove once off Owin
-                if (EnvironmentUtil.IsRunningLegacyOwin)
-                {
-                    Engine.Exit(0);
-                }
-                else
-                {
-                    Environment.Exit(0);
-                }
+                Environment.Exit(0);
             }
         }
     }

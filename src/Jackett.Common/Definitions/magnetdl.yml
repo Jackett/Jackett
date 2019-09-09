@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.magnetdl.com/
+  legacylinks:
     - http://www.magnetdl.com/
 
   caps:
@@ -37,33 +39,34 @@
     paths:
       # return movie results if there are no search parms supplied (for use with the TEST button)
       # http://www.magnetdl.com/m/midnight-texas-s01e10/
-      # using "invalid-cat" in the default case (empty keywords) causes no category limitation
-      - path: "{{if .Keywords}}/{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/invalid-cat/{{end}}"     
+      - path: "{{if .Keywords}}{{ re_replace .Keywords \"(.).*\" \"$1\" }}/{{ .Keywords }}/{{else}}download/movies/{{end}}"     
     rows:
-      selector: tr:has(td[class="m"])
+      selector: tr:has(td.m)
     fields:
       title:
-        selector: td[class="n"] a
+        selector: td.n a
         attribute: title
       category:
         optional: true
         selector:  td[class^="t"]
       details:
-        selector: td[class="n"] a
+        selector: td.n a
         attribute: href
       magnet:
-        selector: td[class="m"] a
+        selector: td.m a
         attribute: href
       date:
         selector: td:nth-child(3)
         filters:
           - name: timeago
+      files:
+        selector: td:nth-child(5)
       size:
         selector: td:nth-child(6)
       seeders:
-        selector: td[class="s"]
-      files:
-        selector: td[class="l"]
+        selector: td.s
+      leechers:
+        selector: td.l
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

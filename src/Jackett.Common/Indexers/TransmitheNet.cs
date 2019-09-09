@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(response.Content);
+                var document = parser.ParseDocument(response.Content);
                 var messageEl = document.QuerySelector("form > span[class='warning']");
                 var errorMessage = response.Content;
                 if (messageEl != null)
@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
             {
                 var globalFreeleech = false;
                 var parser = new HtmlParser();
-                var document = parser.Parse(htmlResponse);
+                var document = parser.ParseDocument(htmlResponse);
 
                 if (document.QuerySelector("div.nicebar > span:contains(\"Personal Freeleech\")") != null)
                     globalFreeleech = true;
@@ -137,7 +137,10 @@ namespace Jackett.Common.Indexers
                     release.Category = new List<int> { TvCategoryParser.ParseTvShowQuality(release.Title) };
 
                     var timeAnchor = row.QuerySelector("span[class='time']");
-                    release.PublishDate = DateTime.ParseExact(timeAnchor.GetAttribute("title"), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+                    var publishdate = timeAnchor.GetAttribute("title");
+                    release.PublishDate = !string.IsNullOrEmpty(publishdate) && publishdate.Contains(",")
+                        ? DateTime.ParseExact(publishdate, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal)
+                        : DateTime.ParseExact(timeAnchor.TextContent.Trim(), "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
                     release.Seeders = ParseUtil.CoerceInt(timeAnchor.ParentElement.NextElementSibling.NextElementSibling.TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(timeAnchor.ParentElement.NextElementSibling.NextElementSibling.NextElementSibling.TextContent.Trim()) + release.Seeders;
                     release.Size = ReleaseInfo.GetBytes(timeAnchor.ParentElement.PreviousElementSibling.TextContent);

@@ -115,8 +115,20 @@
     modes:
       search: [q]
 
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: "IP requirement"
+      default: "This site accepts only users with Spanish IP addresses.<br>For others it will return error: 403 Forbidden."
+
   login:
-    path: /index.php?page=login
+    path: index.php?page=login
     method: post
     inputs:
       uid: "{{ .Config.username }}"
@@ -132,6 +144,8 @@
     keywordsfilters:
       - name: re_replace
         args: ["S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
+      - name: re_replace
+        args: ["[^a-zA-Z0-9]+", " "]
     inputs:
       page: "torrents"
       $raw: "&category={{range .Categories}}{{.}};{{end}}"
@@ -168,7 +182,10 @@
       leechers:
         selector: td:nth-child(7) a
       grabs:
-        selector: td:nth-child(8) a
+        selector: td:nth-child(8)
+        filters:
+          - name: replace
+            args: ["---", "0"]
       date:
         selector: td:nth-child(5)
         filters:

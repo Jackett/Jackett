@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFrameworks>net452;net461;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <AssemblyName>JackettUpdater</AssemblyName>
     <OutputType>Exe</OutputType>
     <Version>0.0.0</Version>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>

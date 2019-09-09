@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -106,7 +106,7 @@ namespace Jackett.Common.Indexers
                 string RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.Parse(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -201,7 +201,7 @@ namespace Jackett.Common.Indexers
             var response = await RequestStringWithCookies(link.ToString());
             var results = response.Content;
             var SearchResultParser = new HtmlParser();
-            var SearchResultDocument = SearchResultParser.Parse(results);
+            var SearchResultDocument = SearchResultParser.ParseDocument(results);
             var downloadSelector = "a[title=\"Download attachment\"]";
             var DlUri = SearchResultDocument.QuerySelector(downloadSelector);
             if (DlUri != null)

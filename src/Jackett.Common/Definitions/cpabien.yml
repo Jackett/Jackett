@@ -5,22 +5,37 @@
   language: fr-fr
   type: public
   encoding: UTF-8
+  followredirect: true
   links:
-    - http://www.cpabien.io/
+    - https://www.cpasbien.lol/
   legacylinks:
     - http://www.cpasbiens.cc/
     - http://www.cpabien.cm/
     - http://cpabien.cm/
     - http://cpasbiens1.com/
     - http://cpabien.mx/
-    - https://www.cpabien.bz/
     - http://www.cpabien.bz/
-    - http://www.cpabien.cx/
     - http://cpabien.org/
     - http://cpabien.cc/
     - http://cpabien.co/
     - http://cpabien.la/
     - http://cpabien.club/
+    - http://www.cpabien.io/
+    - https://ww1.cpabien.io/
+    - https://wvw.cpabien.cm/
+    - https://www.cpabien.io/
+    - https://www.cpabien9.net/
+    - https://wwv.cpabien.cm/
+    - http://www.cpabien.cx/
+    - https://www.cpasbien.blue/
+    - https://www.cpabien.cx/
+    - https://www.cpasbien.re/
+    - http://www.cpasbien.io/
+    - https://www.cpabien.bz/
+    - https://www.cpabien.link/
+    - https://www.cpasbiens.cz/
+    - https://www.cpasbiens.bz/
+    - https://www.cpasbien.vg/
 
   caps:
     categorymappings:
@@ -38,9 +53,9 @@
     attribute: href
   search:
     paths:
-      - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}derniers/{{end}}"
+      - path: "{{if .Keywords}}recherche/{{.Keywords}}{{else}}{{end}}"
     rows:
-      selector: table.table-corps tbody tr td
+      selector: div#gauche > table > tbody > tr:has(a)
     fields:
       site_date:
         selector: a
@@ -53,7 +68,9 @@
         filters:
           # now we put the date at the right place according scene naming rules using .Result.site_date
           - name: replace
-            args: ["FRENCH", "{{ .Result.site_date }} FRENCH"]
+            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
+          - name: replace
+            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
           - name: replace
             args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
           - name: replace

@@ -51,7 +51,7 @@
       movie-search: [q]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form
     inputs:
@@ -60,11 +60,11 @@
     error:
       - selector: div.box:has(div.title:contains("bejelentkez"))
     test:
-      path: /torrentek.php
+      path: torrentek.php
 
   search:
     paths:
-      - path: /torrentek.php
+      - path: torrentek.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Keywords }}"

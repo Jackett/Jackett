@@ -45,10 +45,10 @@ namespace Jackett.Common.Models
 		public static readonly TorznabCategory MoviesSD = new TorznabCategory(2030, "Movies/SD");
 				
 		public static readonly TorznabCategory MoviesHD = new TorznabCategory(2040, "Movies/HD");
-
-        public static readonly TorznabCategory MoviesUHD = new TorznabCategory(2045, "Movies/UHD");
-
-        public static readonly TorznabCategory Movies3D = new TorznabCategory(2050, "Movies/3D");
+				
+		public static readonly TorznabCategory MoviesUHD = new TorznabCategory(2045, "Movies/UHD");
+				
+		public static readonly TorznabCategory Movies3D = new TorznabCategory(2050, "Movies/3D");
 				
 		public static readonly TorznabCategory MoviesBluRay = new TorznabCategory(2060, "Movies/BluRay");
 				
@@ -95,10 +95,10 @@ namespace Jackett.Common.Models
 		public static readonly TorznabCategory TVSD = new TorznabCategory(5030, "TV/SD");
 				
 		public static readonly TorznabCategory TVHD = new TorznabCategory(5040, "TV/HD");
-
-        public static readonly TorznabCategory TVUHD = new TorznabCategory(5045, "TV/UHD");
-
-        public static readonly TorznabCategory TVOTHER = new TorznabCategory(5050, "TV/OTHER");
+				
+		public static readonly TorznabCategory TVUHD = new TorznabCategory(5045, "TV/UHD");
+				
+		public static readonly TorznabCategory TVOTHER = new TorznabCategory(5050, "TV/OTHER");
 				
 		public static readonly TorznabCategory TVSport = new TorznabCategory(5060, "TV/Sport");
 				

@@ -6,7 +6,7 @@
   type: public
   encoding: UTF-8
   links:
-    - https://sukebei.nyaa.si
+    - https://sukebei.nyaa.si/
     
   settings:
     - name: filter-id

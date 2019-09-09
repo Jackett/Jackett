@@ -19,9 +19,12 @@ namespace Jackett.Common.Indexers
 {
     public class TorrentHeaven : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] { 
+            "https://torrentheaven.myfqdn.info/", 
+        }; 
+
         private string IndexUrl { get { return SiteLink + "index.php"; } }
         private string LoginCompleteUrl { get { return SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify"; } }
-        private static readonly string certificateHash = "6F5CE30D578C2A7AECFB919D0D013976D395055F";
 
         private new ConfigurationDataCaptchaLogin configData
         {
@@ -43,6 +46,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
             Type = "private";
+
+            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "cbf23ac75b07255ad7548a87567a839d23f31576"); // incomplete CA chain
 
             AddCategoryMapping(1, TorznabCatType.PCGames, "GAMES/PC");
             AddCategoryMapping(3, TorznabCatType.Console, "GAMES/Sonstige");
@@ -91,8 +96,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(30, TorznabCatType.PC, "APPLICATIONS/Sonstige");
             AddCategoryMapping(70, TorznabCatType.PC, "APPLICATIONS/Linux");
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");
-
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using CsQuery;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.Parse(response.Content);
+                var document = parser.ParseDocument(response.Content);
                 var groups = document.QuerySelectorAll(".torrent_table > tbody > tr.group");
                 var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent");
 
@@ -159,8 +159,23 @@ namespace Jackett.Common.Indexers
                             var downloadAnchor = groupItem.QuerySelectorAll("td a").Last();
                             var qualityData = downloadAnchor.InnerHtml.Split('/');
 
-                            if (qualityData.Length < 2)
-                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length}.");
+                            switch (qualityData.Length)
+                            {
+                                case 0:
+                                    Array.Resize(ref qualityData, 2);
+                                    qualityData[0] = " ";
+                                    qualityData[1] = " ";
+                                    break;
+                                case 1:
+                                    Array.Resize(ref qualityData, 2);
+                                    qualityData[1] = " ";
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            // Replace 4K quality tag with 2160p, so Sonarr etc. can properly parse it
+                            qualityData[1] = qualityData[1].Replace("4K", "2160p");
 
                             // Build title
                             var title = string.Join(".", new List<string>

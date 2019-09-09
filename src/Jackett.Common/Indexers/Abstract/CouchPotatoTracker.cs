@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers.Abstract
             )
         {
             this.endpoint = endpoint;
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers.Abstract
             
             if (!string.IsNullOrEmpty(query.ImdbID))
             { 
-                queryCollection.Add("imdbid", "browse");
+                queryCollection.Add("imdbid", query.ImdbID);
             }
             if (searchString != null)
             {

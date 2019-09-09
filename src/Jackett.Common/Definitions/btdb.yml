@@ -1,12 +1,15 @@
 ---
   site: btdb
   name: BTDB
-  description: "BTDB is a Public BitTorrent DHT search engine. Torrents can be downloaded via magnet links"
+  description: "BTDB is a Public BitTorrent DHT search engine."
   language: en-us
   type: public
   encoding: UTF-8
   links:
+    -  https://btdb.eu/
+  legacylinks:
     -  https://btdb.to/
+    -  https://btdb.unblocked.app/
 
   caps:
     categorymappings:
@@ -25,31 +28,24 @@
 
   search:
     paths:
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/?sort=time{{else}}recent{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/2?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/3?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/4?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/5?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/6?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/7?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/8?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/9?sort=time{{else}}{{end}}"
-      - path: "{{if .Keywords}}q/{{ .Keywords}}/10?sort=time{{else}}{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time{{else}}recent{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=2{{else}}recent?page=2{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=3{{else}}recent?page=3{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=4{{else}}recent?page=4{{end}}"
+      - path: "{{if .Keywords}}?search={{ .Keywords}}&sort=time&page=5{{else}}recent?page=5{{end}}"
     rows:
       selector: li[class$="item"]
-      filters:
-        - name: andmatch
     fields:
       title:
-        selector: h2[class$="title"] a[href^="/torrent/"]
+        selector: h2[class$="title"] a[href*="/torrent/"]
         attribute: title
       category:
         text: "1"
       details:
-        selector: h2[class$="title"] a[href^="/torrent/"]
+        selector: h2[class$="title"] a[href*="/torrent/"]
         attribute: href
       magnet:
-        selector: div[class$="info"] a[href^="magnet:"]
+        selector: div[class$="info"] a[href^="magnet:?xt="]
         attribute: href
       size:
         selector: div[class$="info"] span:nth-of-type(1)
@@ -58,14 +54,13 @@
       date:
         selector: div[class$="info"] span:nth-of-type(3)
         filters:
-          - name: dateparse
-            args: "2006-01-02 15:04:05"
+          - name: timeago
       grabs:
         selector: div[class$="info"] span:nth-of-type(4)
       seeders:
-        text: "999"
+        text: 1
       leechers:
-        text: "999"
+        text: 1
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

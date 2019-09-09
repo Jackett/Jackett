@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -26,8 +26,9 @@ namespace Jackett.Common.Indexers
         private readonly char[] _digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         private readonly Dictionary<string, string> _commonSearchTerms = new Dictionary<string, string>
         {
-            { "agents of shield", "Agents of S.H.I.E.L.D."}
-        };
+            { "agents of shield", "Agents of S.H.I.E.L.D."},
+            { "greys anatomy", "grey's anatomy"},
+    };
         
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://bj-share.me/"
@@ -53,6 +54,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "pt-br";
             Type = "private";
+
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
@@ -102,7 +105,8 @@ namespace Jackett.Common.Indexers
         {
             // Search does not support searching with episode numbers so strip it if we have one
             // Ww AND filter the result later to archive the proper result
-            return isAnime ? term.TrimEnd(_digits) : Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            term = Regex.Replace(term, @"[S|E]\d\d", string.Empty).Trim();
+            return isAnime ? term.TrimEnd(_digits) : term;
         }
 
         private static string FixAbsoluteNumbering(string title)
@@ -124,18 +128,29 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            query = query.Clone(); // avoid modifing the original query
+            
+
             var releases = new List<ReleaseInfo>();
 
+            
+
             // if the search string is empty use the "last 24h torrents" view
-            if (string.IsNullOrWhiteSpace(query.SearchTerm))
+            if (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
             {
                 var results = await RequestStringWithCookies(TodayUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookies(TodayUrl);
+                }
                 try
                 {
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.Parse(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                     foreach (var row in rows)
                     {
@@ -189,18 +204,21 @@ namespace Jackett.Common.Indexers
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                             release.Title = FixAbsoluteNumbering(release.Title);
 
-                            var quality = qQuality.TextContent;
-                            switch (quality)
+                            if (qQuality != null)
                             {
-                                case "Full HD":
-                                    release.Title += " 1080p";
-                                    break;
-                                case "HD":
-                                    release.Title += " 720p";
-                                    break;
-                                default:
-                                    release.Title += " 480p";
-                                    break;
+                                var quality = qQuality.TextContent;
+                                switch (quality)
+                                {
+                                    case "Full HD":
+                                        release.Title += " 1080p";
+                                        break;
+                                    case "HD":
+                                        release.Title += " 720p";
+                                        break;
+                                    default:
+                                        release.Title += " 480p";
+                                        break;
+                                }
                             }
 
                             release.Category = MapTrackerCatToNewznab(catStr);
@@ -230,12 +248,20 @@ namespace Jackett.Common.Indexers
                 var searchUrl = BrowseUrl;
                 var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
 
-                foreach (var searchTerm in _commonSearchTerms)
+                if (!query.IsImdbQuery)
                 {
-                    query.SearchTerm = query.SearchTerm.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value);
+                    foreach (var searchTerm in _commonSearchTerms)
+                    {
+                        query.SearchTerm = query.SearchTerm.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value);
+                    }
                 }
-                
+
                 var searchString = query.GetQueryString();
+                if (query.IsImdbQuery)
+                {
+                    searchString = query.ImdbID;
+                }
+
                 var queryCollection = new NameValueCollection
                 {
                     {"searchstr", StripSearchString(searchString, isSearchAnime)},
@@ -254,12 +280,18 @@ namespace Jackett.Common.Indexers
                 searchUrl += "?" + queryCollection.GetQueryString();
 
                 var results = await RequestStringWithCookies(searchUrl);
+                if (results.IsRedirect)
+                {
+                    // re-login
+                    await ApplyConfiguration(null);
+                    results = await RequestStringWithCookies(searchUrl);
+                }
                 try
                 {
                     const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
 
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.Parse(results.Content);
+                    var searchResultDocument = searchResultParser.ParseDocument(results.Content);
                     var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
 
                     ICollection<int> groupCategory = null;
@@ -365,7 +397,7 @@ namespace Jackett.Common.Indexers
                             release.PublishDate = DateTime.Today;
 
                             // check for previously stripped search terms
-                            if (!query.MatchQueryStringAND(release.Title))
+                            if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title))
                                 continue;
 
                             var size = qSize.TextContent;

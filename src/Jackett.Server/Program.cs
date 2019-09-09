@@ -7,6 +7,7 @@ using Jackett.Common.Utils;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
@@ -47,12 +48,9 @@ namespace Jackett.Server
             {
                 if (string.IsNullOrEmpty(options.Client))
                 {
-                    //TODO: Remove libcurl once off owin
-                    bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
-                    
-                    if (runningOnDotNetCore)
+                    if (DotNetCoreUtil.IsRunningOnDotNetCore)
                     {
-                        options.Client = "httpclientnetcore";
+                        options.Client = "httpclient2netcore";
                     }
                     else
                     {
@@ -83,6 +81,7 @@ namespace Jackett.Server
                 }
             }
 
+            Initialisation.CheckEnvironmentalVariables(logger);
             Initialisation.ProcessSettings(Settings, logger);
 
             ISerializeService serializeService = new SerializeService();
@@ -107,6 +106,7 @@ namespace Jackett.Server
 
             var builder = new ConfigurationBuilder();
             builder.AddInMemoryCollection(runtimeDictionary);
+            builder.AddJsonFile(Path.Combine(configurationService.GetAppDataFolder(), "appsettings.json"), optional: true);
 
             Configuration = builder.Build();
 
@@ -123,14 +123,17 @@ namespace Jackett.Server
 
                 ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
                 Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal).Take(1).ToArray(); //Kestrel doesn't need 127.0.0.1 and localhost to be registered, remove once off OWIN
+                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
 
                 isWebHostRestart = false;
 
                 try
                 {
                     logger.Debug("Creating web host...");
-                    CreateWebHostBuilder(args, url).Build().Run();
+                    string applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
+                    logger.Debug($"Content root path is: {applicationFolder}");
+
+                    CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
                 }
                 catch (Exception ex)
                 {
@@ -174,12 +177,19 @@ namespace Jackett.Server
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(Configuration)
+                .UseContentRoot(contentRoot)
+                .UseWebRoot(contentRoot)
                 .UseUrls(urls)
                 .PreferHostingUrls(true)
+                .UseConfiguration(Configuration)
                 .UseStartup<Startup>()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
                 .UseNLog();
     }
 }

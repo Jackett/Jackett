@@ -3,6 +3,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
+using System;
 
 namespace Jackett.Common.Indexers
 {
@@ -21,6 +22,8 @@ namespace Jackett.Common.Indexers
         {
             Language = "en-us";
             Type = "private";
+
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "B52C043ABDE7AFB2231E162B1DD468758AEEE307");
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.Movies, "Movies");

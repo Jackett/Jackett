@@ -30,6 +30,7 @@
     - name: itorrents-links
       type: checkbox
       label: Add download links via itorrents.org
+      default: false
     - name: info
       type: info
       label: ITorrents Note
@@ -41,13 +42,13 @@
       # sort torrent-list by age in descending order
       - path: "{{if .Keywords}}torrent-list/{{ .Keywords}}?&o=-3&c={{range .Categories }}{{.}}{{end}}{{else}}browse.html{{end}}"
     rows:
-      selector: div[class="resultdiv"]
+      selector: div.resultdiv
     fields:
       title:
-        selector: div[class="resultdivtop"] a div[class="resultdivtopname"]
+        selector: div.resultdivtop a div.resultdivtopname
       category:
         optional: true
-        selector:  div[class="resultdivbotton"] div[class="resultdivbottoncategory"]
+        selector:  div.resultdivbotton div.resultdivbottoncategory
         case:
           ":contains(\"Others\")": 0
           ":contains(\"Movies\")": 1
@@ -60,10 +61,10 @@
           ":contains(\"Apps\")": 8
           ":contains(\"Books\")": 9
       details:
-        selector: div[class="resultdivtop"] a
+        selector: div.resultdivtop a
         attribute: href
       download-itorrents:
-        selector: div[class="resultdivbotton"] div[id^="hideinfohash"]
+        selector: div.resultdivbotton div.hideinfohash
         filters:
           - name: toupper
           - name: prepend
@@ -78,24 +79,26 @@
           - name: validfilename
           - name: urlencode
       magnet:
-        selector: div[class="resultdivbotton"] div[id^="hideinfohash"]
+        selector: div.resultdivbotton div.hideinfohash
         filters:
           - name: prepend
             args: "magnet:?xt=urn:btih:"
           - name: append
             args: "&dn={{ .Result.magfile }}.torrent"
           - name: append
-            args: "&tr=http://182.176.139.129:6969/announce&tr=http://explodie.org:6969/announce&tr=http://tracker.mgtracker.org:2710/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://tracker.sktorrent.net:6969/announce&tr=udp://tracker.zer0day.to:1337/announce"
+            args: "&tr=http://tracker.trackerfix.com:80/announce&tr=udp://9.rarbg.com:2710/announce&tr=udp://9.rarbg.me:2710/announce&tr=udp://9.rarbg.to:2710/announce&tr=udp://coppersurfer.tk:6969/announce&tr=udp://eddie4.nl:6969/announce&tr=udp://exodus.desync.com:6969&tr=udp://glotorrents.pw:6969/announce&tr=udp://open.demonii.com:1337&tr=udp://p4p.arenabg.ch:1337/announce&tr=udp://p4p.arenabg.com:1337&tr=udp://torrent.gresille.org:80/announce&tr=udp://tracker.aletorrenty.pl:2710/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.glotorrents.com:6969/announce&tr=udp://tracker.internetwarriors.net:1337&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://tracker.openbittorrent.com:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://zer0day.ch:1337/announce"
       date:
-        selector: div[class="resultdivbotton"] div[class="resulttime"] div[class="resultdivbottontime"]
+        selector: div.resultdivbotton div.resulttime div.resultdivbottontime
         filters:
           - name: timeago
       size:
-        selector: div[class="resultdivbotton"] div[class="resultlength"] div[class="resultdivbottonlength"]
+        selector: div.resultdivbotton div.resultlength div.resultdivbottonlength
       seeders:
-        selector: div[class="resultdivbotton"] div[class="resultseed"] div[class="resultdivbottonseed"]
+        selector: div.resultdivbotton div.resultseed div.resultdivbottonseed
+      leechers:
+        text: "0"
       files:
-        selector: div[class="resultdivbotton"] div[class="resultfile"] div[class="resultdivbottonfiles"]
+        selector: div.resultdivbotton div.resultfile div.resultdivbottonfiles
       downloadvolumefactor:
         text: "0"
       uploadvolumefactor:

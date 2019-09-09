@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient,
-                supportsFreeleechTokens: true // not verified
+                supportsFreeleechTokens: false // ratiofree
                 )
         {
             Language = "fr-fr";

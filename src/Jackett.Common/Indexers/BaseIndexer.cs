@@ -10,7 +10,6 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -177,17 +176,9 @@ namespace Jackett.Common.Indexers
         //TODO: Remove this section once users have moved off DPAPI
         private bool MigratedFromDPAPI(JToken jsonConfig)
         {
-            if (EnvironmentUtil.IsRunningLegacyOwin)
-            {
-                //Still running legacy Owin and using the DPAPI, we don't want to migrate
-                logger.Debug(ID + " - Running Owin, no need to migrate from DPAPI");
-                return false;
-            }
-
-            bool runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("core", StringComparison.OrdinalIgnoreCase) >= 0;
             bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
-            if (!isWindows && runningOnDotNetCore)
+            if (!isWindows && DotNetCoreUtil.IsRunningOnDotNetCore)
             {
                 // User isn't running Windows, but is running on .NET Core framework, no access to the DPAPI, so don't bother trying to migrate
                 return false;
@@ -302,9 +293,9 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
                 if (!caps.SupportsCategories(query.Categories))
                     return false;
-            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
                 return true;
-            else if (!caps.SupportsImdbSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
+            else if (!caps.SupportsImdbMovieSearch && query.IsImdbQuery && query.QueryType != "TorrentPotato") // potato query should always contain imdb+search term
                 return false;
             if (caps.SearchAvailable && query.IsSearch)
                 return true;
@@ -316,7 +307,7 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.SupportsTVRageSearch && query.IsTVRageSearch)
                 return true;
-            if (caps.SupportsImdbSearch && query.IsImdbQuery)
+            if (caps.SupportsImdbMovieSearch && query.IsImdbQuery)
                 return true;
 
             return false;
@@ -582,6 +573,11 @@ namespace Jackett.Common.Indexers
             {
                 throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The tracker seems to be down.");
             }
+
+            if (response.Status == System.Net.HttpStatusCode.Forbidden && response.Content.Contains("<span data-translate=\"complete_sec_check\">Please complete the security check to access</span>"))
+            {
+                throw new Exception("Request to " + response.Request.Url + " failed (Error " + response.Status + ") - The page is protected by an Cloudflare reCaptcha. The page is in aggressive DDoS mitigation mode or your IP might be blacklisted (e.g. in case of shared VPN IPs). There's no easy way of making it usable with Jackett.");
+            }
         }
 
         protected async Task FollowIfRedirect(WebClientStringResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
@@ -752,26 +748,22 @@ namespace Jackett.Common.Indexers
 
         protected ICollection<int> MapTrackerCatToNewznab(string input)
         {
-            var cats = new List<int>();
-            if (null != input)
-            {
-                var mapping = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).FirstOrDefault();
-                if (mapping != null)
-                {
-                    cats.Add(mapping.NewzNabCategory);
-                }
+            if (input == null)
+                return new List<int>();
 
-                // 1:1 category mapping
-                try
-                {
-                    var trackerCategoryInt = int.Parse(input);
-                    cats.Add(trackerCategoryInt + 100000);
-                }
-                catch (FormatException)
-                {
-                    // input is not an integer, continue
-                }
+            var cats = categoryMapping.Where(m => m.TrackerCategory != null && m.TrackerCategory.ToLowerInvariant() == input.ToLowerInvariant()).Select(c => c.NewzNabCategory).ToList();
+
+            // 1:1 category mapping
+            try
+            {
+                var trackerCategoryInt = int.Parse(input);
+                cats.Add(trackerCategoryInt + 100000);
             }
+            catch (FormatException)
+            {
+                // input is not an integer, continue
+            }
+
             return cats;
         }
 

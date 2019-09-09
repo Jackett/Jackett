@@ -202,6 +202,7 @@ namespace Jackett.Server.Controllers
                 if (t.Key == "Category[]")
                 {
                     request.Category = t.Value.ToString().Split(',').Select(Int32.Parse).ToArray();
+                    CurrentQuery.Categories = request.Category;
                 }
 
                 if (t.Key == "query")
@@ -339,11 +340,13 @@ namespace Jackett.Server.Controllers
 
             if (CurrentQuery.ImdbID != null)
             {
+                /* We should allow this (helpful in case of aggregate indexers)
                 if (!string.IsNullOrEmpty(CurrentQuery.SearchTerm))
                 {
                     logger.Warn($"A search request from {Request.HttpContext.Connection.RemoteIpAddress} was made containing q and imdbid.");
                     return GetErrorXML(201, "Incorrect parameter: please specify either imdbid or q");
                 }
+                */
 
                 CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
                 if (CurrentQuery.ImdbID == null)
@@ -352,7 +355,7 @@ namespace Jackett.Server.Controllers
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
-                if (!CurrentIndexer.TorznabCaps.SupportsImdbSearch)
+                if (!CurrentIndexer.TorznabCaps.SupportsImdbMovieSearch)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported by this indexer");

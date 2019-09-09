@@ -32,6 +32,7 @@ namespace Jackett.Common.Indexers
         private string TorrentCommentUrl { get { return TorrentDescriptionUrl; } }
         private string TorrentDescriptionUrl { get { return SiteLink + "torrents.php?id="; } }
         private string TorrentDownloadUrl { get { return SiteLink + "torrents.php?action=download&id={id}&authkey={auth_key}&torrent_pass={torrent_pass}"; } }
+        private string ReplaceMulti { get { return ConfigData.ReplaceMulti.Value; } }
         private bool Latency { get { return ConfigData.Latency.Value; } }
         private bool DevMode { get { return ConfigData.DevMode.Value; } }
         private bool CacheMode { get { return ConfigData.HardDriveCache.Value; } }
@@ -302,6 +303,11 @@ namespace Jackett.Common.Indexers
 
                     // Release Name
                     string name = tRow.Find("td:eq(1) > a").Text();
+                    //issue #3847 replace multi keyword
+                    if(!string.IsNullOrEmpty(ReplaceMulti)){
+                        System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                        name = regex.Replace(name, "$1"+ReplaceMulti+"$2");
+                    }
                     output("Release: " + name);
 
                     // Category

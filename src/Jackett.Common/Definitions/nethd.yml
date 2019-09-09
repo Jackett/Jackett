@@ -1,7 +1,7 @@
 ---
   site: nethd
   name: NetHD
-  description: "A vietnamese tracker"
+  description: "NetHD (VietTorrent) is a VIETNAMESE Private Torrent Tracker for HD MOVIES / TV"
   language: vi-vn
   type: semi-private
   encoding: UTF-8
@@ -23,7 +23,7 @@
       movie-search: [q, imdbid]
 
   login:
-    path: /takelogin.php
+    path: takelogin.php
     method: post
     inputs:
       username: "{{ .Config.username }}"
@@ -31,17 +31,16 @@
     error:
       - selector: form#loginform > span.warning
     test:
-      path: /torrents.php
+      path: torrents.php
 
   ratio:
-    path: /torrents.php
+    path: torrents.php
     selector: div.user-info-extend > dl > dt:contains("Ratio:") + dd
   search:
     paths:
-      - path: /torrents.php
-        method: post
+      - path: torrents.php
     inputs:
-      $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+      $raw: "{{range .Categories}}cat={{.}}&{{end}}"
       search: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
       search_mode: 0
@@ -54,7 +53,7 @@
         - name: andmatch
     fields:
       title:
-        selector: td.name > div > a.poster-preview[title]
+        selector: td.name > div > a[href*="-torrent-"][title]
         attribute: title
       category:
         selector: td.category > a
@@ -63,38 +62,39 @@
           - name: querystring
             args: cat
       details:
-        selector: td.name > div > a.poster-preview[title]
+        selector: td.name > div > a[href*="-torrent-"][title]
         attribute: href
+      banner:
+        selector: td.name > a.poster-preview img
+        attribute: src
       comments:
         selector: a[href*="#comments"]
         attribute: href
       download:
-        selector: a.bookmark[onclick]
-        attribute: onclick
+        selector: td.name > div > a[href*="-torrent-"][title]
+        attribute: href
         filters:
-          - name: replace
-            args: [",false)", ""]
-          - name: replace
-            args: ["return bookmark(", "download.php?id="]
-      size:
-        selector: td:nth-child(5)
-      seeders:
-        selector: td:nth-child(6)
-      leechers:
-        selector: td:nth-child(7)
-      grabs:
-        selector: td:nth-child(8)
+          - name: regexp
+            args: "-torrent-(\\d+).html"
+          - name: prepend
+            args: "download.php?id="
       date:
-        selector: td:nth-child(4)
+        selector: td:nth-child(5)
         filters:
-          - name: append
-            args: " +0700"
-          - name: dateparse
-            args: "2006-01-0215:04:05 -0700"
+          - name: timeago
+      size:
+        selector: td:nth-child(6)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      grabs:
+        selector: td:nth-child(9)
       downloadvolumefactor:
         case:
           "span.label:contains(\"Free\")": "0"
           "span.label:contains(\"50%\")": "0.5"
+          "span.label:contains(\"30%\")": "0.7"
           "*": "1"
       uploadvolumefactor:
         case:

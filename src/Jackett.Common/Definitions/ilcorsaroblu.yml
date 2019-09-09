@@ -6,12 +6,10 @@
   type: public
   encoding: UTF-8
   links:
-    - https://www.ilcorsaroblu.info/
+    - https://www.ilcorsaroblu.org/
   legacylinks:
     - http://ilcorsaroblu.org/
-    - https://www.ilcorsaroblu.org/
-  certificates:
-    - e6dd93ef71f96d04559e2bee8cc8e6fd74957730 # incomplete CA chain
+    - https://www.ilcorsaroblu.info/
 
   caps:
     categorymappings:
@@ -51,17 +49,14 @@
 
   search:
     paths:
-      - path: /index.php
+      - path: index.php
     keywordsfilters:
-      - name: re_replace
-        args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
       - name: diacritics
         args: replace
-      # most ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
-      - name: re_replace
-        args: ["S0?(\\d{1,2})", " $1 "]
-      - name: re_replace
-        args: ["E(\\d{2,3})", " $1 "]
+      - name: re_replace # S01 to 1
+        args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+      - name: re_replace # S01E01 to 1 1
+        args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"
@@ -69,31 +64,37 @@
       active: 0
     rows:
       selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      filters:
+        - name: andmatch
     fields:
       title:
         selector: td:nth-child(2) > a
-        # normalize to SXXEYY format
         filters:
+          # - name: re_replace # replace special characters with " " (space)
+          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9]|\\.", " "]
+            args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+          - name: diacritics
+            args: replace
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format
-          - name: re_replace
-            args: ["(\\d{2})x(\\d{2})", "S$1E$2"]
-          - name: re_replace
-            args: ["(\\d{1})x(\\d{2})", "S0$1E$2"]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
-          - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
-          - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
-          - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
-          - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
-          # fine prova
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       download: # handle torrents with normal torrent file download
         optional: true
         selector: a[href^="download.php?id="]
@@ -135,28 +136,38 @@
           - name: querystring
             args: category
       details:
-        selector: td:nth-child(2) a
-        attribute: href
-      banner:
-        optional: true
         selector: td:nth-child(2) > a
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src=(.+?) "
+        attribute: href
+#      banner:
+#        optional: true
+#        selector: td:nth-child(2) > a
+#        attribute: onmouseover
+#        filters:
+#          - name: regexp
+#            args: "src=(.+?) "
       size:
-        selector: td:nth-child(9)
+        selector: td:nth-last-child(2)
       date:
-        selector: td:nth-child(5)
+        selector: td:nth-last-child(6):contains('ago')
+        optional: true
+        filters:
+          - name: timeago
+      date:
+        selector: td:nth-last-child(6):contains('/')
+        optional: true
         filters:
           - name: dateparse
             args: "02/01/2006"
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(3)
         filters:
           - name: replace
             args: ["---", "0"]
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(5)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(4)
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

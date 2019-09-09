@@ -1,12 +1,12 @@
 ---
   site: worldofp2p
   name: WorldOfP2P
-  description: "A general tracker"
+  description: "WorldOfP2P (WOP) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://worldofp2p.net
+    - https://worldofp2p.net/
 
   caps:
     categorymappings:
@@ -68,11 +68,12 @@
       - {id: 6, cat: XXX/XviD, desc: "xXx-XviD"}
 
     modes:
-      search: [q]
-      tv-search: [q, season, ep]
+      search: [q, imdbid]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form
     inputs:
@@ -82,16 +83,17 @@
     error:
       - selector: td.stdmsg2
     test:
-      path: /usercp.php?action=default
+      path: usercp.php?action=default
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.IMDBID}}{{.Query.IMDBID}}{{else}}{{.Keywords}}{{end}}"
       incldead: "1"
-      searchin: "title"
+      # searchin: title, descr, genre, all
+      searchin: "{{if .Query.IMDBID}}all{{else}}title{{end}}"
 
     rows:
       selector: table > tbody > tr:has(a[href^="download.php?torrent="])

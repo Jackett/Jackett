@@ -19,6 +19,10 @@ namespace Jackett.Common.Indexers
 {
     public class Fuzer : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "https://fuzer.me/",
+        };
+
         private string SearchUrl { get { return SiteLink + "browse.php"; } }
         private string LoginUrl { get { return SiteLink + "login.php"; } }
         private const int MAXPAGES = 3;
@@ -32,7 +36,7 @@ namespace Jackett.Common.Indexers
         public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
             : base(name: "Fuzer",
                 description: "Fuzer is a private torrent website with israeli torrents.",
-                link: "https://fuzer.me/",
+                link: "https://www.fuzer.me/",
                 configService: configService,
                 client: w,
                 logger: l,
@@ -42,12 +46,13 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
             TorznabCaps.Categories.Clear();
 
             // סרטים
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "סרטים");
             AddCategoryMapping(9, TorznabCatType.MoviesHD, "סרטים HD");
+            AddCategoryMapping(97, TorznabCatType.MoviesUHD, "סרטים UHD");
             AddCategoryMapping(58, TorznabCatType.MoviesDVD, "סרטים DVD-R");
             AddCategoryMapping(59, TorznabCatType.MoviesSD, "סרטי BDRIP-BRRip");
             AddCategoryMapping(60, TorznabCatType.MoviesSD, "סרטים ישראליים");

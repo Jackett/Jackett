@@ -1,0 +1,105 @@
+---
+  site: proaudiotorrents
+  name: ProAudioTorrents
+  description: "ProAudioTorrents (PAT) is a Private Torrent Tracker for AUDIO SOFTWARE / SAMPLES / TUTORIALS / ETC"
+  language: en
+  type: private
+  encoding: UTF-8
+  links:
+    - https://proaudiotorrents.org/
+  legacylinks:
+    - http://proaudiotorrents.org/
+
+  caps:
+    categorymappings:
+      - {id: 24, cat: PC/0day, desc: "DJ Applications"}
+      - {id: 3, cat: Books/Ebook, desc: "Ebooks"}
+      - {id: 4, cat: PC, desc: "Expansions & Addons"}
+      - {id: 5, cat: PC, desc: "HYBRID PC/MAC"}
+      - {id: 26, cat: Other, desc: "Independent"}
+      - {id: 19, cat: PC, desc: "Linux Plugins"}
+      - {id: 2, cat: PC/Mac, desc: "Mac Audio Apps"}
+      - {id: 15, cat: PC/Mac, desc: "Mac Updates"}
+      - {id: 22, cat: PC/Mac, desc: "Mac VST Fx"}
+      - {id: 21, cat: PC/Mac, desc: "Mac VST Instrument"}
+      - {id: 6, cat: Other/Misc, desc: "Misc / Other"}
+      - {id: 20, cat: TV/Documentary, desc: "Music Documentary"}
+      - {id: 18, cat: TV/Documentary, desc: "Musical Training"}
+      - {id: 1, cat: PC/0day, desc: "PC Audio Apps"}
+      - {id: 14, cat: PC/0day, desc: "PC Updates"}
+      - {id: 16, cat: Other, desc: "Refills"}
+      - {id: 7, cat: PC, desc: "RTAS"}
+      - {id: 8, cat: Audio, desc: "Samples / Libraries"}
+      - {id: 12, cat: Audio, desc: "SFX"}
+      - {id: 9, cat: TV/Documentary, desc: "Software Tutorials"}
+      - {id: 11, cat: PC, desc: "VST Instruments"}
+      - {id: 13, cat: PC, desc: "VST Plug-ins"}
+
+    modes:
+      search: [q]
+
+  login:
+    path: login.php
+    method: form
+    form: form[action="takelogin.php"]
+    submitpath: takelogin.php
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+    error:
+      - selector: table tr td.text
+    test:
+      path: my.php
+
+  search:
+    paths:
+      - path: browse.php
+    inputs:
+      # does not appear to support multi category searches
+      cat: "0"
+      search: "{{.Keywords}}"
+      searchin: "0"
+      incldead: "1"
+    rows:
+      selector: tr.ttable:has(a[href^="browse.php?cat="])
+    fields:
+      category:
+        selector: a[href^="browse.php?cat="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: cat
+      title:
+        filters:
+        selector: td:nth-child(2) a
+        attribute: title
+      download:
+        selector: a[href^="download.php/"]
+        attribute: href
+      details:
+        selector: a[href^="details.php?id="]
+        attribute: href
+      files:
+        selector: td:nth-child(3)
+      size:
+        selector: td:nth-child(5)
+      grabs:
+        selector: td:nth-child(6)
+        filters:
+          - name: regexp
+            args: ([\d,]+)
+      seeders:
+        selector: td:nth-child(7)
+      leechers:
+        selector: td:nth-child(8)
+      downloadvolumefactor:
+        text: "1"
+      uploadvolumefactor:
+        text: "1"
+      date:
+        selector: td:nth-child(2)
+        remove: a
+        filters:
+          - name: replace
+            args: ["Uploaded ", ""]
+          - name: timeago

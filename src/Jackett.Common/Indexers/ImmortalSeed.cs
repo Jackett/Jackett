@@ -21,6 +21,10 @@ namespace Jackett.Common.Indexers
         private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
         private string QueryString { get { return "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no"; } }
 
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://immortalseed.me/",
+        };
+
         private new ConfigurationDataBasicLogin configData
         {
             get { return (ConfigurationDataBasicLogin)base.configData; }
@@ -30,7 +34,7 @@ namespace Jackett.Common.Indexers
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
             : base(name: "ImmortalSeed",
                 description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "http://immortalseed.me/",
+                link: "https://immortalseed.me/",
                 caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
                 configService: configService,
                 client: wc,
@@ -42,30 +46,49 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(32, TorznabCatType.TVAnime);
-            AddCategoryMapping(31, TorznabCatType.TVOTHER);
-            AddCategoryMapping(47, TorznabCatType.TVSD);
-            AddCategoryMapping(8, TorznabCatType.TVHD);
-            AddCategoryMapping(48, TorznabCatType.TVHD);
-            AddCategoryMapping(9, TorznabCatType.TVSD);
-            AddCategoryMapping(4, TorznabCatType.TVHD);
-            AddCategoryMapping(6, TorznabCatType.TVSD);
-
-            AddCategoryMapping(22, TorznabCatType.Books);
-            AddCategoryMapping(41, TorznabCatType.BooksComics);
-            AddCategoryMapping(23, TorznabCatType.PC);
-
-            AddCategoryMapping(16, TorznabCatType.MoviesHD);
-            AddCategoryMapping(17, TorznabCatType.MoviesSD);
-            AddCategoryMapping(14, TorznabCatType.MoviesSD);
-            AddCategoryMapping(34, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(18, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(33, TorznabCatType.MoviesForeign);
-
-            AddCategoryMapping(34, TorznabCatType.Audio);
-            AddCategoryMapping(37, TorznabCatType.AudioLossless);
-            AddCategoryMapping(35, TorznabCatType.AudioAudiobook);
-            AddCategoryMapping(36, TorznabCatType.AudioMP3);
+            AddCategoryMapping(3, TorznabCatType.Other, "Nuked");
+            AddCategoryMapping(32, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(23, TorznabCatType.PC, "Apps");
+            AddCategoryMapping(35, TorznabCatType.AudioAudiobook, "Audiobooks");
+            AddCategoryMapping(31, TorznabCatType.TV, "Childrens/Cartoons");
+            AddCategoryMapping(54, TorznabCatType.TVDocumentary, "Documentary - HD");
+            AddCategoryMapping(41, TorznabCatType.BooksComics, "Comics");
+            AddCategoryMapping(25, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(29, TorznabCatType.ConsoleXbox, "Games Xbox");
+            AddCategoryMapping(27, TorznabCatType.PCGames, "Games-PC Rips");
+            AddCategoryMapping(28, TorznabCatType.ConsolePS4, "Games-PSx");
+            AddCategoryMapping(49, TorznabCatType.PCPhoneOther, "Mobile");
+            AddCategoryMapping(59, TorznabCatType.MoviesUHD, "Movies-4k");
+            AddCategoryMapping(60, TorznabCatType.MoviesForeign, "Non-English 4k Movies");
+            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movies HD");
+            AddCategoryMapping(18, TorznabCatType.MoviesForeign, "Movies HD Non-English");
+            AddCategoryMapping(17, TorznabCatType.MoviesSD, "TS/CAM/PPV");
+            AddCategoryMapping(34, TorznabCatType.MoviesForeign, "Movies Low Def Non-English");
+            AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies-SD");
+            AddCategoryMapping(33, TorznabCatType.MoviesForeign, "Movies SD Non-English");
+            AddCategoryMapping(30, TorznabCatType.AudioOther, "Music");
+            AddCategoryMapping(37, TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping(36, TorznabCatType.AudioMP3, "MP3");
+            AddCategoryMapping(39, TorznabCatType.AudioOther, "Music Other");
+            AddCategoryMapping(38, TorznabCatType.AudioVideo, "Music Video");
+            AddCategoryMapping(45, TorznabCatType.Other, "Other");
+            AddCategoryMapping(7, TorznabCatType.TVSport, "Sports Tv");
+            AddCategoryMapping(44, TorznabCatType.TVSport, "Sports Fitness-Instructional");
+            AddCategoryMapping(58, TorznabCatType.TVSport, "Olympics");
+            AddCategoryMapping(47, TorznabCatType.TVSD, "TV - 480p");
+            AddCategoryMapping(8, TorznabCatType.TVHD, "TV - High Definition");
+            AddCategoryMapping(48, TorznabCatType.TVSD, "TV - Standard Definition - x264");
+            AddCategoryMapping(9, TorznabCatType.TVSD, "TV - Standard Definition - XviD");
+            AddCategoryMapping(4, TorznabCatType.TVHD, "TV Season Packs - HD");
+            AddCategoryMapping(6, TorznabCatType.TVSD, "TV Season Packs - SD");
+            AddCategoryMapping(22, TorznabCatType.BooksEbook, "Ebooks");
+            AddCategoryMapping(26, TorznabCatType.PCGames, "Games-PC ISO");
+            AddCategoryMapping(46, TorznabCatType.BooksMagazines, "Magazines");
+            AddCategoryMapping(50, TorznabCatType.PCPhoneIOS, "IOS");
+            AddCategoryMapping(51, TorznabCatType.PCPhoneAndroid, "Android");
+            AddCategoryMapping(52, TorznabCatType.PC0day, "Windows");
+            AddCategoryMapping(53, TorznabCatType.TVDocumentary, "Documentary - SD");
+            AddCategoryMapping(58, TorznabCatType.TVSport, "Olympics");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -113,13 +136,13 @@ namespace Jackett.Common.Indexers
                 CQ dom = results.Content;
 
                 var rows = dom["#sortabletable tr:has(a[href*=\"details.php?id=\"])"];
-                foreach (var row in rows.Skip(1))
+                foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     var qRow = row.Cq();
 
                     var qDetails = qRow.Find("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
-                    var qTitle = qRow.Find("td:eq(1) .tooltip-content div:eq(0)"); // use Title from tooltip
+                    var qTitle = qRow.Find(".tooltip-content > div:eq(0)"); // use Title from tooltip
                     if (!qTitle.Any()) // fallback to Details link if there's no tooltip
                     {
                         qTitle = qDetails;
@@ -130,7 +153,7 @@ namespace Jackett.Common.Indexers
                     if (qDesciption.Any())
                         release.Description = qDesciption.Get(1).InnerText.Trim();
 
-                    var qLink = row.Cq().Find("td:eq(2) a:eq(1)");
+                    var qLink = row.Cq().Find("a[href*=\"download.php\"]");
                     release.Link = new Uri(qLink.Attr("href"));
                     release.Guid = release.Link;
                     release.Comments = new Uri(qDetails.Attr("href"));
@@ -164,7 +187,11 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    release.UploadVolumeFactor = 1;
+
+                    if (qRow.Find("img[title^=\"x2 Torrent\"]").Length >= 1)
+                        release.UploadVolumeFactor = 2;
+                    else
+                        release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }

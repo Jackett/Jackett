@@ -6,9 +6,22 @@
   type: semi-private
   encoding: windows-1251
   links:
-    - https://nnm-club.me/
+    - http://nnmclub.to/
   legacylinks:
     - https://nnm-club.name/
+    - https://nnm-club.me/
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: striprussian
+      type: checkbox
+      label: Strip Russian Letters
+      default: true
 
   caps:
     categorymappings:
@@ -712,30 +725,33 @@
       pn: ""
       submit: "Поиск"
     rows:
-      selector: table.forumline.tablesorter > tbody > tr:has(a[href^="viewtopic.php?t="])
+      selector: table.forumline.tablesorter > tbody > tr:has(a[href^="viewtopic.php?t="]):has(a[href^="download.php?id="])
     fields:
       title:
         selector: a[href^="viewtopic.php?t="] > b
         filters:
-          - name: re_replace
-            args: ["\\b(\\d)\\b", "0$1"]
+          - name: replace
+            args: [" / ", " "]
           - name: replace
             args: ["Кураж-Бамбей", "kurazh"]
+          - name: replace
+            args: ["Кубик в Кубе", "Kubik"]
           - name: re_replace
-            args: ["(\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", "(S$2E$3) RUS"]
+            args: ["((\\([12][0-9]{3}\\))(.+)\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", " - S$4E$5 - rus $3"]
           - name: re_replace
-            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", ""]
+            args: ["(\\([А-Яа-я\\W]+\\))|(^[А-Яа-я\\W\\d]+\\/ )|([а-яА-Я \\-]+,+)|([а-яА-Я]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          - name: replace
+            args: ["-Rip", "Rip"]
+          - name: replace
+            args: ["WEB-DL", "WEBDL"]
           - name: replace
             args: ["WEBDLRip", "WEBDL"]
-          - name: replace
-            args: ["WEB-DLRip", "WEBDL"]
           - name: replace
             args: ["HDTVRip", "HDTV"]
       details:
         selector: a[href^="viewtopic.php?t="]
         attribute: href
       download:
-        optional: true
         selector: a[href^="download.php?id="]
         attribute: href
       category:
@@ -763,6 +779,8 @@
         case:
           img[src$="/images/gold.gif"]: "0"
           img[src$="/images/platinum.gif"]: "0"
+          img[src$="/images/bronze.gif"]: "0.75"
+          img[src$="/images/silver.gif"]: "0.5"
           "*": "1"
       uploadvolumefactor:
         text: "1"

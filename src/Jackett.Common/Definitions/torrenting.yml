@@ -6,7 +6,7 @@
   type: private
   encoding: windows-1252
   links:
-    - https://torrenting.com
+    - https://torrenting.com/
 
   caps:
     categorymappings:
@@ -53,7 +53,7 @@
       q: "{{if .Query.IMDBID}}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
       incldead: 1
     rows:
-      selector: table#torrentTable > tbody > tr:has(td.torrentNameInfo)
+      selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
     fields:
       download:
         selector: a[href^="/download.php/"]
@@ -72,6 +72,8 @@
       date:
         selector: td.torrentNameInfo > div
         filters:
+          - name: re_replace
+            args: [" by.*", ""]
           - name: split
             args: ["|", -1]
       seeders:
@@ -84,7 +86,7 @@
         text: "1"
       downloadvolumefactor:
         case:
-          "span:contains(\"Freeleech\")": "0"
+          "span:contains(\"FreeLeech\")": "0"
           "*": "1"
       uploadvolumefactor:
         case:

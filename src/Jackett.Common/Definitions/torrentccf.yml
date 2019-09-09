@@ -40,7 +40,7 @@
       movie-search: [imdbid]
 
   login:
-    path: /login.php
+    path: login.php
     method: form
     form: form[action="takelogin.php"]
     captcha:
@@ -53,11 +53,11 @@
     error:
       - selector: td.embedded:has(h2:contains("登录失败"))
     test:
-      path: /torrents.php
+      path: torrents.php
 
   search:
     paths:
-      - path: /torrents.php
+      - path: torrents.php
         method: get
     inputs:
       $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"

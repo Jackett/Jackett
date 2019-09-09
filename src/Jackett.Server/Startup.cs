@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -18,7 +17,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
@@ -48,6 +46,7 @@ namespace Jackett.Server
                             options.AccessDeniedPath = new PathString("/UI/Login");
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
+                            options.Cookie.SameSite = SameSiteMode.None;
                         });
 
             services.AddMvc(config =>
@@ -80,12 +79,11 @@ namespace Jackett.Server
 
             builder.Populate(services);
             builder.RegisterModule(new JackettModule(runtimeSettings));
-            builder.RegisterType<SecuityService>().As<ISecuityService>();
-            builder.RegisterType<ServerService>().As<IServerService>();
-            builder.RegisterType<ProtectionService>().As<IProtectionService>();
-            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>();
-            if (runtimeSettings.ClientOverride == "httpclientnetcore")
-                builder.RegisterType<HttpWebClientNetCore>().As<WebClient>();
+            builder.RegisterType<SecuityService>().As<ISecuityService>().SingleInstance();
+            builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
+            builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
+            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
+            builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
 
             IContainer container = builder.Build();
             Helper.ApplicationContainer = container;
@@ -117,7 +115,10 @@ namespace Jackett.Server
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                // When adjusting these pareamters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                ForwardLimit = 10,
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
             });
 
             var rewriteOptions = new RewriteOptions()
@@ -127,13 +128,7 @@ namespace Jackett.Server
 
             app.UseRewriter(rewriteOptions);
 
-            app.UseFileServer(new FileServerOptions
-            {
-                FileProvider = new PhysicalFileProvider(Helper.ConfigService.GetContentFolder()),
-                RequestPath = "",
-                EnableDefaultFiles = true,
-                EnableDirectoryBrowsing = false
-            });
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

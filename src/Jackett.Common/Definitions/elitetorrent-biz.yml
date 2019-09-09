@@ -1,0 +1,88 @@
+---
+  site: elitetorrent-biz
+  name: EliteTorrent.biz
+  description: "EliteTorrent.biz is a Public torrent site for TV, movies and documentaries"
+  language: es-es
+  type: public
+  encoding: UTF-8
+  links:
+    - https://www.elitetorrent.one/
+  legacylinks:
+    - https://www.elitetorrent.biz/
+    - https://www.elitetorrent.io/
+
+  caps:
+    categories:
+      "series": TV
+      "peliculas": Movies
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="magnet:?"]
+    attribute: href
+
+  search:
+  # site returns just 30 results, attempt to fetch upto 90
+    paths:
+      - path: /
+      - path: /page/2/
+      - path: /page/3/
+    keywordsfilters:
+      # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
+      - name: re_replace
+        args: ["S0?(\\d{1,2})", " $1 "]
+      - name: re_replace
+        args: ["E(\\d{2,3})", " $1 "]
+    inputs:
+      s: "{{ .Keywords }}"
+      $raw: "&x=0&y=0"
+    error:
+      - selector: "#principal div.not_results"
+    rows:
+      selector: "#principal .miniboxs-ficha li"
+    fields:
+      title:
+        selector: .meta a
+        # normalize to SXXEYY format
+        filters:
+          - name: re_replace
+            args: ["(\\d{2})×(\\d{2})", "S$1E$2"]
+          - name: re_replace
+            args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
+      details:
+        selector: .meta a
+        attribute: href
+      download:
+        selector: .meta a
+        attribute: href
+      category:
+        selector: .meta a
+        attribute: href
+        filters:
+          - name: split
+            args: ["/", 3]
+      size:
+        text: "0 B"
+      size:
+      # size can be missing
+        optional: true
+        selector: .voto1
+        filters:
+          - name: replace
+            args: ["s", ""]
+      date:
+        text: now
+      seeders:
+        text: "1"
+      leechers:
+        text: "1"
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

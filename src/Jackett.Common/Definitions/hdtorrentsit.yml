@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - http://hdtorrents.xyz/
+  legacylinks:
     - http://hdtorrents.it/
 
   caps:
@@ -54,23 +56,25 @@
           - name: re_replace #separate title
             args: ["(\\s+\\/\\s+|\\/\\s+|\\s+\\/|\\/)(.*)\\s\\(", " ("]
           - name: re_replace #remove (yyyy) from the title
-            args: ["(\\(\\d{4}\\))|(\\(\\d{4})", ""]
+            args: ["(\\(\\d{4}\\)?\\s?)", ""]
           - name: re_replace #remove |
-            args: ["(\\s\\|\\s)", " "]
-          - name: re_replace #Stagione X --> S0X
-            args: ["Stagione (\\d{0,1}\\s)", "S0$1"]
-          - name: re_replace #Stagione XX --> SXX
-            args: ["Stagione (\\d{2}\\s)", "S$1"]
+            args: ["(\\s\\||\\s\\/)", ""]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
           - name: re_replace #/ Episodio [YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sEpisodio|\\s\\/\\sEpisodi|\\sEpisodio|\\s\\|\\sEpisodio|\\sEpisodi)\\s\\[", "E"]
+            args: ["(?i)(\\s\\/?\\s?Episodi[o]?)\\s\\[", "E"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\s\\/\\|]?Episodi[o]?\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
           - name: re_replace #/ Completa [episodi  YY-YY --> EYY-YY
-            args: ["(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
+            args: ["(?i)(\\s\\/\\sCompleta\\s\\[episodi\\s)", "E"]
           - name: re_replace #remove  di YY] | remove /YY]
-            args: ["(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
+            args: ["(?i)(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
           - name: re_replace #remove various
-            args: ["(Serie completa|Completa|\\[in pausa\\])", ""]
+            args: ["(?i)(Serie completa|Completa|\\[in pausa\\])", ""]
       title|append: #start year
-        text: "("
+        text: " ("
       title|append: #add year
         selector: td:nth-child(2) a:nth-child(1)
         filters:
@@ -97,6 +101,9 @@
             args: ["ITA", ""]
       title|append: #end TAG
         text: "ITA]"
+        filters:
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
       details:
         selector: td:nth-child(2) a:nth-child(1)
         attribute: href
@@ -112,12 +119,18 @@
       size:
         selector: td:nth-child(3)
       seeders:
+        text: 1
+      seeders:
         selector: td:nth-child(4)
+        optional: true
         filters:
           - name: re_replace
             args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$1"]
       leechers:
+        text: 1
+      leechers:
         selector: td:nth-child(4)
+        optional: true
         filters:
           - name: re_replace
             args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$2"]
@@ -133,6 +146,8 @@
           "a[href^=\"details.php\"]:contains(\"Stagione\")": 5040 # TV/HD
           "*": 2040 # default to Movies/HD
       downloadvolumefactor:
-        text: "1"
+        case:
+          img[src="pic/freedownload.gif"]: "0"
+          "*": "1"
       uploadvolumefactor:
         text: "1"

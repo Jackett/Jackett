@@ -3,12 +3,13 @@
   name: Xtreme Zone
   description: "XtreMeZone (MYXZ) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: ro-ro
-  type: semi-private
+  type: private
   encoding: UTF-8
   links:
+    - https://myxz.eu/
+  legacylinks:
     - https://www.myxz.eu/
 # not yet enabled (legitimacy concerns, see #2821)
-#  legacylinks:
 #    - https://www.myxz.org/
 
   caps:
@@ -45,30 +46,32 @@
       - {id: 49, cat: XXX/Imageset, desc: "XXX-IMGSet"}
       - {id: 50, cat: XXX, desc: "XXX-Packs"}
       - {id: 51, cat: XXX, desc: "XXX-SD"}
+      - {id: 60, cat: TV/HD, desc: "TV-RO"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
 
   login:
-    path: /login.php
+    path: login
     method: form
-    form: form
+    form: form:has(input[name="_remember_me"])
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
+      _remember_me: 1
     error:
       - selector: td.embedded:has(center > h2:contains(failed))
     test:
-      path: /browse.php
+      path: browse.php
       
   ratio:
-    path: /browse.php
+    path: browse.php
     selector: font:contains("Ratio:")+font
 
   search:
     paths:
-      - path: /browse.php
+      - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
       search: "{{ .Query.Keywords }}"

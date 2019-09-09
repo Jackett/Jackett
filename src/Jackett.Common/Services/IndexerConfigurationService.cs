@@ -35,6 +35,11 @@ namespace Jackett.Common.Services
         {
             var configFilePath = GetIndexerConfigFilePath(indexer);
             File.Delete(configFilePath);
+            var configFilePathBak = configFilePath + ".bak";
+            if (File.Exists(configFilePathBak))
+            {
+                File.Delete(configFilePathBak);
+            }
         }
 
         public void Load(IIndexer idx)

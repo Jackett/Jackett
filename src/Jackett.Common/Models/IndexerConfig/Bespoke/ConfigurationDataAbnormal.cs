@@ -8,6 +8,7 @@
         public StringItem Username { get; private set; }
         public StringItem Password { get; private set; }
         public DisplayItem PagesWarning { get; private set; }
+        public StringItem ReplaceMulti { get; private set; }
         public StringItem Pages { get; private set; }
         public DisplayItem SecurityWarning { get; private set; }
         public BoolItem Latency { get; private set; }
@@ -32,10 +33,11 @@
             AuthKey = new HiddenItem { Name = "AuthKey", Value = "" };
             TorrentPass = new HiddenItem { Name = "TorrentPass", Value = "" };
             CredentialsWarning = new DisplayItem("<b>Credentials Configuration</b> (<i>Private Tracker</i>),<br /><br /> <ul><li><b>Username</b> is your account name on this tracker.</li><li><b>Password</b> is your password associated to your account name.</li></ul>") { Name = "Credentials" };
-            Username = new StringItem { Name = "Username (Required)", Value = "" };
-            Password = new StringItem { Name = "Password (Required)", Value = "" };
-            PagesWarning = new DisplayItem("<b>Preferences Configuration</b> (<i>Tweak your search settings</i>),<br /><br /> <ul><li><b>Max Pages to Process</b> let you specify how many page (max) Jackett can process when doing a search. Setting a value <b>higher than 4 is dangerous</b> for you account ! (<b>Result of too many requests to tracker...that <u>will be suspect</u></b>).</li><li><b>With Dead Torrents</b> let you search <u>with</u> torrents which are marked Dead.</li><li><b>Freeleech Only</b> let you search <u>only</u> for torrents which are marked Freeleech.</li><li><b>With Nuked Releases</b> let you search <u>with</u> torrents which are marked Nuked.</li><li><b>3D Releases Only</b> let you search <u>only</u> for torrents which are marked 3D.</li><li><b>French Only</b> let you search <u>only</u> for torrents which are marked FRENCH or TRUEFRENCH (<i>MULTI not included !</i>).</li></ul>") { Name  = "Preferences" };
+            Username = new StringItem { Name = "Username", Value = "" };
+            Password = new StringItem { Name = "Password", Value = "" };
+            PagesWarning = new DisplayItem("<b>Preferences Configuration</b> (<i>Tweak your search settings</i>),<br /><br /> <ul><li><b>Replace MULTI</b>, replace multi keyword in the resultset (leave empty  to deactivate)</li><li><b>Max Pages to Process</b> let you specify how many page (max) Jackett can process when doing a search. Setting a value <b>higher than 4 is dangerous</b> for you account ! (<b>Result of too many requests to tracker...that <u>will be suspect</u></b>).</li></ul>") { Name  = "Preferences" };
             Pages = new StringItem { Name = "Max Pages to Process (Required)", Value = "4" };
+            ReplaceMulti = new StringItem() { Name = "Replace MULTI", Value = "MULTI.FRENCH" };
             SecurityWarning = new DisplayItem("<b>Security Configuration</b> (<i>Read this area carefully !</i>),<br /><br /> <ul><li><b>Latency Simulation</b> will simulate human browsing with Jacket by pausing Jacket for an random time between each request, to fake a real content browsing.</li><li><b>Browser Simulation</b> will simulate a real human browser by injecting additionals headers when doing requests to tracker.</li></ul>") { Name = "Security" };
             Latency = new BoolItem() { Name = "Latency Simulation (Optional)", Value = false };
             Browser = new BoolItem() { Name = "Browser Simulation (Optional)", Value = true };

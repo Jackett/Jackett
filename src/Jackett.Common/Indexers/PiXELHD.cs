@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }
@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
             var LoginParser = new HtmlParser();
-            var LoginDocument = LoginParser.Parse(loginPage.Content);
+            var LoginDocument = LoginParser.ParseDocument(loginPage.Content);
 
             configData.CaptchaCookie.Value = loginPage.Cookies;
 
@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
            {
                var LoginParser = new HtmlParser();
-               var LoginDocument = LoginParser.Parse(result.Content);
+               var LoginDocument = LoginParser.ParseDocument(result.Content);
                var errorMessage = LoginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
@@ -144,7 +144,7 @@ namespace Jackett.Common.Indexers
 
             Regex IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
-            var ResultDocument = hParser.Parse(results.Content);
+            var ResultDocument = hParser.ParseDocument(results.Content);
             try
             {
                 var Groups = ResultDocument.QuerySelectorAll("div.browsePoster");

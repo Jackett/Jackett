@@ -92,7 +92,7 @@
         selector: a[href^="details.php"]
         attribute: href
       download:
-        selector: a[href^=" /gettorrent/ssl/"]
+        selector: a[href^=" /gettorrent/"]
         attribute: href
       files:
         selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2), a[href*="&filelist=1"]

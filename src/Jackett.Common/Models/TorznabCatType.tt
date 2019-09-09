@@ -26,6 +26,7 @@
 2020: Movies/Other
 2030: Movies/SD
 2040: Movies/HD
+2045: Movies/UHD
 2050: Movies/3D
 2060: Movies/BluRay
 2070: Movies/DVD
@@ -50,6 +51,7 @@
 5020: TV/FOREIGN
 5030: TV/SD
 5040: TV/HD
+5045: TV/UHD
 5050: TV/OTHER
 5060: TV/Sport
 5070: TV/Anime
@@ -76,7 +78,7 @@
 "; #>
 using System.Collections.Generic;
 
-namespace Jackett.Models
+namespace Jackett.Common.Models
 {
 
 	public static partial class TorznabCatType

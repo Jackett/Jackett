@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected string DownloadUrl { get { return SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id="; } }
         protected string DetailsUrl { get { return SiteLink + "torrents.php?torrentid="; } }
         protected bool supportsFreeleechTokens;
+        protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
         protected bool useTokens = false;
 
         new ConfigurationDataBasicLogin configData
@@ -77,7 +78,7 @@ namespace Jackett.Common.Indexers.Abstract
             await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.Parse(response.Content);
+                var loginResultDocument = loginResultParser.ParseDocument(response.Content);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
                     throw new ExceptionWithConfigData(response.Content, configData);
@@ -108,7 +109,7 @@ namespace Jackett.Common.Indexers.Abstract
             queryCollection.Add("order_by", "time");
             queryCollection.Add("order_way", "desc");
 
-            
+
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 queryCollection.Add("cataloguenumber", query.ImdbID);
@@ -130,9 +131,12 @@ namespace Jackett.Common.Indexers.Abstract
             if (query.Album != null)
                 queryCollection.Add("groupname", query.Album);
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
+            if (supportsCategories)
             {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
+                foreach (var cat in MapTorznabCapsToTrackers(query))
+                {
+                    queryCollection.Add("filter_cat[" + cat + "]", "1");
+                }
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
@@ -318,7 +322,7 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var content = await base.Download(link);
 
-            // Check if we're out of FL tokens
+            // Check if we're out of FL tokens/torrent is to large
             // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
             var requestLink = link.ToString();
             if (content.Length >= 1
@@ -326,7 +330,8 @@ namespace Jackett.Common.Indexers.Abstract
                 && requestLink.Contains("usetoken=1"))
             {
                 var html = Encoding.GetString(content);
-                if (html.Contains("You do not have any freeleech tokens left."))
+                if (html.Contains("You do not have any freeleech tokens left.")
+                    || html.Contains("This torrent is too large."))
                 {
                     // download again with usetoken=0
                     var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
