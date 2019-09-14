@@ -351,6 +351,7 @@ namespace Jackett.Updater
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/xktorrent.yml",
+                "Definitions/mkvcage.yml",
             };
 
             foreach (var oldFile in oldFiles)
