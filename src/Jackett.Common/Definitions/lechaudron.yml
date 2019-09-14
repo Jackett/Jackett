@@ -142,6 +142,9 @@
       path: TTV3/Bienvenue
       selector: a[href$="/TTV3/Deconnexion"]
 
+  download:
+    selector: a[href*="/Telechargement/"]
+
   search:
     paths:
     # https://lechaudron.nl/TTV3/Torrents/Recherche?recherche=viva+maria&type=exacte&endroit=nomtorrent&langue=0&tl=peuimporte
@@ -159,7 +162,7 @@
       tl: "peuimporte"
 
     rows:
-      selector: tr.t-row
+      selector: tr:has(a[onmouseover])
     fields:
       category:
         selector: a[href*="/SousCategories/"]
@@ -168,42 +171,14 @@
           - name: regexp
             args: (\d+)$
       title:
-        selector: a[onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "<b>(.*?)</b>"
+        selector: a[href*="/SousCategories/"]
+        attribute: title
       details:
         selector: a[onmouseover]
         attribute: href
       download:
-        selector: a[href*="/Telechargement/"]
+        selector: a[onmouseover]
         attribute: href
-      date:
-        selector: a[onmouseover] font[color="#F2F2F2"]
-        filters:
-          - name: regexp
-            args: "Il y a (.*?)\\s-" 
-          - name: replace
-            args: ["heures", "hours"]
-          - name: replace
-            args: ["heure", "hour"]
-          - name: replace
-            args: ["Jours", "days"]
-          - name: replace
-            args: ["Jour", "day"]
-          - name: replace
-            args: ["Semaines", "weeks"]
-          - name: replace
-            args: ["Semaine", "week"]
-          - name: replace
-            args: ["Mois", "months"]
-          - name: replace
-            args: ["Ans", "years"]
-          - name: replace
-            args: ["An", "year"]
-          - name: append
-            args: " ago"
       banner:
         selector: a[onmouseover]
         attribute: onmouseover
@@ -211,18 +186,24 @@
           - name: regexp
             args: "src= (.*?)><"
       size:
-        selector: td:nth-last-child(5)
+        selector: td:nth-last-child(6)
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td:nth-last-child(5)
       seeders:
-        selector: td:nth-last-child(3)
+        selector: td:nth-last-child(4)
       leechers:
-        selector: td:nth-last-child(2)
+        selector: td:nth-last-child(3)
+      date:
+        selector: td:nth-last-child(1)
+        filters:
+          - name: dateparse
+            args: "02-01-2006 15:04:05" 
       downloadvolumefactor:
         case:
-          img[src$="/images/Torrents/freeleech.png"]: "0"
-          "*": "1"
+          img[src$="/images/Torrents/TLibre.png"]: 0
+          img[src$="/images/Torrents/freeleech.png"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
 # TT3.00 FRENCH
