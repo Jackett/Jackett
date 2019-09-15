@@ -100,7 +100,7 @@
         attribute: title
         filters:
           - name: dateparse
-            args: "Sep 14, 2019, 11:29:00 AM"
+            args: "Jan 02, 2006, 03:04:05 PM"
       grabs:
         selector: div[data-toggle="kt-tooltip"] + div
         filters:
