@@ -28,25 +28,7 @@
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings:
-    - name: category
-      type: select
-      label: Category
-      default: "0"
-      options:
-        "0": "All"
-        "1": "Applications"
-        "2": "Audio Books"
-        "3": "Books"
-        "4": "Comics"
-        "5": "Games"
-        "6": "Anime"
-        "7": "Miscellaneous"
-        "8": "Movies"
-        "9": "Music"
-        "10": "Music Videos"
-        "11": "Pictures"
-        "12": "TV"
+  settings: []
 
   download:
     selector: a[href^="magnet:?xt="]
@@ -56,10 +38,7 @@
       # https://www.dnoid.to/files/?category=0&subcategory=0&language=0&quality=0&incldead=3&search=id&sort=desc
       - path: files/
     inputs:
-      category: "{{.Config.category}}"
-      subcategory: 0
-      language: 0
-      quality: 0
+      $raw: "{{range .Categories}}c{{.}}&{{end}}"
       # 1 active 2 dead 3 both
       incldead: 3
       search: "{{.Keywords}}"
