@@ -3,7 +3,7 @@
   name: TFile
   description: "TFile is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
   language: ru-ru
-  type: private
+  type: public
   encoding: windows-1251
   links:
     - http://search.tfile.me/
