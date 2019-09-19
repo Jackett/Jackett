@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://movcr.to/
+  legacylinks:
     - https://movcr.tv/
 
   caps:
