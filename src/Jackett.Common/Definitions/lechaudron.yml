@@ -185,19 +185,39 @@
         filters:
           - name: regexp
             args: "src= (.*?)><"
-      size:
-        selector: td:nth-last-child(6)
-      grabs:
-        selector: td:nth-last-child(5)
-      seeders:
-        selector: td:nth-last-child(4)
-      leechers:
-        selector: td:nth-last-child(3)
       date:
-        selector: td:nth-last-child(1)
+        selector: a[onmouseover] font[color="#F2F2F2"]
         filters:
-          - name: dateparse
-            args: "02-01-2006 15:04:05" 
+          - name: regexp
+            args: "Il y a (.*?)\\s-" 
+          - name: replace
+            args: ["heures", "hours"]
+          - name: replace
+            args: ["heure", "hour"]
+          - name: replace
+            args: ["Jours", "days"]
+          - name: replace
+            args: ["Jour", "day"]
+          - name: replace
+            args: ["Semaines", "weeks"]
+          - name: replace
+            args: ["Semaine", "week"]
+          - name: replace
+            args: ["Mois", "months"]
+          - name: replace
+            args: ["Ans", "years"]
+          - name: replace
+            args: ["An", "year"]
+          - name: append
+            args: " ago"
+      size:
+        selector: td:nth-last-child(5)
+      grabs:
+        selector: td:nth-last-child(4)
+      seeders:
+        selector: td:nth-last-child(3)
+      leechers:
+        selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
           img[src$="/images/Torrents/TLibre.png"]: 0
