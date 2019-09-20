@@ -344,7 +344,6 @@ namespace Jackett.Updater
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/evolutionpalace.yml",
                 "Definitions/qxr.yml",
-                "Definitions/btdigg.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/megabliz.yml",
                 "Definitions/tigers-dl.yml",
