@@ -149,15 +149,16 @@
           - name: dateparse
             args: "2 Jan 2006 15:04:05"
       files:
-        selector: td:nth-last-child(7)
+      # remember #5754 advanced users have additional last TD so dont go using nth-last-child ;-)
+        selector: td:nth-child(5)
       size:
-        selector: td:nth-last-child(5)
+        selector: td:nth-child(7)
       grabs:
-        selector: td:nth-last-child(4)
+        selector: td:nth-child(8)
       seeders:
-        selector: td:nth-last-child(3)
+        selector: td:nth-child(9)
       leechers:
-        selector: td:nth-last-child(2)
+        selector: td:nth-child(10)
       downloadvolumefactor:
         case:
           img[src="./images/gold.png"]: "0"
