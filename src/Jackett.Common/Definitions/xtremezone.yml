@@ -52,6 +52,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   login:
     path: login
@@ -74,8 +75,8 @@
     paths:
       - path: browse
     inputs:
-      $raw: "{{range .Categories}}&categories[]={{.}}{{end}}"
-      search: "{{ .Query.Keywords }}"
+      $raw: "{{range .Categories}}categories[]={{.}}&{{end}}"
+      search: "{{ .Keywords }}"
     rows:
       selector: div[class="kt-container  kt-grid__item"] > div:not(#top10-wrapper) div[class^="row mr-0"]
     fields:
@@ -85,11 +86,11 @@
         selector: a[href^="/browse/"]
         attribute: href
       category:
-        selector: a[href] > img
-        attribute: class
+        selector: a[href^="/browse?categories"]
+        attribute: href
         filters:
           - name: regexp
-            args: ([\d\.]+)
+            args: (\d+)$
       download:
         selector: a[href^="/dwn.php"]
         attribute: href
@@ -119,6 +120,7 @@
       banner:
         selector: a[onmouseover][href^="details.php?id="]
         attribute: onmouseover
+        optional: true
         filters:
           - name: regexp
             args: src=([^\s]+)
