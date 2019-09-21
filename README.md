@@ -31,7 +31,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * btbit
  * BTDB
  * BTDIGG
- * BTKitty
  * ConCen
  * Corsaro.red
  * cpasbien
@@ -55,7 +54,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * KATcrs
  * KickAssTorrent (KATcr)
  * KickAssTorrent (thekat.se clone)
- * KikiBT
  * LemenCili
  * LePorno
  * LimeTorrents
