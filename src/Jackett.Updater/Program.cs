@@ -351,6 +351,7 @@ namespace Jackett.Updater
                 "Definitions/tntvillage.yml",
                 "Definitions/xktorrent.yml",
                 "Definitions/mkvcage.yml",
+                "Definitions/btkitty.yml",
             };
 
             foreach (var oldFile in oldFiles)
