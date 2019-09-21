@@ -83,7 +83,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torrent Downloads (TD)
  * TorrentFunk
  * TorrentGalaxy.org (TGx)
- * TorrentKitty
  * TorrentProject2
  * TorrentQuest
  * Torrents.csv

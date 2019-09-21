@@ -353,6 +353,7 @@ namespace Jackett.Updater
                 "Definitions/mkvcage.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/kikibt.yml",
+                "Definitions/torrentkitty.yml",
             };
 
             foreach (var oldFile in oldFiles)
