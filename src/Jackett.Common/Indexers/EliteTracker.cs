@@ -25,10 +25,6 @@ namespace Jackett.Common.Indexers
         { get { return SiteLink + "browse.php"; } }
         private bool TorrentHTTPSMode => configData.TorrentHTTPSMode.Value;
 
-        private static readonly string[] certificateHashs = new string[] {
-            "4482711D19A95CDE01D7958E5F1295E05BCA335D", // Let's Encrypt Authority X3
-        };
-
         private new ConfigurationDataEliteTracker configData
         {
             get { return (ConfigurationDataEliteTracker)base.configData; }
@@ -54,6 +50,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(63, TorznabCatType.TVAnime, "Animes DVD");
             AddCategoryMapping(56, TorznabCatType.TVAnime, "Animes HD");
             AddCategoryMapping(59, TorznabCatType.TVAnime, "Animes Serie");
+            AddCategoryMapping(89, TorznabCatType.TVAnime, "Animes HDLight");
+            AddCategoryMapping(87, TorznabCatType.TVAnime, "Animes Pack");
+            AddCategoryMapping(88, TorznabCatType.TVAnime, "Animes SD");
+            AddCategoryMapping(90, TorznabCatType.TVAnime, "Animes 3D");
 
             AddCategoryMapping(3, TorznabCatType.PC0day, "APPLICATION");
             AddCategoryMapping(74, TorznabCatType.PCPhoneAndroid, "ANDROID");
@@ -65,6 +65,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(38, TorznabCatType.TVDocumentary, "DOCUMENTAIRES");
 
             AddCategoryMapping(34, TorznabCatType.Books, "EBOOKS");
+            AddCategoryMapping(86, TorznabCatType.Books, "ABOOKS");
 
             AddCategoryMapping(7, TorznabCatType.Movies, "FILMS");
             AddCategoryMapping(11, TorznabCatType.MoviesDVD, "DVD");
@@ -78,10 +79,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(51, TorznabCatType.MoviesHD, "1080P");
             AddCategoryMapping(70, TorznabCatType.Movies3D, "3D");
             AddCategoryMapping(50, TorznabCatType.MoviesHD, "720P");
-            AddCategoryMapping(84, TorznabCatType.MoviesHD, "4K");
+            AddCategoryMapping(84, TorznabCatType.MoviesUHD, "4K");
             AddCategoryMapping(49, TorznabCatType.MoviesBluRay, "BluRay");
-            AddCategoryMapping(78, TorznabCatType.MoviesHD, "M - HD");
+            AddCategoryMapping(78, TorznabCatType.MoviesHD, "HDLight");
             AddCategoryMapping(85, TorznabCatType.MoviesHD, "x265");
+            AddCategoryMapping(91, TorznabCatType.Movies3D, "3D");
+            AddCategoryMapping(95, TorznabCatType.Movies, "VOSTFR");
 
             AddCategoryMapping(15, TorznabCatType.Console, "JEUX VIDEO");
             AddCategoryMapping(76, TorznabCatType.Console3DS, "3DS");
@@ -103,6 +106,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(44, TorznabCatType.ConsoleXbox360, "XBOX360.E");
             AddCategoryMapping(54, TorznabCatType.ConsoleXbox360, "XBOX360.JTAG");
             AddCategoryMapping(43, TorznabCatType.ConsoleXbox360, "XBOX360.NTSC");
+            AddCategoryMapping(96, TorznabCatType.Console, "NSW");
 
             AddCategoryMapping(23, TorznabCatType.Audio, "MUSIQUES");
             AddCategoryMapping(26, TorznabCatType.Audio, "CLIP/CONCERT");
@@ -110,14 +114,17 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(60, TorznabCatType.AudioMP3, "MP3");
 
             AddCategoryMapping(30, TorznabCatType.TV, "SERIES");
-            AddCategoryMapping(73, TorznabCatType.TV, "Pack TV");
-            AddCategoryMapping(31, TorznabCatType.TV, "Series FR");
-            AddCategoryMapping(32, TorznabCatType.TV, "Series VO");
-            AddCategoryMapping(33, TorznabCatType.TV, "Series VO-STFR");
-            AddCategoryMapping(77, TorznabCatType.TVSD, "Series.DVD");
-            AddCategoryMapping(67, TorznabCatType.TVHD, "Series.FR.HD");
-            AddCategoryMapping(68, TorznabCatType.TVHD, "Series.VO.HD");
-            AddCategoryMapping(69, TorznabCatType.TVHD, "Series.VOSTFR.HD");
+            AddCategoryMapping(73, TorznabCatType.TVSD, "Series Pack FR SD");
+            AddCategoryMapping(92, TorznabCatType.TVHD, "Series Pack FR HD");
+            AddCategoryMapping(93, TorznabCatType.TVSD, "Series Pack VOSTFR SD");
+            AddCategoryMapping(94, TorznabCatType.TVHD, "Series Pack VOSTFR HD");
+            AddCategoryMapping(31, TorznabCatType.TVSD, "Series FR SD");
+            AddCategoryMapping(32, TorznabCatType.TVSD, "Series VO SD");
+            AddCategoryMapping(33, TorznabCatType.TVSD, "Series VOSTFR SD");
+            AddCategoryMapping(77, TorznabCatType.TVSD, "Series DVD");
+            AddCategoryMapping(67, TorznabCatType.TVHD, "Series.FR HD");
+            AddCategoryMapping(68, TorznabCatType.TVHD, "Series VO HD");
+            AddCategoryMapping(69, TorznabCatType.TVHD, "Series VOSTFR HD");
 
             AddCategoryMapping(47, TorznabCatType.TV, "SPECTACLES/EMISSIONS");
             AddCategoryMapping(71, TorznabCatType.TV, "Emissions");
@@ -128,10 +135,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(65, TorznabCatType.TVSport, "UFC");
 
             AddCategoryMapping(37, TorznabCatType.XXX, "XXX");
-
-            foreach (var certificateHash in certificateHashs)
-                webclient.AddTrustedCertificate(new Uri(SiteLink).Host, certificateHash);
-
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -273,7 +276,7 @@ namespace Jackett.Common.Indexers
                     }
                     else
                     {
-                        release.PublishDate = DateTime.ParseExact(added.TextContent.Trim(), "dd.M.yyyy HH:mm", CultureInfo.InvariantCulture);
+                        release.PublishDate = DateTime.ParseExact(added.TextContent.Trim(), "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
                         lastDate = release.PublishDate;
                     }
 

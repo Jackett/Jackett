@@ -6,7 +6,10 @@
   type: public
   encoding: UTF-8
   links:
+    - https://torrentgalaxy.to/
+  legacylinks:
     - https://torrentgalaxy.org/
+    - https://torrentgalaxy.pw/
 
   caps:
     categorymappings:
@@ -63,7 +66,7 @@
       sort: "id"
       order: "desc"
     rows:
-      selector: div[class="tgxtablerow clickable-row click"]
+      selector: div[class="tgxtablerow"]
     fields:
       title:
         selector: div a[href^="/torrent/"]
@@ -76,9 +79,6 @@
             args: cat
       details:
         selector: div a[href^="/torrent/"]
-        attribute: href
-      download:
-        selector: div a[href*="/get/"]
         attribute: href
       magnet:
         selector: div a[href^="magnet:?"]

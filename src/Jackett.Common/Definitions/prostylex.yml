@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://prostylex.org/
+  legacylinks:
     - http://prostylex.com/
 
   caps:

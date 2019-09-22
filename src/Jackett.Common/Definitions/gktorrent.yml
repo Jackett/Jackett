@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.gktorrent.net/
+    - https://www.gktorrent.biz/
   legacylinks:
     - https://www.gktorrent.com/
     - http://www.gktorrent.com/
@@ -25,6 +25,7 @@
     - https://www.rantop.org/
     - https://www.gktorrent.cx/
     - https://www.gktorrent.tv/
+    - https://www.gktorrent.net/
 
   caps:
     categorymappings:
@@ -44,7 +45,7 @@
   settings: []
 
   download:
-    selector: a[href*="/get_torrent/"]
+    selector: a[href^="/download/"]
 
   search:
     paths:

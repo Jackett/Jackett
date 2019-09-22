@@ -126,7 +126,6 @@ Task("Package-Mono-Full-Framework")
 
 		CopyFiles("./src/Jackett.Updater/bin/" + configuration + "/net461" + "/JackettUpdater.*", buildOutputPath);  //builds against multiple frameworks
 
-		CopyFileToDirectory("./install_service_macos_mono", buildOutputPath);
 		CopyFileToDirectory("./install_service_systemd_mono.sh", buildOutputPath);
 		CopyFileToDirectory("./Upstart.config", buildOutputPath);
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,14 +18,17 @@ namespace Jackett.Common.Indexers
 {
     class MejorTorrent : BaseWebIndexer
     {
-        public static Uri WebUri = new Uri("http://www.mejortorrent.tv/");
+        public static Uri WebUri = new Uri("http://www.mejortorrentt.org/");
         public static Uri DownloadUri = new Uri(WebUri, "secciones.php?sec=descargas&ap=contar_varios");
         private static Uri SearchUriBase = new Uri(WebUri, "secciones.php");
         public static Uri NewTorrentsUri = new Uri(WebUri, "secciones.php?sec=ultimos_torrents");
-        public static Encoding MEEncoding = Encoding.GetEncoding("iso-8859-1");
+        public static Encoding MEEncoding = Encoding.GetEncoding("utf-8");
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "http://www.mejortorrent.org/"
+            "http://www.mejortorrent.org/",
+            "http://www.mejortorrent.tv/",
+            "http://www.mejortorrentt.com/",
+            "https://www.mejortorrentt.org/",
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
@@ -153,7 +156,7 @@ namespace Jackett.Common.Indexers
 
         class RssScraper : IScraper<IEnumerable<KeyValuePair<MTReleaseInfo, Uri>>>
         {
-            private readonly string LinkQuerySelector = "a[href*=\"/serie\"]";
+            private readonly string LinkQuerySelector = "a[href*=series_extend]";
 
             public IEnumerable<KeyValuePair<MTReleaseInfo, Uri>> Extract(IHtmlDocument html)
             {
@@ -660,6 +663,7 @@ namespace Jackett.Common.Indexers
                 release.IsMovie = true;
                 var selectors = html.QuerySelectorAll("b");
                 var titleSelector = html.QuerySelector("span>b");
+                var titleSelector3do4k = html.QuerySelector("span:nth-child(4) > b:nth-child(1)");
                 try
                 {
                     var title = titleSelector.TextContent;
@@ -710,19 +714,41 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var title = titleSelector.TextContent;
-                    if (title.Contains("(") && title.Contains(")") && title.Contains("4k"))
+                    if (title.Contains("(") && title.Contains(")") && title.Contains("3D"))
                     {
-                        release.CategoryText = "2160p";
+                        release.CategoryText = "3D";
                     }
-                }
-                catch { }
+                } catch { }
+                try
+                {
+                    var title = titleSelector.TextContent;
+                    if (title.Contains("(") && title.Contains(")") && title.Contains("4K"))
+                    {
+                        release.CategoryText = "4K";
+                    }
+                } catch { }
+                try
+                {
+                    var title = titleSelector3do4k.TextContent;
+                    if (title.Contains("[") && title.Contains("]") && title.Contains("3D"))
+                    {
+                        release.CategoryText = "3D";
+                    }
+                } catch { }
+                try
+                {
+                    var title = titleSelector3do4k.TextContent;
+                    if (title.Contains("[") && title.Contains("]") && title.Contains("4K"))
+                    {
+                        release.CategoryText = "4K";
+                    }
+                } catch { }
                 try
                 {
                     var link = html.QuerySelector("a[href*=\"sec=descargas\"]").GetAttribute("href");
                     release.Link = new Uri(WebUri, link);
                     release.Guid = release.Link;
-                }
-                catch { }
+                } catch { }
                 return release;
             }
         }
@@ -845,7 +871,7 @@ namespace Jackett.Common.Indexers
                 var html = await requester.MakeRequest(seasonUri);
                 var newEpisodes = seasonScraper.Extract(html);
                 // GET BY EPISODE NUMBER
-                newEpisodes = newEpisodes.Where(e => e.EpisodeNumber == episode.EpisodeNumber);
+                newEpisodes = newEpisodes.Where(e => e.EpisodeNumber.Equals(episode.EpisodeNumber));
                 if (newEpisodes.Count() == 0)
                 {
                     throw new Exception("Imposible to detect episode ID in RSS");

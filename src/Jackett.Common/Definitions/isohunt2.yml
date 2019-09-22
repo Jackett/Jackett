@@ -48,6 +48,9 @@
       - name: querystring
         args: url
       - name: urldecode
+      # temp fix for #5372
+      - name: replace
+        args: [" ⭐", ""]
 
   search:
     paths:

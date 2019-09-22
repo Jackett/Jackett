@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "Movies/DVDR");
             AddCategoryMapping(2, TorznabCatType.MoviesSD, "Movies/XviD");

@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             TorznabCaps.Categories.Clear();
 
@@ -155,34 +155,29 @@ namespace Jackett.Common.Indexers
                     release.Title = qRow.Find("td.mainblockcontent b a").Text();
                     release.Description = qRow.Find("td:nth-child(3) > span").Text();
 
-                    if (0 != qRow.Find("td.mainblockcontent u").Length)
-                    {
-                        var imdbStr = qRow.Find("td.mainblockcontent u").Parent().First().Attr("href").Replace("http://www.imdb.com/title/tt", "").Replace("/", "");
-                        long imdb;
-                        if (ParseUtil.TryCoerceLong(imdbStr, out imdb))
-                        {
-                            release.Imdb = imdb;
-                        }
-                    }
-
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 172800;
                     
                     int tdIndex = 0;
                     if(qRow.Find("td:nth-last-child(1)").Text() == "Edit") tdIndex = 1;
+                    // moderators get additional delete, recomend and like links
+                    if (qRow.Find("td:nth-last-child(4)").Text() == "Edit") tdIndex = 4;
 
                     // Sometimes the uploader column is missing
-                    int seeders, peers;
-                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out seeders))
+                    if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 3})").Text(), out int seeders))
                     {
                         release.Seeders = seeders;
-                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out peers))
+                        if (ParseUtil.TryCoerceInt(qRow.Find($"td:nth-last-child({tdIndex + 2})").Text(), out int peers))
                         {
                             release.Peers = peers + release.Seeders;
                         }
                     }
 
-                    release.Grabs = ParseUtil.CoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text());
+                    // Sometimes the grabs column is missing
+                    if (ParseUtil.TryCoerceLong(qRow.Find($"td:nth-last-child({tdIndex + 1})").Text(), out long grabs))
+                    {
+                        release.Grabs = grabs;
+                    }
 
                     string fullSize = qRow.Find("td.mainblockcontent").Get(6).InnerText;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
@@ -216,7 +211,7 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    var imdblink = qRow.Find("a[href^=\"https://www.imdb.com/title/\"]").Attr("href");
+                    var imdblink = qRow.Find("a[href*=\"www.imdb.com/title/\"]").Attr("href");
                     release.Imdb = ParseUtil.GetLongFromString(imdblink);
 
                     releases.Add(release);

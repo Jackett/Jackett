@@ -7,7 +7,9 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://wvw.t9.pe/
+    - https://www.torrent9.is/
+    - https://www.torrent09.uno/
+    - https://www4.torrent9.to/
 
   legacylinks:
     - http://www.torrent9.ec/
@@ -26,6 +28,11 @@
     - https://www.torrent9.uno/
     - https://wvw.torrent9.uno/
     - https://ww1.torrent9.uno/
+    - https://wvw.t9.pe/
+    - https://www4.torrent9.to/
+    - https://www.torrent9.cat/
+    - https://ww1.torrent9.is/
+    - https://ww1.torrent9.to/
 
   caps:
     categorymappings:
@@ -40,17 +47,21 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings: []
 
   download:
-    selector: a[href^="/downloading/"]
+    selector: a[href^="magnet:?"]
+    attribute: href
       
   search:
     paths:
       - path: "{{ if .Keywords }}/search_torrent/{{ re_replace .Keywords \"[']+\" \"\" }}/page-0{{else}}/top_torrent.php{{end}}"
     rows:
       selector: div.table-responsive > table tbody tr
+      filters:
+        - name: andmatch
     fields:
       site_date:
         selector: td:nth-child(1) a
@@ -81,6 +92,7 @@
         case:
           i[class="fa fa-video-camera"]: films
           i[class="fa fa-desktop"]: series
+          i[class="fa fa-tv"]: series
           i[class="fa fa-music"]: musique
           i[class="fa fa-gamepad"]: jeux-pc
           i[class="fa fa-laptop"]: logiciels
@@ -111,6 +123,9 @@
             args: [ " To", "000000000000"]
           - name: replace
             args: [ "X", "" ]
+            # this is for the search with keywords which returns sizes nnnnn.n without unit indicator.
+          - name: re_replace
+            args: [ "(\\d+)\\.\\d", "$1 MB"]
       seeders:
         text: 0
       seeders:

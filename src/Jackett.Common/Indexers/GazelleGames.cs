@@ -298,7 +298,7 @@ namespace Jackett.Common.Indexers
                         release.Title = release.Title.Replace(", Neutral Leech!", "");
 
                         if (stickyGroup) // AND match for sticky releases
-                            if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                            if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                                 continue;
 
                         var Size = qSize.TextContent;

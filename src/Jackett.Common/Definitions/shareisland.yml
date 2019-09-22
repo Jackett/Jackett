@@ -17,21 +17,23 @@
        - {id: 21, cat: Movies/DVD, desc: "Movie DVD-9"}
        - {id: 11, cat: Movies/DVD, desc: "Movie DVD-5"}
        - {id: 20, cat: Movies/SD, desc: "Movie DVDRip"}
+       - {id: 45, cat: Movies, desc: "Movie RIP mp4"}
        - {id: 22, cat: Movies/UHD, desc: "Movie 4K-Ultra-HD"}
        - {id: 23, cat: Movies/HD, desc: "Movie H-265"}
        - {id: 24, cat: Movies/HD, desc: "Movie 1080p"}
        - {id: 25, cat: Movies/HD, desc: "Movie 720p"}
        - {id: 26, cat: Movies/3D, desc: "Movie 3D-FullHD"}
-       - {id: 27, cat: Movies/BluRay, desc: "Movie Blu Ray Disk"}
-       - {id: 43, cat: Movies/SD, desc: "BMovie DRip"}
+       - {id: 27, cat: Movies/BluRay, desc: "Movie BluRay"}
+       - {id: 43, cat: Movies/SD, desc: "Movie BDRip"}
        - {id: 29, cat: Movies/SD, desc: "Movie Cine News"}
-       - {id: 30, cat: TV/HD, desc: "Serie Tv HD"}
-       - {id: 31, cat: TV/SD, desc: "Serie Tv SD"}
+       - {id: 30, cat: TV/HD, desc: "Serie TV HD"}
+       - {id: 31, cat: TV/SD, desc: "Serie TV SD"}
        - {id: 35, cat: TV/Other, desc: "Programmi TV"}
        - {id: 42, cat: TV/Documentary, desc: "Documentari"}
       # Music
        - {id: 36, cat: Audio/MP3, desc: "Music MP3"}
        - {id: 37, cat: Audio/Lossless, desc: "Music Flac"}
+       - {id: 46, cat: Audio, desc: "Music"}
       # Games
        - {id: 18, cat: PC/Games, desc: "Games PC"}
        - {id: 19, cat: Console/PS3, desc: "Games PS3"}
@@ -46,6 +48,7 @@
        - {id: 17, cat: Books, desc: "Edicola Riviste"}
        - {id: 41, cat: Books, desc: "Edicola Fumetti"}
       # Applicazioni
+       - {id: 4, cat: PC, desc: "IPTV"}
        - {id: 7, cat: PC/0day, desc: "Applicazioni PC"}
        - {id: 8, cat: PC/0day, desc: "Applicazioni Linux"}
        - {id: 9, cat: PC/Mac, desc: "Applicazioni Mac"}
@@ -77,8 +80,19 @@
       path: index.php
       selector: a[href="logout.php"]
 
+  # download:
+  #   before:
+  #     path: thanks.php
+  #     method: "post"
+  #     inputs:
+  #       infohash: "{{ .DownloadUri.Query.id }}"
+  #       thanks: "1"
+  #       rndval: "1487013827343"
+  #   selector: a[href^="download.php?id="]
+
   search:
     paths:
+      # 30 entries per page
       - path: index.php
         inputs:
           pages: 1
@@ -91,24 +105,6 @@
       - path: index.php
         inputs:
           pages: 4
-      - path: index.php
-        inputs:
-          pages: 5
-      - path: index.php
-        inputs:
-          pages: 6
-      - path: index.php
-        inputs:
-          pages: 7
-      - path: index.php
-        inputs:
-          pages: 8
-      - path: index.php
-        inputs:
-          pages: 9
-      - path: index.php
-        inputs:
-          pages: 10
     inputs:
       search: "{{ .Keywords }}"
       category: "{{range .Categories}}{{.}};{{end}}"
@@ -124,95 +120,79 @@
       - name: re_replace # S01E01 to 1 1
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
     rows:
-      selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+      selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
       filters:
         - name: andmatch
     fields:
-      download:
-        selector: a[href^="download.php?id="]
-        attribute: href
-      title: # shortened title?
-        selector: td:nth-child(2)
-        filters:
-          - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
-          - name: re_replace # replace multiple spaces
-            args: ["[ ]{2,}", " "]
-          # normalize to SXXEYY format
-          - name: re_replace # S01 E01 to S01E01
-            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
-          - name: re_replace # 01x01 to S01E01
-            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
-          - name: re_replace # 1x01 to S01E01
-            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
-          - name: re_replace # Stagione X --> S0X
-            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
-          - name: re_replace # Stagione XX --> SXX
-            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
-          - name: re_replace # Episodio 4 to E4
-            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
-          - name: re_replace # Episodi 4 5 to E04-05
-            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
-          - name: re_replace # rimozioni varie
-            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
-      title: # long titles?
-        optional: true
-        selector: td:nth-child(2)
-        attribute: title
-        filters:
-          - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
-          - name: re_replace # replace multiple spaces
-            args: ["[ ]{2,}", " "]
-          # normalize to SXXEYY format
-          - name: re_replace # S01 E01 to S01E01
-            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
-          - name: re_replace # 01x01 to S01E01
-            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
-          - name: re_replace # 1x01 to S01E01
-            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
-          - name: re_replace # Stagione X --> S0X
-            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
-          - name: re_replace # Stagione XX --> SXX
-            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
-          - name: re_replace # Episodio 4 to E4
-            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
-          - name: re_replace # Episodi 4 5 to E04-05
-            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
-          - name: re_replace # rimozioni varie
-            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       category:
-        selector: td:nth-child(1) a[href^="index.php?page=torrents&category="]
+        selector: a[href^="index.php?page=torrents&category="]
         attribute: href
         filters:
           - name: querystring
             args: category
+      title:
+        selector: a[href^="index.php?page=torrent-details&id="]
+        filters:
+          # - name: re_replace # replace special characters with " " (space)
+          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+          - name: re_replace # replace special characters with " " (space)
+            args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+          - name: diacritics
+            args: replace
+          - name: re_replace # replace multiple spaces
+            args: ["[ ]{2,}", " "]
+          # normalize to SXXEYY format
+          - name: re_replace # S01 E01 to S01E01
+            args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+          - name: re_replace # 01x01 to S01E01
+            args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+          - name: re_replace # 1x01 to S01E01
+            args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+          - name: re_replace # Stagione X --> S0X
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+          - name: re_replace # Stagione XX --> SXX
+            args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+          - name: re_replace # Episodio 4 to E4
+            args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+          - name: re_replace # Episodi 4 5 to E04-05
+            args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+          - name: re_replace # rimozioni varie
+            args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
       details:
         selector: a[href^="index.php?page=torrent-details&id="]
         attribute: href
       banner:
         optional: true
-        selector: a[href^="index.php?page=torrent-details&id="][onmouseover]
+        selector: a[href^="index.php?page=torrent-details&id="]
         attribute: onmouseover
         filters:
           - name: regexp
             args: "src=(.+?) "
+      download:
+        # selector: a[href^="index.php?page=downloadcheck&id="]
+        selector: a[href^="download.php?id="]
+        attribute: href
       size:
-        selector: td:nth-last-child(3)
+        selector: td:nth-child(2) p:nth-last-child(5)
+        filters:
+          - name: regexp
+            args: ":\\s+(.+?)$" 
       date:
-        selector: td[width="85"] # some users have an extra uploader column between the grabs and size column, see #4435
+        selector: td:nth-child(2) p:nth-last-child(4)
         filters:
+          - name: regexp
+            args: ":\\s+(.+?)$" 
           - name: dateparse
-            args: "02/01/2006"
-      grabs:
-        selector: td[width="85"] + td + td + td
-        filters:
-          - name: replace
-            args: ["---", "0"]
+            args: "15:04:05 02/01/2006"
       seeders:
-        selector: td[width="85"] + td
+        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(1)
       leechers:
-        selector: td[width="85"] + td + td
+        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(2)
+      grabs:
+        text: 0
+      grabs:
+        selector: td:nth-child(2) p:nth-last-child(3) a:nth-child(3)
+        optional: true
       downloadvolumefactor:
         case:
           img[alt="Free Leech"]: "0"

@@ -56,20 +56,30 @@ namespace Jackett.Common.Indexers
             }
         }
 
+        class DownloadMatcher
+        {
+            public Regex MatchRegex;
+            public MatchEvaluator MatchEvaluator;
+        }
+
         private static Uri DefaultSiteLinkUri =
-            new Uri("http://descargas2020.com/");
+            new Uri("https://descargas2020.org");
 
         private static Uri[] ExtraSiteLinkUris = new Uri[]
         {
+            new Uri("http://www.tvsinpagar.com/"),
+            new Uri("http://torrentlocura.com/"),
+            new Uri("https://pctnew.site"),
+            new Uri("https://descargas2020.site"),
             new Uri("http://torrentrapid.com/"),
             new Uri("http://tumejortorrent.com/"),
             new Uri("http://pctnew.com/"),
-            new Uri("http://torrentlocura.com/"),
         };
 
         private static Uri[] LegacySiteLinkUris = new Uri[]
         {
-            new Uri("http://www.tvsinpagar.com/"),
+            new Uri("https://pctnew.site"),
+            new Uri("http://descargas2020.com/"),
         };
 
         private NewpctRelease _mostRecentRelease;
@@ -79,16 +89,25 @@ namespace Jackett.Common.Indexers
         private Regex _titleListRegex = new Regex(@"Serie( *Descargar)?(.+?)(Temporada(.+?)(\d+)(.+?))?Capitulos?(.+?)(\d+)((.+?)(\d+))?(.+?)-(.+?)Calidad(.*)", RegexOptions.IgnoreCase);
         private Regex _titleClassicRegex = new Regex(@"(\[[^\]]*\])?\[Cap\.(\d{1,2})(\d{2})([_-](\d{1,2})(\d{2}))?\]", RegexOptions.IgnoreCase);
         private Regex _titleClassicTvQualityRegex = new Regex(@"\[([^\]]*HDTV[^\]]*)", RegexOptions.IgnoreCase);
-        private Regex _downloadMatchRegex = new Regex("[^\"]*/descargar-torrent/[^\"]*");
+        private DownloadMatcher[] _downloadMatchers = new DownloadMatcher[]
+        {
+            new DownloadMatcher() { MatchRegex = new Regex("([^\"]*/descargar-torrent/[^\"]*)") },
+            new DownloadMatcher()
+            {
+                MatchRegex = new Regex(@"nalt\s*=\s*'([^\/]*)"),
+                MatchEvaluator = m => string.Format("/download/{0}.torrent", m.Groups[1])
+            },
+        };
 
         private int _maxDailyPages = 7;
         private int _maxMoviesPages = 30;
         private int _maxEpisodesListPages = 100;
-        private int[] _allTvCategories = TorznabCatType.TV.SubCategories.Select(c => c.ID).ToArray();
-        private int[] _allMoviesCategories = TorznabCatType.Movies.SubCategories.Select(c => c.ID).ToArray();
+        private int[] _allTvCategories = (new TorznabCategory[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
+        private int[] _allMoviesCategories = (new TorznabCategory[] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
 
         private bool _includeVo;
         private bool _filterMovies;
+        private bool _removeMovieAccents;
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
@@ -124,6 +143,9 @@ namespace Jackett.Common.Indexers
 
             var filterMoviesItem = new BoolItem() { Name = "Only full match movies", Value = true };
             configData.AddDynamic("FilterMovies", filterMoviesItem);
+
+            var removeMovieAccentsItem = new BoolItem() { Name = "Remove accents in movie searchs", Value = true };
+            configData.AddDynamic("RemoveMovieAccents", removeMovieAccentsItem);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -153,39 +175,23 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            List<string> links = new List<string>();
-            links.Add(linkParam.AbsoluteUri);
+            IEnumerable<Uri> uris = GetLinkUris(linkParam);
 
-            IEnumerable<Uri> knownUris = (new Uri[] { DefaultSiteLinkUri }).
-                Concat(ExtraSiteLinkUris);
-
-            foreach (Uri extraSiteUri in knownUris)
-            {
-                UriBuilder ub = new UriBuilder(linkParam);
-                ub.Host = extraSiteUri.Host;
-                string link = ub.Uri.AbsoluteUri;
-                if (link != linkParam.AbsoluteUri)
-                    links.Add(ub.Uri.AbsoluteUri);
-            }
-
-            foreach (string link in links)
+            foreach (Uri uri in uris)
             {
                 byte[] result = null;
 
                 try
                 {
-                    var results = await RequestStringWithCookiesAndRetry(link);
+                    var results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
                     await FollowIfRedirect(results);
                     var content = results.Content;
 
                     if (content != null)
                     {
-                        Match match = _downloadMatchRegex.Match(content);
-                        if (match.Success)
-                        {
-                            Uri uriLink = new Uri(new Uri(link), match.Groups[0].Value);
+                        Uri uriLink = ExtractDownloadUri(content, uri.AbsoluteUri);
+                        if (uriLink != null)
                             result = await base.Download(uriLink);
-                        }
                     }
                 }
                 catch
@@ -195,10 +201,55 @@ namespace Jackett.Common.Indexers
                 if (result != null)
                     return result;
                 else
-                    this.logger.Warn("Newpct - download link not found in " + link);
+                    this.logger.Warn("Newpct - download link not found in " + uri.LocalPath);
             }
 
             return null;
+        }
+
+        private Uri ExtractDownloadUri(string content, string baseLink)
+        {
+            foreach (DownloadMatcher matcher in _downloadMatchers)
+            {
+                Match match = matcher.MatchRegex.Match(content);
+                if (match.Success)
+                {
+                    string linkText; 
+                        
+                    if (matcher.MatchEvaluator != null)
+                        linkText = (string)matcher.MatchEvaluator.DynamicInvoke(match);
+                    else
+                        linkText = match.Groups[1].Value;
+
+                    return new Uri(new Uri(baseLink), linkText);
+                }
+            }
+
+            return null;
+        }
+
+        IEnumerable<Uri> GetLinkUris(Uri referenceLink)
+        {
+            List<Uri> uris = new List<Uri>();
+            uris.Add(referenceLink);
+            if (DefaultSiteLinkUri.Scheme != referenceLink.Scheme && DefaultSiteLinkUri.Host != referenceLink.Host)
+                uris.Add(DefaultSiteLinkUri);
+
+            uris = uris.Concat(ExtraSiteLinkUris.
+                Where(u => 
+                    (u.Scheme != referenceLink.Scheme || u.Host != referenceLink.Host) && 
+                    (u.Scheme != DefaultSiteLinkUri.Scheme || u.Host != DefaultSiteLinkUri.Host))).ToList();
+
+            List<Uri> result = new List<Uri>();
+
+            foreach (Uri uri in uris)
+            {
+                UriBuilder ub = new UriBuilder(uri);
+                ub.Path = referenceLink.LocalPath;
+                result.Add(ub.Uri);
+            }
+
+            return result;
         }
 
         private async Task<IEnumerable<ReleaseInfo>> PerformQuery(Uri siteLink, TorznabQuery query, int attempts)
@@ -207,6 +258,7 @@ namespace Jackett.Common.Indexers
 
             _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
             _filterMovies = ((BoolItem)configData.GetDynamic("FilterMovies")).Value;
+            _removeMovieAccents = ((BoolItem)configData.GetDynamic("RemoveMovieAccents")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
             bool rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
@@ -214,13 +266,39 @@ namespace Jackett.Common.Indexers
             if (rssMode)
             {
                 int pg = 1;
+                Uri validUri = null;
                 while (pg <= _maxDailyPages)
                 {
-                    Uri url = new Uri(siteLink, string.Format(_dailyUrl, pg));
-                    var results = await RequestStringWithCookiesAndRetry(url.AbsoluteUri);
-                    await FollowIfRedirect(results);
+                    IEnumerable<NewpctRelease> items = null;
+                    WebClientStringResult results = null;
 
-                    var items = ParseDailyContent(results.Content);
+                    if (validUri != null)
+                    {
+                        Uri uri = new Uri(validUri, string.Format(_dailyUrl, pg));
+                        results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+                        if (results == null || string.IsNullOrEmpty(results.Content))
+                            break;
+                        await FollowIfRedirect(results);
+                        items = ParseDailyContent(results.Content);
+                    }
+                    else
+                    {
+                        foreach (Uri uri in GetLinkUris(new Uri(siteLink, string.Format(_dailyUrl, pg))))
+                        {
+                            results = await RequestStringWithCookiesAndRetry(uri.AbsoluteUri);
+                            if (results != null && !string.IsNullOrEmpty(results.Content))
+                            {
+                                await FollowIfRedirect(results);
+                                items = ParseDailyContent(results.Content);
+                                if (items != null && items.Any())
+                                {
+                                    validUri = uri;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     if (items == null || !items.Any())
                         break;
 
@@ -497,7 +575,10 @@ namespace Jackett.Common.Indexers
             var releases = new List<NewpctRelease>();
 
             string searchStr = query.SanitizedSearchTerm;
+            if (_removeMovieAccents)
+                searchStr = RemoveDiacritics(searchStr);
 
+            Uri validUri = null;
             int pg = 1;
             while (pg <= _maxMoviesPages)
             {
@@ -505,10 +586,35 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("q", searchStr);
                 queryCollection.Add("pg", pg.ToString());
 
-                Uri url = new Uri(siteLink, string.Format(_searchUrl, pg));
-                var results = await PostDataWithCookies(url.AbsoluteUri, queryCollection);
+                WebClientStringResult results = null;
+                IEnumerable<NewpctRelease> items = null;
 
-                var items = ParseSearchContent(results.Content);
+                if (validUri != null)
+                {
+                    Uri uri = new Uri(validUri, string.Format(_searchUrl, pg));
+                    results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                    if (results == null || string.IsNullOrEmpty(results.Content))
+                        break;
+
+                    items = ParseSearchContent(results.Content);
+                }
+                else
+                {
+                    foreach (Uri uri in GetLinkUris(new Uri(siteLink, string.Format(_searchUrl, pg))))
+                    {
+                        results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                        if (results != null && !string.IsNullOrEmpty(results.Content))
+                        {
+                            items = ParseSearchContent(results.Content);
+                            if (items != null && items.Any())
+                            {
+                                validUri = uri;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if (items == null)
                     break;
 
@@ -557,7 +663,8 @@ namespace Jackett.Common.Indexers
                     try
                     {
                         size = ReleaseInfo.GetBytes(sizeText);
-                    } catch
+                    }
+                    catch
                     {
                     }
                     DateTime publishDate;
@@ -736,6 +843,23 @@ namespace Jackett.Common.Indexers
             result = Regex.Replace(result, @"\.[ \.]*\.", ".");
 
             return result;
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

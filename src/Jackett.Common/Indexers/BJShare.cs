@@ -55,7 +55,7 @@ namespace Jackett.Common.Indexers
             Language = "pt-br";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");

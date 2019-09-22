@@ -158,9 +158,24 @@ namespace Jackett.Common.Indexers
                             // Parse required data
                             var downloadAnchor = groupItem.QuerySelectorAll("td a").Last();
                             var qualityData = downloadAnchor.InnerHtml.Split('/');
-                            
-                            if (qualityData.Length < 2)
-                                throw new Exception($"We expected 2 or more quality datas, instead we have {qualityData.Length} for {season}.");
+
+                            switch (qualityData.Length)
+                            {
+                                case 0:
+                                    Array.Resize(ref qualityData, 2);
+                                    qualityData[0] = " ";
+                                    qualityData[1] = " ";
+                                    break;
+                                case 1:
+                                    Array.Resize(ref qualityData, 2);
+                                    qualityData[1] = " ";
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            // Replace 4K quality tag with 2160p, so Sonarr etc. can properly parse it
+                            qualityData[1] = qualityData[1].Replace("4K", "2160p");
 
                             // Build title
                             var title = string.Join(".", new List<string>

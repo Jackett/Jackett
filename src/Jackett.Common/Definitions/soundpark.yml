@@ -6,8 +6,10 @@
   type: semi-private
   encoding: UTF-8
   links:
-    - https://soundpark-club.com/
+    - https://sound-park.world/
     - https://soundpark-club.casa/
+  legacylinks:
+    - https://soundpark-club.com/
 
   caps:
     categories:
@@ -15,6 +17,7 @@
 
     modes:
       search: [q]
+      music-search: [q, album, artist, label, year]
 
   login:
     path: login
@@ -37,7 +40,7 @@
     paths:
       - path: "{{if .Keywords}}search{{else}}music{{end}}"
     inputs:
-      q: "{{ .Keywords }}"
+      q: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
       num: 50
 
     rows:

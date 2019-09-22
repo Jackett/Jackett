@@ -6,6 +6,8 @@
   type: private
   encoding: UTF-8
   links:
+    - https://nostalgic.is/
+  legacylinks:
     - https://nostalgic.to/
 
   caps:

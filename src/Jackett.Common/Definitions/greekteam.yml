@@ -120,21 +120,21 @@
         attribute: href
       download:
         text: "download2.php?torrent={{ .Result._id }}"
-      size:
-        selector: td:nth-last-child(4)
+      files:
+        selector: td:has(a[href$="filelist=1"])
       date:
-        selector: td:nth-last-child(6) > nobr
+        selector: td:has(a[href$="filelist=1"]) ~ td ~ td > nobr
         filters:
           - name: append
             args: " +02:00"
           - name: dateparse
             args: "2006-01-0215:04:05 -07:00"
-      files:
-        selector: td:nth-last-child(8)
+      size:
+        selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td
       seeders:
-        selector: td:nth-last-child(3)
+        selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td
       leechers:
-        selector: td:nth-last-child(2)
+        selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td
       downloadvolumefactor:
         case:
           "img[src=\"pic/free.png\"]": "0"

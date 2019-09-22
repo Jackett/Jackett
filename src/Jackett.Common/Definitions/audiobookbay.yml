@@ -5,8 +5,10 @@
   language: en-us
   type: semi-private
   encoding: UTF-8
+  followredirect: true
   links:
     - http://audiobookbay.nl/
+  legacylinks:
     - https://audiobookbay.la/
 
   caps:
@@ -75,21 +77,26 @@
 
   login:
     path: https://audiobookbay.nl/member/login.php
-    form: form[action="https://audiobookbay.nl/member/login.php"]
+    form: form[action$="/member/login.php"]
     method: post
     form: form
     inputs:
       username: "{{ .Config.username }}"
       password: "{{ .Config.password }}"
-      login: "Login"
     error:
-      - selector: td.embedded:has(h2:contains("Invalid"))
+      - selector: div.warning
     test:
-      path: /member/users/
+      path: http://audiobookbay.nl/member/users/
+      selector: a[href="/member/logout"]
 
   download:
-    selector: a[href^="/download?"]
-    attribute: href 
+    method: get
+    before:
+      path:  https://audiobookbay.nl/member/login.php
+      method: "post"
+      inputs:
+        username: "{{ .Config.username }}"
+        password: "{{ .Config.password }}"
 
   search:
     paths:
@@ -110,8 +117,11 @@
         selector: div.postTitle h2 a
         attribute: href
       download:
-        selector: a[href^="/audio-books/"]
+        selector: a[href^="/dl-now?f="]
         attribute: href
+        filters:
+          - name: replace
+            args: ["/dl-now?f=", "/download?f="]
       banner:
         optional: true
         selector: img

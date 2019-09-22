@@ -56,6 +56,9 @@ namespace Jackett.Common.Plumbing
                 case "httpclientnetcore":
                     RegisterWebClient<HttpWebClientNetCore>(builder);
                     break;
+                case "httpclient2netcore":
+                    RegisterWebClient<HttpWebClient2NetCore>(builder);
+                    break;
                 case "httpclient":
                     RegisterWebClient<HttpWebClient>(builder);
                     break;

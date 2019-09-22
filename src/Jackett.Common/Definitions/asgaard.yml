@@ -1,0 +1,168 @@
+﻿---
+  site: asgaard
+  name: Asgaard
+  description: "Asgaard (AG) is a NORDIC Private Torrent Tracker for MOVIES / TV / GENERAL"
+  language: en
+  type: private
+  encoding: UTF-8
+  links:
+    - https://asgrd.org/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV, desc: "Kidz"}
+      - {id: 2, cat: Movies, desc: "Movies"}
+      - {id: 3, cat: TV, desc: "TV"}
+      - {id: 4, cat: Audio, desc: "Music"}
+      - {id: 5, cat: PC, desc: "Apps"}
+      - {id: 6, cat: PC/Games, desc: "Games"}
+      - {id: 7, cat: Books, desc: "Books"}
+      - {id: 8, cat: Movies, desc: "Kidz Movies"}
+      - {id: 9, cat: TV, desc: "Kidz TV"}
+      - {id: 10, cat: TV, desc: "Kidz Boxset"}
+      - {id: 54, cat: Movies/SD, desc: "Movies SD"}
+      - {id: 55, cat: Movies/DVD, desc: "Movies DVDR"}
+      - {id: 13, cat: Movies/HD, desc: "Movies 720p"}
+      - {id: 14, cat: Movies/HD, desc: "Movies 1080p"}
+      - {id: 56, cat: Movies/HD, desc: "Movies x265"}
+      - {id: 15, cat: Movies/UHD, desc: "Movies 4K"}
+      - {id: 16, cat: Movies, desc: "Movies Remux"}
+      - {id: 17, cat: Movies/BluRay, desc: "Movies Bluray Disc"}
+      - {id: 53, cat: Movies, desc: "Movies Boxset"}
+      - {id: 51, cat: Movies, desc: "Movies No Nordic Subs"}
+      - {id: 52, cat: TV/SD, desc: "TV SD"}
+      - {id: 58, cat: TV/SD, desc: "TV DVDR"}
+      - {id: 18, cat: TV/HD, desc: "TV 720p"}
+      - {id: 19, cat: TV/HD, desc: "TV 1080p"}
+      - {id: 60, cat: TV/HD, desc: "TV Bluray Disc"}
+      - {id: 20, cat: TV, desc: "TV Boxset"}
+      - {id: 50, cat: TV, desc: "TV No Nordic Subs"}
+      - {id: 59, cat: TV/UHD, desc: "TV 4K"}
+      - {id: 49, cat: Audio/Video, desc: "Music Video"}
+      - {id: 23, cat: Audio/MP3, desc: "Music MP3"}
+      - {id: 61, cat: Audio/MP3, desc: "Music MP3 Boxset"}
+      - {id: 24, cat: Audio/Lossless, desc: "Music Flac"}
+      - {id: 62, cat: Audio/Lossless, desc: "Music Flac Boxset"}
+      - {id: 28, cat: PC/Phone-Android, desc: "Apps Android"}
+      - {id: 29, cat: PC/Phone-IOS, desc: "Apps iOS"}
+      - {id: 25, cat: PC/0day, desc: "Apps Windows"}
+      - {id: 26, cat: PC, desc: "Apps Linux"}
+      - {id: 27, cat: PC/Mac, desc: "Apps MacOS"}
+      - {id: 30, cat: PC/Games, desc: "Games Windows"}
+      - {id: 31, cat: PC, desc: "Games Linux"}
+      - {id: 32, cat: PC/Mac, desc: "Games MacOS"}
+      - {id: 33, cat: PC/Phone-Android, desc: "Games Android"}
+      - {id: 34, cat: PC/Phone-IOS, desc: "Games iOS"}
+      - {id: 35, cat: Console/NDS, desc: "Games Nintendo"}
+      - {id: 38, cat: Console/PSP, desc: "Games Playstation"}
+      - {id: 39, cat: Console/Xbox, desc: "Games XBox"}
+      - {id: 41, cat: Books/Ebook, desc: "Books E-Book"}
+      - {id: 42, cat: Audio/Audiobook, desc: "Books Audiobook"}
+      - {id: 43, cat: Books/Technical, desc: "Books Education"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep, imdbid]
+      movie-search: [q, imdbid]
+
+  settings:
+    - name: username
+      type: text
+      label: Username
+    - name: password
+      type: password
+      label: Password
+    - name: info
+      type: info
+      label: "About the Username field"
+      default: "Enter your <b>Email address</b> in the username field."
+
+  login:
+    path: login.php
+    method: post
+    form: form
+    inputs:
+      email: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: 1
+    error:
+      - selector: h2:contains("Error")
+        message:
+          selector: p
+    test:
+      path: /
+      selector: a[href$="/logout.php"]
+      
+  search:
+    paths:
+    # https://asgrd.org/browse.php?sns=&sna=&spf=&sr=&sg=&sys=&sye=&srs=&sre=&si=tt2401090&ss=&incldead=0&only_free=0&sort=4&type=desc
+    - path: browse.php
+    inputs:
+      $raw: "{{range .Categories}}cats[]={{.}}&{{end}}"
+      sns: ""
+      sna: "{{if .Query.IMDBID}}{{else}}{{ .Keywords }}{{end}}"
+      spf: ""
+      sr: ""
+      sg: ""
+      sys: ""
+      sye: ""
+      srs: ""
+      sre: ""
+      si: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{end}}"
+      ss: ""
+      # 0 active 1 incldead 2 onlydead
+      incldead: 0
+      # 0 incl non-free 1 incl only-free
+      only_free: 0
+      sort: 4
+      type: desc
+    rows:
+      selector: table.table-striped > tbody > tr:has(a[href*="details.php?id="])
+      filters:
+        - name: andmatch
+    fields:
+      title:
+        selector: div.torrent-name
+        filters:
+        # need to remove the tooltip text
+          - name: regexp
+            args: "(.+?)\\n"
+      details:
+        selector: a[href*="details.php?id="]
+        attribute: href
+      category:
+        selector: a[href*="browse.php?"]
+        attribute: href
+        filters:
+          - name: regexp
+            args: cats\[\]=(\d+)$
+      banner:
+        optional: true
+        selector: img.tooltip-poster
+        attribute: src
+      download:
+        selector: a[href*="download.php?torrent="]
+        attribute: href
+      date:
+        selector: div:has(span[id^="staff_pick_"])
+        filters:
+          - name: dateparse
+            args: "2 Jan 2006 15:04:05"
+      files:
+      # remember #5754 advanced users have additional last TD so dont go using nth-last-child ;-)
+        selector: td:nth-child(5)
+      size:
+        selector: td:nth-child(7)
+      grabs:
+        selector: td:nth-child(8)
+      seeders:
+        selector: td:nth-child(9)
+      leechers:
+        selector: td:nth-child(10)
+      downloadvolumefactor:
+        case:
+          img[src="./images/gold.png"]: "0"
+          "*": "1"
+      uploadvolumefactor:
+        case:
+          "*": "1"

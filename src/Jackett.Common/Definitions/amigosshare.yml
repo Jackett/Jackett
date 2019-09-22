@@ -29,6 +29,8 @@
       - {id: 74, cat: XXX, desc: "Adultos: XXX"}
       - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
       - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
+      - {id: 118, cat: TV/Anime, desc: "Anime: Séries"}
+      - {id: 116, cat: TV/Anime, desc: "Anime: Filmes"}
       - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
       - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
       - {id: 23, cat: PC/Phone-Android, desc: "Aplicativos: Android"}
@@ -40,28 +42,11 @@
       - {id: 72, cat: Books, desc: "Apostila: Apostila"}
       - {id: 67, cat: Books, desc: "Ebook: Livros"}
       - {id: 68, cat: Books, desc: "Ebook: Revistas"}
-      - {id: 85, cat: Movies, desc: "Filmes: Guerra"}
-      - {id: 81, cat: Movies, desc: "Filmes: Musical"}
-      - {id: 17, cat: Movies, desc: "Filmes: Biografia"}
-      - {id: 16, cat: Movies, desc: "Filmes: Esportes"}
-      - {id: 15, cat: Movies, desc: "Filmes: Ficção"}
-      - {id: 14, cat: Movies, desc: "Filmes: Infantil"}
-      - {id: 13, cat: Movies, desc: "Filmes: Nacionais"}
-      - {id: 12, cat: Movies, desc: "Filmes: Policial"}
-      - {id: 11, cat: Movies, desc: "Filmes: Religioso"}
-      - {id: 10, cat: Movies, desc: "Filmes: Suspense"}
-      - {id: 9, cat: Movies, desc: "Filmes: Western"}
-      - {id: 8, cat: Movies, desc: "Filmes: Animação"}
-      - {id: 7, cat: Movies, desc: "Filmes: Clássicos"}
-      - {id: 6, cat: Movies, desc: "Filmes: Comédia"}
-      - {id: 5, cat: Movies, desc: "Filmes: Documentário"}
-      - {id: 4, cat: Movies, desc: "Filmes: Drama"}
-      - {id: 3, cat: Movies, desc: "Filmes: Romance"}
-      - {id: 2, cat: Movies, desc: "Filmes: Terror"}
-      - {id: 1, cat: Movies, desc: "Filmes: Ação"}
-      - {id: 80, cat: Movies, desc: "Filmes: Aventura"}
-      - {id: 70, cat: Other, desc: "Fotos: XXX"}
+      - {id: 112, cat: Books, desc: "Ebook: HQs"}
+      - {id: 119, cat: Movies, desc: "Filmes:"}
+      - {id: 70, cat: XXX, desc: "Fotos: XXX"}
       - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
+      - {id: 109, cat: Console, desc: "Jogos: Emulação"}
       - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
       - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
       - {id: 48, cat: PC/Mac, desc: "Jogos: Mac"}
@@ -69,17 +54,15 @@
       - {id: 50, cat: Console, desc: "Jogos: Ps2"}
       - {id: 51, cat: Console/PS3, desc: "Jogos: Ps3"}
       - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
-      - {id: 54, cat: Console/Xbox 360, desc: "Jogos: X360"}
+      - {id: 54, cat: Console/Xbox 360, desc: "Jogos: Xbox360"}
       - {id: 56, cat: Console/Xbox, desc: "Jogos: Xbox"}
       - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
       - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
-      - {id: 111, cat: Console, desc: "Jogos: Nintendo Swich"}
       - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
       - {id: 57, cat: Console, desc: "Jogos: Android"}
       - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
       - {id: 78, cat: Console/Xbox One, desc: "Jogos: Xbox One"}
       - {id: 29, cat: Audio, desc: "Musica: Axé"}
-      - {id: 30, cat: Audio, desc: "Musica: Eletronica"}
       - {id: 31, cat: Audio, desc: "Musica: Funk"}
       - {id: 32, cat: Audio, desc: "Musica: Pagode"}
       - {id: 33, cat: Audio, desc: "Musica: Hip-Hop"}
@@ -88,7 +71,7 @@
       - {id: 37, cat: Audio, desc: "Musica: Hard Rock"}
       - {id: 38, cat: Audio, desc: "Musica: Blues"}
       - {id: 39, cat: Audio, desc: "Musica: Dance"}
-      - {id: 40, cat: Audio, desc: "Musica: Dicografia"}
+      - {id: 40, cat: Audio, desc: "Musica: Discografia"}
       - {id: 41, cat: Audio, desc: "Musica: Erudita"}
       - {id: 42, cat: Audio, desc: "Musica: Forró"}
       - {id: 43, cat: Audio, desc: "Musica: Dubstep"}
@@ -97,6 +80,8 @@
       - {id: 77, cat: Audio, desc: "Musica: Outros"}
       - {id: 76, cat: Audio, desc: "Musica: Reggae"}
       - {id: 83, cat: Audio, desc: "Musica: Gospel"}
+      - {id: 115, cat: Audio, desc: "Musica: POP"}
+      - {id: 114, cat: Audio, desc: "Musica: MPB"}
       - {id: 84, cat: Audio, desc: "Musica: Game (OST)"}
       - {id: 88, cat: TV, desc: "Series: Musical"}
       - {id: 86, cat: TV, desc: "Series: Guerra"}
@@ -142,18 +127,18 @@
     error:
       - selector: div.alert-error
     test:
-      path: index.php
-#      selector: a[href="account-logout.php"]
+      path: torrents-search.php
+      selector: a[href="account-logout.php"]
 
   ratio:
-    path: index.php
+    path: torrents-search.php
     selector: li:contains("Ratio:") a b
 
   search:
     paths:
       # http://amigos-share.club/torrents-search.php?search=&c1=1&c19=1&c36=1&incldead=0&freeleech=0&lang=0sort=id&order=desc&page=1
       - path: torrents-search.php
-      # site displays just 21 results, no profile options found to change this, so we attempt to fetch 5 pages
+      # site displays just 9 results, no profile options found to change this, so we attempt to fetch 5 pages
       - path: torrents-search.php
         inputs:
           page: 1
@@ -168,17 +153,42 @@
           page: 4
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Keywords }}"
+      search: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
       incldead: 1
       freeleech: 0
       lang: 0
       sort: "id"
       order: "desc"
+    keywordsfilters:
+      - name: re_replace
+        args: ["([12][0-9]{3})", ""]
     rows:
-      selector: table > tbody > tr:has(a[href^="torrents-details.php?id="])
+      selector: div#fancy-list-group ul.list-group li.list-group-item
     fields:
+      _quality:
+        selector: div.list-group-item-content p.m-0 span.badge-primary:contains("1080p"), div.list-group-item-content p.m-0 span.badge-primary:contains("720p"), div.list-group-item-content p.m-0 span.badge-primary:contains("4k")
+        optional: true
+      _year:
+        selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#246AB6;"]
+        optional: true
+      _type:
+        selector: div.list-group-item-content p.m-0 span.badge-info:contains("Rip"), div.list-group-item-content p.m-0 span.badge-info:contains("WEB-"), div.list-group-item-content p.m-0 span.badge-info:contains("TV"), div.list-group-item-content p.m-0 span.badge-info:contains("Blu-Ray"), div.list-group-item-content p.m-0 span.badge-info:contains("BD50"), div.list-group-item-content p.m-0 span.badge-info:contains("MUX"), div.list-group-item-content p.m-0 span.badge-info:contains("DVD"), div.list-group-item-content p.m-0 span.badge-info:contains("320"), div.list-group-item-content p.m-0 span.badge-info:contains("CAM"), div.list-group-item-content p.m-0 span.badge-info:contains("rip")
+        optional: true
       title:
         selector: a[href^="torrents-details.php?id="]
+        filters:
+            # strip out the non-english title [to the left of the brackets] and drop the brackets enclosing the english title
+          - name: re_replace
+            args: ["^(.*?)[\\(](.*?)[\\)](.*?)$", "$2$3"]
+            # add the year to the title
+          - name: append
+            args: "{{if .Result._year}} {{.Result._year}}{{else}}{{end}}"
+            # add the quality to the title
+          - name: append
+            args: "{{if .Result._quality}} {{.Result._quality}}{{else}}{{end}}"
+            # add the type to the title
+          - name: append
+            args: "{{if .Result._type}} {{.Result._type}}{{else}}{{end}}"
       details:
         selector: a[href^="torrents-details.php?id="]
         attribute: href
@@ -186,7 +196,7 @@
         selector: a[href^="download.php?id="]
         attribute: href
       category:
-        selector: td:first-child img
+        selector: div.list-group-item-addon img
         attribute: src
         case:
         # unfortunately the site does not have category numbers on the results page, just a .png which can apply to both movies and tv.
@@ -206,43 +216,47 @@
          "[src$=\"/Apostila.png\"]": "72"
          "[src$=\"/E-books.png\"]": "67"
          "[src$=\"/Revista.png\"]": "68"
-         "[src$=\"/Aventura.png\"]": "80"
-         "[src$=\"/XXX.png\"]": "70"
-         "[src$=\"/Jogos-Ps4.png\"]": "79"
+         "[src$=\"/HQ.png\"]": "112"
+         "[src$=\"/Filmes.png\"]": "119"
+         "[src$=\"/Revistas-XXX.png\"]": "70"
+         "[src$=\"/PS4.png\"]": "79"
          "[src$=\"/Jogos-PC.png\"]": "47"
-         "[src$=\"/Jogos-EmuladoreseRoms.png\"]": "61"
+         "[src$=\"/Emulador.png\"]": "61"
+         "[src$=\"/Emulacao.png\"]": "109"
          "[src$=\"/Jogos-Mac.png\"]": "48"
-         "[src$=\"/Jogos-Ps1.png\"]": "49"
-         "[src$=\"/Jogos-Ps2.png\"]": "50"
-         "[src$=\"/Jogos-Ps3.png\"]": "51"
+         "[src$=\"/Jogos-PS1.png\"]": "49"
+         "[src$=\"/Jogos-PS2.png\"]": "50"
+         "[src$=\"/Jogos-PS3.png\"]": "51"
          "[src$=\"/Jogos-Dreamcast.png\"]": "52"
-         "[src$=\"/ogos-X360.png\"]": "54"
-         "[src$=\"/Jogos-Xbox.png\"]": "55"
-         "[src$=\"/Jogos-Wii.png\"]": "56"
-         "[src$=\"/Jogos-NintendoDS.png\"]": "58"
-         "[src$=\"/Jogos-Android.png\"]": "57"
+         "[src$=\"/Jogos-Xbox360.png\"]": "54"
+         "[src$=\"/Jogos-Xbox.png\"]": "56"
+         "[src$=\"/Jogos-Wii.png\"]": "55"
+         "[src$=\"/Jogos-DS.png\"]": "58"
+         "[src$=\"/jogosandroid.png\"]": "57"
          "[src$=\"/Jogos-PSP.png\"]": "82"
+         "[src$=\"/Jogos-NS.png\"]": "110"
          "[src$=\"/Jogos-XboxOne.png\"]": "78"
          "[src$=\"/Axe.png\"]": "29"
-         "[src$=\"/Electronica.png\"]": "30"
          "[src$=\"/Funk.png\"]": "31"
          "[src$=\"/Pagode.png\"]": "32"
-         "[src$=\"/Hip-Hop.png\"]": "33"
+         "[src$=\"/Hip_Hop.png\"]": "33"
          "[src$=\"/Rap.png\"]": "34"
          "[src$=\"/Rock.png\"]": "36"
          "[src$=\"/Hard-Rock.png\"]": "37"
          "[src$=\"/Blues.png\"]": "38"
          "[src$=\"/Dance.png\"]": "39"
-         "[src$=\"/Dicografia.png\"]": "40"
+         "[src$=\"/Discografia.png\"]": "40"
          "[src$=\"/Erudita.png\"]": "41"
          "[src$=\"/Forro.png\"]": "42"
          "[src$=\"/Dubstep.png\"]": "43"
          "[src$=\"/Sertanejo.png\"]": "46"
          "[src$=\"/Samba.png\"]": "45"
-         "[src$=\"/Outros.png\"]": "77"
+         "[src$=\"/Musica-Outros.png\"]": "77"
          "[src$=\"/Reggae.png\"]": "76"
          "[src$=\"/Gospel.png\"]": "83"
-         "[src$=\"/Game-OST.png\"]": "84"
+         "[src$=\"/POP.png\"]": "115"
+         "[src$=\"/MPB.png\"]": "114"
+         "[src$=\"/OST.png\"]": "84"
          "[src$=\"/Musical.png\"]": "88"
          "[src$=\"/Guerra.png\"]": "86"
          "[src$=\"/Biografia.png\"]": "105"
@@ -268,36 +282,19 @@
          "[src$=\"/Aventura.png\"]": "87"
          "[src$=\"/Shows.png\"]": "65"
          "[src$=\"/Aberta.png\"]": "63"
-         "[src$=\"/Esportes.png\"]": "62"
+         "[src$=\"/Esporte.png\"]": "62"
          "[src$=\"/Fechada.png\"]": "64"
          "[src$=\"/Videoaula.png\"]": "73"
-         "[src$=\"/Guerra.png\"]": "85"
-         "[src$=\"/Musical.png\"]": "81"
-         "[src$=\"/Biografia.png\"]": "17"
-         "[src$=\"/Esportes.png\"]": "16"
-         "[src$=\"/Ficcao.png\"]": "15"
-         "[src$=\"/Infantil.png\"]": "14"
-         "[src$=\"/Nacionais.png\"]": "13"
-         "[src$=\"/Policial.png\"]": "12"
-         "[src$=\"/Religioso.png\"]": "11"
-         "[src$=\"/Suspense.png\"]": "10"
-         "[src$=\"/Western.png\"]": "9"
-         "[src$=\"/Animacao.png\"]": "8"
-         "[src$=\"/Classicos.png\"]": "7"
-         "[src$=\"/Comedia.png\"]": "6"
-         "[src$=\"/Documentario.png\"]": "5"
-         "[src$=\"/Drama.png\"]": "4"
-         "[src$=\"/Romance.png\"]": "3"
-         "[src$=\"/Terror.png\"]": "2"
-         "[src$=\"/Acao.png\"]": "1"
       date:
         text: now
       size:
-        selector: td:nth-child(2) span.badge-info
+        selector: div.list-group-item-content p.m-0 span.badge-info
       seeders:
-        selector: td:nth-child(4)
+        selector: div.list-group-item-controls a:nth-child(1)
       leechers:
-        selector: td:nth-child(5)
+        selector: div.list-group-item-controls a:nth-child(2)
+      grabs:
+        selector: div.list-group-item-controls a:nth-child(3)
       downloadvolumefactor:
         case:
           "span.badge-success:contains(\"FREE\")": "0"

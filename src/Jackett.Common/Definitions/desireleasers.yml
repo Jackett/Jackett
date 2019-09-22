@@ -20,20 +20,15 @@
       tv-search: [q, season, ep, imdbid]
       movie-search: [q, imdbid]
 
-  settings:
-    - name: cookie
-      type: text
-      label: Cookie
-    - name: info
-      type: info
-      label: How to get the Cookie
-      default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
-          
   login:
-    method: cookie
+    path: login
+    method: form
     inputs:
-      cookie: "{{ .Config.cookie }}"
-    test:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+      remember: 1
+    error:
+      - selector: form[action$="/login"] span strong
     test:
       path: torrents
       selector: a[href$="/logout"]
@@ -127,7 +122,7 @@
           "i[data-original-title=\"Personal Freeleech\"]": "0" # 24 Hour FreeLeech From BON Store
           "i[data-original-title=\"Special Freeleech\"]": "0" # Special FreeLeech For Certain User Groups
           "i[data-original-title=\"Freeleech Token\"]": "0" # Freeleech From Token
-          "i[data-original-title=\"Global FreeLeech\"]": "0" # Global Freeleech
+          "i[data-original-title=\"Global Freeleech\"]": "0" # Global Freeleech
           "i[data-original-title=\"Freeleech\"]": "0" # Freeleech
           "i[data-original-title=\"Featured\"]": "0" # Featured Torrent
           "*": "1"

@@ -155,8 +155,12 @@
       title:
         selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
         filters:
+          # - name: re_replace # replace special characters with " " (space)
+          #   args: ["[^a-zA-Z0-9\\s]|\\.", " "]
           - name: re_replace # replace special characters with " " (space)
-            args: ["[^a-zA-Z0-9\\s]|\\.", " "]
+            args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+          - name: diacritics
+            args: replace
           - name: re_replace # replace multiple spaces
             args: ["[ ]{2,}", " "]
           # normalize to SXXEYY format

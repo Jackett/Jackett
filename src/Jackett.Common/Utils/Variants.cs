@@ -103,5 +103,18 @@ namespace Jackett.Common.Utils
                 }
             }
         }
+
+        public bool IsNonWindowsDotNetCoreVariant(JackettVariant variant)
+        {
+            if (variant == JackettVariant.CoreMacOs || variant == JackettVariant.CoreLinuxAmdx64
+                || variant == JackettVariant.CoreLinuxArm32 || variant == JackettVariant.CoreLinuxArm64)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

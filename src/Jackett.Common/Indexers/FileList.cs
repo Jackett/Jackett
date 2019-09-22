@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers
             Language = "ro-ro";
             Type = "private";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(24, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(11, TorznabCatType.Audio, "Audio");
@@ -120,8 +120,8 @@ namespace Jackett.Common.Indexers
             }
 
             queryCollection.Add("cat", cat);
-            queryCollection.Add("searchin", "0");
-            queryCollection.Add("sort", "0");
+            queryCollection.Add("searchin", "1");
+            queryCollection.Add("sort", "2");
 
             searchUrl += "?" + queryCollection.GetQueryString();
 

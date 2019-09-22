@@ -144,7 +144,7 @@ namespace Jackett.Common.Indexers
                         var titleRow = qRow.Find("td:eq(2)").First();
                         titleRow.Children().Remove();
                         release.Title = titleRow.Text().Trim();
-                        if ((query.ImdbID == null || !TorznabCaps.SupportsImdbSearch) && !query.MatchQueryStringAND(release.Title))
+                        if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
                             continue;
 
                         var qBanner = qRow.Find("div[style^=\"cursor: pointer; background-image:url\"]");

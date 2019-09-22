@@ -7,8 +7,6 @@
   encoding: UTF-8
   links:
     - https://www.trancetraffic.com/
-  certificates:
-    - 117B89D7C086F3E051F0A5A3576504667402AE52
 
   caps:
     categories:
@@ -16,7 +14,7 @@
 
     modes:
       search: [q]
-      tv-search: [q, season, ep]
+      music-search: [q, album, artist, label, year]
 
   login:
     path: takelogin.php
@@ -33,7 +31,7 @@
     paths:
       - path: browse.php
     inputs:
-      search: "{{ .Query.Keywords }}"
+      search: "{{if .Query.Artist}}{{ .Query.Artist }}{{else}}{{ .Keywords }}{{end}}"
     rows:
       selector: table.mainouter table > tbody > tr:has(a[href^="details.php?id="])
     fields:

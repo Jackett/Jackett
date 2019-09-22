@@ -240,8 +240,8 @@
         selector: td a.gen
         attribute: href
         filters:
-          - name: querystring
-            args: f
+          - name: regexp
+            args: "=(\\d+)\\."
       size:
         selector: td a.tr-dl
       seeders:
@@ -258,74 +258,35 @@
       grabs:
         optional: true
         selector: td[title^="Replies"]
-        # date for English
+        # date for English, Russian, Ukrainian
       date:
-        selector: td[title="Added"] p:last-of-type
-        optional: true
-        filters:
-          - name: dateparse
-            args: "2-01-06"
-        # date for Russian
-      date:
-        selector: td[title="Добавлен"] p:last-of-type
-        optional: true
+        selector: td[title="Added"] p:last-of-type, td[title="Добавлен"] p:last-of-type, td[title="Додано"] p:last-of-type
         filters:
             # replace month abbreviations
-          - name: replace
-            args: ["Янв", "Jan"]
-          - name: replace
-            args: ["Фев", "Feb"]
-          - name: replace
-            args: ["Мар", "Mar"]
-          - name: replace
-            args: ["Апр", "Apr"]
-          - name: replace
-            args: ["Май", "May"]
-          - name: replace
-            args: ["Июн", "Jun"]
-          - name: replace
-            args: ["Июл", "Jul"]
-          - name: replace
-            args: ["Авг", "Aug"]
-          - name: replace
-            args: ["Сен", "Sep"]
-          - name: replace
-            args: ["Окт", "Oct"]
-          - name: replace
-            args: ["Ноя", "Nov"]
-          - name: replace
-            args: ["Дек", "Dec"]
-          - name: dateparse
-            args: "2-Jan-06"
-        # date for Ukrainian
-      date:
-        selector: td[title="Додано"] p:last-of-type
-        optional: true
-        filters:
-          - name: replace
-            args: ["Січ", "Jan"]
-          - name: replace
-            args: ["Лют", "Feb"]
-          - name: replace
-            args: ["Бер", "Mar"]
-          - name: replace
-            args: ["Кві", "Apr"]
-          - name: replace
-            args: ["Травень", "May"]
-          - name: replace
-            args: ["Чер", "Jun"]
-          - name: replace
-            args: ["Лип", "Jul"]
-          - name: replace
-            args: ["Сер", "Aug"]
-          - name: replace
-            args: ["Вер", "Sep"]
-          - name: replace
-            args: ["Жов", "Oct"]
-          - name: replace
-            args: ["Лис", "Nov"]
-          - name: replace
-            args: ["Грудень", "Dec"]
+          - name: re_replace
+            args: ["Янв|Січ", "Jan"]
+          - name: re_replace
+            args: ["Фев|Лют", "Feb"]
+          - name: re_replace
+            args: ["Мар|Бер", "Mar"]
+          - name: re_replace
+            args: ["Апр|Кві", "Apr"]
+          - name: re_replace
+            args: ["Май|Травень", "May"]
+          - name: re_replace
+            args: ["Июн|Чер", "Jun"]
+          - name: re_replace
+            args: ["Июл|Лип", "Jul"]
+          - name: re_replace
+            args: ["Авг|Сер", "Aug"]
+          - name: re_replace
+            args: ["Сен|Вер", "Sep"]
+          - name: re_replace
+            args: ["Окт|Жов", "Oct"]
+          - name: re_replace
+            args: ["Ноя|Лис", "Nov"]
+          - name: re_replace
+            args: ["Дек|Грудень", "Dec"]
           - name: dateparse
             args: "2-Jan-06"
       downloadvolumefactor:

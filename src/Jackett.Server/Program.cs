@@ -50,7 +50,7 @@ namespace Jackett.Server
                 {
                     if (DotNetCoreUtil.IsRunningOnDotNetCore)
                     {
-                        options.Client = "httpclientnetcore";
+                        options.Client = "httpclient2netcore";
                     }
                     else
                     {

@@ -16,5 +16,6 @@ namespace Jackett.Common.Services.Interfaces
         List<string> notices { get; }
         string GetBlackholeDirectory();
         string GetApiKey();
+        bool MonoUserCanRunNetCore();
     }
 }

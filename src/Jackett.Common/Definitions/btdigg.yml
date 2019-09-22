@@ -25,21 +25,8 @@
   search:
     # https://btdig.com/search?q=test&order=2
     # only 10 results per page
-    # https://btdig.com/search?q=test&p=1&order=2
     paths:
       - path: search
-      - path: search
-        inputs:
-            p: 1
-      - path: search
-        inputs:
-            p: 2
-      - path: search
-        inputs:
-            p: 3
-      - path: search
-        inputs:
-            p: 4
     inputs:
       q: "{{if .Keywords }}{{.Keywords}}{{else}}test{{end}}"
       order: 2

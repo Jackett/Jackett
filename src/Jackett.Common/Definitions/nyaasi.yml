@@ -7,9 +7,7 @@
   encoding: UTF-8
   links:
     - https://nyaa.si/
-  certificates:
-    - 3801e330482d4f9baef71ca4e33ba23ede74f59c # incomplete CA chain
-    
+
   settings:
     - name: filter-id
       type: select
@@ -37,6 +35,14 @@
         3_1: "Literature - English-translated"
         3_2: "Literature - Non-English-translated"
         3_3: "Literature - Lossy"
+        4_0: "Live Action"
+        4_1: "Live Action - English"
+        4_2: "Live Action - Idol/PV"
+        4_3: "Live Action - Non-English"
+        4_4: "Live Action - Raw"
+        5_0: "Pictures"
+        5_1: "Pictures  - Graphics"
+        5_2: "Pictures  - Photos"
         6_0: "Software"
         6_1: "Software - Applications"
         6_2: "Software - Games"

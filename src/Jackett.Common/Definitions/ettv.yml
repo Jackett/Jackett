@@ -6,6 +6,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://www.ettv.to/
+  legacylinks:
     - https://www.ettv.tv/
 
   caps:

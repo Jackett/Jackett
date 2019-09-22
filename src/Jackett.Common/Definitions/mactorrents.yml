@@ -6,7 +6,10 @@
   type: public
   encoding: UTF-8
   links:
+    - https://mac-torrents.io/
+  legacylinks:
     - https://mac-torrents.com/
+    - https://www.mac-torrents.com/
 
   caps:
     categories:
@@ -29,11 +32,11 @@
       title:
         selector: div.blog-content h3 a
       category:
-        selector: a[href*="/category/"]
+        selector: a[href*="/mac-os-"]
         attribute: href
         filters:
           - name: split
-            args: ["/", 4]
+            args: ["/", 3]
       details:
         selector: div.blog-content h3 a
         attribute: href
@@ -44,7 +47,7 @@
         selector: div.blog-media p a img
         attribute: data-src
       date:
-        selector: div.blog-content div.entry-meta time
+        selector: time
         attribute: datetime
         filters:
           - name: replace

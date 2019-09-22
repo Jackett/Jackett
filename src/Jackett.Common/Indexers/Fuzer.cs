@@ -46,12 +46,13 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
             Type = "private";
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
             TorznabCaps.Categories.Clear();
 
             // סרטים
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "סרטים");
             AddCategoryMapping(9, TorznabCatType.MoviesHD, "סרטים HD");
+            AddCategoryMapping(97, TorznabCatType.MoviesUHD, "סרטים UHD");
             AddCategoryMapping(58, TorznabCatType.MoviesDVD, "סרטים DVD-R");
             AddCategoryMapping(59, TorznabCatType.MoviesSD, "סרטי BDRIP-BRRip");
             AddCategoryMapping(60, TorznabCatType.MoviesSD, "סרטים ישראליים");

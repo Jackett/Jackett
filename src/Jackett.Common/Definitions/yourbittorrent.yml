@@ -1,0 +1,74 @@
+---
+  site: yourbittorrent
+  name: YourBittorrent
+  description: "YourBittorrent is a Public torrent index"
+  language: en-us
+  type: public
+  encoding: UTF-8
+  links:
+    - https://yourbittorrent.host/
+  legacylinks:
+    - https://yourbittorrent.com/
+
+  caps:
+    categories:
+      "Other": Other
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  download:
+    selector: a[href^="/down/"]
+
+  search:
+    paths:
+      - path: /
+    inputs:
+      q: "{{ .Keywords}}"
+    keywordsfilters:
+      - name: re_replace
+        args: ["[\\s]+", "-"]
+    rows:
+      selector: table.table > tbody > tr:has(a[href^="/torrent/"])
+#      filters:
+#        - name: andmatch
+    fields:
+      category:
+        text: Other
+      title:
+        selector: td.n div a, td.v div a
+      details:
+        selector: td.n div a, td.v div a
+        attribute: href
+      download:
+        selector: td.n div a, td.v div a
+        attribute: href
+      size:
+        selector: td.s
+      date:
+        selector: td.t:not(:contains("/"))
+        optional: true
+        filters:
+          - name: replace
+            args: ["Today", "now"]
+          - name: replace
+            args: ["Yesterday", "1 day"]
+          - name: timeago
+      date:
+        selector: td.t:contains("/")
+        optional: true
+        filters:
+          - name: dateparse
+            args: "02/01/06"
+      seeders:
+        selector: td.u
+      leechers:
+        selector: td.d
+      downloadvolumefactor:
+        text: "0"
+      uploadvolumefactor:
+        text: "1"

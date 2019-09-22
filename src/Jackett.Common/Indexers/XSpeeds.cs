@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
             configData.DisplayText.Value = "Expect an initial delay (often around 10 seconds) due to XSpeeds CloudFlare DDoS protection";
             configData.DisplayText.Name = "Notice";
 
-            TorznabCaps.SupportsImdbSearch = true;
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
@@ -184,6 +184,8 @@ namespace Jackett.Common.Indexers
                 {
                     CQ dom = result.Content;
                     var errorMessage = dom[".left_side table:eq(0) tr:eq(1)"].Text().Trim().Replace("\n\t", " ");
+                    if (string.IsNullOrWhiteSpace(errorMessage))
+                        errorMessage = dom["div.notification-body"].Text().Trim().Replace("\n\t", " ");
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
 

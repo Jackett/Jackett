@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers.Feeds
                 SearchAvailable = true,
                 TVSearchAvailable = false,
                 MovieSearchAvailable = false,
-                SupportsImdbSearch = false,
+                SupportsImdbMovieSearch = false,
                 SupportsTVRageSearch = false
             };
 

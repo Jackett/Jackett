@@ -6,9 +6,10 @@
   type: private
   encoding: UTF-8
   links:
-    - https://torrent-turk.co/
+    - https://torrent-turk.de/
   legacylinks:
     - https://torrent-turk.org/
+    - https://torrent-turk.co/
   
   caps:
     categorymappings:
