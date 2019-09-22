@@ -80,7 +80,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(33,  TorznabCatType.MoviesOther,     "SPECTACLE");
             AddCategoryMapping(31,  TorznabCatType.MoviesOther,     "ANIMATION");
             AddCategoryMapping(9,   TorznabCatType.MoviesOther,     "VOSTFR");
-            
+
             // Series
             AddCategoryMapping(104, TorznabCatType.TVOTHER,         "BLURAY");
             AddCategoryMapping(13,  TorznabCatType.TVOTHER,         "PACK VF");
@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
 
             // Music
             AddCategoryMapping(20,  TorznabCatType.AudioVideo,      "CONCERT");
-            
+
             // Books
             AddCategoryMapping(24,  TorznabCatType.BooksEbook,      "ENOOKS NOVEL");
             AddCategoryMapping(96,  TorznabCatType.BooksMagazines,  "EBOOKS MAGAZINES");
@@ -223,9 +223,10 @@ namespace Jackett.Common.Indexers
                     releases.AddRange(xthorResponse.torrents.Select(torrent =>
                     {
                         //issue #3847 replace multi keyword
-                        if(!string.IsNullOrEmpty(ReplaceMulti)){
+                        if (!string.IsNullOrEmpty(ReplaceMulti))
+                        {
                             System.Text.RegularExpressions.Regex regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                            torrent.name = regex.Replace(torrent.name, "$1"+ReplaceMulti+"$2");
+                            torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
                         }
 
                         var release = new ReleaseInfo
@@ -365,6 +366,11 @@ namespace Jackett.Common.Indexers
             if (ConfigData.Freeleech.Value)
             {
                 parameters.Add("freeleech", "1");
+            }
+
+            if (!string.IsNullOrEmpty(ConfigData.Accent.Value))
+            {
+                parameters.Add("accent", ConfigData.Accent.Value);
             }
 
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong category param)
@@ -631,6 +637,14 @@ namespace Jackett.Common.Indexers
                 Output("Validated Setting -- PassKey (auth) => " + ConfigData.PassKey.Value);
             }
 
+            if (!string.IsNullOrEmpty(ConfigData.Accent.Value) && !string.Equals(ConfigData.Accent.Value, "1") && !string.Equals(ConfigData.Accent.Value, "2"))
+            {
+                throw new ExceptionWithConfigData("Only '1' or '2' are available in the Accent parameter.", ConfigData);
+            }
+            else
+            {
+                Output("Validated Setting -- Accent (audio) => " + ConfigData.Accent.Value);
+            }
             // Check Dev Cache Settings
             if (ConfigData.HardDriveCache.Value)
             {
