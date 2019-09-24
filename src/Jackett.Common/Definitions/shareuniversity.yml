@@ -1,12 +1,12 @@
 ---
-  site: ShareUniversity
+  site: shareuniversity
   name: ShareUniversity
   description: "ShareUniversity is a Private Torrent Tracker for High Quality Nordic Content"
   language: en-us
   type: private
   encoding: UTF-8
   links:
-    - https://shareuniversity.org
+    - https://shareuniversity.org/
 
   caps:
     categorymappings:
@@ -18,13 +18,11 @@
       - {id: 6, cat: Other}
       - {id: 13, cat: Audio/Audiobook}
       - {id: 4, cat: Books/Ebook}
-      - {id: 16, cat: E-learning}
       - {id: 5, cat: PC/Games}
       - {id: 11, cat: Movies}
       - {id: 3, cat: Audio}
       - {id: 10, cat: XXX}
       - {id: 7, cat: Movies}
-      - {id: 7, cat: TV}
 
     modes:
       search: [q]
