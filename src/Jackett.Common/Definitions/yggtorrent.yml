@@ -7,7 +7,8 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.yggtorrent.ch/
+    - https://www.yggtorrent.pe/
+    # don't forget to also change bellow in settings !
   legacylinks:
     - https://yggtorrent.com/
     - https://ww1.yggtorrent.com/
@@ -27,6 +28,7 @@
     - https://ww3.yggtorrent.gg/
     - http://www2.yggtorrent.gg/
     - https://www.yggtorrent.gg/
+    - https://www.yggtorrent.ch/
 
   caps:
     categorymappings:
@@ -92,7 +94,7 @@
     - name: searchanddlurl
       label: Search and download URL
       type: text
-      default: www2.yggtorrent.ch
+      default: www2.yggtorrent.pe
     - name: username
       type: text
       label: Username
