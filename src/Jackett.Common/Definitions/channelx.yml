@@ -72,7 +72,7 @@
       title:
         selector: a.view-torrent
       download:
-        selector: a[href*="/download_check/"]
+        selector: a[href*="/download/"]
         attribute: href
       details:
         selector: a.view-torrent
@@ -140,4 +140,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2
+# UNIT3D 1.9.4
