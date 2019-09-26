@@ -24,6 +24,10 @@
       - {id: 17, cat: Books/Ebook, desc: "hobby"}
       - {id: 19, cat: Books/Ebook, desc: "medisch"}
       - {id: 21, cat: Books/Ebook, desc: "sport"}
+      - {id: 50, cat: Books/Ebook, desc: "Kookboeken"}
+      - {id: 51, cat: Books/Ebook, desc: "Fantasy"}
+      - {id: 52, cat: Books/Ebook, desc: "Kerst"}
+      - {id: 53, cat: Books/Ebook, desc: "Waargebeurd"}
 
     modes:
       search: [q]
@@ -59,7 +63,7 @@
           - name: querystring
             args: cat
       banner:
-        selector: img[src*="/covers"]
+        selector: img[src*="/covers/"]
         attribute: src
       title:
         selector: a[href^="details.php?id="]
@@ -88,7 +92,7 @@
           - name: regexp
             args: "(\\d{1,})"
       date:
-        selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(3)
+        selector: td:nth-child(4) table tr:nth-child(2) td:last-child
         filters:
           - name: replace
             args: ["januari", "January"]

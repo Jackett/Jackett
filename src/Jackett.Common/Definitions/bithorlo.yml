@@ -53,6 +53,7 @@
     modes:
       search: [q]
       tv-search: [q, season, ep]
+      movie-search: [q]
 
   settings:
     - name: cookie
@@ -73,7 +74,7 @@
       - path: browse.php
     inputs:
       $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
+      search: "{{ .Keywords }}"
     rows:
       selector: tr[class^="browse"]
     fields:

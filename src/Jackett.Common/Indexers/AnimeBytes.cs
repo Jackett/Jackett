@@ -56,6 +56,23 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)
+
+            AddCategoryMapping("anime[tv_series]", TorznabCatType.TVAnime, "TV Series");
+            AddCategoryMapping("anime[tv_special]", TorznabCatType.TVAnime, "TV Special");
+            AddCategoryMapping("anime[ova]", TorznabCatType.TVAnime, "OVA");
+            AddCategoryMapping("anime[ona]", TorznabCatType.TVAnime, "ONA");
+            AddCategoryMapping("anime[dvd_special]", TorznabCatType.TVAnime, "DVD Special");
+            AddCategoryMapping("anime[bd_special]", TorznabCatType.TVAnime, "BD Special");
+            AddCategoryMapping("anime[movie]", TorznabCatType.Movies, "Movie");
+            AddCategoryMapping("gamec[game]", TorznabCatType.PCGames, "Game");
+            AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Visual Novel");
+            AddCategoryMapping("printedtype[manga]", TorznabCatType.BooksComics, "Manga");
+            AddCategoryMapping("printedtype[oneshot]", TorznabCatType.BooksComics, "Oneshot");
+            AddCategoryMapping("printedtype[anthology]", TorznabCatType.BooksComics, "Anthology");
+            AddCategoryMapping("printedtype[manhwa]", TorznabCatType.BooksComics, "Manhwa");
+            AddCategoryMapping("printedtype[light_novel]", TorznabCatType.BooksComics, "Light Novel");
+            AddCategoryMapping("printedtype[artbook]", TorznabCatType.BooksComics, "Artbook");
+
         }
 
         protected override IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> input)
@@ -87,6 +104,7 @@ namespace Jackett.Common.Indexers
             // Tracer does not support searching with episode number so strip it if we have one
             term = Regex.Replace(term, @"\W(\dx)?\d?\d$", string.Empty);
             term = Regex.Replace(term, @"\W(S\d\d?E)?\d?\d$", string.Empty);
+            term = Regex.Replace(term, @"\W\d+$", string.Empty);
             return term;
         }
 
@@ -132,11 +150,13 @@ namespace Jackett.Common.Indexers
 
             var queryCollection = new NameValueCollection();
 
-            var cat = "0";
             var queryCats = MapTorznabCapsToTrackers(query);
-            if (queryCats.Count == 1)
+            if (queryCats.Count > 0)
             {
-                cat = queryCats.First().ToString();
+                foreach (var cat in queryCats)
+                {
+                    queryCollection.Add(cat, "1");
+                }
             }
 
             queryCollection.Add("username", configData.Username.Value);
@@ -144,7 +164,7 @@ namespace Jackett.Common.Indexers
             queryCollection.Add("type", searchType);
             queryCollection.Add("searchstr", searchTerm);
             var queryUrl = ScrapeUrl + "?" + queryCollection.GetQueryString();
-
+            
             // Check cache first so we don't query the server for each episode when searching for each episode in a series.
             lock (cache)
             {
@@ -275,7 +295,7 @@ namespace Jackett.Common.Indexers
 
                             if (searchType == "anime")
                             {
-                                if (GroupName == "TV Series")
+                                if (GroupName == "TV Series" || GroupName == "OVA")
                                     Category = new List<int> { TorznabCatType.TVAnime.ID };
 
                                 // Ignore these categories as they'll cause hell with the matcher

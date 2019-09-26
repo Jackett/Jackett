@@ -1,0 +1,80 @@
+---
+  site: nitro
+  name: Nitro
+  description: "Nitro is a POLISH Public Torrent Tracker"
+  language: pl-pl
+  type: public
+  encoding: UTF-8
+  links:
+    - http://nitro.to/
+
+  caps:
+    categorymappings:
+      - {id: 1, cat: TV, desc: "Seriale"}
+      - {id: 2, cat: Movies, desc: "Filmy"}
+      - {id: 3, cat: Audio, desc: "Muzyka"}
+      - {id: 4, cat: PC/Games, desc: "Gry"}
+      - {id: 5, cat: TV/Anime, desc: "Anime"}
+      - {id: 6, cat: PC, desc: "Programy"}
+      - {id: 7, cat: Books, desc: "E-Booki/Książki"}
+      - {id: 8, cat: Audio/Audiobook, desc: "Audio Booki"}
+      - {id: 9, cat: PC/Phone-Other, desc: "GSM/PDA"}
+      - {id: 10, cat: Other, desc: "Inne"}
+      - {id: 11, cat: XXX, desc: "XXX"}
+      - {id: 144, cat: Other, desc: "Nieposortowane"}
+
+    modes:
+      search: [q]
+      tv-search: [q, season, ep]
+      movie-search: [q]
+
+  settings: []
+
+  search:
+    paths:
+      - path: tags.php
+    inputs:
+      search: "{{ .Keywords }}"
+      # 0 poster 1 list
+      where: 1
+      per: 50
+      # 0 all 1 active 2 dead
+      active: 1
+      order: data
+    rows:
+      selector: table[width="100%"] > tbody > tr:has(a[onclick="getMagnet(this)"])
+    fields:
+      title:
+        selector: a[href^="/torrent/"]
+      details:
+        selector: a[href^="/torrent/"]
+        attribute: href
+      category:
+        selector: a[href^="/tags.php?tags="]
+        attribute: href
+        filters:
+          - name: querystring
+            args: tags
+      magnet:
+        selector: a[onclick="getMagnet(this)"]
+        attribute: title
+        filters:
+          - name: replace
+            args: ["/__DWNMAGNET__?", "download_magnet.php?"]
+          - name: prepend
+            args: "{{ .Config.sitelink }}"
+      date:
+        selector: td:nth-child(1)
+        filters:
+          - name: dateparse
+            args: "02/01/2006"
+      size:
+        selector: td:nth-child(4)
+      seeders:
+        selector: td:nth-child(6)
+      leechers:
+        selector: td:nth-child(7)
+      downloadvolumefactor:
+        text: 0
+      uploadvolumefactor:
+        text: 1

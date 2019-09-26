@@ -18,6 +18,9 @@ namespace Jackett.Common.Indexers
     public class ShowRSS : BaseWebIndexer
     {
         private string SearchAllUrl { get { return SiteLink + "other/all.rss"; } }
+        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+            "http://showrss.info/",
+        };
 
         private new ConfigurationData configData
         {

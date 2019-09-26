@@ -51,7 +51,12 @@ namespace Jackett.Server.Controllers
                 path = protectionService.UnProtect(path);
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
                 var fileExtension = ".torrent";
-                var downloadBytes = await indexer.Download(remoteFile);
+
+                byte[] downloadBytes;
+                if (remoteFile.Scheme == "magnet")
+                    downloadBytes = Encoding.UTF8.GetBytes(remoteFile.OriginalString);
+                else
+                    downloadBytes = await indexer.Download(remoteFile);
 
                 // handle magnet URLs
                 if (downloadBytes.Length >= 7

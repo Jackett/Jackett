@@ -12,14 +12,20 @@
     categorymappings:
       - {id: 1, cat: TV/Anime, desc: "Anime"}
       - {id: 5, cat: Movies/BluRay, desc: "Movies BluRay"}
+      - {id: 56, cat: Movies/BluRay, desc: "Movies BluRay-Ro"}
+      - {id: 52, cat: Movies/UHD, desc: "Movies 4K"}
       - {id: 9, cat: Movies/DVD, desc: "Movies DVD"}
-      - {id: 10, cat: Movies/DVD, desc: "Movies DVD-RO"}
+      - {id: 10, cat: Movies/DVD, desc: "Movies DVD-Ro"}
       - {id: 11, cat: Movies/HD, desc: "Movies HD"}
-      - {id: 12, cat: Movies/HD, desc: "Movies HD-RO"}
+      - {id: 12, cat: Movies/HD, desc: "Movies HD-Ro"}
       - {id: 24, cat: Movies/SD, desc: "Movies Xvid"}
+      - {id: 51, cat: Movies/SD, desc: "Movies Xvid-Ro"}
+      - {id: 55, cat: Movies, desc: "Movies Pack"}
+      - {id: 53, cat: Movies, desc: "Movies Oldies"}
       - {id: 15, cat: PC/Phone-Other, desc: "Mobile"}
       - {id: 20, cat: TV, desc: "TV"}
       - {id: 13, cat: TV/HD, desc: "HDTV"}
+      - {id: 54, cat: TV, desc: "TV Pack"}
       - {id: 27, cat: XXX, desc: "Adult Movies"}
       - {id: 30, cat: PC/Games, desc: "Games PC"}
       - {id: 34, cat: Console, desc: "Console"}
@@ -27,9 +33,9 @@
       - {id: 29, cat: Audio/Video, desc: "Music Videos"}
       - {id: 26, cat: PC/0day, desc: "Software"}
       - {id: 50, cat: TV/Sport, desc: "Sport"}
-      - {id: 43, cat: Books, desc: "Documents"}
+      - {id: 43, cat: Other, desc: "Misc"}
       - {id: 44, cat: Other, desc: "Images"}
-      - {id: 49, cat: Other/Misc, desc: "Misc"}
+      - {id: 49, cat: Books, desc: "Books"}
       - {id: 45, cat: PC, desc: "Linux"}
 
     modes:
@@ -83,23 +89,23 @@
         selector: a[href^="download.php/"]
         attribute: href
       files:
-        selector: td:nth-last-child(8)
+        selector: td:nth-last-child(7)
       date:
-        selector: td:nth-last-child(6)
+        selector: td:nth-last-child(5)
         filters:
           - name: dateparse
             args: "02-01-200615:04:05"
       size:
-        selector: td:nth-last-child(5)
-      grabs:
         selector: td:nth-last-child(4)
+      grabs:
+        selector: td:nth-last-child(3)
         filters:
           - name: regexp
             args: ([\d\.]+)
       seeders:
-        selector: td:nth-last-child(3)
-      leechers:
         selector: td:nth-last-child(2)
+      leechers:
+        selector: td:nth-last-child(1)
       downloadvolumefactor:
         case:
           img[src="pic/freeleech.png"]: 0

@@ -142,6 +142,9 @@
       path: TTV3/Bienvenue
       selector: a[href$="/TTV3/Deconnexion"]
 
+  download:
+    selector: a[href*="/Telechargement/"]
+
   search:
     paths:
     # https://lechaudron.nl/TTV3/Torrents/Recherche?recherche=viva+maria&type=exacte&endroit=nomtorrent&langue=0&tl=peuimporte
@@ -159,7 +162,7 @@
       tl: "peuimporte"
 
     rows:
-      selector: tr.t-row
+      selector: tr:has(a[onmouseover])
     fields:
       category:
         selector: a[href*="/SousCategories/"]
@@ -168,17 +171,20 @@
           - name: regexp
             args: (\d+)$
       title:
-        selector: a[onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "<b>(.*?)</b>"
+        selector: a[href*="/SousCategories/"]
+        attribute: title
       details:
         selector: a[onmouseover]
         attribute: href
       download:
-        selector: a[href*="/Telechargement/"]
+        selector: a[onmouseover]
         attribute: href
+      banner:
+        selector: a[onmouseover]
+        attribute: onmouseover
+        filters:
+          - name: regexp
+            args: "src= (.*?)><"
       date:
         selector: a[onmouseover] font[color="#F2F2F2"]
         filters:
@@ -204,12 +210,6 @@
             args: ["An", "year"]
           - name: append
             args: " ago"
-      banner:
-        selector: a[onmouseover]
-        attribute: onmouseover
-        filters:
-          - name: regexp
-            args: "src= (.*?)><"
       size:
         selector: td:nth-last-child(5)
       grabs:
@@ -220,9 +220,10 @@
         selector: td:nth-last-child(2)
       downloadvolumefactor:
         case:
-          img[src$="/images/Torrents/freeleech.png"]: "0"
-          "*": "1"
+          img[src$="/images/Torrents/TLibre.png"]: 0
+          img[src$="/images/Torrents/freeleech.png"]: 0
+          "*": 1
       uploadvolumefactor:
         case:
-          "*": "1"
+          "*": 1
 # TT3.00 FRENCH

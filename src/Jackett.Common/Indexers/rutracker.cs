@@ -1559,7 +1559,7 @@ namespace Jackett.Common.Indexers
                         release.Guid = release.Comments;
                         release.Size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
 
-                        var seeders = Row.QuerySelector("td:nth-child(7)").TextContent;
+                        var seeders = Row.QuerySelector("td:nth-child(7) b").TextContent;
                         if (string.IsNullOrWhiteSpace(seeders))
                             seeders = "0";
                         release.Seeders = ParseUtil.CoerceInt(seeders);
