@@ -12,6 +12,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -112,6 +113,7 @@ namespace Jackett.Common.Indexers
         private int _dailyResultIdx;
 
         private string _searchUrl = "/buscar";
+        private string _searchJsonUrl = "/get/result/";
         private string _dailyUrl = "/ultimas-descargas/pg/{0}";
         private string[] _seriesLetterUrls = new string[] { "/series/letter/{0}", "/series-hd/letter/{0}" };
         private string[] _seriesVOLetterUrls = new string[] { "/series-vo/letter/{0}" };
@@ -579,11 +581,13 @@ namespace Jackett.Common.Indexers
                 searchStr = RemoveDiacritics(searchStr);
 
             Uri validUri = null;
+            bool validUriUsesJson = false;
             int pg = 1;
             while (pg <= _maxMoviesPages)
             {
                 var queryCollection = new Dictionary<string, string>();
                 queryCollection.Add("q", searchStr);
+                queryCollection.Add("s", searchStr);
                 queryCollection.Add("pg", pg.ToString());
 
                 WebClientStringResult results = null;
@@ -591,25 +595,59 @@ namespace Jackett.Common.Indexers
 
                 if (validUri != null)
                 {
-                    Uri uri = new Uri(validUri, string.Format(_searchUrl, pg));
-                    results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
-                    if (results == null || string.IsNullOrEmpty(results.Content))
-                        break;
-
-                    items = ParseSearchContent(results.Content);
+                    if (validUriUsesJson)
+                    {
+                        Uri uri = new Uri(validUri, _searchJsonUrl);
+                        results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                        if (results == null || string.IsNullOrEmpty(results.Content))
+                            break;
+                        items = ParseSearchJsonContent(uri, results.Content);
+                    }
+                    else
+                    {
+                        Uri uri = new Uri(validUri, _searchUrl);
+                        results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+                        if (results == null || string.IsNullOrEmpty(results.Content))
+                            break;
+                        items = ParseSearchContent(results.Content);
+                    }
                 }
                 else
                 {
-                    foreach (Uri uri in GetLinkUris(new Uri(siteLink, string.Format(_searchUrl, pg))))
+                    using (var jsonUris = GetLinkUris(new Uri(siteLink, _searchJsonUrl)).GetEnumerator())
                     {
-                        results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
-                        if (results != null && !string.IsNullOrEmpty(results.Content))
+                        using (var uris = GetLinkUris(new Uri(siteLink, _searchUrl)).GetEnumerator())
                         {
-                            items = ParseSearchContent(results.Content);
-                            if (items != null && items.Any())
+                            bool resultFound = false;
+                            while (jsonUris.MoveNext() && uris.MoveNext() && !resultFound)
                             {
-                                validUri = uri;
-                                break;
+                                for (int i = 0; i < 2 && !resultFound; i++)
+                                {
+                                    bool usingJson = i == 0;
+
+                                    Uri uri;
+                                    if (usingJson)
+                                        uri = jsonUris.Current;
+                                    else
+                                        uri = uris.Current;
+
+                                    results = await PostDataWithCookies(uri.AbsoluteUri, queryCollection);
+
+                                    if (results != null && !string.IsNullOrEmpty(results.Content))
+                                    {
+                                        if (usingJson)
+                                            items = ParseSearchJsonContent(uri, results.Content);
+                                        else
+                                            items = ParseSearchContent(results.Content);
+
+                                        if (items != null)
+                                        {
+                                            validUri = uri;
+                                            validUriUsesJson = usingJson;
+                                            resultFound = true;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -632,6 +670,7 @@ namespace Jackett.Common.Indexers
 
         private IEnumerable<NewpctRelease> ParseSearchContent(string content)
         {
+            bool someFound = false;
             var SearchResultParser = new HtmlParser();
             var doc = SearchResultParser.ParseDocument(content);
 
@@ -648,6 +687,8 @@ namespace Jackett.Common.Indexers
                     var h2 = anchor.QuerySelector("h2");
                     var title = Regex.Replace(h2.TextContent, @"\s+", " ").Trim();
                     var detailsUrl = anchor.GetAttribute("href");
+
+                    someFound = true;
 
                     bool isSeries = h2.QuerySelector("span") != null && h2.TextContent.ToLower().Contains("calidad");
                     bool isGame = title.ToLower().Contains("pcdvd");
@@ -682,6 +723,74 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(content, ex);
             }
+
+            if (!someFound)
+                return null;
+
+            return releases;
+        }
+
+        private IEnumerable<NewpctRelease> ParseSearchJsonContent(Uri uri, string content)
+        {
+            bool someFound = false;
+
+            List<NewpctRelease> releases = new List<NewpctRelease>();
+
+            //Remove path from uri
+            UriBuilder ub = new UriBuilder(uri);
+            ub.Path = string.Empty;
+            uri = ub.Uri;
+
+            try
+            {
+                var jo = JObject.Parse(content);
+
+                int numItems = int.Parse(jo["data"]["items"].ToString());
+                for (int i = 0; i < numItems; i++)
+                {
+                    var item = jo["data"]["torrents"]["0"][i.ToString()];
+
+                    string url = item["guid"].ToString();
+                    string title = item["torrentName"].ToString();
+                    string pubDateText = item["torrentDateAdded"].ToString();
+                    string calidad = item["calidad"].ToString();
+                    string sizeText = item["torrentSize"].ToString();
+
+                    someFound = true;
+
+                    bool isSeries = calidad != null && calidad.ToLower().Contains("hdtv");
+                    bool isGame = title.ToLower().Contains("pcdvd");
+                    if (isSeries || isGame)
+                        continue;
+
+                    long size = 0;
+                    try
+                    {
+                        size = ReleaseInfo.GetBytes(sizeText);
+                    }
+                    catch
+                    {
+                    }
+                    DateTime publishDate;
+                    DateTime.TryParseExact(pubDateText, "dd/MM/yyyy", null, DateTimeStyles.None, out publishDate);
+
+                    NewpctRelease newpctRelease;
+                    string detailsUrl = new Uri(uri, url).AbsoluteUri;
+                    newpctRelease = GetReleaseFromData(ReleaseType.Movie, title, detailsUrl, calidad, null, size, publishDate);
+
+                    releases.Add(newpctRelease);
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                OnParseError(content, ex);
+            }
+
+            if (!someFound)
+                return null;
 
             return releases;
         }
