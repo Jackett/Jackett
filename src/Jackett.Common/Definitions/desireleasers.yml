@@ -14,6 +14,7 @@
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Audio, desc: "Music"}
       - {id: 4, cat: Audio/Video, desc: "Music Videos"}
+      - {id: 5, cat: Console, desc: "Game"}
 
     modes:
       search: [q]
@@ -28,7 +29,9 @@
       password: "{{ .Config.password }}"
       remember: 1
     error:
-      - selector: form[action$="/login"] span strong
+      - selector: script[nonce]:contains("Error")
+        message:
+          selector: script[nonce]:contains("Error")
     test:
       path: torrents
       selector: a[href$="/logout"]
@@ -52,6 +55,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
+      igdb: ""
       sort: created_at
       direction: desc
       qty: 100
@@ -76,14 +80,20 @@
         optional: true
         selector: div.torrent-poster img
         attribute: src
+        filters:
+          - name: replace
+            args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
-        selector: td:nth-child(5)
+        selector: td:nth-last-child(4)
       seeders:
-        selector: td:nth-child(6)
+        selector: td:nth-last-child(3)
       leechers:
-        selector: td:nth-child(7)
+        selector: td:nth-last-child(2)
       grabs:
-        selector: td:nth-child(8)
+        selector: td:nth-last-child(1)
         filters:
           - name: regexp
             args: ([\d\.]+)
@@ -132,4 +142,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.1
+# UNIT3D 1.9.4
