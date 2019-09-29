@@ -13,13 +13,15 @@
       - {id: 1, cat: Movies, desc: "Movies"}
       - {id: 2, cat: TV, desc: "TV"}
       - {id: 3, cat: Audio, desc: "Music"}
-      - {id: 4, cat: TV/Anime, desc: "Anime"}
+      - {id: 4, cat: TV/Anime, desc: "Anime-TV"}
       - {id: 5, cat: PC/0day, desc: "Apps"}
-      - {id: 6, cat: Books, desc: "eBooks"}
+      - {id: 6, cat: Books/Ebook, desc: "eBooks"}
       - {id: 7, cat: PC/Games, desc: "Games"}
       - {id: 8, cat: TV/Sport, desc: "Sports"}
       - {id: 9, cat: Other, desc: "Others"}
       - {id: 10, cat: XXX, desc: "XXX"}
+      - {id: 11, cat: Books/Comics, desc: "Comics"}
+      - {id: 12, cat: TV/Anime, desc: "Anime-Movie"}
 
     modes:
       search: [q]
@@ -60,8 +62,9 @@
       tvdb: ""
       tmdb: ""
       mal: ""
-      sort: "created_at"
-      direction: "desc"
+      igdb: ""
+      sort: created_at
+      direction: desc
       qty: 100
     rows:
       selector: table > tbody > tr
@@ -87,6 +90,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
@@ -143,4 +149,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2
+# UNIT3D 1.9.4
