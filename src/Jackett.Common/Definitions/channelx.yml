@@ -42,9 +42,6 @@
       - name: regexp
         args: "Ratio : (\\d+)"
 
-  download:
-    selector: a[href*="/download/"]
-
   search:
     paths:
       - path: filterTorrents
