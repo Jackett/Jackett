@@ -354,7 +354,6 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/kikibt.yml",
                 "Definitions/torrentkitty.yml",
-                "Definitions/hdforever.yml",
                 "Definitions/rockethd.yml",
             };
 

@@ -7,7 +7,7 @@
         public ConfigurationDataEliteTracker()
             : base()
         {
-            TorrentHTTPSMode = new BoolItem { Name = "Use https for tracker URL", Value = false };
+            TorrentHTTPSMode = new BoolItem { Name = "Use https for tracker URL (Experimental)", Value = false };
         }
     }
 }
