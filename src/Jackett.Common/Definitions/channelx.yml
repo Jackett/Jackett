@@ -54,6 +54,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
+      igdb: ""
       sort: created_at
       direction: desc
       qty: 100
@@ -81,6 +82,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
