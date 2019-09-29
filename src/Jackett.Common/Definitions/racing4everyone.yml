@@ -13,31 +13,35 @@
   caps:
     categorymappings:
       - {id: 1, cat: TV/Sport, desc: "BTCC"}
-      - {id: 2, cat: TV/Sport, desc: "Documentaries/TV"}
+      - {id: 2, cat: TV/Sport, desc: "Documentaries TV"}
       - {id: 3, cat: TV/Sport, desc: "DTM"}
       - {id: 22, cat: TV/Sport, desc: "Formula 2"}
-      - {id: 23, cat: TV/Sport, desc: "Formula E"}
       - {id: 24, cat: TV/Sport, desc: "Misc"}
-      - {id: 25, cat: TV/Sport, desc: "Motorbikes"}
-      - {id: 26, cat: TV/Sport, desc: "MotoGP/2/3"}
+      - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
+      - {id: 26, cat: TV/Sport, desc: "MotoGP 2-3-E"}
       - {id: 31, cat: TV/Sport, desc: "Nascar"}
-      - {id: 32, cat: TV/Sport, desc: "Stockcars"}
-      - {id: 33, cat: TV/Sport, desc: "Touring Cars"}
+      - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
       - {id: 50, cat: TV/Sport, desc: "WRC"}
-      - {id: 53, cat: TV/Sport, desc: "Open-Wheelers"}
       - {id: 55, cat: TV/Sport, desc: "Season Reviews"}
       - {id: 56, cat: TV/Sport, desc: "WRX"}
       - {id: 57, cat: TV/Sport, desc: "WEC"}
-      - {id: 58, cat: TV/Sport, desc: "Formula 1 Full Seasons"}
+      - {id: 58, cat: TV/Sport, desc: "W Series"}
       - {id: 60, cat: TV/Sport, desc: "Drag Racing"}
-      - {id: 61, cat: TV/Sport, desc: "Rally"}
-      - {id: 62, cat: TV/Sport, desc: "Formula 1 Testing"}
+      - {id: 61, cat: TV/Sport, desc: "ERC"}
+      - {id: 62, cat: TV/Sport, desc: "Indycar Series"}
       - {id: 63, cat: TV/Sport, desc: "Supercars"}
-      - {id: 64, cat: TV/Sport, desc: "Indycar Complete Seasons"}
-      - {id: 65, cat: TV/Sport, desc: "NASCAR Complete Seasons"}
       - {id: 66, cat: TV/Sport, desc: "Documentaries"}
-      - {id: 67, cat: TV/Sport, desc: "Formula 1 2019"}
-      - {id: 68, cat: TV/Sport, desc: "Formula 1 2018-1950"}
+      - {id: 67, cat: TV/Sport, desc: "Formula 1"}
+      - {id: 68, cat: TV/Sport, desc: "Formula 3"}
+      - {id: 69, cat: TV/Sport, desc: "Other Cars"}
+      - {id: 70, cat: TV/Sport, desc: "Motorsport Movies"}
+      - {id: 71, cat: TV/Sport, desc: "WSBK"}
+      - {id: 72, cat: TV/Sport, desc: "AMA Pro Motocross"}
+      - {id: 73, cat: TV/Sport, desc: "AMA Supercross"}
+      - {id: 74, cat: TV/Sport, desc: "WTCR"}
+      - {id: 76, cat: TV/Sport, desc: "ARCA"}
+      - {id: 77, cat: TV/Sport, desc: "Blancpain GT"}
+      - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
 
     modes:
       search: [q]
@@ -59,8 +63,8 @@
       selector: a[href$="/logout"]
 
   ratio:
-    path: /
-    selector: span:has(i.fa-sync-alt)
+    path: torrents
+    selector: li:has(i.fa-sync-alt)
     filters:
       - name: regexp
         args: "Ratio : (\\d+)"
@@ -103,6 +107,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
@@ -114,6 +121,10 @@
         filters:
           - name: regexp
             args: ([\d\.]+)
+      imdb:
+        optional: true
+        selector: a[href*="www.imdb.com/title/tt"]
+        attribute: href
       date:
         selector: time
         filters:
@@ -155,4 +166,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2
+# UNIT3D 1.9.4
