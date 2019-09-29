@@ -77,6 +77,12 @@
             args: "/categories/.*?\\.(\\d+)"
       title:
         selector: a.view-torrent
+      download:
+        selector: a[href*="/download/"]
+        attribute: href
+      details:
+        selector: a.view-torrent
+        attribute: href
       banner:
         optional: true
         selector: div.torrent-poster img
@@ -84,13 +90,6 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
-      download:
-        method: post
-        selector: a[href*="/download/"]
-        attribute: href
-      details:
-        selector: a.view-torrent
-        attribute: href
       comments:
         selector: a[href*="#comments"]
         attribute: href
@@ -150,4 +149,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.3
+# UNIT3D 1.9.4
