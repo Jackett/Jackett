@@ -104,6 +104,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Crazy's Corner
  * CzTorrent
  * Deildu
+ * EniaHD
  * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
