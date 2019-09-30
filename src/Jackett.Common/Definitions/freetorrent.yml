@@ -19,11 +19,10 @@
       - {id: 7, cat: TV, desc: "Animations"}
       - {id: 8, cat: PC, desc: "Linux"}
       - {id: 9, cat: PC/Mac, desc: "MacOS"}
-      - {id: 10, cat: PC/Phone-Android, desc: "Android app"}
-      - {id: 11, cat: PC/Phone-Android, desc: "Android ROMs"}
       - {id: 12, cat: TV/Documentary, desc: "Documentaries"}
       - {id: 13, cat: TV, desc: "Shows"}
       - {id: 14, cat: Audio/Video, desc: "Music clips"}
+      - {id: 15, cat: PC/Phone-Android, desc: "Apps APK"}
 
     modes:
       search: [q]
