@@ -359,6 +359,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tazmania-Den
  * TeamHD
  * TeamOS
+ * TEKNO3D
  * TellyTorrent
  * TenYardTorrents (TYT)
  * TheAudioScene
