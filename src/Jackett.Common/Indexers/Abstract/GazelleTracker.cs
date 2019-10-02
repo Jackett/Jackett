@@ -188,8 +188,25 @@ namespace Jackett.Common.Indexers.Abstract
                     if (tags != null && tags.Count > 0 && (string)tags[0] != "")
                         release.Description += "Tags: " + string.Join(", ", tags) + "\n";
 
-                    if (TorznabCaps.SupportsImdbMovieSearch && !string.IsNullOrWhiteSpace(query.ImdbID))
-                        release.Imdb = ParseUtil.GetImdbID(query.ImdbID);
+                    if (imdbInTags)
+                    {
+                        int? currentTagImdbId;
+                        // Check if multiple IMDb IDs exist
+                        // If they do, show no IMDb link
+                        foreach (var tag in tags)
+                        {
+                            currentTagImdbId = ParseUtil.GetImdbID((string)tag);
+                            if (currentTagImdbId != null && release.Imdb == null)
+                            {
+                                release.Imdb = currentTagImdbId;
+                            }
+                            else if (currentTagImdbId != null)
+                            {
+                                release.Imdb = null;
+                                break;
+                            }
+                        }
+                    }
 
                     if (r["torrents"] is JArray)
                     {
