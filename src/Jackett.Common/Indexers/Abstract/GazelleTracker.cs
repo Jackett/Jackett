@@ -188,6 +188,9 @@ namespace Jackett.Common.Indexers.Abstract
                     if (tags != null && tags.Count > 0 && (string)tags[0] != "")
                         release.Description += "Tags: " + string.Join(", ", tags) + "\n";
 
+                    if (TorznabCaps.SupportsImdbMovieSearch && !string.IsNullOrWhiteSpace(query.ImdbID))
+                        release.Imdb = ParseUtil.GetImdbID(query.ImdbID);
+
                     if (r["torrents"] is JArray)
                     {
                         foreach (JObject torrent in r["torrents"])
