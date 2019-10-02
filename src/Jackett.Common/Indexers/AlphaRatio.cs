@@ -8,7 +8,7 @@ namespace Jackett.Common.Indexers
 {
     public class AlphaRatio : GazelleTracker
     {
-        public AlphaRatio(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+        public AlphaRatio(IIndexerConfigurationService configService, Utils.Clients.WebClient webClient, Logger logger, IProtectionService protectionService)
             : base(name: "AlphaRatio",
                 desc: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
                 link: "https://alpharatio.cc/",
@@ -16,11 +16,13 @@ namespace Jackett.Common.Indexers
                 logger: logger,
                 protectionService: protectionService,
                 webClient: webClient,
-                supportsFreeleechTokens: true
+                supportsFreeleechTokens: true,
+                imdbInTags: true
                 )
         {
             Language = "en-us";
             Type = "private";
+            TorznabCaps.SupportsImdbMovieSearch = true;
 
             AddCategoryMapping(1, TorznabCatType.TVSD, "TvSD");
             AddCategoryMapping(2, TorznabCatType.TVHD, "TvHD");
