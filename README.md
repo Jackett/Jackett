@@ -258,6 +258,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDME
  * HDSky
  * HDTorrents.it
+ * HDTurk
  * Hebits
  * Hon3y HD
  * HQSource (HQS)
