@@ -190,22 +190,11 @@ namespace Jackett.Common.Indexers.Abstract
 
                     if (imdbInTags)
                     {
-                        int? currentTagImdbId;
-                        // Check if multiple IMDb IDs exist
-                        // If they do, show no IMDb link
-                        foreach (var tag in tags)
-                        {
-                            currentTagImdbId = ParseUtil.GetImdbID((string)tag);
-                            if (currentTagImdbId != null && release.Imdb == null)
-                            {
-                                release.Imdb = currentTagImdbId;
-                            }
-                            else if (currentTagImdbId != null)
-                            {
-                                release.Imdb = null;
-                                break;
-                            }
-                        }
+                        var imdbTags = tags
+                            .Select(tag => ParseUtil.GetImdbID((string)tag))
+                            .Where(tag => tag != null);
+                        if (imdbTags.Count() == 1)
+                            release.Imdb = imdbTags.First();
                     }
 
                     if (r["torrents"] is JArray)
