@@ -7,9 +7,9 @@
   encoding: UTF-8
   links:
     - https://www.dnoid.to/
+
   caps:
     categorymappings:
-      #This needs to be updated with subcategory IDs (some are missing or have different number)
       # Applications
       - {id: 1, cat: PC/Phone-Android, desc: "Applications Android"}
       - {id: 2, cat: PC/Phone-IOS, desc: "Applications Iphone / Ipod touch"}
@@ -118,104 +118,161 @@
       - {id: 101, cat: PC/Games, desc: "Games Windows"}
       - {id: 102, cat: Console/Xbox, desc: "Games XBox"}
       # Anime
-      - {id: 158, cat: TV/Anime, desc: "Anime 4K / UHD"}
-      - {id: 103, cat: TV/Anime, desc: "Anime DVD Quality"}
-      - {id: 104, cat: TV/Anime, desc: "Anime HD 1080p / 1080i"}
-      - {id: 105, cat: TV/Anime, desc: "Anime HD 720p"}
-      - {id: 106, cat: TV/Anime, desc: "Anime HEVC / x265"}
-      - {id: 107, cat: TV/Anime, desc: "Anime Other Quality"}
-      - {id: 108, cat: TV/Anime, desc: "Anime TV Quality"}
-      - {id: 109, cat: TV/Anime, desc: "Anime VHS Quality"}
-      - {id: 157, cat: TV/Anime, desc: "Anime WEBRip"}
+      - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
+      - {id: 103, cat: TV/Anime, desc: "Anime Action"}
+      - {id: 104, cat: TV/Anime, desc: "Anime Adventure"}
+      - {id: 105, cat: TV/Anime, desc: "Anime Comedy"}
+      - {id: 106, cat: TV/Anime, desc: "Anime Drama"}
+      - {id: 107, cat: TV/Anime, desc: "Anime Fantasy"}
+      - {id: 108, cat: TV/Anime, desc: "Anime Horror"}
+      - {id: 109, cat: TV/Anime, desc: "Anime Other"}
+      - {id: 157, cat: TV/Anime, desc: "Anime Romance"}
       # Movies
-      - {id: 151, cat: Movies/UHD, desc: "Movies 4K / UHD"}
-      - {id: 110, cat: Movies/BluRay, desc: "Movies Blu-ray"}
-      - {id: 111, cat: Movies/3D, desc: "Movies Blu-ray 3D"}
-      - {id: 152, cat: Movies/BluRay, desc: "Movies Blu-ray Rip"}
-      - {id: 112, cat: Movies, desc: "Movies Cam"}
-      - {id: 113, cat: Movies/DVD, desc: "Movies DVD Full"}
-      - {id: 114, cat: Movies/DVD, desc: "Movies DVD Rip"}
-      - {id: 115, cat: Movies,/HD desc: "Movies HD 1080p / 1080i"}
-      - {id: 116, cat: Movies/HD, desc: "Movies HD 720p"}
-      - {id: 153, cat: Movies/HD, desc: "Movies HDRip"}
-      - {id: 117, cat: Movies/HD, desc: "Movies HEVC / x265"}
-      - {id: 118, cat: Movies/SD, desc: "Movies Other Quality"}
-      - {id: 119, cat: Movies, desc: "Movies Remux"}
-      - {id: 120, cat: Movies/SD, desc: "Movies Screener VHS"}
-      - {id: 121, cat: Movies/SD, desc: "Movies VHS Rip"}
-      - {id: 154, cat: Movies/WEBDL, desc: "Movies WEBRip"}
+      - {id: 151, cat: Movies, desc: "Movies Action"}
+      - {id: 110, cat: Movies, desc: "Movies Adventure"}
+      - {id: 236, cat: Movies, desc: "Movies Animation"}
+      - {id: 111, cat: Movies, desc: "Movies Biography"}
+      - {id: 152, cat: Movies, desc: "Movies Comedy"}
+      - {id: 112, cat: Movies, desc: "Movies Concerts"}
+      - {id: 113, cat: Movies, desc: "Movies Crime"}
+      - {id: 114, cat: Movies, desc: "Movies Documentary"}
+      - {id: 115, cat: Movies, desc: "Movies Drama"}
+      - {id: 116, cat: Movies, desc: "Movies Family"}
+      - {id: 153, cat: Movies, desc: "Movies Fantasy"}
+      - {id: 117, cat: Movies, desc: "Movies Horror"}
+      - {id: 118, cat: Movies, desc: "Movies Musical"}
+      - {id: 119, cat: Movies, desc: "Movies Mystery"}
+      - {id: 120, cat: Movies, desc: "Movies Other"}
+      - {id: 121, cat: Movies, desc: "Movies Romance"}
+      - {id: 154, cat: Movies, desc: "Movies Sci-Fi"}
+      - {id: 159, cat: Movies, desc: "Movies Short-Film"}
+      - {id: 160, cat: Movies, desc: "Movies Sports"}
+      - {id: 161, cat: Movies, desc: "Movies Thriller"}
+      - {id: 162, cat: Movies, desc: "Movies Trailers"}
+      - {id: 163, cat: Movies, desc: "Movies War"}
+      - {id: 164, cat: Movies, desc: "Movies Western"}
       # Music
-      - {id: 122, cat: Audio, desc: "Music AAC"}
-      - {id: 123, cat: Audio/Lossless, desc: "Music Lossless"}
-      - {id: 124, cat: Audio/MP3, desc: "Music MP3/128Kbps"}
-      - {id: 125, cat: Audio/MP3, desc: "Music MP3/192Kbps"}
-      - {id: 126, cat: Audio/MP3, desc: "Music MP3/256Kbps"}
-      - {id: 127, cat: Audio/MP3, desc: "Music MP3/64Kbps"}
-      - {id: 128, cat: Audio/MP3, desc: "Music MP3/Over 256Kbps"}
-      - {id: 129, cat: Audio/MP3, desc: "Music MP3/Surround"}
-      - {id: 130, cat: Audio/MP3, desc: "Music MP3/Variable"}
-      - {id: 131, cat: Audio, desc: "Music MPC"}
-      - {id: 132, cat: Audio, desc: "Music OGG"}
-      - {id: 133, cat: Audio, desc: "Music Other Quality"}
-      - {id: 134, cat: Audio, desc: "Music WMA"}
+      - {id: 122, cat: Audio, desc: "Music Alternative"}
+      - {id: 123, cat: Audio, desc: "Music Bluegrass"}
+      - {id: 124, cat: Audio, desc: "Music Blues"}
+      - {id: 125, cat: Audio, desc: "Music Childrens"}
+      - {id: 126, cat: Audio, desc: "Music Christian"}
+      - {id: 127, cat: Audio, desc: "Music Classical"}
+      - {id: 128, cat: Audio, desc: "Music Comedy"}
+      - {id: 129, cat: Audio, desc: "Music Contemporary African"}
+      - {id: 130, cat: Audio, desc: "Music Country"}
+      - {id: 131, cat: Audio, desc: "Music Dance / Disco"}
+      - {id: 132, cat: Audio, desc: "Music Drum and Bass"}
+      - {id: 133, cat: Audio, desc: "Music Electro / Techno"}
+      - {id: 134, cat: Audio, desc: "Music Folk"}
+      - {id: 165, cat: Audio, desc: "Music Gospel"}
+      - {id: 166, cat: Audio, desc: "Music Grunge"}
+      - {id: 167, cat: Audio, desc: "Music Hip-Hop / Rap"}
+      - {id: 168, cat: Audio, desc: "Music Indie"}
+      - {id: 169, cat: Audio, desc: "Music Industrial"}
+      - {id: 170, cat: Audio, desc: "Music J-Pop"}
+      - {id: 171, cat: Audio, desc: "Music Jazz"}
+      - {id: 172, cat: Audio, desc: "Music Latin American"}
+      - {id: 173, cat: Audio, desc: "Music Melodic"}
+      - {id: 174, cat: Audio, desc: "Music Metal"}
+      - {id: 175, cat: Audio, desc: "Music Other"}
+      - {id: 176, cat: Audio, desc: "Music Pop"}
+      - {id: 177, cat: Audio, desc: "Music Punk"}
+      - {id: 178, cat: Audio, desc: "Music Radio Show"}
+      - {id: 179, cat: Audio, desc: "Music Reggae"}
+      - {id: 180, cat: Audio, desc: "Music Rhythm and blues"}
+      - {id: 181, cat: Audio, desc: "Music Rock"}
+      - {id: 182, cat: Audio, desc: "Music Soul"}
+      - {id: 183, cat: Audio, desc: "Music Soundtrack"}
+      - {id: 184, cat: Audio, desc: "Music Trance"}
+      - {id: 185, cat: Audio, desc: "Music Trip Hop"}
       # Music Videos
-      - {id: 135, cat: Audio/Video, desc: "Music Videos DVD Quality"}
-      - {id: 136, cat: Audio/Video, desc: "Music Videos HEVC / x265"}
-      - {id: 137, cat: Audio/Video, desc: "Music Videos Other Quality"}
-      - {id: 138, cat: Audio/Video, desc: "Music Videos TV Quality"}
-      - {id: 139, cat: Audio/Video, desc: "Music Videos VHS Quality"}
+      - {id: 135, cat: Audio/Video, desc: "Music Videos Alternative"}
+      - {id: 136, cat: Audio/Video, desc: "Music Videos Bluegrass"}
+      - {id: 137, cat: Audio/Video, desc: "Music Videos Blues"}
+      - {id: 138, cat: Audio/Video, desc: "Music Videos Childrens"}
+      - {id: 139, cat: Audio/Video, desc: "Music Videos Christian"}
+      - {id: 186, cat: Audio/Video, desc: "Music Videos Classical"}
+      - {id: 187, cat: Audio/Video, desc: "Music Videos Comedy"}
+      - {id: 188, cat: Audio/Video, desc: "Music Videos Contemporary African"}
+      - {id: 189, cat: Audio/Video, desc: "Music Videos Country"}
+      - {id: 190, cat: Audio/Video, desc: "Music Videos Dance / Disco"}
+      - {id: 191, cat: Audio/Video, desc: "Music Videos Drum and Bass"}
+      - {id: 192, cat: Audio/Video, desc: "Music Videos Electro / Techno"}
+      - {id: 193, cat: Audio/Video, desc: "Music Videos Folk"}
+      - {id: 194, cat: Audio/Video, desc: "Music Videos Gospel"}
+      - {id: 195, cat: Audio/Video, desc: "Music Videos Grunge"}
+      - {id: 196, cat: Audio/Video, desc: "Music Videos Hip-Hop / Rap"}
+      - {id: 197, cat: Audio/Video, desc: "Music Videos Indie"}
+      - {id: 198, cat: Audio/Video, desc: "Music Videos Industrial"}
+      - {id: 199, cat: Audio/Video, desc: "Music Videos J-Pop"}
+      - {id: 200, cat: Audio/Video, desc: "Music Videos Jazz"}
+      - {id: 201, cat: Audio/Video, desc: "Music Videos Latin American"}
+      - {id: 202, cat: Audio/Video, desc: "Music Videos Melodic"}
+      - {id: 203, cat: Audio/Video, desc: "Music Videos Metal"}
+      - {id: 204, cat: Audio/Video, desc: "Music Videos Other"}
+      - {id: 205, cat: Audio/Video, desc: "Music Videos Pop"}
+      - {id: 206, cat: Audio/Video, desc: "Music Videos Punk"}
+      - {id: 207, cat: Audio/Video, desc: "Music Videos Radio Show"}
+      - {id: 208, cat: Audio/Video, desc: "Music Videos Reggae"}
+      - {id: 209, cat: Audio/Video, desc: "Music Videos Rhythm and blues"}
+      - {id: 210, cat: Audio/Video, desc: "Music Videos Rock"}
+      - {id: 211, cat: Audio/Video, desc: "Music Videos Soul"}
+      - {id: 212, cat: Audio/Video, desc: "Music Videos Soundtrack"}
+      - {id: 213, cat: Audio/Video, desc: "Music Videos Trance"}
+      - {id: 214, cat: Audio/Video, desc: "Music Videos Trip Hop"}
       # Pictures
-      - {id: 140, cat: Other, desc: "Pictures Hi-Res"}
-      - {id: 141, cat: Other, desc: "Pictures Low-Res"}
-      - {id: 142, cat: Other, desc: "Pictures Mixed Quality"}
+      - {id: 140, cat: Other, desc: "Pictures Art"}
+      - {id: 141, cat: Other, desc: "Pictures Commercial"}
+      - {id: 142, cat: Other, desc: "Pictures Glamour"}
+      - {id: 215, cat: Other, desc: "Pictures Other"}
+      - {id: 216, cat: Other, desc: "Pictures Photojournalism"}
+      - {id: 217, cat: Other, desc: "Pictures Snapshots"}
+      - {id: 218, cat: Other, desc: "Pictures Sports"}
+      - {id: 219, cat: Other, desc: "Pictures Wildlife"}
       # TV
-      - {id: 155, cat: TV/UHD, desc: "TV 4K / UHD"}
-      - {id: 143, cat: TV/SD, desc: "TV DVD Quality"}
-      - {id: 144, cat: TV/HD, desc: "TV HD 1080p / 1080i"}
-      - {id: 145, cat: TV/HD, desc: "TV HD 720p"}
-      - {id: 146, cat: TV/HD, desc: "TV HEVC / x265"}
-      - {id: 147, cat: TV/SD, desc: "TV Other Quality"}
-      - {id: 148, cat: TV/HD, desc: "TV TV Quality"}
-      - {id: 149, cat: TV/SD, desc: "TV VHS Quality"}
-      - {id: 156, cat: TV/WEB-DL, desc: "TV WEBRip"}
+      - {id: 155, cat: TV, desc: "TV Action"}
+      - {id: 143, cat: TV, desc: "TV Adventure"}
+      - {id: 144, cat: TV, desc: "TV Biography"}
+      - {id: 145, cat: TV, desc: "TV Cartoons"}
+      - {id: 146, cat: TV, desc: "TV Comedy"}
+      - {id: 147, cat: TV, desc: "TV Concerts"}
+      - {id: 148, cat: TV, desc: "TV Crime"}
+      - {id: 149, cat: TV, desc: "TV Documentary"}
+      - {id: 156, cat: TV, desc: "TV Drama"}
+      - {id: 220, cat: TV, desc: "TV Family"}
+      - {id: 221, cat: TV, desc: "TV Fantasy"}
+      - {id: 222, cat: TV, desc: "TV Horror"}
+      - {id: 223, cat: TV, desc: "TV Musical"}
+      - {id: 224, cat: TV, desc: "TV Mystery"}
+      - {id: 225, cat: TV, desc: "TV Other"}
+      - {id: 226, cat: TV, desc: "TV Reality"}
+      - {id: 227, cat: TV, desc: "TV Romance"}
+      - {id: 228, cat: TV, desc: "TV Sci-Fi"}
+      - {id: 229, cat: TV, desc: "TV Short film"}
+      - {id: 230, cat: TV, desc: "TV Sports"}
+      - {id: 231, cat: TV, desc: "TV Talk show"}
+      - {id: 232, cat: TV, desc: "TV Thriller"}
+      - {id: 233, cat: TV, desc: "TV Trailers"}
+      - {id: 234, cat: TV, desc: "TV War"}
+      - {id: 235, cat: TV, desc: "TV Western"}
 
     modes:
       search: [q]
       tv-search: [q, season, ep]
       movie-search: [q]
 
-  settings:
-    - name: category
-      type: select
-      label: Category
-      default: "0"
-      options:
-        "0": "All"
-        "1": "Applications"
-        "2": "Audio Books"
-        "3": "Books"
-        "4": "Comics"
-        "5": "Games"
-        "6": "Anime"
-        "7": "Miscellaneous"
-        "8": "Movies"
-        "9": "Music"
-        "10": "Music Videos"
-        "11": "Pictures"
-        "12": "TV"
+  settings: []
 
   download:
     selector: a[href^="magnet:?xt="]
 
   search:
     paths:
-      # https://www.dnoid.to/files/?c1&c2&c3&lang=0&incldead=0&search=&sort=added&order=desc
+      # https://www.dnoid.to/files/?c1&c2&c3&lang=0&incldead=3&search=&sort=added&order=desc
       - path: files/
     inputs:
-      category: "{{.Config.category}}"
-      subcategory: 0
-      language: 0
-      quality: 0
+      $raw: "{{range .Categories}}c{{.}}&{{end}}"
       # 1 active 2 dead 3 both
       incldead: 3
       search: "{{.Keywords}}"
@@ -238,11 +295,11 @@
         selector: a[href^="/files/details/"]
         attribute: title
       category:
-        selector:  a[href^="/files/?category="]
+        selector:  a[href*="&subcategory="]
         attribute: href
         filters:
           - name: querystring
-            args: category
+            args: subcategory
       details:
         selector: a[href^="/files/details/"]
         attribute: href
