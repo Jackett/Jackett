@@ -88,7 +88,7 @@
         attribute: href
       imdb:
         optional: true
-        selector: a[href*="http://www.imdb.com/title/"]
+        selector: a[href*="www.imdb.com/title/tt"]
         attribute: href
         filters:
           # http://anonym.to?javascript:popdetails('http://www.imdb.com/title/tt0086817');

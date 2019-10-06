@@ -151,7 +151,7 @@
         selector: td.leechers a, .torrentInfo a[rel="torrent_leechers"]
       imdb:
         optional: true
-        selector: .torrentFlags a[href^="http://www.imdb.com/title/"]
+        selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
         attribute: href
       date:
         selector: td.torrent_name, .torrentOwner
