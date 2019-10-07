@@ -7,7 +7,7 @@
   encoding: UTF-8
   followredirect: true
   links:
-    - https://www.yggtorrent.pe/
+    - https://www3.yggtorrent.pe/
     # don't forget to also change bellow in settings !
   legacylinks:
     - https://yggtorrent.com/
@@ -29,6 +29,7 @@
     - http://www2.yggtorrent.gg/
     - https://www.yggtorrent.gg/
     - https://www.yggtorrent.ch/
+    - https://www.yggtorrent.pe/
 
   caps:
     categorymappings:
