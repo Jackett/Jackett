@@ -115,7 +115,7 @@ namespace Jackett.Common.Utils
             if (imdbid == null)
                 return null;
          
-            return "tt" + ((int)imdbid).ToString("D8");
+            return "tt" + ((int)imdbid).ToString("D7");
         }
     }
 }
