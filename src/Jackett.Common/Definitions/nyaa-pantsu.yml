@@ -11,6 +11,8 @@
   type: public
   encoding: UTF-8
   links:
+    - https://nyaa.net/
+  legacylinks:
     - https://nyaa.pantsu.cat/
     - https://nyaa.pt/
     
