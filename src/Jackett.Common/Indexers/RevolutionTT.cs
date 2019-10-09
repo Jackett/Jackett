@@ -255,7 +255,7 @@ namespace Jackett.Common.Indexers
                     if (!infoMatch.Success)
                         throw new Exception("Unable to find info");
 
-                    var imdbMatch = Regex.Match(description, "(?<=http://www.imdb.com/title/tt)([0-9]*)");
+                    var imdbMatch = Regex.Match(description, "(?<=www.imdb.com/title/tt)([0-9]*)");
                     long? imdbID = null;
                     if (imdbMatch.Success)
                     {

@@ -403,7 +403,7 @@ namespace Jackett.Common.Indexers
                             release.Description = genres;
 
                         // IMDB
-                        var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
+                        var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                         if (tRow.Find("img[title=\"100% freeleech\"]").Length >= 1)

@@ -413,7 +413,7 @@ namespace Jackett.Common.Indexers
                         };
 
                         // IMDB
-                        var imdbLink = tRow.Find("a[href*=\"http://imdb.com/title/\"]").First().Attr("href");
+                        var imdbLink = tRow.Find("a[href*=\"imdb.com/title/tt\"]").First().Attr("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                         if (tRow.Find("img[title=\"Free Torrent\"]").Length >= 1)

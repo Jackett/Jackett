@@ -42,9 +42,6 @@
       - name: regexp
         args: "Ratio : (\\d+)"
 
-  download:
-    selector: a[href*="/download/"]
-
   search:
     paths:
       - path: filterTorrents
@@ -57,6 +54,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
+      igdb: ""
       sort: created_at
       direction: desc
       qty: 100
@@ -72,7 +70,7 @@
       title:
         selector: a.view-torrent
       download:
-        selector: a[href*="/download_check/"]
+        selector: a[href*="/download/"]
         attribute: href
       details:
         selector: a.view-torrent
@@ -84,6 +82,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
@@ -140,4 +141,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2
+# UNIT3D 1.9.4

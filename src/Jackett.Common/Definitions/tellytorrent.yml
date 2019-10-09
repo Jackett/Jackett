@@ -58,8 +58,9 @@
       tvdb: ""
       tmdb: ""
       mal: ""
-      sort: "created_at"
-      direction: "desc"
+      igdb: ""
+      sort: created_at
+      direction: desc
       qty: 100
     rows:
       selector: table > tbody > tr
@@ -85,6 +86,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
@@ -141,4 +145,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.3
+# UNIT3D 1.9.4

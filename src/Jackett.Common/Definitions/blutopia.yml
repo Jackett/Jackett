@@ -33,6 +33,13 @@
     test:
       path: torrents
       selector: a[href$="/logout"]
+      
+  ratio:
+    path: torrents
+    selector: li:has(i.fa-sync-alt)
+    filters:
+      - name: regexp
+        args: "Ratio : (\\d+)"
 
   search:
     paths:
@@ -46,6 +53,7 @@
       tvdb: ""
       tmdb: ""
       mal: ""
+      igdb: ""
       sort: created_at
       direction: desc
       qty: 100
@@ -73,6 +81,9 @@
         filters:
           - name: replace
             args: ["https://via.placeholder.com/600x900", ""]
+      comments:
+        selector: a[href*="#comments"]
+        attribute: href
       size:
         selector: td:nth-last-child(4)
       seeders:
@@ -129,4 +140,4 @@
           "i[data-original-title=\"Global Double Upload\"]": "2" # Global Double Upload
           "i[data-original-title=\"Featured\"]": "2" # Featured Torrent
           "*": "1"
-# UNIT3D 1.9.2
+# UNIT3D 1.9.4

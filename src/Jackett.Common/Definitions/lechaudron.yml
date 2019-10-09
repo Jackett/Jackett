@@ -172,7 +172,10 @@
             args: (\d+)$
       title:
         selector: a[href*="/SousCategories/"]
-        attribute: title
+        attribute: alt
+        filters:
+          - name: regexp
+            args: "^..(.+)"
       details:
         selector: a[onmouseover]
         attribute: href

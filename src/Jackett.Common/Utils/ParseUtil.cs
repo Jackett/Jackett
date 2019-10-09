@@ -11,7 +11,7 @@ namespace Jackett.Common.Utils
             new Regex(
                 @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
                 RegexOptions.Compiled);
-        private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,7})$", RegexOptions.Compiled);
+        private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,8})$", RegexOptions.Compiled);
 
         public static string NormalizeSpace(string s)
         {

@@ -104,6 +104,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Crazy's Corner
  * CzTorrent
  * Deildu
+ * EniaHD
  * Film-Paleis
  * Gay-Torrents.net
  * Gay-Torrents.org
@@ -194,6 +195,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Cinematik
  * CinemaZ (EuTorrents)
  * Classix
+ * Concertos
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
@@ -257,6 +259,8 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * HDME
  * HDSky
  * HDTorrents.it
+ * HDTurk
+ * HDZone
  * Hebits
  * Hon3y HD
  * HQSource (HQS)
@@ -328,7 +332,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * RetroFlix
  * RevolutionTT
  * RGU
- * RocketHD
  * RoDVD (Cinefiles)
  * Romanian Metal Torrent (RMT)
  * RPTorrents
@@ -359,6 +362,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Tazmania-Den
  * TeamHD
  * TeamOS
+ * TEKNO3D
  * TellyTorrent
  * TenYardTorrents (TYT)
  * TheAudioScene
@@ -459,10 +463,10 @@ On most operating systems all the required dependencies will already be present.
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
-2. To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
 ### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
+Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
 
 ### home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
@@ -473,10 +477,10 @@ On most operating systems all the required dependencies will already be present.
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) 
-2. To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
 ### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases) and run Jackett with the command `./jackett`
+Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
 
 ### home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.  
