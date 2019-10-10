@@ -279,12 +279,12 @@
       sort: added
       order: desc
     rows:
-      selector: table.ttable_headinner tr:has(td[class^="tone_"])
+      selector: table.ttable_headinner tr:has(td[class^="tone_1"])
       after: 1
       filters:
         - name: andmatch
       dateheaders:
-        selector: tr td.added_today
+        selector: tr td.added_today:not(:contains("Sponsored links"))
         filters:
           - name: replace
             args: ["Added ", ""]
