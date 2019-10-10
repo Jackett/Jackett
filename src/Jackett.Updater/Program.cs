@@ -355,6 +355,7 @@ namespace Jackett.Updater
                 "Definitions/kikibt.yml",
                 "Definitions/torrentkitty.yml",
                 "Definitions/rockethd.yml",
+                "Definitions/worldofp2p.yml",
             };
 
             foreach (var oldFile in oldFiles)
