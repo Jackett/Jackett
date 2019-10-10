@@ -53,7 +53,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * iTorrent
  * KATcrs
  * KickAssTorrent (KATcr)
- * KickAssTorrent (thekat.se clone)
+ * KickAssTorrent (kat.li)
  * LemenCili
  * LePorno
  * LimeTorrents
@@ -82,13 +82,13 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Torlock
  * Torrent Downloads (TD)
  * TorrentFunk
- * TorrentGalaxy.org (TGx)
+ * TorrentGalaxy (TGx)
  * TorrentProject2
  * TorrentQuest
  * Torrents.csv
  * TorrentWal
  * Torrent9
- * Torernt9 clone (torrents9.ch)
+ * Torrent9Clone
  * Torrentz2
  * YourBittorrent
  * YTS.ag
@@ -398,7 +398,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * ToTheGlory
  * TranceTraffic
  * Trezzor
- * TurkTorrent (TT)
+ * TurkTorrent (TT) [![(invite needed)][inviteneeded]](#)
  * TV Chaos UK (TVCUK)
  * TV-Vault
  * TVstore
