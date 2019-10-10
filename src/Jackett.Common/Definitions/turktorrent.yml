@@ -6,9 +6,10 @@
   type: private
   encoding: ISO-8859-9
   links:
-    - http://turktorrent.us/
+    - https://turktorrent.us/
   legacylinks:
     - http://turktorrent1.in/
+    - http://turktorrent.us/
 
   caps:
     categorymappings:
@@ -86,42 +87,41 @@
       movie-search: [q]
 
   login:
-    path: login.php
+    path: ?p=home&pid=1
     method: form
-    form: form[action="takelogin.php"]
+    form: form#loginbox_form
+    submitpath: ajax/login.php
     inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    captcha:
-      type: image
-      selector: img#regimage
-      input: imagestring
+      action: "login"
+      loginbox_membername: "{{ .Config.username }}"
+      loginbox_password: "{{ .Config.password }}"
+      loginbox_remember: 1
+    selectorinputs:
+      securitytoken:
+        selector: "script:contains(\"stKey: \")"
+        filters:
+          - name: regexp
+            args: "stKey: \"(.+?)\","
     error:
-      - selector: table:contains("Bir hata oluştu!")
+      - selector: div.error
+      - selector: :contains("-ERROR-")
     test:
-      path: index.php
-      selector: a[href*="/logout.php?logouthash="]
-
-  ratio:
-    path: index.php
-    selector: div#top div:nth-child(2) span:nth-child(2)
-    filters:
-      - name: regexp
-        args: "Ratio: (.+?) Bonus:"
+      path: ?p=home&pid=1
+      selector: div#member_info_bar
 
   search:
     paths:
-      - path: browse.php
+      - path: /
     keywordsfilters:
       - name: re_replace # S01E01 to X.sezon X.blm
         args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1.sezon $2.blm"]
     inputs:
-    # does not support multi categories so defaulting to ALL
-      do: "search"
-      keywords: "{{if .Keywords}}\"{{.Keywords}}\"{{else}}{{end}}"
-      category: "0"
-      search_type: "t_name"
-      include_dead_torrents: "yes"
+      p: torrents
+      pid: 10
+      $raw: "{{range .Categories}}&cid[]={{.}}{{end}}"
+      keywords: "{{ .Keywords }}"
+      # name description both uploader
+      search_type: name
     rows:
       selector: table#sortabletable tbody tr:has(div[id^="port-target-"])
     fields:
