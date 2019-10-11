@@ -175,6 +175,7 @@ namespace Jackett.Common.Indexers
                             // Get international title if available, or use the full title if not
                             release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
 
+                            var year = "";
                             release.Description = "";
                             foreach (var child in qBJinfoBox.ChildNodes)
                             {
@@ -195,6 +196,11 @@ namespace Jackett.Common.Indexers
                                     var publishDate = DateTime.SpecifyKind(DateTime.ParseExact(publishDateStr, "dd/MM/yyyy HH:mm z", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                                     release.PublishDate = publishDate.ToLocalTime();
                                 }
+                                else if (line.StartsWith("Ano:"))
+                                {
+                                    year = line.Substring("Ano: ".Length); ;
+
+                                }
                                 else
                                 {
                                     release.Description += line + "\n";
@@ -203,6 +209,11 @@ namespace Jackett.Common.Indexers
 
                             var catStr = qCatLink.GetAttribute("href").Split('=')[1];
                             release.Title = FixAbsoluteNumbering(release.Title);
+
+                            if(year != "")
+                            {
+                                release.Title += " " + year;
+                            }
 
                             if (qQuality != null)
                             {
