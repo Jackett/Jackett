@@ -2,7 +2,7 @@ version: 0.12.{build}
 skip_tags: true
 image:
   - Ubuntu
-  - Visual Studio 2017
+  - Visual Studio 2019
 environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
 configuration: Release
