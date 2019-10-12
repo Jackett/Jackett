@@ -30,7 +30,7 @@ namespace Jackett.Test
             };
 
             //https://docs.microsoft.com/en-us/dotnet/api/system.text.codepagesencodingprovider?view=netcore-2.0
-#if NETCOREAPP2_0
+#if !NET461
                 if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 {
                     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

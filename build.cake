@@ -16,7 +16,7 @@ var configuration = Argument("configuration", "Debug");
 var workingDir = MakeAbsolute(Directory("./"));
 string artifactsDirName = "Artifacts";
 string testResultsDirName = "TestResults";
-string netCoreFramework = "netcoreapp2.2";
+string netCoreFramework = "netcoreapp3.0";
 string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 string updaterProjectPath = "./src/Jackett.Updater/Jackett.Updater.csproj";
 
@@ -64,7 +64,7 @@ Task("Build-Full-Framework")
 
 		var buildSettings = new MSBuildSettings()
                 .SetConfiguration(configuration)
-                .UseToolVersion(MSBuildToolVersion.VS2017);
+                .UseToolVersion(MSBuildToolVersion.VS2019);
 		
 		MSBuild("./src/Jackett.sln", buildSettings);
 	});
@@ -423,14 +423,31 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 
 private void DotNetCorePublish(string projectPath, string framework, string runtime, string outputPath)
 {
-	var settings = new DotNetCorePublishSettings
-	{
-		Framework = framework,
-		Runtime = runtime,
-		OutputDirectory = outputPath
-	};
+	bool publishSingleFile = false;
 
-	DotNetCorePublish(projectPath, settings);
+	if (publishSingleFile && framework != "net461")
+	{
+		var settings = new DotNetCorePublishSettings
+		{
+			Framework = framework,
+			Runtime = runtime,
+			OutputDirectory = outputPath,
+			ArgumentCustomization = args=>args.Append("/p:PublishSingleFile=true")
+		};
+
+		DotNetCorePublish(projectPath, settings);
+	}
+	else
+	{
+		var settings = new DotNetCorePublishSettings
+		{
+			Framework = framework,
+			Runtime = runtime,
+			OutputDirectory = outputPath
+		};
+
+		DotNetCorePublish(projectPath, settings);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
