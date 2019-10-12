@@ -1,4 +1,4 @@
-version: 0.11.{build}
+version: 0.12.{build}
 skip_tags: true
 image:
   - Ubuntu
@@ -6,10 +6,6 @@ image:
 environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
 configuration: Release
-install:
-  #Remove once .NET Core 2.2.5 is deployed to Appveyor
-  - sh: sudo apt-get update
-  - sh: sudo apt-get -y install dotnet-sdk-2.2
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'

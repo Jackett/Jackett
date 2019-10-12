@@ -610,7 +610,7 @@ All contributions are welcome just send a pull request.
 * Install the .NET Core [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
 * Open Powershell and from the `src` directory, run `dotnet restore`
-* Open the Jackett solution in Visual Studio 2017 (version 15.9 or above)
+* Open the Jackett solution in Visual Studio 2019 (version 16.3 or above)
 * Right click on the Jackett solution and click 'Rebuild Solution' to restore nuget packages
 * Select Jackett.Server as startup project
 * In the drop down menu of the run button select "Jackett.Server" instead of "IIS Express"
@@ -627,21 +627,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp2.2/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install mono-complete nuget msbuild dotnet-sdk-2.2 # install build tools (debian/ubuntu)
+sudo apt install mono-complete nuget msbuild dotnet-sdk-3.0 # install build tools (debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f netcoreapp2.2 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/netcoreapp2.2/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f netcoreapp3.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/netcoreapp3.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots
