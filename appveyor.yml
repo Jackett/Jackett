@@ -5,6 +5,8 @@ image:
   - Visual Studio 2019
 environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
+install:
+- ps: choco install cygwin --yes --x86 --params "/InstallDir:C:\cygwin /NoStartMenu"
 configuration: Release
 assembly_info:
   patch: true
