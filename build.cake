@@ -106,6 +106,8 @@ Task("Package-Windows-Full-Framework")
 
 		InnoSetupSettings settings = new InnoSetupSettings();
 		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
+		//Can remove below line once Cake is updated for InnoSetup 6 - https://github.com/cake-build/cake/pull/2565
+		settings.ToolPath = @"C:\Program Files (x86)\Inno Setup 6\ISCC.exe";
  		settings.Defines = new Dictionary<string, string>
 			{
 				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
