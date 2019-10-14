@@ -63,6 +63,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Monova
  * MovCr
  * Newpct (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
+ * Newstudio
  * Nitro
  * NoName Club (NNM-Club)
  * Nyaa.si
@@ -118,7 +119,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Metal Tracker
  * MVGroup Forum
  * MVGroup Main
- * Newstudio
  * NetHD (VietTorrent)
  * RockBox
  * RuTracker
