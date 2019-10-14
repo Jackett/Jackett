@@ -16,7 +16,7 @@ var configuration = Argument("configuration", "Debug");
 var workingDir = MakeAbsolute(Directory("./"));
 string artifactsDirName = "Artifacts";
 string testResultsDirName = "TestResults";
-string netCoreFramework = "netcoreapp2.2";
+string netCoreFramework = "netcoreapp3.0";
 string serverProjectPath = "./src/Jackett.Server/Jackett.Server.csproj";
 string updaterProjectPath = "./src/Jackett.Updater/Jackett.Updater.csproj";
 
@@ -28,7 +28,7 @@ Task("Info")
 	.Does(() =>
 	{
 		Information(@"Jackett Cake build script starting...");
-		Information(@"Requires InnoSetup and C:\cygwin to be present for packaging (Pre-installed on AppVeyor) on Windows");
+		Information(@"Requires InnoSetup and C:\msys64 to be present for packaging (Pre-installed on AppVeyor) on Windows");
 		Information(@"Working directory is: " + workingDir);
 
 		if (IsRunningOnWindows())
@@ -64,7 +64,7 @@ Task("Build-Full-Framework")
 
 		var buildSettings = new MSBuildSettings()
                 .SetConfiguration(configuration)
-                .UseToolVersion(MSBuildToolVersion.VS2017);
+                .UseToolVersion(MSBuildToolVersion.VS2019);
 		
 		MSBuild("./src/Jackett.sln", buildSettings);
 	});
@@ -106,6 +106,8 @@ Task("Package-Windows-Full-Framework")
 
 		InnoSetupSettings settings = new InnoSetupSettings();
 		settings.OutputDirectory = workingDir + "/" + artifactsDirName;
+		//Can remove below line once Cake is updated for InnoSetup 6 - https://github.com/cake-build/cake/pull/2565
+		settings.ToolPath = @"C:\Program Files (x86)\Inno Setup 6\ISCC.exe";
  		settings.Defines = new Dictionary<string, string>
 			{
 				{ "MyFileForVersion", sourceFolder + "/Jackett.Common.dll" },
@@ -145,6 +147,7 @@ Task("Package-Mono-Full-Framework")
 
 		DeleteFile(buildOutputPath + "/System.Runtime.InteropServices.RuntimeInformation.dll");
 
+		InstallMsysTar();
 		Gzip("./BuildOutput/net461/linux-x64", $"./{artifactsDirName}", "Jackett", "Jackett.Binaries.Mono.tar.gz");
 	});
 
@@ -326,13 +329,13 @@ Task("Linux-Environment")
 	});
 
 
-private void RunCygwinCommand(string utility, string utilityArguments)
+private void RunMsysCommand(string utility, string utilityArguments)
 {
-	var cygwinDir = @"C:\cygwin\bin\";
-	var utilityProcess = cygwinDir + utility + ".exe";
+	var msysDir = @"C:\msys64\usr\bin\";
+	var utilityProcess = msysDir + utility + ".exe";
 
-	Information("CygWin Utility: " + utility);
-	Information("CygWin Directory: " + cygwinDir);
+	Information("MSYS2 Utility: " + utility);
+	Information("MSYS2 Directory: " + msysDir);
 	Information("Utility Location: " + utilityProcess);
 	Information("Utility Arguments: " + utilityArguments);
 
@@ -343,7 +346,7 @@ private void RunCygwinCommand(string utility, string utilityArguments)
 			utilityProcess,
 			new ProcessSettings {
 				Arguments = utilityArguments,
-				WorkingDirectory = cygwinDir,
+				WorkingDirectory = msysDir,
 				RedirectStandardOutput = true
 			},
 			out redirectedStandardOutput,
@@ -364,11 +367,9 @@ private void RunCygwinCommand(string utility, string utilityArguments)
 	Information(utility + " Exit code: {0}", exitCodeWithArgument);
 }
 
-private string RelativeWinPathToCygPath(string relativePath)
+private string RelativeWinPathToFullPath(string relativePath)
 {
-	var cygdriveBase = "/cygdrive/" + workingDir.ToString().Replace(":", "").Replace("\\", "/");
-	var cygPath = cygdriveBase + relativePath.TrimStart('.');
-	return cygPath;
+	return (workingDir + relativePath.TrimStart('.'));
 }
 
 private void RunLinuxCommand(string file, string arg)
@@ -390,12 +391,12 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	
 	if (IsRunningOnWindows())
 	{
-		var cygSourcePath = RelativeWinPathToCygPath(sourceFolder);
-		var tarArguments = @"-cvf " + cygSourcePath + "/" + tarFileName + " -C " + cygSourcePath + $" {tarCdirectoryOption} --mode ='755'";
-		var gzipArguments = @"-k " + cygSourcePath + "/" + tarFileName;
+		var fullSourcePath = RelativeWinPathToFullPath(sourceFolder);
+		var tarArguments = @"--force-local -cvf " + fullSourcePath + "/" + tarFileName + " -C " + fullSourcePath + $" {tarCdirectoryOption} --mode ='755'";
+		var gzipArguments = @"-k " + fullSourcePath + "/" + tarFileName;
 
-		RunCygwinCommand("Tar", tarArguments);
-		RunCygwinCommand("Gzip", gzipArguments);
+		RunMsysCommand("tar", tarArguments);
+		RunMsysCommand("gzip", gzipArguments);
 		MoveFile($"{sourceFolder}/{tarFileName}.gz", $"{outputDirectory}/{tarFileName}.gz");
 	}
 	else
@@ -421,16 +422,57 @@ private void Gzip(string sourceFolder, string outputDirectory, string tarCdirect
 	}	
 }
 
-private void DotNetCorePublish(string projectPath, string framework, string runtime, string outputPath)
+private void InstallMsysTar()
 {
-	var settings = new DotNetCorePublishSettings
+	//Gzip is included by default with MSYS2, but not tar. Use the package manager to install tar
+
+	var startInfo = new System.Diagnostics.ProcessStartInfo()
 	{
-		Framework = framework,
-		Runtime = runtime,
-		OutputDirectory = outputPath
+		Arguments = "-S --noconfirm tar",
+		FileName = @"C:\msys64\usr\bin\pacman.exe",
+		UseShellExecute = false
 	};
 
-	DotNetCorePublish(projectPath, settings);
+	var process = System.Diagnostics.Process.Start(startInfo);
+	process.WaitForExit();
+
+	if (FileExists(@"C:\msys64\usr\bin\tar.exe") && FileExists(@"C:\msys64\usr\bin\gzip.exe"))
+	{
+		Information("tar.exe and gzip.exe were found");
+	}
+	else
+    {
+        throw new Exception("tar.exe and gzip.exe were NOT found");   
+    }
+}
+
+private void DotNetCorePublish(string projectPath, string framework, string runtime, string outputPath)
+{
+	bool publishSingleFile = false;
+
+	if (publishSingleFile && framework != "net461")
+	{
+		var settings = new DotNetCorePublishSettings
+		{
+			Framework = framework,
+			Runtime = runtime,
+			OutputDirectory = outputPath,
+			ArgumentCustomization = args=>args.Append("/p:PublishSingleFile=true")
+		};
+
+		DotNetCorePublish(projectPath, settings);
+	}
+	else
+	{
+		var settings = new DotNetCorePublishSettings
+		{
+			Framework = framework,
+			Runtime = runtime,
+			OutputDirectory = outputPath
+		};
+
+		DotNetCorePublish(projectPath, settings);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
