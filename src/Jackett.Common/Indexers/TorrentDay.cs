@@ -89,7 +89,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
-            AddCategoryMapping(17, TorznabCatType.Audio, "Music/Audio");
             AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
             AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
             AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
