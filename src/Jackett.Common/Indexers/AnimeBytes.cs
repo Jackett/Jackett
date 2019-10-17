@@ -203,30 +203,14 @@ namespace Jackett.Common.Indexers
                         var Year = (int)group["Year"];
                         var GroupName = (string)group["GroupName"];
                         var SeriesName = (string)group["SeriesName"];
-                        var Artists = (string)group["Artists"];
-
                         var mainTitle = WebUtility.HtmlDecode((string)group["FullName"]);
                         if (SeriesName != null)
                             mainTitle = SeriesName;
 
                         synonyms.Add(mainTitle);
-
-                        // If the title contains a comma then we can't use the synonyms as they are comma seperated
-                        if (!mainTitle.Contains(",") && AddSynonyms)
+                        foreach (string synonym in group["Synonymns"])
                         {
-                            var symnomnNames = WebUtility.HtmlDecode((string)group["Synonymns"]);
-
-                            if (!string.IsNullOrWhiteSpace(symnomnNames))
-                            {
-                                foreach (var name in symnomnNames.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-                                {
-                                    var theName = name.Trim();
-                                    if (!theName.Contains("&#") && !string.IsNullOrWhiteSpace(theName))
-                                    {
-                                        synonyms.Add(theName);
-                                    }
-                                }
-                            }
+                            synonyms.Add(synonym);
                         }
 
                         List<int> Category = null;
