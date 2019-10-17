@@ -350,7 +350,6 @@ namespace Jackett.Updater
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/xktorrent.yml",
-                "Definitions/mkvcage.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/kikibt.yml",
                 "Definitions/torrentkitty.yml",
