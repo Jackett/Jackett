@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
     /// </summary>
     public class Xthor : BaseCachingWebIndexer
     {
-        private static string ApiEndpoint => "https://api.xthor.to/";
+        private static string ApiEndpoint => "https://api.xthor.tk/";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
             "https://xthor.bz/",
@@ -44,13 +44,13 @@ namespace Jackett.Common.Indexers
             : base(
                 name: "Xthor",
                 description: "General French Private Tracker",
-                link: "https://xthor.to/",
+                link: "https://xthor.tk/",
                 caps: new TorznabCapabilities(),
                 configService: configService,
                 client: w,
                 logger: l,
                 p: ps,
-                downloadBase: "https://xthor.to/download.php?torrent=",
+                downloadBase: "https://xthor.tk/download.php?torrent=",
                 configData: new ConfigurationDataXthor())
         {
             Encoding = Encoding.UTF8;
