@@ -194,7 +194,7 @@
       - name: re_replace #Full season S 1-9
         args: ["(.*)[sS]([1-9])$", "$1 S0$2"]
       - name: re_replace #Full season S >= 10
-        args: ["(.*)[sS]([1-9][0-9])$", "$1 S0$2"]
+        args: ["(.*)[sS]([1-9][0-9])$", "$1 S$2"]
       # END ANIME HACK
       - name: replace
         args: ["\"", ""]
