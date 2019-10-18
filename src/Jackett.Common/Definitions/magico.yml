@@ -128,7 +128,7 @@
       - name: replace # use this as a workaround till #893 is implemented
         args: ["Greys Anatomy", "Grey's Anatomy"]
       - name: re_replace
-        args: ["[^a-zA-Z0-9]+", "%25"]
+        args: ["[^\\w\\d]+", "%25"]
     inputs:
       p: "torrents"
       pid: "32"
