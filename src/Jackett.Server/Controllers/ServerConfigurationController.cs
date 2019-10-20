@@ -131,6 +131,7 @@ namespace Jackett.Server.Controllers
                 serverConfig.ProxyUsername = config.proxy_username;
                 serverConfig.ProxyPassword = config.proxy_password;
                 configService.SaveConfig(serverConfig);
+                webHostRestartNeeded = true;
             }
 
             if (port != serverConfig.Port || external != serverConfig.AllowExternal)
