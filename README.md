@@ -211,7 +211,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * DocumentaryTorrents (DT)
  * Downloadville
  * Dragonworld Reloaded
- * Dream Team
  * DXDHD
  * EbookParadijs
  * Ebooks-Shares

@@ -357,6 +357,7 @@ namespace Jackett.Updater
                 "Definitions/worldofp2p.yml",
                 "Definitions/avg.yml",
                 "Definitions/aox.yml",
+                "Definitions/dreamteam.yml",
             };
 
             foreach (var oldFile in oldFiles)
