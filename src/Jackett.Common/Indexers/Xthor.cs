@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
         private static string ApiEndpoint => "https://api.xthor.tk/";
 
         public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://xthor.to/",
+            "https://xthor.bz/",
+            "https://xthor.to",
         };
 
         private string TorrentCommentUrl => TorrentDescriptionUrl;
