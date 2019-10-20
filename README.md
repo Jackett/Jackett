@@ -149,7 +149,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
  * Anthelion
- * AOX (Chippu)
  * Araba Fenice (Phoenix)
  * Asgaard (AG)
  * AsianCinema
