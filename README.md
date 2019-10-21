@@ -215,7 +215,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
- * EliteHD (HDClub) [![(invite needed)][inviteneeded]](#)
  * Elit Tracker (ET)
  * Elite-Tracker
  * Empornium (EMP)
