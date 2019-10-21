@@ -359,6 +359,7 @@ namespace Jackett.Updater
                 "Definitions/aox.yml",
                 "Definitions/dreamteam.yml",
                 "Definitions/elitehd.yml",
+                "Definitions/gdf76.yml",
             };
 
             foreach (var oldFile in oldFiles)
