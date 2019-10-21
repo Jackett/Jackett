@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
             searchTerm = searchTerm.Trim();
             searchTerm = searchTerm.ToLower();
 
-            if (EnhancedAnime && query.HasSpecifiedCategories && query.Categories.Contains(TorznabCatType.TVAnime.ID))
+            if (EnhancedAnime && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
                 System.Text.RegularExpressions.Regex regex = new Regex(" ([0-9]+)");
                 searchTerm = regex.Replace(searchTerm, " E$1");
