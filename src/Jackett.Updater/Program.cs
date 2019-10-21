@@ -361,6 +361,7 @@ namespace Jackett.Updater
                 "Definitions/elitehd.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/hyperay.yml",
+                "Definitions/scenereactor.yml",
             };
 
             foreach (var oldFile in oldFiles)
