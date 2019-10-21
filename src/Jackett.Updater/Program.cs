@@ -360,6 +360,7 @@ namespace Jackett.Updater
                 "Definitions/dreamteam.yml",
                 "Definitions/elitehd.yml",
                 "Definitions/gdf76.yml",
+                "Definitions/hyperay.yml",
             };
 
             foreach (var oldFile in oldFiles)

@@ -260,7 +260,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Hon3y HD
  * HQSource (HQS)
  * HuSh 
- * Hyperay
  * ICE Torrent
  * iLoveClassics (iLC)
  * ImmortalSeed (iS)
