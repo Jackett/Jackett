@@ -27,10 +27,11 @@ namespace Jackett.Server
                 logger.Info("Tracing enabled.");
             }
 
-            if (runtimeSettings.IgnoreSslErrors == true)
-            {
-                logger.Error($"The IgnoreSslErrors option has been deprecated, please remove it from your start arguments");
-            }
+            // https://github.com/Jackett/Jackett/issues/6229
+            //if (runtimeSettings.IgnoreSslErrors == true)
+            //{
+            //    logger.Error($"The IgnoreSslErrors option has been deprecated, please remove it from your start arguments");
+            //}
 
             if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
             {
