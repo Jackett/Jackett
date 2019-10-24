@@ -185,7 +185,16 @@
       files:
         selector: td[data-title="Files"]
       date:
-        selector: td[data-title="Age"]
+        selector: td[data-title="Age"]:contains("-")
+        attribute: title
+        optional: true
+        filters:
+          - name: dateparse
+            args: "2006-01-02"
+      date:
+        selector: td[data-title="Age"]:not(:contains("-"))
+        attribute: title
+        optional: true
         filters:
           - name: dateparse
             args: "2006-01-02 15:04:05"
