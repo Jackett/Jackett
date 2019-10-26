@@ -229,6 +229,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * FunFile (FF)
  * FunkyTorrents (FT)
  * Fuzer (FZ)
+ * Galeriens (LaPauseTorrents)
  * GAYtorrent.ru
  * GazelleGames (GGn)
  * Generation-Free
@@ -270,7 +271,6 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * JPopsuki
  * Kapaki
  * Karagarga
- * LaPauseTorrents
  * Le Chaudron
  * Le Saloon
  * LearnFlakes

@@ -1,12 +1,12 @@
 ﻿---
-  site: lapausetorrents
-  name: Lapausetorrents
-  description: "Lapausetorrents is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+  site: galeriens
+  name: Galeriens
+  description: "Galeriens is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
   language: fr-fr
   type: private
   encoding: UTF-8
   links:
-    - https://tempsdepause.eu/
+    - https://galeriens.eu/
 
   caps:
     categorymappings:

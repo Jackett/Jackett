@@ -362,6 +362,7 @@ namespace Jackett.Updater
                 "Definitions/gdf76.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/scenereactor.yml",
+                "Definitions/lapausetorrents.yml",
             };
 
             foreach (var oldFile in oldFiles)
