@@ -32,6 +32,23 @@ if [[ $(systemctl status ${jackettservice} | grep "active (running)") ]]; then
     exit 1
 fi
 
+# Write the Jackett's launcher
+cat >"/bin/jackett_launcher.sh" <<EOL
+#!/bin/bash
+
+${jackettdir}/jackett
+
+while pgrep JackettUpdater > /dev/null ; do
+     sleep 1
+done
+
+echo "Jackett update complete"
+
+EOL
+
+# Give execution permissions
+chmod +x "/bin/jackett_launcher.sh"
+
 # Write the systemd service descriptor
 cat >"/etc/systemd/system/${jackettservice}" <<EOL
 [Unit]
@@ -46,7 +63,7 @@ Type=simple
 User=${jackettuser}
 Group=${jackettuser}
 WorkingDirectory=${jackettdir}
-ExecStart=${jackettdir}/jackett --NoRestart
+ExecStart=/bin/jackett_launcher.sh
 TimeoutStopSec=20
 
 [Install]
