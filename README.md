@@ -128,6 +128,7 @@ Developer note: The software implements the [Torznab](https://github.com/Sonarr/
  * Toloka.to
  * Torrent-Explosiv
  * Torrents-Local
+ * TribalMixes
  * Union Fansub
  * Vanila
  * YggTorrent (YGG)
