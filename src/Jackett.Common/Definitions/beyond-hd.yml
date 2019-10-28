@@ -45,6 +45,7 @@
       qty: 100
     rows:
       selector: table > tbody > tr
+      after: 1
     fields:
       _category:
         selector: a[href*="/categories/"]
@@ -69,7 +70,7 @@
         attribute: src
         filters:
           - name: replace
-            args: ["https://via.placeholder.com/600x900", ""]
+            args: ["/img/person.png", ""]
       date:
         selector: td:not(a[href$="/history"]) span.text-orange
         filters:
