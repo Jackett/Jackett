@@ -3,7 +3,7 @@
   name: BookTracker
   description: "BookTracker is a RUSSIAN Semi-Private Torrent Tracker for EBOOKS"
   language: ru-ru
-  type: private
+  type: semi-private
   encoding: UTF-8
   links:
     - https://booktracker.org/
