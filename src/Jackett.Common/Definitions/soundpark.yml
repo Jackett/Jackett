@@ -2,7 +2,7 @@
   site: soundpark
   name: SoundPark
   description: "SoundPark Semi-Private RUSSIAN site dedicated to MUSIC."
-  language: ru-RU
+  language: ru-ru
   type: semi-private
   encoding: UTF-8
   links:
